@@ -1,0 +1,43 @@
+## OpenMeetings
+## author swagner
+## 10.04.2007
+## revised H.Kuze(minamotonoason) 2008.Apr.2
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='de' lang='de'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
+</head>
+<body>
+<h1>Openmeetings - Installation</h1>
+<p>Necessary steps which should have already been done:</p>
+<ol>
+<li>Install and configure a database
+<li>Edit <b>hibernate.cfg.xml</b> to fit your database authentification values.<br/>
+hibernate.cfg.xml can be found in <b>$RED5-HOME/webapps/openmeetings/conf/</b>.<br/>
+You need to alter:
+<pre>
+  &lt;!-- User  / Password --&gt;
+  &lt;property name="connection.username"&gt;postgres&lt;/property&gt;
+  &lt;property name="connection.password"&gt;********&lt;/property&gt;
+
+  &lt;!-- Database Settings --&gt;
+  &lt;property name="connection.driver_class"&gt;org.postgresql.Driver&lt;/property&gt;
+  &lt;property name="dialect"&gt;org.hibernate.dialect.PostgreSQLDialect&lt;/property&gt;
+  &lt;property name="connection.url"&gt;jdbc:postgresql://localhost/openmeetings&lt;/property&gt;	
+</pre>
+you should <b>restart red5</b> after you did change database - connection values<br/>
+<li>Install openoffice-service running on port 8100 in headless mode (<A HREF="http://code.google.com/p/openmeetings/wiki/OpenOfficeConverter">OpenOfficeConverter</A>)<BR/>
+<li>Install imagemagick + ghostscript +swftools and make it availible in your Classpath <BR/>
+	<UL>
+	<LI>Linux distros: Imagemagick can be installed with your package system (apt-get,yast,..)</LI>
+	<LI>MacOSX: Imagemagick can be installed from the <A HREF="http://www.imagemagick.org" TARGET="_BLANK">imagemagick projectpage<A> or using fink + apt-get</LI>
+	<LI>Windows: Follow the instructions on the <A HREF="http://www.imagemagick.org" TARGET="_BLANK">imagemagick projectpage<A> </LI>
+	</UL>
+
+</ol>
+
+<BR/>
+If this steps have been done you can follow with step 1 of installation:<BR/><BR/>
+<h1><A HREF="?command=step1">Continue with STEP 1</A></h1>
+</body>
+</html>

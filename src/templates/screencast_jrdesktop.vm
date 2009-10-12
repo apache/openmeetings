@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Web Start Deployment Template -->
+<jnlp spec="1.0+" codebase="http://$rtmphostlocal:$red5httpport/$webAppRootKey/screen"> 
+	<information> 
+		<title>ScreenViewer Client Application</title> 
+		<vendor>Openmeetings</vendor> 
+		<homepage>http://code.google.com/p/openmeetings/</homepage>
+		<icon href="icon.jpg" />
+		<icon kind="splash" href="splashicon.jpg" />
+		<description>ScreenViewer Client Application</description> 
+		<description kind="short">A File to grab a screen and send it to a Server</description> 
+		<offline-allowed/> 
+	</information>
+	<security>
+	    <all-permissions/>
+	</security>	
+	<resources> 
+		<j2se version="1.4+"/> 
+        <jar href="viewer.jar"/> 
+        
+    </resources> 
+    <application-desc main-class="jrdesktop.main">
+    	<argument>http://$rtmphostlocal:$red5httpport/$webAppRootKey/ScreenServlet</argument> 
+    	<argument>$SID</argument> 
+    	<argument>$ROOM</argument> 
+    	<argument>$DOMAIN</argument> 
+    	<argument>$PUBLIC_SID</argument>
+    	<argument>$RECORDER</argument> 
+    </application-desc> 
+</jnlp> 

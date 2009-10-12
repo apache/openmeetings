@@ -1,0 +1,21 @@
+## OpenMeetings
+## author swagner
+## 16.05.2007
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+</head>
+<body>
+<b>$labelid500</b><br />
+$labelid501 $user<br/>
+$labelid502 $message<br/><br/>
+$invitation_times
+
+<b>$labelid503</b><br/>
+<A HREF="$invitation_link">$labelid504</A><BR/>
+<BR/><BR/>
+$labelid505<BR/>
+$invitation_link2
+</body>
+</html>

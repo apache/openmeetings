@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>OpenMeetings RTP Screensharer Applet</title>
+	</head>
+	<body>
+		<br><br>
+		<center>
+		<applet code="de.medint.rtpsharer.applet.RTPPlayerApplet.class" 
+		codebase="screen" archive="rtpapplet.jar, jmf.jar" 
+		width=$WIDTH height=$HEIGHT> 
+			<!--<param name="archive" value="screen/jmf.jar">-->
+			<!--<param name="archive" value="screen/rtpapplet.jar"> --> 
+			<param name="video" value="On"> 
+			<param name="audio" value="Off">
+			<param name="videosession" value="$HOST">
+			<param name="videoport" value="$PORT"> 
+		</applet>
+		</center>
+	</body>
+</html>
+

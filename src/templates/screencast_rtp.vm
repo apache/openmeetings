@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Web Start Deployment Template -->
+<jnlp spec="1.0+" codebase="http://$rtmphostlocal:$red5httpport/$webAppRootKey/screen"> 
+	<information> 
+		<title>ScreenViewer Client Application</title> 
+		<vendor>Openmeetings</vendor> 
+		<homepage>http://code.google.com/p/openmeetings/</homepage>
+		<icon href="icon.jpg" />
+		<icon kind="splash" href="splashicon.jpg" />
+		<description>ScreenViewer Client Application</description> 
+		<description kind="short">A File to grab a screen and stream it to server</description> 
+		<offline-allowed/> 
+	</information>
+	<security>
+	    <all-permissions/>
+	</security>	
+	<resources> 
+		<j2se version="1.4+"/> 
+        <jar href="rtpviewer.jar"/> 
+        <jar href="fmj.jar"/>
+        <jar href="fmj-nojmf.jar"/>
+        <jar href="jmf.jar"/>
+        <jar href="log4j-1.2.6.jar"/>
+    </resources> 
+    <application-desc main-class="de.medint.rtpsharer.main.Main">
+    	<argument>$HOST</argument>
+    	<argument>$PORT</argument>
+    	<argument>$SID</argument>
+    	<argument>$ROOM</argument>
+    	<argument>$rtmphostlocal</argument>
+    	<argument>$red5httpport</argument>
+    	<argument>$webAppRootKey</argument>
+    	<argument>$PUBLIC_SID</argument>
+    	<argument>$RECORDER</argument>
+    </application-desc> 
+</jnlp> 

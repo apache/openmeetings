@@ -1,0 +1,314 @@
+## OpenMeetings
+## author swagner
+## 11.05.2007
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='de' lang='de'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
+<style type="text/css">
+
+form, fieldset {
+	margin: 0;
+	padding: 0;
+	}
+	
+fieldset { border: 1px solid #000; }
+
+legend {
+	padding: 0;
+	color: #000;
+}
+
+input:focus, textarea:focus {
+	color: #000; 
+	background: #fff;
+	outline: 1px solid black;
+}
+
+
+input, textarea, select {
+	margin: 0;
+	padding: 1px;
+	position:absolute;
+	left:540px;
+	background: #ddd;
+	font-size: 100%;
+	font-family: inherit;
+}
+
+select { padding: 0; }
+
+form.cmxform {
+	width: 800px;
+	font-size: 1.1em;
+	color: #333;
+	}
+	
+form.cmxform legend { padding-left: 0; }
+	
+form.cmxform legend,
+form.cmxform label { color: #333; }
+
+form.cmxform fieldset {
+	border: none;
+	border-top: 1px solid #C9DCA6;
+	background: url(../images/cmxform-fieldset.gif) left bottom repeat-x;
+	}
+	
+form.cmxform fieldset fieldset { background: none; }
+	
+form.cmxform fieldset li {
+	padding: 5px 10px 7px;
+	background: url(../images/cmxform-divider.gif) left bottom repeat-x;
+	}
+	
+form.cmxform fieldset {
+  margin-bottom: 10px;
+}
+form.cmxform legend {
+  padding: 0 2px;
+  font-weight: bold;
+}
+form.cmxform label {
+  display: inline-block;
+  line-height: 1.8;
+  vertical-align: top;
+}
+form.cmxform fieldset ol {
+  margin: 0;
+  padding: 0;
+}
+form.cmxform fieldset li {
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+}
+form.cmxform fieldset fieldset {
+  border: none;
+  margin: 3px 0 0;
+}
+form.cmxform fieldset fieldset legend {
+  padding: 0 0 5px;
+  font-weight: normal;
+}
+form.cmxform fieldset fieldset label {
+  display: block;
+  width: auto;
+}
+form.cmxform em {
+  font-weight: bold;
+  font-style: normal;
+  color: #f00;
+}
+form.cmxform label {
+  width: 120px; /* Width of labels */
+}
+form.cmxform fieldset fieldset label {
+  margin-left: 123px; /* Width plus 3 (html space) */
+}
+
+</style>
+</head>
+<body>
+
+<script language="JavaScript"> 
+ 
+function checkEmail() 
+{
+    //alert(document.getElementById("useremail").value);
+    
+	if	(/^[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+.)+([a-zA-Z]{1,3})$/.test(document.getElementById("useremail").value))
+	{
+		document.forms[0].submit();
+	}
+	else
+	{
+		alert("Please enter a valid EMail, for example name@mail.com");
+	}
+}
+</script>
+
+<h1>Openmeetings - Installation</h1>
+
+<form name="cmxform" id="form1" class="cmxform" method="post" action="?command=step2">
+
+    <fieldset id="userData">
+    
+		<legend>Userdata</legend>    
+		<li>
+        <label for="username">Username</label>
+    	<input name="username" id="username" size="27" 
+    		title="Enter a username" type="text" /><br />
+		</li><li>
+        <label for="userpass">Userpass</label>
+    	<input name="userpass" id="userpass" size="27" 
+    		title="Enter a password" type="text" /><br />
+		</li><li>
+        <label for="useremail">EMail</label>
+    	<input name="useremail" id="useremail" size="27" 
+    		title="Enter a EMail" type="text" /><br/>
+		</li>
+    </fieldset>
+    
+    <fieldset id="userOrga" >
+    
+		<legend>Organisation(Domains)</legend>    
+		<li>
+        <label for="orgname">Name</label>
+    	<input name="orgname" id="orgname" size="27" 
+    		title="Enter a default Organisation" type="text" />   	
+    	</li>    	
+    </fieldset>    
+    
+    <fieldset id="userConf">
+    
+		<legend>Configuration</legend>    
+		<li>
+        <label for="configdefault">Allow self-registering (allow_frontend_register)</label>
+    	<select name="configdefault" id="configdefault" size="1" 
+    		>
+	      	<option value="1" selected>Yes</option>
+	        <option value="0">No</option>
+	    </select><br />
+	    </li><li>
+        <label for="sendEmailAtRegister">Send Email to new registered Users (sendEmailAtRegister)</label>
+    	<select name="sendEmailAtRegister" id="sendEmailAtRegister" size="1"
+    		>
+	      	<option value="1" selected>Yes</option>
+	        <option value="0">No</option>
+	    </select><br />	 
+		</li><li>
+        <label for="sendEmailWithVerficationCode">New Users need to verify their EMail (sendEmailWithVerficationCode)</label>
+    	<select name="sendEmailWithVerficationCode" id="sendEmailWithVerficationCode" 
+    		size="1">
+	      	<option value="1" selected>Yes</option>
+	        <option value="0">No</option>
+	    </select><br />	 	       
+	    </li><li>
+	    <label for="configreferer">Mail-Referer (system_email_addr)</label>
+    	<input name="configreferer" id="configreferer" size="27" 
+    		title="Enter a Referer" type="text" /><br />
+    	</li><li>
+        <label for="configsmtp">SMTP-Server (smtp_server)</label>
+    	<input name="configsmtp" id="configsmtp" size="27" 
+    		title="Enter a SMTP-Server" type="text" /><br/>
+    	</li><li>
+    	<label for="configsmtp">SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)</label>
+    	<input name="configsmtpport" id="configsmtpport" size="27" 
+    		title="Enter a SMTP-Server.Port normally 25" type="text" /><br/>
+    	</li><li>
+    	<label for="configmailuser">SMTP-Username (email_userpass)</label>
+    	<input name="configmailuser" id="configmailuser" size="27" 
+    		title="Enter the mail-username" type="text" /><br />
+    	</li><li>
+    	<label for="configmailpass">SMTP-Userpass (email_userpass)</label>
+    	<input name="configmailpass" id="configmailpass" size="27" 
+    		title="Enter the mail-userpass" type="text" /><br/>
+    	</li><li> 
+    	<label for="configdefaultLang">Default Language</label>
+    	<select name="configdefaultLang" id="configdefaultLang" 
+    		size="1">
+			#foreach( $key in $allLanguages.keySet() )
+			    <option value="$key">$allLanguages.get($key)</option>
+			#end	
+	    </select><br/>
+	    </li> 
+	    <li> 
+    	<label for="default_export_font">Default Font for Export [default_export_font]</label>
+    	<select name="default_export_font" id="default_export_font" 
+    		size="1">
+			#foreach( $key1 in $allFonts.keySet() )
+			    <option value="$key1">$allFonts.get($key1)</option>
+			#end	
+	    </select><br/>
+	    </li>      	
+    </fieldset>  
+    
+    <fieldset id="userConf1">
+    
+		<legend>Converters</legend>    
+		<li>
+        <label for="swftools_path">SWFTools Path</label>
+    	<input name="swftools_path" id="swftools_path" size="27" title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path" type="text" />   	
+    	<p>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
+    		If this shows a list of options leave this field blank otherwise you have to specify the path to pdf2swf on your system<br/>
+    		see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>
+        </li><li>
+        <label for="imagemagick_path">ImageMagick Path</label>
+    	<input name="imagemagick_path" id="imagemagick_path" size="27" title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path" type="text" />   	
+    	<p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>	
+    	</li>
+    </fieldset>      
+    
+    <fieldset id="userConf2">
+    
+		<legend>Crypt Type</legend>    
+		<li>
+        <label for="crypt_ClassName">Crypt Class</label>
+    	<input name="crypt_ClassName" id="crypt_ClassName" size="27" 
+    		type="text" 
+    		title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE"
+    		value="org.openmeetings.utils.crypt.MD5Implementation" />  	
+		</li>
+    	<p>
+	    	You can use this default crypt type which is equal to PHP-MD5 function or BSD-Style<BR/>
+	    	encryption by using:<b>org.openmeetings.utils.crypt.MD5CryptImplementation</b><BR/>
+	    	for more information or to write your own Crypt-Style see:<BR/>
+			<a href="http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism" target="_blank">CustomCryptMechanism</a><BR/>
+			You can edit this value later BUT previous created Users and Sessions might be not usable anymore<BR/>
+    	</p>
+        
+    </fieldset>
+    
+    <fieldset id="LdapConf">
+    
+		<legend>Authentication Type</legend>    
+		<li>
+        <label for="ldap_config_path">LDAP Config</label>
+    	<input name="ldap_config_path" id="ldap_config_path" size="27" 
+    		type="text" 
+    		title="Enter the absolute path to a valid ldap config (see om_ldap.cfg within installation directory)"
+    		value="" />  	
+		</li>
+    	<p>
+	    	Entering a path pointing to a valid LDAP Configuration File activates LDAP Authentification.<BR/>
+	    	Keep empty, if you want to keep the standard auth method.<BR/>
+	    	Admin users are always authenticated against local database, other user have to enter a valid LDAP password.
+    	</p>
+        
+    </fieldset>
+    
+    <fieldset id="ScreenViewer">
+    
+		<legend>Screen Viewer</legend>    
+		<li>
+        <label for="screen_viewer">Screenviewer Config</label>
+    	<select name="screen_viewer" id="screen_viewer" size="1" 
+    		>
+	      	<option value="0" selected>Standard Viewer</option>
+	        <option value="1">JRDesktop</option>
+	        <option value="2">JMF RTP Sharer</option>
+	    </select><br />	
+		</li>
+    	<p>
+	    	The standard Screenviewer is optimized for low-bandwidth areas - You have the possibility of<BR/>
+	    	altering the quality of the screencapture,ie.<BR/>
+	    	The jrDesktop alternative starts immediately without GUI, just stoppable via SysTray Icon, but offers<BR/>
+	    	a higher speed tranferring the screencaptures to the whiteboard<BR/>
+	    	The RTP Sharer transfers Desktop Data as RTP Stream to Server. Best performance and quality is reached using 1024x768 as Screen Resolution<BR/>
+	    	
+    	</p>
+        
+    </fieldset>       
+        	  
+        	
+    <fieldset>
+        <legend>Submit</legend> 
+        <input name="Submit" value="INSTALL" 
+    		title="Submit" type="button"  onclick="checkEmail();"/>
+    </fieldset>	
+	
+</form>
+
+</body>
+</html>
