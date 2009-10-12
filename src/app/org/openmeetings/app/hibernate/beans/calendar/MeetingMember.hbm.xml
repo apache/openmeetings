@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="meeting_members" lazy="false" name="org.openmeetings.app.hibernate.beans.calendar.MeetingMember">
+    <id column="meeting_member_id" name="meetingMemberId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="user_id" lazy="false" cascade="none" name="userid" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <property name="email" type="string" column="email"/>
+    <property name="firstname" type="string" column="firstname"/>
+    <property name="lastname" type="string" column="lastname"/>
+    <property name="memberStatus" type="string" column="member_status"/>
+    <property name="appointmentStatus" type="string" column="appointment_status"/>
+    <many-to-one outer-join="true" not-null="false" column="appointment_id" lazy="false" cascade="none" name="appointment" class="org.openmeetings.app.hibernate.beans.calendar.Appointment"/>
+    <many-to-one outer-join="true" not-null="false" column="invitation" lazy="false" cascade="none" name="invitation" class="org.openmeetings.app.hibernate.beans.invitation.Invitations"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="boolean" column="deleted"/>
+    <property name="comment" type="string" column="comment"/>
+    <property name="invitor" type="boolean" column="invitor"/>
+  </class>
+</hibernate-mapping>

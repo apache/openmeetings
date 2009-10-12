@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="recordingclient" lazy="false" name="org.openmeetings.app.hibernate.beans.recording.RecordingClient">
+    <id column="recordingclient_id" name="recordingclient_id">
+      <generator class="increment"/>
+    </id>
+    <property name="roomRecordingId" type="long" column="roomrecording_id"/>
+    <property name="remoteAdress" type="string" column="remoteaddress"/>
+    <property name="roomenter" type="boolean" column="roomenter"/>
+    <property name="startdate" type="java.util.Date" column="startdate"/>
+    <property name="starttime" type="long" column="starttime"/>
+    <many-to-one outer-join="true" insert="true" column="roomclient_id" lazy="false" update="true" name="rcl" class="org.openmeetings.app.hibernate.beans.recording.RoomClient"/>
+  </class>
+</hibernate-mapping>

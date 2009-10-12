@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="adresses" lazy="false" name="org.openmeetings.app.hibernate.beans.adresses.Adresses">
+    <id column="adresses_id" name="adresses_id">
+      <generator class="increment"/>
+    </id>
+    <property name="additionalname" type="string" column="additionalname"/>
+    <property name="comment" type="string" column="comment"/>
+    <property name="fax" type="string" column="fax"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <many-to-one outer-join="true" not-null="false" column="state_id" lazy="false" cascade="none" name="states" class="org.openmeetings.app.hibernate.beans.adresses.States"/>
+    <property name="street" type="string" column="street"/>
+    <property name="town" type="string" column="town"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="zip" type="string" column="zip"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="email" type="string" column="email"/>
+    <property name="phone" type="string" column="phone"/>
+  </class>
+</hibernate-mapping>

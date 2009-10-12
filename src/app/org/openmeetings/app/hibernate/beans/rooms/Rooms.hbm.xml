@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="rooms" lazy="false" name="org.openmeetings.app.hibernate.beans.rooms.Rooms">
+    <id column="rooms_id" name="rooms_id">
+      <generator class="increment"/>
+    </id>
+    <property name="comment" type="text" column="comment"/>
+    <property name="name" type="string" column="name"/>
+    <many-to-one outer-join="true" not-null="false" column="roomtypes_id" lazy="false" cascade="none" name="roomtype" class="org.openmeetings.app.hibernate.beans.rooms.RoomTypes"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="ispublic" type="boolean" column="ispublic"/>
+    <property name="numberOfPartizipants" type="long" column="numberOfPartizipants"/>
+    <property name="appointment" type="boolean" column="appointMent"/>
+    <property name="isDemoRoom" type="boolean" column="isdemoroom"/>
+    <property name="demoTime" type="integer" column="demo_time"/>
+    <property name="isModeratedRoom" type="boolean" column="ismoderatedroom"/>
+  </class>
+</hibernate-mapping>

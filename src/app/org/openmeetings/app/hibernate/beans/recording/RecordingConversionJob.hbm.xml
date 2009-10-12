@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="recording_conversion_job" lazy="false" name="org.openmeetings.app.hibernate.beans.recording.RecordingConversionJob">
+    <id column="recording_conversion_job_id" name="recordingConversionJobId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" insert="true" column="recording_id" lazy="false" update="true" name="recording" class="org.openmeetings.app.hibernate.beans.recording.Recording"/>
+    <property name="imageNumber" type="long" column="imagenumber"/>
+    <property name="started" type="java.util.Date" column="started"/>
+    <property name="ended" type="java.util.Date" column="ended"/>
+    <property name="currentWhiteBoardAsXml" type="text" column="currentwhiteboardasxml"/>
+    <property name="endTimeInMilliSeconds" type="long" column="endtimeinmilliseconds"/>
+    <property name="startedPngConverted" type="java.util.Date" column="startedpngconverted"/>
+    <property name="endPngConverted" type="java.util.Date" column="endpngconverted"/>
+    <property name="batchProcessCounter" type="long" column="batchprocesscounter"/>
+    <property name="startedSWFConverted" type="java.util.Date" column="startedswfconverted"/>
+    <property name="endSWFConverted" type="java.util.Date" column="endswfconverted"/>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="roomclient" lazy="false" name="org.openmeetings.app.hibernate.beans.recording.RoomClient">
+    <id column="roomclient_id" name="roomClientId">
+      <generator class="increment"/>
+    </id>
+    <property name="connectedSince" type="java.util.Date" column="connected_since"/>
+    <property name="isMod" type="boolean" column="is_mod"/>
+    <property name="username" type="string" column="username"/>
+    <property name="streamid" type="string" column="streamid"/>
+    <property name="scope" type="string" column="scope"/>
+    <property name="formatedDate" type="string" column="formated_date"/>
+    <property name="usercolor" type="string" column="usercolor"/>
+    <property name="userpos" type="int" column="userpos"/>
+    <property name="userip" type="string" column="userip"/>
+    <property name="swfurl" type="string" column="swfurl"/>
+    <property name="userport" type="int" column="userport"/>
+    <property name="firstname" type="string" column="firstname"/>
+    <property name="language" type="string" column="language"/>
+    <property name="lastLogin" type="string" column="last_login"/>
+    <property name="lastname" type="string" column="lastname"/>
+    <property name="mail" type="string" column="mail"/>
+    <property name="official_code" type="string" column="official_code"/>
+    <property name="picture_uri" type="string" column="picture_uri"/>
+    <property name="user_id" type="long" column="user_id"/>
+    <property name="room_id" type="long" column="room_id"/>
+    <property name="roomEnter" type="java.util.Date" column="room_enter"/>
+    <property name="isChatNotification" type="boolean" column="is_chat_notification"/>
+    <property name="chatUserRoomId" type="long" column="chat_user_room_id"/>
+    <property name="isRecording" type="boolean" column="is_recording"/>
+    <property name="roomRecordingName" type="string" column="room_recording_name"/>
+    <property name="avsettings" type="string" column="avsettings"/>
+    <property name="broadCastID" type="long" column="broadcast_id"/>
+    <property name="publicSID" type="string" column="public_sid"/>
+    <property name="zombieCheckFlag" type="boolean" column="zombieCheckFlag"/>
+    <property name="canDraw" type="boolean" column="canDraw"/>
+  </class>
+</hibernate-mapping>

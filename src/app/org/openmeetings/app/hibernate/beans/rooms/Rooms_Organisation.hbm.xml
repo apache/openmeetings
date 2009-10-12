@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="rooms_organisation" lazy="false" name="org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation">
+    <id column="rooms_organisation_id" name="rooms_organisation_id">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="organisation_id" lazy="false" cascade="none" name="organisation" class="org.openmeetings.app.hibernate.beans.domain.Organisation"/>
+    <many-to-one outer-join="true" not-null="false" column="rooms_id" lazy="false" cascade="none" name="room" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+  </class>
+</hibernate-mapping>

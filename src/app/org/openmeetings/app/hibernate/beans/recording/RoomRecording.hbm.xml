@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="roomrecording" lazy="false" name="org.openmeetings.app.hibernate.beans.recording.RoomRecording">
+    <id column="roomrecording_id" name="roomrecordingId">
+      <generator class="increment"/>
+    </id>
+    <property name="conferenceType" type="string" column="conferencetype"/>
+    <many-to-one outer-join="true" not-null="false" column="room_setup" lazy="false" cascade="none" name="room_setup" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
+    <property name="roomRecordingsTableString" type="string" column="roomrecordingstablestring"/>
+    <property name="comment" type="string" column="comment"/>
+    <property name="initwhiteboardvarsInXml" type="text" column="initwhiteboardvars_in_xml"/>
+    <property name="recordingName" type="string" column="recordingname"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <many-to-one outer-join="true" insert="true" column="startedby_roomclient_id" lazy="false" update="true" name="startedby" class="org.openmeetings.app.hibernate.beans.recording.RoomClient"/>
+    <property name="endtime" type="java.util.Date" column="endtime"/>
+    <many-to-one outer-join="true" insert="true" column="enduser_roomclient_id" lazy="false" update="true" name="enduser" class="org.openmeetings.app.hibernate.beans.recording.RoomClient"/>
+    <property name="recordname" type="string" column="recordname"/>
+  </class>
+</hibernate-mapping>

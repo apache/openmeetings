@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="appointments" lazy="false" name="org.openmeetings.app.hibernate.beans.calendar.Appointment">
+    <id column="appointment_id" name="appointmentId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="user_id" lazy="false" cascade="none" name="userId" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <property name="appointmentName" type="string" column="appointmentname"/>
+    <property name="appointmentLocation" type="string" column="location"/>
+    <property name="appointmentStarttime" type="java.util.Date" column="appointment_starttime"/>
+    <property name="appointmentEndtime" type="java.util.Date" column="appointment_endtime"/>
+    <property name="appointmentDescription" type="string" column="description"/>
+    <many-to-one outer-join="true" not-null="false" column="category_id" lazy="false" cascade="none" name="appointmentCategory" class="org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory"/>
+    <many-to-one outer-join="true" not-null="false" column="remind_id" lazy="false" cascade="none" name="remind" class="org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="comment" type="string" column="comment"/>
+    <property name="isWeekly" type="boolean" column="isweekly"/>
+    <property name="isMonthly" type="boolean" column="ismonthly"/>
+    <property name="isYearly" type="boolean" column="isyearly"/>
+    <property name="isDaily" type="boolean" column="isdaily"/>
+    <many-to-one outer-join="true" not-null="false" column="room_id" lazy="false" cascade="none" name="room" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
+    <property name="icalId" type="string" column="icalId"/>
+  </class>
+</hibernate-mapping>

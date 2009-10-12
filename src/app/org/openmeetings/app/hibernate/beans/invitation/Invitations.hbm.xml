@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="invitations" lazy="false" name="org.openmeetings.app.hibernate.beans.invitation.Invitations">
+    <id column="invitations_id" name="invitations_id">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="roomid" lazy="false" cascade="none" name="room" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
+    <many-to-one outer-join="true" not-null="false" column="invitedBy" lazy="false" cascade="none" name="invitedBy" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="hash" type="string" column="hash"/>
+    <property name="invitedname" type="string" column="invitedname"/>
+    <property name="invitedEMail" type="string" column="invitedEMail"/>
+    <property name="isPasswordProtected" type="boolean" column="ispasswordprotected"/>
+    <property name="invitationpass" type="string" column="invitationpass"/>
+    <property name="conferencedomain" type="string" column="conferencedomain"/>
+    <property name="validFrom" type="java.util.Date" column="validFrom"/>
+    <property name="validTo" type="java.util.Date" column="validTo"/>
+    <property name="canBeUsedOnlyOneTime" type="boolean" column="canBeUsedOnlyOneTime"/>
+    <property name="invitationWasUsed" type="boolean" column="invitationWasUsed"/>
+    <property name="isValidByTime" type="boolean" column="isValidByTime"/>
+    <property name="baseUrl" type="string" column="baseUrl"/>
+  </class>
+</hibernate-mapping>

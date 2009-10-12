@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="users" lazy="false" name="org.openmeetings.app.hibernate.beans.user.Users">
+    <id column="user_id" name="user_id">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" insert="true" column="adresses_id" lazy="false" update="true" name="adresses" class="org.openmeetings.app.hibernate.beans.adresses.Adresses"/>
+    <property name="age" type="java.util.Date" column="age"/>
+    <property name="availible" type="int" column="availible"/>
+    <property name="firstname" type="string" column="firstname"/>
+    <property name="lastlogin" type="java.util.Date" column="lastlogin"/>
+    <property name="lastname" type="string" column="lastname"/>
+    <property name="lasttrans" type="long" column="lasttrans"/>
+    <property name="level_id" type="long" column="level_id"/>
+    <property name="login" type="string" column="login"/>
+    <property name="password" type="string" column="password"/>
+    <property name="regdate" type="java.util.Date" column="regdate"/>
+    <property name="status" type="int" column="status"/>
+    <property name="title_id" type="int" column="title_id"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="pictureuri" type="string" column="pictureuri"/>
+    <property name="language_id" type="long" column="language_id"/>
+    <set table="organisation_users" lazy="false" inverse="true" cascade="none" name="organisation_users" where="deleted = 'false'">
+      <key column="user_id"/>
+      <one-to-many class="org.openmeetings.app.hibernate.beans.domain.Organisation_Users"/>
+    </set>
+    <property name="resethash" type="string" column="resethash"/>
+    <property name="activatehash" type="string" column="activatehash"/>
+    <property name="externalUserId" type="long" column="externalUserId"/>
+    <property name="externalUserType" type="string" column="externalUserType"/>
+  </class>
+</hibernate-mapping>

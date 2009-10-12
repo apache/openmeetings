@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="naviglobal" name="org.openmeetings.app.hibernate.beans.basic.Naviglobal">
+    <id column="global_id" name="global_id">
+      <generator class="increment"/>
+    </id>
+    <property name="action" type="string" column="action"/>
+    <property name="comment" type="string" column="comment"/>
+    <property name="icon" type="string" column="icon"/>
+    <property name="isleaf" type="boolean" column="isleaf"/>
+    <property name="isopen" type="boolean" column="isopen"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="name" type="string" column="name"/>
+    <property name="naviorder" type="int" column="naviorder"/>
+    <property name="level_id" type="long" column="level_id"/>
+    <set table="navimain" lazy="false" inverse="true" cascade="all" order-by="naviorder" name="mainnavi" where="deleted='false'">
+      <key column="global_id"/>
+      <one-to-many class="org.openmeetings.app.hibernate.beans.basic.Navimain"/>
+    </set>
+    <property name="fieldvalues_id" type="long" column="fieldvalues_id"/>
+    <property name="tooltip_fieldvalues_id" type="long" column="tooltip_fieldvalues_id"/>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="organisation" lazy="false" name="org.openmeetings.app.hibernate.beans.domain.Organisation">
+    <id column="organisation_id" name="organisation_id">
+      <generator class="increment"/>
+    </id>
+    <property name="insertedby" type="long" column="insertedby"/>
+    <property name="name" type="string" column="name"/>
+    <property name="updatedby" type="long" column="updatedby"/>
+    <property name="starttime" type="java.util.Date" column="starttime"/>
+    <property name="updatetime" type="java.util.Date" column="updatetime"/>
+    <property name="deleted" type="string" column="deleted"/>
+  </class>
+</hibernate-mapping>
