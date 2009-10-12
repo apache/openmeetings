@@ -1,0 +1,1 @@
+keytool -delete -alias screencastAlias
