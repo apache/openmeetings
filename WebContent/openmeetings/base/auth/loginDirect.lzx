@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+ <class name="loginWeb" extends="explorerBox" title="WebRooms"
+    docking="true" resizeable="false" closable="false" width="324" x="200" y="0" height="400">
+
+	<text y="30" x="10" fontsize="10" fontstyle="bold" text="Choose login" />
+
+	<text y="80" x="10" fontsize="10" text="name" />
+		<customEdittext name="_login" y="80" x="120" width="200" text="myusername" />
+    
+	<text y="100" x="10" fontsize="10" text="user_id" />
+		<customEdittext name="user_id" y="100" x="120" width="200" text="0" />
+	<text y="120" x="10" fontsize="10" text="firstName" />
+		<customEdittext name="firstName" y="120" x="120" width="200" text="firstName" />
+	<text y="140" x="10" fontsize="10" text="lastName" />
+		<customEdittext name="lastName" y="140" x="120" width="200" text="lastName" />
+	<text y="160" x="10" fontsize="10" text="mail" />
+		<customEdittext name="mail" y="160" x="120" width="200" text="mail" />
+	<text y="180" x="10" fontsize="10" text="lastLogin" />
+		<customEdittext name="lastLogin" y="180" x="120" width="200" text="lastLogin" />
+	<text y="200" x="10" fontsize="10" text="official_code" />
+		<customEdittext name="official_code" y="200" x="120" width="200" text="official_code" />
+	<text y="220" x="10" fontsize="10" text="picture_uri" />
+		<customEdittext name="picture_uri" y="220" x="120" width="200" text="picture_uri" />
+	<text y="240" x="10" fontsize="10" text="language" />
+		<customEdittext name="language" y="240" x="120" width="200" text="language" />
+
+	<text y="314" x="10" fontsize="10" text="roomname" />
+		<resetCombobox name="_comobox" fontsize="10" x="120" width="200" y="314" editable="false" >
+            <handler name="oninit">
+            	this.addItem('room1','room1');
+            	this.addItem('room2','room2');
+            	this.addItem('room3','room3');
+            	this.addItem('room4','room4');
+            	this.addItem('room5','room5');
+            	this.selectItem('room1');
+            </handler>
+        </resetCombobox>
+		
+	<button name="connect" x="170" y="370" text="connect" width="120" height="20">
+		<handler name="onclick">
+			//Debug.write("this.parent: ",this.parent);
+            //Debug.write(this.parent._comobox.getText());
+            //Debug.write(this.parent._login.getText());
+            canvas.setAttribute('currentcourse',this.parent._comobox.getText());
+            canvas.setAttribute('currentuser',this.parent._login.getText());
+            canvas.setAttribute('currentusename',this.parent._login.getText());
+            
+			canvas.setAttribute('user_id',parent.user_id.getText());
+			canvas.setAttribute('firstName',parent.firstName.getText());
+			canvas.setAttribute('lastName',parent.lastName.getText());
+			canvas.setAttribute('mail',parent.mail.getText());
+			canvas.setAttribute('lastLogin','');
+			canvas.setAttribute('official_code',parent.official_code.getText());
+			canvas.setAttribute('picture_uri','');
+			canvas.setAttribute('language',parent.language.getText());   
+            
+            canvas.setAttribute('currentcourseName',this.parent._comobox.getText());
+            canvas.setAttribute('currentcourseNameLong',this.parent._comobox.getText());
+            canvas.setAttribute('loadingmessage','loading language data');
+            //Debug.write("canvas.languageData doRequest: ",canvas.languageData);
+            canvas.languageData.doRequest();
+        
+            this.parent.close();
+                   
+		</handler>
+	</button>
+		
+</class>
+
+</library>

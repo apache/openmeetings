@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="devrtmpconnection">
+   <doc>
+   	RTMP接続をするクラスです。lpsからの流用っぽいですがオリジナルがわかりません。<br/>
+   	接続状況を表すattributeは'stage'で、0:切断（デフォルト） 1:接続トライ中 2:接続済みです。<br/>
+   	'src'属性でrtmpのサーバ（red5)URLを設定します。
+   	*このファイルは既に使われていません。削除可です。代わりに、devrtmpconnection2.lzxが使われています。
+   </doc>
+ </class>
+ <class name="netremotecall">
+   <doc>
+   	netを介してメソッドを呼ぶ実装（のようです）
+   </doc>
+ </class>
+ <class name="netparam">
+   <doc>
+   	netremotecallで使うattributeを（一つだけ）持っているクラスです。<br/>
+   	rtmpで何かリクエストを送るときに、リクエストクエリストリングを作成する時のルートとして使われているようです。
+   </doc>
+ </class>
+</rlzxdoc>

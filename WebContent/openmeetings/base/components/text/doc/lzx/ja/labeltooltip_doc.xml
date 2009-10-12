@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="labeltooltip">
+   <doc>
+   	ラベル付きのtooltip。viewクラスを継承している。<br/>
+   	*incubator/tooltipクラスを継承することで代替可能では？　その場合、以下の２つのクラスも<br>
+   	 attribute設定で十分対応できるので必要なくなるのでは？
+   	</br>
+   </doc>
+ </class>
+ <class name="xmlcrmtooltip">
+   <doc>
+   	背景色や大きさをカスタム化したtooltip。
+   </doc>
+ </class>
+ <class name="xmlcrmtooltipmulti">
+   <doc>
+   	表示テキストがmultiline=trueであるtooltipクラス。
+   </doc>
+ </class>
+</rlzxdoc>

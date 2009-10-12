@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="scrolledittext">
+   <doc>
+   	incubator/baseedittextクラスを継承した、スクロールバー付きのedittext
+   </doc>
+ </class>
+ <class name="customscrolledittext">
+   <doc>
+   	scrolledittextにラベルをつけたもの。
+   </doc>
+ </class>
+</rlzxdoc>

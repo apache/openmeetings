@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="aqua_rsc1" >
+		<frame src="resources/aquabutton2_part1.png" />
+		<frame src="resources/aquabutton3_part1.png" />
+		<frame src="resources/aquabutton4_part1.png" />
+	</resource>
+	<resource name="aqua_rsc2" >
+		<frame src="resources/aquabutton2_part2.png" />
+		<frame src="resources/aquabutton3_part2.png" />
+		<frame src="resources/aquabutton4_part2.png" />
+	</resource>	
+	<resource name="aqua_rsc3" >
+		<frame src="resources/aquabutton2_part3.png" />
+		<frame src="resources/aquabutton3_part3.png" />
+		<frame src="resources/aquabutton4_part3.png" />
+	</resource>		
+
+
+<class name="aquaButton" extends="view" width="200" height="20.5">
+	<view layout="axis:x" name="_bg">
+		<view name="_b1" resource="aqua_rsc2" stretches="both" width="7" height="20.5" />
+		<view name="_b2" resource="aqua_rsc1" stretches="both" width="${ this.parent.parent.width-14 }" height="20.5" />
+		<view name="_b3" resource="aqua_rsc3" stretches="both" width="7" height="20.5" />
+	</view>
+	<text name="_text" x="${ this.parent.width/2-this.width/2 }" fontsize="10" fgcolor="0x333333" fontstyle="bold" y="3" text="defaulttext" resize="true" />
+	
+	<handler name="onmouseover">
+		this._bg._b1.setAttribute('frame',2);
+		this._bg._b2.setAttribute('frame',2);
+		this._bg._b3.setAttribute('frame',2);
+		_text.setAttribute('fgcolor',0x666666);
+	</handler>
+	<handler name="onmouseout">
+		this._bg._b1.setAttribute('frame',1);
+		this._bg._b2.setAttribute('frame',1);
+		this._bg._b3.setAttribute('frame',1);
+		_text.setAttribute('fgcolor',0x333333);
+	</handler>
+	<handler name="onmousedown">
+		this._bg._b1.setAttribute('frame',3);
+		this._bg._b2.setAttribute('frame',3);
+		this._bg._b3.setAttribute('frame',3);
+		_text.setAttribute('fgcolor',0xEEEEEE);
+	</handler>
+	<handler name="onmouseup">
+		this._bg._b1.setAttribute('frame',1);
+		this._bg._b2.setAttribute('frame',1);
+		this._bg._b3.setAttribute('frame',1);
+		_text.setAttribute('fgcolor',0x333333);
+	</handler>		
+</class>
+
+</library>

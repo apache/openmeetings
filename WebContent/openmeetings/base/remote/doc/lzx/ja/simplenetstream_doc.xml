@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="simplenetstream">
+   <doc>
+   	ビデオ再生におけるstart/stop/pause/closeの各メソッドを持つクラスです。
+   </doc>
+ </class>
+</rlzxdoc>

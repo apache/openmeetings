@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="playvideoview">
+   <doc>
+   	実際にFlash Videoを表示します。<br/>
+   	*private変数を沢山使っていますので注意してください。
+   </doc>
+ </class>
+</rlzxdoc>

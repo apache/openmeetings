@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="width_gripper_rsc" src="resources/width_gripper.swf" />
+
+<resource name="sort_asc_turnover_rsc" src="resources/sort_asc.png" />
+<resource name="sort_desc_turnover_rsc" src="resources/sort_desc.png" />
+
+<class name="turnOverListHeaderItem" extends="simpleLabelButton" clip="true" fontstyle="plain">
+
+	<attribute name="subviewsid" value="0" type="number" />
+
+	<view height="$once{ parent.height-2 }" width="3" align="right" bgcolor="black"
+		cursor="width_gripper_rsc" 
+		onmousedown="parent.rs.apply()" onmouseup="parent.rs.remove()" />
+
+	<handler name="onwidth" args="w">
+		this.parent.parent.parent.sendWidthUpdate(w,this.subviewsid);
+	</handler>
+	<resizestate name="rs" height="20" />
+</class>
+
+<class name="turnOverListHeaderItemSimple" extends="simpleLabelButton" fontstyle="plain">
+	<attribute name="asc" value="false" type="boolean" />
+	<attribute name="pathOrder" value="" type="string" />
+	<handler name="onclick">
+		if (parent.preButton!=null){
+			parent.preButton._asc.setAttribute('visibility','hidden');
+			parent.preButton._desc.setAttribute('visibility','hidden');
+		}
+		if (!this.asc){
+			this._asc.setAttribute('visibility','hidden');
+			this._desc.setAttribute('visibility','visible');
+		} else {
+			this._asc.setAttribute('visibility','visible');
+			this._desc.setAttribute('visibility','hidden');		
+		}
+		parent.preButton = this;
+		parent.setNewSortOrder(this.pathOrder,this);
+	</handler>
+	<view name="_asc" x="$once{ parent.width-20 }" 
+		  visibility="hidden" resource="sort_asc_turnover_rsc" />
+	<view name="_desc" x="$once{ parent.width-20 }" 
+		  visibility="hidden" resource="sort_desc_turnover_rsc" />
+</class>
+
+</library>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="monitorList" extends="view" width="400" height="76" bgcolor="0xC6CEDF">
+    <attribute name="selected" value="null" />
+    <event name="onselect" />
+    <attribute name="doubleclickEvent" value="null" />
+        <method name="clearList">
+        	//Debug.write("clearList");
+        	//this._listItemViewBorder._listItemView.destroy();
+        	//new lz.monitorListItemView(this._listItemViewBorder,{name:'_listItemView'});
+        </method>
+        <method name="addItem" args="txt,id,labelid" >
+			new lz.monitorSubListItem(this._listItemViewBorder._listItemView,{textitem:txt,itemid:id,lableid:labelid});
+		</method>
+		<method name="selectItem" args="id">
+			for (var eg in this._listItemViewBorder._listItemView.subviews){
+				if (this._listItemViewBorder._listItemView.subviews[eg].itemid==String(id)){
+					this._listItemViewBorder._listItemView.subviews[eg]._sublistItem.onclick.sendEvent();
+					break;
+				}
+			}
+		</method>    
+    <view name="_listItemViewBorder" x="2" y="2" width="397" height="73" bgcolor="0xFFFFFF" clip="true">
+        <method name="clearselection">
+            for (var eg in this._listItemView.subviews){
+                this._listItemView.subviews[eg]._sublistItem._selected=false;
+                this._listItemView.subviews[eg]._sublistItem.setAttribute('bgcolor',0xFFFFFF);
+            }
+        </method>   
+        	<monitorListItemView name="_listItemView" /> 
+        <vscrollbar />
+    </view>                                                                                        
+</class>
+
+<class name="monitorListItemView" >
+	<simplelayout axis="y" spacing="2" />
+</class>
+
+<class name="itemKkk" extends="view" width="200" height="80" bgcolor="black">
+
+</class>
+
+<class name="monitorSubListItem" bgcolor="0xA3B2CC" width="400" height="20">
+	<attribute name="textitem" value="def" type="string" />
+	<attribute name="itemid" value="def" type="string" />
+	<attribute name="lableid" value="0" type="number" />
+	<view bgcolor="0xFFFFFF" x="1" y="1" width="398" height="18" name="_sublistItem" 
+	    onmouseover="( ( this._selected) ? this.setAttribute('bgcolor',0xE9ECF3) : this.setAttribute('bgcolor',0xBFCBDD) )" 
+	    onmouseout="( ( this._selected) ? this.setAttribute('bgcolor',0xE9ECF3) : this.setAttribute('bgcolor',0xFFFFFF) )" >
+	    <attribute name="_selected" value="false" type="boolean" />
+	    <text x="6" fontsize="10" resize="true" text="${ this.parent.parent.textitem }" />
+	    <handler name="onclick">
+	        this.parent.parent.parent.clearselection();
+	        this.parent.parent.parent.parent.selected=this;
+	        this.parent.parent.parent.parent.onselect.sendEvent();
+	        this._selected=true;
+	        this.setAttribute('bgcolor',0xE9ECF3);
+	    </handler>
+	    <method name="getId">
+	        return this.parent.itemid;
+	    </method>
+	    <labelTooltip labelid="${ this.parent.parent.lableid }" />
+	</view>
+</class>
+
+</library>

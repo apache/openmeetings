@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="labelbluebutton">
+   <doc>
+	main.lzxのgetLabelName()を呼び出して、指定されたlabelidをradioボタンにセットします。
+	ボタンの表示文字の多言語設定をしています。
+	*labelradiobutton.lzxと同じことをしているがこちらはボタン。
+   </doc>
+ </class>
+</rlzxdoc>

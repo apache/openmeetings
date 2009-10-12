@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<!-- Form shown in the Login Box -->
+    
+<class name="resetForm" extends="view" x="10" y="260" >
+    
+    <attribute name="baseUrl" value="" type="string" />
+    
+    <labelText name="resetLabel" labelid="312" width="200" />
+
+    <radiogroup name="chooseTextType" layout="class:simplelayout;axis:x;spacing:2" y="30" >
+        <labelRadioButton labelid="313" value="1" text="Mail" />
+        <labelRadioButton labelid="314" value="2" text="Login" />
+    </radiogroup>   
+    
+    <!-- reset Values Area -->
+    <labelText name="resetByMailLabel" 
+        visibility="${ ( (parent.chooseTextType.value==1) ? 'visible' : 'hidden' ) }"
+        labelid="315" y="60" x="2"/>
+    <customEdittext name="resetByMail" y="60" regexpType="email"
+        visibility="${ ( (parent.chooseTextType.value==1) ? 'visible' : 'hidden' ) }"
+        password="false" x="120" width="170" />
+    
+    <labelText name="resetByLoginLabel" 
+        visibility="${ ( (parent.chooseTextType.value==2) ? 'visible' : 'hidden' ) }"
+        labelid="316" y="60" x="2"/>
+    <customEdittext name="resetByLogin" y="60" 
+        visibility="${ ( (parent.chooseTextType.value==2) ? 'visible' : 'hidden' ) }"
+        password="false" x="120" width="170" />
+    
+    <simpleLabelButton name="sendBtn" labelid="317" x="120" y="90" >
+        <attribute name="showResetBox" value="false" type="boolean" />
+    	<handler name="onclick">
+            if (parent.chooseTextType.value==1){
+                parent.resetByLogin.setAttribute('text','');
+            } else {
+                parent.resetByMail.setAttribute('text','');
+            }
+            var urlObject =  lz.Browser.getBaseURL();
+			parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+urlObject.port+urlObject.path+urlObject.file;
+			parent.resetUserPwd.doCall();
+    	</handler>
+    </simpleLabelButton>   
+    
+    <netRemoteCallHib name="resetUserPwd" funcname="userservice.resetUserPwd" 
+        remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.resetByMail.getText(); </method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.resetByLogin.getText(); </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.baseUrl; </method></netparam>
+        <handler name="ondata" args="value">
+			<![CDATA[
+                if ($debug) Debug.write("onvalue",value);
+            ]]>
+        </handler>  
+    </netRemoteCallHib>    
+
+    <method name="reset">
+            this.sendBtn.onclick.sendEvent();
+    </method>
+    
+</class>    
+    
+
+</library>

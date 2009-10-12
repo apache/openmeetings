@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="menubarButton" extends="simpleLabelButton">
+    <attribute name="clientmaskname" value="" type="string" />
+    <attribute name="clientobjectArea" value="null" />
+    <attribute name="isselected" value="false" type="boolean" />
+    <handler name="oninit">
+        if (this.isselected) this.onclick.sendEvent();
+    </handler>
+    <handler name="onclick">
+        //Debug.write("clientmaskname: ",this.clientmaskname);
+        new lz[this.clientmaskname](clientobjectArea);
+    </handler>
+</class>
+
+<class name="xmlCrmUserAdmin" extends="labelExplorerBox" title="User Panel"
+    docking="true" resizeable="false" closable="true" width="400" x="0" y="0" height="340">
+    
+    <view name="_menubar" width="$once{ parent.width - 4 }" height="24" y="22" layout="axis:x;spacing:2">
+        <menubarButton isselected="true" text="UserList" clientmaskname="userListAdmin" clientobjectArea="$once{ parent.parent.clientObjectArea.inner }" />
+    </view>
+    
+    <view name="clientObjectArea" width="$once{ parent.width-4 }" x="2" height="$once{ parent.height-50 }" y="48" >
+        <view name="inner" />
+    </view>
+
+</class>
+
+<class name="userListItem" extends="view">
+    <attribute name="login" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <labelText text="$once{ parent.login }" width="100" />
+    <labelText text="$once{ parent.firstname }" x="100" width="150" />
+    <labelText text="$once{ parent.lastname }" x="250" width="150" />
+</class>
+<class name="userListAdmin" extends="view">
+
+    <handler name="oninit">
+        this.getAllUsers.doCall();
+    </handler>
+    
+    <view name="mylist" y="20" width="380" height="380" clip="true" layout="axis:y;spacing:2">
+        
+    </view>
+
+    <netRemoteCallHib name="getAllUsers" funcname="xmlcrm.getAllUsers" remotecontext="$once{ canvas.thishib }" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>  
+        <netparam><method name="getValue"> return 0; </method></netparam>  
+        <netparam><method name="getValue"> return 100; </method></netparam>  
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("getAllUsers: ",value,value.length);
+            for (var i=0;i<value.length;i++){
+                new lz.userListItem(parent.mylist,{login:value[i].login,firstname:value[i].firstname,lastname:value[i].lastname});
+            }
+            
+            ]]>
+        </handler>  
+    </netRemoteCallHib>
+</class>
+
+</library>

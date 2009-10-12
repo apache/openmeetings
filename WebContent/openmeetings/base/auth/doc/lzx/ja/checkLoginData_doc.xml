@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+  <class name="checkLoginData">
+    <doc>
+      <p>ログインパネルの表示を行うクラス。</p>
+      <p>ログインアカウント、デフォルト言語、カラースタイル、通信品質の各設定を行う。</p>
+    </doc>
+  </class>
+</rlzxdoc>

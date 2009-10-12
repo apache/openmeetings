@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+   
+<include href="incubator/scrolledittext.lzx" />
+
+<class name="customScrollEdittext" extends="view" bgcolor="0x333333">
+	
+	<attribute name="text" value="" type="string" />
+
+    <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribtue('text',canvas.getLabelName(this.labelid));
+    </method>
+    
+    <method name="getText">
+    	return this._cbtext.getText();
+    </method>
+    
+    <scrolledittext name="_cbtext" width="$once{ parent.width-2 }" x="1" y="1" bgcolor="0xFFFFFF" 
+		height="$once{ parent.height-2 }" text="${ parent.text }" multiline="true" fontsize="11" />
+    
+</class>
+
+</library>

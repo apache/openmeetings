@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- all datasets for main.lzx -->
+
+<library>
+
+<!-- get values from config.xml -->
+<dataset type="http" name="myConfigSet" request="false" ondata="canvas.myinit()">
+    <handler name="oninit">
+        var d = new Date();
+        this.setAttribute("src","config.xml?random="+d.getTime());
+        this.doRequest();
+    </handler>
+</dataset>
+
+</library>

@@ -1,0 +1,31 @@
+<library>
+  <script>
+    _browserjavascriptcallback = "";
+  </script>
+  <class name="browserjavascriptcallback">
+     <attribute name="lzappId" type="string" value="lzapp" />
+     <attribute name="timer" type="number" value="10" />
+     <attribute name="prevalue" type="string" value="_browserjavascriptcallbackprevalue" />
+     <attribute name="value" />
+
+     <method name="callIt" args="script">
+		var t = script.split("'").join("\\'");
+		var s = "document.getElementById('"+ lzappId + "').SetVariable('_browserjavascriptcallback', escape((" + t + ")));"
+		
+		_browserjavascriptcallback = this.prevalue;
+		
+		lz.Browser.loadJS(s);
+		
+		if(typeof this.callDelegate == 'undefined')
+		this.callDelegate = new LzDelegate( this, "callback" );
+		lz.Timer.resetTimer( this.callDelegate, timer );
+     </method>
+
+     <method name="callback" args="item">
+		if(unescape(_browserjavascriptcallback) == this.prevalue)
+		lz.Timer.resetTimer( this.callDelegate, timer );
+		else
+		setAttribute("value", unescape(_browserjavascriptcallback));
+     </method>
+  </class>
+</library> 

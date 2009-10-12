@@ -1,0 +1,30 @@
+<library>
+    <resource name="lzscrollbar_xthumbleft_rsc" src="resources/scrollbar/x_scrl_thumb_lft.swf" />
+    <resource name="lzscrollbar_xthumbmiddle_rsc" src="resources/scrollbar/x_scrl_thumb_mid.swf" />
+    <resource name="lzscrollbar_xthumbright_rsc" src="resources/scrollbar/x_scrl_thumb_rt.swf" />
+    <resource name="lzscrollbar_xthumbgripper_rsc" src="resources/scrollbar/thumb_x_gripper.png" />
+
+    <resource name="lzscrollbar_xbuttonleft_rsc" >
+        <frame src="resources/scrollbar/x_scrl_btn_lft_up.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_lft_mo.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_lft_dn.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_lft_up.swf" />
+    </resource>
+    <resource name="lzscrollbar_xbuttonright_rsc" >
+        <frame src="resources/scrollbar/x_scrl_btn_rt_up.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_rt_mo.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_rt_dn.swf" />
+        <frame src="resources/scrollbar/x_scrl_btn_rt_up.swf" />
+    </resource>
+    <resource name="lzscrollbar_xtrack_rsc">
+        <frame src="resources/scrollbar/x_scrl_track.swf"/>
+        <frame src="resources/scrollbar/x_scrl_track_slct.swf"/>
+        <frame src="resources/scrollbar/x_scrl_track.swf"/>
+    </resource>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

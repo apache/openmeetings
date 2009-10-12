@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<library>
+<!-- 
+##########################################################
+these properties can be overwritten by config.xml -->  
+   
+   
+<!-- #############################################
+    Admin Modules
+  -->   
+    
+<attribute name="adminModuleUser" value="userAdmin" type="string" />
+
+<attribute name="adminModuleRoom" value="roomAdmin" type="string" />
+
+<attribute name="adminModuleOrg" value="orgAdmin" type="string" />
+
+<attribute name="adminModuleLanguages" value="languagesEditor" type="string" />
+
+<attribute name="adminModuleConnections" value="roomClient" type="string" />
+
+<attribute name="adminModuleConfiguration" value="confAdmin" type="string" />
+
+<attribute name="adminModuleBackup" value="backupContent" type="string" />
+
+
+<!-- #############################################
+    Moderator Modules
+ -->
+
+<attribute name="moderatorModuleUser" value="userModerate" type="string" />
+
+<attribute name="moderatorModuleRoom" value="roomModerate" type="string" />
+
+
+<!-- #############################################
+    Dashboard Modules
+ -->
+
+<attribute name="dashboardModuleStartScreen" value="mainDashboard" type="string" />
+
+<attribute name="dashboardModuleCalendar" value="myScheduledMeetings" type="string" />
+
+
+<!-- Conference Room Modules -->
+
+<attribute name="conferenceModuleRoomList" value="allmeetings" type="string" />
+
+
+<!-- #############################################
+    Conference Room
+ -->
+
+<attribute name="conferenceRoom" value="conferenceView" type="string" />
+
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<attribute name="eventModuleRoomList" value="allEvents" type="string" />
+
+
+<!-- #############################################
+    Event Room
+ -->
+
+<attribute name="eventRoomModule" value="audienceView" type="string" />
+
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<attribute name="recordModule" value="recordContent" type="string" />
+
+<!-- #############################################
+    Profiles Panel Modules
+ -->
+
+<attribute name="userSettingsModule" value="userSettings" type="string" />
+
+</library>

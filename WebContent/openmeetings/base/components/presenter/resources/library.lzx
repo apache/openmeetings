@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
+     
+	<resource name="btn_presenter_close">
+        <frame src="close_up.png" />
+        <frame src="close_mo.png" />
+        <frame src="close_dn.png" />
+    </resource> 
+    
+</library>

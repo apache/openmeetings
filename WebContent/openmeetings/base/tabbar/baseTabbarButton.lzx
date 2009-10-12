@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="baseTabbarButton" extends="view" 
+    bgcolor="$once{ canvas.basebgcolorizer }">
+    <view width="${ parent.width-2 }" height="${ parent.height-2 }"
+    bgcolor="0xFFFFFF" x="1" y="1" name="_bg" />
+    
+    <attribute name="labelid" value="0" type="number" />
+    
+    <labelText labelid="$once{ parent.labelid }" /> 
+    
+
+</class>
+
+</library>

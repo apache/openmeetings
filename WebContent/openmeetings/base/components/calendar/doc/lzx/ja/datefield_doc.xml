@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="datefield">
+   <doc>
+	calendarwindowが実行された後に表示される(?)。
+	*calendarwindowと一緒に、datepickerで代替可能(?)
+   </doc>
+ </class>
+</rlzxdoc>

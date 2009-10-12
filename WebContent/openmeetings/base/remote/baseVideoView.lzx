@@ -1,0 +1,52 @@
+<library>
+
+
+<!--- 
+	This class provides the basic functions for the video-output
+	
+	    @START_CODE
+            <baseVideoView x="20" y="20" width="320" height="240" bgcolor="black" />
+        @END_CODE	
+ -->
+
+<class name="baseVideoView" width="${parent.width}" height="${parent.height}">
+	<method name="init">
+		super.init();
+		var mc = immediateparent.sprite.attachResourceToChildView("__LZvideo", this.sprite);
+        this.sprite.setMovieClip(mc);
+        this.__LZmovieClipRef = this.sprite.__LZmovieClipRef;
+        var vid = this._getflashvideo();
+        vid._x = 0;
+        vid._y = 0;
+        this.applySizeToVid();
+        if ($debug) Debug.write("init");
+	</method>
+	<method name="applySizeToVid">
+		var vid = this._getflashvideo();
+		vid._width = this.width;
+        vid._height = this.height;
+	</method>
+    <handler name="onwidth" args="w">
+         this.applySizeToVid();
+    </handler> 
+    <handler name="onheight" args="h">
+        this.applySizeToVid();
+    </handler>
+	<method name="_getflashvideo">
+		<![CDATA[
+            return this.__LZmovieClipRef.__lzvideo;
+        ]]>
+    </method> 
+    <!--- shows the Video (can be a Cam-Instance or a NetStream) in the View -->
+    <method name="attachVideo" args="video">
+    	var vid = this._getflashvideo();
+    	vid.attachVideo(video);
+    </method>
+    <method name="clear">
+    	this.attachVideo(null);
+		this.__LZmovieClipRef.__lzvideo.clear();
+	</method>
+</class>
+
+
+</library>

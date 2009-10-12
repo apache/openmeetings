@@ -1,0 +1,135 @@
+<library>
+
+<!---
+	extends the baseVideoStream with functions to catch Device Events
+	this Class uses Events from the Base Class baseVideoStream
+	onmicro and oncamera, which are thrown, once a device was set
+ -->
+
+<class name="baseVideoStreamDevice" extends="baseVideoStream">
+	
+	<!--- Shows if there is Activity on the Microphone -->
+	<attribute name="micactive" value="false" type="boolean" />
+	
+    <!--- Level delegate, used to track level changes. 
+          @keywords private -->
+    <attribute name="_leveldel" value="$once{new LzDelegate(this, '_updateLevel')}"/>
+    
+    <!--- Audio level, 0-100, the amount of sound detected by this microphone.
+          Reset to 0 when there is no audio (no activity or not allowed).
+          @keywords readonly -->
+    <attribute name="level" type="number" value="0"/>    
+        	
+	<!--- Shows if there is Activity on the Camera -->
+	<attribute name="camactive" value="false" type="boolean" />
+	
+	<!--- 
+	Message to send to Clients
+	 -->
+	<attribute name="objMessage" value="null" />
+	<!--- 
+		indicates if the message should be send, you can change the notification 
+		level by changing the loudnessAcitviation in the config.xml
+	 -->
+	<attribute name="isgreater" value="false" type="boolean" />     
+	
+	<attribute name="doSendNotification" value="true" type="boolean" />	
+	
+	<event name="sendCameraStatus" />
+    
+    <event name="sendMicroStatus" />
+    
+	<handler name="oncamera" args="c">
+		//if ($debug) Debug.write("Cam: ",c);
+		var t = this;
+		c.onActivity = function(active) {
+			t.setAttribute("camactive", active);
+		}
+		c.onStatus = function(info) {
+			if ($debug) Debug.write("CamStatus: ",info);
+			t.sendCameraStatus.sendEvent(info.code);
+		}
+	</handler>
+	
+	<handler name="onmicro" args="m">
+		//if ($debug) Debug.write("Mic: ",m);
+		var t = this;
+		m.onActivity = function(active) {
+			t.setAttribute("micactive", active);
+		}
+		m.onStatus = function(info) {
+			if ($debug) Debug.write("MicStatus: ",info);
+			t.sendMicroStatus.sendEvent(info.code);
+		}
+	</handler>
+	
+		<!--- Handler for the Flash Microphone onActivity callback. 
+              @keywords private -->
+	<handler name="onmicactive">
+		<![CDATA[
+            if (this.onlevel) {
+                if (this.micactive) {
+                    this._leveldel.register(lz.Idle, "onidle");
+                } else {
+                    this._leveldel.unregisterAll();
+                    this.setAttribute("level", 0);
+                }
+            }
+		]]>
+	</handler>
+	
+    <!--- Handler for updating the microphone activity level attribute. 
+          @keywords private -->
+    <method name="_updateLevel">
+    	<![CDATA[
+            var level = this.micro.activityLevel;
+            if (level < 0) {
+                level = 0;
+            }
+            if (level != this.level) {
+                this.setAttribute("level", level);
+            }
+		]]>
+	</method>	
+	
+    <!-- 
+	    these methods send a Notification to all Connected users of a 
+	    Room about the onActivity-Change
+     -->
+	<handler name="onlevel">
+		<![CDATA[
+		    if (!this.doSendNotification){
+		    	return;
+		    }
+		
+    		//this.parent.parent.parent._loudness.loudness.setAttribute('text',this.level);
+			if (this.level>canvas.loudnessAcitviation) {
+				if (!this.isgreater) {
+					this.isgreater = true;
+					this.sendNotification();
+				}
+			} else {
+				if (this.isgreater) {
+					this.isgreater = false;
+					this.sendNotification();
+				}
+			}
+		]]>
+	</handler>    
+	<method name="sendNotification">
+		if ($debug) Debug.write("Level sendNotification ",this.isgreater);
+  		this.objMessage = new Array ();
+  		this.objMessage[0] = 'audioActivity';
+  		this.objMessage[1] = this.isgreater;
+  		this.objMessage[2] = parent.parent.publicSID;
+	  	this.sendMessage.doCall();
+	</method> 	
+    <netRemoteCallHib name="sendMessage" funcname="sendMessage" 
+		remotecontext="$once{ canvas.thishib }" showLoading="false" > 
+    	<netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+    </netRemoteCallHib>		    			
+
+</class>
+
+
+</library>

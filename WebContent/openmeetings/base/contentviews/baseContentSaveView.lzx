@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="baseContentSaveView" extends="baseContentView">
+
+    <attribute name="observerViews" value="null" />
+	
+	<attribute name="saveIsVisible" value="true" type="boolean" />
+	<attribute name="addIsVisible" value="true" type="boolean" />
+	<attribute name="refreshIsVisible" value="true" type="boolean" />
+	<attribute name="deleteIsVisible" value="true" type="boolean" />
+	
+	<attribute name="confirmMessageLabelId" value="661" type="number" />
+    
+	<event name="onnew" />
+    <event name="ondelete" />
+    <handler name="onsavecompleted" >
+		this._savecontentbar._newRecord.setAttribute('visibility','hidden');
+	</handler>
+	<event name="onreload" />
+
+    <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
+        bgcolor="$once{ canvas.baseMousecolorizer }">
+        <baseChooseIcon resourceN="filesave_rsc" labelid="144" y="2" 
+        	onclick="this.parent.parent.doSaveEvent()" visible="$once{ parent.parent.saveIsVisible }" />
+        <baseChooseIcon resourceN="edit_add_rsc" labelid="155" y="2" 
+        	onclick="this.parent.parent.doAddEvent()" visible="$once{ parent.parent.addIsVisible }" />  
+        <baseChooseIcon resourceN="reload_rsc" labelid="156" y="2" 
+        	onclick="this.parent.parent.doReloadEvent()" visible="$once{ parent.parent.refreshIsVisible }" />        
+        <baseChooseIcon resourceN="button_cancel_rsc" labelid="157" y="2" 
+        	onclick="this.parent.parent.doDeleteEvent()" visible="$once{ parent.parent.deleteIsVisible }" />
+		<labelText name="_newRecord" visibility="hidden" labelid="344" fgcolor="green" width="150" />        	 	      	
+    </view>
+    
+    <method name="addViewToObserver" args="obj">
+    	if (this.observerViews==null) this.observerViews = new Array();
+        this.observerViews.push(obj);
+    </method>
+	
+	<method name="doAddEvent">
+		this._savecontentbar._newRecord.setAttribute('visibility','visible');
+		this.onnew.sendEvent();
+	</method>
+    
+    <method name="doSaveEvent">
+    	if (this.observerViews.length!=0){
+        	new lz.contentSaveWindow(canvas.main_content._content.inner,{refObj:this,saveObj:this.observerViews});
+        }
+    </method>
+	
+	<method name="doReloadEvent">
+		this.onreload.sendEvent();
+	</method>
+    
+    <method name="doDeleteEvent">
+    	new lz.confirmDeleteWindow(canvas.main_content._content.inner,{
+    	                   refObj:this,
+    	                   messagelabelid:confirmMessageLabelId
+    	               });
+    </method> 
+    
+    <method name="confirmDelete">
+    	this.ondelete.sendEvent();
+    </method>
+
+    <event name="ontabcontentleave" />
+    
+    <method name="close">
+        this.ontabcontentleave.sendEvent();
+        this.destroy();
+    </method>
+
+</class>
+
+</library>

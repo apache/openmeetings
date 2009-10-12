@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="devrtmpconnection">
+   <doc>
+   	RTMP接続をするクラスです。
+   </doc>
+ </class>
+ <class name="netremotecall">
+   <doc>
+   	netを介してメソッドを呼ぶ実装（のようです）
+   </doc>
+ </class>
+ <class name="netparam">
+   <doc>
+   	netremotecallで使うattributeを（一つだけ）持っているクラスです。<br/>
+   	rtmpで何かリクエストを送るときに、リクエストクエリストリングを作成する時のルートとして使われているようです。
+   </doc>
+ </class>
+</rlzxdoc>

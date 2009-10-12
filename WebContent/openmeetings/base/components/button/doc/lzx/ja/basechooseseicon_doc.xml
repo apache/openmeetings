@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="basechooseseicon">
+   <doc>
+	tooltipを備えたボタン。
+	*basemenuseperatorクラスとbasechooseseiconクラスの二つが記述されています。
+	　相関がなさそうなのでファイルをわけましょう。basemenuseperatorのresourceも同時に記述されていますので
+	　ファイルをわける際に整理しましょう。
+   </doc>
+ </class>
+</rlzxdoc>

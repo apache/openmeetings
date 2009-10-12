@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="devcamera">
+   <doc>
+   	'camera'オブジェクトの設定クラスです。width/height/fps(frames per second)の設定を行います。<br/>
+   	カメラの帯域設定（bandwidth)はデフォルトで16384です。画質は'picturequality'で0-1の間で設定できます。<br/>
+   	デフォルトでは0ですが、最高品質は1の設定となります。品質は帯域と要相談。<br/>
+   	*どこからか流用しているクラスですね。   	
+   </doc>
+ </class>
+</rlzxdoc>

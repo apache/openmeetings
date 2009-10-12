@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="resetform">
+   <doc>
+   	"forgot your password"で表示されるview。メール通知を行う。
+   </doc>
+ </class>
+</rlzxdoc>

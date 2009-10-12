@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descr>
+	initialize時に任意のデータを表示できる。
+	前面に表示されたとき(onbule)、現在のデータを再設定する。
+	*ソース中に、"parent.parent..."と記述が多く、実装に依存しすぎている。
+</descr>

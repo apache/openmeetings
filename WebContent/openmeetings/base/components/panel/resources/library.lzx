@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="conferenceBox_button_min_small_rsc" src="box_closed_small.png" />
+    
+    <resource name="conferenceBox_button_max_small_rsc" src="box_open_small.png" />
+    
+    
+	<resource name="arrow_draw_panel_cursor" src="arrow_cursor.swf" />
+	<resource name="draw_box_vertical_rsc" src="draw_box_vertical.swf" />
+	<resource name="draw_box_horizontal_rsc" src="draw_box_horizontal.swf" />
+    
+</library>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!-- Basecolor: C6CEDF -->
+
+	<include href="resources/" />
+	
+	<include href="explorerBox.lzx" />
+	<include href="labelexplorerBox.lzx" />
+
+    
+</library>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="iconView" extends="view">
+    <attribute name="enabled" value="true" type="boolean" />
+    <handler name="onenabled" args="ena">
+        //Debug.write("onenabled: ",ena);
+        ( this.enabled ) ? this.setAttribute('frame',1) : this.setAttribute('frame',4);
+    </handler>
+    <handler name="onmouseover">
+        if (this.enabled) this.setAttribute('frame',2);
+    </handler>
+    <handler name="onmouseout">
+        if (this.enabled) this.setAttribute('frame',1);
+    </handler>
+    <handler name="onmousedown">
+        if (this.enabled) this.setAttribute('frame',3);
+    </handler>
+    <handler name="onmouseup">
+        if (this.enabled) this.setAttribute('frame',1);
+    </handler>            
+</class>
+
+</library>

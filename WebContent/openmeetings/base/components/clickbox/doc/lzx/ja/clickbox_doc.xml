@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="clickbox">
+   <doc>
+	clickableな汎用basecomponent(view)。何に使っているのかわからないが、依存関係の小さいいいクラス。
+	*resourceが同一ファイルに記述されている。
+   </doc>
+ </class>
+</rlzxdoc>

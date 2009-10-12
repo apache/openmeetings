@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="helpAndBugs" extends="view" x="${ parent.width-290 }" layout="axis:x">
+    <view name="btn1" width="80">
+        <view name="v1a" resource="cl_navibar_rsc" />
+        <view name="v1b" x="10" width="$once{ parent.width-10 }"
+            stretches="width" resource="navibar_rsc" />
+
+        <view name="v2a" resource="cl_navibarbtn_rsc" visibility="hidden"/>
+        <view name="v2b" x="10" width="$once{ parent.width-10 }" visibility="hidden"
+            stretches="width" resource="mainnavi_rsc" />
+
+        <handler name="onmouseover">
+            this.v1a.setAttribute('visibility','hidden');
+            this.v1b.setAttribute('visibility','hidden');
+            this.v2a.setAttribute('visibility','visible');
+            this.v2b.setAttribute('visibility','visible');
+        </handler>
+        <handler name="onmouseout">
+            this.v1a.setAttribute('visibility','visible');
+            this.v1b.setAttribute('visibility','visible');
+            this.v2a.setAttribute('visibility','hidden');
+            this.v2b.setAttribute('visibility','hidden');
+        </handler>
+        <labelText labelid="5" x="10" y="6" fontsize="14" width="150" />
+        <handler name="onclick">
+            quicklinkAct("userSettingsModule");
+        </handler>
+
+    </view>
+    <view name="btn3" width="80">
+
+        <view name="v1b" width="$once{ parent.width }"
+            stretches="width" resource="navibar_rsc" />
+
+        <view name="v2b" width="$once{ parent.width }" visibility="hidden"
+            stretches="width" resource="mainnavi_rsc" />
+
+        <handler name="onmouseover">
+            this.v1b.setAttribute('visibility','hidden');
+            this.v2b.setAttribute('visibility','visible');
+        </handler>
+        <handler name="onmouseout">
+            this.v1b.setAttribute('visibility','visible');
+            this.v2b.setAttribute('visibility','hidden');
+        </handler>
+        <labelText labelid="310" x="10" y="6" fontsize="14" width="150" />
+        <handler name="onclick">
+            quicklinkAct('logout');
+        </handler>
+
+    </view>
+    <view name="btn2" width="120">
+
+        <view name="v1b" width="$once{ parent.width-10 }"
+            stretches="width" resource="navibar_rsc" />
+        <view name="v1a"  x="$once{ parent.width-10 }"
+            resource="cr_navibar_rsc" />
+
+        <view name="v2b" width="$once{ parent.width-10 }" visibility="hidden"
+            stretches="width" resource="mainnavi_rsc" />
+        <view name="v2a" x="$once{ parent.width-10 }"
+            resource="cr_navibarbtn_rsc" visibility="hidden"/>
+
+        <handler name="onmouseover">
+            this.v1a.setAttribute('visibility','hidden');
+            this.v1b.setAttribute('visibility','hidden');
+            this.v2a.setAttribute('visibility','visible');
+            this.v2b.setAttribute('visibility','visible');
+        </handler>
+        <handler name="onmouseout">
+            this.v1a.setAttribute('visibility','visible');
+            this.v1b.setAttribute('visibility','visible');
+            this.v2a.setAttribute('visibility','hidden');
+            this.v2b.setAttribute('visibility','hidden');
+        </handler>
+        <labelText labelid="284" x="10" y="6" fontsize="14" width="150" />
+        <handler name="onclick">
+            lz.Browser.loadURL(canvas.currentappnamebugurl,"_blank");
+        </handler>
+
+    </view>
+
+    <handler name="oninit">
+        this.setShadow();
+    </handler>
+    <method name="setShadow" >
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getMCRef();
+               this.displacementMap = new flash.filters.DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>
+    </method>
+
+</class>
+
+</library>

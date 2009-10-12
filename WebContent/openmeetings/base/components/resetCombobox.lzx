@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <class name="resetCombobox" extends="combobox" 
+    	   style="componentStyle" itemclassname="labeldTextListItem">
+    
+        <method name="reset" >
+            <![CDATA[
+                var currentCount = this.cblist.getNumItems();
+                for (var i = 0; i < currentCount; i++)
+                    this.removeItemAt(0);
+                this.clearSelection();
+            ]]>
+        </method>
+    
+    </class>
+        
+</library>

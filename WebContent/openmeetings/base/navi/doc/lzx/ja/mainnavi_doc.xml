@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="subitemsListContainter">
+   <doc>
+   	mainmenumeetingsitemクラスで使われるprivateクラス。axis=xのレイアウトを持つ。
+   </doc>
+ </class>
+ <class name="textboxSubBlank">
+   <doc>
+   	subitemsListItemで使われるprivateクラス。fontsize=14のテキストクラス。
+   </doc>
+ </class>
+ <class name="subitemsListItem">
+   <doc>
+   	mainmenumeetingsitemで使われるprivateクラス。
+   </doc>
+ </class>
+ <class name="mainmenumeetingsitem">
+   <doc>
+   	mainnaviで使われてるprivateクラス。メニュのonmouseup/down/click処理を行っています。（？）
+   </doc>
+ </class>
+ <class name="mainnavi">
+   <doc>
+   	"会議室/講演室"に入室する前のメニューバーです。
+   </doc>
+ </class>
+ <class name="helpandbugs">
+   <doc>
+   	画面右上にある、"ユーザ/Logout/バグリポート"表示です。
+	*このファイルで使われるprivateクラスではないので、別ファイルにしましょう。
+   </doc>
+ </class>
+</rlzxdoc>

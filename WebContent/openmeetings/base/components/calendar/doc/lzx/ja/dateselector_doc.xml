@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="dateselector">
+   <doc>
+   	カレンダー設定を行っているクラス。一つのファイルにbasedateselectorcomponentクラスと、dateselectordayクラスがあります。
+	ファイルを分けましょう。
+	*basedateselectorcomponentクラスでは、*曜日*の表記や各月の最終日を設定しています。これは閏年に対応していないので
+	　このままではいけません。これもdatepickerで代替(?)
+   </doc>
+ </class>
+</rlzxdoc>

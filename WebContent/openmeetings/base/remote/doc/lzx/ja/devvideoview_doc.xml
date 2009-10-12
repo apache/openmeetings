@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="devvideoview">
+   <doc>
+   	Flash Videoを再生するためのクラスです。再生画面のインスタンス生成を行っています。表示するビデオはURLで指定され、”URL”attributeに外部から設定されます。
+   </doc>
+ </class>
+</rlzxdoc>

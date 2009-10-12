@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="baseContentView" extends="view">
+
+    <attribute name="destroyByMethod" value="false" type="boolean" />
+    
+    <event name="ontabcontentleave" />
+    
+    <handler name="oninit">
+    	canvas.currentContentView = this;
+    </handler>
+    
+    <!--
+        This Event is for sending additional Init Events, for example after the reconnect
+        the File-List has to be refreshed for the File-Browser Plugin 
+     -->
+    <event name="sendInit" />
+    
+    <method name="close">
+        if ($debug) Debug.write("close: ",this,this.destroyByMethod);
+        this.ontabcontentleave.sendEvent();
+        if (!this.destroyByMethod) this.destroy();
+        return this.destroyByMethod;
+    </method>
+
+</class>
+
+</library>

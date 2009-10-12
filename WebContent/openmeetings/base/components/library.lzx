@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <include href="iconView.lzx" />
+    <include href="resetCombobox.lzx" />
+    <include href="updatecheckbox.lzx" />
+    <include href="tableCombobox.lzx" />
+    <include href="tableListItem.lzx" />
+    <include href="labelRadioButton.lzx" />
+    <include href="labeltabelement.lzx" />
+    
+    <include href="text/" />
+    <include href="button/" />
+    <include href="clickbox/" />   
+    <include href="explorer/" />    
+    <include href="panel/" />  
+    <include href="list/" />
+    <include href="turnoverlist/" />
+    <include href="calendar/" />
+    <include href="simplevaluelist/" />
+    <include href="upload/" /> 
+    <include href="validbox/" />
+    <include href="presenter/" />
+    <include href="lps/" />
+    <include href="conferencebox/" />
+
+</library>

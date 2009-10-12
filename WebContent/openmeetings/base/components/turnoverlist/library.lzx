@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+	<resource name="step_back" src="resources/step_back.png" />
+	<resource name="step_fwd" src="resources/step_fwd.png" />
+    
+    <resource name="step_back_two_arrow" src="resources/2leftarrow.png" />
+    <resource name="step_fwd_two_arrow" src="resources/2rightarrow.png" />
+    
+    <resource name="step_back_arrow" src="resources/1leftarrow.png" />
+    <resource name="step_fwd_arrow" src="resources/1rightarrow.png" />
+
+	<include href="turnOverList.lzx" />
+    <include href="simpleTurnOverList.lzx" />
+	<include href="turnOverListHeaderItem.lzx" />
+	<include href="turnOverTextItem.lzx" />
+    <include href="baseContentListItem.lzx" />
+
+</library>

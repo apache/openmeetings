@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="menuseperator_rsc" src="resources/menuseperator.png" />
+
+<resource name="background_drawchoose_rsc">
+    <frame src="resources/menudraw_up.png" />
+    <frame src="resources/menudraw_over.png" />
+    <frame src="resources/menudraw_down.png" />
+</resource>
+
+<class name="baseMenuSeperator" resource="menuseperator_rsc" extends="view" />
+
+<class name="baseChooseIcon" extends="button" width="24" height="24"  style="componentStyle">
+    <attribute name="resourceN" value="" type="string" />
+    <view resource="${ parent.resourceN }" x="${ parent.width/2-this.width/2 }" y="${ parent.height/2-this.height/2 }"  />
+    <attribute name="isselected" value="false" type="boolean" />
+	<!--
+    <attribute name="enabled" value="true" type="boolean" />
+	 -->
+    <attribute name="labelid" value="0" type="number" />
+    <handler name="oninit">
+        if (this.isselected){
+            this.onclick.sendEvent();
+            this.setAttribute('frame',3);
+        }
+    </handler>          
+    <labelTooltip labelid="$once{ parent.labelid }" inittwice="true" />
+</class>
+
+
+</library>

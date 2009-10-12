@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="blue_btn_rsc" >
+		<frame src="resources/button_no.png" />
+		<frame src="resources/button_mo.png" />
+		<frame src="resources/button_dn.png" />
+	</resource>
+
+<!--
+0x879CBC
+ -->
+
+<class name="blueButton" extends="basecomponent" width="200" height="18" 
+       bgcolor="$once{ canvas.basebgcolorizer }" focusable="true">
+    
+    <!--
+    <attribute name="enabled" value="true" type="boolean" />
+     -->
+	<attribute name="text" value="defaulttext" type="string" />
+    
+    <attribute name="resoureceItem" value="" type="string" />
+    
+    <attribute name="x_insetResource" value="4" type="number" />
+    <attribute name="y_insetResource" value="4" type="number" />
+    
+	<method name="setText" args="txt">
+		this.setAttribute('text',txt);
+	</method>
+	<view layout="axis:x" name="_bg" x="1.5" y="1.5">
+		<view name="_b2" resource="blue_btn_rsc" stretches="both" width="${ this.parent.parent.width-3 }" height="${ this.parent.parent.height-3 }" />
+	</view>
+    <view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }" 
+          height="18" width="18" stretches="both"
+          resource="$once{ parent.resoureceItem }" />
+    <view name="disAbledView" visibility="${ ( !parent.enabled ) ? 'visible' : 'hidden' }"
+          bgcolor="white" opacity="0.6"
+          width="$once{ parent.width }" height="$once{ parent.height }" />
+    <!--
+	<text name="_text" x="${ this.parent.width/2-this.width/2 }" fontsize="10" fgcolor="0x333333" 
+		y="1" text="${ this.parent.text }" resize="true" />
+	 -->
+     
+	<handler name="onmouseover">
+		this._bg._b2.setAttribute('frame',2);
+	</handler>
+	<handler name="onmouseout">
+		this._bg._b2.setAttribute('frame',1);
+	</handler>
+	<handler name="onmousedown">
+		this._bg._b2.setAttribute('frame',3);
+	</handler>
+	<handler name="onmouseup">
+		this._bg._b2.setAttribute('frame',1);
+	</handler>		
+</class>
+
+</library>

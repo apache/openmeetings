@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <resource name="cl_navibar_rsc" src="resources/cr_navibar.swf" />
+	<resource name="cl_navibarbtn_rsc" src="resources/cr_navibarbtn.swf" />
+	<resource name="cr_navibar_rsc" src="resources/cl_navibar.swf" />
+	<resource name="cr_navibarbtn_rsc" src="resources/cl_navibarbtn.swf" />
+	<resource name="navibar_rsc" src="resources/navibar.swf" />
+    <resource name="mainnavi_rsc" src="resources/navibarbtn.swf" />
+
+    <include href="helpAndBugs.lzx" />
+    <include href="mainNavi.lzx" />
+
+</library>

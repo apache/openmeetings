@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<include href="fileUpload.lzx" />
+	<include href="importWindow.lzx" />
+	<include href="uploadWindow.lzx" />
+
+</library>

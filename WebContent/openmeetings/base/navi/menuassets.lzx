@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="mainmenu_left_rsc">
+	<frame src="resources/main_left_rsc.png" />
+	<frame src="resources/main_left_rsc.png" />
+	<frame src="resources/main_left_rsc.png" />
+	<frame src="resources/main_left_rsc.png" />
+</resource>
+
+<resource name="mainmenu_mid_rsc">
+	<frame src="resources/main_mid_rsc.png" />
+	<frame src="resources/main_mid_rsc.png" />
+	<frame src="resources/main_mid_rsc.png" />
+	<frame src="resources/main_mid_rsc.png" />
+</resource>
+
+<resource name="mainmenu_right_rsc">
+	<frame src="resources/main_right_rsc.png" />
+	<frame src="resources/main_right_rsc.png" />
+	<frame src="resources/main_right_rsc.png" />
+	<frame src="resources/main_mid_rsc.png" />
+</resource>
+
+<resource name="submenu_left_rsc">
+	<frame src="resources/sub_left_rsc.png" />
+	<frame src="resources/sub_left_rsc.png" />
+	<frame src="resources/sub_left_rsc.png" />
+	<frame src="resources/sub_mid_rsc.png" />
+</resource>
+
+<resource name="submenu_mid_rsc">
+	<frame src="resources/sub_mid_rsc.png" />
+	<frame src="resources/sub_mid_rsc.png" />
+	<frame src="resources/sub_mid_rsc.png" />
+	<frame src="resources/sub_mid_rsc.png" />
+</resource>
+
+<resource name="submenu_right_rsc">
+	<frame src="resources/sub_right_rsc.png" />
+	<frame src="resources/sub_right_rsc.png" />
+	<frame src="resources/sub_right_rsc.png" />
+	<frame src="resources/sub_mid_rsc.png" />
+</resource>
+
+<resource name="subsubmenu_left_rsc">
+	<frame src="resources/subsub_left_rsc.png" />
+	<frame src="resources/subsub_left_rsc.png" />
+	<frame src="resources/subsub_left_rsc.png" />
+	<frame src="resources/subsub_mid_rsc.png" />
+</resource>
+
+<resource name="subsubmenu_mid_rsc">
+	<frame src="resources/subsub_mid_rsc.png" />
+	<frame src="resources/subsub_mid_rsc.png" />
+	<frame src="resources/subsub_mid_rsc.png" />
+	<frame src="resources/subsub_mid_rsc.png" />
+</resource>
+
+<resource name="subsubmenu_right_rsc">
+	<frame src="resources/subsub_right_rsc.png" />
+	<frame src="resources/subsub_right_rsc.png" />
+	<frame src="resources/subsub_right_rsc.png" />
+	<frame src="resources/subsub_mid_rsc.png" />
+</resource>
+</library>

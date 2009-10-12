@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- base class for the item list views-->
+<class name="baseContentListItem" extends="view" layout="axis:x;spacing:0" 
+	bgcolor="0xFFFFFF" 
+	onmouseover="this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer)" 
+	onmouseout="this.setAttribute('bgcolor',0xFFFFFF)" >
+	
+	<handler name="onclick">
+		this.parent.parent.parent.parent.onclickedItem.sendEvent(this);
+	</handler>
+    
+    <attribute name="obj" value="null" />
+
+</class>
+
+</library>

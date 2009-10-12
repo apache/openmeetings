@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="logoutConfirm" extends="labelExplorerBox" labelid="633"
+    docking="true" resizeable="false" closable="false" width="270" x="${ canvas.width / 2 - 145 }" y="${ canvas.height / 2 - 120}" height="80">
+
+	<attribute name="objectsToClean" type="expression"/>
+	
+	<labelText fontstyle="bold" y="25" labelid="634" x="10" width="270" />
+	
+	<simpleLabelButton name="ok" x="20" y="50" labelid="54" width="120" height="20">
+		<handler name="onclick">
+			if (!clearStageContent(objectsToClean))
+			{
+				canvas._mainbgcontentNavi.navi.destroy();
+				canvas._mainbgcontentNavi.help.destroy();
+				canvas.thishib.logoutUser.doCall();
+			}
+        
+            this.parent.close();                   
+			
+		</handler>
+	</simpleLabelButton>
+	<simpleLabelButton name="cancel" x="140" y="50" labelid="55" width="120" height="20">
+		<handler name="onclick">
+		
+			this.parent.close();
+			
+		</handler>
+	</simpleLabelButton>		
+</class>
+
+</library>

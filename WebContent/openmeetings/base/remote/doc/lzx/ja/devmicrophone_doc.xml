@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="devmicrophone">
+   <doc>
+   	'mic'オブジェクトの設定クラスです。<br/>
+   	音声レベルは0-100でlevel属性に設定されます。デフォルトは'0'でミュート状態です。<br/>
+   	*devcameraクラス同様どこからか流用しているクラスですね。
+   </doc>
+ </class>
+</rlzxdoc>
