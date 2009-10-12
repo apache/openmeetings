@@ -1,0 +1,423 @@
+/*
+  @!@!@!@!@ ATTENTION EDITORS OF THIS FILE @!@!@!@!@
+
+  If you edit this file, please validate your work using http://jigsaw.w3.org/css-validator/
+*/
+
+/* Stylesheet for Laszlo Systems docs.  */
+p
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+}
+
+h1
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #333333;
+}
+
+h2
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #333333;
+}
+
+h3
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #333333;
+}
+
+h4
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+ul
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+}
+
+ol
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+}
+
+/* ************************************************************************ */
+.regular
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+}
+
+.smaller
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 16px;
+	color: #333333;
+}
+
+/* ************************************************************************ */
+p a:visited { color: #9999CC; }
+p a:active { color: #333399; }
+
+.smallerCode
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 11px;
+	background-color: #eaeaea;
+}
+
+.smallerCode a:visited { color: #9999CC; }
+.smallerCode a:active { color: #333399; }
+.smallerCode a:hover { text-decoration: none; }
+p a:hover { text-decoration: none; }
+.regular a:visited { color: #9999CC; }
+.regular a:active { color: #333399; }
+.regular a:hover { text-decoration: none; }
+
+/* ************************************************************************ */
+.tableTitle
+{
+	color: #ffffff;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.tableTitle a:link
+{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.tableTitle a:visited
+{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.tableTitle a:active
+{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.tableTitle a:hover
+{
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+.redText { color: #ff0000; }
+.grayText { color: #999999; }
+
+/* ************************************************************************ */
+.mousetrailCurrent
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+.mousetrail
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.mousetrail a
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: Black;
+	text-decoration: none;
+}
+
+.mousetrailHome a
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #7F7F7F;
+	text-decoration: none;
+}
+
+.sideNavMain a
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.sideNavSub a
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #666666;
+	text-decoration: none;
+}
+
+.tableContent
+{
+	color: #000000;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 22px;
+}
+
+.tableContent a { color: #333399; }
+.tableContent a:hover { text-decoration: none; }
+
+.tableContentSmall
+{
+	color: #000000;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	line-height: 18px;
+}
+
+.tableContentSmall a { color: #333399; }
+.tableContentSmall a:hover { text-decoration: none; }
+.indentTen { margin-left: 10px; }
+
+.bugReportingTitle
+{
+	color: #000000;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+	line-height: 18px;
+}
+
+.loggedInBanner
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	text-align: right;
+	line-height: 14px;
+}
+
+.todayDate
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #666666;
+}
+
+.devSearch
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #999999;
+}
+
+/* Documentation specific ******************************************* */
+.tutorial, .dguide-chapter { background-color: #EAEAEA; }
+
+.PROGRAMLISTING
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+}
+
+.SECTION
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.CHAPTER
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.REFNAMEDIV
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.GLOSSLIST
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.prevNextNav
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.docTableTitle
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.docTableTitle a:visited { color: #9999CC; }
+.docTableTitle a:active { color: #333399; }
+.docTableTitle a:hover { text-decoration: none; }
+
+.code, .program, .fragment
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 13px;
+	background-color: #eaeaea;
+}
+
+.code a:visited, .program a:visited, .fragment a:visited { color: #9999CC; }
+.code a:visited, .program a:visited, .fragment a:active { color: #333399; }
+.code a:visited, .program a:visited, .fragment a:hover { text-decoration: none; }
+
+.smallerCode
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 11px;
+	background-color: #eaeaea;
+}
+
+.smallerCode a:visited { color: #9999CC; }
+.smallerCode a:active { color: #333399; }
+.smallerCode a:hover { text-decoration: none; }
+
+.exampleCode
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+	background-color: #eaeaea;
+}
+
+.exampleCode a:visited { color: #9999CC; }
+.exampleCode a:active { color: #333399; }
+.exampleCode a:hover { text-decoration: none; }
+
+.TOC, .LOT
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.chaptertoc { float: left; }
+.endchaptertoc { clear: both; }
+
+.examples-index
+{
+	float: right;
+	border: 1px solid green;
+	background-color: white;
+	padding: 0 5px 0 5px;
+}
+
+.examples-index ul
+{
+	list-style: none;
+	padding-left: 10px;
+}
+
+.examples-index h2
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.note
+{
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+}
+
+.warning
+{
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+}
+
+td
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+th
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/* Search Specific ************************************************** */
+.pageCountOn
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.pageCountOff
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/* New examples ******************************************* */
+.exampleTableTitle
+{
+	color: #ffffff;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+pre.code, pre.program, pre.fragment
+{
+	font-family: "Courier New", Courier, monospace;
+	font-size: 13px;
+	background-color: #c1c8da;
+}
+
+/* Response Templates */
+/* size info */
+.total { font-style: italic; }
+
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2001-2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/

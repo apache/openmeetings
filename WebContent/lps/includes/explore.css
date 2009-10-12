@@ -1,0 +1,151 @@
+/*
+  @!@!@!@!@ ATTENTION EDITORS OF THIS FILE @!@!@!@!@
+
+  If you edit this file, please validate your work using http://jigsaw.w3.org/css-validator/
+*/
+
+body
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #eaeaea;
+}
+
+td
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+strong { color: #586886; }
+.tag { color: blue; }
+.attribute { color: green; }
+.script { color: #666699; }
+.value { color: maroon; }
+form { margin: 0; }
+
+h1
+{
+	margin-top: 32px;
+	margin-bottom: 12px;
+	font-size: 14px;
+	color: #394660;
+	border-bottom: 1px solid #394660;
+	margin-right: 100px;
+}
+
+h2
+{
+	margin-top: 22px;
+	margin-bottom: 2px;
+	font-size: 16px;
+	color: #394660;
+}
+
+h3
+{
+	font-size: 12px;
+	color: #394660;
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+p, p.bodytext, li
+{
+	color: #394660;
+	font-size: 12px;
+	margin-right: 20px;
+	margin-top: 0px;
+}
+
+p.runtimelabel
+{
+	color: #242E41;
+	font-size: 82%;
+	font-weight: bold;
+	margin-right: 20px;
+	margin-top: 0px;
+}
+
+.desc
+{
+	color: #394660;
+	margin-right: 100px;
+	font-size: 13px;
+}
+
+.desc-short
+{
+	color: #394660;
+	margin-right: 200px;
+	font-size: 13px;
+}
+
+p.coverlist { margin-top: 10px; }
+
+.smallapp
+{
+	margin-top: 6px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	float: left;
+}
+
+a:link { color: #586886; }
+a:visited { color: #586886; }
+a:hover { color: black; }
+
+/* Welcome */
+.welcome h3 { margin-left: 18px; }
+.welcome p { margin-left: 18px; }
+
+/* Doc view */
+body.doc-view
+{
+	margin-top: 6px;
+	margin-left: 10px;
+}
+
+/* Source view*/
+body.source-view
+{
+	margin-left: 10px;
+	margin-top: 8px;
+}
+
+textarea#sourceCode { font-family: monospace; }
+
+/* Application view */
+body.application-view
+{
+	margin: 0pt;
+	border: 0pt solid #eaeaea;
+	border-width: 32pt 0pt 0pt 15pt;
+	/* Set the background color to white and use a colored border, instead
+     of using a colored background with a padding around the embedded
+     application, so that the center of the page doesn't flash the
+     color of the application before it loads. */
+}
+
+.application-view .application
+{
+	border: 1px solid #7f9db9;
+	border-width: 1px 0px 0px 1px;
+	width: 100%;
+	height: 100%;
+}
+
+/* The background of the loading view and the application view (which it
+   transfers to) should be the same color, to avoid a flash while the
+   application is loading. */
+
+body.application-view,
+body.loading-view { background-color: #eaeaea; }
+
+/* Loading view */
+body.loading-view { padding-top: 100pt; }
+
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2001-2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/
