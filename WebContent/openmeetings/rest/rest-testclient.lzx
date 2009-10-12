@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas debug="true" height="100%" title="REST Test-Application">
+	
+<debug width="450" x="460" y="600" height="100" />
+  
+<include href="incubator/lzcombobox.lzx" />
+
+<attribute name="_baseUrlRestTestGate" value="" type="string" />
+
+<method name="setBaseUrlGateway" args="txt">
+	if ($debug) Debug.write("setBaseUrlGateway: ",txt);
+	this.setAttribute("_baseUrlRestTestGate",txt);
+	var tString1 = txt+"/AddressBookService/findEntry";
+	if ($debug) Debug.write("tString1: ",tString1);
+	this.dset.setSrc(tString1);
+	this.dset.setQueryType("POST");
+	this.dset.setQueryParam("param1","awe");
+	this.dset.doRequest();
+	if ($debug) Debug.write("dset: ",this.dset);
+</method>
+
+<dataset name="dset" request="false" type="post" ondata="Debug.write('ondata: ',val,this.data,this)" >
+</dataset>
+
+<datapointer xpath="dset:/">
+	<handler name="ondata">
+		Debug.write('ondata: ',this);
+	</handler>
+</datapointer>
+
+<view layout="axis:y;spacing:4" width="450" x="0">
+	<text fontstyle="bold" text="Connection - Settings (user for both BroadCasting and Subscribing)" />
+	<view width="450">
+		<text text="BaseURL:" />
+		<edittext align="right" width="350" id="url" text="http://127.0.0.1:5080/openmeetings/services" />
+	</view>
+	<button align="right" width="200" text="connectRtmpConnection" 
+			onclick="canvas.setBaseUrlGateway(url.text)" />
+</view>
+
+
+<!-- some description -->
+<text fontstyle="italic" y="0" width="450" multiline="true" x="450">
+	Test-Client for Testing the WebService-Gateway (Axis2)<br/>
+	This uses the REST-Gateway, not the SOAP Gateway as OpenLaszlo does not<br/>
+	Understand/speak SOAP 1.2<br/>
+</text>
+
+
+</canvas>
