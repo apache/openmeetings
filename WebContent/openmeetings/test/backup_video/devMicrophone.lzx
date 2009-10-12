@@ -1,0 +1,212 @@
+<library>
+
+    <!--
+        Microphone. 
+
+        Usage:
+        @START_CODE
+            <microphone/>
+        @END_CODE
+
+        Declaring a microphone with its default attributes will cause it
+        to be immediately useful, which means that a security dialog will
+        appear allowing the end user to allow or deny access to the microphone.
+
+        To defer the display of the security dialog, start the microphone not capturing:
+        @START_CODE
+            <microphone capturing="false"/>
+        @END_CODE
+    -->
+    <class name="devMicrophone" extends="devMediaDevice" >
+
+
+        <!--- Flash movie clip for microphone. 
+              @keywords private --> 
+        <attribute name="_mc" value="null"/>
+
+        <!--- Flash Sound object for _mc to control microphone feedback. 
+              @keywords private --> 
+        <attribute name="_sound" value="null"/>
+
+        <!--- Audio level, 0-100, the amount of sound detected by this microphone.
+              Reset to 0 when there is no audio (no activity or not allowed).
+              @keywords readonly -->
+        <attribute name="level" type="number" value="0"/>
+
+        <!--- Level delegate, used to track level changes. 
+              @keywords private -->
+        <attribute name="_leveldel" value="$once{new LzDelegate(this, '_updateLevel')}"/>
+
+        <!--- Mediastream to associate with the microphone, for audio recordContenting. -->
+        <attribute name="stream" value="null" setter="this._setStream(stream)"/>
+		
+		<attribute name="rate" value="11" type="number" />
+		
+		<!--- Microphone useEchoSupression -->
+		<attribute name="suppress" value="false" type="boolean" />
+
+        <!--- Event sent when microphone level changes. 
+              @keywords private -->
+        <event name="onlevel"/>
+
+
+        <!--- Make the microphone.
+              @keywords private -->
+        <method name="_makeDevice"><![CDATA[
+            var deviceindex = 
+                this['deviceindex'];
+
+            if (deviceindex == null) {
+                dev = Microphone.get();
+            } else {
+                dev = Microphone.get(deviceindex);
+            }
+
+            this._dev = 
+                dev;
+
+            return dev;
+          ]]>
+        </method>
+
+
+        <!--- Set up the microphone. 
+              @keywords private -->
+        <method name="_setupDevice"><![CDATA[
+            var dev = this._dev;
+
+            // ...
+          ]]>
+        </method>
+
+
+        <!--- Start the microphone. -->
+        <method name="startDevice"><![CDATA[
+            //Debug.write("microphone startdevice", this);
+            this._mc = 
+                _root.createEmptyMovieClip("__LZmicMovieClip", 10000);
+
+            // This is done to supress pesky feedback. 
+            this._sound = 
+                new Sound(this._mc);
+            this._sound.setVolume(0);
+
+            super.startDevice();
+
+            // Use duck typing to check for the existence of the
+            // _setMic method, instead of checking if the
+            // immediateparent is an instance of videoview, to avoid
+            // loading the videoview class if it's not needed.
+            if (immediateparent['_setMic']) {
+                immediateparent._setMic(this);
+            }
+
+            //Debug.write("microphone startDevice setting capturing", this.capturing);
+            this.setAttribute("capturing", this.capturing);
+          ]]>
+        </method>
+
+
+        <!--- Handler for the Flash Microphone onActivity callback. 
+              @keywords private -->
+        <handler name="onactive"><![CDATA[
+            //Debug.write("microphone onactive", this, "onlevel", this.onlevel, "active", this.active);
+            if (this.onlevel) {
+                if (this.active && this.capturing) {
+                    this._leveldel.register(lz.Idle, "onidle");
+                } else {
+                    this._leveldel.unregisterAll();
+                    this.setAttribute("level", 0);
+                }
+            }
+          ]]>
+        </handler>
+
+
+        <!--- Called when the allowed flag changes.
+              @keywords private -->
+        <method name="_updateAllowed"><![CDATA[
+            //Debug.write("microphone _updateAllowed", this, this.allowed, "capturing", this.capturing);
+            super._updateAllowed();
+
+            this.setAttribute("capturing", this.capturing);
+          ]]>
+        </method>
+
+
+        <!--- Setter for capturing attribute. 
+              @keywords private -->
+        <method name="_setCapturing" args="capturing"> <![CDATA[
+            //Debug.write("microphone _setCapturing", this, capturing, this.isinited, this._dev, this._mc);
+
+            super._setCapturing(capturing);
+
+            if (!this.isinited) {
+                return;
+            }
+
+            if (this._dev != null) {
+                if (capturing) {
+                    this._mc.attachAudio(this._dev);
+                } else {
+                    this._mc.attachAudio(false);
+                }
+                this.setAttribute("active", this.active);
+            }
+
+          ]]>
+        </method>
+
+
+        <!--- Handler for updating the microphone activity level attribute. 
+              @keywords private -->
+        <method name="_updateLevel"><![CDATA[
+            var level = this._dev.activityLevel;
+            if (level < 0) {
+                level = 0;
+            }
+            if (level != this.level) {
+                this.setAttribute("level", level);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Associate a mediastream with the microphone.
+          This is called to connect a microphone directly
+          to a mediastream, without an intervening videoview,
+          for audio only recordContenting.
+              @keywords private -->
+        <method name="_setStream" args="stream"><![CDATA[
+        //Debug.write("microphone _setStream", stream);
+            this.stream = stream;
+            if (stream) {
+                //Debug.write("microphone", this, "_setStream", stream);
+                stream._setMic(this);
+            }
+          ]]>
+        </method>
+		
+		<method name="setRate" args="rate">
+			<![CDATA[
+				this.rate = rate;
+				if (this._dev) {
+					this._dev.setRate(rate);
+				}
+			]]>
+		</method>
+		
+		<method name="setUseEchoSupression" args="supression">
+			<![CDATA[
+				this.supression = supression;
+				if (this._dev) {
+					this._dev.setUseEchoSuppression(supression);
+				}
+		    ]]>
+		</method>
+
+
+    </class>
+
+
+</library>

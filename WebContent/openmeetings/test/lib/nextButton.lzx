@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="nextButton" extends="button" onclick="changeNextTabpane()">
+    
+    <attribute name="align" value="right" />
+    <attribute name="isdefault" value="true" />
+
+	<attribute name="nextTabpane" required="true" />
+
+    <method name="changeNextTabpane">
+      var object = this.getAttribute('nextTabpane');
+      object.setAttribute("selected","true");
+    </method>
+
+</class>
+
+</library>

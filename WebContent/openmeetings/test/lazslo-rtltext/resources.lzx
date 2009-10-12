@@ -1,0 +1,16 @@
+<library>
+    
+    <!-- Fonts -->
+    <font name="default">
+      <face src="fonts/hebrew/arial.ttf"/>
+      <face src="fonts/hebrew/arialbd.ttf" style="bold"/>
+	</font>
+
+</library>
+<!--                                                                       -->
+<!-- Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.        -->
+<!-- Use is subject to license terms.                                      -->
+<!--                                                                       -->
+<!--                                                                       -->
+<!-- Laszlo Presentation Server version 3.0b1 001227                     -->
+<!--                                                                       -->

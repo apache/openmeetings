@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+<script>
+<![CDATA[
+
+var mess = {};
+
+mess.home = "Home";
+mess.welcome = "Welcome !<br />We now determine if your configuration is good to have the best experience with OpenMeetings.";
+mess.sound = "Sound";
+mess.micro = "Micro";
+mess.webcam = "Webcam";
+mess.bandwidth = "Bandwidth";
+mess.latency = "Latency";
+mess.synthesis = "Synthesis";
+mess.next = "Next >";
+mess.listen_sound = "Do you hear the voice ?";
+mess.yes = "Yes";
+mess.no = "No";
+mess.microRecord = "Record your voice and click on \"Play\" button to hear if your micro works.";
+mess.webcamText = "Your webcam :";
+mess.bandwidthText = "We are testing the capacity of your Internet connexion.";
+mess.latencyText = "We are testing the delay between your computer and our server.";
+mess.synthesisText = "Your results :";
+]]>
+</script>
+</library>

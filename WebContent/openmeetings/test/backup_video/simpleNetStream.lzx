@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+
+<library>
+
+
+    <!--
+        Media stream. 
+
+        @START_CODE
+            <mediastream/>
+        @END_CODE
+    -->
+    <class name="simpleNetStream" extends="node">
+
+        <!--
+              Private attributes.
+        -->
+
+        <!--- A reference to the Flash NetConnection object.
+              @keywords private -->
+        <attribute name="_nc" value="null"/>
+
+        <!--- A reference to the Flash NetStream object.
+              @keywords private -->
+        <attribute name="_flashstream" value="null"/>
+        
+        <attribute name="buffertime" value="0" type="number" />
+        
+        <attribute name="soundRef" value="null" />
+        
+        <handler name="onstatus" args="info" />
+        
+        <!--- The pending stream name. 
+              @keywords private -->
+        <attribute name="_pendingstreamname" value="" type="string"/>   
+        
+        <attribute name="mode" value="" type="string"/>       
+
+        <!--- Event sent when a cue point occurs,
+              whose parameter is a dictionary of metadata. -->
+        <handler name="oncuepoint"/>
+
+        <!--- Event sent when insufficient bandwidth. -->
+        <handler name="oninsufficientbandwidth"/>
+
+        <!--- Event sent when metadata is received, 
+              whose parameter is a dictionary of metadata. -->
+        <handler name="onmetadata"/>
+
+        <handler name="onstart" />
+        <handler name="onstop" />
+
+        <!--- 
+            Play the mediastream at this.url. 
+         -->
+
+        <method name="play" args="streamname,start">
+            <![CDATA[
+                if (this._nc==null){
+                    this._findnc();
+                }
+                if (this._nc!=null){
+                    this._createStream();               
+                    this.streamname = streamname;
+                    //Debug.write("play", this.streamname);
+                    //Debug.write("this._flashstream", this._flashstream);
+                    this.playing = true;
+                    parent.stream = this;
+                    parent._setPlayStream();
+                
+                    this._flashstream.setBufferTime(this.buffertime);
+                
+                    if (start!=0){
+                    	this.mode = "playing";
+                    	this._flashstream.play(this.streamname,start);
+                    }else {
+                    	this.mode = "playing";
+                    	this._flashstream.play(this.streamname,0);
+                    }
+                    //Debug.write(this._flashstream);
+                    _root.createEmptyMovieClip("vSound",_root.getNextHighestDepth());
+                    _root.vSound.attachAudio(this._flashstream);
+                    //Debug.write(_root.vSound);
+                    this.soundRef = new Sound(_root.vSound);
+                    //Debug.write(this.soundRef);
+                } else {
+                    Debug.warn("Cant create Stream without valid rtmp-connection");
+                }
+            ]]>
+        </method>       
+        
+
+       <!--- Stop the stream. Whereas pause will keep the 'mode' as 
+              playing, stop will set mode to "" and is heavier-weight
+              operation. -->
+        <method name="stop"><![CDATA[
+        	Debug.write("STOP ",this.mode);
+            if (this._flashstream == null) {
+                 return;
+            }
+			if ($debug) Debug.write("SIMPLENETSTREAM stop this._flashstream, ",this._flashstream);
+			if ($debug) Debug.write("SIMPLENETSTREAM stop this.mode, ",this.mode);
+            switch (this.mode) {
+
+                case "recording":
+                    this._deactivateTimeDel();
+                    // fall through
+
+                case "broadcasting":
+                    this._flashstream.publish(false);
+                    //this.close();
+                    break;
+
+                case "playing":
+                    this._flashstream.play(false);
+                    break;
+
+                case "":
+                    // Already stopped. 
+                    Debug.warn("Already stopped " + this.mode);
+                    break;
+
+                default:
+                    Debug.warn("bogus mode: " + this.mode);
+                    break;
+
+            }
+
+            this.setAttribute("time", 0);
+            this.setAttribute("progress", 0);
+            this.setAttribute("mode", "");
+            this.playing = false;
+          ]]>
+        </method>
+        
+
+        <!--- Works for playback and mimics animator pause() semantics. -->
+        <method name="pause" args="p"><![CDATA[
+            //Debug.write("pause", this, "p", p, "p == null", p == null, "this['paused']", this['paused']);
+            this.setAttribute("paused",  (p == null) ? !this['paused'] : p)
+          ]]>
+        </method>
+        
+
+
+        <!--- Start recordContenting. -->
+        <method name="recordContent"><![CDATA[
+            //Debug.write("mediastream recordContent", this, "_flashstream", this._flashstream, "streamname", this.streamname, "url", this.url);
+            this._publishSetup();
+            //Debug.write("mediastream recordContent", this, "done with setup, streamname", this.streamname);
+            this._flashstream.publish(this.streamname, "record");
+            //Debug.write("publish", this.streamname);
+
+            this._basetime = (new Date).getTime();
+            //Debug.write("basetime = ", this._basetime);
+            this.setAttribute("time", 0);
+            this.setAttribute("progress", 0.0);
+            this.setAttribute("mode", "recording");
+            this._activateTimeDel();
+          ]]> 
+        </method>       
+
+
+        <!--- start sending a live mediastream to the server. -->
+        <method name="broadcast" args="streamname,cam,mic">
+            <![CDATA[
+				Debug.write("broadcast ",streamname,cam,mic);
+                this._findnc();
+                
+                if (this._nc!=null){
+                    this._createStream();
+                
+                    if (cam!=null) this._flashstream.attachVideo(cam._dev);
+                    if (mic!=null) this._flashstream.attachAudio(mic._dev);
+                
+                    this.streamname = streamname;
+                    if ($debug) Debug.write("publish", this.streamname);
+                    if ($debug) Debug.write("this._flashstream", this._flashstream);
+                	this.mode = "broadcasting";
+                    this._flashstream.publish(this.streamname,"live");
+
+                } else {
+                    if ($debug) Debug.warn("Cant create Stream without valid rtmp-connection");
+                }
+            ]]>
+        </method>       
+
+
+        <!--- Close the stream. -->
+        <method name="close">
+            <![CDATA[
+                Debug.write("FLASHSTREAM CLOSE", this, this._flashstream);
+                if (this._flashstream == null) {
+                    return;
+                }
+                this.stop();
+                this._flashstream.attachVideo(null);
+                this._flashstream.attachAudio(null);
+                this._flashstream.close();
+                this._flashstream = null;
+            ]]>
+        </method>
+        
+        <method name="setBufferTime" args="buffer">
+            this.buffertime = buffer;
+            if (this._flashstream!=null) {
+                this._flashstream.setBufferTime(this.buffertime);
+            }
+        </method>
+            
+
+
+        <!--- Find or create the Flash NetConnection object.
+              @keywords private -->
+        <method name="_findnc">
+            <![CDATA[
+                Debug.write("_findnc", this, this._nc);
+    
+                // If we don't define our own connection, then use
+                // the default one (the first rtmpconnection created).
+                Debug.write("_findnc type rtmp, rtmpconnection", canvas.currentNC);
+                this._nc = canvas.currentNC;
+                
+                Debug.write('this._nc', this._nc);
+
+
+            ]]>
+        </method>
+
+
+        <!--- Create Flash NetStream object.
+              @keywords private -->
+        <method name="_createStream"><![CDATA[
+
+            Debug.write("mediastream _createStream", this, "_nc", this._nc, "_flashstream", this._flashstream);
+
+            if (this._flashstream) {
+                Debug.warn("_flashstream already defined: %w", this._flashstream);
+                return;
+            }
+
+            Debug.write("MAKING _FLASHSTREAM", this._nc);
+            this.setAttribute("_flashstream", new NetStream(this._nc));
+            Debug.write("MADE _FLASHSTREAM", this._flashstream);
+
+            this._flashstream.t = this;  
+
+            this._flashstream.onStatus = function(info) {
+            	_root.Debug.write("simpleNetStream onStatus",info);
+                this.t._onStatus(info);
+            };
+
+            this._flashstream.onCuePoint = function(info) {
+            	_root.Debug.write("simpleNetStream onCuePoint",info);
+                this.t._onCuePoint(info);
+            };
+
+
+            this._flashstream.onPlayStatus = function(info) {
+            	_root.Debug.write("simpleNetStream onPlayStatus",info);
+                this.t._onPlayStatus(info);
+            };
+
+            this._flashstream.onMetaData = function(info) {
+            	_root.Debug.write("simpleNetStream onMetaData",info);
+                this.t._onMetaData(info);
+            };
+
+          ]]>
+        </method>
+
+
+        <!--- Handle the onStatus callback from the Flash NetStream object. 
+              @keywords private -->
+        <method name="_onStatus" args="info"><![CDATA[
+
+            this.onstatus.sendEvent(info);
+
+            switch (info.code) {
+
+                case "NetStream.Buffer.Empty": {
+                    //var newbuftime = this._flashstream.bufferTime + 1;
+                    //this._flashstream.setBufferTime(newbuftime);
+                    //Debug.write("newbuffertime", newbuftime);
+                    break;
+                }
+
+                case "NetStream.Buffer.Full": {
+                    if (this._pendingstreamname != "") {
+                        this.setAttribute("streamname", this._pendingstreamname);
+                        //Debug.write("streamname", this.streamname);
+                        this._pendingstreamname = "";
+                    }
+                    break;
+                }
+
+                case "NetStream.Play.Start": {
+                    this._onStart();
+                    break;
+                }
+
+                case "NetStream.Play.Stop": {
+                    this._onStop();
+                    break;
+                }
+
+                case "NetStream.Play.InsufficientBW": {
+                    this._onInsufficientBandwidth();
+                    break;
+                }
+
+                case "NetStream.Record.Start": {
+                    this._onStart();
+                    break;
+                }
+
+                case "NetStream.Record.Stop": {
+                    this._onStop();
+                    break;
+                }
+
+                case "NetStream.Buffer.Flush": {
+                    break;
+                }
+
+                case "NetStream.Publish.Start": {
+                    // Sent when starting recordContenting from camera to server,
+                    // and apparently when we stop as well.
+                    // info.details = first time: null, subsequently: false
+                    // No way to figure out if it's starting or stopping.
+                    break;
+                }
+
+                case "NetStream.Play.UnpublishNotify": {
+                    // Called when stop publishing live video cam. (???)
+                    break;
+                }
+
+                case "NetStream.Unpublish.Success": {
+                    // Sent after you start playing a stream after recordContenting it. (???)
+                    break;
+                }
+
+                case "NetStream.Pause.Notify": {
+                    // Sent after you pause.
+                    break;
+                }
+
+                case "NetStream.Unpause.Notify": {
+                    // Sent after you unpause.
+                    break;
+                }
+
+                case "NetStream.Play.Reset": {
+                    // Sent after you start playing a stream after recordContenting it. (???)
+                    break;
+                }
+
+                case "NetStream.Seek.Notify": {
+            // Sent after seeking.
+                    break;
+                }
+
+                default: {
+                    Debug.warn("simplenetstream _onStatus not handled %w %w %w", this, info.code, info);
+                    break;
+                }
+
+            }
+
+          ]]>
+        </method>
+
+        <!--- This is called when a media stream starts playing or recordContenting.
+              @keywords private -->
+        <method name="_onStart"><![CDATA[
+            if (this.onstart) {
+                this.onstart.sendEvent();
+            }
+          ]]>
+        </method>
+
+
+        <!--- This is called when a media stream stops playing or recordContenting.
+              @keywords private -->
+        <method name="_onStop"><![CDATA[
+            this.stop(); // FIXME: is this necessary?
+            if (this.onstop) {
+                this.onstop.sendEvent();
+            }
+          ]]>
+        </method>
+
+
+        <!--- This is called when a media stream hits the end and stops playing.
+              @keywords private -->
+        <method name="_onInsufficientBandwidth"><![CDATA[
+        	if ($debug) Debug.write("oninsufficientbandwidth THROWN");
+            if (this.oninsufficientbandwidth) {
+                this.oninsufficientbandwidth.sendEvent();
+            }
+          ]]>
+        </method>
+
+
+        <!--- Handle the onPlayStatus callback from the Flash NetStream object. 
+              @keywords private -->
+        <method name="_onPlayStatus" args="info"><![CDATA[
+            Debug.write("mediastream onPlayStatus", this, info.code, info);
+
+            switch (info.code) {
+
+                case "NetStream.Play.Complete": {
+                    // Correct for valid Buffer.Empty.
+                    // I don't understand why it's doing this. -dhopkins
+                    //var newbuftime = 
+                    //    this._flashstream.bufferTime - 1;
+                    //this._flashstream.setBufferTime(newbuftime);
+                    //Debug.write("newbuffertime=",newbuftime);
+                    break;
+                }
+
+                default: {
+                    if (this.debug) {
+                        Debug.warn("mediastream _onPlayStatus not handled: %w %w %w", this, info.code, info);
+                    }
+                    break;
+                }
+
+             }
+
+          ]]>
+        </method>
+
+
+        <!--- Handle the onMetaData callback from the Flash NetStream object. 
+              Pick out the "duration" property and set our totaltime from it.
+              Then forward the metadata on as a parameter to the onmetadata event. 
+              @keywords private -->
+        <method name="_onMetaData" args="info"><![CDATA[
+            var propName;
+            for (propName in info) {
+                if (this.debug) {
+                    Debug.write("MetaData: " + propName + " = " + info[propName]);
+                }
+                if (propName == "duration") {
+                    this.setAttribute("totaltime", info[propName]);
+                }
+            }
+
+            if (this.onmetadata) {
+                this.onmetadata.sendEvent(info);
+            }
+          ]]>
+        </method>
+        
+        <method name="setVolume" args="vol">
+            Debug.write(this.soundRef,vol);
+            this.soundRef.setVolume(vol);
+        </method>
+
+
+    </class>
+
+
+</library>

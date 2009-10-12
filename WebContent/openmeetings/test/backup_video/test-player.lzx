@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas debug="true" width="100%" height="100%" >
+    
+    <debug fontsize="14" oninit="Debug.showInternalProperties = true" />
+    
+    <include href="devMediaDevice.lzx" />
+	<include href="devMicrophone.lzx" />
+	<include href="devCamera.lzx" />
+	<include href="devrtmpconnection2.lzx" />	
+	<include href="playVideoView.lzx" />
+    
+    <attribute name="currentNC" value="null" />
+
+	<class name="videoview" extends="view" >
+		<playVideoView name="_videoview" x="3" y="2" width="120" height="80" />	
+	</class>
+	
+	<class name="hibRtmpConnection" extends="devRtmpConnection" debug="true"
+    	src="rtmp://192.168.2.102:1935/openmeetings/hibernate" >
+		<handler name="onconnect">
+        	Debug.write("connected");   
+        	var t = new lz.videoview(canvas.i.v_container);
+			t._videoview.playStream("4_05_01_2008_22_20_15.flv");         	
+		</handler>
+		<handler name="onerror" >
+			Debug.write("error ",this.status);
+		</handler>
+	</class>
+	
+	<!--
+		rtmp://192.168.2.102:1935/xmlcrm/hibernate
+		4_05_01_2008_22_20_15.flv
+	 -->
+	 <view>
+	 	<simplelayout axis="y" />
+		<button name="_connect1" text="connect">
+			<handler name="onclick">
+				//new lz.hibRtmpConnection(canvas,{name:'thishib',id:'hib'});
+				canvas.thishib2.connect();
+			</handler>
+		</button>	 
+		<button name="_connect5" text="disconnect">
+			<handler name="onclick">
+				//new lz.hibRtmpConnection(canvas,{name:'thishib',id:'hib'});
+				canvas.thishib2.disconnect();
+			</handler>
+		</button>	
+		<button name="_connect6" text="newVideo">
+			<handler name="onclick">
+				//new lz.hibRtmpConnection(canvas,{name:'thishib',id:'hib'});
+	        	var t = new lz.videoview(canvas.i.v_container);
+	        	t._videoview.v_output._stream=null;
+				t._videoview.v_output.play("4_05_01_2008_22_20_15.flv",0);   
+			</handler>
+		</button>				
+		<button name="_connect2" text="Init">
+			<handler name="onclick">
+				new lz.hibRtmpConnection(canvas,{name:'thishib',id:'hib'});
+			</handler>
+		</button>
+		<button name="_connect3" text="InitedDoConnect">
+			<handler name="onclick">
+				canvas.thishib.connect();
+			</handler>
+		</button>		
+		<button name="_connect4" text="InitAndConnect">
+			<handler name="onclick">
+				new lz.hibRtmpConnection(canvas,{name:'thishib',id:'hib'});
+				canvas.thishib.connect();
+			</handler>
+		</button>		
+	 </view>
+	 
+	 <view name="i" height="400" x="200" width="200">
+		 <view name="v_container">
+		 	<simplelayout axis="y" />
+		 </view>
+		 <vscrollbar />
+	 </view>
+	
+	<hibRtmpConnection name="thishib2" />
+
+</canvas>

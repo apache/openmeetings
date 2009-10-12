@@ -1,0 +1,80 @@
+<library>
+
+
+<class name="playVideoView" width="160" height="120">
+	<attribute name="_ns" value="null" />	
+	
+	<!--- buffer time -->
+	<attribute name="buffertime" value="0.3" type="number" />	
+	
+	<!--- @keywords private -->
+	<attribute name="soundRef" value="null"  />
+	
+    <handler name="oninit">
+    	var mc = immediateparent.sprite.attachResourceToChildView("__LZvideo", this.sprite);
+    	this.sprite.setMovieClip(mc);
+    	this.__LZmovieClipRef = this.sprite.__LZmovieClipRef;
+    	this.__LZmovieClipRef.__lzvideo._x = 0;
+    	this.__LZmovieClipRef.__lzvideo._y = 0;            	
+    	this.__LZmovieClipRef.__lzvideo._width = this.width;
+    	this.__LZmovieClipRef.__lzvideo._height = this.height;
+    </handler>
+    <method name="setWidth" args="w">
+    	if (!this.isinited) { this.width = w; return; }
+    	this.__LZmovieClipRef.__lzvideo._width = w;
+    </method>
+    <method name="setHeight" args="h">
+    	if (!this.isinited) { this.height = h; return; }
+    	this.__LZmovieClipRef.__lzvideo._height = h;
+    </method>	        
+    <method name="playStream" args="flv">
+    	if (this._ns!=null){
+    		this._ns.pause();
+    		this._ns.stop();
+    		this._ns.close();
+    	}
+    	this._ns = new NetStream(canvas.currentNC);
+    	var t = this;
+    	this._ns.onStatus = function(info){
+    		_root.Debug.write("playVideoView onStatus",info);
+    	}
+    	this._ns.onMetaData = function(info){
+    		_root.Debug.write("playVideoView onMetaData",info);
+    	}
+    	this.__LZmovieClipRef.__lzvideo.attachVideo(this._ns);
+    	this._ns.setBufferTime(this.buffertime);
+    	this._ns.play(flv);
+    </method>  
+    <method name="subscribeStream" args="flv,start">
+    	if (this._ns!=null){
+    		this._ns.pause();
+    		this._ns.close();
+    	}
+    	this._ns = new NetStream(canvas.currentNC);
+    	var t = this;
+    	this._ns.onStatus = function(info){
+    		_root.Debug.write("playVideoView onStatus",info);
+    	}
+    	this._ns.onMetaData = function(info){
+    		_root.Debug.write("playVideoView onMetaData",info);
+    	}
+    	this.__LZmovieClipRef.__lzvideo.attachVideo(this._ns);
+    	this._ns.setBufferTime(this.buffertime);
+    	this._ns.play(flv,start);
+
+		var k = _root.getNextHighestDepth();
+        _root.createEmptyMovieClip("vSound"+k,k);
+        _root["vSound"+k].attachAudio(this._ns);
+        //Debug.write(_root.vSound);
+        this.soundRef = new Sound(_root["vSound"+k]);    	
+    </method> 
+    <method name="stop">
+    	if (this._ns!=null){
+	    	this._ns.pause();
+	    	this._ns.close();
+    	}
+	</method>
+</class>
+
+
+</library>

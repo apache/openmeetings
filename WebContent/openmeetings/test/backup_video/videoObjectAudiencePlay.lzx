@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+		This class is just invoked from videoContainerStream.lzx and videoEventContainerStream.lzx.
+	-->
+	<class name="videoObjectAudiencePlay" extends="view" width="252" height="270" visible="true" >
+		<!-- Set the Name of the partner -->
+		<attribute name="chatpartnername" value="" type="string" />
+		<attribute name="usercolor" value="" type="string" />
+		<attribute name="userposition" value="o" type="number" />
+			
+		<!-- Set the ID of the Partner 
+			@keywords private
+		 -->
+		<attribute name="uniqueid" value="-2" type="string" />
+		
+		<attribute name="isremote" value="true" type="boolean" />
+		
+		<handler name="onisremote" args="r">
+			this.isremote = r;
+			if (r) {
+				this.message.setAttribute('visibility','hidden');
+				this.showuser.setAttribute('visibility','visible');
+				this.mute.setAttribute('visibility','visible')
+			} else {
+				this.message.setAttribute('visibility','visible');
+				this.showuser.setAttribute('visibility','hidden');
+				this.mute.setAttribute('visibility','hidden')
+			}
+		</handler>
+		
+		<attribute name="clientVars" value="null" />
+		
+		<handler name="oninit">
+			this.clientVars = new Array();
+			this.clientVars['User']='No User Connected';
+		</handler>
+		
+		<!-- Get the reference to the videoview-Object -->
+		<method name="getVideoReference">
+			return this._chatvideoinner._videoview;
+		</method>
+	    
+	    	<method name="setIdentifier" args="id">
+	    		//for development replace this by the real name later after authentification
+	    		//this.setAttribute('chatpartnername',('StreamID: '+id));
+	        	this.uniqueid = id;
+	    	</method>
+	    
+	    	<method name="resetValues">
+	    		this.uniqueid = '0';
+	    		this.setAttribute('chatpartnername','');
+	    		this.clientVars=null;
+	    	</method>
+	    
+		<!-- Attribute shows if an Video-Stream has been assigned to this videoview 
+			if it has been assigned one then no other can connect -->
+		<attribute name="isassigned" value="false" type="boolean" />
+			
+		<view name="_innertop" width="250" height="18" x="1" y="1" bgcolor="$once{ canvas.basebgcolorizer }">
+	  		<text text="${ parent.parent.chatpartnername }" width="206" fgcolor="white"
+	  			fontsize="10" fontstyle="bold" />
+		</view>
+	
+		<view name="_chatvideoinner" x="1" y="20" width="240" resource="chatbgitemau" height="180" >
+			<handler name="oninit">
+				this.setAttribute('frame',5);
+			</handler>
+			
+			<playVideoView name="_videoview" visible="false" x="5" width="240" height="180" />	
+		</view>
+		
+		<view name="_loudness" x="1" y="204">
+			<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2" onmouseover="" onmouseout="" >		
+				<labelTooltip inittwice="true" labelid="372" />
+			</view>
+		</view>
+		
+		<view name="mute" x="$once{ parent.width-20 }" y="204" onmouseover="" onmouseup="" resource="mute_btn_rsc" >
+			<attribute name="isload" value="true" type="boolean" />
+	
+			<handler name="onclick">
+				if (this.isload){
+					parent._chatvideoinner._videoview.v_output.setVolume(0);
+					this.setAttribute('frame',2);
+					this.isload = false;
+				} else {
+					parent._chatvideoinner._videoview.v_output.setVolume(100);
+					this.setAttribute('frame',1);
+					this.isload = true;
+				}
+			</handler>
+	
+			<labelTooltip inittwice="true" labelid="373" />
+		</view>	
+	
+		<view x="$once{ parent.width-20 }" y="2" resource="messagebox_info_rsc" 	onmouseover="" onmouseup="" name="message">
+			<handler name="onclick">
+				new lz.changeDevice(canvas.main_content._content.inner);
+			</handler>
+			
+			<labelTooltip inittwice="true" labelid="57" />
+		</view>
+		
+		<view x="$once{ parent.width-20 }" y="2" name="showuser" resource="showusercontextau"	onmouseover="" onmouseup="">
+			<handler name="onclick">
+				new infoStuffAudience(parent);
+			</handler>
+			
+			<labelTooltip inittwice="true" labelid="68" />
+		</view>
+		
+		<simpleLabelButton name="_sendInvitation" x="2" y="234" width="200" labelid="213" >
+			<handler name="onclick">
+				new lz.inviteMainWindow(canvas.main_content._content.inner);
+			</handler>
+		</simpleLabelButton>
+	</class>
+</library>

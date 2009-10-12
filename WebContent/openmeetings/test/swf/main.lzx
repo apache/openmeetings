@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<canvas debug="true" width="100%" height="100%" fontsize="14" title="OpenMeetings - Computer testing">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+
+<button text="load SWF">
+    <handler name="onclick">
+        <![CDATA[
+	        if ($debug) Debug.write("load SWF");
+	        //parent.myView._swfView.setAttribute("src","Google.swf");
+	        parent.myView._swfView.setSource("http://localhost:5080/openmeetings/DownloadHandler?fileName=Google.swf&moduleName=videoconf1&parentPath=/Google&room_id=1&sid=a498726852b649da3cce4a5ee9cb3a9b");
+	        //parent.myView._swfView.setSource("http://localhost:5080/openmeetings/Google.swf");
+        ]]>
+    </handler>
+</button>
+
+<view name="myView" y="20">
+    <!--
+    play="false" stretches="both"
+     -->
+    <view name="_swfView" >
+        <handler name="onframe" args="i">
+            ////Debug.write("onframe",i);
+        </handler>
+        
+        <handler name="onplay" args="i">
+            ////Debug.write("onplay",i);
+        </handler>
+        
+        <handler name="onstop" args="i">
+            ////Debug.write("onstop",i);
+        </handler>
+        
+        <handler name="onload">
+            <![CDATA[
+                Debug.write("onload: ",this);
+            ]]>
+        </handler>
+        <handler name="onerror" args="error">
+            <![CDATA[
+                Debug.write("onerror "+error);
+            ]]>
+        </handler>
+        <handler name="ontimeout" args="error">
+            <![CDATA[
+                Debug.write("ontimeout "+error);
+            ]]>
+        </handler> 
+    </view>
+</view>
+
+</canvas>

@@ -1,0 +1,283 @@
+<library>
+
+    <!--
+        Video view.
+
+        @START_CODE
+            <videoview/>
+        @END_CODE
+    -->
+    <class name="devVideoView"  width="160" height="120">
+
+
+        <!--- The url of the mediastream, maybe a relative URL, 
+              for example: "http://localhost/myvideo.flv", or simply "myvideo.flv".
+              When type="rtmp", the url is always relative the the rtmpconnection.
+              (Use only when you are not explicitly declaring the mediastream.) -->
+        <attribute name="url" value="" type="string" setter="this._setUrl(url)"/>
+
+        <!--- Protocol "rtmp" or "http". Default: http. -->
+        <attribute name="type" value="http" type="string" setter="this._setType(type)"/>
+
+        <!--- If true, video will start playing as soon as url is set.
+              Default: false. -->
+        <attribute name="autoplay" value="false" setter="this._setAutoplay(autoplay)"/>
+
+        <!--- If true, Debug.write extra stuff (this may go away). -->
+        <attribute name="debug" value="false"/>
+
+        <!--- Flag to track if the clip initialization is done. 
+              @keywords private -->
+        <attribute name="_clipinitdone" value="false"/>
+
+        <!--- The camera object. 
+              @keywords readonly -->
+        <attribute name="cam" value="null"/>
+
+        <!--- The microphone object. 
+              @keywords readonly -->
+        <attribute name="mic" value="null"/>
+
+        <!--- The mediastream object. -->
+        <attribute name="stream" value="null" when="once"/>
+
+        <!--- The volume for video playback, a float from 0 to 1. Default 1. -->
+        <attribute name="playvolume" value="1.0" setter="this._setPlayVolume(playvolume)"/>
+
+        <!--- Flash Sound object to control volume of video playback.
+              @keywords private -->
+        <attribute name="_sound" value="null"/>
+
+        <!--- Flag to track if initialization is complete. 
+              @keywords private -->
+        <attribute name="_initcomplete" value="false"/>
+
+        <!--- Delegate to call _setPlayStream when stream starts playing. 
+              @keywords private -->
+        <attribute name="_urldel" value="null"/>
+
+
+        <!--- Event sent when url changes.
+              @keywords private -->
+        <event name="onurl"/>
+
+
+        <!--- Initialize the videoview. 
+              @keywords private -->
+        <method name="init"><![CDATA[
+            //Debug.write("videoview init BEGIN", this);
+
+            super.init();
+
+            // no other subviews should be allowed (todo: schema)
+            var mc = 
+                immediateparent.sprite.attachResourceToChildView("__LZvideo", this.sprite);
+            this.sprite.setMovieClip(mc);
+            this.__LZmovieClipRef = this.sprite.__LZmovieClipRef;
+
+            this._sound = 
+                new Sound(
+                    this.__LZmovieClipRef);
+
+            //Debug.write("init set play volume", this, this.playvolume);
+            this._sound.setVolume(this.playvolume * 100.0);
+
+            //Debug.write("videoview setMovieClip", mc);
+            //Debug.write("videoview __LZmovieClipRef", this.__LZmovieClipRef, "__lzvideo", this._getflashvideo());
+
+            var vid =
+                this._getflashvideo();
+
+            vid._x = 0;
+            vid._y = 0;
+            vid._width = this.width;
+            vid._height = this.height;
+            this._clipinitdone = true;
+
+            Debug.write("videoview stream", this.stream);
+
+            var stream = 
+                this.v_output;
+
+            Debug.write("videoview init found stream", this, stream, simpleNetStream);
+            if (!stream) {
+               stream = 
+                    new lz.simpleNetStream(
+                        this, 
+                        {debug:this.debug}, 
+                        null, 
+                        true);
+                this.stream = stream;
+                Debug.write("videoview init made stream", this.stream);
+
+                // only use this.url if we auto-created the mediastream
+                stream.setAttribute("type", this.type);
+                stream.setAttribute("url", this.url);
+            }
+
+            //Debug.write("videoview setting _urldel", this, "stream", stream);
+            this._urldel = 
+                new LzDelegate(
+                    this, "_setPlayStream",
+                    stream, "onplaying");
+
+            this._initcomplete = true;
+
+          ]]>
+        </method>
+
+
+        <!--- Set the play stream. 
+              @keywords private -->
+        <method name="_setPlayStream"><![CDATA[
+            Debug.write("_setPlayStream", this.stream._flashstream, this.stream.playing);
+            if (this.stream.playing) {
+                var vid = this._getflashvideo();
+                //Debug.write("videoview _setPlayStream", this, "s", this.stream, "fs", this.stream._flashstream, "vid", vid);
+                vid.attachVideo(this.stream._flashstream);
+                this.__LZmovieClipRef.attachAudio(this.stream._flashstream); // Doing this so we can control volume.
+                this.setAttribute("width", this.width);
+                this.setAttribute("height", this.height);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Return the Flash video object. 
+              @keywords private -->
+        <method name="_getflashvideo"><![CDATA[
+            return this.__LZmovieClipRef.__lzvideo;
+          ]]>
+        </method>
+
+
+        <!--- Set the videoview width. 
+              @keywords private -->
+        <method name="setWidth" args="w"><![CDATA[
+            super.setWidth(w);
+
+            if (!this._clipinitdone) { 
+                this.width = w;
+                return;
+            }
+
+            var vid = 
+                this._getflashvideo();
+            vid._width = w;
+          ]]>
+        </method>
+
+
+        <!--- Set the videoview height. 
+              @keywords private -->
+        <method name="setHeight" args="h"><![CDATA[
+            super.setHeight(h);
+
+            if (!this._clipinitdone) {
+                this.height = h;
+                return;
+            }
+
+            var vid = 
+                this._getflashvideo();
+            vid._height = h;
+          ]]>
+        </method>
+
+
+        <!--- Setter for the "playvolume" attribute. 
+              Sets the video playback volume. 
+              @keywords private -->
+        <method name="_setPlayVolume" args="newplayvolume"><![CDATA[
+            //Debug.write("_setPlayVolume", this, newplayvolume, this._sound);
+            this.playvolume = newplayvolume;
+            if (this.isinited && 
+                (this._sound != null)) {
+                this._sound.setVolume(newplayvolume * 100.0);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Setter for the "url" attribute. 
+              @keywords private -->
+        <method name="_setUrl" args="newurl"><![CDATA[
+            //Debug.write("videoview setUrl", newurl, "old", this['url'], "isinited", this.isinited, "stream", this['stream']);
+
+            this.url = newurl;
+
+            // _setUrl called before init or stream is define, so tip-toe.
+            if (this['stream']) {
+                this.stream.setAttribute("url", newurl);
+            }
+          ]]> 
+        </method>
+
+
+        <!--- Setter for the "type" attribute. 
+              @keywords private -->
+        <method name="_setType" args="newtype"><![CDATA[
+            //Debug.write("videoview setType", newtype, "old", this['type'], "isinited", this.isinited, "stream", this['stream']);
+
+            this.type = newtype;
+
+            // _setType called before init or stream is define, so tip-toe.
+            if (this['stream']) {
+                this.stream.setAttribute("type", newtype);
+            }
+          ]]> 
+        </method>
+
+
+        <!--- Setter for the "autoplay" attribute. 
+              @keywords private -->
+        <method name="_setAutoplay" args="newautoplay"><![CDATA[
+            //Debug.write("videoview _setAutoplay", newautoplay, "old", this['autoplay'], "isinited", this.isinited, "stream", this['stream']);
+
+            this.autoplay = newautoplay;
+
+            // _setAutoplay called before init or stream is define, so tip-toe.
+            if (this['stream']) {
+                this.stream.setAttribute("autoplay", this.autoplay);
+            }
+          ]]> 
+        </method>
+
+
+        <!--- Called by the stream to tell the videoview about the stream. 
+              @keywords private -->
+        <method name="_setStream" args="stream"><![CDATA[
+            //Debug.write("videoview _setStream", this, stream, "autoplay", this['autoplay'], "isinited", this.isinited);
+            this.stream = stream;
+            if (stream != null) {
+                this.stream.setAttribute("autoplay", this.autoplay);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Called by the camera to tell the videoview about the camera. 
+              @keywords private -->
+        <method name="_setCam" args="cam"><![CDATA[
+            this.cam = cam;
+          ]]>
+        </method>
+
+
+        <!--- Called by the microphone to tell the videoview about the microphone. 
+              @keywords private -->
+        <method name="_setMic" args="mic"><![CDATA[
+            this.mic = mic;
+          ]]>
+        </method>
+        
+        <method name="stop">
+        	if ($debug) Debug.write("STOP DEVVIDEOVIEW");
+        	this.__LZmovieClipRef.clear();
+        </method>
+
+
+    </class>
+
+
+</library>

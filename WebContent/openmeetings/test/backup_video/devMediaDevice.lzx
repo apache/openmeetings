@@ -1,0 +1,438 @@
+<library>
+
+
+    <!--
+        Media device, an abstract class.
+    -->
+    <class name="devMediaDevice" extends="node">
+
+
+        <!--- Shared flag defined in mediadevice.prototype that 
+              tracks whether the user has allowed device access. 
+              Default: false.
+              True after user has accepted security dialog,
+              false if the user denies access with security dialog.
+              Note: allowed is not defined in objects, but in the prototype. 
+              Initialized in the script at the end of the file.
+              @keywords readonly -->
+        <attribute name="allowed"/>
+
+        <!--- Shared flag defined in mediadevice.prototype that 
+              tracks whether we've figured out if we're allowed or not. 
+              Default: false.
+              Note: allowed is not defined in objects, but in the prototype. 
+              Initialized in the script at the end of the file.
+              @keywords private -->
+        <attribute name="_allowedknown"/>
+
+        <!--- Shared array defined in mediadevice.prototype that 
+              contains all mediadevice (or subclass) instances.
+              Note: _instances is not defined in objects, but in the prototype. 
+              Initialized in the script at the end of the file.
+              @keywords private -->
+        <attribute name="_instances"/>
+
+        <!--- Reference to internal Flash device object.
+              @keywords private -->
+        <attribute name="_dev" value="null"/>
+
+        <!--- If true, the device is initialized.
+              @keywords private --> 
+        <attribute name="_devinited" value="false"/>
+
+        <!--- Zero-based index of the device, or null for user's default device. 
+              Default is null, which selects the default device. 
+              When the default device is initialized, deviceindex is updated to
+              its actual index. -->
+        <attribute name="deviceindex" value="null" setter="this._setDeviceIndex(deviceindex)"/>
+
+        <!--- Name of the device. 
+              @keywords readonly -->
+        <attribute name="devicename" type="string" value=""/>
+
+        <!--- Boolean flag that controls if the media device
+              is currently capturing input. -->
+        <attribute name="capturing" value="true" setter="this._setCapturing(capturing)"/>
+
+        <!--- Flag that tracks if there's device activity (audio sound, video motion). 
+              @keywords readonly -->
+        <attribute name="active" value="false"/>
+
+
+        <!--- Event sent when device index changes. 
+              @keywords private -->
+        <event name="ondeviceindex"/>
+
+        <!--- Event sent when device name changes.
+              @keywords private -->
+        <event name="ondevicename"/>
+
+        <!--- Event sent when allowed status changes.
+              @keywords private -->
+        <event name="onallowed"/>
+
+        <!--- Event sent when capturing flag changes.
+              @keywords private -->
+        <event name="oncapturing"/>
+
+        <!--- Event sent when active flag changes.
+              @keywords private -->
+        <event name="onactive"/>
+
+
+        <!--- Initialize the device. 
+              Keeps track of all mediadevices in a list on the 
+              mediadevice class, so we can set all allowed 
+              changes to all devices. 
+              @keywords private -->
+        <method name="init"><![CDATA[
+            super.init();
+
+            this._instances.push(this);
+
+            //Debug.write("mediadevice init", this, "allowed", this["allowed"], "starting device");
+
+            this.startDevice();
+
+            this._updateAllowed();
+          ]]>
+        </method>
+
+
+        <!--- Destroy the media device. Removes the media device from 
+              the global list of media devices. 
+              @keywords private -->
+        <method name="destroy"><![CDATA[
+            this.stopDevice();
+
+            this.removeFromArray(
+                this._instances,
+                this);
+
+            super.destroy();
+          ]]>
+        </method>
+
+
+        <!--- Remove an object from an array. -->
+        <method name="removeFromArray" args="a, obj"><![CDATA[
+            var n = a.length;
+            var i;
+            for (i = 0; i < n; i++) {
+                if (obj == a[i]) {
+                    a.splice(i, 1);
+                    break;
+                }
+            }
+          ]]>
+        </method>
+
+
+        <!--- Starts the device.
+              This is called by init and _setDeviceIndex to set 
+              up the Flash device. 
+              @keywords private -->
+        <method name="startDevice"><![CDATA[
+            this.stopDevice();
+
+            var dev = 
+                this._makeDevice();
+
+            if (dev == null) {
+                this.setAttribute("devicename", "");
+            } else {
+
+                // Add ourself to the device's list of targets,
+                // creating it if necessary. 
+
+                var targets = dev['targets'];
+                if (targets == null) {
+                    targets = [];
+                    dev.targets = targets;
+                }
+
+                // Add this mediadevice to the Flash device's 
+                // list of targets, so we get notified of 
+                // interesting stuff (like onActivity).
+                targets.push(this);
+
+                // Hook up our notification events. 
+                //_root.Debug.write("mediadevice onActivity INIT ONCE");
+
+                dev.onActivity = function(active) {
+                	//_root.Debug.write("mediadevice onActivity INIT");
+                    // Send the onActivity notification to all mediadevice 
+                    // objects that are attached to this Flash device 
+                    // (in the targets array). 
+                    var targets = this.targets;
+                    var n = targets.length;
+                    var i;
+                    for (i = 0; i < n; i++) {
+                        targets[i]._onActivity(active);
+                    }
+                };
+
+                dev.onStatus = function(info) {
+
+                    // Note: This notifier is handled specially,
+                    // because of the quirkyness of Flash's onStatus
+                    // notification. Flash only sends one notification
+                    // to a random device, not to each one. It's
+                    // really a global notification that needs to be
+                    // forwarded to all mediadevices, no matter which
+                    // camera or microphone Flash delivered it to. If
+                    // we switch a mediadevice's deviceindex away from
+                    // a Flash device (orphaning it), we still want
+                    // that Flash device to notify everybody of
+                    // onStatus changes, because the orphaned device
+                    // might be the one that gets notified when the
+                    // user changes the permission (only one device
+                    // ever is, no guessing which one). So we forward
+                    // that notification to all other mediadevices,
+                    // via _onStatusStatic. If we cleared out the
+                    // orphaned camera's notifier, then we might miss
+                    // an important notification, and if we didn't
+                    // reset its target when deleting a mediadevice,
+                    // we might notify a dead mediadevice.
+
+                    // The solution: we send this notification to the
+                    // mediadevice class method _onStaticStatic.
+                    // That's because orphaned Flash devices might
+                    // still get notified of onStatus events, and we
+                    // need to send them to somebody, and don't want
+                    // to send them to a dead object. The class method
+                    // forwards the message to all existing mediadevices.
+
+                    devMediaDevice.prototype._onStatusStatic(info);
+                };
+
+                // Set up initial values for device properties.
+
+                // Just poke deviceindex, because we'll notify later
+                // (when called from _setDeviceIndex).
+                this.deviceindex = dev.index; 
+
+                // Set the devicename attribute from the Flash 
+                // device name. 
+                this.setAttribute("devicename", dev.name);
+
+                this._setupDevice();
+
+                // Check the device to see if allowed is different 
+                // than we think it is. If so, notify all mediadevices.
+                var devallowed = 
+                    !dev.muted;
+                //Debug.write("mediadevice", this, "allowed", this.allowed, "startDevice devallowed", devallowed);
+                if (this.allowed != devallowed) {
+                    mediadevice.prototype._updateAllAllowedStatic(devallowed);
+                }
+            }
+
+          ]]>
+        </method>
+
+
+        <!--- Stops the device. -->
+        <method name="stopDevice"><![CDATA[
+            var dev = this._dev;
+            if (dev == null) {
+                return;
+            }
+
+            // Remove us from the device's list of targets.
+            this.removeFromArray(
+                dev.targets, 
+                this);
+
+            this._dev = null;
+          ]]>
+        </method>
+
+
+        <!--- This should be defined in the subclass to do 
+              device specific device creation stuff. 
+              It should return the Flash device object. 
+              @keywords private -->
+        <method name="_makeDevice"><![CDATA[
+            // Subclasses define this.
+            // Returns the device.
+          ]]>
+        </method>
+
+
+        <!--- This should be defined in the subclass to do 
+              set up the Flash device object. 
+              @keywords private -->
+        <method name="_setupDevice"><![CDATA[
+            // Subclasses define this.
+          ]]>
+        </method>
+
+        <!--- Show the Flash player settings dialog, so the 
+              user can change the device permission and 
+              other properties. -->
+        <method name="showSettings"><![CDATA[
+            System.showSettings(0);
+          ]]>
+        </method>
+
+
+        <!--- Setter for the device index attribute 
+              (0-based index, or null).
+              If the index is null, the default device is selected. 
+              Changing deviceindex will try to open a different 
+              device, and set devicename if successful. 
+              Subclasses should implement this device
+              specific method.
+              @keywords private -->
+        <method name="_setDeviceIndex" args="index"><![CDATA[
+            if (index == this['deviceindex']) {
+                return;
+            }
+
+            this.stopDevice();
+
+            this.deviceindex = index;
+
+            if (!this.isinited) {
+                return;
+            }
+
+            // This will set the actual device index if it's null,
+            // but not notify ondeviceindex.
+            // Note: startDevice may change the deviceindex from null
+            // to a number. 
+            this.startDevice();
+
+            if (this.ondeviceindex) {
+                this.ondeviceindex.sendEvent(this.deviceindex);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Setter for capturing attribute (true or false boolean). 
+              Subclasses should implement this device specific
+              method. 
+              TODO: Move this to subclasses.
+              @keywords private -->
+        <method name="_setCapturing" args="capturing"><![CDATA[
+            //Debug.write("mediadevice _setCapturing", this, capturing, arguments.caller);
+
+            this.capturing = capturing;
+
+            if (this.oncapturing) {
+                this.oncapturing.sendEvent();
+            }
+          ]]>
+        </method>
+
+
+        <!--- Static method called on mediadevice.prototype, 
+              the handler for the Flash Camera onStatus callback. 
+              Info is the Flash status event name, like "Device.Action".
+              This notifies all mediadevice instances that
+              the allowed status changed.
+              Don't call this on a mediadevice instance! 
+              @keywords private -->
+        <method name="_onStatusStatic" args="info"><![CDATA[
+            // This is a static method, so "this" is mediadevice.prototype.
+            var tokens = info.code.split(".");
+            var deviceName = tokens[0];
+            var actionName = tokens[1];
+
+            //Debug.write("mediadevice _onStatusStatic", this, deviceName, actionName, "allowed", this.allowed);
+
+            var allowedNow = null;
+            var update = false;
+
+            switch (actionName) {
+
+                case "Unmuted": {
+                    if (this.allowed != true) {
+                        allowedNow = true;
+                        update = true;
+                    }
+                    break;
+                }
+
+                case "Muted": {
+                    if (this.allowed != false) {
+                        allowedNow = false;
+                        update = true;
+                    }
+                    break;
+                }
+
+            }
+
+            if (update) {
+                //Debug.write("mediadevice", this, "_onStatusStatic allowed", allowedNow);
+                this._updateAllAllowedStatic(allowedNow);
+            }
+
+          ]]>
+        </method>
+
+
+        <!--- Static method called on mediadevice.prototype,
+              that sets the allowed class variable and tells
+              all mediadevices that allowed changed.
+              Don't call this on a mediadevice instance! 
+              @keywords private -->
+        <method name="_updateAllAllowedStatic" args="allowedNow"><![CDATA[
+            // This is a static method, so "this" is mediadevice.prototype.
+            //Debug.write("_updateAllAllowedStatic", allowedNow, arguments.caller);
+            this.allowed = 
+                allowedNow;
+            var instances = 
+                this._instances;
+            var i;
+            var n = instances.length;
+            for (i = 0; i < n; i++) {
+                var dev = instances[i];
+                //Debug.write("_updateAllAllowedStatic", dev, this.allowed);
+                dev._updateAllowed();
+            } 
+            this._allowedknown = true;
+          ]]>
+        </method>
+
+
+        <!--- Called on each mediadevice instance when the shared
+              mediadevice.prototype.allowed value changes.
+              @keywords private -->
+        <method name="_updateAllowed"><![CDATA[
+            //Debug.write("mediadevice _updateAllowed", this, this['allowed'])
+
+            if (this.onallowed) {
+                this.onallowed.sendEvent(this.allowed);
+            }
+          ]]>
+        </method>
+
+
+        <!--- Handler for the Flash device onActivity callback. 
+              @keywords private -->
+        <method name="_onActivity" args="active">
+        	<![CDATA[
+            	//Debug.write("mediadevice _onActivity", this, active);
+            	this.setAttribute("active", active);
+          	]]>
+        </method>
+
+
+    </class>
+
+
+    <script><![CDATA[
+
+        // Initialize the shared class variables in mediadevice.prototype. 
+        devMediaDevice.prototype.allowed = false;
+        devMediaDevice.prototype._allowedknown = false;
+        devMediaDevice.prototype._instances = [];
+
+      ]]>
+    </script>
+
+</library>

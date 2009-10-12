@@ -1,0 +1,23 @@
+<canvas debug="false">     
+
+	<!-- DATASETS -->
+	<include href="rtldata.xml"/>
+
+	<!-- RESOURCES [FONTS] -->
+  <include href="resources.lzx"/> 
+
+	<!-- RTLTEXT CLASS DEFINITION -->
+  <include href="rtlText.lzx"/> 
+
+	
+	<view x="200" y="20">
+    <simplelayout axis="y" />
+    <view datapath="personsData:/myXML[1]/person" width="300" bgcolor="#cccccc">
+      <simplelayout axis="y" />
+    	<rtlText name="txtName" textAlign="center" fontsize="10" font="default" fontstyle="bold" datapath="name/text()"/>
+    	<rtlText name="txtTitle" fontsize="10" font="default" datapath="title/text()"/> 
+    	<text></text>
+    </view>
+  </view>
+
+</canvas>

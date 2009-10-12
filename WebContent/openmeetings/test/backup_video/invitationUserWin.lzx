@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+		This class is invoked in base/hibernate/hibRtmpConnection.lzx, but it has been commented out.
+		So, this class has not used anymore.
+			Mar 27 2008 commented by onokeiji@gmail.com
+	-->
+	 <class name="invitationUserWin" extends="labelExplorerBox" labelid="221"
+			docking="true" resizeable="false" closable="false" width="324" x="300" y="0" height="400">
+		 
+		<attribute name="userlang" value="1" type="number" />
+	
+		<!-- label: userdata -->
+		<labelText y="30" x="10" fontstyle="bold" labelid="222" />
+	
+		<!-- label: Nick -->
+		<labelText y="80" x="10" labelid="223" />
+		<customEdittext name="_login" y="80" x="120" width="200" text="myusername" />
+	
+		<!-- label: firstname -->
+		<labelText y="110" x="10" labelid="224" />
+		<customEdittext name="firstName" y="110" x="120" width="200" text="firstName" />
+		
+		<!-- label: lastname -->
+		<labelText y="140" x="10" labelid="225" />
+		<customEdittext name="lastName" y="140" x="120" width="200" text="lastName" />
+	
+		<!-- label: email -->
+		<labelText y="170" x="10" labelid="226" />
+		<customEdittext name="mail" y="170" x="120" width="200" text="mail" />
+		 
+		<!-- lable: language -->
+		<labelText name="n3" labelid="227" width="200" y="200" resize="false" x="10" />     
+		<resetCombobox name="languages" width="170" y="200" x="120" editable="false">
+	      	<netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" remotecontext="$once{ canvas.thishib }" >      
+	            	<handler name="oninit">
+	                  	this.doCall();
+	                	</handler>
+	                	
+	                	<handler name="ondata" args="value">
+	                  	//The onResult-Handler will be called be the rtmpconnection
+	                    	//Debug.write("getLanguages: ",value);
+	                    	<![CDATA[
+	                    		for (var i=0;i<value.length;i++){
+	                        		this.parent.addItem(value[i].name,value[i].language_id);
+	                    }
+	                    
+	                    		this.parent.selectItem(value[0].language_id);
+	            	]]>
+	                	</handler>
+			</netRemoteCallHib>
+		</resetCombobox>	 
+		 
+	    	<labelText name="n5" text="Color-Style" width="200" y="230" resize="false" x="2"/>  
+			<resetCombobox name="colors" width="170" y="230" x="120" editable="false">
+				<attribute name="initselect" value="true" type="boolean" />
+	            	
+	            	<handler name="oninit">
+					this.addItem('redorange','redorange');
+					this.addItem('mediumseagreen','mediumseagreen');
+					this.addItem('steelblue','steelblue');
+					this.addItem('lightsteelblue','lightsteelblue');
+					this.addItem('goldenrod','goldenrod');
+					this.selectItem('lightsteelblue');
+				</handler>
+				
+				<handler name="onselect" args="v">
+					//Debug.write("onselect: ",v.value);
+					if (this.initselect){
+						this.initselect=false;
+					} else {
+						if (v.value=="mediumseagreen"){
+							canvas.setAttribute('basebgcolorizer',"0x3CB371");
+							canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
+							canvas.setAttribute('baseMouseOvercolorizer',"0x66CC8E");
+						} else if (v.value=="steelblue"){
+							canvas.setAttribute('basebgcolorizer',"0x4682B4");
+							canvas.setAttribute('baseMousecolorizer',"0x80AECC");
+							canvas.setAttribute('baseMouseOvercolorizer',"0x80AECC");
+						} else if (v.value=="redorange"){
+							canvas.setAttribute('basebgcolorizer',"0xFC8558");
+							canvas.setAttribute('baseMousecolorizer',"0xFDC4A6");
+							canvas.setAttribute('baseMouseOvercolorizer',"0xFDC4A6");
+						} else if (v.value=="lightsteelblue"){
+							canvas.setAttribute('basebgcolorizer',"0xB0C4DE");
+							canvas.setAttribute('baseMousecolorizer',"0xC4D5E6");
+							canvas.setAttribute('baseMouseOvercolorizer',"0xC4D5E6");
+						} else if (v.value=="goldenrod"){
+							canvas.setAttribute('basebgcolorizer',"0xDAA520");
+							canvas.setAttribute('baseMousecolorizer',"0xE8C064");
+							canvas.setAttribute('baseMouseOvercolorizer',"0xE8C064");
+						}
+						
+						this.parent.close();
+						new lz.checkLoginData(canvas.main_content._content);
+					}
+				</handler>
+		</resetCombobox>		 
+		
+		<!-- label: enter -->	
+		<simpleLabelButton name="connect" x="170" y="370" text="connect" labelid="228" width="120" height="20">
+			<handler name="onclick">
+				//Debug.write("this.parent: ",this.parent);
+				
+				parent.userlang = Number(parent.languages.getValue());
+				
+				var userObject = new Array();
+				
+				canvas.setAttribute('currentuser',parent._login.getText());
+				canvas.setAttribute('user_id',-1);
+				canvas.setAttribute('firstName',parent.firstName.getText());
+				canvas.setAttribute('lastName',parent.lastName.getText());	
+				canvas.setAttribute('mail','');
+				canvas.setAttribute('lastLogin','');
+				canvas.setAttribute('official_code','');
+				canvas.setAttribute('picture_uri','');
+				canvas.setAttribute('language','');					
+			
+				userObject["login"] = parent._login.getText();
+				userObject["firstname"] = parent.firstName.getText();
+				userObject["lastname"] = parent.lastName.getText();
+				userObject["adresses"] = new Array();
+				userObject["adresses"]["emails"] = new Array();
+				userObject["adresses"]["emails"][0] = new Array();
+				userObject["adresses"]["emails"][0]["mail"] = new Array();
+				userObject["adresses"]["emails"][0]["mail"]["email"] = parent.mail.getText();
+				
+				hib.userobject = userObject;
+				
+				hib.userlang = Number(parent.languages.getValue());
+	 
+	            	parent.getLanguageById.doCall();
+			</handler>
+		</simpleLabelButton>
+		 
+		<netRemoteCallHib name="getLanguageById" funcname="xmlcrm.getLanguageById" 
+							remotecontext="$once{ canvas.thishib }" >      
+	      	<netparam><method name="getValue"> return parent.parent.userlang; </method></netparam> 
+	        		<handler name="ondata" args="value">
+	            		//The onResult-Handler will be called be the rtmpconnection
+	            		//Debug.write("getLanguageById: ",value);
+	            		setLabelObject(value);
+					parent.getStates.doCall();
+	        		</handler>  
+	    	</netRemoteCallHib>	 
+	
+		<netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" remotecontext="$once{ canvas.thishib }" >  
+			<handler name="ondata" args="value">
+	            	//The onResult-Handler will be called be the rtmpconnection
+	            	//Debug.write("getStates: ",value);
+	            	canvas.statesInitValues = value;
+	            	parent.getUserSalutations.doCall();
+	        	</handler>  
+		</netRemoteCallHib>    
+	    
+		<netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" 
+							remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	      	
+	      	<handler name="ondata" args="value">
+	            	//The onResult-Handler will be called be the rtmpconnection
+	            	//Debug.write("getUserSalutations ",value);
+	            	canvas.salutationsInitValues = value;
+	            	parent.getRoomTypes.doCall();
+	        	</handler>  
+	    	</netRemoteCallHib>   
+	    
+	    	<netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" 
+							remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	       	<handler name="ondata" args="value">
+	            	//The onResult-Handler will be called be the rtmpconnection
+	            	//Debug.write("getRoomTypes ",value);
+	            	canvas.roomTypesInitValues = value;
+	            	parent.setUsername.doCall();
+	        	</handler>  
+	    	</netRemoteCallHib>    	 
+	
+	    	<netRemoteCallHib name="setUsername" funcname="setUsername" remotecontext="$once{ canvas.thishib }" >   
+	      	<netparam><method name="getValue">return canvas.user_id;</method></netparam>
+	        	<netparam><method name="getValue">return canvas.currentuser;</method></netparam>
+	        	<netparam><method name="getValue">return canvas.firstName;</method></netparam>
+	        	<netparam><method name="getValue">return canvas.lastName;</method></netparam>      
+	        	<netparam><method name="getValue">return parent.parent.currentdomain;</method></netparam>
+	        	
+	        	<handler name="ondata" args="value">
+	            	//The onResult-Handler will be called be the rtmpconnection
+	            	//Debug.write("setUsername: ",value);
+		        	hib.currentroomid=canvas.initroomid;
+	            	hib.conferencedomain = canvas.initdomainid;
+	
+	            	//Debug.write("hib.conferencedomain: ",hib.conferencedomain);
+	            	clearStageContent();
+	            	canvas._mainbgcontentNavi.navi._innercontent.clearAllSubItemLists(); 			
+				if (canvas.initroomtype=="conference"){
+					new lz.conferenceView(canvas.main_content._content.inner); 
+				} else {
+					new lz.audienceView(canvas.main_content._content.inner); 
+				}
+				
+				this.parent.close();	                 
+	        	</handler>  
+		</netRemoteCallHib>  	 	
+	</class>
+</library>
