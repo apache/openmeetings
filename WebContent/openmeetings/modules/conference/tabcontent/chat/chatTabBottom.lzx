@@ -94,7 +94,7 @@
             </handler>
             <view x="2" y="1">
                 <handler name="oninit">
-                    var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/public/emoticons/smile_btn.swf';
+                    var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'public/emoticons/smile_btn.swf';
                     this.setSource(swfurl);
                     //if ($debug) Debug.write("CHAT SWFURL",swfurl);
                 </handler>

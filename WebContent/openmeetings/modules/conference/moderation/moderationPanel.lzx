@@ -70,7 +70,7 @@
     <method name="checkForApplyScreen" args="record">
             <![CDATA[
                 var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                    +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                    canvas.httpRootKey+'ScreenRequestHandler?'
                     +'rtmphostlocal='+canvas.rtmphostlocal
                     +'&room='+hib.currentroomid
                     +'&domain='+hib.conferencedomain

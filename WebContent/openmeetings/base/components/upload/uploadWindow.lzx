@@ -116,7 +116,7 @@
 	<simpleLabelButton name="upload" x="10" y="100" labelid="593" width="250" enabled="false" height="20">
 		<handler name="onclick">
 			<![CDATA[
-			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/'+ parent.servletName +'?' +
+			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+ parent.servletName +'?' +
 					'moduleName='+this.parent.uploadmodule +
                     '&publicSID='+canvas.publicSID +
                     '&filename='+encodeURIComponent(parent.txtFile.text) +

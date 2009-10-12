@@ -10,7 +10,7 @@
     <button text="setSource" >
         <handler name="onclick">
             <![CDATA[
-                canvas._drawarea.loadSWFPresentation('http://macbook:5080/'+canvas.webAppRootKey+'/DownloadHandler?fileName=Tutorat.swf&moduleName=videoconf1&parentPath=/Tutorat_1/&room=2&domain=1&sid=ab4ccec3ee9b8fceba0140636d6ff5bb','fileName','moduleName','parentPath','room','domain',0);
+                canvas._drawarea.loadSWFPresentation('http://macbook:5080'+canvas.httpRootKey+'DownloadHandler?fileName=Tutorat.swf&moduleName=videoconf1&parentPath=/Tutorat_1/&room=2&domain=1&sid=ab4ccec3ee9b8fceba0140636d6ff5bb','fileName','moduleName','parentPath','room','domain',0);
             ]]> 
         </handler>
     </button>

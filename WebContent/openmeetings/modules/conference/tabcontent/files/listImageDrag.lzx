@@ -19,7 +19,7 @@
     
     <method name="generateFileLink" args="file">
     	<![CDATA[
-	        return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName='+encodeURIComponent(file) +
+	        return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+encodeURIComponent(file) +
 		        '&moduleName='+this.uploadmodul +
 		        '&parentPath='+encodeURIComponent(canvas.uploadmoduleimgfolder+'/') +
 		        '&room_id='+hib.currentroomid +
@@ -34,7 +34,7 @@
     </handler>
     <handler name="onmousedown">
         //this.oninit.sendEvent();
-       	new lz.dragView(canvas,{filename:this.filename,filesid:1,refObj:this,uploadmodul:this.uploadmodul,baseurl:'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler',fileName:this.filename,moduleName:this.uploadmodul,parentPath:canvas.uploadmoduleimgfolder+'/',room:hib.currentroomid,domain:hib.conferencedomain});
+       	new lz.dragView(canvas,{filename:this.filename,filesid:1,refObj:this,uploadmodul:this.uploadmodul,baseurl:'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',fileName:this.filename,moduleName:this.uploadmodul,parentPath:canvas.uploadmoduleimgfolder+'/',room:hib.currentroomid,domain:hib.conferencedomain});
         lz.ModeManager.globalLockMouseEvents();
         this.onmouseout.sendEvent();     
         this.parent.parent.parent.highlightItem(this);
@@ -68,7 +68,7 @@
 	<method name="__LZFileAddDirect">
 		<![CDATA[
 		if ($debug) Debug.write("__LZFileAddDirect clearAreaAndAddImage1: ",this);
-        canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(this.filename),0,0,'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler',this.filename,this.uploadmodul,canvas.uploadmoduleimgfolder+'/',hib.currentroomid,hib.conferencedomain);
+        canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(this.filename),0,0,'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',this.filename,this.uploadmodul,canvas.uploadmoduleimgfolder+'/',hib.currentroomid,hib.conferencedomain);
         this.parent.parent.parent.highlightItem(this);
         ]]>
 	</method>

@@ -174,7 +174,7 @@ setNewSource
     <method name="startViewerSessionJNPL">
         <![CDATA[
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                +canvas.httpRootKey+'ScreenRequestHandler?'
                 +'rtmphostlocal='+canvas.rtmphostlocal
                 +'&room='+hib.currentroomid
                 +'&domain='+hib.conferencedomain
@@ -250,7 +250,7 @@ setNewSource
                 return;
             }
         
-            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + '/'+canvas.webAppRootKey+'/serverUDP?' +
+            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + canvas.httpRootKey+'serverUDP?' +
                                    'sid=' + canvas.sessionId +
                                    '&publicSID=' + this.sharerPublicSID + 
                                    '&x='+x+'&y='+y;
@@ -272,7 +272,7 @@ setNewSource
         
             var d = new Date();
         
-            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + '/'+canvas.webAppRootKey+'/serverUDP?' +
+            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + canvas.httpRootKey+'serverUDP?' +
                                    'sid=' + canvas.sessionId +
                                    '&publicSID=' + this.sharerPublicSID + 
                                    '&x='+screenSharingNewFrame.x+'&y='+screenSharingNewFrame.y +

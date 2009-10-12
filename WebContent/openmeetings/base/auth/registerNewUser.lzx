@@ -98,7 +98,7 @@
                     
                     this.parent.regObject["domain"]=canvas.rtmphostlocal; 
                     this.parent.regObject["port"]=canvas.red5httpport; 
-                    this.parent.regObject["webapp"]=canvas.webAppRootKey; 
+                    this.parent.regObject["webapp"]=canvas.httpRootKey; 
                     
                     if( $debug ) Debug.write("parent.regObject: ",parent.regObject);
                     

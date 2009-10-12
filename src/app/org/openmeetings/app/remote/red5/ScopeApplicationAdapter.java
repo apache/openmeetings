@@ -69,13 +69,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	//This is the Folder where all executables are written
 	//TODO:fix hardcoded name of webapp
 	public static String batchFileFir = "webapps"+File.separatorChar
-									+"openmeetings"+File.separatorChar
+									+"ROOT"+File.separatorChar
 									+"jod" + File.separatorChar;
 	public static String lineSeperator = System.getProperty("line.separator");
 	   
 	//The Global WebApp Path
 	public static String webAppPath = "";
-	public static String webAppRootKey = "openmeetings";
+	public static String webAppRootKey = "ROOT";
 	public static String configDirName = "conf";
 	
 	public static String configKeyCryptClassName = null;

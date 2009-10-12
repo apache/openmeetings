@@ -149,7 +149,7 @@
 	  	
 	  	<method name="generateFileLink" args="recordingConversionJobId">
 	    	<![CDATA[
-	        	return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=whiteboard.swf' +
+	        	return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName=whiteboard.swf' +
 		        '&moduleName=videoconf1' +
 		        '&parentPath='+recordingConversionJobId+'/' +
 		        '&room_id=recorded' +
