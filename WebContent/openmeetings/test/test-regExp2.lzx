@@ -1,0 +1,58 @@
+<canvas debug="true" >
+  <script>
+    _browserjavascriptcallback = "";
+  </script>
+  
+     <attribute name="lzappId" type="string" value="lzapp" />
+     <attribute name="timer" type="number" value="10" />
+     <attribute name="prevalue" type="string" value="_browserjavascriptcallbackprevalue" />
+     <attribute name="value" />
+     
+     <handler name="onvalue" args="v">
+     	if ($debug) Debug.write("onvalue: ",v);
+     	
+     </handler>
+     
+	<edittext name="_hand" />
+  
+  <button name="btn" y="20" text="test" onclick="canvas.testRegExp()" />
+
+  <method name="testRegExp2">
+  	<![CDATA[
+  		var regExp = "[0-9]*";
+  		
+    	var fieldValue = this._hand.getText();
+  	    
+    	var returnValue = flash.external.ExternalInterface.call("replace",fieldValue,escape(regExp),escape);
+    	if ($debug) Debug.write("returnValue: ",returnValue);
+	]]>
+ </method>
+ 
+ <method name="testRegExp" >
+ 	<![CDATA[
+	var fieldValue = "9";
+	var regExp = "[0-9]*";
+    var regex = "/^"+regExp+"$/";
+    var script = "( !( (\""+ fieldValue +"\".replace("+ regex +" ,\"\").length == 0) && ( "+ regex +".test(\""+ fieldValue +"\")) ) ) ";
+  
+	var t = script.split("'").join("\\'");
+	var s = "document.getElementById('"+ lzappId + "').SetVariable('_browserjavascriptcallback', escape((" + t + ")));"
+
+	
+		lz.Browser.loadJS(s);
+		
+		if(typeof this.callDelegate == 'undefined')
+		this.callDelegate = new LzDelegate( this, "callback" );
+		lz.Timer.resetTimer( this.callDelegate, timer );
+		]]>
+   </method>
+
+ <method name="callback">
+	if(unescape(_browserjavascriptcallback) == this.prevalue)
+	lz.Timer.resetTimer( this.callDelegate, timer );
+	else
+	setAttribute("value", unescape(_browserjavascriptcallback));
+ </method>
+
+
+</canvas>

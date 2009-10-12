@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<canvas height="400" debug="true">
+ 
+     <button text="Show then Fade" onclick="canvas.showText()" />
+     <text name="myText" opacity="0.0" bgcolor="#CCCCCC">The Invisible Man</text>
+     <simplelayout axis="y" spacing="10" />
+	
+	<attribute name="fadeDelegate" value="null" />
+ 
+     <method name="showText">
+         this.myText.setAttribute( "opacity", 1.0 );
+         this.fadeDelegate = new LzDelegate( this, "fadeText" );
+         lz.Timer.addTimer( this.fadeDelegate, 3000 );
+     </method>
+ 
+     <method name="fadeText">
+		 //Debug.write("fadeText: ",lz.Timer.countTimers(this.fadeDelegate));
+         this.myText.animate( "opacity", 0.0, 1000 );
+     </method>
+ 
+ </canvas>

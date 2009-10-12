@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<canvas debug="true" width="100%" height="100%" fontsize="14" title="OpenMeetings - Computer testing">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+    
+<class name="swfResourceView" extends="view" play="false" y="40">
+        
+        <handler name="onload">
+            //Debug.write("Resource loaded: ",this);
+            this.stop();
+            this.setAttribute('play',false);
+        </handler>
+        
+        <handler name="onclick">
+            //Debug.write("onclick: ",this.sprite);
+            //Debug.write("onclick: ",this.sprite.getMCRef());
+        </handler>        
+        
+        <handler name="onframe" args="i">
+            ////Debug.write("onframe",i);
+        </handler>
+        
+        <handler name="onplay" args="i">
+            //Debug.write("onplay",i);
+        </handler>
+        
+        <handler name="onstop" args="i">
+            //Debug.write("onstop",i);
+        </handler>        
+        
+</class>    
+    
+<button text="setSource" onclick="xyz.setSource('Tutorat.swf')" >
+    <handler name="onclick">
+        var tempView = new lz.swfResourceView(canvas,{id:'xyz'});
+        tempView.setSource('Tutorat.swf');
+    </handler>
+</button>
+
+  
+    
+</canvas>

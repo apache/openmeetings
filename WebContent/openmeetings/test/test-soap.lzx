@@ -1,0 +1,32 @@
+<canvas debug="true" height="400" width="530">
+
+    <debug x="10" y="190" width="510" height="200"/>
+
+    <soap name="fileService" wsdl="http://localhost:5080/openmeetings/services/FileService?wsdl">
+        <handler name="onload">
+            Debug.write('fileService soap service loaded');
+        </handler>
+
+        <handler name="onerror" args="error">
+            Debug.write('error:', error);
+        </handler>
+
+        <!-- See RPC chapter for details on remotecall and how dataobject is
+             used to data bind to RPC operation results. --> 
+        <remotecall name="ping" funcname="ping">
+        	<param value="1"/>
+            <handler name="ondata" args="value">
+                Debug.write('result:\n', value);
+            </handler>
+        </remotecall>
+    </soap>
+
+    <view x="10" y="10" layout="spacing: 5">
+        <view layout="axis: x; spacing: 5">
+            <edittext id="s" text="SOAP"/>
+            <button text="search" onclick="Debug.write('Invoking search...'); fileService.ping.invoke()"/>
+        </view>
+
+    </view>
+
+</canvas>

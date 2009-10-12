@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<canvas debug="true" width="100%" height="100%" fontsize="14" title="OpenMeetings - Computer testing">
+	
+	<debug fontsize="14" oninit="Debug.showInternalProperties = true"/>
+
+                <edittext name="url" width="400"> 
+                    <handler name="onkeyup" args="key">
+                        if ((key == 27) || (key == 13)) {
+                            this.parent.readStart.onclick.sendEvent();
+                        }
+                    </handler>
+                </edittext>
+                
+                <button name="readStart" width="200" x="400" text="LOAD"
+                                y="2">
+                    <handler name="onclick">
+                        <![CDATA[
+                            var url = parent.url.getText();
+                            if ((url.indexOf("http://") < 0)
+                                    && (url.indexOf("https://") < 0)) {
+                                url = "http://" + url;
+                            }
+    
+                            parent.htmlviewer.setAttribute("src",url);
+                            parent.htmlviewer.setAttribute("visible",true);
+    
+                        ]]>
+                    </handler>
+                </button>
+                
+        <html name="htmlviewer" x="4" y="60" width="600" height="500" bgcolor="0xCCCCCC" >
+            <handler name="onloading" args="loading">
+                this.loading = loading;
+                if ($debug) Debug.write("LOADING ",loading);
+            </handler>
+            <handler name="onsrc" args="src">
+                this.src = src;
+                if ($debug) Debug.write("SRC ",loading);
+            </handler>
+        </html>
+	
+</canvas>
