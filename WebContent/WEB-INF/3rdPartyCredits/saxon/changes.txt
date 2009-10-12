@@ -1,0 +1,3 @@
+Laszlo Presentation Server uses a version of Saxon 6.5.3 that
+does not include the meta-inf/services files, to avoid installing
+aelfred as the default parser. (2004-05-06)
