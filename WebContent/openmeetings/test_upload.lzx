@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas debug="true" width="1000" height="700">
+
+<include href="oslmon/" />
+    
+    <handler name="oninit">
+        new lz.uploadWindow(canvas);
+    </handler>
+
+</canvas>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas debug="true" width="1000" height="700">
+
+    <class name="myView" extends="drawview" bgcolor="red" clip="true" 
+        width="200" height="200" 
+        onclick="//Debug.write('onclick',this)" 
+        onmouseup="//Debug.write('onmouseup',this)" />
+    
+<myView />
+    
+</canvas>
