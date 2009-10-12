@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
+  
+    <title>OpenLaszlo 4.6.1 Release Notes</title>
+    <!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+    * Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+    * Use is subject to license terms.                                            *
+    * X_LZ_COPYRIGHT_END ****************************************************** -->
+    <style type="text/css">
+      body, th, td {
+          font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+          font-size : 12px;
+          line-height : 18px;
+          margin-left : 25px;
+          margin-right : 25px;
+          color: #333333;
+      }
+      h1, h2, h3, h4 {
+          font-weight : bold;
+          margin-top : 20px;
+      }
+      h1 {
+          font-size : 20px;
+      }
+      h2 {
+          font-size : 18px;
+          margin-bottom: 20px;
+      }
+      h3 {
+          font-size : 14px;
+      }
+      h4 {
+          font-size: 12px;
+      }</style>
+
+  </head><body class="release-notes"> <hr> <h1>Release Notes for OpenLaszlo 4.6.1</h1> <hr> 
+
+<p>OpenLaszlo 4.6.1 is a bug fix release, containing
+  more than 50 fixes primarily in the area of mouse events, context
+  menus, and text. These fixes resulted from an architectural simplification
+  of the underlying event and text mechanisms, which has the dual effect of 
+  both simplifying and stabilizing the DHTML code base. In addition,
+  there were significant data and replication fixes thanks to Andr&#xE9;
+  Bargull.</p>
+
+<p>OpenLaszlo 4.6.1 also contains two significant improvements
+from community contributors. Sebastian Wagner extended the output of
+RPC with Gson as the marshaller for JSON. More details are provided in
+<a href="http://www.openlaszlo.org/jira/browse/LPP-8437">Bug
+LPP-8437</a>, including how to write your own marshaller and how to
+get the Gson Factory to set your custom marshalling options. Raju
+Bitter added support for rotation in DHTML using FireFox 3.5, and
+fixed the default rotation origin to be top left or 0% for DHTML. See
+<a href="http://www.openlaszlo.org/jira/browse/LPP-8362">BUG
+LPP-8362</a> for more details.</p>
+
+<p>For those of you who have already upgraded your applications to
+OpenLaszlo 4.2 or higher, no further work is needed. You should just
+start using OpenLaszlo 4.6.1.</p>
+
+<h2>Migrating your Applications to OpenLaszlo 4.6.1</h2>
+<p>To migrate your 4.0.X or 4.1.1 applications, we strongly suggest
+      that you refer to this wiki page: <a
+      href="http://wiki.openlaszlo.org/Runtime_Differences#Upgrading_to_OpenLaszlo_4.2"
+      target="_blank">Runtime_Differences</a>. This page discusses the
+      changes required by SWF9 and also provides a methodology for
+      upgrading your application. It is very important that you run
+      the automated conversion scripts in the recommended order,
+      should you choose to take advantage of them. To review the
+      changes in incremental releases, please refer to the <a
+      href="http://www.openlaszlo.org/archive"
+      target="_blank">OpenLaszlo Archive</a></p>
+
+<h2>Operating System, Browser, Runtime Compatibility</h2>
+    <p>This release has been fully tested on the following operating systems/browser/runtime
+      platforms:</p>
+    <ul>
+      <li>Windows XP, Internet Explorer 7: SWF8, SWF9, DHTML</li>
+      <li>Windows XP, Firefox 3: SWF8, SWF9, DHTML</li>
+      <li>Linux 2.6 kernel, Firefox 3: SWF8, SWF9, DHTML</li>
+      <li>Mac OS X, Firefox 3: SWF8, SWF9, DHTML</li>
+      <li>Mac OS X, Safari 3: SWF8, SWF9, DHTML</li>
+    </ul>
+    <p>Please note that although we have also done some testing with Windows Vista, OpenLaszlo 4.6.1
+      has not been fully qualified against that operating system at this time. Please see <a href="#windowsvista">
+        <i>Running OpenLaszlo Server on Windows Vista</i>
+      </a> for more information.</p>
+
+<h2>Additional Notes</h2>
+    <p>The current charting and graphing remain at a beta level, while the new charting and graphing
+      API is out for review - see: <a href="http://wiki.openlaszlo.org/Charting_API_Change_Proposal" target="_blank">http://wiki.openlaszlo.org/Charting_API_Change_Proposal</a>. Please email <a href="mailto:laszlo-dev@openlaszlo.org">laszlo-dev@openlaszlo.org</a> with your comments. In
+      addition, SOAP support is still incomplete and would be a welcome task for community
+      involvement. If you are interested in contributing to the project, please send us an <a href="mailto:contributions@openlaszlo.org">email</a> for more information.</p>
+
+    <p>For every release, we rely on the OpenLaszlo community to help ensure the quality of the
+      platform release and to determine its future direction. To propose or participate in
+      discussion of new features, see the <a href="http://wiki.openlaszlo.org/Enhancement_Proposals" target="_blank">Wiki</a>. We encourage you to report any problems, and to make suggestions
+      for enhancements, through our <a href="http://www.openlaszlo.org/jira/browse/LPP"> bug
+        tracking system</a>. We'd also like to hear from you on the <a href="http://www.openlaszlo.org/lists" target="_blank">mailing lists</a> and in the <a href="http://forum.openlaszlo.org/" target="_blank">forums</a>.</p>
+        
+<h3>Workaround for Input Text Unexpected Behavior with onfocus Handler</h3>
+<p>In some cases, the onfucus event fires too early, causing unexpected input text characters to be selected as it does in this example:<br>
+<code style="white-space: pre">
+&lt;canvas&gt;
+&lt;simplelayout axis="y"/&gt;
+&lt;inputtext text="abcd" width="100" bgcolor="0xcccccc"/&gt;
+&lt;inputtext text="abcd" width="100" bgcolor="0xffcccc" onfocus="this.setSelection(0, 1)"/&gt;
+&lt;/canvas&gt;
+</code>
+</p>
+
+<p>To work around this issue, you can create a cover view that handles initial clicks, as shown here for the above example:<br>
+<code style="white-space: pre">
+&lt;canvas&gt;
+&lt;simplelayout axis="y"/&gt;
+
+&lt;inputtext text="abcd" width="100" bgcolor="0xcccccc"/&gt;
+
+&lt;view bgcolor="0xffcccc"&gt;
+    &lt;inputtext name="field" text="abcd" width="100"
+        onfocus="parent.cover.setVisible(false); this.setSelection(0, this.getText().length);"
+        onblur="parent.cover.setVisible(true)"
+    /&gt;
+    &lt;view name="cover" width="100%" height="100%"
+        onclick="LzFocus.setFocus(parent.field)"
+    /&gt;
+&lt;/view&gt;
+&lt;/canvas&gt; 
+</code>
+</p>
+
+<h3>Deprecation Notice: Attribute Values on Data Element Will Be Coerced to String in a Future OpenLaszlo Release</h3>
+<p>Currently, if you set an attribute value for a data element, the value is stored as it is set. This will no longer be true in future OpenLaszlo releases, where the value will be coerced to a String value.  If you need to set non-String values for data elements, you should use the <code>setUserData</code> method as shown in this example where <code>node</code> is an <code>LzDataElement</code>:<br>
+<code style="white-space: pre">
+node1.setUserData('key1', val1);
+assertEquals(val1, node1.getUserData('key1'), 'getUserData key1');
+</code>
+</p>
+
+<h2>Bugs Fixed in OpenLaszlo 4.6.1</h2>
+    <p>The 4.6.1 release includes over 50 bug fixes since OpenLaszlo 4.5; we have provided links to
+      our JIRA bug tracking system where you can view the details:</p>
+    <ul>
+      <li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11021" target="_blank">Fixed bugs in 4.6.1</a>
+        </li>
+<li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11011" target="_blank">Fixed bugs in 4.5.0</a>
+</li>
+        <li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=10972" target="_blank">Fixed bugs in 4.4.0</a>
+      </li>
+      <li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=10950" target="_blank">Fixed bugs in 4.3.0</a>
+      </li>
+      <li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=10911" target="_blank">Fixed bugs in 4.2.0.2</a>
+      </li>
+      <li>
+        <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=10880" target="_blank">Fixed bugs in 4.2.0.1</a>
+      </li>
+    </ul>
+
+    <h2>OpenLaszlo 4.6.1 Credits</h2>
+
+    <p> We would like to thank the entire OpenLaszlo community for
+    submitting bug fixes and participating in discussions to help make
+    OpenLaszlo a better platform. Special thanks to Andr&#xE9; Bargull
+    and Raju Bitter for their continued and amazing support of the
+    project.  We'd also like to thank the incredible engineering team
+    at <a href="http://g.ho.st/">G.ho.st</a>, who have worked with us
+    as a sponsor to bring SWF9 and many other improvements to the
+    community.  Special recognition is also due to community
+    contributors: Chad Lancour, Rami Ojares, Philip Romanik, and Jason
+    Gratt. </p>
+
+    <hr>
+    <p>OpenLaszlo 4.6.1 Production branches/4.6@14781 (14781) 2009-09-18T12:18:17Z</p>
+    <!-- Dear Editor, Please do NOT insert a Unicode copyright symbol below.  It will get eaten by the intermediate processors and not display correctly in browsers.  Hence the &#xA9;, which is proper XML for the copyright character -->
+    <p>Copyright &#xA9; 2002-2009 Laszlo Systems, Inc. All Rights Reserved. Unauthorized use,
+      duplication or distribution is strictly prohibited. This is the proprietary information of
+      Laszlo Systems, Inc. Use is subject to license terms. </p>
+    <hr>
+  </body></html>
