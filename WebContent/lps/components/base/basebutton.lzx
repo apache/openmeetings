@@ -1,0 +1,325 @@
+<library>
+    <include href="base/basecomponent.lzx"/>
+
+    <class name="basebutton" extends="basecomponent" styleable="false">
+
+        <!--- Since basebutton is frequently used as part of another component. -->
+        <attribute name="focusable" value="false"/>
+
+        <!--- The resource for the mouse up state, and initial state of the
+              button.
+              @keywords final -->
+        <attribute name="normalResourceNumber" type="number" value="1"/>
+
+        <!--- The resource for the mouse over state. 
+              Use 0 if the resource has at least 2 frames, but there is no over
+              state.
+              @keywords final -->
+        <attribute name="overResourceNumber" type="number" value="2"/>
+
+        <!--- The resource for the mouse down state.
+              Use 0 if the resources has at least 3 frames, but there is no down
+              state.
+              @keywords final -->
+        <attribute name="downResourceNumber" type="number" value="3"/>
+
+        <!--- The resource for the disabled state.
+              Use 0 if the resource has at least 4 frames, but there
+              is no disabled state.
+              @keywords final -->
+        <attribute name="disabledResourceNumber" type="number" value="4"/>
+
+        <!--- The maximum number of frames to use, defaults to the number of
+              frames for the resource associated with this view. This is useful
+              for a subclass that has no resource for this view.
+              @keywords final -->
+        <attribute name="maxframes" value="$once{this.totalframes}" type="number"/>
+
+        <!--- The first 'n' subviews that will respond to mouseevents by
+              changing the frame number of their resource. -->
+        <attribute name="resourceviewcount" type="number"
+                   value="0" setter="this.setResourceViewCount(resourceviewcount)"/>
+
+        <!--- If this button does not respond to onmouseout or onmousedragout
+              events, set this flag to false. -->
+        <attribute name="respondtomouseout" value="true" />
+
+        <!--- Where to send mouse events (the view that will be "clickable").
+              @keywords final -->
+        <attribute name="reference" value="this" when="once" setter="setreference(reference)"/>
+
+        <!--- This event is sent when the resourceviewcount changes. -->
+        <event name="onresourceviewcount" />
+
+        <!--- This event is sent when button the clicked. -->
+        <event name="onclick" />
+
+        <!---  @access private -->
+        <attribute name="_msdown" value="false" />
+        <!---  @access private -->
+        <attribute name="_msin" value="false" />
+
+        <!--- Setter for attribute resourceviewcount.
+             @param Number rvc: the resource view count. -->
+        <method name="setResourceViewCount" args="rvc"><![CDATA[
+            this.resourceviewcount = rvc;
+            if (this._initcomplete) {
+                if ( rvc > 0 ) {
+                    if ( this.subviews) {
+                        this.maxframes = this.subviews[0].totalframes;
+                        if (this.onresourceviewcount) {
+                            this.onresourceviewcount.sendEvent();
+                        }
+                    }
+                }
+            }
+        ]]></method>
+
+        <!--- @access private -->
+        <method name="_callShow"><![CDATA[
+            if ( this._msdown && this._msin && 
+                 this.maxframes >= this.downResourceNumber ) this.showDown();
+            else if ( this._msin && 
+                      this.maxframes >= this.overResourceNumber) this.showOver();
+            else this.showUp();
+        ]]></method>
+
+        <!--- @access private -->
+        <handler args="m" name="onmode" reference="lz.ModeManager">
+            <![CDATA[ 
+            if ( m && ( this._msdown || this._msin ) &&
+                 !this.childOf( m ) ){
+                this._msdown = false;
+                this._msin = false;
+                this._callShow();
+            }
+            ]]> 
+        </handler>
+
+        <!--- Overrides view's method for resourceviewcount.
+              @param Number r: resource number.
+              @access private -->
+        <setter name="frame" args="r"><![CDATA[
+            if ( this.resourceviewcount > 0 ) {
+                for (var i = 0;i < resourceviewcount; i++ ) {
+                    this.subviews[i].setAttribute('frame', r);
+                }
+            } else {
+                super.setAttribute('frame', r);
+            }
+        ]]></setter>
+
+        <!--- When the space bar is down, basebutton shows its down state. -->
+        <method name="doSpaceDown" >
+            <![CDATA[
+            if ( this._enabled) {
+                this.showDown();
+            }
+            ]]>
+        </method>
+
+        <!--- When the space bar is up, basebutton shows its up state. -->
+        <method name="doSpaceUp" >
+            <![CDATA[
+            if ( this._enabled) {
+                this.onclick.sendEvent();
+                this.showUp();
+            }
+            ]]>
+        </method>
+
+        <!--- Called by the button manager when this button is the default-->
+        <method name="doEnterDown" >
+            if ( this._enabled ){
+                this.showDown( );
+            }
+        </method>
+
+        <!--- Called by the button manager when this button is the default-->
+        <method name="doEnterUp" >
+            if ( this._enabled ){
+                if ( this.onclick ){
+                    this.onclick.sendEvent();
+                }
+                this.showUp( );
+            }
+        </method>
+
+        <!--- @access private -->
+        <handler name="ontotalframes">
+            if ( this.isinited ) {
+                this.maxframes = this.totalframes;
+                this._callShow();
+            }
+        </handler>
+
+        <!--- @access private -->
+        <method name="init">
+            // now that subviews are created reset resourceviewcount
+            super.init();
+            this.setResourceViewCount(this.resourceviewcount);
+            this._callShow();
+        </method>
+
+        <!--- @access private -->
+        <handler name="onmouseover">
+            this.setAttribute( '_msin' , true );
+            this._callShow();
+        </handler>
+
+        <!--- @access private -->
+        <handler name="onmouseout">
+            this.setAttribute( '_msin' , false );
+            this._callShow();
+        </handler>
+
+        <!--- @access private -->
+        <handler name="onmousedown">
+            this.setAttribute( '_msdown' , true );
+            this._callShow();
+        </handler>
+
+        <!--- @access private -->
+        <handler name="onmouseup">
+            this.setAttribute( '_msdown' , false );
+            this._callShow();
+        </handler>
+
+        <!--- Sets clickable to true and shows appropriate resource.
+              @access private -->
+        <method name="_showEnabled"> <![CDATA[
+            reference.setAttribute('clickable', this._enabled);
+            showUp();
+        ]]>
+        </method>
+
+        <!--- This function is called whenever the button's visible state
+              should appear to be down.
+              @param Boolean sd: unused. -->
+        <method name="showDown" args="sd=null">
+            this.setAttribute('frame', this.downResourceNumber );
+        </method>
+
+        <!--- This function is called whenever the button's visible state
+              should appear to be up. 
+              @param Boolean sd: unused. -->
+        <method name="showUp" args="sd=null"> <![CDATA[
+            if (!this._enabled && this.disabledResourceNumber) {
+                this.setAttribute('frame', this.disabledResourceNumber );
+            } else {
+                this.setAttribute('frame', this.normalResourceNumber );
+            }
+        ]]>
+        </method>
+
+        <!--- This function is called whenever the button's visible state should
+              appear to be highlighted to indicate that it can be clicked. 
+              @param Boolean sd: unused. -->
+        <method name="showOver" args="sd=null">
+            this.setAttribute('frame', this.overResourceNumber );
+        </method>
+
+        <!--- @access private -->
+        <method name="setreference" args="r">
+             this.reference = r;
+             if (r != this) this.setAttribute('clickable', false)
+        </method>
+
+        <!--- @access private -->
+        <method name="_applystyle" args="s">
+            setTint(this, s.basecolor);
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>Abstract class for making buttons with up-over-down states.</text></tag>
+          <text>
+            <p>A <classname>basebutton</classname> is a view that encapsulates the
+            basic event mechanisms of a button (<event>onclick</event>,
+            <event>onmousedown</event>,
+            <event>onmouseover</event>).</p>
+            
+            <p>There are no visual elements to a <classname>basebutton</classname>
+            so it requires a multi-frame resource<!--link--> to work
+            correctly.</p>
+            
+            <p>The example below shows how to construct a
+            <classname>basebutton</classname> and how to respond to its
+            events. </p>
+            
+            <p>First, the images that will be used are shown below:</p>
+            
+            <inlinemediaobject><imageobject><imagedata fileref="images/basebutton/button-up.png" width="118" /></imageobject></inlinemediaobject>
+            <inlinemediaobject><imageobject><imagedata fileref="images/basebutton/button-over.png" width="118"/></imageobject></inlinemediaobject>
+            <inlinemediaobject><imageobject><imagedata fileref="images/basebutton/button-down.png" width="118"/></imageobject></inlinemediaobject>
+            
+            <example class="program">
+            &lt;canvas height="150"&gt;
+              &lt;!-- first create the multi-frame resource and give it a name --&gt;
+              &lt;resource name="mybutton_rsrc"&gt;
+               &lt;!-- first frame MUST be the mouseup state of the button --&gt;  
+                &lt;frame src="resources/basebutton/button-up.png"/&gt;
+                &lt;!-- second frame MUST be the mouseover state of the button --&gt;
+                &lt;frame src="resources/basebutton/button-over.png"/&gt;
+                &lt;!-- third frame MUST be the mousedown state of the button --&gt;
+                &lt;frame src="resources/basebutton/button-down.png"/&gt;
+              &lt;/resource&gt;
+              
+              &lt;!-- Second, assign the resource to a basebutton tag --&gt;
+              &lt;basebutton resource="mybutton_rsrc"/&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>Using the example above, the basebutton will appear initially on screen in the 'mouseup' state and it will respond to the mouse
+            events by showing the correct images associated with each event. In order to have the button do more than just switch images, a
+            script needs to be added. There are three basic approaches for creating scripts to be executed by a basebutton once it has been
+            clicked, and these approaches are shown below.</p>
+            
+            
+            <example class="program" id="basebutton-2">
+            &lt;canvas&gt;
+              &lt;resource name="mybutton_rsrc"&gt;
+                &lt;frame src="resources/basebutton/button-up.png"/&gt;
+                &lt;!-- first frame MUST be the mouseup state of the button --&gt;     
+                &lt;frame src="resources/basebutton/button-over.png"/&gt;
+                &lt;!-- second frame MUST be the mouseover state of the button --&gt;     
+                &lt;frame src="resources/basebutton/button-down.png"/&gt;
+                &lt;!-- third frame MUST be the mousedown state of the button --&gt;     
+              &lt;/resource&gt;
+              
+              &lt;!-- APPROACH 1: include a script in the event attribute, onclick --&gt;
+              &lt;basebutton resource="mybutton_rsrc" onclick="this.animate('x', 100, 1000, true)"/&gt;
+              
+              &lt;!-- APPROACH 2: include a script in the onclick attribute that calls a method --&gt;
+              &lt;basebutton resource="mybutton_rsrc" onclick="this.doMyMethod()"&gt;
+                &lt;method <em>name</em>="doMyMethod"&gt;
+                  this.animate('x', 100, 1000, true, {motion: 'easeout'}); 
+                  this.animate('x', -100, 1000, true, {motion: 'easein'}); 
+                &lt;/method&gt;
+              &lt;/basebutton&gt;
+              
+              
+              &lt;!-- APPROACH 3: have the handler respond to the onclick event directly --&gt;
+              &lt;basebutton resource="mybutton_rsrc"&gt;
+                &lt;handler <em>name</em>="onclick"&gt;
+                  this.animate('x', 100, 1000, true, {motion: 'easeout'}); 
+                  this.animate('x', -100, 1000, true, {motion: 'easein'}); 
+                &lt;/handler&gt;
+              &lt;/basebutton&gt;
+              
+              &lt;simplelayout axis="y" spacing="20"/&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            
+            <p>You can also use these approaches to respond to the other mouse
+            events as well, if there is a need to do more then just switch
+            images.</p>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

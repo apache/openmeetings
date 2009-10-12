@@ -1,0 +1,417 @@
+<library>
+    <include href="shared/basechart.lzx"/>
+    <include href="shared/databar.lzx"/>
+    <include href="shared/barchartbacking.lzx"/>
+
+    <!--- The barchart class draws data in bars using the
+        information in the child dataseries object(s).
+        (Of beta quality.) -->
+    <class name="barchart" extends="basechart">
+        <!--- Public attributes. -->
+        
+        <!--- The space between bars. -->
+        <attribute name="barspace" type="number" value="2"/>
+        <!--- Whether to alternate lengths of tick lines. -->
+        <attribute name="staggerticks" type="boolean" value="true"/>
+        
+        <!--- Private attributes. -->
+        
+        <!--- @keywords private
+            Number of total bars. -->
+        <attribute name="numbars" type="number" value="0"/>
+        <!--- @keywords private
+            Indicates the bars have been drawn at least once. -->
+        <attribute name="datadrawn" type="boolean" value="false"/>
+        
+        <!--- @keywords private
+            Sets the altmaximum.  In barchart, due to the directional changes,
+            these attributes have a slightly different private function used
+            for scaling, and cannot be set manually without malfunctions. -->
+        <attribute name="altmaximum" type="number"
+            value="${this.drawaxis == 'y' ? this.maximum : 100}"/>
+        <!--- @keywords private
+            Sets the altminimum.  In barchart, due to the directional changes,
+            these attributes have a slightly different private function used
+            for scaling, and cannot be set manually without malfunctions. -->
+        <attribute name="altminimum" type="number"
+            value="${this.drawaxis == 'y' ? this.minimum : 0}"/>
+
+        <handler name="ondata">
+            if(this.adjusttodata == true){
+                //this.adjustToData();
+            }
+            this.dataclip.datapane.breakDown();
+            this.setAttribute('datadrawn', false);
+            this.setAttribute('rendercomplete', false);
+            this.chartbg.clearAll();
+            if(this.drawaxis == 'x'){
+                this.buildBarsVert();
+                this.chartbg.clearHTickLabels();
+            } else {
+                this.buildBarsHoriz();
+                this.chartbg.clearVTickLabels();
+            }
+            this.chartbg.renderAll();
+            if(this.findLegend() != null){
+                if(this.subnodes[this.findLegend()].legenddrawn != true){
+                    this.subnodes[this.findLegend()].buildLegend();
+                }
+            }
+        </handler>
+        
+        <!--- Refreshes drawn chart when direction changes. -->
+        <event name="ondrawaxis"/>
+        <handler name="ondrawaxis">
+            this.dataclip.datapane.setAttribute('anicomplete', false);
+            this.ondata.sendEvent();
+        </handler>
+        
+        <!--- Builds vertical bars, if drawaxis is x. -->
+        <method name="buildBarsVert">
+            <![CDATA[
+            var snum = this.seriesnumber; // Number of dataseries.
+            var dnode = this.findData(); // Location of chartdata.
+            var barspace = this.barspace; // Space between bars.
+            var tickset = 0;
+            var xpos; // x location of bars, to be determined later.
+            var barviewwidth = scaledaltmax - scaledaltmin;
+            for(var j = 0; j < snum; j++){
+                var bl = this.subnodes[dnode].subviews[j];
+                if(bl.ydata != null &&
+                    bl.dataenabled == true){
+                    var ylength = bl.ydata.length;
+                    var visbars = Math.abs(this.altmaximum) - Math.abs(this.altminimum);
+                    this.setAttribute('barcount', visbars);
+                    var barwidth = Math.round(barviewwidth / (ylength * snum)) -
+                        barspace;
+                    var xstartpos = (barviewwidth - (((barwidth + barspace) *
+                        ylength) * snum) + barspace) / 2;
+                    xpos = xstartpos + (barwidth * j) + (barspace * j);
+                    this.setAttribute('numbars', snum * ylength);
+                    for(var i = 0; i < ylength; i++){
+                        var barheight = (bl.ydata[i] *
+                            this.scaler) - (this.zerowidth / (2 * this.scaler));
+                        var bvalue = bl.ydata[i];
+                        var datacolor = bl.datacolor;
+                        var dhover = bl.tooltip;
+                        var aninit = bl.animationinit;
+                        var dataopacity = bl.dataopacity;
+                        var barrsc;
+                        var bcolor;
+                        if(bl.rscdata != null){
+                            if(typeof bl.rscdata[i] !=
+                                'undefined'){
+                                barrsc = bl.rscdata[i];
+                            } else {
+                                barrsc = null;
+                            }
+                        } else {
+                            barrsc = bl.dataresource;
+                        }
+                        if(bl.colordata != null){
+                            if(typeof bl.colordata[i] !=
+                                'undefined'){
+                                bcolor = bl.colordata[i];
+                            } else {
+                                bcolor = null;
+                            }
+                        } else {
+                            bcolor = bl.datacolor;
+                        }
+                        var yposit = this.dataclip.datapane.height -
+                            this.height;
+                        if(barheight < 0){
+                            barheight = barheight * -1;
+                            yposit = this.dataclip.datapane.height;
+                        }
+                        new databar(dataclip.datapane, {width:barwidth,
+                            height:barheight, x:xpos, y:yposit,
+                            realy:plotheight, bgcolor:bcolor,
+                            tooltip:dhover, realx:xpos, animationinit:aninit,
+                            stretches:"both", resource:barrsc, datalink:bl,
+                            opacity:dataopacity, dataresource:barrsc, barnumber:i,
+                            name:"bar"+j+i, drawaxis:this.drawaxis, barset:j,
+                            siblingbars:snum * ylength, barspace:barspace,
+                            totalsets:snum, bvalue:bvalue});
+                        if(bl.labeldata != null){
+                            var ltxtsize = bl.labeltextsize;
+                            var lborder = bl.labelborder;
+                            var lbwidth = bl.labelborderwidth;
+                            var lbcolor = bl.labelcolor;
+                            var ltcolor = bl.labeltextcolor;
+                            var labelheight = 15;
+                            var labelwidth = barwidth * 2;
+                            if(bl.labeldata[i] != null){
+                                var ltext = bl.labeldata[i];
+                                var doanim = false;
+                                if(aninit != ''){
+                                    doanim = true;
+                                }
+                                new label(dataclip.datapane, {height:labelheight,
+                                    x:xpos + (barwidth / 2), labelnumber:i,
+                                    bgcolor:lbcolor, name:"label"+j+i, fadein:doanim,
+                                    ltext:ltext, labelset:j,
+                                    ltextsize:ltxtsize, lborder:lborder,
+                                    lbwidth:lbwidth, ltcolor:ltcolor, datalink:bl,
+                                    drawaxis:this.drawaxis, charttype:"bar"});
+                            }
+                        }
+                        if(this.rendercomplete != true){
+                            if(bl.baselabels != null &&
+                                typeof bl.baselabeldata[i] != 'undefined'){
+                                var xtext = bl.baselabeldata[i];
+                                var vtickunit = (barwidth + barspace) * i;
+                                var basesetter = tickset * (barwidth + barspace) +
+                                    ((snum * vtickunit) + (barwidth / 2) +
+                                    (xstartpos));
+                                var loffset = 0;
+                                var toffset = typeof toffset == 'undefined' ?
+                                    ((tickset + 2) % 2 == 0 ? 0 : 14) : (toffset == 14 ? 0 : 14);
+                                if(this.staggerticks == true){
+                                    if(snum > 1){
+                                        loffset = (tickset * 14);
+                                    } else {
+                                        loffset = toffset;
+                                    }
+                                }
+                                new ticklabel(chartbg.vtickclip.vtickpane,
+                                    {x:basesetter, ltext:xtext, y:plotheight,
+                                    fontsize:this.vticklabelsize, tickaxis:"x",
+                                    ltcolor:this.baselabels, datalink:bl,
+                                    ticklength:this.vticklength,
+                                    labelset:j, labelnumber:i, loffset:loffset,
+                                    labelangle:bl.baselabelangle});
+                            }
+                        }
+                        xpos = xpos + (barspace * snum + (barwidth * snum));
+                    }
+                }
+                if(bl.baselabels != null){
+                    tickset++;
+                }
+            }
+            this.setAttribute('rendercomplete', true);
+            this.setAttribute('datadrawn', true);
+            this.dataclip.datapane.setAttribute('anicomplete', true);
+            ]]>
+        </method>
+        <!--- Builds horizontal bars, if drawaxis is y. -->
+        <method name="buildBarsHoriz">
+            <![CDATA[
+            var snum = this.seriesnumber; // Number of dataseries.
+            var dnode = this.findData(); // Location of chartdata.
+            var barspace = this.barspace; // Space between bars.
+            var tickset = 0;
+            var ypos; // x location of bars, to be determined later.
+            var barviewwidth = scaledaltmax - scaledaltmin;
+            for(var j = 0; j < snum; j++){
+                var bl = this.subnodes[dnode].subviews[j];
+                if(bl.ydata != null &&
+                    bl.dataenabled == true){
+                    var xlength = bl.ydata.length;
+                    var barwidth = Math.round(barviewwidth / (xlength * snum)) -
+                        barspace;
+                    var xstartpos = (barviewwidth - (((barwidth + barspace) *
+                        xlength) * snum) + barspace) / 2;
+                    ypos = xstartpos + (barwidth * j) + (barspace * j);
+                    this.setAttribute('numbars', snum * xlength);
+                    for(var i = 0; i < xlength; i++){
+                        var barheight = Math.abs(bl.ydata[i] *
+                            this.altscaler) - (this.zerowidth / (2 * this.altscaler));
+                        var bvalue = bl.ydata[i];
+                        var datacolor = bl.datacolor;
+                        var dhover = bl.tooltip;
+                        var aninit = bl.animationinit;
+                        var dataopacity = bl.dataopacity;
+                        var barrsc;
+                        if(bl.rscdata != null){
+                            if(typeof bl.rscdata[i] !=
+                                'undefined'){
+                                barrsc = bl.rscdata[i];
+                            } else {
+                                barrsc = null;
+                            }
+                        } else {
+                            barrsc = bl.dataresource;
+                        }
+                        if(bl.colordata != null){
+                            if(typeof bl.colordata[i] !=
+                                'undefined'){
+                                bcolor = bl.colordata[i];
+                            } else {
+                                bcolor = null;
+                            }
+                        } else {
+                            bcolor = bl.datacolor;
+                        }
+                        var yposit = plotheight - barheight;
+                        new databar(dataclip.datapane, {width:barheight,
+                            height:barwidth, y:ypos,
+                            realy:ypos, bgcolor:bcolor, datalink:bl,
+                            tooltip:dhover, totalsets:snum,
+                            animationinit:aninit, drawaxis:this.drawaxis,
+                            stretches:"both", resource:barrsc, barnumber:i,
+                            opacity:dataopacity, dataresource:barrsc, barset:j,
+                            name:"bar"+j+i, siblingbars:snum * xlength,
+                            barspace:barspace, bvalue:bvalue});
+                        if(bl.labeldata != null){
+                            var ltxtsize = bl.labeltextsize;
+                            var lborder = bl.labelborder;
+                            var lbwidth = bl.labelborderwidth;
+                            var lbcolor = bl.labelcolor;
+                            var ltcolor = bl.labeltextcolor;
+                            var labelheight = 15;
+                            var labelwidth = barwidth * 2;
+                            if(bl.labeldata[i] != null){
+                                var ltext = bl.labeldata[i];
+                                var doanim = false;
+                                if(aninit != ''){
+                                    doanim = true;
+                                }
+                                new label(dataclip.datapane, {height:labelheight,
+                                    y:ypos + (barwidth / 2), datalink:bl,
+                                    x:barheight + labelwidth + 4,
+                                    bgcolor:lbcolor, name:"label"+j+i, fadein:doanim,
+                                    ltext:ltext, labelnumber:i, labelset:j,
+                                    ltextsize:ltxtsize, lborder:lborder,
+                                    lbwidth:lbwidth, ltcolor:ltcolor,
+                                    drawaxis:this.drawaxis, charttype:"bar"});
+                            }
+                        }
+                        if(this.rendercomplete != true){
+                            if(bl.baselabels != null &&
+                                typeof bl.baselabeldata[i] != 'undefined'){
+                                var xtext = bl.baselabeldata[i];
+                                var htickunit = (barwidth + barspace) * i;
+                                var basesetter = tickset * (barwidth + barspace) +
+                                    ((snum * htickunit) + (barwidth / 2) +
+                                    (xstartpos));
+                                var loffset = 0;
+                                var toffset = typeof toffset == 'undefined' ?
+                                    ((tickset + 2) % 2 == 0 ? 0 : this.vticklength) :
+                                    (toffset == this.vticklength ? 0 : this.vticklength);
+                                if(this.staggerticks == true){
+                                    if(snum > 1){
+                                        loffset = (tickset * this.vticklength);
+                                    } else {
+                                        loffset = toffset;
+                                    }
+                                }
+                                new ticklabel(chartbg.htickclip.htickpane,
+                                    {x:chartbg.htickclip.htickpane.width, ltext:xtext,
+                                    y:basesetter, fontsize:this.vticklabelsize,
+                                    tickaxis:"y", ltcolor:this.baselabels, datalink:bl,
+                                    ticklength:this.vticklength,
+                                    labelset:j, labelnumber:i,
+                                    loffset:loffset, labelangle:bl.baselabelangle});
+                            }
+                        }
+                        ypos = ypos + (barspace * snum + (barwidth * snum));
+                    }
+                }
+                if(bl.baselabels != null){
+                    tickset++;
+                }
+            }
+            this.setAttribute('rendercomplete', true);
+            this.setAttribute('datadrawn', true);
+            this.dataclip.datapane.setAttribute('anicomplete', true);
+            ]]>
+        </method>
+        
+        <!--- The background of the chart.  (Gridlines, etc.) -->
+        <chartbacking name="chartbg" width="${parent.plotwidth}"
+            height="${parent.plotheight}" x="${parent.plotx}" y="${parent.ploty}"/>
+            
+        <!--- Dataclip is a view at a fixed size (plotwidth and plotheight, with location
+            set by plotx and ploty) that contains an internal view with all the points,
+            lines and labels.  As the internal view datapane is scalable and able to be
+            dragged around once scaled, it needs to be clipped. -->
+        <view name="dataclip" width="$once{parent.plotwidth - (parent.borderwidth * 2)}"
+            height="$once{parent.plotheight - (parent.borderwidth * 2)}"
+            x="$once{parent.plotx + parent.borderwidth + 1}"
+            y="$once{parent.ploty + parent.borderwidth}" clip="true">
+            <view name="datapane" x="${parent.parent.paneslider}"
+                y="${parent.parent.altslider}"
+                width="${parent.parent.scaledaltmax - parent.parent.scaledaltmin}"
+                height="${parent.parent.scaledmax - parent.parent.scaledmin}">
+                <attribute name="anicomplete" type="boolean" value="false"/>
+                <handler name="onmousedown">
+                    if(parent.parent.draggable){
+                        dragger.setAttribute('applied', true);
+                    }
+                </handler>
+                <handler name="onmouseup">
+                    if(parent.parent.draggable){
+                        dragger.setAttribute('applied', false);
+                    }
+                </handler>
+                
+                <method name="breakDown">
+                    <![CDATA[
+                    var killviews = 0;
+                    for(var i = 0; i <= this.subviews.length; i++){
+                        if(this.subviews[i] instanceof lz.databar ||
+                            this.subviews[i] instanceof lz.label){
+                            killviews++;
+                        }
+                    }
+                    var remainviews = this.subviews.length - killviews;
+                    while(this.subviews.length != remainviews){
+                        for(var j = 0; j <= this.subviews.length; j++){
+                            if(this.subviews[j] instanceof lz.databar ||
+                                this.subviews[j] instanceof lz.label){
+                                this.subviews[j].destroy();
+                            }
+                        }
+                    }
+                    ]]>
+                </method>
+
+                <dragstate name="dragger" drag_axis="both"
+                    drag_min_x="${parent.width - this.width + 2}"
+                    drag_max_x="0" drag_min_y="${parent.height - this.height + 2}"
+                    drag_max_y="0"/>
+            </view>
+        </view>
+        <!--- This allows one to zoom in and out of the chart. -->
+        <chartzoomer name="datazoom"/>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    The barchart class draws data in bars using the
+                        information in the child dataseries object(s).
+                </text>
+            </tag>
+            <text>
+                <p>This is an example of a simple barchart with minimal customization.  By
+                specifying additional attributes, one can exercise much greater control over
+                the visual appearance of the chart.  (See: /test/charting/ for more detailed
+                examples.)</p>
+
+                <example title="Simple barchart">
+                    &lt;canvas width="600" height="500"&gt;
+                        &lt;dataset name="dset" request="true" src="resources/barchart_data_02.xml"/&gt;
+
+                        &lt;barchart name="testchart" width="500" height="400" datapath="dset:/"&gt;
+                            &lt;chartdata&gt;
+                                &lt;dataseries ydatapath="salesdata/fy2005/month/@amount"
+                                    datacolor="0xAABBDD" label="salesdata/fy2005/month/@amount"/&gt;
+                                &lt;dataseries ydatapath="salesdata/fy2006/month/@amount"
+                                    label="salesdata/fy2006/month/@amount" datacolor="salesdata/fy2006/month/@color"/&gt;
+                            &lt;/chartdata&gt;
+                        &lt;/barchart&gt;
+
+                    &lt;/canvas&gt;
+                </example>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

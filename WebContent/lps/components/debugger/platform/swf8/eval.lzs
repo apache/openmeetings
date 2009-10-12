@@ -1,0 +1,37 @@
+<library>
+<script when="immediate">
+<![CDATA[
+
+class LzDebugEvalLoader {
+
+    var loader;
+    var errorDel;
+
+    function LzDebugEvalLoader (view) {
+        this.loader = new LzLoader(view.sprite, { attachname: 'debugloader' });
+        this.errorDel = new LzDelegate(this, 'evalError', this.loader, 'onerror');
+    }
+
+    function doEval(expr:String, seq:int=0) {
+        this.loader.request( { lz_load : false,
+                               lzt : "eval",
+                               proxied: true,
+                               url: "__debugger.lzx",
+                               lz_script : "#file interactive-eval-"+ seq + 
+                               "\n#line 0\n" + expr } );
+    }
+
+    function evalError(val) {
+        Debug.error("error connecting to debug server");
+    }
+
+}
+
+]]>
+</script>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

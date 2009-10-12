@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>basezoomarea</title>
+    <link href="http://www.laszlosystems.com/favicon.ico" rel="icon"/>
+    <link href="styles.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="head">
+      <h1>
+            &lt;basezoomarea&gt;
+          </h1>
+    </div>
+    <div class="description">
+      <p><p>An abstract class that provide basic zooming ability.
+Allow subclasses to modify the look and feel
+and action to be taken</p></p>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Attributes
+          </h2>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">chart</span>
+        </div>
+        <div class="attrDesc"><p>the chart instance</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">duration</span>
+          (default: 500)
+        </div>
+        <div class="attrDesc"><p>zoom animation duration</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">enabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable zoom area</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">selecting</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>user is selecting or not</p>&nbsp;
+      </div>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Methods
+          </h2>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">select</span>
+          <span class="methodTitleParams">
+          (<span class="param">minx</span>
+            <span class="param">, miny</span>
+            <span class="param">, maxx</span>
+            <span class="param">, maxy</span>)
+        </span>
+        </div>
+        <div class="methodDesc">abstract method that allow subclasses to provide custom action after selection<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">minx</span>
+              (Number)
+            
+            -
+            min x of the zooomarea</div>
+          <div class="parameter">
+            <span class="methodParam">miny</span>
+              (Number)
+            
+            -
+            min y of the zooomarea</div>
+          <div class="parameter">
+            <span class="methodParam">maxx</span>
+              (Number)
+            
+            -
+            max y of the zooomarea</div>
+          <div class="parameter">
+            <span class="methodParam">maxy</span>
+              (Number)
+            
+            -
+            max y of the zooomarea</div>
+        </div>&nbsp;
+    </div>
+    </div>
+    <hr/>
+    <p class="copyright">
+          Copyright 2002-2005 <a href="http://www.laszlosystems.com/" target="_top">Laszlo Systems, Inc.</a>
+          All Rights Reserved. Unauthorized use, duplication or distribution is strictly
+          prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to
+          license terms.
+        </p>
+  </body>
+</html>

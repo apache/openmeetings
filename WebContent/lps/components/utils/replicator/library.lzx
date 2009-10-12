@@ -1,0 +1,9 @@
+<!-- Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved. -->
+<!---
+      @topic Components
+      @subtopic Replicators
+  -->
+<library>
+    <include href="replicator.lzx"/>
+    <include href="lazyreplicator.lzx"/>
+</library>

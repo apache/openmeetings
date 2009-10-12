@@ -1,0 +1,34 @@
+<library>
+<text id="myoutput" multiline="true" />
+
+ <handler name="oninited">
+   LzTimeKernel.setTimeout(function () {
+     if (lz.Instantiator.isUpdating) {
+       // If the instantiator is still running, just requeue ourselves
+       LzTimeKernel.setTimeout(arguments.callee, 10 * 1000);
+     } else {
+       // Wait a bit for things to settle
+       LzTimeKernel.setTimeout(function () {
+         myoutput.bringToFront();
+         myoutput.format("LzIdleKernel.__callbacks: %w\n", LzIdleKernel.__callbacks);
+         myoutput.addFormat("lz.Idle.coi: %w\n", lz.Idle.coi);
+         if ($profile) {
+
+           myoutput.addFormat("Starting profiling...");
+           Profiler.start();
+           // Profile for 40 seconds
+           LzTimeKernel.setTimeout(function () {
+             Profiler.stop();
+             myoutput.addFormat(" done!\n");
+           }, 40 * 1000);
+         }
+       }, 10 * 1000);
+     }
+   }, 10 * 1000);
+ </handler>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,52 @@
+<library>
+    <include href="utils/states/resizestate.lzx"/>
+    <!--- Resizes its immediateparent with a minimum size in response to mouse events, when applied. -->
+    <class name="resizestatemin" extends="resizestate">
+        <!--- The minimum width to resize to -->
+        <attribute name="resize_min_width" value="0" type="number"/>
+        <!--- The minimum height to resize to -->
+        <attribute name="resize_min_height" value="0" type="number"/>
+
+        <!--- @keywords private -->
+        <attribute name="width"
+                    value="${Math.max((this.immediateparent.getMouse( 'x' )- __resize_xroffset), resize_min_width || 0)}" />
+
+        <!--- @keywords private -->
+        <attribute name="height"
+                    value="${Math.max((this.immediateparent.getMouse( 'y' )- __resize_yroffset), resize_min_height || 0)}" />
+        <doc>
+          <tag name="shortdesc"><text>Standard resizing behavior with a minimum width and height.</text></tag>
+          <text>
+            <p><classname>resizestatemin</classname> can be used to change the
+            width and height of a view in response to the movement of the
+            mouse.</p>
+            
+            <p>Like <classname>resizestate</classname>, 
+            <classname>resizestatemin</classname> tracks differences in the 
+            mouse position from after it is applied, so the bottom right 
+            corner of the resizing view <em>does not</em> snap to the
+            mouse position.</p>
+
+            <p>Note that the red box can not be resized to be smaller than the default minimum width and height of 0.  The green box can only be resized to a minimum width of 100 and height of 50.</p>
+            
+            <example title="Resizing a view to a minumum size using the mouse">
+                &lt;canvas&gt; 
+                    &lt;simplelayout spacing="10"/&gt;
+
+                    &lt;view bgcolor="red" width="200" height="200" onmousedown="this.res.setAttribute('applied', true)" onmouseup="this.res.setAttribute('applied', false)"&gt;
+                        &lt;resizestatemin name="res"/&gt;
+                    &lt;/view&gt;
+                    &lt;view bgcolor="green" width="200" height="200" onmousedown="this.res.setAttribute('applied', true)" onmouseup="this.res.setAttribute('applied', false)"&gt;
+                        &lt;resizestatemin name="res" resize_min_width="${100}" resize_min_height="${50}"/&gt;
+                    &lt;/view&gt;
+                &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

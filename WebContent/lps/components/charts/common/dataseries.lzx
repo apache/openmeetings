@@ -1,0 +1,445 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <!--- datacolumn contain a list of values of a series. List of values typically are data for x series,
+        y series, tooltip series and datalabel series.
+        @access public
+    -->
+    <class name="datacolumn">
+        <!--- the name of the column in the datapath for the series -->
+        <attribute name="columndatapath" type="string" value=""/>
+        <!--- the name of the label in the datapath for the series -->
+        <attribute name="labeldatapath" type="string" value=""/>
+        <!--- array of data representing the series values -->
+        <attribute name="values" value="$once{null}"/>
+        <!--- type of data: string or number -->  
+        <attribute name="datatype" value="string" type="string"/>
+        <!--- true when data had been loaded at least once -->
+        <attribute name="datadone" value="false" type="boolean"/>
+        <!--- this is part of the fix that allows charts to refresh if data has
+            been changed.  (Datacolumn itself can't have a datapath attribute or
+            else it somehow changes how everything works.) -->
+        <view name="dataview" visible="false">
+            <handler name="ondata">
+                parent.getRootDataSeries().ondata.sendEvent();
+            </handler>
+        </view>
+        
+        <!--- get the min value of the columns for the series -->      
+        <method name="getMin">
+        <![CDATA[
+            var min;
+            if(values != null){
+                if(values.length > 0)
+                {
+                    min = values[0];
+                }
+                for(var i = 1; i < values.length; i++)
+                {
+                    if(values[i] < min)
+                    {
+                        min = values[i];
+                    }                                
+                }
+                return min; 
+            } else {
+                return 0;
+            }
+        ]]>
+        </method>
+        
+        <!--- get the max value of the columns for the series -->
+        <method name="getMax">
+        <![CDATA[
+            var max;
+            if(values != null){
+                if(values.length > 0)
+                {
+                    max = values[0];
+                }
+                for(var i = 1; i < values.length; i++)
+                {
+                    if(max < values[i])
+                    {
+                        max = values[i];
+                    }                                
+                }
+                return max;
+            } else {
+                return 0;
+            }
+        ]]>
+        </method>        
+        
+        <!--- method to preprocess the data -->
+        <method name="processData" args="value">
+            return value;            
+        </method>
+        
+        <!--- get a attribute that is of the current class or inherited from 
+              the parent.
+              @param String attName: the name of the attribute
+        -->     
+        <method name="getNestedAttribute" args="attName">
+        <![CDATA[
+            //Debug.write("attribeName " + attName);
+            //Debug.write("attribeValue " + this[attName]);
+            if((this[attName] != "") && (this[attName] != null))
+            {
+                //Debug.write("attribeValue " + this[attName]);
+                return this[attName];
+            }
+            else
+            {
+                return parent.getNestedAttribute(attName);
+            }
+        ]]> 
+        </method>
+        
+        <method name="getDataPath">
+        <![CDATA[
+            var obj = this;
+            while(obj != canvas)
+            {
+                if(obj["datapath"] != null)
+                {
+                    return obj.datapath;
+                }
+                obj = obj.parent;
+            }
+            return null;
+        ]]> 
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="loadData">
+        <![CDATA[                         
+            var dp = this.getDataPath();
+            if(dp == null){
+                return;
+            }
+            
+            if(dp.xpathQuery(this.columndatapath) != undefined){
+                this.values = dp.xpathQuery(this.columndatapath);
+                
+                if(this.datatype == "number")
+                { 
+                    //FIXME(peter, 4/12/2005):  is there a faster way of converting string to a number
+                    for(var i = 0; i < this.values.length; i++)
+                    {
+                        this.values[i] = this.processData(new Number(this.values[i]));
+                    }
+                }
+                else
+                {
+                    for(var i = 0; i < this.values.length; i++)
+                    {
+                        this.values[i] = this.processData(this.values[i]);
+                    }
+                }
+                this.dataview.setAttribute('datapath', this.columndatapath);
+            }
+            
+        ]]>    
+        </method>
+        
+        <!--- clear the cache -->
+        <method name="clearCache">
+            //Debug.write("data column clear Cache");
+            this.values = null;
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="datachange">
+            //Debug.write("********column datachange ")
+            //this.values = null;
+        </method>
+        
+        <method name="getRootDataSeries">
+            var objectplace = this;
+            while(objectplace.parent instanceof lz.dataseries){
+                if(parent instanceof lz.dataseries){
+                    objectplace = objectplace.parent;
+                } else {
+                    break;
+                }
+            }
+            return objectplace;
+        </method>
+        
+        <!--- @keyword private -->
+        <handler name="ondata">
+            //this.getRootDataseries().ondata.sendEvent();
+        </handler>
+        
+        <doc>
+          <tag name="shortdesc"><text>
+              a series of data
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+          
+    <!---          
+        A dataseries in a container for dataseries and datacolumn.
+        dataseries can be nested.
+        @access public
+    -->               
+    <class name="dataseries">
+        <doc>
+          <text>
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+        <!--- enable the dataseries -->       
+        <attribute name="enabled" value="true"/>
+        <!--- label of the dataseries -->
+        <attribute name="label" type="html" value=""/>
+        <!--- @keyword private
+            cache a leaf nodes of the dataseries -->        
+        <attribute name="dataseriesleafs" value="$once{[]}"/>
+        <!--- @keyword private
+            cache the a hashtable of datacolumn -->
+        <attribute name="datacolumnsmap" value="$once{new Object()}"/>
+
+        <!--- get a attribute that is of the current class or inherited from 
+              the parent.
+              @param String attName: the name of the attribute
+        -->        
+        <method name="getNestedAttribute" args="attName">
+        <![CDATA[
+            //Debug.write("getNestedAttribute: " + attName);
+            //Debug.write("getNestedAttributeValue: " + this[attName]);
+            if((this[attName] != "") && (this[attName] != null))
+            {
+                return this[attName];
+            }
+            else if(parent instanceof lz.dataseries)
+            {         
+                return parent.getNestedAttribute(attName);
+            }
+            else
+            {
+                return "";            
+            }
+        ]]>
+        </method>
+
+        <!--- return a datacolumn
+              @param string name: name of the datacolumn              
+        -->
+        <method name="getDataColumn" args="name">
+        <![CDATA[
+            //Debug.write("datacolumnsmap[name]: "  + datacolumnsmap[name]);
+
+            if(name != undefined){            
+                if(datacolumnsmap[name] && datacolumnsmap[name].values)
+                {
+                    return datacolumnsmap[name]; 
+                }            
+                
+                for(var i = 0; i < this.subnodes.length; i++)
+                {
+                    //Debug.write("subnodename: " + this.subnodes[i].name);
+                    if((this.subnodes[i] instanceof lz.datacolumn) && (this.subnodes[i].name == name))
+                    {
+                    
+                        datacolumnsmap[name] = this.subnodes[i];
+                        datacolumnsmap[name].loadData();
+                        return datacolumnsmap[name];                       
+                    }
+                }               
+    
+                if(parent instanceof lz.dataseries)
+                {
+                    
+                    return parent.getDataColumn(name);
+                }
+            }
+            
+            return null;
+        ]]>    
+        </method>
+
+        <!--- get the number of leaf node dataseries -->
+        <method name="getNumDataSeries">  //get the Number of leaf dataseries 
+            return this.dataseriesleafs != null?this.getDataSeriesLeafs().length:0;       
+        </method>
+
+        <!--- get the dataseries of the index 
+              @param Number index: the index of a leaf node dataseries
+        -->
+        <method name="getDataSeries" args="index"> //get the leaf dataseries of that index
+            return this.getDataSeriesLeafs()[index];
+        </method>
+        
+        <!--- get an array of leaf node dataseries -->    
+        <method name="getDataSeriesLeafs">
+        <![CDATA[
+            if(this.dataseriesleafs != null){
+                if(this.dataseriesleafs.length > 0){
+                    return this.dataseriesleafs;
+                }            
+                            
+                for(var i = 0; i < this.subnodes.length; i++){
+                    var childDataSeries = this.subnodes[i];
+                    
+                    if(childDataSeries instanceof lz.dataseries){
+                        this.dataseriesleafs = this.dataseriesleafs.concat(childDataSeries.getDataSeriesLeafs());                                                                                                
+                    }
+                }                       
+                
+                if(this.dataseriesleafs.length == 0){
+                    this.dataseriesleafs.push(this);                                      
+                }
+            }                        
+            return this.dataseriesleafs;
+        ]]>
+        </method>
+
+
+        <!--- return xml data require for the legend -->
+        <method name="getLegend">
+        <![CDATA[
+
+            var dscounter = 1;
+            // The counter serves to keep track of the number of legends on the
+            // canvas.  This fixes the issue with multiple charts all ending up
+            // with the same legend text.
+            
+            var ds = canvas["legendds"];
+            if(!canvas["legendds"])
+            {
+                ds = new lz.dataset(canvas, { name: "legendds"});
+                canvas["legendds"] = ds;     
+            } else {
+                dscounter++;
+                ds = new lz.dataset(canvas, { name: "legendds"+dscounter});
+                canvas["legendds"+dscounter] = ds;
+            }
+ 
+            ds.childNodes = [];
+ 
+            var series = this.getDataSeriesLeafs();
+            var dp = ds.getPointer();
+ 
+            if( parent.constructor.tagname == 'piechart') {
+                
+                if(parent.getDataSeries().getDataSeries(0).getDataColumn("x") != null){
+                    var xseries = parent.getDataSeries().getDataSeries(0).getDataColumn("x").values;
+                } else {
+                    var xseries = null;
+                }
+                
+                if(xseries != null){
+                    for (var i=0 ; i<xseries.length ; i++ ) {
+                        dp.addNode("item", "", {name: xseries[i]}); 
+                    }
+                }
+                 
+            } else {
+                           
+                var yseriesname = (parent.constructor.tagname == 'barchart'? 'x' : 'y');
+
+                for(var i = 0; i < series.length; i++)
+                {
+                    var aseries = series[i];
+                    if(aseries.getDataColumn(yseriesname) != null)
+                    {                    
+                        dp.addNode("item", "", {name: aseries.label});          
+                    }
+                }            
+            }
+           
+            return dp;
+            
+        ]]> 
+        </method> 
+
+        <!--- get the top level -->
+        <method name="getRootDataSeries">
+            var objectplace = this;
+            while(objectplace.parent instanceof lz.dataseries){
+                if(parent instanceof lz.dataseries){
+                    objectplace = objectplace.parent;
+                } else {
+                    break;
+                }
+            }
+            return objectplace;
+        </method>
+
+
+        <!--- clear the cache of datacolumns for the dataseries -->
+        <method name="clearCache">
+        <![CDATA[              
+            for(var i = 0; i < this.subnodes.length; i++)
+            {
+                if(this.subnodes[i]["clearCache"])
+                {
+                    this.subnodes[i].clearCache();                
+                }
+            }
+            this.dataseriesleafs = [];
+        ]]>
+        </method>
+        
+        <!--- add a child datasereis 
+            @param object args: args to pass in to create dataseries. it is ok to be null -->
+        <method name="addDataSeries" args="args">
+            this.clearCache();
+            var childNode = new lz.dataseries(this, args);
+            this.clearCache();            
+            return childNode;
+        </method>
+        
+        <!--- remove child dataseries 
+            @param object child: child dataseries -->
+        <method name="removeDataSeries" args="child">
+            this.clearCache();
+            child.destroy();
+        </method>
+        
+        
+        <!--- add a child datacolumn
+             @param object args: args to pass in to create. It is ok to be null -->
+        <method name="addDataColumn" args="args">
+            this.clearCache();
+            var childNode = new lz.datacolumn(this, args);            
+            return childNode;
+        </method>
+        
+        <!--- remove child datacolumn
+            @param object child: child datacolumn -->
+        <method name="removeDataColumn" args="child">
+            this.clearCache();
+            child.destroy();
+        </method>
+        
+        <!--- @keyword private -->
+        <handler name="ondata">
+            // Have to keep this from happening on linechart, or else it doesn't
+            // draw it properly the first time.  This may need to be fixed.  -JC
+            if(this.getRootDataSeries().parent.constructor.tagname != "linechart"){
+                this.clearCache();
+                this.setAttribute("datadone", true);
+            }
+        </handler>
+    </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

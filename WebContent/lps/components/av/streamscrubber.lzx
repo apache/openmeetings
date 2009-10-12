@@ -1,0 +1,143 @@
+<library>
+        
+<!---
+   enclosing view must have the following attributes:
+   stream  the stream to control, assume it is paused
+   min     min 'x' value
+   max     max 'x' value
+
+   @keywords private -->
+<class name="_scrubstate" extends="state">
+    
+    <!--- @keywords private -->
+    <attribute name="__scrubstate_xdoffset" value="$once{this.xoffset - this.getMouse( 'x' )}"/>
+
+    <attribute name="x"
+       value="this.__scrubstate_getnewpos(
+                this.immediateparent.getMouse( 'x' ) + this.__scrubstate_xdoffset)"
+        when="always"/>
+
+    <!--- @keywords private -->
+    <method name="__scrubstate_getnewpos" args="newpos"> <![CDATA[
+        if (newpos < min) newpos = min;
+        if (newpos > max) newpos = max;
+        if (this.x != newpos) { // new scrubber value
+            //Debug.write('new newpos=%w',newpos);
+            var totalLength = this.max - this.min;
+            var pos = newpos - this.min;
+            var newtime = pos/totalLength * this.stream.totaltime;
+
+            /**
+            Debug.write('pos=%w totalLength=%w perc=%w',
+                        pos, totalLength, pos/totalLength);
+            Debug.write('totaltime=%w newtime=%w',
+                this.stream.totaltime, newtime);
+            **/
+            this.stream.seek(newtime);
+        }
+        return newpos;
+    ]]>
+    </method> 
+</class>
+
+
+<class name="streamscrubber" >
+    <!--- the stream to control -->
+    <attribute name="stream" value="null"/>
+    <!--- true when user has the mouse down and is scrubbing the stream -->
+    <attribute name="scrubbing" value="false" type="boolean"/>
+    <!--- min 'x' value, defaults to zero (typically the left side of parent) -->
+    <attribute name="min" value="0" type="number"/>
+    <!--- max 'x' value, defaults to the right side of the parent -->
+    <attribute name="max" value="$once{parent.width-this.width}" type="number"/>
+
+    <!--- read only -->
+    <attribute name="time" value="0"/>
+    <!--- read only -->
+    <attribute name="totaltime" value="0"/>
+    <!--- read only -->
+    <attribute name="progress" value="0"/>
+
+    <!--- @keywords private -->
+    <attribute name="_waspaused" value="true" type="boolean"/>
+
+    <!--- @keywords private -->
+    <attribute name="_trackdel" value="null"/>
+
+    <!--- @keywords private -->
+    <event name="onstream"/>
+    <!--- @keywords private -->
+    <event name="ontime"/>
+    <!--- @keywords private -->
+    <event name="ontotaltime"/>
+    <!--- @keywords private -->
+    <event name="onprogress"/>
+    
+    <!--- @keywords private -->
+    <setter name="stream" args="newStream">
+        this.stream = newStream;
+        if (!_trackdel) {
+            this._trackdel = new LzDelegate(this, "_trackprogress");
+        }
+        this._trackdel.unregisterAll();
+        this._trackdel.register(this.stream, 'ontime');
+        this._trackdel.register(this.stream, 'ontotaltime');
+        this._trackdel.register(this, 'onmin');
+
+        if (this.onstream) this.onstream.sendEvent(this);
+    </setter>
+
+    <!--- @keywords private -->
+    <handler name="onmousedown">
+        if (!this.stream) {
+            Debug.warn('streamscrubber %w: null stream');
+        }
+        this._waspaused = this.stream.paused;
+        this.stream.pause(true);
+        this.setAttribute('scrubbing', true);
+        this._trackdel.unregisterAll();
+        this.scrubaction.apply(); 
+    </handler>
+    
+    <!--- @keywords private -->
+    <handler name="onmouseup">
+        this.scrubaction.remove(); 
+        this.setAttribute('scrubbing', false);
+        this._trackdel.register(this.stream, 'ontime');
+        this._trackdel.register(this.stream, 'ontotaltime');
+        if (!this._waspaused) this.stream.pause(false);
+    </handler>
+
+    <!--- when the user is not scrubbing track the progress of the
+          stream by moving x when time passes
+          @keywords private -->
+    <method name="_trackprogress" args="ignore=null"> <![CDATA[
+        var newTime = false, newTotal = false;
+        if (this.time != this.stream.time) {
+            newTime = true;
+            this.time = this.stream.time;
+        }
+        if (this.totaltime != this.stream.totaltime) {
+            newTotal = true;
+            this.totaltime = this.stream.totaltime;
+        }
+        this.progress = this.totaltime > 0 ?
+            this.time / this.totaltime : 0;
+        
+        if (this.inited) {
+            var newx = this.min + (this.max-this.min) * this.progress;
+            this.setAttribute('x', newx );
+        }
+        if (this.ontime && newTime) this.ontime.sendEvent(this);
+        if (this.ontotaltime && newTotal) this.ontotaltime.sendEvent(this);
+        if (this.onprogress) this.onprogress.sendEvent(this);    
+        ]]>
+    </method>
+
+    <_scrubstate name="scrubaction" />
+</class>        
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

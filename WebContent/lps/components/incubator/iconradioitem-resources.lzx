@@ -1,0 +1,38 @@
+<library>
+<!-- blank resource to use as a placeholder -->
+<resource name="iconradiotransparent_button_rsc">
+    <frame src="resources/util/transparent.swf"/>
+    <frame src="resources/util/transparent.swf"/>
+    <frame src="resources/util/transparent.swf"/>
+</resource>
+
+<!-- small button resource: used by buttons and new combobox -->
+<resource name="iconradiobutton_small_left_rsc" >
+    <frame src="resources/button/small/sm_btn_up_lft.png" />
+    <frame src="resources/button/small/sm_btn_mo_lft.png" />
+    <frame src="resources/button/small/sm_btn_dn_lft.png" />
+    <frame src="resources/button/small/sm_btn_dsbl_lft.swf" />
+</resource>
+
+<resource name="iconradiobutton_small_right_rsc" >
+    <frame src="resources/button/small/sm_btn_up_rt.png" />
+    <frame src="resources/button/small/sm_btn_mo_rt.png" />
+    <frame src="resources/button/small/sm_btn_dn_rt.png" />
+    <frame src="resources/button/small/sm_btn_dsbl_rt.swf" />
+</resource>
+
+<resource name="iconradiobutton_small_middle_rsc" >
+    <frame src="resources/button/small/sm_btn_up_mid.swf" />
+    <frame src="resources/button/small/sm_btn_mo_mid.swf" />
+    <frame src="resources/button/small/sm_btn_dn_mid.swf" />
+    <frame src="resources/button/small/sm_btn_dsbl_mid.swf" />
+</resource>
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

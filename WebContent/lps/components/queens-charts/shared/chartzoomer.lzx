@@ -1,0 +1,104 @@
+<library>
+    <include href="utils/states/resizestate.lzx"/>
+    <!--- Allows users to zoom in on specific areas of the chart.
+        Click or drag right-to-left to zoom back out.  (Of beta quality.)
+        Due to a bug with drawview, this doesn't currently work in DHTML. -->
+    <class name="chartzoomer" width="${parent.plotwidth}" height="${parent.plotheight}"
+        x="${parent.plotx}" y="${parent.ploty}" visible="${parent.zoomable}"
+        opacity=".4">
+        <!--- The color tint of the zoomer. -->
+        <attribute name="zoomcolor" type="color" value="${parent.zoomcolor}"/>
+
+        <!--- @keywords private
+            The original maximum value of the chart we're zooming in on. -->
+        <attribute name="origmaximum" type="number" value="$once{parent.maximum}"/>
+        <!--- @keywords private
+            The original minimum value of the chart we're zooming in on. -->
+        <attribute name="origminimum" type="number" value="$once{parent.minimum}"/>
+        <!--- @keywords private
+            The original scaler value of the chart we're zooming in on. -->
+        <attribute name="origscaler" type="number" value="$once{parent.scaler}"/>
+        <!--- @keywords private
+            The original maximum value of the chart we're zooming in on,
+            in the x-value direction. -->
+        <attribute name="origaltmaximum" type="number" value="$once{parent.altmaximum}"/>
+        <!--- @keywords private
+            The original maximum value of the chart we're zooming in on,
+            in the x-value direction. -->
+        <attribute name="origaltminimum" type="number" value="$once{parent.altminimum}"/>
+        <!--- @keywords private
+            The original scaler value of the chart we're zooming in on,
+            in the x-value direction. -->
+        <attribute name="origaltscaler" type="number" value="$once{parent.altscaler}"/>
+        <!--- @keywords private
+            The corner of the zoomer.  Set onmousedown, it serves as the
+            upper left corner's x coordinate. -->
+        <attribute name="cornerx" type="number" value="0"/>
+        <!--- @keywords private
+            The corner of the zoomer.  Set onmousedown, it serves as the
+            upper left corner's y coordinate. -->
+        <attribute name="cornery" type="number" value="0"/>
+
+        <handler name="onmousedown">
+            <![CDATA[
+            this.setAttribute('width', 0);
+            this.setAttribute('height', 0);
+            this.setAttribute('cornerx', parent.getMouse('x'));
+            this.setAttribute('cornery', parent.getMouse('y'));
+            this.setAttribute('x', this.cornerx);
+            this.setAttribute('y', this.cornery);
+            this.rs.setAttribute('applied', true);
+            this.setAttribute('bgcolor', this.zoomcolor);
+            ]]>
+        </handler>
+        <handler name="onmouseup">
+            <![CDATA[
+            parent.setAttribute('zooming', true);
+            if(parent.getMouse('x') <= this.cornerx ||
+                parent.getMouse('y') <= this.cornery){
+                parent.setAttribute('paneslider', 0);
+                parent.setAttribute('altslider', 0);
+                parent.setAttribute('altminimum', this.origaltminimum);
+                parent.setAttribute('altmaximum', this.origaltmaximum);
+                parent.setAttribute('minimum', this.origminimum);
+                parent.setAttribute('maximum', this.origmaximum);
+            } else if(parent.getMouse('x') > this.cornerx &&
+                parent.getMouse('y') > this.cornery){
+                var newwratio = Math.abs(parent.plotwidth / this.width);
+                var newhratio = Math.abs(parent.plotheight / this.height);
+                parent.setAttribute('paneslider', (parent.paneslider * newwratio) -
+                    ((this.x - parent.plotx) * newwratio));
+                parent.setAttribute('altslider', (parent.altslider * newhratio) -
+                    ((this.y - parent.ploty) * newhratio));
+                parent.setAttribute('scaledaltmin', parent.scaledaltmin * newwratio);
+                parent.setAttribute('scaledaltmax', parent.scaledaltmax * newwratio);
+                parent.setAttribute('altscaler', parent.altscaler * newwratio);
+                parent.setAttribute('scaledmin', parent.scaledmin * newhratio);
+                parent.setAttribute('scaledmax', parent.scaledmax * newhratio);
+                parent.setAttribute('scaler', parent.scaler * newhratio);
+            }
+            this.setAttribute('width', parent.plotwidth);
+            this.setAttribute('height', parent.plotheight);
+            this.setAttribute('x', parent.plotx);
+            this.setAttribute('y', parent.ploty);
+            this.rs.setAttribute('applied', false);
+            this.setAttribute('bgcolor', null);
+            parent.setAttribute('zooming', false);
+            ]]>
+        </handler>
+        <resizestate name="rs"/>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart or linechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

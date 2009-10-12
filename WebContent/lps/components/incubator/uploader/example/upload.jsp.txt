@@ -1,0 +1,25 @@
+<%@page import="com.oreilly.servlet.MultipartRequest" %> 
+<% 
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/
+
+/* To use this example, rename it upload.jsp. 
+   It is named upload.jsp.txt when it is distributed as part of Open Laszlo because
+   we do not want add a security hole that allows arbitrary uploads to all 
+   distributions.
+   This example upload servlet requires cos.jar from O'Reilly's servlets.com:
+   Please get it from http://www.servlets.com/cos/index.html, place it in
+   $TOMCAT_HOME/common/lib, and restart tomcat. 
+   (The terms of the servlets.com license forbid it from being redistributed 
+   with Open Laszlo.)
+*/ 
+    String saveDirectory = "/tmp/uploader"; // On windows, use "c:/"
+    // size limitation is 10Mb
+    //int maxPostSize = 10 * 1024 * 1024 ; 
+    //MultipartRequest multi = new MultipartRequest(request , saveDirectory , maxPostSize, "MS950"); 
+    
+    MultipartRequest multi = new MultipartRequest(request , saveDirectory , "MS950"); 
+    out.println("uploaded ok"); 
+%> 

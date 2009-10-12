@@ -1,0 +1,91 @@
+<library>
+<chartstyle name="defaultchartstyle">
+    <plotstyle name="plot" linesize="1" linecolor="0xA0A0A0" fillcolor="0xffeeff" opacity="1"/>
+    <chartbgstyle name="chartbgstyle">
+        <linestyle name="line" size="3"/>
+        <regionstyle name="region" color="0xFFFFFF" opacity="1"/>
+    </chartbgstyle>
+    <valueregionstyle name="valueregionstyle">
+        <linestyle name="line" color="0x000000" size="1" opacity="1"/>
+        <regionstyle name="region" color="0xB71CB3" opacity="0.8" gradient="linear"/>
+        <labelstyle name="label" font="serif" fontsize="12" fontcolor="0x000000"/>
+        <labelstyle name="tip" font="serif" fontsize="12" fontcolor="0x000000"/>
+    </valueregionstyle>
+    <axisstyle name="haxisstyle">
+        <labelstyle name="label" font="Helmet" fontsize="16" fontcolor="0x000000" fontangle="0"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="3" size="1">
+            <labelstyle name="label" font="serif" fontstyle="bold" fontsize="12" fontcolor="0x606060"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0xD3D3D3" position="outside" length="3" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="1"/>
+        <linestyle name="gridline" color="0xD3D3D3" size="1"/>
+    </axisstyle>
+    <axisstyle name="vaxisstyle">
+        <labelstyle name="label" font="Helmet" fontsize="16" fontcolor="0x000000" fontangle="-90"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="3" size="1">
+            <labelstyle name="label" font="serif" fontsize="12" fontcolor="0x606060"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0x000000" position="outside" length="3" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="1"/>
+        <linestyle name="gridline" color="0xD3D3D3" size="1"/>
+        <regionstyle name="band1" color="0xE8EBEE" opacity="1" gradient="linear"/>
+        <regionstyle name="band2" color="0xE3E5E7" opacity="1" gradient="linear"/>
+    </axisstyle>
+    <valuelinestyle name="valuelinestyle">
+        <linestyle name="line" color="0xFF9999" size="2" opacity="1"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuelinestyle>
+    <valuepointstyle name="valuepointstyle">
+        <pointstyle name="point" width="15" height="15" color="0x00ff00" opacity=".5" shape="triangle" image="../../test/images/master.gif"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuepointstyle>
+    <datastylelist name="datastyles">
+        <datastyle name="yline">
+            <pointstyle name="point" width="10" height="10" color="0xF9F932" opacity="1" shape="diamond" strokeStyle="0xA3A304" lineWidth="1"/>
+            <linestyle name="line" color="0xF9F932" size="4" opacity="1" type="dotted"/>
+            <regionstyle name="region" color="0xff0000" opacity="1" gradient="radial"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0xF9F932" fillcolor="0xFFFFC1" linesize="4"/>
+        </datastyle>
+        <datastyle name="bline">
+            <pointstyle name="point" width="10" height="10" color="0x32ADFB" opacity="1" shape="fourpoint" strokeStyle="0x03609C" lineWidth="1"/>
+            <linestyle name="line" color="0x32ADFB" size="4" opacity="1" type="dotted"/>
+            <regionstyle name="region" color="0xff0000" opacity="1" gradient="radial"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="rline">
+            <pointstyle name="point" width="10" height="10" color="0xFA8159" opacity="1" shape="circle" strokeStyle="0xB24C2C" lineWidth="1"/>
+            <linestyle name="line" color="0xFA8159" size="3" opacity="1" type="dotted"/>
+            <regionstyle name="region" color="0xff0000" opacity="1" gradient="radial"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+        <datastyle name="gline">
+            <pointstyle name="point" width="10" height="10" color="0x58FB59" opacity="1" shape="square" strokeStyle="0x1D991D" lineWidth="1"/>
+            <linestyle name="line" color="0x58FB59" size="3" opacity="1" type="dotted"/>
+            <regionstyle name="region" color="0xff0000" opacity="1" gradient="radial"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+    </datastylelist>
+</chartstyle>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

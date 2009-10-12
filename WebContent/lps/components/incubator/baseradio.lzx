@@ -1,0 +1,270 @@
+<library>
+
+    <include href="base/baseformitem.lzx" />
+
+    <!--- A helper intermediary service used by baseradiobutton and
+          baseradiogroup. Handles creation of baseradiogroups, and adds and
+          modifies radiobuttons within those groups. Should never be accessed
+          except from those classes. A single instance lives on the canvas
+          called _lzrbcontroller.
+
+          @keywords private -->
+    <node id="_lzrbcontroller">
+        <!--- @keywords private -->
+        <attribute name="groups" value="$once{{}}"/>
+
+        <!--- @keywords private -->
+        <attribute name="defaultGroupName" value="lzdefaultgroup" type="string" />
+
+        <!--- If a radiobutton is in a form, place the radiobutton's group under
+              the form, else place it under this controller. Note that the
+              controller still has a reference to the baseradiogroup through it's
+              groups map.
+              @param baseradiobutton rb: radio button to create group with.
+              @keywords private -->
+        <method name="createGroup" args="groupname,rb"><![CDATA[
+            if(rb['findForm']){
+                var groupPlacement = rb.findForm();
+            } else {
+                var groupPlacement = null;
+            }
+            if (groupPlacement == null) groupPlacement = this;
+            var group = new lz.baseradiogroup(groupPlacement, 
+                           { name: groupname, 
+                             submitname: rb.submitname,
+                             submit: rb.submit, 
+                             datapath: rb.groupdatapath } );
+            return (this.groups[groupname] = group);
+            ]]>
+        </method>
+
+        <!--- Finds a baseradiogroup ancestor for a baseradiobutton.
+              @return a baseradiogroup if found, else null.
+              @keywords private -->
+        <method name="findRadioGroupAncestor" args="rb"><![CDATA[
+            var p = rb.parent;
+            while (p != canvas && ! (p instanceof lz.baseradiogroup)) {
+                p = p.parent;
+            }
+            return (p != canvas ? p : null);
+            ]]>
+        </method>
+
+        <!--- Used by helper classes.
+              @keywords private -->
+        <method name="addRadioButton" args="rb"><![CDATA[
+            var group = null;
+            var groupname = rb['groupname'];
+            if (groupname != null) {
+                group = this.groups[groupname];
+                if (!group) group = this.createGroup(groupname, rb);
+            } else if (rb.group != null) {
+                group = rb.group;
+                groupname = group.name;
+            } else {
+                group = this.findRadioGroupAncestor(rb);            
+            }
+
+            // if we still haven't found a group, use default.
+            if (! group) {
+                Debug.write('WARNING: group and groupname not defined. ' +
+                            'Using default baseradiogroup for', rb);
+                group = this.groups[this.defaultGroupName];
+                if (!group) {
+                    group = this.createGroup(this.defaultGroupName, rb);
+                }
+            }
+
+            rb.group = group;
+            rb.groupname = group.name;
+
+            group.addRadioButton(rb);
+            ]]>
+        </method>
+
+    </node>
+
+
+     <!--- Class baseradiobutton: represents a single radio button. If groupname
+           is defined, it will reference an baseradiogroup that's named
+           groupname. If both groupname and group are not defined, this
+           radiobutton will attempt to use a baseradiogroup ancestor in its view
+           hierarchy. If it can't find one, it will use a default baseradiogroup
+           with groupname 'lzdefaultgroup'. If this radiobutton is inside a
+           form, an implicit baseradiogroup is created as a child the form.
+
+           The first radiobutton is special for implicitly created
+           baseradiogroups. A baseradiogroup will inherit the groupdatapath,
+           used as the baseradiogroup's datapath, and submit attributes from the
+           first radiobutton, which are used during its instantiation. Those
+           same attributes are ignored for subsequent radiobuttons belonging in
+           the same group. -->
+     <class name="baseradiobutton" extends="basecomponent">
+
+        <!--- Name of baseradiogroup. If not defined, it will use group reference as
+              its group. If both groupname and group are not defined, this
+              radiobutton will attempt to use a baseradiogroup ancestor in its view
+              hierarchy. If it can't find one, it will use a default baseradiogroup
+              with groupname 'lzdefaultgroup'. If this radiobutton is inside a
+              form, an implicit baseradiogroup is created as a child of the
+              form. -->
+        <attribute name="groupname" value="$once{null}" type="string"/>
+
+        <!--- Reference to baseradiogroup. If groupname is defined, it will
+              reference an baseradiogroup that's named groupname. If both groupname
+              and group are not defined, this radiobutton will attempt to use a
+              baseradiogroup ancestor in its view hierarchy. If it can't find one,
+              it will use a default baseradiogroup with groupname
+              'lzdefaultgroup'. If this radiobutton is inside a form, an
+              implicit baseradiogroup is created as a child of the form. -->
+        <attribute name="group" value="null" />
+
+        <!--- Value of this radiobutton. -->
+        <attribute name="value" value="null" />
+        
+        <!--- Whether a baseradiogroup will send its data when a form is
+              submitted. This must be set by the first radiobutton in a
+              baseradiogroup to take effect. -->
+        <attribute name="submit" value="true" />
+
+        <!--- The submit name for a baseradiogroup. This must be set by the first
+              radiobutton in a baseradiogroup to take effect. -->
+        <attribute name="submitname" value="" type="string" />
+
+        <!--- The value datapath for a baseradiogroup. This must be set by the first
+              radiobutton in a baseradiogroup to take effect. -->
+        <attribute name="groupdatapath" value="$once{null}" type="string" />
+
+        <!--- True if radio's group value is the same as group's. -->
+        <attribute name="selected" value="false" 
+                   setter="this._select(selected)" />
+
+        <!--- Event sent when selected attribute selected or unselected. -->
+        <event name="onselected" />
+
+        <!--- Send onselected event during init if we selected this radiobutton
+              too early.
+              @keywords private -->
+        <attribute name="_sendonselected" value="false" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            _lzrbcontroller.addRadioButton(this);
+
+            // Call onselected if we selected this radiobutton very early and
+            // didn't send one before.
+            if (this._sendonselected) {
+                this.onselected.sendEvent(this.selected);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onclick">
+            this._select(true);
+        </handler>
+
+        <!--- Select this radiobutton. 
+              @keywords private -->
+        <method name="_select" args="s">
+            if (this['selected'] == s) return;
+            this.selected = s;
+
+            // This ensures we send onselected event even if we select
+            // radiobutton early, i.e., before it's fully inited.
+            if (! this.isinited) { 
+                this._sendonselected = true;
+                return;
+            }
+
+            // If we send event before init, make sure we don't send it during
+            // init.
+            this._sendonselected = false;
+
+            if (s) this.group.setValue( this.value );
+            if (this.onselected) this.onselected.sendEvent(s);
+        </method>
+
+
+        <!--- Subclasses should implement _applystyle to set their own styles.
+              @keywords private -->
+        <method name="_showEnabled">
+            if (this['_applystyle']) {
+                this._applystyle(this.style);
+            }
+        </method>
+        
+    </class>
+
+
+    <!--- Class baseradiogroup: a class representing the selected radiobutton,
+          that can have many radiobuttons associated with it -->
+    <class name="baseradiogroup" extends="baseformitem">
+        <!--- The value for the baseradiogroup. -->
+        <attribute name="value" value="null" setter="this.setValue(value, false)"/>
+
+        <!--- Array of radiobuttons associated with this baseradiogroup.
+              @keywords private -->
+        <attribute name="_rbuttons" value="null" />
+
+        <!--- @param baseradiobutton rb: radiobutton to add. -->
+        <method name="addRadioButton" args="rb"><![CDATA[
+
+            // If a parent form isn't found enclosed in radiogroup, look for it
+            // in the first of the radiobuttons.
+            if (this._rbuttons == null && this._parentform == null) {
+                var p = rb.immediateparent;
+                while (p != canvas) {
+                     if (p[ 'formdata' ]) {
+                        // found a form parent
+                        p.addFormItem(this);
+                        this._parentform  =  p;
+                        break;
+                     }
+                     p = p.immediateparent;
+                }
+            }
+
+            if (this._rbuttons == null) this._rbuttons = [];
+            if (rb.selected) {
+                this.setValue(rb.value, false);
+            } else {
+                if (rb.value == this.value) {
+                    if (!rb.selected) rb.setAttribute('selected', true);
+                } else {
+                    if ( rb.selected) rb.setAttribute('selected', false);
+                }
+            }
+            this._rbuttons.push(rb);
+            ]]>
+        </method>
+
+        <!--- Setter for value. 
+              @param Any value: the value to set.
+              @param Boolean isinitvalue: true if value is rollback value, else
+              false. -->
+        <method name="setValue" args="value,isinitvalue=null"> <![CDATA[
+            if (this['value'] == value) return;
+            if (this._rbuttons != null) {
+                for (var i=0; i < this._rbuttons.length; i++) {
+                    var rb = this._rbuttons[i]
+                    var s = rb.value == value;
+                    if (s && ! rb.selected) {
+                        rb.setAttribute('selected', true);
+                    } else if (!s && rb.selected) {
+                        rb.setAttribute('selected', false);
+                    }
+                }
+            }
+            super.setValue(value,isinitvalue);
+            ]]>
+        </method>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

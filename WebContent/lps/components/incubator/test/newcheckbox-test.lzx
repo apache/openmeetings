@@ -1,0 +1,47 @@
+<canvas>
+<include href="incubator/newcheckbox.lzx" />
+<include href="lzunit" />
+
+<baseform id="theform" x="20" y="20">
+    <simplelayout axis="y" spacing="10" />
+    <newcheckbox id="ncb" text="name joe" name="joe" />
+    <newcheckbox id="xcb" text="submitname gimp" submitname="gimp" />
+    <newcheckbox id="ocb" text="name ryan" name="originalryan" />
+</baseform>
+
+<TestSuite>
+    <TestCase>
+        <method name="testNamedCheckboxToXML"><![CDATA[
+            var str = ncb.toXML(ncb.value);
+            assertTrue(str.indexOf("joe") >= 0);
+        ]]></method>
+
+        <method name="testSubmitNamedCheckboxToXML"><![CDATA[
+            var str = ocb.toXML(ocb.value);
+            assertTrue(str.indexOf("ryan") >= 0); 
+        ]]></method>        
+
+        <method name="testRenameSubmit"><![CDATA[
+            var str = xcb.toXML(xcb.value);
+            assertTrue(str.indexOf("gimp") >= 0); 
+            xcb.setAttribute("submitname", "carabiner");
+            str = xcb.toXML(xcb.value);
+            assertTrue(str.indexOf("carabiner") >= 0); 
+        ]]></method>        
+        <method name="addTests"> 
+            this.addTest("testNamedCheckboxToXML");
+            this.addTest("testSubmitNamedCheckboxToXML");
+            this.addTest("testRenameSubmit");
+        </method> 
+    </TestCase>
+ </TestSuite>
+        
+
+</canvas>
+
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,27 @@
+<!--
+********************************************************
+* [[validators/validatingForm]]
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp
+********************************************************
+-->
+<canvas>
+    <include href="../formlayout.lzx" />
+    <form>
+        <formlayout name="ly" spacing="15" align="right"/>
+        <text>name:</text>
+        <edittext width="150" />
+        <text>e-mail address:</text>
+        <edittext width="200" />
+        <text>address logn text long:</text>
+        <edittext width="250" />
+        <button onclick="parent.ly.setAttribute('align','left')">aligh to left</button>
+    </form>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

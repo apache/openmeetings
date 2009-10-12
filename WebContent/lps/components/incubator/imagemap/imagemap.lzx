@@ -1,0 +1,434 @@
+<library>
+
+<!---
+This class is a contract interface for hotspots that can be used
+by the imagemap class. A generic hotspot does three things:
+1. Tells us if it contains a point
+2. Performs some action on entry
+3. Performs some action on leaving
+-->
+<class name="hotspot" extends="node">
+
+    <!---
+        Does this spot contain the given point?
+        @param Number x: The x coordinate of the point
+        @param Number y: The y coordinate of the point
+        @return boolean: true if the point is within the hotspot, otherwise false
+    -->
+    <method name="contains" args="x,y"><![CDATA[
+        return false;
+    ]]></method>
+
+    <!---
+        Invoked when a hostspot becomes active.
+    -->
+    <method name="doActivate" />
+
+    <!--
+        Invoked when a hotspot becomes inactive.
+    -->
+    <method name="doDeactivate" />
+
+</class>
+
+<!---
+A general hotspot for points inside a circle.
+-->
+<class name="circlehotspot" extends="hotspot">
+
+    <!--- The X coordinate of the center -->
+    <attribute name="x" type="number" />
+
+    <!--- The Y coordinate of the center -->
+    <attribute name="y" type="number" />
+    
+    <!--- The radius of the circle -->
+    <attribute name="radius" type="number" />
+
+    <method name="contains" args="x,y"><![CDATA[
+        return (Math.pow(((x-this.x)/this.radius), 2)+
+                Math.pow(((y-this.y)/this.radius), 2)) <= 1;
+    ]]></method>
+
+</class>
+
+<!---
+A general hotspot for an N-sided polygon.
+This will create a polygon whose sides are described
+by moving in order to the points added by calling addPoint,
+returning back to the first point added to close the polygon.
+-->
+<class name="polygonhotspot" extends="hotspot" oninit="this._points = new Array();">
+
+    <!--- @keywords private The list of points we contain. This is a list [x1, y1, x2, y2, ..., xn, yn]-->
+    <attribute name="_points" type="expression" />
+
+    <!--- Remove all points from this polygon -->
+    <method name="clearPoints"><![CDATA[
+        this._points = new Array();
+    ]]></method>
+
+    <!---
+        Add another point to this polygon 
+        @param Number x: The x coordinate of the point.
+        @param Number y: The y coordinate of the point.
+    -->
+    <method name="addPoint" args="x,y"><![CDATA[
+        this._points.push(x);
+        this._points.push(y);
+    ]]></method>
+
+    <!--- 
+        Get the number of points in this polygon.
+        @return Number: The num,ber of points in the polygon.
+    -->
+    <method name="getNumPoints"><![CDATA[
+        return this._points.length/2;
+    ]]></method>
+
+    <!---
+        Get the nth point in this polygon. Return value 
+        is an object with two properties, 'x' and 'y'. If n
+        is out of range null will be returned.
+        @param Number n: The index of the point to fetch.
+        @return Object: An object describing the nth point, or null  if n is invalid.
+    -->
+    <method name="getPoint" args="n"><![CDATA[
+        if(n < 0 || n > this._points.length/2){
+            return null;
+        }
+        var ret = new Object();
+        ret['x'] = this._points[n*2];
+        ret['y'] = this._points[n*2+1];
+        return ret;
+    ]]></method>
+
+    <method name="contains" args="x,y"><![CDATA[
+        if(this._points.length < 3){
+            //ITS A POINT OR LINE (WE NEED AT LEAST 
+            //THREE SIDES TO CONTAIN SOMETHING)
+            return false;
+        }
+        var oddNodes = false;
+
+        //FOR EACH OF THE X/Y PAIRS
+        var i2 = this._points.length-2;
+        for(var i=0;i<this._points.length;i+=2){
+            var x1 = this._points[i];
+            var y1 = this._points[i+1];
+            var x2 = this._points[i2];
+            var y2 = this._points[i2+1];
+
+            //IF Y IS WITHIN THE BOUNDS OF THE PAIRS
+            if ((y1 < y && y2 >= y) || (y2 < y && y1 >= y)) {
+                //AND THE SLOPE MATCHES THE X COORDINATE
+                if (x1 + (y - y1)/(y2 - y1) * (x2 - x1) < x) {
+                    //WE HAVE CROSSED THE BOUNDS
+                    oddNodes =! oddNodes;
+                }
+            }
+            i2 = i;
+        }
+        return oddNodes;
+    ]]></method>
+</class>
+
+<!---
+A class which will activate hotspots as the mouse passes over them in a parent view, or deactivate
+them as they leave. This class operates by havign a number of objects subclassed from hotspot added.
+Each of these is then queried as the mouse passes about the view to alter its activation state.
+This class will operate either exclusively, only one active hotspot at a time, or may allow
+multiple active hotspots at once if exclusive is true (it is false by default). The class
+also provides suspend and resume methods to pause the classes handling of the hotspots and
+resume respectively. Note that the priority of choosing an active spot is random. That is
+in exclusive mode (or switching from non-exclusive to exclusive mode) if two spot a and b
+both contain x and y, no guarantee is made as to which of a and b will be chosen to be
+the active exclusive view. Additionally this will only activate and deactivate hotspots
+within the parent view. Even if a hotspot added to this map defines an active region outside
+the parent view it will not be honored. Therefore it is strongly recommended that no hotspots
+define an area outside of the view in which the are active. In order for this class
+to work the view in which it is defined must be clickable.
+-->
+<class name="imagemap">
+
+    <!-- @keywords private If the mouse is over our parent view -->
+    <attribute name="_over" type="boolean" value="false" />
+
+    <!-- @keywords private The hotspots we are controlling. -->
+    <attribute name="_spots" type="expression" />
+
+    <!-- @keywords private Our delegate to listen to the mouse movement. -->
+    <attribute name="_checkDel" type="expression" />
+    
+    <!-- @keywords private The active spot when we are in exclusive mode -->
+    <attribute name="_active" type="expression" value="null" />
+
+    <!-- @keywords private If detection is currently suspended -->
+    <attribute name="_suspended" type="boolean" value="false" />
+
+    <!-- If we activate spots exclusively (only one active hotspot at a time) -->
+    <attribute name="exclusive" type="boolean" value="true" />
+
+    <!--- @keywords private
+        Here we simply initialize our itnernal storage for the spots
+        and setup our three listeners for mouse move, in, and out.
+    -->
+    <handler name="oninit"><![CDATA[
+        this._spots = new Array();
+        this._checkDel = new LzDelegate(this, "_check");
+
+        //LISTEN FOR MOUSEIN AND OUT ON OUR PARENT
+        new LzDelegate(this, '_startCheck', this.parent, 'onmouseover');
+        new LzDelegate(this, '_stopCheck', this.parent, 'onmouseout');
+    ]]></handler>
+
+    <!---
+        Add a new hotspot to this map.
+        If the argument is not a subclass of hotspot this call
+        has no effect.
+        @param hotspot spot: The hotspot to be added.
+    -->
+    <method name="addHotspot" args="spot"><![CDATA[
+        if(!(spot instanceof lz.hotspot)){
+            return;
+        }
+
+        //CREATE AN INTERNAL OBJECT SO WE CAN TRACK THE STATUS OF THE SPOT
+        var intSpot = new Object();
+        intSpot['spot'] = spot;
+
+        //SET THE ACTIVE STATUS
+        //IT WILL BE ACTIVE IF:
+        //1. The mouse is over our parent view.
+        //2. We have not been suspended
+        //3. We are not in exclusive mode, or there is not another active spot
+        //4. The mouse is currently within the spots bounds
+        if((intSpot['active'] = 
+                (this._over && !this._suspended && (!this.exclusive || this._active == null) &&
+                spot.contains(this.parent.getMouse('x'), this.parent.getMouse('y'))))){
+            spot.doActivate();
+            if(this.exclusive){
+                //WE ARE THE EXCLUSIVE HOTSPOT
+                this._active = intSpot;
+            }
+        }
+        this._spots.push(intSpot);
+        if(this._over && !this._suspended && this._spots.length == 1){
+            //WE JUST ADDED THE FIRST HOTSPOT AND ARE ACTIVE
+            this._checkDel.register(canvas, "onmousemove");
+        }
+    ]]></method>
+
+    <!---
+        Suspends tracking of this image map. After this method
+        is invoked no hotspot which is part of this map will be
+        activated or deactivated until resume is called.
+    -->
+    <method name="suspend"><![CDATA[
+        this._suspended = true;
+        this._checkDel.unregisterAll();
+    ]]></method>
+
+    <!---
+        Resume tracking of this image map. After this method
+        is invoked the status of all hotspots will be updated
+        to reflect the current position of the mouse.
+    -->
+    <method name="resume"><![CDATA[
+        this._suspended = false;
+
+        //WE NEED TO RECHECK THE ACTIVATION STATE
+        if(!this.exclusive || this._active != null){
+            //WE ARENT EXCLUSIVE, OR WE KNOW WHICH THE EXCLUSIVE HAD BEEN
+            //SO WE CAN JUST RUN A STANDARD CHECK.
+            _check();
+        }else{
+            //WE ARE EXCLUSIVE, BUT MAY HAVE OTHER NON-EXCLUSIVE
+            //ACTIVE VIEWS, SO WE NEED TO CHECK EVERYTHING
+            _checkExclusive(true);
+        }
+
+        //RESUME LISTENING TO THE MOUSE
+        if(this._over){
+            this._checkDel.register(canvas, "onmousemove");
+        }
+
+    ]]></method>
+
+    <!---
+        Remove all hotspots from this image map. This will
+        remove all of the hotspots from this image map and
+        also deactivate any currently active spots.
+    -->
+    <method name="clearHotspots"><![CDATA[
+        _deactivateAll();
+        if(this._over){
+            //WE ARE ACTIVE, STOP LISTENING UNTIL
+            //WE GET A NEW HOTSPOT
+            this._checkDel.unregisterAll();
+        }
+    ]]></method>
+
+    <!--- @keywords private
+        This method will be invoked by our delegate that
+        listens for mouseover on the parent view. It will
+        mark our internal flag of _over and if appropriate
+        begin listening to the mouse movement.
+        This should only be invoked by our mousein delegate.
+    -->
+    <method name="_startCheck" args="arg"><![CDATA[
+        this._over = true;
+        if(this._spots.length > 0 && !this._suspended){
+            //WE ONLY NEED TO CHECK IF WE HAVE A HOTSPOT
+            //AND ARENT SUSPENDED
+            this._checkDel.register(canvas, "onmousemove");
+            _check();
+        }
+    ]]></method>
+
+    <!--- @keywords private
+        Finish our checking. Here we stop listening
+        for the mouse move, and unless we are suspended
+        deactivate all of the hotspots.
+        This should only be invoked by our mouseout delegate.
+    -->
+    <method name="_stopCheck" args="arg"><![CDATA[
+        this._checkDel.unregisterAll();
+        this._over = false;
+        if(!this._suspended){
+            _deactivateAll();
+        }
+    ]]></method>
+
+    <!--- @keywords private Deactivates all hotspots registered with us. -->
+    <method name="_deactivateAll"><![CDATA[
+        for(var i=0;i<this._spots.length;i++){
+            if(this._spots[i]['active']){
+                this._spots[i]['active'] = false;
+                this._spots[i]['spot'].doDeactivate();
+            }
+        }
+        this._active = null;
+    ]]></method>
+
+    <!--- @keywords private
+        When our exclusivity changes we must update
+        which of the hotspots is active.
+    -->
+    <handler name="onexclusive"><![CDATA[
+        if(!this._over || this._suspended){
+            //NOT LISTENING, IGNORE
+            return;
+        }
+
+        if(!this.exclusive){
+            //WE HAD BEEN EXCLUSIVE, SO WE CAN SIMPLY
+            //CHECK ALL OF THE VIEWS. FIRST MAKE SURE
+            //WE NOTE WE CAN'T HAVE AN EXCLUSIVE VIEW
+            this._active = null;
+            _check();
+        }else{
+            //WE NEED TO CHECK FOR SOMETHING TO BECOME EXCLUSIVE
+            _checkExclusive(false);
+        }
+    ]]></handler>
+
+    <!--- @keywords private
+        Check for an exclusive view in some active views. This
+        is called when either our exclusivity state changes or
+        we resume from being suspended. If checkMouse is true
+        then we will make sure any view marked as active should
+        still be active (in the case this is called from resume).
+        @param Boolean checkMouse: true if we should make sure the views should still be active.
+    -->
+    <method name="_checkExclusive" args="checkMouse"><![CDATA[
+        var x,y;
+        if(checkMouse){
+            x = this.parent.getMouse('x');
+            y = this.parent.getMouse('y');
+        }
+        //WE RANDOMLY CHOOSE A SPOT TO BE ACTIVE
+        //IF THERE ALREADY IS ONE
+        var i = 0;
+        for(;i<this._spots.length;i++){
+            if(this._spots[i]['active']){
+                //THIS SPOT WAS ACTIVE BEFORE
+                if(!checkMouse ||this. _spots[i]['spot'].contains(x, y)){
+                    //THIS WILL BE OUR ACTIVE SPOT
+                    this._active = _spots[i++];
+                    break;
+                }
+                //WERE CHECKING AND IT IS INVALID NOW, SO MARK IT
+                this._spots[i]['active'] = false;
+                this._spots[i]['spot'].doDeactivate();
+            }
+        }
+
+        //THEN DEACTIVATE ANYTHING ELSE THAT HAD BEEN ACTIVE
+        for(;i<this._spots.length;i++){
+            if(this._spots[i]['active']){
+                //DEACTIVATE THE SPOT
+                this._spots[i]['active'] = false;
+                this._spots[i]['spot'].doDeactivate();
+            }
+        }
+
+        if(this._active == null){
+            //THERE WASNT ANYTHING ACTIVE, SO DO A FULL CHECK
+            _check();
+        }
+    ]]></method>
+
+    <!--- @keywords private
+        Here we do the actual checking to find what
+        is or is not active. This is primarily called
+        from the mouse move delegate, but is also called
+        when we are in non-exclusive mode by our onexclusive
+        handler, and resume, or by _checkExclusive it it
+        can not identify the active spot from those already active.
+    -->
+    <method name="_check" args="arg=null"><![CDATA[
+        //WHEER IS THE MOUSE?
+        var x = this.parent.getMouse('x');
+        var y = this.parent.getMouse('y');
+
+        if(this.exclusive && this._active != null){
+            //WE HAVE AN EXCLUSIVE ACTIVE VIEW
+            if(!this._active['spot'].contains(x, y)){
+                //ITS NO LONGER ACTIVE
+                this._active['active'] = false;
+                this._active['spot'].doDeactivate();
+                this._active = null;
+            }else{
+                //ITS STILL ACTIVE
+                return;
+            }
+        }
+
+        //WERE NOT EXCLUSIVE, OR IF THERE WAS AN ACTIVE
+        //EXCLUSIVE, IT WAS DEACTIVATED, SO WE CAN LOOK
+        //FOR A NEW ONE
+        for(var i=0;i<this._spots.length;i++){
+            var spot = this._spots[i];
+            //ARE WE IN THE SPOTS BOUNDS?
+            if(spot['spot'].contains(x, y) != spot['active']){
+                //YES!
+                if((spot['active'] = !spot['active'])){
+                    //WE ARE ACTIVATING THE SPOT
+                    spot['spot'].doActivate();
+                    if(this.exclusive){
+                        //MARK EXCLUSIVE IF NECESSARY
+                        this._active = spot;
+                        break;
+                    }
+                }else{
+                    //WE ARE DEACTIVATING THE SPOT
+                    spot['spot'].doDeactivate();
+                }
+            }
+        }
+    ]]></method>
+
+</class>
+
+</library>

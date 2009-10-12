@@ -1,0 +1,74 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<canvas debug="true">
+
+<include href="incubator/uploader/multiplefileupload.lzx"/>
+
+
+        <multiplefileupload y="10" id="mul" numfields="4"/>
+
+        <window title="Test Window" x="540" y="10" width="250" height="350">
+
+            <handler name="oncomplete" reference="mul">
+                Debug.write("EVENT: oncomplete, All files have been uploaded completely or no error occured!!");
+            </handler>
+            <handler name="onincomplete" reference="mul">
+                Debug.write("EVENT: onincomplete, At least one error occured!!");
+            </handler>
+            <constantlayout axis="x" value="10"/>
+            <simplelayout spacing="10"/><view height="15"/>
+            <button onclick="mul.addField()" text="add fields"/>
+            <button onclick="mul.removeField()" text="remove fields"/>
+            <button onclick="mul.setNumFields(6)" text="Set number of fields to 6"/>
+            <button onclick="mul.setNumFields(1)" text="Set number of fields to 1"/>
+            <button text="check select">
+                <handler name="onclick"><![CDATA[
+                    Debug.write("----------  check select  -----------");
+                    var count=0;
+                    for(var i=0; i<mul.content.subnodes.length;i++ ){
+                     if(mul.content.subnodes[i] instanceof lz.fileuploadlist){
+                         if(mul.content.subnodes[i].selected ==true){
+                             count++;
+                             mul.content.subnodes[i].onselect.sendEvent(mul.content.subnodes[i].myFileUpload.fileref.name+' has been selected in field #' + i );
+                         }
+                      }
+                    }
+                    Debug.write(count+""+(count<=1?" file":" files")+" have been selected!!");
+                ]]>
+                </handler>
+            </button>
+
+            <button text="check complete">
+                <handler name="onclick"><![CDATA[
+                    Debug.write("----------  check complete  -----------");
+                    if(!mul.checkError()){
+                        mul.oncomplete.sendEvent();
+                    }
+                    else{
+                        mul.onincomplete.sendEvent();
+                        var count=0;
+                        for(var i=0; i<mul.content.subnodes.length;i++ ){
+                         if(mul.content.subnodes[i] instanceof lz.fileuploadlist){
+                             if(mul.content.subnodes[i].erroroccured ==true){
+                                 count++;
+                                 mul.content.subnodes[i].onerror.sendEvent(mul.content.subnodes[i].myFileUpload.fileref.name+' encountered an error in field #' + i);
+                             }
+                          }
+                        }
+                        Debug.write(count+""+(count<=1?" error":" errors")+" occured!!");
+                    }
+                ]]>
+                </handler>
+            </button>
+
+            <button text="clear all fields">
+                <handler name="onclick">
+                   mul.clearAllFields();
+                </handler>
+            </button>
+
+        </window>
+
+</canvas>

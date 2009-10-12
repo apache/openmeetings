@@ -1,0 +1,136 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+<include href="fileuploadlist.lzx"/>
+<class name="multiplefileupload">
+
+<simplelayout axis="y" />
+      <!--- numbers of fileuploadlist   -->
+      <attribute name="numfields" value="1" />
+
+      <!--- Error occured-->
+      <attribute name="erroroccured" type="boolean" value="false"/>
+
+      <handler name="oninit"><![CDATA[
+            for(var i=0;i<numfields;i++){
+              var t = new lz['fileuploadlist'](content);
+          }
+      ]]>
+      </handler>
+
+      <!--- add one file upload field-->
+      <method name="addField">
+          this.setNumFields(numfields+1);
+      </method>
+
+      <!--- remove one file upload field, and sort selected files to top-->
+      <method name="removeField">
+          this.setNumFields(numfields-1);
+      </method>
+
+      <!--- check if there were any errors in these file upload fields-->
+      <method name="checkError"><![CDATA[
+         this.setAttribute('erroroccured', false);
+         for(var i=0; i<this.content.subnodes.length;i++ ){
+             if(this.content.subnodes[i] instanceof lz.fileuploadlist){
+                 if(this.content.subnodes[i].erroroccured ==true){
+                     this.setAttribute('erroroccured', true);
+                 }
+             }
+         }
+         return(this.erroroccured);
+      ]]>
+      </method>
+
+      <!--- Set number of field upload fields and sort selected files to top
+      -->
+      <method name="setNumFields" args="num"><![CDATA[
+       if(num>0)
+         if(num > numfields){
+              for(var i=numfields;i<num;i++){
+                  var t = new lz['fileuploadlist'](content);
+              }
+              this.setAttribute('numfields',num);
+
+         }else if(num < numfields){
+              var count= numfields - num;
+              var kill = 0;
+              for(var i=numfields-1;i>=0;i--){
+                  if(content.subviews[i].selected==false){
+                      content.subviews[i].destroy();
+                      kill++;
+                  }
+              }
+
+              if(kill>count){
+                 for(var i=0;i<kill-count;i++){
+                    var t = new lz['fileuploadlist'](content);
+                 }
+              }else if(kill < count){
+                  for(var i=numfields-kill-1;i>=numfields-count;i--){
+                      content.subviews[i].destroy();
+                  }
+              }
+
+              this.setAttribute('numfields',num);
+      }
+      ]]>
+      </method>
+
+      <!--- clear all selected file fields-->
+      <method name="clearAllFields"><![CDATA[
+          for(var i=0; i<numfields;i++){
+              content.subviews[i].remove.onclick.sendEvent();
+          }
+      ]]>
+      </method>
+
+      <simplelayout axis="y" spacing="5"/>
+      <view name="content">
+          <simplelayout axis="y" spacing="5"/>
+      </view>
+      <!--- button to upload all selected file fields -->
+      <button name="upload" text="Upload" x="410" enabled="true">
+            <handler name="onclick"><![CDATA[
+                for(var i=0; i<parent.content.subnodes.length;i++){
+                    if(parent.content.subnodes[i] instanceof lz.fileuploadlist && parent.content.subnodes[i].selected==true){
+                        parent.content.subnodes[i].myFileUpload.upload('upload.jsp');
+                    }
+                }
+            ]]>
+            </handler>
+        </button>
+        <doc>
+            <tag name="shortdesc"><text>A swf8-specific class for uploading multiple files to a server</text></tag>
+            <text>
+                <p>
+                A class for uploading a single file using the Flash 8 file upload api. This only works with
+                the swf8 runtime, that is, with lzr=swf8.
+                </p>
+                <p>
+                Using this class requires a service to which to upload. A sample upload jsp is provided,
+                which uses the cos.jar library from servlets.com. To use the example, copy cos.jar from
+                <a href="http://www.servlets.com/cos/index.html">servlets.com</a> into $TOMCAT_HOME/common/lib
+                and rename lps/components/incubator/uploader/example/upload.jsp.txt to upload.jsp.
+                Restart tomcat, so it will see the new jar, then visit
+                <a href="http://localhost:8080/legals/lps/components/incubator/uploader/example/test-multiplefileupload.lzx?lzr=swf8">
+                    http://localhost:8080/legals/lps/components/incubator/uploader/example/test-multiplefileupload.lzx?lzr=swf8</a>
+                </p>
+                <p>(The terms of the servlets.com license forbid it from being redistributed 
+                with Open Laszlo.)
+                </p>                
+                <p>
+                    To upload a single file, see <tagname>fileupload</tagname>.
+                </p>
+            </text>
+        </doc>
+
+</class>
+</library>
+
+
+
+
+

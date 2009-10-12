@@ -1,0 +1,84 @@
+<!---
+      @topic Incubator
+      @subtopic Rich Text Editor
+  -->
+<library>
+     
+     <!-- Data: Font Name
+              inside of a state because datasets get instantiated upon application init
+              the state delays instantiation until the RTE is used. -->
+     <state name="fontFaceData">
+         <dataset name="fontnames">
+             <fnt value="Verdana">Verdana</fnt>
+             <fnt value="Arial">Arial</fnt>
+             <fnt value="Helvetica">Helvetica</fnt>
+             <fnt value="Courier">Courier</fnt>
+             <fnt value="Times">Times</fnt>
+         </dataset>
+     </state>
+     
+     <!--- 
+         A class which wraps up the font face combobox and associated data
+     -->
+    <class name="formatfontface" extends="lzcombobox" width="130" shownitems="5" focusable="false" 
+        style="sidebarbutton_style" itemdatapath="fontnames:/fnt" listwidth="${this.bkgnd.mid.width}">
+         
+            <attribute name="editor" value="$once{this.parent.editor}" />
+            <attribute name="toolbar" value="$once{this.parent}" />
+            
+            <tooltip>Choose font</tooltip>      
+         <!---  @keywords private
+             Set my initial value to be the editor's default font face.
+             Register tool with toolbar -->
+            <method name="init">
+                super.init();
+                toolbar.registerTool(this,"font");
+                this.setValue(this.editor.defaultfontname, true);
+            </method>
+         
+            <!---  @keywords private
+                apply state for late instantiation of local data -->
+             <method name="construct" args="parent, args">
+                 super.construct(parent, args);
+                 fontFaceData.setAttribute('applied', true);
+             </method>
+            
+            <!--- When the user selects an item from the combo box, 
+                create an object representing just the change in format.
+                Give that object to the editor. --> 
+            <handler name="onselect"><![CDATA[
+                this.setChanged(true); // fix bug LPP-4556, Rich text: Can't change font back to Verdana
+                //------------------------------------------------------------
+                // make sure that we call into editor if this combobox has
+                // changed, i.e., it contains an initial value. -pk
+                //------------------------------------------------------------
+                if (this.changed && this.toolbar._passthruchanges) {
+                    this.editor.setFormatAttribute("font", this.getValue()); 
+                    this.editor.delegateRestoreSelection(); 
+                }
+                ]]>
+            </handler>
+         
+         <!--- method broadcast out by the toolbar for clearing tool's state -->
+         <method name="reset">
+             rollback();
+         </method>
+         
+         <!--- method broadcast out by the toolbar for setting tool's state -->
+         <method name="setState" args="state">
+             this.setValue(state); 
+         </method>
+         
+        <!--- Save the selection region before another widget gets focus. -->
+        <handler name="onmouseover">
+            this.editor.saveSelectionRegion();
+        </handler>
+         
+     </class>
+ </library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         --> 

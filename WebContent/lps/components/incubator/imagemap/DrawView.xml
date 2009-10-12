@@ -1,0 +1,22 @@
+<spots>
+        <polygon text="Complex">
+                <point x="0" y="5" order="1" />
+                <point x="10" y="50" order="2" />
+                <point x="50" y="40" order="3" />
+                <point x="35" y="10" order="4" />
+                <point x="45" y="0" order="5" />
+        </polygon>
+        <circle text="Circle" x="150" y="150" radius="50" />
+        <polygon text="Triangle">
+                <point x="150" y="150" order="1" />
+                <point x="225" y="225" order="2" />
+                <point x="300" y="150" order="3" />
+        </polygon>
+        <polygon text="Rectangle">
+                <point x="10" y="200" order="1" />
+                <point x="50" y="200" order="2" />
+                <point x="50" y="250" order="3" />
+                <point x="10" y="250" order="4" />
+        </polygon>
+        <circle text="Big Circle" x="200" y="75" radius="75" />
+</spots>

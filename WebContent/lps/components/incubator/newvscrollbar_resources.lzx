@@ -1,0 +1,30 @@
+<library>
+    <resource name="newvscrollbar_ythumbtop_rsc" src="resources/scrollbar/scrollthumb_y_top.swf" />
+    <resource name="newvscrollbar_ythumbmiddle_rsc" src="resources/scrollbar/scrollthumb_y_mid.swf" />
+    <resource name="newvscrollbar_ythumbbottom_rsc" src="resources/scrollbar/scrollthumb_y_bot.swf" />
+    <resource name="newvscrollbar_ythumbgripper_rsc" src="resources/scrollbar/thumb_y_gripper.png" />
+
+    <resource name="newvscrollbar_ybuttontop_rsc" >
+        <frame src="resources/scrollbar/scrollbtn_y_top_up.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_top_mo.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_top_dn.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_top_up.swf" />
+    </resource>
+    <resource name="newvscrollbar_ybuttonbottom_rsc" >
+        <frame src="resources/scrollbar/scrollbtn_y_bot_up.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_bot_mo.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_bot_dn.swf" />
+        <frame src="resources/scrollbar/scrollbtn_y_bot_up.swf" />
+    </resource>
+    <resource name="newvscrollbar_ytrack_rsc">
+        <frame src="resources/scrollbar/y_scrolltrack.swf"/>
+        <frame src="resources/scrollbar/y_scrolltrack_dn.swf"/>
+        <frame src="resources/scrollbar/y_scrolltrack.swf"/>
+    </resource>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

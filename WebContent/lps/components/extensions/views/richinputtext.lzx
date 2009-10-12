@@ -1,0 +1,364 @@
+<library>
+
+<include href="LzTextFormat.lzx" />
+
+<!-- This component deals with displaying, editing, and formatting rich text.
+    It is a subclass of inputtext, and supports the inputtext API, plus
+    several methods for setting and getting the format of the text. Formats
+    are specified as textformat.
+-->
+<interface name="richinputtext" extends="inputtext">
+  <!--- The default format to use for inserted and typed text.
+      Flash support for default formatting of text is not reliable.
+      The default format will sometimes but rarely be observed. To ensure
+      that Flash uses the default format you want when the user types new
+      text, format the character after the insertion point.
+      See the example, also in test-richinputtext.lzx,
+      shows an example of using this trick.
+  -->
+  <attribute name="defaultformat" />
+
+  <doc>
+    <tag name="shortdesc"><text>
+      An editor for rich text 
+    </text></tag>
+    <text>
+      <p>
+        The <tagname>richinputtext</tagname> component allows you to add basic 
+        rich text properties, such as bolding and italics, to input text. 
+      </p>
+      <example>
+        <![CDATA[
+<canvas bgcolor="blue" height="60" >
+  <richinputtext width="200" x="20" y="20">default text goes here</richinputtext>
+</canvas>
+        ]]>
+      </example>
+    </text>
+  </doc>
+
+</interface>
+
+<script when='immediate'>
+<![CDATA[
+
+// Classes that implement an interface must obey the LZX
+// tag->class mapping convention
+class $lzc$class_richinputtext extends LzInputText {
+  // Next two are part of the required LFC tag class protocol
+  static var tagname = 'richinputtext';
+  static var attributes = new LzInheritedHash(LzInputText.attributes);
+
+  var defaultformat = null;
+
+
+  /**
+    * @access private
+    */
+  override function construct ( parent , args ){
+    super.construct.apply(this, arguments);
+    if ($swf8) { }
+    else {
+      Debug.warn("The dhtml and swf9 runtime do not support richinputtext");
+    }
+  }
+
+  //-----------------------------------------------------------------------------
+  // Set the contents of the richinputtext to the string passed in. Pass in
+  // null or an empty string to clear the component's contents.
+  // For best results, follow calls to setText with calls to setTextFormat.
+  //
+  // @param String t: the string to which to set the text
+  //-----------------------------------------------------------------------------
+  function setText ( t ){
+    if ($swf8) {} else { return;}
+
+    if (typeof(t) == 'undefined' || t == null) {
+      t = "";
+    } else if (typeof(t) != "string") {
+      t = t.toString();
+    }
+
+
+    this.text =  t;
+
+    var mc = this.sprite.__LZtextclip;
+    mc.htmlText = t;
+
+    if (this.resize && (this.multiline == false)) {
+      // single line resizable fields adjust their width to match the text
+      this.setAttribute('width', this.getTextWidth());
+    }
+
+    //multiline resizable fields adjust their height
+    if (this.multiline && this.sizeToHeight) {
+      this.setAttribute('height', mc._height);
+    }
+
+    if (this.multiline && this.scroll == 0 ) {
+      var scrolldel = new LzDelegate(this.sprite, "__LZforceScrollAttrs");
+      _root.lz.Idle.callOnIdle(scrolldel);
+    }
+
+    // @event ontext: Sent whenever the text in the field changes.
+    if (this['ontext']) this.ontext.sendEvent();
+
+  }
+
+  //-----------------------------------------------------------------------------
+  // When using databinding... (I don't understand this)
+  //
+  // @return: The string in the text field, with html formatting.
+  //-----------------------------------------------------------------------------
+  function updateData (){
+    if ($swf8) {} else { return '';}
+    return this.sprite.__LZtextclip.htmlText;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  // Sets the default format to apply to added text. This roughly corresponds
+  // to Flash's TextField.setNewTextFormat, although flash only sometimes
+  // respects that setting.
+  // For best results, follow calls to setText with calls to setTextFormat
+  //
+  // @param textformat fmt: the  default format
+  //-----------------------------------------------------------------------------
+  function setDefaultFormat ( fmt ){
+    if ($swf8) {} else { return;}
+
+    this.defaultformat = fmt;
+    var flashformat = new TextFormat();
+    for (var i in fmt) {
+      flashformat[i] = fmt[i];
+    }
+    this.sprite.__LZtextclip.setNewTextFormat(flashformat);
+  }
+
+  //-----------------------------------------------------------------------------
+  // Push the default format currently set on this object in this.defaultformat
+  // into the Flash TextField. This is just like setDefaultFormat except that it
+  // doesn't require a new default format to be passed in.
+  //
+  // @keywords private
+  //-----------------------------------------------------------------------------
+  function _forceResetDefaultFormat ( ){
+    if ($swf8) {} else { return;}
+
+    var flashformat = new TextFormat();
+    for (var i in this.defaultformat) {
+      flashformat[i] = this.defaultformat[i];
+    }
+    this.sprite.__LZtextclip.setNewTextFormat(flashformat);
+  }
+
+
+  //-----------------------------------------------------------------------------
+  // Sets the string in the text field to be the html text passed in.
+  // If there's no formatting information in the html text passed in,
+  // apply the default text format to it.
+  // This trick relies on the nestedness of html formatting. Innermost
+  // formats win over outer formats.
+  //
+  // @param t: the new contents of the text field
+  //-----------------------------------------------------------------------------
+  function setHTMLText ( t ){
+    if ($swf8) {} else { return;}
+
+    if (this['defaultformat']) {
+      t = this['defaultformat'].toHTML() + t + "</font>";
+    }
+
+    this.sprite.__LZtextclip.htmlText = t;
+  }
+
+  //-----------------------------------------------------------------------------
+  // Returns the string represented in the text field.
+  // Substitutes \r's with \n's because otherwise flash loses line breaks on
+  // setText(getText()).
+  //
+  // @return: The string in the text field
+  //-----------------------------------------------------------------------------
+  function getText ( ){
+    if ($swf8) {} else { return '';}
+
+    var rawtext = this.sprite.__LZtextclip.text;
+    return rawtext.split("\r").join("\n");
+  }
+
+  //-----------------------------------------------------------------------------
+  // Returns HTML of the formatted string in the text field
+  //
+  // @return: HTML of the formatted string in the text field
+  //-----------------------------------------------------------------------------
+  function getHTMLText ( ){
+    if ($swf8) {} else { return '';}
+
+    return this.sprite.__LZtextclip.htmlText;
+  }
+
+  //------------------------------------------------------------------------------
+  // @keywords private
+  //------------------------------------------------------------------------------
+  getText.dependencies = function ( who , self){
+    return [ self , "htmlText" ];
+  }
+
+
+  //------------------------------------------------------------------------------
+  // Apply the specified format change to the substring indicated.
+  // For example:
+  // foo.applyTextFormat("bold", true, start, end) == makes the text bold no matter what
+  // foo.applyTextFormat("bold", false, start, end) == makes the text un-bold no matter what
+  // foo.applyTextFormat("size", 32, start, end);
+  // foo.applyTextFormat("font", "Euphoria", start, end);
+  //
+  // @param String attr: the name of the attribute to change, One of bold, italic, underline, size,
+  // face, color, url, align, indent, leading, bullet
+  // @param color|boolean|number|string val: the value to which to set the specified attribute to
+  // @param integer beginIndex: index of the beginning of the selection
+  // @param integer endIndex: index of the end of the selection.
+  //------------------------------------------------------------------------------
+  function applyTextAttr (attr, val, beginIndex, endIndex){
+    if ($swf8) {} else { return;}
+
+    // Start with a TextFormat object with no attributes set
+    var format = new TextFormat();
+
+    // Change the text format based on the format passed in.
+    format[attr] = val;
+    this.sprite.__LZtextclip.setTextFormat(beginIndex, endIndex, format);
+  }
+
+  //------------------------------------------------------------------------------
+  // Append the specified string to the contents of the field
+  // @param str the string to append
+  // @param toHTML whether to put the appended text into the HTMLText or the plaintext?
+  // if toHTML is not specified, append the text to the plaintext.
+  //------------------------------------------------------------------------------
+  function appendText(str, toHTML) {
+    if ($swf8) {} else { return;}
+
+    if (toHTML) {
+      this.sprite.__LZtextclip.htmlText = this.sprite.__LZtextclip.htmlText + str;
+    } else {
+      this.sprite.__LZtextclip.text = this.sprite.__LZtextclip.text + str;
+    }
+
+  }
+
+  //------------------------------------------------------------------------------
+  // Gets the format of the specified range of characters. Attributes will be
+  // undefined unless they are common to the entire range of characters.
+  //
+  // @param integer beginIndex: index of the beginning character of the range
+  // @param integer endIndex: index of the last character of the range
+  //------------------------------------------------------------------------------
+
+  function getTextFormat(beginindex, endindex) {
+    var fmt = new lz.textformat(this);
+
+    if ($swf8) {} else { return fmt;}
+
+    var flashformat = this.sprite.__LZtextclip.getTextFormat(beginindex, endindex);
+    for (var i in flashformat) {
+      fmt[i] = flashformat[i];
+    }
+
+    return fmt;
+  }
+
+  //------------------------------------------------------------------------------
+  // Sets the format of the specified range of characters.
+  // @param textformat fmt: the new format. attributes to leave alone should be undefined.
+  //
+  // @param integer beginIndex: index of the beginning character of the range
+  // @param integer endIndex: index of the last character of the range
+  //------------------------------------------------------------------------------
+  function setTextFormat(fmt, beginindex, endindex) {
+    if ($swf8) {} else { return;}
+
+    var flashformat = new TextFormat();
+
+    for (var i in fmt) {
+      flashformat[i] = fmt[i];
+    }
+    if (beginindex || (beginindex == 0)) {
+      this.sprite.__LZtextclip.setTextFormat(beginindex, endindex, flashformat);
+    } else {
+      this.sprite.__LZtextclip.setTextFormat(flashformat);
+    }
+
+
+  }
+
+  //------------------------------------------------------------------------------
+  // Bold, italic, and underline make sense to toggle, so here's a special
+  // toggling API.
+  //
+  // @param String attr: One of "bold", "italic", or "underline"
+  // @param integer beginIndex: index of the beginning character of the range
+  // @param integer endIndex: index of the last character of the range
+  //------------------------------------------------------------------------------
+  function toggleFormat(attr, beginindex, endindex) {
+    if ($swf8) {} else { return;}
+
+    // Due to what seems to be a bug in flash, we create a new, all-undefined
+    // TextFormat object, and *only* set the particular attribute we are
+    // toggling. Otherwise, the font may change unpredictably.
+    var format = this.sprite.__LZtextclip.getTextFormat(beginindex, endindex);
+    var newFormat = new TextFormat();
+    switch (attr) {
+      case "bold":
+        newFormat.bold =  !format.bold;
+        break;
+      case "italic":
+        newFormat.italic =  !format.italic;
+        break;
+      case "underline":
+        newFormat.underline =  !format.underline;
+        break;
+      default:
+    }
+
+    this.sprite.__LZtextclip.setTextFormat(beginindex, endindex, newFormat);
+
+  }
+
+  //------------------------------------------------------------------------------
+  // Replace the current selection with the string specified. The current selection
+  // is the range of characters which Flash thinks is selected. This range is
+  // (-1, -1) unless this component has the focus.
+  //
+  // @keywords deprecated
+  // @param String: str string to put where the current selection is in the string
+  //------------------------------------------------------------------------------
+  function replaceSel (str) {
+    if ($swf8) {} else { return;}
+
+    this.sprite.__LZtextclip.replaceSel(str);
+  }
+
+  //------------------------------------------------------------------------------
+  // Replace text between start and end, without changing that text's format.
+  //
+  // @param Number s: the start of the range to replace
+  // @param Number e: the end of the range to replace
+  // @param String txt: the text to put in the string instead of what's currently
+  // there
+  //------------------------------------------------------------------------------
+  function replaceText (s, e, txt) {
+    if ($swf8) {} else { return;}
+
+    this.sprite.__LZtextclip.replaceText(s,e,txt);
+  }
+}
+]]>
+</script>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

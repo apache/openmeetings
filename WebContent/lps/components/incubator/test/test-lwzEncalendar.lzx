@@ -1,0 +1,34 @@
+<canvas debug="true">
+    <include href="../lwzCalendar/lwzEncalendar.lzx"/>
+    <view name="calendarcontainer" x="10" y="10">
+        <lwzendatepicker name="datepicker" x="2">
+                     <handler name="oninit">
+                         var dayobj = new Date();
+                         //新建每月的1号的日期对象
+                         var dayone = new Date(dayobj.getFullYear(),dayobj.getMonth(),1);
+                        //返回1号是星期几
+                         var dayoneweek = dayone.getDay();
+
+                         //返回今天是多少号
+                         var todaynum = dayobj.getDate();
+
+                         var tempweek =  Math.floor((todaynum+dayoneweek)/7);
+
+                         var sparenum = (todaynum+dayoneweek)%7;
+                         Debug.write(sparenum);
+                         if(sparenum ==0){
+                             var currweek = tempweek-1;
+                         }else{
+                            var currweek = tempweek;
+                         }
+
+                       this.focusOnDay(currweek,dayobj.getDay());
+                       this.selectFocusDay();
+                     </handler>
+              </lwzendatepicker>    
+    </view>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

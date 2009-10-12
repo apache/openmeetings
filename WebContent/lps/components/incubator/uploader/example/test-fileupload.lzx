@@ -1,0 +1,69 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<canvas debug="true">
+<include href="incubator/uploader/fileupload.lzx"/>
+<window name="main" title="File Upload Test" x="5" y="5" width="410" height="150">
+            <fileupload name="myFileUpload" maxsize="15000">
+                <method name="onComplete" args="fr"><![CDATA[
+                    canvas.main.progressBar.setValue(100);
+                    canvas.main.upload.setAttribute('enabled', false);
+                    Debug.write("upload complete");
+                ]]>
+                </method>
+
+                <method name="onProgress" args="fr, bytesLoaded, bytesTotal"><![CDATA[
+                    canvas.main.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+                ]]>
+                </method>
+
+                <method name="onSelect" args="fr"><![CDATA[
+                    canvas.main.txtFile.setAttribute('text', getName());
+                    parent.myFileUpload.setAttribute('uploadenable', true);
+                    canvas.main.upload.setAttribute('enabled', true);
+                ]]>
+                </method>
+                <method name="onCancel">
+                    if(parent.txtFile.text==''){
+                    canvas.main.progressBar.initValue();
+                    }
+                </method>
+            </fileupload>
+    
+            <edittext x="10" y="10" width="200" name="txtFile" enabled="false"/>
+
+            <button x="220" y="11" text="Browse...">
+                <handler name="onclick"><![CDATA[
+                    parent.myFileUpload.browse();
+                    canvas.main.progressBar.setValue(0);
+                ]]>
+                </handler>
+            </button>
+
+            <button name="upload" x="310" y="11" text="Upload" enabled="false">
+                <handler name="onclick"><![CDATA[
+                    parent.myFileUpload.upload('upload.jsp');
+                ]]>
+                </handler>
+            </button>
+
+            <view name="progressBar" x="11" y="51" width="363" height="16" bgcolor="#666666">
+                <view x="1" y="1" width="361" height="14" bgcolor="#FFFFFF"/>
+                <view name="status" x="1" y="1" height="14" bgcolor="#BBBBFF"/>
+                <text name="percent" x="5" fontstyle="bold" fgcolor="#6666FF"/>
+
+                <method name="setValue" args="value"><![CDATA[
+                    status.setAttribute('width', value * 361 / 100);
+                    percent.setAttribute('text', Math.round(value) + '%');
+                ]]>
+                </method>
+                <method name="initValue"><![CDATA[
+                    status.setAttribute('width',0);
+                    percent.setAttribute('text', '');
+                ]]>
+                </method>
+            </view>
+            <text name="msg" text="${parent.myFileUpload.msg}" x="11" y="75" fgcolor="red"/>
+</window>    
+</canvas>

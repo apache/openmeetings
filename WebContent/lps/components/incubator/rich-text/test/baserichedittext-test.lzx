@@ -1,0 +1,36 @@
+<canvas>
+
+<include href="lzunit" />
+<include href="incubator/baseedittext.lzx" />
+<include href="incubator/rich-text/baserichedittext.lzx" />
+
+<baserichedittext id="gbet" width="200" height="100" />
+
+<class name="TextTestCase" extends="TestCase">
+    <method name="setUp">
+        gbet.clearText();
+    </method>
+</class>
+<TestSuite>
+    <TextTestCase>
+        <method name="testSimple">
+            assertNotNull(gbet); 
+        </method>
+        <method name="testInitialConditions">
+            assertEquals("", gbet.getValue()); 
+            assertEquals(gbet.getValue(), gbet.getText()); 
+        </method>
+        <method name="addTests" >
+            this.addTest("testSimple");
+            this.addTest("testInitialConditions");
+        </method>
+    </TextTestCase>
+</TestSuite>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

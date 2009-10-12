@@ -1,0 +1,18 @@
+<!---
+      @topic Components
+      @subtopic RPC
+  -->
+<library>
+    <include href="javarpc.lzx"/>
+    <include href="rpc.lzx"/>
+    <include href="sessionrpc.lzx"/>
+    <include href="soap.lzx"/>
+    <include href="webapprpc.lzx"/>
+    <include href="xmlrpc.lzx"/>
+    <include href="ajax.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

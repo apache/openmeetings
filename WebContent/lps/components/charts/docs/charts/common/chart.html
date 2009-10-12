@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>chart</title>
+    <link href="http://www.laszlosystems.com/favicon.ico" rel="icon"/>
+    <link href="styles.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="head">
+      <h1>
+            &lt;chart&gt;
+          </h1>
+    </div>
+    <div class="description">
+      <p><p>chart is the base class representing a chart. In general,
+this class is not instantiated directly. A chart contains
+at least one dataseries element
+at least one axis element
+The chart needs to look at its dataseries children and pass
+the relevant dataseries to each axis. Relevent dataseries
+for the chart must have columns for each of the axes
+that the chart cares about.</p></p>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Attributes
+          </h2>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">bottomMargin</span>
+          (default: 10)
+        </div>
+        <div class="attrDesc"><p>The blank space bordering the bottom of the chart area.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">dataPointsEnabled</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>enable data point(data marker)</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">databorderEnabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc">&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datalabelColumn</span>
+        </div>
+        <div class="attrDesc"><p>data column name of the data label</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datalabelEnabled</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>enable data label</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datatipColumn</span>
+        </div>
+        <div class="attrDesc"><p>data column name of the tooltip</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datatipEnabled</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>enable tooltip for data</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultRightMargin</span>
+          (default: 10)
+        </div>
+        <div class="attrDesc"><p>The default blank space bordering the right side of the chart area.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultstyle</span>
+        </div>
+        <div class="attrDesc"><p>The default style to be applied to the chart.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">horizontalGap</span>
+          (default: 5)
+        </div>
+        <div class="attrDesc"><p>The horizontal blank space between components.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">initdone</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>subview have</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">leftMargin</span>
+          (default: 10)
+        </div>
+        <div class="attrDesc"><p>The blank space bordering the left side of the chart area.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">rightMargin</span>
+          (default: 10)
+        </div>
+        <div class="attrDesc"><p>The blank space bordering the right side of the chart area.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">topMargin</span>
+          (default: 10)
+        </div>
+        <div class="attrDesc"><p>The blank space bordering the top of the chart area.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">valuelinesenabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable value lines</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">valuepointsenabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable value points</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">valueregionsenabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable value region</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">verticalGap</span>
+          (default: 5)
+        </div>
+        <div class="attrDesc"><p>The vertical blank space between components.</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">zoomEnabled</span>
+        </div>
+        <div class="attrDesc"><p>enable zoom</p>&nbsp;
+      </div>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Methods
+          </h2>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">adjustPlotAreaToLayout</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">Adjust the plot area to the dimensions of the chart and other
+components</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getDataSeries</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">get the dataseries</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getNodeOfClass</span>
+          <span class="methodTitleParams">
+          (<span class="param">className</span>)
+        </span>
+        </div>
+        <div class="methodDesc">return a subnode with the class name<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">className</span>
+              (string)
+            
+            -
+            name of the class</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getNodesOfClass</span>
+          <span class="methodTitleParams">
+          (<span class="param">className</span>)
+        </span>
+        </div>
+        <div class="methodDesc">return an array of subnodes with the class name<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">className</span>
+              (string)
+            
+            -
+            name of the class</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">render</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">Method that renders the chart. This method is overridden by
+class rectangularchart. The class piechart uses it as is.</div>&nbsp;
+    </div>
+    </div>
+    <hr/>
+    <p class="copyright">
+          Copyright 2002-2005 <a href="http://www.laszlosystems.com/" target="_top">Laszlo Systems, Inc.</a>
+          All Rights Reserved. Unauthorized use, duplication or distribution is strictly
+          prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to
+          license terms.
+        </p>
+  </body>
+</html>

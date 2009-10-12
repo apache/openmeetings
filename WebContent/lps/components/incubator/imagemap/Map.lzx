@@ -1,0 +1,93 @@
+<canvas debug="true">
+
+<include href="imagemap.lzx" />
+
+<!-- 
+A simple extension of the polygon that will
+show a view with some text when it is activated,
+and hide the view when it is deactivated.
+-->
+<class name="PopupPolygon" extends="polygonhotspot">
+        <attribute name="parentView" type="expression" />
+        <attribute name="__popup" type="expression" />
+        <attribute name="text" type="string" />
+        <attribute name="__followDel" type="expression" />
+        <handler name="oninit">
+                this.__popup = new LzView(parentView, {'visible': false, 'bgcolor': 'aqua'});
+                new LzText(this.__popup, {'text': this.text});
+                this.__followDel = new LzDelegate(this, 'follow');
+        </handler>
+        <method name="doActivate">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y')-this.__popup.height);
+                this.__popup.setAttribute('visible', true);
+                this.__followDel.register(canvas, 'onmousemove');
+        </method>
+
+        <method name="doDeactivate">
+                this.__popup.setAttribute('visible', false);
+                this.__followDel.unregisterAll();
+        </method>
+
+        <method name="follow" args="arg">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y')-this.__popup.height);
+        </method>
+
+</class>
+
+<!--
+A dataset containing the description of some shapes.
+-->
+<dataset name="shapes" src="Map.xml" />
+
+<!--
+        This handler will take the loaded XML data
+        create a series of hotspots and added them to
+        the image mapped view.
+-->
+<handler name="oninit"><![CDATA[
+        var sort = function(a, b){
+                var one = parseInt(a.getAttr('order'));
+                var two = parseInt(b.getAttr('order'));
+                return one-two;
+        };
+        var polys = shapes.getPointer().xpathQuery('/spots/polygon');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.PopupPolygon(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text')});
+                var points = polys[i].getElementsByTagName('point');
+                points.sort(sort);
+                for(var j=0;j<points.length;j++){
+                        poly.addPoint(parseInt(points[j].getAttr('x')), parseInt(points[j].getAttr('y')));
+                }
+                imageMap.addSpot(poly);
+        }
+
+        var polys = shapes.getPointer().xpathQuery('/spots/circle');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.PopupCircle(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text'),
+                                'x': parseInt(polys[i].getAttr('x')),
+                                'y': parseInt(polys[i].getAttr('y')),
+                                'radius': parseInt(polys[i].getAttr('radius'))});
+                imageMap.addSpot(poly);
+        }
+]]></handler>
+
+<!-- An implementation view that will draw the outline of the
+hotspots that are used in its image map -->
+<resource name="nemap" src="northeast.jpg" />
+<view id="imageMap" width="319" height="366"
+                clickable="true" showhandcursor="false" resource="nemap">
+        <imagemap name="map" />
+        <method name="addSpot" args="spot"><![CDATA[
+                this.map.addHotspot(spot);
+        ]]></method>
+</view>
+
+</canvas>

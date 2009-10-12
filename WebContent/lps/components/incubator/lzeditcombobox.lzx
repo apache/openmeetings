@@ -1,0 +1,64 @@
+<library>
+    <resource name="comboedit_lft" >
+        <frame src="resources/editcombo/edit_lft.swf" />
+        <frame src="resources/editcombo/edit_lft.swf" />
+        <frame src="resources/editcombo/edit_lft.swf" />
+        <frame src="resources/editcombo/edit_lft.swf" />
+        <frame src="resources/editcombo/edit_lft_squared.swf" />
+        <frame src="resources/editcombo/edit_lft_squared.swf" />
+        <frame src="resources/editcombo/edit_lft_squared.swf" />
+        <frame src="resources/editcombo/edit_lft_up_squared.swf" />
+        <frame src="resources/editcombo/edit_lft_up_squared.swf" />
+        <frame src="resources/editcombo/edit_lft_up_squared.swf" />
+    </resource>
+<class name="lzeditcombobox" extends="lzcombobox">
+
+    <attribute name="width_offset" value="-9"/>
+    <attribute name="height_offset" value="-3"/>
+    <attribute name="x_offset" value="0"/>
+    <attribute name="y_offset" value="2"/>
+
+    <method name="init">
+        super.init();
+        this.bkgnd.lft.setAttribute('resource', "comboedit_lft");
+    </method>
+
+    <method name="setOpen" args="o">
+      if (o) {
+        // Sync the list to the text
+        this.dSetValue(editbkgnd.textfield.getText());
+      }
+      super.setOpen(o);
+    </method>
+
+    <method name="dSetValue" args="v">
+        super.setValue(v);
+
+        if (this.isinited) {
+            this.editbkgnd.textfield.setAttribute('text', v);
+           // lz.Focus.setFocus(this.editbkgnd.textfield);
+           var index = this.editbkgnd.textfield.text.length;
+           this.editbkgnd.textfield.setSelection(index,index);
+        }
+
+    </method>
+
+    <method name="getText">
+        return this.editbkgnd.textfield.getText();
+    </method>
+        
+    <!-- overlay the text over the middle of the box (have to fudge width)-->
+    <view name="editbkgnd" bgcolor="#FFFFFF"
+        x="${classroot.bkgnd.mid.x + classroot.x_offset}" y="${classroot.bkgnd.mid.y + classroot.y_offset}"
+        width="${classroot.bkgnd.arr.x - classroot.bkgnd.mid.x}"
+        height="${classroot.bkgnd.mid.height + classroot.height_offset}">
+        <inputtext name="textfield" y="-2" width="${parent.width}"/>
+    </view>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

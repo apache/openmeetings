@@ -1,0 +1,122 @@
+<canvas debug="true">
+
+<include href="imagemap.lzx" />
+
+<!-- 
+A simple extension of the polygon that will
+show a view with some text when it is activated,
+and hide the view when it is deactivated.
+-->
+<class name="PopupPolygon" extends="polygonhotspot">
+        <attribute name="parentView" type="expression" />
+        <attribute name="__popup" type="expression" />
+        <attribute name="text" type="string" />
+        <handler name="oninit">
+                this.__popup = new LzView(parentView, {'visible': false, 'bgcolor': 'aqua'});
+                new LzText(this.__popup, {'text': this.text});
+        </handler>
+        <method name="doActivate">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y'));
+                this.__popup.setAttribute('visible', true);
+        </method>
+
+        <method name="doDeactivate">
+                this.__popup.setAttribute('visible', false);
+        </method>
+
+</class>
+
+<!-- 
+A simple extension of the circle that will
+show a view with some text when it is activated,
+and hide the view when it is deactivated.
+-->
+<class name="PopupCircle" extends="circlehotspot">
+        <attribute name="parentView" type="expression" />
+        <attribute name="__popup" type="expression" />
+        <attribute name="text" type="string" />
+        <handler name="oninit">
+                this.__popup = new LzView(parentView, {'visible': false, 'bgcolor': 'aqua'});
+                new LzText(this.__popup, {'text': this.text});
+        </handler>
+        <method name="doActivate">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y'));
+                this.__popup.setAttribute('visible', true);
+        </method>
+
+        <method name="doDeactivate">
+                this.__popup.setAttribute('visible', false);
+        </method>
+
+</class>
+
+<!--
+A dataset containing the description of some shapes.
+-->
+<dataset name="shapes" src="DrawView.xml" />
+
+<!--
+        This handler will take the loaded XML data
+        create a series of hotspots and added them to
+        the image mapped view.
+-->
+<handler name="oninit"><![CDATA[
+        var sort = function(a, b){
+                var one = parseInt(a.getAttr('order'));
+                var two = parseInt(b.getAttr('order'));
+                return one-two;
+        };
+        var polys = shapes.getPointer().xpathQuery('/spots/polygon');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.PopupPolygon(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text')});
+                var points = polys[i].getElementsByTagName('point');
+                points.sort(sort);
+                for(var j=0;j<points.length;j++){
+                        poly.addPoint(parseInt(points[j].getAttr('x')), parseInt(points[j].getAttr('y')));
+                }
+                imageMap.addSpot(poly);
+        }
+
+        var polys = shapes.getPointer().xpathQuery('/spots/circle');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.PopupCircle(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text'),
+                                'x': parseInt(polys[i].getAttr('x')),
+                                'y': parseInt(polys[i].getAttr('y')),
+                                'radius': parseInt(polys[i].getAttr('radius'))});
+                imageMap.addSpot(poly);
+        }
+]]></handler>
+
+<!-- An implementation view that will draw the outline of the
+hotspots that are used in its image map -->
+<drawview id="imageMap" width="300" height="300" bgcolor="#FFFF00" 
+                clickable="true" showhandcursor="false">
+        <imagemap name="map" exclusive="false" />
+        <method name="addSpot" args="spot"><![CDATA[
+                beginPath();
+                if(spot instanceof lz.polygonhotspot){
+                        var p = spot.getPoint(0);
+                        moveTo(p['x'], p['y']);
+                        for(var i=1;i<spot.getNumPoints();i++){
+                                p = spot.getPoint(i);
+                                lineTo(p['x'], p['y']);
+                        }
+                        closePath();
+                }else if(spot instanceof lz.circlehotspot){
+                        moveTo(spot['x'], spot['y']);
+                        arc(spot['x'], spot['y'], spot['radius'], 0, 2*Math.PI, false);
+                }
+                stroke();
+                this.map.addHotspot(spot);
+        ]]></method>
+</drawview>
+
+</canvas>

@@ -1,0 +1,552 @@
+<library>
+
+    <include href="base/basedatepicker.lzx"/> 
+    <include href="base/basedatepickerweek.lzx"/> 
+    <include href="base/basedatepickerday.lzx"/> 
+    <include href="base/basecombobox.lzx"/> 
+    <include href="combobox.lzx"/>
+    <include href="textlistitem.lzx"/>
+    <include href="windowpanel.lzx"/> 
+
+
+<!-- These are the resources for the Laszlo datepicker -->
+
+
+        <resource name="datepicker_pulldown_rsc">
+                <frame src="resources/datepicker/pulldown_btn_up.swf"/>
+                <frame src="resources/datepicker/pulldown_btn_mo.swf"/>
+                <frame src="resources/datepicker/pulldown_btn_dn.swf"/>
+        </resource> 
+
+    <resource name="datepicker_dirbutton_rsc">
+        <frame src="resources/datepicker/button_up.swf"/>
+        <frame src="resources/datepicker/button_mo.swf"/>
+        <frame src="resources/datepicker/button_dn.swf"/>
+        <frame src="resources/datepicker/button_dsbl.swf"/>
+    </resource> 
+
+    <resource name="datepicker_date_rsc">
+        <frame src="resources/datepicker/date_btn_slct.swf"/>
+        <frame src="resources/datepicker/date_btn_dn.swf"/>
+        <frame src="resources/datepicker/selected_date.swf"/>
+    </resource>
+
+    <resource name="datepicker_close_rsc">
+        <frame src="resources/datepicker/close_btn_up.swf"/>
+        <frame src="resources/datepicker/close_btn_mo.swf"/>
+        <frame src="resources/datepicker/close_btn_dn.swf"/>
+    </resource>
+
+
+        <!--- @access private -->
+        <class name="datepickercombobox" extends="basecombobox" fontsize="8" 
+        bgcolor="0xeaeaea" editable="false">
+        <attribute name="text_y" value="-3"/>
+            <view placement="bkgnd">
+                <view height="11" 
+                      width="$once{ classroot.width - parent.bbutton.width -1 }"
+                      stretches="both"
+                      resource="resources/datepicker/pulldown_bg.swf"/>
+                <basebutton name="bbutton" 
+                            x="$once{classroot.width - this.width }" 
+                            resource="datepicker_pulldown_rsc" 
+                            styleable="true"  
+                            onclick="parent.parent.toggle()" /> 
+            </view>
+        </class>
+
+
+    <!--- @access private -->
+    <class name="datepickerlistitem" extends="textlistitem"
+        fontsize="8" text_y="-2" height="12"/>
+
+
+    <!--- @access private -->
+   <class name="_datepicker_dirButton" 
+          width="14"
+          stretches="height"
+          height="12"
+          resource="datepicker_dirbutton_rsc"
+          styleable="true"
+          focusable="true"
+          doesenter="true" 
+          extends="basebutton">    
+        <method name="doEnterDown"> 
+            this.setAttribute('frame', 3); 
+        </method>
+        <method name="doEnterUp"> 
+            this.setAttribute('frame', 1);
+            this.buttonpush();
+        </method>
+        <handler name="onclick">
+            this.buttonpush();
+        </handler>
+
+
+        <handler name="onenabled">
+            if( this.enabled ) {
+                this.icon.setAttribute('opacity', 1 );
+            } else { 
+                this.icon.setAttribute('opacity', .5 );
+            }
+        </handler>
+   </class>
+
+
+
+    <!--- This is the implementation of the datepickerday for 
+          the datepicker --> 
+    <class name="datepickerday" 
+           extends="basedatepickerday"
+           bgcolor="${this.disabled ? 0xB2B2B2 : 0xDBDBDB}"
+           width="19" 
+           height="16"> 
+
+        <handler name="onselected"> 
+            if( this.selected ) { 
+                this.buttonview.setAttribute('visible', true );  
+                this.buttonview.setAttribute('frame', 3 );
+            } else { 
+                this.buttonview.setAttribute('frame', 1 ); 
+                this.buttonview.setAttribute('visible', false );
+            }
+        </handler>
+
+        <handler name="onmouseover"> 
+        <![CDATA[
+            if( !this.disabled && this.selectable ) { 
+                this.gotFocus();
+            }
+        ]]>
+        </handler>
+
+        <handler name="onmouseout"> 
+            this.removeFocus();
+        </handler> 
+
+        <method name="buttonpush"> 
+        <![CDATA[
+            if( !this.disabled && this.selectable ){ 
+                buttonview.setAttribute('frame', 2);
+            }
+        ]]>
+        </method>
+
+        <method name="buttonrelease"> 
+        <![CDATA[
+            if( !this.disabled && this.selectable ){ 
+                this.setAttribute('selected',true); 
+                buttonview.setAttribute('frame', 3);
+            }
+        ]]>
+        </method> 
+
+        <method name="gotFocus"> 
+        <![CDATA[ 
+            if( !this.disabled && this.selectable && !this.selected ) {
+                buttonview.setAttribute('frame', 1 );
+                buttonview.setAttribute('visible', true ); 
+            }
+        ]]>
+        </method> 
+
+        <method name="removeFocus"> 
+            if( !this.selected ) {
+                buttonview.setAttribute('visible', false );
+            }
+         </method> 
+
+        <basecomponent name="buttonview"
+                       styleable="true"
+                       visible="false" 
+                       resource="datepicker_date_rsc"
+                       focusable="false">
+            <method name="_applystyle" args="s">
+                this.setTint(this, s.hilitecolor );
+            </method> 
+
+        </basecomponent>
+        
+        <text text="${classroot.daynum}" 
+              resize="true" 
+              align="center" 
+              valign="middle"
+              visible="${!parent.disabled}"
+              fgcolor="${parent.selectable ? 0x000000 : 0x888888 }"/> 
+    </class>
+
+
+
+    <!--- This is the implementation of the datepickerweek for 
+          the datepicker -->
+    <class name="datepickerweek" 
+           extends="basedatepickerweek">
+        <simplelayout axis="x"
+                      spacing="1"/> 
+    </class>
+
+
+    <!-- This is the Laszlo implementation datepicker class. -->
+    <class name="datepicker" 
+           doesenter="${this.startAsIcon}"
+           extends="basedatepicker"
+           xinset="${7 + main.x}"
+           yinset="${36 + main.y}"
+           focusable="${this.icon.visible}"> 
+
+        <!--- Set to true to initially show the datepicker as an
+              icon, otherwise set to false.
+              @keywords public --> 
+        <attribute name="startAsIcon" type="boolean" value="true" when="once"/>
+        <!--- @keywords private -->
+        <attribute name="firstDaySelected" type="boolean" value="false"/> 
+        <!--- @keywords private -->
+        <attribute name="weekclass" value="lz.datepickerweek"/> 
+        <!--- @keywords private --> 
+        <attribute name="dayclass" value="lz.datepickerday"/> 
+    <!--- @keywords public -->
+    <attribute name="allowdrag" type="boolean" value="true"/>
+
+    <!--- @keywords private -->
+        <method name="init"> 
+            super.init();
+            this.main.toolbar_view.yearcombo.addYears( this.earliestdate.getFullYear(), 
+                                                       this.latestdate.getFullYear() );
+            if( this.startAsIcon ) {
+                this.content.setAttribute('visible',  false );
+                this.main.setAttribute('visible',  false ); 
+            } 
+
+            this.main.title_area.gripper_right.setAttribute('visible',  false );
+            this.main.title_area.gripper_left.setAttribute('visible',  false );
+        </method> 
+
+
+        <!--- @keywords private --> 
+        <handler name="onselecteddate">
+        <![CDATA[   
+            if( this._basedatepicker_inited && this.startAsIcon ) {
+                this.shrinkToIcon();   
+            }
+        ]]>
+        </handler> 
+
+
+
+        <!--- @keywords private --> 
+        <method name="doSpaceUp">
+            this.handleSelected();
+        </method> 
+
+        <!--- @keywords private --> 
+        <method name="doEnterUp">
+            this.handleSelected();
+        </method>
+
+        <!--- @keywords private --> 
+        <method name="handleSelected"> 
+            if( this.icon.visible ) { 
+                this.expandFromIcon(); 
+                //workaround for setFocus bug
+                this._ignoreKeyUp = true;
+                lz.Focus.setFocus( this.content ); 
+            }
+        </method> 
+
+
+        <!--- @keywords private --> 
+        <method name="expandFromIcon"> 
+            this.icon.setAttribute('visible',  false ); 
+            this.content.setAttribute('visible',  true ); 
+            this.main.setAttribute('visible',  true ); 
+            this.content.bringToFront() 
+        </method>
+
+        <!--- @keywords private --> 
+        <method name="shrinkToIcon">
+            this.icon.setAttribute('visible', true );
+            this.content.setAttribute('visible',  false );
+            this.main.setAttribute('visible',  false );
+        </method>
+    
+        <!--- Set the month to show in the basedatepicker.  
+              @param month: The month of the year to show
+              @param year: The year of the month to show 
+              @keywords public --> 
+        <method name="setMonthToShow" args="month, year"> 
+            super.setMonthToShow( month, year );    
+            this.main.toolbar_view.monthcombo.selectItem( month );                
+            this.main.toolbar_view.yearcombo.selectItem( year );                
+        </method> 
+
+        <simplelayout axis="y" placement="content" spacing="1"/> 
+
+        <view name="icon" 
+              resource="resources/datepicker/datepicker_icon.swf"
+              visible="$once{classroot.startAsIcon}" 
+              >
+            <handler name="onclick">
+                parent.expandFromIcon();
+            </handler>
+        </view>
+
+        <windowpanel name="main" visible="true"
+                     bgcolor="0x565656"
+                     closeable="false"
+                     datapath="."
+             allowdrag = "${parent.allowdrag}">
+
+
+            <view name="toolbar_view" 
+                  x="6"
+                  y="7"
+                  width="${parent.width}" 
+                  height="18" 
+                  ignoreplacement="true">
+                <_datepicker_dirButton name="previousmonth">    
+                    <view name="icon"
+                          resource="resources/datepicker/arrow_left.swf"
+                          x="4"
+                          y="3"/> 
+                    <method name="checkButtonStatus">
+                    <![CDATA[
+                        if( classroot.earliestdate != null &&
+                            classroot.earliestdate.getMonth() ==
+                                                    classroot.showingmonth  &&
+                            classroot.earliestdate.getFullYear() == 
+                                                        classroot.showingyear) { 
+                            this.setAttribute('enabled', false );
+                        }  else { 
+                            this.setAttribute('enabled', true ); 
+                        }
+
+                        if( classroot.latestdate != null &&
+                            classroot.latestdate.getMonth() ==
+                                                    classroot.showingmonth  &&
+                            classroot.latestdate.getFullYear() == 
+                                                        classroot.showingyear ) {
+                            parent.nextmonth.setAttribute('enabled', false );
+                        } else { 
+                            parent.nextmonth.setAttribute('enabled', true );
+                        }
+                    ]]>
+                    </method>
+
+                    <method name="buttonpush">
+                    <![CDATA[ 
+                        if( parent.monthcombo.value  == 0 ) { 
+                            parent.monthcombo.selectItemAt( 11 ); 
+                            parent.yearcombo.selectItem( parent.yearcombo.value - 
+                                                         1 ); 
+                        } else { 
+                            parent.monthcombo.selectItemAt(
+                            parent.monthcombo.value - 1 ); 
+                        } 
+                        this.checkButtonStatus(); 
+                    ]]>    
+                    </method>
+
+                </_datepicker_dirButton>
+
+                <_datepicker_dirButton name="nextmonth">    
+                    <view name="icon"
+                          resource="resources/datepicker/arrow_right.swf"
+                          x="4"
+                          y="3"/> 
+                    <method name="checkButtonStatus">
+                    <![CDATA[
+                        if( classroot.latestdate != null 
+                            && classroot.latestdate.getMonth() ==
+                                                    classroot.showingmonth  &&
+                            classroot.latestdate.getFullYear() == 
+                                                        classroot.showingyear) { 
+                            this.setAttribute('enabled', false ); 
+                        } else {
+                            this.setAttribute('enabled', true );
+                        }
+
+                        if( classroot.earliestdate != null && (
+                            ( classroot.earliestdate.getMonth() < 
+                                                    classroot.showingmonth  &&
+                              classroot.earliestdate.getFullYear() == 
+                                                        classroot.showingyear ) 
+                                                        || 
+                            classroot.earliestdate.getFullYear() <   
+                                                        classroot.showingyear 
+                                                        )) { 
+                            parent.previousmonth.setAttribute('enabled', true ); 
+                        } else { 
+                            parent.previousmonth.setAttribute('enabled', false );
+                        }
+                    ]]>
+                    </method>
+
+                    <method name="buttonpush">
+                    <![CDATA[
+                        if( parent.monthcombo.value  == 11 ) { 
+                            parent.monthcombo.selectItemAt( 0 ); 
+                            parent.yearcombo.selectItem(
+                                       Number(parent.yearcombo.value) + 1 ); 
+                        } else { 
+                            var newMonth = Number(parent.monthcombo.value) + 1; 
+                            parent.monthcombo.selectItemAt( newMonth ); 
+                        } 
+                        this.checkButtonStatus(); 
+                    ]]> 
+                    </method>
+
+                </_datepicker_dirButton>
+                <datepickercombobox name="monthcombo"
+                          width="45"     
+                          editable="false"> 
+
+                    <handler name="oninit" reference="this.cblist">
+                        this.selectItemAt( classroot.showingmonth ); 
+                    </handler> 
+
+
+                    <attribute name="oldvalue"
+                               value="null"/> 
+            
+                    <handler name="onvalue"> 
+                    <![CDATA[
+                        if( this.oldvalue != null && this.oldvalue != this.value ) { 
+                            classroot.setMonthToShow( this.value,
+                                                      parent.yearcombo.value );   
+                        } 
+                        this.oldvalue = this.value; 
+                        parent.nextmonth.checkButtonStatus();
+                        parent.previousmonth.checkButtonStatus();
+                    ]]>
+                    </handler>
+
+                    <datepickerlistitem datapath="datepicker_strings_en:/months/month"
+                                  text="$path{'@abr'}"
+                                  value="$path{'@index'}"/> 
+                </datepickercombobox>
+                <datepickercombobox name="yearcombo"
+                          width="55"      
+                          editable="false"> 
+                    <attribute name="oldvalue"
+                               value="null"/> 
+
+                    <handler name="onvalue"> 
+                    <![CDATA[
+                        if(this.oldvalue != null && this.oldvalue != this.value) {
+                            //handle case where user selects new year that would
+                            //put us out of the early-late date range
+                            if( classroot.earliestdate.getMonth() >
+                                   parent.monthcombo.value    &&
+                                classroot.earliestdate.getFullYear() >=
+                                   this.value  ) { 
+                                parent.monthcombo.selectItemAt(
+                                classroot.earliestdate.getMonth() );
+                             } 
+                            //handle case where user selects new year that would
+                            //put us out of the early-late date range
+                            else if( classroot.latestdate.getMonth() <
+                                   parent.monthcombo.value    &&
+                                classroot.latestdate.getFullYear() <=
+                                   this.value  ) { 
+                                parent.monthcombo.selectItemAt(
+                                classroot.latestdate.getMonth() );
+                             } 
+
+                            classroot.setMonthToShow( parent.monthcombo.value, 
+                                                      this.value );   
+                        } 
+
+                        this.oldvalue = this.value;
+                    ]]>
+                    </handler> 
+
+                    <handler name="oninit" reference="this.cblist"> 
+                        this.selectItem( classroot.showingyear ); 
+                    </handler>
+
+                    <method name="addYears" args="start,end">
+                    <![CDATA[
+                        for( var i = start ; i <= end ; i++ ) {
+                            new lz.datepickerlistitem( this, { text : i } );    
+                        }
+                    ]]>
+                    </method> 
+                </datepickercombobox> 
+                <basebutton name="__datepicker_close_button"
+                            resource="datepicker_close_rsc"
+                            styleable="true"
+                            focusable="true"
+                            doesenter="true">
+                    <method name="doEnterDown">
+                        this.setAttribute('frame', 3 );  
+                    </method>
+                    <method name="doEnterUp">
+                        this.buttonpush();
+                        lz.Focus.next(); 
+                    </method>
+                    <method name="doSpaceUp"> 
+                        super.doSpaceUp();
+                        lz.Focus.next();  
+                    </method>
+
+                    <handler name="onclick">
+                        this.buttonpush();
+                    </handler>
+                    <method name="buttonpush">
+                        classroot.main.close();     
+                        classroot.content.setAttribute('visible',  false ); 
+                        if( classroot.startAsIcon ) {
+                            classroot.icon.setAttribute('visible',  true );
+                        } 
+                    </method>
+                </basebutton>
+                <simplelayout axis="x"/>
+            </view> 
+           
+            <view resource="resources/datepicker/date_bg.swf"/> 
+
+        </windowpanel> 
+ <doc>
+          <tag name="shortdesc"><text>
+              A simple date picker
+          </text></tag>
+          <text>
+            <p>
+              Datepicker is a simple component that makes it easy for users to select dates.  
+            </p>
+            <example class="program" id="datepicker-1"> 
+              &lt;canvas height="200"&gt; 
+              &lt;datepicker showingdate="new Date()"
+              earliestdate="new Date( 2007, 1, 1)" 
+              latestdate="new Date( 2008, 11, 31)"
+              selecteddate="new Date()"&gt;
+              &lt;handler name="onselecteddate"&gt;
+              if( this.selecteddate != null ) {
+              display.year.setAttribute('text', this.selecteddate.getFullYear() );
+              display.month.datapath.setXPath(
+              "datepicker_strings_en:/months/month[@index='" + 
+              this.selecteddate.getMonth() + "']/@full" ); 
+              display.date.setAttribute('text', this.selecteddate.getDate() );
+              } 
+              &lt;/handler&gt;
+              &lt;/datepicker&gt; 
+
+              &lt;view id="display"&gt;
+              &lt;text name="month" resize="true" datapath="."/&gt;
+              &lt;text name="date" resize="true"/&gt;
+              &lt;text name="year" resize="true"/&gt; 
+              &lt;simplelayout axis="x" spacing="2"/&gt;
+              &lt;/view&gt;
+              &lt;simplelayout axis="y" spacing="10"/&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+
+    </class> 
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,28 @@
+<canvas width="50%" height="50%">
+    <include href="incubator/hsplitpane.lzx"/>
+    <hsplitpane bordersize="1"  bordercolor="#ff0000" lhs_min_width="200" lhs_max_width="400">
+        <view>
+            <text>lhs</text>
+        </view>
+        <view width="100%" bgcolor="blue">
+            <simplelayout axis="y"/>
+            <text>rhs</text>
+            <text multiline="true" width="100%">
+                The split pane is pretty simple really. 
+                It assumes you have two child views. 
+                The first one is the left hand side. 
+                The second one is the right hand side. 
+                Scroll bars, sizing, etc are up to you. Attribute include: 
+                    lhs_min_width, lhs_max_width, lhs_width_start, bordersize, bordercolor,sizer_width
+            </text>
+        </view>
+        <view>
+            <text> WHat happens to this view? Nada, its just added to the the rhs</text>
+        </view>
+    </hsplitpane>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

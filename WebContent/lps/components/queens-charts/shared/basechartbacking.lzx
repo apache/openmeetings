@@ -1,0 +1,277 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <!--- The base chart background class for rectangular charts.
+        (That is, not used in piechart.)  (Of beta quality.) -->
+    <class name="basechartbacking" width="${parent.width}" height="${parent.height}"
+        bgcolor="0xDEDEDD">
+        <!--- @keywords private
+            Prevents vertical lines from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="vlinesdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents vertical bands from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="vbandsdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents horizontal lines from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="hlinesdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents horizontal bands from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="hbandsdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents area below zero from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="belowzerodrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents line at zero from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="zerodrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents vertical ticks from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="vticksdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents horizontal ticks from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="hticksdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents vertical tick labels from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="vticklabelsdrawn" type="boolean" value="false"/>
+        <!--- @keywords private
+            Prevents horizontal tick labels from being redrawn for every set of data,
+            which would result in increased opacity. -->
+        <attribute name="hticklabelsdrawn" type="boolean" value="false"/>
+        <!--- The background resource view for the chart, if an image is specified. -->
+        <view name="backingrsc" width="${parent.width}" height="${parent.height}"
+            stretches="both"
+            visible="${(parent.parent.bgresource != null ? true : false)}">
+            <handler name="oninit">
+                if(parent.parent.bgresource){
+                    this.setSource(parent.parent.bgresource);
+                }
+            </handler>
+        </view>
+
+        <!--- The view that clips the horizontal ticks, so they don't bleed out
+            into oblivion when the chart is zoomed in on. -->
+        <view name="htickclip" height="${parent.height + 10}"
+            x="${-(this.width)}" y="-5"
+            width="${parent.parent.plotx}" clip="true">
+            <!--- This view contains all of the horizontal ticks and tick labels.
+                Stretches with the proportions of the chart. -->
+            <view name="htickpane" width="${parent.width}"
+                height="${classroot.parent.dataclip.datapane.height}"
+                x="0" y="${classroot.parent.dataclip.datapane.y + 5}">
+                <!--- Destroys all the tick labels and subviews. -->
+                <method name="breakDown">
+                    <![CDATA[
+                    var killviews = 0;
+                    for(var i = 0; i <= this.subviews.length; i++){
+                        if(this.subviews[i] instanceof lz.ticklabel){
+                            killviews++;
+                        }
+                    }
+                    var remainviews = this.subviews.length - killviews;
+                    while(this.subviews.length != remainviews){
+                        for(var j = 0; j <= this.subviews.length; j++){
+                            if(this.subviews[j] instanceof lz.ticklabel){
+                                this.subviews[j].destroy();
+                            }
+                        }
+                    }
+                    ]]>
+                </method>
+            </view>
+            <!--- The drawview responsible for drawing horizontal ticks. -->
+            <drawview name="htickdrawer" width="${parent.width}"
+                height="${parent.height}" y="${parent.htickpane.y}">
+                <attribute name="drawready" type="boolean" value="false"/>
+                <handler name="oncontext">
+                    this.setAttribute('drawready', true);
+                </handler>
+            </drawview>
+        </view>
+        <!--- The view that clips the vertical ticks, so they don't bleed out
+            into oblivion when the chart is zoomed in on. -->
+        <view name="vtickclip" width="${parent.width + 20}" clip="true"
+            x="-5" height="${parent.height + (parent.parent.height -
+                (parent.parent.plotheight + parent.parent.ploty))}">
+            <!--- This view contains all of the vertical ticks and tick labels.
+                Stretches with the proportions of the chart. -->
+            <view name="vtickpane" width="${classroot.parent.dataclip.datapane.width}"
+                height="${parent.height}" x="${classroot.parent.dataclip.datapane.x + 5}"
+                y="0">
+                <method name="breakDown">
+                    <![CDATA[
+                    var killviews = 0;
+                    for(var i = 0; i <= this.subviews.length; i++){
+                        if(this.subviews[i] instanceof lz.ticklabel){
+                            killviews++;
+                        }
+                    }
+                    var remainviews = this.subviews.length - killviews;
+                    while(this.subviews.length != remainviews){
+                        for(var j = 0; j <= this.subviews.length; j++){
+                            if(this.subviews[j] instanceof lz.ticklabel){
+                                this.subviews[j].destroy();
+                            }
+                        }
+                    }
+                    ]]>
+                </method>
+            </view>
+            <!--- The drawview responsible for drawing vertical ticks. -->
+            <drawview name="vtickdrawer" width="${parent.width}"
+                height="${parent.height}" x="${parent.vtickpane.x}">
+                <attribute name="drawready" type="boolean" value="false"/>
+                <handler name="oncontext">
+                    this.setAttribute('drawready', true);
+                </handler>
+            </drawview>
+        </view>
+        <!--- The drawview responsible for drawing the border. -->
+        <drawview name="borderdrawer" width="${parent.width}" height="${parent.height}">
+            <attribute name="drawready" type="boolean" value="false"/>
+            <handler name="oncontext">
+                this.setAttribute('drawready', true);
+            </handler>
+        </drawview>
+
+        <!--- Clears everything. -->
+        <method name="clearAll">
+            this.clearGrid();
+            this.clearHTickLabels();
+            this.clearVTickLabels();
+        </method>
+        <!--- Clears just the background grid.  (Leaves the labels.) -->
+        <method name="clearGrid">
+            <![CDATA[
+            if(this.bgridclip.backinggrid.drawready){
+                this.bgridclip.backinggrid.clear();
+            }
+            if(this.bgridclip.zerodrawer.drawready){
+                this.bgridclip.zerodrawer.clear();
+            }
+            if(this.borderdrawer.drawready){
+                this.borderdrawer.clear();
+            }
+            if(this.htickclip.htickdrawer.drawready){
+                this.htickclip.htickdrawer.clear();
+            }
+            if(this.vtickclip.vtickdrawer.drawready){
+                this.vtickclip.vtickdrawer.clear();
+            }
+            this.setAttribute('vlinesdrawn', false);
+            this.setAttribute('vbandsdrawn', false);
+            this.setAttribute('hlinesdrawn', false);
+            this.setAttribute('hbandsdrawn', false);
+            this.setAttribute('hticksdrawn', false);
+            this.setAttribute('vticksdrawn', false);
+            this.setAttribute('belowzerodrawn', false);
+            this.setAttribute('zerodrawn', false);
+            ]]>
+        </method>
+        <!--- Clears labels on vertical tick marks. -->
+        <method name="clearVTickLabels">
+            <![CDATA[
+            this.vtickclip.vtickpane.breakDown();
+            this.setAttribute('vticklabelsdrawn', false);
+            ]]>
+        </method>
+        <!--- Clears labels on horizontal tick marks. -->
+        <method name="clearHTickLabels">
+            <![CDATA[
+            this.htickclip.htickpane.breakDown();
+            this.setAttribute('hticklabelsdrawn', false);
+            ]]>
+        </method>
+
+        <!--- Renders everything. -->
+        <method name="renderAll">
+            <![CDATA[
+            this.renderGrid();
+            this.renderAltGrid();
+            ]]>
+        </method>
+        <!--- Renders one direction of the grid. -->
+        <method name="renderGrid">
+            <![CDATA[
+            if(this.bgridclip.backinggrid.drawready == true){
+                if(parent.hgridbands){
+                   this.renderHorizBands();
+                }
+                if(parent.hgridlines){ 
+                    this.renderHorizLines();
+                }
+            }
+            if(this.htickclip.htickdrawer.drawready == true){
+                if(parent.htick){
+                    this.renderHTicks();
+                }
+            }
+            if(parent.hticklabel){
+                this.renderHTickLabels();
+            }
+            if(this.borderdrawer.drawready == true){
+                if(parent.border){
+                    this.renderBorder();
+                }
+                if(parent.vaxis != null){
+                    this.renderVaxis();
+                }
+                if(parent.haxis != null){
+                    this.renderHaxis();
+                }
+            }
+            ]]>
+        </method>
+        <!--- Renders a filled rectangle with no outline.  Needed for
+            drawing gridbands and the area below zero and such. -->
+        <method name="renderRect" args="dv, tlx, tly, brx, bry, fillcolor, fillopacity">
+            // set styles to drawview
+            dv.fillStyle = fillcolor;
+            dv.globalAlpha = fillopacity;
+
+            // create rectangle path 
+            dv.beginPath();
+            dv.moveTo(tlx,tly);
+            dv.lineTo(brx,tly);
+            dv.lineTo(brx,bry);
+            dv.lineTo(tlx,bry);
+            dv.lineTo(tlx,tly);
+        
+            dv.fill();
+        </method>
+        <!--- Draws the border. -->
+        <method name="renderBorder">
+            <![CDATA[
+            this.borderdrawer.globalAlpha = 1;
+            this.borderdrawer.strokeStyle = parent.border;
+            this.borderdrawer.lineWidth = parent.borderwidth;
+            this.borderdrawer.beginPath();
+            this.borderdrawer.moveTo(0, 0);
+            this.borderdrawer.lineTo(this.width, 0);
+            this.borderdrawer.lineTo(this.width, this.height);
+            this.borderdrawer.lineTo(0, this.height);
+            this.borderdrawer.lineTo(0, 0);
+            this.borderdrawer.stroke();
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart or linechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

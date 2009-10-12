@@ -1,0 +1,80 @@
+<!---
+      @topic Incubator
+      @subtopic Utilities
+  -->
+<library>
+<!--
+  * Base64 Library for Laszlo
+  *
+  * Usage:
+  *
+  * <include href="base64.lzx" />
+  *
+  * var encoded_string = base64.encode(unencoded_string);
+  * var decoded_string = base64.decode(encoded_string);
+  *
+  -->
+    <view id="base64">
+        <method name="decode" args="s">
+            <![CDATA[
+            var b64s='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    
+            var d=[];
+            var i=0;
+            s=base64.replace(s,"\n","");
+            s=base64.replace(s,"\r",""); 
+            s=base64.replace(s,"=","");
+
+            while (i<s.length) {            
+                d[d.length] = String.fromCharCode((b64s.indexof(s.charAt(i)) << 2) | (b64s.indexof(s.charAt(i+1)) >> 4));
+                d[d.length] = String.fromCharCode(((b64s.indexof(s.charAt(i+1)) & 15) << 4) | (b64s.indexof(s.charAt(i+2)) >> 2));
+                d[d.length] = String.fromCharCode(((b64s.indexof(s.charAt(i+2)) & 3) << 6) | b64s.indexof(s.charAt(i+3)));
+                i+=4;
+            }
+
+            if (s.length%4 == 2) d = d.slice(0, d.length-2);
+            if (s.length%4 == 3) d = d.slice(0, d.length-1);
+
+            return d.join("");
+            ]]>
+        </method>
+        
+        <method name="encode" args="s">
+            <![CDATA[
+            var b64s='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+                
+            var r=[]; 
+            var i=0; 
+            var dl=s.length;
+
+            if ((dl%3) == 1) { s[s.length] = 0; s[s.length] = 0;}
+            if ((dl%3) == 2) s[s.length] = 0;
+            
+            while (i<s.length) {
+                r[r.length] = b64s.charAt(s.charCodeAt(i)>>2);              
+                r[r.length] = b64s.charAt(((s.charCodeAt(i)&3)<<4) | (s.charCodeAt(i+1)>>4));
+                r[r.length] = b64s.charAt(((s.charCodeAt(i+1)&15)<<2) | (s.charCodeAt(i+2)>>6));
+                r[r.length] = b64s.charAt(s.charCodeAt(i+2)&63);
+                if ((i%57)==54) r[r.length] = "\n";
+                i+=3;
+            }
+
+            if ((dl%3) == 1) r[r.length-1] = r[r.length-2] = "=";
+            if ((dl%3) == 2) r[r.length-1] = "=";
+
+            return r.join("");
+            ]]>
+        </method>
+                
+        <method name="replace" args="s,c1,c2">
+            var arr = [];
+            arr = s.split(c1);
+            return arr.join(c2);
+        </method>
+    </view>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

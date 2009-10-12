@@ -1,0 +1,45 @@
+<library>
+    <include href="datamarker.lzx"/>
+    <!--- @keywords private
+          datapoints for the chart -->
+    <class name="datapoints" >
+        <!--- @keywords private -->
+        <attribute name="locationx"/>
+        <!--- @keywords private -->
+        <attribute name="locationy"/>
+        <!--- @keywords private -->
+        <attribute name="tooltip" type="string"/>
+        <!--- @keywords private -->
+        <attribute name="style" type="string"/>
+        
+        <!--- create the data marker 
+            @keyword private-->
+        <datamarker name="marker"/>  
+        
+        <!--- shows the data tooltip on mouseover event 
+            @keyword private-->
+        <handler name="onmouseover">
+        <![CDATA[
+            if(parent.parent.datatipEnabled && tooltip != null){
+                parent.parent.datatooltip.style = style.tip;
+                parent.parent.datatooltip.show(tooltip);
+            }            
+             ]]> 
+        </handler>
+        <!--- hides the data tooltip on mouseout event 
+            @keyword private-->
+        <handler name="onmouseout">
+            parent.parent.datatooltip.hide();
+        </handler>
+    </class>
+    
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2005, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

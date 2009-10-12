@@ -1,0 +1,663 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="chart.lzx"/>
+    <include href="horizontalaxis.lzx"/>
+    <include href="verticalaxis.lzx"/>
+    <!---
+       class that provides all common features for the rectangular charts like line, bar and column
+       @access public
+       -->
+    <class name="rectangularchart" extends="chart" clip="true">
+        
+        <!--- The minimum virtual value to be rendered in the 'x' axis -->
+        <attribute name="minx" type="number" value="0"/>
+        <!--- The maximum virtual value to be rendered in the 'x' axis -->
+        <attribute name="maxx" type="number" value="100"/>
+        <!--- The minimum virtual value to be rendered in the 'y' axis -->
+        <attribute name="miny" type="number" value="0"/>
+        <!--- The maximum virtual value to be rendered in the 'y' axis -->
+        <attribute name="maxy" type="number" value="100"/>
+
+        <!-- The default min's ans max's values that belongs to all the data series -->
+        <attribute name="defaultminx" type="number" value="0"/>
+        <attribute name="defaultmaxx" type="number" value="100"/>
+        <attribute name="defaultminy" type="number" value="0"/>
+        <attribute name="defaultmaxy" type="number" value="100"/>
+
+        <!--- @keyword private -->
+        <attribute name="dataSeriesLeaf" type="expression" value="${null}"/>
+
+        <!--- Determines if the vertical grid lines are going to be used -->
+        <attribute name="verticalGridLines" type="boolean" value="false"/>
+        
+        <!--- Determines if the horizontal grid lines are going to be used -->
+        <attribute name="horizontalGridBands" type="boolean" value="false"/>
+        <attribute name="horizontalGridLines" type="boolean" value="false"/>
+
+        <!--- @keyword private -->
+        <attribute name="gridlinecolor" type="color" value="0x000000"/>
+
+        <!--- @keyword private -->
+        <method name="setHAxisMin">
+            this.haxis.minimumRender = this.minx;
+        </method>
+
+        <!--- @keyword private -->
+        <method name="setHAxisMax">
+            this.haxis.maximumRender = this.maxx;
+        </method>
+
+        <!--- @keyword private -->
+        <method name="setVAxisMin">
+            this.vaxis.minimumRender = this.miny;
+        </method>
+        <!--- @keyword private -->
+        <method name="setVAxisMax">
+            this.vaxis.maximumRender = this.maxy;
+        </method>
+
+        <!-- a utility method to render a basic filled rect with no outline -->
+        <method name="renderRect" args="dv, tlx, tly, brx, bry, fillcolor, fillopacity" >
+            // set styles to drawview
+            dv.fillStyle = fillcolor;
+            dv.globalAlpha = fillopacity;
+
+            // create rectangle path 
+            dv.beginPath();
+            dv.moveTo(tlx,tly);
+            dv.lineTo(brx,tly);
+            dv.lineTo(brx,bry);
+            dv.lineTo(tlx,bry);
+            dv.lineTo(tlx,tly);
+            
+            dv.fill(); 
+            
+            //this.closePath(); 
+        </method>
+        
+       <!--- Draw the grid lines 
+       @keyword private -->
+        <method name="renderGridLines">
+        <![CDATA[
+            if ( this.horizontalGridBands ) {
+               this.renderHorizontalGridBands();         
+            }
+            
+            
+            if ( this.horizontalGridLines ) { 
+                this.renderHorizontalGridlines();
+            }
+            
+            if ( this.verticalGridLines ){
+                this.renderVerticalGridlines();
+            }
+        ]]>
+        </method>
+
+
+        <method name="renderHorizontalGridBands">
+        <![CDATA[
+            if ( vaxis.getTickMarkPositions()!=null && vaxis.getTickMarkPositions().length > 0 ) {
+                
+                var colors = []; var j=1;
+                var rgnstyle = this.style.vaxisstyle['band' + j];
+                while ( this.style.vaxisstyle['band' + j] ) {                    
+                    colors.push( rgnstyle.color );
+                    j++;
+                    rgnstyle = this.style.vaxisstyle['band' + j];
+                }
+                
+                var tly = this.style.plot.linesize + 1; var colorindex;
+                for ( var i=1; i < vaxis.getTickMarkPositions().length ; i++ ) {  
+                    colorindex = (i-1) % colors.length;  
+                    //Debug.write("colorindex,points",colorindex,   0, tly, haxis.width, vaxis.getTickMarkPositions()[i]);
+                    this.renderRect( this.plotareabackground, this.style.plot.linesize, tly, (haxis.width - this.style.plot.linesize + 1), vaxis.getTickMarkPositions()[i], colors[colorindex], 1);
+                    tly = vaxis.getTickMarkPositions()[i] + 1;
+                }
+            }
+
+        ]]>
+        </method>        
+        
+        <method name="renderHorizontalGridlines">
+        <![CDATA[
+            
+            if ( vaxis.getTickMarkPositions()!=null && vaxis.getTickMarkPositions().length > 0 ) {
+            
+                var graphport = this.plotareabackground; //vaxis
+            
+                graphport.strokeStyle = this.style.haxisstyle.gridline.color;
+                graphport.lineWidth   = this.style.haxisstyle.gridline.size;
+                graphport.globalAlpha = this.style.haxisstyle.gridline.opacity;
+               // graphport.fill();
+                
+                for ( var i=0; i < vaxis.getTickMarkPositions().length ; i++ ) {
+                    graphport.beginPath();
+                    graphport.moveTo(0, vaxis.getTickMarkPositions()[i] );
+                    graphport.lineTo(haxis.width, vaxis.getTickMarkPositions()[i] );                
+                    graphport.stroke();
+                }
+            }
+
+        ]]>
+        </method>        
+        
+        <!-- Render vertical grid lines 
+        @keyword private -->
+        <method name="renderVerticalGridlines">
+        <![CDATA[
+            if ( haxis.getTickMarkPositions()!=null && haxis.getTickMarkPositions().length > 0 ) {
+            
+                var graphport = this.plotareabackground; //haxis
+                
+                graphport.strokeStyle = this.style.vaxisstyle.gridline.color;
+                graphport.lineWidth   = this.style.vaxisstyle.gridline.size;
+                graphport.globalAlpha = this.style.vaxisstyle.gridline.opacity;
+                // graphport.fill();
+                
+                for ( var i=0; i < haxis.getTickMarkPositions().length ; i++ ) {
+                    graphport.beginPath();
+                    graphport.moveTo(haxis.getTickMarkPositions()[i], 0  );
+                    graphport.lineTo(haxis.getTickMarkPositions()[i], vaxis.height );                
+                    graphport.stroke();
+                }
+            }
+        ]]>
+        </method>        
+
+        <!-- Render horizontal grid lines 
+        @keyword private -->
+
+        <method name="render">
+        <![CDATA[
+            var startTime = (new Date()).getTime();
+            
+            this.plotareabackground.clear(); // this should be abstracted
+            
+            // TBD: Why is this first 
+            this.renderAxis();
+            this.adjustAxesToLayout();
+            
+            this.renderPlotArea();
+            this.renderGridLines();
+
+            
+            if (this.valuelinesenabled) {
+                this.renderValueLine();    
+            }
+            
+            if (this.valuepointsenabled) {
+                this.renderValuePoint();
+            }
+
+            if (this.valueregionsenabled) {
+                this.renderValueRegion();
+            }
+
+            this.applyBGStyle( this.style.chartbgstyle );
+            haxis.sendBehind(plotarea);
+            vaxis.sendBehind(plotarea);           
+            //Debug.write("render time: " + (((new Date()).getTime() - startTime) / 1000) + " seconds");            
+        ]]>
+        </method>
+        
+        <!--- render the axis 
+        @keyword private -->
+        <method name="renderAxis">
+        <![CDATA[        
+            vaxis.clear();
+            vaxis.setDataSeries(this.dataSeriesLeaf);
+
+            if ( this.style.vaxisstyle!=null ) {
+                vaxis.style = this.style.vaxisstyle;
+            } else {
+                vaxis.style = new lz.axisstyle();
+            }
+            
+            vaxis.setAttribute('x', (this.plotarea[x] != null ? this.plotarea.x : this.x) );
+            vaxis.setAttribute('y', (this.plotarea[y] != null ? this.plotarea.y : this.y) );
+            vaxis.setAttribute('height', (this.plotarea[height] != null ? this.plotarea.height : this.height) );
+
+            vaxis.render();
+            
+            haxis.clear();
+            haxis.setDataSeries(this.dataSeriesLeaf);
+
+            if ( this.style.haxisstyle!=null ) {
+                haxis.style = this.style.haxisstyle;
+            } else {
+                haxis.style = new lz.axisstyle();
+            }
+            
+            haxis.setAttribute('x', (this.plotarea[x] != null ? this.plotarea.x : this.x) );
+            haxis.setAttribute('y', (this.plotarea[y] != null && this.plotarea[height] != null ? 
+                           this.plotarea.y + this.plotarea.height : this.y + this.height) );
+            haxis.setAttribute('width', (this.plotarea[width] != null ? this.plotarea.width : this.width) );
+
+            haxis.render();         
+        ]]>    
+        </method>
+   
+   <!--- @keyword private -->
+   <method name="renderValueLine">
+        <![CDATA[
+            var valueLines = this.getNodesOfClass("valueline");
+            for(var i = 0; i < valueLines.length; i++){
+                valueLines[i].render();
+            }
+        ]]>
+        </method>
+
+   <method name="renderValuePoint">
+        <![CDATA[
+            var valuePoints = this.getNodesOfClass("valuepoints");
+            for(var i = 0; i < valuePoints.length; i++){
+                valuePoints[i].render();
+            }
+        ]]>
+        </method>
+
+        <!--- Render the value regions defined in the chart 
+        @keyword private -->
+        <method name="renderValueRegion">
+        <![CDATA[
+            var valueRegions = this.getNodesOfClass("valueregion");
+            for(var i = 0; i < valueRegions.length; i++){
+                valueRegions[i].sendBehind();
+                valueRegions[i].style = this.style.valueregionstyle;
+                valueRegions[i].render();
+            }
+        ]]>
+        </method>
+
+        <!--- Adjust the plot area to the dimensions of the chart and the 
+              axes. This method overrides chart.adjustPlotAreaToLayout() 
+              @keyword private -->
+        <method name="adjustPlotAreaToLayout">
+        <![CDATA[
+            if( this.plotarea != null ) {
+                var lX = this.leftMargin;
+                var lY = this.topMargin;
+                var overHeight = getAxisOverDimension("horizontal");
+                var overWidth = getAxisOverDimension("vertical");
+                var lWidth = this.width - (this.leftMargin + this.rightMargin + 5);
+                var lHeight = this.height - (this.topMargin + this.bottomMargin + overHeight);
+
+                this.plotarea.setAttribute( "width", lWidth );
+                this.plotarea.setAttribute( "height", lHeight );
+                this.plotarea.setAttribute( "x", lX);
+                this.plotarea.setAttribute( "y", lY );
+            }
+        ]]>
+        </method>
+        <!--- @keyword private -->
+        <method name="adjustAxesToLayout">
+        <![CDATA[
+            if(this.leftMargin < getAxisOverDimension("vertical")){
+                this.setAttribute('leftMargin', getAxisOverDimension("vertical") + 5);
+            }
+            var overHeight = 0;
+            var overWidth = 0;
+
+            vaxis.clear();
+            overHeight = getAxisOverDimension("horizontal");
+            if( (vaxis.height + overHeight + this.topMargin + this.bottomMargin) > this.height ) {
+                vaxis.setAttribute( "height", (this.height - 
+                                               (overHeight + this.topMargin + this.bottomMargin) ) );
+            }
+            haxis.clear();
+            haxis.setRightMargin();
+            overWidth = getAxisOverDimension("vertical");
+            if( (haxis.width + overWidth + this.leftMargin + this.rightMargin) > this.width ) {
+                haxis.setAttribute( "width", (this.width - 
+                                              (this.leftMargin + this.rightMargin + 5) ) );
+            }
+
+            this.xoffset = this.width;
+            vaxis.setAttribute('x', this.leftMargin );
+            vaxis.setAttribute('y', this.topMargin );
+            vaxis.render();
+
+            haxis.setAttribute('x', this.leftMargin );
+            haxis.setAttribute('y', (vaxis.y + vaxis.height) );
+            haxis.render();
+        ]]>
+
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="getAxisOverDimension" args="axis">
+        <![CDATA[
+            if( axis == "horizontal" ) {
+                // Tests horizontal axis with axis title below the axis line.
+                if( haxis != null ) {
+
+                    if( haxis.columnName == 'x' && haxis.titleLocation == "low" ) 
+                        return (haxis.height + haxis.tickMarksView.height + 
+                                        2*this.verticalGap + haxis.titleView.height);
+                    else 
+                        return (haxis.height + haxis.tickMarksView.height + this.verticalGap);
+                }
+            }
+            else if( axis == "vertical" ) {
+                // Tests vertical axis with axis title at the left of the axis line.
+                if( vaxis != null ) {
+
+                    if( vaxis.columnName == 'y' && vaxis.titleLocation == "low" ) 
+                        return (vaxis.width + vaxis.tickMarksView.width + 
+                                        2*this.horizontalGap + vaxis.titleView.width);
+                    else 
+                        return (vaxis.width + vaxis.tickMarksView.width + this.horizontalGap);
+                }
+            }
+
+            return 0;
+        ]]>
+        </method>
+
+        <!--- @keywords private
+         rerender a chart when new data come in -->
+        <method name="dataload">
+            this["haxis"] = this.getNodeOfClass("horizontalaxis");
+            this["vaxis"] = this.getNodeOfClass("verticalaxis");
+
+            var dataseries = this.getDataSeries();
+            this.dataSeriesLeaf = dataseries ? dataseries.getDataSeriesLeafs() : [];
+
+            this.calcDefaultMinMax();
+            this.minx = this.defaultminx;
+            this.maxx = this.defaultmaxx;
+            this.miny = this.defaultminy;
+            this.maxy = this.defaultmaxy;
+
+            this.adjustOptimizeMinMax();
+            super.dataload();            
+        </method>
+        <!--- @keyword private -->
+        <method name="adjustOptimizeMinMax">
+            if( haxis.type.toUpperCase() == 'LINEAR' ) {
+                haxis.setAutomaticMinMaxRender( this.minx, this.maxx );
+                this.setAttribute("minx", haxis.minimumRender);
+                this.setAttribute("maxx", haxis.maximumRender);
+            }
+
+            if( vaxis.type.toUpperCase() == 'LINEAR' ) {
+                vaxis.setAutomaticMinMaxRender( this.miny, this.maxy );                        
+                this.setAttribute("miny", vaxis.minimumRender);
+                this.setAttribute("maxy", vaxis.maximumRender);
+            }
+        </method>
+
+        <!--- Set the min and max to show all data 
+        @keyword private -->
+        <method name="calcDefaultMinMax">
+        <![CDATA[
+           // Set the minx and maxx values based on the data series.
+           if( haxis.type.toUpperCase() == 'LINEAR' ) {
+                this.buildLinearMinMax( haxis, 'x' );
+            } else if( haxis.type.toUpperCase() == 'CATEGORICAL' ) {
+                this.buildCategoricalMinMax( haxis, 'x' );
+            }
+
+           // Set the miny and maxy values based on the data series.
+            if( vaxis.type.toUpperCase() == 'LINEAR' ) {
+                this.buildLinearMinMax( vaxis, 'y' );
+            } else if( vaxis.type.toUpperCase() == 'CATEGORICAL' ) {
+                this.buildCategoricalMinMax( vaxis, 'y' );
+            }
+        ]]>
+        </method>
+        <!--- @keyword private -->
+        <method name="buildLinearMinMax" args="pAxis, pOrientation"> 
+        <![CDATA[
+            var i = 0;
+            var column = null;
+            var singledataseriesmin = [];
+            var singledataseriesmax = [];
+
+            for (i = 0; i < this.dataSeriesLeaf.length; i++) {
+                //Get the a single data series from the array
+                column = this.dataSeriesLeaf[i].getDataColumn(pAxis.columnName);
+                
+                if(column != null){
+
+                    //Get the mininum value of the single data series
+                    singledataseriesmin.push(column.getMin());
+    
+                    //Get the maximum value of the single data series
+                    singledataseriesmax.push(column.getMax());
+                }
+            }
+
+            //Set the minimum and maximum values for this axis.
+            if( pOrientation.toLowerCase() == 'x' ) {
+                this.defaultminx =  (findMin(singledataseriesmin) == undefined ? this.defaultminx : findMin(singledataseriesmin));
+                this.defaultmaxx =  (findMax(singledataseriesmax) == undefined ? this.defaultmaxx : findMax(singledataseriesmax));
+            } if( pOrientation.toLowerCase() == 'y' ) {
+                this.defaultminy =  (findMin(singledataseriesmin) == undefined ? this.defaultminy : findMin(singledataseriesmin));
+                this.defaultmaxy =  (findMax(singledataseriesmax) == undefined ? this.defaultmaxy : findMax(singledataseriesmax));
+            }
+        ]]>
+        </method>
+        <!--- @keyword private -->
+        <method name="buildCategoricalMinMax" args="pAxis, pOrientation"> 
+        //Categorical Axis - When the axis type is categorical, the axis class only expects one data serie
+        //The Axis minimun value is 0 and maximum value is the # of Categories -1 for the data serie.
+            if(this.dataSeriesLeaf[0].getDataColumn(pAxis.columnName) != null){
+                pAxis.categoricalArray = this.dataSeriesLeaf[0].getDataColumn(pAxis.columnName).values;
+            }
+
+            //Set the minimum and maximum values for this axis.
+            if( pOrientation.toLowerCase() == 'x' ) {
+                this.defaultminx = 0;
+                if(pAxis.categoricalArray != null){
+                    this.defaultmaxx = pAxis.categoricalArray.length - 1;
+                }
+            } if( pOrientation.toLowerCase() == 'y' ) {
+                this.defaultminy = 0;
+                if(pAxis.categoricalArray != null){
+                    this.defaultmaxy = pAxis.categoricalArray.length - 1;
+                }
+            }
+        </method>
+
+        <!--- Allows to customize the minimum and maxium data value.
+              @param Number pMinX: the new minimum value in 'x' of the chart.
+              @param Number pMaxX: the new maximum value in 'x' of the chart.
+              @param Number pMinY: the new minimum value in 'y' of the chart.
+              @param Number pMaxY: the new maximum value in 'y' of the chart.
+          -->
+        <method name="customizeMinMax" args="pMinX, pMaxX, pMinY, pMaxY">
+            this.minx = pMinX;
+            this.maxx = pMaxX;
+            this.miny = pMinY;
+            this.maxy = pMaxY;
+        </method>
+
+        <!--- @keyword private -->
+        <method name="findMin" args="arr">
+        <![CDATA[
+            var min;
+            if(arr.length > 0) {
+                min = arr[0];
+            }
+            for(var i = 1; i < arr.length; i++) {
+                if(arr[i] < min) {
+                    min = arr[i];
+                }                                
+            }
+            return min;         
+        ]]>
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="findMax" args="arr">
+        <![CDATA[
+            var max;
+            if(arr.length > 0) {
+                max = arr[0];
+            }
+            for(var i = 1; i < arr.length; i++) {
+                if(max < arr[i]) {
+                    max = arr[i];
+                }                                
+            }
+            return max;
+        ]]> 
+        </method>
+        
+        <!--- @keyword private -->                        
+        <chartactionhelper name="actionhelper" chart="${parent}"/>
+        <!--- change the virtual boundary of the rectangular chart 
+            @param Number newminx: the new min x of the boundary
+            @param Number newminy: the new min y of the boundary
+            @param Number newmaxx: the new max x of the boundary
+            @param Number newmaxy: the new max y of the boundary
+            @param Number animated: the animation duration in milliseconds. 0 for no animation
+            @param Number undoable: deterimine if the action can be undo
+        -->
+        <method name="changeBound" args="newminx, newminy, newmaxx, newmaxy,  animated, undoable">
+            actionhelper.changeBound(newminx, newminy, newmaxx, newmaxy,  animated, undoable);
+        </method>
+        <!--- undo the last chart zoom interaction to the one previous -->
+        <method name="undo" args="duration">
+            actionhelper.undo(duration);
+        </method>
+        <event name="onRenderStart" />
+        <event name="onRenderStop" />
+
+        <doc>
+          <tag name="shortdesc"><text>
+              A rectangular chart
+          </text></tag>
+          <text>
+
+            <warning>This component is Beta quality and is subject to revision</warning>
+          </text>
+        </doc>
+
+    </class>
+    
+    <!--- @keyword private 
+        class that help with the zoom animation and undo ability
+    -->
+    <class name="chartactionhelper">
+        <attribute name="chart" type="expression" value="${null}" />
+        <attribute name="actionlist" value="[]"/>    
+        <attribute name="animateProgress" value="0" type="number" />
+        
+        <animator name="animatezoom" attribute="animateProgress" from="0" to="1" start="false" duration="500">
+            <handler name="onstart">
+                parent.setAttribute("isdrawing", true);
+            </handler>
+            <handler name="onstop">
+                parent.setAttribute("isdrawing", false);
+            </handler>
+        </animator>
+        
+        <method name="changeBound" args="newminx, newminy, newmaxx, newmaxy,  duration, undoable">
+        <![CDATA[
+        
+            //Debug.write("changeBound(" + newminx + ", " + newminy + ", " +  newmaxx + ", " + newmaxy + ")");
+            if(duration == null)
+            {
+                duration = 0;
+            }
+            
+            if(undoable == null)
+            {
+                undoable = false;
+            }
+            
+            chart.onRenderStart.sendEvent();  
+            if(undoable)
+            {
+               
+                this.actionlist.push(
+                    {
+                        minx : chart.minx,
+                        miny : chart.miny,
+                        maxx : chart.maxx,
+                        maxy : chart.maxy
+                    }
+                );
+            } 
+                               
+            if(duration > 0)
+            {
+                this["origminx"] = new Number(chart.minx);
+                this["origminy"] = new Number(chart.miny);
+                this["origmaxx"] = new Number(chart.maxx);
+                this["origmaxy"] = new Number(chart.maxy);
+                
+                this["newminx"] = new Number(newminx);
+                this["newminy"] = new Number(newminy);
+                this["newmaxx"] = new Number(newmaxx);
+                this["newmaxy"] = new Number(newmaxy);
+                this.animateProgress = 0;
+                this.animate("animateProgress", 1, duration, false);                                          
+            }
+            else
+            {                  
+                /*       
+                chart.minx = newminx;                
+                chart.miny = newminy;
+                chart.maxx = newmaxx;
+                chart.maxx = newmaxy;
+                */
+                this.chart.setAttribute("minx", newminx);
+                this.chart.setAttribute("miny", newminy);
+                this.chart.setAttribute("maxx", newmaxx);
+                this.chart.setAttribute("maxy", newmaxy);                
+                
+                this.chart.render();                
+                chart.onRenderStop.sendEvent();
+            }
+        ]]>
+        </method>
+                        
+        <method name="undo" args="duration">
+            var action = actionlist.pop();
+            if(action)
+            {
+               this.changeBound(action.minx, action.miny, action.maxx, action.maxy, duration, false);
+            }
+        </method>
+        
+        <handler name="onanimateProgress">
+        <![CDATA[        
+            //Debug.write("AnimateStep: " + chart.minx + " " + chart.miny + " " + chart.maxx + " "  + chart.maxy);
+
+            chart.setAttribute("minx", this.origminx + (this.newminx - this.origminx) * this.animateProgress);
+            chart.setAttribute("miny", this.origminy + (this.newminy - this.origminy) * this.animateProgress);
+            chart.setAttribute("maxx", this.origmaxx + (this.newmaxx - this.origmaxx) * this.animateProgress);
+            chart.setAttribute("maxy", this.origmaxy + (this.newmaxy - this.origmaxy) * this.animateProgress);
+
+            
+            if(this.animateProgress < 1)
+            {
+                chart.render();
+            }
+            else
+            {
+                //chart.adjustOptimizeMinMax();
+                chart.render();
+                chart.onRenderStop.sendEvent();             
+            }
+        ]]>
+        </handler>
+    </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

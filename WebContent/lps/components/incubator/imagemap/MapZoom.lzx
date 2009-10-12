@@ -1,0 +1,133 @@
+<canvas debug="true">
+
+<include href="imagemap.lzx" />
+
+<!--
+A dataset containing the description of some shapes.
+-->
+<dataset name="shapes" src="Map.xml" />
+
+<!--
+        This handler will take the loaded XML data
+        create a series of hotspots and added them to
+        the image mapped view.
+-->
+<handler name="oninit"><![CDATA[
+        var sort = function(a, b){
+                var one = parseInt(a.getAttr('order'));
+                var two = parseInt(b.getAttr('order'));
+                return one-two;
+        };
+        var polys = shapes.getPointer().xpathQuery('/spots/polygon');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.ZoomPolygon(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text'), 'map': imageMap.map});
+                var points = polys[i].getElementsByTagName('point');
+                points.sort(sort);
+                for(var j=0;j<points.length;j++){
+                        poly.addPoint(parseInt(points[j].getAttr('x')), parseInt(points[j].getAttr('y')));
+                }
+                imageMap.addSpot(poly);
+        }
+
+        var polys = shapes.getPointer().xpathQuery('/spots/circle');
+        if(polys == null)                                       polys = new Array();
+        else if(!(polys instanceof Array))      polys = new Array(polys);
+        for(var i=0;i<polys.length;i++){
+                var poly = new lz.PopupCircle(imageMap, 
+                                {'parentView': imageMap, 'text': polys[i].getAttr('text'),
+                                'x': parseInt(polys[i].getAttr('x')),
+                                'y': parseInt(polys[i].getAttr('y')),
+                                'radius': parseInt(polys[i].getAttr('radius'))});
+                imageMap.addSpot(poly);
+        }
+]]></handler>
+
+<class name="ZoomView">
+        <attribute name="text" type="string" />
+        <event name="opened" />
+        <event name="closed" />
+        <simplelayout axis="y" spacing="3" />
+        <text text="Zoom View" />
+        <text text="${parent.text}" />
+        <button text="Close" onclick="parent.close.doStart();" />
+        <animator name="open" attribute="opacity" from="0" to="1" duration="1000" start="false"
+                motion="linear" onstart="parent.bringToFront();" onstop="parent.opened.sendEvent();" />
+        <animator name="close" attribute="opacity" from="1" to="0" duration="1000" start="false"
+                motion="linear" onstop="parent.sendToBack();parent.closed.sendEvent()" />
+</class>
+
+<!-- 
+A simple extension of the polygon that will
+show a view with some text when it is activated,
+and hide the view when it is deactivated.
+-->
+<class name="ZoomPolygon" extends="polygonhotspot">
+        <attribute name="parentView" type="expression" />
+        <attribute name="map" type="expression" />
+        <attribute name="__popup" type="expression" />
+        <attribute name="__zoom" type="expression" />
+        <attribute name="text" type="string" />
+        <attribute name="__followDel" type="expression" />
+        <attribute name="__clickDel" type="expression" />
+        <attribute name="__closeDel" type="expression" />
+        <handler name="oninit">
+                this.__popup = new LzView(parentView, {'visible': false, 'bgcolor': 'aqua'});
+                this.__zoom = new lz.ZoomView(parentView, {'opacity': 0, 'bgcolor': 'aqua', 
+                        'text': this.text, 'width': parentView.width, 'height': parentView.height});
+                this.__zoom.sendToBack();
+
+                new LzText(this.__popup, {'text': this.text});
+                this.__followDel = new LzDelegate(this, 'follow');
+                this.__clickDel = new LzDelegate(this, 'showZoom');
+                this.__closeDel = new LzDelegate(this, 'hideZoom', this.__zoom, 'closed');
+        </handler>
+        <method name="doActivate">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y')-this.__popup.height);
+                this.__popup.setAttribute('visible', true);
+                this.__followDel.register(canvas, 'onmousemove');
+                this.__clickDel.register(parentView, 'onclick');
+        </method>
+
+        <method name="doDeactivate">
+                this.__popup.setAttribute('visible', false);
+                this.__followDel.unregisterAll();
+                this.__clickDel.unregisterAll();
+        </method>
+
+        <method name="follow" args="arg=null">
+                this.__popup.setAttribute('x', parentView.getMouse('x'));
+                this.__popup.setAttribute('y', parentView.getMouse('y')-this.__popup.height);
+        </method>
+
+        <method name="showZoom" args="arg">
+                map.suspend();
+                this.__followDel.unregisterAll();
+                this.__popup.setAttribute('visible', false);
+                this.__zoom.open.doStart();
+        </method>
+
+        <method name="hideZoom" args="arg">
+                this.__followDel.register(canvas, 'onmousemove');
+                follow();
+                this.__popup.setAttribute('visible', true);
+                map.resume();
+        </method>
+
+</class>
+
+<!-- An implementation view that will draw the outline of the
+hotspots that are used in its image map -->
+<resource name="nemap" src="northeast.jpg" />
+<view id="imageMap" width="319" height="366"
+                clickable="true" showhandcursor="false" resource="nemap">
+        <imagemap name="map" />
+        <method name="addSpot" args="spot"><![CDATA[
+                this.map.addHotspot(spot);
+        ]]></method>
+</view>
+
+</canvas>

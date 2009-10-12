@@ -1,0 +1,147 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+<include href="fileupload.lzx"/>
+<class name="fileuploadlist">
+
+        <!--- Max file size  unit: bytes -->
+        <attribute name="maxsize" value="15000" />
+
+        <!--- select file or not-->
+        <attribute name="selected" value="false" type="boolean"/>
+
+        <!--- Error occured -->
+        <attribute name="erroroccured" value="false" type="boolean"/>
+
+        <!--- Events-->
+        <event name="onselect" />
+        <handler name="onselect" args="msg">
+           this.setAttribute('selected', true);
+        </handler>
+
+        <event name="onerror" />
+        <event name="oncomplete" />
+
+        <!--- fileupload component   (invisible conponent)-->
+
+        <fileupload name="myFileUpload" maxsize="$once{parent.maxsize}">
+            <method name="onComplete" args="fr"><![CDATA[
+                super.onComplete(fr);
+                parent.progressBar.setValue(100);
+                parent.txtFile.setAttribute('text', this.msg);
+                parent.setAttribute('erroroccured', false);
+                parent.oncomplete.sendEvent('File: '+ this.fileref.name + ' uploading completed!');
+            ]]>
+            </method>
+
+            <method name="onProgress" args="fr, bytesLoaded, bytesTotal"><![CDATA[
+                parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+                parent.txtFile.setAttribute('text', this.msg);
+            ]]>
+            </method>
+
+            <method name="onSelect" args="fr"><![CDATA[
+                parent.txtFile.setAttribute('text', getName());
+                parent.progressBar.setValue(0);
+                parent.onselect.sendEvent('File: '+ this.fileref.name + ' has been selected!');
+            ]]>
+            </method>
+            <method name="onCancel">
+                if(parent.txtFile.text==''){
+                    parent.remove.setAttribute('enabled',false);
+                    parent.progressBar.initValue();
+                }
+            </method>
+
+            <method name="onSecurityError">
+                super.onSecurityError();
+                parent.txtFile.setAttribute('text', this.msg);
+                parent.setAttribute('erroroccured', true);
+                parent.onerror.sendEvent('Security Error occured while uploading '+ this.fileref.name + ' !');
+            </method>
+
+            <method name="onIOError">
+                 super.onIOError();
+                 parent.txtFile.setAttribute('text', this.msg);
+                 parent.setAttribute('erroroccured', true);
+                 parent.onerror.sendEvent('IO Error occured while uploading '+ this.fileref.name + ' !');
+            </method>
+
+            <method name="onHTTPError">
+                 super.onHTTPError();
+                 parent.txtFile.setAttribute('text', this.msg);
+                 parent.setAttribute('erroroccured', true);
+                 parent.onerror.sendEvent('HTTP Error occured while uploading '+ this.fileref.name + ' !');
+            </method>
+
+        </fileupload>
+
+        <simplelayout axis="x" spacing="10"/>
+
+        <!---  Edittext for displaying browsed file name  -->
+
+        <edittext name="txtFile" width="200" enabled="false"/>
+
+        <!---  Button for browsing file  -->
+
+        <button name="browse" text="Browse...">
+            <handler name="onclick"><![CDATA[
+                parent.myFileUpload.browse();
+                parent.myFileUpload.setAttribute('uploadenable',true);
+                parent.remove.setAttribute('enabled',true);
+            ]]>
+            </handler>
+        </button>
+
+        <!---  Button for clearing file list  -->
+        <button name="remove" text="Clear" enabled="false">
+            <handler name="onclick"><![CDATA[
+                parent.myFileUpload.setAttribute('uploadenable',false);
+                this.setAttribute('enabled',false);
+                parent.txtFile.setAttribute('text', '');
+                parent.progressBar.initValue();
+                parent.setAttribute('erroroccured', false);
+                parent.setAttribute('selected', false);
+            ]]>
+            </handler>
+        </button>
+
+        <!---  progress bar  -->
+
+        <view name="progressBar" width="100" y="3" height="16" bgcolor="#666666">
+            <view x="1" y="1" width="98" height="14" bgcolor="#FFFFFF"/>
+            <view name="status" x="1" y="1" height="14" bgcolor="#BBBBFF"/>
+            <text name="percent" x="5" fontstyle="bold" fgcolor="#6666FF" align="center"/>
+
+            <method name="setValue" args="value"><![CDATA[
+                status.setAttribute('width', value * 98 / 100);
+                percent.setAttribute('text', Math.round(value) + '%');
+            ]]>
+            </method>
+            <method name="initValue"><![CDATA[
+                status.setAttribute('width',0);
+                percent.setAttribute('text', '');
+            ]]>
+            </method>
+        </view>
+
+        <doc>
+            <tag name="shortdesc"><text>An internal-only helper class</text></tag>
+            <text>
+                <p>
+                A helper class for internal use for uploading multiple files.
+                This component include a fileupload, an edittext for displaying browsed file name,
+                a browse button, a remove button, and a progress bar.
+                </p>
+                <p>
+                This class is for internal use only.
+                For uploading a single file, see <tagname>fileupload</tagname>.
+                For uploading multiple files, see <tagname>mulitplefileupload</tagname>.
+                </p>
+            </text>
+        </doc>
+
+</class>
+</library>

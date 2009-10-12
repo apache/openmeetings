@@ -1,0 +1,21 @@
+<!--
+    textstyle.lzx
+-->
+<library>
+    <!-- TEXT STYLES -->
+    <!--- Simple class that adds font attributes to style class
+        <example executable="false">
+        &lt;textstyle font="futura" fontsize="12" fontstyle="bold" /&gt;
+        </example>
+    -->
+    <class name="textstyle" extends="style">
+        <attribute name="font" value="arial" type="string" />
+        <attribute name="fontsize" value="11" />
+        <attribute name="fontstyle" value="plain" type="string" />
+    </class>    
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2007 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

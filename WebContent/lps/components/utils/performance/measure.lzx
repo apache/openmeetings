@@ -1,0 +1,222 @@
+<!--
+ $Id$
+-->
+
+<library>
+
+<!--
+  Simple time measurement framework
+-->
+
+<text id="measurements" multiline="true" resize="true" font="monospace" selectable="true">
+    <attribute name="width" value="$once{canvas.width}"/>
+    <attribute name="height" value="$once{canvas.height}"/>
+</text>
+
+<script when="immediate"><![CDATA[
+  //---
+  // Meter
+  //
+  // A meter is used to to accumulate a count, total, max, min, and
+  // mean^2 of a set of data points.  These accumulated values can be
+  // used to report number, total, average and deviation of the data
+  // set.
+  //
+  // @param String name: the name of the meter
+  // @param String units: the units of the meter
+  //---
+  class Meter {
+    var name:String;
+    var units:String;
+    var count:Number = 0;
+    var total:Number = 0.0;
+    var meanSquared:Number = 0.0;
+    var max:Number = 0;
+    var min:Number = Infinity;
+    var padding:Number;
+
+    function Meter (name:String="", units:String="", padding=0) {
+      this.name = name;
+      this.units = units;
+      this.padding = padding;
+    }
+
+    //---
+    // Accumulate a value, which will increment the count of events and
+    // update max, min, and the running mean^2
+    //---
+    function accumulate (amount) {
+      var count = this.count + 1;
+      var total = this.total;
+      var meanSquared = this.meanSquared;
+
+      // We accumulate a running mean^2, which minimizes overflow but
+      // sacrifices numerical stability for small variances, so sez jga.
+      this.count = count;
+      this.total = total + amount;
+      this.meanSquared += amount * amount;
+      //      (meanSquared / count) * (count - 1.0)
+      //      + (amount / count) * amount;
+
+      if (amount > this.max) {
+        this.max = amount;
+      }
+      if (amount < this.min) {
+        this.min = amount;
+      }
+    }
+
+    //---
+    // Subtract overhead
+    //--
+    function subtractOverhead (overhead) {
+      this.total -= overhead.total;
+      this.meanSquared -= overhead.meanSquared;
+      this.min -= overhead.min;
+      this.max -= overhead.max;
+    }
+
+    //---
+    // String version of a meter.  The name, mean, sigma, range and
+    // count.
+    //---
+    function toString () {
+       var sigma = measurements.formatToString(
+         "\u03C3 %0.2d",        // \u03C3 == greek small letter sigma
+         Math.sqrt((this.meanSquared - ((this.total / this.count) * this.total)) / (this.count - 1)));
+       return measurements.formatToString(
+         "%*s: %8.2d%s %-10s [%0.2d \u2026 %0.2d]/%d", // -u2026 == ellipses
+         (- this.padding),
+         this.name, this.total/this.count, this.units,
+         sigma,
+         this.min, this.max, this.count);
+    }
+  };
+
+  //---
+  // Measure the cost of an operation
+  //
+  // @param object targets: A hashmap of functions to measure.  If
+  // there is a member with the key 'empty', it is used to calculate
+  // the measurement overhead (which is subtracted from the time of all
+  // other targets).
+  //
+  // @param integer iterations: Number of iterations of the inner loop
+  // of each target.  Short operations need to be iterated sufficiently
+  // that the microsecond clock can measure them.  Default 
+  // Measurement.defaultIterations.
+  //
+  // @param integer trials: Number of trials to average over.
+  // Measurements are repeated to reduce the perturbation due to
+  // garbage collection or other asynchronous operations in the
+  // runtime.  Default Measurement.defaultTrials.
+  //
+  // @param boolean background: Whether or not to run the trials in
+  // the idle loop (to avoid "Player running slowly").  Default
+  // Measurement.defaultRunInBackground.
+  //--
+  class Measurement extends LzEventable {
+    static var defaultTrials = 100;
+    static var defaultIterations = 200;
+    static var defaultRunInBackground = true;
+
+    var targets:Object;
+    var iterations:Number;
+    var trials:Number;
+    var runInBackground:Boolean;
+    var meters:Object;
+    var units:String = "ms";    // milliseconds
+    var scale:Number = 1000;    // ditto
+    var count:Number = 0;
+
+    function Measurement (targets, iterations=null, trials=null, background=null) {
+      if (! targets) {
+        Debug.error("No measurment targets");
+        return;
+      }
+      // Fill defaults
+      if (iterations == null) {
+        iterations = Measurement.defaultIterations;
+      }
+      if (trials == null) {
+        trials = Measurement.defaultTrials;
+      }
+      if (background == null) {
+        background = Measurement.defaultRunInBackground;
+      }
+
+      this.targets = targets;
+      this.iterations = iterations;
+      this.trials = trials;
+      this.runInBackground = background;
+      measurements.format("%d trials of %d iterations each\n", this.trials, this.iterations);
+
+      // Measure each target trials times
+      this.meters = {};
+      var pad = 0;
+      for (var key in targets) {
+        if (key.length > pad) { pad = key.length; }
+      }
+      for (var key in targets) {
+        this.meters[key] = new Meter(key, this.units, pad);
+      }
+    }
+
+    function run () {
+      if (this.runInBackground) {
+        this.background();
+      } else {
+        this.foreground();
+      }
+    }
+
+    var delegate:LzDelegate;
+
+    function foreground () {
+      this.delegate = null;
+      while (this.measureStep(null));
+    }
+
+    function background () {
+      this.delegate = new LzDelegate(this, 'measureStep' ,
+                                     lz.Idle , "onidle" );
+    }
+
+    function measureStep (ignore) {
+      with (this) {
+        if (this.count < this.trials) {
+          for (var key in targets) {
+            var target = targets[key];
+            var start = (new Date()).getTime();
+            target();
+            var end = (new Date()).getTime();
+            meters[key].accumulate((end - start)*this.scale/this.iterations);
+          }
+          this.count++;
+          return true;
+        }
+        // Stop background loop
+        if (this.delegate != null) {
+          this.delegate.unregisterAll();
+        }
+        var overhead = meters['empty'];
+        delete targets['empty'];
+        measurements.addText(overhead.toString() + "\n");
+        for (var key in targets) {
+          if (overhead != null) {
+              // meters[key].subtractOverhead(overhead);
+          }
+          // Report results
+          measurements.addText(meters[key].toString() + "\n");
+        }
+        return false;
+      }
+    }
+  };
+]]></script>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

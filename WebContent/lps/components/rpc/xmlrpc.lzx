@@ -1,0 +1,151 @@
+<library>
+    
+    <include href="rpc/rpc.lzx" />
+    <include href="rpc/library/xmlrpc.js" />
+
+    <class name="xmlrpc" extends="rpc">
+
+        <!--- (Required) XML-RPC service URL. The URL must be http. -->
+        <attribute name="service" value="$once{null}" type="string" />
+        <!--- @keywords private -->
+        <attribute name="_verifywithproxy" value="false" type="boolean" />
+
+        <!--=================================================================-->
+        <!-- public methods                                                  -->
+        <!--=================================================================-->
+
+        <!--- Load the object. If successful, this.proxy is set to an object
+              with remote APIs. -->
+        <method name="load">
+            <![CDATA[
+            // Since there aren't any prototypes to load for XML-RPC,
+            // we just create proxy using declared calls. 
+            for (var cn=0, len=this.subnodes.length; cn<len; cn++) {
+
+                // create proxy object if it doesn't exist
+                if (this.proxy == null) this.proxy = {};
+
+                var call = this.subnodes[cn];
+                if ( ! (call instanceof lz.remotecall) ) continue;
+                var method = call.funcname;
+
+                // create proxy for a particular funcname only once.
+                if ( this.proxy[method] == null ) {
+                    this.proxy[method] = function (paramArr, delegate) {
+                        var args = arguments.callee.args;
+                        LzXMLRPCService.invoke(delegate, paramArr, 
+                            { service: args.service, methodname: args.method},
+                              args.secure, args.secureport);
+                    }
+                    this.proxy[method].args = {
+                        service: this.service,
+                        method: method,
+                        secure: this.secure,
+                        secureport: this.secureport
+                    }
+                }
+            }
+
+            this._loadDel.execute( 
+                { status: 'ok', message: 'ok', 
+                  stub: this.proxy, stubinfo: null }
+            );
+        ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            if (this.service == null) {
+                Debug.write("xmlrpc ERROR: service not defined");
+                return;
+            }
+            super.init();
+        </method>
+        <doc>
+            <tag name="shortdesc">
+                <text>XML-RPC implementation</text>
+            </tag>
+            <text>
+                <p>XML-RPC is simple spec that describes how to invoke a remote operation using
+                    XML over HTTP. Laszlo XML-RPC is part of <link linkend="rpc">Laszlo RPC</link> and shares many of the same APIs and concepts. 
+                  Laszlo RPC includes <link linkend="rpc-soap">SOAP</link> and <link linkend="rpc-javarpc">JavaRPC</link>. For more information on XML-RPC,
+                    go to <a href="http://www.xmlrpc.com/" shape="rect">XML-RPC.com</a>
+                </p>
+                
+                
+                <p>Most Laszlo RPC objects like JavaRPC and SOAP will set function stubs in the
+                    proxy property during load based on methods described by a class (for JavaRPC)
+                    or on a service description (using a WSDL in SOAP). Remotecall declarations
+                    refer to these function stubs and any remotecalls not pointing to a function
+                    stub that doesn't exist will generate an error/warning. In &lt;xmlrpc&gt;,
+                    function stubs are created based on remotecall declarations. Note that XML-RPC
+                    use dot notation for their operation names. Because that will conflict with the
+                    view system's notation, it's suggested that remotecalls are explictly named.</p>
+                <example>
+    &lt;canvas debug="true" height="400"&gt;
+    
+        &lt;debug x="10" y="40" width="450" height="350"/&gt;
+        
+        &lt;xmlrpc name="math" service="http://www.cookcomputing.com/xmlrpcsamples/math.rem"&gt;
+            
+            &lt;handler name="onload"&gt;
+                Debug.debug('math XML-RPC service loaded');
+                Debug.debug('proxy:');
+                Debug.inspect(this.proxy);
+            &lt;/handler&gt;
+            
+            &lt;handler name="ondata" args="data"&gt;
+                Debug.debug('got data: %w', data);
+            &lt;/handler&gt;
+            
+            &lt;handler name="onerror" args="error"&gt;
+                Debug.debug('onerror: %w', error);
+            &lt;/handler&gt;
+            
+            &lt;remotecall name="add" funcname="math.Add"/&gt;
+            &lt;remotecall name="subtract" funcname="math.Subtract"/&gt;
+            &lt;remotecall name="multiply" funcname="math.Multiply"/&gt;
+            &lt;remotecall name="divide" funcname="math.Divide"/&gt;
+            
+        &lt;/xmlrpc&gt;
+        
+        &lt;button text="100+200" x="10" y="10"&gt;
+            &lt;handler name="onclick"&gt;
+                Debug.debug('100+200');
+                math.add.invoke([100,200]);
+            &lt;/handler&gt;
+        &lt;/button&gt;
+    
+    &lt;/canvas&gt;
+                </example>
+                <p><b>See Also:</b></p>
+                    <ul>
+                        <li>
+                            <sgmltag class="element" role="lz.rpc">&lt;rpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.soap">&lt;soap&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <link linkend="rpc">Developer's Guide: RPC chapter</link>
+                        </li>
+                        <li>
+                            <link linkend="rpc-xmlrpc">Developer's Guide: XMLRPC chapter</link>
+                        </li>
+                    </ul>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

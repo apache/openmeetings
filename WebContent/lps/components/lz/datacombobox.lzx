@@ -1,0 +1,147 @@
+<library>
+
+    <include href="base/basedatacombobox.lzx" />
+    <include href="lz/floatinglist.lzx" />
+
+    <!-- resources -->
+    <resource name="datacombobox_left_rsc">
+        <frame src="resources/combobox/popup_lft_up.swf" />
+        <frame src="resources/combobox/popup_lft_dsbl.swf" />
+    </resource>
+
+    <resource name="datacombobox_mid_rsc">
+        <frame src="resources/combobox/popup_mid_up.swf" />
+        <frame src="resources/combobox/popup_mid_dsbl.swf" />
+    </resource>
+
+    <resource name="datacombobox_right_rsc">
+        <frame src="resources/combobox/popbtn_rt_up.swf" />
+        <frame src="resources/combobox/popbtn_rt_mo.swf" />
+        <frame src="resources/combobox/popbtn_rt_dn.swf" />
+        <frame src="resources/combobox/popbtn_rt_dsbl.swf" />
+    </resource>
+
+
+    <!-- A dropdown list of selectable items. -->
+    <class name="datacombobox" extends="basedatacombobox" width="100">
+
+        <!-- The name of the class for the floating list.
+             @keywords private -->
+        <attribute name="menuclassname" value="floatinglist" type="string"/>
+        
+        <!--- Tell base class about our label view.
+              @keywords private -->
+        <attribute name="_cbtext" value="$once{this._text}" />
+        
+        <method name="getText">
+             return _text.getText();
+        </method>
+
+        <!--- @access private -->
+        <method name="_showEnabled">
+           super._showEnabled();
+           if (_enabled) {
+                this.bkgnd.left.setAttribute('frame', 1 );
+                this.bkgnd.mid.setAttribute('frame', 1 );
+            } else {
+                this.bkgnd.left.setAttribute('frame', 2 );
+                this.bkgnd.mid.setAttribute('frame', 2 );
+            }
+        </method>
+        <view name="bkgnd" width="100%" height="20" focusable="false" bgcolor="#CCCCCC">
+            <handler name="onclick">
+                classroot.toggle()
+                if (immediateparent['onclick']) immediateparent.onclick.sendEvent();
+            </handler>
+            <view name="left" resource="datacombobox_left_rsc"/>
+            <view name="mid" resource="datacombobox_mid_rsc" stretches="width"/>
+            <basebutton name="right" resource="datacombobox_right_rsc" styleable="true">
+                <handler name="onclick">
+                    if (immediateparent['onclick']) immediateparent.onclick.sendEvent();
+                </handler>
+            </basebutton>
+            <stableborderlayout axis="x"/>
+        </view>
+        
+        <text name="_text" x="8" y="0"
+              width="${ parent.width - 19 }" />
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                this.setTint(this.bkgnd.left, s.basecolor);
+                this.setTint(this.bkgnd.mid, s.basecolor);
+                this.setTint(this.bkgnd.right, s.basecolor);
+            }
+        </method>
+ <doc>
+          <tag name="shortdesc"><text>
+              combobox displays a data-driven dropdown list of selectable items.
+          </text></tag>
+          <text>
+            <p>A combination box or "combobox"  is a common UI element for
+              displaying a pop-up list associated with a text field. </p>
+            <p>
+              OpenLaszlo includes two variants of the combobox:</p>
+            <ul>
+              <li> <tagname link="true">combobox</tagname> has list items defined inline.</li>
+              <li><tagname>datacombobox</tagname>, has list items determined by a dataset, which may be local or remote.</li>
+            </ul>
+
+            <p>The selected
+              text of the combobox is displayed within the text field.  This field
+              is an <classname>LzInputText</classname> field if the
+              <attribute>editable</attribute> of the combobox is <code>true</code>
+              (the default), or a static <classname>LzText</classname> field if it
+              is <code>false</code>.</p>
+
+            <p>The number of items shown in the combobox can be set using the
+              <attribute>shownitems</attribute> attribute.  If there are more items
+              available than are shown, a scrollbar will be created
+              automatically.</p>
+
+            <p>The list of items in a combobox can be created explicity using the
+              <tagname>textlistitem</tagname> tag with assigned
+              <attribute>text</attribute> and <attribute>value</attribute>
+              attributes.</p>
+            <example title="simple datacombobox">
+              &lt;canvas bgcolor="#EAEAEA"  height="200"&gt;
+              &lt;include href="lz/datacombobox.lzx"/&gt;
+              
+              &lt;dataset name="items"&gt;
+              &lt;item value="item0" &gt;item 0&lt;/item&gt;
+              &lt;item value="item1" &gt;item 1&lt;/item&gt;
+              &lt;item value="item2" &gt;item 2&lt;/item&gt;
+              &lt;item value="item3" &gt;item 3&lt;/item&gt;
+              &lt;item value="item4" &gt;item 4&lt;/item&gt;
+              &lt;item value="item5" &gt;item 5&lt;/item&gt;
+              &lt;item value="item6" &gt;item 6&lt;/item&gt;
+              &lt;item value="item7" &gt;item 7&lt;/item&gt;
+              &lt;item value="item8" &gt;item 8&lt;/item&gt;
+              &lt;item value="item9" &gt;item 9&lt;/item&gt;
+              &lt;item value="item10" &gt;item 10&lt;/item&gt;
+              &lt;item value="item11" &gt;item 11&lt;/item&gt;
+              &lt;/dataset&gt;
+              
+              &lt;view x="20" y="20" &gt;
+              &lt;simplelayout/&gt;
+              &lt;text&gt; local data, defaulttext="choose one.." &lt;/text&gt;
+              &lt;datacombobox id="cbox1"
+              width="130"  
+              shownitems="6"
+              defaulttext="Choose One..."
+              itemdatapath="items:/item"/&gt;
+              &lt;/view&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

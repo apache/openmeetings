@@ -1,0 +1,97 @@
+<library>
+    <include href="lz/slider.lzx"/>
+    <purplestyle isdefault="true"/>
+
+    <class name="myslider" extends="slider" minvalue="0" maxvalue="255" value="0" showfill="1" width="90" thumbheight="8" >
+        <handler name="oninit">
+            this.track.background.setAttribute('bgcolor', "0xFFFFFF"); 
+        </handler>
+        <handler name="onvalue">
+            classroot.gotColor();
+        </handler>
+    </class>
+
+    <class name="colorslider">
+        <view name="colorlayout">
+            <simplelayout axis="x" spacing="15"/>
+            <view name="colorchooser" x="10" y="10">
+                <simplelayout axis="x" spacing="12"/>
+                <view name="mycolor">
+                    <simplelayout axis="y" spacing="5"/> 
+                    <myslider name="red"/>
+                    <myslider name="green"/>
+                    <myslider name="blue"/>
+                </view>
+                <view name="clist">
+                    <simplelayout axis="y" spacing="12"/>
+                    <view name="cview" width="60" height="35" bgcolor="${parent.cinfo.colortext.text}"/>
+                    <view name="cinfo" height="15" width="60">
+                        <text name="colortext" width="60" selectable="true"
+                            text="0x000000"/>
+                    </view>
+                 </view>
+             </view>
+        </view>
+
+        <method name="gotColor">
+            <![CDATA[
+            var r;
+            var g;
+            var b;
+            var clr;
+            
+            if(this.colorlayout.colorchooser.mycolor.red.value > 16){
+                r = toHex(this.colorlayout.colorchooser.mycolor.red.value);
+            } else {
+                r = "0"+toChar(this.colorlayout.colorchooser.mycolor.red.value);
+            }
+
+            if(this.colorlayout.colorchooser.mycolor.green.value > 16){
+                g = toHex(this.colorlayout.colorchooser.mycolor.green.value);
+            } else {
+                g = "0"+toChar(this.colorlayout.colorchooser.mycolor.green.value);
+            }
+
+            if(this.colorlayout.colorchooser.mycolor.blue.value > 16){
+                b = toHex(this.colorlayout.colorchooser.mycolor.blue.value);
+            } else {
+                b = "0"+toChar(this.colorlayout.colorchooser.mycolor.blue.value);
+            }
+
+            if(typeof this.colorlayout.colorchooser.mycolor.red.track != 'undefined'){
+                this.colorlayout.colorchooser.mycolor.red.track.filled.setAttribute('bgcolor', "0x"+r+""+"0000");
+            }
+            if(typeof this.colorlayout.colorchooser.mycolor.green.track != 'undefined'){
+                this.colorlayout.colorchooser.mycolor.green.track.filled.setAttribute('bgcolor', "0x00"+g+"00");
+            }
+            if(typeof this.colorlayout.colorchooser.mycolor.blue.track != 'undefined'){
+                this.colorlayout.colorchooser.mycolor.blue.track.filled.setAttribute('bgcolor', "0x0000"+b);
+            }
+
+            clr = "0x"+r+""+g+""+b;
+            this.colorlayout.colorchooser.clist.cinfo.colortext.setAttribute('text', clr);
+            ]]>
+        </method>
+        <method name="toHex" args="d">
+            <![CDATA[
+            var r = d % 16;
+            if(d - r == 0){
+                return toChar(r);
+            } else {
+                return toHex( (d-r)/16 )+toChar(r);
+            }
+            ]]>
+        </method>
+        <method name="toChar" args="n">
+            <![CDATA[
+            var alpha = "0123456789ABCDEF";
+            return alpha.charAt(n);
+            ]]>
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2008 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

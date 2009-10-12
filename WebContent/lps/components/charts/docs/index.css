@@ -1,0 +1,45 @@
+body {
+    font-family: arial, helvitica, sans-serif;
+    margin: 10px 10px 10px 10px;
+    background: #ffffff;
+    color: #000000;
+}
+
+a:hover {
+    background: #cccccc;
+}
+
+.pagecontainer {
+    position: absolute;
+    left: 50%;
+    width: 400px;
+    margin-left: -205px;
+    margin-top: 20px;
+}
+.directory {
+    border: 1px solid #999999;
+    width: 400px;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 12px;
+    background: #f0f0f0;
+}
+
+.file {
+    margin-bottom: 5px;
+}
+
+h1 {
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+
+h2 {
+    font-size: 14px;
+    margin: 0px 0px 10px 0px;
+}
+
+.copyright {
+    margin-top: 50px;
+    font-size: 10px;
+}

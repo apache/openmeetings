@@ -1,0 +1,23 @@
+<canvas width="100%" height="80%" debug="true">
+  <include href="../boxview.lzx"/>
+  <debug  fontsize="12"/>
+
+  <simplelayout axis="x" spacing="8"/>
+  <boxview bordersize="1" paddingsize="10"
+           marginsize="25" title="A title" contentbgcolor="0xdddddd">
+    <simplelayout />
+    <text>Your buttons and text here</text>
+    <button text="click me" />
+  </boxview>
+
+  <boxview bordersize="1" paddingsize="10"
+           marginsize="25" 
+           title="My Title" 
+           contentbgcolor="0xdddddd"><statictext>Text</statictext></boxview>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

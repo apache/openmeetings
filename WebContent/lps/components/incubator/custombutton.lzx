@@ -1,0 +1,214 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+    <!-- blank resource to use as a placeholder -->
+    <resource name="transparent_button_rsc">
+        <frame src="resources/util/transparent.swf"/>
+        <frame src="resources/util/transparent.swf"/>
+        <frame src="resources/util/transparent.swf"/>
+    </resource>
+
+    <!-- small button resource: used by buttons and new combobox -->
+    <resource name="custombutton_small_left_rsc" >
+        <frame src="resources/button/small/sm_btn_up_lft.png" />
+        <frame src="resources/button/small/sm_btn_mo_lft.png" />
+        <frame src="resources/button/small/sm_btn_dn_lft.png" />
+        <frame src="resources/button/small/sm_btn_dsbl_lft.swf" />
+    </resource>
+
+    <resource name="custombutton_small_right_rsc" >
+        <frame src="resources/button/small/sm_btn_up_rt.png" />
+        <frame src="resources/button/small/sm_btn_mo_rt.png" />
+        <frame src="resources/button/small/sm_btn_dn_rt.png" />
+        <frame src="resources/button/small/sm_btn_dsbl_rt.swf" />
+    </resource>
+    
+    <resource name="custombutton_small_middle_rsc" >
+        <frame src="resources/button/small/sm_btn_up_mid.swf" />
+        <frame src="resources/button/small/sm_btn_mo_mid.swf" />
+        <frame src="resources/button/small/sm_btn_dn_mid.swf" />
+        <frame src="resources/button/small/sm_btn_dsbl_mid.swf" />
+    </resource>
+    
+   
+    <include href="base/basebutton.lzx" />
+    
+    <!--- The custombutton class can include text and/or an icon, with our app-specific background graphic
+        <example>
+          &lt;canvas&gt;
+            &lt;include href="incubator/custombutton.lzx"/&gt;
+            &lt;custombutton iconname="target" text="Hit Me"/&gt;
+          &lt;/canvas&gt;
+        </example>
+
+        the icon should be a resource with a name ending in "_icon_rsc";
+        the iconname should be that resource name, without the "_icon_rsc"
+    -->
+   <class name="custombutton" extends="basebutton" focusable="true"
+          resourceviewcount="3" doesenter="true" styleable="true"
+          height="18" fontsize="10">
+           
+        <!-- text attributes -->
+        
+        <!--- text to display in the button (can leave empty) -->
+        <attribute name="text"      value="" type="html" />
+        <!--- use to fine-tune text y position -->
+        <attribute name="texty"     value="0"  />
+
+        <!-- icon attributes -->
+ 
+        <!--- icon resource name prefix -->
+        <attribute name="iconname"       value=""  type="string" />
+        <!--- fine-tune the vertical position of icon -->
+        <attribute name="icony"          value="null"/>
+        <!--- fine-tune the horizontal spacing of icon to text -->
+        <attribute name="iconspace"      value="2" />
+        <!--- controls whether the icon stretches (none|both) -->
+        <attribute name="iconstretches"  value="none" type="string" />
+        <!--- max width of button -->
+        <attribute name="expandedWidth"  value="$once{this.width}"/>
+        <!--- min width of button -->
+        <attribute name="collapsedWidth" value="30"/>
+                
+        <!--- background resources -->
+        <attribute name="leftrsc"        value="custombutton_small_left_rsc"  type="string" />
+        <attribute name="middlersc"      value="custombutton_small_middle_rsc"  type="string" />
+        <attribute name="rightrsc"       value="custombutton_small_right_rsc"  type="string" />
+
+        <!-- button background -->
+        <!-- have to use placeholder resources so that basebutton initializes correctly -->     
+        <view name="left"   resource="transparent_button_rsc" height="${parent.height}" x="0" stretches="height" visible="$once{classroot.leftrsc != ''}"/>
+        <view name="middle" resource="transparent_button_rsc" height="${parent.height}" x="${parent.left.width}" width="${parent.width-parent.left.width-parent.right.width}" stretches="both"/>
+        <view name="right"  resource="transparent_button_rsc" height="${parent.height}" x="${parent.width-width}" stretches="height" visible="$once{classroot.rightrsc != ''}"/>
+         
+        <view name="content" x="${Math.round((parent.width - width) / 2)}" height="${parent.height}">
+            <simplelayout name="contentlayout" axis="x" spacing="$once{classroot.iconspace}" />
+            <view name="icon" 
+                  x="0" 
+                  y="${classroot.icony != null ? classroot.icony: Math.round((classroot.height - height )/2) }"
+                  resource="$once{classroot.iconname ? classroot.iconname + '_icon_rsc' : ''}"
+                  visible="$once{classroot.iconname != ''}" opacity="${classroot.enabled?1:0.4}">
+                <method name="init" >
+                  <![CDATA[
+                    super.init();
+                    if (classroot.iconstretches != "none")
+                    {
+                        this.setAttribute("stretches", classroot.iconstretches);
+                        
+                        // scale the resource proportionally to the view height
+                        this.setAttribute('width', Math.round(this.resourcewidth*height*1.0/this.resourceheight) );
+                    }
+
+                    // FIXME: [gse 2006-02-06] for some reason play="false" causes a hard loop on startup
+                    // See http://www.openlaszlo.org/jira/browse/LPP-1577
+                    this.stop(0);
+                    ]]>
+                </method>
+            </view>
+            <text name="txt" resize="true"
+                  text="${classroot.text}" visible="${this.text != ''}"
+                  y="${classroot.texty}" height="${parent.height}" />
+        </view>
+
+
+        <!-- load resources -->
+        <!--- @keywords private -->
+        <method name="init" >
+            <![CDATA[
+            super.init();
+            
+            if ( leftrsc != "" )
+            {
+                // set resource.  also need to set tint again.
+                this.left.setAttribute('resource', leftrsc);
+                if (this.style != null && this.style.basecolor != null)
+                    this.setTint(this.left, this.style.basecolor);
+            }
+                
+            if ( middlersc != "" )
+            {
+                this.middle.setAttribute('resource', middlersc);
+                this.setTint(this.middle, this.style.basecolor);
+            }
+            
+            if ( rightrsc != "" )
+            {
+                this.right.setAttribute('resource', rightrsc);
+                this.setTint(this.right, this.style.basecolor);
+            }
+            ]]>
+        </method>
+
+        <method name="doEnterDown">
+            <![CDATA[
+            if ( this._enabled) {
+                this.doShowDown();
+            }
+            ]]>
+        </method>
+
+        <!-- pressing an enter key should act the same as a mouse click -->
+        <method name="doEnterUp">
+            <![CDATA[
+            if ( this._enabled) {
+                this.onclick.sendEvent();
+                this.doShowUp();
+            }
+            ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="doShowOver">
+            super.showOver();
+            if (this.content.txt.visible)
+                this.content.txt.setAttribute('fgcolor', this.enabled ? this.style.texthilitecolor : this.style.textdisabledcolor );
+       </method>
+        <!---  @keywords private -->
+        <method name="doShowUp">
+            super.showUp();
+            if (this.content.txt.visible)
+                this.content.txt.setAttribute('fgcolor', this.enabled ? this.style.textcolor : this.style.textdisabledcolor );
+        </method>
+        <!---  @keywords private -->
+        <method name="doShowDown">
+            super.showDown();
+            if (this.content.txt.visible)
+                this.content.txt.setAttribute('fgcolor', this.enabled ? this.style.textselectedcolor : this.style.textdisabledcolor );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+//                super._applystyle(s);
+                this.setTint(this.left, s.basecolor);
+                this.setTint(this.middle, s.basecolor);
+                this.setTint(this.right, s.basecolor);
+               
+                var tc = s.textcolor*1;
+                //Debug.write("Button style .. s.textcolor,tc",s.textcolor, tc);
+                //this.content.txt.setAttribute("fgcolor", this.enabled ? tc : s.textdisabledcolor);
+                if (s['font']) this.content.txt.setAttribute("font", s.font);
+                if (s['fontsize']) this.content.txt.setAttribute("fontsize", s.fontsize);
+            }
+        </method>
+
+        <method name="iconPlay">
+            this.content.icon.play();
+        </method>
+
+        <method name="iconStop">
+            this.content.icon.stop(0);
+        </method>
+
+    </class>
+    
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

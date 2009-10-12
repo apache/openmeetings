@@ -1,0 +1,172 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<!---
+      @topic Incubator
+      @subtopic Tooltip Manager
+  -->
+<library>
+  
+    <class name="tooltipManager" extends="view" x="-1000" y="-1000" width="0" height="0" visible="false" opacity="0" >
+
+        <attribute name="messages" type="string"/>
+        <attribute name="component_identifier" type="string" />
+        
+        <attribute name="tooltip_obj" />
+    
+        <!-- how long before the tooltip shows up? -->
+        <attribute name="delay"     value="1000"       type="number"   />
+
+    
+        <!--- @access private -->
+        <attribute name="onMouseOverDelegateArray" value="[]"/>
+        <!--- @access private -->
+        <attribute name="onMouseOutDelegateArray" value="[]"/>
+    
+        <!--- @access private -->
+        <attribute name="__timerDelegate"       value="[]"/>
+        <!--- @access private -->
+        <attribute name="__currentComponent"    value="[]"/>
+    
+        <!--- @access private -->
+        <attribute name="messageMap" value="[]" />
+    
+        <handler name="ondata"><![CDATA[    
+            var xpath = datapath.xpath+"/"+this.messages;   
+            var messages = datapath.xpathQuery(xpath);         
+            var dict = [];         
+            for(var i=0; i<messages.length; i++) {
+                var row = messages[i];
+                var name = row.attributes["key"];
+                var value = row.attributes["value"];
+                dict[name] = value;
+            }  
+            this.setAttribute("messageMap",dict);  
+           ]]> 
+        </handler>
+
+        <handler name="oninit">
+             var tooltip = this['tooltip_obj'];
+             if(tooltip == undefined || tooltip == null) {
+                tooltip = new lz.basetooltip(canvas);
+                this.setAttribute("tooltip_obj",tooltip);
+             }
+             tooltip.setAttribute("opacity",0);
+        </handler>
+
+        <method name="createChildren" args="carr">
+            canvas.createChildren(carr);
+        </method>
+     
+    
+        <method name="register" args="component">
+            <![CDATA[
+              { //register mouse over delegate
+                var over_delegate = new lz.Delegate(this,"doMouseover");
+                this.onMouseOverDelegateArray.push(over_delegate);
+                over_delegate.register(component,"onmouseover");
+              }
+              {    //register mouse out delegate
+                var out_delegate = new lz.Delegate(this,"doMouseout");
+                this.onMouseOutDelegateArray.push(out_delegate);
+                out_delegate.register(component,"onmouseout");
+              }
+              //Debug.write("Component registered",component);
+            ]]>
+        </method>
+    
+    
+    <method name="doMouseover" args="component">
+      var timerDelegate = new lz.Delegate( this, "showTooltip",component,"name");
+      this.setAttribute("__timerDelegate",timerDelegate);
+      this.setAttribute("__currentComponent",component);
+      lz.Timer.addTimer( timerDelegate, this.delay );
+    </method>
+    
+    <method name="doMouseout" args="component">
+      this.setAttribute("__currentComponent",[]);
+      var timerDelegate = this.__timerDelegate;
+      lz.Timer.removeTimer(timerDelegate);
+      this.setAttribute("__timerDelegate",[]);
+      this.destroyTooltip(component);
+    </method>
+    
+    <method name="showTooltip" args="ignore=null">
+      <![CDATA[
+      var component = this.__currentComponent;
+      var cid = this['component_identifier'];
+      if(typeof cid != 'undefined'){
+        var keyID = component[cid];
+        var msg = this.messageMap[keyID];
+      } else {
+        var keyID = null;
+        var msg = null;
+      }
+
+      
+      var tooltip = this.tooltip_obj;
+      
+      var override = component['tooltip'];
+      if(override == undefined || override == null) {
+        tooltip.setAttribute("text",msg);
+      } else {
+        tooltip.setAttribute("text",override);
+      }      
+      
+      
+      var tooltipWidth = tooltip.width;
+
+      var xPos = canvas.getMouse("x");
+      var xDelta = xPos - tooltipWidth/2;
+      
+      if(xDelta+tooltipWidth > canvas.width) {
+        // move the start position of the tooltip so it doesnt get truncated
+        var diff = xDelta + tooltipWidth - canvas.width;
+        xDelta -= diff;
+      }
+      
+       // does the tooltip start before the canvas starts?
+       if(xDelta < 0) xDelta = 0;
+      
+      tooltip.setAttribute("x",xDelta);
+      
+      var yPos = canvas.getMouse("y");
+      if(yPos > (canvas.height/2)) {
+        yPos -= 30; /* avoid the cursor above */
+      } else {
+        yPos += 25; /* avoid the cursor below */
+      }
+      
+
+      tooltip.setAttribute("y",yPos);
+      tooltip.animate("opacity",1,300);
+      
+    ]]>
+    </method>
+    
+    <method name="destroyTooltip" args="component">
+        var tooltip = this.tooltip_obj;
+        tooltip.setAttribute("opacity",0);
+    </method>
+    
+  </class>
+  
+  
+        <class name="basetooltip" bgcolor="white" width="${theText.width+2}" height="${theText.height+2}" pixellock="true">
+            <attribute name="text" type="html" value="Default Value"/>
+            
+            <view bgcolor="black" y="0" width="${parent.width}" height="1"/>
+            <view bgcolor="black" y="${parent.height-1}"    width="${parent.width}" height="1"/>
+            <view bgcolor="black" x="0"                        height="${parent.height}" width="1"/>
+            <view bgcolor="black" x="${parent.width-1}"        height="${parent.height}" width="1"/>
+            
+            <handler name="ontext">
+                theText.setAttribute("text",this.text);
+            </handler>
+            <text name="theText" resize="true" text="${parent.text}" x="1" y="1"/>
+        </class>
+
+  
+</library>

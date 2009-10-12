@@ -1,0 +1,95 @@
+<library>
+    <include href="utils/layouts/stableborderlayout.lzx" />
+
+    <class name="resizeview_x" >
+        <attribute name="left" type="string" />
+        <attribute name="middle" type="string" />
+        <attribute name="right" type="string" />
+        <attribute name="frame" />
+
+        <method name="init" >
+            this.leftview.setAttribute('resource', this.left);
+            this.middleview.setAttribute('resource', this.middle);
+            this.rightview.setAttribute('resource', this.right);
+
+            super.init();
+
+            // if this view has a height, then the child views should
+            // be constrained to that height, otherwise they will be sized
+            // to the height of their resource
+            if (this.hassetheight) {
+                var d = [ this, 'height' ];
+                this.applyConstraintMethod('adjheight', d );
+            }
+        </method>
+
+        <method name="adjheight" args="h" >
+            this.leftview.setAttribute('height', h);
+            this.middleview.setAttribute('height', h);
+            this.rightview.setAttribute('height', h);
+        </method>
+
+        <setter name="frame" args="fr" >
+            this.frame = fr;
+            this.onframe.sendEvent(fr);
+
+            this.leftview.setAttribute('frame', fr);
+            this.middleview.setAttribute('frame', fr);
+            this.rightview.setAttribute('frame', fr);
+        </setter>
+
+        <view name="leftview" stretches="height" />
+        <view name="middleview" stretches="both" />
+        <view name="rightview" stretches="height" />
+        <stableborderlayout name="sbl" axis="x" />
+    </class>
+
+    <class name="resizeview_y" >
+        <attribute name="top" type="string" />
+        <attribute name="middle" type="string" />
+        <attribute name="bottom" type="string" />
+        <attribute name="frame" />
+
+        <method name="init" >
+            this.topview.setAttribute('resource', this.top);
+            this.middleview.setAttribute('resource', this.middle);
+            this.bottomview.setAttribute('resource', this.bottom);
+
+            super.init();
+
+            // if this view has a width, then the child views should
+            // be constrained to that width, otherwise they will be sized
+            // to the width of their resource
+            if (this.hassetwidth) {
+                var d = [ this, 'width' ];
+                this.applyConstraintMethod('adjwidth', d );
+            }
+        </method>
+
+        <setter name="frame" args="fr" >
+            this.frame = fr;
+            this.onframe.sendEvent(fr);
+
+            this.topview.setAttribute('frame', fr);
+            this.middleview.setAttribute('frame', fr);
+            this.bottomview.setAttribute('frame', fr);
+        </setter>
+
+        <method name="adjwidth" args="w" >
+            this.topview.setAttribute('width', w);
+            this.middleview.setAttribute('width', w);
+            this.bottomview.setAttribute('width', w);
+        </method>
+
+        <view name="topview" stretches="width" />
+        <view name="middleview" stretches="both" />
+        <view name="bottomview" stretches="width" />
+        <stableborderlayout name="sbl" axis="y" />
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

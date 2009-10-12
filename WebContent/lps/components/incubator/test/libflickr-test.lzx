@@ -1,0 +1,60 @@
+<canvas title="OpenLaszlo Flickr Mini" oninit="gFlickr.getRecent(canvas.myapikey)" proxied="false">
+
+<!--
+When using this library, set api to your own flickr api key, from
+http://www.flickr.com/services/api/misc.api_keys.html 
+This app is currently using OpenLaszlo's api key --> 
+        
+<attribute name="myapikey" value="563a40afe6128e60145dd1e347911e54" type="string"/>
+
+<include href="incubator/libflickr.lzx" />
+
+<simplelayout spacing="10" />
+<view
+    x="10">
+    <simplelayout axis="x" spacing="10" />
+    <button onclick="gFlickr.getRecent(canvas.myapikey)">recent</button>
+    <button onclick="gFlickr.getInteresting(canvas.myapikey)">interesting</button>
+    <edittext name="tagQuery" text="special">
+        <handler name="onkeyup" args="kc">
+            if (kc == 13) gFlickr.searchWithTags(this.getValue(),canvas.myapikey);
+        </handler>
+    </edittext>
+</view> 
+
+<view 
+    x="10"
+    width="${parent.height-20}" >
+    <wrappinglayout axis="x" spacing="5" />
+    
+    <photo datapath="photods:/rsp/photos/photo[1-24]">
+        <handler name="onmouseover">
+            gFloater.animate("x", this.x + 10, 500);
+            gFloater.animate("y", this.y + parent.y + this.height - 10, 500); 
+            gFloater.titlelabel.setAttribute('text', "t: " + this.datapath.xpathQuery('@title')); 
+            gFloater.ownerlabel.setAttribute('text', "o: " + this.datapath.xpathQuery('@ownername'));             
+        </handler>
+    </photo>
+    
+</view>
+
+<view id="gFloater" width="160" bgcolor="#333333" 
+    options="ignorelayout"
+    x="1000"> <!-- start off offscreen -->
+    <simplelayout axis="y" spacing="1" />
+    <text name="titlelabel" fgcolor="white" width="150">title</text>
+    <text name="ownerlabel" fgcolor="white" width="150">owner</text>
+</view>    
+
+<text visible="${canvas.myapikey == 'PLEASE_INSERT_FLICKR_API_KEY'}"
+    width="${canvas.width-10}" multiline="true"
+    fontsize="20" bgcolor="white" fgcolor="red">This application requires a flickr api key. 
+    See canvas attribute 'myapikey' for details.
+</text>    
+</canvas>
+
+<!--
+* X_LZ_COPYRIGHT_BEGIN ****************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc.  All Rights Reserved.          *
+* Use is subject to license terms.                                        *
+* X_LZ_COPYRIGHT_END ******************************************************-->

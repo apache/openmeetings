@@ -1,0 +1,13 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->
+<canvas width="300" height="300" debug="true">
+  <include href="../gradientview.lzx" />
+  <gradientview x="20" y="20" width="200" height="200"
+    colorFrom="0xcccccc" colorTo="0x000000" borderSize="1" 
+    borderSizeRight="2" borderColorRight="0x9999ff"
+    gradientOrientation="diagonalright" gradientType="linear"/>
+</canvas>
+

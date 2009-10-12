@@ -1,0 +1,543 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <include href="utils/layouts/wrappinglayout.lzx"/>
+    <!-- CLASS INDEX:
+        <chartlegend/>
+        <legenditem/>
+        <legendtitle/>
+        -->
+
+    <!--- A legend for charts and graphs. It is imperative
+        that this is declared at the very end of a chart.
+        (Of beta quality.) Due to a couple bugs in drawview,
+        performance is spotty in DHTML. -->
+    <class name="chartlegend" extends="drawview">
+        <!--- The color of the border around the legend. -->
+        <attribute name="border" type="color" value="$once{null}"/>
+        <!--- The width of the border around the legend. -->
+        <attribute name="borderwidth" type="number" value="1"/>
+        <!--- The background color of the legend. -->
+        <attribute name="backcolor" type="color" value="$once{null}"/>
+        <!--- The highlight color of individual legend items. -->
+        <attribute name="hlcolor" type="color" value="$once{null}"/>
+        <!--- The legend title, if any. -->
+        <attribute name="ltitle" type="string" value="$once{null}"/>
+        <!--- Whether to resize the legend to the data.  If not, this will
+            use the specified width and height for the legend, and fit
+            legend items into this size to the best of its ability.  If so,
+            this will use a rough guess at legend item dimensions, and
+            resize the legend.  Accepted values: "tall", "wide", "$once{null}".
+            "tall" will make a taller legend, "wide" will make a wider legend,
+            "$once{null}" will not resize. -->
+        <attribute name="resizetodata" type="string" value="$once{null}"/>
+        <!--- Size of the text in legend items. -->
+        <attribute name="textsize" type="number" value="10"/>
+        <!--- Size of the legend title's text. -->
+        <attribute name="titletextsize" type="number" value="12"/>
+        <!--- The position of the title: left, right, center. -->
+        <attribute name="titleposition" type="string" value="left"/>
+        <!--- Color of the text in legend items. -->
+        <attribute name="textcolor" type="color" value="#000000"/>
+        <!--- Color of the legend title's text. -->
+        <attribute name="titlecolor" type="color" value="#000000"/>
+        <!--- The type of chart associated with this legend.
+            Currently, only needs to be specified if this
+            is used on a piechart. -->
+        <attribute name="charttype" type="string"
+            value="$once{typeof linechart != 'undefined' ?
+                (parent instanceof lz.linechart ? 'line' : null) : null}"/>
+        
+        <!--- Piechart-specific attributes.  Piechart legends
+            are generated dynamically, since it's possible there
+            are multiple pies.  These attributes are typically
+            assigned by values on dataseries, and the each
+            individual generated pie. -->
+        <!--- The position of the legend: left, right, top, bottom, manualleft,
+            manualright, manualtop, manualbottom.
+            If left or right, the legend will behave as though
+            resizetodata="tall" is in effect.  If top or bottom,
+            the legend will behave as though resizetodata="wide" is
+            in effect.  If manual, additional values must be set to
+            place and size legend, and the legend will fit the
+            legenditems within the legend to the best of its ability. -->
+        <attribute name="posit" type="string" value="right"/>
+        <!--- Pie pieces associated with this legend. -->
+        <attribute name="piepieces" value="$once{[]}"/>
+        <!--- Respective piece colors. -->
+        <attribute name="piececolors" value="$once{[]}"/>
+        <!--- Radius of the pie.  This helps determine placement. -->
+        <attribute name="pieradius" type="number" value="0"/>
+        <!--- Center x coordinate of the pie.  This helps determine
+            placement. -->
+        <attribute name="centerx" type="number" value="0"/>
+        <!--- Center x coordinate of the pie.  This helps determine
+            placement. -->
+        <attribute name="centery" type="number" value="0"/>
+        <!--- The values to use in the legend. -->
+        <attribute name="legendvalues" value="$once{[]}"/>
+        <!--- Number of items in the legend. (a.k.a. Number of pie pieces.) -->
+        <attribute name="itemnums" type="number" value="0"/>
+        <!--- If posit is 'manual', this sets the x coordinate of the legend. -->
+        <attribute name="legendx" type="number" value="0"/>
+        <!--- If posit is 'manual', this sets the y coordinate of the legend. -->
+        <attribute name="legendy" type="number" value="0"/>
+        <!--- If posit is 'manual', this sets the width of the legend. -->
+        <attribute name="legendwidth" type="number" value="0"/>
+        <!--- If posit is 'manual', this sets the height of the legend. -->
+        <attribute name="legendheight" type="number" value="0"/>
+        
+        <!-- Private attributes. -->
+        
+        <!--- @keywords private
+            Prevents the legend from being drawn multiple times. -->
+        <attribute name="legenddrawn" type="boolean" value="false"/>
+
+        <handler name="oncontext">
+            if(this.charttype == 'pie'){
+                this.buildPieLegend();
+            }
+        </handler>
+        
+        <method name="buildPieLegend">
+            <![CDATA[
+            if(this.posit == 'top'){
+                ctrx = this.width / 2;
+                ctry = this.height / 2 + (this.height * .1);
+            } else if(this.posit == 'bottom'){
+                ctrx = this.width / 2;
+                ctry = this.height / 2 - (this.height * .1);
+            } else if(this.posit == 'left'){
+                ctrx = this.width / 2 + (this.width * .1);
+                ctry = this.height / 2;
+            } else if(this.posit == 'right'){
+                ctrx = this.width / 2 - (this.width * .1);
+                ctry = this.height / 2;
+            } else if(this.posit == 'manualtop'){
+                
+            } else if(this.posit == 'manualbottom'){
+                
+            } else if(this.posit == 'manualleft'){
+                
+            } else if(this.posit == 'manualright'){
+                
+            }
+            var twidth;
+            var theight;
+            if(this.posit == 'top' || this.posit == 'bottom'){
+                var numrows = Math.floor(Math.sqrt(this.itemnums));
+                if(numrows > 1){
+                    numrows = numrows - 1;
+                }
+                var numcols = Math.ceil(this.itemnums / numrows);
+                var litemwidth = parent.expanded ? 80 : 30;
+                var litemheight = parent.expanded ? 14 : 8;
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:(parent.expanded ? this.titletextsize : 10), tcolor:this.titlecolor});
+                }
+                this.setAttribute('width', litemwidth * numcols);
+                this.setAttribute('height', litemheight * numrows + (this.ltitle != null ? this.legendtitle.height : 0));
+                this.setAttribute('x', (parent.width - this.width) / 2);
+                if(this.posit == 'bottom'){
+                    this.setAttribute('y', (this.centery + this.pieradius) +
+                        (parent.height - this.centery - this.pieradius - this.height) / 2);
+                } else {
+                    this.setAttribute('y', (this.centery - this.pieradius - this.height) / 2);
+                }
+            } else if(this.posit == 'left' || this.posit == 'right') {
+                var numcols = Math.floor(Math.sqrt(this.itemnums));
+                if(numcols > 1){
+                    numcols = numcols - 1;
+                }
+                var numrows = Math.ceil(this.itemnums / numcols);
+                var litemwidth = parent.expanded ? 80 : 30;
+                var litemheight = parent.expanded ? 14 : 8;
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:(parent.expanded ? this.titletextsize : 10), tcolor:this.titlecolor});
+                }
+                this.setAttribute('width', litemwidth * numcols);
+                this.setAttribute('height', litemheight * numrows + (this.ltitle != null ? this.legendtitle.height : 0));
+                if(this.posit == 'left'){
+                    this.setAttribute('x', (this.centerx - this.pieradius - this.width) / 2);
+                    this.setAttribute('y', (parent.height - this.height) / 2);
+                } else {
+                    this.setAttribute('x', (this.centerx + this.pieradius) +
+                        (parent.width - this.centerx - this.pieradius - this.width) / 2);
+                    this.setAttribute('y', (parent.height - this.height) / 2);
+                }
+            } else {
+                this.setAttribute('width', this.legendwidth);
+                this.setAttribute('height', this.legendheight);
+                this.setAttribute('x', this.legendx);
+                this.setAttribute('y', this.legendy);
+                if(this.width / 4 > this.height){
+                    var numrows = Math.floor(Math.sqrt(this.itemnums));
+                    if(numrows > 1){
+                        numrows = numrows - 1;
+                    }
+                    var numcols = Math.ceil(this.itemnums / numrows);
+                } else {
+                    var numcols = Math.floor(Math.sqrt(this.itemnums));
+                    if(numcols > 1){
+                        numcols = numcols - 1;
+                    }
+                    var numrows = Math.ceil(this.itemnums / numcols);
+                }
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:(parent.expanded ? this.titletextsize : 10), tcolor:this.titlecolor});
+                }
+                var litemwidth = (this.width / numcols);
+                var litemheight = (this.height / numrows);
+            }
+            
+            for(var i = 0; i < this.piepieces.length; i++){
+                var pclink = this.piepieces[i];
+                new lz.legenditem(this, {itemvalue:parent[pclink]['piecevalue'],
+                    lpiece:this.piepieces[i], width:litemwidth,
+                    hlcolor:(this.hlcolor == null ? this.backcolor : this.hlcolor),
+                    height:litemheight, iconcolor:this.piececolors[i],
+                    itemlabel:this.legendvalues[i], iconshape:'triangle'});
+            }
+            
+            this.fillStyle = this.backcolor;
+            this.strokeStyle = this.border;
+            this.lineWidth = this.borderwidth;
+            this.beginPath();
+            this.moveTo(-this.borderwidth,-this.borderwidth);
+            this.lineTo(this.width, -this.borderwidth);
+            this.lineTo(this.width, this.height);
+            this.lineTo(-this.borderwidth, this.height);
+            this.lineTo(-this.borderwidth,-this.borderwidth);
+            this.closePath();
+            if(this.backcolor != null){
+                this.fill();
+            }
+            if(this.border != null && this.borderwidth != 0){
+                this.stroke();
+            }
+            ]]>
+        </method>
+        <method name="buildLegend">
+            <![CDATA[
+            var dloc = parent.findData();
+            var dnum = parent.subnodes[dloc].subviews.length;
+            var iconcolor = null;
+            var itemlabel = null;
+            var itemcount = 0;
+            
+            // Calculate the legend item size.
+            for(var i = 0; i < dnum; i++){
+                var ll = parent.subnodes[dloc].subviews[i];
+                if(ll.legenddata != null &&
+                    typeof ll.legenddata != 'undefined'){
+                    itemcount++;
+                }
+            }
+
+            if(this.resizetodata == null){
+                if(this.width / 4 > this.height){
+                    var numrows = Math.floor(Math.sqrt(itemcount));
+                    if(numrows > 1){
+                        numrows = numrows - 1;
+                    }
+                    var numcols = Math.ceil(itemcount / numrows);
+                } else {
+                    var numcols = Math.floor(Math.sqrt(itemcount));
+                    if(numcols > 1){
+                        numcols = numcols - 1;
+                    }
+                    var numrows = Math.ceil(itemcount / numcols);
+                }
+                if(this.ltitle != null){
+                    numrows = numrows + 1;
+                }
+                var litemwidth = (this.width / numcols);
+                var litemheight = (this.height / numrows);
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:this.titletextsize, tcolor:this.titlecolor});
+                }
+
+                // Create legend items.
+                for(var i = 0; i < dnum; i++){
+                    var ll = parent.subnodes[dloc].subviews[i];
+                    if(this.charttype == 'line'){
+                        if(ll.lvdata != null &&
+                            typeof ll.lvdata[0] != 'undefined'){
+                            iconcolor = ll.lvdata[0];   
+                        } else {
+                            iconcolor = ll.linesvisible;
+                        }
+                    } else if(ll.colordata != null &&
+                        typeof ll.colordata[0] != 'undefined'){
+                        iconcolor = ll.colordata[0];
+                    } else {
+                        iconcolor = ll.datacolor;
+                    }
+                    if(iconcolor.indexOf('x') != -1){
+                        iconcolor = '#' + iconcolor.substring(iconcolor.indexOf('x')+1);
+                    }
+                    if(ll.legenddata != null &&
+                        typeof ll.legenddata != 'undefined'){
+                        itemlabel = ll.legenddata;
+                    } else {
+                        //itemlabel = ll.legenddatapath;
+                    }
+                    if(itemlabel != null){
+                        new lz.legenditem(this, {itemvalue:itemlabel,
+                            width:litemwidth, height:litemheight, dlink:ll,
+                            hlcolor:(this.hlcolor == null ? this.backcolor : this.hlcolor),
+                            height:this.height, iconcolor:iconcolor, textcolor:this.textcolor,
+                            textsize:this.textsize, itemlabel:itemlabel, iconshape:'square'});
+                    }
+                }
+            } else if(this.resizetodata == 'wide'){
+                var numrows = Math.floor(Math.sqrt(itemcount));
+                if(numrows > 1){
+                    numrows = numrows - 1;
+                }
+                var numcols = Math.ceil(itemcount / numrows);
+                var litemwidth = 80;
+                var litemheight = 14;
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:this.titletextsize, tcolor:this.titlecolor});
+                }
+                this.setAttribute('width', litemwidth * numcols);
+                this.setAttribute('height', litemheight * numrows + (this.ltitle != null ? this.legendtitle.height : 0));
+
+                // Create legend items.
+                for(var i = 0; i < dnum; i++){
+                    var ll = parent.subnodes[dloc].subviews[i];
+                    if(this.charttype == 'line'){
+                        if(ll.lvdata != null &&
+                            typeof ll.lvdata[0] != 'undefined'){
+                            iconcolor = ll.lvdata[0];   
+                        } else {
+                            iconcolor = ll.linesvisible;
+                        }
+                    } else if(ll.colordata != null &&
+                        typeof ll.colordata[0] != 'undefined'){
+                        iconcolor = ll.colordata[0];
+                    } else {
+                        iconcolor = ll.datacolor;
+                    }
+                    if(iconcolor.indexOf('x') != -1){
+                        iconcolor = '#' + iconcolor.substring(iconcolor.indexOf('x')+1);
+                    }
+                    if(ll.legenddata != null &&
+                        typeof ll.legenddata != 'undefined'){
+                        itemlabel = ll.legenddata;
+                    } else {
+                        //itemlabel = ll.legenddatapath;
+                    }
+                    if(itemlabel != null){
+                        new lz.legenditem(this, {itemvalue:itemlabel,
+                            width:litemwidth, height:litemheight, dlink:ll,
+                            hlcolor:(this.hlcolor == null ? this.backcolor : this.hlcolor),
+                            height:this.height, iconcolor:iconcolor, textcolor:this.textcolor,
+                            textsize:this.textsize, itemlabel:itemlabel, iconshape:'square'});
+                    }
+                }
+            } else if(this.resizetodata == 'tall'){
+                var numcols = Math.floor(Math.sqrt(itemcount));
+                if(numcols > 1){
+                    numcols = numcols - 1;
+                }
+                var numrows = Math.ceil(itemcount / numcols);
+                var litemwidth = 80;
+                var litemheight = 14;
+                if(this.ltitle != null){
+                    new lz.legendtitle(this, {name:'legendtitle', ltitle:this.ltitle, tposit:this.titleposition,
+                        ttsize:this.titletextsize, tcolor:this.titlecolor});
+                }
+                this.setAttribute('width', litemwidth * numcols);
+                this.setAttribute('height', litemheight * numrows + (this.ltitle != null ? this.legendtitle.height : 0));
+
+                // Create legend items.
+                for(var i = 0; i < dnum; i++){
+                    var ll = parent.subnodes[dloc].subviews[i];
+                    if(this.charttype == 'line'){
+                        if(ll.lvdata != null &&
+                            typeof ll.lvdata[0] != 'undefined'){
+                            iconcolor = ll.lvdata[0];   
+                        } else {
+                            iconcolor = ll.linesvisible;
+                        }
+                    } else if(ll.colordata != null &&
+                        typeof ll.colordata[0] != 'undefined'){
+                        iconcolor = ll.colordata[0];
+                    } else {
+                        iconcolor = ll.datacolor;
+                    }
+                    if(iconcolor.indexOf('x') != -1){
+                        iconcolor = '#' + iconcolor.substring(iconcolor.indexOf('x')+1);
+                    }
+                    if(ll.legenddata != null &&
+                        typeof ll.legenddata != 'undefined'){
+                        itemlabel = ll.legenddata;
+                    } else {
+                        //itemlabel = ll.legenddatapath;
+                    }
+                    if(itemlabel != null){
+                        new lz.legenditem(this, {itemvalue:itemlabel,
+                            width:litemwidth, height:litemheight, dlink:ll,
+                            hlcolor:(this.hlcolor == null ? this.backcolor : this.hlcolor),
+                            height:this.height, iconcolor:iconcolor, textcolor:this.textcolor,
+                            textsize:this.textsize, itemlabel:itemlabel, iconshape:'square'});
+                    }
+                }
+            }
+            this.fillStyle = this.backcolor;
+            this.strokeStyle = this.border;
+            this.lineWidth = this.borderwidth;
+            this.beginPath();
+            this.moveTo(-this.borderwidth,-this.borderwidth);
+            this.lineTo(this.width, -this.borderwidth);
+            this.lineTo(this.width, this.height);
+            this.lineTo(-this.borderwidth, this.height);
+            this.lineTo(-this.borderwidth,-this.borderwidth);
+            this.closePath();
+            if(this.backcolor != null){
+                this.fill();
+            }
+            if(this.border != null && this.borderwidth != 0){
+                this.stroke();
+            }
+            this.setAttribute('legenddrawn', true);
+            ]]>
+        </method>
+        <method name="updateLegend">
+            var dloc = parent.findData();
+            var snum = parent.subnodes[dloc].subviews.length;
+        </method>
+
+        <wrappinglayout spacing="0"/>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+    
+    <class name="legenditem" extends="view">
+        <!--- The value for this item in the legend. -->
+        <attribute name="itemvalue" type="string" value="$once{null}"/>
+        <!--- The color for the icon. -->
+        <attribute name="iconcolor" type="color" value="$once{null}"/>
+        <!--- The color of the label text for this item in the legend. -->
+        <attribute name="textcolor" type="color" value="$once{null}"/>
+        <!--- The font size of the label text for this item in the legend. -->
+        <attribute name="textsize" type="number" value="$once{null}"/>
+        <!--- The shape of the icon drawn. -->
+        <attribute name="iconshape" type="string" value="$once{null}"/>
+        <!--- The highlight color to be used when this item has been
+            moused over. -->
+        <attribute name="hlcolor" type="color" value="$once{null}"/>
+        <!--- The text label for this item. -->
+        <attribute name="itemlabel" type="string" value="$once{null}"/>
+        <!--- @keywords private
+            The dataseries to which this piece is linked. -->
+        <attribute name="dlink" value="$once{null}"/>
+        <!--- @keywords private
+            The pie piece to which this piece is linked, if this is
+            an element in a legend on a piechart. -->
+        <attribute name="lpiece" value="$once{null}"/>
+        <handler name="oninit">
+            if(this.itemlabel != null){
+                this.ltext.setAttribute('text', itemlabel);
+            } else {
+                this.ltext.setAttribute('text', itemvalue);
+            }
+        </handler>
+        <handler name="onmouseover">
+            this.setAttribute('bgcolor', this.hlcolor);
+            if(parent.charttype == 'pie'){
+                parent.parent[this.lpiece].setAttribute('exploded', true);
+            }
+        </handler>
+        <handler name="onmouseout">
+            this.setAttribute('bgcolor', parent.backcolor);
+            if(parent.charttype == 'pie'){
+                parent.parent[this.lpiece].setAttribute('exploded', false);
+            }
+        </handler>
+        <handler name="onclick">
+            if(parent.charttype != "pie"){
+                this.dlink.setAttribute('dataenabled', !this.dlink.dataenabled);
+            }
+            if(parent.charttype == "line"){
+                parent.parent.ondata.sendEvent();
+            }
+        </handler>
+        <drawview name="licon">
+            <handler name="oncontext">
+                this.fillStyle = parent.iconcolor;
+                this.beginPath();
+                if(parent.iconshape == 'triangle'){
+                    this.moveTo(2, 2);
+                    this.lineTo(parent.height - 2, parent.height - 2);
+                    this.lineTo(2, parent.height - 2);
+                    this.lineTo(2, 2);
+                }
+                if(parent.iconshape == 'square'){
+                    this.moveTo(2, 2);
+                    this.lineTo(parent.height - 2, 2);
+                    this.lineTo(parent.height - 2, parent.height - 2);
+                    this.lineTo(2, parent.height - 2);
+                    this.lineTo(2, 2);
+                }
+                this.closePath();
+                this.fill();
+                this.stroke();
+            </handler>
+        </drawview>
+        <text name="ltext" x="${parent.height + 2}" fgcolor="${parent.textcolor}"
+            fontsize="${parent.textsize != null ? parent.textsize :
+                (parent.height &lt; 10 ? 7 : 10)}"/>
+                
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+
+    <!--- The title for the legend.  This is its own small class because it
+        makes constraints easier for adjustments. -->
+    <class name="legendtitle" width="${parent.width}"
+        height="${typeof this.tt != 'undefined' ? this.tt.height + 4 : 16}">
+        <!--- The title text for the legend. -->
+        <attribute name="ltitle" type="string" value="$once{null}"/>
+        <!--- The title text's font size. -->
+        <attribute name="ttsize" type="string" value="10"/>
+        <!--- The title text's color. -->
+        <attribute name="tcolor" type="color" value="$once{null}"/>
+        <!--- The title text's alignment.  (left, right, center) -->
+        <attribute name="tposit" type="string" value="left"/>
+        <text name="tt" fontstyle="bold" text="${parent.ltitle}"
+            fontsize="${parent.ttsize}" fgcolor="${parent.tcolor}"
+            x="${parent.tposit == 'left' ? 0 : (parent.tposit == 'right' ?
+                (parent.width - this.width - 4) : (parent.width - this.width) / 2)}"/>
+                
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

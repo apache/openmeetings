@@ -1,0 +1,144 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../common/label.lzx"/>
+    <include href="extensions/drawview.lzx"/>
+        
+    <!---
+       Represents a line in the chart
+       @access public
+       -->
+    <class name="valueline" extends="drawview">       
+        <doc>
+          <text>
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+        <!--- the value will be draw -->
+        <attribute name="data" type="string" value=""/>
+        <!--- the label will be display next to the line -->
+        <attribute name="label" type="string" value=""/>
+        <!--- the axis value could be "x" or "y" -->
+        <attribute name="axis" type="string"/>
+        <!--- the tooltip value will be display when the mouse over the line -->
+        <attribute name="tip" type="string" value=""/>
+        <!--- enable tooltip for data -->
+        <attribute name="tipEnable" type="boolean" value="null"/>
+        
+        <!--- Method for extensible label rendering
+        @param string pLabel: a label text
+        -->
+        <method name="processData" args="pLabel">
+            return pLabel;
+        </method>
+        
+        <!--- @keyword private -->
+        <label name="txt"/>
+        
+        <!--- shows the data tooltip and applied style
+            @keyword private-->
+        <method name="showtooltip">
+            <![CDATA[
+                var ldata;
+                if ( this.tip == '' ){
+                    ldata = (this.label!=''?this.label+' : ':'') + this.data;
+                } else{
+                    ldata = this.tip;
+                }
+                parent.datatooltip.style = parent.style.valuelinestyle.tip;
+                parent.datatooltip.show(ldata);                  
+             ]]> 
+        </method>       
+        
+        <!--- hides the data tooltip
+            @keyword private-->
+        <method name="hidetooltip">
+            parent.datatooltip.hide();               
+        </method>
+        <view name="hitarea" x="-2" y="-2" width="${parent.width + 5}" height="${parent.height + 5}" pixellock="true">
+            <handler name="onmouseover">
+                parent.showtooltip();
+            </handler>
+            <handler name="onmouseout">
+                parent.hidetooltip();
+            </handler>
+        </view>
+        
+        <!--- render the line
+            @keyword private-->
+        <method name="render">
+            clear();
+            renderValueLine();
+        </method>
+        
+        <!--- @keyword private-->
+        <method name="renderValueLine">
+        <![CDATA[  
+            this.txt.setAttribute('visible',false);
+        
+            if ( this.axis == 'x' ){
+                if((parent.plotarea.minx <= this.data) && (this.data <= parent.plotarea.maxx)){ 
+
+                    var devicex = parent.haxis.getPixelDistance(this.data);                   
+                    this.setAttribute('height', parent.plotarea.height);
+                    this.setAttribute('width', parent.style.valuelinestyle.line.size);
+                    
+                    this.lineWidth = parent.style.valuelinestyle.line.size;
+                    this.strokeStyle = parent.style.valuelinestyle.line.color;
+                    
+                    this.setAttribute('x', parent.plotarea.x + devicex);
+                    this.setAttribute('y', parent.plotarea.y);
+                    
+                    this.beginPath();
+                    this.moveTo(0, 0);
+                    this.lineTo(0,this.height);                
+                    this.stroke();
+                    
+                } 
+            } else  if ( this.axis == 'y' ){
+                if((parent.plotarea.miny <= this.data) && (this.data <= parent.plotarea.maxy)){
+
+                    var devicey = parent.vaxis.getPixelDistance(this.data);                   
+                    this.setAttribute('width', parent.plotarea.width);
+                    this.setAttribute('height', parent.style.valuelinestyle.line.size);
+                    this.lineWidth = parent.style.valuelinestyle.line.size;
+                    this.strokeStyle = parent.style.valuelinestyle.line.color;
+                    
+                    this.setAttribute('x', parent.plotarea.x);
+                    this.setAttribute('y', parent.plotarea.y + parent.plotarea.height - devicey);
+                    
+                    this.beginPath();
+                    this.moveTo(0, 0);
+                    this.lineTo(this.width,0);                
+                    this.stroke();
+                                        
+                }         
+            }
+                
+            //adjust text style 
+            if ( this.label!=null && this.label.length > 0 ) {
+                this.txt.style = parent.style.valuelinestyle.label;
+                this.txt.render(processData(this.label));
+                this.txt.setAttribute('visible',true);
+            }
+        ]]>
+        </method>
+        <!--- clears the area
+            @keyword private-->
+        <method name="clear"> 
+            super.clear();
+        </method>
+    </class>
+    
+</library>    
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

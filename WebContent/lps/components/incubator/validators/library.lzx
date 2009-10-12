@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************
+* [[validators/library]]
+* 2005/12/18 ver.2.0.1 -fix valitagingform bug.
+* 2005/12/21 ver.2.0.0 -add icon and dynamic validation.
+* 2005/12/06 ver.1.0.1 -add trim attributes to stringvalidator, numbervalidator, datebaridator, emailvalidator [togawa manabu]
+*                      -add subnodes validating to validatingForm.lzx.
+
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp 
+********************************************************
+-->
+<library>
+    <include href="validatingForm.lzx"/>
+    
+    <!-- validators -->
+    <include href="stringvalidator.lzx"/>
+    <include href="emailvalidator.lzx"/>
+    <include href="datevalidator.lzx"/>
+    <include href="numbervalidator.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

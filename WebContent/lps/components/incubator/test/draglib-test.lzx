@@ -1,0 +1,75 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+
+<canvas>
+<debug y="200"/>
+<include href="../draglib.lzx"/>
+
+<basedragimage name="dragimage" width="10" height="10" options="ignorelayout"
+    bgcolor="silver" dropgroup="target"/>
+
+<class name="droptarget">
+        <attribute name="text" type="text"/>
+        <text text="${parent.text}"/>
+       <method name="init">
+            super.init();
+            lz.Track.register(this, 'target');
+       </method>
+
+       <handler name="onmousetrackover">
+           setAttribute('bgcolor', 0xffff00); // hilite
+       </handler>
+       <handler name="onmousetrackout">
+           setAttribute('bgcolor', null); // normal
+       </handler>
+       <handler name="onmousetrackup">
+           setAttribute('bgcolor', null); // normal
+           canvas.dragimage.dropcomplete(this);
+           Debug.write('dropped: '+dragimage.source.text);
+       </handler>
+</class>
+
+<class name="dragger" >
+    <attribute name="text" type="text"/>
+    <view width="10" height="10" bgcolor="green"/>
+    <text x="15" text="${parent.text}" resize="true"/>
+    <handler name="onmousedown">
+        checkdrag.setAttribute('applied', true);
+    </handler>
+    <handler name="onmouseup">
+        canvas.dragimage.stopdrag(this);
+        checkdrag.setAttribute('applied', false);
+    </handler>
+
+    <checkdragstate name="checkdrag" draggername="dragimage"/>
+</class>
+
+ <simplelayout axis="y" spacing="10"/>
+    <view name="helptext" x="10" y="10"  bgcolor="0xeaeaea" width="300">
+        <text y="10" multiline="true" width="290" align="center">
+           This test file displays dragging properties. <br/><br/> Notice how the labels hilite when drug upon, and how the icons snap back when they are not placed on a label. 
+           
+        </text>
+    </view> 
+
+<view>
+<simplelayout axis="x"  inset="20" spacing="20"/>
+<view layout="spacing:4">
+    <droptarget id="t1">Work</droptarget>
+    <droptarget>Personal</droptarget>
+    <droptarget>Salamanders</droptarget>
+    <droptarget>Bionicles</droptarget>
+</view>
+
+<view layout="spacing:10">
+   <dragger id="d1">Welcome!</dragger>
+   <dragger>This is a test</dragger>
+   <dragger>What's new?</dragger>
+   <dragger>This is a long message</dragger>
+</view>
+</view>
+
+</canvas>

@@ -1,0 +1,211 @@
+<library>
+    <include href="utils/layouts/wrappinglayout.lzx"/>
+    <include href="shared/label.lzx"/>
+    <include href="shared/dataseries.lzx"/>
+    <include href="shared/legend.lzx"/>
+    <include href="shared/wholepie.lzx"/>
+    
+    <!--- Renders data in the form of a pie, with individual slices
+        representing a certain proportional quantity.
+        (Of beta quality.) -->
+    <class name="piechart">
+        <!--- Width of plotting area. -->
+        <attribute name="plotwidth" type="number"
+            value="${this.width - 1}"/>
+        <!--- Height of plotting area. -->
+        <attribute name="plotheight" type="number"
+            value="${this.height - 1}"/>
+        <!--- Plot area x coordinate, relative to chart as a whole. -->
+        <attribute name="plotx" type="number" value="0"/>
+        <!--- Plot area y coordinate, relative to chart as a whole. -->
+        <attribute name="ploty" type="number" value="0"/>
+        <!--- Border around the plot area, if anything. -->
+        <attribute name="border" type="color" value="$once{null}"/>
+        <!--- Width of the plot area's border. -->
+        <attribute name="borderwidth" type="number" value="1"/>
+        <!--- Background color of the plot area. -->
+        <attribute name="plotbgcolor" type="color" value="$once{null}"/>
+        <!--- The space between the pies, if there are multiple pies. -->
+        <attribute name="piespacing" type="number" value="1"/>
+        <!--- If desired, a resource can be used in the background.
+            If specified, this view will appear behind the chart,
+            with everything drawn on top of it. -->
+        <attribute name="bgresource" type="string" value=""/>
+
+        <!--- Private attributes. -->
+        
+        <!--- @keywords private
+            Number of dataseries instances. -->
+        <attribute name="seriesnumber" type="number" value="0"/>
+
+        <handler name="ondata">
+            this.removePies();
+            this.buildPie();
+        </handler>
+
+        <!--- Creates the pie or pies. -->
+        <method name="buildPie">
+            <![CDATA[
+            var snum = this.seriesnumber; // Number of dataseries.
+            var dnode = this.findData(); // Location of chartdata.
+            for(var j = 0; j < snum; j++){
+                subnodes[dnode].subviews[j].ondata.sendEvent();
+                if(subnodes[dnode].subviews[j].xdata != null){
+                    subnodes[dnode].subviews[j].ondata.sendEvent();
+                    var xlength = subnodes[dnode].subviews[j].xdata.length;
+                    var pievalue = Number(0);
+                    for(var i = 0; i < xlength; i++){
+                        if(subnodes[dnode].subviews[j].xdata[i] != null){
+                            pievalue = pievalue + Number(subnodes[dnode].subviews[j].xdata[i]);
+                        }
+                    }
+                    if(snum > 1){
+                        var numrows = Math.floor(Math.sqrt(snum));
+                        var numcols = Math.ceil(snum / numrows);
+                        var piespacewidth = (this.plotwidth / numcols) - (this.piespacing);
+                        var piespaceheight = (this.plotheight / numrows) - (this.piespacing);
+                    } else {
+                        var piespacewidth = this.plotwidth;
+                        var piespaceheight = this.plotheight;
+                    }
+                    var bcolor;
+                    if(subnodes[dnode].subnodes[j].colordata != null){
+                        bcolor = subnodes[dnode].subviews[j].colordata;
+                    } else {
+                        bcolor = subnodes[dnode].subviews[j].datacolor;
+                    }
+                    var bordercolor;
+                    if(subnodes[dnode].subnodes[j].borderdata != null &&
+                        typeof subnodes[dnode].subnodes[j].borderdata[0] != 'undefined'){
+                        bordercolor = subnodes[dnode].subviews[j].borderdata;
+                    } else {
+                        bordercolor = subnodes[dnode].subviews[j].bordercolor;
+                    }
+                    var borderw;
+                    if(subnodes[dnode].subnodes[j].borderwidthdata != null &&
+                        typeof subnodes[dnode].subnodes[j].borderwidthdata[0] != 'undefined'){
+                        borderw = subnodes[dnode].subviews[j].borderwidthdata;
+                    } else {
+                        borderw = subnodes[dnode].subviews[j].borderwidth;
+                    }
+                    var popac;
+                    if(subnodes[dnode].subnodes[j].opacdata != null &&
+                        typeof subnodes[dnode].subnodes[j].opacdata[0] != 'undefined'){
+                        popac = subnodes[dnode].subviews[j].opacdata;
+                    } else {
+                        popac = subnodes[dnode].subviews[j].dataopacity;
+                    }
+                    new lz.wrappinglayout(this.datapane, {spacing:this.piespacing});
+                    new lz.wholepie(this.datapane, {name:'pie'+j, width:piespacewidth, height:piespaceheight,
+                        pienumber:j, allpies:snum, pievalue:pievalue,
+                        piecevalues:subnodes[dnode].subviews[j].xdata,
+                        colorvalues:bcolor, borderwidths:borderw, opacvalues:popac,
+                        bordercolors:bordercolor, explode:subnodes[dnode].subviews[j].explode,
+                        bgcolor:subnodes[dnode].subviews[j].piebgcolor,
+                        drawbg:subnodes[dnode].subviews[j].drawbg,
+                        drawbgborder:subnodes[dnode].subviews[j].drawbgborder,
+                        bgborderwidth:subnodes[dnode].subviews[j].bgborderwidth,
+                        legend:subnodes[dnode].subviews[j].legend,
+                        legendx:subnodes[dnode].subviews[j].legendx,
+                        legendy:subnodes[dnode].subviews[j].legendy,
+                        legendwidth:subnodes[dnode].subviews[j].legendwidth,
+                        legendheight:subnodes[dnode].subviews[j].legendheight,
+                        lborder:subnodes[dnode].subviews[j].legendborder,
+                        lborderwidth:subnodes[dnode].subviews[j].legendborderwidth,
+                        lbgcolor:subnodes[dnode].subviews[j].legendbg,
+                        lhlcolor:subnodes[dnode].subviews[j].legendhl,
+                        ltitle:subnodes[dnode].subviews[j].legendtitle,
+                        legendvalues:subnodes[dnode].subviews[j].legenddata,
+                        showlegendminimized:subnodes[dnode].subviews[j].showlegendminimized,
+                        legendtitleposition:subnodes[dnode].subviews[j].legendtitleposition,
+                        radiusvalues:subnodes[dnode].subviews[j].raddata,
+                        labelvalues:subnodes[dnode].subviews[j].labeldata,
+                        labelcolors:subnodes[dnode].subviews[j].labelcolor,
+                        labelborders:subnodes[dnode].subviews[j].labelborder,
+                        labelbwidth:subnodes[dnode].subviews[j].labelborderwidth,
+                        labeltsize:subnodes[dnode].subviews[j].labeltextsize,
+                        labeltcolor:subnodes[dnode].subviews[j].labeltextcolor});
+                }
+            }
+            ]]>
+        </method>
+        
+        <!--- Breaks down all pies. -->
+        <method name="removePies">
+            <![CDATA[
+            while(this.datapane.subviews.length > 0){
+                var piecesleft = this.datapane.subviews.length;
+                for(var i = 0; i <= piecesleft; i++){
+                    if(typeof this.datapane.subviews[i] != 'undefined'){
+                        this.datapane.subviews[i].destroy();
+                    }
+                }
+            }
+            ]]>
+        </method>
+        
+        <!--- Locates a subnode of type "chartdata", wherein all the data
+            for the chart can be found. -->
+        <method name="findData">
+            <![CDATA[
+            for(var i = 0; i <= this.subnodes.length; i++){
+                if(subnodes[i] instanceof lz.chartdata){
+                    return i;
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- The background image for the chart, if there is one. -->
+        <view name="viewbg" x="${parent.datapane.x}" y="${parent.datapane.y}"
+            width="${parent.datapane.width}" height="${parent.datapane.height}"
+            stretches="both">
+            <handler name="oninit">
+                if(parent.bgresource){
+                    this.setSource(parent.bgresource);
+                }
+            </handler>
+        </view>
+        <!--- The plot area, containing all the rendered data. -->
+        <view name="datapane" x="${parent.plotx}" y="${parent.ploty}"
+            width="${parent.plotwidth}" height="${parent.plotheight}"
+            clip="true" bgcolor="${parent.plotbgcolor}">
+            <!--- Which pie is selected, if there are multiple pies. -->
+            <attribute name="selectedpie" value="$once{null}"/>
+        </view>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    The piechart class draws data in slices using the
+                        information in the child dataseries object(s).
+                </text>
+            </tag>
+            <text>
+                <p>This is an example of a simple piechart with minimal customization.  By
+                specifying additional attributes, one can exercise much greater control over
+                the visual appearance of the chart.  (See: /test/charting/ for more detailed
+                examples.)</p>
+
+                <example title="Simple piechart">
+                    &lt;canvas width="800" height="600"&gt;
+                        &lt;dataset name="dset" request="true" src="resources/piechart_data_01.xml"/&gt;
+
+                        &lt;piechart name="testchart" width="600" height="400" datapath="dset:/"&gt;
+                            &lt;chartdata&gt;
+                                &lt;dataseries xdatapath="data/show/@hours" datacolor="data/show/@color"
+                                    explode="true" label="data/show/@title"/&gt;
+                            &lt;/chartdata&gt;
+                        &lt;/piechart&gt;
+                    &lt;/canvas&gt;
+                </example>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

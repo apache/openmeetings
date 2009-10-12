@@ -1,0 +1,269 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <!---
+        Represents a region of values in the chart
+        @access public
+        -->
+    <class name="valueregion" extends="drawview">
+        <!--- enable the rendering of the value region in the chart -->
+        <attribute name="regionEnabled" value="true"/>
+        <!--- Minimum value for the Value region-->
+        <attribute name="data1" type="string" value=""/>
+        <!--- Maximum value for the Value region-->
+        <attribute name="data2" type="string" value=""/>
+        <!--- label of the value region, it is shown next to the region -->
+        <attribute name="label" type="string" value=""/>
+        <!--- the associated axis to the Region can be"x" or "y" -->
+        <attribute name="axis" type="string"/>
+        <!--- Tip label that appear when the mouse is over the value region-->
+        <attribute name="tip" type="string" value=""/>
+        <!--- enable the value region's tooltip -->
+        <attribute name="tipEnabled" type="boolean" value="true"/>
+
+        <!--- @keyword private -->
+        <strokestyle name="objStroke"/>
+        <!-- strokestyle name="objStroke" x="${parent.x}" y="${parent.y}"/-->
+        <valueregionstyle name="style" />
+
+        <!--- @keyword private -->
+        <text name="txt" text="${parent.label}" resize="true" 
+              x="${(parent.width - this.width) / 2}" 
+              y="${parent.height / 8}" />
+
+        <!--- shows the data tooltip and applied style
+            @keyword private-->
+        <method name="showtooltip">
+            <![CDATA[
+                var ldata;
+
+                if ( this.tip == '' ){
+                    ldata = (this.label!=''? this.label+': ':'') + 
+                                        this.data1 + ',' + this.data2;
+                } else {
+                    ldata = this.tip;
+                }
+
+                parent.datatooltip.style = this.style.tip;
+                parent.datatooltip.show(ldata);
+             ]]>
+        </method>       
+
+        <!--- hides the data tooltip
+            @keyword private-->
+        <method name="hidetooltip">
+            parent.datatooltip.hide();               
+        </method>
+
+        <view name="hitarea" width="${parent.width}" height="${parent.height}" pixellock="true" visible="${parent.tipEnabled}">
+            <handler name="onmouseover">
+                parent.showtooltip();
+            </handler>
+            <handler name="onmouseout">
+                parent.hidetooltip();
+            </handler>
+        </view>
+        
+        <!--- @keywords private -->
+        <method name="searchStrokeStyle"> 
+            <![CDATA[
+               var lStrokeObj = null;
+               for (var i=0; i < parent.subnodes.length; i++) {
+                    if (parent.subnodes[i].name == this.style) {
+                        lStrokeObj =  parent.subnodes[i];
+                    }
+               }
+               //Checks if any Stroke style is defined.
+               if (lStrokeObj != null) {
+                   this.objStroke.setAttribute('strokeColor', lStrokeObj.strokeColor);
+                   this.objStroke.setAttribute('strokeType', lStrokeObj.strokeType);
+                   this.objStroke.setAttribute('strokeWidth', lStrokeObj.strokeWidth);
+               }
+             ]]> 
+        </method>
+
+        <!--- sets the style
+            @keyword private-->
+        <method name="setStyleAttributes"> 
+            <![CDATA[
+               //Checks if any style is defined.
+               if (this.style != null) {
+                   // adjust line style attributs
+                   this.objStroke.setAttribute('strokeColor', this.style.line.color);
+                   this.objStroke.setAttribute('strokeType', this.style.line.type);
+                   this.objStroke.setAttribute('strokeWidth', this.style.line.size);
+                   this.objStroke.setAttribute('opacity', this.style.line.opacity);
+
+                   // adjust label style attributes
+                   //this.txt.setAttribute('font', this.style.label.fontname);
+                   this.txt.setAttribute('fontsize', this.style.label.fontsize);
+                   this.txt.setAttribute('fgcolor', this.style.label.fontcolor);
+
+                   // adjust region style attributes
+                   this.fillStyle = this.style.region.color;
+                   this.globalAlpha = this.style.region.opacity;
+
+                   if( this.style.region.gradient != "none" ||
+                           this.style.region.gradient != null ) {
+                       var g = null;
+
+                       if( this.style.region.gradient == "linear" ) {
+                           g = this.createLinearGradient(0, 0, this.width, this.height);
+                       } else if ( this.style.region.gradient == "radial" ) {
+                           g = this.createRadialGradient(0, 0,
+                                                      .7, this.width, this.height, 0);
+                       }
+
+                       if( g != null ) {
+                           this.globalAlpha = 0;
+                           g.addColorStop(0, 0x000000);
+                           this.globalAlpha = 1;
+                           g.addColorStop(1, this.style.region.color);
+                           this.fillStyle = g;
+                       }
+                   }
+
+                   if( this.style.region.image != null ) {
+                       this.setSource( this.style.region.image );
+                       if (this.style.region.stretches)
+                           this.setAttribute( "stretches", this.style.region.stretches );
+                   }
+               }
+             ]]> 
+        </method>
+
+        <!--- render the region
+            @keyword private-->
+        <method name="render">
+            clear();
+            setStyleAttributes();
+            renderValueRegion();
+        </method>
+
+        <!--- draws the region
+            @keyword private-->
+        <method name="renderValueRegion">
+        <![CDATA[
+            var lowValue, highValue;
+            var lowDeviceX, highDeviceX, lowDeviceY, highDeviceY;
+
+            if( this.data1 > this.data2 ) {
+                lowValue = this.data2;
+                highValue = this.data1;
+            }
+            else {
+                lowValue = this.data1;
+                highValue = this.data2;
+            }
+
+            this.objStroke.clear();
+
+            if ( this.axis == 'x' ) {
+                this.setAttribute('y', parent.plotarea.y);
+                this.setAttribute('height', parent.plotarea.height);
+
+                // Configures the left side of the region
+                if( (parent.plotarea.minx <= lowValue) && (lowValue <= parent.plotarea.maxx)) {
+                    lowDeviceX = parent.haxis.getPixelDistance(lowValue);
+
+                    this.objStroke.renderStroke(0, 0, 0, this.height);
+                } else {
+                    lowDeviceX = parent.haxis.getPixelDistance( (lowValue < parent.plotarea.minx? 
+                                                                  parent.plotarea.minx : 
+                                                                  parent.plotarea.maxx) );
+                }
+
+                // Configures the right side of the region
+                if( (parent.plotarea.minx <= highValue) && (highValue <= parent.plotarea.maxx)) {
+                    highDeviceX = parent.haxis.getPixelDistance(highValue);
+
+                    this.objStroke.renderStroke(highDeviceX - lowDeviceX, 0, highDeviceX - lowDeviceX, this.height);
+
+                } else {
+                    highDeviceX = parent.haxis.getPixelDistance( (highValue < parent.plotarea.minx? 
+                                                                    parent.plotarea.minx : 
+                                                                    parent.plotarea.maxx) );
+                }
+
+                this.setAttribute('x', parent.plotarea.x + lowDeviceX);
+                this.setAttribute('width', highDeviceX - lowDeviceX + this.objStroke.strokeWidth );
+
+                if( (highDeviceX - lowDeviceX) != 0 )
+                    this.setAttribute('visible', this.regionEnabled);
+                else
+                    this.setAttribute('visible',  false );
+
+            } else  if ( this.axis == 'y' ) {
+                this.setAttribute('x', parent.plotarea.x);
+                this.setAttribute('width', parent.plotarea.width);
+
+                // Configures the bottom side of the region
+                if( (parent.plotarea.miny <= lowValue) && (lowValue <= parent.plotarea.maxy) ) {
+                    lowDeviceY = parent.vaxis.getPixelDistance(lowValue);
+                    objStroke.renderStroke(0, 0, this.width, 0);
+                } else {
+                    lowDeviceY = parent.vaxis.getPixelDistance( (lowValue < parent.plotarea.miny? 
+                                                                  parent.plotarea.miny : 
+                                                                  parent.plotarea.maxy) );
+                }
+
+                // Configures the up side of the region
+                if( (parent.plotarea.miny <= highValue) && (highValue <= parent.plotarea.maxy)) {
+                    highDeviceY = parent.vaxis.getPixelDistance(highValue);
+
+                    this.objStroke.renderStroke(0, highDeviceY - lowDeviceY, 
+                                                this.width, highDeviceY - lowDeviceY);
+                } else {
+                    highDeviceY = parent.vaxis.getPixelDistance( (highValue < parent.plotarea.miny? 
+                                                                    parent.plotarea.miny : 
+                                                                    parent.plotarea.maxy) );
+                }
+
+                this.setAttribute('y', parent.plotarea.y + parent.plotarea.height - highDeviceY);
+                this.setAttribute('height', highDeviceY - lowDeviceY + this.objStroke.strokeWidth );
+
+                if( (highDeviceY - lowDeviceY) != 0 )
+                    this.setAttribute('visible', this.regionEnabled);
+                else
+                    this.setAttribute('visible',  false );
+            }
+
+            this.beginPath();
+            this.lineTo(this.width,0);
+            this.lineTo(this.width,this.height);
+            this.lineTo(0,this.height);
+            this.lineTo(0,0);
+            this.closePath();
+
+            this.fill();
+        ]]>
+        </method>
+
+        <!--- clears the area
+            @keyword private-->
+        <method name="clear">
+            super.clear();
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>
+              a region of values in a chart
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

@@ -1,0 +1,42 @@
+<library>
+    <!--- Text list item that displays a default -->
+    <class name="defaultlistitem" extends="textlistitem">
+    
+        <attribute name="isdefault" value="$path{'@default'}"/>
+
+        <!--- x position of default label -->
+        <attribute name="default_x" value="40"/>
+        <!-- y position of default label -->
+        <attribute name="default_y" 
+            value="$once{this.height/2 - this.defaultlabel._default.height/2}" />
+        
+       <handler name="onisdefault">
+            this.adjustDefault();
+       </handler>
+        
+       <handler name="ondefault_x">
+            this.adjustDefault();
+       </handler>
+
+        <method name="adjustDefault">
+            if (this.isdefault) this._title.setAttribute('width', this.default_x);
+            else this._title.setAttribute('width', this.width);
+
+        </method>
+
+        <view name="defaultlabel" 
+            width="${parent.width - parent.default_x}"
+            height="${parent.height - parent.default_y}"
+            x="${classroot.default_x}" 
+            y="${classroot.default_y}"
+            visible="${classroot.isdefault == 'true'}" >
+            <text name="_default" 
+            fontsize="9" text="(default)" />
+        </view>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

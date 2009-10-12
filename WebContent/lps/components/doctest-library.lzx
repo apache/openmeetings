@@ -1,0 +1,13 @@
+<!-- Used by the doc tools to determine which components to document -->
+<!-- Auto-includes are determined by a separate mechanism, a property list
+     found at WEB-INF/lps/misc/lzx-autoincludes.properties
+  -->
+     
+<library>
+  <include href="base/doctest-library.lzx" />
+  <include href="lz/doctest-library.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

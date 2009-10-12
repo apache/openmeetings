@@ -1,0 +1,15 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<canvas>
+    <debug x="50" height="200"/>
+    <include href="colormenu.lzx"/>
+
+    <view bgcolor="0x0000ff" width="20" height="20">
+        <colormenu id="cp"/>
+    </view>
+    <text>Click on the square, then release the mouse button to select a new color.</text>
+    <simplelayout axis="y" spacing="20"/>
+
+</canvas>

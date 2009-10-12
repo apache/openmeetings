@@ -1,0 +1,133 @@
+/* Styles for LZX-generated docs. */
+
+body {
+    font-family: arial, helvitica, sans-serif;
+    margin: 10px 10px 10px 10px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 12px;
+}
+
+a {
+}
+
+a:hover {
+    background: #bbbbbb;
+}
+
+
+.pagecontainer {
+    /*border: 1px solid #990000;*/
+    position: absolute;
+    left: 50%;
+    width: 400px;
+    margin-left: -205px;
+    margin-top: 20px;
+}
+
+.linkgroup {
+    border: 1px solid #999999;
+    width: 400px;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 12px;
+    background: #fcfcfc;
+}
+
+.link {
+    margin-bottom: 5px;
+}
+
+h1 {
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 0px 0px 10px 0px;
+}
+
+/*---------------------------------------------------------------------------*/
+
+.attribute {
+    margin-bottom: 10px;
+}
+
+.attrName {
+    font-size: 125%;
+    font-weight: bold;
+    margin-bottom: 0px;
+    /*font-family: "Courier New", Courier, monospace;*/
+}
+
+.attrDesc {
+    margin-top: 0px;
+    margin-left: 15px;
+    margin-bottom: 0px;
+}
+
+.attrDesc p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+
+/*---------------------------------------------------------------------------*/
+
+.method {
+    margin-bottom: 10px;
+}
+
+.methodTitle {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.methodName {
+    font-size: 125%;
+    font-weight: bold;
+    margin-bottom: 0px;
+    /*font-family: "Courier New", Courier, monospace;*/
+}
+
+.methodTitleParams {
+    font-style: italic;
+}
+
+.methodParam {
+    font-style: italic;
+}
+
+.methodDesc {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+}
+
+.methodDesc p {
+    margin-top: 0px;
+}
+
+.paramlabel {
+    margin-top: 3px;
+    font-weight: bold;
+}
+
+.parameter {
+    margin-top: 0px;
+    margin-left: 15px;
+}
+
+.methodreturn {
+    margin-left: 15px;
+}
+.returnlabel {
+    font-weight: bold;
+}
+
+/*---------------------------------------------------------------------------*/
+
+.copyright {
+    margin-top: 25px;
+    font-size: 10px;
+}

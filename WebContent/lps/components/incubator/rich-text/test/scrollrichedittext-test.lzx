@@ -1,0 +1,38 @@
+<!-- Copyright 2007 Laszlo Systems -->
+<canvas title="scrollrichedittext test" width="100%" height="100%">
+    
+    <include href="lzunit" />
+    <include href="incubator/baseedittext.lzx" />    
+    <include href="incubator/rich-text/scrollrichedittext.lzx" />
+    <include href="lz/vscrollbar.lzx" />
+
+    <scrollrichedittext id="gText" width="200" height="100" />
+
+    <class name="ScrollRichEditTextTestCase" extends="TestCase">
+        <method name="setUp">
+            gText.clearText();
+        </method>
+    </class>
+    <TestSuite>
+        <ScrollRichEditTextTestCase>
+            <method name="testSimple">
+                assertNotNull(gText); 
+            </method>
+            <method name="testInitialConditions">
+                assertEquals("", gText.getValue()); 
+                assertEquals(gText.getValue(), gText.getText()); 
+            </method>
+            <method name="addTests" >
+                this.addTest("testSimple");
+                this.addTest("testInitialConditions");
+            </method>
+        </ScrollRichEditTextTestCase>
+    </TestSuite>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

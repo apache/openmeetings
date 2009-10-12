@@ -1,0 +1,79 @@
+<library>
+    
+    <class name="basedatepickerday">
+
+        <!--- The day of the month to be displayed 
+              @keywords public -->
+        <attribute name="daynum" value="null"/>
+
+        <!--- Indicates if this day should be enabled or disabled.  The day 
+              would be disbled if it should not show its daynum.
+              @keywords public 
+        --> 
+        <attribute name="disabled" type="boolean" value="false"/> 
+
+        <!--- Indicates if this day is selectable.  The day is selectable if 
+              it is within the range of possible selected dates 
+              @keywords public 
+        --> 
+        <attribute name="selectable" type="boolean" value="null"/> 
+
+        <!--- Indicates if this day is currently selected 
+              @keywords public
+        -->
+        <attribute name="selected" type="boolean" value="false"/> 
+
+        <!--- This method is called when this day receives focus. 
+              @keywords public -->
+        <method name="gotFocus">
+        </method> 
+
+        <!--- This method is called when this day loses focus. 
+              @keywords public -->
+        <method name="removeFocus">
+        </method> 
+        
+        <handler name="onselected"> 
+            if( this.selected ) { 
+                parent.parent.parent.setSelecteddatepickerday( this ); 
+            } 
+        </handler> 
+
+        <handler name="onmousedown" >
+            this.buttonpush();
+        </handler>
+        <!--- This method is called when this day has focus, and the 
+              enter key is pushed. 
+              @keywords public --> 
+        <method name="buttonpush" />
+
+        <handler name="onmouseup" >
+            this.buttonrelease();
+        </handler>
+        <!--- This method is called when this day has focus, and the 
+              enter key is released. 
+              @keywords public --> 
+        <method name="buttonrelease" />
+
+        <doc>
+          <tag name="shortdesc"><text>An abstract class representing a day for use with <classname>basedatepicker</classname></text></tag>
+          <text>
+            <p> 
+               Basedatepickerday is an abstract class representing a day for use with the 
+               basedatepicker. When creating an implementation of basedatepickerday, it is expected that certain methods from basedatepicker,
+                basedatepickerday and basedatepickerweek will be overridden to provide full
+                functionality of a datepicker.  For basedatepickerday, these methods include
+                buttonpush(), buttonrelease(), gotFocus(), and removeFocus().  See the source code of
+                datepicker for a more extensive example. 
+               See also <xref linkend="lz.basedatepicker"/> and <xref linkend="lz.basedatepickerweek"/>
+            
+            </p>
+          </text>
+        </doc>
+    </class> 
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
