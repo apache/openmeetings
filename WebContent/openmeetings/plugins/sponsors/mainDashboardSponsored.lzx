@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!---  modules:dashboard -->
+<class name="mainDashboardSponsored" extends="baseContentView">	
+	
+    <!--
+	<labelText fontstyle="bold" y="10" labelid="128" x="10" />
+	
+	<simpleLabelButton text="Issue Tracker Dev Test" x="10" y="40">
+		<handler name="onclick">
+			var obj = new Array();
+			obj["action"] = "issuetracker";
+			loadContent(obj,null,null);
+		</handler>
+	</simpleLabelButton>
+    -->
+   
+    <handler name="oninit">
+        //this.getRssFeeds.doCall();
+    </handler>
+    
+    <handler name="ontabcontentleave">
+    	canvas._overallchatcontent = null;
+    </handler>
+    
+    <netRemoteCallHib name="getRssFeeds" funcname="xmlcrm.getRssFeeds" 
+		remotecontext="$once{ canvas.thishib }" > 
+    	<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+                Debug.write("getRssFeeds: ",value);
+                parent.feed1.feed.outputRSS(value.feed1);
+                parent.feed2.feed.outputRSS(value.feed2);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>      
+    
+	<infosPanel x="10" />
+	
+	<profilesPanel x="420" />
+
+	<overAllChat name="_overallchat" />
+	
+	<sponsorsPopUp name="_sponsorsPopUp" />
+	
+	<!--
+    <rssPanel name="feed1" x="10" y="230" />
+
+    <rssPanel name="feed2" x="420" y="230" />
+	 -->
+		
+</class>
+
+</library>

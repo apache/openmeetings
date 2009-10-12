@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="sponsorsPopUp" extends="labelExplorerBox" title="Sponsors" 
+	docking="true" resizeable="false" closable="true" 
+    width="203" x="830" height="510" y="10">
+
+    <handler name="onclick">
+    	lz.Browser.loadURL("http://www.i4change.com","_blank");
+    </handler>
+    
+    <view y="21" x="1">
+        <image src="http://www.openmeetings.de/sponsors/Medical_user.jpg" />
+    </view>
+    
+    <view layout="axis:y;spacing:0" x="1" width="201" 
+    	  y="${ 510-this.height-1 }" bgcolor="0xFFFFFF">
+        
+        <text x="2" fontsize="12" align="right"
+        	  fontstyle="italic" fgcolor="0x0000CC">
+            Improve my Work
+        </text>
+        <text x="2" fontsize="12" align="right" fontstyle="italic" fgcolor="0x0000CC">
+            Improve my Organization
+        </text>
+        <text x="2" fontsize="12" align="right" fontstyle="italic" fgcolor="0x0000CC">
+            Improve my Life
+        </text>
+        
+        <image align="center" src="http://www.openmeetings.de/sponsors/i4Change_logo.jpg" />
+        
+        <text x="2" fontsize="12" width="199" multiline="true">
+            www.i4Change.com - A Business Modeler Tool to improve all your areas. For further details contact info@i4change.com        	
+        </text> 
+        
+    </view>
+    
+    
+</class>
+
+</library>
