@@ -1,0 +1,124 @@
+<library>
+	
+<class name="appointmentMembers" extends="labelExplorerBox" labelid="574"
+	 closable="true" width="500" x="$once{ parent.width/2-this.width/2 + 10 }" 
+	 y="110" height="310" >
+	<!-- resizeable="false" -->
+	<attribute name ="terminObjRef" value="null"/>
+	
+	<handler name="oninit">
+		this.getAllUserBySearchRange.doCall();
+	</handler>
+	
+	<!--
+	   Get all users by range and parse result List into View
+	 -->
+    <netRemoteCallHib name="getAllUserBySearchRange" funcname="userservice.getAllUserBySearchRange" 
+                      remotecontext="$once{ canvas.thishib }" >
+  
+        <attribute name="numberOfMessage" value="0" type="number" />
+        <attribute name="numberOfStart" value="0" type="number" /> 
+        <attribute name="numberOfRecords" value="20" type="number" />   
+        
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent._search._criteria.getText();</method></netparam>
+        <netparam><method name="getValue"> return parent.numberOfStart;</method></netparam>
+        <netparam><method name="getValue"> return 20;</method></netparam>
+        <netparam><method name="getValue"> return "datumSend";</method></netparam>
+        <netparam><method name="getValue"> return true;</method></netparam>
+        
+        <handler name="ondata" args="valueList">
+            <![CDATA[
+            var result = valueList.result;
+            if ($debug) Debug.write("valueList: ", valueList);
+            if ($debug) Debug.write("result: ", result);
+            
+            this.numberOfMessage = valueList.records;
+            this.numberOfRecords = this.numberOfStart + valueList.result.length;
+            
+            if (valueList.result.length == 0){
+                if ($debug) Debug.write("if valueList: ", valueList);
+                new lz.userNotFound(parent,{
+                    x:parent.width/2-this.width/2,
+                    y:parent.height-this.height-100});
+                
+                new lz.alert(parent);   
+            
+            }
+            else{
+                if (parent._list){
+                    parent._list.destroy();
+                }
+                new lz.searchResultsContact(parent,{name:'_list', y:70, width:700, refObj:this});
+                //new userSearchHead(parent._list._inner);
+                for (var i=0;i<result.length;i++) {
+                    if ($debug) Debug.write("UserList",result[i]);
+                    var id = result[i].user_id;
+                    var vorname = result[i].firstname;
+                    var nachname = result[i].lastname;
+                    var email = result[i].adresses.email;
+                    if ($debug) Debug.write("email",result[i].adresses.email);
+                    
+                    //var userObj = this.result[i];                 
+                    if ($debug) Debug.write("id",id);
+                    //if ($debug) Debug.write("Vorname: ",vorname);
+                    //if ($debug) Debug.write("Nachname",nachname);
+                    //if ($debug) Debug.write("messageId ", messageId);
+                    //if ($debug) Debug.write("datumRead posteingang", datumRead);
+                    //if ($debug) Debug.write("messageObj:", messageObj);
+                    
+                        new lz.searchContact(parent._list._innerList._inner, {
+                                    refObj:parent,
+                                    userId: id,
+                                    vorname:vorname,                                    
+                                    nachname:nachname,
+                                    email:email
+                            });
+                            
+            }}
+            ]]>
+        </handler>
+    </netRemoteCallHib>	
+	
+	<view name="_search" layout="axis:x;spacing:2" y="30" x="20">
+		<edittext name="_criteria" width="150" >
+			
+		</edittext>
+		
+		<simpleLabelButton labelid="628" >
+			<handler name="onclick">			
+    			//parent.parent.getUserContactsBySearchByList.doCall();
+    			parent.parent.getAllUserBySearchRange.doCall();
+			</handler>
+		</simpleLabelButton >
+		
+		<simpleLabelButton labelid="629" >
+			<handler name="onclick">
+				<![CDATA[			
+        			//parent.parent.getUserContactsBySearchByList.doCall();
+        			//parent.parent.getAllUserBySearchRange.doCall();
+        			new lz.enterExternMember(parent.parent.parent, {
+            			         refObj:parent.parent, 
+            			         x:parent.parent.x+parent.parent.width/2, 
+            			         y:parent.parent.y+40
+        			         });
+                ]]>
+			</handler>
+		</simpleLabelButton >
+		
+	</view>
+	
+    <simpleLabelButton labelid="697" x="$once{ parent.width - 125 }"
+                       y="$once{ parent.height - 28 }" width="120">
+        <view resource="button_cancel_rsc" x="2" y="2" />
+        <handler name="onclick">
+            //parent.parent.parent.delTermin.doCall();
+            parent.close();
+        </handler>     
+    </simpleLabelButton>    	
+	     
+
+
+</class>
+	
+</library>

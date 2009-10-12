@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<!-- #################
+		Class videoContainer lol
+		This class is using for video and audio panel of Event(seminar) recording viewer. 
+	 -->
+	 
+	<class name="videoEventContainerStream" extends="view" >
+		<handler name="oninit">		
+			canvas._videocontainer=this;
+		</handler>
+		
+		<method name="enterRoom" args="object">
+			if( $debug ) Debug.write("videoEventContainerStream.enterRoom(): ",object);
+		</method>
+			
+		<method name="startStream" args="flv,object">
+			if( $debug ) Debug.write("videoEventContainerStream.startStream(): ",flv,object);
+		  	this.subviews[0].clientVars = object;
+		  	this.subviews[0].setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+	  		if (object.avsettings=="n"){
+				this.subviews[0].setVideouserProfilePic(object);
+			} else if (object.avsettings=="a"){
+				this.subviews[0].setVideouserProfilePic(object);
+				if( $debug ) Debug.warn("videoEventContainerStream.startStream() start play");
+				this.subviews[0]._chatvideoinner._videostream.playStream(flv,0);
+			} else {
+				this.subviews[0]._chatvideoinner._videostream.playStream(flv,0);
+			}	  	
+		</method>
+	
+		<method name="disconnectclient" >
+			////Debug.write("disconnectclient: ",searchid,userpos);
+			if (this.subviews.length!=0){
+				this.subviews[0]._chatvideoinner.setAttribute('frame',5);
+				this.subviews[0].resetValues();
+			}
+		</method>	
+		
+		<method name="stopVideos">
+			this.subviews[0].resetValues();
+		</method>	
+	
+		<videoObjectAudience name="_video1" x="0" y="0" />
+	</class>
+</library>

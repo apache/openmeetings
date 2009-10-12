@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Existing organization list. used by orgAdmin only -->
+<class name="orgUsersRecordValueList" extends="recordValueList" >
+        
+    <attribute name="usersId" value="0" type="number" />
+    
+    <handler name="oninit">
+        this.addHeaderItem(177,226);    
+        this.addHeaderItem(275,60);   
+    </handler>
+        
+    <handler name="deleteItem" args="obj">
+        Debug.write("deleteItem: ",obj.value);
+        this.usersId = Number(obj.value);
+        this.deleteUserFromOrganisation.doCall();
+    </handler>  
+
+    <netRemoteCallHib name="getUsersByOrganisation" funcname="organisationservice.getUsersByOrganisation" 
+          remotecontext="$once{ canvas.thishib }" > 
+          <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.parent.parent.organisation_id;</method></netparam>
+        <netparam><method name="getValue"> return 0; </method></netparam>
+        <netparam><method name="getValue"> return 200; </method></netparam>
+        <netparam><method name="getValue"> return "user_id"; </method></netparam>
+        <netparam><method name="getValue"> return true; </method></netparam>          
+        <handler name="ondata" args="value">
+            Debug.write("getUsersByorganisation ",value);
+            this.parent.initValues(value.records);
+            this.parent.renderContent(value.result);
+        </handler>
+    </netRemoteCallHib> 
+    
+    <method name="renderContent" args="records">
+        <![CDATA[
+        this.clearList();
+        for (var i=0;i<records.length;i++){
+            var v = records[i].login+' ['+records[i].lastname+', '+records[i].firstname+']';
+            new lz.recordListItem(this._innerlist._inn._inn,{valueName:v,value:records[i].user_id});
+        }
+        ]]>
+    </method>
+            
+    <netRemoteCallHib name="deleteUserFromOrganisation" remotecontext="$once{ canvas.thishib }" 
+        funcname="organisationservice.deleteUserFromOrganisation" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.parent.organisation_id; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.usersId; </method></netparam>
+        <netparam><method name="getValue"> return ''; </method></netparam>
+        <handler name="ondata" args="value">
+            Debug.write("deleteUserFromOrganisation ",value);
+            //this.parent.destroy();
+            if (value>0){
+                this.parent.parent.onreload.sendEvent();
+            } else {
+                new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:value});
+            }
+        </handler>
+    </netRemoteCallHib>       
+      
+</class> 
+
+
+</library>

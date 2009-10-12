@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<class name="resultPollWin" extends="labelExplorerBox" labelid="37"
+    docking="true" resizeable="false" closable="true" width="500" x="100" height="390">
+    
+	<attribute name="createdBy" type="string" value="" />
+	<attribute name="pollDate" type="string" value="" />
+	<attribute name="pollQuestion" type="string" value="" />
+	<attribute name="pollTypeId" type="string" value="" />
+	<attribute name="roomPollAnswerList" value="null" />
+	<attribute name="roomPollId" type="string" value="" />
+	<attribute name="roomScopeName" type="string" value="" />
+	
+	<attribute name="totalVotes" value="0" type="number" />
+	
+	<attribute name="positives" value="0" type="number" />
+    <attribute name="negatives" value="0" type="number" />
+    
+    <attribute name="vote1" value="0" type="number" />
+    <attribute name="vote2" value="0" type="number" />
+    <attribute name="vote3" value="0" type="number" />
+    <attribute name="vote4" value="0" type="number" />
+    <attribute name="vote5" value="0" type="number" />
+    <attribute name="vote6" value="0" type="number" />
+    <attribute name="vote7" value="0" type="number" />
+    <attribute name="vote8" value="0" type="number" />
+    <attribute name="vote9" value="0" type="number" />
+    <attribute name="vote10" value="0" type="number" />
+    
+	<handler name="oninit">
+		<![CDATA[
+		//Debug.write("this.pollTypeId: ",this.pollTypeId);
+		this.head.setAttribute('text',"You "+canvas.getLabelName(36));
+		this.totalVotes = this.roomPollAnswerList.length;
+		if (this.pollTypeId==1){
+			//Debug.write("yes/no");
+			for (var eg=0;eg<this.totalVotes;eg++){
+				//Debug.write("this.totalVotes: ",this.roomPollAnswerList[eg].answer,typeof (this.roomPollAnswerList[eg].answer));
+				if (this.roomPollAnswerList[eg].answer){
+					this.positives++;
+				} else {
+					this.negatives++;
+				}
+			}
+		} else if (this.pollTypeId==2){
+			//Debug.write("numeric");
+			for (var eg=0;eg<this.totalVotes;eg++){
+				//Debug.write("this.totalVotes: ",this.roomPollAnswerList[eg].pointList);
+				this['vote'+this.roomPollAnswerList[eg].pointList]++;
+			}
+		}
+		
+		//Debug.write("this.votes: ",this);
+		this.voteResultNum.setAttribute('text',this.totalVotes);
+		
+		if (this.pollTypeId==1){
+			if (this.positives==0) {
+				var pos = 0;
+			} else {		
+				var pos = Math.round(((this.positives/this.totalVotes)*100));
+			}
+			new lz.parentResultPollBalk(this._resultpollvotes,{newX:pos*2,newPercent:pos+'%',textA:'Yes'});
+			if (this.negatives==0) {
+				var neg = 0;
+			} else {
+				var neg = Math.round(((this.negatives/this.totalVotes)*100));
+			}
+			new lz.parentResultPollBalk(this._resultpollvotes,{newX:neg*2,newPercent:neg+'%',textA:'No'});
+		}
+		if (this.pollTypeId==2){
+			for (var i=1;i<11;i++){
+				if (this['vote'+i]==0) {
+					var pos = 0;
+				} else {		
+					var pos = Math.round(((this['vote'+i]/this.totalVotes)*100));
+				}
+				new lz.parentResultPollBalk(this._resultpollvotes,{newX:pos*2,newPercent:pos+'%',textA:i});
+			}
+		}		
+		]]>
+	</handler>
+
+	<labelText y="22" name="head" />
+	<labelText text="$once{ parent.pollQuestion }" y="42" x="0" height="60" 
+        width="380" multiline="true" resize="false"/>
+	
+	<labelText y="102" labelid="39"/>
+	
+	<labelText y="102" x="100" name="voteResultNum" />
+	
+	<labelText y="122" labelid="40"/>
+	
+	<view name="_resultpollvotes" layout="axis:y;spacing:2" y="122" x="100" />
+	
+    <simpleLabelButton labelid="25" width="100" x="390" y="$once{ parent.height-22 }" 
+        onclick="this.parent.close();" />    
+    
+</class>
+
+<class name="parentResultPollBalk" extends="view">
+	<attribute name="newX" value="0" type="number" />
+	<attribute name="newPercent" value="0%" type="string" />
+	<attribute name="answer" value="0" type="number" />
+	<attribute name="textA" value="" type="string" />
+	<text text="$once{ parent.textA }" resize="true" />
+	<resultPollBalk x="40" />
+</class>
+
+<class name="resultPollBalk" extends="view" bgcolor="black" height="20" width="0">
+	<view bgcolor="red" width="${ parent.width-2 }" height="${ parent.height-2 }" x="1" y="1"/>
+	<text text="$once{ parent.parent.newPercent }" resize="true" y="2" />
+	<animator attribute="width" to="$once{ parent.parent.newX }" duration="1000"/>
+</class>
+
+</library>

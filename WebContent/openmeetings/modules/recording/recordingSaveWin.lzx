@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+		Dialog box for recording data.
+		Similar with recordingStartWIn.lzx, but any other class dose not invoke this class.
+		Maybe this class could be deleted.
+	--> 
+	<!-- label: save as -->
+	<class name="recordingSaveWin" extends="labelExplorerBox" labelid="391"
+		docking="true" resizeable="false" closable="false" width="400" x="300" height="226">
+	 	
+		<attribute name="recordingsName" value="" type="string" />
+	 	
+	 	<handler name="oninit">
+	 		this.rName.setAttribute('text',"recording_"+getStringDateFileSave());
+	 	</handler>
+	 	
+	 	<!-- label: record name -->
+	    	<labelText labelid="392" width="200" y="22" resize="false" x="2"/>
+	      <customEdittext name="rName" y="22" x="120" width="270" />	
+		
+		<!-- label: comment -->
+	    	<labelText labelid="393" width="200" y="52" resize="false" x="2"/>
+	      <customScrollEdittext name="rComment" y="52" x="120" width="270" height="120" />	
+		        					  
+	     <!-- label: cancel -->	
+	    	<simpleLabelButton labelid="420" width="100" x="70" y="190" >
+	    		<handler name="onclick">
+	    			parent.clientCancelRecording.doCall();
+	    		</handler>
+	    		
+	    		<labelTooltip labelid="421" />
+	    	</simpleLabelButton>
+	  
+	  	<!-- label: resume -->
+	    	<simpleLabelButton labelid="422" width="100" x="180" y="190" >
+	    		<handler name="onclick">
+	    			parent.close();
+	    		</handler>
+	    		
+	    		<labelTooltip labelid="423" />
+	    	</simpleLabelButton>
+	    
+	      <!-- label: create -->    
+	    	<simpleLabelButton labelid="22" width="100" x="290" y="190" onclick="this.parent.stopRecordMeetingStream.doCall();" />
+	  	
+	  	<netRemoteCallHib name="stopRecordMeetingStream" remotecontext="$once{ canvas.thishib }" funcname="streamservice.stopRecordMeetingStream"  >
+	  		<netparam><method name="getValue">return parent.parent.recordingsName;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.rName.getText();</method></netparam>
+			<netparam><method name="getValue">return parent.parent.rComment.getText();</method></netparam>    
+	
+		    	<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);	
+				parent.close();
+			</handler>	
+	  	</netRemoteCallHib>  
+	  	
+	  	<netRemoteCallHib name="clientCancelRecording" remotecontext="$once{ canvas.thishib }"	funcname="streamservice.clientCancelRecording"  >
+	  		<netparam><method name="getValue">return parent.parent.recordingsName;</method></netparam>
+	
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debug ) Debug.write("+++++++++++++++++ clientCancelRecording: ",value);	
+				parent.close();
+			</handler>	
+	  	</netRemoteCallHib>    	
+	</class>
+</library>

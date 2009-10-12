@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Chat module of the dashboard. The fixed size is 810x280 -->
+<class name="overAllChat" extends="guiPresenter" resizeable="false"
+    width="810" height="280" y="240" x="10" closable="true" labelid="443" >
+	<!-- 443:Chat -->
+	
+	<handler name="onclose">
+		if($debug) Debug.write("overAllChat/close(): ",this);
+		canvas._overallchatcontent=null;
+	</handler>
+	
+	<!-- background area. all of the chat contents are putted on this view. -->
+	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
+		  height="$once{ parent.height-21 }" />
+	
+	<!-- message and buttons area-->
+	<view y="22" bgcolor="white" x="4" height="$once{ parent.height-25 }" >
+		<view name="_chatoutputborder" height="$once{ parent.height-48 }"
+	        bgcolor="$once{ canvas.basebgcolorizer }" width="604">
+			<overAllChatOutput name="_chatoutput" x="1" y="1" >
+				<handler name="oninit">
+					if (canvas._overallchatcontent!=null) canvas._overallchatcontent.parent.parent.parent.close();
+					canvas._overallchatcontent = this;
+				</handler>
+			</overAllChatOutput>
+		</view>
+		<overAllChatTabBottom name="_chattabbottom" 
+					   y="$once{ parent.height-46 }" x="0" width="604" />
+	</view>
+	
+	<!-- background of chat participant area -->
+	<view x="610" y="22" name="_chatparticipantsBorder" height="$once{ parent.height-22 }" width="1" />
+	
+	<!-- chat participants area -->
+	<view x="612" y="22" name="_chatparticipants" height="$once{ parent.height-24 }" 
+	        width="190" clip="true" >
+	    <handler name="oninit">
+	    	this.getChatOverallUsers.doCall();
+	    </handler>
+	    
+	        <netRemoteCallHib name="getChatOverallUsers" funcname="chatservice.getChatOverallUsers" 
+				remotecontext="$once{ canvas.thishib }" > 
+	            <handler name="ondata" args="value">
+	            	<![CDATA[
+	                	//The onResult-Handler will be called be the rtmpconnection
+						if ($debug) Debug.write("getChatOverallUsers : ",value);
+						for (var i=0;i<value.overallList.length;i++){
+							new lz.chatParticipants(this.parent._list,{
+                                    user_id:value.overallList[i].user_id,
+                                    username:value.overallList[i].firstname+" "+value.overallList[i].lastname
+                                });				
+						}
+	                ]]>
+	            </handler>   
+	        </netRemoteCallHib>
+	        
+	        <method name="removeItemById" args="user_id">
+	        	<![CDATA[
+	        		for (var i=0;i<this._list.subviews.length;i++) {
+	        			if (this._list.subviews[i].user_id==user_id) {
+	        				this._list.subviews[i].destroy();
+	        			}
+	        		}
+	        	]]>
+	        </method>
+	        
+		<view name="_list" width="176" layout="axis:y" />
+		<vscrollbar name="_scroll" />
+	</view>
+	
+</class>
+
+
+</library>

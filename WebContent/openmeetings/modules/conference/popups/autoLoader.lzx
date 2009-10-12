@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="autoLoader" extends="view" align="center" valign="middle"
+    layout="axis:y;spacing:2">
+
+	<attribute name="maxwidth" value="100" type="number" />
+	<attribute name="maxsteps" value="13" type="number" />
+	<attribute name="currentsteps" value="0" type="number" />
+	
+	<method name="close">
+		canvas.main_content.setAttribute('visibility','visible');
+		canvas._mainbgcontentNavi.setAttribute('visibility','visible');
+		canvas.thishib.loaderVar = null;
+		this.destroy();
+	</method>
+	
+	<method name="setProgress">
+		this.currentsteps += 1;
+		if($debug) Debug.write("autoLoader/setProgress ===== ",this.currentsteps);
+		var w = Math.round(((this.maxwidth-2)/this.maxsteps)*this.currentsteps);
+		this.loadingbar.setAttribute('visibility','visible');
+		if($debug) Debug.write("autoLoader/setResourceNumber == ",w);
+		this.loadingbar.setAttribute('frame',w);
+	</method>
+    
+    <text fontsize="11" >Autoconnect</text>
+    <text fontsize="11" name="error" />
+    <text fontsize="11" name="_src" />
+    
+    <view name="loadingbar" resource="currentsplash" 
+          x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden" />
+</class>
+
+</library>

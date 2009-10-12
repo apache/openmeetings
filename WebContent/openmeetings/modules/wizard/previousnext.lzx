@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+<class name="previousNextButton" extends="labelExplorerBox" labelid="180"
+    docking="true" width="400" x="200" y="0" height="290">
+    
+    <attribute name="organisation_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+        lz.ModeManager.makeModal(this);
+    </handler>
+    
+    <handler name="onclose">
+        lz.ModeManager.release(this);
+    </handler>
+	
+	<netRemoteCallHib name="searchUser" funcname="userservice.searchUser" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return "login"; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.searchstring.getText(); </method></netparam>
+		<netparam><method name="getValue"> return 200; </method></netparam>
+		<netparam><method name="getValue"> return 0; </method></netparam>
+		<netparam><method name="getValue"> return "user_id"; </method></netparam>
+		<netparam><method name="getValue"> return true; </method></netparam>
+		<handler name="ondata" args="value">
+			<![CDATA[
+			//Debug.write("searchUser ",value);
+			if (value!=null){
+				for (var i=0;i<value.length;i++){
+					if (!this.parent.refObj._userlist.checkValue(value[i].user_id)){
+						var v = value[i].login+' ['+value[i].lastname+', '+value[i].firstname+']';
+						this.parent._userlist.addItem(v,value[i].user_id);
+					}
+				}
+			}
+			]]>			
+		</handler>
+	</netRemoteCallHib>	
+	
+	<labelText labelid="181" width="200" y="24" resize="false" x="2"/>    	
+		<customEdittext name="searchstring" y="24" x="120" width="270" text="" />	
+	
+	<simpleLabelButton labelid="182" x="290" y="54" width="100">
+		<handler name="onclick">
+			parent.searchUser.doCall();
+		</handler>
+	</simpleLabelButton>	
+	
+    <labelText labelid="183" width="200" y="84" resize="false" x="2"/>     
+    <simpleValueList name="_userlist" y="84" x="120" width="270" height="100" 
+		multiselect="true" />
+	
+	<simpleLabelButton labelid="174" x="180" y="260" width="100">
+		<handler name="onclick">
+			this.parent.close();
+		</handler>
+	</simpleLabelButton>
+	<simpleLabelButton labelid="175" x="290" y="260" width="100">
+		<handler name="onclick">
+			<![CDATA[
+				for (var i=0;i<this.parent._userlist._selected.length;i++){
+					//Debug.write("this.parent.refObj._userlist.addItem ",this.parent._userlist._selected[i].text,this.parent._userlist._selected[i].value);
+					this.parent.refObj._userlist.addItem(this.parent._userlist._selected[i].text,this.parent._userlist._selected[i].value);
+				}
+				this.parent.close();
+			]]>
+		</handler>
+	</simpleLabelButton>	
+    
+</class>
+
+</library>

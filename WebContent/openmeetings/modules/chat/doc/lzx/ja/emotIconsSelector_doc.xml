@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="emotIconsSelector">
+   <doc>
+チャットで顔文字アイコンを選ぶためのポップアップビュー。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

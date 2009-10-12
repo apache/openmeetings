@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+	
+<class name="calendar" extends="view" > 
+
+    <attribute name="detailsInited" value="false" type="boolean"/>
+
+	<attribute name ="terminObjRef" value="null"/>
+	<attribute name ="_startDate" value="null"/>
+	<attribute name ="_endDate" value="null"/>
+	<attribute name ="selecteddate" value="null"/>
+	
+	<handler name="oninit">   
+        var now = new Date();
+        //Objektname = new Date(Jahr, Monat, Tag, Stunden, Minuten, Sekunden);
+
+        //this._startDate = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0);
+        //this._endDate = new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59);
+        
+        this._startDate = new Date(now.getFullYear(),now.getMonth(),now.getDate() ,0,0,0);
+        this._endDate = new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,0);
+        
+        //this.setCalendarItem(24);
+        
+        this.getAppointmentByRange.doCall();        
+    </handler>
+    
+    <method name="setCalendarItem" args="stunden">
+        <![CDATA[
+        for(var x=0;x<stunden;x++){     
+            if (x < 10) { 
+                var x = "0" + x.toString();                 
+            }               
+            new lz.calenderlistitem(this._tagesansicht._list._innerlist,{
+                        text:x + ":00", width:parent.width , terminObjRef:parent});
+        }
+        ]]>
+    </method>
+	
+	<method name="initDetails">
+        if (!this.detailsInited) {
+            this.detailsInited = true;
+            new lz.termindetails(this,{name:'_termindetails'});
+        } else {
+        	this._termindetails.setAttribute("visibility","visible");
+        }
+    </method>	
+	
+	<method name="deleteAppointementByObject" args="terminObj,terminareaObjRef">
+		this.deleteAppointment.terminObj = terminObj;
+		this.deleteAppointment.terminareaObjRef = terminareaObjRef;
+		this.deleteAppointment.doCall();
+	</method>
+	
+    <netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+                          remotecontext="$once{ canvas.thishib }" >     
+        <attribute name ="terminObj" value="null"/>
+        <attribute name ="terminareaObjRef" value="null"/>
+        
+        <netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.terminObj.appointmentId;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //parent._tagesansicht._list._outlist.clearContent();
+                if ($debug) Debug.write("deleteAppointment: ",value);
+                //if ($debug) Debug.write("Appointment_id: ",this.terminObj.appointmentId);
+                //if ($debug) Debug.write("terminObj: ",this.terminObj);
+                //parent.updateUserMessagesTerminIdToNull.doCall();
+                if(this.terminareaObjRef != null) {
+                    this.terminareaObjRef.destroyThis();
+                }
+                parent.parent.getAppointmentByRange.doCall();
+             ]]>
+        </handler>
+    </netRemoteCallHib>
+    
+    <!--return Appointments and MeetingMember-->
+    <netRemoteCallHib name="getAppointmentByRange" funcname="calendarservice.getAppointmentByRange" 
+                      remotecontext="$once{ canvas.thishib }" >     
+        <netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.parent._startDate;</method></netparam>
+        <netparam><method name="getValue">return parent.parent._endDate;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getAppointmentByRange: ",value);
+                if ($debug) Debug.write("_startdate: ",parent._startDate);
+                if ($debug) Debug.write("_enddate: ",parent._endDate);
+                if(value[0] != null){
+                    parent._tabslider._daytab._dayview._tagesansicht._list._outlist.clearContent(); 
+                    for (var i=0;i<value.length;i++){   
+                        if ($debug) Debug.write("value: ",value[i]);    
+                        new lz.terminarea(parent._tabslider._daytab._dayview._tagesansicht._list._outlist, {name:"_terminarea"+i,
+                                            calenderObjRef:parent,
+                                            terminObj:value[i]
+                                        });
+                        new lz.text(parent._tabslider._daytab._dayview._tagesansicht._list._outlist["_terminarea"+i],{
+                                                text:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+                                                multiline:true
+                                            });
+                }
+                
+                }
+             ]]>
+        </handler>
+    </netRemoteCallHib>     
+
+        
+		<!--
+		<simplelayout axis="x" spacing="2"/>
+		 -->
+		
+	<dateSelector name="_calendar" y="10" x="2">
+		<handler name="ondoubleselect">
+ 			//var selectDate = new Date();
+ 			//if ($debug) Debug.write("##### dateselect ", this.selecteddate);
+ 			parent._startDate = this.selecteddate;
+ 			//Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,0);
+ 			parent._endDate  = new Date(this.selecteddate.getFullYear(), this.selecteddate.getMonth(), this.selecteddate.getDate()+1,0,0,0);
+ 			//if ($debug) Debug.write("startDateValue",parent._startDate);
+ 			parent._tabslider._daytab._dayview._tagesansicht._list._outlist.clearContent();
+ 			
+ 			//weekcontroll
+ 			if(parent._tabslider._week['selected'] == true){
+ 				//parent._tabslider._week._weekView._monday._tagesansicht._list._outlist.clearContent();
+ 				parent._tabslider._week._weekView.initWeekByDate(this.selecteddate);
+ 				parent._tabslider._week._weekView.getAppointmentByRangeWeek.doCall();
+ 			}else if(parent._tabslider._month['selected'] == true){
+ 				parent._tabslider._month._monthView.showingdate = this.selecteddate;
+ 				//parent._tabslider._month._monthView.initMonthByDate(this.selecteddate);
+ 				parent._tabslider._month._monthview.init();
+ 				//parent._tabslider._month._monthView.getAppointmentByRangeMonth.doCall();
+ 			}else {
+	 			//parent._tagesansicht._list._innerlist.clearContent();
+	 			//parent._termin.setCalendarItem(24);
+	 			parent.getAppointmentByRange.doCall();
+ 			}
+		</handler> 
+	</dateSelector> 
+	
+    <simpleLabelButton labelid="646" name="_addNewMeeting" x="2"
+    				   width="203" y="150" height="30">
+        <handler name="onclick">
+            parent.initDetails();
+        </handler>
+    </simpleLabelButton>
+		
+		
+	<calendarTabs name="_tabslider" x="205" />
+	
+	<!--
+	<termindetails name="_termindetails" />
+	 -->
+	
+	  
+	</class>
+	
+</library>

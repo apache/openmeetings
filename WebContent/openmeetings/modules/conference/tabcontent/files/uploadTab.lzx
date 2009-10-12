@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="messagebox_info_rsc" src="resources/messagebox_info.png" />
+<resource name="add_file_icon_rsc" src="resources/edit_add.png" />
+
+<!-- ###################
+	Class uploadtab
+ -->
+<class name="uploadTab" extends="simpleBaseTabpane" >
+	
+	<attribute name="currentFilesValue" value="null" />
+	<attribute name="sortOrder" value="file" type="string" />
+	<attribute name="ascFile" value="true" type="boolean" />
+	<attribute name="ascDate" value="true" type="boolean" />
+	
+	<attribute name="preButton" value="null" />
+    
+    <handler name="oninit">
+        
+        new lz.imagesListdraw(this,{
+            uploadmodul:canvas.uploadmoduleimg,
+            name:'_imageslistdraw'});
+        
+        this.getListOfFiles.doCall();
+    </handler>
+
+    <handler name="onvisible">
+        if ($debug) Debug.write("this.isinited",this.isinited);
+        if (this.isinited){
+            this.getListOfFiles.doCall();
+        }
+    </handler>
+    
+    <method name="renderItems" >
+        if ($debug) Debug.write("this: ",this);
+        if ($debug) Debug.write("this._imageslistdraw: ",this._imageslistdraw);
+        this._imageslistdraw.resetList();
+        <![CDATA[
+            var value = this.currentFilesValue;
+            if (value['presentationObject']==null){
+                var folders = value['folders'];
+                if (folders!=null){
+                    if (this.sortOrder=="file" && this.ascFile){
+                        Debug.write("sort Folders asc");
+                        folders.sort(this.ascendentFoldersName);
+                    } else {
+                        Debug.write("sort Folders desc");
+                        folders.sort(this.descendentFoldersName);
+                    }
+                    for(var eg=0;eg<folders.length;eg++){
+                        this._imageslistdraw.addFolder(folders[eg][2]); 
+                    }
+                }
+                //var files = this.parent.sortByName(value['files']);
+                
+                var files = value['files'];
+                if (files!=null){
+                    if (this.sortOrder=="file" && this.ascFile){
+                        files.sort(this.ascendentFilesName);
+                    } else {
+                        files.sort(this.descendentFilesName);
+                    }                       
+                    for(var eg=0;eg<files.length;eg++){
+                        //Debug.write("value[1][eg]: ",value.files[eg]);
+                        if(files[eg][2]=='.wml'){
+                            this._imageslistdraw.addWML(files[eg][1],files[eg][2]);
+                        } else if(files[eg][5]!='n'){
+                            this._imageslistdraw.addFile(files[eg][1],files[eg][2]);
+                        }
+                    }
+                }
+            
+            } else {
+            
+                //Debug.write("value.presentationObject: ",value.presentationObject);
+            
+                if (typeof(value.presentationObject.pdfDocument)=="undefined"){
+                    //Is PDF only
+                    //Debug.write("Is PDF only");
+                    this._imageslistdraw.addListpresentationFilePDF(value.presentationObject.originalDocument,value.presentationObject.swfDocument);
+                } else {
+                    //Is original Document + PDF-Document
+                    //Debug.write("Is original Document + PDF-Document");
+                    this._imageslistdraw.addListpresentationFileOrig(value.presentationObject.originalDocument,value.presentationObject.pdfDocument,value.presentationObject.swfDocument);
+                }
+            
+                for (var eg=0;eg<value.presentationObject.thumbs.thumbs.length;eg++){
+                    ////Debug.write(value.presentationObject.thumbs.thumbs[eg].filename);
+                    this._imageslistdraw.addPresentationThumb(value.presentationObject.thumbs.thumbs[eg].filename,(eg+1));
+                }
+            
+            }
+        ]]>   
+    </method> 
+
+	<netRemoteCallHib name="getListOfFiles" funcname="fileservice.getListOfFiles" 
+		remotecontext="$once{ canvas.thishib }" >   
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return canvas.uploadmoduleimg;</method></netparam>
+		<netparam><method name="getValue">return canvas.uploadmoduleimgfolder;</method></netparam>
+		<netparam><method name="getValue">return hib.currentroomid;</method></netparam>        	
+        <handler name="ondata" args="value">	
+			if ($debug) Debug.write("getListOfFiles -1-: ",value);
+			//if ($debug) Debug.write("getListOfFiles: ",canvas.sessionId);
+			if ($debug) Debug.write("getListOfFiles -2-: ",canvas.uploadmoduleimg);
+			if ($debug) Debug.write("getListOfFiles -3-: ",canvas.uploadmoduleimgfolder);
+			//if ($debug) Debug.write("getListOfFiles: ",hib.currentroomid);
+			//if ($debug) Debug.write("getListOfFiles: ",hib.conferencedomain);
+            parent.currentFilesValue = value;  
+            parent.renderItems();
+        </handler>
+  	</netRemoteCallHib>  
+	  	
+	  	
+    <method name="descendentFilesName" args="a,b">
+        <![CDATA[
+			if(a[0] == b[0]) return 0;
+			else if(a[0] < b[0]) return 1;
+			else return -1;
+        ]]>
+    </method>
+    <method name="ascendentFilesName" args="a,b">
+        <![CDATA[
+			if(a[0] == b[0]) return 0;
+			else if(a[0] > b[0]) return 1;
+			else return -1;
+        ]]>
+    </method>	  
+    
+    <method name="descendentFoldersName" args="a,b">
+        <![CDATA[
+			if(a[2] == b[2]) return 0;
+			else if(a[2] < b[2]) return 1;
+			else return -1;
+        ]]>
+    </method>
+    <method name="ascendentFoldersName" args="a,b">
+        <![CDATA[
+			if(a[2] == b[2]) return 0;
+			else if(a[2] > b[2]) return 1;
+			else return -1;
+        ]]>
+    </method>	
+
+	<method name="setNewSortOrder" args="sortO,obj">
+		this.sortOrder = sortO;
+		if (this.sortOrder=="file"){
+			this.ascFile = obj.asc;
+		} else {
+			this.ascDate = obj.asc;
+		}
+		obj.asc = !obj.asc;
+		this.renderItems();
+	</method>      
+    
+    <imagesListdraw name="_imageslistdraw" x="0" y="40" height="${ parent.height-48 }" 
+        width="${ parent.width }"  uploadmodul="$once{ canvas.uploadmoduleimg }" />  
+		
+	<view resource="refresh_file_rsc" y="2" x="$once{ parent.width -64 }" >
+		<handler name="onclick">
+			this.parent.onvisible.sendEvent();
+		</handler>
+		<labelTooltip labelid="16" />
+	</view>
+	<view resource="folder_top_rsc" y="2" x="$once{ parent.width -46 }" >
+		<handler name="onclick">
+			canvas.setAttribute('uploadmoduleimgfolder','');
+			this.parent.onvisible.sendEvent();
+		</handler>
+		<labelTooltip labelid="17" />
+	</view>	
+	
+	<view y="0" x="$once{ parent.width -28 }" >
+		<handler name="onclick">
+			new lz.editWhiteboardDefault(canvas.main_content._content.inner);
+		</handler>
+		<labelTooltip labelid="66" />
+	</view>		
+	
+	<simpleLabelButton width="190" labelid="15" y="0" x="0" >
+        <view resource="add_file_icon_rsc" y="2" x="4" />
+	    <handler name="onclick">
+	        new lz.uploadWindow(canvas.main_content._content.inner,{
+    	                       x:60,uploadmodule:canvas.uploadmoduleimg,
+    	                       isOnlyImage:true
+	                       });
+	    </handler>
+	</simpleLabelButton>
+
+	<simpleLabelButton width="20" y="20" />
+	<turnOverListHeaderItemSimple x="20" width="200" labelid="440" y="20" pathOrder="file" />
+	<simpleLabelButton x="220" width="$once{ parent.width - 220 }" y="20" />
+	
+		<!--
+        id="_imageslistdraw"
+         -->
+<!--  -->
+    <!--
+	<view name="currentmainobjectisMod" visible="${ !canvas.ismoderator }"
+		x="0" y="20" height="${ parent.height-28 }" width="${ parent.width }" >
+		<handler name="onclick">
+			new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(97)});
+		</handler>
+	</view>	
+	 -->
+	
+</class>
+
+</library>

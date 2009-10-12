@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="errorpopupuserinfo">
+   <doc>
+   	moderationpanelで使われているユーザリストを表示するクラス。
+   	*おそらくprivateクラス。
+   </doc>
+ </class>
+ <class name="moderationpanel">
+   <doc>
+	録音機能を実行するパネル。ボタンクリックでapplyformoderationクラスを実行している。
+	*このパネルがどこで表示されるか未確認
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!-- 
+#########################################
+
+Test the setup values before you enter a room
+
+ -->
+ 
+<class name="simpleLabelRoundButtonIcon" extends="simpleLabelRoundButton" 
+	   height="26" fontstyle="bold" >
+	
+	<attribute name="ressourceIcon" value="" type="string" />
+	<attribute name="tlabelid" value="0" type="number" />
+	
+	<view name="_iconView" x="14" y="3" resource="$once{ parent.ressourceIcon }" />
+	
+	<labelText y="4" x="36" labelid="$once{ parent.tlabelid }" resize="true" />
+	
+	<handler name="onmouseover">
+		this._iconView.setAttribute("opacity",0.5);
+	</handler>
+	
+	<handler name="onmouseout">
+        this._iconView.setAttribute("opacity",1);
+    </handler>
+    
+</class> 
+ 
+<class name="testSetup" extends="labelExplorerBox" labelid="757" x="$once{ parent.width/2 - 300 }" 
+    y="100" docking="true" resizeable="false" closable="true" width="600" height="400">
+
+    <attribute name="roomClassName" type="string" value="" />
+    
+    <attribute name="roomObj" value="null"/>
+    
+    <attribute name="forceTest" value="false" type="boolean" />
+    
+    <attribute name="isDirectLink" value="false" type="boolean" />
+    
+    <handler name="oninit">
+    	<![CDATA[
+    	   
+    	    var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var save = g["showAudioVideoTest"];
+    	    
+            if (!this.forceTest && save){
+            	this.startConference();
+            } else {
+            	
+            	if (this.isDirectLink) {
+            		this._enterMeeting.setAttribute("x",this.width-165);
+            		this._cancel.setAttribute("visibility","hidden");
+            	}
+            	
+                new lz.testingApplication(this,{name:'currentSharing'});
+            }
+            
+    	]]>
+    </handler>
+    
+    <method name="storeSettings">
+        <![CDATA[
+        
+            //Debug.write("sharedobject store ");
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["cam"] = this.currentSharing.availibleCams.getValue();
+            g["mic"] = this.currentSharing.availibleMics.getValue();
+            g["showAudioVideoTest"] = this.holddatainSO.getValue();
+            t.setData('userdata',g);
+            t.flush();  
+            
+            this.startConference();
+        ]]>
+    </method>   
+    
+    <method name="startConference">
+    	<![CDATA[
+    	
+            clearStageContent();
+            
+            if ($debug) Debug.write("roomClassname : ", +this.roomClassName);
+            
+            canvas.currentRoomObj = this.roomObj;
+            
+            this.close();
+            
+            new lz[this.roomClassName](canvas.main_content._content.inner, {
+                        roomobj : this.roomObj
+                    });
+    	
+    	]]>
+    </method>
+    
+    <!-- Remember Me -->    
+    <labelCheckbox name="holddatainSO" labelid="759" x="10" y="$once{ parent.height-24 }" >
+        <handler name="oninit">
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var save = g["showAudioVideoTest"];
+            if ($debug) Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </labelCheckbox>
+    
+    <simpleLabelButton name="_enterMeeting" labelid="761" width="160" x="$once{ parent.width-270 }" 
+           y="$once{ parent.height-30 }" height="28" 
+           onclick="this.parent.storeSettings();">
+    	<view resource="test_setup_start_conference_rsc" x="2" y="4" />
+    </simpleLabelButton>
+    
+    <simpleLabelButton name="_cancel" labelid="760" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-30 }" height="28"  
+           onclick="this.parent.close();" />
+
+</class>
+
+
+</library>

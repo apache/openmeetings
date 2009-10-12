@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="advancedRoomSettings">
+   <doc>
+会議室/講演室のレイアウト設定パネル。
+x,y,width,heightを直接入力するだけで、わかりにくいので、プレビュー画面が必要。
+
+   </doc>
+ </class>
+</rlzxdoc>

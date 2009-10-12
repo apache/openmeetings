@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!-- #################
+	Class videocontainer
+	
+	@deprecated - look at modules/conference/eventuserlist/eventUserList.lzx
+	
+ -->
+ 
+<class name="videoContainerAudience" width="${parent.width}" height="${parent.height}" extends="view" >
+	
+	<!-- 
+		Attribute stores all Initial Streams
+	 -->
+	<attribute name="streams" value="null" />
+
+	<attribute name="allUsers" value="null" />
+	<attribute name="modLoaded" value="false" type="boolean" />
+	
+	<handler name="oninit">
+		canvas.thishib.modus = "audience";
+		canvas._videocontainer=this;
+		this.allUsers = new Array();
+		this.streams = new Array();
+        
+        // Reconnect User to its Room Id
+        canvas.thishib.userScope = canvas.thishib.currentroomid;
+        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+        canvas.thishib.setAttribute('src',src);
+        
+        if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
+        
+        canvas.thishib.reconnectionAction = true;
+        canvas.thishib.reconnectObjRef = this;
+        canvas.thishib.disconnect();
+	</handler>
+    
+    <method name="reconnectSuccess">
+        if ($debug) Debug.write("User Reloged In");
+        //set default values and get already availible streams
+        this.setRoomValues.doCall();
+    </method>
+	
+	<method name="addUser" args="objectR">
+		this.allUsers.push(objectR);
+	</method>
+	
+	<!-- invoked if another client logs into the room 
+	after choosing devices -->     
+    <method name="setAVSettingsToClient" args="rcl">
+    	Debug.write("addNoAVClient ",rcl);
+    	var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
+    	if (obj!=null){
+			if (rcl.avsettings=="n"){
+				obj.setVideouserProfilePic(rcl);
+			} else if (rcl.avsettings=="a"){
+				obj.setVideouserProfilePic(rcl);
+			} else {
+				obj.deleteVideoConfProfilePic();
+			}
+	    	obj.updateAVSettingsSymbol(rcl);
+    	} else {
+    		if ($debug) Debug.warn("No Video Obj for this AVSettings Event, rcl: ",rcl);
+    	}
+    </method>    
+    
+    <!--- get a baseVideoObject by its broadcastId
+    	@param string broadcastId broadcastId, can be also a number
+     --> 
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+    	<![CDATA[
+    		//if ($debug) Debug.write("getVideoObjectByBroadCastId1 SEARCH: ",broadcastId);
+    		if (this._video1.publicSID == publicSID){
+    			return this._video1;
+    		} else {
+    			return null;
+    		}
+    		
+    	]]>
+    </method>   	
+
+  	<netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+    	<netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <netparam><method name="getValue">return canvas.becomemoderator;</method></netparam>
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("setUserroom: ",value,hib.currentroomid);
+            if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            parent.modLoaded = false;
+            for (var i in value){
+            	////Debug.write("getClientListScope value: ",value[i]);
+            	if (value[i].username!=null){
+            		var m = this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,null,value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
+            		if (m){
+            			parent.modLoaded = true;
+            		}
+            	}
+            }
+            canvas.thishib.getCurrentModerator.doCall(); 
+            canvas._mymod.checkForRecording.doCall();
+            canvas._chatcontent.doInit();		
+		</handler>	
+  	</netRemoteCallHib>		  	
+	  	
+	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+		<![CDATA[	
+			if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,userroom,formatedDate);
+			if (streamid!=canvas.streamid && object.isMod){
+	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+		  		myvideocontainer.clientVars = object;
+		  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+		  		myvideocontainer.setAttribute('isremote',true);
+		  		if (object.avsettings=="n"){
+	    			myvideocontainer.setVideouserProfilePic(object);
+	    		} else if (object.avsettings=="a"){
+	    			myvideocontainer.setVideouserProfilePic(object);
+	    			if ($debug) Debug.warn("start play");
+	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
+	    		} else {
+                    if ($debug) Debug.warn("######### start play ?!");
+	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
+	    		}	
+	    		myvideocontainer.updateAVSettingsSymbol(object);
+		  		return true;
+			} else {
+				return false;
+			}
+		]]>
+	</method>
+	<!-- -1,false -->
+	
+	
+	<method name="addClientItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+		<![CDATA[
+		if ($debug) Debug.write("initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,userroom,formatedDate);
+		if (streamid!=canvas.streamid){
+            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+            //Debug.write("myvideocontainer: ",myvideocontainer.v_output);
+	  		myvideocontainer.clientVars = object;
+	  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+	  		myvideocontainer.setAttribute('isremote',true);	
+    		if (object.avsettings=="n" || object.avsettings=="a"){
+    			myvideocontainer.setVideouserProfilePic(value[i]);
+    		}
+    		myvideocontainer.updateAVSettingsSymbol(object);	  		
+		}
+		]]>
+	</method>
+		
+	<method name="startStream" args="publicSID,broadcastId">
+		if ($debug) Debug.write("startStream: ",publicSID,broadcastId);
+		<![CDATA[
+			var obj = this.getVideoObjectByPublicSID(publicSID);
+			if (obj!=null){
+				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
+			}
+		]]>
+	</method>
+
+	
+	<!-- 
+		This method returns a free Video-View to show
+		a Stream or yourself, if there is no free view 
+		availible it will return null
+	 -->
+	<method name="getNewVideoObject" args="publicSID">
+		<![CDATA[
+        if ($debug) Debug.write("getNewVideoObject");
+		//Get a Free VideoView Slot
+		if ($debug) Debug.write("getNewVideoObject publicSID: ",publicSID);
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		
+		if (obj!=null){
+			return obj;
+		} 
+		if (!this._video1.isassigned){
+			//A free Slot has been found
+			//return the Reference to the VideoView it and mark it as used
+			this._video1.setAttribute('isAssigned',true);
+			canvas.currentusercolor = this._video1.usercolor;
+			this._video1.isremote = false;
+			this._video1.publicSID = publicSID;
+			this._video1._chatvideoinner.setAttribute('frame',1);
+			//Debug.write("canvas.currentusercolor : ",canvas.currentusercolor);
+			canvas.currentuserpos=1;
+			canvas.thishib.setAudienceModus.doCall();
+			//canvas.thishib.testMethod.doCall();
+			return this._video1;
+		}
+
+		return null;
+		]]>
+	</method>
+    
+	<method name="getNewVideoObjectByPos" args="publicSID">
+		<![CDATA[
+			//Get a Free VideoView Slot by Position
+			if ($debug) Debug.write("getNewVideoObjectByPos publicSID: ",publicSID);
+			if (!this._video1.isAssigned){
+				//A free Slot has been found
+				//return the Reference to the VideoView it and mark it as used
+				this._video1.publicSID = publicSID;
+				this._video1._chatvideoinner.setAttribute('frame',1);
+				//this._video1._chatvideoinner._videoview.setAttribute('visible',true);
+				this._video1.setAttribute('isAssigned',true);
+				return this._video1;
+			} else {
+				if ($debug) Debug.warn("Already Assigned ",publicSID,this);
+			}
+			return null;
+		]]>
+	</method>
+	
+	<!-- 
+		Remove the current VideoReference, cause the moderator has been changed
+	 -->
+	<method name="clearAllVideoRefernces">
+		if ($debug) Debug.write("clearAllVideoRefernces");
+		this._video1.setAttribute('isAssigned',false);
+		this._video1._chatvideoinner.setAttribute('frame',5);
+		this._video1.resetValues();
+	</method>
+	
+	<!-- 
+		Method makes this View free for a new Client
+		by the partnerid
+		Returns the new free VideoView or null if no VideoView can be found with this partnerid
+		@param int partnerid
+	 -->
+	<method name="closeStreamClient" args="publicSID">
+		if ($debug) Debug.write("closeStreamclient: ",publicSID);
+		<![CDATA[
+		if (this._video1.publicSID == publicSID){
+            if ($debug) Debug.write("Found client to closeStream");
+			this._video1.resetValues();
+		} else {
+			if ($debug) Debug.warn("Could not find Stream to close: ",publicSID,this);
+		}
+		return null;
+		]]>
+	</method>
+    
+	<method name="disconnectclient" args="publicSID">
+		<![CDATA[
+			if ($debug) Debug.write("disconnectclient: ",publicSID);
+			if ($debug) Debug.write("disconnectclient: ",this._video1);
+			if ($debug) Debug.write("disconnectclient: ",this._video1.publicSID);
+			if (this._video1.publicSID == publicSID){
+	            if ($debug) Debug.write("Found client to disconnect");
+	            //mark this view as free
+				this._video1.setAttribute('isAssigned',false);
+				this._video1._chatvideoinner.setAttribute('frame',5);
+				this._video1.resetValues();
+				new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(497)});
+				this.getCurrentModerator.doCall();
+			} else {
+			if ($debug) Debug.warn("Could not find Stream to disconnectclient: ",publicSID,this);
+		}
+			return null;
+		]]>
+	</method>	
+	
+	<netRemoteCallHib name="getCurrentModerator" funcname="getCurrentModerator"
+		remotecontext="$once{ canvas.thishib }" >   
+        <handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("############   getCurrentModerator: ",value);
+				
+				if (value!=null){
+					canvas.setAttribute('moderatorationObject',value);
+					canvas.setAttribute('moderatorStreamID',value.streamid);
+					canvas.setAttribute('moderatorName',value.firstname+' '+value.lastname);
+				} else {
+					canvas.setAttribute('moderatorationObject',null);
+					canvas.setAttribute('moderatorStreamID',"");
+					canvas.setAttribute('moderatorName');
+				}
+			]]>
+        </handler>
+	</netRemoteCallHib>
+	
+	<method name="setSpeakingByPos" args="publicSID,bool">
+		<![CDATA[
+			if (bool){
+				this._video1._loudness.loudness.setAttribute('opacity',1);
+			} else {
+				this._video1._loudness.loudness.setAttribute('opacity',0.2);
+			}
+		]]>
+	</method>	
+	
+	<videoObjectAudience name="_video1" x="0" y="0" />
+
+</class>
+
+</library>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="incomingScreenSharing" extends="labelExplorerBox" labelid="643"
+        docking="true" resizeable="false" closable="true" width="260"
+        x="$once{ canvas.width - this.width - 10 }" y="10" height="160">
+    
+    <attribute name="messageObj" value="null" />
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+        var tString = canvas.getLabelName(644) + " " 
+                + messageObj.rcl.firstName + " " + messageObj.rcl.lastName;
+        this._text.setAttribute("text",tString);
+    </handler>
+    
+    <labelText name="_text" text="" x="10" y="22"
+            width="$once{ parent.width - 20 }" multiline="true" resize="false"/>
+    
+    <simpleLabelButton labelid="645" width="100" 
+                       x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
+        <handler name="onclick">
+            lz.Browser.loadURL(parent.generateFileLink(),'_BLANK');  
+        </handler>
+    </simpleLabelButton>
+    
+    <method name="generateFileLink">
+        <![CDATA[
+            return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+
+                    '/'+canvas.webAppRootKey+'/RtpSharerServlet?publicSID='+this.messageObj.publicSID +
+                    '&room='+this.messageObj.room +
+                    '&room_id='+hib.currentroomid +
+                    '&sid='+canvas.sessionId;  
+        ]]>
+    </method>
+</class>
+
+</library>

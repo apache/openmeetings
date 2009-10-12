@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="listPresentationThumb" extends="baseListPresentationItem">
+    
+    <attribute name="thumbname" value="" type="string"/>
+    <attribute name="no" value="" type="string"/>
+    
+    <handler name="oninit">
+        this._thumb.setAttribute('src',this.formatURL(this.thumbname));
+    </handler>
+    
+    <handler name="onclick">
+        this.parent.checkForOriginal(Number(no));
+    </handler>    
+    
+    <image name="_thumb" x="10" y="1"/>
+    <text name="_thumbText" x="120" text="$once{ this.parent.no }" fontsize="10"
+        width="240" multiline="true"/>
+    
+</class>
+
+</library>

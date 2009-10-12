@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <class name="recordListitem" extends="view" height="24" onmouseout="this.setAttribute('bgcolor',0xFFFFFF)" bgcolor="0xFFFFFF"
+            onmouseover="this.setAttribute('bgcolor',canvas.baseMousecolorizer)" width="$once{ parent.width-14 }">
+        
+        <handler name="ondata2">
+            <![CDATA[
+                var duration = Number(this.obj.duration);
+                var seconds = Math.round(duration/1000);
+                var minutes = Math.floor(seconds/60);
+                var deltaSeconds = seconds-(minutes*60);
+                if (minutes<10) minutes="0"+minutes;
+                if (deltaSeconds<10) deltaSeconds="0"+deltaSeconds;
+                var dateStr = this.obj.starttimeAsString;
+                var recordContentedby = this.obj.recordedby.login;
+                if (recordContentedby==null) recordContentedby=canvas.getLabelName(433);
+                this._text.text = canvas.getLabelName(411)+dateStr+" "+
+                                  canvas.getLabelName(410)+minutes+":"+
+                                  deltaSeconds+" "+canvas.getLabelName(434)+""+
+                                  recordContentedby;
+            ]]>
+        </handler>
+        
+        <handler name="ondblclick">
+            canvas.currentrecorder = this.obj;
+            canvas.currentrecorder_id = Number(this.obj.recording_id);
+            if( $debug ) Debug.write("recordContent.ondblclick(): canvas.currentrecorder_id: ",canvas.currentrecorder_id);
+            quicklinkAct('recordingsViewer');
+        </handler>  
+        
+        <view resource="_recording_play_rsc" y="1" onclick="parent.ondblclick.sendEvent()" >
+            <labelTooltip labelid="409" />
+        </view>
+
+        <!-- title, conference room and duration for recorded contents -->
+        <labelText x="20"  text="$once{ parent.obj.name }" y="2" width="350" resize="false" />
+        <labelText x="370" text="$once{ parent.obj.rooms.name }" y="2" width="200" resize="false" />
+        <labelText x="570" text="$once{ parent.obj.starttimeAsString }" y="2" width="150" resize="false" />
+
+        <!-- show delete icon -->
+        <view resource="_recording_delete" y="1" x="720" >
+            
+	    <handler name="onclick">
+		var rec = Number(this.parent.obj.recording_id);
+                classroot.parent.parent.parent.parent.parent.deleteRecordedFile.recordedFileToDelete = rec;
+		classroot.parent.parent.parent.parent.parent.deleteRecordedFile.doCall();
+            </handler>
+
+            <labelTooltip labelid="432" />
+        </view>
+        
+        <!-- this text would be setted in the above ondata handler -->
+        <labelTooltip name="_text" />       
+    </class>
+    
+	<!---
+		View for recorded contents list.
+		When you select 'Recordings' on the top menu, this class shows the list.
+	-->
+	<class name="recordContent" extends="baseContentView">	
+		<dataset name="recordingsForUser" />
+		
+        <!--
+         dataobject="$once{ parent.recordingsForUser }" 
+          -->
+	  	<netRemoteCallHib name="getAllRecordingsForUser" funcname="streamservice.getAllRecordingsForUser" 
+							remotecontext="$once{ canvas.thishib }" >   
+	  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+	
+	       	<handler name="ondata" args="value">	
+        		<![CDATA[
+        			if( $debug ) Debug.write("recordContent.ondata(): getAllRecordingsForUser",value);
+                    parent.parseResult(value);
+                ]]>	        	          				
+        	</handler>	
+	  	</netRemoteCallHib>   
+        
+        <method name="parseResult" args="value">
+			<![CDATA[
+				this._content.inn.inn.inn.destroy();
+				new lz.view(this._content.inn.inn, { name:"inn", layout:"axis:y;spacing:2", width:this._content.inn.inn.width} );
+
+                for (var i=0;i<value.length;i++) {
+                    new lz.recordListitem(this._content.inn.inn.inn,{
+                            obj:value[i]
+                        });
+                }
+            ]]>
+        </method>
+		  	
+	  	<netRemoteCallHib name="deleteRecordedFile" funcname="streamservice.deleteRecordedFile"
+							remotecontext="$once{ canvas.thishib }" activeErrorHandler="true">   
+			<attribute name="recordedFileToDelete" value="0" type="number" />
+	  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	  		<netparam><method name="getValue">return parent.recordedFileToDelete;</method></netparam>    
+	
+		    <handler name="ondata" args="value">	
+            	<![CDATA[
+            			parent.getAllRecordingsForUser.doCall();
+	            ]]>	        	          				
+        	</handler>	
+	  	</netRemoteCallHib>
+	  	
+	  	<labelText x="2" y="10" fontstyle="bold" labelid="544" width="250" />
+
+		<!-- label: stored files for public/private conference -->	
+		<labelText x="2" y="40" labelid="397" width="300" />
+	
+		<!-- recordings list viewer -->
+		<view y="80" x="2" name="_content">
+			<handler name="oninit">
+				classroot.getAllRecordingsForUser.doCall();
+			</handler>
+
+		  	<!-- show the header of the list -->  	  	
+		  	<view name="head" layout="axis:x;" x="1" >
+		  		<attribute name="preButton" value="null" />
+		  		
+	  			<method name="setNewSortOrder" args="path,obj">
+	  				<![CDATA[
+	  					if (obj.asc) {
+	  						parent.inn.inn.inn.inn.datapath.setOrder(path,ascendent);
+	  					} else {
+	  						parent.inn.inn.inn.inn.datapath.setOrder(path,descendent);
+	  					}
+	  					
+	  					obj.asc=!obj.asc;
+	  					parent.inn.inn._dPath.updateData();
+	  				]]>
+	  			</method>
+	  				  
+		       	<method name="descendent" args="a,b">
+	                		<![CDATA[
+						if(a == b) return 0;
+						else if(a < b) return 1;
+						else return -1;
+	                ]]>
+	            	</method>
+	            	
+	            	<method name="ascendent" args="a,b">
+	                		<![CDATA[
+						if(a == b) return 0;
+						else if(a > b) return 1;
+						else return -1;
+	                ]]>
+	            	</method>
+	            	
+		  		<simpleLabelButton width="20" />
+		  		<turnOverListHeaderItemSimple name="recname"     labelid="435" width="350" pathOrder="name/text()" />
+		  		<turnOverListHeaderItemSimple name="roomname"  labelid="436" width="200" pathOrder="rooms/name/text()" />
+		  		<turnOverListHeaderItemSimple name="dateasstring" labelid="437" width="150" pathOrder="starttimeAsString/text()" />
+		  	</view>
+	
+			<!-- show the list of recordings contents -->
+		  	<view name="inn" width="762" height="200" bgcolor="$once{ canvas.basebgcolorizer }" y="20" >
+		  		<view name="inn" x="1" y="1" width="760" height="198" bgcolor="0xFFFFFF" clip="true" >
+                    <!--
+		  			<datapath name="_dPath" xpath="local:classroot.recordingsForUser:/"  pooling="true"/>
+		  			 -->
+		  			<view name="inn" layout="axis:y;spacing:2" width="$once{ parent.width }" >
+		  				
+		  			</view>
+		  			<vscrollbar />
+		  		</view>
+		  	</view>
+		</view>
+	</class>
+</library>

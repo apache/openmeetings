@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- configure value for roomadmin module -->
+<class name="roomValueFormMod" extends="baseContentSaveView" 
+	saveIsVisible="false" deleteIsVisible="false" >
+
+	<!-- recordContent-id -->
+	<attribute name="rooms_id" value="0" type="number" />
+	
+	<!--handlers -->
+
+	<handler name="onsavecompleted" >
+		this.getRoomById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.rooms_id!=0) this.getRoomById.doCall();
+	</handler>	
+
+	<handler name="onnew">
+		this.rooms_id=0;
+        this.roomname.setAttribute('text','');
+		this.comment.setAttribute('text','');
+		this.ispublic.setValue(false);
+		this._organisationslist.clearList();
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.user_id!=0){
+			this.deleteRoom.doCall();
+		}
+    </handler>
+	
+	<!-- methods -->
+
+    <method name="initValueFieldsByObject" args="obj">
+		this.rooms_id = obj.rooms_id;
+		if (this.rooms_id!=0){
+			this.getRoomById.doCall();
+		}
+    </method>
+    
+    <method name="initFields" args="obj">
+    	<![CDATA[
+			this.roomname.setAttribute('text',obj.name);
+			this.comment.setAttribute('text',obj.comment);
+			this.ispublic.setValue(obj.ispublic);
+			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
+        ]]>
+    </method>
+	
+	<method name="initOrganisations" args="obj">
+		<![CDATA[
+			this._organisationslist.clearList();
+			for (var i=0;i<obj.length;i++){
+				this._organisationslist.addItem(obj[i].organisation.name,obj[i].organisation.organisation_id);
+			}
+		]]>
+	</method>
+	
+	<!-- remotecalls -->
+	
+  	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+    		parent.initFields(value);
+			parent.getOrganisationByRoom.doCall();
+    	</handler>
+  	</netRemoteCallHib>
+	
+  	<netRemoteCallHib name="getOrganisationByRoom" funcname="conferenceservice.getOrganisationByRoom" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+			//Debug.write("getOrganisationByRoom: ",value);
+    		parent.initOrganisations(value);
+    	</handler>
+  	</netRemoteCallHib>
+	
+	<netRemoteCallHib name="deleteRoom" funcname="conferenceservice.deleteRoom" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.rooms_id; </method></netparam>
+		<handler name="ondata" args="value">
+			//Debug.write("deleteUserAdmin ",value);
+			//this.parent.destroy();
+			if (value>0){
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				this.parent.onnew.sendEvent();
+			}
+		</handler>
+	</netRemoteCallHib>		
+
+  	<netRemoteCallHib name="saveOrUpdateRoom" funcname="conferenceservice.saveOrUpdateRoom" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer  -->
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+  			this.sendObject["rooms_id"] = this.parent.rooms_id;
+  			this.sendObject["name"] = this.parent.roomname.getText();
+			this.sendObject["roomtypes_id"] = Number(this.parent.roomtype.getValue());
+  			this.sendObject["comment"] = this.parent.comment.getText();
+  			this.sendObject["ispublic"] = this.parent.ispublic.getValue();
+
+  			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
+
+  			//Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+    		//Debug.write("saveOrUpdateRoom ",val);
+			if (val>0){
+				//Debug.write("saveOrUpdateRoom val greater 0: ",val);
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				var obj = new Array();
+				obj["rooms_id"] = val;
+				this.parent.initValueFieldsByObject(obj);
+			}
+			]]>
+    	</handler>
+  	</netRemoteCallHib>	
+	
+	<!-- content -->
+    
+    <!-- 187:Conferencerooms -->
+    <labelText labelid="187" width="200" y="40" resize="false" fontstyle="bold" />
+    
+    <!-- 193:Name -->
+    <labelText labelid="193" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="roomname" y="70" x="120" width="270" text="" />   
+	
+	<!-- 194:Type -->
+    <labelText labelid="194" width="200" y="100" resize="false" x="2"/>  
+        <resetCombobox name="roomtype" width="270" y="100" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+	            }
+	            this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 	                  
+
+	<!-- 195:Public -->
+    <labelText labelid="195" width="200" y="130" resize="false" x="2"/>  
+        <checkbox name="ispublic" width="270" y="130" x="120" fontsize="11" />
+	
+	<!-- 196:Comment -->
+	<labelText labelid="196" width="200" y="160" resize="false" x="2"/> 
+        <customScrollEdittext name="comment" y="160" x="120" width="270" 
+            height="100" text="" />	
+	
+	<!-- 191:organisations -->
+    <labelText labelid="191" width="200" y="270" resize="false" x="2"/>     
+    <simpleValueList name="_organisationslist" y="270" x="120" width="270" height="160" 
+		multiselect="true" />
+        
+</class>
+
+</library>

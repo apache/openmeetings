@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="documentMenu" extends="baseToolbarMenu" >
+	
+    <drawChooseModirPlain y="4" name="b1" modi="plain" resourceN="plain" labelid="69" />
+    <drawSimpleClick y="4" name="b2" modi="saveobj" resourceN="saveobj" labelid="197" />
+
+    <drawChooseSeperator y="4" />
+	
+    <drawDocumentItem y="4" name="b3" modi="doc_first" resourceN="doc_first" 
+        labelid="255" />		
+    <drawDocumentItem y="4" name="b4" modi="doc_pre" resourceN="doc_pre" 
+        labelid="256" />			
+    <drawDocumentItem y="4" name="b5" modi="doc_next" resourceN="doc_next" 
+        labelid="257" />		
+    <drawDocumentItem y="4" name="b6" modi="doc_last" resourceN="doc_last" 
+        labelid="258" />		
+    <view width="4" />
+    <customEdittext name="_currentSlideNo" y="4" width="40" />	 
+    <labelText y="6" labelid="254" />	  
+    <labelText name="_totalSlideNo" y="6" width="40" />	 
+    
+    <drawChooseSeperator y="4" />
+        
+    <drawDocumentItem y="4" name="b7" modi="doc_zoom_minus" resourceN="doc_zoom_minus" 
+        labelid="259" />		
+    <drawDocumentItem y="4" name="b8" modi="doc_zoom_plus" resourceN="doc_zoom_plus" 
+        labelid="260" />	
+    
+    <customEdittext y="4" name="_zoom" width="60" />
+    <labelText y="6" labelid="253" />	
+     
+</class>
+    
+</library>

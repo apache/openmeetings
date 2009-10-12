@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="_recording_play_rsc" src="resources/noatunplay.png" />
+	<resource name="_recording_gripper_thumb_rsc" src="resources/gripper_thumb.swf" />
+	<resource name="_recording_smallplay_rsc" src="resources/recorder_smallplay.swf" />
+	<resource name="_recording_playBig_rsc" src="resources/recorder_bigplay.swf" />
+	<resource name="_recording_delete" src="resources/button_cancel.png" />
+	
+	<include href="video/" />
+    	<include href="recordContent.lzx" />
+    	<include href="recordingsViewer.lzx" />
+
+<!--
+    	<include href="recordingSaveWin.lzx" />
+    	<include href="recordingStartWin.lzx" />
+-->
+</library>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="fixedWhiteboardPanel" extends="conferenceBox" labelid="615">
+    
+    <fixedWhiteBoard name="_whiteboard" y="34" x="1">
+        <handler name="onsharedMessage" args="obj">
+            //Debug.write("send: ",obj);
+            canvas.objWhiteboard = obj;
+            hib.sendVars.doCall();
+        </handler>
+        <handler name="isloadingImage" args="val" >
+            if ($debug) Debug.write("isloadingImage: ",val);
+        </handler>
+        <handler name="isloadedImage" args="val" >
+            if ($debug) Debug.write("isloadedImage: ",val);
+        </handler>
+    </fixedWhiteBoard>
+    
+</class>
+
+</library>

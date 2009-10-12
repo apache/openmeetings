@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!-- #################
+		Class videoContainer lol
+		This class is using for video and audio panel of conference recording viewer.
+	 -->
+	 
+	<class name="videoContainerStream" extends="view" width="288" height="$once{ parent.height-22 }" >	
+		<handler name="oninit">
+			canvas._videocontainer=this;
+		</handler>
+		
+		<method name="enterRoom" args="object">
+			if( $debug ) Debug.write("videoContainerStream.enterRoom(): ",object);
+			var objRef = new lz.videoObjectPlayBroadcast(this._videoviewcontent,{clientVars:object,
+																		chatpartnername:object.firstname+' '+object.lastname,
+																		uniqueid:object.streamid,
+																		broadcastId:object.broadCastID,
+																		publicSID:object.publicSID,
+																		isremote:true});
+		</method>
+		
+		<method name="setAVOnlyStream" args="userpos,object">		
+			//FIXME: Check if this is still necessary
+		</method>
+		
+		<method name="setAVOnlyStream2" args="userpos,object">
+			this.subviews[userpos].clientVars = object;
+			if (object.avsettings=="n"){
+				//users which do not publish a/v do not send a *startStream* event
+				this.subviews[userpos].setVideouserProfilePic(object);
+			}
+		</method>
+			
+		<method name="startStream" args="flv,object">
+			if ($debug) Debug.write("videoContainerStream.startStream(): ",flv,object);
+			var objRef = this.getVideoObjectByPublicSID(object.publicSID);
+			objRef.clientVars = object;
+			if ($debug) Debug.write("videoContainerStream..startStream() objRef: ",objRef);
+			if (object.avsettings=="a"){
+				objRef.setVideouserProfilePic(object);
+				objRef._chatvideoinner._videostream.playStream(flv,0);
+			} else {
+				objRef._chatvideoinner._videostream.playStream(flv,0);
+			}
+			objRef.updateAVSettingsSymbol(object);	  	
+		</method>	
+	
+		<method name="disconnectclient" args="publicSID">
+			if ($debug) Debug.write("videoContainerStream.disconnectclient(): ",publicSID);
+			var vidRef = this.getVideoObjectByPublicSID(publicSID);
+			if (vidRef!=null){
+				vidRef.setAttribute('isassigned',false);
+				vidRef._chatvideoinner.r.setAttribute('frame',5);
+				vidRef.resetValues();
+				vidRef.destroy();
+			}
+		</method>	
+		
+		<method name="stopVideos">
+			if( $debug ) Debug.write("videoContainerStream.stopVideos()");
+			for (var eg in this._videoviewcontent.subviews){
+				this._videoviewcontent.subviews[eg].resetValues();
+			}		
+		</method>
+		
+	    	<method name="getVideoObjectByPublicSID" args="publicSID">
+		    	<![CDATA[
+		    		if ($debug) Debug.write("videoContainerStream.getVideoObjectByPublicSID1() SEARCH: ",publicSID);
+		    		
+		    		//for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+		    		//	if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+		    		//	if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+		    		//}
+		    		if ($debug) Debug.write("videoContainerStream.getVideoObjectByPublicSID() subviews length ",this.subviews.length);
+		    		if (this.subviews.length>0){
+			    		for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+			    			if ($debug) Debug.write("videoContainerStream.getVideoObjectByPublicSID() getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].publicSID);
+			    			if ($debug) Debug.write("videoContainerStream.getVideoObjectByPublicSID() getVideoObjectByBroadCastId3 broadcastId SEARCH: ",publicSID);
+			    			if ($debug) Debug.write("videoContainerStream.getVideoObjectByPublicSID() getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+			    			//if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+			    			if (this._videoviewcontent.subviews[i].publicSID==publicSID){
+			    				return this._videoviewcontent.subviews[i];
+			    		}
+			    	}
+		    	}
+		    	
+		    		return null;
+	    	]]>
+	    	</method>  	
+		
+		<view width="$once{ parent.width }" name="_videoviewcontent">
+			<wrappinglayout axis="x" spacing="2" />
+		</view>
+	</class>
+</library>

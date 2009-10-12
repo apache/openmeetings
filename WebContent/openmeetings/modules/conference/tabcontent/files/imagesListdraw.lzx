@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+<!--  -->
+
+<class name="imagesListdraw" extends="view" 
+       x="0" y="40" height="${ parent.height-40 }" 
+        width="${ parent.width }" bgcolor="$once{ canvas.basebgcolorizer }">
+    
+    <handler name="oninit">
+        canvas.currentImagesListdraw = this;
+    </handler>
+    
+	<view width="${ parent.width-2 }" height="${ parent.height-2 }" x="1" y="1" bgcolor="white" />
+
+	<attribute name="uploadmodul" value="$once{ canvas.uploadmoduleimg }" type="string" />
+
+    <method name="addFolder" args="foldername">
+        //new lz.listFolderDrag(this._table._listcontent,{uploadmodul:this.uploadmodul,foldername:foldername});
+        new lz.listFolderDrag(this._table._listcontent,{uploadmodul:this.uploadmodul,foldername:foldername});
+    </method>
+    
+    <method name="addFile" args="filename,ext">
+        //new lz.listImageDrag(this._table._listcontent,{uploadmodul:this.uploadmodul,size:size,filename:filename,inserted:inserted,isimage:isimage});
+        new lz.listImageDrag(this._table._listcontent,{uploadmodul:this.uploadmodul,filename:filename+ext,filenamePure:filename,ext:ext});
+    </method>
+    
+    <method name="addWML" args="filename,ext">
+        //new lz.listImageDrag(this._table._listcontent,{uploadmodul:this.uploadmodul,size:size,filename:filename,inserted:inserted,isimage:isimage});
+        new lz.listWml(this._table._listcontent,{uploadmodul:this.uploadmodul,filename:filename+ext,filenamePure:filename,ext:ext});
+    </method>
+    
+    <method name="addPresentationThumb" args="thumbName,no">
+        new lz.listPresentationThumb(this._table._listcontent,{uploadmodul:this.uploadmodul,thumbname:thumbName,no:no});
+    </method>
+    
+    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName">
+        new lz.listPresentationFileOrig(this._table._listcontent,{isoriginal:true,uploadmodul:this.uploadmodul,originalName:originalName,pdfname:pdfname,swfName:swfName});
+    </method>
+    
+    <method name="addListpresentationFilePDF" args="pdfname,swfName">
+        new lz.listPresentationFilePDF(this._table._listcontent,{isoriginal:true,uploadmodul:this.uploadmodul,pdfname:pdfname,swfName:swfName});
+    </method>
+	    
+    <method name="resetList">
+    	this._table.destroy();
+    	new lz.imageListInnerTable(this,{name:'_table'});
+    	this._hideForNonMods.bringToFront();
+    </method>
+    
+    <method name="highlightItem" args="obj">
+    	<![CDATA[
+    		for (var i=0;i<this._table._listcontent.subviews.length;i++){
+    			if (!this._table._listcontent.subviews[i].isPpt){
+                    //Debug.write("this._table._listcontent.subviews[i]: ",this._table._listcontent.subviews[i]);
+    				this._table._listcontent.subviews[i]._thumbText.setAttribute('text','<font>'+this._table._listcontent.subviews[i].filenamePure+'</font>');
+                }
+    		}
+    		obj._thumbText.setAttribute('text','<font><b>'+obj.filenamePure+'</b></font>');
+    	]]>
+    </method>
+    
+    <view x="1" y="1"  name="_hideForNonMods" width="${ parent.width-2 }" height="${ parent.height-2 }" 
+           showhandcursor="false" clickable="true"
+           visible="${ ((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true )) }">
+    	<!--
+    	 ((canvas.isAllowedToDraw) ? false : true )
+    	 -->
+    	 
+        <handler name="oninit">
+            if ($debug) Debug.write("#### _hideForNonMods ",this.height,this.width,parent.height,parent.width,this);
+        </handler>
+        <handler name="onclick">
+            new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(97)});
+        </handler>
+    </view>
+    
+	<imageListInnerTable name="_table" />
+	
+	
+    
+</class>
+
+</library>

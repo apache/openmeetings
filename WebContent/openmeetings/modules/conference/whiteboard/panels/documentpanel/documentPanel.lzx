@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="drawDocumentPanelItem" extends="blueButton" 
+	   width="26" height="26">
+	
+	<attribute name="modi" value="" type="string" />
+	<attribute name="labelid" value="0" type="number" />
+	
+	<handler name="onclick">
+		//if ($debug) Debug.write("parent.parent.parent.parent: ",parent.parent.parent.parent);
+		parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction(this.modi);
+	</handler>
+	
+	<labelTooltip name="__labeltooltip" labelid="$once{ parent.labelid }" />
+    
+</class>    
+
+<class name="documentPanelVPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+	   width="26" height="2" ></class>
+	   
+<class name="documentPanelHPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+	   width="2" height="26" ></class>
+	   	
+<!-- not used in the moment -->	   	
+<class name="verticalDocumentIconBar" extends="view" y="22" x="4">
+	<simplelayout axis="y" spacing="2" />
+
+    <drawDocumentPanelItem name="b3" x="2" modi="doc_first" resoureceItem="doc_first" 
+        labelid="255" />		
+    <drawDocumentPanelItem name="b4" x="2" modi="doc_pre" resoureceItem="doc_pre" 
+        labelid="256" />			
+    <drawDocumentPanelItem name="b5" x="2" modi="doc_next" resoureceItem="doc_next" 
+        labelid="257" />		
+    <drawDocumentPanelItem name="b6" x="2" modi="doc_last" resoureceItem="doc_last" 
+        labelid="258" />		
+        
+    <customEdittext name="_currentSlideNo" regexpType="number"
+    				width="30" height="24" fontsize="10" />	 
+    <labelText y="6" labelid="254" />	  
+    <labelText name="_totalSlideNo" y="6" width="30" />	 
+    
+    <documentPanelVPanelSeperator />
+        
+    <drawDocumentPanelItem name="b7" x="2" modi="doc_zoom_minus" resoureceItem="doc_zoom_minus" 
+        labelid="259" />		
+    <drawDocumentPanelItem name="b8" x="2" modi="doc_zoom_plus" resoureceItem="doc_zoom_plus" 
+        labelid="260" />	
+      
+    <labelText y="6" name="_zoom" width="30" />
+    <labelText y="6" labelid="253" />	
+    
+</class>
+
+<class name="horizontalDocumentIconBar" extends="view" y="22" x="4">
+	
+	<method name="addCurrentObject" args="itemObj">
+		if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
+		this.currentDocument.addItem(itemObj.fileName,itemObj.name);
+		this.currentDocument.sendSelection = false;
+		this.currentDocument.selectItem(itemObj.name);
+		this.currentDocument.sendSelection = true;
+	</method>
+	
+	<method name="removeDocument" args="refItemName">
+		this.currentDocument.removeItem(refItemName);
+		this.currentDocument.selectItemAt(0);
+	</method>
+	
+	<method name="clearDocumentsBar">
+		this.currentDocument.reset();
+	</method>
+	
+	<simplelayout axis="x" spacing="2" />
+
+    <drawDocumentPanelItem name="b3" modi="doc_first" resoureceItem="doc_first" 
+        labelid="255" />		
+    <drawDocumentPanelItem name="b4" modi="doc_pre" resoureceItem="doc_pre" 
+        labelid="256" />			
+    <drawDocumentPanelItem name="b5" modi="doc_next" resoureceItem="doc_next" 
+        labelid="257" />		
+    <drawDocumentPanelItem name="b6" modi="doc_last" resoureceItem="doc_last" 
+        labelid="258" />		
+
+    <customEdittext name="_currentSlideNo" width="40" height="24" regexpType="number" >
+    	<handler name="onblur">
+    		parent.parent.parent.parent._drawareaMask._drawarea.newSlideNumber = Number(this.getText());
+    		parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction("setSlideNumber");    		
+    	</handler>
+    </customEdittext>	 
+    <labelText y="6" labelid="254" />	  
+    <labelText name="_totalSlideNo" y="6" width="40" />	 
+    
+    <documentPanelHPanelSeperator />
+        
+    <drawDocumentPanelItem name="b7" modi="doc_zoom_minus" resoureceItem="doc_zoom_minus" 
+        labelid="259" />		
+    <drawDocumentPanelItem name="b8" modi="doc_zoom_plus" resoureceItem="doc_zoom_plus" 
+        labelid="260" />	
+    
+    <labelText y="6" name="_zoom" width="30" height="24" />
+    <labelText y="6" labelid="253" />
+    
+    <resetCombobox name="currentDocument" width="170" height="24" fontsize="11"
+    			   editable="false" shownitems="7">
+    	<attribute name="sendSelection" value="true" type="boolean"/>
+    	<handler name="onselect" args="sel">
+    		if (this.sendSelection) {
+    		    parent.parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
+    		}
+    	</handler>
+    </resetCombobox>
+    	
+</class>
+	
+<class name="documentIconTopPanel" extends="baseTopPanel" clickable="false" 
+	   width="506" height="33" title="" docking="true"
+	   activationClassBounding="documentIconTopPanel"
+	   activationVClassBounding="documentIconTopPanel"
+	   leftClassPanel="documentIconTopPanel"
+	   topClassPanel="documentIconTopPanel"
+	   bottomClassPanel="documentIconTopPanel"
+	   rightClassPanel="documentIconTopPanel"
+	   verticalClassActive="true"
+	   hWidth="506" hHeight="33" >
+	<handler name="oninit">
+		//if ($debug) Debug.write("oninit: ",this);
+		_inner._currentSlideNo.setAttribute('text',canvas.currentSlideNo);
+		_inner._totalSlideNo.setAttribute('text',canvas.currentSlideTotal);
+		_inner._zoom.setAttribute('text',canvas.currentSlideZoom);
+	</handler>
+	<handler name="preclose">
+		//if ($debug) Debug.write("onclose: ",this);
+		canvas.currentSlideNo = Number(_inner._currentSlideNo.getText());
+		canvas.currentSlideTotal = Number(_inner._totalSlideNo.getText());
+		canvas.currentSlideZoom = Number(_inner._zoom.getText());
+	</handler>
+	<horizontalDocumentIconBar name="_inner" x="20" y="4" />
+</class>	
+	
+<!-- Not used for the Moment -->	
+<class name="documentIconLeftPanel" extends="baseLeftPanel" 
+	   width="33" height="336" title="" docking="true"
+	   activationClassBounding="documentIconLeftPanel"
+	   activationVClassBounding="documentIconTopPanel"
+	   topClassPanel="documentIconTopPanel"
+	   bottomClassPanel="documentIconTopPanel"
+	   leftClassPanel="documentIconLeftPanel"
+	   rightClassPanel="documentIconLeftPanel"
+	   verticalClassActive="false"
+	   vWidth="336" vHeight="33">
+	
+	<verticalDocumentIconBar name="_inner" x="3" y="20" />
+</class>	     
+    
+</library>

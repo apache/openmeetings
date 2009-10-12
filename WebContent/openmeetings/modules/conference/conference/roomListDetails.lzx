@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="userRoomTabItem" extends="view" 
+	   width="$once{ parent.width }" bgcolor="0xFFFFFF">
+
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="usertime" value="" type="string" />
+	<attribute name="cbtext" value="" type="string" />
+	
+	<handler name="oninit">
+		<![CDATA[
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+	        		+'&moduleName=chat&parentPath=&room_id='
+	        		+'&remoteUserid='+this.user_id
+	        		+'&sid='+canvas.sessionId;
+	        		
+	        if ($debug) Debug.write("downloadurl "+downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);	
+	        
+	        if ($debug) Debug.write("TIME: "+this.usertime);
+	        
+        ]]>
+	</handler>
+	
+	<image name="_userpic" />
+
+	<text text="$once{ parent.username }" x="40"
+		  width="$once{ parent.width - 40 }"
+		  selectable="true" />
+	
+	<text text="$once{ parent.usertime }" x="40" y="20" />
+
+</class>
+
+<class name="roomListDetails" extends="view" >
+
+	<attribute name="roomid" value="0" type="number" />
+	<attribute name="roomname" value="" type="string" />
+	<attribute name="currentusers" value="null" />
+	
+	
+	<method name="doinit" args="currentusers,roomid,roomname">
+		<![CDATA[
+			if ($debug) Debug.write("doinit",currentusers,roomid,roomname);
+			this.setAttribute('currentusers',currentusers);
+			this.setAttribute('roomid',roomid);
+			this.setAttribute('roomname',roomname);
+			this._roomname.setAttribute('text',canvas.getLabelName(406)+roomname);
+			this._users.clearList();
+			for (var i = 0;i<this.currentusers.length;i++){
+				var username = this.currentusers[i].firstname + " "
+						+ this.currentusers[i].lastname
+						+ " (" + this.currentusers[i].username + ") ";
+				 new lz.userRoomTabItem(this._users._users._cbtext,{user_id:this.currentusers[i].user_id,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
+			}
+			canvas._chatcontentRPC.doinit();
+			this.addClientToChatNotification.doCall();
+			this.getAppointmentData.doCall();
+			
+		]]>
+	</method>
+	
+	<netRemoteCallHib name="addClientToChatNotification" remotecontext="$once{ canvas.thishib }" 
+		funcname="chatservice.addClientToChatNotification" >   
+		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("addClientToChatNotification: ",value);
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib>
+	
+	<!-- Retrieving Appointmentdata for Meeting -->
+	<netRemoteCallHib name="getAppointmentData" remotecontext="$once{ canvas.thishib }" 
+		funcname="conferenceservice.getAppointMentDataForRoom" >   
+		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getAppointmentData: ",value);
+		    	
+		    	if(value!=null){
+		    		if ($debug) Debug.write("Appointment Name : " + value.appointmentName);
+		    		parent.bdatum.setAttribute('text',parseDateToString(value.appointmentStarttime));
+		    		parent.bzeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentStarttime));
+		    		parent.edatum.setAttribute('text',parseDateToString(value.appointmentEndtime));
+		    		parent.ezeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentEndtime));
+		    		
+		    		
+		    		parent.bdatum.setAttribute("visibility","visible");;
+		    		parent.bzeit.setAttribute("visibility","visible");;
+		    		parent.edatum.setAttribute("visibility","visible");;
+		    		parent.ezeit.setAttribute("visibility","visible");;
+		    		parent.l_bdatum.setAttribute("visibility","visible");;
+		    		parent.l_edatum.setAttribute("visibility","visible");;
+		    		
+		    		if ($debug) Debug.write("Appointment Start : " + value.appointmentStarttime);
+		    		if ($debug) Debug.write("Appointment End : " + value.appointmentEndtime);
+		    		
+		    		//Do change the y-Value of the Chat and users list so that there is no white space between
+                    parent.user_label.setAttribute("y",110);
+                    parent._users.setAttribute("y",130);
+                    parent.chat_label.setAttribute("y",230);
+                    parent._chat.setAttribute("y",250);
+		    	}
+		    	else{
+		    		parent.bdatum.setAttribute('text','');
+		    		parent.bzeit.setAttribute('text','');
+		    		
+		    		parent.bdatum.setAttribute('visible', false);
+		    		parent.bzeit.setAttribute('visible', false);
+		    		parent.edatum.setAttribute('visible', false);
+		    		parent.ezeit.setAttribute('visible', false);
+		    		parent.l_bdatum.setAttribute('visible', false);
+		    		parent.l_edatum.setAttribute('visible', false);
+		    		
+		    		//Do change the y-Value of the Chat and users list so that there is no white space between
+		    		parent.user_label.setAttribute("y",40);
+		    		parent._users.setAttribute("y",70);
+		    		parent.chat_label.setAttribute("y",170);
+		    		parent._chat.setAttribute("y",190);
+		    		
+		    	}
+		    	
+		    	
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib> 	
+	
+	<netRemoteCallHib name="getRoomClientsMapByRoomId" funcname="conferenceservice.getRoomClientsMapByRoomId" 
+		remotecontext="$once{ canvas.thishib }" >   
+		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getRoomClientsListByRoomId: ",value);
+		    	parent.currentusers = value;
+		    	parent.doinit();
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib>   	
+	
+	<labelText labelid="404" fontstyle="italic" width="200" />
+	
+	<labelText name="_roomname" labelid="406" y="20" width="200" />
+	
+	<labelText name="l_bdatum" labelid="570" y="40" width="50" visible="false" />
+	<customEdittext name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
+	<customEdittext name="bzeit" x="200" y="40" width="50" regexpType="time" visible="false" />
+	
+	<labelText name="l_edatum" labelid="571" y="70" width="50" visible="false" />
+	<customEdittext name="edatum" y="70" x="75" width="100" text="" visible="false" /> 	            	
+	<customEdittext name="ezeit" x="200" y="70" width="50" regexpType="time" visible="false" />
+	
+	<labelText name="user_label" labelid="407" y="110" width="200" />
+	<view name="_users" bgcolor="$once{ canvas.basebgcolorizer }" 
+		  width="300" height="100" y="130" >
+		<method name="clearList">
+			for (var eg in this._users._cbtext.subviews) 
+				this._users._cbtext.subviews[eg].destroy();
+		</method>
+		<view name="_users" width="298" height="98" x="1" y="1" clip="true" bgcolor="0xFFFFFF" >
+			<view name="_cbtext" width="286" layout="axis:y;spacing:2" />
+			<vscrollbar />
+		</view>
+	</view>
+	<labelText name="chat_label" y="230" labelid="405" />
+	<view name="_chat" y="250" height="270" >
+		<view name="_chatoutputborder" height="${ parent.height-48 }"
+	        bgcolor="$once{ canvas.basebgcolorizer }" width="300">
+			<chatOutputRoomsList name="_chatoutput" x="1" y="1" >
+				<handler name="oninit">
+					canvas._chatcontentRPC = this;
+				</handler>
+			</chatOutputRoomsList>
+		</view>
+		<chatTabBottomRoomList name="_chattabbottom" x="0" width="300" 
+					   y="${ parent.height-46 }" />		
+	</view>
+
+</class>
+
+</library>

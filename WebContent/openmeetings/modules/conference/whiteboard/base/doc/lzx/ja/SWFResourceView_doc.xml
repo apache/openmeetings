@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="">
+   <doc>
+   	SWFファイルを表示するためのクラスのようです。refObj属性で指定されるオブジェクトを処理対象としていますが、処理で使っているメソッドからrefObj属性で指定されるのはbasedrawimageクラス又はそれを継承したものになります。<br/>
+   	*typeOfObject属性に"swf"と固定してあるので、汎用であるがSWFに限定しているクラスのように見えますが実はこの属性は使われていません。
+   </doc>
+ </class>
+</rlzxdoc>

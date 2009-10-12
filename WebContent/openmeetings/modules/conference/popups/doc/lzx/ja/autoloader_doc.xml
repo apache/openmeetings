@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="autoloader">
+   <doc>
+   	（おそらく、）ログイン直後のHibernate接続ローディングバーを表示しています。
+   </doc>
+ </class>
+ <class name="autoloaderBarOnly">
+   <doc>
+   	Hibernate接続後のローディングバーを表示しています。<br/>
+   	autoloaderクラスと違って、ローディングバーの表示だけでなく”言語”、”会議室”などの設定を呼び出して実行しています。
+   	*'Only'と言いながらいろいろとやっているクラスです。要注意。
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="overAllChatOutput">
+   <doc>
+チャットの発言表示エリアです。起動時にチャット履歴を呼び出して表示しています。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

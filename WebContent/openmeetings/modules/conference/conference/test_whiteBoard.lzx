@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas width="1000" height="700">
+
+   
+    <include href="../../../oslmon/" />
+    <include href="../../../conference/" />
+
+
+    <view x="264" width="658" y="2" height="561" bgcolor="$once{ canvas.basebgcolorizer }">
+		<view name="bg" x="1" y="1" bgcolor="white"
+			width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" />
+	</view>
+
+    <!-- 
+        Videooutput-View
+        See yourself - In this View a User will see itself
+        The quality of this picture is always greater then in the other Boxes
+        And its width and height is bigger
+     -->
+   
+	<!-- 
+		Hold 4 VideoViews 
+		Call _videocontainer.getNewVideoObject()
+		to get a free one
+	 -->
+	<videoContainer name="_videocontainer" x="2" y="2" />
+
+
+
+  	<moderationPanel x="2" y="256" />
+
+  <!--
+  
+  	This is the tab with all the different contents
+  	Chat/Online Users/Files/Library/WWW
+   -->
+  
+    <!-- 
+        shared Whiteboard
+     -->
+    
+   <whiteBoard name="_whiteboard" x="268" y="2" bgcolor="red">
+        <handler name="onsharedMessage" args="obj">
+                
+            //Debug.write("send: ",obj);
+            canvas.objWhiteboard = obj;
+            hib.sendVars.doCall();
+            
+        </handler>   
+	
+		<handler name="isloadingImage" args="val" >
+			//Debug.write("isloadingImage: ",val);
+		</handler>
+		<handler name="isloadedImage" args="val" >        
+			//Debug.write("isloadedImage: ",val);
+		</handler>
+   </whiteBoard>
+
+	<view name="currentmainobjectisMod" x="266" y="46"
+		width="654"
+		height="504"
+		visible="false">
+		<handler name="onclick">
+			new lz.errorPopup(canvas,{error:canvas.getLabelName(97)});
+		</handler>
+	</view>
+
+    
+</canvas>

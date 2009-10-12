@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<include href="maintoolspanel/" />
+	<include href="propertypanel" />
+	<include href="documentpanel/" />
+</library>

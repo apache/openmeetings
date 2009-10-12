@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	
+	<resource name="icon_btn_dashboard_1" src="resources/wizzard_button_1.png" />
+    <resource name="icon_btn_dashboard_2" src="resources/wizzard_button_2.png" />
+    <resource name="icon_btn_dashboard_3" src="resources/wizzard_button_3.png" />
+    <resource name="icon_btn_dashboard_4" src="resources/wizzard_button_4.png" />
+    
+	 
+	<include href="infosPanel.lzx" />
+	<include href="profilesPanel.lzx" />
+	<include href="rssPanel.lzx" />
+	<include href="mainDashboard.lzx" />
+
+</library>

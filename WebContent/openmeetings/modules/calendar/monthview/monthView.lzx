@@ -1,0 +1,294 @@
+<library>
+	
+	<class name="monthView" extends="view">
+		
+	<attribute name="monthnames" value="['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/>
+	<attribute name="weekdaynames" value="['So.','Mo.','Di.','Mi.','Do.','Fr.','Sa.']"/>  
+	<attribute name="firstdayinweek" value="$once{ canvas.firstdayinweek }" type="number" />
+	<attribute name="year" value="" type="string" />
+	<attribute name="selecteddate" value="null" />
+	<attribute name="showingdate" type="string" value="" />
+	<attribute name="dayNamesLabelIds" value="null" />
+	<attribute name="dayLabelNamesLabelIds" value="null" />
+	
+	<attribute name="_startdate" value="null" />
+	<attribute name="_enddate" value="null" />
+	
+<!--	<attribute name="weekdaynames" value="['So.','Mo.','Di.','Mi.','Do.','Fr.','Sa.']"/>  -->
+		
+		<simplelayout axis="y" spacing="2"/>
+	<!--	<view name="_head" bgcolor="green">
+			<text>Dezember</text>
+			
+			<view name="previos" resource="leftarrow_rsc" x="100">
+	 		
+	 		<handler name="onclick">				 			
+	 			
+			</handler>
+	 		
+	 		<handler name="onmouseover">
+					this.animate('xoffset', +2, 200)
+					//if ($debug) Debug.write("this: ", this);
+			</handler>
+			<handler name="onmouseout">
+				this.animate('xoffset', 0, 200) //this.setX(this.x-5)							
+			</handler>
+			</view>
+					
+		 	<view name="next" resource="rightarrow_rsc" x="200">
+	 		<handler name="onmouseover">
+				this.animate('xoffset', -2, 200)	 //this.setX(this.x+5)
+				//if ($debug) Debug.write("this: ", this);
+			</handler>
+			<handler name="onmouseout">
+				this.animate('xoffset', 0, 200) //this.setX(this.x-5)
+			</handler>
+			
+			<handler name="onclick">
+							 	
+ 			</handler>			
+			</view>
+		</view>-->
+		<view name="week0"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+	    	<calendarMonthView></calendarMonthView>
+    	</view>
+    	<view name="week1"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+    	</view>
+    	<view name="week2"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+    	</view>
+    	<view name="week3"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+    	</view>
+    	<view name="week4"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+    	</view>
+    	<view name="week5"> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+	    	<calendarMonthView ></calendarMonthView>
+    	</view> 
+    	 
+   <handler name="oninit">
+   	  
+
+   	   this.dayNamesLabelIds = [459,453,454,455,456,457,458];
+   	   this.dayLabelNamesLabelIds = [466,460,461,462,463,464,465];
+	   this.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
+							canvas.getLabelName(471),canvas.getLabelName(472),
+							canvas.getLabelName(473),canvas.getLabelName(474),
+							canvas.getLabelName(475),canvas.getLabelName(476),
+							canvas.getLabelName(477),canvas.getLabelName(478),
+							canvas.getLabelName(479),canvas.getLabelName(480)]
+								
+   	   if ($debug) Debug.write("this month: ",this);
+   	   if ($debug) Debug.write("this month _startDate: ",parent.parent.parent._startDate);
+   	   this.showingdate = parent.parent.parent._startDate;
+   	   
+   	   this.init();
+   	   
+   </handler>
+   
+   <method name="init">
+        <![CDATA[ 
+	        super.init();
+
+		  if ($debug) Debug.write("monthView init!");
+	        this.clearContent();
+	        if (this.showingdate==""){
+	        	this.showingdate = new Date();
+	        	this.showingdate.setFullYear(this.showingdate.getFullYear());
+	        	this.showingdate.setMonth(this.showingdate.getMonth());
+	        	this.showingdate.setDate(this.showingdate.getDate());
+	        }
+	        //this.setAttribute('year',this.showingdate.getFullYear());
+	        this.selecteddate = this.showingdate;
+	        var firstdayDate = this.getDateFirstDayInMonth();
+	       	this._startdate = firstdayDate;
+	        var j=0;
+	        var t=0;
+	        for(var i=0;i<42;i++){
+	        	//this.week1.day[i].setAttribute('daydate', firstdayDate + i);
+	        	if(i==7||i==14||i==21||i==28||i==35){
+		        	j++
+		        	t=0;
+	        	}
+	        	var datecount = new Date(firstdayDate.getTime() +86400000*i);
+	        	
+	        	if ($debug) Debug.write("datecount ",datecount);
+	        	
+	        	//this["week"+ j].subviews[t].setAttribute('daydate',  this.weekdaynames[datecount.getDay()]+" "
+	        	//+datecount.getDate().toString()+". "+this.monthnames[datecount.getMonth()] ); 
+	        	
+	        	this["week"+ j].subviews[t].setAttribute('daydate', canvas.getLabelName(this.dayNamesLabelIds[datecount.getDay()])+" "
+	        	+datecount.getDate().toString()+". "+this.monthnames[datecount.getMonth()] ); 
+	        	
+	        	this["week"+ j].subviews[t].setAttribute('fullDate', datecount);
+	        	
+	        	if(i<7 && datecount.getDate()>22 || i>28 && datecount.getDate()<28){
+	        		this["week"+ j].subviews[t]._head.setAttribute('bgcolor', 'red');
+	        	}
+	        	
+	        	t++
+	        }
+	        
+	        this._startdate = firstdayDate;
+	        this._enddate = datecount;
+	        
+	        this.getAppointmentByRangeMonth.doCall();
+	        
+		]]>
+	</method>
+	  
+   <method name="getDateFirstDayInMonth">
+		<![CDATA[
+		
+		    if ($debug) Debug.write("getDateFirstDayInMonth ",this.showingdate);
+		    
+		    //if (this.showingdate == null) {
+		    //	return;
+		    //}
+		
+    		//First calc the date by the given first day in week
+    		var newDateTemp = new Date(this.showingdate.getFullYear(), this.showingdate.getMonth(), 1);
+    		////Debug.write(newDateTemp);
+    		var factor = 0;
+    		if (newDateTemp.getDay()>this.firstdayinweek)	
+    			factor = -((newDateTemp.getDay()-this.firstdayinweek));
+    		else if (newDateTemp.getDay()<this.firstdayinweek)
+    			factor = (this.firstdayinweek-newDateTemp.getDay());
+    		////Debug.write("factor: ",factor);
+    		
+    		//calc first day
+    		var newDate = new Date( (newDateTemp.getTime()+(86400000*factor)) );
+    
+    		//if the first day is after the first day of the selected month then we have to add 7 Days
+    		if (newDate.getDate()>1 && newDate.getMonth()==newDateTemp.getMonth()){
+    			newDate = new Date( (newDate.getTime()-(86400000*7)));
+    		}
+    		////Debug.write("getDateFirstDayInMonth ",newDate);
+    		if ($debug) Debug.write("newDate: ",newDate);
+    		return newDate;
+		
+		]]>
+	</method>
+	
+	<method name="clearContent">
+		<![CDATA[
+    		var j=0;
+    	    var t=0;
+    		for(var i=0;i<42;i++){
+    				        	
+            	if(i==7||i==14||i==21||i==28||i==35){
+    	        	j++
+    	        	t=0;
+        		}
+            	this["week"+ j].subviews[t]._appointemtList._innerList.clearContent();
+            	t++
+    		}
+    	]]>
+	</method>
+	
+	<netRemoteCallHib name="getAppointmentByRangeMonth" funcname="calendarservice.getAppointmentByRange" 
+					  remotecontext="$once{ canvas.thishib }" >     
+		<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+		<!--	<netparam><method name="getValue">return canvas.thishib.macomUserID;</method></netparam> -->
+		<netparam><method name="getValue">return parent.parent._startdate;</method></netparam>
+		<netparam><method name="getValue">return parent.parent._enddate;</method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+    			//if ($debug) Debug.write("getAppointmentByRangeMonth: ",value);
+	    		//if ($debug) Debug.write("_startdate: ",parent._startdate);
+	    		//if ($debug) Debug.write("_enddate: ",parent._enddate);
+	
+	    		if(value[0] != null){
+	    		    		
+		    		for (var k=0;k<value.length;k++){		
+			    		var j=0;
+	        			var t=0;
+	        			var m=0;
+	        			for(var i=0;i<42;i++){
+				        	if(i==7||i==14||i==21||i==28||i==35){
+					        	j++
+					        	t=0;
+			        		}
+			        	
+				        	if(parent["week"+ j].subviews[t]['fullDate'].getDate()==value[k].appointmentStarttime.getDate()
+				        		&& parent["week"+ j].subviews[t]['fullDate'].getMonth()==value[k].appointmentStarttime.getMonth()){
+					        		
+					        		var appointmentLength = new Date(value[k].appointmentEndtime.getTime() - value[k].appointmentStarttime.getTime());//appointment over one day?
+						    		if ($debug) Debug.write("appointmentLength: ",appointmentLength.getDate());
+						    		if ($debug) Debug.write("termin über mehrere tage: ",value[k].appointmentEndtime.getTime() - value[k].appointmentStarttime.getTime());
+						    		//appointment over one day?
+						    		if(appointmentLength.getDate()>1){
+						        		for(var n=0;n<appointmentLength.getDate();n++){
+						        			//monthview y-Axis controll
+						        			if(i==7||i==14||i==21||i==28||i==35){
+									        	m++
+									        	t=0;
+							        		}
+							        		new lz.appointmentMonth(parent["week"+ (j+m)].subviews[(t+n)]._appointemtList._innerList, {	
+				    							terminObj:value[k]
+											});
+						        		}
+						    		}else{
+						    			
+						    			new lz.appointmentMonth(parent["week"+ j].subviews[t]._appointemtList._innerList, {	
+				    							terminObj:value[k]
+											});
+						    		}
+			        		}
+			        		t++
+	        			}    
+		    		}	
+	    		}
+    		 ]]>
+    	</handler>
+    </netRemoteCallHib> 
+
+	
+	</class> 
+			    	
+</library>			    	
+			    	

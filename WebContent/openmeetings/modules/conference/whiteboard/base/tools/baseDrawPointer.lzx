@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="baseDrawPointer" extends="baseDrawEllipse" >
+      
+    <!-- Pointers -->
+    
+    <method name="endPointerWhiteBoard">
+        this.drawPointerWhiteBoardFinal(
+                "pointer"+this.getCounter(),
+                this.getMouse('x'),this.getMouse('y'),
+                0,0
+            )
+    </method>
+
+    <method name="drawPointerToHistory" args="actionObject,parentObj">
+        new lz.whiteBoardPointer(parentObj,{
+            x:actionObject[actionObject.length-5],
+            y:actionObject[actionObject.length-4],
+            userName:actionObject[1]
+        })
+    </method>
+
+    <method name="drawPointerWhiteBoardFinal" args="newName,x,y,width,height" >
+        var actionObject = new Array();
+        actionObject[0] = 'pointerWhiteBoard';
+        actionObject[1] = canvas.currentuser;
+        actionObject[2] = this.counter;
+        actionObject[3] = x;
+        actionObject[4] = y;
+        actionObject[5] = width;
+        actionObject[6] = height;
+        actionObject[7] = newName;
+        this.baseactionobjectList.push(actionObject);
+        this.onsharedMessage('draw',actionObject);
+        this.drawPointerToHistory(actionObject,this);
+    </method>
+    
+</class>
+
+</library>

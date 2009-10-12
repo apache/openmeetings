@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<!--- view to select emoticons. size is 160x140 -->
+<class name="emotIconsSelector" extends="closableView" bgcolor="$once{ canvas.basebgcolorizer }" 
+    clickable="true" width="160" height="140" >
+
+    <attribute name="btnRef" value="null" />
+
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+            if ( eventStr == "onmousedown"  ){
+                if ( view != null ) {
+                   if ( !view.childOf(this) ) {
+                        this.close();
+                   }
+                } else {
+                    this.close();
+                }
+            }
+            if (view && view.childOf(this)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            return true;
+        ]]> 
+    </method>
+    
+    <handler name="oninit">
+    	this.getAllPublicEmoticons.doCall();
+    </handler>
+    
+        <netRemoteCallHib name="getAllPublicEmoticons" funcname="chatservice.getAllPublicEmoticons" 
+			remotecontext="$once{ canvas.thishib }" > 
+            <handler name="ondata" args="value">
+            	<![CDATA[
+                	//The onResult-Handler will be called be the rtmpconnection
+					if($debug) Debug.write("emotIconsSelector/getAllPublicEmoticons : ",value);
+					for (var i=0;i<value.length;i++){
+						var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/public/emoticons/'+value[i][0];
+						iconlabel = value[i][1];
+						if (value[i].length>4){
+							iconlabel += ", "+value[i][2];							
+						}
+						
+						if ($debug) Debug.write("swfurl "+swfurl);
+						
+						var m = new lz._chatInnerSmilyIcon(parent.inn.inn,{iconvalue:value[i][1],iconlabel:iconlabel});
+						m.setSource(swfurl);						
+					}
+                ]]>
+            </handler>   
+        </netRemoteCallHib>    
+
+    <view bgcolor="$once{ canvas.baseMousecolorizer }" width="$once{ parent.width-2 }" 
+    	  height="$once{ parent.height-2 }" x="1" y="1" />
+    	  
+    <labelText x="1" y="1" labelid="446" /><!-- 446:Emoticons -->
+	<view name="inn" width="158" height="118" x="0" y="20" clip="true">
+		<view name="inn" width="$once{ parent.height }" >
+			<wrappinglayout axis="x" spacing="2" />
+		</view>
+		<vscrollbar name="myscrollbar" />
+	</view>
+    
+    <view name="_close" x="$once{ parent.width-this.width-2 }" y="2"
+        resource="btn_presenter_close"
+        onmouseover="this.setAttribute('frame',2)"
+        onmouseout="this.setAttribute('frame',1)"
+        onmousedown="this.setAttribute('frame',3)"
+        onmouseup="this.setAttribute('frame',1)" >
+        <handler name="onclick">
+            this.setAttribute('frame',2);
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" /><!-- 430:close -->
+    </view>    
+	
+</class>	
+
+<!--- private class of emotIconsSelector.class. resource view of chat smily icons. it shows icons and label tooltips.-->
+<class name="_chatInnerSmilyIcon" extends="view" onmouseover="" onmouseout="">
+	<attribute name="iconlabel" value="" type="string" />
+	<attribute name="iconvalue" value="" type="string" />
+	<handler name="onclick">
+		var messageBox = parent.parent.parent.btnRef.message;
+		messageBox.setText(messageBox.getText()+" "+iconvalue+"  ");
+		if ($debug) Debug.write("messageBox TEXT: ",messageBox.text,messageBox);
+		lz.Focus.setFocus(messageBox._ctext);
+		messageBox._ctext.setSelection(messageBox.getText().length-1,messageBox.getText().length);
+		parent.parent.parent.close();
+	</handler>
+	<labelTooltip text="$once{ parent.iconlabel }" />
+</class>
+
+</library>

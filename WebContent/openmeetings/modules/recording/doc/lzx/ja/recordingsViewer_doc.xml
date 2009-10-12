@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+<class name="recordingsViewer">
+   <doc>
+	録画データの再生パネルです。<br/>
+	録画データのタイプに合わせて、表示するパネルを変えています。<br/>
+	whiteboard, files panelは録画データを見て再生しています。<br/>
+	video and audio panelは、会議用とセミナー用で入れ替えています。video and audio panelはダミーパネルです。
+   </doc>
+ </class>
+</rlzxdoc>

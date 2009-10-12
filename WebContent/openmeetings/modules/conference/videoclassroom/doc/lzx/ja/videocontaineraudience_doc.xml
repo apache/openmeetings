@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="videocontaineraudience">
+   <doc>
+   	セミナー用の"video and audio"パネルらしい。
+   	*videocontainerクラスと同じですね。統一しましょう。
+   </doc>
+ </class>
+</rlzxdoc>

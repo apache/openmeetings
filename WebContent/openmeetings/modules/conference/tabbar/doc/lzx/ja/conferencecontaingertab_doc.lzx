@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="simplebasetabpane">
+   <doc>
+   	単純なviewクラスです。このファイルでのプライベートではありません。いくつか他のファイルで継承に使っていますが、その必要があるクラスではありません。<br/>
+   	*削除してもいいと思いますが、どうしても使う場合は別ファイルにして独立したクラスにしましょう。
+   </doc>
+ </class>
+ <class name="openmeetingsTabButton">
+   <doc>
+   	iconresourcename属性に指定されたリソースと、labelid属性に指定されたラベルを表示する汎用のタブボタンクラスです。
+   	*conferencecontaingertabクラスのプライベートクラスっぽいです。
+   </doc>
+ </class>
+ <class name="conferencecontainertab">
+   <doc>
+   	3つのopenmeetingsTabButtonクラスと、1つのviewを組み合わせてtabpaneのように見せています。<br/>
+   	*tabコンポーネントを継承して使うよりこのほうが効率いいのかしら？
+   </doc>
+ </class>
+</rlzxdoc>

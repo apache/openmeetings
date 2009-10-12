@@ -1,0 +1,30 @@
+<library>
+
+<class name="searchContactInCalendar" extends="view" bgcolor="silver">
+		<simplelayout axis="x" spacing="5"/>
+		<attribute name ="userId" value="0" type="number"/>
+		<attribute name ="nachname" value="" type="string" />
+		<attribute name ="email" value="null"/>		
+		<attribute name ="meetingMemberId" value="0" type="number" />
+		
+		<attribute name ="refObj" value="null"/>		
+			 		
+		<view resource="list_remove_rsc">
+			<handler name="onclick">
+				//new lz.searchContact(parent.refObj.terminObjRef._liste._innerlist,{userId:parent.userId, vorname:parent.vorname, nachname:parent.nachname, email:parent.email})
+				parent.destroy();
+				//parent.refObj.terminObjRef._liste.setAttribute("visible", true);
+				//if ($debug) Debug.write("Visible: ",parent.refObj.terminObjRef._liste['visible']);
+				//parent.refObj.terminObjRef._liste;
+				//new selectKategoryStatus(canvas,{_contactId:parent.userId});
+				if ($debug) Debug.write("userId  search: ",parent.userId);
+			</handler>
+		</view>	
+		<text  text="$once{parent.userId }" width="20"/>		
+		<text name="_item3" text="$once{ parent.vorname}" width="60" />
+		<text name="_item4" text="$once{parent.nachname }" width="60" />
+		<text name="_item7" text="$once{ parent.email}" width="145"/>  
+					 	
+ </class>
+ 
+</library>

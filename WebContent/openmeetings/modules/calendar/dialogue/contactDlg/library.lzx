@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="incubator/scrolledittext.lzx"/>
+    <include href="appointmentMembers.lzx"/>
+    <include href="searchResultsContact.lzx"/>
+    <include href="searchContact.lzx"/>
+    <include href="searchResultsAddContact.lzx" />
+    <include href="searchContactInCalendar.lzx" />
+    <include href="enterExternMember.lzx" />
+    <include href="ordnerInhaltHead.lzx" />
+    
+</library>

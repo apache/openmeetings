@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+		Dialog box for recording data.
+		When you click the Recording button on your conference menu, this class shows a dialog box for saving it.
+	--> 
+	<!-- label: save as -->
+	<class name="recordingStartWin" extends="labelExplorerBox" labelid="391"
+	    		docking="true" resizeable="false" closable="false" width="400" x="300" height="226">
+	 	
+		<attribute name="recordingsName" value="" type="string" />
+	 	
+	 	<handler name="oninit">
+	 		this.rName.setAttribute('text',"recording_"+getStringDateFileSave());
+	 	</handler>
+	 	
+	   	<!-- label: record name --> 
+	    	<labelText labelid="392" width="200" y="22" resize="false" x="2"/>
+	      <customEdittext name="rName" y="22" x="120" width="270" />	
+		
+		<!-- label: comment -->
+	    	<labelText labelid="393" width="200" y="52" resize="false" x="2"/>
+	      <customScrollEdittext name="rComment" y="52" x="120" width="270" height="120" />	   					
+	  
+	    	<!-- label: cancel -->	
+	    	<simpleLabelButton labelid="438" width="100" x="180" y="190" >
+	    		<handler name="onclick">
+	    			parent.close();
+	    		</handler>
+	    	</simpleLabelButton>
+	        
+	    	<!-- label: start -->
+	    	<simpleLabelButton labelid="439" width="100" x="290" y="190" onclick="this.parent.checkForRecording.doCall();" />
+	  	
+		<netRemoteCallHib name="recordMeetingStream" funcname="streamservice.recordMeetingStream" remotecontext="$once{ canvas.thishib }" >  
+	  		<netparam><method name="getValue">return canvas.thishib.modus;</method></netparam>
+	  		<netparam><method name="getValue">return canvas._drawarea.baseactionobjectList;</method></netparam> 
+	    		<netparam><method name="getValue">return parent.parent.rName.getText();</method></netparam>
+			<netparam><method name="getValue">return parent.parent.rComment.getText();</method></netparam>    
+	    	
+	    		<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debug ) Debug.write("recordingStartWin.recordMeetingsStream(): ",value);	
+				parent.modpanel.recordingsName = value;
+				parent.modpanel.sta_btn.setAttribute('visibility','hidden');
+				parent.modpanel.stp_btn.setAttribute('visibility','visible');	
+				parent.close();			
+			</handler>	
+	  	</netRemoteCallHib>
+	  	
+	  	<netRemoteCallHib name="checkForRecording" funcname="streamservice.checkForRecording" remotecontext="$once{ canvas.thishib }" >  
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if( $debgug ) Debug.write("recordingStartWin.checkForRecording(): ",value);	
+				parent.recordingUser = value;
+				if (value==null) {
+					this.parent.recordMeetingStream.doCall();
+				} else {
+					new lz.errorPopupUserInfo(canvas,{error:canvas.getLabelName(418),user:value});
+				}
+			</handler>	
+	  	</netRemoteCallHib>  	
+	</class>
+</library>

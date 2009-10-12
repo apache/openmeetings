@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="roomAdmin">
+   <doc>
+パブリック/プライベートの会議室/講演室の管理モジュール。<br/>
+ここで会議室/講演室を各種属性設定(名前、定員など)とともに作成します。<br/>
+名前に漢字使用可能。レイアウトの設定も可能。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

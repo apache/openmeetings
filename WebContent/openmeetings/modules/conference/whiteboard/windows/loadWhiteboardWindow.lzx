@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="loadWhiteboardWindow" extends="labelExplorerBox" labelid="205"
+    docking="true" width="260" x="$once{ parent.width/2 - this.width/2 }" y="200" height="100">
+    
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+    	lz.ModeManager.makeModal(this);
+    </handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+	
+	<method name="setMessage" args="mess">
+		this._loadMessage.setAttribute('text',mess);
+	</method>
+    
+    <labelText y="22" name="_loadMessage" multiline="true" 
+		width="250" x="5" resize="false" />
+
+</class>
+
+</library>

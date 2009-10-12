@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="rssFeedListItem" extends="view" layout="axis:y" bgcolor="0xFFFFFF" width="$once{ parent.width }" >
+    <handler name="onmouseover">
+        setCurrentMouseWheelObject(this.parent.parent._scrollbar);
+    </handler>
+    <handler name="onmouseout">
+        disableCurrentMouseWheelObject();
+    </handler>
+    
+    <attribute name="titel" type="string" value="" />
+    <attribute name="summary" type="string" value="" />
+    <attribute name="link" type="string" value="" />
+    <attribute name="updated" type="string" value="" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            this.urlv.setAttribute('text',"<u><FONT color='#0000CC'>"+canvas.getLabelName(285)+"</FONT></u>");
+        ]]>
+    </handler>
+    
+    <labelText fontsize="10" text="$once{ parent.titel }" fontstyle="bold" multiline="true" width="$once{ parent.width }" />
+    <labelText fontsize="10" text="$once{ parent.updated }" fontstyle="italic" />
+    <labelText fontsize="10" name="summaryv" text="$once{ parent.summary }"  multiline="true" width="$once{ parent.width }" />
+    <labelText fontsize="10" name="urlv">
+        <handler name="onclick">
+            lz.Browser.loadURL(parent.link,"_blank");
+        </handler>
+    </labelText>
+    <view height="1" width="$once{ parent.width }" bgcolor="$once{ canvas.basebgcolorizer }" />
+</class>    
+    
+<class name="rssBox" extends="view" width="$once{ parent.width-2 }" 
+	   height="$once{ parent.height-22 }" y="22" x="1"
+    bgcolor="$once{ canvas.basebgcolorizer }" > 	
+    <method name="outputRSS" args="value">
+        this.inner.outputRSS(value);
+    </method>
+    <view name="inner" clip="true" bgcolor="0xFFFFFF" 
+        x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }">
+        <method name="outputRSS" args="value">
+            <![CDATA[
+                var t = new Array();
+                for(var eg in value){
+                    //Debug.write("eg: ",eg,"val",value[eg]);
+                    t.push(value[eg]);
+                }
+                
+                for (var i=t.length-1;i>-1;i--){
+                    //Debug.write("i ",i,"val",t[i],t[i].title.text,t[i].link.attributes.href,t[i].summary.text);
+                    new lz.rssFeedListItem(this.content,{updated:t[i].updated.text,titel:t[i].title.text,link:t[i].link.attributes.href,summary:t[i].summary.text});
+                }
+            ]]>
+        </method>
+        <view name="content" layout="axis:y" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width-14 }" />        
+        <vscrollbar name="_scrollbar" />
+    </view>
+</class>   
+
+<class name="rssPanel" extends="guiPresenter"
+    width="400" height="380" closable="true" labelid="277"
+    resizeable="false">
+	<!--
+    <simpleLabelButton y="40" labelid="279" x="30"
+        onclick="quicklink('meetings')" />
+     -->
+    <rssBox name="feed" />
+</class> 
+
+</library>

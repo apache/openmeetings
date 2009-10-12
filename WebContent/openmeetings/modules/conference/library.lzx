@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<include href="whiteboard/" /> 
+<!-- <include href="remote/" />-->
+ 	<include href="tabbar/" />
+    	<include href="tabcontent/" />
+    	<include href="popups/" />
+    	<include href="moderation/" />
+	<include href="video/" />
+    	<include href="polls/" />
+	<include href="videoclassroom/" />
+    	<include href="conference/" />
+        <!-- throws an Exception
+	<include href="browser/"/>  
+         -->
+    <include href="participents/" /> 
+    <include href="eventuserlist/" />
+    <include href="browser/" />
+    <include href="testsetup/" />
+    
+    <include href="flexibleConferenceRoom/" />
+    
+</library>

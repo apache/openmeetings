@@ -1,0 +1,248 @@
+<library>
+	    	
+<class name="weekView" extends="view" >
+	
+	<attribute name="_monday" />
+	<attribute name="_sunday"/>
+	<attribute name="dayNamesLabelIds" value="null" />
+	<attribute name="dayLabelNamesLabelIds" value="null" />
+	
+	<method name="initWeekByDate" args="date">
+		<![CDATA[
+			//if ($debug) Debug.write("initWeekByDate: ",date);
+			//if ($debug) Debug.write("initWeekByDate: ",date.getDay());
+						
+			this.dayLabelNamesLabelIds = [460,461,462,463,464,465,466];
+			this.dayNamesLabelIds = [453,454,455,456,457,458,459];
+			//day in milliseconds 86 400 000
+			if (date.getDay() > 1) {
+				var monday = new Date();
+				monday.setTime(date.getTime() - (86400000 * (date.getDay()-1)));
+				monday. setHours(00);
+				monday.setMinutes(00);
+				monday.setSeconds(00);
+				
+			} else if (date.getDay() == 0) {
+				var monday = new Date();
+				monday.setTime(date.getTime() - (86400000 * 6));
+			} else {
+				var monday = date;
+			}
+			var sunday = new Date();
+			sunday.setTime(monday.getTime() + (86400000 * 7))
+			
+			this._monday = monday
+			this._sunday = sunday
+			if ($debug) Debug.write("monday: ",monday);
+			if ($debug) Debug.write("sunday: ",sunday);
+			
+			//var Weekday = new Array("Montag", "Dienstag", "Mittwoch",
+                          //"Donnerstag", "Freitag", "Samstag", "Sonntag");
+			
+			for (var i=0;i<7;i++)
+			{
+				var datecoutnt = new Date();
+				datecoutnt.setTime(monday.getTime() + (86400000*i));
+				if ($debug) Debug.write("datecoutnt: ",datecoutnt);
+				//this["_day"+ i].weekday._weekday.setAttribute('text',Weekday[i]+","+" "+ parseDateToString(datecoutnt));
+				this["_day"+ i].weekday._weekday.setAttribute('text', canvas.getLabelName(this.dayLabelNamesLabelIds[i])+","+" "+ parseDateToString(datecoutnt));
+				this["_day"+ i]._date = parseDateToString(datecoutnt);
+			}
+			
+			
+		]]>
+	</method>
+	
+	<netRemoteCallHib name="getAppointmentByRangeWeek" funcname="calendarservice.getAppointmentByRange" 
+					  remotecontext="$once{ canvas.thishib }" >     
+		<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+		<!--	<netparam><method name="getValue">return canvas.thishib.macomUserID;</method></netparam> -->
+		<netparam><method name="getValue">return parent.parent._monday;</method></netparam>
+		<netparam><method name="getValue">return parent.parent._sunday;</method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+    			if ($debug) Debug.write("getAppointmentByRangeWeek: ",value);
+	    		if ($debug) Debug.write("_monday: ",parent._monday);
+	    		if ($debug) Debug.write("_sunday: ",parent._sunday);
+	    		
+	    		parent._day0._tagesansicht._list.clearContent();
+	    		parent._day1._tagesansicht._list.clearContent();
+	    		parent._day2._tagesansicht._list.clearContent();
+	    		parent._day3._tagesansicht._list.clearContent();
+	    		parent._day4._tagesansicht._list.clearContent();
+	    		parent._day5._tagesansicht._list.clearContent();
+	    		parent._day6._tagesansicht._list.clearContent();
+	    		
+	    		//new lz.myTestView(parent._day0._tagesansicht,{y:136});
+	    		
+	    		if(value[0] != null){
+	    		    		
+		    		for (var i=0;i<value.length;i++){
+		    			
+			    		if ($debug) Debug.write("value: ",value[i]);	
+			    		if ($debug) Debug.write("value.appointmentStarttime.getDay(): ",value[i].appointmentStarttime.getDay());
+			    		                    
+			    		//termin.getDay()
+			    		if(value[i].appointmentStarttime.getDay() == 1){
+				    		var day = 0;	    		
+			    		} else if(value[i].appointmentStarttime.getDay() == 2){
+				    		var day = 1;
+			    		} else if(value[i].appointmentStarttime.getDay() == 3){
+				    		var day = 2;
+			    		} else if(value[i].appointmentStarttime.getDay() == 4){
+				    		var day = 3;
+			    		} else if(value[i].appointmentStarttime.getDay() == 5){
+				    		var day = 4;
+			    		} else if(value[i].appointmentStarttime.getDay() == 6){
+				    		var day = 5;
+			    		} else if(value[i].appointmentStarttime.getDay() == 0) {
+				    		var day = 6;
+			    		}
+			    	
+			    		//if (termin_dauer über mehrere Tage)
+			    		//erster tag => Termin setzten von startzeitpunkt bis Mitternacht
+			    		
+			    		//für die folge-tage prüfen wie lange der Termin andauert
+			    		//angenommen der Termin ist am Dianstag
+			    		//ist zu prüfen ob Mi, Do, Fr, SA, SO komplett oder Teilweise 
+			    		//auch Termine sind und für jeden Tag ist dann 
+			    		//jeweils ein Termin Objekt zu initialisieren.
+			    		
+			    		
+			    		var appointmentLength = new Date(value[i].appointmentEndtime.getTime() - value[i].appointmentStarttime.getTime());//appointment over one day?
+			    		if ($debug) Debug.write("appointmentLength: ",appointmentLength.getDate());
+			    		if ($debug) Debug.write("appointmentLength in ms: ",value[i].appointmentEndtime.getTime() - value[i].appointmentStarttime.getTime());
+			    		
+			    		
+			    		
+			    		
+			    		if(appointmentLength.getDate()>1 && value[i].appointmentStarttime > parent._monday){
+			    			for(var n=0;n<appointmentLength.getDate();n++){
+					    			if ($debug) Debug.write("n:++ ",n);
+					    			// first appointmentday
+					    			if(n==0){
+						    			//if ($debug) Debug.write("termin über mehrere tage :");	
+						    			new lz.terminareaWeekView(parent["_day"+day]._tagesansicht._list, {
+		    							y:value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
+		    							height:24*17-2-value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
+		    							name:"_terminarea"+i,
+		    							calenderObjRef:parent,
+		    							description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+		    							terminObj:value[i],
+		    							bgcolor:"red"
+						    			});
+					    			}else if((n+1)==appointmentLength.getDate() && (day+n) <= 6){
+					    				//last appointment day
+					    				new lz.terminareaWeekView(parent["_day"+(day+n)]._tagesansicht._list, 
+					    				{name:"_terminarea"+i,
+					    				y:0, 
+					    				height:value[i].appointmentEndtime.getHours()*17+value[i].appointmentEndtime.getMinutes()*1/4,
+					    				terminObj:value[i],
+					    				calenderObjRef:parent,
+					    				description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+					    				bgcolor:"red"
+					    				});
+					    				if ($debug) Debug.write("appointmentEndtime.getHours():++ ",value[i].appointmentEndtime.getHours());
+					    			}else{
+						    			if((day+n) <= 6){
+						    				if ($debug) Debug.write("_monday+++",parent._monday);
+							    			new lz.terminareaWeekView(parent["_day"+(day+n)]._tagesansicht._list, 
+							    				{y:0,
+							    				name:"_terminarea"+i,
+							    				height:389, //(24*17-2),
+							    				terminObj:value[i],
+							    				calenderObjRef:parent,
+							    				description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+							    				bgcolor:"red"
+							    				});
+					    			}
+				    			}
+			    			}
+	
+	    					}else if(value[i].appointmentStarttime > parent._monday){
+				    				new lz.terminareaWeekView(parent["_day"+day]._tagesansicht._list, {
+		    							name:"_terminarea"+i,
+		    							y:value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
+			    						height:value[i].appointmentEndtime.getHours()*17 + 1/4 * value[i].appointmentEndtime.getMinutes()  
+						    					-(value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4),
+		    							calenderObjRef:parent,
+		    							bgcolor:"green",
+		    							description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+		    							terminObj:value[i]
+									});
+				    		}
+				    		}
+		    		}
+    		 ]]>
+    	</handler>
+    </netRemoteCallHib> 
+    
+    <!--var mondayToEnd = new Date(value[i].appointmentEndtime.getTime() - parent._monday.getTime())
+			    		if ($debug) Debug.write("mondayToEnd: ",mondayToEnd);
+			    		if ($debug) Debug.write("mondayToEnd.getDate(): ",mondayToEnd.getDate());
+			    		if ($debug) Debug.write("monday####: ",parent._monday);
+			    		if ($debug) Debug.write("endtime###: ",value[i].appointmentEndtime);
+			    		if ($debug) Debug.write("obj####: ",value[i]);
+			    		
+			    		if(value[i].appointmentStarttime < parent._monday){
+						    if ($debug) Debug.write("Beginn vor montag ", value[i]);
+						    for(var n=mondayToEnd.getDate();n<appointmentLength.getDate();n++){
+					    			if ($debug) Debug.write("n:++ ",n);
+					    			//first appointmentday
+					    			if(n==0){
+						    			//if ($debug) Debug.write("termin über mehrere tage :");	
+						    			new lz.terminareaWeekView(parent["_day"+1]._tagesansicht._list, {
+		    							y:value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
+		    							height:24*17-2-value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
+		    							name:"_terminarea"+i,
+		    							calenderObjRef:parent,
+		    							description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+		    							terminObj:value[i],
+		    							bgcolor:"red"
+						    			});
+					    			}else if((n+1)==appointmentLength.getDate() && (1+n) <= 6){
+					    				//last appointment day
+					    				new lz.terminareaWeekView(parent["_day"+(1+n)]._tagesansicht._list, 
+					    				{name:"_terminarea"+i,
+					    				y:0, 
+					    				height:value[i].appointmentEndtime.getHours()*17+value[i].appointmentEndtime.getMinutes()*1/4,
+					    				terminObj:value[i],
+					    				calenderObjRef:parent,
+					    				description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+					    				bgcolor:"red"
+					    				});
+					    				if ($debug) Debug.write("appointmentEndtime.getHours():++ ",value[i].appointmentEndtime.getHours());
+					    			}else{
+						    			if((day+n) <= 6){
+						    				if ($debug) Debug.write("_monday+++",parent._monday);
+							    			new lz.terminareaWeekView(parent["_day"+(day+n)]._tagesansicht._list, 
+							    				{y:0,
+							    				name:"_terminarea"+i,
+							    				height:389, //(24*17-2),
+							    				terminObj:value[i],
+							    				calenderObjRef:parent,
+							    				description:value[i].appointmentName +" Beschreibung: "+ value[i].appointmentDescription,
+							    				bgcolor:"red"
+							    				});
+					    			}
+				    			}
+			    			}
+						    
+						}
+			    		
+			    		-->			    		
+	
+	<simplelayout axis="x" spacing="2"/> 
+		
+	<calendarWeekView name="_day0" ></calendarWeekView>	
+	<calendarWeekView name="_day1" ></calendarWeekView>
+	<calendarWeekView name="_day2" ></calendarWeekView>
+	<calendarWeekView name="_day3" ></calendarWeekView>
+	<calendarWeekView name="_day4" ></calendarWeekView>
+	<calendarWeekView name="_day5" ></calendarWeekView>
+	<calendarWeekView name="_day6" ></calendarWeekView>
+	
+		
+</class>
+	
+</library>

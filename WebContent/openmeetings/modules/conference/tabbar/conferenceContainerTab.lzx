@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<include href="incubator/roundrect.lzx"/> 
+
+	<!-- 
+		Icons for the TabbarIconButtons
+	 -->    
+<resource name="ksirc_rsc2" src="resources/ksirc.png" />
+<resource name="kuser_rsc2" src="resources/kuser.png" />   
+<resource name="library2" src="resources/folder.png" />  
+
+
+<!--- Tabpane. it used by chat. -->
+<class name="simpleBaseTabpane" extends="view" height="$once{ parent.height-20 }" 
+	   width="$once{ parent.width }" y="24" x="2" >
+	
+</class>    
+
+<class name="openmeetingsTabButton" extends="roundRectGradient" width="85" height="40"
+	borderWidth="1" borderRadius="5" >
+	<attribute name="labelid" type="number" value="0" />
+	<attribute name="iconresourcename" value="" type="string" />
+	<view x="1" y="0" resource="$once{ parent.iconresourcename }" />
+	<labelText x="18" y="-2" fgcolor="${ (parent.opacity==0.5) ? 0x999999 : 0x000000 }" 
+               labelid="$once{parent.labelid }" />
+</class>
+
+<class name="openmeetingsTabButtonBackground" extends="roundRectGradient" width="85" height="40"
+    borderWidth="1" borderRadius="5" backgroundStartColor="0x7CFC00" backgroundStopColor="0x7CFC00" >
+    
+</class>
+
+<class name="conferenceContainerTab" extends="view"
+    width="262" height="286">
+	
+	<attribute name="uploadTapIsInited" value="false" type="boolean" />
+	<attribute name="membersTapIsInited" value="false" type="boolean" />
+    
+    <openmeetingsTabButton name="b1" iconresourcename="ksirc_rsc2" labelid="244" x="1" y="0" 
+    					   opacity="1">
+         
+        <handler name="oninit">
+            this.fadeDelegate = new LzDelegate( this, "showText" );
+        </handler>
+        
+        <attribute name="fadeDelegate" value="null" />
+        <attribute name="doBlink" value="false" type="boolean" />
+        
+        <method name="startBlink">
+            //if ($debug) Debug.write("startBlink",this.opacity);
+            if (this.opacity != 1) {
+                if (this.doBlink) {
+                    //if ($debug) Debug.write("doBlink already started !!!");
+                } else {
+	                //if ($debug) Debug.write("doBlink");
+	                this.doBlink = true;
+                    parent._newMessage.setAttribute("visibility","visible");
+	                lz.Timer.addTimer( this.fadeDelegate , 1000 );
+                }
+            }
+	    </method>
+	
+	    <method name="showText">
+            if (this.doBlink) {
+                //if ($debug) Debug.write("showText",parent._newMessage.opacity);
+                lz.Timer.addTimer( this.fadeDelegate , 1000 );
+                if (parent._newMessage.opacity == 0.3) {
+                    parent._newMessage.animate( "opacity", 1.0, 750 );
+                } else {
+                    parent._newMessage.animate( "opacity", 0.3, 750 );
+                }
+            } else {
+                this._newMessage.setAttribute("visibility","hidden");
+            }
+	    </method>
+    	
+        <handler name="onclick">
+    		parent._chattab.setAttribute('visible',true);
+    		if (parent.uploadTapIsInited) parent._uploadtab.setAttribute('visible',false);
+    		if (parent.membersTapIsInited) parent._participants.setAttribute('visible',false);
+            lz.Timer.removeTimer( this.fadeDelegate );
+            parent._newMessage.setAttribute("visibility","hidden");
+    		this.setAttribute('opacity',1);
+    		parent.b2.setAttribute('opacity',0.5);
+    		parent.b3.setAttribute('opacity',0.5);
+            this.doBlink = false;
+    	</handler>
+    </openmeetingsTabButton>
+        
+    <openmeetingsTabButtonBackground name="_newMessage" x="1" y="0" >
+        <handler name="oninit">
+            this.fadeDelegate = new LzDelegate( this, "showText" );
+            lz.Timer.addTimer( this.fadeDelegate , 50 );
+        </handler>
+        <method name="showText">
+            this.setAttribute("visibility","hidden");
+        </method>
+        <view x="1" y="0" resource="ksirc_rsc2" />
+        <labelText x="18" y="-2" fgcolor="0x000000" labelid="244" width="60" />
+    </openmeetingsTabButtonBackground>
+    
+    <openmeetingsTabButton name="b2" iconresourcename="library2" labelid="245" x="88" y="0" 
+                           opacity="0.5">
+    	<handler name="onclick">
+    		parent._chattab.setAttribute('visible',false);
+    		if (parent.uploadTapIsInited) {
+    			parent._uploadtab.setAttribute('visible',true);
+    		} else {
+    			var t = new lz.uploadTab(this.parent,{name:'_uploadtab'});
+    			t.onvisible.sendEvent();
+    			parent.uploadTapIsInited = true;
+    		}
+    		if (parent.membersTapIsInited) parent._participants.setAttribute('visible',false);
+    		this.setAttribute('opacity',1);
+    		parent.b1.setAttribute('opacity',0.5);
+    		parent.b3.setAttribute('opacity',0.5);    		
+    	</handler>
+    </openmeetingsTabButton>	
+    
+    <openmeetingsTabButton name="b3" iconresourcename="kuser_rsc2" labelid="246" x="175" y="0" 
+                           opacity="0.5">
+    	<handler name="onclick">
+    		parent._chattab.setAttribute('visible',false);
+    		if (parent.uploadTapIsInited) parent._uploadtab.setAttribute('visible',false);
+    		if (parent.membersTapIsInited) {
+    			parent._participants.setAttribute('visible',true);
+    		} else {
+    			var t = new lz.participantsPanel(this.parent,{name:'_participants'});
+    			t.onvisible.sendEvent();
+    			parent.membersTapIsInited = true;
+    		} 
+    		this.setAttribute('opacity',1);
+    		parent.b2.setAttribute('opacity',0.5);
+    		parent.b1.setAttribute('opacity',0.5);    		
+    	</handler>
+    </openmeetingsTabButton>	
+    <view y="22" bgcolor="0x000000" x="1" width="$once{ parent.width-2 }" 
+          height="$once{ parent.height-23 }">
+    	<view y="1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
+              height="$once{ parent.height-1 }" />
+    </view>
+    <chatTab name="_chattab" />
+    
+    <!--
+    <uploadTab name="_uploadtab" visible="false" />
+    <participantsPanel name="_participants" visible="false" />
+     -->
+     
+</class>    
+
+</library>

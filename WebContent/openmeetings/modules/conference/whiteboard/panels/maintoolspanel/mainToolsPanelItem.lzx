@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+<class name="mainToolsPanelItem" extends="blueButton" 
+	   width="26" height="26">
+	
+	
+	<attribute name="modi" value="" type="string" />
+	<attribute name="labelid" value="0" type="number" />
+	
+	<attribute name="setSelectionToItem" value="true" type="boolean" />
+	<attribute name="_isselected" value="false" type="boolean" />
+	
+	<handler name="oninit">
+		if (this._isselected) parent.parent.parent.setSelection(this);
+	</handler>
+	
+	<!--
+	<view x="1" y="1" width="24" name="_area" 
+		  height="24" bgcolor="0xFFFFFF" />
+     -->
+	
+	<handler name="onmouseover">
+		if ($debug){};
+	</handler>
+	<handler name="onmouseout">
+		if ($debug){};
+	</handler>
+	<handler name="onmouseup">
+		//if (!this._isselected) this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+		//this.__labeltooltip.destroyLabel();
+		//if ($debug) Debug.write("parent.parent.parent",parent.parent.parent);
+		parent.parent.parent.setSelection(this);
+	</handler>
+	<labelTooltip name="__labeltooltip" labelid="$once{ parent.labelid }" />
+</class>
+
+<class name="redoUndoToolsPanelItem" extends="mainToolsPanelItem" setSelectionToItem="false">
+	<attribute name="doredo" value="true" type="boolean" />
+	<handler name="onclick">	  
+          if(this.doredo){
+            this.parent.parent.parent.parent._drawareaMask._drawarea.doredo();
+          } else {
+            this.parent.parent.parent.parent._drawareaMask._drawarea.undoredo();
+          }
+        </handler>
+</class>
+
+<class name="mainToolsHPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+	   width="26" height="2" ></class>
+	   
+<class name="mainToolsVPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+	   width="2" height="26" ></class>
+
+    
+</library>

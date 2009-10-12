@@ -1,0 +1,20 @@
+<library>
+	
+	<class name="appointmentMonth" extends="view" bgcolor="gray">
+		<attribute name ="terminObj" value="null"/>
+		<text name="appTitel" text="$once{parent.terminObj.appointmentName}" ></text>
+		
+		<handler name="onclick">
+    		if ($debug) Debug.write("!!!!!!!!!!!!!!!!!!!!!!!!appointmentMonth ");
+    		if ($debug) Debug.write("this ",this);
+    		if ($debug) Debug.write("this termin: ",this.terminObj);
+    		var tRootCalendarView = parent.parent.parent.parent.parent.parent.parent.parent;
+            
+            tRootCalendarView.initDetails();
+    		tRootCalendarView._termindetails.terminObjRef = this.terminObj;
+    		tRootCalendarView._termindetails.showtermindetails();
+    		tRootCalendarView._termindetails.setAttribute("visibility","visible");;
+		</handler>
+	</class>
+	
+</library>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="basedrawsave">
+   <doc>
+   	ホワイトボードに描画したオブジェクトをWML形式のオブジェクトとして保存、呼び出しを行う処理のクラスです。<br/>
+   　　 *setndPartURL/sendURL属性にタイムアウト時の回避策としてURLが固定であります。この属性の必要性を要検討。
+   </doc>
+ </class>
+</rlzxdoc>

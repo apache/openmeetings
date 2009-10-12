@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="whiteboard">
+   <doc>
+   	ホワイトボードパネルのクラスです。sharedObjectを使って、"image"フィールドを操作しています。
+   	*checkForAppyScreen()でURLを固定して使っていますので、プロパティ設定に変えましょう。
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="errorpopup">
+   <doc>
+   	エラーメッセージを表示する画面のようです。<br/>
+   	errormoderatorpopupクラスとほぼ同じですので、一緒にできそうです。<br/>
+   	*'parent.parent..'と親依存が強いですので要改善。
+   </doc>
+ </class>
+</rlzxdoc>

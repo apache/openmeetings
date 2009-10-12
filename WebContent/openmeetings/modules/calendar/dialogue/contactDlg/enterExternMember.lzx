@@ -1,0 +1,51 @@
+<library>
+	
+	<class name="enterExternMember" extends="labelExplorerBox" width="216" height="190"
+		   closable="true" labelid="629" >
+		
+		<attribute name ="refObj" value="null"/>	
+		
+		<view name="_mainView" x="10" y="24" layout="axis:y;spacing:2">
+			
+
+			<labelText labelid="630" width="100"/>
+			
+			<edittext name="vorname" width="${parent._buttons.width -10}"></edittext>
+			
+			<labelText labelid="631" width="100"/>
+			<edittext name="nachname" width="${parent._buttons.width -10}"></edittext>
+			
+			<labelText labelid="632" width="100"/>
+			<edittext width="${parent._buttons.width - 10}" name="email"></edittext>
+			
+			<view name="_buttons" layout="axis:x;spacing:2" width="210">
+				<simpleLabelButton labelid="333" width="$once{parent._cancel.width}">
+					<handler name="onclick">
+						new lz.searchContactInCalendar(parent.parent.parent.refObj.terminObjRef._liste._innerlist,{
+    						      userId:0, 
+    						      vorname:parent.parent.vorname["text"], 
+    						      nachname:parent.parent.nachname["text"], 
+    						      email:parent.parent.email["text"]
+						      });
+						//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
+						parent.parent.vorname="";
+						parent.parent.nachname="";
+						parent.parent.email="";
+						parent.parent.parent.close();
+						parent.parent.parent.refObj.close();
+						//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
+					</handler>
+				</simpleLabelButton>
+				
+				<simpleLabelButton labelid="25" name="_cancel" width="100">
+					<handler name="onclick">
+						parent.parent.parent.close();
+					</handler>
+				</simpleLabelButton>
+			</view>
+			
+		</view>
+		
+	</class>
+	
+</library>

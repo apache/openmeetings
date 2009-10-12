@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="sharingScreenImage" extends="image" forcereload="true">
+	<attribute name="imageCompleted" value="false" type="boolean"/>
+    <handler name="onerror">
+        if ($debug) Debug.write("sharingScreenImage onerror ",this);
+    </handler>
+    <handler name="ontimeout">
+        if ($debug) Debug.write("sharingScreenImage ontimeout ",this);
+    </handler>
+</class>
+
+<!--
+setNewSource
+ -->
+<class name="sharingFrame" extends="view" width="260" height="130">
+    
+    <attribute name="initSrc" value="" type="string"/>
+    <attribute name="bufferIndex" value="1" type="number" />
+    
+    <attribute name="sharingStarted" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        if ($debug) Debug.write("sharingScreenImage oninit ",this.x,this.y);
+        if (this.initSrc.length != 0) {
+            this.setNewSource(this.initSrc);
+        }
+    </handler>
+    
+    <method name="setNewSource" args="urlToLoad">
+        <![CDATA[
+            if (this.bufferIndex == 1) {
+            	if (!this._sharingScreenImage2.imageCompleted) {
+                   this._sharingScreenImage2.unload();
+                }
+            	this._sharingScreenImage1.imageCompleted = false;
+                this._sharingScreenImage1.setAttribute("src",urlToLoad);
+                this.bufferIndex = 2;
+            } else {
+            	if (!this._sharingScreenImage1.imageCompleted) {
+            	   this._sharingScreenImage1.unload();
+            	}
+            	this._sharingScreenImage2.imageCompleted = false;
+                this._sharingScreenImage2.setAttribute("src",urlToLoad);
+                this.bufferIndex = 1;
+            }
+        ]]>
+    </method>
+    
+    <sharingScreenImage name="_sharingScreenImage1">
+        <handler name="onload">
+        	this.imageCompleted = true;
+            if ($debug) Debug.write("Loading Complete ",this.name);
+            this.bringToFront();
+        </handler>
+    </sharingScreenImage>
+    
+    <sharingScreenImage name="_sharingScreenImage2">
+        <handler name="onload">
+        	this.imageCompleted = true;
+            if ($debug) Debug.write("Loading Complete ",this.name);
+            this.bringToFront();
+        </handler>
+    </sharingScreenImage>
+    
+</class>
+    
+<!---
+    View for recorded contents list.
+    When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="sharingSession" extends="view" align="right" height="100" valign="top" width="280">   
+
+    <attribute name="sharingSessionObject" value="null" />
+    <attribute name="sharerPublicSID" value="" type="string" />
+    
+    <attribute name="httpSessionStarted" value="false" type="boolean"/>
+    
+    <handler name="oninit">
+        <![CDATA[
+        
+            this.sharerPublicSID = this.sharingSessionObject.s;
+            
+            if ($debug) Debug.write("INITED sharingSession ",this.sharerPublicSID);
+            
+            if (this.sharerPublicSID == canvas.publicSID) {
+                this._initText._infoText.setAttribute("labelid",725);
+                this._initText._starthttpButton1.setAttribute("visibility","hidden");
+                this._initText._starthttpJNPL1.setAttribute("visibility","hidden");
+            }
+            
+            //this.setAttribute("width",this.sharingSessionObject.w);
+            //this.setAttribute("height",this.sharingSessionObject.h);
+            
+            //this.setNewScreen(0,0,0,0);
+            
+            if (parent.subviews.length > 1) {
+                this.setAttribute("y",((parent.subviews.length-1)*100)+40);
+            } else {
+                this.setAttribute("y",40);
+            }
+            
+            this.setShadow();
+        ]]>
+    </handler>
+    
+    <method name="setShadow">
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getMCRef();
+            this.displacementMap = new flash.filters.DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method>       
+
+    
+    <method name="startViewerSessionHTTP">
+        <![CDATA[
+        
+            this.httpSessionStarted = true;
+            
+            this._subcontent.setAttribute("visibility","visible");
+        
+            this._showScreenSharing._y.setAttribute("to",0);
+            this._showScreenSharing._height.setAttribute("to",canvas.height);
+            this._showScreenSharing._width.setAttribute("to",canvas.width);
+        
+            this._showScreenSharing.doStart();
+            
+            this._cancelText.setAttribute("visibility","hidden");
+            this._initText.setAttribute("visibility","hidden");
+            
+            this.sharerPublicSID = this.sharingSessionObject.s;
+           
+            for (var i=0;i<this.sharingSessionObject.l.length;i++) {
+            
+                var frame = this.sharingSessionObject.l[i];
+                
+                this.setNewScreen(frame.x,frame.y,frame.w,frame.h);
+                
+            }
+            
+            this.registerViewerSession.registerToViewers = true;
+            this.registerViewerSession.doCall();
+            
+        ]]>
+    </method>
+    
+    <method name="doMinimize">
+    	<![CDATA[
+    	   
+    	   this.httpSessionStarted = false;
+    	   this.clearScreens();
+    	   
+    	   this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
+    	   this._showScreenSharing._height.setAttribute("to",100);
+    	   this._showScreenSharing._width.setAttribute("to",280);
+    	   
+    	   this._showScreenSharing.doStart();
+    	   
+    	   this._initText.setAttribute("visibility","visible");
+    	   this._subcontent.setAttribute("visibility","hidden");
+    	   this._cancelText.setAttribute("visibility","hidden");
+    	   
+    	]]>
+    </method>
+    
+    <method name="doShowButtons">
+    	this._cancelText.setAttribute("visibility","visible");
+    </method>
+    
+    <method name="startViewerSessionJNPL">
+        <![CDATA[
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                +'rtmphostlocal='+canvas.rtmphostlocal
+                +'&room='+hib.currentroomid
+                +'&domain='+hib.conferencedomain
+                +'&sid='+canvas.sessionId
+                +'&red5httpport='+canvas.red5httpport
+                +'&publicSID='+this.sharerPublicSID
+                +'&languageAsString='+hib.userlang
+                +'&mode=viewer'
+                +'&record=no';
+
+            //Debug.write(downloadurl); 
+            lz.Browser.loadURL(downloadurl,'_blank');  
+            
+        ]]>        
+    </method>  
+    
+    <method name="closeByMethod">
+        if (this.sharerPublicSID == canvas.publicSID) {
+            this.destroy();
+        } else {
+            
+            if (this.httpSessionStarted) {
+                this.registerViewerSession.registerToViewers = false;
+                this.registerViewerSession.doCall();
+            }
+            
+        }
+    </method>
+    
+    <method name="close">
+    	this.registerViewerSession.closeByRemote = true;
+    	this.registerViewerSession.registerToViewers = false;
+    	this.registerViewerSession.doCall();
+    </method> 
+    
+    <method name="confirmedClose">
+    	if (this.sharerPublicSID == canvas.publicSID) {
+    		this.destroy();
+    	} else {
+    		new lz.confirmtionSingle(canvas,{labelid:746,refObj:this,labeliderror:745,showCheckBox:false});
+    	}
+    </method>  
+    
+    <method name="sendConfirmation">
+    	this.close();
+    </method>
+    
+    <netRemoteCallHib name="registerViewerSession" funcname="registerViewerSession" 
+                      remotecontext="$once{ canvas.thishib }" >
+        <attribute name="registerToViewers" value="true" type="boolean"/>
+        <attribute name="closeByRemote" value="false" type="boolean" />
+        <netparam><method name="getValue">return parent.registerToViewers;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.sharerPublicSID;</method></netparam>
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("registerViewerSession: ",value);
+            if (this.closeByRemote) {
+            	parent.destroy();
+            	return;
+            }
+            if (!this.registerToViewers) {
+            	parent.doMinimize();
+                //parent.destroy();
+            }
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <method name="setNewScreen" args="x,y,w,h">
+        <![CDATA[
+        
+            if (!this.httpSessionStarted) {
+                log.debug("Session Not Yet Started");
+                return;
+            }
+        
+            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + '/'+canvas.webAppRootKey+'/serverUDP?' +
+                                   'sid=' + canvas.sessionId +
+                                   '&publicSID=' + this.sharerPublicSID + 
+                                   '&x='+x+'&y='+y;
+        
+            var nameImage = "image_"+x+"_"+y;
+            
+            new lz.sharingFrame(this._subcontent._content,{name:nameImage,x:x,y:y,
+                                           initSrc:downloadurl,width:w,height:h});
+            
+        ]]>
+    </method>
+    
+    <method name="sendNewFrame" args="screenSharingNewFrame">
+        <![CDATA[
+            if (!this.httpSessionStarted) {
+                if ($debug) Debug.write("Session Not Yet Started");
+                return;
+            }
+        
+            var d = new Date();
+        
+            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + '/'+canvas.webAppRootKey+'/serverUDP?' +
+                                   'sid=' + canvas.sessionId +
+                                   '&publicSID=' + this.sharerPublicSID + 
+                                   '&x='+screenSharingNewFrame.x+'&y='+screenSharingNewFrame.y +
+                                   '&t='+d.getTime();
+                                   
+            var nameImage = "image_"+screenSharingNewFrame.x+"_"+screenSharingNewFrame.y;
+        
+            if (this._subcontent._content[nameImage]) {
+               
+                //this[nameImage].isLoading = true;
+                this._subcontent._content[nameImage].setNewSource(downloadurl);
+               
+            } else {
+                if ($debug) Debug.warn("Could not Find Image: ",nameImage);
+            }
+           
+           //new lz.sharingScreenImage(this,{name:nameImage,x:x,y:y,src:downloadurl});
+        ]]>
+    </method>
+    
+    <view width="${ this.parent.width }" height="${ this.parent.height }" 
+        bgcolor="$once{ canvas.basebgcolorizer }" > 
+        <view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }"
+             x="1" y="1" bgcolor="0xFFFFFF" />
+    </view>   
+    
+    <view x="1" y="1" width="${ this.parent.width-1 }" height="20" name="_titlebar" >
+        
+        <view width="${ this.parent.width }" y="0" stretches="both" height="20"
+            resource="presenter_thumb_rsc" >
+            <handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,90);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                if (color != "" && color != null){
+
+                    if (brightness == null) { brightness = 0; }
+                    var rgb = color;
+                    var red=(rgb >> 16) & 0xFF;
+                    var green=(rgb >> 8) & 0xFF;
+                    var blue=rgb & 0xFF;
+        
+                    this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                rb : 0, gb : 0, bb : 0 } );
+                                                
+                }
+                ]]>
+            </method>            
+        </view>
+        
+        <labelText fontsize="10" name="_title" height="17" x="6" y="1" labelid="726"
+            resize="true" fontstyle="bold" fgcolor="0xFFFFFF" />
+        
+        <view name="_toolbar" x="${ parent.width-this.width-2 }" 
+            layout="axis:x;spacing:2" y="2">     
+            <view name="_close"
+                resource="btn_presenter_close"
+                onmouseover="this.setAttribute('frame',2)"
+                onmouseout="this.setAttribute('frame',1)"
+                onmousedown="this.setAttribute('frame',3)"
+                onmouseup="this.setAttribute('frame',1)" >
+                <handler name="onclick">
+                    this.setAttribute('frame',2);
+                    this.parent.parent.parent.confirmedClose();
+                </handler>
+                <labelTooltip labelid="430" />
+            </view>  
+        </view>  
+         
+    </view>
+    
+    <method name="clearScreens">
+    	<![CDATA[
+    	
+            for (var eg in this._subcontent._content.subviews) {
+                this._subcontent._content.subviews[eg].destroy();
+	        }
+    	
+    	]]>
+    </method>
+    
+    <view name="_subcontent" width="${ parent.width }" visibility="hidden"
+          y="20" height="${ parent.height - 42 }" clip="true">
+        
+        <view name="_content" />
+        
+        <vscrollbar />
+        <hscrollbar />
+        
+    </view>
+    
+    <view name="_initText">
+    	
+    	<labelText name="_infoText" labelid="724" width="230" x="10" y="26" multiline="true" />
+    
+        <simpleLabelButton name="_starthttpButton1" labelid="723" x="10" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.startViewerSessionHTTP();
+            </handler>
+        </simpleLabelButton> 
+          
+        <simpleLabelButton name="_starthttpJNPL1" labelid="722" x="138" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.startViewerSessionJNPL();
+            </handler>
+        </simpleLabelButton>   
+    	
+    </view>
+    
+    <view name="_cancelText" visibility="hidden" valign="bottom" align="right" height="22" >
+        
+        <simpleLabelButton name="_starthttpButton1" labelid="744" x="10" width="124" y="1">
+            <handler name="onclick">
+            	parent.parent.closeByMethod();
+                parent.parent.startViewerSessionJNPL();
+            </handler>
+        </simpleLabelButton> 
+          
+        <simpleLabelButton name="_starthttpJNPL1" labelid="743" x="138" width="124" y="1">
+            <handler name="onclick">
+                parent.parent.closeByMethod();
+            </handler>
+        </simpleLabelButton> 
+
+        <view width="2" /> 
+        
+    </view>
+    
+    
+    <animatorgroup name="_showScreenSharing" start="false" 
+                   process="simultaneous" duration="1000" >
+    	<handler name="onstop">
+    		if ($debug) Debug.write("onstop this._y.to ",this._y.to);
+    		if (parent.httpSessionStarted) {
+    		    parent.doShowButtons();
+    		}
+    	</handler>
+        <animator name="_y" attribute="y" to="0" />
+        <animator name="_height" attribute="height" />
+        <animator name="_width" attribute="width" />
+    </animatorgroup>
+    
+
+</class>
+    
+</library>

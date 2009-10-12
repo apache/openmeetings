@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="styleableinput">
+   <doc>
+   	basedrawwordsクラスのprivateクラスです。入力文字に合せてHeightを変えるようです。<br/>
+   </doc>
+ </class>
+ <class name="basedrawwords">
+   <doc>
+   	ホワイトボードに入力されたテキスト文字に合せて、オブジェクトのサイズをリサイズするクラスのようです。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

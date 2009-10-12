@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Admin module to configure the Conference or Audience room.-->
+<class name="roomClient" extends="baseContentView">	
+	
+	<turnOverList name="_turnoverlist" width="780" height="600" x="2" y="0" 
+		orderby="rooms_id" step="50" asc="true">
+
+		<handler name="oninit">
+			this.addHeaderItem(599,80);
+			this.addHeaderItem(600,240);
+			this.addHeaderItem(601,130);
+            this.addHeaderItem(602,150);
+            this.addHeaderItem(603,150);
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getRoomClientsMap.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//Debug.write("onclickedItem",obj,obj.obj);
+			parent._roomvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<netRemoteCallHib name="getRoomClientsMap" funcname="conferenceservice.getRoomClientsMap" remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		if ($debug) Debug.write("getRoomClientsMap: ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+	    	this.clearList();
+	    	for (var i=0;i<records.length;i++){
+	    		new lz.roomClientListItem(this._innerlist._inn._inn,{
+	                    obj:records[i],
+	                    streamid:records[i].streamid,
+	                    login:records[i].username,
+                        dateConnected:parseDateToStringTime(records[i].connectedSince),
+	                    scope:records[i].scope
+                    });
+	    	}
+            this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+    <!--
+	<roomValueForm name="_roomvalueform" x="402" />
+     -->
+		
+</class>
+
+
+
+</library>

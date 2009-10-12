@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<resource name="paint_whiteboardtab_rsc" src="resources/kpaint.png" />
+<resource name="document_whiteboardtab_rsc" src="resources/kpdf.png" />    
+    
+<class name="toolbarTabList" extends="view" layout="axis:x;spacing:2">
+    <!-- Holds a reference to the currently selected TabButton -->
+    <attribute name="selected" value="null" />
+    
+    <method name="setSelection" args="selected">
+        if (this.selected!=null) this.selected.setAttribute('enabled',true);
+        this.selected = selected;
+        this.selected.setAttribute('enabled',false);
+        <![CDATA[
+        for (var i=0;i<this.subviews.length;i++){
+            if(this.subviews[i]!=selected){
+                this.subviews[i].setAttribute('isselected',false);
+                this.subviews[i].onmouseout.sendEvent();
+            }
+        }
+        ]]>
+    </method>        
+    <simpleLabelButton name="b_paint" width="100" labelid="242" height="26"
+        oninit="this.onclick.sendEvent()">
+        <handler name="onclick">
+            this.parent.setSelection(this);
+            this.parent.parent.changeMenu(1,false);
+        </handler>      
+        <view name="_icon" x="2" resource="paint_whiteboardtab_rsc" />   
+    </simpleLabelButton>
+    <simpleLabelButton name="b_doc" width="120" labelid="243" height="26"
+        oninit="this.onmouseup.sendEvent()">      
+        <handler name="onclick">
+            this.parent.setSelection(this);
+            this.parent.parent.changeMenu(2,false);
+        </handler>
+        <view name="_icon" x="2" resource="document_whiteboardtab_rsc" />          
+    </simpleLabelButton>        
+</class>
+    
+</library>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="innerlistView" extends="view" layout="axis:y;spacing:1;inset:1" 
+	width="258" bgcolor="$once{ canvas.basebgcolorizer }" />
+
+<class name="userTagView" extends="text" width="280" bgcolor="white"
+    onmouseover="this.setAttribute('bgcolor',canvas.baseMousecolorizer)" 
+    onmouseout="this.setAttribute('bgcolor',white)" >
+	
+	<attribute name="connectedSince" value="" type="string" />
+	<attribute name="isMod" value="" type="string" />
+	<attribute name="streamid" value="" type="string" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="userroom" value="" type="string" />
+	<attribute name="formatedDate" value="" type="string" />
+	<attribute name="firstname" value="" type="string" />
+	<attribute name="lastname" value="" type="string" />
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="refObj" value="null" />
+	
+	<handler name="oninit">
+		<![CDATA[
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+	        		+'&moduleName=chat&parentPath=&room_id='
+	        		+'&remoteUserid='+this.user_id
+	        		+'&sid='+canvas.sessionId;
+	        this._userpic.setAttribute('src',downloadurl);	
+        ]]>
+	</handler>
+	
+	<image name="_userpic" >
+		<handler name="onload">
+			parent.setAttribute('height',this.height);
+		</handler>
+	</image>
+	
+	<labelText x="40" text="$once{ parent.firstname+' '+parent.lastname }" />
+</class>
+
+<class name="listOfUsers" extends="view" width="260" height="240" bgcolor="$once{ canvas.basebgcolorizer }">
+	<view width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" 
+		x="1" y="1" bgcolor="white" />
+
+	<method name="addItem" args="object">
+		//Debug.write(object);
+		new lz.userTagView(this._table.innerList,{user_id:object.user_id,firstname:object.firstname,lastname:object.lastname,refObj:object,connectedSince:object.connectedSince,isMod:object.isMod,streamid:object.streamid,username:object.username,userroom:object.userroom,formatedDate:object.formatedDate});
+	</method>
+	
+	<method name="clearList">
+		this._table.destroy();
+		new lz.usersTable(this,{name:'_table'});
+	</method>
+
+	<usersTable name="_table" />
+
+</class>
+
+<class extends="view" name="usersTable" height="$once{ parent.height-4 }" 
+	bgcolor="white" x="2" y="2" clip="true" width="$once{ parent.width-4 }" >
+		<innerlistView name="innerList"	/>
+	<vscrollbar />
+</class>
+
+<!-- ###################
+	Class participants
+ -->
+<class name="participantsPanel" extends="simpleBaseTabpane" >
+
+	<handler name="onvisible">
+        Debug.write("this.isinited",this.isinited);
+        if (this.isinited){
+			this._listofUsers.clearList();
+            this.getClientListScope.doCall();
+        }
+	</handler>
+    
+    <netRemoteCallHib name="getClientListScope" funcname="getClientListScope" remotecontext="$once{ canvas.thishib }" >          
+        <handler name="ondata" args="value">
+        	<![CDATA[
+            //The onResult-Handler will be called by the rtmpconnection
+            //Debug.write("getClientListScope Instance: ",value);
+                for (var i in value){
+                    //Debug.write("getClientListScope value: ",value[i]);
+                    if (value[i].username!=null){
+                        parent._listofUsers.addItem(value[i]);
+                    }
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+	
+	<view id="_participants" />
+	
+	<simpleLabelButton name="createPoll" labelid="24" width="140" x="0" y="0" enabled="${ canvas.ismoderator }">
+		<handler name="onclick">
+			new lz.createPollWin(canvas.main_content._content.inner);
+		</handler>
+	</simpleLabelButton>
+	
+	<simpleLabelButton name="pollResults" labelid="37" width="140" x="0" y="20" enabled="${  canvas.ismoderator }">
+		<handler name="onclick">
+			this.getVotes.doCall();
+		</handler>
+        <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                //Debug.write("getVotes : ",value);
+                if (value!=null){
+                    new lz.resultPollWin(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});
+                } else {
+                    new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
+                }
+                ]]>
+            </handler>   
+        </netRemoteCallHib>         
+	</simpleLabelButton>	
+    
+
+	<simpleLabelButton name="checkPollVoted" labelid="42" width="100" x="142" y="0" >
+		<handler name="onclick">
+			this.checkHasVoted.doCall();
+		</handler>
+        <netRemoteCallHib name="checkHasVoted" funcname="pollservice.checkHasVoted" 
+            remotecontext="$once{ canvas.thishib }" >
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                //Debug.write("checkHasVoted : ",value);
+                if (value==1){
+                    parent.getPoll.doCall();
+                } else if (value==-1){
+                    new lz.messageWin(canvas.main_content._content.inner,{labeliderror:31});
+                } else if (value==-2){
+                    new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
+                }
+                ]]>
+            </handler>   
+        </netRemoteCallHib> 
+
+        <netRemoteCallHib name="getPoll" funcname="pollservice.getPoll"
+            remotecontext="$once{ canvas.thishib }" >
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                //Debug.write("checkHasVoted : ",value);
+                if (value!=null){
+                    new lz.answerPoll(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});
+                }
+                ]]>
+            </handler>   
+        </netRemoteCallHib>                  
+	</simpleLabelButton>
+	
+	<listOfUsers y="40" height="$once{ parent.height-48 }"
+		width="250" name="_listofUsers" id="_listofUsers" />
+		
+</class>
+
+
+
+</library>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="conferenceBrowser">
+   <doc>
+	会議室、イベントで使うブラウザコンポーネント。<br/>
+	メニューバーから呼び出されることで表示される。リサイズは継承元のlabelExplorerに実装するべき。<br/>	
+   </doc>
+ </class>
+</rlzxdoc>

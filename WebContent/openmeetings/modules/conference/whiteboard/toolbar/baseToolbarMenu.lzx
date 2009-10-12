@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="baseToolbarMenu" extends="view" layout="axis:x;spacing:2;inset:2" 
+    height="30" width="${ parent.parent.width-6 }" 
+    bgcolor="$once{canvas.baseMousecolorizer}"  >
+    <attribute name="selectedButton" value="null" />
+    <method name="selectButton" args="obj,bool">		
+        if (this.selectedButton!=null){
+            this.selectedButton.setAttribute('isselected',false);
+            this.selectedButton.onmouseout.sendEvent();		
+        } 
+        if (bool){
+        	if (this.selectedButton!=null){
+        		this.selectedButton.setAttribute('enabled',true);
+        		this.selectedButton.setAttribute('isselected',false);
+        	}
+            this.selectedButton=obj;	
+            this.selectedButton.setAttribute('isselected',true);	
+            this.selectedButton.setAttribute('enabled',false);
+        }
+    </method>
+</class>  
+    
+</library>

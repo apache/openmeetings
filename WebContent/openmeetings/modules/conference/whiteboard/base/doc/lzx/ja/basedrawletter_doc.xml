@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="whiteboardTetField">
+   <doc>
+   	basedrawletterクラスで使われるprivateクラスです。ホワイトボードに書き込むテキストのオブジェクトです。
+   </doc>
+ </class>
+ <class name="basedrawletter">
+   <doc>
+   	ホワイトボードにお書き込むテキストの各種処理を行うクラスです。フォント設定やリサイズ、移動などを行っています。
+   </doc>
+ </class>
+</rlzxdoc>

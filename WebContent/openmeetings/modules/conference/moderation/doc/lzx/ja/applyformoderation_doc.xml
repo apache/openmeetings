@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="useritem">
+   <doc>
+   	applyformoderationクラスで使うlabeltextクラスを持つクラス。<br/>
+   	*おそらくprivateクラス。
+   </doc>
+ </class>
+ <class name="applyformoderation">
+   <doc>
+   	moderationの許可を行うパネル。現在ログイン中のユーザリストを表示して、moderator権の許可状況が表示されます。
+   </doc>
+ </class>
+</rlzxdoc>

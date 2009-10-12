@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="verticalMenuIconBar" extends="view" y="22" x="4" clickable="true">
+	<simplelayout axis="y" spacing="2" />
+	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
+	<mainToolsHPanelSeperator />
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+	<mainToolsHPanelSeperator />
+	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
+						resoureceItem="menupointer_rsc" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
+                        labelid="557" x_insetResource="1" y_insetResource="1"
+                        resoureceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resoureceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resoureceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resoureceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resoureceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resoureceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resoureceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resoureceItem="drawarrowicon_rsc" />
+</class>
+
+<class name="horizontalMenuIconBar" extends="view" y="22" x="4" clickable="true">
+	<simplelayout axis="x" spacing="2" />
+	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
+	<mainToolsVPanelSeperator />
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+	<mainToolsVPanelSeperator />	
+	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
+						resoureceItem="menupointer_rsc" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
+                        labelid="557" x_insetResource="1" y_insetResource="1"
+                        resoureceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resoureceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resoureceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resoureceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resoureceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resoureceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resoureceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resoureceItem="drawarrowicon_rsc" />
+</class>
+	
+<class name="mainToolsTopPanel" extends="baseTopPanel" 
+	   width="393" height="33" title="" docking="true"
+	   activationClassBounding="mainToolsLeftPanel"
+	   activationVClassBounding="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="true"
+	   hWidth="33" hHeight="393">
+	
+	<horizontalMenuIconBar x="20" y="4" />
+</class>	
+	
+<class name="mainToolsLeftPanel" extends="baseLeftPanel" 
+	   width="33" height="393" title="" docking="true"
+	   activationClassBounding="mainToolsLeftPanel"
+	   activationVClassBounding="mainToolsTopPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="false"
+	   vWidth="393" vHeight="33">
+	
+	<verticalMenuIconBar x="3" y="20" />
+</class>
+
+<!-- ################
+    Non Moderator Tools
+-->
+
+<class name="verticalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
+    <simplelayout axis="y" spacing="2" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
+                        resoureceItem="pointer_whiteboard_menu_rsc" />
+</class>
+
+<class name="horizontalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
+    <simplelayout axis="x" spacing="2" />
+    <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
+                        resoureceItem="pointer_whiteboard_menu_rsc" />
+</class>
+
+<class name="mainToolsTopPanelPointer" extends="baseTopPanel" 
+       width="52" height="32" title="" docking="true"
+       activationClassBounding="mainToolsLeftPanelPointer"
+       activationVClassBounding="mainToolsTopPanelPointer"
+       leftClassPanel="mainToolsLeftPanelPointer"
+       topClassPanel="mainToolsTopPanelPointer"
+       bottomClassPanel="mainToolsTopPanelPointer"
+       rightClassPanel="mainToolsLeftPanelPointer"
+       verticalClassActive="true"
+       hWidth="32" hHeight="52">
+    
+    <horizontalMenuIconBarPointer x="20" y="4" />
+</class>    
+
+<class name="mainToolsLeftPanelPointer" extends="baseLeftPanel" 
+       width="32" height="52" title="" docking="true"
+       activationClassBounding="mainToolsLeftPanelPointer"
+       activationVClassBounding="mainToolsTopPanelPointer"
+       topClassPanel="mainToolsTopPanelPointer"
+       bottomClassPanel="mainToolsTopPanelPointer"
+       leftClassPanel="mainToolsLeftPanelPointer"
+       rightClassPanel="mainToolsLeftPanelPointer"
+       verticalClassActive="false"
+       vWidth="52" vHeight="32">
+    
+    <verticalMenuIconBarPointer x="2" y="20" />
+</class>	
+    
+<class name="mainToolsVPanel" extends="basePanel" 
+	   width="348" height="50" title="" docking="true"
+	   activationClassBounding="mainToolsPanel"
+	   activationVClassBounding="mainToolsVPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="true"
+	   hWidth="32" hHeight="366">
+	
+	<horizontalMenuIconBar />
+</class>
+    
+<class name="mainToolsPanel" extends="basePanel" 
+	   width="34" height="366" title="" docking="true" 
+	   activationClassBounding="mainToolsPanel"
+	   activationVClassBounding="mainToolsVPanel"
+	   topClassPanel="mainToolsTopPanel"
+	   bottomClassPanel="mainToolsTopPanel"
+	   leftClassPanel="mainToolsLeftPanel"
+	   rightClassPanel="mainToolsLeftPanel"
+	   verticalClassActive="false"
+	   vWidth="366" vHeight="32">
+	
+	<verticalMenuIconBar />
+</class>  
+
+	<!--
+    <drawChooseModirPlain y="4" name="b3" modi="plain" resourceN="plain" labelid="69" />
+    <drawSimpleClick y="4" name="b13" modi="saveobj" resourceN="saveobj" labelid="197" />
+    
+    <drawChooseSeperator y="4" />
+    
+    <drawDoAndUndo y="4" name="b4" doredo="false" resourceN="revert" 
+        enabled="${ parent.parent.canvas._drawareaMask.canvas._drawarea.hasprevious }" labelid="70" />
+    <drawDoAndUndo y="4" name="b5" resourceN="next" 
+        enabled="${ parent.parent.canvas._drawareaMask.canvas._drawarea.hasenext }" labelid="71" />
+    
+    <drawChooseSeperator y="4" />
+    
+    <drawChooseModir y="4" isselected="true" name="b1" modi="hand" resourceN="menupointer_rsc" 
+        isSelectablemodi="true" labelid="72" />		
+    <drawChooseModir y="4" name="b6" modi="letter" resourceN="letter" 
+        isSelectablemodi="true" labelid="73" />
+    <drawChooseModir y="4" name="b7" modi="paint" resourceN="paint" 
+        isSelectablemodi="true" labelid="74" />
+    <drawChooseModir y="4" name="b8" modi="line" resourceN="line_rsc" 
+        isSelectablemodi="true" labelid="75" />
+    <drawChooseModir y="4" name="b9" modi="uline" resourceN="uline_rsc" 
+        isSelectablemodi="true" labelid="76" />		
+    <drawChooseModir y="4" name="b11" modi="rectangle" resourceN="rectangle" 
+        isSelectablemodi="true" labelid="77" />
+    <drawChooseModir y="4" name="b12" modi="ellipse" resourceN="ellipse" 
+        isSelectablemodi="true" labelid="78" />
+    <drawChooseModir y="4" name="b10" modi="drawarrow" resourceN="drawarrowicon_rsc" 
+        isSelectablemodi="true" labelid="79" />		
+
+    <drawChooseSeperator y="4" />
+     -->
+     
+    
+</library>

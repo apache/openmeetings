@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="loginscreen">
+   <doc>
+   	ログイン成功後に表示される会議室一覧と入室ボタン付き画面の表示クラスです。<br/>
+   	ソースにもあるように、”既にログイン機能はない”のでクラス名と機能が乖離しています。<br/>
+   	*クラス名を変更したほうがいいでしょう
+   </doc>
+ </class>
+</rlzxdoc>

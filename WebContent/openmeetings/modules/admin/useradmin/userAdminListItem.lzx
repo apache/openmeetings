@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Existing user list. used by userAdmin only -->
+<class name="userAdminListItem" extends="baseContentListItem"> 
+    
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="login" value="" type="string" />
+	<attribute name="firstname" value="" type="string" />
+	<attribute name="lastname" value="" type="string" />
+	
+	<turnOverTextItem text="$once{ parent.user_id }" width="60" />
+	<turnOverTextItem text="$once{ parent.login }" width="100" />
+	<turnOverTextItem text="$once{ parent.firstname }" width="132" />
+	<turnOverTextItem text="$once{ parent.lastname }" width="132" />
+	
+</class>
+
+</library>

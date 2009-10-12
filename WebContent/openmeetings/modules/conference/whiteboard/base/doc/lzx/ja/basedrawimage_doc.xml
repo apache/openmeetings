@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="basedrawimage">
+   <doc>
+   	他の人が描いた図形を、自分のブラウザに表示するための処理。addImageToLayerRecorded()メソッドで、同期処理された描画データを自分のブラウザに追加していきます。<br/>
+   	描画データの読込形式は、"WML形式"のXMLで受け取っているようです。（WMLは携帯などの能力の低い機器用のMarkup言語）<br/>
+   	*何故、WMLなのか要確認です。incomingSreenSharing()でURLが固定であります。プロパティ呼び出しに変えましょう。
+   </doc>
+ </class>
+</rlzxdoc>

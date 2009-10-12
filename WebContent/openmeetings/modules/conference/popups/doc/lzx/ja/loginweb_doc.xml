@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="loginweb">
+   <doc>
+   	（これはおそらく）新規登録ユーザの登録画面でしょう。<br/>
+   	登録後にデータはcanvasの各attributeに設定されログイン処理が実行されるようです。
+   </doc>
+ </class>
+</rlzxdoc>

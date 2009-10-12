@@ -1,0 +1,15 @@
+<library>
+	
+	<class name="myScheduledMeetings" extends="baseContentView">	
+		
+		<!--
+		<handler name="oninit">
+			new lz.calendar(this);
+		</handler>
+		 -->
+		
+		<calendar name="_calendar" />
+		
+	</class>
+	
+</library>

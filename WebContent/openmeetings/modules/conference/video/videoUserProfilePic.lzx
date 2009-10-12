@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="videoUserProfilePic" extends="view" x="1" y="2" width="${parent.width-2}" height="${parent.height-3}" 
+	   clip="true" bgcolor="white">
+	<attribute name="value" value="null" />
+	<handler name="oninit">
+		<![CDATA[
+			if (this.value.picture_uri==null || this.value.picture_uri.length==0){
+				this.value.picture_uri = "d.jpg";
+			} else {
+				this.value.picture_uri = "_profile_"+value.picture_uri;
+			}
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName='+value.picture_uri
+	        		+'&moduleName=remoteuserprofile&parentPath=&room_id='
+	        		+'&remoteUserid='+this.value.user_id
+	        		+'&sid='+canvas.sessionId;
+	        if ($debug) Debug.write(downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);	
+        ]]>
+	</handler>	
+	<image name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />
+</class>
+
+</library>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+		This library contains browser components for conference and auditorium.
+		This class will be called in modules/conference/conference/conferenceMenubar.lzx, and
+		the command decreared in base/mainMethods.lzx.
+		You can change this size with browserPanelWidth/browserPanelHeight attributes in base/mainAttributes.lzx
+		at deriving it.
+				2008 Apr 9 commented by onokeiji@gmail.com 
+	-->
+	<!--- TODO:
+		inprement of history feature
+		add resize feature to labelExplorerBox component
+	-->
+	<!--
+	<include href="extensions/html.lzx"/>
+     -->
+     
+    <class name="browserButton" extends="view" width="22" height="22">
+    	
+    	
+    	
+    </class> 
+     
+	<class name="conferenceBrowser" extends="labelExplorerBox" labelid="749" 
+		   x="$once{ parent.width/2 - this.width/2 }" closable="true" resizeable="true">
+		 
+		<!--
+		      this attribute is true if the user has opened the browser on its own
+		      if the browser is opened by a Remote-Call, the user will get the Web-Site 
+		      notifications from the Moderator(s)
+		 -->
+		<attribute name="initedByUser" value="true" type="boolean" /> 
+		 
+		<handler name="oninit">
+			<![CDATA[
+                var os = lz.Browser.getOS();
+                
+                //We have to detect Firefox, unfortunately it does not work for
+                //Windows with Firefox see: http://jira.openlaszlo.org/jira/browse/LPP-8525
+                
+                if ($debug) Debug.write("os ::",os.indexOf('Win'),os);
+                
+                //To test this you have to run the application with the index.jsp wrapper that
+                //contains the browser-detection code
+                if (os.indexOf("Win") >= 0) {
+                
+                    if ($debug) Debug.write("os :: version isWindows check for Firefox Bug ",os,version);
+                    var t = this;
+                    
+                    function callback(returnValue) {
+                    	
+                    	if ($debug) Debug.write("callback ",returnValue);
+                    	
+                    	if (returnValue.indexOf("Firefox") >= 0) {
+                        	//We have to use parent in this context because it is called as
+                            //callback Object
+                            t.setAttribute("y",160);
+                            
+                            new lz.labelerrorPopup(canvas,{y:0,errorlabelid:750});
+                    	}
+                    }
+                    
+                    lz.Browser.callJS("getBrowserInfo",callback);
+                
+                }
+                
+                if (canvas.ismoderator) {
+                	
+                    this._navigation._inner._showBar.doStart();
+                    
+                }
+                
+                //see attribute definition for docs
+                if (this.initedByUser) {
+                	
+                }
+                
+            ]]>
+        </handler>
+        
+        <handler name="onclose">
+        	if ($debug) Debug.write("Broadcast to all members");
+        </handler>
+        
+        <handler name="onismoderator" reference="canvas" args="m">
+            if ($debug) Debug.write("###### ismoderator ",m);
+            <![CDATA[
+                //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+                if (m) {
+                    this._navigation._inner._showBar.doStart();
+                } else {
+                	this._navigation._inner.setAttribute("y",-40);
+                }
+                //throw a onx/y event to 
+                this.setAttribute("y",this.y);
+            ]]>
+        </handler>
+        
+        <!--
+            Broadcast Message to all user
+         -->
+        <view name="_navigation" clip="true" y="22" height="38" width="${ parent.width }" >
+    		<view name="_inner" y="-40">
+    			
+    			<animator name="_showBar" attribute="y" to="0" duration="750" start="false">
+    				<handler name="onstop">
+    					lz.Focus.setFocus(parent.browser.navigation.url,true);
+    				</handler>
+    			</animator>
+    			
+        		<view name="browser" height="28" bgcolor="0xEEEEEE" x="1">
+        			
+        			<view name="navigation" layout="axis:x;spacing:1;inset:1">
+        				
+        				<browserButton resource="./resources/pre.png" y="2">
+        					<handler name="onclick">
+        						if ($debug) Debug.write("PRE");
+        					</handler>
+        					<labelTooltip labelid="751" />
+        				</browserButton>
+        				
+        				<browserButton resource="./resources/next.png" y="2">
+                            <handler name="onclick">
+                                if ($debug) Debug.write("NEXT");
+                            </handler>
+                            <labelTooltip labelid="752" />
+                        </browserButton>
+                        
+                        <browserButton resource="./resources/refresh.png" y="2">
+                            <handler name="onclick">
+                                if ($debug) Debug.write("RELOAD");
+                            </handler>
+                            <labelTooltip labelid="753" />
+                        </browserButton>
+                        
+                        <browserButton resource="./resources/home.png" y="2">
+                            <handler name="onclick">
+                                if ($debug) Debug.write("HOME");
+                            </handler>
+                            <labelTooltip labelid="754" />
+                        </browserButton>
+                        
+        				<edittext name="url" width="${classroot.width- (5*22) - 8}"> 
+        					<handler name="onkeyup" args="key">
+        						if ((key == 27) || (key == 13)) {
+        							this.parent.readStart.onclick.sendEvent();
+        						}
+        					</handler>
+        				</edittext>
+        				
+        				<browserButton name="readStart" resource="./resources/run.png" 
+        							    y="2">
+        					<handler name="onclick">
+            					<![CDATA[
+            						var url = parent.url.getText();
+            						if ((url.indexOf("http://") < 0)
+            								&& (url.indexOf("https://") < 0)) {
+            							url = "http://" + url;
+            						}
+            
+            						parent.parent.parent.parent.parent.htmlviewer.setAttribute("src",url);
+            						parent.parent.parent.parent.parent.htmlviewer.setAttribute("visible",true);
+            
+            						parent.url.setAttribute('text', url);
+            					]]>
+        					</handler>
+        				</browserButton> 
+        				
+        			</view>
+        			
+        			<view x="0" resource="./resources/browser_sub_cit.swf" 
+        				  width="${ parent.parent.parent.parent.width-2 }" stretches="width" y="28" />
+        			
+        		</view>
+        		
+            </view>
+        </view>
+        
+		<handler name="onclose">
+			this.htmlviewer.setVisible(false);
+		</handler>		
+		
+		<html name="htmlviewer" x="4" y="${ (canvas.ismoderator) ? 60 : 22 }" width="${ parent.width-8 }" height="${ (canvas.ismoderator) ? (parent.height - 90) : (parent.height-52) }" >
+			<handler name="onloading" args="loading">
+				this.loading = loading;
+				if ($debug) Debug.write("LOADING ",loading);
+			</handler>
+			<handler name="onsrc" args="src">
+				this.src = src;
+				if ($debug) Debug.write("SRC ",loading);
+			</handler>
+		</html>
+		
+        <simpleLabelButton labelid="61" width="100" x="${ parent.width-105 }" y="${ parent.height-24 }" 
+               onclick="this.parent.close();" />
+    		  
+	</class>
+ 	
+</library>

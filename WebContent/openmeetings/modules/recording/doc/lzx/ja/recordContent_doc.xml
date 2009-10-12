@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+<class name="recordContent">
+   <doc>
+	録画のリスト表示パネルです。<br/>
+	録画タイトル、対象会議室名、録画実行日時を表示します。<br/>
+	リストをクリックすると録画内容が再生されます。”×”アイコンで録画を削除できます。<br/>
+	リストのソートを実現していますが、gridコンポーネントではなくviewとボタンで実現しています。
+   </doc>
+ </class>
+</rlzxdoc>

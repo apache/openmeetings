@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="backupContent">
+   <doc>
+   バックアップモジュールのクラス。<br/>
+   <br/>
+   2008.3.26現在、ユーザアカウントのみバックアップとリストアができます。リストアはうまく動いてないですが。。
+   </doc>
+ </class>
+</rlzxdoc>

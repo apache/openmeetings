@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="languageEditor">
+   <doc>
+言語エディタの各種コンポーネントが配置されたビュー。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

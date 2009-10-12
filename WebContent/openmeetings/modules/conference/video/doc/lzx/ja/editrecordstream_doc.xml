@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="editrecordstream">
+   <doc>
+   	使用するカメラとマイクを選択するパネルです。sharedobjectを使って、ユーザ設定しています。<br/>
+   	*videoconference/conference/remote/devcamea.lzx,devmicrophone.lzxらとの違いがわかりません。どっちかはつかっていないかもしれません。
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="bigTextListItem">
+   <doc>
+   	fontsizeを12にしたtextlistitemクラスを継承したクラスです。<br/>
+   	*privateクラスでしょう
+   </doc>
+ </class>
+ <class name="createpollwin">
+   <doc>
+   	投票項目を作成するパネルです。
+   </doc>
+ </class>
+</rlzxdoc>

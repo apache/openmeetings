@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="headerMenu" extends="view" layout="axis:x;spacing:4;inset:4" >
+	<text fontsize="11" fontstyle="bold" text="${ canvas.firstName+' '+canvas.lastName }" resize="true" />
+	
+	<labelText labelid="58" fontsize="11" fontstyle="bold" resize="true" />
+	<text fontsize="11" fontstyle="bold" text="${ canvas.currentcourseNameLong }" resize="true" />
+	
+	<labelText labelid="59" fontsize="11" fontstyle="bold" resize="true" />
+	<text fontsize="11" fontstyle="bold" text="${ canvas.currentlanguage }" resize="true" />
+</class>
+
+</library>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!---
+Chat tabpane class. It contains chatOutput-class and catTabBottom-class.
+This is used in the conference.
+-->
+<class name="chatTab" extends="simpleBaseTabpane" >
+
+    <!--
+    bgcolor="$once{ canvas.basebgcolorizer }" 
+     -->
+     
+	<view name="_chatoutputborder" height="${ parent.height-48 }"
+       bgcolor="$once{ canvas.basebgcolorizer }"  width="${ parent.width-2 }">
+		
+		<chatOutput name="_chatoutput" x="1" y="1" >
+			<handler name="oninit">
+				canvas._chatcontent = this;
+			</handler>
+		</chatOutput>
+
+	</view>
+	
+	<chatTabBottom name="_chattabbottom" 
+				   y="${ parent.height-46 }" x="0" width="${ parent.width-2 }" />
+	
+</class>
+
+</library>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="baseListPresentationItem" extends="view" height="110" width="$once{ parent.width }" 
+    bgcolor="0xFFFFFF" focusable="true">
+    
+    <attribute name="uploadmodul" value="" type="string"/>
+    <attribute name="selectable" value="true" type="boolean" />
+    <attribute name="isselected" value="false" type="boolean" />
+    <attribute name="isoriginal" value="false" type="boolean" />
+    
+    <attribute name="uploadmoduleimgfolder" value="$once{ canvas.uploadmoduleimgfolder }" type="string" />
+    
+    <method name="formatURL" args="filename">
+        <![CDATA[
+            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + '/'+canvas.webAppRootKey+'/DownloadHandler?' +
+                'fileName=' + encodeURIComponent(filename) +
+                '&moduleName=' + this.uploadmodul + 
+                '&parentPath=' + encodeURIComponent(this.uploadmoduleimgfolder + '/' )+
+                '&room_id='+hib.currentroomid + 
+                '&sid='+canvas.sessionId;
+            ////Debug.write("downloadurl: ",downloadurl);
+            return downloadurl;
+        ]]>
+    </method>    
+
+    <handler name="onmouseover">
+        setCurrentMouseWheelObject(this.parent.parent._scrollbar);
+        if (!this.isselected){
+            this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+        }
+    </handler> 
+    <handler name="onmouseout">
+        disableCurrentMouseWheelObject();
+        if (!this.isselected){
+            this.setAttribute('bgcolor',0xFFFFFF);
+        }
+    </handler>  
+       
+    <handler name="onfocus">
+        this.selectItem();
+    </handler>
+    <handler name="onblur">
+        this.disselectItem();
+    </handler>
+
+    <handler name="onkeyup" args="k"> 
+        //Debug.write("key " + k + " up");
+    </handler>
+    
+    <method name="selectItem">
+        //this.parent.selectItem(this);
+    </method>
+    <method name="disselectItem">
+        //this.parent.selectItem(this);
+    </method>
+    
+</class>
+
+</library>

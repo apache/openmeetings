@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="responseForModeration"  extends="labelExplorerBox" labelid="81"
+	width="500" height="250" x="14" closable="true">
+	
+	<attribute name="applymessage" value="null" />
+    <!-- Time till automatically apply for modaration will be accepted -->
+	<attribute name="clientId" value="0" type="string" />
+	
+	<attribute name="userobject" value="null" />
+    
+    <attribute name="userautoTimerDelegate" value="null" />
+    <attribute name="userautoTimerCounter" value="31" type="number" />
+	
+	<handler name="oninit">
+		<![CDATA[
+            var dtString = '';
+            dtString += 'Name: '+userobject['username']+'<BR />';
+            dtString += 'Host: '+userobject['userip']+'<BR />';
+            dtString += 'Time: '+userobject['connectedSince']+'<BR />';
+            
+            this.userToAccept.setAttribute('text',dtString);
+            
+            this.userautoTimerDelegate = new LzDelegate( this, "autoResponse" );
+            lz.Timer.addTimer( this.userautoTimerDelegate, 1000 );            
+		]]>
+	</handler>
+
+    <method name="autoResponse" args="itemObj">
+        this.userautoTimerCounter--;
+        if (this.userautoTimerCounter!=0){
+            this._applyBtn.setAttribute('text',canvas.getLabelName(this._applyBtn.labelid)+" "+this.userautoTimerCounter);
+            lz.Timer.addTimer( this.userautoTimerDelegate, 1000 );
+        } else {
+            this._applyBtn.onclick.sendEvent();
+        }
+    </method>   
+	
+	<labelText labelid="89" y="20" x="2" />
+	
+	<labelText name="userToAccept" y="50" multiline="true" width="200" resize="false" />
+    
+    <simpleLabelButton labelid="90" width="200" x="80" y="218" name="_applyBtn" >
+    	<handler name="onclick">
+			parent.applymessage = new Array();
+			parent.applymessage[0] = 'applyModAnswer';
+			parent.applymessage[1] = 'ok';   
+			parent.sendMessageWithClientById.doCall();		
+    	</handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton labelid="91" width="200" x="290" y="218" >
+    	<handler name="onclick">
+			parent.applymessage = new Array();
+			parent.applymessage[0] = 'applyModAnswer';
+			parent.applymessage[1] = 'no'; 
+			parent.sendMessageWithClientById.doCall();	
+    	</handler>
+    </simpleLabelButton>
+     
+    <netRemoteCallHib name="sendMessageWithClientById" funcname="sendMessageWithClientById" remotecontext="$once{ canvas.thishib }" >  
+    	<netparam><method name="getValue">return parent.parent.applymessage;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.clientId;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("sendMessageWithClientById : ",value);
+			this.parent.close();
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+
+</class>
+
+</library>

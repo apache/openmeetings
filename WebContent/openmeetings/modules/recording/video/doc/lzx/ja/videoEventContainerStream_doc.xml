@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+<class name="videoEventContainerStream">
+   <doc>
+	Event(seminar)録画データ再生時のvideo and audio panelを表示するクラスです。<br/>
+	Eventでは講師のみのビデオアイコンを表示するため、この専用クラスが使われます。<br/>
+	実際にはvideoObjectPlayクラスを呼び出して表示しています。<br/>
+	録画データにある人物ビデオも再生するようにしていますが、録画データ自体にまだその機能がないため<br/>
+	ダミーアイコンだけが表示されているようです。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

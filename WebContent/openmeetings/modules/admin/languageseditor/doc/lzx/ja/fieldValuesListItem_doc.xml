@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="fieldValuesListItem">
+   <doc>
+言語のラベルID、ラベル名、値をリスト表示。
+それぞれのattributeとturnOverTextItemが3つ。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <include href="toolbarTabList.lzx" />
+    <include href="baseToolbarMenu.lzx" />
+	<include href="paintMenu.lzx" />
+    <include href="documentMenu.lzx" />
+    <include href="paintToolsPalette.lzx" />
+    <include href="documentToolsPalette.lzx" />
+
+</library>

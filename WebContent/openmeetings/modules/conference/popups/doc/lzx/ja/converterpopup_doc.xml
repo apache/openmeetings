@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="converterpopup">
+   <doc>
+   	エラー表示画面です。<br/>
+   	*クラス名と実行内容が乖離しすぎているような気がします。
+   </doc>
+ </class>
+</rlzxdoc>

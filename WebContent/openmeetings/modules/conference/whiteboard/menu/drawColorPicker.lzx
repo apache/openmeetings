@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="colorRectChoosebase" extends="view" bgcolor="black">
+	<attribute name="colorchoose" value="null" />
+	<view width="${parent.width-2 }" height="${parent.height-2 }" bgcolor="${parent.colorchoose}" x="1" y="1"/>
+</class>
+
+<class name="colorRectChoose" extends="colorRectChoosebase" bgcolor="black" width="24" height="24"
+	onmouseover="this.setAttribute('bgcolor',0xEEEEEE)" onmouseout="this.setAttribute('bgcolor',0x000000)"
+	onclick="parent.sendColor(this)">
+	<attribute name="colorchoose" value="null" />
+	<view width="22" height="22" bgcolor="${parent.colorchoose}" x="1" y="1"/>
+</class>
+
+<class name="colorRectChooseSmall" extends="colorRectChoosebase" bgcolor="black" width="12" height="12"
+	onmouseover="this.setAttribute('bgcolor',0xEEEEEE)" onmouseout="this.setAttribute('bgcolor',0x000000)"
+	onclick="parent.parent.sendColor(this)">
+	<attribute name="defaultno" value="0" type="number" />
+	<handler name="oninit">
+		if (this.defaultno==parent.parent.parent.defaultno) this.parent.parent.sendColor(this)
+	</handler>
+	<attribute name="colorchoose" value="null" />
+	<view width="10" height="10" bgcolor="${parent.colorchoose}" x="1" y="1"/>
+</class>
+
+<class name="drawColorPicker" extends="view">
+	<colorRectChoose name="_basecolorObj" colorchoose="0x000000" />
+	<attribute name="defaultno" value="0" type="number" />
+	<event name="onnewcolor" />
+	<view x="26" layout="axis:y">
+		<method name="sendColor" args="obj">
+			this.parent._basecolorObj.setAttribute('colorchoose',obj.colorchoose);
+			this.parent.onnewcolor.sendEvent(obj.colorchoose);
+		</method>
+		<view layout="axis:x">
+			<colorRectChooseSmall colorchoose="0x000000" defaultno="1" />
+			<colorRectChooseSmall colorchoose="0xcccccc" defaultno="2" />
+			<colorRectChooseSmall colorchoose="0xffffff" defaultno="3" />
+			<colorRectChooseSmall colorchoose="0x0000ff" defaultno="4" />
+		</view>
+		<view layout="axis:x">
+			<colorRectChooseSmall colorchoose="0x00ff00" defaultno="5" />
+			<colorRectChooseSmall colorchoose="0xffff00" defaultno="6" />
+			<colorRectChooseSmall colorchoose="0xff0000" defaultno="7" />
+			<colorRectChooseSmall colorchoose="0x00ffff" defaultno="8" />
+		</view>
+	</view>
+</class>
+
+
+</library>

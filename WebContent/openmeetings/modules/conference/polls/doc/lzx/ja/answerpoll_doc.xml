@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="answerpoll">
+   <doc>
+   	poll(投票)を行うクラス（だと思います）。
+   </doc>
+ </class>
+</rlzxdoc>

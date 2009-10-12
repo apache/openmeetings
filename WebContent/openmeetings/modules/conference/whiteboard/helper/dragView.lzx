@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="_dragicon_rsc" src="resources/dragicon.png" />
+
+<class name="dragView" extends="view" resource="_dragicon_rsc" >
+    <dragstate name="dragger" />
+	<attribute name="startX" type="number" value="0" />
+	<attribute name="startY" type="number" value="0" />
+	
+	<attribute name="filesid" type="number" value="0" />
+	<attribute name="filename" type="number" value="0" />
+	<attribute name="uploadmodul" value="" type="string" />
+	
+	<attribute name="baseurl" value="" type="string" />
+	<attribute name="fileName" value="" type="string" />
+	<attribute name="moduleName" value="" type="string" />
+	<attribute name="parentPath" value="" type="string" />
+	<attribute name="room" value="" type="string" />
+	<attribute name="domain" value="" type="string" />	
+	
+	<attribute name="refObj" value="null" />
+	
+    <handler name="oninit">
+        this.setAttribute('x',canvas.getMouse('x')-this.width/2 );
+        this.setAttribute('y',canvas.getMouse('y')-this.width/2 );
+        this.setAttribute('startX',canvas.getMouse('x') );
+        this.setAttribute('startY',canvas.getMouse('y') );
+
+        this.dragger.apply();
+    </handler>   
+    <handler name="onmouseup" reference="lz.GlobalMouse" args="who">
+    	<![CDATA[
+	        lz.ModeManager.globalUnlockMouseEvents();
+	        var x = canvas._drawarea.getMouse('x');
+	        var y = canvas._drawarea.getMouse('y');
+	        
+	        if ($debug) Debug.write("onmouseup lz.ModeManager globalUnlockMouseEvents ",x,y);
+	        
+	        if (x>=0 && y>=0 && x<=canvas._drawarea.width && y<=canvas._drawarea.height){
+		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName='+encodeURIComponent(this.filename)
+			        +'&moduleName='+this.uploadmodul
+			        +'&parentPath='+encodeURIComponent(canvas.uploadmoduleimgfolder+'/')
+			        +'&room_id='+hib.currentroomid
+			        +'&sid='+canvas.sessionId;
+
+		        if ($debug) Debug.write(canvas._drawarea);        
+		        if ($debug) Debug.write("clearAreaAndAddImage2: ",downloadurl,x,y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+			
+		        canvas._drawarea.parent.parent.clearAreaAndAddImage(downloadurl,x,y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+		        
+		        this.dragger.remove();     
+		        this.doStop();
+	        } else {
+	        	this.dragger.remove();   
+	        	this.goback.doStart();
+	        }
+        ]]>
+    </handler> 
+
+    <method name="doStop">
+       // this.refObj.setAttribute('opacity',1);
+       	//Debug.write("doStop");
+        this.destroy();
+    </method>
+    <animatorgroup name="goback" process="simultaneous" relative="false" duration="1000" 
+        start="false" onstop="this.parent.doStop()" onstart="//Debug.write('isstarted')">
+      <animator name="xval" attribute="x" to="${ parent.parent.startX }" />
+      <animator name="yval" attribute="y" to="${ parent.parent.startY }" motion="easeout" />
+    </animatorgroup>  
+</class>
+
+</library>

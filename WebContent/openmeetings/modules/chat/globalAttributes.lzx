@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- global attributes for chat module -->
+
+<library>
+
+<!--- chat modules: chat history -->
+<attribute name="chathistory" value="null" />
+
+<!--- chat modules: chat content -->
+<attribute name="_chatcontent" value="null" />
+
+<!--- chat modules: chat content RPC -->
+<attribute name="_chatcontentRPC" value="null" />
+
+<!--- chat modules: overall chat content -->
+<attribute name="_overallchatcontent" value="null" />
+
+</library>

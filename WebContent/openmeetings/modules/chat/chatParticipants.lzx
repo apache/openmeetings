@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- it shows chat participants. -->
+<class name="chatParticipants" extends="view" width="$once{ parent.width }" >
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="username" value="" type="string" />	
+	<handler name="oninit">
+		<![CDATA[
+			if($debug) Debug.write("chatParticipants/WIDTH: "+this.width);
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+	        		+'&moduleName=chat&parentPath=&room_id='
+	        		+'&remoteUserid='+this.user_id
+	        		+'&sid='+canvas.sessionId;
+	        //Debug.write("downloadurl "+downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);	
+	        
+	        //Debug.write("TIME: "+this.usertime);
+        ]]>
+	</handler>
+	<image name="_userpic" />
+	<text text="$once{ parent.username }" x="40" resize="false"
+		  width="$once{ parent.width - 40 }" bgcolor="0xCCCCCC"
+		  selectable="true" />	
+</class>
+
+</library>

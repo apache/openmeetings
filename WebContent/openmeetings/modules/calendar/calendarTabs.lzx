@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+	
+<class name="calendarTabs" extends="tabslider" x="10" y="10" 
+	   width="${canvas.width - parent._calendar.width-100}" height="500" spacing="2" slideduration="300">
+		    	    
+		    <labeltabelement text="day" name="_daytab" selected="true" labelid="699">
+		    	<calendarDayView name="_dayview" width="${parent.parent.width - 20}" 
+		    					 height="${parent.height - 56}" ></calendarDayView>	
+		    </labeltabelement>
+		   
+		    <labeltabelement text="week" name="_week" labelid="700">		    	
+		    	
+		    	<handler name="onselect">
+		    		this._weekView.initWeekByDate(new Date());
+					this._weekView.getAppointmentByRangeWeek.doCall();
+		    	</handler>
+		        <!--<simplelayout axis="x" spacing="0"/>
+		    	<view resource="timetable_weekview"   />-->
+		    	<weekView name="_weekView" />
+		    	
+		    	<hscrollbar />
+				<vscrollbar/> 
+				<!--<scrollbar axis="y"></scrollbar>	-->	
+		    </labeltabelement>
+		    
+		    <labeltabelement text="month" name="_month" labelid="701">
+		    	
+		    	 <handler name="onselect">
+			    	 //if ($debug) Debug.write("setCalendarItem_method: ",this);
+			    	 //if ($debug) Debug.write("setCalendarItem_method: ",this.height);
+			    	 if ($debug) Debug.write("tabslider : month select!");
+			    	 //new lz.monthView(this,{name:"_monthView"});
+				     this._monthview.init();
+		    	 </handler>
+		    	
+			     <monthView name="_monthview" />
+		    	
+		    </labeltabelement>	
+		   
+</class>
+		
+</library>		

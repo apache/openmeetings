@@ -1,0 +1,71 @@
+<library>
+	
+	<class name="monthViewAlt" extends="view">
+		
+		<simplelayout axis="y" spacing="2"/>
+		<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	<view> 
+	    	<simplelayout axis="x" spacing="2"/>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+	    	<calendarMonthView height="200"></calendarMonthView>
+    	</view>
+    	 
+    	<hscrollbar />	
+	</class> 
+			    	
+</library>			    	
+			    	

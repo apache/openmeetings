@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- configure value for roomadmin module -->
+<class name="roomValueForm" extends="baseContentSaveView">
+
+	<!-- recordContent-id -->
+	<attribute name="rooms_id" value="0" type="number" />
+	<attribute name="roomsObj" value="null" />
+	
+	<!--handlers -->
+
+	<handler name="onsavecompleted" >
+		this.getRoomById.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		if (this.rooms_id!=0) this.getRoomById.doCall();
+	</handler>	
+
+	<handler name="onnew">
+		this.rooms_id=0;
+        this.roomname.setAttribute('text','');
+		this.comment.setAttribute('text','');
+		this.ispublic.setValue(false);
+		this.isModeratedRoom.setValue(false);
+		this.isDemoRoom.setValue(false);
+		this.demoTime.setAttribute('text','');
+		this.isappointment.setValue(false);
+		this.numberOfParticipants.selectItem('4');
+		this._organisationslist.clearList();
+        this._turnoverlist.clearList();
+	</handler>
+	
+    <handler name="ondelete" >
+		if (this.rooms_id!=0){
+			this.deleteRoom.doCall();
+		}
+    </handler>
+	
+	<!-- methods -->
+
+    <method name="initValueFieldsByObject" args="obj">
+		this.rooms_id = obj.rooms_id;
+		if (this.rooms_id!=0){
+			this.getRoomById.doCall();
+		}
+    </method>
+    
+    <method name="initFields" args="obj">
+    	<![CDATA[
+    		this.roomsObj = obj;
+    		if ($debug) Debug.write("initFields: ",obj);
+			this.roomname.setAttribute('text',obj.name);
+			this.comment.setAttribute('text',obj.comment);
+			this.ispublic.setValue(obj.ispublic);
+            this.demoTime.setAttribute("enabled",true);
+			if ($debug) Debug.write("Appointment: ",obj.appointment);
+			this.isappointment.setValue(obj.appointment);
+			
+		    if (obj.isModeratedRoom != null && obj.isModeratedRoom){
+                this.isModeratedRoom.setValue(true);
+            } else {
+                this.isModeratedRoom.setValue(false);
+            }
+            
+            if (obj.demoTime != null) {
+                this.demoTime.setText(obj.demoTime);
+            } else {
+                this.demoTime.setAttribute("text","");
+            }
+            
+            if (obj.isDemoRoom != null && obj.isDemoRoom){
+                this.isDemoRoom.setValue(true);
+            } else {
+                this.isDemoRoom.setValue(false);
+            }
+                
+			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
+			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
+            this._turnoverlist.clearList();
+            this._turnoverlist.getRoomClientsMapByRoomId.doCall();
+        ]]>
+    </method>
+	
+	<method name="initOrganisations" args="obj">
+		<![CDATA[
+			this._organisationslist.clearList();
+			for (var i=0;i<obj.length;i++){
+				//if ($debug) Debug.write("initOrganisations: ",obj[i]);
+				this._organisationslist.addItem(obj[i].organisation.name,obj[i].organisation.organisation_id);
+			}
+		]]>
+	</method>
+	
+	<!-- remotecalls -->
+	
+  	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+    		parent.initFields(value);
+			parent.getOrganisationByRoom.doCall();
+    	</handler>
+  	</netRemoteCallHib>
+	
+  	<netRemoteCallHib name="getOrganisationByRoom" funcname="conferenceservice.getOrganisationByRoom" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.parent.rooms_id;</method></netparam>
+    	<handler name="ondata" args="value">
+			//Debug.write("getOrganisationByRoom: ",value);
+    		parent.initOrganisations(value);
+    	</handler>
+  	</netRemoteCallHib>
+	
+	<netRemoteCallHib name="deleteRoom" funcname="conferenceservice.deleteRoom" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.rooms_id; </method></netparam>
+		<handler name="ondata" args="value">
+			//Debug.write("deleteUserAdmin ",value);
+			//this.parent.destroy();
+			if (value>0){
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				this.parent.onnew.sendEvent();
+			}
+		</handler>
+	</netRemoteCallHib>		
+
+  	<netRemoteCallHib name="saveOrUpdateRoom" funcname="conferenceservice.saveOrUpdateRoom" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer  -->
+  		<method name="prepareCall">
+  			this.sendObject=new Array();
+  			this.sendObject["rooms_id"] = this.parent.rooms_id;
+  			this.sendObject["name"] = this.parent.roomname.getText();
+			this.sendObject["roomtypes_id"] = Number(this.parent.roomtype.getValue());
+  			this.sendObject["comment"] = this.parent.comment.getText();
+  			this.sendObject["ispublic"] = this.parent.ispublic.getValue();
+			this.sendObject["numberOfPartizipants"] = Number(this.parent.numberOfParticipants.getValue());
+  			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
+  			this.sendObject["appointment"] = this.parent.isappointment.getValue();
+  			this.sendObject["isModeratedRoom"] = this.parent.isModeratedRoom.getValue();
+            
+            this.sendObject["isDemoRoom"] = parent.isDemoRoom.getValue();
+            this.sendObject["demoTime"] = parent.demoTime.getText();
+
+  			if ($debug) Debug.write("prepareCall: ",this.sendObject);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
+    	<handler name="ondata" args="val">
+			<![CDATA[
+    		//Debug.write("saveOrUpdateRoom ",val);
+			if (val>0){
+				//Debug.write("saveOrUpdateRoom val greater 0: ",val);
+				this.parent.parent._turnoverlist.oncallnext.sendEvent();
+				var obj = new Array();
+				obj["rooms_id"] = val;
+				this.parent.initValueFieldsByObject(obj);
+			}
+			]]>
+    	</handler>
+  	</netRemoteCallHib>	
+	
+	<!-- content -->
+    
+    <!-- 187:Conferencerooms -->
+    <labelText labelid="187" width="200" y="40" resize="false" fontstyle="bold" />
+    
+    <!-- 193:Name -->
+    <labelText labelid="193" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="roomname" y="70" x="120" width="270" text="" />   
+    
+    <!-- 482:Participants -->
+    <labelText labelid="482" width="200" y="100" resize="false" x="2"/>
+        <resetCombobox name="numberOfParticipants" width="270" y="100" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            	this.addItem(2,2);
+	            	this.addItem(4,4);
+	            	this.addItem(6,6);
+	            	this.addItem(8,8);
+	            	this.addItem(10,10);
+	            	this.addItem(12,12);
+	            	this.addItem(14,14);
+	            	this.addItem(16,16);
+                    this.addItem(25,25);
+                    this.addItem(50,50);
+                    this.addItem(200,200);
+                    this.addItem(1000,1000);
+	            	this.selectItemAt(1);
+	            ]]>
+	        </handler> 
+        </resetCombobox> 
+
+	<!-- 194:Type -->
+    <labelText labelid="194" width="200" y="130" resize="false" x="2"/>  
+        <resetCombobox name="roomtype" width="270" y="130" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+	            }
+	            this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 	                  
+
+	<!-- 195:Public -->
+    <labelText labelid="195" width="200" y="160" resize="false" x="2"/>  
+        <labelCheckbox name="ispublic" width="270" y="160" x="130" fontsize="11" />
+	
+	<!-- 196:Comment -->
+	<labelText labelid="196" width="200" y="190" resize="false" x="2"/>
+        <customScrollEdittext name="comment" y="190" x="120" width="270" 
+            height="100" text="" />	
+	
+	<!-- Appointment -->
+	<labelText labelid="620" width="200" y="300" resize="false" x="2"/>  
+        <labelCheckbox name="isappointment" width="270" y="300" x="130" fontsize="11" />
+	
+	<!-- 191:organisations -->
+    <labelText labelid="191" width="200" y="320" resize="false" x="2"/>     
+    <simpleValueList name="_organisationslist" y="320" x="120" width="270" height="160" 
+		multiselect="true" />
+		
+	
+	<!-- 172:add organisation -->
+	<baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="320" x="400"
+		onclick="this.parent.addOrganisationToUser()" />		
+	<method name="addOrganisationToUser">
+			new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.rooms_id});
+	</method>	
+
+	<!-- 176:remove organisation -->
+	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="320" x="430"
+		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
+		<method name="confirmDelete">
+			if (this.parent._organisationslist._selected!=null)
+				for (var i in this.parent._organisationslist._selected)	this.parent._organisationslist.removeItem(this.parent._organisationslist._selected[i].value);
+		</method>
+	</baseChooseIcon>
+    
+    <!-- Is Demo Room -->
+    <labelText labelid="636" width="200" y="490" resize="false" x="2"/>  
+        <labelCheckbox name="isDemoRoom" width="270" y="490" x="130" fontsize="11">
+            <handler name="onvalue" args="v">
+                if (v) {
+                    parent.demoTime.setAttribute("enabled",true);
+                } else {
+                    parent.demoTime.setAttribute("enabled",false);
+                }
+            </handler>
+        </labelCheckbox>   
+	
+    <!-- Is Demo Room -->
+    <labelText labelid="637" width="200" y="520" resize="false" x="2"/>  
+        <customEdittext name="demoTime" y="516" x="120" width="270" regexpType="number"
+                        text="" /> 
+                               
+    <!-- 640:Moderated -->
+    <labelText labelid="640" width="200" y="550" resize="false" x="2"/>  
+        <labelCheckbox name="isModeratedRoom" width="270" y="550" x="130" fontsize="11" />
+    
+	<!-- 483:Show Layout Settings
+	<labelCheckbox x="0" y="550" fontsize="11"
+        name="_showAdvancedRoomSettings" labelid="483" >
+        <attribute name="advancedRoomSettingsInited" value="false" type="boolean"/>
+        <handler name="onvalue" args="v">
+			if (v) {
+				new lz.advancedRoomSettings(parent,{name:'_advancedRoomSettings'});
+                this.advancedRoomSettingsInited = true;
+			} else {
+                if (this.advancedRoomSettingsInited) {
+					parent._advancedRoomSettings.destroy();
+	                this.advancedRoomSettingsInited = false;
+                }
+			}
+        </handler>
+    </labelCheckbox>  
+     -->
+    
+    
+    <!-- RoomClient List Right Side -->
+    <labelText labelid="587" width="200" y="40" resize="false" 
+               x="400" fontstyle="bold" />   
+    
+    <simpleTurnOverList name="_turnoverlist" width="300" height="200" y="40" x="400">
+
+        <handler name="oninit">
+            this.addHeaderItem(588,30);
+            this.addHeaderItem(589,230);
+            this.addHeaderItem(590,22);
+        </handler>
+        
+        <handler name="onclickedItem" args="obj">
+            if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+        </handler>
+        
+        <netRemoteCallHib name="getRoomClientsMapByRoomId" funcname="conferenceservice.getRoomClientsMapByRoomId" 
+                          remotecontext="$once{ canvas.thishib }" >      
+            <netparam><method name="getValue"> return parent.parent.parent.rooms_id; </method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("getRoomClientsMapByRoomId: ",value);
+                //this.parent.destroy();
+                this.parent.renderContent(value);
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="renderContent" args="records">
+            <![CDATA[
+            this.clearList();
+            for (var i in records){
+                new lz.roomAdminRoomClientListItem(this._innerlist._inn._inn,{
+                    obj:records[i],
+                    red5_id:i,
+                    login:records[i].username+"("+records[i].streamid+")"});
+            }
+            this.sendInitialWidthUpdate();
+            ]]>
+        </method>
+
+    </simpleTurnOverList>
+        
+</class>
+
+<!--- list of conference/audience rooms -->
+<class name="roomAdminRoomClientListItem" extends="baseContentListItem">
+    
+    <attribute name="red5_id" value="0" type="number" />
+    <attribute name="login" value="" type="string" />
+    <attribute name="ispublic" value="" type="string" />
+    
+    <turnOverTextItem text="$once{ parent.red5_id }" width="60" />
+    <turnOverTextItem text="$once{ parent.login }" width="200" />
+    <turnOverTextItem width="40" text="">
+        
+    </turnOverTextItem>
+    
+</class>
+
+</library>

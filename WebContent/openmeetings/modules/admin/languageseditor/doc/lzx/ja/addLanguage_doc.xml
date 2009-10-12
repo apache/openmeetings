@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="addLanguage">
+   <doc>
+言語エディタの左上にある言語追加ボタンを押したときに出てくるポップアップ。
+新しい言語を追加できる。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

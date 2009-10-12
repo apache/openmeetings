@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+	
+<class name="iconStepButtonWizzard" extends="view">
+	
+	<attribute name="resourceViewName" value="" type="string" />
+	
+	<attribute name="labelid" value="0" type="number" />
+	
+	<handler name="oninit">
+		<![CDATA[
+		    this._txt.setAttribute("x",31-this._txt.width/2);
+		]]>
+	</handler>
+    
+	<view resource="$once{ parent.resourceViewName }" />
+	
+	<labelText name="_txt" labelid="$once{ parent.labelid }" x="0" 
+			   y="64" fontstyle="bold" fgcolor="0x14537C" />
+	
+</class>
+
+<!--- "System" panel on the dashboard -->
+<class name="infosPanel" extends="guiPresenter" resizeable="false"
+    width="500" height="224" closable="true" labelid="374" y="10"><!-- 374:System -->
+	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
+		  height="$once{ parent.height-21 }" >
+        
+  <!-- 282: http://code.google.com/p/openmeetings/
+       283: http://groups.google.com/group/openmeetings-user 
+       286: Project Webside (code.google.com/p/openmeetings/)
+       287: User Mailing List (groups.google.com/group/openmeetings-user)
+  -->
+        
+        <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
+        
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" y="30" x="30" labelid="768" />
+        
+      
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" y="30" x="144" labelid="771" />
+        
+
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" y="30" x="258" labelid="772" />
+        
+        
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773" />
+        
+        
+        <simpleLabelButton labelid="769" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-80 }" height="38" 
+               onclick="this.parent.storeSettings();">
+            <view resource="test_setup_start_conference_rsc" x="2" y="9" />
+            <handler name="onclick">
+                quicklink('meetings');
+            </handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton labelid="770" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-40 }" height="38" 
+               onclick="this.parent.storeSettings();">
+            <view resource="test_setup_start_conference_rsc" x="2" y="9" />
+            <handler name="onclick">
+                quicklink('events');
+            </handler>
+        </simpleLabelButton>
+        
+        <!--
+        <view resource="icon_btn_dashboard_1" y="30" x="10" />
+        
+        <labelText labelid="768" x="10" y="94" fontstyle="bold" fgcolor="0x14537C" />
+      
+	    <view resource="icon_btn_dashboard_2" y="30" x="114" />
+        
+        <labelText labelid="771" x="94" y="94" fontstyle="bold" fgcolor="0x14537C" />
+      
+        <view resource="icon_btn_dashboard_3" y="30" x="218" />
+        
+        <labelText labelid="772" x="198" y="94" fontstyle="bold" fgcolor="0x14537C" />
+      
+        <view resource="icon_btn_dashboard_4" y="30" x="322" />
+        
+        <labelText labelid="773" x="322" y="94" multiline="true" width="100"
+        		   fontstyle="bold" fgcolor="0x14537C" />
+         -->
+           
+	</view>
+</class> 
+
+    <!--
+        <labelText fontstyle="bold" y="10" labelid="278" x="10" width="200" />
+        
+        <view resource="icon_btn_dashboard_1" />
+        
+    
+        <simpleLabelButton width="280" y="40" labelid="279" x="30"
+            onclick="quicklink('meetings')" />
+            
+        <simpleLabelButton width="280" y="70" labelid="280" x="30" 
+            onclick="quicklink('events')" />  
+     -->
+     
+</library>

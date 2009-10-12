@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<resource name="waitcursor" src="resources/lzwaitcursor_rsc.swf"/>
+
+	<class name="roomListItem" extends="view" bgcolor="0xFFFFFF" height="50"
+		onmouseover="" onmouseout="">
+
+		<attribute name="ispublic" value="false" type="boolean" />
+		<attribute name="isaudience" value="false" type="boolean" />
+		<attribute name="obj" value="null" />
+		<attribute name="roomid" value="0" type="number" />
+		<attribute name="starttime" value="" type="string" />
+		<attribute name="roomname" value="" type="string" />
+
+		<attribute name="roomClassName" value="conferenceView" type="string" />
+		<attribute name="currentusers" value="null" />
+
+		<attribute name="maxUsers" value="4" type="number" />
+
+		<attribute name="checkForMaxUsers" value="false" type="boolean" />
+
+		<handler name="oninit">
+		<![CDATA[
+
+			//if ($debug) Debug.write("obj: ",obj);
+			if (this.ispublic) {
+				this.maxUsers = obj.numberOfPartizipants;
+			} else {
+				this.maxUsers = obj.room.numberOfPartizipants;
+			}
+			this._users.setAttribute('text', canvas.getLabelName(398)
+							+ this.currentusers.length + " / " + this.maxUsers);
+			var tString = canvas.getLabelName(401) + "<br/>";
+			for (var i = 0; i < this.currentusers.length; i++) {
+				tString += this.currentusers[i].firstname + " "
+						+ this.currentusers[i].lastname + " ("
+						+ this.currentusers[i].username + ") "
+						+ canvas.getLabelName(399)
+						+ parseDateToStringTime(this.currentusers[i].roomEnter)
+						+ " <br/>";
+			}
+			this._labeltooltip.setAttribute('text', tString);
+		]]>
+		</handler>
+
+		<handler name="onclick">
+			canvas.isConference = !this.isaudience;
+			if (this.isaudience)
+				connectedIsAudience = '_' + 'audi';
+			if (this.ispublic) {
+				hib.conferencedomain = "public";
+				hib.currentroomid = this.obj.rooms_id;
+				//Debug.write("ispublic");
+			} else {
+				hib.conferencedomain = this.obj.organisation.organisation_id;
+				hib.currentroomid = this.obj.room.rooms_id;
+				//Debug.write("non ispublic");
+			}
+			if ($debug) Debug.write("onclick", this);
+			parent.parent.parent.parent.parent._roomlistdetails.doinit(
+					this.currentusers, this.roomid, this.roomname);
+		</handler>
+
+		<method name="checkMaxUsers">
+		<![CDATA[
+			if (this.currentusers.length < this.maxUsers) {
+				this.enterRoom();
+			} else {
+				new lz.rpcErrorDialog(canvas.main_content._content.inner, {
+							errorid : 30
+						});
+			}
+		]]>
+		</method>
+
+		<method name="enterRoom">
+			
+			canvas.isConference = !this.isaudience;
+			if (this.isaudience)
+				connectedIsAudience = '_' + 'audi';
+			if (this.ispublic) {
+				var roomObj = this.obj;
+				hib.conferencedomain = "public";
+				hib.currentroomid = this.obj.rooms_id;
+				//Debug.write("ispublic");
+			} else {
+				var roomObj = this.obj.room;
+				hib.conferencedomain = this.obj.organisation.organisation_id;
+				hib.currentroomid = this.obj.room.rooms_id;
+				//Debug.write("non ispublic");
+			}
+			
+			//the conferencedomain is no more interesting, swagner 07.10.2009
+			//if ($debug) Debug.write("hib.conferencedomain: ", hib.conferencedomain);
+
+			new lz.testSetup(canvas,{roomClassName:this.roomClassName,roomObj:roomObj});
+			
+		</method>
+
+		<netRemoteCallHib name="getRoomClientsListByRoomId" funcname="conferenceservice.getRoomClientsListByRoomId"
+			remotecontext="$once{ canvas.thishib }" >
+			<netparam>
+				<method name="getValue">
+					return parent.parent.roomid;
+				</method>
+			</netparam>
+			<handler name="ondata" args="value">
+			<![CDATA[
+				if ($debug) Debug.write("getRoomClientsListByRoomId: ", value);
+				parent.currentusers = value;
+				parent.oninit.sendEvent();
+				if (parent.checkForMaxUsers) {
+					parent.checkMaxUsers();
+				}
+			]]>
+			</handler>
+		</netRemoteCallHib>
+
+		<labelText text="$once{ parent.roomname }" />
+
+		<labelText name="_users" y="26" />
+		<view name="_r" resource="reload_rsc" x="130" y="26"
+			onclick="parent.getRoomClientsListByRoomId.doCall()" >
+			<labelTooltip labelid="402" />
+		</view>
+  
+		<method name="checkConditionsWhenButtonClicked" args="_clicked">
+		<![CDATA[
+			if (parent.parent.parent.parent.parent.parent.parent.parent.finishedTabsQuantity < 3) {
+				parent.parent.parent.parent.parent.parent.parent.parent.clickedButton = _clicked;
+
+				lz.Cursor.setCursorGlobal("waitcursor");
+			} else {
+				checkForMaxUsers = true;
+				getRoomClientsListByRoomId.doCall();
+			}
+		]]>
+		</method>
+
+		<simpleLabelButton labelid="131" x="300" width="160" height="30" y="17"
+			onclick="parent.checkConditionsWhenButtonClicked(this)">
+			<view resource="test_setup_start_conference_rsc" x="2" y="4" />
+			<!--
+			<view resource="go_jump_rsc" x="$once{ parent.width-24 }" y="6" />
+			 -->
+		</simpleLabelButton>
+
+		<view width="478" bgcolor="$once{ canvas.basebgcolorizer }"
+			height="2" y="48" />
+
+
+		<labelTooltip multiline="true" name="_labeltooltip" />
+
+	</class>
+
+</library>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="videouserProfilePicBig">
+   <doc>
+   	講演会（セミナー）用の1人用の映像オブジェクト。privateクラス。<br/>
+   	*videouserProfilePicクラスとoninitハンドラで指定しているURLが違うだけでは？　統一可？
+   </doc>
+ </class>	
+ <class name="videoobjectaudience">
+   <doc>
+   	講演会（セミナー）用の"video and audio"パネルらしい。<br/>
+   	*videoobjectクラスと同じでは？　統一可？
+   </doc>
+ </class>
+ <class name="infostuffaudience">
+   <doc>
+   	videoobjectaudienceクラスで使われるprivateクラスです。whois問い合わせ機能などがあります。<br/>
+   	*stuffaudienceクラスと同じでは？統一可？
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="chatParticipants">
+   <doc>
+チャット参加者を表示する。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

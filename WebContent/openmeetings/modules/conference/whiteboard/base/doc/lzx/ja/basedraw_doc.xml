@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="drawarrowWhiteBoard">
+   <doc>
+	basedrawクラスで使われるprivateクラス。setColorTransForm()を実行して呼び出し側の色設定を行います。<br/>
+	線や図形を描画する際の色設定や、既存図形の色変更で呼び出されます。
+   </doc>
+ </class>
+ <class name="drawviewnew">
+   <doc>
+   	ホワイトボードに描く図形の大元となるオブジェクト（のようです）。basedrawクラスのprivateクラス。
+   </doc>
+ </class>
+ <class name="basedraw">
+   <doc>
+   	ホワイトボードへの書き込みを行います。
+   	*重要なクラスです。I
+   </doc>
+ </class>
+</rlzxdoc>

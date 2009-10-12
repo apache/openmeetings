@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+<!---
+	This class shows a play-viewer panel for recording data.
+	When you select and click a recording data from the recording list that is invoked with recordContent.lzx,
+	you can see a big start button on this panel. Then you click it, regording data starts with video/audio panel, 
+	whiteboard panel and files panel.
+-->
+
+	<class name="recordingsViewer" extends="baseContentView" 
+		   height="${ parent.parent.parent.height }" width="${ parent.parent.parent.width }" destroyByMethod="true" >
+		
+		<attribute name="timerDel" value="null" />
+		<attribute name="currentTime" value="-500" type="number" />
+		<attribute name="recordingValue" value="null" />
+		<attribute name="timeStepSyncing" value="500" type="number" />
+		<attribute name="roomobj" value="null" />
+		<attribute name="initObjectCount" value="0" type="number" />
+		
+		
+		<attribute name="downloadUrlWhiteboard" value="" type="string" />
+	
+		<handler name="oninit">
+			canvas.thishib.modus = "recording";
+			this.initRecordingComponents();
+		</handler>
+		
+		<handler name="ontabcontentleave">
+			this.clearComponents(true);
+		</handler>
+		
+		<method name="initRecordingComponents">
+			new lz._recorderClickMask(this,{name:'_recorderclickmask'});
+	        canvas.thishib.reconnectionAction = true;
+        	canvas.thishib.reconnectObjRef = this;
+        	if( $debug ) Debug.write("recordingsViewer.initRecordingComponents(): canvas.thishib: ",canvas.currentrecorder);
+            
+            // Reconnect User to its Room Id
+	        canvas.thishib.userScope = canvas.currentrecorder.rooms.rooms_id;
+	        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+            canvas.thishib.setAttribute('src',src);canvas.thishib.setAttribute('src',src);
+            canvas.thishib.disconnect();
+		</method>
+	
+		<method name="reconnectSuccess">
+			this.showStartPlaybackBtn();
+		</method>
+		
+		<method name="showStartPlaybackBtn">
+			if( $debug ) Debug.write("recordingsViewer.showStartPlaybackBtn(): INIT showStartPlaybackBtn",this);
+			new lz._recordPlayerBG(this,{name:'_recordplayerbg'});
+		</method>
+		
+		<method name="clearComponents" args="bool">
+			<![CDATA[
+				if (canvas._videocontainer) canvas._videocontainer.stopVideos();
+				while (this.subviews.length > 0) {
+					this.subviews[0].destroy();
+				}
+				
+				new lz.LzView(this,{name:'_videoboardstream'});
+                
+                if (bool) {
+                    canvas.thishib.userScope = "hibernate";
+		            var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+		            canvas.thishib.setAttribute('src',src);canvas.thishib.setAttribute('src',src);
+		            canvas.thishib.disconnect();
+                }
+			]]>
+		</method>
+		
+		<method name="initRecordingsViewByType">
+			this.roomobj = this.recordingValue.roomRecording.room_setup;
+			this._videoboardstream.destroy();
+			this._recorderclickmask.destroy();
+			this._recordplayerbg.destroy();
+	
+	       	if (this.roomobj.showWhiteBoard){
+	       		new lz._whiteBoardPanelRecord(this,{name:'_whiteboardpanelrecord',refObj:this,
+	       											x:this.roomobj.whiteBoardPanelXPosition,
+										        		y:this.roomobj.whiteBoardPanelYPosition,
+										        		width:this.roomobj.whiteBoardPanelWidth,
+										        		height:this.roomobj.whiteBoardPanelHeight});
+										        		
+	 	       	this._whiteboardpanelrecord._whiteboard.setSource(this.downloadUrlWhiteboard);
+	        }
+	
+	        	if (this.roomobj.showFilesPanel){
+	        		// caution: filesPanel is declared in modules/conference/conference/conferenceView.lzx
+	        	      // filesPanel.lzx should be created.
+	        	      //     May 26 2008 commented by onokeiji@gmail.com
+	        		new lz.filesPanel(this,{name:'_filespanel',
+	        							 x:this.roomobj.filesPanelXPosition,
+						        		 y:this.roomobj.filesPanelYPosition,
+						        	 	 width:this.roomobj.filesPanelWidth,
+						        		 height:this.roomobj.filesPanelHeight});
+	        }
+	        
+			if (this.recordingValue.roomRecording.conferenceType=="conference"){
+				new lz._videoBoardStream(this,{name:'_videoboardstream',
+												x:this.roomobj.videoPodXPosition,
+										        	y:this.roomobj.videoPodYPosition,
+										        	width:this.roomobj.videoPodWidth,
+										        	height:this.roomobj.videoPodHeight});
+			} else {
+				new lz._videoBoardStreamEvent(this,{name:'_videoboardstream',
+													x:this.roomobj.videoPodXPosition,
+											        	y:this.roomobj.videoPodYPosition,
+											        	width:this.roomobj.videoPodWidth,
+											        	height:this.roomobj.videoPodHeight});
+			}
+			
+			new lz._recorderClickMask(this,{name:'_recorderclickmask'});
+			new lz._recorderProgressBar(this,{name:'progress'});	
+			
+			
+		</method>
+        
+        <method name="whiteboardBufferComplete">
+            this.timeLineAction();
+        </method>
+		
+	  	<netRemoteCallHib name="getRecordingById" funcname="streamservice.getRecordingById" remotecontext="$once{ canvas.thishib }">   
+	  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	  		<netparam><method name="getValue">return canvas.currentrecorder_id;</method></netparam>    
+	        	
+	        	<handler name="ondata" args="value">	
+	            	<![CDATA[
+	            		parent.recordingValue = value;
+	            		//Reset XML in Object to make it better readable
+	            		parent.recordingValue.recordingConversionJob.currentWhiteBoardAsXml = null;
+	            		parent.recordingValue.roomRecording.initwhiteboardvarsInXml = null;
+	            		
+		            	if ($debug) Debug.write(parent.recordingValue);
+		            	if ($debug) Debug.write(parent.recordingValue.recordingConversionJob);
+		            	
+		            	if ($debug) Debug.write("getRecordingById",parent.recordingValue.roomRecording);
+		            	parent.timerDel = new LzDelegate( parent, "timeLineAction" );
+		            	if ($debug) Debug.write("value.room_setup: ",value.roomRecording.room_setup);
+		            	
+		            	parent.downloadUrlWhiteboard = parent.generateFileLink(parent.recordingValue.recordingConversionJob.recordingConversionJobId);
+		            	
+		            	if ($debug) Debug.write("downloadUrl: ",parent.downloadUrlWhiteboard);
+		            	
+		            	parent.initRecordingsViewByType();
+	            ]]>	        	          				
+	        </handler>	
+	  	</netRemoteCallHib>  
+	  	
+	  	<method name="generateFileLink" args="recordingConversionJobId">
+	    	<![CDATA[
+	        	return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=whiteboard.swf' +
+		        '&moduleName=videoconf1' +
+		        '&parentPath='+recordingConversionJobId+'/' +
+		        '&room_id=recorded' +
+		        '&sid='+canvas.sessionId;    	
+		    ]]>
+	    </method>	
+        
+        <!--
+        parent.initRecordingsViewByType();
+                        if (parent.recordingValue.roomRecording.initwhiteboardvars!=null && parent.recordingValue.roomRecording.initwhiteboardvars.length>0){
+                            canvas._drawarea.loadwmlObjectToStage(parent.recordingValue.roomRecording.initwhiteboardvars,"","","",true,true);
+                        } else {
+                            parent.timeLineAction();
+                    }
+	    -->
+        
+            <method name="timeLineAction">
+                <![CDATA[
+                    var perc = Math.round((100/this.recordingValue.duration)*this.currentTime);
+                    var newW = Math.round((this.progress.progressbar.width/100)*perc);
+    
+                    this.progress.progressbar.thumb.setAttribute('x',newW);
+                
+                    var restTime = this.recordingValue.duration-this.currentTime;
+                    if (restTime<0) restTime=0;
+                    var seconds = Math.round(restTime/1000);
+                    var minutes = Math.floor(seconds/60);
+                    var deltaSeconds = seconds-(minutes*60);
+                    if (deltaSeconds<10) deltaSeconds = "0"+deltaSeconds;
+                    if (minutes<10) minutes = "0"+minutes;  
+                    this.progress._currentTime._timetext.setAttribute('text',minutes+":"+deltaSeconds);
+                
+                    var roomClients = this.recordingValue.roomRecording.roomClients;
+                    for (var i=0;i<roomClients.length;i++){
+                            var starttime =  (Math.round(roomClients[i].starttime/this.timeStepSyncing))*this.timeStepSyncing;
+                        if (starttime == this.currentTime){
+                                if (roomClients[i].roomenter){
+                                var userpos = roomClients[i].rcl.userpos;
+                                    if ($debug) Debug.write("Found ROOM User Enter",starttime,userpos);
+                                    canvas._videocontainer.enterRoom(roomClients[i].rcl);
+                                } else {
+                                    if ($debug) Debug.write("Found ROOM User Left",starttime,userpos);
+                                    canvas._videocontainer.disconnectclient(roomClients[i].rcl.publicSID);
+                            }
+                        }
+                    }
+                
+                    var streamList = this.recordingValue.roomRecording.roomStreams;
+                    
+                    for (var i=0;i<streamList.length;i++){
+                        var starttime =  (Math.round(streamList[i].starttime/this.timeStepSyncing))*this.timeStepSyncing;
+                        if (starttime == this.currentTime){
+                            if( $debug ) Debug.write("recordingsViewer.timeLineAction(): Found User Event: ",streamList[i]);
+        
+                            if (streamList[i].streamstart && streamList[i].avset){
+                                var streamname = streamList[i].streamName+".flv";
+                                if ($debug) Debug.write("recordingsViewer.timeLineAction(): Found User Entered To Start Stream! - ",starttime,streamname);
+                                canvas._videocontainer.startStream(streamname,this.recordingValue.roomRecording.roomStreams[i].rcl);
+                            } else if (streamList[i].streamstart && !streamList[i].avset){
+                                var streamname = streamList[i].streamName+".flv";
+                                if ($debug) Debug.write("recordingsViewer.timeLineAction(): Found - INIT",starttime,streamname);
+                                canvas._videocontainer.startStream(streamname,this.recordingValue.roomRecording.roomStreams[i].rcl);
+                            } else if (!streamList[i].streamstart && !streamList[i].avset) {
+                                var streamname = streamList[i].streamName+".flv";
+                                if ($debug) Debug.write("recordingsViewer.timeLineAction(): Found Stream To END! - ",starttime,streamname);
+                            } else if (!streamList[i].streamstart && streamList[i].avset) {
+                                var avsettings = streamList[i].rcl.avsettings;
+                                if ($debug) Debug.write("recordingsViewer.timeLineAction(): Found AVEvent! - ",starttime,streamList[i].rcl);
+                                canvas._videocontainer.setAVOnlyStream(streamList[i].rcl);
+                            }
+                        }
+                    }
+                    
+                    var chatValues = this.recordingValue.roomRecording.chatvalues;
+                    for (var i=0;i<chatValues.length;i++){
+                        var starttime =  (Math.round(chatValues[i].starttime/this.timeStepSyncing))*this.timeStepSyncing;
+                        if (starttime == this.currentTime){
+                            if ($debug) Debug.write("found Chatbox Action",whiteBoard[i].actionObj);
+                            var action = chatValues[i].action;
+                            canvas._chatcontent.addChatHistory(action.message,action.client);
+                        }
+                    }
+        
+                    if (perc<100){
+                        lz.Timer.addTimer( this.timerDel, this.timeStepSyncing );
+                        this.currentTime += this.timeStepSyncing;
+                    } else {
+                        this.currentTime = 0;
+                        this.clearComponents();
+                        this.initRecordingComponents();
+                    }
+                ]]>
+            </method>
+	    
+	    <view name="_videoboardstream" />
+	</class>
+	
+	<!-- video and audio panel for conference -->
+	<class name="_videoBoardStream" extends="guiPresenter" x="2" y="2"
+	    width="270" height="280" closable="false" title="Video and Audio" resizeable="false">
+		<videoContainerStream name="_videocontainer" x="1" y="22" 
+	    				width="$once{ parent.width-2 }" height="$once{ parent.height-22 }" />
+	</class>
+
+	<!-- video and audio panel for Event(seminar) -->
+	<class name="_videoBoardStreamEvent" extends="guiPresenter" x="2" y="2"
+    			width="270" height="280" closable="false" title="Video and Audio" resizeable="false">
+    		<videoEventContainerStream name="_videocontainer" x="1" y="22" 
+    										width="$once{ parent.width-2 }" height="$once{ parent.height-22 }" />
+	</class>
+
+	<!-- this private class contains whiteBoad class which is declared in modules/conference/whiteBoad/whiteBoard.lzx -->
+	<class name="_whiteBoardPanelRecord" extends="guiPresenter" x="274" y="2"
+			width="660" height="592" closable="false" title="Whiteboard" resizeable="false">
+        <attribute name="refObj" value="null" />
+		<view name="_whiteboard" y="22" x="4">
+			<handler name="onload">
+				if ($debug) Debug.write("Process Next after Buffering",this);
+                parent.refObj.whiteboardBufferComplete();
+			</handler>
+		</view>   
+	</class>  
+
+	<class name="_recorderClickMask" extends="view" width="${ parent.width }" height="${ parent.height }">
+		<handler name="onclick">
+			new lz.errorPopup(canvas,{error:canvas.getLabelName(412)});
+		</handler>
+	</class>	
+ 
+	<class name="_recordPlayerBG" extends="view" width="100%" height="100%">
+		<view name="bginner" width="100%" height="100%"
+			  bgcolor="0xFFFFFF" opacity="0.7" onclick="parent._btn.onclick.sendEvent();" />
+			  
+		<view align="center" y="${ (parent.parent.height-40)/2 }" resource="_recording_playBig_rsc" 
+			  name="_btn" onmouseover="this.setAttribute('frame',2);" onmouseout="this.setAttribute('frame',1);" >
+			<handler name="oninit">
+		      	this.setShadow();
+		    	</handler>
+		    	
+		    	<method name="setShadow" >
+		      	<![CDATA[
+		        		if (this.isinited){
+		            		this.normalMC = this.getMCRef();
+		           			this.displacementMap = new flash.filters.DropShadowFilter();
+		            		this.normalMC.filters = [this.displacementMap];
+		        	}
+		        ]]>              
+		    	</method> 
+		    	
+		    	<handler name="onclick">
+		    		parent.destroy();
+		    		parent.parent.getRecordingById.doCall();
+		    	</handler>
+		    	
+		    <labelTooltip labelid="413" />
+		</view>
+	</class>
+	
+	<!-- show progressbar below the screen -->
+	<class name="_recorderProgressBar" extends="view" bgcolor="0xCCCCCC"
+	  		height="40" y="${ parent.height-40 }" width="100%">
+		<view resource="_recording_smallplay_rsc">
+			<handler name="onclick">
+				//Todo: Fill with play / pause logic
+			</handler>
+			
+			<labelTooltip labelid="413" />
+		</view>
+		
+		<view name="progressbar" x="83" width="${ parent.width-183 }" height="40">
+			<view width="${ parent.width }" height="10" y="15" bgcolor="0xAAAAAA" />
+			<view name="thumb" resource="_recording_gripper_thumb_rsc">
+				<handler name="onclick">
+					//Todo: Fill with drag / seek logic
+				</handler>
+			</view>
+		</view>
+		
+		<view name="_currentTime" x="${ parent.width-80 }" y="12" >
+			<labelText fontsize="14" name="_timetext" text="--:--" />
+		</view>
+	</class>
+</library>

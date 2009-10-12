@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- User administration module for ADMIN.-->
+<class name="userAdmin" extends="baseContentView">
+	
+	<labelText x="2" y="8" labelid="714" />
+	
+	<customEdittext name="_search" y="4" x="120" width="200" height="24"/>
+	
+    <simpleLabelButton labelid="715" x="330" width="112" height="24" y="4">
+    	<handler name="onclick">
+    		parent._turnoverlist.getUserListWithSearch.doCall();
+    	</handler>
+    </simpleLabelButton>
+
+	<turnOverList name="_turnoverlist" width="440" height="${ canvas.height - 160 }" x="2" y="30" 
+		orderby="user_id" step="50" asc="true">
+
+		<handler name="oninit">
+			this.addHeaderItem(146,60);
+			this.addHeaderItem(147,100);
+			this.addHeaderItem(148,132);
+			this.addHeaderItem(149,132);
+			this.getUserListWithSearch.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getUserListWithSearch.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getUserListWithSearch.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//Debug.write("onclickedItem",obj,obj.obj);
+			parent._useradminvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<!--
+		public SearchResult getUserListWithSearch(String SID, int start, int max, 
+            String orderby, boolean asc, String search){
+            -->
+		
+		<netRemoteCallHib name="getUserListWithSearch" funcname="userservice.getUserListWithSearch" 
+						  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.parent._search.getText(); </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		if ($debug) Debug.write("getUserListWithSearch: ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+	    	this.clearList();
+	    	for (var i=0;i<records.length;i++){
+	    		new lz.userAdminListItem(this._innerlist._inn._inn,{obj:records[i],user_id:records[i].user_id,login:records[i].login,firstname:records[i].firstname,lastname:records[i].lastname});
+	    	}
+	    	if (parent._useradminvalueform.user_id == 0) {
+    			if (records.length>0)
+    			{
+    				parent._useradminvalueform.initValueFieldsByObject(records[0]);
+    			}
+	    	}
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+	<userAdminValueForm name="_useradminvalueform" x="460" />
+
+</class>
+
+</library>

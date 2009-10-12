@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="changedevice">
+   <doc>
+   	ユーザ環境のカメラ・マイクの選択・設定を行います。<br/>
+   	選択されたデバイスは、ユーザのsharedobjectに'userdata'に'cam,mic'として保存されます。	<br/>
+   	*sharedobjectを使っています。
+   </doc>
+ </class>
+</rlzxdoc>

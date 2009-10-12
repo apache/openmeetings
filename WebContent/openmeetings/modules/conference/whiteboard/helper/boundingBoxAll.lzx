@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+<include href="utils/states/resizestatemin.lzx"/>
+
+<!--
+    The order of views is important in this class
+    otherwise the scrollbar of the swfPresentation would be not visible or partly overlayed
+    
+    
+    this is the selection Box for all Whiteboard Objects
+ -->
+    
+<class name="boundingBoxAll" extends="view">
+<!-- 
+	<method name="removeIt">
+		canvas._drawarea.setAttribute('boundingIsActive',true);
+	</method>
+ -->	
+	<method name="removeIt">
+		//Debug.write("removeIt +**********",this.isinited);
+		this.whiteboardRef.setAttribute('boundingIsActive',false);
+		if (this.rs) this.rs.remove();
+		if (this.dragger) this.dragger.remove();
+		this.destroy();
+	</method>
+
+	<attribute name="ex" value="0" type="number" />
+	<attribute name="ey" value="0" type="number" />
+	<attribute name="ewidth" value="0" type="number" />
+	<attribute name="eheight" value="0" type="number" />
+	
+	<attribute name="startdragX" value="0" type="number" />
+	<attribute name="startdragY" value="0" type="number" />
+	<attribute name="startdragWidth" value="0" type="number" />
+	<attribute name="startdragHeight" value="0" type="number" />
+	
+	<attribute name="objRef" value="null" />
+	<attribute name="whiteboardRef" value="null" />
+	<attribute name="doHandlerUpdates" value="false" type="boolean" />	
+    <attribute name="boundingDoUpdateOnInit" value="true" type="boolean" />	 
+    
+    <attribute name="canBeDragged" value="true" type="boolean" />
+    <attribute name="canBeResized" value="true" type="boolean" />
+    
+    <!--- Minimum width for the windowy, default: 60.
+          @keywords final -->
+    <attribute name="minwidth" value="2"/>
+
+    <!--- Minimum height for the window, default: 50.
+          @keywords final -->
+    <attribute name="minheight" value="2"/>    
+	
+	<method name="__LZRemoveItem" args="itemRef">
+		//Debug.write("__LZRemoveItem");
+	</method>
+	
+	<handler name="oninit">
+		<![CDATA[
+		    if (!this.boundingDoUpdateOnInit) {
+		    	if ($debug) Debug.write("DESTROY the clickable view");
+		    	this._innerDrag.destroy();
+		    }
+		
+			this.setAttribute('x',this.ex);
+			this.setAttribute('y',this.ey);
+			this.setAttribute('width',this.ewidth);
+			this.setAttribute('height',this.eheight);	
+			this.setStartValues();		
+			if ($debug) Debug.write("Update Property Panel Settings to Object Properties ",this.objRef.name);
+			if (this.objRef.name.indexOf('rectangle') >= 0){
+				if ($debug) Debug.write("this.objRef._innerRect ",this.objRef._innerRect);
+				
+				if ($debug) Debug.write("strokeStyle: ",this.objRef._innerRect.strokeStyle);
+				if (this.objRef._innerRect.strokeStyle == '#000000') {
+					if ($debug) Debug.write("strokeStyle EMPTY ");
+					this.whiteboardRef.currentrectanglestrokeDis = -1;
+				} else {
+					this.whiteboardRef.currentrectanglestroke = this.objRef._innerRect.strokeStyle;
+					this.whiteboardRef.currentrectanglestrokeDis = 1;
+				}
+				
+				if ($debug) Debug.write("fillStyle: ",this.objRef._innerRect.fillStyle);
+				if (this.objRef._innerRect.fillStyle == '#000000') {
+					if ($debug) Debug.write("fillStyle EMPTY ");
+					this.whiteboardRef.currentrectanglestrokeFillDis = -1;
+				} else {
+					this.whiteboardRef.currentrectanglestrokeFill = this.objRef._innerRect.fillStyle;
+					this.whiteboardRef.currentrectanglestrokeFillDis = 1;
+				}
+				
+				if ($debug) Debug.write("lineWidth: ",this.objRef._innerRect.lineWidth);
+				this.whiteboardRef.currentrectangleineWidth = this.objRef._innerRect.lineWidth;
+				this.whiteboardRef.parent.parent._propertyPanel.loadPanelByModus(this.whiteboardRef,'rectangle');
+				
+			}
+			this.doUpdateAction();
+		]]>
+	</handler>
+	
+	<!--
+	   Do update the Selection-Box, in case another Moderator or User has moved the Object
+	   while you have it in focus
+	 -->
+    <method name="sendRemoteUpdate" args="obj">
+        <![CDATA[
+           
+           if (this.objRef.name == obj.name) {
+           	   
+           	    this.resetValues();
+           	
+           }
+        
+        ]]>
+    </method>
+    
+	
+	<method name="resetValues">
+		this.ex = this.objRef.x;
+		this.ey = this.objRef.y;
+		this.ewidth = this.objRef.width;
+		this.eheight = this.objRef.height;			
+		this.setAttribute('x',this.objRef.x);
+		this.setAttribute('y',this.objRef.y);
+		this.setAttribute('width',this.objRef.width);
+		this.setAttribute('height',this.objRef.height);	
+		this.setStartValues();	
+	</method>
+
+	<!-- 
+    <animatorgroup start="false" process="simultaneous" duration="100" onstop="parent.doUpdateAction()">
+      <animator attribute="x" to="${ parent.parent.ex }" />
+      <animator attribute="y" to="${ parent.parent.ey }" />
+      <animator attribute="width" to="${ parent.parent.ewidth }" />
+      <animator attribute="height" to="${ parent.parent.eheight }" />            
+    </animatorgroup>	
+     -->
+    <method name="doUpdateAction" >
+    	this.setAttribute('doHandlerUpdates',true);
+    	if (this.boundingDoUpdateOnInit) {
+    	    this._innerDrag.onmousedown.sendEvent();
+    	}
+    </method>
+    
+    <handler name="onheight">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('height',this.height);
+    	}
+    </handler>
+    
+    <handler name="onwidth">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('width',this.width);
+    	}
+    </handler>
+    
+    <handler name="onx">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('x',this.getAttributeRelative('x',objRef));
+    	}
+    </handler>
+    
+    <handler name="ony">
+    	if(this.doHandlerUpdates){
+    		this.objRef.setAttribute('y',this.getAttributeRelative('y',objRef));
+    	}
+    </handler>
+	
+	<method name="setStartValues">
+		this.startdragX = this.x;
+		this.startdragY = this.y;
+		this.startdragWidth = this.width;
+		this.startdragHeight = this.height;			
+	</method>
+
+    <method name="_applyResizestateFromThis">
+    	if ($debug) Debug.write("Apply resize State");
+    	if (!this.canBeResized) {
+            return;
+        }
+		this.setStartValues();		
+		this.rs.apply()
+	</method>
+    
+    <method name="_removeResizestateFromThis">
+		<![CDATA[
+		if (!this.canBeResized) {
+            return;
+        }
+    	this.rs.remove();
+		
+		if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
+			//Debug.write("value changed 1");
+			this.objRef.parent.UpdateByObject(this.objRef);
+			//this.whiteboardRef.parent.canvas._drawareaalterposition.updateVal(this.objRef.name);
+			this.setStartValues();
+		}
+		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);
+			
+		]]>
+    </method>
+	
+	<method name="_applyDragstateFromThis">
+		if (!this.canBeDragged) {
+			return;
+		}
+		this.setStartValues();
+		this.dragger.apply()
+	</method>	
+    
+    <method name="_removeDragstateFromThis">
+		<![CDATA[
+		if (!this.canBeDragged) {
+            return;
+        }
+    	////Debug.write("onmouseup invoke");
+    	this.dragger.remove();
+		
+    	if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
+			//Debug.write("value changed 2");
+			this.objRef.parent.UpdateByObject(this.objRef);
+			//this.whiteboardRef.parent.canvas._drawareaalterposition.updateVal(this.objRef.name);
+			this.setStartValues();
+		}
+		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);
+		
+		]]>			
+    </method>
+
+    <method name="doSetInnerObjectsBounds" args="w,h">
+        this._inner._inner.setAttribute('width',w);
+        this._inner._inner.setAttribute('height',h);
+    </method>
+    
+    <method name="applyScrollbarToObject">
+        if (this.objRef.typeOfObject == 'swf'){
+            setCurrentMouseWheelObject(this._inner._scrollstv);
+        }
+    </method>
+    
+    <method name="removeScrollbarToObject">
+        if (this.objRef.typeOfObject == 'swf'){
+            disableCurrentMouseWheelObject();
+        }
+    </method>
+        
+    <resizestatemin name="rs"> 	
+    	<text x="2" y="2" text="${ 'w: '+parent.width+' h: '+parent.height }" bgcolor="white"/>
+    </resizestatemin>
+    
+   	<dragstate name="dragger">    
+		<text x="2" y="2" text="${ 'x: '+parent.getAttributeRelative('x',parent.objRef)+' y: '+parent.getAttributeRelative('y',parent.objRef) }" bgcolor="white"/>   	
+   	</dragstate>
+	
+	<view name="_innerDrag" width="${ parent.width }" height="${ parent.height }"
+    	onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()"
+        onmouseover="this.parent.applyScrollbarToObject()" onmouseout="this.parent.removeScrollbarToObject()">
+		<handler name="oninit">
+	        var newMenu = new LzContextMenu();
+	        newMenu.hideBuiltInItems();
+	        var item1 = newMenu.makeMenuItem('remove Item', new LzDelegate(this.parent, "__LZRemoveItem"));
+	        newMenu.addItem(item1);
+	        this.setContextMenu(newMenu);		
+		</handler>	
+		<handler name="ondblclick">
+			//Debug.write("ondblclick: ",this.parent.objRef.typeOfObject);
+			if (this.parent.objRef.typeOfObject=="text"){
+				var x = this.parent.objRef.getAttributeRelative('x',canvas);
+				var y = this.parent.objRef.getAttributeRelative('y',canvas);
+				//Debug.write("x,y ",x,y);
+				this.parent.whiteboardRef.editTextByValues(this.parent.objRef,this.parent.objRef.name,this.parent.objRef.text,x,y,this.parent.objRef.width,this.parent.objRef.height);
+			}
+		</handler>		
+		<labelTooltip labelid="252" />
+	</view>
+	
+    <!--
+	<view resource="_boundingBoxPointer" x="${ parent.width/2-this.width/2 }" y="${ parent.height/2-this.height/2 }"
+		onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()"
+        onmouseover="this.parent.applyScrollbarToObject()" onmouseout="this.parent.removeScrollbarToObject()">		
+        <handler name="oninit">
+            var newMenu = new LzContextMenu();
+            newMenu.hideBuiltInItems();
+            var item1 = newMenu.makeMenuItem('remove Item', new LzDelegate(this.parent, "__LZRemoveItem"));
+            newMenu.addItem(item1);
+            this.setContextMenu(newMenu);       
+        </handler>               	
+		<labelTooltip labelid="251" />
+	</view>    
+     --> 
+    
+	<baseChooseIcon resourceN="deleteIcon" x="${ parent.width-this.width }" y="0" labelid="80" width="22" height="22">
+		<handler name="onclick">
+			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
+			this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
+		</handler>
+	</baseChooseIcon>	    
+    
+    <!--
+    <view name="_inner" y="22" width="${ parent.width }"
+        height="${ parent.height-22 }" visible="false">    
+        <view name="_inner">
+            
+            <attribute name="timeisInited" value="false" type="boolean" />
+            <attribute name="sendObjectDel" value="null" />
+            
+            <handler name="oninit">
+                if (this.parent.parent.objRef.typeOfObject=='swf') {
+                    this.sendObjectDel = new LzDelegate( this, "sendObject" );
+                }
+            </handler>
+            <handler name="onx" args="x">
+                if (this.parent.parent.objRef.typeOfObject=='swf'){
+                    this.parent.parent.objRef._swfView.setAttribute('x',x);
+                    if (!this.timeisInited){
+                        this.timeisInited=true;
+                        lz.Timer.addTimer( this.sendObjectDel, 250 );
+                    } else {
+                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
+                    }
+                }
+            </handler>
+            <handler name="ony" args="y">
+                if (this.parent.parent.objRef.typeOfObject=='swf'){
+                    this.parent.parent.objRef._swfView.setAttribute('y',y);
+                    if (!this.timeisInited){
+                        this.timeisInited=true;
+                        lz.Timer.addTimer( this.sendObjectDel, 250 );
+                    } else {
+                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
+                    }
+                }
+            </handler>        
+            
+            <method name="sendObject" args="itemRef">
+                //Debug.write("sendObject");
+                this.parent.parent.whiteboardRef.sendCurrentSWFObject(this.parent.parent.objRef);
+                this.timeisInited=false;
+            </method>    
+            
+        </view>
+        <vscrollbar name="_scrollstv" /> 
+        <hscrollbar name="_scrollsth" />     
+    </view>
+     -->
+    
+	<view resource="_boundingBoxPointerTL" x="0" y="0" />
+	<view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
+	<view resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
+		onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
+		<labelTooltip labelid="252" />
+	</view>
+	<view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
+    
+</class>
+
+
+</library>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="contactDlg/"/>
+    <include href="alerts.lzx" />
+    <include href="termindetails.lzx" />
+       
+</library>

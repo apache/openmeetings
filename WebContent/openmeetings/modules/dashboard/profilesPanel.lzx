@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+
+<!--- Logged-in User Profile Panel on the dashboard -->
+<class name="profilesPanel" extends="guiPresenter" resizeable="false"
+    width="300" height="224" y="10" closable="true" labelid="375" >
+	
+	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
+		  height="$once{ parent.height-21 }" >
+	
+	<handler name="oninit">
+        <![CDATA[
+            this.homepage.setAttribute('text',"<u><FONT color='#0000CC'>"+canvas.getLabelName(286)+"</FONT></u>");
+            this.homepage.setAttribute('link',canvas.getLabelName(282));
+            this.mailing.setAttribute('text',"<u><FONT color='#0000CC'>"+canvas.getLabelName(287)+"</FONT></u>");
+            this.mailing.setAttribute('link',canvas.getLabelName(283));
+        ]]>
+    </handler>
+        	
+    <handler name="oninit">
+        <![CDATA[
+			this.getUserSelf.doCall();
+        ]]>
+    </handler>
+    <method name="sendRefresh">
+    	this.getUserSelf.doCall();
+    </method>
+  	<netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+				if($debug) Debug.write("dashboard/getUserSelf: ",value);
+				parent._username.setAttribute('text',canvas.getLabelName(376)+value.login);
+				if (value.pictureuri==null || value.pictureuri.length==0){
+					value.pictureuri = "d.jpg";
+				} else {
+					value.pictureuri = "_profile_"+value.pictureuri;
+				}
+		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName='+value.pictureuri
+		        		+'&moduleName=userprofile&parentPath=&room_id='
+		        		+'&sid='+canvas.sessionId;
+		        if($debug) Debug.write("dashboard/downloadurl "+downloadurl);
+		        parent._userpic.setAttribute('src',downloadurl);	
+	        ]]>
+    	</handler>
+  	</netRemoteCallHib>	    
+  	
+    <labelText name="_username" fontstyle="bold" y="2" labelid="376" x="2" />
+    <!--
+    <labelText name="_newmessages" y="40" labelid="378" x="10" />
+     -->
+    <image y="20" x="10" name="_userpic" />
+    
+    <simpleLabelButton y="40" labelid="379" x="150" width="140"
+        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});" />  
+        
+    <simpleLabelButton y="70" labelid="377" x="150" width="140"
+        onclick="quicklinkAct('userSettingsModule')" />  
+             
+    <labelText fontstyle="bold" x="2" y="110" labelid="281" width="200"/>
+    
+    <labelText name="homepage" x="2" y="140" width="290" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>            
+    </labelText>    
+    <labelText name="mailing" x="2" y="170" width="290" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>            
+    </labelText> 
+     
+              
+	</view>
+</class> 
+
+</library>

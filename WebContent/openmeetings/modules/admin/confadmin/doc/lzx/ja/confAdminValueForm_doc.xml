@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="confAdminValueForm">
+   <doc>
+   設定パネルの右側に表示される。キー/値の表示や変更を行う。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

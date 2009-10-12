@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--
+<class name="videoBoardAudience" id="myVideoBoardAudience" extends="view" x="2" y="2"
+    width="266" height="280" >
+    
+    <videoContainerAudience name="_videocontainer" x="2" y="22" />
+
+</class>
+ -->
+ 
+<class name="videoBoardAudience" id="myVideoBoardAudience" extends="conferenceBox" >
+    
+    <eventUserList name="_videocontainer" y="34" />
+
+</class>
+
+
+<class name="audienceView" extends="baseContentView" destroyByMethod="true" >
+
+    <handler name="oninit">
+    	
+    	_mainScrollBar.setAttribute("visibility","hidden");
+    	
+        canvas._mainbgcontentNavi.setAttribute('height',0);
+        canvas.setAttribute('naviHeightDelta',28);
+        new lz.conferenceMenubar(canvas._conferencemenu);
+        new lz.moderationPanel(canvas._conferencemenu,{x:400});
+        canvas._conferencemenu.setAttribute('visibility','visible');
+
+        this._videoView.bringToFront();
+       
+        if(roomobj.appointment){
+            new lz.winni(canvas.conferenceView,{ name:'appDetail',
+                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });    
+        } else{
+            if ($debug) Debug.write("no appointed meeting");
+        }
+        
+        if (this.roomobj.isDemoRoom) {
+            if (this.roomobj.demoTime != null) {
+                if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
+                this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+            }
+        }
+        
+        this._chatPanelStrict.toggleopen();
+    </handler>
+    
+    <!--
+    
+    new lz.videoBoardAudience(this,{
+            name:'_videoView',
+            x:2,
+            y:2,
+            width:326,
+            height:310});
+            
+    new lz.filesPanel(this,{x:2,
+            y:314,
+            width:270,
+            height:310});
+            
+    if (canvas.showmodernWhiteBoard=="y"){
+                new lz.modernWhiteBoardPanel(this,{x:332,
+                    y:2,
+                    width:660,
+                    height:622});
+            } else {
+                new lz.whiteBoardPanel(this,{x:332,
+                    y:2,
+                    width:660,
+                    height:622});                   
+            }
+            -->
+
+    <handler name="ontabcontentleave">
+        if ($debug) Debug.write("ontabcontentleave:",this);
+        
+        _mainScrollBar.setAttribute("visibility","visible");
+
+        if (canvas._videocontainer!=null){
+        	canvas._videocontainer._video1.resetValues();
+	        canvas._videocontainer = null;
+        }
+        if (canvas._chatcontent!=null){
+        	canvas._chatcontent = null;
+        }
+        if (canvas._mymod!=null){
+        	canvas._mymod = null;
+        }
+        if (canvas._drawarea.letterObjectIsActive){
+          canvas._drawarea.currentletterObj.destroy();
+        }
+        this.logicalRoomLeave.doCall();
+        Debug.write("this.logicalRoomLeave ",this.logicalRoomLeave);
+    </handler>
+
+    <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+		    //Debug.write("logicalRoomLeave: ",value);
+		    //this.parent.destroy();
+		    canvas.thishib.reconnectAfterRoomleft = true;
+		    canvas.thishib.reconnectedRoomInstance = this.parent;
+		    
+		    canvas.thishib.userScope = "hibernate";
+		    var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+		    canvas.thishib.setAttribute('src',src);
+		    
+		    canvas.thishib.disconnect();
+		    canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
+		    canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
+		    canvas._conferencemenu.removeAll();
+		    canvas._conferencemenu.setAttribute('visibility','hidden');
+        </handler>
+    </netRemoteCallHib>
+  
+    <!--
+    <videoBoardAudience name="_videoView" x="2" y="2" 
+                    width="326" height="310" /> -->
+    <videoBoardAudience height="300" name="_videoView" y="2" x="2" 
+                labelid="613" width="274"/>
+  
+    <filesPanelStrict name="_filesPanel" width="274" x="2" 
+                      labelid="614" y="304" height="${ canvas.height - 340 }" />
+                      
+    <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
+       height="200" x="${ parent._filesPanel.width+10 }"  
+       y="${ canvas.height - (this.height+30) }" 
+       width="${ canvas.width - 290 }">
+        <!--
+        <handler name="onwidth" args="w">
+            if ($debug) Debug.write("ON WIDTH",w);
+        </handler>
+         -->
+        <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
+    </conferenceBox>
+         
+  
+	<modernWhiteBoardPanel name="_whiteboard" labelid="615"
+	        y="2" x="${ parent._filesPanel.width+10 }"
+	        width="${ canvas.width - 290 }"
+	        height="${ canvas.height - (parent._chatPanelStrict.height+36)  }" />  
+
+</class>
+
+</library>

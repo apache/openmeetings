@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="invitationMainWindow">
+   <doc>
+	招待メールを配信するためのダイアログボックスを表示するクラスです。<br/>
+	会議室/イベントのvideo and audio panelにある'invitation'ボタンをクリックすることでこのダイアログが表示されます。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

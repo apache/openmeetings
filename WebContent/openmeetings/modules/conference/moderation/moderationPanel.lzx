@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="errorPopupUserInfo" extends="labelExplorerBox" labelid="204"
+    docking="true" resizeable="false" closable="true" 
+    width="224" x="300" height="230">
+
+    <attribute name="error" value="" type="string" />
+    <attribute name="user" value="null" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            Debug.write(user);
+            var tString = this.error + "<BR/>"
+                    + user.username+"<BR/>" 
+                    + user.firstname + " " + user.lastname + "<BR/>"
+                    + parseDateToStringTime(user.roomEnter);
+            this.textInner._inner.setAttribute('text',tString);
+        ]]>
+    </handler>
+
+    <view name="textInner" y="24" width="218" height="200" x="2" clip="true">
+        <text name="_inner" fontsize="10" fontstyle="bold"
+            multiline="true" width="190" />
+        <vscrollbar />
+    </view>
+
+</class>
+
+<class name="moderationPanel" extends="view" layout="axis:x;spacing:2">
+    
+    <attribute name="recordingsName" value="" type="string" />
+    <attribute name="initial" value="true" type="boolean" />
+    <attribute name="recordingUser" value="null" />
+    
+    <handler name="oninit">
+        canvas._mymod = this;
+    </handler>
+    
+    <method name="setMessage">
+        <![CDATA[
+            Debug.write("setMessage: ",this.recordingUser);
+            if (this.recordingUser!=null){
+                var tString = canvas.getLabelName(419) + " "
+                        + this.recordingUser.username+" " 
+                        + this.recordingUser.firstname + " " + this.recordingUser.lastname + " "
+                        + parseDateToStringTime(this.recordingUser.roomEnter);
+                this._inner.setAttribute('text',tString);
+            } else {
+                this._inner.setAttribute('text',"");
+                this.sta_btn.setAttribute('visibility','visible');
+                this.stp_btn.setAttribute('visibility','hidden');
+            }
+        ]]>
+    </method>   
+    
+    <netRemoteCallHib name="checkSharerSession" remotecontext="$once{ canvas.thishib }"
+        funcname="checkSharerSession"  >
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("+++++++++++++++++ checkSharerSession: ",value); 
+            if (value) {
+                parent.checkForApplyScreen("no");
+            } else {
+                new lz.labelerrorPopup(canvas,{errorlabelid:727});
+            }
+        </handler>  
+    </netRemoteCallHib> 
+    
+    <method name="checkForApplyScreen" args="record">
+            <![CDATA[
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                    +'rtmphostlocal='+canvas.rtmphostlocal
+                    +'&room='+hib.currentroomid
+                    +'&domain='+hib.conferencedomain
+                    +'&sid='+canvas.sessionId
+                    +'&red5httpport='+canvas.red5httpport
+                    +'&publicSID='+canvas.publicSID
+                    +'&languageAsString='+hib.userlang
+                    +'&record='+record;
+
+                //Debug.write(downloadurl); 
+                lz.Browser.loadURL(downloadurl,'_blank');    
+            ]]>        
+    </method>   
+    
+    <labelText name="mymodText" resize="true" fgcolor="0xFFFFFF" y="6" labelid="98" />
+    
+    <resetCombobox name="currentModerators" width="170" y="4" editable="false"
+                       shownitems="7" />
+    
+    <simpleLabelButton name="mod_btn" width="30" height="24" y="2" style="itemStyle">
+        <handler name="onclick">
+            //We do only ask the Moderator(s) to change Moderation
+            //new lz.applyForModeration(canvas.main_content._content.inner);
+            canvas.thishib.applyForModeration.doCall();
+        </handler>  
+        <view x="7" y="4" name="infoview" resource="applyformodicon" />
+        <labelTooltip inittwice="true" labelid="84" />      
+    </simpleLabelButton>
+    
+    <!-- --> 
+    <!-- Uncomment when the recording functionality is back
+    
+    <labelText labelid="417" y="6" width="100" fgcolor="0xFFFFFF"
+               visibility="$once{ canvas.showRecording }" />
+    
+    <simpleLabelButton name="sta_btn" width="30" height="24" y="2" style="itemStyle"
+                       visibility="$once{ canvas.showRecording }">
+        <handler name="oninit">
+            if (canvas.showRecording == "hidden") {
+                this.destroy();
+            }
+        </handler>
+        <handler name="onclick">
+            this.parent.checkForRecording.doCall();         
+        </handler>
+        <view resource="start_recording_conf" x="3" y="1" />
+        <labelTooltip labelid="415" />
+    </simpleLabelButton>
+        
+    <simpleLabelButton name="stp_btn" width="30" height="24" y="2" style="itemStyle"
+                       visibility="hidden">
+        <handler name="onclick">
+            parent.stopRecordMeetingStream.doCall();
+        </handler>      
+        <view resource="stop_recording_conf" x="7" y="4" />
+        <labelTooltip labelid="416" />
+    </simpleLabelButton>   
+    
+    -->
+        
+    
+    <netRemoteCallHib name="stopRecordMeetingStream" remotecontext="$once{ canvas.thishib }"
+        funcname="streamservice.stopRecordMeetingStream"  >
+        <netparam><method name="getValue">return parent.parent.recordingsName;</method></netparam>
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            Debug.write("+++++++++++++++++ stopRecordingShow: ",value); 
+        </handler>  
+    </netRemoteCallHib>     
+    
+    <netRemoteCallHib name="checkForRecording" funcname="streamservice.checkForRecording" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            Debug.write("+++++++++++++++++ checkForRecording: ",value); 
+            parent.recordingUser = value;
+            if (parent.initial){
+                parent.initial = false;
+            } else if (value==null) {
+                new lz.recordingStartWin(canvas.main_content._content.inner,{modpanel:parent});
+            } else {
+                new lz.errorPopupUserInfo(canvas,{error:canvas.getLabelName(418),user:value});
+            }
+            parent.setMessage();
+        </handler>  
+    </netRemoteCallHib>  
+   
+    <simpleLabelButton labelid="239" height="24" name="_doShare" style="itemStyle"
+                       width="180" y="2" enabled="${  canvas.ismoderator }">
+        <handler name="onclick">
+            canvas._drawarea.setModus('plain');          
+            this.parent.checkSharerSession.doCall();
+        </handler>
+        <view y="1" x="2" resource="background_screenview_rsc" />
+    </simpleLabelButton>
+    
+    <!--
+    <simpleLabelButton labelid="415" height="24" name="_doRecord" style="itemStyle"
+                       width="180" y="2" enabled="${  canvas.ismoderator }">
+        <handler name="onclick">
+            //Start Streen Grabbing Incl.-Recording
+            this.parent.checkForApplyScreen("yes");
+        </handler>
+        <view resource="start_recording_conf" x="3" y="1" />
+    </simpleLabelButton>
+     -->
+    
+    <labelText name="_inner" fgcolor="0xFF3300" y="4" />
+    
+</class>
+
+</library>

@@ -1,0 +1,48 @@
+<library>
+	
+	<class name="calendarMonthView" extends="view" height="65" width="132">
+		<attribute name="daydate" value="null" />
+		<attribute name="fullDate" value="null"/>
+		<attribute name="countsubwievs" value="0" type="number"/>
+		<simplelayout axis="y" spacing="0"/>
+		<view name="_head" bgcolor="green" width="132">
+			<text name="_date" text="${parent.parent.daydate}"> Mo 31. Dez</text>
+		</view>
+		<view name="_appointemtList" bgcolor="white" height="45" width="132" clip="true">
+			<handler name="onclick">
+					if ($debug) Debug.write("calendarMonthView.onClick");
+					if ($debug) Debug.write("calendarMonthView.daydate : " + parent.daydate);
+					if ($debug) Debug.write("calendarMonthView.fullDate: " + parent.fullDate);
+
+                    var tRootCalendarView = parent.parent.parent.parent.parent.parent;
+                    
+                    tRootCalendarView.initDetails();
+					tRootCalendarView._termindetails.defaulttermindetails();
+					
+					tRootCalendarView._termindetails._date._bdatum.setAttribute('text',parseDateToString(parent.fullDate));
+					tRootCalendarView._termindetails._date.edatum.setAttribute('text',parseDateToString(parent.fullDate));  
+					tRootCalendarView._termindetails.setAttribute("visibility","visible");;
+					
+			</handler>	
+			<view name="_innerList" layout="axis:y;spacing:1" >
+				<handler name="onaddsubview">
+					//parent.parent.countsubwievs=parent.parent.countsubwievs+1
+					
+					//if(parent.parent.countsubwievs==3) new lz.vscrollbar(parent,{name:'scroll'})
+					//if ($debug) Debug.write("countsubwievs: ",parent.parent.countsubwievs);
+				</handler>
+				<method name="clearContent">
+					for (var eg in this.subviews) {
+						this.subviews[eg].destroy();
+					}
+					//parent.scroll.destroy()
+					//parent.parent.countsubwievs=0;
+				</method>
+				
+			</view>
+			<vscrollbar></vscrollbar>
+		</view>
+		
+	</class>
+	
+</library>

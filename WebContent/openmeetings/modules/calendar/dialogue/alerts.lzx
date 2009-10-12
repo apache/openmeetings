@@ -1,0 +1,9 @@
+<library>
+	
+	<class extends="alert" name="myalert"  title="Error!">
+          <handler name="oninit">
+          	this.open();
+          </handler>
+    </class>
+	
+</library>

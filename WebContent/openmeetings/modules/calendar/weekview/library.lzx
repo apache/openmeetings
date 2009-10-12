@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="calendarWeekView.lzx" />
+    <include href="weekView.lzx" />
+    <include href="terminareaWeekView.lzx" />
+   <!-- <include href="terminareaForWeekView.lzx" /> -->
+   
+</library>

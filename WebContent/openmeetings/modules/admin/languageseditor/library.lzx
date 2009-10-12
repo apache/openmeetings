@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="fieldValuesListItem.lzx" />
+    <include href="fieldValueForm.lzx" />
+    <include href="addLanguage.lzx" />
+    <include href="languagesEditor.lzx" />
+
+</library>

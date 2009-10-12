@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="questioncheckbox">
+   <doc>
+   	editwhiteboarddefaultクラスのprivateクラス（っぽい）。<br/>
+   	表示を変えて（parent指定）checkboxを表示しています。
+   </doc>
+ </class>
+ <class name="editwhiteboarddefault">
+   <doc>
+   	”設定の編集”画面を表示しています。設定値はsharedobjectの'userdata'に'image'配列として保存されます。<br/>
+   	*sharedobjectを使っています。
+   </doc>
+ </class>
+</rlzxdoc>

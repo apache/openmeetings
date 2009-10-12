@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<!-- This is the videoview  
+		<devVideoView name="_videoview" visible="false" width="250" height="187.5">
+	        <simpleNetStream name="v_output" buffertime="0.3">
+				<handler name="onstatus" args="info">
+					Debug.write("simplenetstream onstatus",info.code, info);
+				</handler>
+	        </simpleNetStream>
+            <devCamera name="cameraRef" show="false" width="250" height="187.5" fps="22" bandwidth="16384" />
+            <devMicrophone name="microphoneRef" capturing="false">     
+            	<attribute name="isgreater" value="false" type="boolean" />       
+            	<handler name="onlevel">
+            		<![CDATA[
+	            		if (this.level>canvas.loudnessAcitviation) {
+							if (!this.isgreater) {
+								this.isgreater = true;
+								this.sendNotification();
+							}
+						} else {
+							if (this.isgreater) {
+								this.isgreater = false;
+								this.sendNotification();
+							}
+						}
+            		]]>
+            	</handler>    
+            	<method name="sendNotification">
+            		//Debug.write("Level sendNotification ",this.isgreater);
+			  		parent.objMessage = new Array ();
+			  		parent.objMessage[0] = 'audioActivity';
+			  		parent.objMessage[1] = this.isgreater;
+			  		parent.objMessage[2] = 0;
+				  	parent.sendMessage.doCall();
+            	</method>    	
+            </devMicrophone>
+            <attribute name="objMessage" value="null" />
+	        <netRemoteCallHib name="sendMessage" funcname="sendMessage" 
+				remotecontext="$once{ canvas.thishib }" showLoading="false" > 
+	        	<netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+	        </netRemoteCallHib>              
+		</devVideoView>
+		-->
+		
+		
+<resource name="chatbgitemau" src="resources/bgitemvideochat.swf" />
+
+<resource name="showusercontextcloseau" src="resources/error.png" />
+<resource name="showusercontextau" src="resources/1downarrow.png" />
+	
+
+<!-- #################
+	Class videoObject
+	
+	Constructor: non
+	
+	Attributes:
+	String chatpartnername
+	int chatpartnername
+ -->
+    
+<class name="videoObjectAudience" extends="baseVideoObject"  width="${parent.width - 4}" 
+       height="${parent.height - 26}" visible="true" >
+	
+	<attribute name="isAssigned" value="false" type="boolean" />
+	
+	<handler name="oninit">
+          //Display widget defined in mother class
+	  this.syncuser.bringToFront();
+	  this._loudness.bringToFront();
+	  this.showuser.bringToFront();
+	</handler>
+	<handler name="onisremote" args="r">
+		this.isremote = r;
+		if (r){
+			this.mute.setAttribute('visibility','visible');
+		} else {
+			this.mute.setAttribute('visibility','hidden');
+		}
+	</handler>
+
+    
+    <view name="_bg" bgcolor="white" x="1" y="21" width="${ parent.width-2}" 
+    	  height="${ parent.height-22}" />   
+
+	<view name="_chatvideoinner" x="1" y="20" width="${parent.width-2}"
+		  resource="chatbgitemau" height="${parent.height - 44}" >
+		<handler name="oninit">
+			this.setAttribute('frame',5);
+		</handler>
+		<baseVideoStreamDevice name="_videostream" x="0" y="0"
+						 bgcolor="black" >
+		  <handler name="oninit">
+		    var f = function () { 
+		      this.setAttribute("width", this.parent.width);
+		      this.setAttribute("height", this.parent.height);
+		      this.applySizeToVid();
+		    }
+		    var d = [this.parent, "width"];
+		    var e = [this.parent, "height"];
+		    this.applyConstraint("width", f, d);
+		    this.applyConstraint("height", f, e);
+		  </handler>
+		</baseVideoStreamDevice>
+	</view>
+	
+	
+	<view name="mute" x="3" y="${parent.height-42}" visibility="hidden"
+		onmouseover="" onmouseup="" resource="mute_btn_rsc" >
+		<attribute name="isload" value="true" type="boolean" />
+		<handler name="onclick">
+			if (this.isload){
+				parent._chatvideoinner._videostream.setVolume(0);
+				this.setAttribute('frame',2);
+				this.isload = false;
+			} else {
+				parent._chatvideoinner._videostream.setVolume(100);
+				this.setAttribute('frame',1);
+				this.isload = true;
+			}
+		</handler>
+		<labelTooltip inittwice="true" labelid="373" />
+	</view>	
+	
+	<simpleLabelButton name="_sendInvitation" x="2" y="${parent.height-22}" width="200" labelid="213" >
+		<handler name="onclick">
+			new lz.inviteMainWindow(canvas.main_content._content.inner);
+		</handler>
+	</simpleLabelButton>
+	
+    
+</class>
+
+<!--
+<class name="infoStuffAudience"	extends="view" width="$once{ parent.width-2 }" visibility="hidden"
+		height="$once{ parent.height-41 }" y="20" x="1" bgcolor="white">
+		<method name="initUserObject">
+			<![CDATA[
+			var tString = '';
+			Debug.write("initUserObject *** clientVars: ",parent.clientVars);
+			for (var eg in parent.clientVars){
+				if (eg!='userip'){
+					tString += eg+': <BR/>'+parent.clientVars[eg]+'<BR />';
+				} else {
+					tString += eg+': <BR/>'+parent.clientVars[eg]+'<BR />';
+					tString += 'WHOIS:<BR/>';
+					tString += '<A HREF="http://www.networksolutions.com/whois/results.jsp?whoistoken='+parent.clientVars[eg]+'" TARGET="_BLANK">'+parent.clientVars[eg]+'</A><BR/><BR/>';
+				}
+			}
+			//Debug.write("tString: ",tString);
+			this.inner._usertext.setAttribute('text',tString);
+			]]>
+		</method>
+		<view x="$once{ parent.width-20 }" y="2" name="infoview" resource="showusercontextcloseau">
+			<handler name="onclick">
+				parent.desotry();
+			</handler>
+			<labelTooltip inittwice="true" labelid="85" />
+		</view>	
+		<view name="inner" width="$once{ parent.width }" 
+			height="$once{ parent.height-20 }" y="20" clip="true">
+			<text name="_usertext" width="$once{ parent.width }" multiline="true" />
+			<vscrollbar />
+		</view>
+</class>
+ -->
+ 
+</library>

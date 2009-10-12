@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+<class name="recordingStartWin">
+   <doc>
+	録画データ保存用ダイアログ表示パネルです。<br/>
+	会議室で”録画スタート”ボタンをクリックしたときに表示されます。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

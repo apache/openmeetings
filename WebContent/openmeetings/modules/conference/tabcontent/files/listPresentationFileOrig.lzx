@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<resource name="_filesave_icon_original_rsc" src="resources/filesave.png" />
+        
+<class name="listPresentationFileOrig" extends="listPresentationFilePDF">
+    
+    <attribute name="originalName" value="" type="string"/>
+    
+    <view name="_filesave_icon_original" x="120" y="6" resource="_filesave_icon_original_rsc"
+        onmouseover="" onmouseout="">
+        <handler name="onclick">
+            this.parent.loadFileByName(this.parent.originalName.filename);
+        </handler>
+        <labelTooltip labelid="247" />
+    </view>
+    
+</class>
+
+</library>

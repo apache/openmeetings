@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="drawAreaObjectCombobox" extends="basecombobox" fontsize="11"
+         bgcolor="0xEEEEEE" editable="false" height="20" width="120" x="40" y="30">
+         
+    <attribute name="ObjectByName" value="null" />
+    <attribute name="preselectedName" value="" type="string" />
+    
+	<attribute name="modus" type="string" value="${ this.parent.canvas._drawarea.drawmodus }" />
+	<handler name="onmodus">
+		if (this.modus=='pointer'){
+			//Debug.write("modus",this.modus);
+			this.reset();
+			this.clearSelection();
+			this.parent.canvas._drawareaalterposition.updateVal(null);
+			var list = this.parent.canvas._drawarea.getModusItems(this.modus);
+			<![CDATA[
+			var itemName = '';
+			var selectItemPre = '';
+			//Debug.write("this.preselectedName: ",this.preselectedName);
+			for (var eg=0;eg<list.length;eg++){
+				var itemName = list[eg][list[eg].length-1];
+				if (this.preselectedName==itemName) selectItemPre=itemName;
+				this.addItem(list[eg][0]+' No:'+(eg+1),itemName);
+			}
+			//Debug.write("selectItemPre: ",selectItemPre);
+			if (selectItemPre==''){
+				this.selectItem(itemName);
+			} else {
+				this.selectItem(selectItemPre);
+			}
+		}
+		]]>
+	</handler>
+    <method name="reset">
+        <![CDATA[
+            var currentCount = this.cblist.getNumItems();
+            for (var i = 0; i < currentCount; i++)
+            {
+                this.removeItemAt(0);
+            }
+        ]]>
+    </method>
+    <!-- 
+    <handler name="onselect">
+    	if (this.parent.canvas._drawareaalterposition){
+	    	//Debug.write("this.getValue: ",this.getValue());
+	    	this.parent.canvas._drawareaalterposition.updateVal(this.getValue());
+	    	this.doShowObjectBounds(this.getValue());
+    	}
+    </handler>
+     -->
+    <method name="doShowObjectBounds" args="val">
+    <![CDATA[
+    	if (val !=null && val!=''){
+	    	this.ObjectByName = this.parent.canvas._drawarea.getObjectByName(val);
+	    	//Debug.write("this.ObjectByName");
+	    	this.parent.canvas._drawarea.setAttribute('boundingIsActive',true);
+	    	//Debug.write("this.ObjectByName.getAttribute('x'): ",this.ObjectByName.getAttribute('x'));
+	    	//Debug.write("this.ObjectByName.getAttribute('y'): ",this.ObjectByName.getAttribute('y'));
+	    	//Debug.write("parent canvas._drawarea x: ",this.parent.canvas._drawarea.x);
+	    	//Debug.write("parent canvas._drawarea y: ",this.parent.canvas._drawarea.y);
+	    	var x = this.ObjectByName.getAttribute('x');
+	    	var y = this.ObjectByName.getAttribute('y');
+	    	var width = this.ObjectByName.width;
+	    	var height = this.ObjectByName.height;
+	    	if (this.parent.canvas._drawarea.boundingref!=null)this.parent.canvas._drawarea.boundingref.removeIt();
+	    	this.parent.canvas._drawarea.boundingref = new lz.boundingBoxAll(this.parent._drawareaMask._drawarea,{objRef:this.ObjectByName,x:x-200,y:y-200,width:width+400,height:height+400,ex:x,ey:y,ewidth:width,eheight:height});
+	    	//this.parent.canvas._drawarea.boundingref.sendToBack();
+    	}
+    ]]>
+    </method>
+	         
+    <attribute name="text_y" value="-2"/>
+    
+    
+    <view resource="combodown" x="${parent.width-10}"
+          y="0" height="20" width="10"
+          placement="bkgnd" onclick="parent.toggle()" />
+
+</class>
+
+</library>

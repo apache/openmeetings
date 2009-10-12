@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!-- 
+#########################################
+
+This class is out of date
+
+There is no login any more
+
+
+ -->
+ 
+ <class name="loginScreen" extends="labelExplorerBox" labelid="14"
+    docking="true" resizeable="false" closable="false" width="324" x="200" height="300">
+    
+    <method name="setStep" args="stepNo">
+    	if (stepNo==1){
+    		this.part1.setAttribute('visible',true);
+    		this.part2.setAttribute('visible',false);
+    	} else {
+    		if(canvas.iswebrtmp){
+				var addIt='conf';
+				if (!canvas.isConference){
+					addIt='meet'
+				}    		
+				canvas.setAttribute('currentcourseName',canvas.currentcourse);
+				canvas.setAttribute('currentcourse',canvas.currentcourse+addIt);
+    			rtc.connect();
+    		} else {
+    			canvas.getSessionVars();
+    		}
+    		this.part1.setAttribute('visible',false);
+    		this.part2.setAttribute('visible',true);
+    	}
+    </method>
+    
+    <view visible="true" name="part1" >
+		<labelText y="102" x="10" labelid="45" />
+			<radiogroup name="conftypeboolean" x="100" y="102" >
+			  	<labelRadioButton value="4" labelid="43" selected="true" />
+			  	<labelRadioButton value="50" labelid="44" />
+			</radiogroup>    
+		
+		<simpleLabelButton name="next" x="140" y="270" labelid="48" width="160" >
+			<handler name="onclick">
+				canvas.setAttribute('numberofallowedpartners', Number(parent.conftypeboolean.getValue()));
+				if (canvas.numberofallowedpartners==50)canvas.isConference=true;			
+				parent.parent.setStep(2);
+			</handler>
+		</simpleLabelButton>		
+	</view>
+	
+	
+	<view visible="false" name="part2" >
+		<text y="30" x="10" resize="true" fontsize="11" fontstyle="bold" text="${ 'Course: '+canvas.currentcourseNameLong }" />
+	
+		<labelText y="60" x="10" labelid="13" />
+			<text fontsize="11" name="_login" y="60" x="150" width="200" text="${ canvas.currentuser }" />
+	    <!-- 
+		<text y="88" x="10" fontsize="11" text="choose" />
+			<text fontsize="11" text="one2four" x="120" width="200" y="88" />
+		 -->	
+			
+		<labelText y="82" x="10" labelid="11" />
+			<text fontsize="11" name="_current" y="82" x="150" width="200" text="${ canvas.numberofpartners }" >
+				<handler name="ontext">
+					//Debug.write("canvas.numberofpartners: ",canvas.numberofpartners);
+					<![CDATA[
+					if(canvas.numberofpartners<canvas.numberofallowedpartners){
+						this.parent.next.setAttribute('enabled',true);
+					} else {
+						this.parent.next.setAttribute('enabled',false);
+					}
+					]]>
+				</handler>
+			</text>
+		
+		<simpleLabelButton name="next" x="140" y="270" labelid="12" width="160" >
+			<handler name="onclick">
+				//Debug.write("this.parent: ",this.parent);
+				canvas.setAttribute('currentusename',this.parent._login.getText());
+				this.parent.parent.close();
+				canvas._hideit.setAttribute('visible',false);
+				canvas._videocontainer.initializeStreams();
+				if(!canvas.isConference)
+				 new lz.editRecordStream(canvas);
+	
+			</handler>
+		</simpleLabelButton>
+	</view>	
+</class>
+	
+</library>
+ 

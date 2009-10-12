@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="delete_chat_log_rsc" src="resources/cancel.png" />
+
+	<include href="chatTabBottomRoomList.lzx" />
+	<include href="chatOutputRoomsList.lzx" />
+	<include href="chatTabItem.lzx" />
+	<include href="chatTabItemEmoticons.lzx" />
+	<include href="chatOutput.lzx" />
+	<include href="chatTabBottom.lzx" />
+	<include href="chatTab.lzx" />
+
+    
+</library>

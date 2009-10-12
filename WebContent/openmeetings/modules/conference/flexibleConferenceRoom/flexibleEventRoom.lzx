@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="flexibleEventRoom" extends="baseContentView" destroyByMethod="true" >
+	
+	<attribute name="roomobj" value="null" />
+    
+    <attribute name="meetingTimer" value="null" />
+
+    <handler name="oninit">
+    	
+    	_mainScrollBar.setAttribute("visibility","hidden");
+    	
+		if ($debug) Debug.write("roomobj: ",this.roomobj);
+        canvas._mainbgcontentNavi.setAttribute('height',0);
+        canvas.setAttribute('naviHeightDelta',28);
+        new lz.conferenceMenubar(canvas._conferencemenu);
+        //,{x:this.roomobj.moderationPanelXPosition}
+        new lz.moderationPanel(canvas._conferencemenu,{align:'right'});
+        canvas._conferencemenu.setAttribute('visibility','visible');
+		
+        if(roomobj.appointment){
+        	new lz.winni(canvas.conferenceView,{ name:'appDetail',
+                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });	
+        } else{
+        	if ($debug) Debug.write("no appointed meeting");
+        }
+        
+        if (this.roomobj.isDemoRoom) {
+            if (this.roomobj.demoTime != null) {
+                if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
+                this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+            }
+        }
+        
+        this._chatPanelStrict.toggleopen();
+        
+    </handler>
+    
+    <handler name="ontabcontentleave">
+        if ($debug) Debug.write("################# ontabcontentleave:",this);
+        
+        //reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
+        //on server-Side the canDraw status will be false again when you relogin the same room
+        canvas.isAllowedToDraw = true;
+        
+        _mainScrollBar.setAttribute("visibility","visible");
+        
+        if (canvas._videocontainer!=null){
+	        canvas._videocontainer.resetAllValues();
+	        canvas._videocontainer = null;
+        }
+        if (canvas._chatcontent!=null){
+        	canvas._chatcontent = null;
+        }
+        if (canvas._mymod!=null){
+        	canvas._mymod = null;
+        }
+        
+        if (this.meetingTimer != null) {
+            this.meetingTimer.close();
+        }
+        
+        if (canvas._drawarea.letterObjectIsActive){
+            canvas._drawarea.currentletterObj.destroy();
+        }
+        
+        canvas._screens.clearAllSessions();
+        this.logicalRoomLeave.doCall();
+        if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
+    </handler>
+
+    <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+	        if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+	        //this.parent.destroy();
+            canvas.thishib.reconnectAfterRoomleft = true;
+            canvas.thishib.reconnectedRoomInstance = this.parent;
+            
+            // Reconnect User to default Scope
+	        canvas.thishib.userScope = "hibernate";
+	        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+	        canvas.thishib.setAttribute('src',src);
+            canvas.thishib.disconnect();
+            canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
+            canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
+            canvas._conferencemenu.removeAll();
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+        </handler>
+    </netRemoteCallHib>
+    
+    <eventRoomSidebar name="_sidePanel" />
+    
+    <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
+       height="200" x="${ parent._sidePanel.width }"  
+       y="${ canvas.height - (this.height+22) }" 
+       width="${ canvas.width - parent._sidePanel.width }">
+        <!--
+        <handler name="onwidth" args="w">
+            if ($debug) Debug.write("ON WIDTH",w);
+        </handler>
+         -->
+        <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
+    </conferenceBox>
+       
+    <fixedWhiteboardPanel name="_whiteboard" labelid="615"
+        y="0" x="${ parent._sidePanel.width }"
+        width="${ canvas.width - parent._sidePanel.width }"
+        height="${ canvas.height - (parent._chatPanelStrict.height+22) }" />
+    
+    <!--
+        ###############################
+        This is the container for all Videos
+     -->
+    <view name="_videoviewcontent" />
+    
+</class>
+
+</library>

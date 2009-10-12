@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Admin module to configure the Conference or Audience room.-->
+<class name="roomAdmin" extends="baseContentView">	
+	
+	<turnOverList name="_turnoverlist" width="400" height="600" x="2" y="0" 
+		orderby="rooms_id" step="50" asc="true">
+
+		<handler name="oninit">
+			this.addHeaderItem(188,60);
+			this.addHeaderItem(189,186);
+			this.addHeaderItem(190,140);
+			this.getRooms.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getRooms.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getRooms.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			//Debug.write("onclickedItem",obj,obj.obj);
+			parent._roomvalueform.initValueFieldsByObject(obj.obj);
+		</handler>
+		
+		<netRemoteCallHib name="getRooms" funcname="conferenceservice.getRooms" remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		//Debug.write("getRooms: ",value);
+	    		//this.parent.destroy();
+	    		this.parent.initValues(value.records);
+	    		this.parent.renderContent(value.result);
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+	    	this.clearList();
+	    	for (var i=0;i<records.length;i++){
+	    		new lz.roomAdminListItem(this._innerlist._inn._inn,{obj:records[i],rooms_id:records[i].rooms_id,roomname:records[i].name,ispublic:records[i].ispublic});
+	    	}
+	    	if (parent._roomvalueform.rooms_id == 0) {
+                if (records.length > 0) {
+                    parent._roomModerateValueForm.initValueFieldsByObject(records[0]);
+                }
+            }
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+	<roomValueForm name="_roomvalueform" x="402" />
+		
+</class>
+
+
+
+</library>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="drawAreaObjectValueBox" extends="borderedInputtext" 
+	checkIsNumber="true" width="40" height="16" bgcolor="0x000000" >
+	<attribute name="posName" value="" type="string" />
+	<handler name="onblur">
+		this.parent.alterPos(this.posName,Number(this.getText()));
+	</handler>
+</class>
+
+<class name="drawAreaAlterPosition" extends="view" layout="axis:x;spacing:2">
+
+	<attribute name="obj" value="null" />
+	<attribute name="objName" type="string" value="" />
+	
+	<method name="updateVal" args="objName">
+		<![CDATA[
+		this.objName = objName;
+		//Debug.write("drawareaalterposition updateVal: ",objName);
+		if (objName==null || objName==''){
+			this.xval.setAttribute('text','');
+			this.yval.setAttribute('text','');
+			this.heigthval.setAttribute('text','');
+			this.widthval.setAttribute('text','');
+			this.obj=null;
+		} else {
+			this.obj = canvas._drawarea.getObjectByName(objName);
+			//Debug.write("this.obj: ",this.obj);
+			this.xval.setAttribute('text',this.obj.x);
+			this.yval.setAttribute('text',this.obj.y);
+			this.heigthval.setAttribute('text',this.obj.height);
+			this.widthval.setAttribute('text',this.obj.width);
+		}
+		]]>
+	</method>
+	
+	<method name="alterPos" args="posName,newPos">
+		////Debug.write("alterPos",posName,newPos,this.obj,this.obj[posName]);
+		this.obj.setAttribute(posName,newPos);
+		////Debug.write("alterPos",posName,newPos,this.obj,this.obj[posName]);
+		this.obj.parent.UpdateByObject(this.obj);
+		if (this.obj.parent.boundingref!=null) this.obj.parent.boundingref.removeIt();		
+	</method>
+	<text fontsize="11" text="x:" />
+	<drawAreaObjectValueBox name="xval" posName="x" />
+	<text fontsize="11" text="y:" />
+	<drawAreaObjectValueBox name="yval" posName="y" />
+	<text fontsize="11" text="h:" />
+	<drawAreaObjectValueBox name="heigthval" posName="height" />
+	<text fontsize="11" text="w:" />
+	<drawAreaObjectValueBox name="widthval" posName="width" />
+</class>
+
+</library>

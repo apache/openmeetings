@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<!-- #######################
+	Class editRecordStream
+	
+	Description:
+	This Class shows a window where you can alter you Video-/Microphone- Input-Resources
+	and start to stream. The app could also use the default values for Cam/Mic but
+	must users don't know how to alter this (wether in System-Control-Panel or by Right Clicking
+	on the Flash-Screen and *>Preferences>Camera* )
+	So I think it is better if Users are forced to choose something from this list
+	
+ -->
+ 
+<class name="editRecordStream"  extends="labelExplorerBox" labelid="51"
+	width="300" height="250" x="14" y="40" >
+
+    <attribute name="myvideocontainer" value="null" />
+    
+    <attribute name="chosenCam" value="null" />
+    <attribute name="chosenMic" value="null" />
+    <attribute name="chosenSetting" value="null" />
+    <attribute name="currentClient" value="null" />
+    
+    <attribute name="remoteMessage" value="null" />
+    
+    <attribute name="isSyncUpdate" value="false" type="boolean" />
+	<handler name="oninit">
+		<![CDATA[
+			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);			
+			if ($debug) Debug.write("editrecordstream ###################### ");
+	        var t = new lz.sharedObject();
+	        t.getLocal('userdata');
+	        var g = t.getData('userdata');
+	        var save = g["savecamdata"];
+	        //Debug.write("save: ",save,g["cam"],g["mic"]);
+            
+            //In case the user presses the Sync Button this box should not close automatically again
+	        if(save && !this.isSyncUpdate) {
+	        	this.chosenCam = g["cam"];
+	        	this.chosenMic = g["mic"];
+	        	this.chosenSetting = g["avstored"];
+				this.remoteMessage = new Array();
+				this.remoteMessage[0] = 'avsettings';
+				this.remoteMessage[2] = this.chosenSetting;        	
+	        	this.getBroadCastId.doCall();		
+	        }
+            
+        ]]>
+	</handler>
+    
+    <method name="storelocaldata">
+        <![CDATA[
+        if (this.holddatainSO.getValue()){
+            //Debug.write("sharedobject store ");
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["cam"] = this.availibleCams.getValue();
+            g["mic"] = this.availibleMics.getValue();
+            g["avstored"] = this.availibleSettings.getValue();
+            g["savecamdata"] = true;
+            t.setData('userdata',g);
+            t.flush();  
+        } else {
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["cam"] = this.availibleCams.getValue();
+            g["mic"] = this.availibleMics.getValue();
+            g["avstored"] = this.availibleSettings.getValue();
+            g["savecamdata"]=false;
+            t.setData('userdata',g);
+            t.flush(); 
+        }        
+        ]]>
+    </method>   	
+    
+    <netRemoteCallHib name="getBroadCastId" funcname="getBroadCastId" 
+    				  remotecontext="$once{ canvas.thishib }" >  
+    	<handler name="ondata" args="value">
+        	<![CDATA[
+        		if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
+        		parent.myvideocontainer = canvas._videocontainer.getNewVideoObject(canvas.publicSID);
+        		
+        		if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
+        		if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
+        		
+        		parent.setUserAVSettings.doCall();
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+    
+    <netRemoteCallHib name="setUserAVSettings" funcname="setUserAVSettings" 
+    				  remotecontext="$once{ canvas.thishib }" >  
+    	<netparam><method name="getValue">return parent.parent.chosenSetting;</method></netparam>
+    	<netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+        		if ($debug) Debug.write("setUserAVSettings",value);
+        		parent.currentClient = value;
+            	parent.doninitalize();
+            ]]>
+        </handler>   
+    </netRemoteCallHib>    
+
+    <method name="doninitalize">
+    	<![CDATA[
+    		var valCam = this.chosenCam;
+			var valMic = this.chosenMic;
+			var settings = this.chosenSetting;
+			var videoview = this.myvideocontainer._chatvideoinner._videostream;
+	    	if ($debug) Debug.write("this.myvideocontainer: ",this.myvideocontainer);
+	    	if ($debug) Debug.write(valCam,valMic,settings);
+			this.myvideocontainer.setAttribute('isremote',false);
+			
+			var _micro = Microphone.get(valMic);
+			var _camera = Camera.get(valCam);
+			if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
+			_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+			
+			//Microphone.set
+			if (canvas.vaquality=="best") {
+				_micro.setRate(canvas.microphoneRateBest);
+				if ($debug) Debug.write("_camera.setQuality BEST: ",canvas.bandwidthNeededBest,canvas.camQualityBest);
+				_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+			} else {
+				_micro.setRate(canvas.microphoneRateNormal);
+				_micro.setSilenceLevel(canvas.loudnessAcitviation);
+				if ($debug) Debug.write("_camera.setQuality NORMAL: ",canvas.bandwidthNeededNormal,canvas.camQualityNormal);
+				_camera.setQuality(canvas.bandwidthNeededNormal,canvas.camQualityNormal);
+			}
+			
+			//Microphone setUseEchoSupression(bool)
+		    _micro.setUseEchoSuppression(true);
+
+	    	switch (settings){
+	    		case "av":
+	    			videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
+                    this.myvideocontainer.setAttribute("visibility","visible");
+	    			break;
+	    		case "a":
+	    			videoview.broadcast(this.currentClient.broadCastID,null,_micro);
+                    this.myvideocontainer.setAttribute("visibility","visible");
+	    			break;	 
+	    		case "v":
+	    			videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+                    this.myvideocontainer.setAttribute("visibility","visible");
+	    			break;	
+	    		case "n":
+	    			if ($debug) Debug.write("Do not Publish A/V");
+                    //Prevent from Hiding the Box in Event Modus
+                    if (canvas.thishib.modus == "conference") {
+                        this.myvideocontainer.setAttribute("visibility","hidden");
+                    }
+	    			break;
+	    		default:
+	    			if ($debug) Debug.warn("no valid device Setup chosen");
+	    			break;
+	    	}
+
+	        this.myvideocontainer.setAttribute('chatpartnername',canvas.firstName+' '+canvas.lastName);
+	        
+	        this.close();
+        ]]>
+    </method>    
+
+    <labelText labelid="447" fontsize="11" x="10" y="20" width="$once{ parent.width-20 }" />
+    
+    <resetCombobox fontsize="11" name="availibleSettings" x="10" y="40" width="280" editable="false">
+        <handler name="oninit">
+            <![CDATA[
+				this.addItem(canvas.getLabelName(448),"av");
+				this.addItem(canvas.getLabelName(449),"a");
+				this.addItem(canvas.getLabelName(450),"v");
+				this.addItem(canvas.getLabelName(451),"n");
+            
+				var r = "av";
+
+				var t = new lz.sharedObject();
+				t.getLocal('userdata');
+				var g = t.getData('userdata');
+				if (g!=null){
+					var cam = g["avstored"];
+				} else {
+					var cam = r;
+				}
+				if (cam=='undefined' || cam =='' || cam == null) cam=r;
+				this.selectItem(String(cam));    
+
+            ]]>
+        </handler>
+        <handler name="onselect">
+        	<![CDATA[
+        		var camVisible = "visible";
+        		var micVisible = "visible";
+        		var textVisible = "hidden";
+	        	switch (this.getValue()){
+	        		case "av":
+	        			break;
+	        		case "a":
+	        			camVisible = "hidden";
+	        			break;	 
+	        		case "v":
+	        			micVisible = "hidden";
+	        			break;	
+	        		case "n":
+	        			camVisible = "hidden";
+	        			micVisible = "hidden";
+	        			textVisible = "visible";
+	        			break;
+	        		default:
+	        			if ($debug) Debug.warn("no valid device Setup chosen");
+	        			break;
+	        	}
+    			this.parent.availibleCamsLabel.setAttribute("visibility",camVisible);
+    			this.parent.availibleCams.setAttribute("visibility",camVisible);
+    			this.parent.availibleMicsLabel.setAttribute("visibility",micVisible);
+    			this.parent.availibleMics.setAttribute("visibility",micVisible);	   
+    			this.parent.infoTextNoAV.setAttribute("visibility",textVisible);
+        	]]>
+        </handler>
+    </resetCombobox>    
+     
+    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="80" width="$once{ parent.width-20 }" />
+
+    <resetCombobox fontsize="11" name="availibleCams" x="10" y="100" width="280" editable="false">
+        <handler name="oninit">
+            <![CDATA[
+				//Get all availible Cam's
+				var tw = Camera.names;
+				var r = "";
+				for (var eg=0;eg<tw.length;eg++){
+					this.addItem(tw[eg],eg);
+					r=eg;
+				}
+				var t = new lz.sharedObject();
+				t.getLocal('userdata');
+				var g = t.getData('userdata');
+				if (g!=null){
+					var cam = g["cam"];
+				} else {
+					var cam = r;
+				}
+				if (cam=='undefined' || cam =='' || cam == null) cam=r;
+				this.selectItem(String(cam));    
+
+            ]]>
+        </handler>
+    </resetCombobox>
+    
+    
+
+    <resetCombobox fontsize="11" name="availibleMics"  x="10" y="140" width="280" editable="false">
+        <handler name="oninit">
+            <![CDATA[
+	            //Get all availible Mic's
+	            var tw = Microphone.names;
+	            var r = "";
+	            for (var eg=0;eg<tw.length;eg++){
+	                r=eg;
+	                this.addItem(tw[eg],eg);
+	            }
+	            
+	            var t = new lz.sharedObject();
+	            t.getLocal('userdata');
+	            var g = t.getData('userdata');
+	            if (g!=null){
+	            	var mic = g["mic"];
+	            } else {
+	            	var mic = r;
+	            }
+				if (mic=='undefined' || mic =='' || mic ==null) mic=r;
+				this.selectItem(String(mic));  
+            ]]>
+        </handler>
+    </resetCombobox>
+    
+    <labelText name="infoTextNoAV" labelid="452" multiline="true" width="280" 
+    		   fontsize="11" x="10" y="80" visibility="hidden" />
+               
+    <labelText name="availibleMicsLabel" labelid="53" fontsize="11" 
+    		   x="10" y="120" width="$once{ parent.width-20 }" />
+    
+    <!-- Remember Me -->    
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="210">
+        <handler name="oninit">
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var save = g["savecamdata"];
+            Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </labelCheckbox>
+    
+    <simpleLabelButton fontsize="11" labelid="54" x="190" y="180" width="100">
+        <handler name="onclick">
+        	this.parent.storelocaldata();
+        	this.parent.chosenCam = parent.availibleCams.getValue();
+        	this.parent.chosenMic = parent.availibleMics.getValue();
+        	this.parent.chosenSetting = parent.availibleSettings.getValue();      
+			this.parent.remoteMessage = new Array();
+			this.parent.remoteMessage[0] = 'avsettings';
+			this.parent.remoteMessage[1] = "0";
+			this.parent.remoteMessage[2] = this.parent.chosenSetting;              	
+            this.parent.getBroadCastId.doCall();
+        </handler>
+    </simpleLabelButton>
+
+</class>
+    
+</library>

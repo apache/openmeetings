@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="basedrawobject">
+   <doc>
+   	ホワイトボードに描画するオブジェクトのサーバとのやり取り処理を行うクラスです。<br/>
+   	*addPresentationToLayer/addPresentationToLayerRecordingメソッドでURLが固定で指定されています。プロパティ読み込みに変えましょう。
+   </doc>
+ </class>
+</rlzxdoc>

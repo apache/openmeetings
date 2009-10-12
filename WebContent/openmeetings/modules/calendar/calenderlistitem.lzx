@@ -1,0 +1,27 @@
+<library>
+	
+	<class name="calenderlistitem" extends="view" height="22">
+		
+		<attribute name="textAttr" value="" type="string"/>
+		<attribute name="terminObjRef" value="null"/>
+				
+		<handler name="onclick">
+			
+			var tRootCalendarView = parent.parent.parent.parent.parent.parent.parent;
+			
+			tRootCalendarView.initDetails();
+			//if ($debug) Debug.write("calenderlistitem: ",termindetails);
+			
+			tRootCalendarView._termindetails.setAttribute("visibility","visible");
+            ///this.terminObjRef.defaulttermindetails({terminObjRef:this});
+            tRootCalendarView._termindetails._date._bzeit.setAttribute('text',this.textAttr); //getAttribute('text')
+            //this.terminObjRef._terminButton.onclick.sendEvent();
+		</handler>
+		
+		<text y="4" x="4" fontsize="8" text="$once{ parent.textAttr }" />
+		
+        <view width="$once{ parent.width }" height="2" y="20" bgcolor="silver" />
+        	
+	</class>
+	
+</library>

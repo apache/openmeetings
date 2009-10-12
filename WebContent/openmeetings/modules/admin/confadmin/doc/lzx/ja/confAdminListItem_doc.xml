@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="confAdminListItem">
+   <doc>
+設定パネルの左側に表示されるID/キーのリスト。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

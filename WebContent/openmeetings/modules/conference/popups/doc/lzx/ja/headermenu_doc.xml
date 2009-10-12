@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="headermenu">
+   <doc>
+   	画面上部で現在の”ログインユーザ名”、”選択コース”を表示するクラスです。
+   </doc>
+ </class>
+</rlzxdoc>

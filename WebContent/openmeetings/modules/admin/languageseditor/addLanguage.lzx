@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Popup view to input a new language name to be added. -->
+<class name="addLanguage" extends="labelExplorerBox" labelid="364"
+    docking="true" resizeable="false" closable="true" 
+	width="360" x="350" height="160">
+	<!-- 364:Add new language -->
+	
+	<attribute name="refObj" value="null" />
+
+    <handler name="oninit">
+        var pressEnter = new LzDelegate(this, "sendValues");
+        lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
+	</handler>  
+	
+	<method name="sendValues">
+		<![CDATA[
+			this.addLanguage.doCall();
+		]]>
+	</method>
+	
+    <netRemoteCallHib name="addLanguage" funcname="languageservice.addLanguage" 
+		remotecontext="$once{ canvas.thishib }" activeErrorHandler="true"
+		isCallBackHandler="true" >      
+		<attribute name="tempValue" value="0" type="number" />
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam> 
+        <netparam><method name="getValue"> return parent.parent.langName.getText();</method></netparam>  
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+			if($debug) Debug.write(value);
+			parent.refObj.languages.getLanguages.doCall();
+			parent.close();
+        </handler>  
+    </netRemoteCallHib>	      	
+   
+    <!-- 365:Name -->
+    <labelText labelid="365" width="200" y="54" x="2"/>
+        <customEdittext name="langName" y="54" x="140" width="170" />
+	
+	<!-- 366:add language  -->
+    <simpleLabelButton name="_btn" labelid="366" width="120" x="230" 
+		y="$once{ parent.height-40 }" onclick="parent.sendValues()" />   
+	
+</class>    
+
+</library>

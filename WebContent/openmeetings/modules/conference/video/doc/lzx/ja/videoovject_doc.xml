@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="videouserProfilePic">
+   <doc>
+   	ビデオ画面の映像部分（相手の顔など）です。privateクラスのようです。<br/>
+   	*oninitハンドラにURLがベタで書かれていますので直しましょう。
+   </doc>
+ </class>
+ <class name="videoobject">
+   <doc>
+   	ビデオ画面の全体（１人分）です。ミュートボタンや招待機能があります。
+   </doc>
+ </class>
+ <class name="videoinfostuff">
+   <doc>
+   	videoobjectクラスで使われるprivateクラスです。whois問い合わせ機能などがあります。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

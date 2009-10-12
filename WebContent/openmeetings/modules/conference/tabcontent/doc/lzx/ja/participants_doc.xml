@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="innerlistView">
+   <doc>
+   	レイアウト付きのviewクラス。privateクラスのようです。
+   </doc>
+ </class>
+ <class name="userTagView">
+   <doc>
+   	チャットの発言毎の表示をするtextクラスです。ユーザのプロファイル写真をチャット発言毎に表示するのもここでやっています。<br/>
+   	*oninitハンドラで、呼び出すURLがベタで書かれていますので、プロパティを読み込むように要変更。
+   </doc>
+ </class>
+ <class name="listofUsers">
+   <doc>
+   </doc>
+ </class>
+ <class name="usersTable">
+   <doc>
+   </doc>
+ </class>
+ <class name="participants">
+   <doc>
+   </doc>
+ </class>
+</rlzxdoc>

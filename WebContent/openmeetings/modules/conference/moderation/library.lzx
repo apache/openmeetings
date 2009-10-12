@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<resource name="applyformodicon" src="resources/kdmconfig.png" />
+    	<resource name="start_recording_conf" src="resources/media-record.png" />
+    	<resource name="stop_recording_conf" src="resources/player_stop.png" />
+	
+    	<include href="applyForModeration.lzx" />
+    	<include href="moderationPanel.lzx" />
+    	<include href="responseForModeration.lzx" />
+	<include href="recordingStartWin.lzx"/>
+</library>

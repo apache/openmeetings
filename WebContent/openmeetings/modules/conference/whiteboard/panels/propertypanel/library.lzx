@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="_button_rsc_letter_rsc" src="resources/button_rsc.swf" />
+	
+	<include href="propertyPanelLetterButton.lzx" />  
+	<include href="propertyPanel.lzx" />  
+	
+</library>

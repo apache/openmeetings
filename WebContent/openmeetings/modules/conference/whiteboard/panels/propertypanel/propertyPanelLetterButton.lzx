@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="propertyPanelLetterButton" extends="view" resource="_button_rsc_letter_rsc"  
+	   x="312" y="24" height="23" width="24" 
+	bgcolor="$once{ canvas.baseMousecolorizer }" >
+	<attribute name="itemResourceName" value="" type="string" />
+	<attribute name="currentVal" value="false" type="boolean" />
+	
+	<attribute name="enabled" value="false" type="boolean"/>
+	
+	<handler name="onmouseover">
+		this.setAttribute('bgcolor',0xFFFFFF);
+	</handler>
+	<handler name="onmouseout">
+		this.updateByVal();
+	</handler>
+    <handler name="onclick">
+    	this.currentVal = !this.currentVal;
+    	this.updateByVal();
+        parent.parent.updateProperties();	
+    </handler>
+    <method name="getValue">
+    	return this.currentVal;
+    </method>
+    <method name="setValue" args="bool">
+    	this.currentVal = bool;
+    	this.updateByVal();
+    </method>
+    <method name="updateByVal">
+		if (this.currentVal){
+    		this.setAttribute('bgcolor',canvas.basebgcolorizer);
+    	} else {
+    		this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+    	}    	
+    </method>
+    <view x="2" y="2" resource="$once{ parent.itemResourceName }" />
+    
+    <view name="_clickEnabled" width="$once{ parent.width }" height="$once{ parent.height }" 
+    	  visibility="${ (parent.enabled) ? 'visible' : 'hidden' }"
+    	  opacity="0.5" bgcolor="0xFFFFFF" clickable="true" showhandcursor="false" />
+    
+    <labelTooltip x="2" y="2" labelid="87" fontstyle="bold" />
+</class>
+    
+</library>

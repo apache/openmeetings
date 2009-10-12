@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="overAllChatTabBottom">
+   <doc>
+チャット画面の最下部にある入力欄、および発言、顔文字、クリアボタンを配置しているビューです。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

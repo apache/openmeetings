@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- This class shows label-ID,label name, value.-->
+<class name="fieldValuesListItem" extends="baseContentListItem">
+	
+	<attribute name="fieldvalues_id" value="0" type="number" />
+	<attribute name="fieldname" value="" type="string" />
+	<attribute name="fieldvalue" value="" type="string" />
+	
+	<turnOverTextItem text="$once{ parent.fieldvalues_id }" width="120" />
+	<turnOverTextItem text="$once{ parent.fieldname }" width="126" />
+	<turnOverTextItem text="$once{ parent.fieldvalue }" width="200" />
+	
+</class>
+
+</library>

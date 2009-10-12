@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- list of conference/audience rooms -->
+<class name="roomClientListItem" extends="baseContentListItem">
+    
+    <!--
+    RoomClient(Long roomClientId, String username, String streamid,
+            String scope, String publicSID, Boolean isMod, Date connectedSince,
+            String formatedDate, String usercolor, Integer userpos,
+            String userip, int userport, Long room_id, Date roomEnter,
+            long broadCastID, Long user_id, String firstname, String lastname,
+            String mail, String lastLogin, String official_code,
+            String picture_uri, String language, Boolean isChatNotification,
+            Long chatUserRoomId, String avsettings, String swfurl,
+            Boolean isRecording, String roomRecordingName,
+            Boolean zombieCheckFlag)
+            -->
+            
+	<attribute name="streamid" value="0" type="number" />
+	<attribute name="login" value="" type="string" />
+	<attribute name="dateConnected" value="" type="string" />
+    <attribute name="scope" value="" type="string" />
+	
+	<turnOverTextItem text="$once{ parent.streamid }" />
+	<turnOverTextItem text="$once{ parent.login }" />
+	<turnOverTextItem text="$once{ parent.dateConnected }" />
+    <turnOverTextItem text="$once{ parent.scope }" />
+    <simpleLabelButton labelid="603" >
+        <handler name="onclick">
+            if ($debug) Debug.write("onclick ",this);
+            new lz.confirmtionSingle(canvas.main_content._content.inner,{labelid:604,labeliderror:605,refObj:this,showCheckBox:false});
+        </handler>
+        <method name="sendConfirmation" args="yesno" >
+	        if ($debug) Debug.write("Kick that User");
+            this.kickUserByStreamId.doCall();
+	    </method>
+        
+        <netRemoteCallHib name="kickUserByStreamId" funcname="userservice.kickUserByStreamId" 
+                          remotecontext="$once{ canvas.thishib }" >      
+            <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+            <netparam><method name="getValue"> return parent.parent.parent.streamid; </method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("kickUserByStreamId: ",value);
+                //this.parent.destroy();
+                if (value) {
+                    parent.parent.destroy();
+                }
+            </handler>
+        </netRemoteCallHib> 
+        
+    </simpleLabelButton>
+    
+    <labelTooltip name="_labelTooltip" multiline="false">
+        <handler name="setContent">
+            this.setAttribute('text',"publicSID: "+parent.obj.publicSID);
+        </handler>
+    </labelTooltip>
+	
+</class>
+
+</library>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="changeDevice" extends="labelExplorerBox" labelid="51"
+    docking="true" resizeable="false" closable="true" width="300" x="14" height="260">
+
+    <method name="storelocaldata">
+        <![CDATA[
+        if (this.holddatainSO.getValue()){
+            //Debug.write("sharedobject store ");
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["cam"]=availibleCams3.getValue();
+            g["mic"]=availibleMics3.getValue();
+            //Debug.write("sharedobject store ",g["cam"],g["mic"]);
+            g["savecamdata"] = true;
+            t.setData('userdata',g);
+            t.flush();  
+        } else {
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["cam"]=availibleCams3.getValue();
+            g["mic"]=availibleMics3.getValue();            
+            g["savecamdata"]=false;
+            t.setData('userdata',g);
+            t.flush(); 
+        }        
+        ]]>
+    </method>   
+    
+    <method name="doninitalize" args="valCam,valMic">
+        this.storelocaldata();
+        this.close();
+    </method>    
+     
+    <labelText labelid="52" fontsize="11" x="10" y="30" />
+
+    <resetCombobox fontsize="11" id="availibleCams3" x="10" y="50" width="280" editable="false">
+        <handler name="oninit">
+            <![CDATA[
+            //Get all availible Cam's
+            var tw = Camera.names;
+            var t = "";
+            for (var eg=0;eg<tw.length;eg++){
+                this.addItem(tw[eg],eg);
+                t=eg;
+            }
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var cam = g["cam"];
+            //Debug.write("cam: ",cam);
+
+            if (cam!=null || cam!=''){
+            	this.selectItem(String(cam));    
+            } else {
+           	 	this.selectItem(t);
+            }
+            ]]>
+        </handler>
+    </resetCombobox>
+    
+    <labelText text="LABEL53" labelid="53" fontsize="11" x="10" y="80" />
+
+    <resetCombobox fontsize="11" id="availibleMics3"  x="10" y="100" width="280" editable="false">
+        <handler name="oninit">
+            <![CDATA[
+            //Get all availible Mic's
+            var tw = Microphone.names;
+            var t = "";
+            for (var eg=0;eg<tw.length;eg++){
+                t=eg;
+                this.addItem(tw[eg],eg);
+            }
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var mic = g["mic"];
+            //Debug.write("mic: ",mic);
+
+            if (mic!=null || mic!=''){
+            	this.selectItem(String(mic));    
+            } else {
+           	 	this.selectItem(t);
+            }
+            ]]>
+        </handler>
+    </resetCombobox>
+    
+    <!-- Remember Me -->    
+    <checkbox name="holddatainSO" text="Do not ask again" x="10" y="220">
+        <handler name="oninit">
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var save = g["savecamdata"];
+            //Debug.write("save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </checkbox>
+    
+    <simpleLabelButton fontsize="11" labelid="54" x="190" y="190" width="100">
+        <handler name="onclick">
+            this.parent.doninitalize(availibleCams.getValue(),availibleMics.getValue());
+        </handler>
+    </simpleLabelButton>
+    
+    <labelText labelid="56" width="300"
+    	y="150" multiline="true" resize="false"/>
+    
+    <simpleLabelButton labelid="55" width="100" x="80" y="190" 
+        onclick="this.parent.close();" />
+    
+</class>
+
+
+
+</library>

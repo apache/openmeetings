@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="confirmationsingle">
+   <doc>
+   	”次回からの入力を省略”を表示する画面です。<br/>
+   	”OK”、”キャンセル”ボタン付きの確認画面です。<br/>
+   	*confirmationクラスとの違いは、”いいえ"ボタンがあるかないかだけです。一緒にできるのでは？   	
+   </doc>
+ </class>
+</rlzxdoc>

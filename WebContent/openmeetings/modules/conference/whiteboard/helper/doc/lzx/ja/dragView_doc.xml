@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="dragView">
+   <doc>
+   	指定されたオブジェクトのドラッグを行います。ドラッグに際してアニメーションを実行します。<br/>
+   	tabcontent/files/listimagedrag.lzxで使われています。"whiteboard"フォルダにあるべきではないかもしれません。<br/>
+   	
+   </doc>
+ </class>
+</rlzxdoc>

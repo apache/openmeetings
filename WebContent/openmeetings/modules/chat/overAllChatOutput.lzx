@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- chat output area. It shows chat history on-init.  -->
+<class name="overAllChatOutput" extends="view" height="$once{ parent.height-2 }" 
+            clip="true" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" >
+
+    <handler name="oninit">
+        if($debug) Debug.write("overAllChatOutput/oninit");
+        this.loadContent();
+    </handler>
+    
+    <method name="loadContent">
+        this._cbtext.clearChatOutput();
+        this.getOverallChatHistory.doCall();
+    </method>
+    
+    <netRemoteCallHib name="getOverallChatHistory" funcname="chatservice.getOverallChatHistory" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if($debug) Debug.write("overAllChatOutput/getRoomChatHistory: ",value);
+                for (var i=0;i<value.length;i++){
+                    if($debug) Debug.write("overAllChatOutput ",value[i].message,value[i].client);
+                    parent.addChatHistory(value[i].message,value[i].client);
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     
+    
+    <method name="addChatHistory" args="value,client">
+        <![CDATA[
+            if($debug) Debug.write("overAllChatOutput/addChatHistory: ",value,client);
+            //is Right To Left ? not checked for the moment
+            if (value[7]){
+                var username = client.firstname+" "+client.lastname;
+            } else {
+                var username = client.firstname+" "+client.lastname;
+            }
+            var messageObj = value[9];
+            //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+            if($debug) Debug.write("overAllChatOutput/messageObj: ",messageObj);
+            var usercolor = value[5];
+            if ( usercolor==null || usercolor==0 || usercolor.length==0 )usercolor=0xCCCCCC;
+            new lz.chatTabItemEmoticons(this._cbtext,{
+	                messageObj:messageObj,user_id:value[8],
+	                usercolor:usercolor,
+	                username:username,
+	                usertime:value[1]
+                });
+            this.setScrollToMax();              
+        ]]> 
+    </method>           
+    
+    <method name="setScrollToMax">
+        <![CDATA[
+        if(_cbtext.height>this.height){
+            myscrollbar.scrolltarget.setAttribute(myscrollbar.scrollattr,(this.height-_cbtext.height));
+        }
+        
+        ]]>
+    </method>
+    
+    <view name="_cbtext" width="$once{ parent.width }" layout="axis:y;spacing:2" >
+    	<method name="clearChatOutput">
+    		<![CDATA[
+    			if($debug) Debug.write("overAllChatOutput/clearChatOutput ",this.subviews.length);
+    			while (this.subviews.length>0){
+    				this.subviews[0].destroy();
+    			}
+    		]]>
+    	</method>
+    </view>
+    
+    <vscrollbar name="myscrollbar" />
+
+</class>
+    
+
+</library>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+<class name="recordingSaveWin">
+   <doc>
+	録画データ保存用ダイアログ表示パネルです。<br/>
+	でも、どこからも呼び出されていないので、使用されていないと思われます。<br/>
+   </doc>
+ </class>
+</rlzxdoc>

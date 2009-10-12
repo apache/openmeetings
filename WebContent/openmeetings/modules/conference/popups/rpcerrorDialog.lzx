@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="baseErrorDialog" extends="labelExplorerBox" labelid="204"
+    docking="true" resizeable="false" closable="true" width="300" 
+	x="$once{ canvas.width/2-this.width/2 }" height="230">
+	
+    <attribute name="errortext" value="" type="string" />
+	<attribute name="errorid" value="0" type="number" />
+
+	<netRemoteCallHib name="getErrorByCode" funcname="errorservice.getErrorByCode" remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.errorid; </method></netparam>
+        <netparam><method name="getValue"> return canvas.thishib.userlang; </method></netparam>
+		<handler name="ondata" args="value">
+			Debug.write("getErrorByCode ",value);
+			//this.parent.destroy();
+			this.parent.setAttribute('errortext',value.errmessage);
+			this.parent.setAttribute('title',value.errortype);
+		</handler>
+	</netRemoteCallHib>		
+
+	<view y="24" width="298" height="180">
+		<text y="30" x="10" fontsize="10" fontstyle="bold" text="${ parent.parent.errortext }"
+			multiline="true" width="270" />
+		<vscrollbar />
+	</view>
+</class>
+	
+<class name="errorDialog" extends="baseErrorDialog">
+
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+		this.getErrorByCode.doCall();
+	</handler>
+    <handler name="onclose">
+        lz.ModeManager.release(this);
+    </handler>
+	
+</class>
+	
+<class name="contentSaveWindow" extends="baseErrorDialog">
+	
+    <attribute name="saveObj" value="null" />
+    <attribute name="refObj" value="null" />
+    <attribute name="processNextIndex" value="0" type="number" />
+	<attribute name="errorid" value="0" type="number" />
+    
+    <handler name="oninit">
+        lz.ModeManager.makeModal(this);
+        Debug.write("contentsavewindow: ",errorid);
+        this.startSave();
+    </handler>
+    
+    <handler name="onclose">
+        lz.ModeManager.release(this);
+    </handler>
+    
+    <method name="startSave">
+    	<![CDATA[
+    	for (var i=0;i<this.saveObj.length;i++){
+    		this.saveObj[i].prepareCall();
+    	}
+    	this.processNext();
+    	]]>
+    </method>
+	
+	<method name="errorByCode" args="eCode">
+		this.errorid = eCode;
+		this.getErrorByCode.doCall();
+	</method>
+    
+    <method name="processNext">
+    	<![CDATA[
+    	//Debug.write("processNext: ",this.saveObj.length,this.processNextIndex);
+    	if (this.saveObj.length>this.processNextIndex){
+    		this.saveObj[this.processNextIndex].returnObj=this;
+    		this.saveObj[this.processNextIndex].doCall();
+    		this.processNextIndex++;
+    	} else {
+    		//Debug.write("update process complete");
+    		this.refObj.onsavecompleted.sendEvent();
+    		this.close();
+    	}
+    	]]>
+    </method>
+	
+	<method name="doCallBack">
+		this.close();
+	</method>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+	
+<class name="rpcErrorDialog" extends="errorDialog" height="250">
+	
+	<method name="doCallBack">
+		this.close();
+	</method>
+	
+	<handler name="onclose">
+		if ( canvas.focusOnItem != null )
+		{
+			lz.Focus.setFocus( canvas.focusOnItem, true );
+		}
+	</handler>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+	
+<class name="callbackRpcErrorDialog" extends="errorDialog"
+	closable="false"  height="250">
+	
+	<attribute name="callBackObject" value="null" />
+	
+	<method name="doCallBack">
+		this.callBackObject.sendCallBack.sendEvent();
+		this.close();
+	</method>
+	
+	<handler name="onclose">
+		if ( canvas.focusOnItem != null )
+		{
+			lz.Focus.setFocus( canvas.focusOnItem, true );
+		}
+	</handler>
+	
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
+	
+</class>
+   
+
+</library>

@@ -1,0 +1,6 @@
+<library>
+	
+	 <resource name="timetable_weekview" src="timetable_weekview.png" />
+	 <resource name="balken_weekview" src="balken_weekview.png" />
+	 
+</library>

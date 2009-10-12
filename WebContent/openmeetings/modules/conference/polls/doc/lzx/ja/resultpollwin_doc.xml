@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="resultpollwin">
+   <doc>
+   	poll(投票)結果を表示するパネルです。
+   </doc>
+ </class>
+ <class name="parentresultpollbalk">
+   <doc>
+   	resultpollbalkクラスを呼び出している（だけ）。<br/>
+   	*privateクラスでしょう
+   </doc>
+ </class>
+ <class name="resultpolbalk">
+   <doc>
+   	poll(投票)結果を'％'表示するクラスです。<br/>
+   	*privateクラスでしょう
+   </doc>
+ </class>
+</rlzxdoc>

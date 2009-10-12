@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <!-- private class for conferenceMenubar class -->
+    <class name="_labelMenuItem" extends="menuitem" text="labelmenulabelmenulabelmenu"
+           style="componentStyle">
+        <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+        <method name="setLabelId" args="_labelid" >
+            this.labelid = _labelid;
+            this.setAttribute('text',canvas.getLabelName(this.labelid));
+        </method>
+    </class>    
+        
+    <!-- private class for conferenceMenubar class -->
+    <class name="_labelMenu" extends="menu" text="labelmenulabelmenulabelmenu" >
+        <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+        <method name="setLabelId" args="_labelid" >
+            this.labelid = _labelid;
+            this.setAttribute('text',canvas.getLabelName(this.labelid));
+        </method>
+    </class>  
+    
+	<!---
+		Menu for public/private conference and audience room.
+		This class shows exit, moderator, file, setteings and poll menu.
+		Those menu items are connected to each command that has been declared in base/mainMethods.lzx.
+			May 24 2008 commented by onokeiji@gmail.com
+	-->  
+	<class name="conferenceMenubar" extends="menubar" height="28" style="itemStyle">
+        
+        <!-- file menu -->
+        <_labelMenu labelid="245" width="250">
+            <handler name="oninit">
+                <![CDATA[
+                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
+                        this.parent.mbarcontent.subviews[9].destroy();
+                    }
+                ]]>
+            </handler>  
+            <_labelMenuItem labelid="15" command="cmd_importFile" />
+            <menuseparator/>  
+            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
+            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
+            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
+            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
+            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
+            <menuseparator/>  
+            <_labelMenuItem labelid="309" command="cmd_quit" />
+        </_labelMenu> 
+        
+        <_labelMenu labelid="635" width="250">
+            <_labelMenuItem labelid="302" command="cmd_applyforMod" />
+            <_labelMenuItem labelid="213" command="cmd_invitation" />
+            <menuseparator/> 
+            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
+            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
+            <menuseparator/>  
+            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+            <menuseparator/>
+            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
+        </_labelMenu>  
+        
+	   <!-- exit room
+	    <_labelMenu labelid="308" width="250">
+        	    	
+	        
+           
+	    </_labelMenu>
+	    <_labelMenu labelid="301" width="250">
+	        <_labelMenuItem labelid="302" command="cmd_applyforMod" />
+	    </_labelMenu>
+	      
+
+	    <_labelMenu labelid="305" width="250">
+	        <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
+	        <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
+	    </_labelMenu>   
+	    <_labelMenu labelid="303" width="250">
+	        
+	    </_labelMenu>    
+         -->
+	</class>    
+	
+	
+    
+</library>

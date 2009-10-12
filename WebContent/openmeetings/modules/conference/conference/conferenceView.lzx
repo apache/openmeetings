@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="videoBoard" id="myconferenceView" extends="conferenceBox" >
+    <!--
+    
+    <simpleLabelButton y="${ parent.height-19 }" x="${ parent.width-this.width-1 }" 
+					   height="18" labelid="213" >
+		<handler name="onclick">
+			new lz.inviteMainWindow(canvas.main_content._content.inner);
+		</handler>
+	</simpleLabelButton>
+    -->
+    
+	<!--
+	<view name="_sendInvitation" visible="true" x="1" y="1" >
+		<handler name="onclick">
+			new lz.inviteMainWindow(canvas.main_content._content.inner);
+		</handler>
+		<labelText multiline="false" resize="true" labelid="213" 
+			fgcolor="white" fontstyle="bold" />
+	</view>	
+     -->
+     
+    <participents name="_videocontainer" y="34" />
+                    
+</class>
+
+<class name="modernWhiteBoardPanel" extends="conferenceBox" labelid="615">
+    
+    <newWhiteBoard name="_whiteboard" y="34" x="1">
+        <handler name="onsharedMessage" args="obj">
+            //Debug.write("send: ",obj);
+            canvas.objWhiteboard = obj;
+            hib.sendVars.doCall();
+        </handler>
+        <handler name="isloadingImage" args="val" >
+            if ($debug) Debug.write("isloadingImage: ",val);
+        </handler>
+        <handler name="isloadedImage" args="val" >
+            if ($debug) Debug.write("isloadedImage: ",val);
+        </handler>
+    </newWhiteBoard>
+    
+</class>
+
+<class name="modPanel" extends="guiPresenter" x="2" y="284"
+    width="266" height="46" closable="false" labelid="316"
+    resizeable="false">
+  <moderationPanel y="22" />
+</class>
+
+<!-- caution: this class is not private class. It is used in modules/recordings/recordingsViewer.lzx, for example.
+		May 26 2008 commented by onokeiji@gmail.com
+ -->
+<class name="filesPanel" extends="guiPresenter" x="2" y="284"
+    width="290" height="310" closable="false" title="Chat Files User"
+    resizeable="false">
+    <conferenceContainerTab x="1" y="22" name="_menubar" />
+</class>
+
+<class name="filesPanelStrict" extends="conferenceBox" >
+    
+    <uploadTab y="40" height="${ parent.height-40 }" />
+    
+</class>
+
+<class name="winni" extends="window" bgcolor="white" >
+	<attribute name="roomobj" value="null" />
+	<!--
+	textcolor="white"
+	 -->
+	
+	<handler name="oninit" >
+		this.getAppointmentData.doCall();
+		this.getServerTime.doCall();
+	</handler>
+	
+	<labelText name="appstartlabel" y="10" labelid="570" width="50"/>
+	<edittext name="_appstart" x="75" y="10" width="100"></edittext>
+	<customEdittext name="bzeit" x="200" y="10" width="50" regexpType="time" />
+	
+	<labelText name="l_edatum" labelid="571" y="40" width="50"  />
+	<edittext name="edatum" y="40" x="75" width="100" text=""  /> 	            	
+	<customEdittext name="ezeit" x="200" y="40" width="50" regexpType="time"  />
+	
+	<labelText name="l_sdatum" labelid="621" y="80" width="50"  />
+	<edittext name="sdatum" y="80" x="75" width="100" text=""  /> 	            	
+	<customEdittext name="szeit" x="200" y="80" width="50" regexpType="time"  />
+	
+	<!-- Retrieving Appointmentdata for Meeting -->
+	<netRemoteCallHib name="getAppointmentData" remotecontext="$once{ canvas.thishib }" 
+		funcname="conferenceservice.getAppointMentDataForRoom" >   
+		<netparam><method name="getValue">return parent.parent.roomobj.rooms_id;</method></netparam>
+		
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getAppointmentData: ",value);
+		    	
+		    	if(value!=null){
+		    		if ($debug) Debug.write("Appointment Name : " + value.appointmentName);
+		    		
+		    		parent._appstart.setAttribute('text',parseDateToString(value.appointmentStarttime));
+		    		
+		    		parent.bzeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentStarttime));
+		    		parent.edatum.setAttribute('text',parseDateToString(value.appointmentEndtime));
+		    		parent.ezeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentEndtime));
+		    	
+		    		Debug.write("Appointment Start : " + value.appointmentStarttime);
+		    		Debug.write("Appointment End : " + value.appointmentEndtime);
+		    	}
+		    	
+		    	
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib> 
+	
+	<!-- Retrieving Appointmentdata for Meeting -->
+	<netRemoteCallHib name="getServerTime" remotecontext="$once{ canvas.thishib }" 
+		funcname="conferenceservice.getServerTime" >   
+		
+		<handler name="ondata" args="value">	
+		    <![CDATA[
+		    	if ($debug) Debug.write("getServerTime: ",value);
+		    	
+		    	if(value!=null){
+		    		parent.sdatum.setAttribute('text',parseDateToString(value));
+		    		parent.szeit.setAttribute('text',parseDateToStringTimeOnly(value));
+		    	}
+		    	
+		    ]]>	        	          				
+		</handler>	
+	</netRemoteCallHib> 
+	
+</class>
+
+    
+<class name="conferenceView" extends="baseContentView" destroyByMethod="true" >
+	
+	<attribute name="roomobj" value="null" />
+    
+    <attribute name="meetingTimer" value="null" />
+
+    <handler name="oninit">
+    	
+    	_mainScrollBar.setAttribute("visibility","hidden");
+    	
+		if ($debug) Debug.write("roomobj: ",this.roomobj);
+        canvas._mainbgcontentNavi.setAttribute('height',0);
+        canvas.setAttribute('naviHeightDelta',28);
+        new lz.conferenceMenubar(canvas._conferencemenu);
+        //,{x:this.roomobj.moderationPanelXPosition}
+        new lz.moderationPanel(canvas._conferencemenu,{x:400});
+        canvas._conferencemenu.setAttribute('visibility','visible');
+		
+        this._videosView.bringToFront();
+        
+       
+        if(roomobj.appointment){
+        	new lz.winni(canvas.conferenceView,{ name:'appDetail',
+                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });	
+        }
+        else{
+        	if ($debug) Debug.write("no appointed meeting");
+        }
+        
+        if (this.roomobj.isDemoRoom) {
+            if (this.roomobj.demoTime != null) {
+                if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
+                this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+            }
+        }
+        
+        this._chatPanelStrict.toggleopen();
+        
+    </handler>
+    
+    <!--
+    new lz.videoBoard(this,{
+                name:'_videosView',
+                x:this.roomobj.videoPodXPosition,
+                y:this.roomobj.videoPodYPosition,
+                width:this.roomobj.videoPodWidth
+            });
+        
+        if (this.roomobj.showFilesPanel){
+            new lz.filesPanelStrict(this,{
+                name:'_filesPanel',
+                width:this.roomobj.filesPanelWidth});
+        }
+        
+        new lz.chatPanelStrict(this,{
+                name:'_chatPanel'
+            });
+        
+        if (this.roomobj.showWhiteBoard){
+            new lz.modernWhiteBoardPanel(this,{x:this.roomobj.whiteBoardPanelXPosition,
+                y:this.roomobj.whiteBoardPanelYPosition,
+                width:this.roomobj.whiteBoardPanelWidth,
+                height:this.roomobj.whiteBoardPanelHeight});
+        }
+        
+        this._videosView.bringToFront();
+        -->
+
+    <handler name="ontabcontentleave">
+        if ($debug) Debug.write("################# ontabcontentleave:",this);
+        
+        //reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
+        //on server-Side the canDraw status will be false again when you relogin the same room
+        canvas.isAllowedToDraw = true;
+        
+        _mainScrollBar.setAttribute("visibility","visible");
+        
+        if (canvas._videocontainer!=null){
+	        canvas._videocontainer.resetAllValues();
+	        canvas._videocontainer = null;
+        }
+        if (canvas._chatcontent!=null){
+        	canvas._chatcontent = null;
+        }
+        if (canvas._mymod!=null){
+        	canvas._mymod = null;
+        }
+        
+        if (this.meetingTimer != null) {
+            this.meetingTimer.close();
+        }
+        
+        if (canvas._drawarea.letterObjectIsActive){
+          canvas._drawarea.currentletterObj.destroy();
+        }
+        this.logicalRoomLeave.doCall();
+        if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
+    </handler>
+
+    <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+	        if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+	        //this.parent.destroy();
+            canvas.thishib.reconnectAfterRoomleft = true;
+            canvas.thishib.reconnectedRoomInstance = this.parent;
+            
+            // Reconnect User to default Scope
+	        canvas.thishib.userScope = "hibernate";
+	        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+	        canvas.thishib.setAttribute('src',src);
+            canvas.thishib.disconnect();
+            canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
+            canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
+            canvas._conferencemenu.removeAll();
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+        </handler>
+    </netRemoteCallHib>
+    
+    <videoBoard height="300" name="_videosView" y="2" x="2" 
+                labelid="613" width="274"/>
+      
+    <filesPanelStrict name="_filesPanel" width="274" x="2" 
+                      labelid="614" y="304" height="${ canvas.height - 340 }" />
+    
+    <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
+       height="200" x="${ parent._filesPanel.width+10 }"  
+       y="${ canvas.height - (this.height+30) }" 
+       width="${ canvas.width - 290 }">
+        <!--
+        <handler name="onwidth" args="w">
+            if ($debug) Debug.write("ON WIDTH",w);
+        </handler>
+         -->
+        <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
+    </conferenceBox>
+       
+    <modernWhiteBoardPanel name="_whiteboard" labelid="615"
+        y="2" x="${ parent._filesPanel.width+10 }"
+        width="${ canvas.width - 290 }"
+        height="${ canvas.height - (parent._chatPanelStrict.height+36) }" />
+    
+</class>
+
+</library>

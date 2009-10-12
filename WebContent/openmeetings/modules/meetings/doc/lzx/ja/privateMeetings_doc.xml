@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="privateMeetings">
+   <doc>
+   	入室可能なプライベート会議室のリストと、それら会議室の情報を表示する画面viewクラスです。<br/>
+   	全体画面の上側にあるメニューリストの”プライベート会議室”をクリックして表示されます。<br/>
+   	パブリック会議室とは共通するところが多いので、private/publicの属性設定でprivateMeetings/publicMeetings<br/>
+   	を共通化することができそうですが、netRemoteCallHibで呼んでいるリモートメソッドを含めて共通化できそうなので<br/>
+　　そちらを確認してからにします。   	
+   </doc>
+ </class>
+</rlzxdoc>

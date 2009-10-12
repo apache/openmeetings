@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+	<include href="globalAttributes.lzx" />
+	<include href="globalMethods.lzx" />
+	
+	<include href="chatParticipants.lzx" />
+	<include href="emotIconsSelector.lzx" />
+	<include href="overAllChatOutput.lzx" />
+	<include href="overAllChatTabBottom.lzx" />
+	<include href="overAllChat.lzx" />
+    
+</library>

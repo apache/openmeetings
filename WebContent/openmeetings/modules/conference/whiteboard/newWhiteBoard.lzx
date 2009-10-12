@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!-- 
+############################
+
+    Class newWhiteBoard
+    
+    
+    @keywords deprecated
+    
+ -->
+
+
+<class name="newWhiteBoard" extends="view" >
+    
+    <attribute name="baseurl" value="" type="string" />
+    <attribute name="fileName" value="" type="string" />
+    <attribute name="moduleName" value="" type="string" />
+    <attribute name="parentPath" value="" type="string" />
+    <attribute name="room" value="" type="string" />
+    <attribute name="domain" value="" type="string" />
+    
+    <attribute name="downloadurl" value="" type="string" />
+    <attribute name="iamgex" value="" type="string" />
+    <attribute name="imagey" value="" type="string" />
+    
+    <event name="onsharedMessage" />
+    
+    <attribute name="sendObject" value="null" />
+    <attribute name="sendObjectToClientID" value="0" type="number"  />
+    
+    <attribute name="confirmdialog" value="null" />
+    
+    <attribute name="documentmenuIsInited" value="false" type="boolean" />
+
+    <method name="sendConfirmation" args="yesno,askagain" >
+        
+        ////Debug.write("clear yesno,askagain: ",yesno,askagain);
+    
+         var t = new lz.sharedObject();
+         t.getLocal('userdata');
+         var g = t.getData('userdata');
+         if (g==null) g = new Array();
+         if (g["image"]==null) g["image"]=new Array();
+         g["image"]["clearField"]=yesno;
+         g["image"]["askagainclear"]=!askagain;
+         t.setData('userdata',g);
+         t.flush();     
+
+         if (yesno){
+            ////Debug.write("clear field!!");
+            canvas._drawarea.setModus('plain');
+            canvas._drawarea.addNewSyncImage(this.downloadurl,this.iamgex,this.imagey,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         } else {
+            ////Debug.write("don't clear field!!");
+            canvas._drawarea.addNewSyncImage(this.downloadurl,this.iamgex,this.imagey,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         }
+         this.confirmdialog.close();
+    </method>
+    
+    <method name="getconfirmationscode">
+        var t = new lz.sharedObject();
+        t.getLocal('userdata');
+        var g = t.getData('userdata');
+        if (g==null) g = new Array();
+        if (g["image"]==null) {
+            g["image"]=new Array();
+            g["image"]["clearField"]=false;
+            g["image"]["askagainclear"]=true;
+            t.setData('userdata',g);
+            t.flush();              
+        }
+        return g["image"];
+    </method>
+    
+    <method name="resetDefaultConfirmations">
+        var t = new lz.sharedObject();
+        t.getLocal('userdata');
+        var g = t.getData('userdata');
+        if (g==null) g = new Array();
+        if (g["image"]==null) g["image"]=new Array();
+        g["image"]["clearField"]=false;
+        g["image"]["askagainclear"]=true;
+        t.setData('userdata',g);
+        t.flush();              
+    </method>   
+    
+    <method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">
+        <![CDATA[
+        ////Debug.write("clearAreaAndAddImage: ",downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain);
+        this.downloadurl=downloadurlVal;
+        this.iamgex=xVal;
+        this.imagey=yVal;   
+        this.baseurl=baseurl;
+        this.fileName=fileName;
+        this.moduleName=moduleName;
+        this.parentPath=parentPath;
+        this.room=room;
+        this.domain=domain;
+        var storedImageDate = this.getconfirmationscode();
+        ////Debug.write(" g[image] ",storedImageDate);
+        if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
+            canvas._drawarea.setModus('plain');
+            Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+        } else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+            Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
+        } else if (storedImageDate["askagainclear"]){
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        } else {
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        }
+        ]]> 
+    </method>
+    
+    <event name="isloadingImage" />
+    <event name="isloadedImage" />
+    
+    
+    <text fontsize="11" x="10" y="2" 
+        name="_sharingClientName" fontstyle="bold" />    
+    
+    
+    <method name="checkForApplyScreen">
+            <![CDATA[
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                    +'rtmphostlocal='+canvas.rtmphostlocal
+                    +'&room='+hib.currentroomid
+                    +'&domain='+hib.conferencedomain
+                    +'&sid='+canvas.sessionId
+                    +'&red5httpport='+canvas.red5httpport;
+
+                //Debug.write(downloadurl); 
+                lz.Browser.loadURL(downloadurl,'_blank');    
+            ]]>        
+    </method> 
+    
+    <!-- 
+        The Content Area    
+     -->
+    <view width="${ parent.parent.width-2 }" 
+    	  height="${ (canvas.ismoderator) ? (parent.parent.height-33-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-33-parent._propertyPanel.height) : (parent.parent.height-33)) }" 
+    	  y="0" name="_drawareaMask" clip="true" bgcolor="white" >
+        <remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true"
+        			  width="${parent.width}" height="${parent.height}" >
+            <attribute name="initH"/>
+            <attribute name="initW"/>
+            <handler name="oninit">
+            	canvas._drawarea = this; 
+            </handler>
+            
+            <handler name="onprogress" args="perc">
+                //Debug.write("onprogress: ",perc);
+                this.parent.parent._progress.setProgress(perc);
+            </handler>
+            <handler name="onmousedown" >
+                //Debug.write("onprogress: ",perc);
+            </handler>
+            <handler name="ondrawmodus" args="d">
+                this.drawmodus = d;
+                //change Enabled Status of Toolbar Menu Button
+                parent.parent._propertyPanel.loadPanelByModus(this);
+            </handler>
+            <handler name="setNewScreenUserName" args="value">
+                this.parent.parent._sharingClientName.setAttribute('text',value);
+            </handler>
+            <!-- @overwrite -->
+            <method name="onsharedMessage" args="action,obj">
+            	
+            	if ($debug) Debug.write("###### onsharedMessage",action,obj);
+    
+                var tempSendArray = new Array ();
+                tempSendArray[0] = 'whiteboard';
+                tempSendArray[1] = new Date();
+                tempSendArray[2] = action;
+                tempSendArray[3] = obj;
+                     
+                parent.parent.onsharedMessage.sendEvent(tempSendArray);
+            </method>
+            
+            <!--
+            <handler name="onopenWhiteBoard" >
+                var obj = new Array();
+                obj[0] = 'whiteboard';
+                obj[1] = 'initgetVars';
+                obj[2] = canvas.streamid;
+                
+                //Debug.write("Setting Message onopenWhiteBoard: ",canvas.moderatorStreamID,obj);
+                
+                this.parent.parent.sendObjectToClientID = canvas.moderatorStreamID;
+                this.parent.parent.sendObject = obj;
+                     
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </handler>
+             -->
+             
+            <handler name="onopenWhiteBoard" >
+            	parent.parent.getRoomItems.doCall();
+            </handler>
+            
+            <!-- clientid  = streamid of the user -->
+            <method name="oninitUser" args="clientid,objectList">
+                this.parent.parent.sendObjectToClientID = clientid;
+                this.parent.parent.sendObject = objectList;
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </method>
+            
+            <handler name="onboundingIsActive" args="b">
+            	if ($debug) Debug.write("boundingIsActive: ",b);
+            	if (b){
+            		var boundingDoUpdateOnInit = true;
+		            if (this.ObjectByName instanceof lz.swfResourceView){
+		                //Debug.write("is swf Presentation");
+		                boundingDoUpdateOnInit=false;
+		            }
+            		if (!boundingDoUpdateOnInit) {
+		                parent.parent._propertyPanel.setObjectBounds(
+		                	this.ObjectByName.x,this.ObjectByName.y,
+		                	this.ObjectByName._swfView.width,this.ObjectByName._swfView.height);
+		            } else {
+		                parent.parent._propertyPanel.setObjectBounds(
+		                	this.ObjectByName.x,this.ObjectByName.y,
+		                	this.ObjectByName.width,this.ObjectByName.height);
+		            }
+            	}
+            </handler>
+            
+	    	<!--  bounding Box (selection Box) -->
+    	    <handler name="onBoundingBox" args="boundingBoxRef">
+				var boundingDoUpdateOnInit = true;
+	      		if (boundingBoxRef.objRef instanceof lz.swfResourceView){
+                //Debug.write("is swf Presentation");
+                	boundingDoUpdateOnInit=false;
+                }
+    	      	if (!boundingDoUpdateOnInit) {
+                    parent.parent._propertyPanel.setObjectBounds(
+                 	boundingBoxRef.objRef.x,boundingBoxRef.objRef.y,
+                 	boundingBoxRef.objRef._swfView.width,boundingBoxRef.objRef._swfView.height);
+              	} else {
+                 	parent.parent._propertyPanel.setObjectBounds(
+                    boundingBoxRef.objRef.x,boundingBoxRef.objRef.y,
+                    boundingBoxRef.objRef.width,boundingBoxRef.objRef.height);
+              	}
+    	    </handler>
+    	    
+    	    <method name="getDocumentToolBar">
+    	    	return parent.parent.panelArea.getDocumentsToolbar();
+    	    </method>
+    	    
+        </remoteWhiteboard>  
+    </view>
+    
+    
+    
+        <netRemoteCallHib name="sendMessageWithClientById" funcname="sendMessageWithClientById"
+            remotecontext="$once{ canvas.thishib }" >
+            <netparam><method name="getValue">return parent.parent.sendObject;</method></netparam>
+            <netparam><method name="getValue">return parent.parent.sendObjectToClientID;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+	                //The onResult-Handler will be called be the rtmpconnection
+	                //Debug.write("sendMessageWithClientById : ",value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>     
+    
+        <netRemoteCallHib name="getRoomItems" funcname="whiteboardservice.getRoomItems"
+            remotecontext="$once{ canvas.thishib }" >
+            <handler name="ondata" args="value">
+                <![CDATA[
+                	//The onResult-Handler will be called be the rtmpconnection
+                	if ($debug) Debug.write("############## getRoomItems : ",value);
+                	canvas._drawarea.loadObjectList(value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>     
+        
+    <view name="panelArea" width="${ parent.parent.width }" 
+    	  height="${ parent.parent.height-33-parent._propertyPanel.height }">
+    	
+    	<attribute name="objectRef" value="null" />
+    	
+    	<!--- @deprecated -->
+		<method name="_setSelection" args="obj">
+			parent._drawareaMask._drawarea.removeObjectBounds();
+			if (obj.setSelectionToItem){			
+				if (this.objectRef!=null){
+					this.objectRef._isselected = false;
+					this.objectRef._area.setAttribute('bgcolor',0xFFFFFF);
+				}
+				this.objectRef = obj;
+				this.objectRef._isselected = true;
+				this.objectRef._area.setAttribute('bgcolor',canvas.basebgcolorizer);
+				parent._drawareaMask._drawarea.setModus(this.objectRef.modi);
+			}
+		</method>
+		
+		<method name="setSelection" args="obj">
+			parent._drawareaMask._drawarea.removeObjectBounds();
+			if (obj.setSelectionToItem){			
+				if (this.objectRef!=null){
+					this.objectRef._isselected = false;
+					this.objectRef.setAttribute('enabled',true);
+				}
+				this.objectRef = obj;
+				this.objectRef._isselected = true;
+				this.objectRef.setAttribute('enabled',false);
+			}
+			if (obj.modi=="saveobj"){
+				parent._drawareaMask._drawarea.doAction(obj.modi);
+			} else {
+				parent._drawareaMask._drawarea.setModus(obj.modi);
+			}
+		</method>
+		
+		<!--
+								
+		 -->
+		 
+		<method name="sendNewPropertyHeight" args="objRef">
+			<![CDATA[
+				for (var i=0;i<this.subviews.length;i++) {
+					if (this.subviews[i].y != 0) {
+						if (this.subviews[i] instanceof lz.mainToolsTopPanel
+							|| this.subviews[i] instanceof lz.documentIconTopPanel) {
+							if (objRef.height<=22){
+								if (this.subviews[i].y+this.subviews[i].height+5>=parent.parent.height-objRef.initheight-21){
+									if ($debug) Debug.write("mainToolsTopPanel");
+									this.subviews[i].setAttribute('y',objRef.y-this.subviews[i].height);
+								}
+							} else {
+								if (this.subviews[i].y+this.subviews[i].height+5>=objRef.y){
+									if ($debug) Debug.write("mainToolsTopPanel");
+									this.subviews[i].setAttribute('y',objRef.y-this.subviews[i].height);
+								}
+							}
+						}	
+					}
+				}
+			]]>
+		</method>
+		
+		<method name="getDocumentsToolbar">
+			<![CDATA[
+				for (var i=0;i<this.subviews.length;i++) {
+					if (this.subviews[i] instanceof lz.documentIconTopPanel
+						|| this.subviews[i] instanceof lz.documentIconLeftPanel) {
+						//this.subviews[i].setAttribute('visibility','visible');
+						return this.subviews[i]._inner;
+					}
+				}
+			]]>
+		</method>
+        
+        <mainToolsTopPanel x="100" y="0" name="_mainToolsPanel" 
+             visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
+    	
+        <mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer" 
+             visible="${ ((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true )) }"/>
+    	
+    	<documentIconTopPanel x="100" valign="bottom" name="_documentPanel"
+			 visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />
+   
+    </view> 
+    
+    <propertyPanel name="_propertyPanel" x="0" y="${ parent.parent.height-this.height-33 }" 
+                    visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+   		<handler name="onheight" args="h">
+   			this.height = h;
+   			if ($debug) Debug.write("onheight: ",h);
+   			parent.panelArea.sendNewPropertyHeight(this);
+   		</handler>
+    </propertyPanel>
+    
+    <!--
+    <view name="resetSize" x="${parent.width - 20}" width="10" height="10" >
+		<handler name="onclick">
+			this.parent.parent.setAttribute("width",this.parent.parent.initW); 
+			this.parent.parent.setAttribute("height",this.parent.parent.initH);
+			
+			this.parent.parent.onheight.sendEvent();
+			this.parent.parent.onwidth.sendEvent();
+			
+			this.setAttribute("x",this.parent.parent.initW - 20);
+		</handler>
+    </view>
+     -->
+</class>
+
+</library>

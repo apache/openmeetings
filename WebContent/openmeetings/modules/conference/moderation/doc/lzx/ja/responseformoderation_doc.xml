@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="responseformoderation">
+   <doc>
+   	moderation権の許可が各ユーザで行われているかどうかを、LzTimerを使って1秒ごとに
+   	チェックしています。
+   </doc>
+ </class>
+</rlzxdoc>

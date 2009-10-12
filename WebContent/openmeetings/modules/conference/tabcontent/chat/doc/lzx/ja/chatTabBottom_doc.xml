@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="chatTabBottom">
+   <doc>
+overAllChatTabBottomと基本的に同じ内容。各ビューのサイズとかが微妙に違う。
+元となるベースチャットを作ってそこからoverallChatとconferenceChatに派生すべきでした。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

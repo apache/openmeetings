@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="publicEvents">
+   <doc>
+   	入室可能なパブリックEvent(seminar)のリストと、それらEventの情報を表示する画面viewクラスです。<br/>
+   	全体画面の上側にあるメニューリストの”パブリックイベント”をクリックして表示されます。<br/>
+   	プライベートイベントとは共通するところが多いので、private/publicの属性設定でprivateEvents/publicEvents<br/>
+   	を共通化することができそうですが、netRemoteCallHibで呼んでいるリモートメソッドを含めて共通化できそうなので<br/>
+　　そちらを確認してからにします。<br/>
+	また、publicMeetings.lzxともほぼ同じですので、こちらとも共通化を図れそうです。   	
+   </doc>
+ </class>
+</rlzxdoc>

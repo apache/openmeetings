@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<resource name="folder_yellow_rsc" src="resources/folder.png" />
+	
+<class name="listFolderDrag" extends="text" height="18" width="294" resize="false"
+    text="$once{ '     '+this.foldername }" bgcolor="0xFFFFFF" >
+    
+    <handler name="onmouseover">
+        this.setAttribute('bgcolor',0x799FCE);
+    </handler>
+    <handler name="onmouseout">
+        this.setAttribute('bgcolor',0xFFFFFF)
+    </handler>
+    
+    <handler name="onmouseup">
+        this.__LZFileOpenFolder();
+    </handler>
+
+    <attribute name="foldername" value="" type="string" />
+    <attribute name="uploadmodul" value="" type="string" />
+    <attribute name="isPpt" value="true" type="boolean" />
+ 
+	<view resource="folder_yellow_rsc" x="1" onclick="parent.__LZFileOpenFolder()" y="1" />
+
+	<view resource="filedelete_rsc" x="$once{ parent.parent.parent.width -34 }" 
+		y="1" onclick="parent.__LZFileDelete()" />
+
+	<method name="__LZFileDelete">
+		//Debug.write("__LZFileDelete 1");
+		this.parent.deleteFile.String2 = canvas.uploadmoduleimgfolder;
+		//Debug.write("this.parent.deleteFile.String2 1",this.parent.deleteFile.String2);
+		this.parent.deleteFile.String1 = this.foldername;
+		this.parent.deleteFile.doCall();
+	</method>
+  
+	<method name="__LZFileOpenFolder">
+        canvas.addFolderSequence(this.foldername);
+        canvas.currentImagesListdraw.parent.getListOfFiles.doCall();
+	</method>
+
+</class>
+	
+</library>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas title="Browser Test" debug="true">
+	<include href="../../../../base/"/>
+	<include href="../conferenceBrowser.lzx"/>
+	
+	<conferenceBrowser name="cb" width="400" height6="800"/>
+</canvas>

@@ -1,0 +1,54 @@
+<library>
+	<class name="calendarDayView" extends="view">
+		<handler name="oninit">
+			this.setCalendarItem(24);
+			if ($debug) Debug.write("calendarDayView: ",this);
+		</handler>
+		
+		<simplelayout axis="y" spacing="2"/>
+		<view name="weekday">
+			<text name="_weekday"></text>
+		</view>
+		<view name="_tagesansicht" clip="true" width="${parent.width}" height="${parent.height}">
+		 				 
+	 		<view name="_list">
+		 		<view name="_innerlist" clip="true">
+		 			<simplelayout axis="y" spacing="0"/>	
+		 			<method name="clearContent">
+						for (var eg in this.subviews) {
+							this.subviews[eg].destroy();
+						}
+					</method>		
+		 		</view>
+		 		<view name="_outlist" clip="true" x="45">	
+		 		    <simplelayout axis="x" spacing="2"/> 			
+		 			<method name="clearContent">
+						for (var eg in this.subviews) {
+							this.subviews[eg].destroy();
+						}
+					</method>
+		 		</view>				 			
+	 		</view>
+	 		
+		 	<hscrollbar />
+			<vscrollbar name="_scrollbar" /> 
+					
+		 </view>
+		
+		 <method name="setCalendarItem" args="stunden">
+    		<![CDATA[
+        		for(var x=0;x<stunden;x++){		
+        			if (x < 10) { 
+        				var x = "0" + x.toString();					
+        			}				
+        			new lz.calenderlistitem(this._tagesansicht._list._innerlist,{
+        			      textAttr:x + ":00", 
+        			      width:parent.width-30, 
+        			      terminObjRef:parent});
+        		}
+    		]]>
+		</method>
+		
+</class>
+
+</library>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="drawChooseSizeRadio" extends="radiogroup" height="60" layout="class:simplelayout;axis:x">
+    <radiobutton value="1" text="Fine"/>
+    <radiobutton value="2" text="Medium" selected="true" />
+    <radiobutton value="3" text="Thick"/>
+</class>
+
+<class name="drawChooseSizeRadioT" extends="radiogroup" height="60" layout="class:simplelayout;axis:x">
+    <radiobutton value="1" text="Fine"/>
+    <radiobutton value="2" text="Medium" />
+    <radiobutton value="3" text="Thick" selected="true" />
+</class>
+
+</library>

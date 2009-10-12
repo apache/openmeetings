@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="fieldValueForm">
+   <doc>
+言語エディタの右側。ラベルの編集ができる。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

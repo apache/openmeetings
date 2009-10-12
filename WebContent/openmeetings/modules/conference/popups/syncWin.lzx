@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="syncWin" extends="labelExplorerBox" labelid="558"
+        docking="true" resizeable="false" closable="true" width="250"
+        x="$once{ canvas.width/2 - this.width/2 }" height="140">
+    
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    	canvas.syncWindow = null;
+    </handler>
+    
+    <attribute name="labeliderror" value="0" type="number" />
+    
+    <view x="2" width="$once{ parent.width -4 }" clip="true"
+        y="24" height="$once{ parent.height-25 }">
+        <labelText labelid="$once{ parent.parent.labeliderror }" 
+            width="$once{ parent.width }" multiline="true" resize="false"/>
+    </view>
+
+</class>
+
+</library>

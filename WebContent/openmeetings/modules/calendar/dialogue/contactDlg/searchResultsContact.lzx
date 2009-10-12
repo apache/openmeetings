@@ -1,0 +1,74 @@
+<library>
+	
+<!--<class name="userSearchHead" extends="view" bgcolor="$once{ canvas.baseMacomBackground }" width="${parent.width}">
+		 	<simplelayout axis="x" spacing="10"/>
+		 	<text fontsize="10">ID</text>
+		 	<text fontsize="10">Titel</text>
+		 	<text fontsize="10">Vorname</text>
+		 	<text fontsize="10">Nachname</text>
+		 	<text fontsize="10">Username</text>
+		 	<text fontsize="10">Firma</text>
+		 	<text fontsize="10">E-mail</text>
+</class>	 y="${parent.empfaenger.y+30}"-->
+
+<class name="searchResultsContact" extends="view" height="70" x="2" >
+	<attribute name="refObj" value="null" />
+			
+    <contactSearchHead name="_userSearchHead" x="10" width="${parent._innerList.width}">
+		<ordnerInhaltHead name="_ordnerInhaltHead" width="120" x="${parent.width - this.width}">
+			<handler name="oninit">
+				<![CDATA[
+					this._datum.setAttribute('text', "");
+					this._betreff.setAttribute('text', "")
+					
+					this.nxpr.count.setAttribute('text', parent.parent.refObj.numberOfStart+ 
+			 			"" +" - " + "" + parent.parent.refObj.numberOfRecords+ " "+getLabelTag(254)+" " + parent.parent.refObj.numberOfMessage);
+					
+					if ($debug) Debug.write("refObj: ", parent.parent.refObj);
+					if ($debug) Debug.write("ordnerinhlatHead++: ", this);
+					
+					if ( parent.parent.refObj.numberOfRecords < 21) {
+					    this.nxpr.previos.setAttribute('clickable', false);
+					}
+					
+					if (parent.parent.refObj.numberOfRecords 
+					       >= parent.parent.refObj.numberOfMessage) {
+					    this.nxpr.next.setAttribute('clickable', false);
+					}
+					
+					if (this.nxpr.previos.clickable == false)  {
+					    this.nxpr.previos.setAttribute('opacity', 0.5)
+				    }
+				    
+					if (this.nxpr.next.clickable == false)  {
+					    this.nxpr.next.setAttribute('opacity', 0.5)
+				    }
+				]]>
+			</handler>	
+		</ordnerInhaltHead>
+		
+		<method name="loadNext">
+			<![CDATA[
+	 			parent.refObj.numberOfStart = parent.refObj.numberOfStart + 20;
+	 			parent.refObj.doCall();
+	 		]]>
+		</method>
+		
+		<method name="loadPre">
+			<![CDATA[
+	 			parent.refObj.numberOfStart = parent.refObj.numberOfStart - 20;
+	 			parent.refObj.doCall();	
+			]]>
+		</method>
+			
+	</contactSearchHead>
+	
+	<!--x="${(parent.width - this.width)/2}"-->
+	<view x="10" name="_innerList" height="180" width="${this._inner.width + 15}" y="20" clip="true" >
+		<view name="_inner" layout="axis:y;spacing:2" width="460" bgcolor="$once{ canvas.baseMacomBackground }"/>
+		<vscrollbar/>
+		<!-- <hscrollbar/>-->
+	</view>
+</class>
+	
+</library>

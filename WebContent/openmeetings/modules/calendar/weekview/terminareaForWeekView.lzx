@@ -1,0 +1,125 @@
+<library>
+	
+<class name="terminareaForWeekView" extends="view">
+	
+	<attribute name="description" type="string" value="" />
+	<attribute name="terminObj" value="null"/>
+	<attribute name="calenderObjRef" value="null"/>
+	<attribute name="countX" value="0" type="number" />	
+	
+	<handler name="onclick">
+		if ($debug) Debug.write("this ",this);
+		var tRootCalendarView = parent.parent.parent.parent.parent.parent.parent; 
+                    
+        tRootCalendarView.initDetails();
+		//if ($debug) Debug.write("this termin: ",this.terminObj);
+		tRootCalendarView._termindetails.terminObjRef = this.terminObj;
+		if ($debug) Debug.write("terminObjRef ",tRootCalendarView._termindetails.terminObjRef);
+		//if ($debug) Debug.write("terminObjRef: ",parent.parent.parent.parent.parent.parent.parent.parent.terminObjRef);
+		tRootCalendarView._termindetails.showtermindetails();
+		tRootCalendarView._termindetails.setAttribute("visibility","visible");;
+		//parent.parent.parent.parent._terminButton.onclick.sendEvent();
+	</handler>
+	<handler name="oninit">
+		<![CDATA[
+			this.setAttribute('height',  this.terminObj.appointmentEndtime.getHours()*17 + 1/3 * this.terminObj.appointmentEndtime.getMinutes() - 
+				    (this.terminObj.appointmentStarttime.getHours()*17 + 1/3 * this.terminObj.appointmentStarttime.getMinutes()));	  
+			this.setAttribute("width", 100); 
+			this.setAttribute("bgcolor", red); 
+			//this.setAttribute("x",this.countX);
+			
+			if ($debug) Debug.write("Hours",this.terminObj.appointmentStarttime.getHours());
+			if ($debug) Debug.write("Minutes",this.terminObj.appointmentStarttime.getMinutes());
+			
+			this.setAttribute("y",this.terminObj.appointmentStarttime.getHours()*17 + 1/3 * this.terminObj.appointmentStarttime.getMinutes());
+			
+			if (this.terminObj.appointmentStarttime < this.calenderObjRef._monday && 
+				this.terminObj.appointmentEndtime > this.calenderObjRef._sunday){
+				this.setAttribute('y', 0);
+				this.setAttribute('height', 17*24-2);
+				if ($debug) Debug.write("1. if week appointmentStarttime",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent._startDate);
+			}
+			else if(this.terminObj.appointmentEndtime.getTime() > (this.calenderObjRef._monday.getTime() + (86400000*2))){
+				this.setAttribute('height', 17*24-2-this.terminObj.appointmentStarttime.getHours() * 17);
+				if ($debug) Debug.write("2. if week",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent.parent.parent.parent._startDate);
+			}
+			else if(this.terminObj.appointmentStarttime < this.calenderObjRef._monday){
+				this.setAttribute('y', 0);
+				this.setAttribute('height', this.terminObj.appointmentEndtime.getHours() * 17);
+				if ($debug) Debug.write("3. if week",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent.parent.parent.parent._startDate);
+			}
+			
+			if ($debug) Debug.write("this.y",this.y);
+			
+		]]>
+	</handler>
+	
+<!--	this.setAttribute('height',  this.terminObj.appointmentEndtime.getHours()*17 + 1/3 * this.terminObj.appointmentEndtime.getMinutes() - 
+				    (this.terminObj.appointmentStarttime.getHours()*17 + 1/3 * this.terminObj.appointmentStarttime.getMinutes()));	  
+			this.setAttribute("width", 100); 
+			this.setAttribute("bgcolor", red); 
+			//this.setAttribute("x",this.countX);
+			
+			if ($debug) Debug.write("Hours",this.terminObj.appointmentStarttime.getHours());
+			if ($debug) Debug.write("Minutes",this.terminObj.appointmentStarttime.getMinutes());
+			
+			this.setAttribute("y",this.terminObj.appointmentStarttime.getHours()*17 + 1/3 * this.terminObj.appointmentStarttime.getMinutes());
+			
+			if (this.terminObj.appointmentStarttime < this.calenderObjRef._monday && 
+				this.terminObj.appointmentEndtime > this.calenderObjRef._sunday){
+				this.setAttribute('y', 0);
+				this.setAttribute('height', 17*24-2);
+				if ($debug) Debug.write("1. if week appointmentStarttime",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent._startDate);
+			}
+			else if(this.terminObj.appointmentEndtime.getTime() > (this.calenderObjRef._monday.getTime() + (86400000*2))){
+				this.setAttribute('height', 17*24-2-this.terminObj.appointmentStarttime.getHours() * 17);
+				if ($debug) Debug.write("2. if week",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent.parent.parent.parent._startDate);
+			}
+			else if(this.terminObj.appointmentStarttime < this.calenderObjRef._monday){
+				this.setAttribute('y', 0);
+				this.setAttribute('height', this.terminObj.appointmentEndtime.getHours() * 17);
+				if ($debug) Debug.write("3. if week",this.terminObj.appointmentStarttime, "_appointmentStarttime", parent.parent.parent.parent.parent.parent.parent._startDate);
+			}
+			
+			if ($debug) Debug.write("this.y",this.y); -->
+	
+	<text multiline="true" width="${ parent.width-2 }" x="1" bgcolor="blue" 
+		  height="${ parent.height -2 }" y="1"
+		  text="${ parent.description }" />
+		  
+	<view resource="emblem_unreadable_rsc" x="${parent.width - this.width}">
+		<handler name="onclick">
+			
+			//parent.calenderObjRef.deleteAppointment.terminObj = parent.terminObj;
+			//parent.calenderObjRef.deleteAppointment.terminareaObjRef = parent;
+			
+			//parent.calenderObjRef.deleteAppointment.doCall();
+			
+			parent.deleteAppointment.doCall();
+		</handler>
+	</view>
+	<method name="destroyThis">
+		//parent.calenderObjRef.getAppointmentByRange.doCall();
+		this.destroy();
+	</method>
+	
+	<netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+				<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue">return parent.parent.terminObj.appointmentId;</method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+		    			//parent._tagesansicht._list._outlist.clearContent();
+		    			//parent.getUserAlleTermineByRange.doCall();
+			    		if ($debug) Debug.write("deleteAppointment: ",value);
+			    		if ($debug) Debug.write("Appointment_id: ",parent.terminObj.appointmentId);
+			    		if ($debug) Debug.write("terminObj: ",parent.terminObj);
+			    		//parent.updateUserMessagesTerminIdToNull.doCall();
+			    		parent.destroy();
+		    		 ]]>
+		    	</handler>
+	</netRemoteCallHib>
+</class>
+ 
+	
+</library>

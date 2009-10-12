@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="drawChooseSeperator" extends="baseMenuSeperator" />
+
+<class name="drawChooseModirPlain" extends="baseChooseIcon" width="24" height="24">
+	<attribute name="modi" value="" type="string" />
+	<attribute name="isSelectablemodi" value="false" type="boolean" />
+	<handler name="onclick">
+		this.parent.parent._drawareaMask._drawarea.setModus(modi);
+	</handler>
+</class>
+
+<class name="drawChooseModir" extends="baseChooseIcon" width="24" height="24">
+	<attribute name="modi" value="" type="string" />
+	<attribute name="isSelectablemodi" value="false" type="boolean" />
+	<handler name="onclick">
+		this.parent.parent._drawareaMask._drawarea.setModus(modi);
+		parent.selectButton(this,this.isSelectablemodi);
+	</handler>
+</class>
+
+<class name="drawDoAndUndo" extends="baseChooseIcon" width="24" height="24">
+	<attribute name="doredo" value="true" type="boolean" />
+	<handler name="onclick">
+		if(this.doredo){
+			this.parent.parent._drawareaMask._drawarea.doredo();
+		} else {
+			this.parent.parent._drawareaMask._drawarea.undoredo();
+		}
+	</handler>
+</class>
+
+<class name="drawSimpleClick" extends="baseChooseIcon" width="24" height="24">
+	<attribute name="modi" value="" type="string" />
+	<handler name="onclick">
+		this.parent.parent._drawareaMask._drawarea.doAction(this.modi);
+	</handler>
+</class>
+    
+<class name="drawDocumentItem" extends="baseChooseIcon" width="24" height="24">
+	<attribute name="modi" value="" type="string" />
+	<handler name="onclick">
+		this.parent.parent._drawareaMask._drawarea.doDocumentAction(this.modi);
+	</handler>
+</class>    
+	
+</library>

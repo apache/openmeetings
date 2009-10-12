@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="weekview/"/>
+    <include href="monthview/"/>
+    <include href="dayview/"/>
+    <include href="dialogue/"/>
+    <include href="resources/" />
+    
+    <include href="incubator/scrolledittext.lzx"/>
+    <include href="calendar.lzx"/>
+    <include href="calenderlistitem.lzx"/>
+    <include href="myScheduledMeetings.lzx"/>
+    
+    <include href="liste.lzx"/>
+    <include href="calendarTabs.lzx" />
+       
+</library>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+<!--  -->
+
+
+<!-- 
+############################
+
+    Class whiteBoard
+    
+ -->
+
+
+<class name="whiteBoard" extends="view" >
+    
+    <attribute name="baseurl" value="" type="string" />
+    <attribute name="fileName" value="" type="string" />
+    <attribute name="moduleName" value="" type="string" />
+    <attribute name="parentPath" value="" type="string" />
+    <attribute name="room" value="" type="string" />
+    <attribute name="domain" value="" type="string" />
+    
+    <attribute name="downloadurl" value="" type="string" />
+    <attribute name="iamgex" value="" type="string" />
+    <attribute name="imagey" value="" type="string" />
+    
+    <event name="onsharedMessage" />
+    
+    <attribute name="sendObject" value="null" />
+    <attribute name="sendObjectToClientID" value="0" type="number"  />
+    
+    <attribute name="confirmdialog" value="null" />
+    
+    <attribute name="documentmenuIsInited" value="false" type="boolean" />
+    
+    <method name="sendConfirmation" args="yesno,askagain" >
+        
+        ////Debug.write("clear yesno,askagain: ",yesno,askagain);
+    
+         var t = new lz.sharedObject();
+         t.getLocal('userdata');
+         var g = t.getData('userdata');
+         if (g==null) g = new Array();
+         if (g["image"]==null) g["image"]=new Array();
+         g["image"]["clearField"]=yesno;
+         g["image"]["askagainclear"]=!askagain;
+         t.setData('userdata',g);
+         t.flush();     
+
+         if (yesno){
+            ////Debug.write("clear field!!");
+            canvas._drawarea.setModus('plain');
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         } else {
+            ////Debug.write("don't clear field!!");
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+         }
+         this.confirmdialog.close();
+    </method>
+    
+    <method name="getconfirmationscode">
+        var t = new lz.sharedObject();
+        t.getLocal('userdata');
+        var g = t.getData('userdata');
+        if (g==null) g = new Array();
+        if (g["image"]==null) {
+            g["image"]=new Array();
+            g["image"]["clearField"]=false;
+            g["image"]["askagainclear"]=true;
+            t.setData('userdata',g);
+            t.flush();              
+        }
+        return g["image"];
+    </method>
+    
+    <method name="resetDefaultConfirmations">
+        var t = new lz.sharedObject();
+        t.getLocal('userdata');
+        var g = t.getData('userdata');
+        if (g==null) g = new Array();
+        if (g["image"]==null) g["image"]=new Array();
+        g["image"]["clearField"]=false;
+        g["image"]["askagainclear"]=true;
+        t.setData('userdata',g);
+        t.flush();              
+    </method>   
+    
+    <method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">
+        <![CDATA[
+        ////Debug.write("clearAreaAndAddImage: ",downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain);
+        this.downloadurl=downloadurlVal;
+        this.iamgex=xVal;
+        this.imagey=yVal;   
+        this.baseurl=baseurl;
+        this.fileName=fileName;
+        this.moduleName=moduleName;
+        this.parentPath=parentPath;
+        this.room=room;
+        this.domain=domain;
+        var storedImageDate = this.getconfirmationscode();
+        ////Debug.write(" g[image] ",storedImageDate);
+        if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
+            canvas._drawarea.setModus('plain');
+            Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+        } else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
+            canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
+            Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
+        } else if (storedImageDate["askagainclear"]){
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        } else {
+            this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
+        }
+        ]]> 
+    </method>
+    
+    <event name="isloadingImage" />
+    <event name="isloadedImage" />
+    
+    <text fontsize="11" x="10" y="2" 
+        name="_sharingClientName" fontstyle="bold" />    
+    
+    <simpleLabelButton labelid="239" height="24" name="_doShare" width="200" 
+    				   x="$once{ parent.parent.width-210 }" y="2" 
+    				   enabled="${  canvas.ismoderator }">
+        <handler name="onclick">
+	        canvas._drawarea.setModus('plain');          
+            this.parent.checkForApplyScreen();
+        </handler>
+        <view y="1" x="2" resource="background_screenview_rsc" />
+        
+    </simpleLabelButton>  
+    
+    <method name="checkForApplyScreen">
+            <![CDATA[
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +'/'+canvas.webAppRootKey+'/ScreenRequestHandler?'
+                    +'rtmphostlocal='+canvas.rtmphostlocal
+                    +'&room='+hib.currentroomid
+                    +'&domain='+hib.conferencedomain
+                    +'&sid='+canvas.sessionId
+                    +'&red5httpport='+canvas.red5httpport;
+
+                //Debug.write(downloadurl); 
+                lz.Browser.loadURL(downloadurl,'_blank');    
+            ]]>        
+    </method> 
+    
+    <toolbarTabList name="_toolbarTabList" x="2" y="16" />
+    
+    <method name="changeMenu" args="menuId,bool">
+        if (menuId==1){
+            this._paintmenu.setAttribute('visible',true);
+            this._painttoolsPalette.setAttribute('visible',true);
+            if (this.documentmenuIsInited) this._documentmenu.setAttribute('visible',false);
+            //this._documenttoolsPalette.setAttribute('visible',false);
+            if (bool) this._toolbarTabList.setSelection(this._toolbarTabList.b_paint);
+        } else if (menuId==2){
+            this._paintmenu.setAttribute('visible',false);
+            this._painttoolsPalette.setAttribute('visible',false);
+            if (!this.documentmenuIsInited){
+                new lz.documentMenu(this,{name:'_documentmenu',x:0,y:38,visible:false});
+                this._documentmenu.sendInFrontOf(this._paintmenu);
+                this.documentmenuIsInited = true;
+            }
+            this._documentmenu.setAttribute('visible',true);
+            //this._documenttoolsPalette.setAttribute('visible',true);            
+            if (bool) this._toolbarTabList.setSelection(this._toolbarTabList.b_doc);
+        }
+    </method>
+    
+    <!-- 
+        Menubar with tool-icons
+     -->
+
+    <paintMenu name="_paintmenu" x="0" y="38" visible="true" />
+    
+    <!-- 
+        The Content Area    
+     -->
+    <view width="${ parent.parent.width-6 }" height="${ parent.parent.height-100 }" 
+    	  y="68" name="_drawareaMask" clip="true" bgcolor="white" >
+        <baseDrawSave y="0" name="_drawarea" width="${parent.width}" height="${parent.height}" >
+            <attribute name="initH"/>
+            <attribute name="initW"/>
+            <handler name="oninit">
+            	canvas._drawarea = this;
+            </handler>
+
+            <handler name="onprogress" args="perc">
+                //Debug.write("onprogress: ",perc);
+                this.parent.parent._progress.setProgress(perc);
+            </handler>
+            <handler name="onmousedown" >
+                //Debug.write("onprogress: ",perc);
+            </handler>
+            <handler name="ondrawmodus" args="d">
+                this.drawmodus = d;
+                parent.parent._painttoolsPalette.loadToolsByModi(d);
+            </handler>
+            <handler name="setNewScreenUserName" args="value">
+                this.parent.parent._sharingClientName.setAttribute('text',value);
+            </handler>
+            <!-- @overwrite -->
+            <method name="onsharedMessage" args="action,obj">
+    
+                var tempSendArray = new Array ();
+                tempSendArray[0] = 'whiteboard';
+                tempSendArray[1] = new Date();
+                Debug.write("onsharedMessage Setting Message: ",action,obj);
+                tempSendArray[2] = action;
+                tempSendArray[3] = obj;
+                     
+                parent.parent.onsharedMessage.sendEvent(tempSendArray);
+            </method>
+            <handler name="onopenWhiteBoard" >
+                var obj = new Array();
+                obj[0] = 'whiteboard';
+                obj[1] = 'initgetVars';
+                obj[2] = canvas.streamid;
+                
+                //Debug.write("Setting Message onopenWhiteBoard: ",canvas.moderatorStreamID,obj);
+                
+                this.parent.parent.sendObjectToClientID = canvas.moderatorStreamID;
+                this.parent.parent.sendObject = obj;
+                     
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </handler>
+            <!-- clientid  = streamid of the user -->
+            <method name="oninitUser" args="clientid,objectList">
+                this.parent.parent.sendObjectToClientID = clientid;
+                this.parent.parent.sendObject = objectList;
+                this.parent.parent.sendMessageWithClientById.doCall();
+            </method>
+        </baseDrawSave>  
+    </view>
+    
+        <netRemoteCallHib name="sendMessageWithClientById" funcname="sendMessageWithClientById"
+            remotecontext="$once{ canvas.thishib }" >
+            <netparam><method name="getValue">return parent.parent.sendObject;</method></netparam>
+            <netparam><method name="getValue">return parent.parent.sendObjectToClientID;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                //Debug.write("sendMessageWithClientById : ",value);
+                
+                ]]>
+            </handler>   
+        </netRemoteCallHib>     
+    
+    <!-- 
+        Container for the bounding Box (selection Box)
+     -->
+    <view name="boundboxesView" width="$once{ parent.parent.width-6 }" 
+    	  height="$once{ parent.parent.height-100 }" y="68" />
+
+    <!-- Context sensitive stuff -->
+    <paintToolsPalette name="_painttoolsPalette" />
+    
+    
+    <!-- Context sensitive stuff
+    not needed for the moment
+    <documentToolsPalette name="_documenttoolsPalette" />
+     -->
+</class>
+    
+    
+    
+
+    <!-- 
+
+        <button height="20" y="2" text="JPEG" width="40" >
+            <handler name="onclick">
+                this.parent.parent.canvas._drawarea.catchSnapshot();
+            </handler>
+        </button>             
+        
+    <drawChooseModir name="b8" modi="image" resourceN="imageIcon" labelText="Image" />
+
+     -->
+    
+    <!-- Context sensitive Area top Stuff
+    <text x="40" y="10" text="Choose Element" resize="true" fontsize="10" />
+    visible="${ ( ( this.parent.canvas._drawarea.drawmodus=='pointer' ) ? true : false ) }"
+    
+    <drawAreaObjectCombobox x="300" y="4" name="canvas._drawareaobjectcombobox"  visible="${ ( ( this.parent.canvas._drawarea.drawmodus=='pointer' ) ? true : false ) }"/>
+    <drawAreaAlterPosition x="140" y="540" name="canvas._drawareaalterposition"  />
+    <basedrawchoose resourceN="deleteIcon" x="430" y="4" labelText="delete choosen Item" width="22" height="22" visible="${ ( ( this.parent.canvas._drawarea.drawmodus=='pointer' ) ? true : false ) }">
+        <handler name="onclick">
+            //Debug.write("this.parent.canvas._drawareaalterposition.objName: ",this.parent.canvas._drawareaalterposition.objName);
+            this.parent.canvas._drawarea.deleteItemByName(this.parent.canvas._drawareaalterposition.objName);
+        </handler>
+    </basedrawchoose>
+    -->
+    
+    <!-- 
+    
+
+     -->
+    <!-- 
+
+    export -->
+    <!-- 
+    <view name="_progress" bgcolor="black" width="120" x="312" height="18" y="30">
+        <method name="setProgress" args="perc">
+            var percentWidth = ((this.width-2)/100)*perc;
+            this._i2.setWidth(percentWidth);
+        </method>
+        <view x="1" y="1" name="_i" bgcolor="white" width="${ parent.width-2 }" height="${ parent.height-2 }" />
+        <view x="1" y="1" name="_i2" bgcolor="gray" width="0" height="${ parent.height-2 }" />  
+    </view>
+    
+     
+    <text x="14" y="540" text="${ 'Modus: '+this.parent.canvas._drawarea.drawmodus }" resize="true" fontsize="11" />
+     -->
+
+</library>

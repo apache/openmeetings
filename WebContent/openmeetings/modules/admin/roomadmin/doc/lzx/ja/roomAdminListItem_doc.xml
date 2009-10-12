@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="roomAdminListItem">
+   <doc>
+会議室/講演室の一覧表示。名前とパブリック(true/false)が表示される。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="level_meter_rsc" src="resources/level_meter.png" />
+	<resource name="test_setup_start_conference_rsc" src="resources/wizzard_start_button.png" />
+    
+    <resource name="test_setup_record_rsc" src="resources/record.png" />
+    <resource name="test_setup_play_rsc" src="resources/run.png" />
+    <resource name="test_setup_stop_rsc" src="resources/stop.png" />
+    <resource name="test_setup_info_rsc" src="resources/messagebox_info.png" />
+    
+    <include href="testSetup.lzx" />
+    <include href="testingApplication.lzx" />
+    
+</library>

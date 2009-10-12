@@ -1,0 +1,41 @@
+<library>
+	
+	<class name="ordnerInhaltHead" extends="view" bgcolor="$once{ canvas.baseMacomBackground }" width="${parent.parent.parent.width}" >
+ 	<!--<simplelayout axis="x" spacing="130"/> -->
+ 	<text name="_datum" x="${this.x + 20}" fontsize="11">Datum</text>
+ <!--	<text x="${this.x + 120}" fontsize="11">Absender</text> -->
+ 	<text name="_betreff" x="${this.x + 120}" fontsize="11">Betreff</text>	
+ 	<view name="nxpr" layout="axis:x;spacing:2" x="${parent.width - this.width -5}">
+	 	<text x="10" name="count" text=""></text>	 	
+ 	 	<view name="previos" resource="leftarrow_rsc">
+ 		<handler name="onclick">				 			
+ 			parent.parent.parent.loadPre();
+		</handler>
+ 		
+ 		<handler name="onmouseover">
+				this.animate('xoffset', +2, 200)
+				//if ($debug) Debug.write("this: ", this);
+		</handler>
+		<handler name="onmouseout">
+			this.animate('xoffset', 0, 200) //this.setX(this.x-5)							
+		</handler>
+		</view>
+				
+	 	<view name="next" resource="rightarrow_rsc">
+	 		<handler name="onmouseover">
+				this.animate('xoffset', -2, 200)	 //this.setX(this.x+5)
+				///if ($debug) Debug.write("this: ", this);
+			</handler>
+			<handler name="onmouseout">
+				this.animate('xoffset', 0, 200) //this.setX(this.x-5)
+			</handler>
+			
+			<handler name="onclick">
+				parent.parent.parent.loadNext();			 	
+ 			</handler>			
+		</view>
+ 	</view>			 	
+</class>
+
+	
+</library>

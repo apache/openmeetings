@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="users_tab_btn" src="resources/kdmconfig.png" />
+	<resource name="files_tab_btn" src="resources/folder_yellow.png" />
+	
+	
+	<resource name="sidebar_tab_btn">
+		<frame src="resources/sidebar_close.png" />
+		<frame src="resources/sidebar_open.png" />
+	</resource>
+	
+	<include href="roomSidebar/" />
+	<include href="fixedWhiteboardPanel.lzx" />
+    <include href="flexibleConferenceRoom.lzx" />
+    <include href="flexibleEventRoom.lzx" />
+    
+</library>

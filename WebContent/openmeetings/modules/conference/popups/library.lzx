@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <include href="rpcerrorDialog.lzx" />
+    <include href="loginScreen.lzx" />
+    <include href="loginWeb.lzx" />
+    <include href="errorPopup.lzx" />
+    <include href="messageWin.lzx" />
+    <include href="headerMenu.lzx" />
+    <include href="confirmationBox.lzx" />
+    <include href="editWhiteboardDefault.lzx" />
+	<include href="confirmtionSingle.lzx" />
+    <include href="autoLoader.lzx" />
+    <include href="converterPopup.lzx" />
+    <include href="errorModeratorPopup.lzx" />
+    <include href="changeDevice.lzx" />
+    <include href="syncWin.lzx" />
+    <include href="meetingTimer.lzx" />
+    <include href="incomingScreenSharing.lzx" />
+    
+</library>

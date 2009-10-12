@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Configuration list. It shows ID-KEY pairs. -->
+<class name="confAdminListItem" extends="baseContentListItem">
+	
+	<attribute name="configuration_id" value="0" type="number" />
+	<attribute name="conf_key" value="" type="string" />
+    <attribute name="conf_value" value="" type="string" />
+	
+	<turnOverTextItem text="$once{ parent.configuration_id }" width="80" />
+	<turnOverTextItem text="$once{ parent.conf_key }" width="166" />
+    <turnOverTextItem text="$once{ parent.conf_value }" width="150" />
+	
+</class>
+
+</library>

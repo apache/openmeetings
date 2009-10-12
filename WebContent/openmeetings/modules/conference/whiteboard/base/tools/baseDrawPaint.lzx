@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="baseDrawPaint" extends="baseDraw" >
+    
+    <!-- paint -->
+    <attribute name="currentlayerstroke" value="0xFF6600" />
+    <attribute name="currentlayerlineWidth" value="2" type="number" />
+    <attribute name="currentlayerOpacity" value="1" type="number" />
+    
+    <!-- TODO: Check if needed, seems to have no reference -->
+    <attribute name="painttrans" value="false" type="boolean" />
+          
+    <!-- #####################
+        Paint
+     -->
+    
+    <method name="drawline" args="x1,y1,x2,y2">
+        <![CDATA[
+        currentlayer.beginPath();
+        currentlayer.moveTo(x1,y1);
+        currentlayer.lineTo(x2,y2);
+        currentlayer.stroke();
+        ]]>
+    </method>
+    
+    <method name="drawlineOnObject" args="obj,x1,y1,x2,y2">
+        <![CDATA[
+        obj.beginPath();
+        obj.moveTo(x1,y1);
+        obj.lineTo(x2,y2);
+        obj.stroke();
+        ]]>
+    </method>
+        
+    
+    <method name="drawlineRegisterPaint" args="x1,y1,x2,y2">
+        var actionObject = new Array();
+        actionObject[0] = 'point';
+        actionObject[1] = x1;
+        actionObject[2] = y1;
+        actionObject[3] = x2;
+        actionObject[4] = y2;
+        this.basetempactionobjectList.push(actionObject);
+    </method> 
+         
+    <method name="startPaint">
+        //Debug.write("startPaint ",this.startx,this.starty);
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:'paint'+this.getCounter(),width:this.width+2,height:this.height+2,
+            opacity:this.currentlayerOpacity});
+        this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
+        this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
+    
+        //Set previous to null
+        this.prevx = null;
+        this.prevy = null;  
+        
+        currentlayer.strokeStyle = this.currentlayerstroke;
+        currentlayer.lineWidth = this.currentlayerlineWidth;
+        currentlayer.fillstyle = '0x000000';
+        
+        this.basetempactionobjectList = new Array();
+        
+        //beginFill( the_colorpicker.selectedColor );
+    </method>
+
+    <method name="endPaint">
+        ////Debug.write("endPaint");
+        <![CDATA[
+        var tempName = this.currentlayer.name;
+        this.currentlayer.destroy();
+        
+        //GetBounds of that Object
+        var minx = this.width+2;
+        var miny = this.height+2;
+        var maxx = -2;
+        var maxy = -2;
+        
+        for (var eg=0;eg<this.basetempactionobjectList.length;eg++){
+            ////Debug.write(this.basetempactionobjectList[eg][1],this.basetempactionobjectList[eg][3]);
+            if (this.basetempactionobjectList[eg][1]<minx) minx=this.basetempactionobjectList[eg][1];
+            if (this.basetempactionobjectList[eg][3]<minx) minx=this.basetempactionobjectList[eg][3];
+            
+            if (this.basetempactionobjectList[eg][1]>maxx) maxx=this.basetempactionobjectList[eg][1];
+            if (this.basetempactionobjectList[eg][3]>maxx) maxx=this.basetempactionobjectList[eg][3];
+            
+            if (this.basetempactionobjectList[eg][2]<miny) miny=this.basetempactionobjectList[eg][2];
+            if (this.basetempactionobjectList[eg][4]<miny) miny=this.basetempactionobjectList[eg][4];
+            
+            if (this.basetempactionobjectList[eg][2]>maxy) maxy=this.basetempactionobjectList[eg][2];
+            if (this.basetempactionobjectList[eg][4]>maxy) maxy=this.basetempactionobjectList[eg][4];
+        }
+        var width = maxx-minx;
+        var height = maxy-miny;
+        ////Debug.write("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+        
+        this.currentlayer = new lz.drawViewNew(this,{
+            name:tempName,x:minx-1,y:miny-1,width:width,height:height,
+            opacity:this.currentlayerOpacity});
+        this.currentlayer.fillstyle = '0x000000';
+        this.currentlayer.lineWidth = this.currentlayerlineWidth;
+        this.currentlayer.strokeStyle = this.currentlayerstroke;
+        
+        for (var eg=0;eg<this.basetempactionobjectList.length;eg++) 
+            this.drawline(this.basetempactionobjectList[eg][1]-minx,this.basetempactionobjectList[eg][2]-miny,this.basetempactionobjectList[eg][3]-minx,this.basetempactionobjectList[eg][4]-miny)
+            
+        //this.currentlayer.setAttribute('stretches','both');
+        
+        //Add Layer to global Layer     
+        this.layers.push(this.currentlayer);        
+
+        ]]>
+        
+        this.registerFinal();
+    </method>    
+
+    <method name="registerFinal">
+        var actionObject = new Array();
+        actionObject[0] = 'paint';
+        actionObject[1] = this.basetempactionobjectList;
+        actionObject[2] = currentlayer.fillstyle;
+        actionObject[3] = currentlayer.lineWidth;
+        actionObject[4] = currentlayer.strokeStyle;
+        actionObject[5] = this.currentlayerOpacity;
+        actionObject[6] = this.counter;
+        actionObject[7] = currentlayer.x;
+        actionObject[8] = currentlayer.y;
+        actionObject[9] = currentlayer.width;
+        actionObject[10] = currentlayer.height;    
+        actionObject[11] = this.currentlayer.name;
+        this.baseactionobjectList.push(actionObject);       
+        this.onsharedMessage('draw',actionObject);
+    </method>      
+    
+    
+    <method name="paintactionHistory" args="lastActionObject,parentView">
+        <![CDATA[
+        if ($debug) Debug.write("## paintactionHistory",parentView," opacity:",lastActionObject[5]);
+        
+        this.currentlayer = new lz.drawViewNew(parentView,{
+            name:lastActionObject[lastActionObject.length-1],
+            x:lastActionObject[lastActionObject.length-5],
+            y:lastActionObject[lastActionObject.length-4],
+            width:lastActionObject[lastActionObject.length-3],
+            height:lastActionObject[lastActionObject.length-2],
+            opacity:lastActionObject[5]});
+        
+        this.currentlayer.fillstyle = lastActionObject[2];
+        this.currentlayer.lineWidth = lastActionObject[3];
+        this.currentlayer.strokeStyle = lastActionObject[4];
+        
+        for (var eg=0;eg<lastActionObject[1].length;eg++) 
+            this.drawline(lastActionObject[1][eg][1]-this.currentlayer.x,lastActionObject[1][eg][2]-this.currentlayer.y,lastActionObject[1][eg][3]-this.currentlayer.x,lastActionObject[1][eg][4]-this.currentlayer.y);
+        
+        //this.currentlayer.setAttribute('stretches','both');
+        ]]>
+    </method>
+    
+</class>
+
+</library>

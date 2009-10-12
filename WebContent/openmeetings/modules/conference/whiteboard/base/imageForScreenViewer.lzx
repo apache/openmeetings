@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="imageForScreenViewer" extends="image" stretches="both" x="0" y="0">
+	
+	<attribute name="downloadurl" value="" type="string" />
+		
+	<attribute name="alterModus" value="true" type="boolean" />
+	
+	<attribute name="baseurl" value="" type="string" />
+	<attribute name="fileName" value="" type="string" />
+	<attribute name="moduleName" value="" type="string" />
+	<attribute name="parentPath" value="" type="string" />
+	<attribute name="room" value="" type="string" />
+	<attribute name="domain" value="" type="string" />
+    
+    <attribute name="username" value="" type="string" />
+		
+	<attribute name="refObj" value="null" />
+	<handler name="onload">
+        this.refObj.layers.push(this);	
+        this.refObj.isScreenImageLoading=false;
+	    this.sendToBack();
+        
+        var height = this.height/(this.width/this.parent.width)
+        this.setAttribute('width',this.parent.width);
+        this.setAttribute('height',height);
+        this.setAttribute('x',0);
+            
+        this.refObj.toggleVisibleScreenSharing();
+	</handler>
+	<handler name="onerror" args="error">
+        this.refObj.toggleVisibleScreenSharing();
+	</handler>
+	<handler name="ontimeout" args="error">
+        this.refObj.toggleVisibleScreenSharing();
+	</handler>	
+    
+</class>
+
+</library>

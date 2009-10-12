@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="baseerrordialog">
+   <doc>
+   	同一ファイルにあるerrordialogクラス、contentsavewindowクラスで使うprivateクラスのようです。<br/>
+   	エラーメッセージを取得して、クラス内のattributeに設定すると同時に、自身のviewに表示しています。
+   </doc>
+ </class>
+ <class name="errordialog">
+   <doc>
+   	baseerrordialogクラスのmodal版です。
+   </doc>
+ </class>
+ <class name="contentsavewindow">
+   <doc>
+   	errordialogクラスにオブジェクト保存のメソッドを組み込んだクラスです。<br/>
+   	エラー発生によりそのエラーをユーザに表示するまでがerrordialogクラスですがこのクラスでは<br/>
+   	さらにmodal状態としている間に現在処理中のオブジェクトをクラス内のsaveObj属性に保存処理を行います。<br/>
+   	保存処理が終了したならば自動的にこのmodalダイアログは閉じられます。
+   	*エラー時の状態保存方法の例です。
+   </doc>
+ </class>
+ <class name="rpcerrordialog">
+   <doc>
+   	errordialogクラスを継承してさらに'OK'ボタンを実装しています。
+   </doc>
+ </class>
+ <class name="callbackrpcerrordialog">
+   <doc>
+   	errordialogクラスを継承してさらに'OK'ボタンを実装しています。<br/>
+   	rpcerrordialogクラスとの違いは'OK'ボタンの処理にあります。<br/>
+   	rcperrordialogクラスでは'OK'ボタンクリックで単にダイアログクローズが実行されますが、<br/>
+   	このクラスでは、閉じる前にクラス内のcallBackObject属性の値をsendEvent()しています。<br/>
+   	callBackObject属性はこのクラス内で自己設定されません。親クラスで設定されるようです。
+   </doc>
+ </class>
+</rlzxdoc>

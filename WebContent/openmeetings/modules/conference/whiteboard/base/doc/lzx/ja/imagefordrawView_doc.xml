@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="imagefordrawView">
+   <doc>
+   	読み込んだ画像ファイルのサイズを、refObj属性で指定されるオブジェクトに合うようにリサイズするクラスのようです。refObj属性で指定されるオブジェクトを処理対象としていますが、処理で使っているメソッドからrefObj属性で指定されるのはbasedrawimageクラス又はそれを継承したものになります。
+   </doc>
+ </class>
+</rlzxdoc>

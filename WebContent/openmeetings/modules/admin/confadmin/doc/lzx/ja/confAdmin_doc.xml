@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="confAdmin">
+   <doc>
+Windowsでいうレジストリみたいなもの。<br/>
+SMTPサーバのアドレスやポート、デフォルト言語など各種設定をここでできるようですが、生の設定をいじるような感じ。まさに管理者向け。
+
+
+   </doc>
+ </class>
+</rlzxdoc>

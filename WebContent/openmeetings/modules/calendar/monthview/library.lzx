@@ -1,0 +1,7 @@
+<library>
+
+ 	<include href="monthView.lzx" />
+ 	<include href="calendarMonthView.lzx" />
+ 	<include href="appointmentMonth.lzx" />
+
+</library>

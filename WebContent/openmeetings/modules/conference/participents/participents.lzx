@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="participentList" extends="view"  width="$once{ parent.width }" height="${ parent.height }" 
+       bgcolor="$once{ canvas.basebgcolorizer }" >
+    <!-- clip="true" -->
+    
+    <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
+        x="1" y="1" bgcolor="white" />
+
+    <method name="addItem" args="object">
+        <![CDATA[
+        if ($debug) Debug.write("participentList addItem: ",object,object.publicSID);
+        
+        for (var i=0;i<this._table.innerList.subviews.length;i++) {
+            if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+                //if ($debug) Debug.warn("Already on List, do not add twice");
+                return;
+            }
+        }
+        
+        new lz.participentListItem(this._table.innerList,{
+                user_id:object.user_id,
+                firstname:object.firstname,
+                lastname:object.lastname,
+                width:this.width-18,
+                refObj:object,
+                connectedSince:object.connectedSince,
+                isMod:object.isMod,
+                streamid:object.streamid,
+                username:object.username,
+                formatedDate:object.formatedDate
+            });
+            
+        ]]>
+    </method>
+    
+    <method name="clearList">
+        this._table.destroy();
+        new lz.participentsTable(this,{name:'_table'});
+    </method>
+    
+    <!--- get a Objects List Item
+        @param string publicSID publicSID
+     -->
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+        <![CDATA[
+            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+            
+            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+            //}
+            
+            for (var i=0;i<this._table.innerList.subviews.length;i++){
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+                    return this._table.innerList.subviews[i];
+                }
+            }
+            
+            return null;
+            
+        ]]>
+    </method>
+    
+    <participentsTable name="_table" y="20" /> 
+
+    <view name="_miniIcons" x="192" y="0" height="18">
+        
+        <view width="1" height="${ parent.parent.height }" x="0"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_mod" x="2" y="3" resource="participents_isMod_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="608" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="20"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_draw" x="22" y="3" resource="participents_isDrawing_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="609" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="40"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_sync" x="42" y="3" resource="resyncuser_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="610" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="60"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+    </view>
+    <view name="headerDivisionLine" width="${ parent.width }" 
+          bgcolor="$once{ canvas.basebgcolorizer }" height="1" y="20" />
+    
+</class>
+
+<class name="innerlistViewParticipentsTable" extends="view" layout="axis:y;spacing:0" 
+    width="258" bgcolor="$once{ canvas.basebgcolorizer }" />
+    
+<class name="participentsTable" extends="view" height="${ parent.height-24 }" 
+    bgcolor="white" x="2" y="2" clip="true" width="$once{ parent.width-4 }" >
+        <innerlistViewParticipentsTable name="innerList" />
+    <vscrollbar />
+</class>
+
+<class name="miniIcons" extends="view" >
+    <handler name="onmouseover">
+        parent.parent.onmouseover.sendEvent();
+    </handler>
+    <handler name="onmouseout">
+        parent.parent.onmouseout.sendEvent();
+    </handler>
+</class>
+    
+<!-- 
+    The Width of each item is set in the participentList-Class
+ -->
+<class name="participentListItem" extends="view" bgcolor="white" height="40" 
+       showhandcursor="false">
+    
+    <attribute name="connectedSince" value="" type="string" />
+    <attribute name="isMod" value="" type="string" />
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <!--
+    var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+                    +'&moduleName=chat&parentPath=&room_id='
+                    +'&remoteUserid='+this.user_id
+                    +'&sid='+canvas.sessionId;
+     -->
+     
+    <handler name="oninit">
+        <![CDATA[
+            //this._userpic.setAttribute('src',downloadurl); 
+            //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
+            lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
+                    
+            if (canvas.publicSID == this.refObj.publicSID) {
+                this._userName.setAttribute("fontstyle","bold");
+            }
+            
+            this.updateIcons();
+        ]]>
+    </handler>
+    
+    <method name="fadeText" args="ignore=null"> 
+        <![CDATA[
+        
+            //Do Load the Custom Moodle Profilee Picture
+            if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
+                
+                if (this.refObj.externalUserId == 1) {
+                    //Means it is a guest
+                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.jpg";
+                } else {
+                    var downloadurl = canvas.moodleWwwRoot+"/user/pix.php/"+ this.refObj.externalUserId +"/f2.jpg";
+                }
+                
+            } else {
+        
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                        +'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+                        +'&moduleName=chat&parentPath=&room_id='
+                        +'&remoteUserid='+this.user_id
+                        +'&sid='+canvas.sessionId;
+                        
+            }
+            
+            if ($debug) Debug.warn("downloadurl ",downloadurl);
+            
+            this._userpic.setAttribute('src',downloadurl); 
+            
+        ]]>          
+    </method>
+    
+    <!--
+        if (canvas.moderatorStreamID == this.refObj.streamid) {
+            this.isMod = true;
+        } else {
+            this.isMod = false;
+        }
+     -->
+    <handler name="onismoderator" reference="canvas" args="m">
+        if ($debug) Debug.write("###### ismoderator ",m);
+        <![CDATA[
+            this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+            this.updateIcons();
+        ]]>
+    </handler>
+    
+    <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+        <![CDATA[
+            if (this.refObj.publicSID == drawObject.publicSID) {
+                this.refObj.canDraw = drawObject.canDraw;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
+    
+    <!--
+        Set actions to update the User-Rights and Information what he can do
+     -->
+    <method name="updateIcons">
+        <![CDATA[
+        
+            if ($debug) Debug.write("updateByMod,",this.isMod,canvas.streamid);
+        
+            //If this is one Mod he can also draw on the Whitboard
+            if (this.isMod) {
+                
+                
+                this._miniIcons._isMod.setAttribute("visibility","visible");
+                this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
+                this._miniIcons._canDraw.setAttribute("visibility","visible");
+                //the moderator can never remove the right to draw on the whiteboard for himself
+                this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                this._miniIcons._canDraw._text.setAttribute("text","");
+                this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                
+                if (canvas.ismoderator) {
+                    if (canvas.ismoderator && canvas.publicSID != this.refObj.publicSID) {
+                        this._miniIcons._isMod.setAttribute("showhandcursor",true);
+                        this._miniIcons._isMod._text.setAttribute("text",canvas.getLabelName(675));
+                    } else {
+                        this._miniIcons._isMod._text.setAttribute("text","");
+                        this._miniIcons._isMod.setAttribute("showhandcursor",false);
+                    }
+                } else {
+                    this._miniIcons._isMod._text.setAttribute("text","");
+                    this._miniIcons._isMod.setAttribute("showhandcursor",false);
+                }
+                
+            } else {
+                this._miniIcons._isMod.setAttribute("visibility","hidden");
+                    
+                //if this User is the Moderator he can grant access to whiteboard to anybody
+                if (canvas.ismoderator) {
+                    
+                    this._miniIcons._isModAddbutton.setAttribute("visibility","visible");
+                    
+                    if (this.refObj.canDraw) {
+                        
+                        //Only in THIS case you can remove the Draw-to-whiteboard right 
+                        this._miniIcons._canDraw.setAttribute("visibility","visible");
+                        this._miniIcons._canDraw.setAttribute("showhandcursor",true);
+                        this._miniIcons._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                        
+                        this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                        
+                    } else {
+                        this._miniIcons._canDraw.setAttribute("visibility","hidden");
+                        this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                        this._miniIcons._canDraw._text.setAttribute("text","");
+                        this._miniIcons._canDrawModerator.setAttribute("visibility","visible");
+                    }
+                    
+                } else {
+                    
+                    this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
+                    
+                    if (this.refObj.canDraw) {
+                        this._miniIcons._canDraw.setAttribute("visibility","visible");
+                    } else {
+                        this._miniIcons._canDraw.setAttribute("visibility","hidden");
+                    }
+                    
+                    //No Update action available
+                    this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
+                    this._miniIcons._canDraw.setAttribute("showhandcursor",false);
+                    this._miniIcons._canDraw._text.setAttribute("text","");
+                    
+                }
+                    
+            }
+            
+            //this Icon is only available in case its the current User 
+            if (canvas.publicSID == this.refObj.publicSID) {
+                //if ($debug) Debug.write("IS SELF !!!!!!");
+                this._miniIcons._restartDevice.setAttribute("visibility","visible");
+            } else {
+                this._miniIcons._restartDevice.setAttribute("visibility","hidden");
+            }
+        ]]>
+    </method>
+    
+    <!--
+    public Boolean setCanDraw(String SID, String publicSID, boolean canDraw)
+     -->
+     
+    <netRemoteCallHib name="setCanDraw" funcname="whiteboardservice.setCanDraw"
+                       remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canDraw;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("sendVarsModeratorGeneral : ",value);
+            
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+            
+    
+    <handler name="onmouseover">
+        this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+    </handler>
+    
+    <handler name="onmouseout">
+        this.setAttribute('bgcolor',0xFFFFFF);
+    </handler>
+    
+    <image name="_userpic" stretches="both">
+        <handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+            ]]>
+        </handler>
+    </image>
+    
+    <labelText name="_userName" fontsize="11" x="40" text="$once{ parent.firstname+' '+parent.lastname }" />
+    
+    <view name="_miniIcons" x="193" valign="bottom" height="18">
+        
+        <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
+                   height="16" showhandcursor="false">
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do Remove It");
+                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                        hib.removeModerator.doCall();
+                        //parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" />
+        </miniIcons>
+        
+        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isactive" 
+                   height="16" showhandcursor="true">
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do Add It");
+                        hib.addModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                        hib.addModerator.doCall();
+                        //parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" labelid="676" />
+        </miniIcons>
+            
+        <miniIcons name="_canDraw" x="20" width="16" resource="participents_isactive" 
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do add draw to it");
+                        parent.parent.setCanDraw.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" />
+        </miniIcons>
+        
+        <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
+                   resource="participents_isactive" height="16" showhandcursor="true">
+            <handler name="onclick">
+                //Do it 
+                if ($debug) Debug.write("Do it");
+                parent.parent.setCanDraw.doCall();
+            </handler>
+            <labelTooltip labelid="611" />
+        </miniIcons>
+        
+        <miniIcons name="_restartDevice" x="40" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
+            <handler name="onclick">
+                if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
+                var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
+                myvideocontainer.resetValues();
+                new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
+            </handler>
+            <labelTooltip labelid="610" />
+        </miniIcons>
+    </view>
+    
+    <view name="divisionLine" width="$once{ parent.width }" 
+          bgcolor="$once{ canvas.basebgcolorizer }" height="1" y="39" />
+    
+</class>
+
+ 
+<class name="participents" extends="view" 
+       width="$once{ parent.width }" height="$once{ parent.height-34 }">
+
+    <!--- holds a references to the videoview which is broadcasting -->
+    <attribute name="broadCastViewRef" value="null" />
+    
+    <!--- colors for each user -->
+    <attribute name="colorArray" value="null" />
+    
+    <!--
+       This is a variable to make it backwards compatible to the old room layout
+     -->
+    <attribute name="userNewVideoContainer" value="false" type="boolean"/>
+    
+    <handler name="oninit">
+        //set modus
+        canvas.thishib.modus = "conference";
+        //color array
+        this.colorArray = [0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
+                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633];
+        //set reference, this reference will be cleared at *ontabcontenctleave* event
+        canvas._videocontainer=this;
+        
+        // Reconnect User to its Room Id
+        canvas.thishib.userScope = canvas.thishib.currentroomid;
+        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+        canvas.thishib.setAttribute('src',src);
+        
+        if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
+        
+        canvas.thishib.reconnectionAction = true;
+        canvas.thishib.reconnectObjRef = this;
+        canvas.thishib.disconnect();
+    </handler>
+                  
+    <method name="reconnectSuccess">
+        if ($debug) Debug.write("User Reloged In");
+        //set default values and get already availible streams
+        this.setRoomValues.doCall();
+    </method>
+
+    <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <netparam><method name="getValue">return canvas.becomemoderator;</method></netparam>
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("setRoomValues1: ",value);
+            if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
+            
+            if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            for (var i in value){
+                if ( value[i].streamid == canvas.streamid ) {
+                    canvas.isAllowedToDraw = value[i].canDraw;
+                }
+
+                if ($debug) Debug.write("getClientListScope value: ",value[i]);
+                this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
+                              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
+            }
+            //this content must be inited _after_ setting the default values
+            canvas.thishib.getCurrentModeratorList.doCall(); 
+            canvas._mymod.checkForRecording.doCall();
+            canvas._chatcontent.doInit();               
+        </handler>  
+    </netRemoteCallHib>
+
+    <!-- invoked if another client logs into the room 
+    after choosing devices -->     
+    <method name="setAVSettingsToClient" args="rcl">
+        if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
+        var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
+        if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
+        if (obj == null) {
+            if ($debug) Debug.warn("Could Not Find Instance setAVSettingsToClient ",rcl.publicSID);
+            return;
+        }
+        if (rcl.avsettings=="n"){
+            obj.setAttribute("visibility","hidden");
+            obj.setVideouserProfilePic(rcl);
+        } else if (rcl.avsettings=="a"){
+            obj.setVideouserProfilePic(rcl);
+            obj.setAttribute("visibility","visible");
+        } else {
+            obj.deleteVideoConfProfilePic();
+            obj.setAttribute("visibility","visible");
+        }
+        obj.clientVars = rcl;
+        obj.updateAVSettingsSymbol(rcl);
+    </method> 
+    
+
+    <!--- get a baseVideoObject by a Users publicSID
+        @param string publicSID publicSID
+     -->
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+        <![CDATA[
+            if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
+            
+            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+            //}
+            var videoContainer = this._videoviewcontent;
+            if (this.userNewVideoContainer) {
+                videoContainer = parent.parent._videoviewcontent;
+            }
+            
+            for (var i=0;i<videoContainer.subviews.length;i++){
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+                if (videoContainer.subviews[i].publicSID==publicSID){
+                    return videoContainer.subviews[i];
+                }
+            }
+            
+            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+            
+            return null;
+            
+        ]]>
+    </method>           
+
+    <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+        <![CDATA[
+            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+            
+            //Do init only in case this stream is NOT the same as we are
+            if (streamid!=canvas.streamid){
+                var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+                myvideocontainer.clientVars = object;
+                myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+                if ($debug) Debug.write("object.avsettings: ",object.avsettings);
+                if (object.avsettings=="n"){
+                    myvideocontainer.setVideouserProfilePic(object);
+                    myvideocontainer.setAttribute("visibility","hidden");
+                } else if (object.avsettings=="a"){
+                    myvideocontainer.setVideouserProfilePic(object);
+                    if ($debug) Debug.warn("start play");
+                    myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
+                    myvideocontainer.setAttribute("visibility","visible");
+                } else {
+                    myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);    
+                    myvideocontainer.setAttribute("visibility","visible");
+                    if ($debug) Debug.warn("start play");
+                }
+                myvideocontainer.updateAVSettingsSymbol(object);
+                
+                //do add others
+                this._participents.addItem(object);
+                
+                return myvideocontainer;
+            } else {
+                
+                //do add self too
+                this._participents.addItem(object);
+                
+            }
+           
+        ]]>
+    </method>
+    
+    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+        <![CDATA[
+        if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+        
+            if (canvas.publicSID != object.publicSID){
+                
+                
+                var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+                myvideocontainer.clientVars = object;
+                myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+                if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
+                if (object.avsettings=="n" || object.avsettings=="a"){
+                    myvideocontainer.setVideouserProfilePic(object);
+                }
+                myvideocontainer.updateAVSettingsSymbol(object);
+                
+            }
+
+            //Do Add it anyway
+            this._participents.addItem(object);
+        ]]>
+    </method>
+        
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname">
+        <![CDATA[
+            //if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            //if ($debug) Debug.write("startStream obj: ",obj);
+            if (obj != null ){
+                obj._chatvideoinner._videostream.playStream(broadcastId,-1);
+                obj.setAttribute('chatpartnername',firstname+' '+lastname);
+            }
+        ]]>
+    </method>
+
+    
+    <!-- 
+        This method returns an object of type videoObjectBroadcast
+        you can only publish you a/v with this object
+        @param string broadcastId broadcastId
+     -->
+    <method name="getNewVideoObject" args="publicSID">
+        <![CDATA[
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj!=null){
+                this.broadCastViewRef = obj;
+            } else {
+                
+                var videoContainer = this._videoviewcontent;
+                if (this.userNewVideoContainer) {
+                    videoContainer = parent.parent._videoviewcontent;
+                }
+                
+                if ($debug) Debug.warn("videoContainer ",videoContainer);
+                
+                //Get a Free VideoView Slot
+                var newx = videoContainer.subviews.length*20;
+                var newy = 0;
+                if ((newx+100)>=canvas.width) {
+                    newx = 20;
+                    newy += 140;
+                }
+                
+                this.broadCastViewRef = new lz.videoObjectBroadcast(videoContainer,{
+                        publicSID:publicSID,
+                        x:newx,y:newy
+                    });
+                canvas.currentusercolor = this.colorArray[this.subviews.length];
+                this.broadCastViewRef._chatvideoinner.r.destroy();
+                canvas.thishib.setAudienceModus.doCall();
+                this.broadCastViewRef.setAttribute('chatpartnername',hib.userobject.firstname+' '+hib.userobject.lastname);
+            }
+            return this.broadCastViewRef;
+        ]]>
+    </method>
+    
+    <!---
+        returns a new object of type videoObjectPlayBroadcast
+        you can only play a stream not publish you a/v with this object
+        @param string broadcastId broadcastId
+     -->
+    <method name="getNewVideoObjectByPos" args="publicSID">
+        <![CDATA[
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj!=null){
+                return obj;
+            }
+            var videoContainer = this._videoviewcontent;
+            if (this.userNewVideoContainer) {
+                videoContainer = parent.parent._videoviewcontent;
+            }
+            
+            //Get a Free VideoView Slot
+            var newx = videoContainer.subviews.length*20;
+            var newy = 0;
+            if ((newx+100)>=canvas.width) {
+                newx = 20;
+                newy += 140;
+            }
+            
+            return new lz.videoObjectPlayBroadcast(videoContainer,{
+                    publicSID:publicSID,
+                    x:newx,y:newy
+                });
+        ]]>
+    </method>
+    
+    <!--- 
+        invoked remotely by Red5-notification 
+        shows a green light if somebody is speaking
+        @param string broadcastId broadcastId
+        @param boolean bool show light on/off
+    -->
+    <method name="setSpeakingByPos" args="publicSID,bool">
+        <![CDATA[
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (bool){
+                obj._loudness.loudness.setAttribute('opacity',1);
+            } else {
+                obj._loudness.loudness.setAttribute('opacity',0.2);
+            }
+        ]]>
+    </method>   
+    
+    <!--- 
+        stops the streaming but does not destroy the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="closeStreamClient" args="publicSID">
+        <![CDATA[
+            if ($debug) Debug.write("closeStreamclient: ",publicSID);
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if ($debug) Debug.write("closeStreamclient obj: ",obj);
+            if (obj != null){
+                obj.resetValues();
+            }
+        ]]>
+    </method>
+    
+    <!--- 
+        stops the streaming but and destroys the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="disconnectclient" args="publicSID">
+        <![CDATA[
+            if ($debug) Debug.write("disconnectclient: ",publicSID);
+            
+            canvas._mymod.currentModerators.removeItem(publicSID);
+            canvas._mymod.currentModerators.clearSelection();
+            canvas._mymod.currentModerators.selectItemAt(0);
+            
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            
+            //if ($debug) Debug.write("disconnectclient obj: ",obj);
+            if (obj == null) {
+            	if ($debug) Debug.warn("Could Not find CLient To disconnect",publicSID);
+            }
+            
+            if (obj != null){
+                obj.resetValues();
+                obj.destroy();
+            }
+            if (objList != null){
+                objList.resetValues();
+                objList.destroy();
+            }
+            return null;
+        ]]>
+    </method>   
+    
+    <method name="resetAllValues">
+        var videoContainer = this._videoviewcontent;
+        if (this.userNewVideoContainer) {
+            videoContainer = parent.parent._videoviewcontent;
+        }
+        for (var eg in videoContainer.subviews){
+            videoContainer.subviews[eg].resetValues();
+        }
+    </method>
+    
+    <participentList name="_participents" />
+    
+    <view name="_videoviewcontent">
+          
+    </view>
+    
+</class>
+
+</library>

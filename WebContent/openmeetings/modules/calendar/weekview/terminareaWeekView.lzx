@@ -1,0 +1,83 @@
+<library>
+	
+<class name="terminareaWeekView" extends="view" width="100" >
+	
+	<attribute name="description" type="string" value="" />
+	<attribute name="terminObj" value="null"/>
+	<attribute name="calenderObjRef" value="null"/>
+	
+	
+	<handler name="onclick">
+		if ($debug) Debug.write("this ",this);
+		var tRootCalendarView = parent.parent.parent.parent.parent.parent.parent;
+		
+		tRootCalendarView.initDetails();
+		//if ($debug) Debug.write("this termin: ",this.terminObj);
+		tRootCalendarView._termindetails.terminObjRef = this.terminObj;
+		if ($debug) Debug.write("terminObjRef ",tRootCalendarView._termindetails.terminObjRef);
+		//if ($debug) Debug.write("terminObjRef: ",tRootCalendarView.parent.terminObjRef);
+		tRootCalendarView._termindetails.showtermindetails();
+		tRootCalendarView._termindetails.setAttribute("visibility","visible");;
+		//parent.parent.parent.parent._terminButton.onclick.sendEvent();
+	</handler>
+	
+	<view name="resize" y="${parent.height-this.height}" height="20" width="${parent.width}" bgcolor="blue" >
+		<handler name="onclick">
+			if ($debug) Debug.write("getMouse y: ", parent.getMouse('y'));
+			this.getMouse('y')
+			//this.dragger.apply();
+		</handler>
+		<handler name="onmousedown">
+			this.dragger.apply();
+		</handler>
+		<handler name="onmouseup">
+			this.dragger.remove();
+		</handler>
+		<handler name="ony">
+			parent.setAttribute('height', parent.height-this.y/10)
+		</handler>
+		<dragstate name="dragger" drag_axis="y"/>
+	</view>
+	
+	
+	<text multiline="true" width="${ parent.width-2 }" x="1" bgcolor="white" 
+		  height="${ parent.height -2 }" y="1"
+		  text="${ parent.description }" />
+		  
+	<view resource="emblem_unreadable_rsc" x="${parent.width - this.width}">
+		<handler name="onclick">
+			
+			//parent.calenderObjRef.deleteAppointment.terminObj = parent.terminObj;
+			//parent.calenderObjRef.deleteAppointment.terminareaObjRef = parent;
+			
+			//parent.calenderObjRef.deleteAppointment.doCall();
+			
+			parent.deleteAppointment.doCall();
+		</handler>
+	</view>
+	<method name="destroyThis">
+		//parent.calenderObjRef.getAppointmentByRange.doCall();
+		this.destroy();
+	</method>
+	
+	<netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+		<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue">return parent.parent.terminObj.appointmentId;</method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+    			//parent._tagesansicht._list._outlist.clearContent();
+    			//parent.getUserAlleTermineByRange.doCall();
+	    		if ($debug) Debug.write("deleteAppointment: ",value);
+	    		if ($debug) Debug.write("Appointment_id: ",parent.terminObj.appointmentId);
+	    		if ($debug) Debug.write("terminObj: ",parent.terminObj);
+	    		//parent.updateUserMessagesTerminIdToNull.doCall();
+	    		parent.destroy();
+	    		parent.calenderObjRef.getAppointmentByRangeWeek.doCall();
+    		 ]]>
+    	</handler>
+	</netRemoteCallHib>
+</class>
+ 
+	
+</library>

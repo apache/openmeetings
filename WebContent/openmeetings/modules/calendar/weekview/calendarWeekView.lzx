@@ -1,0 +1,92 @@
+<library>
+	<include href="weekView.lzx" />
+	<class name="calendarWeekView" extends="view">
+		<attribute name="_date" value="" type="string"/>
+		<handler name="oninit">
+			//this.setCalendarItem(24);
+			//if ($debug) Debug.write("calendarMonthView: ",this);
+			//if ($debug) Debug.write("list.width: ",this._tagesansicht._list.width);
+			//if ($debug) Debug.write("outlist.width: ",this._tagesansicht._list._outlist.width);
+			//if ($debug) Debug.write("innerlist.width: ",this._tagesansicht._list._innerlist.width);
+		</handler>
+		
+
+		<view name="weekday">
+			<text name="_weekday"></text>
+		</view>
+		<view name="_tagesansicht" bgcolor="silver" y="20" width="200">
+			
+			<view resource="timetable_weekview" /> 
+ 			<view resource="balken_weekview" x="40" stretches="width" width="200">
+ 				<handler name="onclick">
+					<![CDATA[
+					    var tRootCalendarView = parent.parent.parent.parent.parent.parent; 
+					
+					    tRootCalendarView.initDetails();
+					
+     					tRootCalendarView._termindetails.setAttribute("visibility","visible");;
+     					tRootCalendarView._termindetails.setAttribute('x', 400);
+     					tRootCalendarView._termindetails.setAttribute('y', 50);
+     					tRootCalendarView._termindetails.defaulttermindetails();
+     					
+     					var i=0;
+     					var j=1;
+     					var preTime = "0";
+     					var time = ""+Math.round(this.getMouse('y')/17*10);
+     					
+     					if(this.getMouse('y')/17<1) std="00";
+     					if (time.length == 3) {
+     						j=2;
+     						preTime="";
+     					}
+     					//if ($debug) Debug.write("getMouse/17: ",this.getMouse('y')/17);
+     					//if ($debug) Debug.write("subview length: ",time.length);
+     					var std = Number(time.substring(i,j));
+    					var min = "00"//Number(time.substring(1, 2));
+    					
+    					if(this.getMouse('y')/17<1){ 
+    						std="00";
+    						preTime="";
+    					};
+    					
+    					//if (min==0) min=59;
+     					//if ($debug) Debug.write("std:+++: ",std);
+     					//if ($debug) Debug.write("min:+++: ",min);
+     					//if ($debug) Debug.write("time: ",time);
+     					//if ($debug) Debug.write("y: ",this.getMouse('y'));
+     					
+     					tRootCalendarView._termindetails._date._bzeit.setAttribute('text',preTime+std+":"+min); //Math.round(60/min
+     					tRootCalendarView._termindetails._date._bdatum.setAttribute('text',parent.parent._date);
+     					tRootCalendarView._termindetails._date.edatum.setAttribute('text',parent.parent._date);
+ 					
+ 					]]>
+ 				</handler>
+ 				
+ 			</view>
+	 	    
+	 		<view name="_list" x="45" clip="true">
+	 			<simplelayout axis="x" spacing="2" /> 
+	 			<method name="clearContent">		
+					for (var eg in this.subviews) {
+						this.subviews[eg].destroy();
+					}
+				</method>		
+	 		</view>
+	 	</view>
+		 
+	<!--	 <method name="setCalendarItem" args="stunden">
+					<![CDATA[
+					for(var x=0;x<stunden;x++){		
+						if (x < 10)
+							{ 
+							var x = "0" + x.toString();					
+							}				
+						new lz.calenderlistitem(this._tagesansicht._list._innerlist,{text:x + ":00", fontsize:8, width:400, height:15 , terminObjRef:parent});
+					//if ($debug) Debug.write("setCalendarItem_method: ",this);
+					//if ($debug) Debug.write("setCalendar.widh: ",this.width)
+					}
+					]]>
+		</method>-->
+		
+	</class>
+</library>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="chooseDrawAreaObjectWindow" extends="explorerBox" title="Choose a Object"
+    docking="true" resizeable="true" closable="true" width="264" x="200" y="0" height="200">
+    
+    <attribute name="listV" value="null" />
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+    	lz.ModeManager.makeModal(this);
+    </handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <text fontsize="11" text="There are several Object in this selection" y="22" />
+    <text fontsize="11" text="Objects:" y="42" />
+    
+    <chooseDrawAreaObjectCombobox x="100" refObj="${ parent.refObj }" y="42" />
+	
+	<button name="_close" x="90" y="170" text="ok" width="160" height="20">
+		<handler name="onclick">
+			//Debug.write("this.parent: ",this.parent);
+			this.parent.refObj.setModus('pointer');
+			this.parent.close();
+		</handler>
+	</button>
+</class>
+
+</library>

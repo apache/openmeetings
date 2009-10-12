@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<!-- -->
+	<include href="conference/" />
+	
+	 
+	<include href="chat/" />
+	<include href="settings/" />
+
+	<include href="invitation/" />
+
+
+	<include href="dashboard/" />
+
+    <!-- --> 
+	<include href="meetings/" />
+	<include href="events/" />
+	<include href="recording/" />
+     
+    <include href="admin/" />
+    <include href="calendar/" />
+    
+    <include href="sharing/" />
+
+</library>

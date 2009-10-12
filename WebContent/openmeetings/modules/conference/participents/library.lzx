@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <resource name="participents_isactive" src="resources/button_ok.png" />
+    
+    <resource name="participents_isMod_rsc" src="resources/kdmconfig.png" />
+    <resource name="participents_isDrawing_rsc" src="resources/color_line.png" />
+    
+
+    <include href="participents.lzx" />
+    
+</library>

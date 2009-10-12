@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="remoteWhiteboard" extends="baseDrawSave">
+	
+	<attribute name="loadingObjectListId" value="0" type="number" />
+	<attribute name="loadingObjectList" value="null" />
+	
+	<attribute name="loadObjectDelegate" value="null" />
+
+	<method name="loadObjectList" args="objList">
+		<![CDATA[
+			this.loadingObjectList = objList;
+			this.loadingObjectListId = 0;
+			//this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+			//if (this.loadingObjectList.length != 0){
+			//	lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+			//}
+			//for (var i=0;i<this.loadingObjectList.length;i++){
+			//	if ($debug) Debug.write("i this.loadingObjectList[i] ",i,this.loadingObjectList[i]);
+			//}
+			if (this.loadingObjectList != null && this.loadingObjectList.length != 0){
+				this.startNewSyncprocess.doCall();
+			}
+		]]>
+	</method>
+	
+    <netRemoteCallHib name="startNewSyncprocess" funcname="whiteboardservice.startNewSyncprocess"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("startNewSyncprocess: ",value);
+            	if (value.roomclient.publicSID == canvas.publicSID){
+            		if ($debug) Debug.write("currentLoadingItem IS mine");
+                    //TODO: Check usage of currentLoadingItem
+            		//if (value.currentLoadingItem){
+            			parent.startInitialLoadinProcess();
+            		//}
+            	}
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="sendCompletedSyncEvent" funcname="whiteboardservice.sendCompletedSyncEvent"
+        remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendCompletedSyncEvent: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     	
+    
+    <method name="startInitialLoadinProcess">
+		this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );
+		if (this.loadingObjectList.length != 0){
+			lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+		}
+    </method>
+	
+	<method name="loadRemoteObject">
+		<![CDATA[
+			this.sendRemoteWatchObject(this.loadingObjectList[this.loadingObjectListId]);
+			this.loadingObjectListId++;
+			if (this.loadingObjectListId < this.loadingObjectList.length){
+				lz.Timer.addTimer( this.loadObjectDelegate, 250 );
+			} else {
+				this.sendCompletedSyncEvent.doCall();
+			}
+		]]>
+	</method>
+	
+	<method name="sendRemoteWatchObject" args="actionObject">
+		if ($debug) Debug.write("sendRemoteWatchObject: ",actionObject);
+		<![CDATA[
+			
+			//Redraw the View on the paintarea
+			if (actionObject[0]=='paint'){
+				this.paintactionHistory(actionObject,this);
+			} else if (actionObject[0]=='line'){
+				this.lineactionHistory(actionObject,this);
+			} else if (actionObject[0]=='uline'){
+				this.ulineactionHistory(actionObject,this);
+			} else if (actionObject[0]=='drawarrow'){
+				this.drawarrowlineactionHistory(actionObject,this);
+			} else if(actionObject[0]=='letter'){
+				this.drawactionHistory(actionObject,this);
+			} else if(actionObject[0]=='image'){
+				this.addImageToLayerHistoryToLocal(actionObject,this);
+			} else if(actionObject[0]=='swf'){
+				this.addSWFToLayerHistory(actionObject,this,true);
+			} else if(actionObject[0]=='rectangle'){
+				this.drawrectangleToHistory(actionObject,this);
+			} else if(actionObject[0]=='ellipse'){
+				this.drawellipseToHistory(actionObject,this);
+			}
+			this.baseactionobjectList.push(actionObject);
+
+		]]>
+	</method>	
+	
+	<!-- methods for syncing events -->
+    <netRemoteCallHib name="startNewObjectSyncProcess" funcname="whiteboardservice.startNewObjectSyncProcess"
+        remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="uniqueObjectSyncName" value="" type="string" />
+    	<netparam><method name="getValue">return parent.uniqueObjectSyncName;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("startNewImagesSyncprocess: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="sendCompletedObjectSyncEvent" funcname="whiteboardservice.sendCompletedObjectSyncEvent"
+        remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="uniqueObjectSyncName" value="" type="string" />
+    	<netparam><method name="getValue">return parent.uniqueObjectSyncName;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            	//The onResult-Handler will be called be the rtmpconnection
+            	if ($debug) Debug.write("sendCompletedImagesSyncEvent: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>   
+    
+    
+    <method name="startStreaming" args="messageObj">
+        new lz.incomingScreenSharing(canvas,{messageObj:messageObj});
+    </method>
+    
+    <method name="stopStreaming" args="messageObj">
+        
+    </method>
+	
+</class>
+
+</library>

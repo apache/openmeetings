@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="errormoderatorpopup">
+   <doc>
+   	モデレータ用のエラーメッセージを表示する画面のようです。<br/>
+   	*'parent.parent..'と親依存が強いですので要改善。
+   </doc>
+ </class>
+</rlzxdoc>

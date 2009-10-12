@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<class name="chatTabItemEmoticons" extends="view" width="$once{ parent.width - 14 }" >
+
+	<attribute name="user_id" value="0" type="number" />
+	<attribute name="username" value="" type="string" />
+	<attribute name="usertime" value="" type="string" />
+	<attribute name="usercolor" value="0" type="string" />
+	<attribute name="messageObj" value="null" />
+	
+	<handler name="oninit">
+		<![CDATA[
+			if($debug) Debug.write("chatTabItemEmoticons/WIDTH: "+this.width);
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+'/'+canvas.webAppRootKey+'/DownloadHandler?fileName=CHAT'
+	        		+'&moduleName=chat&parentPath=&room_id='
+	        		+'&remoteUserid='+this.user_id
+	        		+'&sid='+canvas.sessionId;
+	        //Debug.write("downloadurl "+downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);	
+	        
+	        //Debug.write("TIME: "+this.usertime);
+        ]]>
+	</handler>
+	
+	<image name="_userpic" />
+	
+	
+	<text text="$once{ parent.username }" x="40" resize="false" fontsize="10"
+		  width="$once{ parent.width - 40 }" bgcolor="$once{ parent.usercolor }"
+		  selectable="true" />
+	<text text="$once{ parent.usertime }" align="right" selectable="true" fontsize="10" />
+	
+	<!-- space between each line of text -->
+	<attribute name="leading" value="5" type="number" />
+	
+	<text multiline="true" x="40" y="20" width="$once{ parent.width - 40 }" fontsize="11" selectable="false" >
+		<handler name="oninit">
+			<![CDATA[
+				this.sprite.__LZtextclip.wordWrap = false;
+				if($debug) Debug.write(this);
+				//Debug.write(this.sprite.getTextFormat());
+				tFormat = this.sprite.__LZtextclip.getTextFormat();
+				//Debug.write(this.sprite.__LZtextclip.getTextFormat());
+				tFormat.leading = 4;
+				this.sprite.__LZtextclip.setTextFormat(tFormat);
+				var items = parent.messageObj;
+				var t = "";
+				//items[0] = ["text","hello your are the hero lets check accomodation today i need some input"];
+				for (var i=0;i<items.length;i++) {
+					if (items[i][0]=="text"){
+						t += items[i][1];
+					} else {
+						if (t.length!=0){
+							var tempString = calcLineWidthByTextField(this.width, t,this.fontsize,this.fontname);
+							var x = tempString[tempString.length-1]["lineWidth"];
+							var y = (tempString.length-1)*(getLineHeight()+parent.leading-1);
+						}else {
+							var x = 0;
+							var y = 0;
+						}
+						t += items[i][2];
+						//Debug.write(x,y);
+						var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/public/emoticons/'+items[i][1];
+						var m = new lz.chatInnerSmily(parent,{x:x+this.x,y:y+this.y,iconlabel:items[i][3]});
+						m.setSource(swfurl);
+					}
+				}
+				//Debug.write("TTTT: ",t);"Verdana"
+				var tString = calcLineWidthByTextField(this.width, t,this.fontsize,this.fontname);
+				
+				for (var k = 0;k<tString.length;k++){
+					this.setAttribute('text',this.getText()+textObject[k]["text"]+"\r");
+					//Debug.write("text: ",k,textObject[k]["lineWidth"],textObject[k]["text"]);
+				}	
+				//Debug.write(this.sprite.__LZtextclip.getTextFormat());
+				tFormat.leading = parent.leading;
+				this.sprite.__LZtextclip.setTextFormat(tFormat);
+				//Debug.write(this.sprite.__LZtextclip.textHeight);
+				//Debug.write(getLineHeight());
+				//Debug.write(this.sprite.__LZtextclip.textHeight+12);
+				this.setAttribute('height',this.sprite.__LZtextclip.textHeight+12);
+				
+			]]>
+		</handler>		
+
+	</text>
+
+</class>						
+
+<class name="chatInnerTextBox" extends="text" resize="true" bgcolor="red" />
+
+<class name="chatInnerSmily" extends="view" onmouseover="" onmouseout="">
+	<attribute name="iconlabel" value="" type="string" />
+	<labelTooltip text="$once{ parent.iconlabel }" />
+</class>
+
+</library>

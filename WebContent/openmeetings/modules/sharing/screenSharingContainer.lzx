@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="screenSharingContainer" extends="view" 
+	   width="${parent.width }" height="${ parent.height }">
+	
+	<method name="clearAllSessions">
+		<![CDATA[
+            for (var eg in this.subviews) {
+            	this.subviews[eg].destroy();
+            }
+		]]>
+	</method>
+	
+	<method name="searchForSession" args="publicSID">
+		<![CDATA[
+		
+            for (var i=0;i<this.subviews.length;i++) {
+            	if (this.subviews[i].sharerPublicSID == publicSID) {
+            		return this.subviews[i];
+            	}
+            }
+            
+            if ($debug) Debug.write("No HTTP Session "+publicSID);
+		    return null;
+		]]>
+	</method>
+	
+</class>
+
+</library>

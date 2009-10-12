@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="messagewin">
+   <doc>
+   	”新規投票”の画面のようですが、”キャンセルボタン”しか実装していません。<br/>
+   	*使っているのかな？
+   </doc>
+ </class>
+</rlzxdoc>

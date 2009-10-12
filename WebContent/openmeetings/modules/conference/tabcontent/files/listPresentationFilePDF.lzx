@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<resource name="_filesave_icon_pdf_rsc" src="resources/pdf.png" />
+	
+<class name="listPresentationFilePDF" extends="baseListPresentationItem" selectable="false">
+    
+    
+    <attribute name="pdfname" value="null" />
+    <attribute name="swfName" value="null" />
+    
+    <method name="loadFileByName" args="filename">
+        lz.Browser.loadURL(this.formatURL(filename),'_parent');
+    </method>
+
+    <handler name="onclick">
+        this.parent.loadSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,hib.currentroomid,hib.conferencedomain,1);
+    </handler>
+    
+    <method name="checkSWFPresentation" args="slideNumber">
+        return this.parent.checkSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,hib.currentroomid,hib.conferencedomain,slideNumber);
+    </method>    
+    
+    <method name="addSWFPresentation" args="slideNumber">
+        this.parent.loadSWFPresentation(this.formatURL(this.swfName.filename),this.swfName.filename,this.uploadmodul,this.uploadmoduleimgfolder,hib.currentroomid,hib.conferencedomain,slideNumber);
+    </method>    
+    
+    <view name="_filesave_icon_pdf" x="150" y="6" resource="_filesave_icon_pdf_rsc">
+        <handler name="onclick">
+            //Debug.write("this.parent.pdfname: ",this.parent.pdfname.filename);
+            //Debug.write("this.parent: ",this.parent);
+            this.parent.loadFileByName(this.parent.pdfname.filename);
+        </handler>
+        <labelTooltip labelid="248" />
+    </view>
+        
+    <labelText name="_Text" y="40" labelid="249" width="240" />
+    
+</class>
+
+</library>

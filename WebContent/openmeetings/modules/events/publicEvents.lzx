@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	<!---
+	
+	    @deprecated Is not used anymore, see allmeetings
+	
+		This class shows usable public Event(seminar) room list.
+		( *similar with publicMeetings.lzx )
+		The list would created from roomListItem object that was declared in modules/conference/conference/roomListItem.lzx.
+		 
+	-->
+	<class name="publicEvents" extends="baseContentView">	
+		<handler name="ontabcontentleave">
+			canvas._chatcontentRPC = null;
+			canvas.thishib.removeClientFromChatNotification.doCall();
+		</handler>
+	   
+	      <!-- label: meeting rooms --> 
+		<labelText fontstyle="bold" y="10" labelid="128" width="200" />
+			
+		<view y="60" x="20">
+			<handler name="oninit">
+				canvas.thishib.roomtype = "public";
+				this.getRoomsPublic.doCall();
+			</handler>
+			
+		  	<netRemoteCallHib name="getRoomsPublic" funcname="conferenceservice.getRoomsPublic" remotecontext="$once{ canvas.thishib }" >   
+		  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+		  		<netparam><method name="getValue">return 2;</method></netparam>  
+
+			      <handler name="ondata" args="value">	
+		            	<![CDATA[
+		                		if (value!=null){
+			                		for(var eg=0;eg<value.length;eg++){
+			                    		//Debug.write(value[eg]);
+			                    		var time = value[eg].starttime.getHours()+':'+value[eg].starttime.getMinutes()+' '+
+			                    				     value[eg].starttime.getDate()+'.'+(value[eg].starttime.getMonth()+1)+'.'+value[eg].starttime.getFullYear();
+			                    		new lz.roomListItem(parent.inn.inn.inn,{currentusers:value[eg].currentusers,
+			                    											maxUsers:100,
+			                    											roomClassName:'audienceView',
+			                    											isaudience:true,
+			                    											obj:value[eg],
+			                    											ispublic:true,
+			                    											roomid:value[eg].rooms_id,
+			                    											starttime:time,
+			                    											roomname:value[eg].name});
+			                }
+		                }
+		         	]]>
+		         	</handler>	
+		  	</netRemoteCallHib>   
+
+		 	<!-- inn.inn.inn view would be setted object by above ondata hander. -->
+		  	<view width="480" height="500" name="inn" bgcolor="$once{ canvas.basebgcolorizer }" >
+		  		<view x="1" y="1" width="478" height="498" name="inn" bgcolor="0xFFFFFF" clip="true" >
+		  			<view layout="axis:y;spacing:2" name="inn" />
+		  			<vscrollbar />
+		  		</view>
+		  	</view>
+		</view>
+		<!-- description panel for eache room. right hand on this class view.
+			roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
+				Mar 26 2008 commented by onokeiji@gmal.com
+		 -->
+		<roomListDetails x="510" y="50" name="_roomlistdetails" />
+	</class>
+</library>
