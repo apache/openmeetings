@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
+<!-- LZ_COPYRIGHT_BEGIN -->
+<!--=======================================================================-->
+<!-- Copyright (c) 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.    -->
+<!-- Use is subject to license terms                                       -->
+<!--=======================================================================-->
+<!-- LZ_COPYRIGHT_END -->
+<!-- This is a cross-domain-policy file that can be deployed            -->
+<!-- to allow http-loaded Laszlo applications running in Flash 7        -->
+<!-- (or later) to have access to https loaded data or                  -->
+<!-- media at runtime.  This must be placed in the 'root'               --> 
+<!-- directory of the front-end server that serves the                  -->
+<!-- Laszlo application.  If you're running a servlet container,        -->
+<!-- then it should be placed in container's ROOT web application.      -->
+<!-- If you are fronting your server with Apache, this file             -->
+<!-- needs to be placed in Apache's DocumentRoot directory (or the root of -->
+<!-- Apache's virtual host directory for the host that's serving the    -->
+<!-- application.                                                       -->
+<!--                                                                    -->
+<!-- This file permits *any* domain that serves a Laszlo app to have    -->
+<!-- access to runtime Laszlo data and media served by your server.     -->
+<!--                                                                    -->
+<!-- To make this more secure version, place the domain name of your    -->
+<!-- server in the domain attribute below like domain="myserver.com"    -->
+<!--                                                                    -->
+<!-- See Macromedia's Tech. Note http://www.macromedia.com/support/flash/ts/documents/loadvars_security.htm for details -->
+
+<cross-domain-policy>
+   <allow-access-from domain="*" secure="false" />
+</cross-domain-policy>
