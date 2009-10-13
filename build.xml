@@ -1,0 +1,449 @@
+<project name="openmeetings" basedir="./" default="dist">
+
+    <!-- Sources and output dirs -->
+    <property name="main.src.dir" value="${basedir}/src/app"/>
+    <property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
+    <property name="templates.src.dir" value="${basedir}/src/templates"/>
+    <property name="test.src.dir" value="${basedir}/src/test"/>
+	<property name="client.src.dir" value="${basedir}/src/client"/>
+    <property name="main.out.dir" value="${basedir}/temp"/>
+    
+    <!-- Axis2 Services -->
+    <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
+    <property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
+    <property name="userservice.src.dir" value="${basedir}/src/userservice"/>
+    
+    <property name="classes.dir" value="${basedir}/temp"/>
+    
+    <property name="dist.dir" value="dist"/>
+    
+    <!-- Conf dirs -->
+    <property name="conf.dir" value="${basedir}/conf"/>
+    
+    <!-- Distribution properties -->
+    <property name="project.distname" value="openmeetings"/>
+
+    <!-- Hibernate Properties -->
+    <property file="${conf.dir}/hibernate.properties" />
+
+    <!-- libraries -->
+    <property name="project.lib" value="./WebContent/WEB-INF/lib"/>
+
+    <!-- Web-Start -->
+    <property name="webstart.lib" value="./WebContent/screen"/>
+	
+	<!-- Junit Lib
+	
+	This part could be removed in the future, we have
+	to use Spring Mock Objects 
+	 -->
+    <property name="junit.lib" value="${basedir}/lib/junit"/>
+    
+    <!-- compile classpath -->
+    <path id="compile.classpath">
+    	<pathelement location="${basedir}/WebContent/WEB-INF/classes" />
+        <fileset dir="${project.lib}" includes="*.jar"/>
+        <fileset dir="${webstart.lib}" includes="*.jar"/>
+    	<fileset dir="${junit.lib}" includes="*.jar"/>
+    </path>
+
+    <!-- start of xdoclet2 -->
+    <property name="xdoclet2.lib.dir" value="${basedir}/lib/xdoclet2/"/>
+
+    <target name="xdoclet2">
+        <path id="xdoclet2.task.classpath">
+            <!-- xdoclet2 -->
+            <pathelement location="${xdoclet2.lib.dir}/lib/xdoclet-2.0.6.jar"/>
+            <!-- Add the xdoclet2 plugins jar here -->
+            
+            <pathelement location="${xdoclet2.lib.dir}/plugins/xdoclet-plugin-hibernate-1.0.4-SNAPSHOT.jar"/>
+            <!-- xdoclet2 runtime dependencies -->
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-beanutils-1.7.0.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-logging-1.0.4.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/qdox-20051211.114207.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-collections-3.1.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/dom4j-1.6.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/saxpath-1.0-FCS.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-jelly-20050813.225330.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/generama-1.2.1.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/velocity-1.4.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-jelly-tags-define-1.0.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/jaxen-1.1-beta-4.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/xdoclet-2.0.4.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-jelly-tags-jsl-1.0.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/nanocontainer-1.0-beta-3.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/xerces-2.4.0.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-jelly-tags-xml-20050823.222913.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/nanocontainer-ant-1.0-beta-3.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/commons-jexl-1.0.jar"/>
+            <pathelement location="${xdoclet2.lib.dir}/lib/picocontainer-1.0.jar"/>
+        </path>
+
+        <taskdef
+            name="xdoclet2"
+            classname="org.xdoclet.ant.XDocletTask"
+            classpathref="xdoclet2.task.classpath"
+            />
+
+    </target>
+
+    <target name="remove" depends="xdoclet2" >
+        <delete>
+            <fileset dir="${basedir}/src/app">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </delete>
+    </target>
+    
+    <target name="hibernate" depends="remove">
+        <xdoclet2>
+            <!-- defines the file handled by xdoclet2 -->
+            <fileset dir="${basedir}/src/app">
+                <include name="**/*.java"/>
+            </fileset>
+
+            <!-- defines the processing of a plugin -->
+            <component
+                classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
+                destdir="${basedir}/src/app"
+                version="3.0"
+                />
+            <component
+                classname="org.xdoclet.plugin.hibernate.HibernateConfigPlugin"
+                destdir="${basedir}/src/app" version="3.0"
+                dialect="${hibernate.dialect}"
+                jdbcdriver="${hibernate.connection.driver_class}"
+                jdbcurl="${hibernate.connection.url}"
+                jdbcusername="${hibernate.connection.username}"
+                jdbcpassword="${hibernate.connection.password}"
+                showsql="true" hbm2ddlauto="update"/>
+        </xdoclet2>
+    </target>
+    
+    
+    <!-- end of xdoclet 2 -->
+
+    <!-- build webapp -->
+
+    <target name="dist" description="binary distribution of OpenMeetings"
+        depends="cleanForBinary, jar, signWebStartJars">
+        
+    </target>
+
+    <!-- Export SQL schema using mapping files and hibernate configuration -->
+<!--    <target name="Export SQL Schema" depends="Generate Mappings">
+    <target name="Export SQL Schema" depends="Generate Mappings">-->
+<!--
+        <taskdef name="schemaexport" classname="org.hibernate.tool.hbm2ddl.SchemaExportTask">
+            <classpath refid="schema.export.classpath" />
+        </taskdef>
+
+        <schemaexport
+            properties="${main.src.dir}/hibernate.properties"
+            quiet="false"
+            text="false"
+            drop="false"
+            delimiter=";"
+            output="${main.out.dir}/installation.sql">
+            <fileset dir="${main.out.dir}" includes="**/*.hbm.xml"/>
+        </schemaexport>
+
+    </target>
+-->
+
+	<target name="prepare">
+        <mkdir dir="${main.out.dir}"/>
+	</target>
+	
+    <!-- Check timestamp on files
+    <target name="prepare">
+        <mkdir dir="${dist.dir}"/>
+        <copy todir="${dist.dir}" filtering="true">
+            <fileset dir="webapp">
+                <exclude name="**/*.fla"/>
+                <exclude name="**/*.gif"/>
+            </fileset>
+        </copy> 
+        <copy todir="${dist.dir}/openmeetings/WEB-INF/lib">
+            <fileset dir="${axis2.lib}">
+            </fileset>
+            <fileset dir="${velocity.lib}">
+            </fileset>
+            <fileset dir="${batik.lib}">
+            </fileset>
+            <fileset dir="${hibernate.lib}">
+            </fileset>  
+            <fileset dir="${upload.lib}">
+            </fileset>  
+            <fileset dir="${xstream.lib}">
+            </fileset>  
+            <fileset dir="${database.lib}">
+            </fileset>
+            <fileset dir="${ical.lib}">
+            </fileset>
+            <fileset dir="${java2swf.lib}">
+            </fileset>  
+            <fileset dir="${jmf.lib}" includes="*.jar"/>
+        </copy>
+        <tstamp/>
+    </target>
+     -->
+
+    <!-- Copy any resource or configuration files
+    <target name="resources">
+        <copy todir="${main.out.dir}" includeEmptyDirs="yes">
+            <fileset dir="${main.src.dir}">
+                <patternset>
+                    <include name="**/*.conf"/>
+                    <include name="**/*.properties"/>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.png"/>
+                    <include name="**/*.vm"/>
+                    <exclude name="hibernate.properties"/>
+                </patternset>
+            </fileset>
+            <fileset dir="${webstart.src.dir}">
+                <patternset>
+                    <include name="**/*.conf"/>
+                    <include name="**/*.properties"/>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.png"/>
+                    <include name="**/*.vm"/>
+                    <exclude name="hibernate.properties"/>
+                </patternset>
+            </fileset>          
+            <fileset dir="${templates.src.dir}">
+                <patternset>
+                    <include name="**/*.conf"/>
+                    <include name="**/*.properties"/>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.png"/>
+                    <include name="**/*.vm"/>
+                    <exclude name="hibernate.properties"/>
+                </patternset>
+            </fileset>          
+        </copy>
+    </target>
+     -->
+
+    <!-- Compile JAR -->
+    <target name="jar" description="Make Archive" depends="compile">
+        <tstamp prefix="build">
+            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+        </tstamp>
+        <manifestclasspath property="jar.classpath" jarfile="openmeetings.jar">
+            <classpath refid="compile.classpath"/>
+        </manifestclasspath>
+    	
+    	<!-- Not needed for the Moment
+        <jar destfile="${dist.dir}/${project.distname}/WEB-INF/lib/openmeetings.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**"/>
+                <exclude name="**/test/**"/>
+                <exclude name="**/webstart/**"/>
+            	<exclude name="**/client/**"/>
+                <exclude name="**/*.png"/>
+                <exclude name="**/*.vm"/>
+                <exclude name="hibernate.cfg.xml"/>
+                <exclude name="log4j.properties"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>  
+        <jar destfile="${dist.dir}/${project.distname}/WEB-INF/lib/openmeetings-templates.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**"/>
+                <exclude name="**/org/**"/>
+                <exclude name="**/*.png"/>
+                <exclude name="**/*.properties"/>
+                <exclude name="hibernate.cfg.xml"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>  
+         -->
+        <jar destfile="${basedir}/WebContent/screen/screenviewer.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**/webstart/**"/>
+                <include name="**/*png"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>
+    	<jar destfile="${basedir}/WebContent/screen/openmeetings-client.jar">
+            <fileset dir="${classes.dir}">
+            	<include name="log4j.properties" />
+                <include name="**/client/**"/>
+                <include name="**/*png"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>
+        <jar destfile="${basedir}/WebContent/screen/viewer.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**/jrdesktop/**"/>
+                <include name="**/*png"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>
+        <jar destfile="${basedir}/WebContent/screen/rtpviewer.jar">
+            <fileset dir="${classes.dir}">
+            	<include name="log4j.properties" />
+                <include name="**/de/**"/>
+                <exclude name="**/applet/**"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>  
+        <jar destfile="${basedir}/WebContent/WEB-INF/services/FileService.aar">
+            <fileset dir="${fileservice.src.dir}/">
+                <include name="META-INF/**"/>
+            </fileset>
+            <fileset dir="${classes.dir}">
+                <include name="org/openmeetings/axis/services/FileService.class"/>
+            </fileset>
+        </jar>  
+        <jar destfile="${basedir}/WebContent/WEB-INF/services/RoomService.aar">
+            <fileset dir="${roomservice.src.dir}/">
+                <include name="META-INF/**"/>
+            </fileset>
+            <fileset dir="${classes.dir}">
+                <include name="org/openmeetings/axis/services/RoomService.class"/>
+            </fileset>
+        </jar>  
+        <jar destfile="${basedir}/WebContent/WEB-INF/services/UserService.aar">
+            <fileset dir="${userservice.src.dir}/">
+                <include name="META-INF/**"/>
+            </fileset>
+            <fileset dir="${classes.dir}">
+                <include name="org/openmeetings/axis/services/UserService.class"/>
+            </fileset>
+        </jar>
+        <jar destfile="${basedir}/WebContent/screen/rtpapplet.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**/applet/**"/>
+                
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>
+        
+    </target>
+    
+    <target name="signWebStartJars">
+        <delete file="filetest.keystore" />
+        <genkey alias="filetest"
+          storepass="secret"
+          keystore="filetest.keystore"
+          verbose="true">
+            <dname>
+                <param name="CN" value="Sebastian Wagner"/>
+                <param name="OU" value="technology"/>
+                <param name="O"  value="openmeetings.googlecode.com"/>
+                <param name="C"  value="DE"/>
+            </dname>
+        </genkey>       
+        <signjar
+            alias="filetest" keystore="filetest.keystore"
+            storepass="secret"
+            lazy="false"
+            >
+          <path>
+            <fileset dir="${basedir}/WebContent/screen" >
+                 <include name="**/*.jar" />
+                
+            </fileset>
+          </path>
+        </signjar>  
+    </target>
+        
+    <!-- Normal build of application
+    compiler="org.eclipse.jdt.core.JDTCompilerAdapter" depends="prepare, resources" -->
+    <target name="compile" depends="prepare">
+        <echo message="${main.out.dir}"></echo>
+    	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+    	<javac debug="on" debuglevel="lines,vars,source" srcdir="${client.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${test.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>    
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${fileservice.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${roomservice.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>        
+    </target>
+	
+	<target name="doStartServer" depends="compile">
+	    <junit>
+	    	<classpath refid="compile.classpath"/>
+	    	<formatter type="plain"/>
+
+	    	   <test name="org.openmeetings.server.TestSocket" />
+	    </junit>
+	</target>
+
+    <!-- Build of junit tests
+    compiler="org.eclipse.jdt.core.JDTCompilerAdapter"
+     -->
+    <target name="compileTest" depends="compile">
+        <javac debug="on" srcdir="${test.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+    <!-- Remove classes directory for clean build -->
+    <target name="clean" depends="cleanForBinary" 
+        description="Prepare for clean build">
+        <delete file="${main.out.dir}/**/*.hbm.xml"/>
+        <!--mkdir dir="${main.out.dir}"/-->
+    </target>
+    
+    <target name="cleanForBinary" description="Clean For Binary">
+        <delete dir="${dist.dir}"/>
+        <delete dir="${main.out.dir}"/>
+        <delete file="filetest.keystore" />
+    </target>
+
+
+    <!-- Build entire project -->
+    <target name="build project" depends="clean, compile, hibernate"/>
+
+    
+
+</project>
