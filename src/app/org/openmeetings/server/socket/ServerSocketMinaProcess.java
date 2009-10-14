@@ -140,7 +140,7 @@ public class ServerSocketMinaProcess {
 
 	        acceptor.bind(new InetSocketAddress(port));
 
-	        log.debug("TCPServer listening on port " + port);
+	        log.warn("TCPServer listening on port " + port);
 	        //log.debug("UDPServer listening on port " + i);
 	        
 			

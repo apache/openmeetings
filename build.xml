@@ -189,7 +189,7 @@
     </target>
      -->
 
-    <!-- Copy any resource or configuration files
+    <!-- Copy any resource or configuration files -->
     <target name="resources">
         <copy todir="${main.out.dir}" includeEmptyDirs="yes">
             <fileset dir="${main.src.dir}">
@@ -224,7 +224,7 @@
             </fileset>          
         </copy>
     </target>
-     -->
+    
 
     <!-- Compile JAR -->
     <target name="jar" description="Make Archive" depends="compile">
@@ -381,7 +381,7 @@
         
     <!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" depends="prepare, resources" -->
-    <target name="compile" depends="prepare">
+    <target name="compile" depends="prepare, resources">
         <echo message="${main.out.dir}"></echo>
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
