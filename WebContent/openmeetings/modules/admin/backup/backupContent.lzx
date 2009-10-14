@@ -12,7 +12,7 @@
     	<handler name="onclick">
     		<![CDATA[
 	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	    				canvas.httpRootKey+'Export?organisation='+0
+	    				+canvas.httpRootKey+'Export?organisation='+0
 	    				+'&moduleName=users'
 	    				+'&sid='+canvas.sessionId;
 	    		if($debug) Debug.write("BACKUP/exporturl "+exporturl);
@@ -51,7 +51,7 @@
     	<handler name="onclick">
     		<![CDATA[
 	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	    				canvas.httpRootKey+'Export?organisation='+parent.organistations.getValue()
+	    				+canvas.httpRootKey+'Export?organisation='+parent.organistations.getValue()
 	    				+'&moduleName=userorganisations'
 	    				+'&sid='+canvas.sessionId;
 	    		if($debug) Debug.write("BACKUP/exporturl "+exporturl);

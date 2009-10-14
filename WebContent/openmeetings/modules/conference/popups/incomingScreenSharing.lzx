@@ -27,7 +27,7 @@
     <method name="generateFileLink">
         <![CDATA[
             return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+
-                    canvas.httpRootKey+'RtpSharerServlet?publicSID='+this.messageObj.publicSID +
+                    +canvas.httpRootKey+'RtpSharerServlet?publicSID='+this.messageObj.publicSID +
                     '&room='+this.messageObj.room +
                     '&room_id='+hib.currentroomid +
                     '&sid='+canvas.sessionId;  

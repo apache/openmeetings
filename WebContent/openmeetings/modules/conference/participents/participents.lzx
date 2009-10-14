@@ -134,7 +134,7 @@
     
     <!--
     var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                    canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
+                    +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
                     +'&moduleName=chat&parentPath=&room_id='
                     +'&remoteUserid='+this.user_id
                     +'&sid='+canvas.sessionId;
@@ -170,7 +170,7 @@
             } else {
         
                 var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                        canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
+                        +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
                         +'&moduleName=chat&parentPath=&room_id='
                         +'&remoteUserid='+this.user_id
                         +'&sid='+canvas.sessionId;

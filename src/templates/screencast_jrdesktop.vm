@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Web Start Deployment Template -->
-<jnlp spec="1.0+" codebase="http://$rtmphostlocal:$red5httpport/$webAppRootKey/screen"> 
+<!-- Web Start Deployment Template $webAppRootKey/ => is obsolete as we deploy into ROOT -->
+<jnlp spec="1.0+" codebase="http://$rtmphostlocal:$red5httpport/screen"> 
 	<information> 
 		<title>ScreenViewer Client Application</title> 
 		<vendor>Openmeetings</vendor> 

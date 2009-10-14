@@ -14,7 +14,7 @@ To this port the default server lookup is done
 
 You can find all this configuraiton in your red5-Config in: $RED5_HOME/conf/red5.properties
  -->
-<rtmpport>1936</rtmpport>
+<rtmpport>1935</rtmpport>
 
 <!-- 
 Port to use for the Server
