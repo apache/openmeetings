@@ -46,7 +46,7 @@ public class TestSimpleSVGDom extends TestCase {
 			rectangle.setAttributeNS(svgNS, "width", "100");
 			rectangle.setAttributeNS(svgNS, "height", "50");
 			rectangle.setAttributeNS(svgNS, "fill", "red");
-			rectangle.setTextContent("textFF");
+			//rectangle.setTextContent("textFF");
 
 			// Attach the rectangle to the root 'svg' element.
 			svgRoot.appendChild(rectangle);
