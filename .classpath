@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/fileservice"/>
-	<classpathentry kind="src" path="src/app"/>
 	<classpathentry kind="src" path="src/userservice"/>
+	<classpathentry kind="src" path="src/roomservice"/>
+	<classpathentry kind="src" path="src/app"/>
+	<classpathentry kind="src" path="src/stored"/>
+	<classpathentry kind="src" path="src/client"/>
 	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="src" path="src/fileservice"/>
 	<classpathentry kind="src" path="src/screenviewer"/>
 	<classpathentry kind="src" path="src/templates"/>
-	<classpathentry kind="src" path="src/client"/>
-	<classpathentry kind="src" path="src/roomservice"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.6.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="WebContent/screen/kunststoff.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
