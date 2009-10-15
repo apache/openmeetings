@@ -2307,4 +2307,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="767" name="test setup">
     <value>Level-Meter</value>
   </string>
+  <string id="768" name="start view">
+    <value>Press Start</value>
+  </string>
+  <string id="769" name="start view">
+    <value>Start Conference</value>
+  </string>
+  <string id="770" name="start view">
+    <value>Start Event</value>
+  </string>
+  <string id="771" name="start view">
+    <value>Choose Room</value>
+  </string>
+  <string id="772" name="start view">
+    <value>Check Setup</value>
+  </string>
+  <string id="773" name="start view">
+    <value>Start Conference</value>
+  </string>
+  <string id="774" name="start view">
+    <value>How to Conference:</value>
+  </string>
+  <string id="775" name="test setup">
+    <value>Start Recording</value>
+  </string>
+  <string id="776" name="test setup">
+    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+  </string>
 </language>
