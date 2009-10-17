@@ -208,10 +208,15 @@
         <customEdittext name="town" y="310" x="200" width="190" text="" />                        
          
     <labelText labelid="141" width="200" y="370" resize="false" x="2"/>  
+		<dynamicCombobox name="state" width="270" y="370" x="120"
+						 text="Switzerland" value="204" />
+    
+    	<!--
 		<validText name="state" width="270" y="370" x="120" fontsize="11" 
             shownitems="7" validate_method="$once{ canvas.validateCountry }" 
             resultId="state_id" resultName="name" />    
-
+		 -->
+		 
     <labelText labelid="158" width="200" y="400" resize="false" x="2"/>  
         <resetCombobox name="status" width="200" y="400" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >

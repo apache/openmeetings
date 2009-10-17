@@ -196,22 +196,25 @@ public class Usermanagement {
 	 * @param Userpass
 	 * @return
 	 */
-	public Object loginUser(String SID, String username, String userpass, RoomClient currentClient) {
+	public Object loginUser(String SID, String userOrEmail, String userpass, RoomClient currentClient) {
 		try {
+			
+			String hql = "SELECT c from Users AS c " +
+					"WHERE " +
+					"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
+					"AND c.deleted != :deleted";
+			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Users.class);
-			crit.add(Restrictions.eq("login", username));
-			crit.add(Restrictions.eq("deleted", "false"));
-			//crit.add(Restrictions.eq("status", 1));
-			List ll = crit.list();
-			log.info("debug loginUser: " + username);
-			tx.commit();
-			HibernateUtil.closeSession(idf);
+			Query query = session.createQuery(hql);
+			query.setString("userOrEmail", userOrEmail);
+			query.setString("deleted", "true");
+			
+			List<Users> ll = query.list();
 
-			log.info("debug SIZE: " + ll.size());
+			log.debug("debug SIZE: " + ll.size());
 			
 			if (ll.size()==0) {
 				return new Long(-10);
@@ -1246,6 +1249,38 @@ public class Usermanagement {
 	}
 	//-----------------------------------------------------------------------------------------------------
 	
+	/**
+	 * @author swagner
+	 * Find User by LoginName or EMail (test existence of a active user with login - name
+	 */
+	//-----------------------------------------------------------------------------------------------------
+	public Users getUserByLoginOrEmail(String userOrEmail) throws Exception{
+		log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
+		
+		String hql = "SELECT c from Users AS c " +
+				"WHERE " +
+				"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
+				"AND c.deleted != :deleted";
+		
+		Object idf = HibernateUtil.createSession();
+		Session session = HibernateUtil.getSession();
+		Transaction tx = session.beginTransaction();
+		
+		Query query = session.createQuery(hql);
+		query.setString("userOrEmail", userOrEmail);
+		query.setString("deleted", "true");
+		
+		List<Users> ll = query.list();
+		
+		if (ll.size() > 1) {
+			throw new Exception("ALERT :: There are two users in the database that have either same login or Email ");
+		} else if (ll.size() == 1){
+			return ll.get(0);
+		} else {
+			return null;
+		}
+		
+	}
 	
 	/**
 	 * @author o.becherer

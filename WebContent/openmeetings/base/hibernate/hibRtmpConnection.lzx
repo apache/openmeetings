@@ -5,6 +5,7 @@
 
 <dataset name="languagesSet" />        
 
+<dataset name="countrySet" />
 
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
     src="$once{ this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope }" >
@@ -382,7 +383,7 @@
     </netRemoteCallHib>   
      -->   
     
-    <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" >
+    <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" dataobject="countrySet">
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getStates: ",value);

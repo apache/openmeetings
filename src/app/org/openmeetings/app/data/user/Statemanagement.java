@@ -94,7 +94,7 @@ public class Statemanagement {
 	 * Get all state-Object
 	 * @return List of State Objects or null
 	 */
-	public List getStates() {
+	public List<States> getStates() {
 		try {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -102,7 +102,7 @@ public class Statemanagement {
 			Query query = session
 					.createQuery("select c from States as c where deleted != :deleted");
 			query.setString("deleted", "true");
-			List ll = query.list();
+			List<States> ll = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;

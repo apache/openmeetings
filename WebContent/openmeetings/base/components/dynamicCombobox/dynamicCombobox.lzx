@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	
+<countryCombobox name="_countryCombobox" width="200" shownitems="14"
+				 height="20" visibility="hidden" />
+
+<class name="dynamicCombobox" extends="baseformitem" style="componentStyle">
+    
+    <attribute name="isCountryCombobox" value="true" type="boolean" />
+    
+    <event name="onselect" />
+    
+    <handler name="onclick">
+    	<![CDATA[
+    		if (this.isCountryCombobox) {
+    			
+    			canvas._countryCombobox.setAttribute("visibility","visible");
+    			canvas._countryCombobox.bringToFront();
+    			canvas._countryCombobox.setAttribute("x",this.getAttributeRelative("x",canvas));
+    			canvas._countryCombobox.setAttribute("y",this.getAttributeRelative("y",canvas));
+    			canvas._countryCombobox.setAttribute("width",this.width);
+    			canvas._countryCombobox.setAttribute("height",this.height);
+    			
+    			canvas._countryCombobox.refObj = this;
+    			
+    			var item = canvas._countryCombobox.getItem(this.value);
+    			
+    			if (item != null) {
+    				canvas._countryCombobox.selectItem(this.value);
+    			} else {
+    				canvas._countryCombobox.selectItemAt(0);
+    			}
+    			
+    			canvas._countryCombobox.setOpen(true,true);
+    			
+    			canvas._countryCombobox.doUpdate = true;
+    		}
+    	]]>
+    </handler>
+    
+    <!-- to make it backward compatible -->
+    <method name="addAndSelectItem" args="name,id">
+    	this.selectItemByTextValue(name,id);
+    </method>
+    
+    <method name="selectItemByTextValue" args="text,value">
+    	this.setAttribute("text",text);
+    	this.setAttribute("value",value);
+    </method>
+    
+    <method name="setSelectedValue" args="text,value">
+    	this.setAttribute("text",text);
+    	this.setAttribute("value",value);
+    	lz.Focus.setFocus(this);
+    	this.onselect.sendEvent({'text':text,'value':value});
+    </method>
+    
+    <method name="getValue">
+    	return this.value;
+    </method>
+    
+	<view name="lft" resource="lzcombobox_lft_rsc" placement="bkgnd"/>
+	<view name="mid" resource="lzcombobox_mid_rsc" stretches="width" placement="bkgnd"/>
+	<basebutton name="rgt" resource="lzcombobox_rgt_rsc" styleable="true"
+                placement="bkgnd" clickable="false" />
+   
+   	<text x="2" y="2" name="cbtext" text="${ parent.text }"
+   		  width="${ parent.width - 20 }" />
+                    
+    <stableborderlayout axis="x" placement="bkgnd"/>
+    
+</class>
+
+</library>

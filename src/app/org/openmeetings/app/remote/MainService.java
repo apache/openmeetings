@@ -16,6 +16,7 @@ import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
+import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
@@ -170,7 +171,7 @@ public class MainService implements IPendingServiceCallback {
      * @param Userpass
      * @return a valid user account or an empty user with an error message and level -1
      */ 
-    public Object loginUser(String SID, String Username, String Userpass){
+    public Object loginUser(String SID, String usernameOrEmail, String Userpass){
     	
     	// Check, whether LDAP - Login is required(Configuration has key ldap_config_path
     	boolean withLdap = false;
@@ -181,14 +182,14 @@ public class MainService implements IPendingServiceCallback {
     	
     	
     	try {
-    		log.debug("loginUser 111: "+SID+" "+Username);
+    		log.warn("loginUser 111: "+SID+" "+usernameOrEmail);
     		
-    		// Prüfen, ob User bereits vorhanden ist
-    		Users user = Usermanagement.getInstance().getUserByLogin(Username);
+    		// Pruefen, ob User bereits vorhanden ist
+    		Users user = Usermanagement.getInstance().getUserByLoginOrEmail(usernameOrEmail);
     		
     		// AdminUser werden auf jeden Fall lokal authentifiziert
     		if(user != null && user.getLevel_id() >=3){
-    			log.debug("User " + Username + " is admin -> local login");
+    			log.debug("User " + usernameOrEmail + " is admin -> local login");
     			withLdap = false;
     		}
     		
@@ -202,7 +203,7 @@ public class MainService implements IPendingServiceCallback {
     			
 	        	currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	           
-	        	o =  LdapLoginManagement.getInstance().doLdapLogin(Username, Userpass, currentClient, SID);
+	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID);
 	        	
     		}
     		else{
@@ -212,7 +213,7 @@ public class MainService implements IPendingServiceCallback {
     			
 	    		currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	    		
-	            o = Usermanagement.getInstance().loginUser(SID,Username,Userpass, currentClient);
+	            o = Usermanagement.getInstance().loginUser(SID,usernameOrEmail,Userpass, currentClient);
 	      	}
     		
     		if(o==null)
@@ -386,7 +387,7 @@ public class MainService implements IPendingServiceCallback {
      * get a list of all states, needs no authentification to load
      * @return List of State-Objects or null
      */
-    public List getStates(){
+    public List<States> getStates(){
     	return Statemanagement.getInstance().getStates();
     }
 

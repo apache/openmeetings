@@ -23,5 +23,6 @@
     <include href="presenter/" />
     <include href="lps/" />
     <include href="conferencebox/" />
+    <include href="dynamicCombobox/" />
 
 </library>

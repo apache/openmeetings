@@ -2,14 +2,12 @@
 <library>
 
 <class name="registerNewUser" extends="labelExplorerBox" labelid="113"
-    docking="true" resizeable="false" closable="false" width="400" x="400" y="0" height="360">
+    docking="true" resizeable="false" closable="false" width="400" x="400" y="10" height="360">
     
     <attribute name="refObj" value="null" />
     <attribute name="regObject" value="null" />
     
     <handler name="oninit">
-        var defaultstate = canvas.getCountryRecord(1);
-        this.state.addAndSelectItem(defaultstate.name,defaultstate.state_id);        
         var pressEnter = new LzDelegate(this, "register");
         lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
     </handler>
@@ -24,21 +22,30 @@
     <method name="register" args="itemObj">
         this.registerB.onclick.sendEvent();
     </method>
-    <labelText labelid="114" width="200" y="42" resize="false" x="2"/>
-        <customEdittext name="username" y="42" x="120" width="270" text="" />
-
-    <labelText labelid="115" width="200" y="72" resize="false" x="2"/>
-        <customEdittext name="userpass1" y="72" password="true" x="120" width="270" text="" />
-        
-    <labelText labelid="116" width="200" y="102" resize="false" x="2"/>
-        <customEdittext name="userpass2" y="102" password="true" x="120" width="270" text="" />
-        
     
-    <labelText labelid="117" width="200" y="132" resize="false" x="2"/>
-        <customEdittext name="firstname" y="132" x="120" width="270" text="" />
+    <labelText labelid="117" width="200" y="42" resize="false" x="2"/>
+        <customEdittext name="firstname" y="42" x="120" width="270" text="">
+        	<handler name="onvalue" args="txt">
+        		parent.username.setAttribute("text",txt+"."+parent.lastname.text);
+        	</handler>
+        </customEdittext>
         
-    <labelText labelid="118" width="200" y="162" resize="false" x="2"/>
-        <customEdittext name="lastname" y="162" x="120" width="270" text="" />                
+    <labelText labelid="118" width="200" y="72" resize="false" x="2"/>
+        <customEdittext name="lastname" y="72" x="120" width="270" text="">
+        	<handler name="onvalue" args="txt">
+        		parent.username.setAttribute("text",parent.firstname.text+"."+txt);
+        	</handler>
+        </customEdittext>
+        
+    <labelText labelid="114" width="200" y="102" resize="false" x="2"/>
+        <customEdittext name="username" y="102" x="120" width="270" text="" />
+
+    <labelText labelid="115" width="200" y="132" resize="false" x="2"/>
+        <customEdittext name="userpass1" y="132" password="true" x="120" width="270" text="" />
+        
+    <labelText labelid="116" width="200" y="162" resize="false" x="2"/>
+        <customEdittext name="userpass2" y="162" password="true" x="120" width="270" text="" />
+                    
 
     <labelText labelid="119" width="200" y="192" resize="false" x="2"/>
         <customEdittext name="email" y="192" x="120" regexpType="email" 
@@ -46,9 +53,14 @@
          
     <labelText labelid="120" width="200" y="222" resize="false" x="2"/>  
 
+		<dynamicCombobox name="_state" width="270" y="222" x="120" 
+						 text="Switzerland" value="204" />
+		
+		<!--
 		<validText name="state" width="270" y="222" x="120" fontsize="11" 
             shownitems="7" validate_method="$once{ canvas.validateCountry }" 
             resultId="state_id" resultName="name" />        
+             -->
 <!--
     <labelText text="Language: " width="200" y="252" resize="false" x="2"/>  
         
