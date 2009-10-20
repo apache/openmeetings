@@ -397,7 +397,7 @@
                         if(startDateTime > endDateTime) {
                             if ($debug) Debug.write("Error: ", "Ende liegt vor Beginn!");
                             new lz.myalert(parent.parent,{text:canvas.getLabelName(578)});//"Terminende liegt vor Terminanfang!"
-                        } else if(!parent._titeledit.getAttribute('text')){
+                        } else if(parent._titeledit.text.length <= 0){
                             new lz.myalert(parent.parent,{text:canvas.getLabelName(579)});
                         } else {
                             if(parent.terminObjRef == null) {
