@@ -331,7 +331,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Login</value>
   </string>
   <string id="109" name="Authuser">
-    <value>Benutzer:</value>
+    <value>Benutzer/EMail:</value>
   </string>
   <string id="110" name="Authpass">
     <value>Passwort:</value>
