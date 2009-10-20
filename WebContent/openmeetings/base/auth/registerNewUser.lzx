@@ -104,7 +104,7 @@
                     this.parent.regObject["additionalname"]='';
                     this.parent.regObject["fax"]='';
                     this.parent.regObject["zip"]='';
-                    this.parent.regObject["states_id"]=Number(this.parent.state.getValue());
+                    this.parent.regObject["states_id"]=Number(this.parent._state.getValue());
                     this.parent.regObject["town"]='';
                     this.parent.regObject["language_id"]=0;
                     
