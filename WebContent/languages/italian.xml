@@ -2110,112 +2110,112 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Anno</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Upload File</value>
+    <value>Carica File</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Add Folder</value>
+    <value>Aggiungi directory</value>
   </string>
   <string id="704" name="file explorer">
-    <value>Refresh</value>
+    <value>Aggiorna</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Trash</value>
+    <value>Cestino</value>
   </string>
   <string id="706" name="file explorer">
-    <value>My Files (Home Drive)</value>
+    <value>Miei File (Spazio privato)</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Room Files (Public Drive)</value>
+    <value>Files della stanza (Spazio pubblico)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Add File</value>
+    <value>Aggiungi File</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Add Folder</value>
+    <value>Aggiungi directory</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Delete Folder</value>
+    <value>Cancella directory</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Edit Name</value>
+    <value>Modifica nome</value>
   </string>
   <string id="712" name="file explorer">
-    <value>New Folder</value>
+    <value>Nuova directory</value>
   </string>
   <string id="713" name="file explorer">
-    <value>Are you sure you want to delete this Item?</value>
+    <value>Sei sicuro di voler cancellare questo elemento?</value>
   </string>
   <string id="714" name="user admin">
-    <value>Search</value>
+    <value>Ricerca</value>
   </string>
   <string id="715" name="user admin">
-    <value>Search</value>
+    <value>Ricerca</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Open Document</value>
+    <value>Apri documento</value>
   </string>
   <string id="717" name="file explorer">
-    <value>Show all Files (Tree View)</value>
+    <value>Mostra tutti i file (Visualizzazione ad albero)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Close Document</value>
+    <value>Chiudi documento</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Delete File</value>
+    <value>Cancella file</value>
   </string>
   <string id="720" name="file explorer">
-    <value>You are not allowed to draw anything on the Whiteboard. You have to become Moderator or at least get the Right to edit Whiteboard. You may ask a Moderator to give you that right.</value>
+    <value>Non sei autorizzato a disegnare sulla lavagna. Devi diventare moderatore o almeno ricevere i diritti per lavorare sulla lavagna. Chiedi al moderatore l'assegnazione di questi diritti.</value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>Proprietà documento</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>Avvia Client (external)</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>Avvia Client (HTTP)</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>Un utente vuol condividere il suo schermo. Vuoi vederlo?</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>Ora stai condividendo il tuo desktop. Per interrompere la sessione di condivisione, premi sul bottone di Stop nella finestra di condivisione.</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>Condivisi sessione</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
-  </string> 
+    <value>Stai già condividendo il tuo desktop!</value>
+  </string>
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>Visualizzatore Desktop</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>Esci</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>Condividi Desktop</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Click Start to publish your screen</value>
+    <value>Clicca avvia per pubblicare il tuo video</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>Avvia condivisione</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Ferma condivisione</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Select your screen area:</value>
+    <value>Scegli l'area del tuo schermo:</value>
   </string>
   <string id="735" name="sharing client">
-    <value>Change width</value>
+    <value>Cambia larghezza</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>La condivisione ha finito la sessione!</value>
   </string>
   <string id="737" name="sharing client">
-    <value>Change height</value>
+    <value>Cambia altezza</value>
   </string>
   <string id="738" name="sharing client">
     <value>X-Offset</value>
@@ -2224,19 +2224,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Y-Offset</value>
   </string>
   <string id="740" name="sharing client">
-    <value>Width:</value>
+    <value>Larghezza:</value>
   </string>
   <string id="741" name="sharing client">
-    <value>Height:</value>
+    <value>Altezza:</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
+    <value>Connessione chiusa dal Server!</value>
   </string>
   <string id="743" name="sharing viewer">
-    <value>Cancel</value>
+    <value>Annulla</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>Avvia External</value>
   </string>
   <string id="745" name="sharing viewer">
     <value>If you close this session completely you are not able to restart the viewer for this session.</value>
@@ -2245,10 +2245,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Confirm Closing Viewer Session</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>Condividi schermo</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>Registra sessione</value>
   </string>
   <string id="749" name="co-browser">
     <value>Co-Browsing</value>
@@ -2257,40 +2257,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ooops, ... Firefox on Windows does not show clear Co-Browsing. Please use another Browser for using the Co-Browsing feature.</value>
   </string>
   <string id="751" name="co-browser">
-    <value>Previous</value>
+    <value>Precedente</value>
   </string>
   <string id="752" name="co-browser">
-    <value>Next</value>
+    <value>Avanti</value>
   </string>
   <string id="753" name="co-browser">
-    <value>Reload</value>
+    <value>Ricarica</value>
   </string>
   <string id="754" name="co-browser">
     <value>Home</value>
   </string>
   <string id="755" name="co-browser">
-    <value>Load</value>
+    <value>Carica</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Add this website as Default website to your Profile.</value>
+    <value>Imposta questo sito come default nel tuo profilo.</value>
   </string>
   <string id="757" name="test setup">
     <value>Test Setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Verifica le impostazioni del tuo microfono e della tua cam prima di entrare nella stanza, registrando qualche secondo. Potrai poi rivedere la registrazione per verificare l'audio e il video.</value>
   </string>
   <string id="759" name="test setup">
-    <value>Don't show this test anymore</value>
+    <value>Non mostrare più questo test</value>
   </string>
   <string id="760" name="test setup">
-    <value>Cancel</value>
+    <value>Annulla</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>Avvia conferenza</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>Do not ask again</value>
+    <value>Non richiedere ancora</value>
   </string>
   <string id="763" name="test setup">
     <value>REC</value>
@@ -2299,39 +2299,39 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>PLAY</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>Puoi procedere senza verificare se hai intenzione di non condividere la tua voce e video. I partecipanti senza audio e video possono ugualmente utilizzare la lavagna, condividere il proprio desktop o scrivere messaggi in chat.</value>
   </string>
   <string id="766" name="test setup">
     <value>STOP</value>
   </string>
-  <string id="767" name="test setup">
+  <string id="767" name="767">
     <value>Level-Meter</value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>Premi Avvia</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>Avvia conferenza</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>Avvia evento</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>Scegli la stanza</value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>Verifica impostazioni</value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>Avvia conferenza</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>Come fare una videoconferenza:</value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>Avvia registrazione</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+    <value>Non mostrate il test Audio/Video (registrazione) prima di entrare in una conferenza</value>
   </string>
 </language>
