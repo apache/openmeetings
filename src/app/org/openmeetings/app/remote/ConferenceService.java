@@ -86,6 +86,35 @@ public class ConferenceService {
 		return null;
 	}
 	
+	public List<Rooms_Organisation> getRoomsByOrganisationWithoutType(String SID, long organisation_id){
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	        
+	        log.debug("getRoomsByOrganisationAndType");
+	        
+	        if (User_level == null) {
+	        	return null;
+	        }
+	        List<Rooms_Organisation> roomOrgsList = Roommanagement.getInstance().getRoomsOrganisationByOrganisationId(User_level, organisation_id);
+	        
+	        List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
+	        
+	        for (Iterator<Rooms_Organisation> iter = roomOrgsList.iterator();iter.hasNext();) {
+	        	Rooms_Organisation orgRoom = iter.next();
+	        	
+	        	if(!orgRoom.getRoom().getAppointment()){
+	        		orgRoom.getRoom().setCurrentusers(this.getRoomClientsListByRoomId(orgRoom.getRoom().getRooms_id()));
+	        		filtered.add(orgRoom);
+	        	}
+	        }
+	        return filtered;     
+		} catch (Exception err) {
+			log.error("[getRoomsByOrganisationAndType]",err);
+		}
+		return null;
+	}
+	
 	/**
 	 * gets all rooms of an organisation
 	 * TODO:check if the requesting user is also member of that organisation
@@ -136,6 +165,36 @@ public class ConferenceService {
 	        return filtered;
 		} catch (Exception err) {
 			log.error("[getRoomsByOrganisationAndType]",err);
+		}
+		return null;
+	}
+	
+	public List<Rooms> getRoomsPublicWithoutType(String SID){
+		try {
+			log.debug("getRoomsPublic");
+			
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	        log.error("getRoomsPublic user_level: "+user_level);
+	        
+	        List<Rooms> roomList = Roommanagement.getInstance().getPublicRoomsWithoutType(user_level);
+	       
+	        // Filter : no appointed meetings
+	        List<Rooms> filtered = new ArrayList<Rooms>();
+	        
+	        for (Iterator<Rooms> iter = roomList.iterator();iter.hasNext();) {
+	        	Rooms rooms = iter.next();
+	        	
+	        	if(!rooms.getAppointment()){
+	        		rooms.setCurrentusers(this.getRoomClientsListByRoomId(rooms.getRooms_id()));
+	        		filtered.add(rooms);
+	        	}
+	        }
+	        
+	        
+	        return filtered;
+		} catch (Exception err) {
+			log.error("[getRoomsPublicWithoutType]",err);
 		}
 		return null;
 	}
@@ -217,6 +276,37 @@ public class ConferenceService {
 	}
 	//--------------------------------------------------------------------------------------------
 	
+	
+	public List<Rooms> getAppointedMeetingRoomsWithoutType(String SID) {
+		log.debug("ConferenceService.getAppointedMeetings");
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+
+			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)) {
+				List<Appointment> appointments = AppointmentLogic.getInstance().getTodaysAppointmentsForUser(users_id);
+				List<Rooms> result = new ArrayList<Rooms>();
+
+				if (appointments != null) {
+					for (int i = 0; i < appointments.size(); i++) {
+						Appointment ment = appointments.get(i);
+
+						Long rooms_id = ment.getRoom().getRooms_id();
+						Rooms rooom = Roommanagement.getInstance().getRoomById(rooms_id);
+
+						rooom.setCurrentusers(this.getRoomClientsListByRoomId(rooom.getRooms_id()));
+						result.add(rooom);
+					}
+				}
+
+				log.debug("Found " + result.size() + " rooms");
+				return result;
+			}
+		} catch (Exception err) {
+			log.error("[getAppointedMeetingRoomsWithoutType]", err);
+		}
+		return null;
+	}
 	
 	/**
 	 * 

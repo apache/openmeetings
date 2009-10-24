@@ -374,6 +374,40 @@ public class Roommanagement {
 		return null;
 	}	
 	
+	public List<Rooms> getPublicRoomsWithoutType(long user_level){
+		try {
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
+				Object idf = HibernateUtil.createSession();
+				Session session = HibernateUtil.getSession();
+				Transaction tx = session.beginTransaction();
+//				Criteria crit = session.createCriteria(Rooms.class);
+//				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
+//				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
+//				crit.add(Restrictions.eq("ispublic", true));
+//				crit.add(Restrictions.ne("deleted", "true"));			
+//				List ll = crit.list();
+				String queryString = "SELECT r from Rooms r " +
+						"JOIN r.roomtype as rt " +
+						"WHERE " +
+						"r.ispublic=:ispublic and r.deleted=:deleted";
+				Query q = session.createQuery(queryString);
+				//
+				q.setBoolean("ispublic", true);
+				q.setString("deleted", "false");
+				
+				List<Rooms> ll = q.list();
+				tx.commit();
+				HibernateUtil.closeSession(idf);
+				log.error("### getPublicRooms: size Room List "+ll.size());
+				return ll;
+			}
+		} catch (HibernateException ex) {
+			log.error("[getPublicRoomsWithoutType] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getPublicRoomsWithoutType] ", ex2);
+		}
+		return null;
+	}	
 	
 	
 	/**
@@ -627,7 +661,7 @@ public class Roommanagement {
 				Criteria subcrit = crit.createCriteria("organisation");
 				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 				crit.add(Restrictions.ne("deleted", "true"));
-				List ll = crit.list();
+				List<Rooms_Organisation> ll = crit.list();
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);

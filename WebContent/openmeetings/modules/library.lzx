@@ -15,7 +15,6 @@
 
     <!-- --> 
 	<include href="meetings/" />
-	<include href="events/" />
 	<include href="recording/" />
      
     <include href="admin/" />

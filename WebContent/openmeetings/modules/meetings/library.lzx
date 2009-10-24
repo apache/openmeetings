@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+	<resource name="info_text_icon_rsc" src="resources/messagebox_info.png" />
+
     <include href="allmeetings.lzx" />
 
 </library>
