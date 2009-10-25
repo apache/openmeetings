@@ -51,11 +51,11 @@
 
 				var imageTypes = new Object();
 				imageTypes.description = "Allowed Files";
-				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.txt; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png; *.ppt; *.odp; *.odt; *.wpd; *.doc; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.sxi; *.pdf";
+				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.txt; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf";
 				allTypes.push(imageTypes); 
 				
 				imageTypes = new Object();
-				imageTypes.extension = "*.txt; *.ppt; *.odp; *.odt; *.wpd; *.doc; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.sxi; *.pdf";
+				imageTypes.extension = "*.txt; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf";
 				imageTypes.description = "Documents";
 				allTypes.push(imageTypes);
 				
