@@ -8,8 +8,20 @@
     
     <attribute name="isOpen" value="true" type="boolean"/>
     
+    <attribute name="restricted" value="false" type="boolean" />
+    
     <method name="doSelection" args="itemRef">
         <![CDATA[
+        	if (itemRef.name == "filesTabButton") {
+            	if (this.restricted) {
+            		if (!canvas.ismoderator && !canvas.isAllowedToDraw) {
+            			//Do not allow
+            			new lz.labelerrorPopup(canvas,{errorlabelid:783});
+            			return;
+            		}
+            	}
+        	}
+            	
             if (this.selected != null) {
                 this.selected.deselect();
             }

@@ -136,7 +136,7 @@
 												
 										new lz.roomListItem(parent.inn.inn.inn,
 												{
-													roomClassName:canvas.conferenceRoomModule,
+													roomType:value[eg].roomtype.roomtypes_id,
 													currentusers : value[eg].currentusers,
 													obj : value[eg],
 													ispublic : true,
@@ -193,7 +193,7 @@
 							if (value != null) {
 								for (var eg = 0; eg < value.length; eg++) {
 									new lz.roomListItem(parent.inn.inn.inn,{
-												roomClassName:canvas.conferenceRoomModule,
+												roomType:value[eg].room.roomtype.roomtypes_id,
 												currentusers : value[eg].room.currentusers,
 												obj : value[eg],
 												ispublic : false,
@@ -261,7 +261,7 @@
 											+ value[eg].starttime.getFullYear();
 									new lz.roomListItem(parent.inn.inn.inn, 
 										   {
-										        roomClassName:canvas.conferenceRoomModule,
+										        roomType:value[eg].roomtype.roomtypes_id,
 												currentusers : value[eg].currentusers,
 												obj : value[eg],
 												ispublic : true,

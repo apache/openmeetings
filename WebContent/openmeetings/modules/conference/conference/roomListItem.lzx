@@ -17,6 +17,8 @@
 		<attribute name="currentusers" value="null" />
 
 		<attribute name="maxUsers" value="4" type="number" />
+		
+		<attribute name="roomType" value="0" type="number" />
 
 		<attribute name="checkForMaxUsers" value="false" type="boolean" />
 
@@ -91,9 +93,20 @@
 				//Debug.write("non ispublic");
 			}
 			
+			if (this.roomType == 1) {
+				this.roomClassName = canvas.conferenceRoomModule;
+			} else if (this.roomType == 2) {
+				this.roomClassName = canvas.eventRoomModule;
+			} else if (this.roomType == 3) {
+				this.roomClassName = "restrictedConferenceRoom";
+			} else {
+				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
+			}
 			//the conferencedomain is no more interesting, swagner 07.10.2009
 			//if ($debug) Debug.write("hib.conferencedomain: ", hib.conferencedomain);
 
+			if ($debug) Debug.write("Test Setup ",this.roomClassName);
+			
 			new lz.testSetup(canvas,{roomClassName:this.roomClassName,roomObj:roomObj});
 			
 		</method>

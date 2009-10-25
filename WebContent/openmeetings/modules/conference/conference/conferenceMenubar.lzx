@@ -33,7 +33,9 @@
             <handler name="oninit">
                 <![CDATA[
                     if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
-                        this.parent.mbarcontent.subviews[9].destroy();
+                    	if ($debug) Debug.write("this mbarcontent ",this);
+                        this.flist.removeItemAt(8);
+                        this.flist.removeItemAt(7);
                     }
                 ]]>
             </handler>  
@@ -45,7 +47,7 @@
             <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
             <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
             <menuseparator/>  
-            <_labelMenuItem labelid="309" command="cmd_quit" />
+            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
         </_labelMenu> 
         
         <_labelMenu labelid="635" width="250">
@@ -55,8 +57,37 @@
             <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
             <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
             <menuseparator/>  
+            <_labelMenuItem labelid="784" enabled="${ !canvas.ismoderator }">
+            	<handler name="onselect" args="sel">
+            		//Apply for Moderation
+                	canvas.thishib.applyForModeration.doCall();
+            	</handler>
+            </_labelMenuItem>
+            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
+            	<handler name="onselect" args="sel">
+            		//Ask for Right to Draw on Whiteboard
+            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+            	</handler>
+            </_labelMenuItem>
+            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
+            	<handler name="onselect" args="sel">
+            		if (canvas.ismoderator) {
+		                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+		                //the notification and the broadcasting Bit is set for this User
+		                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+		                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+		                canvas.thishib.setBroadCastingFlag.doCall(); 
+		            } else {
+		                //Apply for Right to Share Audio/Video
+		                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+		            }
+            	</handler>
+            </_labelMenuItem>
+            <menuseparator/>  
+            <!--
             <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
             <menuseparator/>
+             -->
             <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
@@ -83,6 +114,74 @@
          -->
 	</class>    
 	
+	<class name="restrictedConferenceMenubar" extends="menubar" height="28" style="itemStyle">
+        
+        <!-- file menu -->
+        <_labelMenu labelid="245" width="250">
+            <handler name="oninit">
+                <![CDATA[
+                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
+                    	if ($debug) Debug.write("this mbarcontent ",this);
+                        this.flist.removeItemAt(8);
+                        this.flist.removeItemAt(7);
+                    }
+                ]]>
+            </handler>  
+            <_labelMenuItem labelid="15" command="cmd_importFile" />
+            <menuseparator/>  
+            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
+            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
+            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
+            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
+            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
+            <menuseparator/>  
+            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
+        </_labelMenu> 
+        
+        <_labelMenu labelid="635" width="250">
+            <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
+            <menuseparator/> 
+            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
+            <menuseparator/>  
+            <_labelMenuItem labelid="784" enabled="${ !canvas.ismoderator }">
+            	<handler name="onselect" args="sel">
+            		//Apply for Moderation
+                	canvas.thishib.applyForModeration.doCall();
+            	</handler>
+            </_labelMenuItem>
+            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
+            	<handler name="onselect" args="sel">
+            		//Ask for Right to Draw on Whiteboard
+            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+            	</handler>
+            </_labelMenuItem>
+            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
+            	<handler name="onselect" args="sel">
+            		if (canvas.ismoderator) {
+		                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+		                //the notification and the broadcasting Bit is set for this User
+		                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+		                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+		                canvas.thishib.setBroadCastingFlag.doCall(); 
+		            } else {
+		                //Apply for Right to Share Audio/Video
+		                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+		            }
+            	</handler>
+            </_labelMenuItem>
+            <menuseparator/>
+            <!--
+            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+            <menuseparator/>
+             -->
+            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
+        </_labelMenu>  
+        
+	</class>
 	
     
 </library>
