@@ -1,4 +1,0 @@
-<!ELEMENT field (#PCDATA) >
-<!ATTLIST field name CDATA #REQUIRED >
-<!ELEMENT row (field)+ >
-<!ELEMENT ROOT (row)+ >
