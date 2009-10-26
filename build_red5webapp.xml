@@ -237,6 +237,11 @@
             </fileset>  
             <fileset dir="${jmf.lib}" includes="*.jar"/>
         </copy>
+    	<!-- add language files from .war version -->
+    	<copy todir="${dist.dir}/openmeetings/languages">
+    		<fileset dir="WebContent/languages">
+    		</fileset>
+    	</copy>
         <tstamp/>
     </target>
 
@@ -481,7 +486,8 @@
     <!-- Remove classes directory for clean build -->
     <target name="clean" depends="cleanForBinary" 
         description="Prepare for clean build">
-        <delete file="${main.out.dir}/**/*.hbm.xml"/>
+    	<delete dir="${main.out.dir}"/>
+    	<delete dir="${dist.dir}"/>
         <!--mkdir dir="${main.out.dir}"/-->
     </target>
     

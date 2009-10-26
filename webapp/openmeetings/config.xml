@@ -43,9 +43,9 @@ of the red5-servlet
 <!--
 	These colors are the main colors and style the hole application
  -->
-<basebgcolorizer>0x3F5B9E</basebgcolorizer>
-<baseMousecolorizer>0xC4D5E6</baseMousecolorizer>
-<baseMouseOvercolorizer>0xC4D5E6</baseMouseOvercolorizer>
+<basebgcolorizer>0x2184C5</basebgcolorizer>
+<baseMousecolorizer>0x62AEE1</baseMousecolorizer>
+<baseMouseOvercolorizer>0x62AEE1</baseMouseOvercolorizer>
     
 <!--
     Name of the Application
@@ -86,6 +86,21 @@ of the red5-servlet
     web.xml
  -->
 <webAppRootKey>openmeetings</webAppRootKey>  
+
+<!--
+    We need this additional ROOT-Key as we have to deploy the application 
+    as Global Contex Root. 
+    
+    If the rtmpt issues is solved sothat several Webapps can use different RTMPT connection
+    we might change this value again to its origin / webapp-context
+    
+    If you run openmeetings as .war version: /
+    If you run openmeetings as a native red5-webapp: /$WebAppName/, in most cases /openmeetings/
+    
+    be carefull in adding the slashes in the beginning and end
+
+ -->
+<httpRootKey>/openmeetings/</httpRootKey>  
     
 <!--
     Window-Effect Settings
@@ -102,7 +117,7 @@ of the red5-servlet
     visible = yes
     hidden = no
  -->	
-<showRecording>visible</showRecording>
+<showRecording>hidden</showRecording>
 
 <!--
     
@@ -235,9 +250,11 @@ of the red5-servlet
 
 <!-- #############################################
     Conference Room
+    
+    Room Layout's: flexibleConferenceRoom,conferenceView
  -->
 
-<conferenceRoomModule>conferenceView</conferenceRoomModule>
+<conferenceRoomModule>flexibleConferenceRoom</conferenceRoomModule>
 
 
 <!-- #############################################
@@ -249,9 +266,11 @@ of the red5-servlet
 
 <!-- #############################################
     Event Room
+    
+    Room Layouts: flexibleEventRoom,audienceView
  -->
 
-<eventRoomModule>audienceView</eventRoomModule>
+<eventRoomModule>flexibleEventRoom</eventRoomModule>
 
 
 <!-- #############################################
@@ -259,5 +278,11 @@ of the red5-servlet
  -->
 
 <recordModule>recordContent</recordModule>
+
+<!-- #############################################
+    Profiles Panel Modules
+ -->
+
+<userSettingsModule>userSettings</userSettingsModule>
         
 </config>
