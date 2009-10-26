@@ -361,7 +361,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Apellidos:</value>
   </string>
   <string id="119" name="regformmail">
-    <value>Correo Electrónico:</value>
+    <value>Correo electrónico:</value>
   </string>
   <string id="120" name="regformstate">
     <value>País:</value>
@@ -407,7 +407,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Contraseña</value>
   </string>
   <string id="134" name="useralterself_passretype">
-    <value>Reescribir la contraseña</value>
+    <value>Escribir de nuevo</value>
   </string>
   <string id="135" name="useralterself_firstname">
     <value>Nombre</value>
@@ -419,19 +419,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Correo Electrónico</value>
   </string>
   <string id="138" name="useralterself_birth">
-    <value>Fecha de Nacimiento</value>
+    <value>Fecha Nacimiento</value>
   </string>
   <string id="139" name="useralterself_streetno">
     <value>Dirección</value>
   </string>
   <string id="140" name="useralterself_town">
-    <value>Ciudad</value>
+    <value>Población</value>
   </string>
   <string id="141" name="useralterself_state">
     <value>País</value>
   </string>
   <string id="142" name="useralterself_adresscomment">
-    <value>Información extra</value>
+    <value>Más información</value>
   </string>
   <string id="143" name="useralterself_header">
     <value>Datos de Usuario</value>
@@ -858,7 +858,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>http://groups.google.com/group/openmeetings-user</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
-    <value>Avisar de errores</value>
+    <value>Enviar aviso</value>
   </string>
   <string id="285" name="dashboard_rsslistitemlinktext">
     <value>más</value>
@@ -1137,13 +1137,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Saludos, </value>
   </string>
   <string id="377" name="dashboard">
-    <value>Editar su perfil</value>
+    <value>Editar perfil</value>
   </string>
   <string id="378" name="dashboard">
     <value>Nuevos mensajes:</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Subir una nueva imagen</value>
+    <value>Subir imagen</value>
   </string>
   <string id="380" name="backuppanel">
     <value>Datos de usuario - Exportar</value>
@@ -2176,7 +2176,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>No tiene permisos para escribir o dibujar en la pizarra. Debe ser moderador o, al menos, tener permisos de edición de la pizarra. Solicíteselo a un Moderador.</value>
   </string>
   <string id="721" name="property panel">
-    <value>Propiedades del documento</value>
+    <value>Propiedades</value>
   </string>
   <string id="722" name="sharing session">
     <value>Iniciar Cliente (externo)</value>
@@ -2287,7 +2287,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Probar configuración</value>
   </string>
   <string id="758" name="test setup">
-    <value>Compruebe la configuración de su micrófono y de su cámara antes de entrar en la sala grabando durante algunos segundos. Puede reproducir su grabación para comprobar la imagen y el sonido.</value>
+    <value>Compruebe la configuración de su micrófono y/o cámara antes de entrar en la sala. Para ello grabe durante algunos segundos y reprodúzcalo.</value>
   </string>
   <string id="759" name="test setup">
     <value>No volver a mostrar este test</value>
@@ -2296,7 +2296,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancelar</value>
   </string>
   <string id="761" name="test setup">
-    <value>Iniciar la (Vídeo)conferencia</value>
+    <value>Iniciar</value>
   </string>
   <string id="762" name="edit video settings">
     <value>No pedir de nuevo</value>
@@ -2326,13 +2326,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Iniciar Evento</value>
   </string>
   <string id="771" name="start view">
-    <value>Seleccionar Sala</value>
+    <value>Ir a la Sala</value>
   </string>
   <string id="772" name="start view">
-    <value>Comprobar configuración</value>
+    <value>Comprobar Config.</value>
   </string>
   <string id="773" name="start view">
-    <value>Iniciar Conferencia</value>
+    <value>Iniciar Confer.</value>
   </string>
   <string id="774" name="start view">
     <value>Instrucciones Conferencia:</value>
@@ -2341,7 +2341,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Iniciar Grabación</value>
   </string>
   <string id="776" name="test setup">
-    <value>No mostrar la prueba de grabación de audio /vído antes de entrar en una Conferencia</value>
+    <value>No mostrar el test de grabación de audio /vídeo antes de entrar en una Conferencia</value>
   </string>
   <string id="777" name="overview room">
     <value>Public Rooms</value>
