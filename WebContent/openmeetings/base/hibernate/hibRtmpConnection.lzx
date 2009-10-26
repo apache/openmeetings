@@ -269,6 +269,7 @@
 				if ($debug) Debug.write("getCurrentRoomClient: ",value);
 				if (value!=null){
 					
+					canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
 					canvas.setAttribute('user_id',value.user_id);
                     canvas.setAttribute('firstName',value.firstname);
                     canvas.setAttribute('lastName',value.lastname);
