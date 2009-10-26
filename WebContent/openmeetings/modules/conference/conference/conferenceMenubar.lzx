@@ -54,6 +54,12 @@
             <_labelMenuItem labelid="302" command="cmd_applyforMod" />
             <_labelMenuItem labelid="213" command="cmd_invitation" />
             <menuseparator/> 
+            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
+            	<handler name="onselect" args="sel">
+            		canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+            	</handler>
+            </_labelMenuItem>
+            <menuseparator/>
             <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
             <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
             <menuseparator/>  
@@ -141,6 +147,12 @@
         <_labelMenu labelid="635" width="250">
             <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
+            <menuseparator/> 
+            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
+            	<handler name="onselect" args="sel">
+            		canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+            	</handler>
+            </_labelMenuItem>
             <menuseparator/> 
             <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />

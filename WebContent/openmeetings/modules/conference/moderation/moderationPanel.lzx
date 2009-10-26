@@ -161,7 +161,7 @@
     <simpleLabelButton labelid="239" height="24" name="_doShare" style="itemStyle"
                        width="180" y="2" enabled="${  canvas.ismoderator }">
         <handler name="onclick">
-            canvas._drawarea.setModus('plain');          
+            //canvas._drawarea.setModus('plain');          
             this.parent.checkSharerSession.doCall();
         </handler>
         <view y="1" x="2" resource="background_screenview_rsc" />

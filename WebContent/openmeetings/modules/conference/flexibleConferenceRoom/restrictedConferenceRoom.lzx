@@ -16,7 +16,7 @@
         canvas.setAttribute('naviHeightDelta',28);
         new lz.restrictedConferenceMenubar(canvas._conferencemenu);
         //,{x:this.roomobj.moderationPanelXPosition}
-        new lz.moderationPanel(canvas._conferencemenu,{align:'right'});
+        new lz.moderationPanel(canvas._conferencemenu,{name:'_moderationPanel',align:'right'});
         canvas._conferencemenu.setAttribute('visibility','visible');
 		
         if(roomobj.appointment){
