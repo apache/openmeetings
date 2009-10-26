@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="soaplogin" name="org.openmeetings.app.hibernate.beans.basic.SOAPLogin">
+    <id column="soapLoginId" name="soapLoginId">
+      <generator class="increment"/>
+    </id>
+    <property name="hash" type="string" column="hash"/>
+    <property name="room_id" type="long" column="room_id"/>
+    <property name="sessionHash" type="string" column="session_hash"/>
+    <property name="created" type="java.util.Date" column="created"/>
+    <property name="used" type="boolean" column="used"/>
+    <property name="useDate" type="java.util.Date" column="use_date"/>
+  </class>
+</hibernate-mapping>

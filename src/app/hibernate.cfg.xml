@@ -1,48 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
-<!-- Generated file - Do not edit! -->
-
 <hibernate-configuration>
-
-	<!-- a SessionFactory instance listed as /jndi/name -->
-	<session-factory>
-		
-		<!-- User  / Password -->
-		<property name="connection.username">postgres</property>
-		<property name="connection.password">67810</property>
-		
-		<!-- Database Settings -->
-		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-		<property name="connection.url">jdbc:postgresql://localhost/openmeetings</property>	
-		
-		<property name="hibernate.connection.CharSet">utf8</property>
-		<property name="hibernate.connection.characterEncoding">utf8</property>
-		<property name="hibernate.connection.useUnicode">true</property>		
-		
-		<!-- Database Scheme Auto Update -->
-		<property name="hbm2ddl.auto">update</property>			
-
-		<!-- properties -->
-		
-		<property name="show_sql">false</property>
-		<property name="use_outer_join">false</property>
-		<property name="hibernate.query.factory_class">org.hibernate.hql.ast.ASTQueryTranslatorFactory</property>
-        <property name="connection.provider_class ">org.hibernate.connection.C3P0ConnectionProvider</property>
-        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider </property>
-        <property name="cache.use_query_cache">false</property>
-        <property name="cache.use_second_level_cache">false</property>
-        <property name="generate_statistics">false</property>
-        <property name="cache.use_structured_entries">false</property>
-
-
-		<property name="c3p0.max_size">20</property>
-		<property name="c3p0.min_size">2</property>
-		<property name="c3p0.max_statements">100</property>
-		<property name="c3p0.timeout">3600</property>
-
-		<!-- mapping files -->
+  <session-factory>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost/xmlcrm</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">*****</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping resource="org/openmeetings/app/hibernate/beans/adresses/Adresses.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/adresses/States.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Configuration.hbm.xml"/>
@@ -82,6 +49,5 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userlevel.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users_Usergroups.hbm.xml"/>
-	</session-factory>
-
+  </session-factory>
 </hibernate-configuration>
