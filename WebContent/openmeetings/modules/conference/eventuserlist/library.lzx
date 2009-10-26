@@ -12,5 +12,6 @@
     <include href="eventUserListInner.lzx" />
     <include href="eventUserListItem.lzx" />
     <include href="eventUserList.lzx" />
+    <include href="eventUserListItemWithNames.lzx" />
     
 </library>

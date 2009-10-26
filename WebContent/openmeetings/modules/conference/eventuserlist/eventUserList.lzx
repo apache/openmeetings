@@ -13,6 +13,8 @@
      -->
 	<attribute name="userNewVideoContainer" value="false" type="boolean"/>
 	
+	<attribute name="listType" value="eventUserListTable" type="string" />
+	
 	<!--- colors for each user -->
 	<attribute name="colorArray" value="null" />
 	
@@ -362,7 +364,7 @@
 		}
 	</method>
     
-    <eventUserListInner name="_participents" />
+    <eventUserListInner name="_participents" listType="$once{ parent.listType }" />
     
 	<view name="_videoviewcontent">
           

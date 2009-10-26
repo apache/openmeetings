@@ -9,6 +9,8 @@
     <attribute name="isOpen" value="true" type="boolean"/>
     
     <attribute name="restricted" value="false" type="boolean" />
+   
+    <attribute name="listType" value="eventUserListTable" type="string" />
     
     <method name="doSelection" args="itemRef">
         <![CDATA[
@@ -92,8 +94,9 @@
     <uploadTab name="_files" y="36" width="$once{ parent.width-12 }"
                height="${ parent.height-36 }" visibility="hidden" />
     
-    <eventUserList name="_videocontainer" y="36" userNewVideoContainer="true"
-                  width="$once{ parent.width-10 }" height="${ parent.height-36 }" />
+    <eventUserList name="_videocontainer" y="36" listType="$once{ parent.listType }"
+			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 
+			   height="${ parent.height-36 }" />
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
           bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">

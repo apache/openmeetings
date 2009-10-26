@@ -4,12 +4,25 @@
 <class name="innerlistViewEventUserListTable" extends="view" width="258" >
     <wrappinglayout axis="x" spacing="4"/>
 </class>
-    
-<class name="eventUserListTable" extends="view"  
-    bgcolor="white" x="2" y="2" clip="true" width="$once{ parent.width-4 }" >
+ 
+<class name="innerlistViewEventUserListTableWithNames" extends="view" width="258" >
+    <simplelayout axis="y" spacing="1" />
+</class>
+
+<class name="eventUserListTable" extends="view" y="60" 
+	   height="${ parent.height-64-parent.moderationPanel.height }"
+    	bgcolor="0xFFFFFF" x="2" clip="true" width="$once{ parent.width-4 }" >
         <innerlistViewEventUserListTable name="innerList" />
     <vscrollbar />
 </class>
+
+<class name="eventUserListTableWithNames" extends="view" y="60" 
+	   height="${ parent.height-64-parent.moderationPanel.height }"
+    	bgcolor="0xFFFFFF" x="2" clip="true" width="$once{ parent.width-4 }" >
+        <innerlistViewEventUserListTableWithNames name="innerList" />
+    <vscrollbar />
+</class>
+
 
 <class name="eventUserListInner" extends="view"  width="$once{ parent.width }" height="${ parent.height }" 
        bgcolor="$once{ canvas.basebgcolorizer }" >
@@ -17,6 +30,8 @@
 	<attribute name="selectedItem" value="null" />
 	
 	<attribute name="colorArray" value="null" />
+	
+	<attribute name="listType" value="eventUserListTable" type="string" />
 	
 	<handler name="oninit">
 		<![CDATA[
@@ -35,6 +50,8 @@
                             0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
                             0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
                             0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633];
+            
+			this.initList();
 		]]>
 	</handler>
 	
@@ -57,26 +74,44 @@
             //FIXME: Round Number and make mod(10) to get a number between 1 and 10 for a color
             canvas.currentusercolor = this.colorArray[this._table.innerList.subviews.length];
             
-            new lz.eventUserListItem(this._table.innerList,{
-    	            user_id:object.user_id,
-    	            firstname:object.firstname,
-    	            lastname:object.lastname,
-    	            refObj:object,
-    	            connectedSince:object.connectedSince,
-    	            isMod:object.isMod,
-    	            streamid:object.streamid,
-    	            username:object.username,
-    	            formatedDate:object.formatedDate
-                });
-         
+            if (this.listType == "eventUserListTable") {
+	            new lz.eventUserListItem(this._table.innerList,{
+	    	            user_id:object.user_id,
+	    	            firstname:object.firstname,
+	    	            lastname:object.lastname,
+	    	            refObj:object,
+	    	            connectedSince:object.connectedSince,
+	    	            isMod:object.isMod,
+	    	            streamid:object.streamid,
+	    	            username:object.username,
+	    	            formatedDate:object.formatedDate
+	                });
+            } else if (this.listType == "eventUserListTableWithNames") {
+	            new lz.eventUserListItemWithNames(this._table.innerList,{
+	    	            user_id:object.user_id,
+	    	            firstname:object.firstname,
+	    	            lastname:object.lastname,
+	    	            refObj:object,
+	    	            connectedSince:object.connectedSince,
+	    	            isMod:object.isMod,
+	    	            streamid:object.streamid,
+	    	            username:object.username,
+	    	            formatedDate:object.formatedDate
+	                });
+            }
             //Broadcast the message about the new user to all participants
             canvas.thishib.setAudienceModus.doCall();
         ]]>
     </method>
     
+    <method name="initList">
+    	new lz[this.listType](this,{name:'_table'});
+    	this.moderationPanel.bringToFront();
+    </method>
+    
     <method name="clearList">
         this._table.destroy();
-        new lz.eventUserListTable(this,{name:'_table'});
+        this.initList();
     </method>
     
     <!--- get a Objects List Item
@@ -142,9 +177,9 @@
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
 						  x="$once{ parent.width-this.width-4 }" y="2" />
     
-    <eventUserListTable name="_table" y="60" 
-    					height="${ parent.height-64-parent.moderationPanel.height }"/> 
-    
+    <!--
+    <eventUserListTable name="_table" /> 
+     -->
     <view name="moderationPanel" height="0" clip="true" y="${ parent.height - this.height - 2 }">
     	
     	<handler name="onismoderator" reference="canvas" args="m">
