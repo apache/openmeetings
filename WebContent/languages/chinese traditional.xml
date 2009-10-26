@@ -2340,4 +2340,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="776" name="test setup">
     <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
   </string>
+  <string id="777" name="overview room">
+    <value>Public Rooms</value>
+  </string>
+  <string id="778" name="overview room">
+    <value>Public Rooms are accessible for all Users.</value>
+  </string>
+  <string id="779" name="overview room">
+    <value>Private Rooms</value>
+  </string>
+  <string id="780" name="Private Rooms">
+    <value>Private Rooms are only accessible for users of the same organization.</value>
+  </string>
+  <string id="781" name="overview room">
+    <value>My Rooms</value>
+  </string>
+  <string id="782" name="overview room">
+    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+  </string>
+  <string id="783" name="restricted room">
+    <value>You have to be moderator to do this.</value>
+  </string>
+  <string id="784" name="menu option">
+    <value>Apply for moderation</value>
+  </string>
+  <string id="785" name="menu option">
+    <value>Apply for whiteboard access</value>
+  </string>
+  <string id="786" name="menu option">
+    <value>Apply for camera/microphone access</value>
+  </string>
 </language>
