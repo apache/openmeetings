@@ -107,6 +107,7 @@
 		
 		this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
         
+		this.setAttribute('red5httpport',canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()'));  
         
         
 		mainBaseText.setAttribute('text',canvas.currentappname);
