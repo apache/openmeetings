@@ -7,13 +7,13 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class GenerateImage {
 
-	private static final Logger log = Logger.getLogger(
-			GenerateImage.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			GenerateImage.class, "openmeetings");
 
 	private static GenerateImage instance;
 

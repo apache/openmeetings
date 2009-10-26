@@ -3,8 +3,8 @@ package org.openmeetings.app.documents;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -13,7 +13,7 @@ import org.openmeetings.app.data.basic.files.*;
 
 public class LoadLibraryPresentationToObject {
 	
-	private static final Logger log = Logger.getLogger(LoadLibraryPresentationToObject.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentationToObject.class, "openmeetings");
 	
 	private static LoadLibraryPresentationToObject instance;
 

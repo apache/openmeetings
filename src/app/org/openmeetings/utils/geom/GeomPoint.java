@@ -2,8 +2,8 @@ package org.openmeetings.utils.geom;
 
 import java.awt.Point;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 /**
  * 
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class GeomPoint extends Point {
 	
-	private static final Logger log = Logger.getLogger(GeomPoint.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(GeomPoint.class, "openmeetings");
 
 	public GeomPoint add(GeomPoint p) {
 		GeomPoint gPoint = new GeomPoint();

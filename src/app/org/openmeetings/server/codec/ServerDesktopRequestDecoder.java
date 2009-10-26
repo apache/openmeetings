@@ -8,8 +8,8 @@ import org.apache.mina.core.session.IoSession;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 
 /**
@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class ServerDesktopRequestDecoder extends CumulativeProtocolDecoder {
 
-	private static final Logger log = Logger.getLogger(ServerDesktopRequestDecoder.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerDesktopRequestDecoder.class, "openmeetings");
 
 	private static final String DECODER_STATE_KEY = ServerDesktopRequestDecoder.class.getName() + ".STATE";
 

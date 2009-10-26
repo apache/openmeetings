@@ -15,15 +15,15 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context; 
 import org.apache.velocity.tools.view.servlet.VelocityViewServlet;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Install extends VelocityViewServlet {
 
-	private static final Logger log = Logger.getLogger(DownloadHandler.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(DownloadHandler.class, "openmeetings");
 
 	/*
 	 * (non-Javadoc)

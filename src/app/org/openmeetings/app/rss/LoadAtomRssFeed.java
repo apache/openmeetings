@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Attribute;
@@ -16,7 +16,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 
 public class LoadAtomRssFeed {
 	
-	private static final Logger log = Logger.getLogger(LoadAtomRssFeed.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, "openmeetings");
 	
 	private static LoadAtomRssFeed instance;
 

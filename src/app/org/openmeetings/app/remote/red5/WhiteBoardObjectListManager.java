@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
 
 public class WhiteBoardObjectListManager {
@@ -15,7 +15,7 @@ public class WhiteBoardObjectListManager {
 	
 	private static HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>>();
 
-	private static final Logger log = Logger.getLogger(WhiteBoardObjectListManager.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManager.class, "openmeetings");
 
 	private static WhiteBoardObjectListManager instance = null;
 

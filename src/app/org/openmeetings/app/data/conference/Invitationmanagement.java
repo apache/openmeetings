@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,7 +38,7 @@ import org.openmeetings.utils.mail.MailHandler;
  */
 public class Invitationmanagement {
 	
-	private static final Logger log = Logger.getLogger(Invitationmanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Invitationmanagement.class, "openmeetings");
 
 	private static Invitationmanagement instance;
 

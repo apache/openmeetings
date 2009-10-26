@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
@@ -18,7 +18,7 @@ import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 
 public class CalendarService {
 	
-	private static final Logger log = Logger.getLogger(CalendarService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarService.class, "openmeetings");
 	
 	private static CalendarService instance = null;
 

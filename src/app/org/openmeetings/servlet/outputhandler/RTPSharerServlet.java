@@ -22,8 +22,8 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rtp.RTPScreenSharingSession;
 import org.openmeetings.app.rtp.RTPStreamingHandler;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  */
 public class RTPSharerServlet extends VelocityViewServlet{
 	
-	private static final Logger log = Logger.getLogger(RTPSharerServlet.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(RTPSharerServlet.class, "openmeetings");
 	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,

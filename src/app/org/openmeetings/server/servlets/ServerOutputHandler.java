@@ -18,8 +18,8 @@ import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
 import org.openmeetings.servlet.outputhandler.ScreenServlet;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public class ServerOutputHandler extends HttpServlet {
 	
-	private static final Logger log = Logger.getLogger(ServerOutputHandler.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerOutputHandler.class, "openmeetings");
 
 	/**
 	 * 

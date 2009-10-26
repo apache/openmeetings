@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManager;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 public class WhiteboardManagement {
 	
-	private static final Logger log = Logger.getLogger(WhiteboardManagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardManagement.class, "openmeetings");
 
 	private WhiteboardManagement() {}
 	

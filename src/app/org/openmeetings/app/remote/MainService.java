@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -50,7 +50,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
  */ 
 public class MainService implements IPendingServiceCallback {
 	
-	private static final Logger log = Logger.getLogger(MainService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, "openmeetings");
 	private static MainService instance;
 	
 	private ClientListManager clientListManager = null;

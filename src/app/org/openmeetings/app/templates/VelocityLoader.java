@@ -1,7 +1,7 @@
 package org.openmeetings.app.templates;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.apache.velocity.app.Velocity;
 import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
@@ -14,7 +14,7 @@ import org.red5.server.api.Red5;
 
 public class VelocityLoader {
 	
-	private static final Logger log = Logger.getLogger(VelocityLoader.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(VelocityLoader.class, "openmeetings");
 	
 	/**
 	 * Loads the Path from the Red5-Scope

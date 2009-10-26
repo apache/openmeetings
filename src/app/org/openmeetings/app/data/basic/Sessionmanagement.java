@@ -11,22 +11,22 @@ import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
-//import org.apache.log4j.Logger;
+//import org.slf4j.Logger;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.red5.logging.Red5LoggerFactory;
-//import org.apache.log4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.red5.logging.Red5LoggerFactory;
+//import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-//import org.apache.log4j.Logger;
-//import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.red5.logging.Red5LoggerFactory;
 
 /**
  * 
@@ -38,12 +38,12 @@ import org.hibernate.Transaction;
  */ 
 public class Sessionmanagement {
  
-	private static final Logger log = Logger.getLogger(Sessionmanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Sessionmanagement.class, "openmeetings");
 
-	//private static final Logger log = new Logger(Sessionmanagement.class);
+	//private static final Logger log = new Logger(Sessionmanagement.class, "openmeetings");
 	
-	//private static final Logger log = Red5Logger.getLogger(Sessionmanagement.class, "openmeetings");
-	//private static final Logger log = Logger.getLogger(Sessionmanagement.class);
+	//private static final Logger log = Red5Red5LoggerFactory.getLogger(Sessionmanagement.class, "openmeetings");
+	//private static final Logger log = Red5LoggerFactory.getLogger(Sessionmanagement.class, "openmeetings");
 
 	private static Sessionmanagement instance;
 
@@ -104,7 +104,7 @@ public class Sessionmanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			session.flush();
-			Criteria crit = session.createCriteria(Sessiondata.class);
+			Criteria crit = session.createCriteria(Sessiondata.class, "openmeetings");
 			crit.add(Restrictions.eq("session_id", SID));
 
 			List fullList = crit.list();
@@ -141,7 +141,7 @@ public class Sessionmanagement {
 //			Transaction tx = session.beginTransaction();
 //			
 //			//session.flush();
-//			Criteria crit = session.createCriteria(Sessiondata.class);
+//			Criteria crit = session.createCriteria(Sessiondata.class, "openmeetings");
 //			crit.add(Restrictions.eq("session_id", SID));
 //
 //			List<Sessiondata> sessions = crit.list();
@@ -288,7 +288,7 @@ public class Sessionmanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			session.flush();
-			Criteria crit = session.createCriteria(Sessiondata.class);
+			Criteria crit = session.createCriteria(Sessiondata.class, "openmeetings");
 			crit.add(Restrictions.eq("session_id", SID));
 
 			List fullList = crit.list();
@@ -336,7 +336,7 @@ public class Sessionmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Sessiondata.class);
+			Criteria crit = session.createCriteria(Sessiondata.class, "openmeetings");
 			crit.add(Restrictions.eq("session_id", SID));
 			List fullList = crit.list();
 			tx.commit();
@@ -377,7 +377,7 @@ public class Sessionmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Sessiondata.class);
+			Criteria crit = session.createCriteria(Sessiondata.class, "openmeetings");
 			crit.add(Restrictions.lt("refresh_time", date));
 			List fullList = crit.list();
 			tx.commit();

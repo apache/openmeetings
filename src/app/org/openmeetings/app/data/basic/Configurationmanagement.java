@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.LinkedHashMap;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Criteria;
@@ -27,7 +27,7 @@ import org.openmeetings.utils.mappings.CastMapToObject;
 
 public class Configurationmanagement {
 
-	private static final Logger log = Logger.getLogger(Configurationmanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Configurationmanagement.class, "openmeetings");
 
 	private Configurationmanagement() {
 	}
@@ -128,7 +128,7 @@ public class Configurationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Configuration.class);
+			Criteria crit = session.createCriteria(Configuration.class, "openmeetings");
 			crit.add(Restrictions.eq("deleted", "false"));
 			crit.setFirstResult(start);
 			crit.setMaxResults(max);

@@ -3,7 +3,7 @@ package org.openmeetings.app.data.basic.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,11 +14,11 @@ import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
-import org.slf4j.LoggerFactory;
+import org.red5.logging.Red5LoggerFactory;
 
 public class SOAPLoginDAO {
 	
-	private static final Logger log = Logger.getLogger(SOAPLoginDAO.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDAO.class, "openmeetings");
 
 	private SOAPLoginDAO() {
 	}

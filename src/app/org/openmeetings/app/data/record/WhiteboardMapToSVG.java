@@ -11,14 +11,14 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.geom.GeomPoint;
 
 public class WhiteboardMapToSVG extends BatikMethods {
 
-	private static final Logger log = Logger.getLogger(WhiteboardMapToSVG.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardMapToSVG.class, "openmeetings");
 
 	private WhiteboardMapToSVG() {
 	}

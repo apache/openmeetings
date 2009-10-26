@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -37,7 +37,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
  */
 public class Roommanagement {
 
-	private static final Logger log = Logger.getLogger(Roommanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Roommanagement.class, "openmeetings");
 
 	private static Roommanagement instance;
 
@@ -289,7 +289,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms.class);
+			Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
 			crit.setFirstResult(start);
 			crit.setMaxResults(max);
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -313,7 +313,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Rooms_Organisation.class);
+				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 				crit.add(Restrictions.ne("deleted", "true"));
 				Criteria subcrit = crit.createCriteria("room");
 				subcrit.add(Restrictions.eq("rooms_id", rooms_id));
@@ -344,7 +344,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class);
+//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
@@ -380,7 +380,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class);
+//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
@@ -461,7 +461,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class);
+//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
@@ -590,7 +590,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 			crit.add(Restrictions.eq("rooms_organisation_id", rooms_organisation_id));
 			List ll = crit.list();
 			
@@ -621,7 +621,7 @@ public class Roommanagement {
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
 				
-				Criteria crit = session.createCriteria(Rooms_Organisation.class);
+				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 				Criteria subcrit = crit.createCriteria("organisation");
 				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 				Criteria subcritRoom = crit.createCriteria("room");
@@ -657,7 +657,7 @@ public class Roommanagement {
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
 				
-				Criteria crit = session.createCriteria(Rooms_Organisation.class);
+				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 				Criteria subcrit = crit.createCriteria("organisation");
 				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 				crit.add(Restrictions.ne("deleted", "true"));
@@ -702,7 +702,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -734,7 +734,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -760,7 +760,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			Criteria subcrit2 = crit.createCriteria("room");
@@ -791,7 +791,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
 			Criteria subcrit = crit.createCriteria("room");
 			subcrit.add(Restrictions.eq("rooms_id", rooms_id));
 			crit.add(Restrictions.ne("deleted", "true"));

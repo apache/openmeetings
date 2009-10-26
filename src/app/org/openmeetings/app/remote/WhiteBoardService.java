@@ -23,8 +23,8 @@ import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 /**
  * 
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class WhiteBoardService implements IPendingServiceCallback {
 	
-	private static final Logger log = Logger.getLogger(WhiteBoardService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, "openmeetings");
 	
 	private WhiteBoardService() {}
 	

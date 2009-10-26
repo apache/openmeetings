@@ -41,8 +41,8 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.stream.ClientBroadcastStream;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
@@ -60,7 +60,7 @@ public class StreamService implements IPendingServiceCallback {
 	//Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;
 	
-	private static final Logger log = Logger.getLogger(StreamService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamService.class, "openmeetings");
 	
 	private static LinkedHashMap<String,RoomRecording> roomRecordingList = new LinkedHashMap<String,RoomRecording>();
 	

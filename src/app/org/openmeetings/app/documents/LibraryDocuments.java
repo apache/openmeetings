@@ -1,11 +1,11 @@
 package org.openmeetings.app.documents;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 public class LibraryDocuments {
 	
-	private static final Logger log = Logger.getLogger(LibraryDocuments.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocuments.class, "openmeetings");
 
 	private static LibraryDocuments instance;
 

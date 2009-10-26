@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.openmeetings.server.beans.ServerSharingViewerBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
  */
 public class ServerSharingViewersList {
 
-	private static final Logger log = Logger.getLogger(ServerSharingSessionList.class);
-	//private static Logger log = Logger.getLogger(ServerSharingSessionList.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
+	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
 
 	private static Map<String,List<ServerSharingViewerBean>> viewerSessions = new HashMap<String,List<ServerSharingViewerBean>>();
 	/**

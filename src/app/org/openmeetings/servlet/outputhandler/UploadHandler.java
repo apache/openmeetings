@@ -25,12 +25,12 @@ import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.stringhandlers.StringComparer;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class UploadHandler extends HttpServlet {
 
-	private static final Logger log = Logger.getLogger(UploadHandler.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(UploadHandler.class, "openmeetings");
 	 
 	private String filesString[] = null;
 

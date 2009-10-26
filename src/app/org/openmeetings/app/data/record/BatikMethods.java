@@ -24,8 +24,8 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.utils.geom.ArrowStyle;
 import org.openmeetings.utils.geom.GeomPoint;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
 
 public class BatikMethods {
 	
-	private static final Logger log = Logger.getLogger(BatikMethods.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(BatikMethods.class, "openmeetings");
 
 	public void paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {

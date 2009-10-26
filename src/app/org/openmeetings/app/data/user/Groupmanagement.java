@@ -3,8 +3,8 @@ package org.openmeetings.app.data.user;
 import java.util.Iterator;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -22,7 +22,7 @@ import org.openmeetings.utils.math.CalendarPatterns;
  */
 public class Groupmanagement {
 
-	private static final Logger log = Logger.getLogger(Groupmanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Groupmanagement.class, "openmeetings");
 
 	private static Groupmanagement instance;
 

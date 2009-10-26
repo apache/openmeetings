@@ -10,8 +10,8 @@ import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  */
 public class ServerPacketMinaHandler extends IoHandlerAdapter {
 
-	private static final Logger log = Logger.getLogger(ServerPacketMinaHandler.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketMinaHandler.class, "openmeetings");
 	
     private ServerSocketMinaProcess server;
 

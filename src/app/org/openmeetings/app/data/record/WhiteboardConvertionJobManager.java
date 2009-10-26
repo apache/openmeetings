@@ -13,8 +13,8 @@ import java.util.Map;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.data.record.dao.RecordingConversionJobDaoImpl;
 import org.openmeetings.app.data.record.dao.RecordingDaoImpl;
@@ -66,7 +66,7 @@ public class WhiteboardConvertionJobManager {
 	//see also Methods on bottom to change the Default Out dir in JUnit
 	private static boolean isDebug = false;
 
-	private static final Logger log = Logger.getLogger(WhiteboardConvertionJobManager.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardConvertionJobManager.class, "openmeetings");
 
 	private WhiteboardConvertionJobManager() {
 	}

@@ -2,8 +2,8 @@ package org.openmeetings.app.hibernate.utils;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.*;
 import org.hibernate.cfg.*;
 
@@ -11,7 +11,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class HibernateUtil {
 	
-	private static final Logger log = Logger.getLogger(HibernateUtil.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(HibernateUtil.class, "openmeetings");
 
 	/** Read the configuration, will share across threads**/
 	  private static SessionFactory sessionFactory;

@@ -33,8 +33,8 @@ import org.openmeetings.server.beans.ServerViewerRegisterBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
 import org.openmeetings.server.cache.ServerSharingViewersList;
 import org.openmeetings.server.codec.ServerDesktopCodecSharingFactory;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
  */
 public class ServerSocketMinaProcess {
 	
-	private static final Logger log = Logger.getLogger(ServerSocketMinaProcess.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSocketMinaProcess.class, "openmeetings");
 	
 	private static NioSocketAcceptor acceptor = null;
 	

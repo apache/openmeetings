@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class GenerateSWF {
 	
-	private static final Logger log = Logger.getLogger(GeneratePDF.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class, "openmeetings");
 	
 	private static GenerateSWF instance;
 

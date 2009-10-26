@@ -11,8 +11,8 @@ import java.util.Calendar;
 import java.util.Set;
 import java.lang.Integer;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
@@ -36,7 +36,7 @@ public class ChatService implements IPendingServiceCallback {
 	//number of items in the Chatroom history
 	private static final int chatRoomHistory = 50;
 	
-	private static final Logger log = Logger.getLogger(ChatService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatService.class, "openmeetings");
 	
 	private static LinkedHashMap<Long,List<HashMap<String,Object>>> myChats = new LinkedHashMap<Long,List<HashMap<String,Object>>>();
 	

@@ -2,8 +2,8 @@ package org.openmeetings.app.templates;
 
 import java.io.StringWriter;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -14,7 +14,7 @@ public class InvitationTemplate extends VelocityLoader{
 	
 	private static final String tamplateName = "invitation.vm";
 
-	private static final Logger log = Logger.getLogger(InvitationTemplate.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationTemplate.class, "openmeetings");
 
 	private InvitationTemplate() {
 		super();

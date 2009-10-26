@@ -8,8 +8,8 @@ import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.calendar.management.AppointmentRemindertypeLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class AppointmentremindertypeService {
-private static final Logger log = Logger.getLogger(AppointmentremindertypeService.class);
+private static final Logger log = Red5LoggerFactory.getLogger(AppointmentremindertypeService.class, "openmeetings");
 	
 	private static AppointmentremindertypeService instance = null;
 

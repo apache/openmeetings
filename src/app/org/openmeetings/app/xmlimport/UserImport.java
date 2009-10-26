@@ -3,8 +3,8 @@ package org.openmeetings.app.xmlimport;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -18,7 +18,7 @@ import org.openmeetings.utils.math.CalendarPatterns;
 
 public class UserImport {
 	
-	private static final Logger log = Logger.getLogger(UserImport.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserImport.class, "openmeetings");
 	
 	public UserImport() {	}
 

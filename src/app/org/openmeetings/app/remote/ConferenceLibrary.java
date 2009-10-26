@@ -22,8 +22,8 @@ import org.openmeetings.app.documents.LibraryWmlLoader;
 import org.openmeetings.app.documents.LoadLibraryPresentation;
 import org.openmeetings.app.documents.LoadLibraryPresentationToObject;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 /**
  * 
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConferenceLibrary {
 
-	private static final Logger log = Logger.getLogger(ConferenceLibrary.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, "openmeetings");
 	
 	private static ConferenceLibrary instance;
 

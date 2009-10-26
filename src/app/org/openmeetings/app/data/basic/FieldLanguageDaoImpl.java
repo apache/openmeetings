@@ -3,8 +3,8 @@ package org.openmeetings.app.data.basic;
 import java.util.List;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,7 +20,7 @@ import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
  */
 public class FieldLanguageDaoImpl {
 
-	private static final Logger log = Logger.getLogger(FieldLanguageDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDaoImpl.class, "openmeetings");
 
 	private FieldLanguageDaoImpl() {
 	}

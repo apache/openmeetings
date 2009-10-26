@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 /**
  * @author Sebastian Wagner
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CalendarPatterns {
 	
-	private static final Logger log = Logger.getLogger(CalendarPatterns.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, "openmeetings");
 	
 	public static SimpleDateFormat dateFormat__ddMMyyyyHHmmss = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	public static SimpleDateFormat dateFormat__ddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");

@@ -3,8 +3,8 @@ package org.openmeetings.app.conference.configutils;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -16,7 +16,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 
 public class UserConfigFactory {
 
-	protected static Logger log = Logger.getLogger(UserConfigFactory.class);
+	protected static Logger log = Red5LoggerFactory.getLogger(UserConfigFactory.class, "openmeetings");
 
 	protected static String userconfigFileName = "WEB-INF/configbandwidth.xml";
 	 

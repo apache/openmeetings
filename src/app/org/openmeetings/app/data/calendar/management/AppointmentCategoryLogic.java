@@ -4,8 +4,8 @@ package org.openmeetings.app.data.calendar.management;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
@@ -15,7 +15,7 @@ import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
 public class AppointmentCategoryLogic {
 	
-	private static final Logger log = Logger.getLogger(AppointmentCategoryLogic.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryLogic.class, "openmeetings");
 	private static AppointmentCategoryLogic instance = null;
 
 	public static synchronized AppointmentCategoryLogic getInstance() {

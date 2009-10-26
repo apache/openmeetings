@@ -2,8 +2,8 @@ package org.openmeetings.app.remote;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic;
@@ -12,7 +12,7 @@ import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
 
 public class AppointmentCategoryService {
 	 
-	private static final Logger log = Logger.getLogger(AppointmentCategoryService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryService.class, "openmeetings");
 	
 	private static AppointmentCategoryService instance = null;
 

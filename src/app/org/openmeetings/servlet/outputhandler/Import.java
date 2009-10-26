@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -32,7 +32,7 @@ import org.openmeetings.utils.math.CalendarPatterns;
 
 public class Import extends HttpServlet {
 
-	private static final Logger log = Logger.getLogger(Import.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Import.class, "openmeetings");
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -1,13 +1,13 @@
 package org.openmeetings.server.socket;
 
-//import org.apache.log4j.Logger;
+//import org.slf4j.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
 import org.openmeetings.server.util.DePacketizerUtil;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -15,8 +15,8 @@ import org.apache.log4j.Logger;
  */
 public class ServerPacketHandler {
 	
-	private static final Logger log = Logger.getLogger(ServerPacketHandler.class);
-	//private static Logger log = Logger.getLogger(ServerPacketHandler.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, "openmeetings");
+	//private static Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, "openmeetings");
 
 	/**
 	 * @param data

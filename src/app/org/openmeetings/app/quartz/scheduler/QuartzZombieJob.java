@@ -1,17 +1,17 @@
 package org.openmeetings.app.quartz.scheduler;
 
-//import org.apache.log4j.Logger;
-//import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.red5.logging.Red5LoggerFactory;
 
-import org.slf4j.LoggerFactory; 
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory; 
+import org.slf4j.Logger;
 
 import org.red5.server.api.scheduling.IScheduledJob;
 import org.red5.server.api.scheduling.ISchedulingService;
  
 public class QuartzZombieJob implements IScheduledJob {
 
-	private static Logger log = Logger.getLogger(QuartzZombieJob.class);
+	private static Logger log = Red5LoggerFactory.getLogger(QuartzZombieJob.class, "openmeetings");
 
 	public void execute(ISchedulingService service) {
 		try {

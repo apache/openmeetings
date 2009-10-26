@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -23,7 +23,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
  */
 public class Salutationmanagement {
 
-	private static final Logger log = Logger.getLogger(Salutationmanagement.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Salutationmanagement.class, "openmeetings");
 
 	private static Salutationmanagement instance = null;
 
@@ -73,7 +73,7 @@ public class Salutationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Salutations.class);
+			Criteria crit = session.createCriteria(Salutations.class, "openmeetings");
 			List ll = crit.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);

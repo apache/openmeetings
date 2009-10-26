@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-//import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+//import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
@@ -29,8 +29,8 @@ import org.openmeetings.server.socket.ServerSocketMinaProcess;
  */
 public class ServerSharingSessionList {
 	
-	private static final Logger log = Logger.getLogger(ServerSharingSessionList.class);
-	//private static Logger log = Logger.getLogger(ServerSharingSessionList.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
+	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
 
 	private static Map<String,ServerSharingSessionBean> sharingSessions = new HashMap<String,ServerSharingSessionBean>();
 	

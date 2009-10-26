@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -27,7 +27,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  */
 public class Fieldmanagment {
 
-	private static final Logger log = Logger.getLogger(Fieldmanagment.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(Fieldmanagment.class, "openmeetings");
 
 	private static Fieldmanagment instance = null;
 
@@ -473,7 +473,7 @@ public class Fieldmanagment {
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class);
+		Criteria crit = session.createCriteria(Fieldvalues.class, "openmeetings");
 		crit.add(Restrictions.eq("deleted", "false"));
 		List<Fieldvalues> ll = crit.list();
 		tx.commit();
@@ -485,7 +485,7 @@ public class Fieldmanagment {
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class);
+		Criteria crit = session.createCriteria(Fieldvalues.class, "openmeetings");
 		crit.add(Restrictions.eq("deleted", "false"));
 		crit.setFirstResult(start);
 		crit.setMaxResults(max);

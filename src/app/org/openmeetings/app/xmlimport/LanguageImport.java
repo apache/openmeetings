@@ -3,8 +3,8 @@ package org.openmeetings.app.xmlimport;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -16,7 +16,7 @@ import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 
 public class LanguageImport {
-	private static final Logger log = Logger.getLogger(LanguageImport.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(LanguageImport.class, "openmeetings");
 	
 	public LanguageImport() {	}
 

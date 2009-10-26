@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class AppointmentRemindertypeLogic {
 	
-	private static final Logger log = Logger.getLogger(AppointmentCategoryLogic.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryLogic.class, "openmeetings");
 	private static AppointmentRemindertypeLogic instance = null;
 
 	public static synchronized AppointmentRemindertypeLogic getInstance() {

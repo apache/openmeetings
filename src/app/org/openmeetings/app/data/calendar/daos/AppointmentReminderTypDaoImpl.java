@@ -3,8 +3,8 @@ package org.openmeetings.app.data.calendar.daos;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,7 +19,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
 
 public class AppointmentReminderTypDaoImpl {
 	
-	private static final Logger log = Logger.getLogger(AppointmentReminderTypDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDaoImpl.class, "openmeetings");
 
 	private AppointmentReminderTypDaoImpl() {
 	}

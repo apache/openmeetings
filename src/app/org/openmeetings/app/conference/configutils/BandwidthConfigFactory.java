@@ -6,12 +6,12 @@ import java.util.Iterator;
 import org.w3c.dom.*;
 import org.apache.xerces.parsers.DOMParser;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 public class BandwidthConfigFactory {
  
-	protected static Logger log = Logger.getLogger(BandwidthConfigFactory.class);
+	protected static Logger log = Red5LoggerFactory.getLogger(BandwidthConfigFactory.class, "openmeetings");
 
 	protected static String bandwidthonfigFileName = "WEB-INF/configbandwidth.xml";
 	

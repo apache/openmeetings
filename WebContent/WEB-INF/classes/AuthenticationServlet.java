@@ -26,7 +26,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -90,7 +90,7 @@ public class AuthenticationServlet extends HttpServlet
     private boolean mAllowLoginGuest = true;
 
     /** Logger */
-    private static Logger mLogger  = Logger.getLogger(AuthenticationServlet.class);
+    private static Logger mLogger  = Red5LoggerFactory.getLogger(AuthenticationServlet.class, "openmeetings");
 
 
     /** 

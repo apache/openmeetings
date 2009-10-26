@@ -12,8 +12,8 @@ import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.ScreenRequestHandler;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
  */
 public class RTPStreamingHandler {
 	
-		private static final Logger log = Logger.getLogger(RTPStreamingHandler.class);
+		private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamingHandler.class, "openmeetings");
 	
 		/** Contains all RTPSessions*/
 		private static HashMap<Rooms, RTPScreenSharingSession> rtpSessions = new HashMap<Rooms, RTPScreenSharingSession>();

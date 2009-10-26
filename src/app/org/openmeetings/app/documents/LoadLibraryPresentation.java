@@ -4,15 +4,15 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.io.FileInputStream;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class LoadLibraryPresentation {
 	
-	private static final Logger log = Logger.getLogger(LoadLibraryPresentation.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, "openmeetings");
 	
 	private static LoadLibraryPresentation instance;
 

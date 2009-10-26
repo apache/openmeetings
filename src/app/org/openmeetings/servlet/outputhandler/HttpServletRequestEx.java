@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Collections;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;			// FIXME
-import org.slf4j.LoggerFactory; // FIXME
+import org.slf4j.Logger;			// FIXME
+import org.red5.logging.Red5LoggerFactory; // FIXME
 
 
 public class HttpServletRequestEx extends HttpServletRequestWrapper {

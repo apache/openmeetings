@@ -1,7 +1,7 @@
 package org.openmeetings.app.remote;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -22,7 +22,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  */
 public class ErrorService {
 	
-	private static final Logger log = Logger.getLogger(MainService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, "openmeetings");
 	
 	/**
 	 * Gets an Error-Object by its id

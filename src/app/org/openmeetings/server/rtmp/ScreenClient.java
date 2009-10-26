@@ -14,7 +14,7 @@ import org.red5.io.flv.impl.FLVReader;
 import org.red5.io.flv.impl.Tag;
 import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
-import org.slf4j.LoggerFactory;
+import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.event.IEventDispatcher;
 import org.red5.server.api.service.IPendingServiceCall;
@@ -36,7 +36,7 @@ import org.red5.server.stream.AbstractClientStream;
 import org.red5.server.stream.IStreamData;
 import org.red5.server.stream.message.RTMPMessage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -45,8 +45,8 @@ import org.apache.log4j.Logger;
 public class ScreenClient extends RTMPClient implements INetStreamEventHandler, 
 		ClientExceptionHandler, IPendingServiceCallback {
 
-	private static final Logger logger = Logger.getLogger(ScreenClient.class);
-    //private static final Logger logger = Logger.getLogger( RTMPUser.class );
+	private static final Logger logger = Red5LoggerFactory.getLogger(ScreenClient.class, "openmeetings");
+    //private static final Logger logger = Red5LoggerFactory.getLogger( RTMPUser.class );
 
     public boolean createdPlayStream = false;
 

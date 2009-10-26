@@ -4,9 +4,9 @@ import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-//import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+//import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.openmeetings.server.beans.ServerFrameBean;
 
 /**
@@ -15,8 +15,8 @@ import org.openmeetings.server.beans.ServerFrameBean;
  */
 public class DePacketizerUtil {
 	
-	private static final Logger log = Logger.getLogger(DePacketizerUtil.class);
-	//private static Logger log = Logger.getLogger(DePacketizerUtil.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(DePacketizerUtil.class, "openmeetings");
+	//private static Logger log = Red5LoggerFactory.getLogger(DePacketizerUtil.class, "openmeetings");
 	
 	public ServerFrameBean handleReceivingBytes(byte[] incomingBytes) {
 		try {

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IServiceCapableConnection;
@@ -28,7 +28,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
  */
 public class PollService {
 	
-	private static final Logger log = Logger.getLogger(PollService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(PollService.class, "openmeetings");
 	
 	private static HashMap<Long,RoomPoll> pollList = new HashMap<Long,RoomPoll>();
 	

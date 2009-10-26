@@ -53,8 +53,8 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamAwareScopeHandler;
 
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	IPendingServiceCallback, IStreamAwareScopeHandler {
@@ -64,7 +64,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private EmoticonsManager emoticonsManager = null;
 	private WhiteBoardService whiteBoardService = null;
 	
-	private static final Logger log = Logger.getLogger(ScopeApplicationAdapter.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, "openmeetings");
 
 	//This is the Folder where all executables are written
 	//TODO:fix hardcoded name of webapp

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -31,7 +31,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
  */
 public class ConferenceService {
 	
-	private static final Logger log = Logger.getLogger(ConferenceService.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, "openmeetings");
 	private static ConferenceService instance;
 	
 	//beans, see chaservice.service.xml

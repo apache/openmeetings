@@ -10,13 +10,13 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.utils.crypt.MD5;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 public class PrintService {
 
 
-	private static final Logger log = Logger.getLogger(PrintService.class);	
+	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, "openmeetings");	
 	
 	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	
