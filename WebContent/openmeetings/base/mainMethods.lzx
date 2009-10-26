@@ -112,19 +112,26 @@
 		mainBaseText.setAttribute('text',canvas.currentappname);
 		mainBaseText.setShadow();
 		mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  
-	
 		
-		var doubleSlash = _url.indexOf("//");
-		var isNotPort80 = _url.indexOf(":", doubleSlash+2);
-		//Debug.write("isNotPort80: ",isNotPort80);
-		if (isNotPort80!=-1){
-		    //Debug.write("isNotPort80: ",doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
-		    var server = _url.substr(doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2); 
-		} else {
-		    var server = _url.substr(doubleSlash+2, _url.indexOf("/", doubleSlash+2)-doubleSlash-2); 
+		var cleanUrl = _url;
+		
+		var hasParams = _url.indexOf("?");
+		if (hasParams != -1) {
+			cleanUrl = _url.substr(0,hasParams-1);
 		}
 		
-		//Debug.write("this zielnr: ",this,server);
+		if ($debug) Debug.write("_url ",_url,cleanUrl);
+		var doubleSlash = cleanUrl.indexOf("//");
+		var isNotPort80 = cleanUrl.indexOf(":", doubleSlash+2);
+		if ($debug) Debug.write("isNotPort80: ",isNotPort80,doubleSlash);
+		if (isNotPort80!=-1){
+		    //Debug.write("isNotPort80: ",doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
+		    var server = cleanUrl.substr(doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2); 
+		} else {
+		    var server = cleanUrl.substr(doubleSlash+2, _url.indexOf("/", doubleSlash+2)-doubleSlash-2); 
+		}
+		
+		if ($debug) Debug.write("this zielnr: ",this,server);
 		
 		this.setAttribute('rtmphost',server);
 	
