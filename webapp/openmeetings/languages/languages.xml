@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+	<lang id="1" rightToLeft="false">english</lang>
+	<lang id="2" rightToLeft="false">deutsch</lang>
+	<lang id="3" rightToLeft="false">french</lang>
+	<lang id="4" rightToLeft="false">italian</lang>
+	<lang id="5" rightToLeft="false">portugues</lang>
+	<lang id="6" rightToLeft="false">spanish</lang>
+	<lang id="7" rightToLeft="false">russian</lang>
+	<lang id="8" rightToLeft="false">swedish</lang>
+	<lang id="9" rightToLeft="false">chinese simplified</lang>
+	<lang id="10" rightToLeft="false">chinese traditional</lang>
+	<lang id="11" rightToLeft="false">korean</lang>
+	<lang id="12" rightToLeft="true">arabic</lang>
+	<lang id="13" rightToLeft="false">japanese</lang>
+	<lang id="14" rightToLeft="false">indonesian</lang>
+	<lang id="15" rightToLeft="false">hungarian</lang>
+    <lang id="16" rightToLeft="false">turkish</lang>
+    <lang id="17" rightToLeft="false">ukrainian</lang>
+    <lang id="18" rightToLeft="false">thai</lang>
+    <lang id="19" rightToLeft="false">persian</lang>
+    <lang id="20" rightToLeft="false">czech</lang>
+    <lang id="21" rightToLeft="false">galician</lang>
+    <lang id="22" rightToLeft="false">finnish</lang>
+</language>
