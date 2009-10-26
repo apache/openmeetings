@@ -12,6 +12,8 @@
     	_mainScrollBar.setAttribute("visibility","hidden");
     	
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
+		canvas.currentRoomObject = this.roomobj;
+		
         canvas._mainbgcontentNavi.setAttribute('height',0);
         canvas.setAttribute('naviHeightDelta',28);
         new lz.conferenceMenubar(canvas._conferencemenu);

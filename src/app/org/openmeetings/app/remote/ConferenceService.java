@@ -283,7 +283,7 @@ public class ConferenceService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 
-			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)) {
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				List<Appointment> appointments = AppointmentLogic.getInstance().getTodaysAppointmentsForUser(users_id);
 				List<Rooms> result = new ArrayList<Rooms>();
 

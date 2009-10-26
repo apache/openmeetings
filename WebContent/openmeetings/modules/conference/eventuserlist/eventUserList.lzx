@@ -38,7 +38,7 @@
 	</handler>
                   
     <method name="reconnectSuccess">
-        if ($debug) Debug.write("User Reloged In");
+        if ($debug) Debug.warn("User Reloged In ",canvas.becomemoderator);
         //set default values and get already availible streams
         this.setRoomValues.doCall();
     </method>

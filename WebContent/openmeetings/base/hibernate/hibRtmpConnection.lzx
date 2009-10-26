@@ -507,7 +507,7 @@
                 	if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
                     if (canvas.ismoderator){
                     	if (this.parent.modus == "conference"){
-                        if ($debug) Debug.write("############## editRecordStream 3");
+                        	if ($debug) Debug.write("############## editRecordStream 3");
                             new lz.editRecordStream(canvas.main_content._content.inner);
                     	}
                     } else if (value==null){
@@ -538,17 +538,19 @@
                         }
                     }
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
-                       
-                    if (canvas.currentRoomObj.isModeratedRoom) {
-                    	if (value.length == 0 && !messageAlreadyThrown){
-                            new lz.labelerrorPopup(canvas,{errorlabelid:641});
-                        }
-                    } else {
-                    	if (value.length == 0 && !messageAlreadyThrown){
-                            new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-                        }
-                    }
                     
+                    if (canvas.currentRoomObject.roomtype.roomtypes_id!=3) {
+                    	//We do not show this warning when the roomtype is 3 (restricted)
+	                    if (canvas.currentRoomObj.isModeratedRoom) {
+	                    	if (value.length == 0 && !messageAlreadyThrown){
+	                            new lz.labelerrorPopup(canvas,{errorlabelid:641});
+	                        }
+	                    } else {
+	                    	if (value.length == 0 && !messageAlreadyThrown){
+	                            new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
+	                        }
+	                    }
+                    }
                     parent.checkSharingSession.doCall();
                 ]]>
             </handler>

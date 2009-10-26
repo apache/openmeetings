@@ -317,6 +317,10 @@
                     canvas.setAttribute('language','');
                     canvas.setAttribute('currentuser',value.login);
                     
+                    if (value.level_id >= 2) {
+                    	canvas.becomemoderator = true;
+                    }
+                    
                     hib.userlang = Number(parent.languages.getValue());
                     hib.userobject = value;
                     if (value.organisation_users.length==0){

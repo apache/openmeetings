@@ -271,8 +271,10 @@
 											});
 								}
 	
-								parent.parent.parent.parent.updateFinishedTabsQuantity();
+								
 							}
+							
+							parent.parent.parent.parent.updateFinishedTabsQuantity();
 						]]>		        	          				
 					</handler>	
 				</netRemoteCallHib> 

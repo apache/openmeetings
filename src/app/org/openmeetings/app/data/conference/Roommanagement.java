@@ -652,7 +652,7 @@ public class Roommanagement {
 	 */
 	public List<Rooms_Organisation> getRoomsOrganisationByOrganisationId(long user_level,long organisation_id){
 		try {
-			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();

@@ -363,9 +363,14 @@
             	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:this.roomClassName,roomobj:roomObj});
                 //new lz[canvas.conferenceRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
-            } else {
+            } else if (roomTypeId==2){
             	
             	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.eventRoomModule,roomobj:roomObj});
+                //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
+                 
+            } else if (roomTypeId==3){
+            	
+            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomobj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             }   
