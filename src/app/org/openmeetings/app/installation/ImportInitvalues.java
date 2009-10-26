@@ -95,7 +95,7 @@ public class ImportInitvalues {
 		 */
 
 		Navimanagement.getInstance().addGlobalStructure("events", 4, 3, false,
-				true, 1, "List of Event Rooms Global Navi", "false", 585L);
+				true, 1, "List of Event Rooms Global Navi", "true", 585L);
 		
 		Navimanagement.getInstance().addMainStructure("eventModuleRoomList", 1, 3,
 				true, false, 1, "List of Event Rooms Main Navi", 4, "false");
