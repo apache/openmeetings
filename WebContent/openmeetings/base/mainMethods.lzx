@@ -360,7 +360,7 @@
     	if (roomObj!=null){
             if (roomTypeId==1){
             	
-            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:this.roomClassName,roomobj:roomObj});
+            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomobj:roomObj});
                 //new lz[canvas.conferenceRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             } else if (roomTypeId==2){
