@@ -47,20 +47,11 @@
         
         
         <simpleLabelButton labelid="769" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-80 }" height="38" 
+               y="$once{ parent.height-80 }" height="78" 
                onclick="this.parent.storeSettings();">
-            <view resource="test_setup_start_conference_rsc" x="2" y="9" />
+            <view resource="test_setup_start_conference_rsc" x="2" valign="middle" />
             <handler name="onclick">
                 quicklink('meetings');
-            </handler>
-        </simpleLabelButton>
-        
-        <simpleLabelButton labelid="770" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-40 }" height="38" 
-               onclick="this.parent.storeSettings();">
-            <view resource="test_setup_start_conference_rsc" x="2" y="9" />
-            <handler name="onclick">
-                quicklink('events');
             </handler>
         </simpleLabelButton>
         

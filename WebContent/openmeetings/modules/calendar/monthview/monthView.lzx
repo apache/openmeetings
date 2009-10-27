@@ -156,7 +156,7 @@
 	        	}
 	        	var datecount = new Date(firstdayDate.getTime() +86400000*i);
 	        	
-	        	if ($debug) Debug.write("datecount ",datecount);
+	        	//if ($debug) Debug.write("datecount ",datecount);
 	        	
 	        	//this["week"+ j].subviews[t].setAttribute('daydate',  this.weekdaynames[datecount.getDay()]+" "
 	        	//+datecount.getDate().toString()+". "+this.monthnames[datecount.getMonth()] ); 

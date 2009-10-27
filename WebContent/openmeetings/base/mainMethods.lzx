@@ -267,24 +267,8 @@
 	            } else if (stringSub=='editBoardSettings') {
 	                new lz.editWhiteboardDefault(canvas.main_content._content.inner);
 	            } else if (stringSub=='quit') {
-	            	if($debug) Debug.write(canvas.thishib.modus,canvas.thishib.roomtype);
-	                	if (canvas.thishib.modus=='audience' && canvas.thishib.roomtype=='public'){
-	                  	var t = new Array();
-	                    	t.action = 'eventModuleRoomList';
-	                	} else if (canvas.thishib.modus=='audience' && canvas.thishib.roomtype=='private'){
-	                    	var t = new Array();
-	                    	t.action = 'eventModuleRoomList';
-	               	} else if (canvas.thishib.modus=='conference' && canvas.thishib.roomtype=='public'){
-	                  	var t = new Array();
-	                    	t.action = 'conferenceModuleRoomList';
-	                	} else if (canvas.thishib.modus=='conference' && canvas.thishib.roomtype=='private'){
-	                    	var t = new Array();
-	                    	t.action = 'conferenceModuleRoomList';
-	           	}
-	
-				if($debug) Debug.write( 'conferenceMenubar: doActionMenu(): ' , t);
-				
-	            loadContent(t);
+	            	
+	            	quicklink('meetings')
 	            
 	         	} else if( stringSub == "browser_open" ){
 	         		var browserPanelWidth  = canvas.browserPanelWidth;
