@@ -30,7 +30,7 @@
             if (newx+this.width > parent.width) {
             	newx = parent.width - this.width - 20;
             }
-            
+             
             if (newy < 0) {
                 newy = 0;
             }
