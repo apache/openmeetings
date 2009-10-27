@@ -2373,4 +2373,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="786" name="menu option">
     <value>Apply for camera/microphone access</value>
   </string>
+  <string id="787" name="error message soap secure login">
+    <value>This Session Hash was already used. You cannot use it twice.</value>
+  </string>
+  <string id="788" name="dashboard button">
+    <value>START</value>
+  </string>
+  <string id="789" name="exit conference">
+    <value>EXIT</value>
+  </string>
+  <string id="790" name="conference view">
+    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+  </string>
+  <string id="791" name="conference view">
+    <value>Exit conference</value>
+  </string>
 </language>
