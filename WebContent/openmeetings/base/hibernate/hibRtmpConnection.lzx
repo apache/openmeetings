@@ -242,6 +242,27 @@
 				}
             ]]>
         </handler>   
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="secureLoginByRemote" activeErrorHandler="true" 
+    	funcname="xmlcrm.secureLoginByRemote" >          
+    	<netparam name="remoteSessionId"><method name="getValue">return canvas.secureHash;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+        		canvas.thishib.loaderVar.close();
+            	//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("loginUserByRemote: ",value);
+				if (value<0){
+					
+				} else {
+					
+					canvas.initroomid = value.room_id;
+					canvas.becomemoderator = value.becomemoderator;
+					
+					parent.getCurrentRoomClient.doCall();
+				}
+            ]]>
+        </handler>   
     </netRemoteCallHib>  
     
     <netRemoteCallHib name="loginUserByRemote" activeErrorHandler="true" 
@@ -328,7 +349,8 @@
 		            	parent.getRoomTypes.doCall();
 		            } else {
 		            	parent.initlanguageLoaded=true;
-					    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.directUserLogin){
+					    if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
+					    		|| canvas.directUserLogin || canvas.secureRemoteUserLogin){
 					    	canvas.thishib.loaderVar.setProgress();
 					        if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
 					        parent.markSessionAsLogedIn.doCall();
@@ -353,7 +375,9 @@
             if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
             if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
             if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
-            if (canvas.isinitRoomDirect){
+            if (canvas.secureRemoteUserLogin) {
+            	parent.secureLoginByRemote.doCall();
+            } else if (canvas.isinitRoomDirect){
             	parent.getInvitationByHash.doCall();   
             } else if (canvas.remoteUserLogin) {
             	parent.loginUserByRemote.doCall();   

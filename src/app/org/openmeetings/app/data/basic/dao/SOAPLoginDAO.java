@@ -32,7 +32,7 @@ public class SOAPLoginDAO {
 		return instance;
 	}
 	
-	public String addSOAPLogin(String sessionHash, Long room_id) {
+	public String addSOAPLogin(String sessionHash, Long room_id, boolean becomemoderator) {
 		try {
 			
 			String thistime = "TIME_"+(new Date().getTime());
@@ -49,6 +49,7 @@ public class SOAPLoginDAO {
 			soapLogin.setRoom_id(room_id);
 			soapLogin.setHash(hash);
 			soapLogin.setSessionHash(sessionHash);
+			soapLogin.setBecomemoderator(becomemoderator);
 
 			Long soapLoginId = (Long) session.save(soapLogin);
 
@@ -97,6 +98,25 @@ public class SOAPLoginDAO {
 			log.error("[getSOAPLoginByHash]: ",ex2);
 		}
 		return null;
+	}
+	
+	public void updateSOAPLogin(SOAPLogin soapLogin) {
+		try {
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			session.update(soapLogin);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (HibernateException ex) {
+			log.error("[updateSOAPLogin]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateSOAPLogin]: ",ex2);
+		}
 	}
 		
 

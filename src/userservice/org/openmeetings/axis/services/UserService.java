@@ -7,6 +7,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Organisationmanagement;
@@ -192,7 +193,7 @@ public class UserService {
 	
 	public String setUserObjectAndGenerateRoomHash(String SID, String username, String firstname, String lastname, 
 			String profilePictureUrl, String email, Long externalUserId, String externalUserType,
-			Long room_id){
+			Long room_id, int becomeModeratorAsInt){
 		log.debug("UserService.setUserObject");
 	     
 		try {
@@ -221,7 +222,17 @@ public class UserService {
 				
 				Sessionmanagement.getInstance().updateUserRemoteSession(SID, xmlString);
 				
-				return ""+new Long(1);
+				boolean becomeModerator = false;
+				if (becomeModeratorAsInt == 2) {
+					becomeModerator = true;
+				}
+				
+				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, becomeModerator);
+				
+				if (hash != null) {
+					return hash;
+				}
+				
 			} else {
 				return ""+new Long(-26);
 			}

@@ -46,13 +46,14 @@
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773" />
         
         
-        <simpleLabelButton labelid="769" width="196" x="$once{ parent.width-200 }" 
+        <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
                y="$once{ parent.height-80 }" height="78" 
                onclick="this.parent.storeSettings();">
-            <view resource="test_setup_start_conference_rsc" x="2" valign="middle" />
+            <view resource="test_setup_start_conference_rsc" x="20" valign="middle" />
             <handler name="onclick">
                 quicklink('meetings');
             </handler>
+            <labelTooltip labelid="769" />
         </simpleLabelButton>
         
         <!--

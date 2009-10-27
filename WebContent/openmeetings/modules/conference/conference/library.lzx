@@ -4,6 +4,7 @@
 	<resource name="go_jump_rsc" src="resources/go-jump.png" />
 	<resource name="messagebox_info_big_rsc" src="resources/messagebox_info.png" />
 	<resource name="reload_rsc" src="resources/reload.png" />
+	<resource name="exit_btn_rsc" src="resources/exit.png" />
 
     <include href="conferenceView.lzx" />
 	<include href="roomListItem.lzx" />

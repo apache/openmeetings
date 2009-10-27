@@ -12,5 +12,6 @@
     <property name="created" type="java.util.Date" column="created"/>
     <property name="used" type="boolean" column="used"/>
     <property name="useDate" type="java.util.Date" column="use_date"/>
+    <property name="becomemoderator" type="boolean" column="becomemoderator"/>
   </class>
 </hibernate-mapping>

@@ -16,6 +16,7 @@ public class SOAPLogin {
 	private Date created;
 	private Boolean used;
 	private Date useDate;
+	private Boolean becomemoderator;
 	
 	/**
      * 
@@ -100,6 +101,18 @@ public class SOAPLogin {
 	}
 	public void setUseDate(Date useDate) {
 		this.useDate = useDate;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="becomemoderator"
+     *  type="boolean"
+     */
+	public Boolean getBecomemoderator() {
+		return becomemoderator;
+	}
+	public void setBecomemoderator(Boolean becomemoderator) {
+		this.becomemoderator = becomemoderator;
 	}
 	
 }

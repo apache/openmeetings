@@ -147,6 +147,12 @@
 			canvas.invitationHash = invitationHash;
 		}
 		
+		var secureHash = lz.Browser.getInitArg('secureHash');
+		if (secureHash != undefined){
+			canvas.secureRemoteUserLogin = true;
+			canvas.secureHash = secureHash;
+		}
+		
 		//sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
 		var sid = lz.Browser.getInitArg('sid');
 		var initroomid = lz.Browser.getInitArg('roomid');

@@ -18,6 +18,7 @@ import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.SOAPLogin;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
@@ -35,6 +36,7 @@ import org.openmeetings.app.ldap.LdapLoginManagement;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Feedbackmanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.rss.LoadAtomRssFeed;
 
@@ -291,6 +293,42 @@ public class MainService implements IPendingServiceCallback {
     	return null;
     	*/
     } 
+    
+    public Object secureLoginByRemote(String secureHash) {
+    	try {
+    		
+    		SOAPLogin soapLogin = SOAPLoginDAO.getInstance().getSOAPLoginByHash(secureHash);
+    		
+    		if (!soapLogin.getUsed()) {
+    			return -42L;
+    		} else {
+    			
+    			Long loginReturn = this.loginUserByRemote(soapLogin.getSessionHash());
+    			
+    			if (loginReturn == null) {
+    				return -1L;
+    			} else if (loginReturn < 0) {
+    				return loginReturn;
+    			} else {
+    				
+    				soapLogin.setUsed(true);
+    				
+    				SOAPLoginDAO.getInstance().updateSOAPLogin(soapLogin);
+    				
+    				//Hide the admin session Hash from the public user
+    				soapLogin.setSessionHash("****");
+    				
+    				return soapLogin;
+    				
+    			}
+    			
+    		}
+    		
+    	} catch (Exception err) {
+    		log.error("[secureLoginByRemote]",err);
+    	}
+    	return null;
+    }
     
     /**
      * Attention! This SID is NOT the default session id! its the Session id retrieved in the call

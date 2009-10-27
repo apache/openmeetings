@@ -229,6 +229,12 @@ these properties will be overwritten by config.xml -->
 <attribute name="remoteUserLogin" value="false" type="boolean" />
 <attribute name="remoteUserSid" value="" type="string" />
 
+<!--- attributes for direct room access via remoteUser
+	This is using the advanced methods to prevent abuse
+ -->
+<attribute name="secureRemoteUserLogin" value="false" type="boolean" />
+<attribute name="secureHash" value="" type="string" />
+
 <!--- skip loading of Language -->
 <attribute name="language_id" value="0" type="number" />
 

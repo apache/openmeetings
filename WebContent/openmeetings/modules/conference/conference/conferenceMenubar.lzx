@@ -28,14 +28,26 @@
 	-->  
 	<class name="conferenceMenubar" extends="menubar" height="28" style="itemStyle">
         
+        <simpleLabelButton labelid="789" name="_exitbtn" text_x="32"
+        				   width="80" style="itemStyle" height="28">
+        	<handler name="onclick">
+        		new lz.confirmtionSingle(canvas,{refObj:this,labelid:791,
+        				labeliderror:790,showCheckBox:false});
+        	</handler>
+        	<method name="sendConfirmation" args="confirm,bool">
+        		canvas.doActionmenu('quit');
+        	</method>
+        	<view resource="exit_btn_rsc" y="2" x="4" />
+        	<labelTooltip labelid="309" />
+        </simpleLabelButton>
+        
         <!-- file menu -->
         <_labelMenu labelid="245" width="250">
             <handler name="oninit">
                 <![CDATA[
                     if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
                     	if ($debug) Debug.write("this mbarcontent ",this);
-                        this.flist.removeItemAt(8);
-                        this.flist.removeItemAt(7);
+                        parent._exitbtn.destroy();
                     }
                 ]]>
             </handler>  
@@ -46,8 +58,10 @@
             <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
             <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
             <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
+            <!--
             <menuseparator/>  
             <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
+             -->
         </_labelMenu> 
         
         <_labelMenu labelid="635" width="250">
@@ -122,14 +136,26 @@
 	
 	<class name="restrictedConferenceMenubar" extends="menubar" height="28" style="itemStyle">
         
+        <simpleLabelButton labelid="789" name="_exitbtn" text_x="32"
+        				   width="80" style="itemStyle" height="28">
+        	<handler name="onclick">
+        		new lz.confirmtionSingle(canvas,{refObj:this,labelid:791,
+        				labeliderror:790,showCheckBox:false});
+        	</handler>
+        	<method name="sendConfirmation" args="confirm,bool">
+        		canvas.doActionmenu('quit');
+        	</method>
+        	<view resource="exit_btn_rsc" y="2" x="4" />
+        	<labelTooltip labelid="309" />
+        </simpleLabelButton>
+        
         <!-- file menu -->
         <_labelMenu labelid="245" width="250">
             <handler name="oninit">
                 <![CDATA[
                     if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
                     	if ($debug) Debug.write("this mbarcontent ",this);
-                        this.flist.removeItemAt(8);
-                        this.flist.removeItemAt(7);
+                        parent._exitbtn.destroy();
                     }
                 ]]>
             </handler>  
@@ -140,8 +166,10 @@
             <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ !canvas.ismoderator }" />
             <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ !canvas.ismoderator }" />
             <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ !canvas.ismoderator }" />
+            <!--
             <menuseparator/>  
             <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
+             -->
         </_labelMenu> 
         
         <_labelMenu labelid="635" width="250">
