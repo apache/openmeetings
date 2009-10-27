@@ -2388,4 +2388,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="791" name="conference view">
     <value>Exit conference</value>
   </string>
+  <string id="792" name="main menu">
+    <value>Rooms</value>
+  </string>
+  <string id="793" name="main menu">
+    <value>Choose a room for a meeting</value>
+  </string>
 </language>

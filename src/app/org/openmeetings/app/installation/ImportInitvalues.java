@@ -83,11 +83,11 @@ public class ImportInitvalues {
 		 * Conference Menu Points
 		 */
 		
-		Navimanagement.getInstance().addGlobalStructure("meetings", 3, 2,
-				false, true, 1, "List of Conference Rooms Global Navi", "false", 584L);
+		Navimanagement.getInstance().addGlobalStructure("meetings", 3, 792,
+				false, true, 1, "List of Conference Rooms Global Navi", "false", 793L);
 		
 		Navimanagement.getInstance().addMainStructure("conferenceModuleRoomList", 1,
-				2, true, false, 1, "List of Conference Rooms Main Navi", 3, "false");
+				792, true, false, 1, "List of Conference Rooms Main Navi", 3, "false");
 		
 		
 		/* ########################
