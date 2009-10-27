@@ -242,6 +242,13 @@
     		<fileset dir="WebContent/languages">
     		</fileset>
     	</copy>
+    	<!-- add compiled versions of openmeetings SWF to release
+    		You have to manually copy those ressources out of the Temp directory of Eclipse!!
+    	 -->
+    	<copy todir="${dist.dir}/openmeetings" file="WebContent/openmeetings/main.lzx.swf8.swf" >
+    	</copy>
+    	<copy todir="${dist.dir}/openmeetings" file="WebContent/openmeetings/maindebug.lzx.swf8.swf" >
+    	</copy>
         <tstamp/>
     </target>
 

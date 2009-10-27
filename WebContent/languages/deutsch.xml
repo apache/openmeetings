@@ -1141,7 +1141,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Neue Nachrichten:</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Anzeigebild ändern</value>
+    <value>Bild ändern</value>
   </string>
   <string id="380" name="backuppanel">
     <value>Benutzerdaten - Exportieren</value>
