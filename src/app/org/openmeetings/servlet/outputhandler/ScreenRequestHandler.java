@@ -126,7 +126,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				
 				String publicSID = httpServletRequest.getParameter("publicSID");
 				if (publicSID == null) {
-					log.error("publicSID is empty: "+publicSID);
+					new Exception("publicSID is empty: "+publicSID);
 					return null;
 				}
 				
@@ -135,39 +135,45 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 				String domain = httpServletRequest.getParameter("domain");
 				if(domain == null) {
-					log.error("domain is empty: "+domain);
+					new Exception("domain is empty: "+domain);
 					return null;
 				}
 				
 				String languageAsString = httpServletRequest.getParameter("languageAsString");
 				if(languageAsString == null) {
-					log.error("languageAsString is empty: "+domain);
+					new Exception("languageAsString is empty: "+domain);
 					return null;
 				}
 				Long language_id = Long.parseLong(languageAsString);
 				
 				String rtmphostlocal = httpServletRequest.getParameter("rtmphostlocal");
 				if (rtmphostlocal == null) {
-					log.error("rtmphostlocal is empty: "+rtmphostlocal);
+					new Exception("rtmphostlocal is empty: "+rtmphostlocal);
 					return null;
 				}
 				
 				String red5httpport = httpServletRequest.getParameter("red5httpport");
 				if (red5httpport == null) {
-					log.error("red5httpport is empty: "+red5httpport);
+					new Exception("red5httpport is empty: "+red5httpport);
 					return null;
 				}
 				
 				String record = httpServletRequest.getParameter("record");
 				if (record == null) {
-					log.error("recorder is empty: ");
+					new Exception("recorder is empty: ");
 					record = "no";
 				}
 				
 				String mode = httpServletRequest.getParameter("mode");
 				if (mode == null) {
-					log.error("mode is empty: ");
+					new Exception("mode is empty: ");
 					mode = "sharer";
+				}
+				
+				String httpRootKey = httpServletRequest.getParameter("httpRootKey");
+				if (httpRootKey == null) {
+					new Exception("httpRootKey is empty could not start sharer");
+					return null;
 				}
 				
 				//make a complete name out of domain(organisation) + roomname
@@ -181,7 +187,18 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				//String jnlpString = ScreenCastTemplate.getInstance(current_dir).getScreenTemplate(rtmphostlocal, red5httpport, sid, room, domain);
 				ctx.put("rtmphostlocal", rtmphostlocal); //rtmphostlocal
 			    ctx.put("red5httpport", red5httpport); //red5httpport
-			    ctx.put("webAppRootKey", "openmeetings"); //TODO: Query webAppRootKey by Servlet
+			    
+			    System.out.println("httpRootKey "+httpRootKey);
+			    
+			    String codebase = "http://"+rtmphostlocal+":"+red5httpport+httpRootKey+"screen";
+			    
+			    ctx.put("codebase", codebase);
+			    
+			    String httpSharerURL = "http://"+rtmphostlocal+":"+red5httpport + httpRootKey + "ScreenServlet";
+			    
+			    ctx.put("webAppRootKey", httpRootKey); 
+			    ctx.put("httpSharerURL", httpSharerURL);
+			    
 			    ctx.put("SID", sid);
 			    ctx.put("ROOM", room);
 			    ctx.put("DOMAIN", domain);

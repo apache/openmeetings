@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Web Start Deployment Template $webAppRootKey/ => is obsolete as we deploy into ROOT -->
-<jnlp spec="1.0+" codebase="http://$rtmphostlocal:$red5httpport/screen"> 
+<!-- Web Start Deployment Template $webAppRootKey/ => is either / in case 
+its .war or /openmeetings/ in case its a native red5 webapp-->
+<jnlp spec="1.0+" codebase="$codebase"> 
 	<information> 
 		<title>ScreenViewer Client Application</title> 
 		<vendor>Openmeetings</vendor> 

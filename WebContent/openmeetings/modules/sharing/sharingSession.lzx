@@ -176,6 +176,7 @@ setNewSource
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                 +canvas.httpRootKey+'ScreenRequestHandler?'
                 +'rtmphostlocal='+canvas.rtmphostlocal
+                +'&httpRootKey='+canvas.httpRootKey
                 +'&room='+hib.currentroomid
                 +'&domain='+hib.conferencedomain
                 +'&sid='+canvas.sessionId
