@@ -2317,7 +2317,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Event starten</value>
   </string>
   <string id="771" name="start view">
-    <value>Wählen Sie einen Raum aus</value>
+    <value>Raum wählen</value>
   </string>
   <string id="772" name="start view">
     <value>Prüfe Setup</value>
@@ -2335,34 +2335,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Audio-/Video-Test (Aufnahme) vor dem Betreten einer Konferenz nicht zeigen</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>Öffentliche Rooms</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>Öffentliche Räume können von allen Benutzern benutzt werden.</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>Private Räume</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>Private Räume sind nur für Benutzer in der selben Organisation verfügbar.</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>Meine Räume</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Räume in diesem Bereich sind für den persönlichen Bedarf. Die Räume haben ein Start und Enddatum und stehen nur in diesem Zeitraum zur Verfügung.</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>Sie müssen Moderator sein um diese Aktion auszuführen.</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>Moderation beantragen</value>
   </string>
   <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
+    <value>Zeichenbrett beantragen</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>WebCam/Mikrofon beantragen</value>
   </string>
   <string id="787" name="error message soap secure login">
     <value>This Session Hash was already used. You cannot use it twice.</value>
@@ -2374,15 +2374,15 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>EXIT</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>Wollen Sie die Konferenz wirklich verlassen? Vielleicht sollten Sie zuerst Dokumente, Zeichenbrett und Chat History leeren. Andernfalls werden die Dateien einfach in diesem Raum bis zu Ihrem nächsten Besuch bleiben.</value>
   </string>
   <string id="791" name="conference view">
-    <value>Exit conference</value>
+    <value>Konferenz beenden</value>
   </string>
   <string id="792" name="main menu">
-    <value>Rooms</value>
+    <value>Räume</value>
   </string>
   <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>Wählen Sie einen Raum für die Konferenz aus</value>
   </string>
 </language>
