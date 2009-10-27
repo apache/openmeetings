@@ -251,7 +251,7 @@
         	<![CDATA[
         		canvas.thishib.loaderVar.close();
             	//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("loginUserByRemote: ",value);
+				if ($debug) Debug.write("secureLoginByRemote: ",value);
 				if (value<0){
 					
 				} else {
@@ -299,7 +299,7 @@
                     canvas.setAttribute('official_code','');
                     canvas.setAttribute('picture_uri','');
                     canvas.setAttribute('language','');
-                    canvas.setAttribute('currentuser',value.login);
+                    //canvas.setAttribute('currentuser',value.login);
                     
 					parent.getRoomById.doCall();
 				}

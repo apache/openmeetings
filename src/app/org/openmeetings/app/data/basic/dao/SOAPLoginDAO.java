@@ -72,8 +72,8 @@ public class SOAPLoginDAO {
 	
 	public SOAPLogin getSOAPLoginByHash(String hash) {
 		try {
-			String hql = "select c from SOAPLogin as sl " +
-							"WHERE c.hash != :hash";
+			String hql = "select sl from SOAPLogin as sl " +
+							"WHERE sl.hash LIKE :hash";
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();

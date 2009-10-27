@@ -216,10 +216,14 @@ public class Configurationmanagement {
 					return this.addConfig(conf);
 				} else {
 					log.info("update Configuration ID: "+conf.getConfiguration_id());
-					conf.setUser_id(users_id);
-					conf.setDeleted("false");
-					conf.setUpdatetime(new Date());
-					return this.updateConfig(conf);
+					Configuration conf2 = this.getConfByConfigurationId(3L, conf.getConfiguration_id());
+					conf2.setComment(conf.getComment());
+					conf2.setConf_key(conf.getConf_key());
+					conf2.setConf_value(conf.getConf_value());
+					conf2.setUser_id(users_id);
+					conf2.setDeleted("false");
+					conf2.setUpdatetime(new Date());
+					return this.updateConfig(conf2);
 				}
 			} else {
 				log.error("[saveOrUpdateConfByConfigurationId] Error: Permission denied");
@@ -274,7 +278,16 @@ public class Configurationmanagement {
 				conf.setUsers(UsersDaoImpl.getInstance().getUser(users_id));
 				conf.setUpdatetime(new Date());
 				conf.setDeleted("true");
-				this.updateConfig(conf);
+				
+				Configuration conf2 = this.getConfByConfigurationId(3L, conf.getConfiguration_id());
+				conf2.setComment(conf.getComment());
+				conf2.setConf_key(conf.getConf_key());
+				conf2.setConf_value(conf.getConf_value());
+				conf2.setUser_id(users_id);
+				conf2.setDeleted("true");
+				conf2.setUpdatetime(new Date());
+				
+				this.updateConfig(conf2);
 				return new Long(1);
 			} else {
 				log.error("Error: Permission denied");

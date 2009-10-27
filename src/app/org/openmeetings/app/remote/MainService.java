@@ -299,7 +299,7 @@ public class MainService implements IPendingServiceCallback {
     		
     		SOAPLogin soapLogin = SOAPLoginDAO.getInstance().getSOAPLoginByHash(secureHash);
     		
-    		if (!soapLogin.getUsed()) {
+    		if (soapLogin.getUsed()) {
     			return -42L;
     		} else {
     			

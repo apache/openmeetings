@@ -45,7 +45,7 @@
         <_labelMenu labelid="245" width="250">
             <handler name="oninit">
                 <![CDATA[
-                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
+                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
                     	if ($debug) Debug.write("this mbarcontent ",this);
                         parent._exitbtn.destroy();
                     }
@@ -153,7 +153,7 @@
         <_labelMenu labelid="245" width="250">
             <handler name="oninit">
                 <![CDATA[
-                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin) {
+                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
                     	if ($debug) Debug.write("this mbarcontent ",this);
                         parent._exitbtn.destroy();
                     }
