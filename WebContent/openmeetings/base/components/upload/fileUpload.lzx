@@ -51,7 +51,7 @@
 
 				var imageTypes = new Object();
 				imageTypes.description = "Allowed Files";
-				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.txt; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf";
+				imageTypes.extension = "*.txt; *.pcd; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.jpg; *.jpeg; *.gif; *.png; *.ppt; *.pptx; *.odp; *.odt; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.pdf";
 				allTypes.push(imageTypes); 
 				
 				imageTypes = new Object();
