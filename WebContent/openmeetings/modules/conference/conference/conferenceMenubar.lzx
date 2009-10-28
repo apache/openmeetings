@@ -51,7 +51,7 @@
                     }
                 ]]>
             </handler>  
-            <_labelMenuItem labelid="15" command="cmd_importFile" />
+            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }"/>
             <menuseparator/>  
             <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
             <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
@@ -65,7 +65,6 @@
         </_labelMenu> 
         
         <_labelMenu labelid="635" width="250">
-            <_labelMenuItem labelid="302" command="cmd_applyforMod" />
             <_labelMenuItem labelid="213" command="cmd_invitation" />
             <menuseparator/> 
             <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
@@ -159,13 +158,13 @@
                     }
                 ]]>
             </handler>  
-            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ !canvas.ismoderator }" />
+            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }" />
             <menuseparator/>  
-            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" enabled="${ !canvas.ismoderator }" />
-            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" enabled="${ !canvas.ismoderator }" />
-            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ !canvas.ismoderator }" />
-            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ !canvas.ismoderator }" />
-            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ !canvas.ismoderator }" />
+            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ canvas.ismoderator }" />
+            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ canvas.ismoderator }" />
             <!--
             <menuseparator/>  
             <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
@@ -173,7 +172,6 @@
         </_labelMenu> 
         
         <_labelMenu labelid="635" width="250">
-            <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
             <menuseparator/> 
             <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
@@ -185,12 +183,7 @@
             <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
             <menuseparator/>  
-            <_labelMenuItem labelid="784" enabled="${ !canvas.ismoderator }">
-            	<handler name="onselect" args="sel">
-            		//Apply for Moderation
-                	canvas.thishib.applyForModeration.doCall();
-            	</handler>
-            </_labelMenuItem>
+            <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
             <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
             	<handler name="onselect" args="sel">
             		//Ask for Right to Draw on Whiteboard

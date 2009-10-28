@@ -30,7 +30,7 @@ Test the setup values before you enter a room
 		lz.Timer.addTimer( this.counterDelegate, 1000 );
 	</method>
 	
-	<method name="count">
+	<method name="count" args="calleeObj">
 		if (this.recordingsCounter != 0){
 			this.recordingsCounter -= 1;
 			lz.Timer.addTimer( this.counterDelegate, 1000 );

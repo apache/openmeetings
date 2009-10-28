@@ -354,21 +354,26 @@
 	    	} else {
 	    		canvas.isConference = false;
 	    }
+	    
+	    //this is needed cause in the rpc-method *getCurrentModeratorList* we check if its roomtype_id == 3
+	    //and if roomtype_id == 3 we will not show any *There is no Moderator* Warning Dialog
+	    canvas.currentRoomObject = roomObj;
+	    
     	hib.currentroomid = roomId;
     	if (roomObj!=null){
             if (roomTypeId==1){
             	
-            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomobj:roomObj});
+            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:roomObj});
                 //new lz[canvas.conferenceRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             } else if (roomTypeId==2){
             	
-            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.eventRoomModule,roomobj:roomObj});
+            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.eventRoomModule,roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             } else if (roomTypeId==3){
             	
-            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomobj:roomObj});
+            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             }   

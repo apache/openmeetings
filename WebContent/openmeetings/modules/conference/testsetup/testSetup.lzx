@@ -85,14 +85,15 @@ Test the setup values before you enter a room
     	
             clearStageContent();
             
-            if ($debug) Debug.write("roomClassname : ", +this.roomClassName);
+            if ($debug) Debug.warn("roomClassname : ", this.roomClassName);
+            if ($debug) Debug.warn("canvas.currentRoomObj will be : ", this.roomObj);
             
             canvas.currentRoomObj = this.roomObj;
             
             this.close();
             
             new lz[this.roomClassName](canvas.main_content._content.inner, {
-                        roomobj : this.roomObj
+                        roomobj:this.roomObj
                     });
     	
     	]]>

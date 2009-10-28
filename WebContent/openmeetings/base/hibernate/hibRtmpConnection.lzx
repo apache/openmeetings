@@ -135,7 +135,7 @@
         ]]>
     </handler>    
     
-    <method name="refreshSessionMeth">
+    <method name="refreshSessionMeth" args="calleeObj">
         this.refreshSession.doCall();
     </method>
     
@@ -255,6 +255,11 @@
 				if (value<0){
 					
 				} else {
+					
+					if (value == null) {
+						new lz.errorPopup(canvas,{error:'Invalid Hash'});
+						return;
+					}
 					
 					canvas.initroomid = value.room_id;
 					canvas.becomemoderator = value.becomemoderator;
@@ -563,6 +568,9 @@
                         }
                     }
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
+                    
+                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject);
+                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject.roomtype.roomtypes_id);
                     
                     if (canvas.currentRoomObject.roomtype.roomtypes_id!=3) {
                     	//We do not show this warning when the roomtype is 3 (restricted)
