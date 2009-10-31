@@ -18,8 +18,11 @@
 	<include href="recording/" />
      
     <include href="admin/" />
+    <!--
     <include href="calendar/" />
+     -->
     
     <include href="sharing/" />
+    <include href="lzcalendar/" />
 
 </library>

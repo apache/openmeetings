@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+    <include href="resources.lzx"/>
+    <include href="cal-button.lzx" />
+
+    <include href="gridsliderlayout.lzx"/>
+    <include href="basepanel.lzx" />
+    <include href="cal-data.lzx" />
+    <include href="event.lzx" />
+    <include href="day.lzx" />
+    <include href="infopanel.lzx" />
+    <include href="simpletimelayout.lzx"/>
+    <include href="dayname.lzx"/>
+    <include href="selected-daylook.lzx"/>
+    <include href="eventselector.lzx"/>
+    
+	<include href="lzCalendar.lzx" />
+
+</library>

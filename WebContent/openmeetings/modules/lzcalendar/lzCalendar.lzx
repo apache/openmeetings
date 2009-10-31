@@ -1,58 +1,64 @@
-<!-- This is an example of a fairly sophisticated Laszlo app that makes    -->
-<!-- use of advanced features such as custom events, states, and complex   -->
-<!-- data bindings. Note that there is no convetion in this code with      -->
-<!-- respect to variable and method names: some are all lower case, some   -->
-<!-- use underscores ("_") and some use mixedCase.                         -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
 
-<!-- bgcolor="#1E3A49" -->
-
-<canvas title="Laszlo Calendar" debug="true" bgcolor="0xC4D5E6" width="100%" height="100%" >
-	
-    <debug fontsize="11" oninit="Debug.showInternalProperties = true" />
-	
-    <include href="resources.lzx"/>
-    <include href="cal-button.lzx" />
-
-
-    <!-- INCLUDES -->
-    <include href="lz/scrollbar.lzx" />
-
-    <include href="gridsliderlayout.lzx"/>
-    <include href="basepanel.lzx" />
-    <include href="cal-data.lzx" />
-    <include href="event.lzx" />
-    <include href="day.lzx" />
-    <include href="infopanel.lzx" />
-    <include href="simpletimelayout.lzx"/>
-    <include href="dayname.lzx"/>
-    <include href="selected-daylook.lzx"/>
-    <include href="eventselector.lzx"/>
-    
-	<attribute name="basebgcolorizer" value="0x2184C5" type="string" />	
-	<attribute name="baseMousecolorizer" value="0x62AEE1" type="string" />	
-	<attribute name="baseMouseOvercolorizer" value="0x62AEE1" type="string" />   
-	    
-
-
-    <attribute name="calMonths" value='[ "January","February","March","April",
+<attribute name="calMonths" value='[ "January","February","March","April",
                                          "May","June", "July","August",
                                          "September","October", "November",
                                          "December" ]'/>
+<class name="lzCalendar" extends="baseContentView" >
+	
+	<dateSelector name="_calendar" y="0" x="2">
+		<handler name="ondoubleselect">
+ 			//var selectDate = new Date();
+ 			//if ($debug) Debug.write("##### dateselect ", this.selecteddate);
+ 			parent._startDate = this.selecteddate;
+ 			//Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,0);
+ 			parent._endDate  = new Date(this.selecteddate.getFullYear(), this.selecteddate.getMonth(), this.selecteddate.getDate()+1,0,0,0);
+ 			//if ($debug) Debug.write("startDateValue",parent._startDate);
+ 			parent._tabslider._daytab._dayview._tagesansicht._list._outlist.clearContent();
+ 			
+ 			//weekcontroll
+ 			if(parent._tabslider._week['selected'] == true){
+ 				//parent._tabslider._week._weekView._monday._tagesansicht._list._outlist.clearContent();
+ 				parent._tabslider._week._weekView.initWeekByDate(this.selecteddate);
+ 				parent._tabslider._week._weekView.getAppointmentByRangeWeek.doCall();
+ 			}else if(parent._tabslider._month['selected'] == true){
+ 				parent._tabslider._month._monthView.showingdate = this.selecteddate;
+ 				//parent._tabslider._month._monthView.initMonthByDate(this.selecteddate);
+ 				parent._tabslider._month._monthview.init();
+ 				//parent._tabslider._month._monthView.getAppointmentByRangeMonth.doCall();
+ 			}else {
+	 			//parent._tagesansicht._list._innerlist.clearContent();
+	 			//parent._termin.setCalendarItem(24);
+	 			parent.getAppointmentByRange.doCall();
+ 			}
+		</handler> 
+	</dateSelector> 
+	
+	<lzCalendarContent name="lzCalendarContent" x="206" />
+	
+</class>
 
+<class name="lzCalendarContent" extends="view" width="935" height="640">
+	
+	<handler name="oninit">
+		slideInTopPanel.doStart();
+	</handler>
+	
     <!-- ============================ MAIN ================================ -->
     <!-- This is the main section of the calendar, where all the views      -->
     <!-- ================================================================== -->
 
     <!-- The top panel holds the views above the calendar grid, which include
          the day names that appear as column titles.  -->
-    <view font="Verdana,sans-serif" id="toppanel" x="20" y="-50"  width="806" 
+    <view font="Verdana,sans-serif" id="toppanel" x="0" y="-50"  width="806" 
         fontsize="10">
 
         <!-- This is the bar that appears below the toolbar (and contains the
              day names. This comes first in the file because it needs to be
              behind the toolbar. -->
         <view name="weekbkgnd" bgcolor="$once { canvas.basebgcolorizer }" y="26"
-              width="808" height="26" >
+              width="810" height="26" >
             <!-- Day names appear as titles in month and week views.  They
                  are constrained to their respective columns within the
                  calendar grid by binding to the firs-->
@@ -93,15 +99,13 @@
 
         <!-- TOOLBAR DISPLAY Month and a set of tools for
              manipulating that month -->
-        <view name="mbar"
-              bgcolor="$once { canvas.basebgcolorizer }"
-              width="${parent.width}" >
+        <view name="mbar" bgcolor="$once { canvas.basebgcolorizer }" width="810" >
 
 			<!--
             <view resource="menubar"/>
              -->
 
-            <view name="viewbuttons" x="141" y="4">
+            <view name="viewbuttons" x="2" y="6">
                 <calButton rightcap="shear" icon="iconDay"
                            onclick="calgrid.showdayview()" label="day" />
                 <calButton leftcap="shear"  rightcap="shear"  icon="iconWeek"
@@ -111,7 +115,7 @@
                 <simplelayout axis="x"/>
             </view>
 
-            <view name="monthController" x="321" y="8" width="161" >
+            <view name="monthController" x="300" y="6" width="161" >
                 <calButton rightcap="shear" icon="iconLeftArrow"
                            onclick="calgrid.prevMonth()" />
                 <calButton label=" " leftcap="shear" rightcap="shear"
@@ -122,25 +126,22 @@
                 <resizelayout axis="x" />
             </view>
 
-            <!-- constrain shadow to the top -->
-            <text name="monthtitleshdw" fontstyle="bold"
-                  fgcolor="#143B45" y="${parent.monthtitle.y -1}"
-                  x="${parent.monthtitle.x -0.3}" opacity=".5">
-                  <attribute name="text" value="${parent.monthtitle.text}" />
-            </text>
-            <text name="monthtitle" fontstyle="bold"
-                fgcolor="#FFFFFF" y="10">
+            <text name="monthtitle" fontstyle="bold" fgcolor="#FFFFFF" y="8">
                 <handler name="ontext">
-                    this.setAttribute('x', Math.round( ( this.parent.width -
+                    this.setAttribute('x', 300 + Math.round( ( 161 -
                                this.getTextWidth())/2.0) - 2);
                     this.setAttribute('width', this.getTextWidth()+2);
-                    this.parent.monthtitleshdw.setAttribute('width', this.getTextWidth()+2);
-
                 </handler>
             </text>
 
-            <calButton label="Add Event" x="496" y="5"
-                       onclick="eventDataMgr.addEvent(); infopanel.open(); infopanel.setAttribute('dataapply', false);" />
+            <calButton label="Add Event" x="$once{ parent.width - 100 }" y="6">
+            	<handler name="onclick">
+            		eventDataMgr.addEvent(); 
+					infopanel.open(); 
+					infopanel.setAttribute('dataapply', false);
+            	</handler>
+            </calButton>
+            
         </view>
 
         <!-- animates in top panel on startup -->
@@ -152,7 +153,7 @@
 
     <!-- The cal interior holds the views in the calendar with the exception
          of the top view.  -->
-    <view id="cal_interior" x="20" y="57" visible="false" 
+    <view id="cal_interior" x="0" y="57" visible="false" 
           opacity="0" clip="true"
           font="Verdana,sans-serif"
           width="810" height="516" pixellock="true">
@@ -517,14 +518,6 @@
     <eventSelectorbar id="eventselector" 
         font="Verdana,sans-serif" />
 
-    <!-- Start the ui appearing with a cool animation when the canvas is ready -->
-    <handler reference="canvas" name="oninit">
-        slideInTopPanel.doStart(); // make the top panel slide in
-    </handler>
-    
-</canvas>
-<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
-* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
-* Use is subject to license terms.                                            *
-* X_LZ_COPYRIGHT_END ****************************************************** -->
-<!-- @LZX_VERSION@                                                         -->
+</class>
+
+</library>

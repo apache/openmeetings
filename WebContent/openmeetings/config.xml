@@ -235,7 +235,7 @@ of the red5-servlet
 
 <dashboardModuleStartScreen>mainDashboard</dashboardModuleStartScreen>
 
-<dashboardModuleCalendar>myScheduledMeetings</dashboardModuleCalendar>
+<dashboardModuleCalendar>lzCalendar</dashboardModuleCalendar>
 
 
 <!-- Conference Room Modules -->
