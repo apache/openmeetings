@@ -76,10 +76,16 @@
 					//If Port is Null or undefinied use port 80
 					if (urlObject.port!=null && urlObject.port!=undefined){
 						var port = urlObject.port;
+						
+						if (port != 80) {
+							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+						} else {
+							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+						}
 					} else {
-						var port = 80;
+						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
 					}
-					parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+					
 					if( $debug ) Debug.write("parent.baseUrl: ",parent.baseUrl);
 					if (!canvas.isConference){
 						parent.roomType = "audience";

@@ -20,18 +20,31 @@
         </handler>
         
         <handler name="oninit">
-            this._date.bringToFront();
-            this._erinnerungedit.selectItemAt(2);
-            this._repetitionselect.selectItemAt(0);
-            
-            //Point URL to actual File
-            var urlObject =  lz.Browser.getBaseURL();
-            this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+urlObject.port+urlObject.path+urlObject.file;
-            
-            if ($debug) Debug.write("parent.baseUrl ",this.baseUrl);
-            
-            this.getAppointmentCategoryList.doCall();
-            this.getAppointmentReminderTypList.doCall();
+        	<![CDATA[
+	            this._date.bringToFront();
+	            this._erinnerungedit.selectItemAt(2);
+	            this._repetitionselect.selectItemAt(0);
+	            
+	            //Point URL to actual File
+	            var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
+					
+					if (port != 80) {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+					} else {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+					}
+				} else {
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+				}
+						
+	            if ($debug) Debug.write("parent.baseUrl ",this.baseUrl);
+	            
+	            this.getAppointmentCategoryList.doCall();
+	            this.getAppointmentReminderTypList.doCall();
+            ]]>
         </handler>
         	
 		<method name="defaulttermindetails">
