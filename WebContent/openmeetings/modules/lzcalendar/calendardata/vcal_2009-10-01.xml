@@ -1,0 +1,162 @@
+<vcalendar>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+    <year2009>
+        <month10>
+            <day15>
+
+                <event>
+                       <summary value="Send presentation slides"/>
+                       <comment value="Send something"/>
+                       <start year="2009" month="10" day="15" hour="13" minute="2"/>
+                       <end year="2009" month="10" day="15" hour="14" minute="2"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Call Arnold about fiscal plan"/>
+                       <comment value="Call Arnold"/>
+                       <start year="2009" month="10" day="15" hour="9" minute="12"/>
+                       <end year="2009" month="10" day="15" hour="10" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day15>
+            <day2>
+                <event>
+                       <summary value="Arrange flight to Shanghai"/>
+                       <comment value="no comment"/>
+                       <start year="2009" month="10" day="2" hour="8" minute="30"/>
+                       <end year="2009" month="10" day="2" hour="10" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Verify delivery of book order for book club"/>
+                       <comment value="A longer event to show wrapping"/>
+                       <start year="2009" month="10" day="2" hour="14" minute="12"/>
+                       <end year="2009" month="10" day="2" hour="15" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day2>
+            <day6>
+                <event>
+                       <summary value="Steering Committee meeting"/>
+                       <comment value="Another meeting"/>
+                       <start year="2009" month="10" day="6" hour="3" minute="30"/>
+                       <end year="2009" month="10" day="6" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Pizza with kids"/>
+                       <comment value="Lunch with kids"/>
+                       <start year="2009" month="10" day="6" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="6" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day6>
+            <day11>
+                <event>
+                   <summary value="Columbus Day"/>
+                   <comment value="Columbus Day"/>
+                   <start year="2009" month="10" day="11" hour="9"/>
+                   <end year="2009" month="10" day="11" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+            </day11>
+            <day12>
+                <event>
+                       <summary value="Car oil change"/>
+                       <comment value="car maintenance"/>
+                       <start year="2009" month="10" day="12" hour="3" minute="30"/>
+                       <end year="2009" month="10" day="12" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Write blog entry"/>
+                       <comment value="Lunch with kids"/>
+                       <start year="2009" month="10" day="12" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="12" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day12>
+            <day21>
+                <event>
+                       <summary value="Noodles with neighbors"/>
+                       <comment value="the nice ones"/>
+                       <start year="2009" month="10" day="21" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="21" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Pick up car"/>
+                       <comment value="Pick up car"/>
+                       <start year="2009" month="10" day="21" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="21" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day21>
+            <day30>
+                <event>
+                       <summary value="Happy birthday Dad!"/>
+                       <comment value="Happy birthday Dad!"/>
+                       <start year="2009" month="10" day="30" hour="3" minute="30"/>
+                       <end year="2009" month="10" day="30" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Surfs up"/>
+                       <comment value="Another example event"/>
+                       <start year="2009" month="10" day="30" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="30" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day30>
+            <day31>
+                <event>
+                   <summary value="Daylight Savings Ends"/>
+                   <comment value="Daylight Savings Ends"/>
+                   <start year="2009" month="10" day="31" hour="9"/>
+                   <end year="2009" month="10" day="31" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+                <event>
+                   <summary value="Halloween"/>
+                   <comment value="Halloween"/>
+                   <start year="2009" month="10" day="31" hour="9"/>
+                   <end year="2009" month="10" day="31" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+            </day31>
+            <day18>
+                <event>
+                       <summary value="Text wrapping for dummies class"/>
+                       <comment value="Text wrapping for dummies class"/>
+                       <start year="2009" month="10" day="18" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="18" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Walk the dog"/>
+                       <comment value="Walk the dog"/>
+                       <start year="2009" month="10" day="18" hour="12" minute="12"/>
+                       <end year="2009" month="10" day="18" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day18>
+        </month10>
+    </year2009>
+</vcalendar>

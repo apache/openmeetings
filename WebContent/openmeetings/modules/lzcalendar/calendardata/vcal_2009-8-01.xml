@@ -1,0 +1,47 @@
+<vcalendar>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+    <year2009>
+        <month8>
+            <day6>
+                <event>
+                   <summary value="Launch Party!"/>
+                   <comment value="Drinks at the Pub!"/>
+                   <start year="2009" month="8" day="6" hour="6" />
+                   <end year="2009" month="8" day="6" hour="9" />
+                   <category value="holiday"/>
+                </event>
+           </day6>
+
+            <day2>
+                <event>
+                   <summary value="Civic Holiday"/>
+                   <comment value="Civic Holiday, Canada"/>
+                   <start year="2009" month="8" day="2" hour="9" />
+                   <end year="2009" month="8" day="2" hour="10" />
+                   <category value="holiday"/>
+                </event>
+           </day2>
+           <day14>
+                <event>
+                   <summary value="Book Club"/>
+                   <comment value="Understanding Camus"/>
+                   <start year="2009" month="8" day="14" hour="9" />
+                   <end year="2009" month="8" day="14" hour="10" />
+                   <category value="holiday"/>
+                </event>
+           </day14>
+            <day19>
+                <event>
+                   <summary value="Laszlo's Birthday!"/>
+                   <comment value="Surprise Party in the Kitchen"/>
+                   <start year="2009" month="8" day="19" hour="1" />
+                   <end year="2009" month="8" day="19" hour="3" />
+                   <category value="holiday"/>
+                </event>
+           </day19>
+        </month8>
+    </year2009>
+</vcalendar>

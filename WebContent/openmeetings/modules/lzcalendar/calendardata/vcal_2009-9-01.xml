@@ -1,0 +1,136 @@
+<vcalendar>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+    <year2009>
+        <month9>
+            <day10>
+                <event>
+                   <summary value="Movie Screening"/>
+                   <comment value="Movie Screening in LA"/>
+                   <start year="2009" month="9" day="10" hour="9"/>
+                   <end year="2009" month="9" day="10" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+            </day10>
+            <day22>
+                <event>
+                   <summary value="Fall Equinox"/>
+                   <comment value="Fall Equinox"/>
+                   <start year="2009" month="9" day="22" hour="9"/>
+                   <end year="2009" month="9" day="22" hour="10"/>
+                   <category value="astro"/>
+                </event>
+            </day22>
+            <day16>
+                <event>
+                   <summary value="Jewish New Year"/>
+                   <comment value="Jewish New Year"/>
+                   <start year="2009" month="9" day="16" hour="9"/>
+                   <end year="2009" month="9" day="16" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+            </day16>
+
+            <day2>
+                <event>
+                       <summary value="Jury duty"/>
+                       <comment value="jury selection"/>
+                       <start year="2009" month="9" day="2" hour="8" minute="30"/>
+                       <end year="2009" month="9" day="2" hour="10" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Meet with investors"/>
+                       <comment value="meet vc firm"/>
+                       <start year="2009" month="9" day="2" hour="7" minute="12"/>
+                       <end year="2009" month="9" day="2" hour="8" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day2>
+            <day6>
+                <event>
+                   <summary value="Labor Day"/>
+                   <comment value="Labor Day"/>
+                   <start year="2009" month="9" day="6" hour="9"/>
+                   <end year="2009" month="9" day="6" hour="10"/>
+                   <category value="holiday"/>
+                </event>
+                <event>
+                       <summary value="customer meeting"/>
+                       <comment value="customer meeting"/>
+                       <start year="2009" month="9" day="6" hour="3" minute="30"/>
+                       <end year="2009" month="9" day="6" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Lunch with Mark"/>
+                       <comment value="Lunch with Mark"/>
+                       <start year="2009" month="9" day="6" hour="12" minute="12"/>
+                       <end year="2009" month="9" day="6" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day6>
+            <day15>
+                <event>
+                       <summary value="Lunch with Tucker"/>
+                       <comment value="Lunch with Tucker"/>
+                       <start year="2009" month="9" day="15" hour="14" minute="1"/>
+                       <end year="2009" month="9" day="15" hour="16" minute="1"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Dentist visit"/>
+                       <comment value="Dentis visit"/>
+                       <start year="2009" month="9" day="15" hour="16" minute="30"/>
+                       <end year="2009" month="9" day="15" hour="17" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day15>
+            <day18>
+                <event>
+                       <summary value="Gym workout at Gold's with cycling team"/>
+                       <comment value="Gym workout with the whole gang"/>
+                       <start year="2009" month="9" day="18" hour="12" minute="12"/>
+                       <end year="2009" month="9" day="18" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="XML Conference"/>
+                       <comment value="XML Conference"/>
+                       <start year="2009" month="9" day="18" hour="12" minute="12"/>
+                       <end year="2009" month="9" day="18" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day18>
+            <day30>
+                <event>
+                       <summary value="Happy birthday Marlena"/>
+                       <comment value="Happy birthday Marlena"/>
+                       <start year="2009" month="9" day="30" hour="3" minute="30"/>
+                       <end year="2009" month="9" day="30" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day30>
+            <day25>
+                <event>
+                   <summary value="Yom Kippur"/>
+                   <comment value="Yom Kippur"/>
+                   <start year="2009" month="7" day="25" hour="9"/>
+                   <end year="2009" month="7" day="25" hour="11"/>
+                   <category value="holiday"/>
+                </event>
+           </day25>
+        </month9>
+    </year2009>
+</vcalendar>
