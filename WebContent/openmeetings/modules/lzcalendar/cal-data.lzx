@@ -130,7 +130,12 @@
 
     <!-- This node provides some useful methods for manipulating the 
          local data -->
-    <node id="eventDataMgr">
+    <node >
+    	
+    	<handler name="oninit">
+    		canvas.eventDataMgr = this;
+    	</handler>
+    	
         <method name="addEvent">
             // Add event is called by the "Add Event" button to 
             //create a new event

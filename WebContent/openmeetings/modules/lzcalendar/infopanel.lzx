@@ -116,7 +116,7 @@
                                     calgrid.open_day = global[prevcell];
                                 }
                             }
-                            eventDataMgr.changeDay(-1);
+                            canvas.eventDataMgr.changeDay(-1);
                             if(thiscell == 1){
                                 calgrid.prevMonth();
                                 calgrid.keepinfoopen = false;
@@ -145,7 +145,7 @@
                                     calgrid.open_day = global[nextcell];
                                 }
                             }
-                            eventDataMgr.changeDay(+1);
+                            canvas.eventDataMgr.changeDay(+1);
                             if(thiscell == 42){
                                 calgrid.nextMonth();
                                 calgrid.keepinfoopen = false;
@@ -196,11 +196,11 @@
                     <basebutton x="$immediately{60-11}" width="14" 
                                 resource="info_larrow"
                                 datapath="start[1]" 
-                                onclick="eventDataMgr.changetime('start',-1);"/>
+                                onclick="canvas.eventDataMgr.changetime('start',-1);"/>
                     <basebutton x="$immediately{74-11}" width="14" 
                                 resource="info_rarrow"
                                 datapath="start[1]"
-                                onclick="eventDataMgr.changetime('start',+1);"/>
+                                onclick="canvas.eventDataMgr.changetime('start',+1);"/>
 
                     <text x="$immediately{92-11}" y="0" width="20" >
                         to</text>
@@ -214,10 +214,10 @@
                     </textbox>
                     <basebutton x="149" width="14" resource="info_larrow"
                         datapath="end[1]" 
-                        onclick="eventDataMgr.changetime('end',-1);"/>
+                        onclick="canvas.eventDataMgr.changetime('end',-1);"/>
                     <basebutton x="163" width="14" resource="info_rarrow"
                         datapath="end[1]" 
-                        onclick="eventDataMgr.changetime('end',+1);"/>
+                        onclick="canvas.eventDataMgr.changetime('end',+1);"/>
                 </view>
                 <view bgcolor="0xEEF0EB" height="1" width="${parent.width - 10}" x="5" />
                <!--
@@ -279,16 +279,16 @@
 
             <calButton label="Apply" x="15" y="13">
                 <handler name="onclick">
-                    eventDataMgr.changeTitle(sitbox.getText());
-                    eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
-                    eventDataMgr.changeLocation(classroot.tabs.location.txt.getText());
-                    eventDataMgr.changeAttendees(classroot.tabs.attendees.txt.getText());
+                    canvas.eventDataMgr.changeTitle(sitbox.getText());
+                    canvas.eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
+                    canvas.eventDataMgr.changeLocation(classroot.tabs.location.txt.getText());
+                    canvas.eventDataMgr.changeAttendees(classroot.tabs.attendees.txt.getText());
                     classroot.setAttribute('dataapply', true);
                 </handler>
             </calButton>
                 
             <calButton label="Delete" x="${parent.width - width - 15}" y="13"
-                       onclick="eventDataMgr.deleteEvent()"/>
+                       onclick="canvas.eventDataMgr.deleteEvent()"/>
         </view>
 
         <!-- ANIMATORS -->
@@ -344,7 +344,7 @@
         <method name="close" args="v">
             <![CDATA[
             if(!this.dataapply){
-                eventDataMgr.deleteEvent()
+                canvas.eventDataMgr.deleteEvent()
             }
             if (! this.opened) { return; }
             this.awaitingClose = false;

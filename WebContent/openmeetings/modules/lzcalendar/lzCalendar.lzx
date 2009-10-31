@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+<!-- Reference to the Node with the Methods -->
+<attribute name="eventDataMgr" value="null" />
+
 <attribute name="calMonths" value='[ "January","February","March","April",
                                          "May","June", "July","August",
                                          "September","October", "November",
                                          "December" ]'/>
+                                         
 <class name="lzCalendar" extends="baseContentView" >
 	
 	<dateSelector name="_calendar" y="0" x="2">
@@ -39,10 +43,51 @@
 	
 </class>
 
+
+<class name="weekbkgnd" extends="view" bgcolor="$once { canvas.basebgcolorizer }" y="26"
+              width="810" height="26" >
+    <!-- Day names appear as titles in month and week views.  They
+         are constrained to their respective columns within the
+         calendar grid by binding to the firs-->
+    <view name="daynames" x="0" y="11" width="792" >
+
+        <!-- shows the day titles if necessary when the grid stops
+             updating -->
+        <handler name="onupdatestop" method="showalldaytitles" reference="parent.parent.parent.calgrid.gridlayout" />
+        <method name="showalldaytitles" args="v">
+          <![CDATA[
+            if ( calgrid.gridlayout.displaymode != 'cell' ){
+                var svs = this.subviews;
+                for (var i = 0; i < 7; i++) {
+                    svs[i].setAttribute('visible', true);
+                }
+            } ]]>
+        </method>
+        <dayname name="sunday" resource="sunday_label" 
+        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - 63)/2.0}" />
+        <dayname name="monday"    resource="monday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - 63)/2.0}" />
+        <dayname name="tuesday"   resource="tuesday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - 63)/2.0}" />
+        <dayname name="wednesday" resource="wednesday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - 63)/2.0}" />
+        <dayname name="thursday"  resource="thursday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - 63)/2.0}" />
+        <dayname name="friday"    resource="friday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - 63)/2.0}" />
+        <dayname name="saturday"  resource="saturday_label"
+        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - 63)/2.0}" />
+
+
+    </view>
+    <view name="line" bgcolor="$once { canvas.baseMousecolorizer }" height="1" y="25"
+          width="${parent.width}"/>
+</class>
+
 <class name="lzCalendarContent" extends="view" width="935" height="640">
 	
 	<handler name="oninit">
-		slideInTopPanel.doStart();
+		this.toppanel.slideInTopPanel.doStart();
 	</handler>
 	
     <!-- ============================ MAIN ================================ -->
@@ -51,52 +96,14 @@
 
     <!-- The top panel holds the views above the calendar grid, which include
          the day names that appear as column titles.  -->
-    <view font="Verdana,sans-serif" id="toppanel" x="0" y="-50"  width="806" 
+    <view font="Verdana,sans-serif" name="toppanel" x="0" y="-50"  width="806" 
         fontsize="10">
 
         <!-- This is the bar that appears below the toolbar (and contains the
              day names. This comes first in the file because it needs to be
              behind the toolbar. -->
-        <view name="weekbkgnd" bgcolor="$once { canvas.basebgcolorizer }" y="26"
-              width="810" height="26" >
-            <!-- Day names appear as titles in month and week views.  They
-                 are constrained to their respective columns within the
-                 calendar grid by binding to the firs-->
-            <view name="daynames" x="0" y="11" width="792" >
-
-                <!-- shows the day titles if necessary when the grid stops
-                     updating -->
-                <handler name="onupdatestop" method="showalldaytitles" reference="calgrid.gridlayout" />
-                <method name="showalldaytitles" args="v">
-                  <![CDATA[
-                    if ( calgrid.gridlayout.displaymode != 'cell' ){
-                        var svs = this.subviews;
-                        for (var i = 0; i < 7; i++) {
-                            svs[i].setAttribute('visible', true);
-                        }
-                    } ]]>
-                </method>
-                <dayname name="sunday" resource="sunday_label"
-                         targetCell="cell1"/>
-                <dayname name="monday"    resource="monday_label"
-                         targetCell="cell2"/>
-                <dayname name="tuesday"   resource="tuesday_label"
-                         targetCell="cell3"/>
-                <dayname name="wednesday" resource="wednesday_label"
-                         targetCell="cell4"/>
-                <dayname name="thursday"  resource="thursday_label"
-                         targetCell="cell5"/>
-                <dayname name="friday"    resource="friday_label"
-                         targetCell="cell6"/>
-                <dayname name="saturday"  resource="saturday_label"
-                         targetCell="cell7"/>
-
-
-            </view>
-            <view name="line" bgcolor="$once { canvas.baseMousecolorizer }" height="1" y="25"
-                  width="${parent.width}"/>
-        </view>
-
+        <weekbkgnd name="weekbkgnd" />
+        
         <!-- TOOLBAR DISPLAY Month and a set of tools for
              manipulating that month -->
         <view name="mbar" bgcolor="$once { canvas.basebgcolorizer }" width="810" >
@@ -136,24 +143,24 @@
 
             <calButton label="Add Event" x="$once{ parent.width - 100 }" y="6">
             	<handler name="onclick">
-            		eventDataMgr.addEvent(); 
-					infopanel.open(); 
-					infopanel.setAttribute('dataapply', false);
+            		canvas.eventDataMgr.addEvent(); 
+					parent.parent.parent.cal_interior.infopanel.open(); 
+					parent.parent.parent.cal_interior.infopanel.setAttribute('dataapply', false);
             	</handler>
             </calButton>
             
         </view>
 
         <!-- animates in top panel on startup -->
-    <animator id="slideInTopPanel" attribute="y" 
-        to="0" duration="500" start="false" 
-        onstop="calgrid.finishStartSequence()"/>
+	    <animator name="slideInTopPanel" attribute="y" 
+	        to="0" duration="500" start="false" 
+	        onstop="parent.parent.calgrid.finishStartSequence()"/>
 
     </view>
 
     <!-- The cal interior holds the views in the calendar with the exception
          of the top view.  -->
-    <view id="cal_interior" x="0" y="57" visible="false" 
+    <view name="cal_interior" x="0" y="57" visible="false" 
           opacity="0" clip="true"
           font="Verdana,sans-serif"
           width="810" height="516" pixellock="true">
@@ -164,16 +171,16 @@
                   duration="1000" from="0" to="1"
                   start="false"/>
 
-        <info_Panel name="infopanel" id="infopanel" x="830" width="203"
+        <info_Panel name="infopanel" x="830" width="203"
                     height="516" visible="false" initstage="late" 
                     font="Verdana,sans-serif"                    
                     pixellock="true">
             <datapath p="${currenteventDP.p}" />
         </info_Panel>
-      </view>
+	</view>
 
-        <view id="calgrid" x="${cal_interior.x}" y="${cal_interior.y}"
-          width="${cal_interior.width - 2}" height="${cal_interior.height}" >
+	<view name="calgrid" x="$once{parent.cal_interior.x}" y="$once{parent.cal_interior.y}"
+          width="$once{parent.cal_interior.width - 2}" height="$once{parent.cal_interior.height}" >
           <attribute name="viewmode" value="month" type="string" />
           <attribute name="firstDay" value="null"/>
           <attribute name="keepinfoopen" type="boolean" value="false"/>
@@ -185,63 +192,63 @@
                library tag won't work here, and we don't want to use an
                extra view to make the included file valid XML (with a
                single root element.) -->
-          <calendar_day id="cell1"/>
-          <calendar_day id="cell2"/>
-          <calendar_day id="cell3"/>
-          <calendar_day id="cell4"/>
-          <calendar_day id="cell5"/>
-          <calendar_day id="cell6"/>
-          <calendar_day id="cell7"/>
+          <calendar_day name="cell1"/>
+          <calendar_day name="cell2"/>
+          <calendar_day name="cell3"/>
+          <calendar_day name="cell4"/>
+          <calendar_day name="cell5"/>
+          <calendar_day name="cell6"/>
+          <calendar_day name="cell7"/>
 
-          <calendar_day id="cell8"/>
-          <calendar_day id="cell9"/>
-          <calendar_day id="cell10"/>
-          <calendar_day id="cell11"/>
-          <calendar_day id="cell12"/>
-          <calendar_day id="cell13"/>
-          <calendar_day id="cell14"/>
+          <calendar_day name="cell8"/>
+          <calendar_day name="cell9"/>
+          <calendar_day name="cell10"/>
+          <calendar_day name="cell11"/>
+          <calendar_day name="cell12"/>
+          <calendar_day name="cell13"/>
+          <calendar_day name="cell14"/>
 
-          <calendar_day id="cell15"/>
-          <calendar_day id="cell16"/>
-          <calendar_day id="cell17"/>
-          <calendar_day id="cell18"/>
-          <calendar_day id="cell19" />
-          <calendar_day id="cell20"/>
-          <calendar_day id="cell21"/>
+          <calendar_day name="cell15"/>
+          <calendar_day name="cell16"/>
+          <calendar_day name="cell17"/>
+          <calendar_day name="cell18"/>
+          <calendar_day name="cell19" />
+          <calendar_day name="cell20"/>
+          <calendar_day name="cell21"/>
 
-          <calendar_day id="cell22"/>
-          <calendar_day id="cell23"/>
-          <calendar_day id="cell24"/>
-          <calendar_day id="cell25"/>
-          <calendar_day id="cell26"/>
-          <calendar_day id="cell27"/>
-          <calendar_day id="cell28"/>
+          <calendar_day name="cell22"/>
+          <calendar_day name="cell23"/>
+          <calendar_day name="cell24"/>
+          <calendar_day name="cell25"/>
+          <calendar_day name="cell26"/>
+          <calendar_day name="cell27"/>
+          <calendar_day name="cell28"/>
 
-          <calendar_day id="cell29"/>
-          <calendar_day id="cell30"/>
-          <calendar_day id="cell31"/>
-          <calendar_day id="cell32"/>
-          <calendar_day id="cell33"/>
-          <calendar_day id="cell34"/>
-          <calendar_day id="cell35"/>
+          <calendar_day name="cell29"/>
+          <calendar_day name="cell30"/>
+          <calendar_day name="cell31"/>
+          <calendar_day name="cell32"/>
+          <calendar_day name="cell33"/>
+          <calendar_day name="cell34"/>
+          <calendar_day name="cell35"/>
 
-          <calendar_day id="cell36"/>
-          <calendar_day id="cell37"/>
-          <calendar_day id="cell38"/>
-          <calendar_day id="cell39"/>
-          <calendar_day id="cell40"/>
-          <calendar_day id="cell41"/>
-          <calendar_day id="cell42"/>
+          <calendar_day name="cell36"/>
+          <calendar_day name="cell37"/>
+          <calendar_day name="cell38"/>
+          <calendar_day name="cell39"/>
+          <calendar_day name="cell40"/>
+          <calendar_day name="cell41"/>
+          <calendar_day name="cell42"/>
 
           <gridsliderlayout name="gridlayout" cols="7" spacing="4"/>
 
 
           <!-- METHODS -->
           <method name="finishStartSequence">
-              cal_interior.setAttribute('visible',  true );
+              parent.cal_interior.setAttribute('visible',  true );
               var now = new Date();
               this.setMonthAndYear(now.getMonth(), now.getFullYear());
-              cal_interior.fadeUp.doStart();
+              parent.cal_interior.fadeUp.doStart();
           </method>
 
           <!-- Finds the day associated with a given JavaScript Date
@@ -286,24 +293,25 @@
               // Open one day, close the last
 
               // update gridslider
-              if(gridlayout.displaymode == 'grid') gridlayout.doanimation = false;
+              if(this.gridlayout.displaymode == 'grid') this.gridlayout.doanimation = false;
 
-              gridlayout.setopenview(d,true);
+              this.gridlayout.setopenview(d,true);
 
               this.open_day = d;  // Make the requested day the open day
           ]]></method>
 
 
-          <method name="closeday" >      <![CDATA[
-              //if (this['open_day'] == undefined || this.open_day == null)
-              //    return;
-
-              //this.open_day.setAttribute( 'opened' , false);
-              //this.open_day = null;
-              gridlayout.doanimation = false;
-              gridlayout.setopenview(null,true);
-
-          ]]></method>
+          <method name="closeday" >      
+          	  <![CDATA[
+	              //if (this['open_day'] == undefined || this.open_day == null)
+	              //    return;
+	
+	              //this.open_day.setAttribute( 'opened' , false);
+	              //this.open_day = null;
+	              this.gridlayout.doanimation = false;
+	              this.gridlayout.setopenview(null,true);
+          	  ]]>
+          </method>
 
           <method name="prevMonth">
               var prvmonth = this.month - 1;
@@ -313,7 +321,7 @@
                   prvyear -= 1;
               }
               this.setMonthAndYear(prvmonth,prvyear);
-              cal_interior.viewstyle = "month";
+              parent.cal_interior.viewstyle = "month";
           </method>
 
           <method name="nextMonth">
@@ -328,12 +336,12 @@
               if (global['mytext'] != null){
                   global['mytext'].setAttribute('text', LzTimeKernel.getTimer() -t );
               }
-              cal_interior.viewstyle = "month";
+              parent.cal_interior.viewstyle = "month";
           </method>
 
           <!-- BEGIN: VIEW MODE METHODS ASSOCIATED WITH VIEW BUTTONS -->
           <method name="showonedaytitle" args="dayindex"> <![CDATA[
-              var svs = toppanel.weekbkgnd.daynames.subviews;
+              var svs = parent.toppanel.weekbkgnd.daynames.subviews;
               for (var i = 0; i < 7; i++){
                   if (i == dayindex)
                       svs[i].setAttribute('visible', true);
@@ -342,51 +350,57 @@
               }
           ]]> </method>
 
-          <method name="showdayview"> <![CDATA[
-              var sday = daySelectionMgr.getSelection()[0];
-              this.showonedaytitle(sday.col);
-              gridlayout.showcell(sday.row,sday.col);
-              cal_interior.setAttribute("viewstyle", "day");
-          ]]> </method>
+          <method name="showdayview"> 
+          	  <![CDATA[
+	              var sday = this.daySelectionMgr.getSelection()[0];
+	              this.showonedaytitle(sday.col);
+	              this.gridlayout.showcell(sday.row,sday.col);
+	              parent.cal_interior.setAttribute("viewstyle", "day");
+          	  ]]> 
+          </method>
 
-          <method name="showweekview"> <![CDATA[
-              var sday = daySelectionMgr.getSelection()[0];
-              gridlayout.showrow(sday.row);
-              cal_interior.setAttribute("viewstyle", "week");
-          ]]> </method>
+          <method name="showweekview"> 
+          	  <![CDATA[
+	              var sday = this.daySelectionMgr.getSelection()[0];
+	              this.gridlayout.showrow(sday.row);
+	              parent.cal_interior.setAttribute("viewstyle", "week");
+          	  ]]> 
+          </method>
 
-          <method name="showmonthview" args="withanimation" > <![CDATA[
-              gridlayout.showgrid(false);
-              cal_interior.setAttribute("viewstyle", "month");
-          ]]> </method>
+          <method name="showmonthview" args="withanimation" > 
+          	  <![CDATA[
+	              this.gridlayout.showgrid(false);
+	              parent.cal_interior.setAttribute("viewstyle", "month");
+          	  ]]> 
+          </method>
 
           <!-- END: VIEW MODE METHODS ASSOCIATED WITH VIEW BUTTONS -->
 
-          <method name="setMonthAndYear" args="mth,yr"> <![CDATA[
-              if (mth == this['month'] && yr == this['year']){
-                  return;
-              }
-
-              if(this.keepinfoopen == false){
-                  eventselector.hide();
-              }
-
-              this.month = mth;
-              this.year  = yr;
-
-              this.gridlayout.setopenview(null,false);
-
-              // don't animate  gridlayout on update
-              gridlayout.setAttribute('doanimation',false);
-              //this.gridlayout.setAttribute('displaymode','grid');
-              var noanimation = true;
-              gridlayout.showgrid(noanimation);
-
-              var t = canvas.calMonths[mth] + " " + yr;
-              toppanel.mbar.monthtitle.setAttribute('text', t);
-
-              this.setDates();
-
+          <method name="setMonthAndYear" args="mth,yr"> 
+          	  <![CDATA[
+	              if (mth == this['month'] && yr == this['year']){
+	                  return;
+	              }
+	
+	              if(this.keepinfoopen == false){
+	                  parent.eventselector.hide();
+	              }
+	
+	              this.month = mth;
+	              this.year  = yr;
+	
+	              this.gridlayout.setopenview(null,false);
+	
+	              // don't animate  gridlayout on update
+	              this.gridlayout.setAttribute('doanimation',false);
+	              //this.gridlayout.setAttribute('displaymode','grid');
+	              var noanimation = true;
+	              this.gridlayout.showgrid(noanimation);
+	
+	              var t = canvas.calMonths[mth] + " " + yr;
+	              parent.toppanel.mbar.monthtitle.setAttribute('text', t);
+	
+	              this.setDates();
 
               ]]>
           </method>
@@ -394,12 +408,12 @@
 
           <!-- These are used by the info panel when it slides in and out -->
           <method name="contract" >
-              gridlayout.doanimation = false;
+              this.gridlayout.doanimation = false;
               this.setAttribute('width', cal_interior.width - 208);
           </method>
 
           <method name="expand" >
-              gridlayout.doanimation = false;
+              this.gridlayout.doanimation = false;
               this.setAttribute('width', cal_interior.width);
           </method>
 
@@ -511,11 +525,11 @@
 
     <!-- This is the beveled treatment for the selected day, plus the button
          that appears in the top right corner -->
-    <selectedDayLook id="dayselectorlook" width="150" height="23" 
+    <selectedDayLook name="dayselectorlook" width="150" height="23" 
         font="Verdana,sans-serif"
         visible="false" opacity="0"/>
 
-    <eventSelectorbar id="eventselector" 
+    <eventSelectorbar name="eventselector" 
         font="Verdana,sans-serif" />
 
 </class>

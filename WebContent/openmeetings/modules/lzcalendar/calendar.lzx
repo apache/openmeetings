@@ -140,7 +140,7 @@
             </text>
 
             <calButton label="Add Event" x="496" y="5"
-                       onclick="eventDataMgr.addEvent(); infopanel.open(); infopanel.setAttribute('dataapply', false);" />
+                       onclick="canvas.eventDataMgr.addEvent(); infopanel.open(); infopanel.setAttribute('dataapply', false);" />
         </view>
 
         <!-- animates in top panel on startup -->

@@ -206,7 +206,7 @@
                 newDay=this.startdate.getDate();
 
                 // Move the event to the new location
-                eventDataMgr.moveEvent(newYear,newMonth,newDay);
+                canvas.eventDataMgr.moveEvent(newYear,newMonth,newDay);
             }
 
         </method>

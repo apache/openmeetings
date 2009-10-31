@@ -7,7 +7,7 @@
     <class name="eventSelectorbar" clip="false"
            y="61"
            x="16"
-           width="${parent.width}" height="$once{calgrid.height}"
+           width="${parent.width}" height="$once{parent.calgrid.height}"
            pixellock="false"
            clickable="false">
 
@@ -292,7 +292,7 @@
             //round to nearest 15 min
             var newm = Math.floor( ( h - newh ) * 4  ) * 15;
 
-            eventDataMgr.changeEventTime( newh , newm );
+            canvas.eventDataMgr.changeEventTime( newh , newm );
         </method>
 
 

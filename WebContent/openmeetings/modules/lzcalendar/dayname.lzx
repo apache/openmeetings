@@ -1,7 +1,5 @@
 <library>
-    <class name="dayname" width="63" 
-           x="${targetCell.x + (targetCell.width - 63)/2.0}">
-        <attribute name="targetCell" when="once"/>
+    <class name="dayname" width="63">
     </class>
 </library>
 <!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
