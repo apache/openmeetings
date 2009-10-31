@@ -1,0 +1,50 @@
+<library>
+
+<!-- CLASS: textbox ================================================== -->
+<!-- ================================================================= -->
+<class name="textbox" height="14">
+    <attribute name="bordercolor" value="0x000000" />
+    <view name="v_border" height="1" bgcolor="${parent.bordercolor}" width="${parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="${parent.bordercolor}" height="${parent.height -1}" />
+    <view y="${parent.height}" width="${parent.width}" bgcolor="white" height="1"/>
+    <view x="${parent.width}" y="${parent.height}" bgcolor="white" width="1"/>
+    <text name="txt" x="2" width="${parent.width-4}"/> <!-- fgcolor="#535353" -->
+    <method name="setText" args="t">
+        txt.setAttribute('text', t);
+    </method>
+
+    <method name="changeDataset" args="DP,path">
+       var tempDP = DP.dupePointer();
+    </method>
+</class>
+
+<!-- CLASS: inputtextbox ============================================= -->
+<!-- ================================================================= -->
+<class name="inputtextbox" extends="inputtext" bgcolor="white"> <!-- fgcolor="#535353"-->
+    <view name="v_border" height="1"       bgcolor="black" width="${parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="black" height="${parent.height -1}" />
+
+    <!-- [bshine 9.28.06] TODO legals does not support LzCommand 
+    <command name="myenter" onselect="parent.datapath.updateData();"  
+             key="['Enter']"
+             active="false"/>
+    -->                      
+    
+    <handler name="onfocus">
+        // [bshine 9.28.06] TODO legals does not support LzCommand // myenter.setAttribute( "active" ,true );
+    </handler>
+
+    <handler name="onblur">
+        this.datapath.updateData();
+        // [bshine 9.28.06] TODO legals does not support LzCommand //myenter.setAttribute( "active" ,false );
+    </handler>
+    
+</class>
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

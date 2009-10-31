@@ -1,0 +1,504 @@
+<library>
+
+    <!-- local data set -->
+    <dataset name="eventdata" />
+
+    <!-- loads one month of data at a time; source is set by dataloader 
+         below-->
+    <dataset name="serverdata" type="http"/>
+
+    <!-- controls loading of server data; once data has loaded calls 
+         notifies localdatacontroller -->
+    <datapointer name="dataloader" xpath="serverdata:/*" ondata="this.run()">
+
+        <attribute name="reqq" value="[]"/>
+        <attribute name="requestrunning" value="false"/>
+
+        <method name="run">
+        	if ($debug) Debug.write("dataloader RUN",this);
+            this.requestrunning = false;
+            localdatacontroller.mergeInsert( this );
+            this.doNextRequest();
+        </method>
+
+        <!-- keep going if we get an error -->
+        <handler name="onerror">
+            this.requestrunning = false;
+            this.doNextRequest();
+        </handler>
+
+        <method name="loadData" args="mo, yr">
+        	if ($debug) Debug.write("loadData",mo, yr);
+            if( !datatester.hasNode( mo , yr ) ){
+                var r = "calendardata/vcal_" + yr + "-" + mo + "-01.xml";
+                this.enqueueRequest( r );
+            }
+        </method>
+
+        <method name="doNextRequest" >
+            if ( !this.reqq.length ) return;
+            var nr = this.reqq.shift();
+            //Debug.write( "make request "  + nr );
+            this.requestrunning = true;
+            serverdata.setAttribute( "src", nr );
+            serverdata.doRequest();
+        </method>
+
+        <method name="enqueueRequest" args="r">
+            this.reqq.push( r );
+            if ( ! this.requestrunning ){
+                this.doNextRequest();
+            }
+        </method>
+
+    </datapointer>
+
+    <datapointer name="datatester">
+        <method name="hasNode" args="mo , yr">
+            this.setXPath( "eventdata:/vcalendar/year" + yr + "/month" + mo );
+            //this is unfortunate, but there's no easy way to see if this
+            //succeeded as v1
+            if(this.p != null){
+                return this.getNodeName() == "month"+mo;
+            } else {
+                return false;
+            }
+        </method>
+    </datapointer>
+
+    <!-- walks down local and server dataset node hierarchies while it finds
+         matching nodes. when there is a mismatch, inserts server data -->
+    <datapointer name="localdatacontroller" xpath="eventdata:/">    
+        <method name="mergeInsert" args="optr">
+            var ptr = optr.dupePointer();
+            this.setXPath( "eventdata:/" );
+
+            while ( ptr.getNodeCount() == 1 ){
+                var op = this.p;
+                if(ptr.p != null){
+                    this.setXPath( ptr.getNodeName() );
+                }
+                var thisgnn = (this.p == null ? null : this.getNodeName());
+                if ( thisgnn != ptr.getNodeName() ){
+                    this.setPointer ( op );
+                    break;
+                }
+                ptr.selectChild()
+            }
+
+            var t = LzTimeKernel.getTimer();
+            this.addNodeFromPointer( ptr );
+            if ($debug) Debug.write( "time to addNode: " + ( LzTimeKernel.getTimer() - t ) );
+        </method>
+    </datapointer>
+
+
+    <!-- used for adding events -->
+    <dataset name="blankEvent">
+        <event>
+            <summary value=""/>
+            <comment value=""/>
+            <notes value=""/>
+            <location value=""/>
+            <attendees value=""/>
+            <start year="" month="" day="" hour="" minute="" />
+            <end year="" month="" day="" hour="" minute="" />
+            <category value=""/>
+            <uid value=""/>
+        </event>
+    </dataset>
+
+    <!-- Assigned to the panel when deleting an event -->
+    <dataset name="noEvent">
+        <event>
+            <summary value=""/>
+            <comment value=""/>
+            <notes value=""/>
+            <location value=""/>
+            <attendees value=""/>
+            <start year="" month="" day="" hour="" minute="" />
+            <end year="" month="" day="" hour="" minute="" />
+            <category value=""/>
+            <uid value=""/>
+        </event>
+    </dataset>
+
+    <datapointer id="alleventsDP" xpath="eventdata:/"/>
+    <datapointer id="currenteventDP" />
+    <datapointer id="blankeventDP" xpath="blankEvent:/"/>
+    <datapointer id="tempDP" xpath="eventdata:/"/>
+
+    <!-- This node provides some useful methods for manipulating the 
+         local data -->
+    <node id="eventDataMgr">
+        <method name="addEvent">
+            // Add event is called by the "Add Event" button to 
+            //create a new event
+
+            alleventsDP.setXPath('eventdata:/vcalendar[1]');
+
+            // Set the blank event pointer to the top of the event
+            blankeventDP.setXPath('blankEvent:/event[1]');
+
+            // Set the right current cal day for new events
+            var selDay = calgrid.daySelectionMgr.getSelection()[0];
+            if ( selDay ){
+                blankeventDP.setNodeAttribute('selected','true');
+                blankeventDP.setXPath('start[1]');
+                blankeventDP.setNodeAttribute('year',
+                         selDay.startdate.getFullYear()+'');
+                blankeventDP.setNodeAttribute('month',
+                             (selDay.startdate.getMonth()+1)+'');
+                blankeventDP.setNodeAttribute('day',
+                             selDay.startdate.getDate()+'');
+
+                blankeventDP.setNodeAttribute('hour', '9' );
+                blankeventDP.setNodeAttribute('minute', '0' );
+
+                blankeventDP.setXPath('../end[1]');
+
+                blankeventDP.setNodeAttribute('year',
+                             selDay.startdate.getFullYear()+'');
+                blankeventDP.setNodeAttribute('month',
+                             (selDay.startdate.getMonth()+1)+'');
+                blankeventDP.setNodeAttribute('day',
+                             selDay.startdate.getDate()+'');
+
+                blankeventDP.setNodeAttribute('hour', '10' );
+                blankeventDP.setNodeAttribute('minute', '0' );
+
+
+                blankeventDP.setXPath('../summary[1]');
+                blankeventDP.setNodeAttribute('value', "New Event" );
+
+                blankeventDP.selectParent();
+            }
+
+            // Move to OR create the node tree for this event
+            // Each event should be in the right part of the 
+            // tree of data (yearXXXX/monthX/dayX/)
+            // The location in the tree is derived from the new 
+            // events start data
+            var year = blankeventDP.xpathQuery('start/@year');
+            var month = blankeventDP.xpathQuery('start/@month');
+            var day = blankeventDP.xpathQuery('start/@day');
+            getNewNode(alleventsDP,'year'+year);
+            getNewNode(alleventsDP,'month'+month);
+            getNewNode(alleventsDP,'day'+day);
+
+            // Add the event
+            currenteventDP.setNodeAttribute( "selected" , 'false' );
+            var newPoint = alleventsDP.addNodeFromPointer(blankeventDP);
+
+            // Set the event data pointer to the top of the event data
+            alleventsDP.setXPath('eventdata:/vcalendar[1]');
+
+        </method>
+
+        <method name="moveEvent" args="year,month,day">
+            updateEventDate(currenteventDP,year,month,day); 
+            //Make node attributes match dataset location
+
+            alleventsDP.setXPath('eventdata:/vcalendar[1]');
+
+            // Create the node tree for this event
+            getNewNode(alleventsDP,'year'+year);
+            getNewNode(alleventsDP,'month'+month);
+            getNewNode(alleventsDP,'day'+day);
+
+            tempDP.setFromPointer( currenteventDP );
+            tempDP.setNodeAttribute('selected', 'false');
+            // Copy current data to new location
+            // If the record being moved is selected (usually the case, 
+            // currenteventDP changes after this call
+            var newPoint = alleventsDP.addNodeFromPointer(currenteventDP);
+            currenteventDP.setFromPointer(newPoint);
+
+            //Delete the original node
+            tempDP.deleteNode();
+            currenteventDP.setNodeAttribute('selected', 'true');
+
+            // Set the event data pointer to the top of the event data
+            alleventsDP.setXPath('eventdata:/vcalendar[1]');
+
+        </method>
+
+        <method name="deleteEvent">
+            // Deletes the current node
+            currenteventDP.setNodeAttribute("selected", 'false');
+            currenteventDP.deleteNode();
+            //currenteventDP.setXPath('blankEvent:/event[1]');
+            
+            currenteventDP.setPointer( noEvent.getFirstChild() );
+            eventselector.hide();
+        </method>
+
+        <method name="changeEventTime" args="shour, smin"> <![CDATA[
+            // Changes the current event's time
+            tempDP.setFromPointer( currenteventDP );
+
+
+            var ehourtmp = tempDP.xpathQuery( "end[1]/@hour" );
+            var shourtmp = tempDP.xpathQuery( "start[1]/@hour" );
+
+            var emintmp = tempDP.xpathQuery( "end[1]/@minute" );
+            var smintmp = tempDP.xpathQuery( "start[1]/@minute" );
+            if (typeof(emintmp) == 'undefined') emintmp = 0;
+            if (typeof(smintmp) == 'undefined') smintmp = 0;
+
+            var evlen = Number(ehourtmp) * 60 + Number(emintmp) - (Number(shourtmp) * 60 + Number(smintmp));
+            if (evlen < 0) evlen += 60*24;
+            if (evlen == 0) evlen = 15;
+
+            var evlenhour = Math.floor( evlen / 60 );
+            var evlenmin = evlen - ( evlenhour * 60 );
+
+            tempDP.setXPath('start[1]');
+            tempDP.setNodeAttribute('hour', shour+'');
+            tempDP.setNodeAttribute('minute', smin+'');
+
+            tempDP.setXPath('../end[1]');
+
+            var emin = smin + evlenmin;
+            var ehour = shour + evlenhour;
+            if (emin >= 60) {
+                emin = emin % 60;
+                ehour = ehour+1;
+            }
+
+            if (ehour < 0) ehour += 24;
+            ehour = ehour % 24;
+            var mincheck = 0;
+            var smincheck = 0;
+            if(evlenmin != 0){
+                mincheck = ((60 / evlenmin) * .25);
+                if(smin != 0){
+                    smincheck = ((60 / smin) * .25);
+                }
+            }
+            if (shour < 24 && shour + evlenhour + mincheck + smincheck >= 24){
+                ehour = 23;
+                emin = 45;
+            }
+            tempDP.setNodeAttribute('hour', ehour+'');
+            tempDP.setNodeAttribute('minute', emin+'');
+        ]]></method>
+
+        <method name="getNewNode" args="dp,node">    <![CDATA[
+            //Returns the pointer to the requested node and makes one if needed
+
+            if ( dp.xpathQuery(node+'/name()') == null){
+                dp.addNode(node);
+            }
+            dp.setXPath(node);
+
+            return (dp);
+        ]]></method>
+
+        <method name="updateEventDate" args="dp,year,month,day">
+            //This changes the attributes of the event's 
+            //data to the right year,month,day
+            //Debug.write("updateEventDate");
+            //Debug.write("Year: "+year+"  month: "+month+"  day: "+day);
+
+            tempDP.setFromPointer( dp );
+
+            tempDP.setXPath('start[1]');
+            tempDP.setNodeAttribute('year',year+'');
+            tempDP.setNodeAttribute('month',month+'');
+            tempDP.setNodeAttribute('day',day+'');
+
+            tempDP.selectParent();
+
+            tempDP.setXPath('end[1]');
+            tempDP.setNodeAttribute('year',year+'');
+            tempDP.setNodeAttribute('month',month+'');
+            tempDP.setNodeAttribute('day',day+'');
+
+
+        </method>
+
+        <method name="getShortTime" args="DP">
+            //Pass this a datapointer of Start or End node
+            //returns H[a/p]  example: 1p
+
+            var h = DP.getNodeAttribute('hour');
+            if (h=="")return;
+
+            var ap='a';
+
+            if (h &gt; 11) ap='p';
+            if (h &gt; 12) h-=12;
+            if (h==0) h='12';
+            return h+ap;
+        </method>
+
+        <method name="getLongTime" args="DP">
+            //Pass this a datapointer of Start or End node
+            //returns HH:MM [a/p]  example: 1:45p
+
+            var h = DP.getNodeAttribute('hour');
+            if (h=="")return;
+            var m = DP.getNodeAttribute('minute')
+
+            if (Number(m)==0 || m==null) m='0';
+            if (Number(m)&lt;10) m='0'+m;
+
+            var ap='a';
+
+            if (h &gt; 11) ap='p';
+            if (h &gt; 12) h-=12;
+
+            return h+':'+m+ap;
+
+        </method>
+
+        <method name="getLongDate" args="DP">
+            //Pass this a datapointer of Start or End node
+            //returns MONTH DD,YYYY   example: April 28, 2003
+
+            if (DP.getNodeAttribute('month')=="") return ("");
+
+            return canvas.calMonths[(DP.getNodeAttribute('month')-1)] + " " +
+                               DP.getNodeAttribute('day') + ", " +
+                               DP.getNodeAttribute('year');
+        </method>
+
+        <method name="changeDay" args="whichWay">
+            // Moves the current event to the next or previous day
+            // Assumes updateEventDate has fixed any incorrect start tag data
+
+            // Get current date info
+            var year = Number(currenteventDP.xpathQuery('start[1]/@year'));
+            var month = Number(currenteventDP.xpathQuery('start[1]/@month'));
+            var day = Number(currenteventDP.xpathQuery('start[1]/@day'));
+
+            var tempDate = new Date();
+            tempDate.setFullYear(year);
+            tempDate.setMonth(month-1);
+            tempDate.setDate(day);
+
+            //Change day
+            tempDate=new Date(tempDate.valueOf() + whichWay * 86400000);
+
+            year = tempDate.getFullYear();
+            month = Number(tempDate.getMonth())+1;
+            day = tempDate.getDate();
+
+
+            moveEvent(year,month,day);
+
+        </method>
+
+        <method name="changetime" args="startEnd,whichWay"><![CDATA[
+            // Moves the current event to the next or previous day
+            // startEnd is either 'start' or 'end'
+            // whichWay is either +1 or -1
+
+            // Get current date info (need start and end for rules)
+            var sHour = Number(currenteventDP.xpathQuery('start[1]/@hour'));
+            var sMinute = Number(currenteventDP.xpathQuery('start[1]/@minute'));
+            if (sHour + '' == 'NaN') sHour = 0;
+            if (sMinute + '' == 'NaN') sMinute = 0;
+
+            var eHour = Number(currenteventDP.xpathQuery('end[1]/@hour'));
+            var eMinute = Number(currenteventDP.xpathQuery('end[1]/@minute'));
+
+            if (eHour + '' == 'NaN') eHour = 0;
+            if (eMinute + '' == 'NaN') eMinute = 0;
+
+            var evlen = (eHour * 60 + eMinute) - (sHour * 60 + sMinute);
+            if (eHour < sHour)  evlen += 60*24;
+
+            if ( startEnd == "start" ){
+                sMinute += 15 * whichWay;
+                if ( sMinute < 0 ) {
+                    sMinute += 60;
+                    sHour -= 1;
+                } else if ( sMinute > 59 ) {
+                    sMinute -= 60;
+                    sHour += 1;
+                }
+                if (sHour >= 0 && sHour < 24)
+                    this.changeEventTime( sHour, sMinute );
+            }else{
+                if (evlen + 15 * whichWay < 60*24 && evlen + 15 * whichWay > 0) {
+                    eMinute += 15 * whichWay;
+                    if ( eMinute < 0 ) {
+                        eMinute += 60;
+                        eHour -= 1;
+                    } else if ( eMinute > 59 ) {
+                        eMinute -= 60;
+                        eHour += 1;
+                    }
+                    if (eHour < 0) eHour += 24;
+                    eHour = eHour % 24;
+                    if(eHour != 0){
+                        tempDP.setFromPointer( currenteventDP );
+                        tempDP.setXPath('end[1]');
+                        tempDP.setNodeAttribute( 'hour' , eHour+'' );
+                        tempDP.setNodeAttribute( 'minute' , eMinute+'' );
+                    }
+                }
+            }
+            ]]>
+        </method>
+
+        <method name="changeTitle" args="newtitle">
+            //This changes the attributes of the event's 
+            //data to the right information
+            tempDP.setFromPointer( currenteventDP );
+
+            tempDP.setXPath('summary[1]');
+            tempDP.setNodeAttribute('value', newtitle);
+        </method>
+
+        <method name="changeNotes" args="newnotes">
+            //This changes the attributes of the event's 
+            //data to the right information
+            tempDP.setFromPointer( currenteventDP );
+
+            tempDP.setXPath('notes[1]');
+            if(tempDP.isValid()){
+                tempDP.setNodeAttribute('value', newnotes);
+            } else {
+                tempDP.setFromPointer( currenteventDP );
+                tempDP.addNode('notes', null, {value : newnotes});
+            }
+        </method>
+
+        <method name="changeLocation" args="newloc">
+            //This changes the attributes of the event's 
+            //data to the right information
+            tempDP.setFromPointer( currenteventDP );
+
+            tempDP.setXPath('location[1]');
+            if(tempDP.isValid()){
+                tempDP.setNodeAttribute('value', newloc);
+            } else {
+                tempDP.setFromPointer( currenteventDP );
+                tempDP.addNode('location', null, {value : newloc});
+            }
+        </method>
+
+        <method name="changeAttendees" args="newattend">
+            //This changes the attributes of the event's 
+            //data to the right information
+            tempDP.setFromPointer( currenteventDP );
+
+            tempDP.setXPath('attendees[1]');
+            if(tempDP.isValid()){
+                tempDP.setNodeAttribute('value', newattend);
+            } else {
+                tempDP.setFromPointer( currenteventDP );
+                tempDP.addNode('attendees', null, {value : newattend});
+            }
+        </method>
+    </node>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

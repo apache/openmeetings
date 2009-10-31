@@ -1,0 +1,446 @@
+<library>
+    <!-- CLASS: CALENDAR EVENT SELECTOR BAR ============================== -->
+    <!-- The graphic bar that overlays an event when when it is selected   -->
+    <!-- ================================================================= -->
+    <!-- The event class is a 9 part collection much like a window object  -->
+    <!-- ================================================================= -->
+    <class name="eventSelectorbar" clip="false"
+           y="61"
+           x="16"
+           width="${parent.width}" height="$once{calgrid.height}"
+           pixellock="false"
+           clickable="false">
+
+        <!-- Add the line below to the attributes for the class
+             to get an idea of how the clip region behaves.
+             bgcolor="white" opacity=".5"-->
+
+        <!-- INSTANCE NAME: ID="eventselector" -->
+        <attribute name="dragging" value="false"/>
+        <attribute name="freedragging" value="false"/>
+        <attribute name="clipping" value="false"/>
+        <attribute name="xoff" type="number" value="0"/>
+        <attribute name="yoff" type="number" value="0"/>
+        <attribute name="origx" type="number" value="0"/>
+        <attribute name="obarx" type="number" value="0"/>
+
+        <view name="bar" pixellock="false" bgcolor="white" visible="false"
+              onmousedown="parent.domousedown()"
+              onmouseup="parent.domouseup(null)">
+
+            <text name="timeArea" fgcolor="#4B5D6C"
+                  datapath="start[1]" y="5" x="2" resize="true">
+                  <attribute name="hour" value="$path{'@hour'}"/>
+                <handler name="onhour">
+                    <![CDATA[
+                    if ( this.hour == null ) return;
+                    var h = Number( this.hour );
+                    var ap = h < 12 ? 'a' : 'p';
+                    if ( h > 12) h-=12;
+                    else if ( h==0 ) h='12';
+                    this.setAttribute('text', h + ap );
+                    ]]>
+                </handler>
+            </text>
+
+            <view width="${parent.width}" height="${parent.height}" clip="true">
+                <text name="smalltitletext" 
+                        fgcolor="#4B5D6C"
+                        width="${parent.width - this.x}" height="15"
+                        x="${parent.parent.timeArea.width + 5}"
+                        y="$once{parent.parent.timeArea.y}"
+                        datapath="summary/@value"/>
+            </view>
+
+            <view name="gripper" width="100%" height="100%" >
+                <view name="top" clip="true" x="-2"
+                      width="${parent.width - this.x}"
+                      resource="es_dragbar"/>
+
+                <view name="bottom" resource="es_btm" x="0" stretches="width"
+                    width="${parent.width}" y="${parent.height-3}"/>
+
+                <ibutton name="button" x="-21" y="-1"
+                         onclick="infopanel.open()" />
+            </view>
+
+            <state name="followstate">
+                <attribute name="x"
+                        value="${classroot['followview'].getAttributeRelative( 'x',
+                                                                    this )}"/>
+                <attribute name="y"
+                        value="${classroot['followview'].getAttributeRelative( 'y',
+                                                                    this)}"/>
+                <attribute name="width"
+                   value="${classroot['followview'].classroot.eventwidth}"/>
+
+                <attribute name="height"
+                        value="${classroot['followview'].height}"/>
+
+            </state>
+
+        </view>
+
+        <state name="clipSizing" >
+
+            <attribute name="y"
+              value="${this['followview'].classroot.details.bgrect.getAttributeRelative(
+                                                'y' , this)}"/>
+
+            <attribute name="height"
+                       value="${this['followview'].classroot.details.bgrect.height}"/>
+
+
+        </state>
+
+        <datapath p="${currenteventDP.p}"/>
+
+        <!-- METHODS -->
+        <handler name="oninit">
+            //Debug.write("ONINIT: this =" + this);
+            this.mdel = new LzDelegate(this,"trackmouse");
+            this.clipdel = new LzDelegate(this,"checkClip");
+            this.hidedel = new LzDelegate(this,"checkHide");
+            this.startDragDel = new LzDelegate(this,"startDrag");
+            //Debug.write("event selector.oninit");
+        </handler>
+
+        <method name="hide">
+            bar.setAttribute('visible', false);
+            bar.followstate.remove();
+            this.followview = null;
+            this.clipdel.unregisterAll();
+            this.hidedel.unregisterAll();
+            this.setAttribute( "freedragging" , true );
+            if(calgrid.keepinfoopen == false){
+                infopanel.unselectEvent();
+            }
+        </method>
+
+        <!-- All new data events must call this -->
+        <method name="selectData" args="e">
+            //Debug.write("selectData: "+e);
+            //Debug.write ("selectData Deselecting: "+
+                            //currenteventDP.serialize());
+            if(currenteventDP['p'] != null){
+                currenteventDP.setNodeAttribute( "selected" , 'false' );
+            }
+            e.datapath.setNodeAttribute( "selected" , 'true' );
+        </method>
+
+        <method name="setSelectedEvent" args="e , sdrag "><![CDATA[
+            //Debug.write( 'setSelectedEvent ' , e );
+            if ( e == this['followview'] ){
+                if ( sdrag && !this.dragging ){
+                    this.domousedown();
+                }
+                return;
+            }
+
+            
+            currenteventDP.setFromPointer( e.datapath );
+
+            //there is always a view associated with the selected event
+            //so we are guaranteed to correctly set the pointers if
+            //process it here
+
+
+            // update eventselector view
+            bar.setAttribute('visible',  true );
+            this.bringToFront();
+
+
+            //handle the visible aspects of this class
+            this.followview = e;
+
+            this.clipdel.unregisterAll();
+            this.clipdel.register( this['followview'].classroot, "onopened" );
+
+            this.hidedel.unregisterAll();
+            this.hidedel.register( this['followview'].classroot, "onvisible" );
+
+            // change selected day
+            calgrid.daySelectionMgr.select(e.classroot);
+            calgrid.open_day = e.classroot;
+
+            //reinitialize the constraints to the new view
+            //(there are no meta-constraints in v1
+            bar.followstate.remove();
+            bar.followstate.apply();
+
+
+            var nfd = !this['followview'].classroot.opened;
+            if ( this.freedragging != nfd){
+                this.setAttribute('freedragging', nfd );
+            } else {
+                if( !this.freedragging ){
+                    //since we have a new selected event, we need to reapply
+                    //the clipstate
+                    this.clipSizing.remove();
+                    this.clipSizing.apply();
+                }
+            }
+
+            colorMe();
+
+            if ( sdrag && !this.dragging ){
+                this.domousedown();
+            }
+
+            //Debug.write( "x: " + this.x + 'y' + this.y + "w" + this.width );
+            ]]>
+        </method>
+
+        <method name="colorMe">
+            // transform the color of the selector bar to match the event
+            var cat = currenteventDP.xpathQuery('category[1]/@value');
+
+            if (cat==undefined || cat=="")
+                var transColor = {ra:80, ga:80, ba:80};
+            else{
+                var catColor = category_colors[cat];
+                var trans = gColorTable[catColor].trans;
+                var transColor = { ra: trans.ra, ga: trans.ga, ba: trans.ba };
+            }
+
+            bar.gripper.top.setColorTransform(transColor);
+            bar.gripper.bottom.setColorTransform(transColor);
+            bar.gripper.button.bkgnd.setColorTransform(transColor);
+        </method>
+
+        <handler name="onfreedragging"><![CDATA[
+            if ( !this.clipping && !this.freedragging ){
+                this.clipping = true;
+
+                this.clipSizing.apply();
+
+            } else if ( this.clipping && this.freedragging ){
+                this.clipSizing.remove();
+                this.clipping = false;
+                // this.setAttributeRelative( 'y' , calgrid); // [bshine 9.28.06] TODO beware this in legals
+                this.setAttribute('y', this.getAttributeRelative('y', calgrid) );                
+                this.setAttribute( 'height' , calgrid.height);
+            }]]>
+        </handler>
+
+        <method name="checkClip" args="v"><![CDATA[
+            if ( this['followview'].classroot.opened && this.freedragging ){
+                this.setAttribute( "freedragging" , false );
+            }]]>
+        </method>
+
+        <method name="checkHide" args="v"><![CDATA[
+            if ( !this['followview'].classroot.visible ){
+                this.hide();
+            }]]>
+        </method>
+
+        <handler name="ondblclick">
+            //Debug.write("eventselector doubleclick");
+            infopanel.open();
+            // OLD  cal_interior.showInfo(smallevent.event);
+        </handler>
+
+        <handler name="onmousedown">
+            this.domousedowndel(null);
+        </handler>
+        <method name="domousedowndel" args="v">
+            this.domousedown();
+        </method>
+        <method name="domousedown"><![CDATA[
+            //wait 150ms before starting drag; prevents moving the 
+            //event selector on a click -- 150ms is empirical
+            this.origx = bar.x;
+            this.obarx = this.x + bar.x;
+            this.xoff = bar.getMouse( 'x' );
+            this.yoff = bar.getMouse( 'y' );
+
+            lz.Timer.resetTimer( this.startDragDel , 150 );
+            ]]>
+        </method>
+
+        <method name="startDrag" args="v">   <![CDATA[
+            this.mdel.register( lz.Idle, "onidle" );
+            bar.followstate.remove();
+            this.setAttribute('freedragging', !this['followview'].classroot.opened );
+            this.setAttribute('dragging',true);
+            calgrid.gridlayout.startTrack(); ]]>
+        </method>
+
+        <handler name="onmouseup" method="domouseup"/>
+        <method name="domouseup" args="v"><![CDATA[
+            if ( this.dragging ){
+                this.mdel.unregisterAll( );
+                this.setAttribute('dragging',false);
+                calgrid.gridlayout.stopTrack();
+                //this may be already applied, but it can't hurt
+                bar.followstate.apply();
+                
+                if ($debug) Debug.warn("ON MOUSE UP => Update Cal Event ",this['followview']);
+                
+                this.setAttribute('freedragging', !this['followview'].classroot.opened );
+            } else {
+                lz.Timer.removeTimer( this.startDragDel );
+            } ]]>
+        </method>
+
+        <method name="updateEventTime" args="d">
+            //called by day (d);
+            var h = d.calcHourFromY( bar.getAttributeRelative( 'y' , d) );
+
+            var newh = Math.floor( h );
+            //round to nearest 15 min
+            var newm = Math.floor( ( h - newh ) * 4  ) * 15;
+
+            eventDataMgr.changeEventTime( newh , newm );
+        </method>
+
+
+        <method name="updateOver" args="d">
+            //called by day (d);
+            if ( !this.freedragging ) return;
+            bar.setAttribute('width', d.eventwidth );
+
+            if ( xoff > bar.width ){
+                //move it over so that you're still dragging it in a
+                //sensible spot
+                this.xoff = bar.width-10;
+            }
+        </method>
+
+        <attribute name="snapEdge" value="30"/>
+
+        <method name="trackmouse" args="v"><![CDATA[
+            //may not be free dragging anymore
+            var needset = true;
+
+            if ( this['followview'].classroot.opened ){
+                //this is the amount the bar would move in x if it
+                //updated to mouse
+                var xedge = this.x + ( this.getMouse( 'x' ) - xoff ) - obarx;
+                if ( xedge < snapEdge && xedge > -snapEdge ) {
+
+                    var ybar = bar.getAttributeRelative( 'y' ,
+                                        this['followview'].parent ) +
+                                    ( this.getMouse('y') - yoff - bar.y );
+
+                    //Debug.write( ybar  + " d " +
+                                    //( this.getMouse('y') - yoff - bar.y ) );
+
+                    //Debug.write( this.getMouse('y') + " m " + bar.y + " o " + yoff );
+
+                    var h = this['followview'].classroot.details.bgrect.height -
+                            bar.height;
+                    if ( ybar > -snapEdge && ybar < h+snapEdge ){
+                        //we're within tolerance
+                        needset = false;
+                        if ( this.freedragging ) {
+                            this.setAttribute( "freedragging" , false );
+                            //this needs to happen second, after the
+                            //clipping view changes coordinates
+                            bar.setAttribute('x', this.origx );
+                            //need to reset y in new coordinate system
+                        }
+                        if ( ybar <= 0 ){
+                            if (this['followview'].classroot.details.bgrect.scrollview['sb']) this['followview'].classroot.details.bgrect.scrollview.sb.step(-1);
+                            bar.setAttribute('y', 0 );
+                        } else if ( ybar > h ){
+                            if (this['followview'].classroot.details.bgrect.scrollview['sb']) this['followview'].classroot.details.bgrect.scrollview.sb.step(1);
+                            bar.setAttribute('y', h );
+                        } else {
+                            bar.setAttribute('y', this.getMouse( 'y' ) - yoff );
+                        }
+
+                        var newStartHour = Math.floor (
+                             this['followview'].classroot.calcHourFromY(
+                                bar.getAttributeRelative( 'y' ,
+                                                     this['followview'].classroot)) );
+
+                        // Format output
+                        var ap='a';
+                        if (newStartHour >  11) ap='p';
+                        if (newStartHour >  12) newStartHour-=12;
+                        if (newStartHour == 0) newStartHour='12';
+
+                        bar.timeArea.setAttribute('text', newStartHour+ap);
+                    }
+                }
+            }
+
+            if ( needset && !this.freedragging ){
+                this.setAttribute( "freedragging" , true );
+            }
+
+            if ( this.freedragging ){
+                bar.setAttribute('x', this.getMouse( 'x' ) - xoff );
+                bar.setAttribute('y', this.getMouse( 'y' ) - yoff );
+            }
+            ]]>
+        </method>
+
+    </class>
+
+    <!-- THE INFO BUTTON -->
+    <class name="ibutton" clickable="true">
+        <attribute name="label"              value=""      type="string"/>
+        <attribute name="normalRsrcNumber"   value="1"     type="number"/>
+        <attribute name="overRsrcNumber"     value="2"     type="number"/>
+        <attribute name="downRsrcNumber"     value="3"     type="number"/>
+        <attribute name="mouseisdown"        value="false"/>
+
+        <!-- VIEWS -->
+        <view name="bkgnd" width="100%">
+            <view name="button" resource="ibutton_rsc" />
+        </view>
+
+        <view name="i" resource="ibutton_icon"/>
+
+
+        <!-- MOUSEEVENT METHODS-->
+        <handler name="onmousedown" >
+            this.mouseisdown = true;
+            this.bkgnd.button.setAttribute('frame', this.downRsrcNumber );
+            this.i.setAttribute('x', 1);
+            this.i.setAttribute('y', 1);
+        </handler>
+
+        <handler name="onmouseup" >
+            this.mouseisdown = false;
+            if (this.mouseisover) {
+                this.bkgnd.button.setAttribute('frame', this.overRsrcNumber );
+            } else {
+                this.bkgnd.button.setAttribute('frame', this.normalRsrcNumber );
+            }
+            this.i.setAttribute('x', 0);
+            this.i.setAttribute('y', 0);
+        </handler>
+
+        <handler name="onmouseover" ><![CDATA[
+            this.mouseisover = true;
+            if (this.mouseisdown) {
+                this.bkgnd.button.setAttribute('frame', this.downRsrcNumber );
+                this.i.setAttribute('x', 1);
+                this.i.setAttribute('y', 1);
+            } else {
+                this.bkgnd.button.setAttribute('frame', this.overRsrcNumber );
+                this.i.setAttribute('x', 0);
+                this.i.setAttribute('y', 0);
+            }
+
+         ]]> </handler>
+
+        <handler name="onmouseout" > <![CDATA[
+            this.mouseisover = false;
+            this.bkgnd.button.setAttribute('frame', this.normalRsrcNumber );
+            this.i.setAttribute('x', 0);
+            this.i.setAttribute('y', 0);
+        ]]> </handler>
+
+   </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

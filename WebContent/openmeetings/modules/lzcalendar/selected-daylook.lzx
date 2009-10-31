@@ -1,0 +1,121 @@
+<library>
+
+    <class name="selectedDayLook">
+        <attribute name="dayview" value="null" />
+
+        <!-- VIEWS 
+        <view name="top" width="${parent.width}" height="19">
+            <view name="bkgnd" width="${parent.width}" >
+                <view name="l" resource="tpLft" x="-1" y="-1"/>
+                <view name="m" resource="tpMdl" stretches="width"
+                    width="${parent.width - 22}" x="5"/>
+                <multistatebutton name="r" resource="tpRgt_multi" maxstate="1" statelength="3"
+                    x="${parent.m.x + parent.m.width - 1}" y="-1">
+                    <handler name="onclick">
+                        if (this.statenum ==0){
+                            calgrid.openday(classroot.dayview)
+                        }else{
+                            if (calgrid.gridlayout.displaymode=='cell'){
+                                calgrid.locked=true;
+                                calgrid.gridlayout.setopenview(null,false);
+                                calgrid.locked=false;
+                                calgrid.showmonthview(true);
+                            } else calgrid.gridlayout.setopenview(null,true);
+                        }
+                    </handler>
+                </multistatebutton>
+            </view>
+            <text name="day" fgcolor="0xFFFFFF"
+                width="60" height="20" x="3" y="2" >
+                0
+            </text>
+
+        </view>
+        
+        -->
+        
+        <!-- bgcolor="#E7E7E7"-->
+        
+        <!--
+        <view name="middle" width="${parent.width}" options="releasetolayout" >
+            <view name="l" resource="lft" x="-2" stretches="height"
+                height="${parent.height}"/>
+            <view name="content" x="${parent.l.width + -2}"
+                width="${parent.width - 6}" height="${parent.height}"/>
+            <view name="r" resource="rgt" stretches="height"
+                x="${parent.content.x + parent.width - 6}"
+                height="${parent.height}"/>
+        </view>
+        
+        <view name="bottom" width="${parent.width}" height="7">
+                <view name="l" resource="btLft" x="0" bgcolor="red" />
+                <view name="m" resource="btMdl" stretches="width"  bgcolor="red"/>
+                <view name="r" resource="btRgt" />
+                <stableborderlayout axis="x"/>
+        </view>
+         -->
+        
+        <resizelayout axis="y" spacing="0" />
+        
+        <attribute name="open" />
+        
+        <!--
+        <attribute name="open" 
+                   setter="this.top.bkgnd.r.setStateNum( open ? 1 : 0 )"/>
+         -->
+         
+        <!-- METHODS -->
+
+        <method name="hide"> <![CDATA[
+            setAttribute('visible', false);
+        ]]></method>
+
+        <!--
+        <method name="setOpened" args="o">
+            if (top['bkgnd']['r'])
+              top.bkgnd.r.setStateNum(o ? 1 : 0);
+        </method>
+         -->
+
+        <method name="select" args="day"> <![CDATA[
+            //Debug.write("select for ", this, day);
+            //if (dayview == day) return;
+
+            // store a reference to this calendar day
+            this.setAttribute('dayview',day);
+
+            // update the text field with the day of this dayview
+            //setDay(dayview.dateNum);
+            //this.top.day.setAttribute('text', dayview.dayOfMonth );
+
+            // Make sure the grow button is set to '+'
+            //top.bkgnd.r.setStateNum(dayview.opened ? 1:0);
+
+            if (this.dayview) {
+                this.followstate.remove();
+                this.followstate.apply();
+            }
+
+            setAttribute('visible', true); ]]>
+        </method>
+
+        <state name="followstate" applied="false">
+            <attribute name="x" value="${dayview.getAttributeRelative( 'x',
+                                                        canvas )}"/>
+            <attribute name="y" value="${dayview.getAttributeRelative( 'y',
+                                                        canvas )}"/>
+
+            <attribute name="width" value="${this.dayview.width}"/>
+
+            <attribute name="height"
+                       value="${this.dayview.height}"/>
+
+            <attribute name="open" value="${dayview.opened}"/>
+        </state>    
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

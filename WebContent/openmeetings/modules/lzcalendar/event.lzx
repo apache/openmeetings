@@ -1,0 +1,207 @@
+<library>
+    <!-- CLASS: CALENDAR EVENT =========================================== -->
+    <class name="calendar_event"
+           height="22"
+           bgcolor="${normalColor}"
+           width="$once{canvas.width}"
+           clickable="true">
+
+        <attribute name="category" value="$path{'category[1]/@value'}"/>
+
+        <attribute name="normalColor" type="color"
+            value="${this.getEventColor( this.category )}"/>
+
+        <attribute name="hiColor" type="color" value="0xDDDDDD"/>
+        <attribute name="bkgndColor" type="color" value="0x5D84CB"/>
+
+        <method name="getEventColor" args="cat">
+            if (cat==undefined || cat=="") return (0xC6CEDC); //default
+            else var catColor = category_colors[cat];
+
+            setAttribute('hiColor',gColorTable[catColor].bright);
+            setAttribute('bkgndColor',gColorTable[catColor].bkgnd);
+
+            return (gColorTable[catColor].dim);
+        </method>
+
+        <attribute name="pixelPerMin" type="number" value="22/60"/>
+
+        <attribute name="mouseIsDown" value="false"/>
+
+        <attribute name="selected" value="$path{'@selected'}"
+                   setter="this.setSel( selected )"/>
+
+        <method name="setSel" args="sel" >
+            // When a event is current it's selected node attribute is 'true'
+            // This is the only way that an event becomes the current event,
+            // which in turn selects the event selector bar
+            this.selected = sel;
+            if (this.selected){
+                eventselector.setSelectedEvent( this ,this.mouseIsDown );
+            }
+        </method>
+
+        <!-- time attributes -->
+        <attribute name="defaultTimes" value="{startHour: 0, startMin: 0, endHour: 0, endMin: 0}"/>
+        <attribute name="startHour" value="$path{'start[1]/@hour'}"  />
+        <attribute name="startMin"  value="$path{'start[1]/@minute'}"/>
+        <attribute name="startTime" 
+                   value="${this.startHour * 60 + Number( this.startMin )}"/>
+
+        <attribute name="endHour" value="$path{'end[1]/@hour'}"  />
+        <attribute name="endMin"  value="$path{'end[1]/@minute'}"/>
+        <attribute name="endTime" 
+                   value="${this.endHour * 60 + Number( this.endMin )}"/>
+
+        <handler name="ondata">
+          var dts =  this.defaultTimes;
+          for (var f in dts) {
+            if (! this[f]) {
+              this.setAttribute(f, dts[f]);
+            }
+          }
+        </handler>
+
+        <!-- VIEWS -->
+        <view name="tl" bgcolor="#FFFFFF"
+              width="${classroot.width}" height="1" />
+        <view name="bl" bgcolor="#555555"
+              width="${classroot.width}" height="1"
+              y="${parent.height-1}" />
+
+        <text name="timeArea" fgcolor="#4B5D6C"
+              width="35" height="20" x="2" y="3" resize="true"
+              visible="$once{!this.classroot.classroot.opened}">
+
+            <attribute name="text" 
+                        value="${ classroot.startHour }" type="text" />/>
+
+            <datapath xpath="start[1]">
+                <!-- Usually data bound views are 'automagically' displayed
+                    which changes the visibility so that views without
+                    data are hidden. 'datacontrolsvisibility' set to false
+                    allows us to control when events are shown without
+                    interference from the data binding -->
+                <attribute name="datacontrolsvisibility" value="false"/>
+            </datapath>
+            <setter name="text" args="h">
+                <![CDATA[
+                h = Number( h );
+                var ap = h < 12 ? 'a' : 'p';
+                if ( h > 12) h-=12;
+                else if ( h==0 ) h='12';
+                super.setAttribute('text', h + ap );
+                ]]>
+            </setter>
+        </text>
+
+        <text name="smalltitletext" fgcolor="#4B5D6C"
+              width="$once{classroot.width}"
+              height="20" x="${parent.timeArea.width + 5}" y="3"
+              datapath="summary[1]/@value"/>
+
+        <method name="openToggle" args="o">
+            if ( o ){
+                this.timeArea.setAttribute('visible',  false );
+                this.smalltitletext.setAttribute('x', 10 );
+                this.timekgnd.setAttribute('bgcolor', this.bkgndColor);
+            } else {
+                this.timeArea.setAttribute('visible',  true );
+                this.smalltitletext.setAttribute('x', 25 );
+                this.setAttribute('x', 0 );
+                this.setAttribute('height', 22);
+                this.parent.closedlayout.update(true);
+            }
+        </method>
+
+        <state name="timeLayout" applied="${this.parent.classroot.opened}"
+               onapply="parent.openToggle(true)"
+               onremove="parent.openToggle(false)">
+
+            <attribute name="x"
+                       value="24"/>
+            <attribute name="y"
+                       value="${this.startTime * this.pixelPerMin + (pixelPerMin * 30)}"/>
+            <attribute name="height"
+                       value="${Math.max( 22, ( this.endTime - this.startTime )
+                                              * this.pixelPerMin )}" />
+            <!-- EVENT BOX VIEW -->
+            <view name="timekgnd" bgcolor="#5D84CB" opacity=".3"
+                x="-29" width="29" height="${parent.height}">
+                <datapath xpath="end[1]"/>
+            </view>
+        </state>
+
+        <!-- METHODS -->
+        <handler name="onmouseover">
+            this.setAttribute('bgcolor', this.hiColor );
+        </handler>
+
+        <handler name="onmouseout">
+            this.setAttribute('bgcolor', this.normalColor );
+        </handler>
+
+        <handler name="onmousedown">
+            this.mouseIsDown = true;
+            //The next line seems redundant.  See: eventselector.lzx
+            //calgrid.daySelectionMgr.select(this.classroot);
+            eventselector.selectData( this );
+        </handler>
+
+        <handler name="onmouseup">
+            this.mouseIsDown = false;
+            eventselector.domouseup(null);
+        </handler>
+
+    </class>
+
+    <!-- This script creates the a global colortable to be used by -->
+    <!-- shoudl this be a data object, I actually prefere the dot  -->
+    <!-- notation instead of datapointers -->
+    <script>
+        // define colors for event types
+        var gColorTable = {
+            green:{
+                dim:    0xCBD1C5,
+                bright:    0xD4DAC8,
+                bkgnd:    0x587457,
+                trans: {ra:85, ga:100, ba:85}
+                },
+            blue:{
+                dim:    0xBBC6D1,
+                bright:    0xC6CEDC,
+                bkgnd:    0x4C5E7E,
+                trans: {ra:75, ga:85, ba:100},
+                bvl_bkgnd: 0xCDD4E0,
+                bvl_hilite: 0xDFE4EB,
+                bvl_shdw: 0x606369
+                },
+            purple:{
+                dim:    0xC5C3D5,
+                bright:    0xCDC6DC,
+                bkgnd:    0x4C5E7E,
+                trans: {ra:85, ga:75, ba:100}
+                },
+            grey:{
+                dim:    0xC6CEDC,
+                bright:    0xDDDDDD,
+                bkgnd:    0x9F9F9F,
+                trans: {ra:80, ga:80, ba:80}
+                }
+            }
+
+        var category_colors = {
+            holiday: 'green',
+            astro: 'purple',
+            milestone: 'blue'
+
+        }
+    </script>
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

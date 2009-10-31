@@ -1,0 +1,79 @@
+<library>
+<class name="simpletimelayout" extends="layout" >
+    <attribute name="enabled" value="true" setter="setEnabled(enabled)"/>
+    <attribute name="viewheight" value="22"/>
+
+    <method name="setEnabled" args="e">
+        if ( typeof( this['enabled'] ) == "undefined" ){
+            this.enabled = true;
+        }
+        if ( this.enabled == e ) return;
+        //careful -- calling enable() on an enabled delegate will hose it
+        this.enabled=e;
+        if ( this.enabled ) {
+            this.updateDelegate.enable();
+            this.update(true);
+       } else this.updateDelegate.disable();
+    </method>
+
+    <method name="addSubview" args="newsub"> <![CDATA[
+        this.updateDelegate.register( newsub,  "onstartTime" );
+        super.addSubview( newsub );
+        if (this.enabled) this.update( true );
+        ]]>
+    </method>
+
+    <method name="reset" args="e=null">
+        this.update( true );
+    </method>
+
+    <method name="update" args="force=null">
+        <![CDATA[
+        var sv = this.subviews;
+        if ( this.locked || this.enabled!=true ) return;
+        if ( sv.length < 2 && !force ) return;
+
+        this.locked = true;
+
+        var l = this.subviews.length - 1;
+        var c = 0;
+        var i =0;
+        var tmp;
+        var changed = force;
+
+
+        //use insertion sort; assume it's usually in correct order
+        while( i < l ){
+            if ( sv[ i ]['startTime'] > sv[ i + 1 ]['startTime'] ){
+                changed = true;
+                tmp = sv[ i+1 ];
+                sv[ i +1 ] = sv[i];
+                sv[ i ] = tmp;
+                if ( i > 0 ) i--
+            } else {
+                i++
+            }
+        }
+
+        if ( changed ){
+            var c = 0;
+            for(var i=0; i <= l; i++) {
+                var s = sv[i];
+                s.setAttribute('y', c );
+                c += s.height;
+            }
+        }
+
+        this.locked = false;
+        super.update();
+        ]]>
+    </method>
+
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

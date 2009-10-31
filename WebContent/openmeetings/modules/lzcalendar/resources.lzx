@@ -1,0 +1,168 @@
+<library>
+
+    <!-- RESOURCES Menubar -->
+    <resource src="images/menubar/mainbar-overlay.png"  name="menubar"/>
+    <resource src="images/menubar/logo.png" name="logo"/>
+
+    <!-- RESOURCES Days of week -->
+    <resource src="images/days-of-week/sun.png"      name="sunday_label"/>
+    <resource src="images/days-of-week/mon.png"      name="monday_label"/>
+    <resource src="images/days-of-week/tues.png"  name="tuesday_label"/>
+    <resource src="images/days-of-week/wed.png"      name="wednesday_label"/>
+    <resource src="images/days-of-week/thurs.png" name="thursday_label"/>
+    <resource src="images/days-of-week/fri.png"      name="friday_label"/>
+    <resource src="images/days-of-week/sat.png"      name="saturday_label"/>
+
+    <!-- RESOURCES - ICONS FOR BUTTONS -->
+    <resource src="images/buttons/iconday.png" name="iconDay"/>
+    <resource src="images/buttons/iconweek.png" name="iconWeek"/>
+    <resource src="images/buttons/iconmonth.png" name="iconMonth"/>
+    <resource src="images/buttons/iconleftarrow.png" name="iconLeftArrow"/>
+    <resource src="images/buttons/iconrightarrow.png" name="iconRightArrow"/>
+
+    <!-- BASE RESOURCES -->
+    <resource name="xbutton">
+        <frame src="images/infopanel/x.png"/>
+        <frame src="images/infopanel/x_bright.png"/>
+        <frame src="images/infopanel/x_press.png"/>
+    </resource>
+
+    <!-- CAL-BUTTON RESOURCES -->
+    <!-- RESOURCES for all styles of button -->
+    <resource name="button_middle" >
+        <frame src="btn_rsrcs/btn_up_mid.swf" />
+        <frame src="btn_rsrcs/btn_mo_mid.swf" />
+        <frame src="btn_rsrcs/btn_dn_mid.swf" />
+    </resource>
+
+    <!-- RESOURCES for oval button ( bevevled) -->
+    <resource name="leftcap_oval" >
+        <frame src="btn_rsrcs/ovalbtn_up_lft.swf" />
+        <frame src="btn_rsrcs/ovalbtn_mo_lft.swf" />
+        <frame src="btn_rsrcs/ovalbtn_dn_lft.swf" />
+    </resource>
+
+    <resource name="rightcap_oval" >
+        <frame src="btn_rsrcs/ovalbtn_up_rt.swf" />
+        <frame src="btn_rsrcs/ovalbtn_mo_rt.swf" />
+        <frame src="btn_rsrcs/ovalbtn_dn_rt.swf" />
+    </resource>
+
+    <!-- RESOURCES for rectangle button ( beveled ) -->
+    <resource name="leftcap_roundrect" >
+        <frame src="btn_rsrcs/roundrectbtn_up_lft.swf" />
+        <frame src="btn_rsrcs/roundrectbtn_mo_lft.swf" />
+        <frame src="btn_rsrcs/roundrectbtn_dn_lft.swf" />
+    </resource>
+
+    <resource name="rightcap_roundrect" >
+        <frame src="btn_rsrcs/roundrectbtn_up_rt.swf" />
+        <frame src="btn_rsrcs/roundrectbtn_mo_rt.swf" />
+        <frame src="btn_rsrcs/roundrectbtn_dn_rt.swf" />
+    </resource>
+
+    <!-- RESOURCES for rect elements -->
+    <resource name="leftcap_rect" >
+        <frame src="btn_rsrcs/rectbtn_up_lft.swf" />
+        <frame src="btn_rsrcs/rectbtn_mo_lft.swf" />
+        <frame src="btn_rsrcs/rectbtn_dn_lft.swf" />
+    </resource>
+
+    <resource name="rightcap_rect" >
+        <frame src="btn_rsrcs/rectbtn_up_rt.swf" />
+        <frame src="btn_rsrcs/rectbtn_mo_rt.swf" />
+        <frame src="btn_rsrcs/rectbtn_dn_rt.swf" />
+    </resource>
+
+      <!-- RESOURCES for shear elements -->
+    <resource name="leftcap_shear" >
+        <frame src="btn_rsrcs/shearbtn_up_lft.swf" />
+        <frame src="btn_rsrcs/shearbtn_mo_lft.swf" />
+        <frame src="btn_rsrcs/shearbtn_dn_lft.swf" />
+    </resource>
+
+    <resource name="rightcap_shear" >
+        <frame src="btn_rsrcs/shearbtn_up_rt.swf" />
+        <frame src="btn_rsrcs/shearbtn_mo_rt.swf" />
+        <frame src="btn_rsrcs/shearbtn_dn_rt.swf" />
+    </resource>
+
+    <!-- ######################################## -->
+    <!-- CAL-DAY RESOURCES -->
+    <!-- ######################################## -->
+    <resource src="images/day/cal_timegrid.png"  name="tgrid"/>
+
+    <resource src="images/day/top_lft_dslct2.png"  name="ctl"/>
+    <resource src="images/day/top_rt_dslct2.png"   name="ctr" />
+    <resource src="images/day/bot_lft_dslct2.png"  name="cbl"/>
+    <resource src="images/day/bot_rt_dslct2.png"   name="cbr" />
+
+    <!-- RESOURCES FOR CLASS: dayGrabBar CLASS -->
+    <resource src="images/day-grab-bar/top_lft2.png" name="tpLft"/>
+              
+    <resource src="images/day-grab-bar/top_mdl2.png" name="tpMdl"/>
+              
+    <resource name="tpRgt_multi">
+      <frame src="images/day-grab-bar/top_rt_slct_+_up.png"/>
+      <frame src="images/day-grab-bar/top_rt_slct_+_mo.png"/>
+      <frame src="images/day-grab-bar/top_rt_slct_+_dn.png"/>
+      <frame src="images/day-grab-bar/top_rt_slct_-_up.png"/>
+      <frame src="images/day-grab-bar/top_rt_slct_-_mo.png"/>
+      <frame src="images/day-grab-bar/top_rt_slct_-_dn.png"/>
+    </resource>
+    
+    <resource name="tpRgt_base">
+      <frame src="images/day-grab-bar/top_rt_infoclose_up.png"/>
+      <frame src="images/day-grab-bar/top_rt_infoclose_mo.png"/>
+      <frame src="images/day-grab-bar/top_rt_infoclose_dn.png"/>
+    </resource>
+
+    <resource src="images/day-grab-bar/lft_mid_slct.swf"  name="lft" />
+    <resource src="images/day-grab-bar/rt_mid_slct.swf"   name="rgt" />
+
+    <resource src="images/day-grab-bar/bot_lft_slct.png"  name="btLft"/>
+    <resource src="images/day-grab-bar/bot_mid_slct.swf"  name="btMdl" />
+    <resource src="images/day-grab-bar/bot_rt_slct.png"   name="btRgt" />
+
+    <resource src="images/day-grab-bar/option_btn_up.swf" name="opBtn"/>
+    <resource src="images/day-grab-bar/arrow.png" name="arrow"/>
+
+    <!-- ######################################## -->
+    <!-- RESOURCES FOR CLASS: EVENT SELECTOR BAR -->
+    <!-- ######################################## -->
+    <resource src="images/events/gripper.gif" name="es_dragbar"/>
+
+    <!-- THE INFO BUTTON -->
+    <resource name="ibutton_rsc">
+        <frame src="images/buttons/event_infobtn_up.png"/>
+        <frame src="images/buttons/event_infobtn_mo.png"/>
+        <frame src="images/buttons/event_infobtn_dn.png"/>
+    </resource>
+
+    <resource src="images/buttons/event_infobtn_icon.png" name="ibutton_icon"/>
+
+    <resource src="images/events/selector_btm3.png"           name="es_btm"/>
+
+    <!-- ######################################## -->
+    <!-- RESOURCES FOR CLASS: infopanel.lzx-->
+    <!-- ######################################## -->
+    <resource src="images/infopanel/arrow.swf" name="tabarrow"/>
+
+    <resource name="info_larrow">
+        <frame src="images/infopanel/larrow.png"/>
+        <frame src="images/infopanel/larrow_bright.png"/>
+        <frame src="images/infopanel/larrow_dim.png"/>
+    </resource>
+
+    <resource name="info_rarrow">
+        <frame src="images/infopanel/rarrow.png"/>
+        <frame src="images/infopanel/rarrow_bright.png"/>
+        <frame src="images/infopanel/rarrow_dim.png"/>
+    </resource>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

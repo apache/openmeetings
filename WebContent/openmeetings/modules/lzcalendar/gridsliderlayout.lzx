@@ -1,0 +1,511 @@
+<library>
+<class name="gridsliderlayout" extends="layout" >
+
+    <!-- ATTRIBUTES -->
+    <attribute name="spacing" value="0"
+               setter="this.spacing = spacing" />
+
+    <attribute name="cols" value="6"
+               setter="this.cols = cols" />
+
+    <attribute name="rows" value="6"
+               setter="this.set_rows(rows);" />
+
+    <!-- doanimation means do layout update with animation -->
+    <attribute name="doanimation" value="false" />
+    <!-- if doanimation then use this value for the duration of all
+         animations -->
+    <attribute name="duration" value="300" />
+
+    <!-- DISPLAY MODE ATTRIBUTE -->
+    <!-- cell, row, or grid view modes -->
+    <attribute name="displaymode" value="grid" type="string"/>
+
+    <!-- openrow_only: means only display this row and hide all others -->
+    <attribute name="openrow_only" value="false"   />
+
+    <!-- opencol_only: means only display this column and hide all others -->
+    <attribute name="opencol_only" value="false"   />
+
+    <!-- OPENED VIEW ATTRIBUTES -->
+    <!-- reference to the view that is currently opened -->
+    <attribute name="openview" value="null" />
+
+    <!-- indicies for the open view -->
+    <!-- when set the width and height of that day is expanded -->
+    <attribute name="openrow" value="-1"
+               setter="this.setopenrow(openrow)" />
+    <attribute name="opencol" value="-1"
+               setter="this.setopencol(opencol)" />
+
+
+    <!-- indicies for the display view not the same as open -->
+    <attribute name="displayrow" value="-1" />
+    <attribute name="displaycol" value="-1" />
+
+    <!-- INTERNAL ATTRIBUTES -->
+    <attribute name="addedOpenWidth"  value="150"/>
+    <attribute name="addedOpenHeight" value="170" />
+
+    <attribute name="cw" type="number" value="0"/>
+    <attribute name="ch" type="number" value="0"/>
+    <attribute name="cellwidth" type="number" value="0"/>
+    <attribute name="cellheight" type="number" value="0"/>
+    
+    <attribute name="lastsel" value="${null}"/>
+
+    <handler name="oninit" > <![CDATA[
+        // Create delegates used by the update method.
+        this.doupdateDelegate = new LzDelegate(this, "doupdate");
+        this.doupdateDelegate.register( immediateparent,  "onwidth");
+        this.doupdateDelegate.register( immediateparent,  "onheight");
+        this.resetvisDL = new LzDelegate(this,'resetVisibility');
+    ]]> </handler>
+
+    <!-- METHOD: addSubview -->
+    <!-- As subviews are added to this layout store their row and col.
+         This adds the layout's data in an internal spot in the view, which
+         is not great OOP, but it's fast. We could use v.setOption( 'col', ...
+         for this -->
+    <method name="addSubview" args="v"> <![CDATA[
+        super.addSubview(v);
+        v.col =  (this.subviews.length - 1) % 7;
+        v.row = Math.floor((this.subviews.length - 1)/ 7);
+    ]]> </method>
+
+
+    <method name="set_rows" args="r"> <![CDATA[
+        if (this['rows'] != r) {
+            this.rows = r;
+            this.doupdate(null);
+        }
+    ]]> </method>
+
+
+    <!-- OPEN METHODS -->
+
+    <!-- used to set the indicies only -->
+    <!--
+    <method name="set_open" args="row, col"> <![CDATA[
+        this.openrow = row;
+        this.opencol = col;
+        this.doupdate(null);
+    ]]> </method>
+    -->
+
+    <!-- METHOD: setopen -->
+    <!-- Sets the indicies for the openview and then finds the reference-->
+    <method name="setopen" args="row,col,withupdate"> <![CDATA[
+
+        // create a reference to the view at row,col
+        var newView = this.subviews[this.cols*row + col];
+
+        // call setopen with new view reference
+        setopenview(newView,withupdate);
+    ]]> </method>
+
+    <event name="onopenstart" />
+    <event name="onclosestart" />
+    <!-- METHOD: setopenview -->
+    <!-- opens the designated view and sets the open indicies-->
+    <method name="setopenview" args="v,withupdate"> <![CDATA[
+        this.locked = true;
+        
+        if (this.openview)
+            if (this.openview!=v){
+                // Save a reference to close the view later
+                // by sending an 'onclosestart' event
+                this.closedview=this.openview;
+                this.openview['onclosestart']['sendEvent']();
+            }
+
+        this.openview = v;
+        
+        if (v == null) {
+            this.openrow  = -1
+            this.opencol  = -1; }
+        else {
+            this.openrow  = v.row;
+            this.opencol  = v.col;
+            // will send the event 'onopenstart' later
+            // once the grid is finished updating
+            this.openview['onopenstart']['sendEvent']();
+            }
+        this.locked = false;
+        if (this.displaymode == 'grid') doanimation = false;
+        if (withupdate) this.doupdate(null);
+    ]]> </method>
+
+    <method name="setopenrow" args="row"> <![CDATA[
+        // using brackets avoids the undefined warning in the Debugger
+        if (this['openrow'] == row) { return; }
+        this.openrow = row;
+        this.doupdate(null);
+    ]]> </method>
+
+    <method name="setopencol" args="col"> <![CDATA[
+        // using brackets avoids the undefined warning in the Debugger
+        if (this['opencol'] == col) { return; }
+        this.opencol = col;
+        this.doupdate(null);
+    ]]> </method>
+
+
+    <!-- DISPLAY METHODS -->
+
+    <!-- METHOD: showcell -->
+    <method name="showcell" args="row,col"> <![CDATA[
+        this.locked = true;
+
+        // set the open view
+        this.setopen(row,col,false);
+        
+        // Set these to only display one cell fully
+        this.openrow_only = true;
+        this.opencol_only = true;
+
+        this.locked = false;
+        this.displaymode = 'cell';
+        this.doanimation  = true;
+        this.doupdate(null);
+    ]]> </method>
+
+    <!-- METHOD: showrow -->
+    <method name="showrow" args="row"> <![CDATA[
+        if (row) this.displayrow = row
+        else this.displayrow = 0;
+
+        this.locked = true;
+        this.openrow_only = true;
+        
+        if (this.displaymode == 'row') {
+            // Already in 'row' mode so close openday to make
+            // the columnm widths all same size
+            
+            this.opencol_only = false;
+            this.setopenview(null,false);
+            
+        } else if (this.openrow != row) {
+            
+            // not in 'week' display mode
+        
+            // the opened row is different than the one
+            // that will be shown, so close day
+            // and expand row.
+            this.openrow_only = true;
+            this.displaymode = 'row';
+            this.setopenview(null,false);
+
+        } else {
+            // the opened row is the same as the row to be
+            // expanded so just make sure there is no column only focus.
+            this.opencol_only =  false;
+        }
+        this.doanimation  = true;
+        this.locked = false;
+        this.doupdate(null);
+        this.displaymode = 'row';
+    ]]> </method>
+
+    <!-- METHOD: showgrid -->
+    <method name="showgrid" args="noanimation" > <![CDATA[
+
+        this.displayrow = -1;
+        this.displaycol = -1;
+
+        if ( this.displaymode == "grid" ) {
+            // if gridslider already in grid mode, close cell
+            // without animation
+            this.doanimation  = false;
+            if (this.openview) {
+               this.doanimation  = false;
+               this.setopenview(null,false);
+            }
+        } else {
+            this.doanimation = true;
+            this.openrow_only = false;
+            this.opencol_only = false;
+            if (this.opencol <  0) this.openrow = -1;
+        }
+        if(noanimation) this.doanimation = false;
+        this.doupdate(null);
+        this.displaymode = "grid";
+    ]]> </method>
+
+
+    <event name="onupdatestart" />
+    <!-- METHOD: update -->
+    <method name="doupdate" args="v">
+        <![CDATA[
+        if ( this['locked'] ) { return }
+        if (this.onupdatestart) {
+            this.onupdatestart.sendEvent(this.openview);
+        }
+
+        // store a local value for fast reference
+        var didAnimation=false;
+        // [bshine 10.01.06] uh-oh, we re-declare w and h below
+        var w = immediateparent.width;
+        var h = immediateparent.height;
+
+        // the values for 'this.rows' and 'this.cols' were set in calgrid.calcBoundaryDates()
+        var nrows = this.rows;
+        var ncols = this.cols < this.subviews.length  ? this.cols : this.subviews.length;
+
+        // store a local value for fast reference
+        var fr = this.openrow < 0 ? this.displayrow : this.openrow;
+        var fc = this.opencol < 0 ? this.displaycol : this.opencol;
+
+
+        // This is the what each (cw=colwidth) and (ch=columnheight) should be with no open
+        this.cw = Math.floor((w - this.spacing*(ncols-1))/ncols);
+        this.ch = Math.floor((h - this.spacing*(nrows-1))/nrows);
+
+
+        // If there is a column open then that column will be wider than the rest
+        // so adjust this difference.
+        var k = this.opencol < 0 ? 0 : 1;
+        this.cellwidth  = cw - Math.floor((k*this.addedOpenWidth )/(ncols - 1));
+        this.cellheight = ch - Math.floor((k*this.addedOpenHeight)/(nrows - 1));
+
+        // Set the intialis values for the first view in the grid
+        var x = 0; var y = 0; var w = 0; var h = 0;
+
+        var i = 0; // start the index counter at 0
+
+        // if only a row and/or column is being displayed ignore the spacing in that dimension
+        var hspace = openrow_only ? 0 : this.spacing;
+        var wspace = opencol_only ? 0 : this.spacing;
+
+        // iterate once through entire subviews
+        for (var rowi = 0; rowi < nrows; rowi++) {
+
+            x=0; // the initial position of the subview for this row
+
+            // First if this row is the opened row then set its appropriate height
+            if (openrow_only) { // 'only' means all other rows will be invisible... h=0;
+                if (rowi == fr)  h = immediateparent.height;
+                else h = 0;
+            } else if (rowi != fr) {
+                h = cellheight;
+            } else {
+                h = ch + this.addedOpenHeight;
+            }
+
+            // Now for each column in this row...
+            // set its appropriate width
+            for (var coli = 0; coli < ncols; coli++) {
+
+                var s = this.subviews[i];
+
+                if (opencol_only) {
+                    if (coli == fc)  w = immediateparent.width - this.spacing;
+                    else w = 0;
+                  } else if (coli != fc) {
+                    w = cellwidth;
+                } else {
+                    w = cw + this.addedOpenWidth;
+                }
+
+                // Now using the values above update the subview.
+                // A zero width and height implies that the subview should be set
+                // to be invisible WITHOUT actually setting its height and width.
+                // This avoids activating contraints
+                var vis = (w > 0) && (h > 0);
+                if (vis) {
+                    if (this.doanimation) {
+                        if (!s.visible) {
+                            if (s.x != x)       s.setAttribute('x', x);
+                            if (s.y != y)       s.setAttribute('y', y);
+                            if (s.width != w)   s.setAttribute('width', w);
+                            if (s.height != h)  s.setAttribute('height', h);
+                            // To speed up the process only the currently visible
+                            // views are animated, while the hidden views are
+                            // given there final dimensions and then popped into view
+                            // at the end of the animations. called by the 'delayvisDL'
+                            // delegate.
+                            s.update_vis_later = true;
+                        } else {                        
+                            s.animateTo(x, y, w, h);
+                            didAnimation=true;
+                        }
+                    } else {
+                        if (s.x != x)       s.setAttribute('x', x);
+                        if (s.y != y)       s.setAttribute('y', y);
+                        if (s.width != w)   s.setAttribute('width', w);
+                        if (s.height != h)  s.setAttribute('height', h);
+                        if (!s.visible) s.setAttribute('visible', true);
+                    }
+                } else {
+                   if (rowi ==0) {
+                        // move the top row even though its invisible so that the
+                        // headers for the day of week (which are constrained to the
+                        // top row) move correctly. only need width and x info.
+                        if (this.doanimation) {
+                            s.animateTo(x, s.y, w, s.height);
+                        } else {
+                            if (s.x != x)       s.setAttribute('x', x);
+                            if (s.width != w)   s.setAttribute('width', w);
+                        }
+                    }
+                    if (s.visible) s.setAttribute('visible', false);
+                    s.update_vis_later = false;
+                }
+
+                i++; //increment index counter
+
+                if (i >= this.subviews.length) { break; }
+
+                x += w + wspace; // increment the x value for the next subview in this row
+            }
+            if (i >= this.subviews.length) { break; }
+            y += h + hspace;
+         }
+
+         // Check to see if we need the last row, and if not hide these days
+         if (nrows == 5) { // hide last row
+            for (var c = 35; c < 42; c++) {
+                this.subviews[c].setAttribute('visible', false);
+                this.subviews[c].update_vis_later = false;
+             }
+         }
+
+         // When the layout is in its completed state, 
+         // correct the visibility of all of the calendar cells.
+         // We can do this right way if there wasn't any animation...
+         if (!didAnimation) 
+            this.resetVisibility(null);
+        else { // if we started some animation, wait until it finishes
+            // to reset the visibility. 
+            // We know that the animations are set to 500 ms,
+            // so we wait a little tiny bit longer than that, 
+            // then call this delegate to correct visibility.
+            // [bshine 10.01.06] Instead of a constant delay and a timer,
+            // here, we could put an onstop delegate on an animator, but
+            // this way is simpler. Less flexibile, but simpler. 
+            lz.Timer.addTimer(this.resetvisDL,600);        }
+        super.update();
+         ]]>
+    </method>
+
+    <event name="onupdatestop" />
+    <method name="resetVisibility" args="v"><![CDATA[
+        // Debug.write("resetting visibility");
+        // Now show the views that were hidden
+        var s;
+        for (var i =0; i < this.subviews.length; i++) {
+            s = this.subviews[i];
+            if (s['update_vis_later']){
+                if (!s.opened && s.details.bgrect.container.dataview) s.details.bgrect.container.dataview.setAttribute('y', 0);            
+                s.setAttribute('visible', true);
+            }
+
+        }
+        //this['closedview']['onclosestart']['sendevent'](); 
+        //this['openview']['onopenstart']['sendevent']();
+
+        // Process is complete so send  onupdatestop event
+        this['onupdatestop']['sendEvent'](this.openview); ]]>
+    </method>
+
+
+    <!-- TRACKING METHODS -->
+
+    <!-- The methods that follow are for tracking the eventselector as it
+         is dragged. These methods appear here because the layout has all the
+         position information about the grid. -->
+    <method name="startTrack" >
+        if ( ! this[ 'positiondel' ] ){
+            this.positiondel = new LzDelegate( this , "checkMousePosition" );
+        }
+        this.positiondel.register( lz.Idle , "onidle" );
+    </method>
+
+    <method name="stopTrack" >
+        this.positiondel.unregisterAll( );
+        if ( lastsel != null ){
+            lastsel.hilite(false, false);
+            lastsel.acceptDrop();
+        } else {
+            //cancel drop
+        }
+    </method>
+
+    <method name="checkMousePosition" args="v"><![CDATA[
+        //this runs every frame while dragging -- it's private to the layout
+        var x = immediateparent.getMouse( 'x' );
+        var y = immediateparent.getMouse( 'y' );
+        var s;
+
+        //if it's not on the grid
+        if ( x < 0 || x > parent.width
+             || y < 0 || y > parent.height ) {
+            s = null;
+        }else if ( this.openrow_only ){
+            //grid special condition
+            if ( this.opencol_only ){
+                //in day only view
+                s = this.subviews[ this.cols * openrow + opencol ];
+            } else {
+                //in week view
+
+                var newcol = Math.floor( x/ (cellwidth + spacing ) );
+
+                if ( opencol != -1 && newcol > opencol ){
+                    var rightedge =  ( opencol * ( spacing + cellwidth ) )+ cw + addedOpenWidth;
+                    if ( x < rightedge ) {
+                        newcol = opencol;
+                    } else {
+                        newcol =  opencol + 1 + Math.floor( ( x - rightedge ) / (cellwidth + spacing ) );
+                    }
+                }
+
+
+                s = this.subviews[ this.cols * displayrow + newcol ];
+            }
+        } else {
+            var newcol = Math.floor( x/ (cellwidth + spacing ) );
+            if ( opencol != -1 && newcol > opencol ){
+                var rightedge =  ( opencol * ( spacing + cellwidth ) )+ cw + addedOpenWidth;
+                if ( x < rightedge ) {
+                    newcol = opencol;
+                } else {
+                    newcol =  opencol + 1 + Math.floor( ( x - rightedge ) / (cellwidth + spacing ) );
+                }
+            }
+            //this doesn't find the case where the mouse is over the spacing between cells
+
+            var newrow = Math.floor( y/ (cellheight + spacing ) );
+            if ( openrow != -1 && newrow > openrow ){
+                var bottom =  ( openrow * ( spacing + cellheight ) )+ cw + addedOpenHeight;
+                if ( y < bottom ) {
+                    newrow = openrow;
+                } else {
+                    newrow =  openrow + 1 + Math.floor( ( y - bottom ) / (cellheight + spacing ) );
+                }
+            }
+
+            s = this.subviews[ this.cols * newrow + newcol ];
+        }
+
+        if( s != this['lastsel'] ){
+            if (this['lastsel'] != null ){
+                lastsel.hilite(false, false);
+            }
+
+            this.lastsel = s;
+            // update the hilite
+            if (lastsel != null){
+                lastsel.hilite(true, false);
+            }
+        }
+        ]]>
+    </method>
+
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,258 @@
+<library>
+
+    <!-- CLASS: CALENDAR DAY ============================================= -->
+    <!-- ================================================================= -->
+    
+    
+    <!--
+    bgcolor="0x7A949E"
+     -->
+     
+    <class name="calendar_day" 
+            width="3" bgcolor="$once{ canvas.baseMousecolorizer }" 
+            height="10"
+            clickable="true"> <!-- extends="tabElement" -->
+
+        <!-- ATTRIBUTES -->
+        <attribute name="startdate" value="1" />
+        <attribute name="enddate" value="1" />
+        <attribute name="opened" value="false"/>
+        <attribute name="pixels_per_hour" value="22"/>
+
+        <attribute name="eventwidth"
+                   value="${details.bgrect.width - ( this.opened ? 38 : 0 )}"/>
+                   
+        <method name="animateTo" args="tox,toy,towidth,toheight">
+            // Debug.write("animateTo",tox,toy,towidth,toheight, this);
+            slideranim.xanim.setAttribute("to", tox);
+            slideranim.yanim.setAttribute("to", toy);
+            slideranim.widthanim.setAttribute("to", towidth);
+            slideranim.heightanim.setAttribute("to", toheight);
+            slideranim.doStart();
+        </method>
+                
+        <!-- This one animator controls all the animating we need to do for
+         switching between day, week, and month views. --> 
+        <animatorgroup name="slideranim" start="false" duration="500" process="simultaneous">
+            <animator name="xanim" attribute="x" to="333"/>
+            <animator name="yanim" attribute="y" to="444"/>
+            <animator name="widthanim" attribute="width" to="222"/>
+            <animator name="heightanim" attribute="height" to="111" />
+        </animatorgroup>
+        
+        <!-- VIEWS -->
+        <view name="bkgnd" bgcolor="$once { canvas.basebgcolorizer }" x="1" y="1"
+            width="${parent.width - 2}" height="${parent.height - 2}" />
+
+        <view name="details" width="${parent.width}" height="${parent.height}">
+        	
+        	<!--
+            <view resource="ctl"/>
+             -->
+
+            <text name="dayofmonth"
+                  fgcolor="0xFFFFFF" width="35" x="3" y="1"/>
+            <view name="bgrect" clip="true" bgcolor="$once { canvas.basebgcolorizer }" x="3" y="19"
+                  width="${parent.width-8}" height="${parent.height-26}">
+
+                <!-- THIS SECTION FOR THE TIME GRID -->
+                <view name="timeview">
+                    <state applied="${classroot.opened}"
+                       onapply="parent.setTimeOffset(7.5);
+                                parent.parent.scrollview.scrollState.apply()"
+                       onremove="parent.parent.scrollview.scrollState.remove();
+                                parent.parent.container.setAttribute('y', 0)">
+                        <view name="marks" resource="tgrid" x="-2" pixellock="true"/>
+                    </state>
+                    <method name="setTimeOffset" args="hours">
+                        var sv=classroot.details.bgrect.container.dataview['subviews'];
+                        if (sv!=undefined){
+                            if (sv.length&gt;0){
+                                // find the first event time
+                                for (var i=0; i&lt; sv.length; i++){
+                                    if (this['firstEvent']==undefined)
+                                        this.firstEvent = sv[i].startTime;
+                                    else if (this.firstEvent &gt; sv[i].startTime)
+                                        this.firstEvent = sv[i].startTime;
+                                }
+                            }
+                        }
+
+                        if (this['firstEvent']!=undefined)
+                            hours = this.firstEvent/60-1;
+
+                        if (hours&lt;0) hours=-.5;
+                        if (hours&gt;13) hours=12.5;
+                        var tgrid_zero = 11;
+                        var pixels_per_hour = 22;
+                        
+                        
+                        //marks.setAttribute('y', -(hours * pixels_per_hour + tgrid_zero));
+                    </method>
+                </view>
+
+                <!-- Data is bound to this view in the setDate method below
+                     This corresponds to <day> node in the data -->
+                <!-- both of these are pixel locked so that the
+                             pixel font doesn't blur -->
+                <view name="container" y="${parent.timeview.y}">
+                    <view name="dataview" width="${parent.parent.width}"
+                        height="${parent.parent.height}" pixellock="true"
+                        ondata="this.showData.apply()">
+                        <!-- no harm in calling apply on a state that's already
+                            been applied -->
+
+                        <state name="showData" applied="false">
+                            <calendar_event name="events" pixellock="true">
+                                <datapath pooling="true" xpath="event">
+                                    <!-- this forces the replication to happen
+                                        synchronously -->
+                                    <attribute name="asyncNew" value="false"/>
+                                </datapath>
+                            </calendar_event>
+                        </state>
+                        <simpletimelayout name="closedlayout"
+                                        enabled="${!classroot.opened}"/>
+                    </view>
+                </view>
+
+                <state applied="${classroot.opened}">
+                    <scrollbar visible="${scrollable}"/>
+                </state>
+                <view name="scrollview" visible="false">
+                    <state name="scrollState" applied="false" 
+                           onapply="parent.bringToFront()">
+                    </state>
+                </view>
+
+            </view>
+        </view>
+
+         <method name="setSelected" args="amselected" >
+            this.hilite(amselected , true );
+
+            if ( amselected) {
+                //Global tracking of the currently selected day
+                dayselectorlook.select(this);
+            } else {
+                // selection managers always call unselect first
+                dayselectorlook.hide();
+            }
+        </method>
+        <attribute name="year" type="number" value="0"/>
+        <attribute name="month" type="number" value="0"/>
+        <attribute name="dayOfMonth" type="number" value="0"/>
+        <attribute name="newYear" type="number" value="0"/>
+        <attribute name="newMonth" type="number" value="0"/>
+        <attribute name="newDay" type="number" value="0"/>
+
+        <method name="setDate" args="d,dend" > <![CDATA[
+            //Debug.write("CALLED setDate for " +
+            //            this.details.dayofmonth + " with " + d);
+            if (this.startdate == d) return;
+
+
+            //these are actually start and end times... just poorly named
+            this.startdate = d;
+            this.enddate = dend;
+
+            this.year=this.startdate.getFullYear();
+            this.month = this.startdate.getMonth();
+            this.dayOfMonth=d.getDate();
+            this.details.dayofmonth.setAttribute('text', this.dayOfMonth);
+
+            // *NEW: Assign new datapath
+            var vDatapath =
+                'eventdata:/vcalendar/year'+ this.year +
+                '/month'+(this.month+1)+
+                '/day'+dayOfMonth;
+
+            //Debug.write ("*assigning: "+this+" a new day datapath: "
+                            //+vDatapath);
+
+            this.details.bgrect.container.dataview.setAttribute('datapath', vDatapath);
+
+
+            var textColor = 0xDAE3E8;
+
+            // If this day is not in the month...
+            if (this.month != calgrid.month ) {
+                this.unselectedColor = 0x768A97;
+                textColor = 0x7E929F;
+                }
+            else  if ( (this.startdate.getDay() == 0) ||
+                       (this.startdate.getDay() == 6) ) {
+                this.unselectedColor = 0x879BA8;
+            } else {
+                this.unselectedColor = 0x9BA9B1;
+            }
+            this.details.bgrect.setAttribute('bgcolor', this.unselectedColor);
+            this.details.dayofmonth.setAttribute('fgcolor',textColor); ]]>
+        </method>
+
+        <!-- called by layout while dragging -->
+        <method name="acceptDrop">
+
+            // If this is an opened day then use the time grid functions
+            if ( this.opened ){
+                eventselector.updateEventTime( this );
+            }
+
+            if ( !eventselector['followview'].childOf( this ) ) {
+                // This must be a new calendar day
+                // Get the new day
+                newYear=this.startdate.getFullYear();
+                newMonth=this.startdate.getMonth()+1;;
+                newDay=this.startdate.getDate();
+
+                // Move the event to the new location
+                eventDataMgr.moveEvent(newYear,newMonth,newDay);
+            }
+
+        </method>
+
+        <handler name="onclick" >
+            calgrid.openday(this);
+        </handler>
+
+        <method name="hilite" args="dohilite, dontupdate">
+            if (dohilite) {
+                if ( !dontupdate ) eventselector.updateOver( this );
+                details.bgrect.setAttribute('bgcolor', 0xD3D3D3);
+            } else {
+                details.bgrect.setAttribute('bgcolor', this.unselectedColor);
+            }
+        </method>
+
+        <method name="calcHourFromY" args="y">
+            if (!details) return 12; // [bshine 9.28.2006] PORTING if we're not totally initialized,
+                // just pretend it's noon. Avoid calling getAttributeRelative because it
+                // causes trouble in legals. 
+            var ny = 1 + y - details.bgrect.timeview.marks.y -
+                     details.bgrect.timeview.getAttributeRelative( 'y' , this );
+            return ny/this.pixels_per_hour;
+        </method>
+
+        <method name="toString">
+            var d = this.startdate;
+            return "calendar_day "+d.getFullYear()+"."+(d.getMonth()+1)+"."+d.getDate();
+        </method>
+
+        <handler name="onopenstart" >
+           //Debug.write('called onopenstart on day = ' + this.tostring());
+           this.setAttribute( 'opened' , true);
+        </handler>
+
+        <handler name="onclosestart" >
+           //Debug.write('called onclosestart on day = ' + this.tostring());
+           this.setAttribute( 'opened' , false);
+        </handler>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

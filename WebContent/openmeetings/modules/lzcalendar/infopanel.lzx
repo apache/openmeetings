@@ -1,0 +1,376 @@
+<library>
+    <!-- LIBRARY: INFO PANEL ============================================== -->
+    <!-- Here is where I will use states to fill out the various panels     -->
+    <!-- start and end date.                                                -->
+    <!-- ================================================================== -->
+    <!-- more comments on use -->
+    <!-- get rid of Debug.code -->
+
+    <include href="basepanel.lzx" />    
+    <include href="base/basetabslider.lzx"/>
+    <include href="textbox.lzx" />
+
+
+    <!-- CLASS: infoTab ================================================== -->
+    <!-- ================================================================= -->
+    <class name="infoTab" extends="basetabelement" clickable="false" bgcolor="0xEEF0EB" 
+        clip="true">
+
+        <!-- ATTRIBUTES -->
+        <attribute name="minheight" value="21"/>
+        <attribute name="label" type="string" />
+        <attribute name="defaultplacement" value="interior" type="string"/>
+
+        <!-- VIEWS -->
+        <view name="top" bgcolor="0xEEF0EB"
+            width="${immediateparent.width}" height="${parent.minheight}"
+            onclick="classroot.parent.openTab(classroot,true)">
+            <view name="tline" height="1" width="${parent.width}"
+                bgcolor="0xFDFFFF" y="0"/>
+            <view name="bline" height="1" width="${parent.width}"
+                bgcolor="0xC6C7C4" y="${parent.height - 1}"  />
+            <text name="ttl" width="150" x="5" y="1"
+                fgcolor="#898B86" pixellock="true"  >
+                <attribute name="text" value="${classroot.label}"/>
+            </text>
+            <view name="arrowref" resource="tabarrow"
+                x="${parent.width - 15}" y="${Math.floor(parent.height/2)}">
+            </view>
+        </view>
+        <view name="interior" clip="true" width="${immediateparent.width}"
+            options="releasetolayout" visible="false"/>
+            <resizelayout axis="y"/>
+            
+        <!-- METHODS -->
+        <handler name="onopenstart" >
+            // tab is about to open
+            this.interior.setAttribute('visible', true);
+            this.top.setAttribute('bgcolor', 0xE2E4DF);
+            this.top.tline.setAttribute('bgcolor', 0xB8B9B5)
+            this.top.bline.setAttribute('bgcolor', 0xFDFFFF)
+        </handler>
+
+        <handler name="onclosestart" >
+            //tab is about to close
+            this.top.setAttribute('bgcolor', 0xEEF0EB);
+            this.top.tline.setAttribute('bgcolor', 0xFDFFFF)
+            this.top.bline.setAttribute('bgcolor', 0xC6C7C4)
+        </handler>
+
+        <handler name="onclosestop" >
+            //tab is closed
+            this.interior.setAttribute('visible', false);
+        </handler>
+
+        <method name="toggle">
+            // ugh - tabslider doesn't support closing tabs yet
+            this.parent.openTab(this.parent,true);
+        </method>
+    </class>
+
+    <!-- CLASS: info_Panel =============================================== -->
+    <!-- ================================================================= -->
+    <class name="info_Panel" extends="basepanel" clip="true">
+
+        <attribute name="opened" value="false"/>
+        <attribute name="dataapply" value="false"/>
+
+        <!-- VIEWS -->
+        <view name="summary" width="198" height="83" bgcolor="0xEEF0EB">
+            <view y="10" name="content" x="10" width="${parent.width - 20}" height="65">
+                <inputtextbox name="title" id="sitbox"
+                    width="${immediateparent.width}" height="20"
+                    datapath="summary/@value">
+                </inputtextbox>
+
+                <view name="day" y="29" >
+                   <!-- <basebutton resource="info_minical" width="15" x="-2"
+                         onclick="classroot.selectmonth();" -->
+                    <!-- height="13" -->
+                    <textbox name="day"  x="0" y="1" width="150"  
+                             bgcolor="0xEEF0EB" bordercolor="0x333333"
+                             datapath="start[1]/@*" >
+                        <method name="applyData" args="attrs">
+                            <![CDATA[
+                            var s = ""
+                            if ( attrs && attrs.month != "" ){
+                                s = canvas.calMonths[ attrs.month-1 ] + " " +
+                                                      attrs.day + ", " +
+                                                      attrs.year;
+                            }
+                            this.setText( s );
+                            ]]>
+                        </method>
+                    </textbox>
+                    <basebutton x="149" width="14" resource="info_larrow">
+                        <handler name="onclick">
+                            <![CDATA[
+                            calgrid.keepinfoopen = true;
+                            var thiscell = calgrid.open_day.id;
+                            thiscell = Number(thiscell.substr(4));
+                            
+                            var prevcell = 'cell' + Number(thiscell - 1);
+                            if(thiscell > 1){
+                                if(typeof global[prevcell] != 'undefined'){
+                                    calgrid.daySelectionMgr.select(global[prevcell]);
+                                    calgrid.open_day = global[prevcell];
+                                }
+                            }
+                            eventDataMgr.changeDay(-1);
+                            if(thiscell == 1){
+                                calgrid.prevMonth();
+                                calgrid.keepinfoopen = false;
+                            }
+                            if(cal_interior.viewstyle == "day"){
+                                calgrid.showdayview();
+                            }
+                            if(cal_interior.viewstyle == "week"){
+                                calgrid.showweekview();
+                            }
+                            calgrid.keepinfoopen = false;
+                            ]]>
+                        </handler>
+                    </basebutton>
+                    <basebutton x="163" width="14" resource="info_rarrow">
+                        <handler name="onclick">
+                            <![CDATA[
+                            calgrid.keepinfoopen = true;
+                            var thiscell = calgrid.open_day.id;
+                            thiscell = Number(thiscell.substr(4));
+                            
+                            var nextcell = 'cell' + Number(thiscell + 1);
+                            if(thiscell < 42){
+                                if(typeof global[nextcell] != 'undefined'){
+                                    calgrid.daySelectionMgr.select(global[nextcell]);
+                                    calgrid.open_day = global[nextcell];
+                                }
+                            }
+                            eventDataMgr.changeDay(+1);
+                            if(thiscell == 42){
+                                calgrid.nextMonth();
+                                calgrid.keepinfoopen = false;
+                            }
+                            if(thiscell == 35){
+                                if(cell42.visible == false){
+                                    calgrid.nextMonth();
+                                    calgrid.keepinfoopen = false;
+                                }
+                            }
+                            if(cal_interior.viewstyle == "day"){
+                                calgrid.showdayview();
+                            }
+                            if(cal_interior.viewstyle == "week"){
+                                calgrid.showweekview();
+                            }
+                            calgrid.keepinfoopen = false;
+                            ]]>
+                        </handler>
+                    </basebutton>
+                            
+                </view>
+
+                <view name="times" x="0" y="50">
+                    <method name="getLongTime" args="attrs">
+                        if (!attrs) return;
+                        var h = attrs.hour;
+                        if (Number(h)==0 || h==null) h='0';
+                        var m = attrs[ 'minute' ];
+
+                        if (Number(m)==0 || m==null) m='0';
+                        if (Number(m)&lt;10) m='0'+m;
+
+                        var ap='a';
+
+                        if (h &gt; 11) ap='p';
+                        if (h &gt; 12) h-=12;
+
+                        return h+':'+m+ap;
+                    </method>
+                    <textbox name="stime" x="0" y="1" width="45" 
+                             bgcolor="0xEEF0EB" bordercolor="0x333333"
+                             datapath="start[1]/@*" >
+                        <method name="applyData" args="attrs">
+                            this.setText(parent.getLongTime( attrs ));
+                        </method>
+                    </textbox>
+                    <basebutton x="$immediately{60-11}" width="14" 
+                                resource="info_larrow"
+                                datapath="start[1]" 
+                                onclick="eventDataMgr.changetime('start',-1);"/>
+                    <basebutton x="$immediately{74-11}" width="14" 
+                                resource="info_rarrow"
+                                datapath="start[1]"
+                                onclick="eventDataMgr.changetime('start',+1);"/>
+
+                    <text x="$immediately{92-11}" y="0" width="20" >
+                        to</text>
+
+                    <textbox name="etime" x="100" y="1" width="45" 
+                             bgcolor="0xEEF0EB" bordercolor="0x333333"
+                             datapath="end[1]/@*" >
+                        <method name="applyData" args="attrs">
+                            this.setText(parent.getLongTime( attrs ));
+                        </method>
+                    </textbox>
+                    <basebutton x="149" width="14" resource="info_larrow"
+                        datapath="end[1]" 
+                        onclick="eventDataMgr.changetime('end',-1);"/>
+                    <basebutton x="163" width="14" resource="info_rarrow"
+                        datapath="end[1]" 
+                        onclick="eventDataMgr.changetime('end',+1);"/>
+                </view>
+                <view bgcolor="0xEEF0EB" height="1" width="${parent.width - 10}" x="5" />
+               <!--
+                <view>
+                    <text x="20" text="Label" />
+                    <view bgcolor="0x333333" x="70" width="${this.colors.width + 2}" height="${this.colors.height + 2}" >
+                        <view name="colors" x="1" y="1">
+                            <view bgcolor="red"       width="16" height="16"/>
+                            <view bgcolor="0xFF7F00"  width="16" height="16"/>
+                            <view bgcolor="yellow"    width="16" height="16"/>
+                            <view bgcolor="green"     width="16" height="16"/>
+                            <view bgcolor="blue"      width="16" height="16"/>
+                            <view bgcolor="purple"    width="16" height="16"/>
+                            <simplelayout axis="x" spacing="1"/>
+                        </view>
+                    </view>
+                </view>             -->
+                <simplelayout axis="y" spacing="5"/>
+            </view>
+        </view>
+
+
+        <view name="gutter1" bgcolor="0xEEF0EB" y="$once{parent.summary.height}"
+            width="${parent.width-7}" height="4">
+            <view name="tline" height="1" width="$once{parent.width}"
+                bgcolor="0xB8B9B5"/>
+            <view name="bline" height="1" y="3" width="$once{parent.width}"
+                bgcolor="0xFDFFFF"/>
+        </view>
+
+        <basetabslider name="tabs" height="365" width="100%" y="${parent.summary.height + 4}" pixellock="true"
+            slideduration="200" mintabheight="20" oninit="this.openTab(this.notes,true)" >
+
+            <infoTab name="notes" label="Notes" pixellock="true">
+                <!-- fixed size input text is best for large multiline text,
+                 so it is good to declare with values for width/height -->
+                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
+                    width="175" height="280" datapath="notes/@value" visible="true"/>
+            </infoTab>
+            
+            <infoTab name="location" label="Location" pixellock="true">
+                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
+                    width="175" height="280" datapath="location/@value" visible="true"/>
+            </infoTab>
+            <infoTab name="attendees" label="Attendees" pixellock="true">
+                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
+                    width="175" height="280" datapath="attendees/@value" visible="true"/>
+            </infoTab>
+
+        </basetabslider>
+
+        <view name="gutter2"  bgcolor="0xEEF0EB" 
+              y="${parent.tabs.y + parent.tabs.height}" height="3" 
+              width="$once{parent.width-7}" >
+            <view name="tline" height="1" width="$once{parent.width}"
+                bgcolor="0xB8B9B5"/>
+            <view name="bline" height="1" y="3" width="$once{parent.width}"
+                bgcolor="0xFDFFFF"/>
+
+            <calButton label="Apply" x="15" y="13">
+                <handler name="onclick">
+                    eventDataMgr.changeTitle(sitbox.getText());
+                    eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
+                    eventDataMgr.changeLocation(classroot.tabs.location.txt.getText());
+                    eventDataMgr.changeAttendees(classroot.tabs.attendees.txt.getText());
+                    classroot.setAttribute('dataapply', true);
+                </handler>
+            </calButton>
+                
+            <calButton label="Delete" x="${parent.width - width - 15}" y="13"
+                       onclick="eventDataMgr.deleteEvent()"/>
+        </view>
+
+        <!-- ANIMATORS -->
+        <animator start="false" name="slideopen1old" attribute="width" to="204"
+            duration="500" relative="false"/>
+        <animator start="false" name="slideopen1" attribute="x" to="602" from="830"
+            duration="500" onstop="lz.Focus.setFocus(parent.summary.content.title);"/>
+        <animator start="false" name="slideopen2" attribute="opacity" to="1" from="0"
+            duration="500" relative="false"/>
+            
+        <animator start="false" name="slideclose1" attribute="x" from="602" to="830"
+            duration="500" onstop="parent.close_done()"/>
+        <animator start="false" name="slideclose2" attribute="opacity" to="0"
+            duration="400" relative="false"/>
+            <!--
+        <animator start="false" name="slideclose1old" attribute="width" to="0"
+            duration="500" relative="false" onstop="parent.close_done()"/>
+            -->
+
+        <!-- METHODS -->
+
+        <handler name="oninit">
+            this.setWindowTitle( "Event Info" );
+            this.closeDel = new LzDelegate( this , "close" );
+        </handler>
+        
+        <method name="open">
+            this.completeInstantiation();
+            if(sitbox.text != "New Event"){
+                this.setAttribute('dataapply', true);
+            }
+            
+            if ( this['awaitingClose'] ){
+                this.awaitingClose = false;
+                lz.Timer.removeTimer( this.closeDel );
+            }
+
+            if (this.opened) {
+                lz.Focus.setFocus(summary.content.title);
+                return;
+            }
+
+            calgrid.contract();
+
+            this.setAttribute('visible', true);
+            this.setAttribute('opacity', 1);
+            this.slideopen1.doStart();
+            this.slideopen2.doStart();
+            this.opened = true;
+
+        </method>
+
+        <method name="close" args="v">
+            <![CDATA[
+            if(!this.dataapply){
+                eventDataMgr.deleteEvent()
+            }
+            if (! this.opened) { return; }
+            this.awaitingClose = false;
+            slideclose1.doStart();
+            slideclose2.doStart(); //remove
+            this.opened = false;
+            this.setAttribute('dataapply', true);
+            ]]>
+        </method>
+
+        <method name="close_done" >
+            //Debug.write("close_done");
+            calgrid.expand();
+            this.setAttribute('visible', false);
+        </method>
+
+        <method name="unselectEvent" >
+            if ( !this.opened ){ return; }
+            this.awaitingClose = true;
+            lz.Timer.resetTimer( this.closeDel , 500 );
+        </method>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,103 @@
+<!-- Copyright 2006-2008 Laszlo Systems -->
+<canvas title="test-data" width="100%" height="100%" bgcolor="0x7A8AB3">
+    <simplelayout axis="y" spacing="5" />
+    
+    <include href="lz/scrollbar.lzx" />
+    <include href="resources.lzx"/>
+    <include href="cal-button.lzx" />
+    <include href="gridsliderlayout.lzx"/>
+    <include href="basepanel.lzx" />
+    <include href="cal-data.lzx" />
+    <include href="event.lzx" />
+    <include href="day.lzx" />
+    <include href="infopanel.lzx" />
+    <include href="simpletimelayout.lzx"/>
+    <include href="dayname.lzx"/>
+    <include href="selected-daylook.lzx"/>
+    <include href="eventselector.lzx"/>
+    
+    
+    <dataset name="myData">
+        <myXML>
+            <person show="simpsons">
+              <firstName>Homer</firstName>
+              <lastName>Simpson</lastName>
+            </person>
+            <person show="simpsons">
+              <firstName>Marge</firstName>
+              <lastName>Simpson</lastName>
+            </person>
+            <person show="simpsons">
+              <firstName>Montgomery</firstName>
+              <lastName>Burns</lastName>
+            </person>
+          </myXML>
+       
+    </dataset>
+    
+    <method name="loadSomeData">
+        Debug.write("loadSomeData");
+        dataloader.loadData(7,2006);
+        dataloader.loadData(8,2006);
+        dataloader.loadData(9,2006);  
+        dataloader.loadData(10,2006);          
+        dataloader.loadData(11,2006);                  
+        itb.setDatapath("eventdata:/vcalendar/year2006");                      
+        dataloader.run();
+    </method>
+    
+    <method name="setDateTest">
+        var now = new Date();
+        var soon = new Date();
+        soon.setTime(8630000);
+        cell1.setDate(now, soon);
+        var oct12 = new Date();
+        oct12.setMonth(9);
+        oct12.setDate(12);
+        cell2.setDate(oct12,oct12);
+    </method>
+        
+    <button onclick="canvas.loadSomeData()">load some data</button>
+    <button onclick="canvas.setDateTest()">set date test</button>    
+    
+    <view name="calgrid">
+        <attribute name="month" value="10" />
+    </view>
+        
+    <!--
+    <dataset name="eventdata">
+        <eventdata><vcalendar><year2006><month10><day15>
+            <event>
+            <summary value="Send presentation slides"/>
+            <comment value="Send something"/>
+            <start minute="2" hour="13" day="15" month="10" year="2006"/>
+            <end minute="2" hour="14" day="15" month="10" year="2006"/>            
+        </event>
+        </day15></month10></year2006></vcalendar></eventdata>
+    </dataset>
+-->
+
+  <calendar_day id="cell1" width="100" height="100"/>
+  <calendar_day id="cell2" width="300" height="100"/>
+  
+    <view id="fakeinfopanel" width="500" height="100" visible="true">
+        <simplelayout axis="y" spacing="5" />        
+        <datapath p="${currenteventDP.p}" />        
+    
+        <text>inputtext:</text>
+        <inputtext width="200" height="30" text="crabcakes" />
+
+        <text>itb</text>
+        <inputtextbox id="itb" width="200" height="30"  datapath="summary/@value"/>
+    
+    </view>    
+  
+        
+    <info_Panel name="infopanel" id="infopanel" x="830" width="203"
+                height="516" visible="true" initstage="late" 
+                font="Verdana,sans-serif"                    
+                pixellock="true">
+        <datapath p="${currenteventDP.p}" />
+    </info_Panel>
+    
+</canvas>
