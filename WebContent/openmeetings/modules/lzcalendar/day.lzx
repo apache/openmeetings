@@ -133,10 +133,10 @@
 
             if ( amselected) {
                 //Global tracking of the currently selected day
-                dayselectorlook.select(this);
+                parent.parent.dayselectorlook.select(this);
             } else {
                 // selection managers always call unselect first
-                dayselectorlook.hide();
+                parent.parent.dayselectorlook.hide();
             }
         </method>
         <attribute name="year" type="number" value="0"/>
@@ -176,7 +176,7 @@
             var textColor = 0xDAE3E8;
 
             // If this day is not in the month...
-            if (this.month != calgrid.month ) {
+            if (this.month != parent.month ) {
                 this.unselectedColor = 0x768A97;
                 textColor = 0x7E929F;
                 }
@@ -212,7 +212,7 @@
         </method>
 
         <handler name="onclick" >
-            calgrid.openday(this);
+            parent.openday(this);
         </handler>
 
         <method name="hilite" args="dohilite, dontupdate">

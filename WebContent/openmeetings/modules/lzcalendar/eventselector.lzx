@@ -106,14 +106,14 @@
         </handler>
 
         <method name="hide">
-            bar.setAttribute('visible', false);
-            bar.followstate.remove();
+            this.bar.setAttribute('visible', false);
+            this.bar.followstate.remove();
             this.followview = null;
             this.clipdel.unregisterAll();
             this.hidedel.unregisterAll();
             this.setAttribute( "freedragging" , true );
-            if(calgrid.keepinfoopen == false){
-                infopanel.unselectEvent();
+            if(parent.calgrid.keepinfoopen == false){
+                parent.cal_interior.infopanel.unselectEvent();
             }
         </method>
 
@@ -146,7 +146,7 @@
 
 
             // update eventselector view
-            bar.setAttribute('visible',  true );
+            this.bar.setAttribute('visible',  true );
             this.bringToFront();
 
 
@@ -160,13 +160,13 @@
             this.hidedel.register( this['followview'].classroot, "onvisible" );
 
             // change selected day
-            calgrid.daySelectionMgr.select(e.classroot);
-            calgrid.open_day = e.classroot;
+            parent.calgrid.daySelectionMgr.select(e.classroot);
+            parent.calgrid.open_day = e.classroot;
 
             //reinitialize the constraints to the new view
             //(there are no meta-constraints in v1
-            bar.followstate.remove();
-            bar.followstate.apply();
+            this.bar.followstate.remove();
+            this.bar.followstate.apply();
 
 
             var nfd = !this['followview'].classroot.opened;
@@ -181,7 +181,7 @@
                 }
             }
 
-            colorMe();
+            this.colorMe();
 
             if ( sdrag && !this.dragging ){
                 this.domousedown();
@@ -203,9 +203,9 @@
                 var transColor = { ra: trans.ra, ga: trans.ga, ba: trans.ba };
             }
 
-            bar.gripper.top.setColorTransform(transColor);
-            bar.gripper.bottom.setColorTransform(transColor);
-            bar.gripper.button.bkgnd.setColorTransform(transColor);
+            this.bar.gripper.top.setColorTransform(transColor);
+            this.bar.gripper.bottom.setColorTransform(transColor);
+            this.bar.gripper.button.bkgnd.setColorTransform(transColor);
         </method>
 
         <handler name="onfreedragging"><![CDATA[
@@ -237,7 +237,7 @@
 
         <handler name="ondblclick">
             //Debug.write("eventselector doubleclick");
-            infopanel.open();
+            parent.cal_interior.infopanel.open();
             // OLD  cal_interior.showInfo(smallevent.event);
         </handler>
 
@@ -261,10 +261,10 @@
 
         <method name="startDrag" args="v">   <![CDATA[
             this.mdel.register( lz.Idle, "onidle" );
-            bar.followstate.remove();
+            this.bar.followstate.remove();
             this.setAttribute('freedragging', !this['followview'].classroot.opened );
             this.setAttribute('dragging',true);
-            calgrid.gridlayout.startTrack(); ]]>
+            parent.calgrid.gridlayout.startTrack(); ]]>
         </method>
 
         <handler name="onmouseup" method="domouseup"/>
@@ -272,9 +272,9 @@
             if ( this.dragging ){
                 this.mdel.unregisterAll( );
                 this.setAttribute('dragging',false);
-                calgrid.gridlayout.stopTrack();
+                parent.calgrid.gridlayout.stopTrack();
                 //this may be already applied, but it can't hurt
-                bar.followstate.apply();
+                this.bar.followstate.apply();
                 
                 if ($debug) Debug.warn("ON MOUSE UP => Update Cal Event ",this['followview']);
                 

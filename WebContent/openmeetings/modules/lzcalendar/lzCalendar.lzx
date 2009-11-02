@@ -39,7 +39,11 @@
 		</handler> 
 	</dateSelector> 
 	
-	<lzCalendarContent name="lzCalendarContent" x="206" />
+	<lzCalendarContent name="lzCalendarContent" x="206">
+		<handler name="oninit">
+			canvas.eventDataMgr.lzCalendarContent = this;
+		</handler>
+	</lzCalendarContent>
 	
 </class>
 
@@ -56,7 +60,7 @@
         <handler name="onupdatestop" method="showalldaytitles" reference="parent.parent.parent.calgrid.gridlayout" />
         <method name="showalldaytitles" args="v">
           <![CDATA[
-            if ( calgrid.gridlayout.displaymode != 'cell' ){
+            if ( parent.parent.parent.calgrid.gridlayout.displaymode != 'cell' ){
                 var svs = this.subviews;
                 for (var i = 0; i < 7; i++) {
                     svs[i].setAttribute('visible', true);
@@ -114,22 +118,22 @@
 
             <view name="viewbuttons" x="2" y="6">
                 <calButton rightcap="shear" icon="iconDay"
-                           onclick="calgrid.showdayview()" label="day" />
+                           onclick="parent.parent.parent.parent.calgrid.showdayview()" label="day" />
                 <calButton leftcap="shear"  rightcap="shear"  icon="iconWeek"
-                           onclick="calgrid.showweekview()" label="week" />
+                           onclick="parent.parent.parent.parent.calgrid.showweekview()" label="week" />
                 <calButton leftcap="shear"  icon="iconMonth" 
-                           onclick="calgrid.showmonthview(true)"  label="month"/>
+                           onclick="parent.parent.parent.parent.calgrid.showmonthview(true)"  label="month"/>
                 <simplelayout axis="x"/>
             </view>
 
             <view name="monthController" x="300" y="6" width="161" >
                 <calButton rightcap="shear" icon="iconLeftArrow"
-                           onclick="calgrid.prevMonth()" />
+                           onclick="parent.parent.parent.parent.calgrid.prevMonth()" />
                 <calButton label=" " leftcap="shear" rightcap="shear"
                            clickable="false" options="releasetolayout" />
                 <calButton leftcap="shear" leftinset="5" rightinset="9"
                            icon="iconRightArrow"
-                           onclick="calgrid.nextMonth()"  />
+                           onclick="parent.parent.parent.parent.calgrid.nextMonth()"  />
                 <resizelayout axis="x" />
             </view>
 
@@ -167,7 +171,7 @@
         <attribute name="viewstyle" type="string" value="month"/>
 
         <animator name="fadeUp" attribute="opacity"
-                  onstop="dayselectorlook.setAttribute('opacity', 1 )"
+                  onstop="parent.parent.dayselectorlook.setAttribute('opacity', 1 )"
                   duration="1000" from="0" to="1"
                   start="false"/>
 
@@ -281,24 +285,26 @@
 
          <!-- Makes the passed day the open day (with the grid in the
               background -->
-         <method name="openday" args="d" >       <![CDATA[
-              // d is a reference to a dayview
-
-              //make sure it's selected
-              this.daySelectionMgr.select( d );
-
-              // don't do anything else if already opened
-              // if (this['open_day'] == d) { return; }
-
-              // Open one day, close the last
-
-              // update gridslider
-              if(this.gridlayout.displaymode == 'grid') this.gridlayout.doanimation = false;
-
-              this.gridlayout.setopenview(d,true);
-
-              this.open_day = d;  // Make the requested day the open day
-          ]]></method>
+         <method name="openday" args="d" >       
+         	  <![CDATA[
+	              // d is a reference to a dayview
+	
+	              //make sure it's selected
+	              this.daySelectionMgr.select( d );
+	
+	              // don't do anything else if already opened
+	              // if (this['open_day'] == d) { return; }
+	
+	              // Open one day, close the last
+	
+	              // update gridslider
+	              if(this.gridlayout.displaymode == 'grid') this.gridlayout.doanimation = false;
+	
+	              this.gridlayout.setopenview(d,true);
+	
+	              this.open_day = d;  // Make the requested day the open day
+          	  ]]>
+          </method>
 
 
           <method name="closeday" >      
@@ -409,12 +415,12 @@
           <!-- These are used by the info panel when it slides in and out -->
           <method name="contract" >
               this.gridlayout.doanimation = false;
-              this.setAttribute('width', cal_interior.width - 208);
+              this.setAttribute('width', parent.cal_interior.width - 208);
           </method>
 
           <method name="expand" >
               this.gridlayout.doanimation = false;
-              this.setAttribute('width', cal_interior.width);
+              this.setAttribute('width', parent.cal_interior.width);
           </method>
 
           <!-- This method sets the dates for all the days in the grid,

@@ -105,64 +105,64 @@
                     <basebutton x="149" width="14" resource="info_larrow">
                         <handler name="onclick">
                             <![CDATA[
-                            calgrid.keepinfoopen = true;
-                            var thiscell = calgrid.open_day.id;
+                            parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = true;
+                            var thiscell = parent.parent.parent.parent.parent.parent.calgrid.open_day.id;
                             thiscell = Number(thiscell.substr(4));
                             
                             var prevcell = 'cell' + Number(thiscell - 1);
                             if(thiscell > 1){
                                 if(typeof global[prevcell] != 'undefined'){
-                                    calgrid.daySelectionMgr.select(global[prevcell]);
-                                    calgrid.open_day = global[prevcell];
+                                    parent.parent.parent.parent.parent.parent.calgrid.daySelectionMgr.select(global[prevcell]);
+                                    parent.parent.parent.parent.parent.parent.calgrid.open_day = global[prevcell];
                                 }
                             }
                             canvas.eventDataMgr.changeDay(-1);
                             if(thiscell == 1){
-                                calgrid.prevMonth();
-                                calgrid.keepinfoopen = false;
+                                parent.parent.parent.parent.parent.parent.calgrid.prevMonth();
+                                parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = false;
                             }
-                            if(cal_interior.viewstyle == "day"){
-                                calgrid.showdayview();
+                            if(parent.parent.parent.parent.parent.parent.cal_interior.viewstyle == "day"){
+                                parent.parent.parent.parent.parent.parent.calgrid.showdayview();
                             }
-                            if(cal_interior.viewstyle == "week"){
-                                calgrid.showweekview();
+                            if(parent.parent.parent.parent.parent.parent.cal_interior.viewstyle == "week"){
+                                parent.parent.parent.parent.parent.parent.calgrid.showweekview();
                             }
-                            calgrid.keepinfoopen = false;
+                            parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = false;
                             ]]>
                         </handler>
                     </basebutton>
                     <basebutton x="163" width="14" resource="info_rarrow">
                         <handler name="onclick">
                             <![CDATA[
-                            calgrid.keepinfoopen = true;
-                            var thiscell = calgrid.open_day.id;
+                            parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = true;
+                            var thiscell = parent.parent.parent.parent.parent.parent.calgrid.open_day.id;
                             thiscell = Number(thiscell.substr(4));
                             
                             var nextcell = 'cell' + Number(thiscell + 1);
                             if(thiscell < 42){
                                 if(typeof global[nextcell] != 'undefined'){
-                                    calgrid.daySelectionMgr.select(global[nextcell]);
-                                    calgrid.open_day = global[nextcell];
+                                    parent.parent.parent.parent.parent.parent.calgrid.daySelectionMgr.select(global[nextcell]);
+                                    parent.parent.parent.parent.parent.parent.calgrid.open_day = global[nextcell];
                                 }
                             }
                             canvas.eventDataMgr.changeDay(+1);
                             if(thiscell == 42){
-                                calgrid.nextMonth();
-                                calgrid.keepinfoopen = false;
+                                parent.parent.parent.parent.parent.parent.calgrid.nextMonth();
+                                parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = false;
                             }
                             if(thiscell == 35){
                                 if(cell42.visible == false){
-                                    calgrid.nextMonth();
-                                    calgrid.keepinfoopen = false;
+                                    parent.parent.parent.parent.parent.parent.calgrid.nextMonth();
+                                    parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = false;
                                 }
                             }
-                            if(cal_interior.viewstyle == "day"){
-                                calgrid.showdayview();
+                            if(parent.parent.parent.parent.parent.parent.cal_interior.viewstyle == "day"){
+                                parent.parent.parent.parent.parent.parent.calgrid.showdayview();
                             }
-                            if(cal_interior.viewstyle == "week"){
-                                calgrid.showweekview();
+                            if(parent.parent.parent.parent.parent.parent.cal_interior.viewstyle == "week"){
+                                parent.parent.parent.parent.parent.parent.calgrid.showweekview();
                             }
-                            calgrid.keepinfoopen = false;
+                            parent.parent.parent.parent.parent.parent.calgrid.keepinfoopen = false;
                             ]]>
                         </handler>
                     </basebutton>
@@ -331,7 +331,7 @@
                 return;
             }
 
-            calgrid.contract();
+            parent.parent.calgrid.contract();
 
             this.setAttribute('visible', true);
             this.setAttribute('opacity', 1);
@@ -357,7 +357,7 @@
 
         <method name="close_done" >
             //Debug.write("close_done");
-            calgrid.expand();
+            parent.parent.calgrid.expand();
             this.setAttribute('visible', false);
         </method>
 

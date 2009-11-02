@@ -37,7 +37,8 @@
             // which in turn selects the event selector bar
             this.selected = sel;
             if (this.selected){
-                eventselector.setSelectedEvent( this ,this.mouseIsDown );
+            	if ($debug) Debug.write("setSel ITEM :: ",parent.parent.parent.parent.parent.parent.parent);
+                parent.parent.parent.parent.parent.parent.parent.eventselector.setSelectedEvent( this ,this.mouseIsDown );
             }
         </method>
 

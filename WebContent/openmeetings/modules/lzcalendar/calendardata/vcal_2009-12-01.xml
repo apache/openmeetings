@@ -1,0 +1,112 @@
+<vcalendar>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+    <year2009>
+        <month12>
+            <day14>
+                <event>
+                       <summary value="Gym workout"/>
+                       <comment value="gym"/>
+                       <start year="2009" month="11" day="14" hour="16" minute="30"/>
+                       <end year="2009" month="11" day="14" hour="17" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="photo shoot"/>
+                       <comment value="photo shoot"/>
+                       <start year="2009" month="11" day="14" hour="9" minute="12"/>
+                       <end year="2009" month="11" day="14" hour="10" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day14>
+            <day2>
+                <event>
+                       <summary value="Speech at the MOMA"/>
+                       <comment value="A test event"/>
+                       <start year="2009" month="11" day="2" hour="8" minute="30"/>
+                       <end year="2009" month="11" day="2" hour="10" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day2>
+            <day6>
+                <event>
+                       <summary value="Ribbon Cutting Ceremony"/>
+                       <comment value="Another meeting"/>
+                       <start year="2009" month="11" day="6" hour="3" minute="30"/>
+                       <end year="2009" month="11" day="6" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Governor's Luncheon"/>
+                       <comment value="Lunch with Arnold"/>
+                       <start year="2009" month="11" day="6" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="6" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day6>
+            <day30>
+                <event>
+                       <summary value="Pick-up Movie DVDs"/>
+                       <comment value="Pick-up movies"/>
+                       <start year="2009" month="11" day="30" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="30" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Another example event"/>
+                       <comment value="Another example event"/>
+                       <start year="2009" month="11" day="30" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="30" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day30>
+            <day12>
+                <event>
+                       <summary value="Run Heartache Hill"/>
+                       <comment value="Good evening"/>
+                       <start year="2009" month="11" day="12" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="12" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day12>
+            <day1>
+                <event>
+                       <summary value="Swim English Channel"/>
+                       <comment value="Another example event"/>
+                       <start year="2009" month="11" day="1" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="1" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day1>
+            <day18>
+                <event>
+                       <summary value="Climb Mount Everest"/>
+                       <comment value="How we do it back home"/>
+                       <start year="2009" month="11" day="18" hour="3" minute="30"/>
+                       <end year="2009" month="11" day="18" hour="5" minute="30"/>
+                       <category/>
+                       <uid/>
+                </event>
+                <event>
+                       <summary value="Sail across Pacific"/>
+                       <comment value="Conference"/>
+                       <start year="2009" month="11" day="18" hour="12" minute="12"/>
+                       <end year="2009" month="11" day="18" hour="13" minute="12"/>
+                       <category/>
+                       <uid/>
+                </event>
+            </day18>
+        </month12>
+    </year2009>
+</vcalendar>

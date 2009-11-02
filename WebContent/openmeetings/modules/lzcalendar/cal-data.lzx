@@ -30,7 +30,7 @@
         <method name="loadData" args="mo, yr">
         	if ($debug) Debug.write("loadData",mo, yr);
             if( !datatester.hasNode( mo , yr ) ){
-                var r = "calendardata/vcal_" + yr + "-" + mo + "-01.xml";
+                var r = "modules/lzcalendar/calendardata/vcal_" + yr + "-" + mo + "-01.xml";
                 this.enqueueRequest( r );
             }
         </method>
@@ -132,6 +132,8 @@
          local data -->
     <node >
     	
+    	<attribute name="lzCalendarContent" value="null" />
+    	
     	<handler name="oninit">
     		canvas.eventDataMgr = this;
     	</handler>
@@ -140,14 +142,22 @@
             // Add event is called by the "Add Event" button to 
             //create a new event
 
+			if ($debug) Debug.write("addEvent :: alleventsDP ",alleventsDP);
+
             alleventsDP.setXPath('eventdata:/vcalendar[1]');
 
             // Set the blank event pointer to the top of the event
             blankeventDP.setXPath('blankEvent:/event[1]');
 
             // Set the right current cal day for new events
-            var selDay = calgrid.daySelectionMgr.getSelection()[0];
+            var selDay = this.lzCalendarContent.calgrid.daySelectionMgr.getSelection()[0];
+            
+            if ($debug) Debug.write("Fill Blank Event ",selDay);
+            
             if ( selDay ){
+            	
+            	if ($debug) Debug.write("DO Fill Blank Event ",selDay);
+            	
                 blankeventDP.setNodeAttribute('selected','true');
                 blankeventDP.setXPath('start[1]');
                 blankeventDP.setNodeAttribute('year',
@@ -177,23 +187,39 @@
                 blankeventDP.setNodeAttribute('value', "New Event" );
 
                 blankeventDP.selectParent();
+                
+                if ($debug) Debug.write("FILL Complete the event ");
             }
-
+            
             // Move to OR create the node tree for this event
             // Each event should be in the right part of the 
             // tree of data (yearXXXX/monthX/dayX/)
             // The location in the tree is derived from the new 
             // events start data
+            
+            if ($debug) Debug.write("FILL YEAR ");
             var year = blankeventDP.xpathQuery('start/@year');
+            if ($debug) Debug.write("FILL MONTH ");
             var month = blankeventDP.xpathQuery('start/@month');
+            if ($debug) Debug.write("FILL DAY ");
             var day = blankeventDP.xpathQuery('start/@day');
-            getNewNode(alleventsDP,'year'+year);
-            getNewNode(alleventsDP,'month'+month);
-            getNewNode(alleventsDP,'day'+day);
+            if ($debug) Debug.write("Done YEAR ");
+            this.getNewNode(alleventsDP,'year'+year);
+            if ($debug) Debug.write("Done MONTH ");
+            this.getNewNode(alleventsDP,'month'+month);
+            if ($debug) Debug.write("Done DAY ");
+            this.getNewNode(alleventsDP,'day'+day);
 
+            if ($debug) Debug.write("Add the event ");
+            
             // Add the event
-            currenteventDP.setNodeAttribute( "selected" , 'false' );
+            //currenteventDP.setNodeAttribute( "selected" , 'false' );
+            
+            //if ($debug) Debug.write("Add the event 2 ",currenteventDP);
+            
             var newPoint = alleventsDP.addNodeFromPointer(blankeventDP);
+            
+            if ($debug) Debug.write("currenteventDP ",newPoint);
 
             // Set the event data pointer to the top of the event data
             alleventsDP.setXPath('eventdata:/vcalendar[1]');
@@ -235,7 +261,7 @@
             //currenteventDP.setXPath('blankEvent:/event[1]');
             
             currenteventDP.setPointer( noEvent.getFirstChild() );
-            eventselector.hide();
+            this.lzCalendarContent.eventselector.hide();
         </method>
 
         <method name="changeEventTime" args="shour, smin"> <![CDATA[
