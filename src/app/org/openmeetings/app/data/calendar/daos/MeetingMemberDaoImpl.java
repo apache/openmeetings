@@ -51,9 +51,9 @@ public class MeetingMemberDaoImpl {
 			
 			return meetingMember;
 		} catch (HibernateException ex) {
-			log.error("[getMeetingMemberById]: " + ex);
+			log.error("[getMeetingMemberById]: " , ex);
 		} catch (Exception ex2) {
-			log.error("[getMeetingMemberById]: " + ex2);
+			log.error("[getMeetingMemberById]: " , ex2);
 		}
 		return null;
 	}
@@ -79,9 +79,9 @@ public class MeetingMemberDaoImpl {
 			
 			return listmeetingMember;
 		} catch (HibernateException ex) {
-			log.error("[getMeetingMemberByAppointmentId]: " + ex);
+			log.error("[getMeetingMemberByAppointmentId]: " , ex);
 		} catch (Exception ex2) {
-			log.error("[getMeetingMemberByAppointmentId]: " + ex2);
+			log.error("[getMeetingMemberByAppointmentId]: " , ex2);
 		}
 		return null;
 	}

@@ -22,6 +22,7 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -68,14 +69,7 @@ public class CalendarServlet extends HttpServlet {
 				endtime.set(Calendar.SECOND, 0);
 				endtime.set(Calendar.YEAR, Integer.parseInt(yearStr));
 				
-				System.out.println("starttime "+starttime);
-				System.out.println("endtime "+endtime);
-				System.out.println("getTimeInMillis s "+new Date(starttime.getTimeInMillis()));
-				System.out.println("getTimeInMillis e "+new Date(endtime.getTimeInMillis()));
-				
 				List<Appointment> appointements = AppointmentLogic.getInstance().getAppointmentByRange(Long.parseLong(userStr), new Date(starttime.getTimeInMillis()), new Date(endtime.getTimeInMillis()));
-				
-				System.out.println("Num of Appointements "+appointements.size());
 				
 				Document document = DocumentHelper.createDocument();
 				document.setXMLEncoding("UTF-8");
@@ -117,14 +111,14 @@ public class CalendarServlet extends HttpServlet {
 						Element start = event.addElement("start");
 						
 						start.addAttribute("year", ""+(appointment.getAppointmentStarttime().getYear()+1900));
-						start.addAttribute("month", ""+appointment.getAppointmentStarttime().getMonth()+1);
+						start.addAttribute("month", ""+(appointment.getAppointmentStarttime().getMonth()+1));
 						start.addAttribute("day", ""+appointment.getAppointmentStarttime().getDate());
 						start.addAttribute("hour", ""+appointment.getAppointmentStarttime().getHours());
 						start.addAttribute("minute", ""+appointment.getAppointmentStarttime().getMinutes());
 						
 						Element end = event.addElement("end");
 						end.addAttribute("year", ""+(appointment.getAppointmentEndtime().getYear()+1900));
-						end.addAttribute("month", ""+appointment.getAppointmentEndtime().getMonth()+1);
+						end.addAttribute("month", ""+(appointment.getAppointmentEndtime().getMonth()+1));
 						end.addAttribute("day", ""+appointment.getAppointmentEndtime().getDate());
 						end.addAttribute("hour", ""+appointment.getAppointmentEndtime().getHours());
 						end.addAttribute("minute", ""+appointment.getAppointmentEndtime().getMinutes());
@@ -135,12 +129,30 @@ public class CalendarServlet extends HttpServlet {
 						Element uid = event.addElement("uid");
 						uid.addAttribute("value",""+appointment.getAppointmentId());
 						
+						Element attendees = event.addElement("attendees");
+						
+						for (MeetingMember meetingMember : appointment.getMeetingMember()) {
+							
+							Element attendee = attendees.addElement("attendee");
+							
+							Element email = attendee.addElement("email");
+							email.addAttribute("value", meetingMember.getEmail());
+							
+							Element memberId = attendee.addElement("memberId");
+							memberId.addAttribute("value", ""+meetingMember.getMeetingMemberId());
+							
+							Element firstname = attendee.addElement("firstname");memberId.addAttribute("value", ""+meetingMember.getMeetingMemberId());
+							firstname.addAttribute("value", meetingMember.getFirstname());
+							
+							Element lastname = attendee.addElement("lastname");
+							lastname.addAttribute("value", meetingMember.getLastname());
+							
+						}
+						
 					}
 					
 				}
 				
-				String requestedFile = "users.xml";
-
 				httpServletResponse.reset();
 				httpServletResponse.resetBuffer();
 				OutputStream out = httpServletResponse.getOutputStream();

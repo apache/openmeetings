@@ -16,6 +16,8 @@
 
         <method name="getEventColor" args="cat">
 
+			if ($debug) Debug.write("getEventColor ",cat);
+
             setAttribute('hiColor',gColorTable[cat].bright);
             setAttribute('bkgndColor',gColorTable[cat].bkgnd);
 
@@ -85,11 +87,11 @@
             </datapath>
             <setter name="text" args="h">
                 <![CDATA[
-                h = Number( h );
-                var ap = h < 12 ? 'a' : 'p';
-                if ( h > 12) h-=12;
-                else if ( h==0 ) h='12';
-                super.setAttribute('text', h + ap );
+	                h = Number( h );
+	                var ap = h < 12 ? 'a' : 'p';
+	                if ( h > 12) h-=12;
+	                else if ( h==0 ) h='12';
+	                super.setAttribute('text', h + ap );
                 ]]>
             </setter>
         </text>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<canvas debug="true" width="100%" height="100%">
+<canvas debug="true" width="100%" height="100%" title="OpenMeetings">
     <debug fontsize="11" oninit="Debug.showInternalProperties = true" />
     
 <!-- 

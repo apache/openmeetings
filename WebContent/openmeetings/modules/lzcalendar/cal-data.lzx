@@ -115,10 +115,10 @@
             <comment value=""/>
             <notes value=""/>
             <location value=""/>
-            <attendees value=""/>
+            <attendees />
             <start year="" month="" day="" hour="" minute="" />
             <end year="" month="" day="" hour="" minute="" />
-            <category value=""/>
+            <category value="1"/>
             <uid value=""/>
         </event>
     </dataset>
@@ -130,10 +130,10 @@
             <comment value=""/>
             <notes value=""/>
             <location value=""/>
-            <attendees value=""/>
+            <attendees />
             <start year="" month="" day="" hour="" minute="" />
             <end year="" month="" day="" hour="" minute="" />
-            <category value=""/>
+            <category value="1"/>
             <uid value=""/>
         </event>
     </dataset>

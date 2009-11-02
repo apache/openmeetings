@@ -94,6 +94,9 @@
                             <![CDATA[
                             var s = ""
                             if ( attrs && attrs.month != "" ){
+                            	
+                            	//if ($debug) Debug.write("applyData",attrs);
+                            	
                                 s = canvas.calMonths[ attrs.month-1 ] + " " +
                                                       attrs.day + ", " +
                                                       attrs.year;
@@ -255,7 +258,7 @@
                 <!-- fixed size input text is best for large multiline text,
                  so it is good to declare with values for width/height -->
                 <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
-                    width="175" height="280" datapath="notes/@value" visible="true"/>
+                    width="175" height="280" datapath="comment/@value" visible="true"/>
             </infoTab>
             
             <infoTab name="location" label="Location" pixellock="true">
@@ -263,8 +266,23 @@
                     width="175" height="280" datapath="location/@value" visible="true"/>
             </infoTab>
             <infoTab name="attendees" label="Attendees" pixellock="true">
+            	
+            	<simplelayout axis="y" />
+            	
+            	<view datapath="attendees/attendee/">
+            		<view>
+            			<simplelayout axis="x" />
+            			<text resize="true" datapath="firstname/@value" />
+            			<text resize="true" datapath="lastname/@value" />
+            			<text text="(" />
+            			<text resize="true" datapath="email/@value" />
+            			<text text=")" />
+            		</view>
+            	</view>
+            	<!--
                 <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
                     width="175" height="280" datapath="attendees/@value" visible="true"/>
+                 -->
             </infoTab>
 
         </basetabslider>

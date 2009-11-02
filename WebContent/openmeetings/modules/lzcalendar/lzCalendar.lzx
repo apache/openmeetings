@@ -526,7 +526,7 @@
 
           <selectionmanager name="daySelectionMgr" />
 
-      </view>
+	</view>
 
 
     <!-- This is the beveled treatment for the selected day, plus the button
