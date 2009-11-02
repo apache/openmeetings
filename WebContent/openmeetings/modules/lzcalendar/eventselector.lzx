@@ -16,13 +16,19 @@
              bgcolor="white" opacity=".5"-->
 
         <!-- INSTANCE NAME: ID="eventselector" -->
-        <attribute name="dragging" value="false"/>
-        <attribute name="freedragging" value="false"/>
-        <attribute name="clipping" value="false"/>
+        <attribute name="dragging" value="false" type="boolean"/>
+        <attribute name="freedragging" value="false" type="boolean"/>
+        <attribute name="clipping" value="false" type="boolean"/>
         <attribute name="xoff" type="number" value="0"/>
         <attribute name="yoff" type="number" value="0"/>
         <attribute name="origx" type="number" value="0"/>
         <attribute name="obarx" type="number" value="0"/>
+        
+        
+        <attribute name="clipdel" value="null" />
+        <attribute name="hidedel" value="null" />
+        <attribute name="mdel" value="null" />
+        <attribute name="startDragDel" value="null" />
 
         <view name="bar" pixellock="false" bgcolor="white" visible="false"
               onmousedown="parent.domousedown()"
@@ -217,8 +223,8 @@
                 this.clipSizing.remove();
                 this.clipping = false;
                 // this.setAttributeRelative( 'y' , calgrid); // [bshine 9.28.06] TODO beware this in legals
-                this.setAttribute('y', this.getAttributeRelative('y', calgrid) );                
-                this.setAttribute( 'height' , calgrid.height);
+                this.setAttribute('y', this.getAttributeRelative('y', parent.calgrid) );                
+                this.setAttribute( 'height' , parent.calgrid.height);
             }]]>
         </handler>
 
@@ -246,6 +252,7 @@
         <method name="domousedowndel" args="v">
             this.domousedown();
         </method>
+        
         <method name="domousedown"><![CDATA[
             //wait 150ms before starting drag; prevents moving the 
             //event selector on a click -- 150ms is empirical
@@ -258,29 +265,49 @@
             ]]>
         </method>
 
-        <method name="startDrag" args="v">   <![CDATA[
-            this.mdel.register( lz.Idle, "onidle" );
-            this.bar.followstate.remove();
-            this.setAttribute('freedragging', !this['followview'].classroot.opened );
-            this.setAttribute('dragging',true);
-            parent.calgrid.gridlayout.startTrack(); ]]>
+        <method name="startDrag" args="v">   
+        	<![CDATA[
+        	
+        		if ($debug) Debug.write("startDrag ",this['followview'].classroot.opened,v);
+        		
+        		//if (this['followview'].classroot.opened) {
+        		//	if ($debug) Debug.warn("Do Not Drag Allow when opened?!");
+        		//	return;
+        		//}
+        		
+	            this.mdel.register( lz.Idle, "onidle" );
+	            
+	            this.setAttribute('dragging',true);
+	            
+	            this.bar.followstate.remove();
+	            
+	            this.setAttribute('freedragging', !this['followview'].classroot.opened );
+	            
+	            parent.calgrid.gridlayout.startTrack(); 
+	            
+            ]]>
         </method>
 
         <handler name="onmouseup" method="domouseup"/>
-        <method name="domouseup" args="v"><![CDATA[
-            if ( this.dragging ){
-                this.mdel.unregisterAll( );
-                this.setAttribute('dragging',false);
-                parent.calgrid.gridlayout.stopTrack();
-                //this may be already applied, but it can't hurt
-                this.bar.followstate.apply();
-                
-                if ($debug) Debug.warn("ON MOUSE UP => Update Cal Event ",this['followview']);
-                
-                this.setAttribute('freedragging', !this['followview'].classroot.opened );
-            } else {
-                lz.Timer.removeTimer( this.startDragDel );
-            } ]]>
+        <method name="domouseup" args="v">
+        	<![CDATA[
+	            if ( this.dragging ){
+	            	
+	            	if ($debug) Debug.write("Remove Drag State");
+	            	
+	                this.mdel.unregisterAll( );
+	                this.setAttribute('dragging',false);
+	                parent.calgrid.gridlayout.stopTrack();
+	                //this may be already applied, but it can't hurt
+	                this.bar.followstate.apply();
+	                
+	                if ($debug) Debug.warn("ON MOUSE UP => Update Cal Event ",this['followview']);
+	                
+	                this.setAttribute('freedragging', !this['followview'].classroot.opened );
+	            } else {
+	                lz.Timer.removeTimer( this.startDragDel );
+	            } 
+            ]]>
         </method>
 
         <method name="updateEventTime" args="d">
@@ -438,8 +465,3 @@
    </class>
 
 </library>
-<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
-* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
-* Use is subject to license terms.                                            *
-* X_LZ_COPYRIGHT_END ****************************************************** -->
-<!-- @LZX_VERSION@                                                         -->

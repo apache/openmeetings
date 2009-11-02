@@ -1,6 +1,14 @@
 <library>
 <class name="gridsliderlayout" extends="layout" >
 
+	<!--
+	
+	
+ERROR @modules/lzcalendar/eventselector.lzx#226: reference to undefined variable 'calgrid' 
+
+	
+	 -->
+
     <!-- ATTRIBUTES -->
     <attribute name="spacing" value="0"
                setter="this.spacing = spacing" />
@@ -52,34 +60,42 @@
     <attribute name="cellwidth" type="number" value="0"/>
     <attribute name="cellheight" type="number" value="0"/>
     
-    <attribute name="lastsel" value="${null}"/>
+    <attribute name="lastsel" value="${null}" />
+    
+    <attribute name="positiondel" value="null" />
 
-    <handler name="oninit" > <![CDATA[
-        // Create delegates used by the update method.
-        this.doupdateDelegate = new LzDelegate(this, "doupdate");
-        this.doupdateDelegate.register( immediateparent,  "onwidth");
-        this.doupdateDelegate.register( immediateparent,  "onheight");
-        this.resetvisDL = new LzDelegate(this,'resetVisibility');
-    ]]> </handler>
+    <handler name="oninit" > 
+    	<![CDATA[
+	        // Create delegates used by the update method.
+	        this.doupdateDelegate = new LzDelegate(this, "doupdate");
+	        this.doupdateDelegate.register( immediateparent,  "onwidth");
+	        this.doupdateDelegate.register( immediateparent,  "onheight");
+	        this.resetvisDL = new LzDelegate(this,'resetVisibility');
+    	]]> 
+    </handler>
 
     <!-- METHOD: addSubview -->
     <!-- As subviews are added to this layout store their row and col.
          This adds the layout's data in an internal spot in the view, which
          is not great OOP, but it's fast. We could use v.setOption( 'col', ...
          for this -->
-    <method name="addSubview" args="v"> <![CDATA[
+    <method name="addSubview" args="v"> 
+    	<![CDATA[
         super.addSubview(v);
         v.col =  (this.subviews.length - 1) % 7;
         v.row = Math.floor((this.subviews.length - 1)/ 7);
-    ]]> </method>
+    	]]> 
+    </method>
 
 
-    <method name="set_rows" args="r"> <![CDATA[
+    <method name="set_rows" args="r"> 
+    	<![CDATA[
         if (this['rows'] != r) {
             this.rows = r;
             this.doupdate(null);
         }
-    ]]> </method>
+    	]]> 
+    </method>
 
 
     <!-- OPEN METHODS -->
@@ -415,7 +431,7 @@
          is dragged. These methods appear here because the layout has all the
          position information about the grid. -->
     <method name="startTrack" >
-        if ( ! this[ 'positiondel' ] ){
+        if ( this.positiondel == null ){
             this.positiondel = new LzDelegate( this , "checkMousePosition" );
         }
         this.positiondel.register( lz.Idle , "onidle" );
