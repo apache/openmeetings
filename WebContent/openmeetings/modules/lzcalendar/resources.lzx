@@ -26,7 +26,11 @@
         <frame src="images/infopanel/x_bright.png"/>
         <frame src="images/infopanel/x_press.png"/>
     </resource>
-
+	
+	<resource name="delete_button">
+        <frame src="images/cancel.png"/>
+    </resource>
+    
     <!-- CAL-BUTTON RESOURCES -->
     <!-- RESOURCES for all styles of button -->
     <resource name="button_middle" >

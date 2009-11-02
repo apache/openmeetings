@@ -16,5 +16,6 @@
     <include href="eventselector.lzx"/>
     
 	<include href="lzCalendar.lzx" />
+	<include href="addAttendee.lzx" />
 
 </library>

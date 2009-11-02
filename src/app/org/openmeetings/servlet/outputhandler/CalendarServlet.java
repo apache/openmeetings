@@ -138,6 +138,9 @@ public class CalendarServlet extends HttpServlet {
 							Element email = attendee.addElement("email");
 							email.addAttribute("value", meetingMember.getEmail());
 							
+							Element userId = attendee.addElement("userId");
+							userId.addAttribute("value", ""+meetingMember.getUserid());
+							
 							Element memberId = attendee.addElement("memberId");
 							memberId.addAttribute("value", ""+meetingMember.getMeetingMemberId());
 							

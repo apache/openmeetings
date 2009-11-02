@@ -122,6 +122,16 @@
             <uid value=""/>
         </event>
     </dataset>
+    
+    <dataset name="blankMeetingMember">
+        <attendee>
+            <userId value=""/>
+            <firstname value=""/>
+            <lastname value=""/>
+            <memberId value=""/>
+            <email value=""/>
+        </attendee>
+    </dataset>
 
     <!-- Assigned to the panel when deleting an event -->
     <dataset name="noEvent">
@@ -141,6 +151,7 @@
     <datapointer id="alleventsDP" xpath="eventdata:/"/>
     <datapointer id="currenteventDP" />
     <datapointer id="blankeventDP" xpath="blankEvent:/"/>
+    <datapointer id="blankMeetingMemberDP" xpath="blankMeetingMember:/"/>
     <datapointer id="tempDP" xpath="eventdata:/"/>
 
     <!-- This node provides some useful methods for manipulating the 
@@ -228,7 +239,7 @@
             if ($debug) Debug.write("Add the event ");
             
             // Add the event
-            //currenteventDP.setNodeAttribute( "selected" , 'false' );
+            currenteventDP.setNodeAttribute( "selected" , 'false' );
             
             //if ($debug) Debug.write("Add the event 2 ",currenteventDP);
             

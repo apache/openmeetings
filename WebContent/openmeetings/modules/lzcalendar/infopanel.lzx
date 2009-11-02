@@ -205,8 +205,7 @@
                                 datapath="start[1]"
                                 onclick="canvas.eventDataMgr.changetime('start',+1);"/>
 
-                    <text x="$immediately{92-11}" y="0" width="20" >
-                        to</text>
+                    <text x="$immediately{92-11}" y="0" width="20" >to</text>
 
                     <textbox name="etime" x="100" y="1" width="45" 
                              bgcolor="0xEEF0EB" bordercolor="0x333333"
@@ -261,24 +260,113 @@
                     width="175" height="280" datapath="comment/@value" visible="true"/>
             </infoTab>
             
-            <infoTab name="location" label="Location" pixellock="true">
-                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
-                    width="175" height="280" datapath="location/@value" visible="true"/>
-            </infoTab>
             <infoTab name="attendees" label="Attendees" pixellock="true">
             	
-            	<simplelayout axis="y" />
+            	<calButton label="Add Attendee" x="2" y="2">
+	            	<handler name="onclick">
+	            		new lz.addAttendee(canvas,{refObj:parent});
+	            	</handler>
+	            </calButton>
+	          
+	            <method name="addListItem" args="userId,firstName,lastName,email,memberId">
+	            	<![CDATA[
+	            	
+	            		new lz.attendeeListItem(this.list,{
+				            			userId:userId,
+				            			firstName:firstName,
+				            			lastName:lastName,
+				            			email:email,
+				            			memberId:memberId
+				            		})
+	            	]]>
+	            </method> 
+	             <!--
+	               
+	            <method name="addListItem" args="userId,firstName,lastName,email">
+	            	<![CDATA[
+	            	
+	            		// Set the blank event pointer to the top of the member
+            			blankMeetingMemberDP.setXPath('blankMeetingMember:/attendee[1]');
+	            		
+            			blankMeetingMemberDP.setXPath('email');
+            			blankMeetingMemberDP.setNodeAttribute('value',email);
+            			
+            			blankMeetingMemberDP.setXPath('../memberId');
+            			blankMeetingMemberDP.setNodeAttribute('value',''+0);
+	            	
+            			blankMeetingMemberDP.setXPath('../firstname');
+            			blankMeetingMemberDP.setNodeAttribute('value',firstName);
+            			
+            			blankMeetingMemberDP.setXPath('../lastname');
+            			blankMeetingMemberDP.setNodeAttribute('value',lastName);
+            			
+            			blankMeetingMemberDP.setXPath('../userId');
+            			blankMeetingMemberDP.setNodeAttribute('value',''+userId);
+            			
+            			blankMeetingMemberDP.setXPath('../');
+            			
+            			//if ($debug) Debug.write("blankMeetingMemberDP ",blankMeetingMemberDP);
+            			
+            			//if ($debug) Debug.write(this.list.datapath);
+            			this.list.datapath.addNodeFromPointer(blankMeetingMemberDP);
+            			this.list.datapath.updateData();
+	            	]]>
+	            </method>
+	             -->
             	
-            	<view datapath="attendees/attendee/">
-            		<view>
-            			<simplelayout axis="x" />
-            			<text resize="true" datapath="firstname/@value" />
-            			<text resize="true" datapath="lastname/@value" />
-            			<text text="(" />
-            			<text resize="true" datapath="email/@value" />
-            			<text text=")" />
-            		</view>
+            	<view name="list" y="22" datapath="attendees/"
+            		  height="${ parent.height-22 }">
+            		
+            		<handler name="ondata" args="data">
+            			<![CDATA[
+	            			//if ($debug) Debug.warn("attendees -1 ondata ",data);
+	            			
+	            			for (var eg in this.subviews){
+	            				this.subviews[eg].destroy();
+	            			}
+	            			
+	            			for (var i=0;i<data.childNodes.length;i++){
+	            				
+	            				var email = data.childNodes[i].childNodes[0].attributes.value;
+	            				var userId = data.childNodes[i].childNodes[1].attributes.value;
+	            				var memberId = data.childNodes[i].childNodes[2].attributes.value;
+	            				var firstName = data.childNodes[i].childNodes[3].attributes.value;
+	            				var lastName = data.childNodes[i].childNodes[4].attributes.value;
+	            				
+	            				parent.addListItem(userId,firstName,lastName,email,memberId);
+	            				
+	            			}
+            			]]>
+            		</handler>
+            		
+	            	<simplelayout axis="y" />
+	            	
+	            	<!--
+	            	<view datapath="attendee/">
+	            		
+	            		<view name="member">
+	            			<simplelayout axis="x" />
+	            			<text resize="true" datapath="firstname/@value" />
+	            			<text resize="true" datapath="lastname/@value" />
+	            			<text text="(" />
+	            			<text resize="true" datapath="email/@value" />
+	            			<text text=")" />
+	            		</view>
+	            		<view x="150" resource="delete_button">
+	            			<handler name="onclick">
+	            				//if ($debug) Debug.write(parent);
+	            				//if ($debug) Debug.write(parent.datapath);
+	            				parent.datapath.deleteNode();
+	            				//parent.datapath.updateData();
+	            				parent.parent.datapath.updateData();
+	            			</handler>
+	            		</view>
+	            	</view>
+	            	 -->
+	            	
             	</view>
+            	
+            	<vscrollbar />
             	<!--
                 <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
                     width="175" height="280" datapath="attendees/@value" visible="true"/>
@@ -386,9 +474,30 @@
         </method>
 
     </class>
+    
+    
+<class name="attendeeListItem" extends="view" >
+	
+	<attribute name="userId" value="0" type="number"/>
+	<attribute name="firstName" value="" type="string"/>
+	<attribute name="memberId" value="0" type="number"/>
+	<attribute name="lastName" value="" type="string"/>
+	<attribute name="email" value="" type="string"/>
+	
+	<view name="member">
+		<text resize="true" text="$once{ parent.parent.firstName + ',' + parent.parent.lastName }" />
+		<text resize="true" y="20" text="$once{ '(' + parent.parent.email + ')' }" />
+	</view>
+	
+	<view x="166" resource="delete_button" bgcolor="0xFFFFFF">
+		<handler name="onclick">
+			parent.destroy();
+		</handler>
+	</view>
+	
+	<view height="1" width="200" y="40" 
+		  bgcolor="$once{ canvas.basebgcolorizer }" />
+	
+</class>
+    
 </library>
-<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
-* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
-* Use is subject to license terms.                                            *
-* X_LZ_COPYRIGHT_END ****************************************************** -->
-<!-- @LZX_VERSION@                                                         -->
