@@ -173,12 +173,14 @@
 	    		<![CDATA[
 		    		if ($debug) Debug.write("saveAppointment ",value);
 		    		
-		    		var tStartObj = parent.datapath.xpathQuery("start[1]");
+		    		//var tStartObj = parent.datapath.xpathQuery("start[1]");
         		
 	        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
-	        		if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
+	        		//if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
         		
-		    		dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+		    		//dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+		    		
+		    		parent.parent.parent.calgrid.reloadAll();
 	    		 ]]>
 	    	</handler>
 	    </netRemoteCallHib> 
@@ -208,12 +210,15 @@
 	    		<![CDATA[
 	    			if ($debug) Debug.write("updateAppointment ",value);
 	    			
-	    			var tStartObj = parent.datapath.xpathQuery("start[1]");
+	    			//var tStartObj = parent.datapath.xpathQuery("start[1]");
         		
 	        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
-	        		if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
+	        		//if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
         		
-		    		dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+		    		//dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+		    		
+	    			parent.parent.parent.calgrid.reloadAll();
+	    			
 	    		 ]]>
 	    	</handler>
 	    </netRemoteCallHib> 
@@ -447,7 +452,7 @@
 		    	<labelText name="_roomtype" y="44" x="10" labelid="619" width="60"/>
 		    	
 			 	<resetCombobox name="_roomtype_edit" x="10" 
-			 			  width="176" editable="false" shownitems="2" y="64">
+			 			  width="176" editable="false" shownitems="3" y="64">
 					<handler name="onvalue" args="v">						
 						parent.parent.parent.roomtype = Number(this.getValue());												
 						if ($debug) Debug.write("roomtype: ",parent.parent.parent.roomtype);
@@ -552,6 +557,10 @@
 	            			
 	            			for (var eg in this.subviews){
 	            				this.subviews[eg].destroy();
+	            			}
+	            			
+	            			if (data == null) {
+	            				return;
 	            			}
 	            			
 	            			for (var i=0;i<data.childNodes.length;i++){

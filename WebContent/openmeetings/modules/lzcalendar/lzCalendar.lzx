@@ -432,6 +432,10 @@
                loaded for all visible months -->
           <method name="setDates" > <![CDATA[
               this.calcBoundaryDates();
+              
+              //Empty Data
+          	  localdatacontroller.clearDataPointer();
+          	  
 
               var k=0;
               var firstDay="";
@@ -465,6 +469,32 @@
               // Calls to getYear() returns 2 digits on FF, and 4 digits
               // on IE6. getFullYear() returns 4 digits in all.
               var i = this.startdate.getFullYear() * 100 +
+                      this.startdate.getMonth();
+              var en= this.enddate.getFullYear() * 100 +
+                      this.enddate.getMonth();
+              //now request all the months that are visible onscreen from
+              //the data loader
+              while (  i <= en  ){
+                  var mo = i%100;
+                  var yr = Math.floor( i/100 );
+                  if ( mo < 11 ) i++
+                  else           i += ( 100 - 11 );
+                  if ($debug) Debug.write( "request mo " + mo +" yr " + yr);
+                  dataloader.loadData( mo+1 , yr );
+              }
+
+              // point to the new 1st day of the month
+              this.daySelectionMgr.select( firstDay );
+              ]]>
+          </method>
+          
+          <method name="reloadAll">
+          	  <![CDATA[
+          	  
+          	  //Empty Data
+          	  localdatacontroller.clearDataPointer();
+          	  
+          	  var i = this.startdate.getFullYear() * 100 +
                       this.startdate.getMonth();
               var en= this.enddate.getFullYear() * 100 +
                       this.enddate.getMonth();

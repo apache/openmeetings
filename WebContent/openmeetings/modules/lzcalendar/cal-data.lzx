@@ -99,12 +99,29 @@
                     this.setPointer ( op );
                     break;
                 }
-                ptr.selectChild()
+                ptr.selectChild();
             }
 
             var t = LzTimeKernel.getTimer();
             this.addNodeFromPointer( ptr );
             if ($debug) Debug.write( "time to addNode: " + ( LzTimeKernel.getTimer() - t ) );
+        </method>
+        
+        <method name="clearDataPointer">
+        	<![CDATA[
+        		
+        		if ($debug) Debug.info("clearDataPointer ");
+        	
+        		this.deleteNode();
+        		
+        		//while ( this.getNodeCount() == 1 ){
+        		//	
+        		//	
+        		//	
+        		//}
+        	
+        	
+        	]]>
         </method>
     </datapointer>
 
@@ -258,25 +275,41 @@
             updateEventDate(currenteventDP,year,month,day); 
             //Make node attributes match dataset location
 
+			if ($debug) Debug.write("moveEvent :: alleventsDP ",alleventsDP);
+			
             alleventsDP.setXPath('eventdata:/vcalendar[1]');
 
             // Create the node tree for this event
+            if ($debug) Debug.write("FILL YEAR ");
             getNewNode(alleventsDP,'year'+year);
+            if ($debug) Debug.write("FILL MONTH ");
             getNewNode(alleventsDP,'month'+month);
+            if ($debug) Debug.write("FILL DAY ");
             getNewNode(alleventsDP,'day'+day);
 
+            if ($debug) Debug.write("tempDP ");
             tempDP.setFromPointer( currenteventDP );
+            
+            if ($debug) Debug.write("tempDP ");
             tempDP.setNodeAttribute('selected', 'false');
+            
             // Copy current data to new location
             // If the record being moved is selected (usually the case, 
             // currenteventDP changes after this call
+            if ($debug) Debug.write("addNodeFromPointer ");
             var newPoint = alleventsDP.addNodeFromPointer(currenteventDP);
+            
+            if ($debug) Debug.write("setFromPointer ");
             currenteventDP.setFromPointer(newPoint);
 
+            if ($debug) Debug.write("deleteNode ");
             //Delete the original node
             tempDP.deleteNode();
+            
+            if ($debug) Debug.write("setNodeAttribute ");
             currenteventDP.setNodeAttribute('selected', 'true');
 
+            if ($debug) Debug.write("alleventsDP :: eventdata ");
             // Set the event data pointer to the top of the event data
             alleventsDP.setXPath('eventdata:/vcalendar[1]');
 
@@ -345,6 +378,7 @@
 
         <method name="getNewNode" args="dp,node">    <![CDATA[
             //Returns the pointer to the requested node and makes one if needed
+			if ($debug) Debug.write("getNewNode ",dp,node);
 
             if ( dp.xpathQuery(node+'/name()') == null){
                 dp.addNode(node);

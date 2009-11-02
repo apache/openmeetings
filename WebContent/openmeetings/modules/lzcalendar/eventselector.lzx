@@ -29,6 +29,12 @@
         <attribute name="hidedel" value="null" />
         <attribute name="mdel" value="null" />
         <attribute name="startDragDel" value="null" />
+        
+        <attribute name="startDate" value="null" />
+        <attribute name="endDate" value="null" />
+        
+        <attribute name="startDate2" value="null" />
+        <attribute name="endDate2" value="null" />
 
         <view name="bar" pixellock="false" bgcolor="white" visible="false"
               onmousedown="parent.domousedown()"
@@ -260,7 +266,32 @@
             this.obarx = this.x + bar.x;
             this.xoff = bar.getMouse( 'x' );
             this.yoff = bar.getMouse( 'y' );
-
+            
+            var appointementId = this.followview.datapath.xpathQuery("appointementId/@value");
+        		
+    		var tStartObj = this.datapath.xpathQuery("start[1]");
+    		var tEndObj = this.datapath.xpathQuery("end[1]");
+        		
+    		this.startDate = new Date();
+    		this.startDate.setDate(Number(tStartObj.attributes.day));
+    		this.startDate.setMonth(Number(tStartObj.attributes.month)-1);
+    		this.startDate.setFullYear(Number(tStartObj.attributes.year));
+    		this.startDate.setSeconds(0);
+    		this.startDate.setHours(Number(tStartObj.attributes.hour));
+    		this.startDate.setMinutes(Number(tStartObj.attributes.minute));
+    		
+    		this.endDate = new Date();
+    		this.endDate.setDate(Number(tEndObj.attributes.day));
+    		this.endDate.setMonth(Number(tEndObj.attributes.month)-1);
+    		this.endDate.setFullYear(Number(tEndObj.attributes.year));
+    		this.endDate.setSeconds(0);
+    		this.endDate.setHours(Number(tEndObj.attributes.hour));
+    		this.endDate.setMinutes(Number(tEndObj.attributes.minute));
+        		
+            if ($debug) Debug.write("appointementId ",appointementId);
+            if ($debug) Debug.write("startDate ",this.startDate);
+            if ($debug) Debug.write("endDate ",this.endDate);
+            
             lz.Timer.resetTimer( this.startDragDel , 150 );
             ]]>
         </method>
@@ -301,9 +332,35 @@
 	                //this may be already applied, but it can't hurt
 	                this.bar.followstate.apply();
 	                
+	                this.setAttribute('freedragging', !this['followview'].classroot.opened );
+	                
 	                if ($debug) Debug.warn("ON MOUSE UP => Update Cal Event ",this['followview']);
 	                
-	                this.setAttribute('freedragging', !this['followview'].classroot.opened );
+	                var appointementId = this.followview.datapath.xpathQuery("appointementId/@value");
+        		
+		    		var tStartObj = this.datapath.xpathQuery("start[1]");
+		    		var tEndObj = this.datapath.xpathQuery("end[1]");
+    		
+	                this.startDate2 = new Date();
+		    		this.startDate2.setDate(Number(tStartObj.attributes.day));
+		    		this.startDate2.setMonth(Number(tStartObj.attributes.month)-1);
+		    		this.startDate2.setFullYear(Number(tStartObj.attributes.year));
+		    		this.startDate2.setSeconds(0);
+		    		this.startDate2.setHours(Number(tStartObj.attributes.hour));
+		    		this.startDate2.setMinutes(Number(tStartObj.attributes.minute));
+		    		
+		    		this.endDate2 = new Date();
+		    		this.endDate2.setDate(Number(tEndObj.attributes.day));
+		    		this.endDate2.setMonth(Number(tEndObj.attributes.month)-1);
+		    		this.endDate2.setFullYear(Number(tEndObj.attributes.year));
+		    		this.endDate2.setSeconds(0);
+		    		this.endDate2.setHours(Number(tEndObj.attributes.hour));
+		    		this.endDate2.setMinutes(Number(tEndObj.attributes.minute));
+		        		
+		            if ($debug) Debug.write("appointementId ",appointementId);
+		            if ($debug) Debug.write("startDate2 ",this.startDate2);
+		            if ($debug) Debug.write("endDate2 ",this.endDate2);
+	                
 	            } else {
 	                lz.Timer.removeTimer( this.startDragDel );
 	            } 
