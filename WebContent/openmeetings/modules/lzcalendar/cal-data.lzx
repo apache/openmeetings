@@ -30,23 +30,24 @@
         <method name="loadData" args="mo, yr">
         	<![CDATA[
 	        	if ($debug) Debug.write("loadData",mo, yr);
-	            if( !datatester.hasNode( mo , yr ) ){
-	                //var r = "modules/lzcalendar/calendardata/vcal_" + yr + "-" + mo + "-01.xml";
-	                
-	            	var r = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey + 
-	            			'Calendar?' +
-	            			'sid=' + canvas.sessionId +
-	            			'&year=' + yr +
-	            			'&month=' + mo +
-	            			'&user=' + canvas.user_id;
-	                
-	            	if ($debug) Debug.write("r ");
-	            	if ($debug) Debug.write(r);
-	            		
-	            	//var r = "modules/lzcalendar/calendardata/vcal_" + yr + "-" + mo + "-01.xml";
-	            	
-	                this.enqueueRequest( r );
-	            }
+                //var r = "modules/lzcalendar/calendardata/vcal_" + yr + "-" + mo + "-01.xml";
+                
+            	var d = new Date();
+            	
+            	var r = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey + 
+            			'Calendar?' +
+            			'sid=' + canvas.sessionId +
+            			'&year=' + yr +
+            			'&month=' + mo +
+            			'&randomT=' + d.getTime() +
+            			'&user=' + canvas.user_id;
+                
+            	if ($debug) Debug.write("r ");
+            	if ($debug) Debug.write(r);
+            		
+            	//var r = "modules/lzcalendar/calendardata/vcal_" + yr + "-" + mo + "-01.xml";
+            	
+                this.enqueueRequest( r );
             ]]>
         </method>
 
@@ -111,6 +112,7 @@
     <!-- used for adding events -->
     <dataset name="blankEvent">
         <event>
+        	<appointementId value="0" />
             <summary value=""/>
             <comment value=""/>
             <notes value=""/>

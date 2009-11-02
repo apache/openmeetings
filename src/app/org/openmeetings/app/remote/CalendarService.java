@@ -3,6 +3,7 @@ package org.openmeetings.app.remote;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -127,24 +128,30 @@ public class CalendarService {
 			Long remind,
 			List mmClient,
 			Long roomType, String baseurl){
-		log.debug("updateAppointment");
 		try{
 			
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					        	
+					
+	        	log.debug("updateAppointment");
+	        	
+	        	System.out.println("appointmentId "+appointmentId);
 	        	
 	        	RoomTypes rt = Roommanagement.getInstance().getRoomTypesById(roomType);
 	        	
 	        	Appointment app = AppointmentLogic.getInstance().getAppointMentById(appointmentId);
+	        	
 	        	Rooms room = app.getRoom();
-	        	
-	        	room.setComment(appointmentDescription);
-	        	room.setName(appointmentName);
-	        	room.setRoomtype(rt);
-	        	
-	        	Roommanagement.getInstance().updateRoomObject(room);
+	        	if (room != null) {
+		        	
+		        	room.setComment(appointmentDescription);
+		        	room.setName(appointmentName);
+		        	room.setRoomtype(rt);
+		        	
+		        	Roommanagement.getInstance().updateRoomObject(room);
+	        	}
+	        	System.out.println("mmClient "+mmClient);
 	        	
 	        	return AppointmentLogic.getInstance().updateAppointment(appointmentId, appointmentName, 
 	        			appointmentDescription, appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, 
@@ -152,6 +159,7 @@ public class CalendarService {
 	        }
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
+			err.printStackTrace();
 		}
 		return null;
 		

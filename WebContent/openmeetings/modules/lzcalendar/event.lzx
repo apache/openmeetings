@@ -1,4 +1,15 @@
 <library>
+	
+	
+	<!--
+	_erinnerungatr:  3
+	WARNING: attendees -1 ondata  
+	«LzDataElement#132| 
+	<attendees>
+		<attendee><email value="seba.wagner@gmail.com"/><userId value="1"/><memberId value="10"/><firstname value="firstname"/><lastname value="lastname"/></attendee>
+	</attendees>»
+ 	 -->
+	
     <!-- CLASS: CALENDAR EVENT =========================================== -->
     <class name="calendar_event"
            height="22"
@@ -17,6 +28,9 @@
         <method name="getEventColor" args="cat">
 
 			if ($debug) Debug.write("getEventColor ",cat);
+			if (cat == null) {
+				cat = 1;
+			}
 
             setAttribute('hiColor',gColorTable[cat].bright);
             setAttribute('bkgndColor',gColorTable[cat].bkgnd);

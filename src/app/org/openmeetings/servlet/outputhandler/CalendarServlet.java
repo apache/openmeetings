@@ -102,6 +102,9 @@ public class CalendarServlet extends HttpServlet {
 					
 						Element event = day.addElement("event");
 						
+						Element appointementId = event.addElement("appointementId");
+						appointementId.addAttribute("value",""+appointment.getAppointmentId());
+						
 						Element summary = event.addElement("summary");
 						summary.addAttribute("value",appointment.getAppointmentName());
 						
@@ -139,7 +142,11 @@ public class CalendarServlet extends HttpServlet {
 							email.addAttribute("value", meetingMember.getEmail());
 							
 							Element userId = attendee.addElement("userId");
-							userId.addAttribute("value", ""+meetingMember.getUserid());
+							if (meetingMember.getUserid() != null) {
+								userId.addAttribute("value", ""+meetingMember.getUserid().getUser_id());
+							} else {
+								userId.addAttribute("value", "");
+							}
 							
 							Element memberId = attendee.addElement("memberId");
 							memberId.addAttribute("value", ""+meetingMember.getMeetingMemberId());

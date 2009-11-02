@@ -74,11 +74,154 @@
 
         <attribute name="opened" value="false"/>
         <attribute name="dataapply" value="false"/>
+        
+        <attribute name="appointementId" value="$path{ 'appointementId/@value' }" type="number" />
+        
+        <attribute name="_erinnerungatr" value="null"/>
+        <attribute name="roomtype" type="number" value="1" />
+        
+        <attribute name="baseUrl" value="" type="string" />
+        
+        <attribute name="startDate" value="null" />
+        <attribute name="endDate" value="null" />
+        
+        <attribute name="arrayMeetingMember" value="null"/>	
+        
+        <handler name="oninit">
+        	<![CDATA[
+	        	//Point URL to actual File
+	            var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
+					
+					if (port != 80) {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+					} else {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+					}
+				} else {
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+				}
+						
+	            if ($debug) Debug.write("parent.baseUrl ",this.baseUrl);
+            ]]>
+        </handler>
+        
+        <method name="saveOrUpdateAppointement">
+        	<![CDATA[
+        	
+        		if ($debug) Debug.write("saveOrUpdateAppointement ",this.appointementId);
+        		
+        		var tStartObj = this.datapath.xpathQuery("start[1]");
+        		var tEndObj = this.datapath.xpathQuery("end[1]");
+        		
+        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
+        		if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
+        		if ($debug) Debug.write("tEndObj ",tEndObj.attributes);
+        		
+        		this.startDate = new Date();
+        		this.startDate.setDate(Number(tStartObj.attributes.day));
+        		this.startDate.setMonth(Number(tStartObj.attributes.month)-1);
+        		this.startDate.setFullYear(Number(tStartObj.attributes.year));
+        		this.startDate.setSeconds(0);
+        		this.startDate.setHours(Number(tStartObj.attributes.hour));
+        		this.startDate.setMinutes(Number(tStartObj.attributes.minute));
+        		
+        		this.endDate = new Date();
+        		this.endDate.setDate(Number(tEndObj.attributes.day));
+        		this.endDate.setMonth(Number(tEndObj.attributes.month)-1);
+        		this.endDate.setFullYear(Number(tEndObj.attributes.year));
+        		this.endDate.setSeconds(0);
+        		this.endDate.setHours(Number(tEndObj.attributes.hour));
+        		this.endDate.setMinutes(Number(tEndObj.attributes.minute));
+        		
+        		if ($debug) Debug.write("this.startDate ",this.startDate);
+        		if ($debug) Debug.write("this.endDate ",this.endDate);
+        		
+        		this.arrayMeetingMember = this.tabs.attendees.getMemberArrayValue();
+        		
+        		if (this.appointementId == "0" || this.appointementId == 0) {
+        			if ($debug) Debug.write("ADD");
+        			this.saveAppointment.doCall();
+        		} else {
+        			if ($debug) Debug.write("UPDATE");
+        			this.updateAppointment.doCall();
+        		}
+        		
+        	]]>
+        </method>
 
+		<netRemoteCallHib name="saveAppointment" funcname="calendarservice.saveAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.summary.content.title.text;</method></netparam>	
+			<netparam><method name="getValue">return '';</method></netparam>
+			<netparam><method name="getValue">return parent.parent.tabs.notes.txt.text;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.startDate;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.endDate;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return 1;</method></netparam>
+			<netparam><method name="getValue">return parent.parent._erinnerungatr;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.roomtype;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("saveAppointment ",value);
+		    		
+		    		var tStartObj = parent.datapath.xpathQuery("start[1]");
+        		
+	        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
+	        		if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
+        		
+		    		dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
+    	<netRemoteCallHib name="updateAppointment" funcname="calendarservice.updateAppointment" 
+						  remotecontext="$once{ canvas.thishib }" >  
+			
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.appointementId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.summary.content.title.getText();</method></netparam>
+			<netparam><method name="getValue">return '';</method></netparam>
+			<netparam><method name="getValue">return parent.parent.tabs.notes.txt.getText();</method></netparam>
+			<netparam><method name="getValue">return parent.parent.startDate;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.endDate;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return false;</method></netparam>
+			<netparam><method name="getValue">return '1';</method></netparam>
+			<netparam><method name="getValue">return parent.parent._erinnerungatr;</method></netparam>
+			
+			<netparam><method name="getValue">return parent.parent.arrayMeetingMember;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.roomtype</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+	    			if ($debug) Debug.write("updateAppointment ",value);
+	    			
+	    			var tStartObj = parent.datapath.xpathQuery("start[1]");
+        		
+	        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
+	        		if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
+        		
+		    		dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
         <!-- VIEWS -->
         <view name="summary" width="198" height="83" bgcolor="0xEEF0EB">
             <view y="10" name="content" x="10" width="${parent.width - 20}" height="65">
-                <inputtextbox name="title" id="sitbox"
+                <inputtextbox name="title"
                     width="${immediateparent.width}" height="20"
                     datapath="summary/@value">
                 </inputtextbox>
@@ -254,10 +397,76 @@
             slideduration="200" mintabheight="20" oninit="this.openTab(this.notes,true)" >
 
             <infoTab name="notes" label="Notes" pixellock="true">
+            	
+            	<handler name="oninit">
+            		this.getAppointmentReminderTypList.doCall();
+            	</handler>
+            	
+            	<netRemoteCallHib name="getAppointmentReminderTypList" 
+            					  funcname="appointmentreminderservice.getAppointmentReminderTypList" 
+                              	  remotecontext="$once{ canvas.thishib }" >
+	                <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	                <handler name="ondata" args="valueList">
+	                    <![CDATA[
+	                    if ($debug) Debug.write("getAppointmentReminderTypList-valueList: ", valueList);
+	                    
+	                    //new combobox(parent.parent{name:_kategory,x:20})
+	                    for (var i=0;i<valueList.length;i++) {
+	                        //if ($debug) Debug.write("UserList",valueList[i]);
+	                        var id = valueList[i].typId;
+	                        var titel = valueList[i].name;              
+	                        if ($debug) Debug.write("typID",id);
+	                        if ($debug) Debug.write("titel: ",titel);                   
+	                        new lz.textlistitem(parent._erinnerungedit, {
+	                                        value : id,                                                                                     
+	                                        text:titel
+	                            
+	                                });     
+	                        parent._erinnerungedit.selectItemAt(2);
+	                    }
+	                    ]]>
+	                </handler>
+	            </netRemoteCallHib>
+            	
+			 	<labelText name="_erinnerung" y="2" 
+		 			   x="10" labelid="565" width="60" />
+		 	 	
+			 	<resetCombobox name="_erinnerungedit" x="10" 
+			 			  width="176" editable="false" shownitems="5" y="22">
+					<handler name="onvalue" args="v">						
+						if ($debug) Debug.write("_erinnerungatr: ",parent.parent.parent._erinnerungatr);
+						if(this.getValue == 0 ) {
+							parent.parent.parent._erinnerungatr = null;
+						} else{
+	    					parent.parent.parent._erinnerungatr = this.getValue();												
+	    					if ($debug) Debug.write("_erinnerungatr: ",parent.parent.parent._erinnerungatr);
+						}
+					</handler> 
+			 	</resetCombobox> 
+	    		  
+		    	<labelText name="_roomtype" y="44" x="10" labelid="619" width="60"/>
+		    	
+			 	<resetCombobox name="_roomtype_edit" x="10" 
+			 			  width="176" editable="false" shownitems="2" y="64">
+					<handler name="onvalue" args="v">						
+						parent.parent.parent.roomtype = Number(this.getValue());												
+						if ($debug) Debug.write("roomtype: ",parent.parent.parent.roomtype);
+					</handler>
+					<handler name="oninit">
+					    this.selectItemAt(0);
+					</handler>	
+	    		 	<!--textitmes-->
+	    		 	<labeldTextListItem labelid="647" value="1"/>
+	    			<labeldTextListItem labelid="648" value="2"/>
+	    			<labeldTextListItem labelid="648" value="3"/>
+			 	</resetCombobox> 
+		 	
                 <!-- fixed size input text is best for large multiline text,
                  so it is good to declare with values for width/height -->
-                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
-                    width="175" height="280" datapath="comment/@value" visible="true"/>
+                <labelText name="_descrLabel" y="90" x="10" labelid="619" width="60"/>
+                <inputtextbox name="txt" x="10" y="110" multiline="true" pixellock="true"
+                    width="175" height="210" datapath="comment/@value" visible="true"/>
+                    
             </infoTab>
             
             <infoTab name="attendees" label="Attendees" pixellock="true">
@@ -277,9 +486,29 @@
 				            			lastName:lastName,
 				            			email:email,
 				            			memberId:memberId
-				            		})
+				            		});
 	            	]]>
 	            </method> 
+	            
+	            <method name="getMemberArrayValue">
+	            	<![CDATA[
+	            		var tArray = new Array();
+	            		
+	            		for (var i=0;i<this.list.subviews.length;i++) {
+	            			
+	            			var tObject = new Object();
+	            			tObject.meetingMemberId = this.list.subviews[i].memberId;
+			        		tObject.firstname = this.list.subviews[i].firstName;
+			        		tObject.lastname = this.list.subviews[i].lastName;
+			        		tObject.email = this.list.subviews[i].email;
+	            			
+			        		tArray.push(tObject);
+	            		}
+	            		
+	            		return tArray;
+	            	]]>
+	            </method>
+	            
 	             <!--
 	               
 	            <method name="addListItem" args="userId,firstName,lastName,email">
@@ -319,7 +548,7 @@
             		
             		<handler name="ondata" args="data">
             			<![CDATA[
-	            			//if ($debug) Debug.warn("attendees -1 ondata ",data);
+	            			if ($debug) Debug.warn("attendees -1 ondata ",data);
 	            			
 	            			for (var eg in this.subviews){
 	            				this.subviews[eg].destroy();
@@ -385,11 +614,17 @@
 
             <calButton label="Apply" x="15" y="13">
                 <handler name="onclick">
-                    canvas.eventDataMgr.changeTitle(sitbox.getText());
+                    canvas.eventDataMgr.changeTitle(parent.parent.summary.content.title.getText());
                     canvas.eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
-                    canvas.eventDataMgr.changeLocation(classroot.tabs.location.txt.getText());
-                    canvas.eventDataMgr.changeAttendees(classroot.tabs.attendees.txt.getText());
+                    
+                    //canvas.eventDataMgr.changeLocation(classroot.tabs.location.txt.getText());
+                    
+                    //canvas.eventDataMgr.changeAttendees(classroot.tabs.attendees.txt.getText());
+                    
                     classroot.setAttribute('dataapply', true);
+                    
+                    parent.parent.saveOrUpdateAppointement();
+                    
                 </handler>
             </calButton>
                 
@@ -423,7 +658,7 @@
         
         <method name="open">
             this.completeInstantiation();
-            if(sitbox.text != "New Event"){
+            if(this.summary.content.title.text != "New Event"){
                 this.setAttribute('dataapply', true);
             }
             
@@ -433,7 +668,7 @@
             }
 
             if (this.opened) {
-                lz.Focus.setFocus(summary.content.title);
+                lz.Focus.setFocus(this.summary.content.title);
                 return;
             }
 
