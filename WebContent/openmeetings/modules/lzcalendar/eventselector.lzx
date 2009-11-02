@@ -61,7 +61,7 @@
                     width="${parent.width}" y="${parent.height-3}"/>
 
                 <ibutton name="button" x="-21" y="-1"
-                         onclick="infopanel.open()" />
+                         onclick="parent.parent.parent.parent.cal_interior.infopanel.open()" />
             </view>
 
             <state name="followstate">
@@ -198,8 +198,7 @@
             if (cat==undefined || cat=="")
                 var transColor = {ra:80, ga:80, ba:80};
             else{
-                var catColor = category_colors[cat];
-                var trans = gColorTable[catColor].trans;
+                var trans = gColorTable[cat].trans;
                 var transColor = { ra: trans.ra, ga: trans.ga, ba: trans.ba };
             }
 

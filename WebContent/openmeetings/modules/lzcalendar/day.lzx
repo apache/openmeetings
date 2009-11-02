@@ -195,10 +195,10 @@
 
             // If this is an opened day then use the time grid functions
             if ( this.opened ){
-                eventselector.updateEventTime( this );
+                parent.parent.eventselector.updateEventTime( this );
             }
 
-            if ( !eventselector['followview'].childOf( this ) ) {
+            if ( !parent.parent.eventselector['followview'].childOf( this ) ) {
                 // This must be a new calendar day
                 // Get the new day
                 newYear=this.startdate.getFullYear();
@@ -217,7 +217,7 @@
 
         <method name="hilite" args="dohilite, dontupdate">
             if (dohilite) {
-                if ( !dontupdate ) eventselector.updateOver( this );
+                if ( !dontupdate ) parent.parent.eventselector.updateOver( this );
                 details.bgrect.setAttribute('bgcolor', 0xD3D3D3);
             } else {
                 details.bgrect.setAttribute('bgcolor', this.unselectedColor);

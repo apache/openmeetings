@@ -15,13 +15,11 @@
         <attribute name="bkgndColor" type="color" value="0x5D84CB"/>
 
         <method name="getEventColor" args="cat">
-            if (cat==undefined || cat=="") return (0xC6CEDC); //default
-            else var catColor = category_colors[cat];
 
-            setAttribute('hiColor',gColorTable[catColor].bright);
-            setAttribute('bkgndColor',gColorTable[catColor].bkgnd);
+            setAttribute('hiColor',gColorTable[cat].bright);
+            setAttribute('bkgndColor',gColorTable[cat].bkgnd);
 
-            return (gColorTable[catColor].dim);
+            return (gColorTable[cat].dim);
         </method>
 
         <attribute name="pixelPerMin" type="number" value="22/60"/>
@@ -37,7 +35,7 @@
             // which in turn selects the event selector bar
             this.selected = sel;
             if (this.selected){
-            	if ($debug) Debug.write("setSel ITEM :: ",parent.parent.parent.parent.parent.parent.parent);
+            	//if ($debug) Debug.write("setSel ITEM :: ",parent.parent.parent.parent.parent.parent.parent);
                 parent.parent.parent.parent.parent.parent.parent.eventselector.setSelectedEvent( this ,this.mouseIsDown );
             }
         </method>
@@ -146,12 +144,12 @@
             this.mouseIsDown = true;
             //The next line seems redundant.  See: eventselector.lzx
             //calgrid.daySelectionMgr.select(this.classroot);
-            eventselector.selectData( this );
+            parent.parent.parent.parent.parent.parent.parent.eventselector.selectData( this );
         </handler>
 
         <handler name="onmouseup">
             this.mouseIsDown = false;
-            eventselector.domouseup(null);
+            parent.parent.parent.parent.parent.parent.parent.eventselector.domouseup(null);
         </handler>
 
     </class>
@@ -162,13 +160,13 @@
     <script>
         // define colors for event types
         var gColorTable = {
-            green:{
+            1:{
                 dim:    0xCBD1C5,
                 bright:    0xD4DAC8,
                 bkgnd:    0x587457,
                 trans: {ra:85, ga:100, ba:85}
                 },
-            blue:{
+            2:{
                 dim:    0xBBC6D1,
                 bright:    0xC6CEDC,
                 bkgnd:    0x4C5E7E,
@@ -177,13 +175,13 @@
                 bvl_hilite: 0xDFE4EB,
                 bvl_shdw: 0x606369
                 },
-            purple:{
+            3:{
                 dim:    0xC5C3D5,
                 bright:    0xCDC6DC,
                 bkgnd:    0x4C5E7E,
                 trans: {ra:85, ga:75, ba:100}
                 },
-            grey:{
+            4:{
                 dim:    0xC6CEDC,
                 bright:    0xDDDDDD,
                 bkgnd:    0x9F9F9F,
