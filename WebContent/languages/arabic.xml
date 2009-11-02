@@ -934,7 +934,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>عودة الى غرف</value>
   </string>
   <string id="310" name="conferencebar">
-    <value>Logout</value>
+    <value>خروج</value>
   </string>
   <string id="311" name="loginwindow">
     <value>Desktop Viewer</value>
@@ -943,229 +943,230 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>start Desktop Viewer</value>
   </string>
   <string id="313" name="loginwindow">
-    <value>Video and Audio</value>
+    <value>صوت و صورة</value>
   </string>
   <string id="314" name="loginwindow">
-    <value>Chat</value>
+    <value>دردشة</value>
   </string>
   <string id="315" name="loginwindow">
-    <value>Whiteboard</value>
+    <value>لوح أبيض </value>
   </string>
   <string id="316" name="loginwindow">
-    <value>Moderation</value>
+    <value>(إعادة) بدء صوت / صورة أو تغيير إعدادات الجهاز</value>
   </string>
   <string id="317" name="loginwindow">
-    <value>Files</value>
+    <value>ملفات</value>
   </string>
   <string id="318" name="loginwindow">
-    <value>Users</value>
+    <value>مستخدمين</value>
   </string>
   <string id="319" name="loginwindow">
-    <value>Polls</value>
+    <value>إستطلاعات</value>
   </string>
   <string id="320" name="loginwindow">
-    <value>There is no User connected to this Username</value>
+    <value>هذا الإسم لا يعود إلى أي مستخدم </value>
   </string>
   <string id="321" name="loginwindow">
-    <value>The email containing a special link has been sent to your email address, please check your mailbox. If you still have not received a email, please adjust your email spam settings and resend confirmation email.</value>
+    <value>لقد تم إرسال بريد يتضمن رابط خاص إلى بريدك الإلكتروني، الرجاء تفحص صندوق البريد. إذا لم تحصل بعد على بريد إلكتروني، الرجاء تعديل إعدادات البريد المزعج و قم بإعادة إرسال البريد الإلكتروني الخاص بالتأكيد.</value>
   </string>
   <string id="322" name="errortype">
-    <value>Error</value>
+    <value>خطأ</value>
   </string>
   <string id="323" name="errortype">
-    <value>Message</value>
+    <value>رسالة</value>
   </string>
   <string id="324" name="resetpass">
-    <value>Invalid Hash. No User found.</value>
+    <value>مزيج غير صالح. ليس هناك أي مستخدم.</value>
   </string>
   <string id="325" name="resetpass">
-    <value>Reset Your Password</value>
+    <value>إستعادة كلمة المرور </value>
   </string>
   <string id="326" name="resetpass">
-    <value>Login</value>
+    <value>تسجيل الدخول</value>
   </string>
   <string id="327" name="resetpass">
-    <value>change Password</value>
+    <value>تغيير كلمة المرور</value>
   </string>
   <string id="328" name="resetpass">
-    <value>new Password</value>
+    <value>كلمة مرور جديدة</value>
   </string>
   <string id="329" name="resetpass">
-    <value>re-enter Password</value>
+    <value>إعادة إدخال كلمة المرور</value>
   </string>
   <string id="330" name="resetpass">
-    <value>The Passwords you entered weren't identical.</value>
+    <value>كلمات المرور التي أدخلتها ليست متطابقة</value>
   </string>
   <string id="331" name="resetpass">
-    <value>4 or more characters; capitalization matters!</value>
+    <value>أربع أحرف أو أكثر</value>
   </string>
   <string id="332" name="resetpass">
-    <value>Password set. You can login now.</value>
+    <value>تم تسجيل كلمة المرور. يمكنك الآن تسجيل الدخول</value>
   </string>
   <string id="333" name="rpccallback">
     <value>OK</value>
   </string>
   <string id="334" name="rpcgeneralerror">
-    <value>Unkown Error. Please report this to your Service-Team.</value>
+    <value>خطأ غير معروف. الرجاء إبلاغ فريق الخدمة</value>
   </string>
   <string id="335" name="loginwindow">
-    <value>Username not found</value>
+    <value>إسم المستخدم غير موجود</value>
   </string>
   <string id="336" name="loginwindow">
-    <value>Invalid Password</value>
+    <value>كلمة مرور غير صحيحة</value>
   </string>
   <string id="337" name="logout">
-    <value>Successfully Logged out</value>
+    <value>تم تسجيل الخروج بنجاح</value>
   </string>
   <string id="338" name="registration">
-    <value>Frontend Registration disabled.</value>
+    <value>تم إلغاء التسجيل السابق.</value>
   </string>
   <string id="339" name="registration">
-    <value>Invalid EMail</value>
+    <value>بريد إلكتروني غير صحيح</value>
   </string>
   <string id="340" name="registration">
-    <value>duplicate filename, please choose another filename</value>
+    <value>إسم ملف مكرر. الرجاء إختيار إسماً آخراً</value>
   </string>
   <string id="341" name="filebrowser">
-    <value>filename too short</value>
+    <value>إسم الملف قصير</value>
   </string>
   <string id="342" name="filebrowser">
-    <value>Could not save Address</value>
+    <value>لا يمكن حفظ العنوان</value>
   </string>
   <string id="343" name="useradmin">
-    <value>User added but you need to assign this User to an Organisation, otherwise he won't be able to sign-in.</value>
+    <value>تمت إضافة المستخدم لكن يجب إنساب هذا المستخدم إلى تنظيم و إلا لن يمكنه تسجيل الدخول.</value>
   </string>
   <string id="344" name="adminforms">
-    <value>New Record</value>
+    <value>سجل جديد</value>
   </string>
   <string id="345" name="languageseditor">
-    <value>No Field found with this FieldId.</value>
+    <value>ليس هناك أي حقل يحمل هذا Id.</value>
   </string>
   <string id="346" name="languageseditor">
-    <value>No Label found for that Field.</value>
+    <value>ليس هناك إسم لهذه الرقعة. </value>
   </string>
   <string id="347" name="errormessage">
-    <value>Admin Authorization required</value>
+    <value>المطلوب إذن المشرف</value>
   </string>
   <string id="348" name="mainnavi">
-    <value>Language-Editor</value>
+    <value>محرر اللغة</value>
   </string>
   <string id="349" name="languageseditor">
-    <value>Language</value>
+    <value>لغة</value>
   </string>
   <string id="350" name="languageseditor">
-    <value>Label-ID</value>
+    <value>معرف الرقعة</value>
   </string>
   <string id="351" name="languageseditor">
-    <value>Label-Name</value>
+    <value>إسم الرقعة</value>
   </string>
   <string id="352" name="languageseditor">
-    <value>Value</value>
+    <value>قيمة</value>
   </string>
   <string id="353" name="languageseditor">
-    <value>Fieldvalues</value>
+    <value>حقل القيم</value>
   </string>
   <string id="354" name="languageseditor">
-    <value>LabelName</value>
+    <value>إسم الرقعة</value>
   </string>
   <string id="355" name="languageseditor">
-    <value>LabelValue</value>
+    <value>قيمة الرقعة</value>
   </string>
   <string id="356" name="languageseditor">
-    <value>Label-ID</value>
+    <value>معرف الرقعة</value>
   </string>
   <string id="357" name="languageseditor">
-    <value>You did only delete the Label NOT the Field! You cannot delete the Field, it may has Labels in other Languages.</value>
+    <value>لقد حذفت الرقعة ليس الحقل! لا يمكنك حذف الحقل. يمكن أن يكون له رقع في لغات أخرى.</value>
   </string>
   <string id="358" name="languageseditor">
-    <value>Invalid Labelid. The FieldLanguagesvalues_Id cannot be found in the database.</value>
+    <value>رقعة غير صالح
+ةid. لا يمكن إيجاد The FieldLanguagesvalues_Id في قاعدة البيانات.</value>
   </string>
   <string id="359" name="languageseditor">
-    <value>You cannot delete this Field. You can only delete Labels NOT Fields. There is no Label loaded at the moment, wether it is not selected any Field or there is no Label for this Language for that Field defined.</value>
+    <value>لا يمكنك حذف هذا الحقل. يمكنك فقط حذف رقعات لا حلقات. ليس هناك أي رقعات محملة في هذه الأثناء، سواء لم تختر أي حقل أو ليس هناك أي رقعة معرفة لهذه اللغة لهذا الحقل. </value>
   </string>
   <string id="360" name="languageseditor">
-    <value>export</value>
+    <value>تصدير</value>
   </string>
   <string id="361" name="languageseditor">
-    <value>You need to logout to see any changes.</value>
+    <value>يجب أن تخرج لرؤية التغييرات.</value>
   </string>
   <string id="362" name="languageseditor">
-    <value>Add new language</value>
+    <value>إضافة لغة جديدة</value>
   </string>
   <string id="363" name="languageseditor">
     <value>delete language</value>
   </string>
   <string id="364" name="languageseditor">
-    <value>Add new language</value>
+    <value>حذف لغة</value>
   </string>
   <string id="365" name="languageseditor">
-    <value>Name</value>
+    <value>إسم</value>
   </string>
   <string id="366" name="languageseditor">
-    <value>add language</value>
+    <value>إضافة لغة</value>
   </string>
   <string id="367" name="languageseditor">
-    <value>Backup</value>
+    <value>نسخ إحتياطي</value>
   </string>
   <string id="368" name="turnoverlist">
-    <value>goto first</value>
+    <value>القفز إلى الأول</value>
   </string>
   <string id="369" name="turnoverlist">
-    <value>goto previous</value>
+    <value>القفز إلى السابق</value>
   </string>
   <string id="370" name="turnoverlist">
-    <value>goto next</value>
+    <value>القفز إلى التالي</value>
   </string>
   <string id="371" name="turnoverlist">
-    <value>goto last</value>
+    <value>القفز إلى الأخير</value>
   </string>
   <string id="372" name="videobox">
-    <value>user speaks</value>
+    <value>المستخدم يتكلم</value>
   </string>
   <string id="373" name="videobox">
-    <value>turn sound on/off</value>
+    <value>تشغيل/إيقاف الصوت</value>
   </string>
   <string id="374" name="dashboard">
-    <value>System</value>
+    <value>نظام</value>
   </string>
   <string id="375" name="dashboard">
-    <value>Your Settings</value>
+    <value>إعداداتك</value>
   </string>
   <string id="376" name="dashboard">
-    <value>hi,</value>
+    <value>مرحباً،</value>
   </string>
   <string id="377" name="dashboard">
-    <value>Edit your profile</value>
+    <value>إضافة ملف التعريف</value>
   </string>
   <string id="378" name="dashboard">
-    <value>New Messages:</value>
+    <value>رسائل جديدة:</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Upload new Image</value>
+    <value>إيداع صور جديدة</value>
   </string>
   <string id="380" name="backuppanel">
-    <value>Userdata - Export</value>
+    <value>بيانات المستخدم - تصدير</value>
   </string>
   <string id="381" name="backuppanel">
-    <value>All organisations must be already existing!</value>
+    <value>يجب أن تكون المنظمات موجودة!</value>
   </string>
   <string id="382" name="backuppanel">
-    <value>start export</value>
+    <value>بدء التصدير</value>
   </string>
   <string id="383" name="backuppanel">
-    <value>By organisation</value>
+    <value>عن طريق المنظمة</value>
   </string>
   <string id="384" name="backuppanel">
-    <value>start export</value>
+    <value>بدء التصدير</value>
   </string>
   <string id="385" name="backuppanel">
-    <value>Userdata - Import</value>
+    <value>بيانات المستخدم - إستيراد</value>
   </string>
   <string id="386" name="backuppanel">
-    <value>choose users.xml</value>
+    <value>إختر users.xml</value>
   </string>
   <string id="387" name="languageseditor">
-    <value>import</value>
+    <value>إستيراد</value>
   </string>
   <string id="388" name="languageseditor">
     <value>Export to XML - These files can be used to: - Contribute to the project - Import into another System - Backup - Customization - Put it into the language-directory for your next installation</value>
@@ -1174,469 +1175,469 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Choose a language file to import. Choose the right Langauge from the Combobox! No matter what the name of the file is, it will be imported into this language!</value>
   </string>
   <string id="390" name="importwindow">
-    <value>import - choose file</value>
+    <value>إستيراد - إختر ملف</value>
   </string>
   <string id="391" name="recordingsavewin">
-    <value>Save as</value>
+    <value>حفظ بإسم</value>
   </string>
   <string id="392" name="recordingsavewin">
-    <value>Name:</value>
+    <value>إسم:</value>
   </string>
   <string id="393" name="recordingsavewin">
-    <value>Comment:</value>
+    <value>تعليق:</value>
   </string>
   <string id="394" name="recordingsavewin">
-    <value>save</value>
+    <value>حفظ</value>
   </string>
   <string id="395" name="record">
-    <value>Recordings</value>
+    <value>تسجيلات</value>
   </string>
   <string id="396" name="recorder">
-    <value>Recordings Viewer</value>
+    <value>مشاهدين التسجيلات</value>
   </string>
   <string id="397" name="record">
-    <value>Recordings of public and private Rooms</value>
+    <value>تسجيلات الغرف العامة و الخاصة</value>
   </string>
   <string id="398" name="roomslist">
-    <value>Users :</value>
+    <value>مستخدمين:</value>
   </string>
   <string id="399" name="roomslist">
-    <value>Joined:</value>
+    <value>إنضم:</value>
   </string>
   <string id="400" name="roomslist">
     <value></value>
   </string>
   <string id="401" name="roomslist">
-    <value>Users in this Room:</value>
+    <value>المستخدمين في هذه الغرفة:</value>
   </string>
   <string id="402" name="roomslist">
-    <value>refresh</value>
+    <value>تحديث</value>
   </string>
   <string id="403" name="roomslist">
-    <value>This Room is Full. Try again in a few minutes.</value>
+    <value>هذه الغرفة ممتلئة. حاول بعد بضع دقائق مرة أخرى.</value>
   </string>
   <string id="404" name="roomsList">
-    <value>click on a room to get details</value>
+    <value>إضغط على الغرفة للحصول على تفاصيل</value>
   </string>
   <string id="405" name="roomslist">
-    <value>Chat with the users in this Room:</value>
+    <value>دردشة مع المستخدمين في هذه الغرفة: </value>
   </string>
   <string id="406" name="roomslist">
-    <value>Room:</value>
+    <value>غرفة:</value>
   </string>
   <string id="407" name="roomslist">
-    <value>Users in this room:</value>
+    <value>مستخدمين في هذه الغرفة:</value>
   </string>
   <string id="408" name="roomslist">
-    <value>since:</value>
+    <value>منذ:</value>
   </string>
   <string id="409" name="record">
-    <value>play recording</value>
+    <value>شغل التسجيل</value>
   </string>
   <string id="410" name="record">
-    <value>Length:</value>
+    <value>الطول:</value>
   </string>
   <string id="411" name="record">
-    <value>Date:</value>
+    <value>التاريخ:</value>
   </string>
   <string id="412" name="record">
-    <value>Recorder Mode! You cannot change any values, this is a recorded File!</value>
+    <value>أسلوب المسجل! لا يمكنك تغيير القيم، هذا ملف مسجل!</value>
   </string>
   <string id="413" name="record">
-    <value>Play this recording</value>
+    <value>شغل هذا المسجل</value>
   </string>
   <string id="414" name="record">
-    <value>Play / Pause</value>
+    <value>تشغيل/إيقاف</value>
   </string>
   <string id="415" name="record">
-    <value>Start recording</value>
+    <value>بدء التسجيل</value>
   </string>
   <string id="416" name="record">
-    <value>stop recording</value>
+    <value>إيقاف التسجيل</value>
   </string>
   <string id="417" name="record">
-    <value>Recording:</value>
+    <value>تسجيل:</value>
   </string>
   <string id="418" name="record_error_msg">
-    <value>There is already somebody recording at the moment:</value>
+    <value>هناك شخص آخر يقوم بالتسجيل في هذه الأثناء:</value>
   </string>
   <string id="419" name="record_message">
-    <value>Recording! By User:</value>
+    <value>تسجيل! عن طريق المستخدم: </value>
   </string>
   <string id="420" name="record_cancel">
-    <value>cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="421" name="record_cancal_tooltip">
-    <value>Recording will be canceled and not saved.</value>
+    <value>سيتم إلغاء التسجيل دون حفظه. </value>
   </string>
   <string id="422" name="cancel_dialog_resume">
-    <value>resume</value>
+    <value>إستئناف</value>
   </string>
   <string id="423" name="cancel_dialog_resume_tooltip">
-    <value>Close this window and resume recording</value>
+    <value>اقفل النافذة و إستأنف التسجيل</value>
   </string>
   <string id="424" name="painttools_ellipse_color">
-    <value>change Linecolor</value>
+    <value>تغيير لون الخط</value>
   </string>
   <string id="425" name="colorpicker_head">
-    <value>Choose Color</value>
+    <value>إختر اللون</value>
   </string>
   <string id="426" name="painttools_line_disable">
-    <value>Disable / Enable Linecolor</value>
+    <value>تمكين/تعطيل لون الخط</value>
   </string>
   <string id="427" name="painttools_fill_disable">
-    <value>change Fillcolor</value>
+    <value>تغيير ملء اللون</value>
   </string>
   <string id="428" name="painttools_line_disable">
-    <value>Disable / Enable Fillcolor</value>
+    <value>تعطيل / تشغيل ملء اللون</value>
   </string>
   <string id="429" name="change_width_arrow_down_slider">
-    <value>Change Linewidth</value>
+    <value>تغيير عرض الخط</value>
   </string>
   <string id="430" name="close_small_popups">
-    <value>close</value>
+    <value>غلق</value>
   </string>
   <string id="431" name="paint_tool_letter">
-    <value>change Fontsize</value>
+    <value>تغيير حجم الحروف</value>
   </string>
   <string id="432" name="recordingslist_delete">
-    <value>Delete Recording</value>
+    <value>حذف التسجيل</value>
   </string>
   <string id="433" name="recordingslist_recordedByGuest">
-    <value>Guest</value>
+    <value>ضيف</value>
   </string>
   <string id="434" name="recordingslist_recordedby">
-    <value>By:</value>
+    <value>عند:</value>
   </string>
   <string id="435" name="recordings_table_head_name">
-    <value>Name</value>
+    <value>إسم</value>
   </string>
   <string id="436" name="recordings_table_head_room">
-    <value>Room</value>
+    <value>غرفة</value>
   </string>
   <string id="437" name="recordings_table_head_date">
-    <value>Date</value>
+    <value>تاريخ</value>
   </string>
   <string id="438" name="record_start_cancel">
-    <value>cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="439" name="record_start_start">
-    <value>start</value>
+    <value>بدء</value>
   </string>
   <string id="440" name="filesbrowser_table_head_name">
-    <value>Name</value>
+    <value>إسم</value>
   </string>
   <string id="441" name="filesbrowser_table_head_date">
-    <value>Date</value>
+    <value>تاريخ</value>
   </string>
   <string id="442" name="chat_clear_history">
-    <value>Delete Server-Chatlog</value>
+    <value>حذف server-chatlog</value>
   </string>
   <string id="443" name="chat_overall_header">
-    <value>Chat</value>
+    <value>دردشة</value>
   </string>
   <string id="444" name="chat_send_btn">
-    <value>send message</value>
+    <value>إرسال رسالة</value>
   </string>
   <string id="445" name="chat_emot_btn">
-    <value>Emoticons</value>
+    <value>رموز</value>
   </string>
   <string id="446" name="chat_emot_win">
-    <value>Emoticons</value>
+    <value>رموز</value>
   </string>
   <string id="447" name="choose_video_settings">
-    <value>Choose Published Devices</value>
+    <value>إختر الأجهزة المنشورة</value>
   </string>
   <string id="448" name="choose_video_settings_combo">
-    <value>Audio and Video</value>
+    <value>صوت و صورة</value>
   </string>
   <string id="449" name="choose_video_settings_combo">
-    <value>Audio only</value>
+    <value>صوت فقط</value>
   </string>
   <string id="450" name="choose_video_settings_combo">
-    <value>Video only</value>
+    <value>صورة فقط</value>
   </string>
   <string id="451" name="choose_video_settings_combo">
-    <value>no Audio/Video (static Image)</value>
+    <value>لا صورة/صوت (صورة ثابتة)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>No Audio/Video from your PC will be published, instead of that a picture from your profile will be shown. Choose these settings if you have problems with your bandwidth or a very slow Internet connection.</value>
+    <value>لا صوت/صورة ستنشر من جهازك، بدلاً من هذا ستظهر صورة من ملفك. إختر هذه الإعدادات إذا كان لديك مشاكل مع عرض النطاق الترددي أو إذا كان إتصالك بالإنترنت بطيئاً.  </value>
   </string>
   <string id="453" name="calendar_dayname_monday">
-    <value>MO</value>
+    <value>الإثنين</value>
   </string>
   <string id="454" name="calendar_dayname_tuesday">
-    <value>TU</value>
+    <value>الثلاثاء</value>
   </string>
   <string id="455" name="calendar_dayname_wednesday">
-    <value>WE</value>
+    <value>الأربعاء</value>
   </string>
   <string id="456" name="calendar_dayname_thursday">
-    <value>TH</value>
+    <value>الخميس</value>
   </string>
   <string id="457" name="calendar_dayname_friday">
-    <value>FR</value>
+    <value>الجمعة</value>
   </string>
   <string id="458" name="calendar_dayname_saturday">
-    <value>SA</value>
+    <value>السبت</value>
   </string>
   <string id="459" name="calendar_dayname_sunday">
-    <value>SU</value>
+    <value>الأحد</value>
   </string>
   <string id="460" name="calendar_dayname_monday">
-    <value>Monday</value>
+    <value>الإثنين</value>
   </string>
   <string id="461" name="calendar_dayname_TuesdayLabel">
-    <value>Tuesday</value>
+    <value>الثلثاء</value>
   </string>
   <string id="462" name="calendar_dayname_WednesdayLabel">
-    <value>Wednesday</value>
+    <value>الأربعاء</value>
   </string>
   <string id="463" name="calendar_dayname_ThursdayLabel">
-    <value>Thursday</value>
+    <value>الخميس</value>
   </string>
   <string id="464" name="calendar_dayname_FridayLabel">
-    <value>Friday</value>
+    <value>الجمعة</value>
   </string>
   <string id="465" name="calendar_dayname_SaturdayLabel">
-    <value>Saturday</value>
+    <value>السبت</value>
   </string>
   <string id="466" name="calendar_dayname_SundayLabel">
-    <value>Sunday</value>
+    <value>الأحد</value>
   </string>
   <string id="467" name="calendar_weeknumber_header">
-    <value>CW</value>
+    <value>التقويم الأسبوعي</value>
   </string>
   <string id="468" name="calendar_weeknumber_headerTooltip">
-    <value>Calendar week</value>
+    <value>التقويم الأسبوعي</value>
   </string>
   <string id="469" name="calendar_monthnames">
-    <value>January</value>
+    <value>كانون الثاني(يناير)</value>
   </string>
   <string id="470" name="calendar_monthnames">
-    <value>February</value>
+    <value>شباط(فبراير)</value>
   </string>
   <string id="471" name="calendar_monthnames">
-    <value>March</value>
+    <value>آذار(مارس)</value>
   </string>
   <string id="472" name="calendar_monthnames">
-    <value>April</value>
+    <value>نيسان(أبريل)</value>
   </string>
   <string id="473" name="calendar_monthnames">
-    <value>May</value>
+    <value>أيار(مايو)</value>
   </string>
   <string id="474" name="calendar_monthnames">
-    <value>June</value>
+    <value>حزيران(يونيو)</value>
   </string>
   <string id="475" name="calendar_monthnames">
-    <value>July</value>
+    <value>تموز(يوليو)</value>
   </string>
   <string id="476" name="calendar_monthnames">
-    <value>August</value>
+    <value>آب(أغسطس)</value>
   </string>
   <string id="477" name="calendar_monthnames">
-    <value>September</value>
+    <value>أيلول(سبتمبر)</value>
   </string>
   <string id="478" name="calendar_monthnames">
-    <value>October</value>
+    <value>تشرين أول(أكتوبر)</value>
   </string>
   <string id="479" name="calendar_monthnames">
-    <value>November</value>
+    <value>تشرين ثاني(نوفمبر)</value>
   </string>
   <string id="480" name="calendar_monthnames">
-    <value>December</value>
+    <value>كانون أول(ديسمبر)</value>
   </string>
   <string id="481" name="calendarwin_header">
-    <value>Calendar</value>
+    <value>تقويم</value>
   </string>
   <string id="482" name="roomadmin_labelNumberOfParticipants">
-    <value>Participants</value>
+    <value>المشاركون</value>
   </string>
   <string id="483" name="roomValue_advancedSettings">
-    <value>Show Layout Settings</value>
+    <value>عرض إعدادات التصميم</value>
   </string>
   <string id="484" name="roomAdmin_layout_videoX">
     <value>X | Y</value>
   </string>
   <string id="485" name="roomAdmin_layout_videoY">
-    <value>Width | Height</value>
+    <value>عرض | طول</value>
   </string>
   <string id="486" name="roomAdmin_layout">
-    <value>Video-Container</value>
+    <value>صندوق الفيديو</value>
   </string>
   <string id="487" name="roomAdmin_layout_mod">
-    <value>Moderation-Container</value>
+    <value>صندوق الإدارة</value>
   </string>
   <string id="488" name="roomAdmin_layout_mod_pos">
     <value>X</value>
   </string>
   <string id="489" name="roomAdmin_layout_whiteboard">
-    <value>Whiteboard-Container</value>
+    <value>صندوق اللوح </value>
   </string>
   <string id="490" name="roomAdmin_layout_whiteboard_show">
-    <value>Enabled</value>
+    <value>ممكن</value>
   </string>
   <string id="491" name="roomAdmin_layout_whiteboard_pos">
     <value>X | Y</value>
   </string>
   <string id="492" name="roomAdmin_layout_whiteboard">
-    <value>Width | Height</value>
+    <value>عرض | طول</value>
   </string>
   <string id="493" name="roomAdmin_layout_files">
-    <value>Files,Chat,Partizipants - Container</value>
+    <value>صندوق - ملفات،دردشة،مشاركين</value>
   </string>
   <string id="494" name="roomAdmin_layout_files_show">
-    <value>Enabled</value>
+    <value>ممكن</value>
   </string>
   <string id="495" name="roomAdmin_layout_files_pos">
     <value>X |Y</value>
   </string>
   <string id="496" name="roomAdmin_layout_files">
-    <value>Width | Height</value>
+    <value>عرض | طول</value>
   </string>
   <string id="497" name="moderator_gone_message">
-    <value>The Moderator has left the Room. No one is presenting at the Moment. You could apply for Moderation or wait.</value>
+    <value>لقد ترك رئيس الجلسة الغرفة. ليس هناك أي رئيس للجلسة في هذه الأثناء. يمكنك التقدم لرئاسة الجلسة أو الإنتظار.</value>
   </string>
   <string id="498" name="moderator_message_event_no_mod">
-    <value>There is no Moderator in this Room, but there are some Participants. You have to apply for Moderation or wait.</value>
+    <value>ليس هناك أي رئيس للجلسة في هذه الغرفة، و لكن هناك بعد المشاركين. عليك التقدم لرئاسة الجلسة أو الإنتظار.</value>
   </string>
   <string id="499" name="feedback_template_subject">
-    <value>Feedback OpenMeetings</value>
+    <value>ملاحظات OpenMeetings</value>
   </string>
   <string id="500" name="invitation_template_head">
-    <value>OpenMeetings - Invitation</value>
+    <value>OpenMeetings - دعوات</value>
   </string>
   <string id="501" name="invitation_text_from">
-    <value>Message from User:</value>
+    <value>رسالة من المستخدم:</value>
   </string>
   <string id="502" name="invitation_text_message">
-    <value>Message:</value>
+    <value>رسالة:</value>
   </string>
   <string id="503" name="invitation_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>أنقر على هذا الرابط للمشاركة في الإجتماعات:</value>
   </string>
   <string id="504" name="invitation_text_click_text_link">
-    <value>Click here to enter room</value>
+    <value>أنقر هنا لدخول الغرفة:</value>
   </string>
   <string id="505" name="invitation_text_click_text_help">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>إذا واجهتك مشاكل مع الرابط، الرجاء نسخه و من ثم لصقه في المتصفح:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>OpenMeetings SignUp</value>
+    <value>تسجيل OpenMeetings</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
-    <value>Your userdata:</value>
+    <value>بياناتك:</value>
   </string>
   <string id="508" name="registering_mail_text_username">
-    <value>Login:</value>
+    <value>تسجيل الدخول:</value>
   </string>
   <string id="509" name="registering_mail_text_pass">
-    <value>Pass:</value>
+    <value>كلمة المرور:</value>
   </string>
   <string id="510" name="registering_mail_text_mail">
-    <value>EMail:</value>
+    <value>البريد الإلكتروني:</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
-    <value>OpenMeetings-Team</value>
+    <value>فريق - OpenMeeting</value>
   </string>
   <string id="512" name="register_mail_subject">
-    <value>OpenMeetings Sign-Up</value>
+    <value>إنشاء حساب OpenMeeting</value>
   </string>
   <string id="513" name="reset_password_template_head">
-    <value>OpenMeetings - Reset Password</value>
+    <value>إعادة ضبط كلمة مرور - OpenMeeting</value>
   </string>
   <string id="514" name="reset_password_template_test_link">
-    <value>Click on this link to enter a new password:</value>
+    <value>انقر على هذا الرابط من أجل إدخال كلمة مرور جديدة:</value>
   </string>
   <string id="515" name="reset_password_template_text2_link">
-    <value>Click here to enter a new Password</value>
+    <value>انقر على هنا من أجل إدخال كلمة مرور جديدة</value>
   </string>
   <string id="516" name="reset_password_template_text3_link">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>إذا واجهتك مشاكل مع هذا الرابط، الرجاء نسخه و لصقه في المتصفح:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
-    <value>OpenMeetings Password Reset</value>
+    <value>إعادة ضبط كلمة مرور OpenMeeting</value>
   </string>
   <string id="518" name="dateRegExpError">
-    <value>Please enter a valid Date, for example 24.12.2001 (dd.mm.yyyy)</value>
+    <value>الرجاء إدخال تاريخ صالح 24.12.2001 (يوم، شهر، سنة)</value>
   </string>
   <string id="519" name="emailRegExpError">
-    <value>Please enter a valid EMail, for example name@mail.com</value>
+    <value>الرجاء إدخال بريد إلكتروني صالح، مثلاً name@mail.com</value>
   </string>
   <string id="520" name="floatRegExpError">
-    <value>Please enter a Float-Number, for example 1.00</value>
+    <value>الرجاء إدخال عدد من أعداد الفاصلة العائمة، مثلاً 1.00</value>
   </string>
   <string id="521" name="numberRegExpError">
-    <value>Please enter a Number (Integer), for example 100</value>
+    <value>الرجاء إدخال عدد صحيح، مثلاً 100</value>
   </string>
   <string id="522" name="phoneRegExpError">
-    <value>Please enter a valid Phone number, for example ++49 0123 123123</value>
+    <value>الرجاء إدخال رقم هاتف صحيح، مثلاً ++49 0123 123123</value>
   </string>
   <string id="523" name="timeRegExpError">
-    <value>Please enter a valid time, for example 12:23 (hh:mm)</value>
+    <value>الرجاء إدخال وقت صالح، مثلاً 12:23 (hh:mm)</value>
   </string>
   <string id="524" name="invitation_window">
-    <value>Passwort protected</value>
+    <value>محمي عن طريق كلمة مرور</value>
   </string>
   <string id="525" name="invitation_window_passwordLabel">
-    <value>Password</value>
+    <value>كلمة المرور</value>
   </string>
   <string id="526" name="invitation_window_validLabel">
-    <value>Validity period</value>
+    <value>مدة الصلاحية</value>
   </string>
   <string id="527" name="invitation_window_valid">
-    <value>Endless</value>
+    <value>أبدي</value>
   </string>
   <string id="528" name="invitation_window_valid">
-    <value>Period</value>
+    <value>مدة</value>
   </string>
   <string id="529" name="invitation_window_valid">
-    <value>One-Time</value>
+    <value>وقت واحد</value>
   </string>
   <string id="530" name="invitation_window_validFromLabel">
-    <value>Valid From:</value>
+    <value>صالح من:</value>
   </string>
   <string id="531" name="invitation_window_validToLabel">
-    <value>Valid to:</value>
+    <value>صالح لغاية:</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
-    <value>Invitation To OpenMeetings</value>
+    <value>دعوة إلى To OpenMeetings</value>
   </string>
   <string id="533" name="invitation_error">
-    <value>Not Invitation availible for this Invitation-Code</value>
+    <value>ليس هناك دعوة متوفرة لرمز الدعوة هذا</value>
   </string>
   <string id="534" name="invitation_error">
-    <value>The Invitation was already used. This type of Invitation cannot be re-used.</value>
+    <value>هذه الدعوة استخدمت من قبل. لا يمكن إعادة إستخدام هذا النوع من الدعوات.</value>
   </string>
   <string id="535" name="invitation_error">
-    <value>This Invitation-Code is not valid.</value>
+    <value>رمز الدعوة هذا ليس صالح.</value>
   </string>
   <string id="536" name="invitation_pass">
-    <value>Password:</value>
+    <value>كلمة المرور:</value>
   </string>
   <string id="537" name="invitation_pass_btn">
-    <value>Check Password</value>
+    <value>إفحص كلمة المرور</value>
   </string>
   <string id="538" name="invitation_pass_error">
-    <value>Invalid Password!</value>
+    <value>كلمة مرور غير صحيحة! </value>
   </string>
   <string id="539" name="Browser">
-    <value>Browser</value>
+    <value>متصفح</value>
   </string>
   <string id="540" name="audio_video">
-    <value>Syncronize Audio/Video</value>
+    <value>مزامنة الصوت/الصورة</value>
   </string>
   <string id="541" name="errorCode_invalidSession">
-    <value>Login was correct, but the Session you tried is not active or stored on the Server. You have to get a new SessionId and retry login.</value>
+    <value>تسجيل الدخول صحيح لكن الجلسة التي إخترتها معطلة أو مخزنة في الخادوم. تحتاج أن تحصل على ID-جلسة جديد و تسجل الدخول من جديد.</value>
   </string>
   <string id="542" name="errorcode_setUserObject">
-    <value>The SessionId is not loggedin or has no Admin rights. The SOAP Gateway needs an User with Admin-Rights to embed new Users.</value>
+    <value>ID-جلسة لم تسجل الدخول أو ليس لديها حقوق المسؤول. The SOAP Gateway يحتاج إلى مستخدم لديه حقوق مسؤول ليتضمن مستخدمين جدد.</value>
   </string>
   <string id="543" name="errorcode_loginByRemoteUser">
-    <value>This Session has no Remoteuser-Data connected. Wether you did not call the SOAP-Gateway before accessing the Application or you are usnig a wrong Session-ID</value>
+    <value>ليس لدى هذه الجلسة إتصال ب-Remoteuser-Data. سواء لم تصل ب- SOAP-Gateway قبل البدء بالإستعمال أو أنك تستخدم جلسة-ID خاطئة. </value>
   </string>
   <string id="544" name="debug_message_recording">
-    <value>The recorder is currently Beta!</value>
+    <value>يكون التسجيل حالياً Beta! </value>
   </string>
   <string id="545" name="propertyPanelXValue">
     <value>x</value>
@@ -1651,37 +1652,37 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>y-axis</value>
   </string>
   <string id="549" name="propertyPanelWidthValue">
-    <value>w</value>
+    <value>ع</value>
   </string>
   <string id="550" name="propertyPanelWidthValueLabel">
-    <value>width</value>
+    <value>عرض</value>
   </string>
   <string id="551" name="propertyPanelHeightValue">
-    <value>h</value>
+    <value>ط</value>
   </string>
   <string id="552" name="propertyPanelHeightValueLabel">
-    <value>height</value>
+    <value>طول</value>
   </string>
   <string id="553" name="propertyOpacitySlider">
-    <value>Change Transparency</value>
+    <value>تغيير الشفافية</value>
   </string>
   <string id="554" name="browserOpen">
-    <value>Browser Open</value>
+    <value>فتح المتصفح</value>
   </string>
   <string id="555" name="browserClose">
-    <value>Browser Close</value>
+    <value>إغلاق المتصفح</value>
   </string>
   <string id="556" name="connectionLostMessage">
-    <value>The Connection to the Server is lost. You need to reload the Application or/and check your Network.</value>
+    <value>لقد تم فقدان الإتصال بالخادوم. عليك تحديث الطلب أو تفحص الشبكة.</value>
   </string>
   <string id="557" name="557">
-    <value>Pointer</value>
+    <value>المؤشر</value>
   </string>
   <string id="558" name="sync message header">
-    <value>Synchronizing</value>
+    <value>المزامنة</value>
   </string>
   <string id="559" name="Synchronizing message">
-    <value>Synchronizing Users, please wait</value>
+    <value>مزامنة المستخدمين، الرجاء الإنتظار</value>
   </string>
   <string id="560" name="exportToSVG">
     <value>&lt;u&gt;Download as SVG&lt;/u&gt;</value>
@@ -1699,523 +1700,523 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>&lt;u&gt;Download as TIF&lt;/u&gt;</value>
   </string>
   <string id="565" name="calendarLabel">
-    <value>Reminder:</value>
+    <value>مذكرة:</value>
   </string>
   <string id="566" name="calendarLabel">
-    <value>Category:</value>
+    <value>فئة:</value>
   </string>
   <string id="567" name="calendarLabel">
-    <value>Repetition:</value>
+    <value>التكرار:</value>
   </string>
   <string id="568" name="calendarLabel">
-    <value>none</value>
+    <value>لا أحد</value>
   </string>
   <string id="569" name="calendarLabel">
-    <value>Location:</value>
+    <value>موقع:</value>
   </string>
   <string id="570" name="calendarLabel">
-    <value>Start</value>
+    <value>بداية</value>
   </string>
   <string id="571" name="calendarLabel">
-    <value>End</value>
+    <value>نهاية</value>
   </string>
   <string id="572" name="calendarLabel">
-    <value>Title:</value>
+    <value>عنوان:</value>
   </string>
   <string id="573" name="calendarLabel">
-    <value>Comment:</value>
+    <value>تعليق:</value>
   </string>
   <string id="574" name="calendarLabel">
-    <value>Invite People</value>
+    <value>دعوة ناس</value>
   </string>
   <string id="575" name="calendarLabel">
-    <value>Daily</value>
+    <value>يومي</value>
   </string>
   <string id="576" name="calendarLabel">
-    <value>Monthly</value>
+    <value>شهري</value>
   </string>
   <string id="577" name="calendarLabel">
-    <value>Yearly</value>
+    <value>سنوي</value>
   </string>
   <string id="578" name="alert">
-    <value>Appointment-end is after of appointment-start!</value>
+    <value>نهاية الموعد بعد بداية الموعد!</value>
   </string>
   <string id="579" name="alert">
-    <value>Please insert a title!</value>
+    <value>الرجاء إدخال عنوان!</value>
   </string>
   <string id="580" name="580">
     <value>RTL</value>
   </string>
   <string id="581" name="581">
-    <value>Activate this if you write in a right to left language (inverse word order)</value>
+    <value>قم بتشغيل هذا إن كنت تستخدم لغة تكتب من اليمن إلى اليسار (ترتيب كلمات معكوس)</value>
   </string>
   <string id="582" name="tooltip main-menu">
-    <value>Dashboard</value>
+    <value>لوحة أجهزة القياس </value>
   </string>
   <string id="583" name="tooltip main-menu">
-    <value>Watch recorded Meetings or Events</value>
+    <value>مشاهدة الإجتماعات أو الاحداث المسجلة</value>
   </string>
   <string id="584" name="tooltip main-menu">
-    <value>Meeting - Make a conference with 4 (up to 16) Users&lt;br/&gt;everybody will have audio + video access</value>
+    <value>إجتماع - قم بتشكيل مؤتمر مع 4 (حتى 16) مستخدمين&lt;br/&gt;يحصل الجميع على صوت و صورة</value>
   </string>
   <string id="585" name="tooltip main-menu">
-    <value>Event - Make a conference with up to 200 participents&lt;br/&gt;Only the Moderator will have audio/video</value>
+    <value>حدث - قم بتشكيل مؤتمر مع إلى 200 مشارك&lt;br/&gt;رئيس المؤتمر فقط يكون لديه صوت و صورة</value>
   </string>
   <string id="586" name="tooltip main-menu">
-    <value>Create users, rooms, organizations&lt;br/&gt; + change configuration</value>
+    <value>قم بخلق مستخدمين، غرف، منظمات&lt;br/&gt; + تغيير الترتيبات</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>Users in this Room now</value>
+    <value>المستخدمين في هذه الغرفة في الوقت الحالي</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
   </string>
   <string id="589" name="room Administration roomclients list">
-    <value>Login</value>
+    <value>تسجيل الدخول</value>
   </string>
   <string id="590" name="room Administration roomclients list">
     <value>D</value>
   </string>
   <string id="591" name="swf sync message">
-    <value>Loading Document. Please wait untill all Client have been synchronized.</value>
+    <value>تحمل وثائق. التجاء الإنتظار حتى يتم مزامنة كل العملاء.</value>
   </string>
   <string id="592" name="upload dialog">
-    <value>Upload complete, converting Document ...</value>
+    <value>تم الإيداع، تحويل الوثيقة ...</value>
   </string>
   <string id="593" name="upload dialog">
-    <value>Start Upload</value>
+    <value>بدء الإيداع</value>
   </string>
   <string id="594" name="upload dialog">
-    <value>Upload and Import Dialog. Please select a File from your Disk.</value>
+    <value>إيداع و إستيراد الحوار. الرجاء إختيار ملف من الإسطوانة.</value>
   </string>
   <string id="595" name="upload Dialog">
-    <value>Cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="596" name="upload Dialog">
-    <value>Select File</value>
+    <value>إختيار الملف</value>
   </string>
   <string id="597" name="administration navigation">
-    <value>Connections</value>
+    <value>إتصالات</value>
   </string>
   <string id="598" name="confadmin value list">
-    <value>Value</value>
+    <value>قيمة</value>
   </string>
   <string id="599" name="connection administration panel">
     <value>Streamid</value>
   </string>
   <string id="600" name="connection administration panel">
-    <value>Login</value>
+    <value>تسجيل الدخول</value>
   </string>
   <string id="601" name="connection administration panel">
-    <value>Connected since</value>
+    <value>متصل منذ</value>
   </string>
   <string id="602" name="connection administration panel">
-    <value>Room / Scope</value>
+    <value>غرفة / إطار</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Kick User</value>
+    <value>رمي المستخدم</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Kick User</value>
+    <value>رمي المستخدم</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>Do you really want to kick this Client from the Connection?&lt;br/&gt; This does only remove the Client from the current Room.The Client could re-login again.</value>
+    <value>هل تريد فعلاً أن ترمي العميل خارج الإتصال؟&lt;br/&gt; هذا سوف يقوم فقط بإخراج الزبون من الغرفة الحالية. يمكن للزبون أن يدخل مرة أخرى.</value>
   </string>
   <string id="606" name="kick user message dialog">
-    <value>Your session has been closed by an Administrator or Moderator.</value>
+    <value>لقد تم إغلاق جلستك عن طريق المسؤول أو رئيس الجلسة. </value>
   </string>
   <string id="607" name="useralterself_phone">
-    <value>Phone</value>
+    <value>هاتف</value>
   </string>
   <string id="608" name="participents panel">
-    <value>User is the Moderator of this Room</value>
+    <value>المستخدم هو الرئيس في هذه الغرفة.</value>
   </string>
   <string id="609" name="participents panel">
-    <value>User is allowed to draw on the Whiteboard</value>
+    <value>يسمح للمستخدم الرسم على اللوح.</value>
   </string>
   <string id="610" name="participents panel">
-    <value>(Re) Start Audio/Video or change Device Settings</value>
+    <value>(إعادة) بدء صوت / صورة أو تغيير إعدادات الجهاز</value>
   </string>
   <string id="611" name="participents panel">
-    <value>Allow this User to draw on the Whiteboard</value>
+    <value>السماح لهذا  المستخدم بالرسم على اللوح</value>
   </string>
   <string id="612" name="participents panel">
-    <value>Remove ability to draw on whiteboard</value>
+    <value>إلغاء قدرة الرسم على اللوح</value>
   </string>
   <string id="613" name="conferencePanels">
-    <value>Users</value>
+    <value>المستخدمين</value>
   </string>
   <string id="614" name="conferencePanels">
-    <value>Files</value>
+    <value>الملفات</value>
   </string>
   <string id="615" name="conferencePanels">
-    <value>Whiteboard</value>
+    <value>اللوح</value>
   </string>
   <string id="616" name="conferencePanels">
-    <value>Chat</value>
+    <value>دردشة</value>
   </string>
   <string id="617" name="organization choose info">
-    <value>Your account is assigned to multiple Organizations. Please choose one for this Session.</value>
+    <value>حسابك يعود إلى عدة منظمات. الرجاء إختيار واحدة لهذه الجلسة.</value>
   </string>
   <string id="618" name="error message room full">
-    <value>This room is full at the moment. Please try again later.</value>
+    <value>هذه الغرفة مليئة في هذه الأثناء. الرجاء المحاولة لاحقاً.</value>
   </string>
   <string id="619" name="roomtypes">
-    <value>Room Type</value>
+    <value>نوع الغرفة.</value>
   </string>
   <string id="620" name="appointed_room">
-    <value>Appointment Room</value>
+    <value>غرفة المواعيد</value>
   </string>
   <string id="621" name="servertime">
-    <value>Server Time</value>
+    <value>وقت الخادوم.</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
-    <value>OpenMeetings - Reminder</value>
+    <value>مذكرة - OpenMeeting</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
-    <value>Message from User:</value>
+    <value>رسالة من المستخدم:</value>
   </string>
   <string id="624" name="inv_reminder_text_message">
-    <value>Message:</value>
+    <value>رسالة:</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>أنقر على هذا الرابط للمشاركة في الإجتماع:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
-    <value>Click here to enter room</value>
+    <value>أنقر هنا لدخول الغرفة</value>
   </string>
   <string id="627" name="inv_reminder_text_click_text_help">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>إذا كان لديك مشاكل مع الرابط، الرجاء نسخه و لصقه في المتصفح:</value>
   </string>
   <string id="628" name="btn_search_intern">
-    <value>search intern</value>
+    <value>البحث في الداخل</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>extern users</value>
+    <value>مستخدم خارجي</value>
   </string>
   <string id="630" name="lbl_prename">
-    <value>pre name</value>
+    <value>إسم الكنية</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>name</value>
+    <value>إسم</value>
   </string>
   <string id="632" name="lbl_email">
-    <value>E-mail</value>
+    <value>بريد إلكتروني</value>
   </string>
   <string id="633" name="logoutConfirm_title">
-    <value>Confirm logout</value>
+    <value>أكد الخروج</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
-    <value>Are you sure you want to logout now?</value>
+    <value>هل أنت متأكد أنك تريد تسجيل الخروج؟</value>
   </string>
   <string id="635" name="main menu">
-    <value>Actions</value>
+    <value>النشاطات</value>
   </string>
   <string id="636" name="room admin">
-    <value>Demo Room</value>
+    <value>غرفة تجريبية</value>
   </string>
   <string id="637" name="room admin">
-    <value>Demo Time</value>
+    <value>وقت تجريبي</value>
   </string>
   <string id="638" name="meeting Timer">
-    <value>Meeting Timer</value>
+    <value>عداد الإجتماع</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>This Room is a Demo Room. To disable this warning you either should get a private meeting room for your personal usage or set up an own Server. You will be automatically logged off in:</value>
+    <value>هذه الغرفة هي غرفة تجربة. لتعطيل هذه التحذير عليك الحصول على غرفة خاصة للإستخدام الخاص أو إنشاء خادم خاص. سوف يتم إخراجك فوراً في:</value>
   </string>
   <string id="640" name="meeting room administration">
-    <value>Moderated</value>
+    <value>مدار</value>
   </string>
   <string id="641" name="moderated room waiting message">
-    <value>Please wait untill the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.</value>
+    <value>الرجاء إنتظار دخول المدير الغرفة. يمكن أن يكون المدير معلم، مسؤول أو منشئ هذه الغرفة.</value>
   </string>
   <string id="642" name="error popup">
     <value>Ok</value>
   </string>
   <string id="643" name="window screensharing">
-    <value>Incoming Screen Sharing</value>
+    <value>وصول مشاركة الشاشة</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>There is a new Screen Sharing incoming from the User:</value>
+    <value>هناك مشارك شاشة قادمة من المستخدم:</value>
   </string>
   <string id="645" name="window screen sharing">
-    <value>Start Sharing</value>
+    <value>بدء المشاركة</value>
   </string>
   <string id="646" name="calendar">
-    <value>Add new Meeting</value>
+    <value>إضافة لقاء جديد</value>
   </string>
   <string id="647" name="calendar">
-    <value>Meeting Room</value>
+    <value>غرفة الإجتماع</value>
   </string>
   <string id="648" name="calendar">
-    <value>Event Room</value>
+    <value>غرفة الحدث</value>
   </string>
   <string id="649" name="main menu moderation">
-    <value>Moderation</value>
+    <value>إدارة</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>Moderate Users</value>
+    <value>المستخدمين المدراء</value>
   </string>
   <string id="651" name="menu moderation">
-    <value>Moderate Rooms</value>
+    <value>الغرف المدارة</value>
   </string>
   <string id="652" name="moderator org">
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>Do you want to change this User to become a Moderator of that Organization?</value>
+    <value>هل تريد تغيير هذا المستخدم و جعله مدير هذه المنظمة؟</value>
   </string>
   <string id="654" name="error message">
-    <value>Please choose an Organization before you try to add a User to it!</value>
+    <value>الرجاء إختيار المنظمة قبل محاول إضافة مستخدم إليها!</value>
   </string>
   <string id="655" name="choose user window">
-    <value>Organization - Moderator</value>
+    <value>منظمة - مدير </value>
   </string>
   <string id="656" name="moderator org users">
-    <value>Do you really want to delete this User from the Organization?</value>
+    <value>هل تريد بالفعل حذف هذا المستخدم من المنظمة؟</value>
   </string>
   <string id="657" name="org moderation">
-    <value>This User is Moderator</value>
+    <value>هذا المستخدم هو مدير</value>
   </string>
   <string id="658" name="org moderation">
-    <value>This User is No-Moderator</value>
+    <value>هذا المستخدم ليس مديراً</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>Do you want this User to be not a Moderator of this Organization?</value>
+    <value>هل تريد أن لا يكون هذا المستخدم مدير هذه المنظمة؟</value>
   </string>
   <string id="660" name="moderation">
-    <value>Add or delete Users or Rooms within your Organization</value>
+    <value>إضافة أو حذف مستخدمين أو غرف ضمن منظمتك</value>
   </string>
   <string id="661" name="delete confirm question">
-    <value>Do you really want to delete this record?</value>
+    <value>هل تريد حقاً حذف هذا التسجيل؟</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>Do you really want to delete this user from your organization? You will only delete the connection between the user and your organization, to really delete the user itself you have to login into the Administration-Panel.</value>
+    <value>هل تريد حقاً حذف هذا المستخدم من منظمتك؟ سوف يتم فقط حذف الإتصال بين المستخدم و منظمتك، من أجل حذف المستخدم يجب أن تدخل لوحة المسؤول.</value>
   </string>
   <string id="663" name="error message self deleting">
-    <value>You cannot delete your own User!</value>
+    <value>لا يمكنك حذف مستخدمك!</value>
   </string>
   <string id="664" name="error message auth">
-    <value>This Method needs a Adminstration Account to be invoked!</value>
+    <value>لتنفيذ هذه الطريقة تحتاج لحساب مسؤول!</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>There was no Session associated with this ID.</value>
+    <value>ليس هناك أي جلسة ترتبط ب- ID هذا.</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>This is an Administrator or Moderator account. You can only edit this account through the Administration Panel.</value>
+    <value>هذا حساب مسؤول أو مدير. يمكن تحرير هذا الحساب عن طريق لوحة المسؤول.</value>
   </string>
   <string id="667" name="email verification">
-    <value>To complete your registration please click on the following link. Or copy the URL to your browser bar.</value>
+    <value>لإكمال التسجيل الرجاء النقر على الرابط التالي. أو نسخ URL إلى المتصفح.</value>
   </string>
   <string id="668" name="email verification">
-    <value>Click to verify your E-Mail</value>
+    <value>أنقر من أجل التحقق من بريدك الإلكتروني</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>No user was found for this Hash.</value>
+    <value>ليس هناك أي مستخدم لهذا الخليط.</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>This user is already activated!</value>
+    <value>هذا المستخدم معطل!</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>You did successfully activate your account!</value>
+    <value>لقد تم تفعيل حسابك بنجاح!</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Login Now</value>
+    <value>تسجيل الدخول الآن</value>
   </string>
   <string id="673" name="loginErrorMessage = user was not activated">
-    <value>Your account is not activated. First use the link in the Email you've received during registration.</value>
+    <value>حسابك ليس شغال. إستخدم أولاً الرابط في البريد الإلكتروني الذي حصلت عليه خلال التسجيل.</value>
   </string>
   <string id="674" name="register verification message">
-    <value>You successfully signed up. We've send an EMail with a verification Code to your Mail. Please check your Inbox.</value>
+    <value>لقد تم فتح حسابك بنجاح. لقد تم إرسال بريد إلكتروني مع رمز تحقق إلى بريدك. الرجاء التحقق من بريدك الإلكتروني.</value>
   </string>
   <string id="675" name="participants panel">
-    <value>Remove Moderation Role from this User</value>
+    <value>إزالة دور الإدارة من هذا المستخدم</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Grant Moderation Rights to this User</value>
+    <value>منح هذا المستخدم حق الإدارة</value>
   </string>
   <string id="677" name="event user list">
-    <value>User</value>
+    <value>مستخدم</value>
   </string>
   <string id="678" name="event user list">
-    <value>Access to whiteboard</value>
+    <value>مدخل إلى اللوح</value>
   </string>
   <string id="679" name="event user list">
-    <value>Moderator</value>
+    <value>مدير</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderation: Please choose any User on the List to grant him access to the Whiteboard, Moderation or Video.</value>
+    <value>إدارة: الرجاء إختيار أي مستخدم على القائمة لمنحه مدخل إلى اللوح، الإدارة أو الفيديو.</value>
   </string>
   <string id="681" name="event user list">
-    <value>This User is already Moderator, so he has automatically the right to draw.</value>
+    <value>هذا المستخدم هو مدير، لهذا لديه تلقائياً الحق في الرسم على اللوح.</value>
   </string>
   <string id="682" name="event user list error">
-    <value>This is you! You cannot remove the Moderation rights from yourself.</value>
+    <value>هذا أنت! لا يمكنك إزالة حقوق الإدارة من نفسك.</value>
   </string>
   <string id="683" name="event user list">
-    <value>Allow this User to Publish his Audio / Video</value>
+    <value>السماح لهذا المستخدم نشر صوت / صورة</value>
   </string>
   <string id="684" name="event user list">
-    <value>Remove Audio/Video of this User</value>
+    <value>حذف صوت / صورة من هذا المستخدم</value>
   </string>
   <string id="685" name="event user list">
-    <value>I would like to get the moderation of this room</value>
+    <value>أود أن أدير هذه الغرفة</value>
   </string>
   <string id="686" name="event user list">
-    <value>I would like to draw on whiteboard</value>
+    <value>أود أن أرسم على اللوح</value>
   </string>
   <string id="687" name="event user list">
-    <value>I would like to share my Audio/Video</value>
+    <value>أو أن أشارك صوت / صورة</value>
   </string>
   <string id="688" name="event user list">
-    <value>You are moderator of this room</value>
+    <value>أنت مدير هذه الغرفة</value>
   </string>
   <string id="689" name="event user list">
-    <value>You are allowed to draw on whiteboard</value>
+    <value>لديك حق الرسم على اللوح</value>
   </string>
   <string id="690" name="event user list">
-    <value>You are allowed to share your Audio/Video</value>
+    <value>لديك حق مشاركة صوت / صورة</value>
   </string>
   <string id="691" name="errortype">
-    <value>Message to Moderator</value>
+    <value>رسالة إلى المدير</value>
   </string>
   <string id="692" name="apply for mod message">
-    <value>The User</value>
+    <value>المستخدم</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>would like to get the Moderation. Use the status Icons next to the user in the List of Users to add or remove the Moderation.</value>
+    <value>يود أن يحصل على الإدارة. إستخدم أيقونات الحالات جانب المستخدم في قائمة المستخدمين لإضافة أو حذف الإدارة.</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</value>
+    <value>يود أن يرسم على اللوح. إستخدم أيقونات الحالات جانب المستخدم في قائمة المستخدمين لإضافة أو حذف حق الرسم على اللوح.</value>
   </string>
   <string id="695" name="695">
-    <value>would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</value>
+    <value>يود أن يتشارك الصوت/الصورة. إستخدم أيقونات الحالات جانب المستخدم في قائمة المستخدمين لإضافة أو حذف حق المشاركة صوت/صورة لأي مستخدم.</value>
   </string>
   <string id="696" name="moderation message">
-    <value>You have to wait untill a Moderator enters the room.</value>
+    <value>عليك إنتظار المدير حتى يدخل الغرفة.</value>
   </string>
   <string id="697" name="calendar button">
-    <value>Cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="698" name="calendar button">
-    <value>Save</value>
+    <value>حفظ</value>
   </string>
   <string id="699" name="calendar component">
-    <value>Day</value>
+    <value>يوم</value>
   </string>
   <string id="700" name="calendar component">
-    <value>Month</value>
+    <value>شهر</value>
   </string>
   <string id="701" name="calendar component">
-    <value>Year</value>
+    <value>سنة</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Upload File</value>
+    <value>إيداع ملف</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Add Folder</value>
+    <value>إضافة مجلد</value>
   </string>
   <string id="704" name="file explorer">
-    <value>Refresh</value>
+    <value>تحديث</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Trash</value>
+    <value>قمامة</value>
   </string>
   <string id="706" name="file explorer">
-    <value>My Files (Home Drive)</value>
+    <value>ملفاتي (Home Drive)</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Room Files (Public Drive)</value>
+    <value>غرفة الملفات (Public Drive)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Add File</value>
+    <value>إضافة ملف</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Add Folder</value>
+    <value>إضافة مجلد</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Delete Folder</value>
+    <value>حذف مجلد</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Edit Name</value>
+    <value>تحرير إسم</value>
   </string>
   <string id="712" name="file explorer">
-    <value>New Folder</value>
+    <value>مجلد جديد</value>
   </string>
   <string id="713" name="file explorer">
-    <value>Are you sure you want to delete this Item?</value>
+    <value>هل أنت متأكد أنك تريد حذف هذا البند؟</value>
   </string>
   <string id="714" name="user admin">
-    <value>Search</value>
+    <value>بحث</value>
   </string>
   <string id="715" name="user admin">
-    <value>Search</value>
+    <value>بحث</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Open Document</value>
+    <value>فتح وثيقة</value>
   </string>
   <string id="717" name="file explorer">
-    <value>Show all Files (Tree View)</value>
+    <value>إظهار كل الملفات (Tree View)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Close Document</value>
+    <value>إغلاق وثيقة</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Delete File</value>
+    <value>حذف ملف</value>
   </string>
   <string id="720" name="file explorer">
-    <value>You are not allowed to draw anything on the Whiteboard. You have to become Moderator or at least get the Right to edit Whiteboard. You may ask a Moderator to give you that right.</value>
+    <value>لا يسمح لك بالرسم على هذا اللوح. تحتاج أن تكون مديراً أو أن تحصل على الأقل على حق تحرير لوح. يجب أن تسأل مديراً للحصول على هذا الحق. </value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>خصائص الوثيقة</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>بدأ العميل (external)</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>بدأ العميل (HTTP)</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>مسخدم يود تقاسم شاشته. هل تريد رؤيتها؟</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>أنت تتشارك سطح مكتبك في هذه الأثناء. لإيقاف جلسة المشاركة الرجاء النقر زر توقف في عميل المشاركة.</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>جلسة المشاركة</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
+    <value>أنت تتشارك سطح مكتبك!</value>
   </string>  
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>مشاهد سطح المكتب</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>خروج</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>مقاسم سطح المكتب</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Click Start to publish your screen</value>
+    <value>أنقر على إبدأ لنشر شاشتك</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>بدء المشاركة</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>إيقاف المشاركة</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Select your screen area:</value>
+    <value>إختر نطاق شاشتك:</value>
   </string>
   <string id="735" name="sharing client">
-    <value>Change width</value>
+    <value>تغيير العرض</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>إنتهى المشارك من هذه الجلسة!</value>
   </string>
   <string id="737" name="sharing client">
-    <value>Change height</value>
+    <value>تغيير الطول</value>
   </string>
   <string id="738" name="sharing client">
     <value>X-Offset</value>
@@ -2224,31 +2225,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Y-Offset</value>
   </string>
   <string id="740" name="sharing client">
-    <value>Width:</value>
+    <value>العرض:</value>
   </string>
   <string id="741" name="sharing client">
-    <value>Height:</value>
+    <value>الطول:</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
+    <value>قطع الإتصال من الخادوم </value>
   </string>
   <string id="743" name="sharing viewer">
-    <value>Cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>بدء الخارجي</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>If you close this session completely you are not able to restart the viewer for this session.</value>
+    <value>إذا أقفلت هذه الجلسة كلياً لن يعد بإمكانك البدء من جديد بالمشاهد لهذه الجلسة. </value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Confirm Closing Viewer Session</value>
+    <value>تأكيد إقفال جسلة المشاهد</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>مشاركة الشاشةShare Screen</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>تسجيل الجلسةRecord Session</value>
   </string>
   <string id="749" name="co-browser">
     <value>Co-Browsing</value>
@@ -2257,40 +2258,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ooops, ... Firefox on Windows does not show clear Co-Browsing. Please use another Browser for using the Co-Browsing feature.</value>
   </string>
   <string id="751" name="co-browser">
-    <value>Previous</value>
+    <value>السابقPrevious</value>
   </string>
   <string id="752" name="co-browser">
-    <value>Next</value>
+    <value>التالي</value>
   </string>
   <string id="753" name="co-browser">
-    <value>Reload</value>
+    <value>تحديث</value>
   </string>
   <string id="754" name="co-browser">
     <value>Home</value>
   </string>
   <string id="755" name="co-browser">
-    <value>Load</value>
+    <value>شحن</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Add this website as Default website to your Profile.</value>
+    <value>إجعل هذه الصفحة صفحة ملفك الإفتراضية.</value>
   </string>
   <string id="757" name="test setup">
-    <value>Test Setup</value>
+    <value>فحص الإعداد</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>إفحص إعدادات الميكروفون و الكاميرا قبل دخولك الغرفة عن طريق التسجيل لبضع ثوان. يمكنك بعدها رؤية التسجيل لفحص الصوت و الصورة. </value>
   </string>
   <string id="759" name="test setup">
-    <value>Don't show this test anymore</value>
+    <value>لا تظهر هذا الإختبار بعد الآن </value>
   </string>
   <string id="760" name="test setup">
-    <value>Cancel</value>
+    <value>إلغاء</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>بدء المؤتمر</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>Do not ask again</value>
+    <value>لا تسأل مجدداً</value>
   </string>
   <string id="763" name="test setup">
     <value>REC</value>
@@ -2299,90 +2300,39 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>PLAY</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>يمكنك المتابعة دون الفحص إذا لا تريد نشر صورتك و صوتك. يمكن للمشاركين دون صوت و صورة متابعة إستخدام اللوح، مشاركة سطح المكتب أو كتابة رسائل دردشة. </value>
   </string>
   <string id="766" name="test setup">
-    <value>STOP</value>
+    <value>توقف</value>
   </string>
   <string id="767" name="test setup">
-    <value>Level-Meter</value>
+    <value>مقياس المستوى </value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>إضغط على البداية</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>بدء المؤتمر</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>بدء الحدث</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>إختر غرفة </value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>فحص الإعدادات </value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>بدء المؤتمر</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>الطريق إلى المؤتمر: </value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>بدء التسجيل</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
-  </string>
-  <string id="777" name="overview room">
-    <value>Public Rooms</value>
-  </string>
-  <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
-  </string>
-  <string id="779" name="overview room">
-    <value>Private Rooms</value>
-  </string>
-  <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
-  </string>
-  <string id="781" name="overview room">
-    <value>My Rooms</value>
-  </string>
-  <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
-  </string>
-  <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
-  </string>
-  <string id="784" name="menu option">
-    <value>Apply for moderation</value>
-  </string>
-  <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
-  </string>
-  <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
-  </string>
-  <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
-  </string>
-  <string id="788" name="dashboard button">
-    <value>START</value>
-  </string>
-  <string id="789" name="exit conference">
-    <value>EXIT</value>
-  </string>
-  <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
-  </string>
-  <string id="791" name="conference view">
-    <value>Exit conference</value>
-  </string>
-  <string id="792" name="main menu">
-    <value>Rooms</value>
-  </string>
-  <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>لا تظهر فحص صوت / صورة (تسجيل) قبل دخول المؤتمر </value>
   </string>
 </language>
