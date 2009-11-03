@@ -18,9 +18,10 @@ import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 
 public class CalendarService {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarService.class, "openmeetings");
-	
+
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			CalendarService.class, "openmeetings");
+
 	private static CalendarService instance = null;
 
 	public static synchronized CalendarService getInstance() {
@@ -31,163 +32,194 @@ public class CalendarService {
 		return instance;
 	}
 
-	public List<Appointment> getAppointmentByRange(String SID, Date starttime, Date endtime) {
-		log.debug("getAppointmentByRange : startdate - " + starttime + ", enddate - " + endtime);
+	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
+			Date endtime) {
+		log.debug("getAppointmentByRange : startdate - " + starttime
+				+ ", enddate - " + endtime);
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					        	
-	        	return AppointmentLogic.getInstance().getAppointmentByRange(users_id ,starttime, endtime);
-	        }
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				return AppointmentLogic.getInstance().getAppointmentByRange(
+						users_id, starttime, endtime);
+			}
 		} catch (Exception err) {
-			log.error("[getAppointmentByRange]",err);
+			log.error("[getAppointmentByRange]", err);
 		}
 		return null;
 	}
-	
-	
-	
-	public Appointment getNextAppointment(String SID){
-		
-		try{
-			
+
+	public Appointment getNextAppointment(String SID) {
+
+		try {
+
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					        	
-	        	return AppointmentLogic.getInstance().getNextAppointment();
-	        }
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				return AppointmentLogic.getInstance().getNextAppointment();
+			}
 		} catch (Exception err) {
-			log.error("[getNextAppointmentById]",err);
+			log.error("[getNextAppointmentById]", err);
 		}
 		return null;
-			
+
+	}
+
+	public List<Appointment> searchAppointmentByName(String SID,
+			String appointmentName) {
+
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				return AppointmentLogic.getInstance().searchAppointmentByName(
+						appointmentName);
+			}
+		} catch (Exception err) {
+			log.error("[searchAppointmentByName]", err);
 		}
-	
-	public List<Appointment> searchAppointmentByName(String SID, String appointmentName){
-			
-			try{
-				
-				Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-		        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-		        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-						        	
-		        	return AppointmentLogic.getInstance().searchAppointmentByName(appointmentName);
-		        }
-			} catch (Exception err) {
-				log.error("[searchAppointmentByName]",err);
-			}
-			return null;
-				
-			}
-	
-	public Long saveAppointment(String SID, String appointmentName, String appointmentLocation,String appointmentDescription, 
-			Date appointmentstart, Date appointmentend, 
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, 
-			Long remind, Long roomType, String baseUrl){
-		
+		return null;
+
+	}
+
+	public Long saveAppointment(String SID, String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
+			Long categoryId, Long remind, Long roomType, String baseUrl) {
+
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
-		
-		try{
+
+		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					        	
-	        	Long id = AppointmentLogic.getInstance().saveAppointment(appointmentName, users_id, appointmentLocation, 
-	        			appointmentDescription, appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, 
-	        			isYearly, categoryId, remind, roomType, baseUrl);
-	        	
-	        	return id;
-	        }
-	        else{
-	        	log.error("saveAppointment : wrong user level");
-	        }
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				Long id = AppointmentLogic.getInstance().saveAppointment(
+						appointmentName, users_id, appointmentLocation,
+						appointmentDescription, appointmentstart,
+						appointmentend, isDaily, isWeekly, isMonthly, isYearly,
+						categoryId, remind, roomType, baseUrl);
+
+				return id;
+			} else {
+				log.error("saveAppointment : wrong user level");
+			}
 		} catch (Exception err) {
-			log.error("[saveAppointment]",err);
+			log.error("[saveAppointment]", err);
 		}
 		return null;
-		
-			
-		}
-	
-	public Long updateAppointment(String SID,
-			Long appointmentId ,
-			String appointmentName,
-			String appointmentLocation,
-			String appointmentDescription, 
-			Date appointmentstart,
-			Date appointmentend, 
-			Boolean isDaily,
-			Boolean isWeekly,
-			Boolean isMonthly,
-			Boolean isYearly,
-			Long categoryId,
-			Long remind,
-			List mmClient,
-			Long roomType, String baseurl){
-		try{
-			
+
+	}
+
+	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
+			Date appointmentstart, Date appointmentend, String baseurl) {
+		try {
+
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					
-	        	log.debug("updateAppointment");
-	        	
-	        	System.out.println("appointmentId "+appointmentId);
-	        	
-	        	RoomTypes rt = Roommanagement.getInstance().getRoomTypesById(roomType);
-	        	
-	        	Appointment app = AppointmentLogic.getInstance().getAppointMentById(appointmentId);
-	        	
-	        	Rooms room = app.getRoom();
-	        	if (room != null) {
-		        	
-		        	room.setComment(appointmentDescription);
-		        	room.setName(appointmentName);
-		        	room.setRoomtype(rt);
-		        	
-		        	Roommanagement.getInstance().updateRoomObject(room);
-	        	}
-	        	System.out.println("mmClient "+mmClient);
-	        	
-	        	return AppointmentLogic.getInstance().updateAppointment(appointmentId, appointmentName, 
-	        			appointmentDescription, appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, 
-	        			isYearly, categoryId, remind, mmClient, users_id, baseurl);
-	        }
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				log.debug("updateAppointment");
+
+				System.out.println("appointmentId " + appointmentId);
+
+				Appointment app = AppointmentLogic.getInstance()
+						.getAppointMentById(appointmentId);
+
+				return AppointmentLogic.getInstance().updateAppointmentByTime(
+						appointmentId, 
+						appointmentstart, appointmentend, 
+						users_id, baseurl);
+			}
 		} catch (Exception err) {
-			log.error("[updateAppointment]",err);
+			log.error("[updateAppointment]", err);
 			err.printStackTrace();
 		}
 		return null;
-		
-			
-		}
-	
-	public Long deleteAppointment(String SID,Long appointmentId){
-		
-		log.debug("deleteAppointment : " + appointmentId);
-		
-		try{
-			
+
+	}
+
+	public Long updateAppointment(String SID, Long appointmentId,
+			String appointmentName, String appointmentLocation,
+			String appointmentDescription, Date appointmentstart,
+			Date appointmentend, Boolean isDaily, Boolean isWeekly,
+			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
+			List mmClient, Long roomType, String baseurl) {
+		try {
+
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-					        	
-	        	Appointment app = AppointmentLogic.getInstance().getAppointMentById(appointmentId);
-	        	Roommanagement.getInstance().deleteRoom(app.getRoom());
-	        	
-	        	return AppointmentLogic.getInstance().deleteAppointment(appointmentId, users_id);
-	        }
-	        
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				log.debug("updateAppointment");
+
+				RoomTypes rt = Roommanagement.getInstance().getRoomTypesById(
+						roomType);
+
+				Appointment app = AppointmentLogic.getInstance()
+						.getAppointMentById(appointmentId);
+
+				Rooms room = app.getRoom();
+				if (room != null) {
+
+					room.setComment(appointmentDescription);
+					room.setName(appointmentName);
+					room.setRoomtype(rt);
+
+					Roommanagement.getInstance().updateRoomObject(room);
+				}
+
+				return AppointmentLogic.getInstance().updateAppointment(
+						appointmentId, appointmentName, appointmentDescription,
+						appointmentstart, appointmentend, isDaily, isWeekly,
+						isMonthly, isYearly, categoryId, remind, mmClient,
+						users_id, baseurl);
+			}
 		} catch (Exception err) {
-			log.error("[deleteAppointment]",err);
+			log.error("[updateAppointment]", err);
+			err.printStackTrace();
 		}
 		return null;
-		
-			
+
+	}
+
+	public Long deleteAppointment(String SID, Long appointmentId) {
+
+		log.debug("deleteAppointment : " + appointmentId);
+
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				Appointment app = AppointmentLogic.getInstance()
+						.getAppointMentById(appointmentId);
+				Roommanagement.getInstance().deleteRoom(app.getRoom());
+
+				return AppointmentLogic.getInstance().deleteAppointment(
+						appointmentId, users_id);
+			}
+
+		} catch (Exception err) {
+			log.error("[deleteAppointment]", err);
 		}
-	
+		return null;
+
+	}
+
 }

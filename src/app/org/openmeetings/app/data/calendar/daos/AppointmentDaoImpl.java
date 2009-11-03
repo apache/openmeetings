@@ -312,6 +312,52 @@ public class AppointmentDaoImpl {
 		return null;
 		
 	}
+	
+	
+	public Long updateAppointmentByTime(Long appointmentId, 
+			Date appointmentstart, Date appointmentend, Long users_id, String baseUrl) {
+		
+			log.debug("AppointmentDAOImpl.updateAppointment");
+		try {
+			
+			
+			Appointment ap = this.getAppointmentById(appointmentId);
+									
+			ap.setAppointmentStarttime(appointmentstart);
+		 	ap.setAppointmentEndtime(appointmentend);
+			ap.setUpdatetime(new Date());
+						
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			session.update(ap);
+
+			tx.commit();
+		    HibernateUtil.closeSession(idf);
+		    
+		    
+		    List<MeetingMember> meetingsRemoteMembers = MeetingMemberDaoImpl.getInstance().getMeetingMemberByAppointmentId(ap.getAppointmentId());
+		    
+		    
+		    //Send notification of updated Event
+		    for (MeetingMember memberRemote : meetingsRemoteMembers) {
+		    	
+	    		// Notify member of changes
+	    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id);
+		    		
+		    }
+		    
+		    return appointmentId;
+		} catch (HibernateException ex) {
+			log.error("[updateAppointmentByTime]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateAppointmentByTime]: ",ex2);
+		}
+		return null;
+		
+	}
+	
 	//----------------------------------------------------------------------------------------------------------
 	
 	public Long deleteAppointement(Long appointmentId) {

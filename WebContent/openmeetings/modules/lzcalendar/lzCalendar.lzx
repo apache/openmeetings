@@ -17,29 +17,13 @@
 	
 	<dateSelector name="_calendar" y="0" x="2">
 		<handler name="ondoubleselect">
- 			//var selectDate = new Date();
- 			//if ($debug) Debug.write("##### dateselect ", this.selecteddate);
- 			parent._startDate = this.selecteddate;
- 			//Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,0);
- 			parent._endDate  = new Date(this.selecteddate.getFullYear(), this.selecteddate.getMonth(), this.selecteddate.getDate()+1,0,0,0);
- 			//if ($debug) Debug.write("startDateValue",parent._startDate);
- 			parent._tabslider._daytab._dayview._tagesansicht._list._outlist.clearContent();
- 			
- 			//weekcontroll
- 			if(parent._tabslider._week['selected'] == true){
- 				//parent._tabslider._week._weekView._monday._tagesansicht._list._outlist.clearContent();
- 				parent._tabslider._week._weekView.initWeekByDate(this.selecteddate);
- 				parent._tabslider._week._weekView.getAppointmentByRangeWeek.doCall();
- 			}else if(parent._tabslider._month['selected'] == true){
- 				parent._tabslider._month._monthView.showingdate = this.selecteddate;
- 				//parent._tabslider._month._monthView.initMonthByDate(this.selecteddate);
- 				parent._tabslider._month._monthview.init();
- 				//parent._tabslider._month._monthView.getAppointmentByRangeMonth.doCall();
- 			}else {
-	 			//parent._tagesansicht._list._innerlist.clearContent();
-	 			//parent._termin.setCalendarItem(24);
-	 			parent.getAppointmentByRange.doCall();
- 			}
+			if (parent.lzCalendarContent.eventselector.checkSaved()) {
+ 				parent.lzCalendarContent.calgrid.setMonthAndYear(this.selecteddate.getMonth(),this.selecteddate.getFullYear());
+			} else {
+				//Check Warning
+    			if ($debug) Debug.warn("Unsaved Item - Show warning");
+    			new lz.labelerrorPopup(canvas,{errorlabelid:794});
+			}
 		</handler> 
 	</dateSelector> 
 	

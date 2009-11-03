@@ -351,7 +351,17 @@ public class AppointmentLogic {
 		return null;
 	}
 	
-	
+	public Long updateAppointmentByTime(Long appointmentId, 
+			Date appointmentstart, Date appointmentend, Long user_id, String baseUrl){
+		
+		try {
+			return AppointmentDaoImpl.getInstance().updateAppointmentByTime(appointmentId, 
+					appointmentstart, appointmentend, user_id, baseUrl);
+		} catch (Exception err) {
+			log.error("[updateAppointment]",err);
+		}
+		return null;
+	}
 	
 	/**
 	 *Updating AppointMent object 

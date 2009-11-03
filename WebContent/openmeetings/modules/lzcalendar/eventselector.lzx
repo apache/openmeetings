@@ -381,15 +381,82 @@
 		    		this.endDate2.setMinutes(Number(tEndObj.attributes.minute));
 		        		
 		            if ($debug) Debug.write("appointementId ",appointementId);
+		            
+		            if ($debug) Debug.write("startDate ",this.startDate);
+		            if ($debug) Debug.write("endDate ",this.endDate);
+		            
 		            if ($debug) Debug.write("startDate2 ",this.startDate2);
 		            if ($debug) Debug.write("endDate2 ",this.endDate2);
 	                
+		            if (this.startDate.getTime() == this.startDate2.getTime() && this.endDate.getTime() == this.endDate2.getTime()) {
+		            	
+		            	if ($debug) Debug.write("NO Changes");
+		            	
+		            } else {
+		            	
+		            	if ($debug) Debug.write("DO Update Changes ",appointementId);
+		            	
+		            	if (Number(appointementId) == 0) {
+		            		
+		            		if ($debug) Debug.write("Do not store its non saved item yet");
+		            		
+		            	} else {
+		            		
+		            		if ($debug) Debug.write("Do save and update item ",appointementId);
+		            		
+		            		//Point URL to actual File
+				            var urlObject =  lz.Browser.getBaseURL();
+							//If Port is Null or undefinied use port 80
+							if (urlObject.port!=null && urlObject.port!=undefined){
+								var port = urlObject.port;
+								
+								if (port != 80) {
+									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+								} else {
+									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+								}
+							} else {
+								this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+							}
+		            		
+		            		this.updateAppointmentTimeOnly.appointementId = Number(appointementId);
+		            		
+		            		this.updateAppointmentTimeOnly.doCall();
+		            	}
+		            	
+		            }
+		            
 	            } else {
 	                lz.Timer.removeTimer( this.startDragDel );
 	            } 
             ]]>
         </method>
-
+        
+        <!--
+        	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
+							Date appointmentstart, Date appointmentend, String baseurl) 
+		 -->
+	    
+    	<netRemoteCallHib name="updateAppointmentTimeOnly" funcname="calendarservice.updateAppointmentTimeOnly" 
+						  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="appointementId" value="0" type="number" />
+			<attribute name="baseUrl" value="" type="string" />
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.appointementId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.startDate2;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.endDate2;</method></netparam>
+			<netparam><method name="getValue">return parent.baseUrl;</method></netparam>
+			
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+	    			if ($debug) Debug.write("updateAppointmentTimeOnly ",value);
+		    		
+	    			parent.parent.calgrid.reloadAll();
+	    			
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
         <method name="updateEventTime" args="d">
             //called by day (d);
             var h = d.calcHourFromY( bar.getAttributeRelative( 'y' , d) );
