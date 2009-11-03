@@ -31,7 +31,7 @@
         <simpleLabelButton labelid="789" name="_exitbtn" text_x="32"
         				   width="80" style="itemStyle" height="28">
         	<handler name="onclick">
-        		new lz.confirmtionSingle(canvas,{refObj:this,labelid:791,
+        		new lz.confirmationSingle(canvas,{refObj:this,labelid:791,
         				labeliderror:790,showCheckBox:false});
         	</handler>
         	<method name="sendConfirmation" args="confirm,bool">
@@ -138,7 +138,7 @@
         <simpleLabelButton labelid="789" name="_exitbtn" text_x="32"
         				   width="80" style="itemStyle" height="28">
         	<handler name="onclick">
-        		new lz.confirmtionSingle(canvas,{refObj:this,labelid:791,
+        		new lz.confirmationSingle(canvas,{refObj:this,labelid:791,
         				labeliderror:790,showCheckBox:false});
         	</handler>
         	<method name="sendConfirmation" args="confirm,bool">

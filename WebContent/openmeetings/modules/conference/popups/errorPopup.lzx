@@ -7,7 +7,9 @@
 
 	<attribute name="error" value="" type="string" />
 
-	<view y="24" width="318" height="130" x="2" clip="true">
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
 		<text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
 			multiline="true" width="312" selectable="true" />
 	</view>

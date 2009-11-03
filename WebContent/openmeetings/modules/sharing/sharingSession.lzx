@@ -215,7 +215,7 @@ setNewSource
     	if (this.sharerPublicSID == canvas.publicSID) {
     		this.destroy();
     	} else {
-    		new lz.confirmtionSingle(canvas,{labelid:746,refObj:this,labeliderror:745,showCheckBox:false});
+    		new lz.confirmationSingle(canvas,{labelid:746,refObj:this,labeliderror:745,showCheckBox:false});
     	}
     </method>  
     

@@ -141,6 +141,11 @@
         		
         		this.arrayMeetingMember = this.tabs.attendees.getMemberArrayValue();
         		
+        		if (this.arrayMeetingMember.length == 0) {
+        			new lz.labelerrorPopup(canvas,{errorlabelid:795});
+        			return;
+        		}
+        		
         		if (this.appointementId == "0" || this.appointementId == 0) {
         			if ($debug) Debug.write("ADD");
         			this.saveAppointment.doCall();
@@ -219,6 +224,22 @@
 		    		
 	    			parent.parent.parent.calgrid.reloadAll();
 	    			
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
+	    <!--
+        	public Long deleteAppointment(String SID,Long appointmentId){
+         -->
+	    <netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return Number(parent.parent.appointementId);</method></netparam>	
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("deleteAppointment ",value);
+		    		canvas.eventDataMgr.deleteEvent();
+		    		parent.parent.parent.calgrid.reloadAll();
 	    		 ]]>
 	    	</handler>
 	    </netRemoteCallHib> 
@@ -637,8 +658,23 @@
                 </handler>
             </calButton>
                 
-            <calButton label="Delete" x="${parent.width - width - 15}" y="13"
-                       onclick="canvas.eventDataMgr.deleteEvent()"/>
+                
+            
+            <calButton label="Delete" x="${parent.width - width - 15}" y="13">
+            	<handler name="onclick" args="c">
+            		
+            		if (Number(parent.parent.appointementId) == 0) {
+            			canvas.eventDataMgr.deleteEvent();
+            		} else {
+            			new lz.confirmationSingle(canvas,{refObj:this,labelid:797,
+            						showCheckBox:false,labeliderror:796});
+            		}
+            	</handler>
+            	<method name="sendConfirmation" args="refObj,t">
+            		parent.parent.deleteAppointment.doCall();
+            	</method>
+            </calButton>
+            
         </view>
 
         <!-- ANIMATORS -->
@@ -688,7 +724,6 @@
             this.slideopen1.doStart();
             this.slideopen2.doStart();
             this.opened = true;
-
         </method>
 
         <method name="close" args="v">

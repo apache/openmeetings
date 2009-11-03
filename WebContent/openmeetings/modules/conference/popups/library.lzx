@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+	<resource name="warning_icon_rsc" src="resources/messagebox_warning.png" />
     
     <include href="rpcerrorDialog.lzx" />
     <include href="loginScreen.lzx" />
@@ -9,7 +11,7 @@
     <include href="headerMenu.lzx" />
     <include href="confirmationBox.lzx" />
     <include href="editWhiteboardDefault.lzx" />
-	<include href="confirmtionSingle.lzx" />
+	<include href="confirmationSingle.lzx" />
     <include href="autoLoader.lzx" />
     <include href="converterPopup.lzx" />
     <include href="errorModeratorPopup.lzx" />

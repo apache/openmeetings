@@ -93,9 +93,9 @@
 				//this case will never happen
 				this.loadWmlObject.doCall();
 			} else if (storedImageDate["askagainclear"]){
-				new lz.confirmtionSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
+				new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
 			} else {
-				new lz.confirmtionSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
+				new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:210,labeliderror:211,refObj:this});
 			}
 			]]>
 		</method>

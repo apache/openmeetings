@@ -9,10 +9,10 @@
                                          "September","October", "November",
                                          "December" ]'/>
                                          
-<class name="lzCalendar" extends="baseContentView" height="640">
+<class name="lzCalendar" extends="baseContentView" height="570">
 	
 	<handler name="oninit">
-		this.setAttribute("height",640);
+		this.setAttribute("height",570);
 	</handler>
 	
 	<dateSelector name="_calendar" y="0" x="2">
@@ -92,7 +92,7 @@
           width="${parent.width}"/>
 </class>
 
-<class name="lzCalendarContent" extends="view" width="935" height="640">
+<class name="lzCalendarContent" extends="view" width="935" height="570">
 	
 	<handler name="oninit">
 		this.toppanel.slideInTopPanel.doStart();
@@ -151,9 +151,15 @@
 
             <calButton label="Add Event" x="$once{ parent.width - 100 }" y="6">
             	<handler name="onclick">
-            		canvas.eventDataMgr.addEvent(); 
-					parent.parent.parent.cal_interior.infopanel.open(); 
-					parent.parent.parent.cal_interior.infopanel.setAttribute('dataapply', false);
+            		if (parent.parent.parent.eventselector.checkSaved()) {
+	            		canvas.eventDataMgr.addEvent(); 
+						parent.parent.parent.cal_interior.infopanel.open(); 
+						parent.parent.parent.cal_interior.infopanel.setAttribute('dataapply', false);
+            		} else {
+            			//Check Warning
+            			if ($debug) Debug.warn("Unsaved Item - Show warning");
+            			new lz.labelerrorPopup(canvas,{errorlabelid:794});
+            		}
             	</handler>
             </calButton>
             

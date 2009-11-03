@@ -35,6 +35,29 @@
         
         <attribute name="startDate2" value="null" />
         <attribute name="endDate2" value="null" />
+        
+        <method name="checkSaved">
+        	<![CDATA[
+        	
+        		if (this.bar.visible) {
+	        		if ($debug) Debug.write("checkSaved ",this.datapath);
+	        		
+	        		var appointementId = this.datapath.xpathQuery("appointementId/@value");
+	        	
+	        		if ($debug) Debug.write("appointementId ",appointementId);
+	        		
+	        		if (Number(appointementId) == 0) {
+	        			return false;
+	        		} else {
+	        			return true;
+	        		}
+	        		
+        		} else {
+        			if ($debug) Debug.write("Not visible eventSelectorbar");
+        			return true;
+        		}
+        	]]>
+        </method>
 
         <view name="bar" pixellock="false" bgcolor="white" visible="false"
               onmousedown="parent.domousedown()"

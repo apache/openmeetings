@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="confirmtionSingle" extends="labelExplorerBox" labelid="18"
+<class name="confirmationSingle" extends="labelExplorerBox" labelid="18"
     docking="true" resizeable="false" closable="true" height="140" width="300">
     
     <attribute name="refObj" value="null" />
@@ -10,8 +10,11 @@
     
     <attribute name="labeliderror" value="0" type="number" />
     
-    <labelText labelid="$once{ parent.labeliderror }" width="$once{ parent.width - 2 }" x="1"
-    	y="22" multiline="true" resize="false"/>
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText labelid="$once{ parent.labeliderror }" y="24" 
+    		   width="$once{ parent.width - 40 }"
+    	multiline="true" resize="false" x="30" />
         
     <handler name="oninit">
         <![CDATA[
@@ -25,20 +28,25 @@
             if ($debug) Debug.write("1",x,y,newx,newy);
             
             if (newx < 0) {
-                newx = 0;
+                newx = 20;
             }
-            if (newx+this.width > parent.width) {
-            	newx = parent.width - this.width - 20;
-            }
-             
             if (newy < 0) {
-                newy = 0;
+                newy = 20;
+            }
+            
+            if (this.width + newx + 20 > parent.width) {
+            	newx = parent.width-this.width-20;
+            }
+            
+            if (this.height + newy + 20 > parent.height) {
+            	newy = parent.height-this.height-20;
             }
             
             if ($debug) Debug.write("2",newx,newy);
             
             this.setAttribute("x",newx);
             this.setAttribute("y",newy);
+            
         ]]>
     </handler>
     

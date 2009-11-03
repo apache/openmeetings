@@ -29,7 +29,7 @@
     <simpleLabelButton labelid="603" >
         <handler name="onclick">
             if ($debug) Debug.write("onclick ",this);
-            new lz.confirmtionSingle(canvas.main_content._content.inner,{labelid:604,labeliderror:605,refObj:this,showCheckBox:false});
+            new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:604,labeliderror:605,refObj:this,showCheckBox:false});
         </handler>
         <method name="sendConfirmation" args="yesno" >
 	        if ($debug) Debug.write("Kick that User");

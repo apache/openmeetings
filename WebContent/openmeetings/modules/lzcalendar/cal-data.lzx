@@ -257,6 +257,7 @@
 
             if ($debug) Debug.write("Add the event ");
             
+            
             // Add the event
             currenteventDP.setNodeAttribute( "selected" , 'false' );
             

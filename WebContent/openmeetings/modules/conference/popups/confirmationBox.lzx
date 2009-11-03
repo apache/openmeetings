@@ -9,9 +9,12 @@
     <attribute name="labeliderror" value="0" type="number" />
     
     <attribute name="doAskAgain" value="true" type="boolean" />
-    
-    <labelText labelid="$once{ parent.labeliderror }" width="400"
-    	y="22" multiline="true" resize="false"/>
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText labelid="$once{ parent.labeliderror }" y="24" 
+    		   width="$once{ parent.width - 40 }"
+    	multiline="true" resize="false" x="30" />
     
     <labelCheckbox name="holddatainSO" 
     			   visibility="$once{ (parent.doAskAgain) ? 'visible' : 'hidden' }" 
