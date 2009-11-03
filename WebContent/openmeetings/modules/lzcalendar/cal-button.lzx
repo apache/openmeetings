@@ -20,6 +20,13 @@
         <attribute name="keepinitialwidth"   value="false"/>
         <attribute name="enabled"            value="true" />
         <attribute name="mouseisdown"        value="false"/>
+        
+    	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+		<method name="setLabelId" args="_labelid" >
+			this.labelid = _labelid;
+			this.setAttribute('label',canvas.getLabelName(this.labelid));
+		</method>
+	
         <event name="onsafeclick"/>        
 
         <setter name="width" args="w">

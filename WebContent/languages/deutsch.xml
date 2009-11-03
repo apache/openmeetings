@@ -874,13 +874,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dateien</value>
   </string>
   <string id="290" name="subnavi">
-    <value>Meine Übesicht</value>
+    <value>Meine Übersicht</value>
   </string>
   <string id="291" name="subnavi">
-    <value>meine Meetings</value>
+    <value>Meetings planen</value>
   </string>
   <string id="292" name="subnavi">
-    <value>meine Events</value>
+    <value>Meine Events</value>
   </string>
   <string id="293" name="subnavi">
     <value>Öffentliche Meetings</value>
@@ -1126,7 +1126,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Sound an/ausschalten</value>
   </string>
   <string id="374" name="dashboard">
-    <value>System</value>
+    <value>Übersicht</value>
   </string>
   <string id="375" name="dashboard">
     <value>Ihr Profil</value>
@@ -2304,10 +2304,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="766" name="test setup">
     <value>Stop</value>
   </string>
-  <string id="767" name="test setup">
+  <string id="767" name="767">
     <value>Lautstärke</value>
   </string>
-    <string id="768" name="start view">
+  <string id="768" name="start view">
     <value>Start drücken</value>
   </string>
   <string id="769" name="start view">
@@ -2341,13 +2341,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Öffentliche Räume können von allen Benutzern benutzt werden.</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Räume</value>
+    <value>Gruppenräume</value>
   </string>
   <string id="780" name="Private Rooms">
     <value>Private Räume sind nur für Benutzer in der selben Organisation verfügbar.</value>
   </string>
   <string id="781" name="overview room">
-    <value>Meine Räume</value>
+    <value>Private Räume</value>
   </string>
   <string id="782" name="overview room">
     <value>Räume in diesem Bereich sind für den persönlichen Bedarf. Die Räume haben ein Start und Enddatum und stehen nur in diesem Zeitraum zur Verfügung.</value>
@@ -2384,5 +2384,35 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="793" name="main menu">
     <value>Wählen Sie einen Raum für die Konferenz aus</value>
+  </string>
+  <string id="794" name="calendar">
+    <value>Es ist ein nicht gespeichertes Event im Kalender. Speichern Sie es oder löschen Sie es wieder.</value>
+  </string>
+  <string id="795" name="calendar">
+    <value>Bitte fügen Sie mindestens einen Teilnehmer zum Event.</value>
+  </string>
+  <string id="796" name="calendar">
+    <value>Soll dieses Event wirklich aus dem Kalender gelöscht werden?</value>
+  </string>
+  <string id="797" name="calendar">
+    <value>Warnung</value>
+  </string>
+  <string id="798" name="calendar">
+    <value>Neues Event</value>
+  </string>
+  <string id="799" name="calendar">
+    <value>Tag</value>
+  </string>
+  <string id="800" name="calendar">
+    <value>Woche</value>
+  </string>
+  <string id="801" name="calendar">
+    <value>Monat</value>
+  </string>
+  <string id="802" name="calendar">
+    <value>Beschreibung</value>
+  </string>
+  <string id="803" name="calendar">
+    <value>Teilnehmer</value>
   </string>
 </language>

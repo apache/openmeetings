@@ -105,12 +105,12 @@
              -->
 
             <view name="viewbuttons" x="2" y="6">
-                <calButton rightcap="shear" icon="iconDay"
-                           onclick="parent.parent.parent.parent.calgrid.showdayview()" label="day" />
-                <calButton leftcap="shear"  rightcap="shear"  icon="iconWeek"
-                           onclick="parent.parent.parent.parent.calgrid.showweekview()" label="week" />
-                <calButton leftcap="shear"  icon="iconMonth" 
-                           onclick="parent.parent.parent.parent.calgrid.showmonthview(true)"  label="month"/>
+                <calButton rightcap="shear" icon="iconDay" labelid="799"
+                           onclick="parent.parent.parent.parent.calgrid.showdayview()" />
+                <calButton leftcap="shear"  rightcap="shear"  icon="iconWeek" labelid="800"
+                           onclick="parent.parent.parent.parent.calgrid.showweekview()" />
+                <calButton leftcap="shear"  icon="iconMonth" labelid="801"
+                           onclick="parent.parent.parent.parent.calgrid.showmonthview(true)" />
                 <simplelayout axis="x"/>
             </view>
 
@@ -133,7 +133,7 @@
                 </handler>
             </text>
 
-            <calButton label="Add Event" x="$once{ parent.width - 100 }" y="6">
+            <calButton labelid="798" x="$once{ parent.width - 100 }" y="6">
             	<handler name="onclick">
             		if (parent.parent.parent.eventselector.checkSaved()) {
 	            		canvas.eventDataMgr.addEvent(); 

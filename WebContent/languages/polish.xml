@@ -2459,4 +2459,34 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="793" name="main menu">
     <value>Choose a room for a meeting</value>
   </string>
+  <string id="794" name="calendar">
+    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+  </string>
+  <string id="795" name="calendar">
+    <value>Please add at least one attendee for your meeting!</value>
+  </string>
+  <string id="796" name="calendar">
+    <value>Do you really want to delete this Event?</value>
+  </string>
+  <string id="797" name="calendar">
+    <value>Warning</value>
+  </string>
+  <string id="798" name="calendar">
+    <value>Add Event</value>
+  </string>
+  <string id="799" name="calendar">
+    <value>day</value>
+  </string>
+  <string id="800" name="calendar">
+    <value>week</value>
+  </string>
+  <string id="801" name="calendar">
+    <value>month</value>
+  </string>
+  <string id="802" name="calendar">
+    <value>Description</value>
+  </string>
+  <string id="803" name="calendar">
+    <value>Attendees</value>
+  </string>
 </language>

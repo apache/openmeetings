@@ -2335,4 +2335,85 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="776" name="test setup">
     <value>لا تظهر فحص صوت / صورة (تسجيل) قبل دخول المؤتمر </value>
   </string>
+  <string id="777" name="overview room">
+    <value>Public Rooms</value>
+  </string>
+  <string id="778" name="overview room">
+    <value>Public Rooms are accessible for all Users.</value>
+  </string>
+  <string id="779" name="overview room">
+    <value>Private Rooms</value>
+  </string>
+  <string id="780" name="Private Rooms">
+    <value>Private Rooms are only accessible for users of the same organization.</value>
+  </string>
+  <string id="781" name="overview room">
+    <value>My Rooms</value>
+  </string>
+  <string id="782" name="overview room">
+    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+  </string>
+  <string id="783" name="restricted room">
+    <value>You have to be moderator to do this.</value>
+  </string>
+  <string id="784" name="menu option">
+    <value>Apply for moderation</value>
+  </string>
+  <string id="785" name="menu option">
+    <value>Apply for whiteboard access</value>
+  </string>
+  <string id="786" name="menu option">
+    <value>Apply for camera/microphone access</value>
+  </string>
+  <string id="787" name="error message soap secure login">
+    <value>This Session Hash was already used. You cannot use it twice.</value>
+  </string>
+  <string id="788" name="dashboard button">
+    <value>START</value>
+  </string>
+  <string id="789" name="exit conference">
+    <value>EXIT</value>
+  </string>
+  <string id="790" name="conference view">
+    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+  </string>
+  <string id="791" name="conference view">
+    <value>Exit conference</value>
+  </string>
+  <string id="792" name="main menu">
+    <value>Rooms</value>
+  </string>
+  <string id="793" name="main menu">
+    <value>Choose a room for a meeting</value>
+  </string>
+  <string id="794" name="calendar">
+    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+  </string>
+  <string id="795" name="calendar">
+    <value>Please add at least one attendee for your meeting!</value>
+  </string>
+  <string id="796" name="calendar">
+    <value>Do you really want to delete this Event?</value>
+  </string>
+  <string id="797" name="calendar">
+    <value>Warning</value>
+  </string>
+  <string id="798" name="calendar">
+    <value>Add Event</value>
+  </string>
+  <string id="799" name="calendar">
+    <value>day</value>
+  </string>
+  <string id="800" name="calendar">
+    <value>week</value>
+  </string>
+  <string id="801" name="calendar">
+    <value>month</value>
+  </string>
+  <string id="802" name="calendar">
+    <value>Description</value>
+  </string>
+  <string id="803" name="calendar">
+    <value>Attendees</value>
+  </string>
 </language>

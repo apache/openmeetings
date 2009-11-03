@@ -335,7 +335,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="600" type="number" />    
+    	<attribute name="max" value="700" type="number" />    
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 

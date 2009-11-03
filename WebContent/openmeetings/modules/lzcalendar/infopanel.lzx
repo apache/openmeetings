@@ -21,6 +21,12 @@
         <attribute name="label" type="string" />
         <attribute name="defaultplacement" value="interior" type="string"/>
 
+		<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+		<method name="setLabelId" args="_labelid" >
+			this.labelid = _labelid;
+			this.setAttribute('label',canvas.getLabelName(this.labelid));
+		</method>
+		
         <!-- VIEWS -->
         <view name="top" bgcolor="0xEEF0EB"
             width="${immediateparent.width}" height="${parent.minheight}"
@@ -422,7 +428,7 @@
         <basetabslider name="tabs" height="365" width="100%" y="${parent.summary.height + 4}" pixellock="true"
             slideduration="200" mintabheight="20" oninit="this.openTab(this.notes,true)" >
 
-            <infoTab name="notes" label="Notes" pixellock="true">
+            <infoTab name="notes" labelid="802" pixellock="true">
             	
             	<handler name="oninit">
             		this.getAppointmentReminderTypList.doCall();
@@ -495,7 +501,7 @@
                     
             </infoTab>
             
-            <infoTab name="attendees" label="Attendees" pixellock="true">
+            <infoTab name="attendees" labelid="803" pixellock="true">
             	
             	<calButton label="Add Attendee" x="2" y="2">
 	            	<handler name="onclick">
