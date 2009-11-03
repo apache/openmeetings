@@ -36,7 +36,7 @@
             <view name="bline" height="1" width="${parent.width}"
                 bgcolor="0xC6C7C4" y="${parent.height - 1}"  />
             <text name="ttl" width="150" x="5" y="1"
-                fgcolor="#898B86" pixellock="true"  >
+                fgcolor="#666666" pixellock="true"  >
                 <attribute name="text" value="${classroot.label}"/>
             </text>
             <view name="arrowref" resource="tabarrow"
@@ -191,6 +191,7 @@
         		
 		    		//dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
 		    		
+		    		canvas.eventDataMgr.deleteEvent();
 		    		parent.parent.parent.calgrid.reloadAll();
 	    		 ]]>
 	    	</handler>
@@ -228,6 +229,7 @@
         		
 		    		//dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
 		    		
+	    			canvas.eventDataMgr.deleteEvent();
 	    			parent.parent.parent.calgrid.reloadAll();
 	    			
 	    		 ]]>

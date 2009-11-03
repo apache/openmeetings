@@ -43,9 +43,9 @@ of the red5-servlet
 <!--
 	These colors are the main colors and style the hole application
  -->
-<basebgcolorizer>0x2184C5</basebgcolorizer>
-<baseMousecolorizer>0x62AEE1</baseMousecolorizer>
-<baseMouseOvercolorizer>0x62AEE1</baseMouseOvercolorizer>
+<basebgcolorizer>0x67B3E4</basebgcolorizer>
+<baseMousecolorizer>0x7DBEE8</baseMousecolorizer>
+<baseMouseOvercolorizer>0x7DBEE8</baseMouseOvercolorizer>
     
 <!--
     Name of the Application
