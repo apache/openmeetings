@@ -16,7 +16,12 @@
 	</handler>
 	
 	<dateSelector name="_calendar" y="0" x="2">
-		<handler name="ondoubleselect">
+		<handler name="onselect">
+			
+			if (!parent.lzCalendarContent.isloaded) {
+				return;
+			}
+			
 			if (parent.lzCalendarContent.eventselector.checkSaved()) {
  				parent.lzCalendarContent.calgrid.setMonthAndYear(this.selecteddate.getMonth(),this.selecteddate.getFullYear());
 			} else {
@@ -83,6 +88,8 @@
 </class>
 
 <class name="lzCalendarContent" extends="view" width="935" height="570">
+	
+	<attribute name="isloaded" value="false" type="boolean" />
 	
 	<handler name="oninit">
 		this.toppanel.slideInTopPanel.doStart();
@@ -171,9 +178,13 @@
         <attribute name="viewstyle" type="string" value="month"/>
 
         <animator name="fadeUp" attribute="opacity"
-                  onstop="parent.parent.dayselectorlook.setAttribute('opacity', 1 )"
                   duration="1000" from="0" to="1"
-                  start="false"/>
+                  start="false">
+        	<handler name="onstop" args="t">
+        		parent.parent.isloaded = true;
+        		parent.parent.dayselectorlook.setAttribute('opacity', 1 );
+        	</handler>
+        </animator>
 
         <info_Panel name="infopanel" x="830" width="203"
                     height="516" visible="false" initstage="late" 
