@@ -492,7 +492,7 @@
 	    		 	<!--textitmes-->
 	    		 	<labeldTextListItem labelid="647" value="1"/>
 	    			<labeldTextListItem labelid="648" value="2"/>
-	    			<labeldTextListItem labelid="648" value="3"/>
+	    			<labeldTextListItem labelid="808" value="3"/>
 			 	</resetCombobox> 
 		 	
                 <!-- fixed size input text is best for large multiline text,

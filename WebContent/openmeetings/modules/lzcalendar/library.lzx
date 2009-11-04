@@ -2,7 +2,7 @@
 <library>
 	
     <include href="resources.lzx"/>
-    <include href="cal-button.lzx" />
+    
 
     <include href="gridsliderlayout.lzx"/>
     <include href="basepanel.lzx" />

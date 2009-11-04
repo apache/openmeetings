@@ -2424,4 +2424,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="803" name="calendar">
     <value>Attendees</value>
   </string>
+  <string id="804" name="dashboard">
+    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+  </string>
+  <string id="805" name="dashboard">
+    <value>Plan a Meeting</value>
+  </string>
+  <string id="806" name="lzcalendar">
+    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+  </string>
+  <string id="807" name="lzcalendar">
+    <value>Need help?</value>
+  </string>
+  <string id="808" name="lzcalendar">
+    <value>Restricted</value>
+  </string>
 </language>

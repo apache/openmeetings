@@ -3,6 +3,8 @@
     <!-- RESOURCES Menubar -->
     <resource src="images/menubar/mainbar-overlay.png"  name="menubar"/>
     <resource src="images/menubar/logo.png" name="logo"/>
+    
+    <resource name="messagebox_info_rsc" src="images/messagebox_info.png" />
 
     <!-- RESOURCES Days of week -->
     <resource src="images/days-of-week/sun.png"      name="sunday_label"/>

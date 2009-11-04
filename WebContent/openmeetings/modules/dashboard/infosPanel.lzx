@@ -45,9 +45,11 @@
         
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773" />
         
+        <labelText labelid="804" x="10" y="$once{ parent.height-80 }" multiline="true"
+        		   width="$once{ parent.width-210 }" />
         
         <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-80 }" height="78" 
+               y="$once{ parent.height-80 }" height="38" 
                onclick="this.parent.storeSettings();">
             <view resource="test_setup_start_conference_rsc" x="20" valign="middle" />
             <handler name="onclick">
@@ -55,6 +57,17 @@
             </handler>
             <labelTooltip labelid="769" />
         </simpleLabelButton>
+        
+        <simpleLabelButton labelid="805" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-40 }" height="38" 
+               onclick="this.parent.storeSettings();">
+            <view resource="test_setup_start_conference_rsc" x="20" valign="middle" />
+            <handler name="onclick">
+                quicklink('dashboardModuleCalendar');
+            </handler>
+            <labelTooltip labelid="805" />
+        </simpleLabelButton>
+        
         
         <!--
         <view resource="icon_btn_dashboard_1" y="30" x="10" />

@@ -133,10 +133,28 @@
         <method name="doAction" args="action">
             <![CDATA[
                 for (var i=0;i<this.subviews.length;i++) {
+                	
+                	if ($debug) Debug.write("this.subviews[i] ",this.subviews[i].action);
+                	
                     if (this.subviews[i].action == action) {
                         this.subviews[i].onclick.sendEvent();
                         return true;
                     }
+                }
+                
+                for (var j=0;j<parent.subitemlist.subviews.length;j++) {
+                	
+                	var container = parent.subitemlist.subviews[j];
+                	
+                	for (var k=0;k<container.subviews.length;k++) {
+                		
+                		if ($debug) Debug.write("ontainer.subviews[i] ",container.subviews[k].action);
+                	
+	                    if (container.subviews[k].action == action) {
+	                        container.subviews[k].onclick.sendEvent();
+	                        return true;
+	                    }
+                	}
                 }
             ]]>
         </method>

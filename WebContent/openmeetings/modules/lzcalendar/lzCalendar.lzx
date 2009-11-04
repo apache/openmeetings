@@ -27,6 +27,12 @@
 		</handler> 
 	</dateSelector> 
 	
+	<view resource="messagebox_info_rsc" x="10" y="144" />
+	
+	<labelText labelid="807" x="36" y="148" fontstyle="bold" />
+	
+	<labelText labelid="806" x="10" y="170" multiline="true" width="190" />
+	
 	<lzCalendarContent name="lzCalendarContent" x="206">
 		<handler name="oninit">
 			canvas.eventDataMgr.lzCalendarContent = this;

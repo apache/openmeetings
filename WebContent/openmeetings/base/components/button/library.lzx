@@ -2,6 +2,7 @@
 <library>
 
     <include href="incubator/roundrectbutton.lzx" />
+    <include href="cal-button.lzx" />
     
 	<include href="aquaButton.lzx" />
 	<include href="blueButton.lzx" />

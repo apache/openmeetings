@@ -31,7 +31,7 @@
     	<handler name="ondata" args="value">
     		<![CDATA[
 				if($debug) Debug.write("dashboard/getUserSelf: ",value);
-				parent._username.setAttribute('text',canvas.getLabelName(376)+value.login);
+				parent._username.setAttribute('text',canvas.getLabelName(376)+" "+value.firstname+' '+value.lastname);
 				if (value.pictureuri==null || value.pictureuri.length==0){
 					value.pictureuri = "d.jpg";
 				} else {
@@ -59,7 +59,7 @@
     <simpleLabelButton y="70" labelid="377" x="150" width="140"
         onclick="quicklinkAct('userSettingsModule')" />  
              
-    <labelText fontstyle="bold" x="2" y="110" labelid="281" width="200"/>
+    <labelText fontstyle="bold" x="2" y="124" labelid="281" width="200"/>
     
     <labelText name="homepage" x="2" y="140" width="290" multiline="true" >
         <attribute name="link" type="string" value="" />

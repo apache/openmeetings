@@ -16,7 +16,7 @@
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<!--  for performance reasons changed to MyISAM from org.hibernate.dialect.MySQLInnoDBDialect -->
 		<property name="dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>
-		<property name="connection.url">jdbc:mysql://localhost/openmeetings_act2win_10?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8</property>	
+		<property name="connection.url">jdbc:mysql://localhost/openmeetings_act2win_11?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8</property>	
 		
 		<property name="hibernate.connection.CharSet">utf8</property>
 		<property name="hibernate.connection.characterEncoding">utf8</property>

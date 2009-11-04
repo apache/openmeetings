@@ -2415,4 +2415,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="803" name="calendar">
     <value>Teilnehmer</value>
   </string>
+  <string id="804" name="dashboard">
+    <value>OpenMeetings, Ihre Web Conferencing Platform. Entweder starten Sie sofort ein Meeting indem sie den 1-2-3 Anweisungen folgen oder Sie benutzen den Kalender um eine Konferenz zu planen.</value>
+  </string>
+  <string id="805" name="dashboard">
+    <value>Konferenz planen</value>
+  </string>
+  <string id="806" name="lzcalendar">
+    <value>Um eine Konferenz zu planen können Sie ein Event im Kalender hinzufügen. Für jedes Kalender Event wird automatisch ein Konferenzraum angelegt.&lt;br/&gt;&lt;br/&gt;Sie können beim Anlegen der Konferenz zwischen unterschiedlichen Raumtypen wählen. Jeder Raumtyp hat ein leicht anderes Layout und Moderations-System. Sie können außerdem für jedes Event ein eigene Email-Erinnerung wählen.</value>
+  </string>
+  <string id="807" name="lzcalendar">
+    <value>Brauchen Sie Hilfe?</value>
+  </string>
+  <string id="808" name="lzcalendar">
+    <value>Eingeschränkt</value>
+  </string>
 </language>
