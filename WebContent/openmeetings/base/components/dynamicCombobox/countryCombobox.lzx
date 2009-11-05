@@ -9,6 +9,7 @@
     <attribute name="doUpdate" value="false" type="boolean"/>
     
     <handler name="onselect" args="sel">
+        if ($debug) Debug.write("onselect ",sel,this.refObj,this.doUpdate);
     	if (this.refObj != null) {
     		if (this.doUpdate) {
     			
@@ -19,6 +20,10 @@
     			
     		}
     	}
+    </handler>
+    
+    <handler name="onopen" args="o">
+        if ($debug) Debug.write("onopen ",o);
     </handler>
     
     <labeldTextListItem datapath="countrySet:/item" text="$path{ 'name/text()' }" 

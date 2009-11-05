@@ -1076,18 +1076,22 @@ public class Usermanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 				Long returnLong = null;
-				Users user = (Users) CastMapToObject.getInstance().castByGivenObject(values, Users.class);
 	
-				if (user.getUser_id() != null && user.getUser_id()>0) {					
+				Long user_id = Long.parseLong(values.get("user_id").toString());
+				
+				if (user_id != null && user_id >0) {					
 					
-					returnLong = user.getUser_id();
-					Users savedUser = UsersDaoImpl.getInstance().getUser(user.getUser_id());
-					savedUser.setAge(user.getAge());
-					savedUser.setFirstname(user.getFirstname());
-					savedUser.setLastname(user.getLastname());
-					savedUser.setTitle_id(user.getTitle_id());
-					if (user.getPassword().length()>3){
-						savedUser.setPassword(ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(user.getPassword()));
+					returnLong = user_id;
+					Users savedUser = UsersDaoImpl.getInstance().getUser(user_id);
+					savedUser.setAge((Date) values.get("age"));
+					savedUser.setFirstname(values.get("firstname").toString());
+					savedUser.setLastname(values.get("firstname").toString());
+					savedUser.setTitle_id(Integer.parseInt(values.get("title_id").toString()));
+					
+					String password = values.get("password").toString();
+					
+					if (password.length()>3){
+						savedUser.setPassword(ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(password));
 					}
 					
 					String email = values.get("email").toString();
@@ -1100,20 +1104,24 @@ public class Usermanagement {
 							returnLong = new Long(-11);
 						}
 						else{
-							user.getAdresses().setEmail(email);
 							savedUser.getAdresses().setEmail(email);
 						}
 					}			
 					
 					String phone = values.get("phone").toString();
-					user.getAdresses().setPhone(phone);
 					savedUser.getAdresses().setPhone(phone);
+					savedUser.getAdresses().setComment(values.get("comment").toString());
+					savedUser.getAdresses().setStreet(values.get("street").toString());
+					savedUser.getAdresses().setTown(values.get("town").toString());
+					savedUser.getAdresses().setAdditionalname(values.get("additionalname").toString());
+					savedUser.getAdresses().setZip(values.get("zip").toString());
+					
+					savedUser.getAdresses().setStates(Statemanagement.getInstance().getStateById(Long.parseLong(values.get("state_id").toString())));
+					
+					//Addressmanagement.getInstance().updateAdress(savedUser.getAdresses());
 					
 					
-					Addressmanagement.getInstance().updateAdress(user.getAdresses());
-					
-					
-					savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
+					//savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
 					
 					Object idf = HibernateUtil.createSession();
 					Session session = HibernateUtil.getSession();

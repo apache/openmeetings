@@ -88,16 +88,17 @@
             } else {
                 this.parent.userObj.password = '';
             }
+            
   			this.parent.userObj.firstname = this.parent.firstname.getText();
   			this.parent.userObj.lastname = this.parent.lastname.getText();
   			this.parent.userObj.email = this.parent.email.getText();
   			this.parent.userObj.phone = this.parent.phone.getText();
-  			this.parent.userObj.adresses.street = this.parent.street.getText();
-  			this.parent.userObj.adresses.additionalname = this.parent.house.getText();
-  			this.parent.userObj.adresses.zip = this.parent.zip.getText();
-  			this.parent.userObj.adresses.town = this.parent.town.getText();
-  			this.parent.userObj.adresses.states.state_id = this.parent.state.getValue();
-  			this.parent.userObj.adresses.comment = this.parent.adress_comment.getText();
+  			this.parent.userObj.street = this.parent.street.getText();
+  			this.parent.userObj.additionalname = this.parent.house.getText();
+  			this.parent.userObj.zip = this.parent.zip.getText();
+  			this.parent.userObj.town = this.parent.town.getText();
+  			this.parent.userObj.state_id = this.parent.state.getValue();
+  			this.parent.userObj.comment = this.parent.adress_comment.getText();
             this.parent.userObj.age = this.parent.age.getDate();
 			this.parent.userObj.title_id = Number(this.parent.salutation.getValue());
             
@@ -174,9 +175,13 @@
          
     <!-- 141:Country -->
     <labelText labelid="141" width="200" y="340" resize="false" x="2"/>  
+        <dynamicCombobox name="state" width="270" y="340" x="120"
+                         text="Switzerland" value="204" />
+                         
+                         <!--
 		<validText name="state" width="270" y="340" x="120" fontsize="11" 
             shownitems="7" validate_method="$once{ canvas.validateCountry }" 
-            resultId="state_id" resultName="name" />
+            resultId="state_id" resultName="name" /> -->
 			
 	 
     <!-- 142:Adress-Info -->
