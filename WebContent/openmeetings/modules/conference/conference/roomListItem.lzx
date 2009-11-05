@@ -106,7 +106,7 @@
 			//if ($debug) Debug.write("hib.conferencedomain: ", hib.conferencedomain);
 
 			if ($debug) Debug.write("Test Setup ",this.roomClassName);
-			
+            
 			new lz.testSetup(canvas,{roomClassName:this.roomClassName,roomObj:roomObj});
 			
 		</method>

@@ -17,6 +17,7 @@ public class SOAPLogin {
 	private Boolean used;
 	private Date useDate;
 	private Boolean becomemoderator;
+	private Boolean showAudioVideoTest;
 	
 	/**
      * 
@@ -113,6 +114,18 @@ public class SOAPLogin {
 	}
 	public void setBecomemoderator(Boolean becomemoderator) {
 		this.becomemoderator = becomemoderator;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="showaudiovideotest"
+     *  type="boolean"
+     */
+	public Boolean getShowAudioVideoTest() {
+		return showAudioVideoTest;
+	}
+	public void setShowAudioVideoTest(Boolean showAudioVideoTest) {
+		this.showAudioVideoTest = showAudioVideoTest;
 	}
 	
 }

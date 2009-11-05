@@ -193,7 +193,7 @@ public class UserService {
 	
 	public String setUserObjectAndGenerateRoomHash(String SID, String username, String firstname, String lastname, 
 			String profilePictureUrl, String email, Long externalUserId, String externalUserType,
-			Long room_id, int becomeModeratorAsInt){
+			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt){
 		log.debug("UserService.setUserObject");
 	     
 		try {
@@ -203,7 +203,6 @@ public class UserService {
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
-				
 				
 				log.debug("username "+username);
 				log.debug("firstname "+firstname);
@@ -227,7 +226,13 @@ public class UserService {
 					becomeModerator = true;
 				}
 				
-				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, becomeModerator);
+				boolean showAudioVideoTest = false;
+				if (showAudioVideoTestAsInt == 2) {
+					showAudioVideoTest = true;
+				}
+				
+				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, 
+															becomeModerator,showAudioVideoTest);
 				
 				if (hash != null) {
 					return hash;

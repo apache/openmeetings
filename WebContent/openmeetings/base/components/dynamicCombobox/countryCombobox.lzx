@@ -22,9 +22,24 @@
     	}
     </handler>
     
-    <handler name="onopen" args="o">
-        if ($debug) Debug.write("onopen ",o);
+    <handler name="onisopen" args="o">
+        if ($debug) Debug.write("on isopen ",o);
+        
+        if (!o) {
+            lz.Timer.addTimer( new LzDelegate( this, "removeItem" ), 200 );
+        }
     </handler>
+    
+    <!--
+        You can close the combobox without selection, for that purpose we need
+        another way to trigger a close event
+     -->
+    <method name="removeItem" args="o">
+        if (this.visibility == "visible") {
+	        this.setAttribute("visibility","hidden");
+	        this.doUpdate = false;
+        }
+    </method>
     
     <labeldTextListItem datapath="countrySet:/item" text="$path{ 'name/text()' }" 
                 value="$path{ 'state_id/text()' }" />

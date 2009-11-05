@@ -32,7 +32,8 @@ public class SOAPLoginDAO {
 		return instance;
 	}
 	
-	public String addSOAPLogin(String sessionHash, Long room_id, boolean becomemoderator) {
+	public String addSOAPLogin(String sessionHash, Long room_id, 
+				boolean becomemoderator, boolean showAudioVideoTest) {
 		try {
 			
 			String thistime = "TIME_"+(new Date().getTime());
@@ -50,6 +51,7 @@ public class SOAPLoginDAO {
 			soapLogin.setHash(hash);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
+			soapLogin.setShowAudioVideoTest(showAudioVideoTest);
 
 			Long soapLoginId = (Long) session.save(soapLogin);
 

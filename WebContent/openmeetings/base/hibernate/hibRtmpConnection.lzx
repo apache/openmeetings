@@ -263,6 +263,7 @@
 					
 					canvas.initroomid = value.room_id;
 					canvas.becomemoderator = value.becomemoderator;
+                    canvas.showAudioVideoTest = value.showAudioVideoTest;
 					
 					parent.getCurrentRoomClient.doCall();
 				}

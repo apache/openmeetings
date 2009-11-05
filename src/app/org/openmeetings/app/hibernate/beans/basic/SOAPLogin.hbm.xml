@@ -13,5 +13,6 @@
     <property name="used" type="boolean" column="used"/>
     <property name="useDate" type="java.util.Date" column="use_date"/>
     <property name="becomemoderator" type="boolean" column="becomemoderator"/>
+    <property name="showAudioVideoTest" type="boolean" column="showaudiovideotest"/>
   </class>
 </hibernate-mapping>

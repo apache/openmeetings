@@ -22,7 +22,7 @@
 </class>
 	
 	
-<class name="simpleValueList" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" >
+<class name="simpleValueList" extends="view" bgcolor="0x000000" >
 	
 	<attribute name="_selected" value="null" />
 	

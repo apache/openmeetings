@@ -51,6 +51,8 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="httpRootKey" value="/" type="string" />
 
+<attribute name="showAudioVideoTest" value="true" type="boolean" />
+
 <!--- Name of the Application -->
 <attribute name="currentappname" value="OpenMeetings" type="string" />   
 <attribute name="currentappnameurl" value="OpenMeetings" type="string" />   

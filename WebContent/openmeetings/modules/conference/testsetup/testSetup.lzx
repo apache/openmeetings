@@ -47,7 +47,9 @@ Test the setup values before you enter a room
             var g = t.getData('userdata');
             var save = g["showAudioVideoTest"];
     	    
-            if (!this.forceTest && save){
+            if (!canvas.showAudioVideoTest) {
+                this.startConference();
+            } else if (!this.forceTest && save){
             	this.startConference();
             } else {
             	
