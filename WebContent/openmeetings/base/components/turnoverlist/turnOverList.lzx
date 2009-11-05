@@ -13,14 +13,24 @@
 	<attribute name="asc" value="true" type="boolean" />
 	<attribute name="records" value="0" type="number" />
 	
+	<attribute name="_selected" value="null"/>
+	
 	<event name="oncallnext" />
 	<event name="oncallpre" />
-	<event name="onclickedItem" /><!-- args="obj" -->
+	<event name="ondblclickedItem" />
 	
 	<method name="callfirst">
 		this.start = 0;
 		this.oncallnext.sendEvent();
 	</method>
+	
+	<handler name="onclickedItem" args="itemObj">
+		if (this._selected != null) {
+			this._selected.deselect();
+		}
+		this._selected = itemObj;
+		this._selected.select();
+	</handler>
 	
 	<method name="calllast">
 		this.start = this.records-this.step;
@@ -82,6 +92,7 @@
 	</method>
 	
 	<method name="clearList">
+		this._selected = null;
 		this._innerlist._inn._inn.destroy();
 		new lz.innerList(this._innerlist._inn,{name:'_inn'});
 	</method>

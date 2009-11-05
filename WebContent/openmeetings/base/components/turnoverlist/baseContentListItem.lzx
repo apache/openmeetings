@@ -2,15 +2,41 @@
 <library>
 
 <!--- base class for the item list views-->
-<class name="baseContentListItem" extends="view" layout="axis:x;spacing:0" 
-	bgcolor="0xFFFFFF" 
-	onmouseover="this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer)" 
-	onmouseout="this.setAttribute('bgcolor',0xFFFFFF)" >
+<class name="baseContentListItem" extends="view" 
+	   layout="axis:x;spacing:0" bgcolor="0xFFFFFF" >
+	
+	<attribute name="selected" value="false" type="boolean"/>
+	
+	<method name="select">
+		this.selected = true;
+		this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+	</method>
+	
+	<method name="deselect">
+		this.selected = false;
+		this.setAttribute('bgcolor',0xFFFFFF);
+	</method>
+	
+	<handler name="onmouseover">
+		if (!this.selected) {
+			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+		}
+	</handler>
+	
+	<handler name="onmouseout">
+		if (!this.selected) {
+			this.setAttribute('bgcolor',0xFFFFFF);
+		}
+	</handler>
 	
 	<handler name="onclick">
 		this.parent.parent.parent.parent.onclickedItem.sendEvent(this);
 	</handler>
     
+    <handler name="ondblclick">
+		this.parent.parent.parent.parent.ondblclickedItem.sendEvent(this);
+	</handler>
+	
     <attribute name="obj" value="null" />
 
 </class>

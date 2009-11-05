@@ -44,6 +44,9 @@
 		</handler>
 	</lzCalendarContent>
 	
+	<view width="${ this.parent.width-206 }" height="1" 
+		  x="206" y="0" bgcolor="0xEEF0EB" />
+	
 </class>
 
 
@@ -66,20 +69,20 @@
                 }
             } ]]>
         </method>
-        <dayname name="sunday" resource="sunday_label" 
-        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - 63)/2.0}" />
-        <dayname name="monday"    resource="monday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - 63)/2.0}" />
-        <dayname name="tuesday"   resource="tuesday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - 63)/2.0}" />
-        <dayname name="wednesday" resource="wednesday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - 63)/2.0}" />
-        <dayname name="thursday"  resource="thursday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - 63)/2.0}" />
-        <dayname name="friday"    resource="friday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - 63)/2.0}" />
-        <dayname name="saturday"  resource="saturday_label"
-        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - 63)/2.0}" />
+        <labelText name="sunday" labelid="466" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - this.width)/2.0}" />
+        <labelText name="monday" labelid="460" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - this.width)/2.0}" />
+        <labelText name="tuesday" labelid="461" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - this.width)/2.0}" />
+        <labelText name="wednesday" labelid="462" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - this.width)/2.0}" />
+        <labelText name="thursday" labelid="463" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - this.width)/2.0}" />
+        <labelText name="friday" labelid="464" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - this.width)/2.0}" />
+        <labelText name="saturday" labelid="465" fontsize="10" fgcolor="0xEEF0EB"
+        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - this.width)/2.0}" />
 
 
     </view>
@@ -92,6 +95,13 @@
 	<attribute name="isloaded" value="false" type="boolean" />
 	
 	<handler name="oninit">
+		canvas.calMonths = [canvas.getLabelName(469),canvas.getLabelName(470),
+								canvas.getLabelName(471),canvas.getLabelName(472),
+								canvas.getLabelName(473),canvas.getLabelName(474),
+								canvas.getLabelName(475),canvas.getLabelName(476),
+								canvas.getLabelName(477),canvas.getLabelName(478),
+								canvas.getLabelName(479),canvas.getLabelName(480)];
+		
 		this.toppanel.slideInTopPanel.doStart();
 	</handler>
 	

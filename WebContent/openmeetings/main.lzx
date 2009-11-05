@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<canvas debug="false" width="100%" height="100%" >
+<canvas debug="false" width="100%" height="100%" title="OpenMeetings">
     
 <!-- 
     If you use maindebug.lzx, main.lzx with debug=true is loaded. 
@@ -10,7 +10,7 @@
     the normal Client and the Client Including the OpenLaszlo-Debug-Player
     -swagner 2008.3.28
 -->
-    
+     
 <include href="incubator/lzcombobox.lzx" />
 <include href="incubator/shadowbox.lzx" />
 
@@ -45,7 +45,8 @@
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
-    height="${ canvas.height-canvas.naviHeightDelta }" visibility="hidden" showhandcursor="false">
+    height="${ canvas.height-canvas.naviHeightDelta }" bgcolor="0xEEF0EB"
+    visibility="hidden" showhandcursor="false">
     
     <handler name="onmouseover">
         setCurrentMouseWheelObject(this._scrollbar);

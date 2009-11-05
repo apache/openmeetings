@@ -10,10 +10,10 @@
 
 	<attribute name="subviewsid" value="0" type="number" />
 
-	<view height="$once{ parent.height-2 }" width="3" align="right" bgcolor="black"
+	<view height="$once{ parent.height-2 }" width="5" align="right"
 		cursor="width_gripper_rsc" 
 		onmousedown="parent.rs.apply()" onmouseup="parent.rs.remove()" />
-
+		
 	<handler name="onwidth" args="w">
 		this.parent.parent.parent.sendWidthUpdate(w,this.subviewsid);
 	</handler>

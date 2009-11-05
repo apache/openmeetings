@@ -1891,16 +1891,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>search intern</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>extern users</value>
+    <value>Add external</value>
   </string>
   <string id="630" name="lbl_prename">
-    <value>pre name</value>
+    <value>Firstname</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>name</value>
+    <value>Lastname</value>
   </string>
   <string id="632" name="lbl_email">
-    <value>E-mail</value>
+    <value>E-Mail</value>
   </string>
   <string id="633" name="logoutConfirm_title">
     <value>Confirm logout</value>
@@ -2429,5 +2429,26 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="808" name="lzcalendar">
     <value>Restricted</value>
+  </string>
+  <string id="809" name="lzcalender">
+    <value>Search</value>
+  </string>
+  <string id="810" name="lzcalender">
+    <value>Add</value>
+  </string>
+  <string id="811" name="lzcalendar">
+    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+  </string>
+  <string id="812" name="lzcalendar">
+    <value>Add Attendee</value>
+  </string>
+  <string id="813" name="lzcalendar">
+    <value>Save</value>
+  </string>
+  <string id="814" name="lzcalendar">
+    <value>Delete</value>
+  </string>
+  <string id="815" name="lzcalendar">
+    <value>Event Details</value>
   </string>
 </language>

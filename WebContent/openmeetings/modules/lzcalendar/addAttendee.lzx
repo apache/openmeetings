@@ -6,110 +6,147 @@
 	<!-- resizeable="false" -->
 	<attribute name="refObj" value="null"/>
 	
-	<handler name="oninit">
-		this.getAllUserBySearchRange.doCall();
-	</handler>
-	
-	<!--
-	   Get all users by range and parse result List into View
-	 -->
-    <netRemoteCallHib name="getAllUserBySearchRange" funcname="userservice.getAllUserBySearchRange" 
-                      remotecontext="$once{ canvas.thishib }" >
-  
-        <attribute name="numberOfMessage" value="0" type="number" />
-        <attribute name="numberOfStart" value="0" type="number" /> 
-        <attribute name="numberOfRecords" value="20" type="number" />   
-        
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.parent._search._criteria.getText();</method></netparam>
-        <netparam><method name="getValue">return parent.numberOfStart;</method></netparam>
-        <netparam><method name="getValue">return 20;</method></netparam>
-        <netparam><method name="getValue">return "datumSend";</method></netparam>
-        <netparam><method name="getValue">return true;</method></netparam>
-        
-        <handler name="ondata" args="valueList">
-            <![CDATA[
-            var result = valueList.result;
-            if ($debug) Debug.write("valueList: ", valueList);
-            if ($debug) Debug.write("result: ", result);
-            
-            this.numberOfMessage = valueList.records;
-            this.numberOfRecords = this.numberOfStart + valueList.result.length;
-            
-            if (valueList.result == null || valueList.result.length == 0){
-                if ($debug) Debug.write("if valueList: ", valueList);
-                new lz.userNotFound(parent,{
-                    x:parent.width/2-this.width/2,
-                    y:parent.height-this.height-100});
-                
-                // new lz.alert(parent);   
-            
-            } else {
-                if (parent["_list"]){
-                    parent._list.destroy();
-                }
-                new lz.searchResultsAttendees(parent,{name:'_list', y:70, width:700, refObj:this});
-                //new userSearchHead(parent._list._inner);
-                for (var i=0;i<result.length;i++) {
-                    if ($debug) Debug.write("UserList",result[i]);
-                    var id = result[i].user_id;
-                    var vorname = result[i].firstname;
-                    var nachname = result[i].lastname;
-                    var email = result[i].adresses.email;
-                    if ($debug) Debug.write("email",result[i].adresses.email);
-                    
-                    //var userObj = this.result[i];                 
-                    if ($debug) Debug.write("id",id);
-                    //if ($debug) Debug.write("Vorname: ",vorname);
-                    //if ($debug) Debug.write("Nachname",nachname);
-                    //if ($debug) Debug.write("messageId ", messageId);
-                    //if ($debug) Debug.write("datumRead posteingang", datumRead);
-                    //if ($debug) Debug.write("messageObj:", messageObj);
-                    
-                        new lz.attendeItem(parent._list._innerList._inner, {
-                                    refObj:parent,
-                                    userId: id,
-                                    vorname:vorname,                                    
-                                    nachname:nachname,
-                                    email:email
-                            });
-                            
-            }}
-            ]]>
-        </handler>
-    </netRemoteCallHib>	
-	
-	<view name="_search" layout="axis:x;spacing:2" y="30" x="20">
-		<edittext name="_criteria" width="150" >
-			
-		</edittext>
+	<method name="chooseAndClose">
+		<![CDATA[
 		
-		<simpleLabelButton labelid="628" >
+			if (this._turnoverlist._selected == null) {
+				new lz.labelerrorPopup(canvas,{errorlabelid:811});
+				return;
+			}
+			
+			
+			this.refObj.addListItem(
+    						      this._turnoverlist._selected.userId, 
+    						      this._turnoverlist._selected.firstname, 
+    						      this._turnoverlist._selected.lastname, 
+    						      this._turnoverlist._selected.email,
+    						      0
+						      );
+						      
+			this.close();
+		]]>
+	</method>
+	
+	<view name="_search" layout="axis:x;spacing:2;inset:4" y="24" x="0">
+		
+		<labelText width="70" resize="false" labelid="809" />
+		
+		<inputtextbox name="_criteria" width="220" height="20">
+            <handler name="onkeyup" args="key">
+                <![CDATA[
+	                // 13 is return
+	                if (key==13) {
+	                	parent.parent._turnoverlist.getAllUserBySearchRange.doCall();
+	                }
+                ]]>
+            </handler>
+		</inputtextbox>
+		
+		<simpleLabelButton labelid="628" width="200" >
 			<handler name="onclick">			
     			//parent.parent.getUserContactsBySearchByList.doCall();
-    			parent.parent.getAllUserBySearchRange.doCall();
+    			parent.parent._turnoverlist.getAllUserBySearchRange.doCall();
 			</handler>
 		</simpleLabelButton >
 		
-		<simpleLabelButton labelid="629" >
-			<handler name="onclick">
-				<![CDATA[			
-        			//parent.parent.getUserContactsBySearchByList.doCall();
-        			//parent.parent.getAllUserBySearchRange.doCall();
-        			new lz.addExternalAttendee(parent.parent.parent, {
-            			         refObj:parent.parent, 
-            			         x:parent.parent.x+parent.parent.width/2, 
-            			         y:parent.parent.y+40
-        			         });
-                ]]>
-			</handler>
-		</simpleLabelButton >
 		
 	</view>
 	
+	
+	<turnOverList name="_turnoverlist" width="${ parent.width - 4 }" height="${ parent.height - 94 }" x="2" y="46" 
+		orderby="datumSend" step="50" asc="true" bgcolor="0xFFFFFF">
+
+		<handler name="oninit">
+			this.addHeaderItem(146,70);
+			this.addHeaderItem(148,136);
+			this.addHeaderItem(149,136);
+			this.addHeaderItem(137,140);
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="oncallnext" >
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="oncallpre" >		
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="onclickedItem" args="obj">
+			if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+		</handler>
+		
+		<handler name="ondblclickedItem" args="obj">
+			if ($debug) Debug.write("ondblclickedItem",obj,obj.obj);
+			parent.chooseAndClose();
+		</handler>
+		
+		<!--
+		   Get all users by range and parse result List into View
+		 -->
+	 	<netRemoteCallHib name="getAllUserBySearchRange" funcname="userservice.getAllUserBySearchRange" 
+	                      remotecontext="$once{ canvas.thishib }" >
+	        
+	        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.parent._search._criteria.getText();</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.start;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.step;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.orderby;</method></netparam>
+	        <netparam><method name="getValue">return parent.parent.asc;</method></netparam>
+	        
+	        <handler name="ondata" args="valueList">
+	            <![CDATA[
+		            if ($debug) Debug.write("getAllUserBySearchRange ",valueList);
+
+		            this.parent.initValues(valueList.records);
+		    		this.parent.renderContent(valueList.result);
+	            ]]>
+	        </handler>
+	    </netRemoteCallHib>			
+	    
+	    <method name="renderContent" args="records">
+	    	<![CDATA[
+		    	this.clearList();
+		    	for (var i=0;i<records.length;i++){
+		    		new lz.attendeItemListItem(this._innerlist._inn._inn,{
+		    					obj:records[i],
+		    					userId:records[i].user_id,
+		    					login:records[i].login,
+		    					email:records[i].adresses.email,
+		    					firstname:records[i].firstname,
+		    					lastname:records[i].lastname});
+		    	}
+		    	this.sendInitialWidthUpdate();
+	    	]]>
+	    </method>
+
+	</turnOverList>
+	
+	<simpleLabelButton labelid="629" width="240" x="4" y="$once{ parent.height - 24 }">
+		<handler name="onclick">
+			<![CDATA[			
+    			//parent.parent.getUserContactsBySearchByList.doCall();
+    			//parent.parent.getAllUserBySearchRange.doCall();
+    			new lz.addExternalAttendee(parent.parent, {
+        			         refObj:parent, 
+        			         x:parent.x+parent.width/2, 
+        			         y:parent.y+40
+    			         });
+            ]]>
+		</handler>
+	</simpleLabelButton >
+	
+	<simpleLabelButton labelid="810" x="$once{ parent.width - 250 }"
+                       y="$once{ parent.height - 24 }" width="120">
+        <handler name="onclick">
+            //parent.parent.parent.delTermin.doCall();
+            parent.chooseAndClose();
+        </handler>     
+    </simpleLabelButton>    	
+	     
+	     
     <simpleLabelButton labelid="697" x="$once{ parent.width - 125 }"
-                       y="$once{ parent.height - 28 }" width="120">
-        <view resource="button_cancel_rsc" x="2" y="2" />
+                       y="$once{ parent.height - 24 }" width="120">
         <handler name="onclick">
             //parent.parent.parent.delTermin.doCall();
             parent.close();
@@ -120,192 +157,68 @@
 
 </class>
 
-<class name="attendeItem" extends="view" bgcolor="silver">
-	
-	<simplelayout axis="x" spacing="5" />
+<class name="attendeItemListItem" extends="baseContentListItem"> 
+    
 	<attribute name="userId" value="0" type="number" /> 
-	<attribute name="vorname" value="" type="string" />
-	<attribute name="nachname" value="" type="string" />
-	<attribute name="email" value="null"/>		
+	<attribute name="login" value="" type="string" />
+	<attribute name="firstname" value="" type="string" />
+	<attribute name="lastname" value="" type="string" />
+	<attribute name="email" value="" type="string" />
+	
+	<turnOverTextItem text="$once{ parent.userId }" width="60" />
+	<turnOverTextItem text="$once{ parent.firstname }" width="100" />
+	<turnOverTextItem text="$once{ parent.lastname }" width="132" />
+	<turnOverTextItem text="$once{ parent.email }" width="132" />
+	
+</class>
+
+<class name="addExternalAttendee" extends="labelExplorerBox" width="216" height="190"
+	   closable="true" labelid="629" >
 	
 	<attribute name="refObj" value="null"/>	
 	
-	<handler name="onclick">
-		this.refObj.refObj.addListItem(
-                this.userId, 
-                this.vorname, 
-                this.nachname, 
-                this.email,0);
-        //if ($debug) Debug.write("_innerlist: ", parent.refObj.terminObjRef._liste._innerlist);
-        //parent.refObj.terminObjRef._liste;
-        //new selectKategoryStatus(canvas,{_contactId:parent.userId});
-        //if ($debug) Debug.write("userId  search: ",parent.userId);
-        this.refObj.close();
-	</handler>	
-		 		
-	<view resource="list_add_rsc" />
-	
-	<text  text="$once{parent.userId }" width="20"/>		
-	<text name="_item3"  text="$once{ parent.vorname}" width="60" />
-	<text name="_item4"  text="$once{ parent.nachname }" width="60" />
-	<text name="_item7"  text="$once{ parent.email}" width="350"/>  
-					 	
- </class>
- 
- 	<class name="addExternalAttendee" extends="labelExplorerBox" width="216" height="190"
-		   closable="true" labelid="629" >
+	<view name="_mainView" x="10" y="24" layout="axis:y;spacing:2">
 		
-		<attribute name="refObj" value="null"/>	
-		
-		<view name="_mainView" x="10" y="24" layout="axis:y;spacing:2">
-			
 
-			<labelText labelid="630" width="100"/>
+		<labelText labelid="630" width="100"/>
+		
+		<edittext name="vorname" width="${parent._buttons.width -10}"></edittext>
+		
+		<labelText labelid="631" width="100"/>
+		<edittext name="nachname" width="${parent._buttons.width -10}"></edittext>
+		
+		<labelText labelid="632" width="100"/>
+		<edittext width="${parent._buttons.width - 10}" name="email"></edittext>
+		
+		<view name="_buttons" layout="axis:x;spacing:2" width="210">
+			<simpleLabelButton labelid="333" width="$once{parent._cancel.width}">
+				<handler name="onclick">
+					parent.parent.parent.refObj.refObj.addListItem(
+						      0, 
+						      parent.parent.vorname["text"], 
+						      parent.parent.nachname["text"], 
+						      parent.parent.email["text"],
+						      0
+					      );
+					//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
+					parent.parent.vorname="";
+					parent.parent.nachname="";
+					parent.parent.email="";
+					parent.parent.parent.close();
+					parent.parent.parent.refObj.close();
+					//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
+				</handler>
+			</simpleLabelButton>
 			
-			<edittext name="vorname" width="${parent._buttons.width -10}"></edittext>
-			
-			<labelText labelid="631" width="100"/>
-			<edittext name="nachname" width="${parent._buttons.width -10}"></edittext>
-			
-			<labelText labelid="632" width="100"/>
-			<edittext width="${parent._buttons.width - 10}" name="email"></edittext>
-			
-			<view name="_buttons" layout="axis:x;spacing:2" width="210">
-				<simpleLabelButton labelid="333" width="$once{parent._cancel.width}">
-					<handler name="onclick">
-						parent.parent.parent.refObj.refObj.addListItem(
-    						      0, 
-    						      parent.parent.vorname["text"], 
-    						      parent.parent.nachname["text"], 
-    						      parent.parent.email["text"],
-    						      0
-						      );
-						//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
-						parent.parent.vorname="";
-						parent.parent.nachname="";
-						parent.parent.email="";
-						parent.parent.parent.close();
-						parent.parent.parent.refObj.close();
-						//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
-					</handler>
-				</simpleLabelButton>
-				
-				<simpleLabelButton labelid="25" name="_cancel" width="100">
-					<handler name="onclick">
-						parent.parent.parent.close();
-					</handler>
-				</simpleLabelButton>
-			</view>
-			
+			<simpleLabelButton labelid="25" name="_cancel" width="100">
+				<handler name="onclick">
+					parent.parent.parent.close();
+				</handler>
+			</simpleLabelButton>
 		</view>
 		
-	</class>
-
-<class name="attendeeSearchHead" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" width="${parent.width}">
-		 <!--	<simplelayout axis="x" spacing="10"/> -->
-		 	<text fontsize="10"  x="15">ID</text>
-		 	<labelText labelid="135" fontsize="10" x="40" width="60"/>
-		 	<labelText labelid="136" fontsize="10" x="100" width="90"/>
-		 	<labelText labelid="137" fontsize="10" x="190" width="50"/>
-</class>
-
-	
-<class name="attendeeContentHead" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" width="${parent.parent.parent.width}" >
- 	<!--<simplelayout axis="x" spacing="130"/> -->
- 	<text name="_datum" x="${this.x + 20}" fontsize="11">Datum</text>
- <!--	<text x="${this.x + 120}" fontsize="11">Absender</text> -->
- 	<text name="_betreff" x="${this.x + 120}" fontsize="11">Betreff</text>	
- 	<view name="nxpr" layout="axis:x;spacing:2" x="${parent.width - this.width -5}">
-	 	<text x="10" name="count" text=""></text>	 	
- 	 	<view name="previos" resource="leftarrow_rsc">
- 		<handler name="onclick">				 			
- 			parent.parent.parent.loadPre();
-		</handler>
- 		
- 		<handler name="onmouseover">
-				this.animate('xoffset', +2, 200)
-				//if ($debug) Debug.write("this: ", this);
-		</handler>
-		<handler name="onmouseout">
-			this.animate('xoffset', 0, 200) //this.setX(this.x-5)							
-		</handler>
-		</view>
-				
-	 	<view name="next" resource="rightarrow_rsc">
-	 		<handler name="onmouseover">
-				this.animate('xoffset', -2, 200)	 //this.setX(this.x+5)
-				///if ($debug) Debug.write("this: ", this);
-			</handler>
-			<handler name="onmouseout">
-				this.animate('xoffset', 0, 200) //this.setX(this.x-5)
-			</handler>
-			
-			<handler name="onclick">
-				parent.parent.parent.loadNext();			 	
- 			</handler>			
-		</view>
- 	</view>			 	
-</class>
-
-
-<class name="searchResultsAttendees" extends="view" height="70" x="2" >
-	<attribute name="refObj" value="null" />
-			
-    <attendeeSearchHead name="_userSearchHead" x="10" width="${parent._innerList.width}">
-		<attendeeContentHead name="_ordnerInhaltHead" width="120" x="${parent.width - this.width}">
-			<handler name="oninit">
-				<![CDATA[
-					this._datum.setAttribute('text', "");
-					this._betreff.setAttribute('text', "")
-					
-					this.nxpr.count.setAttribute('text', parent.parent.refObj.numberOfStart+ 
-			 			"" +" - " + "" + parent.parent.refObj.numberOfRecords+ " "+getLabelTag(254)+" " + parent.parent.refObj.numberOfMessage);
-					
-					if ($debug) Debug.write("refObj: ", parent.parent.refObj);
-					if ($debug) Debug.write("ordnerinhlatHead++: ", this);
-					
-					if ( parent.parent.refObj.numberOfRecords < 21) {
-					    this.nxpr.previos.setAttribute('clickable', false);
-					}
-					
-					if (parent.parent.refObj.numberOfRecords 
-					       >= parent.parent.refObj.numberOfMessage) {
-					    this.nxpr.next.setAttribute('clickable', false);
-					}
-					
-					if (this.nxpr.previos.clickable == false)  {
-					    this.nxpr.previos.setAttribute('opacity', 0.5)
-				    }
-				    
-					if (this.nxpr.next.clickable == false)  {
-					    this.nxpr.next.setAttribute('opacity', 0.5)
-				    }
-				]]>
-			</handler>	
-		</attendeeContentHead>
-		
-		<method name="loadNext">
-			<![CDATA[
-	 			parent.refObj.numberOfStart = parent.refObj.numberOfStart + 20;
-	 			parent.refObj.doCall();
-	 		]]>
-		</method>
-		
-		<method name="loadPre">
-			<![CDATA[
-	 			parent.refObj.numberOfStart = parent.refObj.numberOfStart - 20;
-	 			parent.refObj.doCall();	
-			]]>
-		</method>
-			
-	</attendeeSearchHead>
-	
-	<!--x="${(parent.width - this.width)/2}"-->
-	<view x="10" name="_innerList" height="180" width="${this._inner.width + 15}" y="20" clip="true" >
-		<view name="_inner" layout="axis:y;spacing:2" width="460" bgcolor="$once{ canvas.baseMacomBackground }"/>
-		<vscrollbar/>
-		<!-- <hscrollbar/>-->
 	</view>
-</class>
 	
+</class>
+
 </library>

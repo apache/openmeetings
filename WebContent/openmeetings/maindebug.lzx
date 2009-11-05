@@ -46,7 +46,8 @@
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
-    height="${ canvas.height-canvas.naviHeightDelta }" visibility="hidden" showhandcursor="false">
+    height="${ canvas.height-canvas.naviHeightDelta }" bgcolor="0xEEF0EB"
+    visibility="hidden" showhandcursor="false">
     
     <handler name="onmouseover">
         setCurrentMouseWheelObject(this._scrollbar);

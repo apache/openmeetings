@@ -127,7 +127,7 @@ public class Usermanagement {
 					}
 					hql +=	"( " +
 								"lower(u.lastname) LIKE lower('%"+searchItems[i]+"%') OR lower(u.firstname) LIKE lower('%"+searchItems[i]+"%') " +
-								//"OR lower(u.username) LIKE lower('%"+searchItems[i]+"%') " +
+								"OR lower(u.adresses.email) LIKE lower('%"+searchItems[i]+"%') " +
 								//"OR lower(u.titel) LIKE lower('%"+searchItems[i]+"%') " +
 								//"OR lower(u.email) LIKE lower('%"+searchItems[i]+"%') " +
 								//"OR lower(u.firma) LIKE lower('%"+searchItems[i]+"%') " +
@@ -159,9 +159,11 @@ public class Usermanagement {
 				return sresult;		
 
 		} catch (HibernateException ex) {
-			log.error("[getAllUserByRange] "+ex);
+			log.error("[getAllUserByRange] ",ex);
+			ex.printStackTrace();
 		} catch (Exception ex2) {
-			log.error("[getAllUserByRange] "+ex2);
+			log.error("[getAllUserByRange] ",ex2);
+			ex2.printStackTrace();
 		}
 		return null;
 	}

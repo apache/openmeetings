@@ -357,7 +357,7 @@
 	<view width="${ this.parent.width }" height="${ this.parent.height }" 
         bgcolor="$once{ canvas.basebgcolorizer }" > 
         <view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }"
-             x="1" y="1" bgcolor="0xFFFFFF" />
+             x="1" y="1" bgcolor="0xEEF0EB" />
     </view>        
     
 	<view x="1" y="1" width="${ this.parent.width-1 }" height="20" name="_titlebar" >

@@ -2430,4 +2430,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="808" name="lzcalendar">
     <value>Eingeschränkt</value>
   </string>
+  <string id="809" name="lzcalender">
+    <value>Search</value>
+  </string>
+  <string id="810" name="lzcalender">
+    <value>Ok</value>
+  </string>
+  <string id="811" name="lzcalendar">
+    <value>Es ist kein Benutzer ausgewählt. Wählen Sie zuerst einen Benutzer und drücken dann ok.</value>
+  </string>
+  <string id="812" name="lzcalendar">
+    <value>Teilnehmer hinzufügen</value>
+  </string>
+  <string id="813" name="lzcalendar">
+    <value>Speichern</value>
+  </string>
+  <string id="814" name="lzcalendar">
+    <value>Löschen</value>
+  </string>
+  <string id="815" name="lzcalendar">
+    <value>Event Details</value>
+  </string>
 </language>

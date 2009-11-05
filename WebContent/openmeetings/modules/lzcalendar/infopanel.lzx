@@ -505,7 +505,7 @@
             
             <infoTab name="attendees" labelid="803" pixellock="true">
             	
-            	<calButton label="Add Attendee" x="2" y="2">
+            	<calButton labelid="812" x="2" y="2">
 	            	<handler name="onclick">
 	            		new lz.addAttendee(canvas,{refObj:parent});
 	            	</handler>
@@ -650,7 +650,7 @@
             <view name="bline" height="1" y="3" width="$once{parent.width}"
                 bgcolor="0xFDFFFF"/>
 
-            <calButton label="Apply" x="15" y="13">
+            <calButton labelid="813" x="10" y="13">
                 <handler name="onclick">
                     canvas.eventDataMgr.changeTitle(parent.parent.summary.content.title.getText());
                     canvas.eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
@@ -668,7 +668,7 @@
                 
                 
             
-            <calButton label="Delete" x="${parent.width - width - 15}" y="13">
+            <calButton labelid="814" x="${parent.width - this.width - 10}" y="13">
             	<handler name="onclick" args="c">
             		
             		if (Number(parent.parent.appointementId) == 0) {
@@ -705,7 +705,7 @@
         <!-- METHODS -->
 
         <handler name="oninit">
-            this.setWindowTitle( "Event Info" );
+            this.setWindowTitle( canvas.getLabelName(815) );
             this.closeDel = new LzDelegate( this , "close" );
         </handler>
         

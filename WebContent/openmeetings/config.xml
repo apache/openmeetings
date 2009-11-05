@@ -128,7 +128,7 @@ of the red5-servlet
 	1 means Monday
 	this is the way how the Celendar inits a week
 -->
-<firstdayinweek>2</firstdayinweek>	
+<firstdayinweek>0</firstdayinweek>	
     
     
 <!--
