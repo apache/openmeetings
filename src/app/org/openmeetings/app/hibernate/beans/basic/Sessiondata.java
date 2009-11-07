@@ -14,6 +14,9 @@ public class Sessiondata {
 	private Date starttermin_time;
 	private Date refresh_time;
 	private String sessionXml;
+	private Boolean storePermanent;
+	private Long language_id;
+	private Long organization_id;
 	public Sessiondata() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -90,6 +93,42 @@ public class Sessiondata {
 	}
 	public void setSessionXml(String sessionXml) {
 		this.sessionXml = sessionXml;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="storePermanent"
+     *  type="boolean"
+     */ 
+	public Boolean getStorePermanent() {
+		return storePermanent;
+	}
+	public void setStorePermanent(Boolean storePermanent) {
+		this.storePermanent = storePermanent;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="language_id"
+     *  type="long"
+     */ 
+	public Long getLanguage_id() {
+		return language_id;
+	}
+	public void setLanguage_id(Long language_id) {
+		this.language_id = language_id;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="organization_id"
+     *  type="long"
+     */
+	public Long getOrganization_id() {
+		return organization_id;
+	}
+	public void setOrganization_id(Long organization_id) {
+		this.organization_id = organization_id;
 	}
 	
 }

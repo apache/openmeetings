@@ -2,6 +2,7 @@ package org.openmeetings.app.remote;
 
 import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -53,8 +54,8 @@ public class LanguageService {
 	 * @param language_id
 	 * @return
 	 */
-	public List<Fieldlanguagesvalues> getLanguageByIdAndMax(Long language_id, int start, int max){
-		return Fieldmanagment.getInstance().getAllFieldsByLanguage(language_id,start,max);
+	public List<Map> getLanguageByIdAndMax(Long language_id, int start, int max){
+		return Fieldmanagment.getInstance().getLabelsByLanguage(language_id,start,max);
 	}
 	
 	public Fieldvalues getFieldvalueById(String SID, Long fieldvalues_id, Long language_id) {

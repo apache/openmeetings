@@ -11,5 +11,8 @@
     <property name="starttermin_time" type="java.util.Date" column="starttermin_time"/>
     <property name="user_id" type="long" column="user_id"/>
     <property name="sessionXml" type="text" column="sessionXml"/>
+    <property name="storePermanent" type="boolean" column="storePermanent"/>
+    <property name="language_id" type="long" column="language_id"/>
+    <property name="organization_id" type="long" column="organization_id"/>
   </class>
 </hibernate-mapping>

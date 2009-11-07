@@ -227,7 +227,116 @@ public class Sessionmanagement {
 	 * @param SID
 	 * @param USER_ID
 	 */
-	public Boolean updateUser(String SID, long USER_ID) {
+	public Boolean updateUser(String SID, long USER_ID, boolean storePermanent, Long language_id) {
+		try {
+			log.debug("updateUser User: "+USER_ID+" || "+SID);
+			
+			String hql = "select c from Sessiondata as c " +
+							"where c.session_id LIKE :session_id";
+	
+			//log.debug("checkSession User: || "+SID);
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			//session.flush();
+			Query query = session.createQuery(hql);
+			query.setString("session_id", SID);
+
+			List<Sessiondata> sessions = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			Sessiondata sessiondata = null;
+			if (sessions != null && sessions.size() > 0) {
+				sessiondata = sessions.get(0);
+			}
+			
+			if (sessiondata == null) {
+				log.error("Could not find session to Update");
+				return false;
+			}
+			log.debug("Found session to update: "+sessiondata.getSession_id()+ " userId: "+USER_ID);
+			
+			idf = HibernateUtil.createSession();
+			session = HibernateUtil.getSession();
+			tx = session.beginTransaction();
+			sessiondata.setRefresh_time(new Date());
+			//session.refresh(sd);
+			sessiondata.setUser_id(USER_ID);
+			sessiondata.setStorePermanent(storePermanent);
+			sessiondata.setLanguage_id(language_id);
+			//session.flush();
+			session.update(sessiondata);
+			//session.flush();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			//log.debug("session updated User: "+USER_ID);
+			return true;
+		} catch (HibernateException ex) {
+			log.error("[updateUser]: " ,ex);
+		} catch (Exception ex2) {
+			log.error("[updateUser]: " ,ex2);
+		}
+		return null;
+	}
+	
+	public Boolean updateUserOrg(String SID, Long organization_id) {
+		try {
+			log.debug("updateUserOrg User: "+organization_id+" || "+SID);
+			
+			String hql = "select c from Sessiondata as c " +
+							"where c.session_id LIKE :session_id";
+	
+			//log.debug("checkSession User: || "+SID);
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			//session.flush();
+			Query query = session.createQuery(hql);
+			query.setString("session_id", SID);
+
+			List<Sessiondata> sessions = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			Sessiondata sessiondata = null;
+			if (sessions != null && sessions.size() > 0) {
+				sessiondata = sessions.get(0);
+			}
+			
+			if (sessiondata == null) {
+				log.error("Could not find session to Update");
+				return false;
+			}
+			log.debug("Found session to update: "+sessiondata.getSession_id()+ " organisation_id: "+organization_id);
+			
+			idf = HibernateUtil.createSession();
+			session = HibernateUtil.getSession();
+			tx = session.beginTransaction();
+			sessiondata.setRefresh_time(new Date());
+			//session.refresh(sd);
+			sessiondata.setOrganization_id(organization_id);
+			//session.flush();
+			session.update(sessiondata);
+			//session.flush();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			//log.debug("session updated User: "+USER_ID);
+			return true;
+		} catch (HibernateException ex) {
+			log.error("[updateUser]: " ,ex);
+		} catch (Exception ex2) {
+			log.error("[updateUser]: " ,ex2);
+		}
+		return null;
+	}
+	
+	
+	public Boolean updateUserWithoutSession(String SID, long USER_ID) {
 		try {
 			log.debug("updateUser User: "+USER_ID+" || "+SID);
 			

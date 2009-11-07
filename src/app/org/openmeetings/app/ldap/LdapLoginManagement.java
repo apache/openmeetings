@@ -167,7 +167,8 @@ public class LdapLoginManagement {
 	 * 
 	 */
 	//----------------------------------------------------------------------------------------
-	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID) {
+	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID, 
+			Boolean storePermanent, Long language_id) {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 		
 		// Retrieve Configuration Data
@@ -285,7 +286,7 @@ public class LdapLoginManagement {
 				}
 				
 				// Update Session
-				Boolean bool = Sessionmanagement.getInstance().updateUser(SID, userid);
+				Boolean bool = Sessionmanagement.getInstance().updateUser(SID, userid, storePermanent, language_id);
 				
 				if (bool==null){
 					//Exception
@@ -322,7 +323,7 @@ public class LdapLoginManagement {
 			}
 			
 			// Update Session
-			Boolean bool = Sessionmanagement.getInstance().updateUser(SID, u.getUser_id());
+			Boolean bool = Sessionmanagement.getInstance().updateUser(SID, u.getUser_id(), storePermanent, language_id);
 			
 			if (bool==null){
 				//Exception

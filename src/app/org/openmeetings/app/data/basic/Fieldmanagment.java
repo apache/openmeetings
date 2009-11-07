@@ -1,9 +1,11 @@
 package org.openmeetings.app.data.basic;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -170,7 +172,70 @@ public class Fieldmanagment {
 		return null;
 	}
 
+	public List<Map> getLabelsByLanguage(Long language_id, int start, int max) {
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			String sql = "select new Map(f.fieldvalues_id as id, f.value as value) from Fieldlanguagesvalues f " +
+					"WHERE f.language_id = :language_id " +
+					"AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
 
+			Query query = session.createQuery(sql);
+			query.setLong("language_id", language_id);
+			query.setLong("start", start);
+			query.setLong("max", start+max);
+			
+			List<Map> returnList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			FieldLanguage fieldLanguage = FieldLanguageDaoImpl.getInstance().getFieldLanguageById(language_id);
+
+			//Check for Right To Left Languages
+			if (fieldLanguage.getRtl()) {
+				
+				List<Map> returnRtlList = new LinkedList<Map>();
+				//List<Fieldlanguagesvalues> returnRtlList = new LinkedList<Fieldlanguagesvalues>();
+				
+				for (Iterator<Map> iter = returnList.iterator();iter.hasNext();) {
+					Map remote = iter.next();
+					
+					Map toAdd = new HashMap();
+					toAdd.put("id",remote.get("id"));
+
+					String value = remote.get("value").toString();
+					
+					String[] splitted = value.split(" ");
+					String reverseOrder = "";
+					for (int i=splitted.length-1;i>=0;i--) {
+						reverseOrder += splitted[i];
+						if (splitted.length != 1) {
+							reverseOrder += " ";
+						}
+					}
+					toAdd.put("value",value);
+					
+					returnRtlList.add(toAdd);
+				}
+				
+				return returnRtlList;
+			} else {
+				
+				return returnList;
+				
+			}
+			
+			
+		} catch (HibernateException ex) {
+			log.error("[getLabelsByLanguage]: " , ex);
+		} catch (Exception ex2) {
+			log.error("[getLabelsByLanguage]: " , ex2);
+		}
+		return null;
+	}
+	
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id, int start, int max) {
 		try {
 			Object idf = HibernateUtil.createSession();

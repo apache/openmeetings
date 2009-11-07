@@ -164,7 +164,67 @@ public class MainService implements IPendingServiceCallback {
     	System.out.println(":: getsessiondata");
     	
         return Sessionmanagement.getInstance().startsession();
-    }   
+    }  
+    
+    public Long setCurrentUserOrganization(String SID, Long organization_id) {
+    	try {
+    		
+    		Sessionmanagement.getInstance().updateUserOrg(SID, organization_id);
+    		
+    	} catch (Exception err) {
+    		log.error("[setCurrentUserOrganization]",err);
+    	}
+    	return -1L;
+    }
+    
+    public Users loginByRemember(String SID, String remoteHashId) {
+    	try {
+    		
+    		RoomClient currentClient;
+    		IConnection current = Red5.getConnectionLocal();
+    		
+    		Users o;
+    		
+    		currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+    		
+            o = Usermanagement.getInstance().loginUserByRemoteHash(SID,remoteHashId);
+    		
+            if(o==null)
+    			return null;
+    		
+            o.setSessionData(Sessionmanagement.getInstance().getSessionByHash(remoteHashId));
+            
+    		if (currentClient.getUser_id()!=null && currentClient.getUser_id()>0) {
+    			
+    				Users u = (Users)o;
+	            	currentClient.setFirstname(u.getFirstname());
+	            	currentClient.setLastname(u.getLastname());
+	    			
+	    			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+	    			for (Set<IConnection> conset : conCollection) {
+		    			for (IConnection cons : conset) {
+		    				if (cons != null) {
+		    					if (cons instanceof IServiceCapableConnection) {
+			    					if (!cons.equals(current)){
+			    						//log.error("sending roomDisconnect to " + cons);
+			    						//RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
+			    						//Send to all connected users
+										((IServiceCapableConnection) cons).invoke("roomConnect",new Object[] { currentClient }, this);
+										//log.error("sending roomDisconnect to " + cons);
+			    					}
+			    				}
+		    			 	}
+		    			}
+	    			}
+	            }
+	            
+	            return o;
+
+    	} catch (Exception err) {
+    		log.error("[loginByRemember]",err);
+    	}
+    	return null;
+    }
        
     /**
      * auth function, use the SID you get by getsessiondata
@@ -173,7 +233,7 @@ public class MainService implements IPendingServiceCallback {
      * @param Userpass
      * @return a valid user account or an empty user with an error message and level -1
      */ 
-    public Object loginUser(String SID, String usernameOrEmail, String Userpass){
+    public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id){
     	
     	// Check, whether LDAP - Login is required(Configuration has key ldap_config_path
     	boolean withLdap = false;
@@ -205,7 +265,8 @@ public class MainService implements IPendingServiceCallback {
     			
 	        	currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	           
-	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID);
+	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID, 
+	        								storePermanent, language_id);
 	        	
     		}
     		else{
@@ -215,7 +276,8 @@ public class MainService implements IPendingServiceCallback {
     			
 	    		currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	    		
-	            o = Usermanagement.getInstance().loginUser(SID,usernameOrEmail,Userpass, currentClient);
+	            o = Usermanagement.getInstance().loginUser(SID,usernameOrEmail,Userpass, currentClient, 
+	            							storePermanent, language_id);
 	      	}
     		
     		if(o==null)
@@ -405,7 +467,7 @@ public class MainService implements IPendingServiceCallback {
      * @param SID
      */
     public void markSessionAsLogedIn(String SID){
-    	Sessionmanagement.getInstance().updateUser(SID, -1);
+    	Sessionmanagement.getInstance().updateUserWithoutSession(SID, -1);
     }
     
     /**

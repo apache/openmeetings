@@ -1124,7 +1124,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Update Session Data
 			log.debug("UDPATE SESSION "+currentClient.getPublicSID()+", "+userId);
 			
-			Sessionmanagement.getInstance().updateUser(currentClient.getPublicSID(), userId);
+			Sessionmanagement.getInstance().updateUser(currentClient.getPublicSID(), userId,false,null);
 			
 			//only fill this value from User-REcord
 			//cause invited users have non
@@ -1168,7 +1168,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			//Update Session Data
 			log.debug("UDPATE SESSION "+SID+", "+userId);
-			Sessionmanagement.getInstance().updateUser(SID, userId);
+			Sessionmanagement.getInstance().updateUserWithoutSession(SID, userId);
 			
 			Users user = Usermanagement.getInstance().getUserById(userId);
 			

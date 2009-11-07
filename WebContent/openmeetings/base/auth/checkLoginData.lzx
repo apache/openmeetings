@@ -243,7 +243,7 @@
             this.parent._register.setAttribute('visible',false);
             this.parent.childObj = new lz.registerNewUser(canvas.main_content._content.inner,{refObj:this.parent});     
             lz.Keys.removeKeyComboCall(this.parent.pressEnter, ["enter"]);
-        parent.showRegForm.doStart();
+            parent.showRegForm.doStart();
         </handler>
     </simpleLabelButton>          
         
@@ -260,6 +260,7 @@
             var orgIndexId = Number(parent.organisation.getValue());
             hib.currentdomain = hib.userobject.organisation_users[orgIndexId].organisation.name;
             hib.currentdomainObj = hib.userobject.organisation_users[orgIndexId].organisation;
+            hib.setCurrentUserOrganization.doCall();
             hib.getLanguageByIdAndMax.start = 0;
             hib.getLanguageByIdAndMax.doCall();
             parent.close();
@@ -272,7 +273,9 @@
         remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
         <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>  
         <netparam><method name="getValue"> return parent.parent.username.getText(); </method></netparam>  
-        <netparam><method name="getValue"> return parent.parent.userpass.getText(); </method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.userpass.getText(); </method></netparam>
+        <netparam><method name="getValue"> return parent.parent._savelogindata.getValue(); </method></netparam> 
+        <netparam><method name="getValue"> return Number(parent.parent.languages.getValue()); </method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
@@ -290,6 +293,7 @@
                         g["usercolor"] = parent.colors.getValue();
                         g["userlang"] = parent.languages.getValue();
                         g["saveuserdata"]=true;
+                        g["storedSession"] = canvas.sessionId;
                         t.setData('userdata',g);
                         t.flush(); 
                     } else {
@@ -303,6 +307,7 @@
                         g["usercolor"] = null;
                         g["userlang"] = null;
                         g["saveuserdata"]=false;
+                        g["storedSession"] = "";
                         t.setData('userdata',g);
                         t.flush();                 
                     }
@@ -328,6 +333,7 @@
                     } else if (value.organisation_users.length==1){
                         hib.currentdomain = value.organisation_users[0].organisation.name;
                         hib.currentdomainObj = value.organisation_users[0].organisation;
+                        hib.setCurrentUserOrganization.doCall();
                         hib.getLanguageByIdAndMax.start = 0;
                         hib.getLanguageByIdAndMax.doCall();
                         canvas.focusOnItem = null;

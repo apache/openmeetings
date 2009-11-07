@@ -20,7 +20,7 @@ public class TestLogin extends TestCase {
 		MainService mService = new MainService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "test");
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "test",false,null);
 		
 		System.out.println("us: "+us.getFirstname());
 		

@@ -195,6 +195,21 @@
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("sendCallBack logoutUser: ",value);    
             parent.initlanguageLoaded = false;
+            
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["username"] = '';
+            g["userpass"] = '';
+            g["userquality"] = null;
+            g["usercolor"] = null;
+            g["userlang"] = null;
+            g["saveuserdata"]=false;
+            g["storedSession"] = "";
+            t.setData('userdata',g);
+            t.flush(); 
+            
         	parent.getLanguageByIdAndMax.start = 0;
         	parent.getLanguageByIdAndMax.doCall();
         </handler>          
@@ -422,11 +437,22 @@
             canvas.thishib.loaderVar.setProgress();
             parent.getUserSalutations.doCall();
         </handler>  
-    </netRemoteCallHib>    
+    </netRemoteCallHib>  
+    
+    <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
+    	<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+    	<netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
+        <handler name="ondata" args="value">
+        	//Sessionmanagement.getInstance() 
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("setCurrentUserOrganization: ",value);
+        </handler>  
+    </netRemoteCallHib> 
+     
     
     <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam><method name="getValue"> return parent.parent.userlang; </method></netparam> 
+		<netparam><method name="getValue">return parent.parent.userlang; </method></netparam> 
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getUserSalutations ",value);
@@ -441,11 +467,84 @@
 				if (parent.testAppLoading){ 
 					canvas.loadNextStepTestApp();
 				} else {
-					new lz.checkLoginData(canvas.main_content._content.inner);
+					
+					//Check if user is auto-logged in by session
+					var t = new lz.sharedObject();
+                    if($debug) Debug.write("checkLoginData/t: ",t);
+                    t.getLocal('userdata');
+                    var g = t.getData('userdata');
+                    if($debug) Debug.write("checkLoginData/g: ",g);
+                    var storedSession = g["storedSession"];
+                    if($debug) Debug.write("checkLoginData/save: ",save);
+                    
+                    parent.loginByRemember.currentHashSession = storedSession;
+                    parent.loginByRemember.doCall();
+					
 				}
 			}
         </handler>  
-    </netRemoteCallHib>   
+    </netRemoteCallHib>
+    
+    <netRemoteCallHib name="loginByRemember" funcname="xmlcrm.loginByRemember" >
+    	<attribute name="currentHashSession" value="" type="string"/>
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.currentHashSession;</method></netparam> 
+        <handler name="ondata" args="value">
+         	<![CDATA[
+         	   if ($debug) Debug.write("loginByRemember",value);
+         	   if (value != null){
+         	      
+                    canvas.setAttribute('user_id',value.user_id);
+                    canvas.setAttribute('firstName',value.firstname);
+                    canvas.setAttribute('lastName',value.lastname);
+                    canvas.setAttribute('mail','');
+                    canvas.setAttribute('lastLogin','');
+                    canvas.setAttribute('official_code','');
+                    canvas.setAttribute('picture_uri','');
+                    canvas.setAttribute('language','');
+                    canvas.setAttribute('currentuser',value.login);
+                    
+                    if (value.level_id >= 2) {
+                        canvas.becomemoderator = true;
+                    }
+                    
+                    if (value.sessionData == null) {
+                    	if ($debug) Debug.write("No Language Found to assign");
+                    	new lz.checkLoginData(canvas.main_content._content.inner);
+                    	return;
+                    }
+                    
+                    hib.userlang = Number(value.sessionData.language_id);
+                    hib.userobject = value;
+                    
+                    var found = false;
+                    
+                    for (var i=0;i<value.organisation_users.length;i++) {
+                    	if (value.organisation_users[i].organisation.organisation_id == value.sessionData.organization_id) {
+                    		found = true;
+                    		hib.currentdomain = value.organisation_users[i].organisation.name;
+                            hib.currentdomainObj = value.organisation_users[i].organisation;
+                            break;
+                    	}
+                    }
+                   
+                    if (found) {
+                        hib.getLanguageByIdAndMax.start = 0;
+                        hib.getLanguageByIdAndMax.doCall();
+                        canvas.focusOnItem = null;
+                    } else {
+                    	if ($debug) Debug.write("No Organization Found to assign");
+                    	new lz.checkLoginData(canvas.main_content._content.inner);
+                    }
+         	      
+         	   } else {
+         	   	   if ($debug) Debug.write("No RPC-Sesion Found to assign");
+         	   	   new lz.checkLoginData(canvas.main_content._content.inner);
+         	   }
+         	]]>
+        </handler>
+    </netRemoteCallHib>
+    
     
     <netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>

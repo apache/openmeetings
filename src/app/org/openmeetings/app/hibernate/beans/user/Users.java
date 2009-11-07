@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
 /**
  * 
@@ -47,6 +48,8 @@ public class Users {
     //Vars to simulate external Users
     private Long externalUserId;
     private String externalUserType;
+    
+    private Sessiondata sessionData;
     
     
     //TODO: Fehlende adressids für rechnung und lieferadresse
@@ -390,5 +393,15 @@ public class Users {
 	public void setExternalUserType(String externalUserType) {
 		this.externalUserType = externalUserType;
 	}
+
+
+	public Sessiondata getSessionData() {
+		return sessionData;
+	}
+	public void setSessionData(Sessiondata sessionData) {
+		this.sessionData = sessionData;
+	}
+	
+	
 	
 }

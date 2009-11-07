@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="customEdittext" extends="edittext" fontsize="11" >
+<class name="customEdittext" extends="inputtext" bgcolor="white" fontsize="11" height="20" >
+	
+	<view name="v_border" height="1"       bgcolor="black" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="black" height="$once{parent.height -1}" />
 	
 	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
 	
@@ -16,8 +19,12 @@
     	this.preText = this.getText();
     </handler>
     
+    <handler name="oninit">
+    	this.field.setAttribute("bgcolor",0xFFFFFF);
+    </handler>
     
-    <handler name="onvalue" args="txt">
+    
+    <handler name="ontext" args="txt">
     	<![CDATA[
             
     	    //

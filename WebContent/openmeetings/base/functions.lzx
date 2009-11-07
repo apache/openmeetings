@@ -88,7 +88,7 @@ function getLabelTagByNo(no,labelid){
     var l = labels[no]
     //if ($debug) Debug.write("Search label tag in: ",labelid,labels[no]);
     for (var eg=0;eg<=l.length;eg++){
-        if (l[eg].fieldvalues_id==labelid){
+        if (l[eg].id==labelid){
             // if($debug) Debug.write("FUNC/getLabelTagByNo",no,labelid,l[eg].value);
             if($debug) {
             	return l[eg].value+" ["+labelid+"]";

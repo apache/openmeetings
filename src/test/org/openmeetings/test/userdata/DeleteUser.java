@@ -17,7 +17,7 @@ public class DeleteUser extends TestCase {
 		MainService mService = new MainService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner6", "678101");
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner6", "678101",false,null);
 		
 		System.out.println("us: "+us.getFirstname());
 		

@@ -44,7 +44,7 @@ public class UserService {
     public Long loginUser(String SID, String username, String userpass){
     	log.debug("UserService.loginuser");
     	try {
-    		Object obj = Usermanagement.getInstance().loginUser(SID,username,userpass, null);
+    		Object obj = Usermanagement.getInstance().loginUser(SID,username,userpass, null,false,null);
     		if (obj==null){
     			return new Long(-1);
     		}

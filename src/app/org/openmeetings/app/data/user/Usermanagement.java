@@ -21,6 +21,7 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
@@ -198,7 +199,8 @@ public class Usermanagement {
 	 * @param Userpass
 	 * @return
 	 */
-	public Object loginUser(String SID, String userOrEmail, String userpass, RoomClient currentClient) {
+	public Object loginUser(String SID, String userOrEmail, String userpass, RoomClient currentClient, 
+			Boolean storePermanent, Long language_id) {
 		try {
 			
 			String hql = "SELECT c from Users AS c " +
@@ -224,7 +226,7 @@ public class Usermanagement {
 				Users users = (Users) ll.get(0);
 				if (ManageCryptStyle.getInstance().getInstanceOfCrypt().verifyPassword(userpass, users.getPassword())) {
 					log.info("chsum OK: "+ users.getUser_id());
-					Boolean bool = Sessionmanagement.getInstance().updateUser(SID, users.getUser_id());
+					Boolean bool = Sessionmanagement.getInstance().updateUser(SID, users.getUser_id(),storePermanent, language_id);
 					if (bool==null){
 						//Exception
 						return new Long(-1);
@@ -257,9 +259,37 @@ public class Usermanagement {
 		}
 		return new Long(-1);
 	}
+	
+	public Users loginUserByRemoteHash(String SID, String remoteHash) {
+		try {
+			
+			Sessiondata sessionData = Sessionmanagement.getInstance().getSessionByHash(remoteHash);
+			
+			
+			if (sessionData != null) {
+				
+				Users u = Usermanagement.getInstance().getUserById(sessionData.getUser_id());
+			
+				Sessionmanagement.getInstance().updateUserWithoutSession(SID, u.getUser_id());
+				
+				return u;
+			
+			} else {
+				
+				return null;
+				
+			}
+		
+		} catch (HibernateException ex) {
+			log.error("[loginUserByRemoteHash]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[loginUserByRemoteHash]: ",ex2);
+		}
+		return null;
+	}
 
 	public Long logout(String SID, long USER_ID) {
-		Sessionmanagement.getInstance().updateUser(SID, 0);
+		Sessionmanagement.getInstance().updateUser(SID, 0, false,null);
 		return new Long(-12);
 	}
 

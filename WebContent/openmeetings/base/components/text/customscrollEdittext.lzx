@@ -3,7 +3,7 @@
    
 <include href="incubator/scrolledittext.lzx" />
 
-<class name="customScrollEdittext" extends="view" bgcolor="0x333333">
+<class name="customScrollEdittext" extends="view" >
 	
 	<attribute name="text" value="" type="string" />
 
@@ -17,9 +17,17 @@
     	return this._cbtext.getText();
     </method>
     
-    <scrolledittext name="_cbtext" width="$once{ parent.width-2 }" x="1" y="1" bgcolor="0xFFFFFF" 
+    <view name="_face" bgcolor="0xFFFFFFF" 
+          width="$once{parent.width}" 
+          height="$once{parent.height}" />
+          
+    <view name="v_border" height="1" bgcolor="black" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="black" height="$once{parent.height -1}" />
+          
+    <scrolledittext name="_cbtext" width="$once{ parent.width-2 }" x="1" y="1" bgcolor="0xFFFFFF"  styleable="false"
 		height="$once{ parent.height-2 }" text="${ parent.text }" multiline="true" fontsize="11" />
     
+     
 </class>
 
 </library>

@@ -98,7 +98,7 @@ public class MethodGateway  extends HttpServlet {
 					
 					Long returnVal = new Long(-1);
 					
-					Object obj = Usermanagement.getInstance().loginUser(SID,username,userpass, null);
+					Object obj = Usermanagement.getInstance().loginUser(SID,username,userpass, null,false,null);
 		    		if (obj==null){
 		    			returnVal =  new Long(-1);
 		    		}

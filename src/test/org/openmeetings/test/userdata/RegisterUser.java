@@ -24,7 +24,7 @@ public class RegisterUser extends TestCase{
 		MainService mService = new MainService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "67810");		
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "67810",false,null);		
 		
 		//Configurationmanagement.getInstance().addConfByKey(3, "allow_frontend_register", "1", 2, "coment");
 
