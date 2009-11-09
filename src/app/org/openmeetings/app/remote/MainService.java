@@ -265,8 +265,9 @@ public class MainService implements IPendingServiceCallback {
     			
 	        	currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	           
+	        	//LDAP Loggedin Users cannot use the permanent Login Flag
 	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID, 
-	        								storePermanent, language_id);
+	        								false, language_id);
 	        	
     		}
     		else{

@@ -2452,4 +2452,73 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="815" name="lzcalendar">
     <value>Event Details</value>
   </string>
+  <string id="816" name="room admin">
+    <value>Default Moderators</value>
+  </string>
+  <string id="817" name="room admin">
+    <value>Super</value>
+  </string>
+  <string id="818" name="room admin">
+    <value>ID</value>
+  </string>
+  <string id="819" name="room admin">
+    <value>Name</value>
+  </string>
+  <string id="820" name="room admin">
+    <value>E-Mail</value>
+  </string>
+  <string id="821" name="room admin">
+    <value>Add new default Moderator</value>
+  </string>
+  <string id="822" name="room admin">
+    <value>Is Super Moderator</value>
+  </string>
+  <string id="823" name="room admin">
+    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+  </string>
+  <string id="824" name="room admin">
+    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+  </string>
+  <string id="825" name="room admin">
+    <value>Apply Super-Moderation to User</value>
+  </string>
+  <string id="826" name="room admin">
+    <value>Remove Super Moderation from User</value>
+  </string>
+  <string id="827" name="room admin">
+    <value>D</value>
+  </string>
+  <string id="828" name="room admin">
+    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+  </string>
+  <string id="829" name="room admin">
+    <value>Moderation</value>
+  </string>
+  <string id="830" name="room admin">
+    <value>Limitations</value>
+  </string>
+  <string id="831" name="room admin">
+    <value>Organization</value>
+  </string>
+  <string id="832" name="confirm action">
+    <value>Are you sure?</value>
+  </string>
+  <string id="833" name="confirm delete">
+    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+  </string>
+  <string id="834" name="user choose error">
+    <value>There is no User selected. Please select first before you add it!</value>
+  </string>
+  <string id="835" name="room admin">
+    <value>Add new Default Moderator</value>
+  </string>
+  <string id="836" name="room admin">
+    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+  </string>
+  <string id="837" name="room admin">
+    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+  </string>
+  <string id="838" name="super moderator">
+    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+  </string>
 </language>

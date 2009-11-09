@@ -10,13 +10,13 @@
 		
 		<!-- User  / Password -->
 		<property name="connection.username">root</property>
-		<property name="connection.password"></property>
+		<property name="connection.password">admin</property>
 		
 		<!-- Database Settings -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<!--  for performance reasons changed to MyISAM from org.hibernate.dialect.MySQLInnoDBDialect -->
 		<property name="dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>
-		<property name="connection.url">jdbc:mysql://localhost/openmeetings?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8</property>	
+		<property name="connection.url">jdbc:mysql://192.168.0.3/openmeetings_act2win_11?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8</property>	
 		
 		<property name="hibernate.connection.CharSet">utf8</property>
 		<property name="hibernate.connection.characterEncoding">utf8</property>
@@ -81,6 +81,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/recording/WhiteBoardEvent.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomTypes.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomModerators.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms_Organisation.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Salutations.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userdata.hbm.xml"/>

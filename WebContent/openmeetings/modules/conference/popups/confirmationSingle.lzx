@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="confirmationSingle" extends="labelExplorerBox" labelid="18"
+<class name="confirmationSingle" extends="labelExplorerBox" labelid="832"
     docking="true" resizeable="false" closable="true" height="140" width="300">
     
     <attribute name="refObj" value="null" />

@@ -80,6 +80,8 @@
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
             this._turnoverlist.clearList();
             this._turnoverlist.getRoomClientsMapByRoomId.doCall();
+            
+            this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
     </method>
 	
@@ -134,6 +136,7 @@
 		<!-- gets called by Observer  -->
   		<method name="prepareCall">
   			this.sendObject=new Array();
+            
   			this.sendObject["rooms_id"] = this.parent.rooms_id;
   			this.sendObject["name"] = this.parent.roomname.getText();
 			this.sendObject["roomtypes_id"] = Number(this.parent.roomtype.getValue());
@@ -146,10 +149,12 @@
             
             this.sendObject["isDemoRoom"] = parent.isDemoRoom.getValue();
             this.sendObject["demoTime"] = parent.demoTime.getText();
+            
+            this.sendObject["roomModerators"] = parent._listRoomModerators.getValues();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
-  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+  		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
     	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
     	<handler name="ondata" args="val">
 			<![CDATA[
@@ -209,86 +214,113 @@
 	        </handler> 
         </resetCombobox> 	                  
 
-	<!-- 195:Public -->
-    <labelText labelid="195" width="200" y="160" resize="false" x="2"/>  
-        <labelCheckbox name="ispublic" width="270" y="160" x="130" fontsize="11" />
-	
 	<!-- 196:Comment -->
-	<labelText labelid="196" width="200" y="190" resize="false" x="2"/>
-        <customScrollEdittext name="comment" y="190" x="120" width="270" 
+	<labelText labelid="196" width="200" y="160" resize="false" x="2"/>
+        <customScrollEdittext name="comment" y="160" x="120" width="270" 
             height="100" text="" />	
 	
 	<!-- Appointment -->
-	<labelText labelid="620" width="200" y="300" resize="false" x="2"/>  
-        <labelCheckbox name="isappointment" width="270" y="300" x="130" fontsize="11" />
+	<labelText labelid="620" width="200" y="270" resize="false" x="2"/>  
+        <labelCheckbox name="isappointment" width="270" y="270" x="130" fontsize="11" />
 	
 	<!-- 191:organisations -->
-    <labelText labelid="191" width="200" y="320" resize="false" x="2"/>     
-    <simpleValueList name="_organisationslist" y="320" x="120" width="270" height="160" 
+    <labelText labelid="191" width="200" y="300" fontstyle="bold"
+               resize="false" x="2"/>    
+               
+    <!-- 195:Public -->
+    <labelText labelid="195" width="200" y="320" resize="false" x="2"/>  
+        <labelCheckbox name="ispublic" width="270" y="320" x="130" fontsize="11" />               
+    
+    <view resource="messagebox_info_rsc" x="0" y="340" />
+    
+    <labelText labelid="828" x="24" y="340" multiline="true" width="370" />    
+     
+    <labelText labelid="191" width="200" y="390" resize="false" x="2"/>     
+     
+    <!-- 172:add organisation -->
+    <baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="390" x="370" width="20" height="20"
+        onclick="this.parent.addOrganisationToUser()" />        
+    <method name="addOrganisationToUser">
+        new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.rooms_id});
+    </method>   
+     
+     <!--
+    <simpleValueList name="_organisationslist" y="410" x="120" width="270" height="80" 
 		multiselect="true" />
-		
-	
-	<!-- 172:add organisation -->
-	<baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="320" x="400"
-		onclick="this.parent.addOrganisationToUser()" />		
-	<method name="addOrganisationToUser">
-			new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.rooms_id});
-	</method>	
+         -->
+        
+	<simpleTurnOverList name="_organisationslist" y="390" x="0" 
+                        width="390" height="100" mainBgColor="0xFFFFFF">
 
-	<!-- 176:remove organisation -->
-	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="320" x="430"
+        <handler name="oninit">
+            this.addHeaderItem(588,30);
+            this.addHeaderItem(831,320);
+            this.addHeaderItem(590,22);
+        </handler>
+        
+        <method name="getAllItems">
+            <![CDATA[
+		        var a = new Array();
+		        for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+		            //Debug.write("t: ",this.content.content.inn.subviews[i].value);
+		            a.push(Number(this._innerlist._inn._inn.subviews[i].orgId));
+		        }
+		        return a;
+	        ]]>
+        </method>
+        
+        <method name="addItem" args="orgName,orgId">
+            new lz.roomAdminOrgListItem(this._innerlist._inn._inn,{
+	                obj:null,
+	                orgName:orgName,
+	                orgId:orgId
+                });
+            this.sendInitialWidthUpdate();
+        </method>
+    </simpleTurnOverList>	
+    
+	<!-- 176:remove organisation
+	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="320" x="370" width="20" height="20"
 		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
 		<method name="confirmDelete">
 			if (this.parent._organisationslist._selected!=null)
 				for (var i in this.parent._organisationslist._selected)	this.parent._organisationslist.removeItem(this.parent._organisationslist._selected[i].value);
 		</method>
 	</baseChooseIcon>
+     -->
+    
+    
+    <!-- Limitations -->
+    <labelText labelid="830" width="200" y="500" fontstyle="bold"
+               resize="false" x="2"/>    
     
     <!-- Is Demo Room -->
-    <labelText labelid="636" width="200" y="490" resize="false" x="2"/>  
-        <labelCheckbox name="isDemoRoom" width="270" y="490" x="130" fontsize="11">
+    <labelText labelid="636" width="200" y="520" resize="false" x="2"/>  
+        <labelCheckbox name="isDemoRoom" width="270" y="520" x="130" fontsize="11">
             <handler name="onvalue" args="v">
+                if (!parent.isinited) {
+                    return;
+                }
                 if (v) {
-                    parent.demoTime.setAttribute("enabled",true);
+                    parent.demoTime.setAttribute("editable",true);
                 } else {
-                    parent.demoTime.setAttribute("enabled",false);
+                    parent.demoTime.setAttribute("editable",false);
                 }
             </handler>
         </labelCheckbox>   
 	
     <!-- Is Demo Room -->
-    <labelText labelid="637" width="200" y="520" resize="false" x="2"/>  
-        <customEdittext name="demoTime" y="516" x="120" width="270" regexpType="number"
+    <labelText labelid="637" width="200" y="550" resize="false" x="2"/>  
+        <customEdittext name="demoTime" y="546" x="120" width="270" regexpType="number"
                         text="" /> 
+                        
                                
-    <!-- 640:Moderated -->
-    <labelText labelid="640" width="200" y="550" resize="false" x="2"/>  
-        <labelCheckbox name="isModeratedRoom" width="270" y="550" x="130" fontsize="11" />
-    
-	<!-- 483:Show Layout Settings
-	<labelCheckbox x="0" y="550" fontsize="11"
-        name="_showAdvancedRoomSettings" labelid="483" >
-        <attribute name="advancedRoomSettingsInited" value="false" type="boolean"/>
-        <handler name="onvalue" args="v">
-			if (v) {
-				new lz.advancedRoomSettings(parent,{name:'_advancedRoomSettings'});
-                this.advancedRoomSettingsInited = true;
-			} else {
-                if (this.advancedRoomSettingsInited) {
-					parent._advancedRoomSettings.destroy();
-	                this.advancedRoomSettingsInited = false;
-                }
-			}
-        </handler>
-    </labelCheckbox>  
-     -->
-    
-    
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="200" y="40" resize="false" 
-               x="400" fontstyle="bold" />   
+               x="398" fontstyle="bold" />   
     
-    <simpleTurnOverList name="_turnoverlist" width="300" height="200" y="40" x="400">
+    <simpleTurnOverList name="_turnoverlist" width="300" mainBgColor="0xFFFFFF"
+                        height="200" y="40" x="400">
 
         <handler name="oninit">
             this.addHeaderItem(588,30);
@@ -324,6 +356,111 @@
         </method>
 
     </simpleTurnOverList>
+    
+    <!--Moderated -->
+    <labelText labelid="829" width="200" y="250" resize="false" 
+               x="400" fontstyle="bold" />   
+    
+    <labelText labelid="640" width="200" y="270" resize="false" x="400"/>  
+        <labelCheckbox name="isModeratedRoom" width="270" y="270" x="530" fontsize="11" />
+    
+    <view resource="messagebox_info_rsc" x="400" y="290" />
+    
+    <labelText labelid="823" x="424" y="290" multiline="true" width="270" />
+        
+    
+    <labelText labelid="816" width="200" y="380" resize="false" x="400"/>  
+    
+    <!-- 172:add default moderator -->
+    <baseChooseIcon resourceN="edit_add_rsc" labelid="821" y="380" x="680"
+        onclick="this.parent.addModeratorToRoom()" width="20" height="20" />        
+    <method name="addModeratorToRoom">
+        new lz.addAttendee(canvas.main_content._content.inner,{
+	                                isSuperModerator:true,
+                                    labelid:835,
+	                                refObj:this._listRoomModerators
+                                });
+    </method>   
+
+    <simpleTurnOverList name="_listRoomModerators" width="300" mainBgColor="0xFFFFFF"
+                        height="200" y="382" x="400">
+
+        <handler name="oninit">
+            this.addHeaderItem(817,50);
+            this.addHeaderItem(818,30);
+            this.addHeaderItem(819,100);
+            this.addHeaderItem(820,84);
+            this.addHeaderItem(827,20);
+        </handler>
+        
+        <method name="getValues">
+            <![CDATA[
+                
+                var tArray = new Array();
+                
+                for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++) {
+                    
+                    var tObject = new Object();
+                    var item = this._innerlist._inn._inn.subviews[i];
+                    
+                    tObject.roomModeratorsId = item.roomModeratorsId;
+                    tObject.userId = item.userId;
+                    tObject.isSuperModerator = item.isSuperModerator;
+                    
+                    tArray.push(tObject);
+                }
+            
+                return tArray;
+            ]]>
+        </method>
+        
+        <handler name="onclickedItem" args="obj">
+            if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+        </handler>
+        
+        <netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>    
+            <netparam><method name="getValue">return parent.parent.parent.rooms_id;</method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                //this.parent.destroy();
+                this.parent.renderContent(value);
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="addListItem" args="userId,first,last,email,superAdmin">
+            new lz.roomModeratorsRoomClientListItem(this._innerlist._inn._inn,{
+                    roomModeratorsId:0,
+                    obj:null,
+                    isSuperModerator:superAdmin,
+                    userId:userId,
+                    email:email,
+                    uName:first+' '+last
+                });
+            this.sendInitialWidthUpdate();
+        </method>
+        
+        <method name="renderContent" args="records">
+            <![CDATA[
+	            this.clearList();
+                
+	            for (var i in records){
+	                new lz.roomModeratorsRoomClientListItem(this._innerlist._inn._inn,{
+		                    roomModeratorsId:records[i].roomModeratorsId,
+		                    obj:records[i],
+		                    isSuperModerator:records[i].isSuperModerator,
+		                    userId:records[i].user.user_id,
+		                    email:records[i].user.adresses.email,
+		                    uName:records[i].user.firstname+' '+records[i].user.lastname
+                        });
+	            }
+                
+	            this.sendInitialWidthUpdate();
+            ]]>
+        </method>
+
+    </simpleTurnOverList>    
         
 </class>
 
@@ -339,6 +476,60 @@
     <turnOverTextItem width="40" text="">
         
     </turnOverTextItem>
+    
+</class>
+
+<!--- list of conference/audience rooms -->
+<class name="roomAdminOrgListItem" extends="baseContentListItem">
+    
+    <attribute name="orgId" value="0" type="number" />
+    <attribute name="orgName" value="" type="string" />
+    
+    <turnOverTextItem text="$once{ parent.orgId }" width="60" />
+    <turnOverTextItem text="$once{ parent.orgName }" width="200" />
+    
+    <view width="20" height="18" 
+        onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:833,showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.destroy();
+        </method>
+        <view resource="button_cancel_rsc" align="center" valign="middle" />
+        <labelTooltip labelid="274" />
+    </view>  
+    
+</class>
+
+<!--- list of ddefault moderators rooms -->
+<class name="roomModeratorsRoomClientListItem" extends="baseContentListItem">
+    
+    <attribute name="roomModeratorsId" value="0" type="number" />
+    <attribute name="isSuperModerator" value="false" type="boolean" />
+    <attribute name="modRoomId" value="0" type="number" />
+    <attribute name="uName" value="" type="string" />
+    <attribute name="userId" value="0" type="number" />
+    <attribute name="email" value="" type="string" />
+    
+    <view width="20" height="18" opacity="${ (parent.isSuperModerator) ? 1 : 0.4 }" 
+          onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:((parent.isSuperModerator) ? 837 : 836),showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.setAttribute("isSuperModerator",!parent.isSuperModerator)
+        </method>
+        <view resource="user_moderator_list_apply_rsc" align="center" valign="middle" />
+        <labelTooltip labelid="${ (parent.parent.isSuperModerator) ? 826 : 825 }" />
+    </view> 
+    
+    <turnOverTextItem text="$once{ parent.userId }" width="200" />
+    <turnOverTextItem text="$once{ parent.uName }" width="200" />
+    <turnOverTextItem text="$once{ parent.email }" width="200" />
+    
+    <view width="20" height="18" 
+        onclick="new lz.confirmationSingle(canvas.main_content._content.inner,{refObj:this,labeliderror:833,showCheckBox:false});" >       
+        <method name="sendConfirmation">
+            this.parent.destroy();
+        </method>
+        <view resource="button_cancel_rsc" align="center" valign="middle" />
+        <labelTooltip labelid="274" />
+    </view>    
     
 </class>
 

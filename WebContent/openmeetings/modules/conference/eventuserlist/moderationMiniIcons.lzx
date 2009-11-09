@@ -4,6 +4,7 @@
 <class name="moderationMiniIcons" extends="view" valign="bottom" height="18">
 	
 	<attribute name="isMod" value="false" type="boolean"/>
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
 	
 	<handler name="oninit">
 		this.isMod = canvas.getIsModeratorByPublicSID(parent.refObj.publicSID);
@@ -47,6 +48,12 @@
     <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
+            
+                if (parent.isSuperModerator) {
+                    new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:838});
+                    return;
+                }
+            
                 //if the label is set and this is a Moderator then this user should
                 //allow the click event => the click event will trigger
                 //this user away from beeing able to draw on the whiteboard

@@ -19,10 +19,19 @@
             }
         }
         
+        var lastname = object.lastname;
+        
+        if ($debug) Debug.write("object.isSuperModerator ",object.isSuperModerator);
+        
+        if (object.isSuperModerator) {
+            lastname += " *";
+        }
+        
         new lz.participentListItem(this._table.innerList,{
                 user_id:object.user_id,
+                isSuperModerator:object.isSuperModerator,
                 firstname:object.firstname,
-                lastname:object.lastname,
+                lastname:lastname,
                 width:this.width-18,
                 refObj:object,
                 connectedSince:object.connectedSince,
@@ -130,6 +139,7 @@
     <attribute name="firstname" value="" type="string" />
     <attribute name="lastname" value="" type="string" />
     <attribute name="user_id" value="0" type="number" />
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
     <attribute name="refObj" value="null" />
     
     <!--
@@ -342,6 +352,12 @@
                    height="16" showhandcursor="false">
             <handler name="onclick">
                 <![CDATA[
+                
+                    if (parent.parent.isSuperModerator) {
+                        new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:838});
+                        return;
+                    }
+                
                     //if the label is set and this is a Moderator then this user should
                     //allow the click event => the click event will trigger
                     //this user away from beeing able to draw on the whiteboard
@@ -458,12 +474,45 @@
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
         //set default values and get already availible streams
-        this.setRoomValues.doCall();
+        this.getRoomModeratorsByRoomId.doCall();
     </method>
+    
+    <netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>    
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                canvas.becomeSuperModerator = false;
+                
+                parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
+                
+                for (var i=0;i<value.length;i++) {
+                    
+                    if (value[i].user.user_id == canvas.user_id) {
+                        parent.setRoomValues.applyDefaultModeration = true;
+                        canvas.becomeSuperModerator = value[i].isSuperModerator;
+                        if ($debug) Debug.info("Make this User to an Moderator");
+                        break;
+                    }
+                    
+                }
+                
+                if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
+                if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
+                
+                this.parent.setRoomValues.doCall();
+            
+            ]]>
+        </handler>
+    </netRemoteCallHib>     
 
     <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+        <attribute name="applyDefaultModeration" value="false" type="boolean" />
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
-        <netparam><method name="getValue">return canvas.becomemoderator;</method></netparam>
+        <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
+        <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("setRoomValues1: ",value);
@@ -546,7 +595,7 @@
 
     <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
         <![CDATA[
-            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+            if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,object);
             
             //Do init only in case this stream is NOT the same as we are
             if (streamid!=canvas.streamid){

@@ -10,7 +10,7 @@
 		<handler name="oninit">
 			this.addHeaderItem(188,60);
 			this.addHeaderItem(189,186);
-			this.addHeaderItem(190,140);
+			this.addHeaderItem(190,134);
 			this.getRooms.doCall();
 		</handler>
 		

@@ -74,11 +74,17 @@
             //FIXME: Round Number and make mod(10) to get a number between 1 and 10 for a color
             canvas.currentusercolor = this.colorArray[this._table.innerList.subviews.length];
             
+            var lastname = object.lastname;
+	        if (object.isSuperModerator) {
+	            lastname += " *";
+	        }
+            
             if (this.listType == "eventUserListTable") {
 	            new lz.eventUserListItem(this._table.innerList,{
 	    	            user_id:object.user_id,
 	    	            firstname:object.firstname,
-	    	            lastname:object.lastname,
+                        isSuperModerator:object.isSuperModerator,
+	    	            lastname:lastname,
 	    	            refObj:object,
 	    	            connectedSince:object.connectedSince,
 	    	            isMod:object.isMod,
@@ -90,7 +96,8 @@
 	            new lz.eventUserListItemWithNames(this._table.innerList,{
 	    	            user_id:object.user_id,
 	    	            firstname:object.firstname,
-	    	            lastname:object.lastname,
+                        isSuperModerator:object.isSuperModerator,
+	    	            lastname:lastname,
 	    	            refObj:object,
 	    	            connectedSince:object.connectedSince,
 	    	            isMod:object.isMod,

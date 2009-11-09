@@ -13,7 +13,7 @@
 
 <class name="baseChooseIcon" extends="button" width="24" height="24"  style="componentStyle">
     <attribute name="resourceN" value="" type="string" />
-    <view resource="${ parent.resourceN }" x="${ parent.width/2-this.width/2 }" y="${ parent.height/2-this.height/2 }"  />
+    <view resource="${ parent.resourceN }" valign="middle" align="center"  />
     <attribute name="isselected" value="false" type="boolean" />
 	<!--
     <attribute name="enabled" value="true" type="boolean" />

@@ -130,6 +130,8 @@ public class AppointmentLogic {
 //				false,				// Demo Room => Meeting Timer
 //				null);				    // Meeting Timer time in seconds
 		
+		//TODO:Add this user as the default Moderator of the Room
+		
 		Long room_id = Roommanagement.getInstance().addRoom(
 				3,					// Userlevel
 				appointmentName,	// name	
@@ -141,7 +143,7 @@ public class AppointmentLogic {
 				true,				// Appointment
 				false,				// Demo Room => Meeting Timer
 				null,               // Meeting Timer time in seconds
-				false);				// Is Moderated Room
+				false, null);				// Is Moderated Room
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);

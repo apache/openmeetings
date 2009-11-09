@@ -81,6 +81,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/recording/WhiteBoardEvent.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomTypes.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomModerators.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms_Organisation.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Salutations.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userdata.hbm.xml"/>

@@ -17,8 +17,10 @@ import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
@@ -60,14 +62,14 @@ public class ConferenceService {
 	public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID, long organisation_id, long roomtypes_id){
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 	        
 	        log.debug("getRoomsByOrganisationAndType");
 	        
-	        if (User_level == null) {
+	        if (user_level == null) {
 	        	return null;
 	        }
-	        List<Rooms_Organisation> roomOrgsList = Roommanagement.getInstance().getRoomsOrganisationByOrganisationIdAndRoomType(User_level, organisation_id, roomtypes_id);
+	        List<Rooms_Organisation> roomOrgsList = Roommanagement.getInstance().getRoomsOrganisationByOrganisationIdAndRoomType(user_level, organisation_id, roomtypes_id);
 	        
 	        List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
 	        
@@ -89,14 +91,14 @@ public class ConferenceService {
 	public List<Rooms_Organisation> getRoomsByOrganisationWithoutType(String SID, long organisation_id){
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 	        
 	        log.debug("getRoomsByOrganisationAndType");
 	        
-	        if (User_level == null) {
+	        if (user_level == null) {
 	        	return null;
 	        }
-	        List<Rooms_Organisation> roomOrgsList = Roommanagement.getInstance().getRoomsOrganisationByOrganisationId(User_level, organisation_id);
+	        List<Rooms_Organisation> roomOrgsList = Roommanagement.getInstance().getRoomsOrganisationByOrganisationId(user_level, organisation_id);
 	        
 	        List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
 	        
@@ -435,6 +437,8 @@ public class ConferenceService {
 	        Long rooms_id = Long.valueOf(argObjectMap.get("rooms_id").toString()).longValue();
 	        log.debug("rooms_id "+rooms_id);
 	        
+	        List roomModerators = (List) argObjectMap.get("roomModerators");
+	        
 	        Integer demoTime = null;
 	        if (argObjectMap.get("demoTime").toString() != null && argObjectMap.get("demoTime").toString().length() > 0) {
 	        	demoTime = Integer.valueOf(argObjectMap.get("demoTime").toString()).intValue();
@@ -448,7 +452,8 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("appointment").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isDemoRoom").toString()),
 	        			demoTime,
-	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()));
+	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
+	        			roomModerators);
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -458,12 +463,34 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("appointment").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isDemoRoom").toString()),
 	        			demoTime,
-	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()));
+	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
+	        			roomModerators);
 	        }
 	        
 		} catch (Exception e){
 			log.error("saveOrUpdateRoom",e);
 		}
+		return null;
+	}
+	
+	public List<RoomModerators> getRoomModeratorsByRoomId(String SID, Long roomId) {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
+	        	
+	        	return RoomModeratorsDaoImpl.getInstance().getRoomModeratorByRoomId(roomId);
+	        	
+	        }
+			
+			
+		} catch (Exception err) {
+			log.error("[getRoomModeratorsByRoomId]",err);
+			err.printStackTrace();
+		}
+		
 		return null;
 	}
 	

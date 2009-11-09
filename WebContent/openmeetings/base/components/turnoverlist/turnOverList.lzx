@@ -2,10 +2,10 @@
 <library>
 
 <!--- private class for turnOverList only. -->
-<class name="innerList" layout="axis:y;spacing:2" />
+<class name="innerList" layout="axis:y;spacing:1" />
 	
 <!--- common TurnOverList view class. -->
-<class name="turnOverList" extends="view">
+<class name="turnOverList" extends="view" >
 
 	<attribute name="start" value="0" type="number" />
 	<attribute name="step" value="100" type="number" />
@@ -14,6 +14,8 @@
 	<attribute name="records" value="0" type="number" />
 	
 	<attribute name="_selected" value="null"/>
+    
+    <attribute name="mainBgColor" value="0xEEF0EB" />
 	
 	<event name="oncallnext" />
 	<event name="oncallpre" />
@@ -143,22 +145,28 @@
 	</simpleLabelButtonTooltip>
 
     <!-- 371:goto last -->
-	<simpleLabelButtonTooltip name="_next2" x="$once{ parent.width-22 }" width="22" height="22" 
+	<simpleLabelButtonTooltip name="_next2" x="$once{ parent.width-21 }" width="22" height="22" 
 		enabled="true" onclick="parent.calllast()" tooltipId="371">
 		<view resource="step_fwd_two_arrow" valign="middle" align="center" />
 	</simpleLabelButtonTooltip>
 	
-	
+    <!-- =========  BgArea area  =========-->
+    <view width="$once{ parent.width }" bgcolor="0x000000"
+          height="$once{ parent.height-20 }" x="0" y="20">
+        <view width="$once{ parent.width-2 }" bgcolor="$once{ parent.parent.mainBgColor }"
+          height="$once{ parent.height-2 }" x="1" y="1"></view>
+    </view>
+          
 	<!-- =========  List Header area  =========-->
 
-	<view name="_innerlisthead" height="20" width="$once{ parent.width }" 
+	<view name="_innerlisthead" height="20" x="1" width="$once{ parent.width-2 }" 
 		 y="22" clip="true">
 		<view name="_inn" x="${ parent.parent._innerlist._inn.x }" layout="axis:x;spacing:0" />
 	</view>	
 	
 	<!-- =========  List Contents area  =========-->
-	<view name="_innerlist" height="$once{ parent.height-22 }" width="$once{ parent.width }"
-		y="42" clip="true">
+	<view name="_innerlist" height="$once{ parent.height-43 }" x="1" width="$once{ parent.width-2 }"
+		y="42" clip="true" bgcolor="$once{ parent.mainBgColor }">
 		<view name="_inn" >
 			<innerList name="_inn" />
 		</view>

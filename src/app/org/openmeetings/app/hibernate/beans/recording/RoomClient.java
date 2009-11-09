@@ -45,6 +45,7 @@ public class RoomClient {
 	 * 
 	 */
 	private Boolean isMod = false;
+	private Boolean isSuperModerator = false;
 	private Boolean canDraw = false;
 	private Date connectedSince;
 	private String formatedDate;
@@ -557,6 +558,12 @@ public class RoomClient {
 	public void setSharerSIDs(List<String> sharerSIDs) {
 		this.sharerSIDs = sharerSIDs;
 	}
-	
+
+	public Boolean getIsSuperModerator() {
+		return isSuperModerator;
+	}
+	public void setIsSuperModerator(Boolean isSuperModerator) {
+		this.isSuperModerator = isSuperModerator;
+	}
 	
 }

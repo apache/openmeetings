@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+<resource name="user_moderator_list_apply_rsc" src="apply.png" />
+
 <resource name="reg_back" src="buttons/reg_bg.png" />
 <resource name="reg_back_s" src="buttons/reg_bg_s.png" />
 <resource name="reg_back_opt" src="buttons/reg_bg_opt.png" />
@@ -30,9 +32,9 @@
 <!-- add for calendar -->
 
 <resource name="filesave_rsc" src="filesave.png" />
-<resource name="button_cancel_rsc" src="button_cancel.png" />
+<resource name="button_cancel_rsc" src="editdelete.png" />
 <resource name="edit_add_rsc" src="edit_add.png" />
-<resource name="reload_rsc" src="reload.png" />
+<resource name="reload_rsc" src="reload_page.png" /> 
 
 <resource name="xoffice_rsc" src="x-office-presentation.png" />
 <resource name="xoffice22_rsc" src="x-office-presentation22.png" />

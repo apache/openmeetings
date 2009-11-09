@@ -15,6 +15,8 @@
     <attribute name="user_id" value="0" type="number" />
     <attribute name="refObj" value="null" />
     
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
     <attribute name="isSelected" value="false" type="boolean" />
     
 	<handler name="oninit">
@@ -90,10 +92,12 @@
     <handler name="onclick">
     	parent.parent.parent.selectItem(this);
     </handler>
-    
+     
     <method name="select">
     	if (!this.isSelected) {
-	    	new lz.moderationMiniIcons(this,{name:'_miniIcons',align:'right'});
+	    	new lz.moderationMiniIcons(this,{name:'_miniIcons',align:'right',
+                isMod:this.isMod,
+                isSuperModerator:this.isSuperModerator});
 	    	this.isSelected = true;
 	    	this._userName.text = "";
 	    	this.showItem.doStart();

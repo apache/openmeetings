@@ -24,6 +24,7 @@ import org.openmeetings.app.hibernate.beans.user.*;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -503,7 +504,8 @@ public class Roommanagement {
 			Boolean appointment,
 			Boolean isDemoRoom,
 			Integer demoTime,
-			Boolean isModeratedRoom){
+			Boolean isModeratedRoom, 
+			List roomModerators){
 		
 		log.debug("addRoom");
 		
@@ -535,6 +537,10 @@ public class Roommanagement {
 				if (organisations!=null){
 					Long t = this.updateRoomOrganisations(organisations, r);
 					if (t==null) return null;
+				}
+				
+				if (roomModerators!=null) {
+					RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
 				}
 				
 				return returnId;
@@ -893,7 +899,8 @@ public class Roommanagement {
 			Boolean appointment,
 			Boolean isDemoRoom,
 			Integer demoTime,
-			Boolean isModeratedRoom){
+			Boolean isModeratedRoom,
+			List roomModerators){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -924,6 +931,9 @@ public class Roommanagement {
 				if (organisations!=null){
 					Long t = this.updateRoomOrganisations(organisations, r);
 					if (t==null) return null;
+				}
+				if (roomModerators!=null) {
+					RoomModeratorsDaoImpl.getInstance().updateRoomModeratorByUserList(roomModerators,r.getRooms_id());
 				}
 				
 				return r.getRooms_id();

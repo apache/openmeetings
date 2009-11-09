@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="customEdittext" extends="inputtext" bgcolor="white" fontsize="11" height="20" >
+<class name="customEdittext" extends="inputtext" bgcolor="0xFFFFFF" fontsize="11" height="20" >
 	
 	<view name="v_border" height="1"       bgcolor="black" width="$once{parent.width}" />
     <view name="h_border" width="1"  y="1" bgcolor="black" height="$once{parent.height -1}" />
@@ -20,7 +20,7 @@
     </handler>
     
     <handler name="oninit">
-    	this.field.setAttribute("bgcolor",0xFFFFFF);
+    	//this.field.setAttribute("bgcolor",0xFFFFFF);
     </handler>
     
     

@@ -281,6 +281,7 @@ and some more references to temp-objects
 <attribute name="isMoodleRoom" value="false" type="boolean" /> 
 
 <attribute name="becomemoderator" value="false" type="boolean" />
+<attribute name="becomeSuperModerator" value="false" type="boolean" />
 
 <attribute name="moodleWwwRoot" value="" type="string" />
 <attribute name="moodleUserId" value="0" type="number" />

@@ -284,30 +284,30 @@ public class ImportInitvalues {
 		log.debug("restricted_Id: " + restricted_Id);
 		
 		Roommanagement.getInstance().addRoom(3, "public Conference Room", 1,
-				"", new Long(8), true, null, false, false, null, false);
+				"", new Long(8), true, null, false, false, null, false, null);
 
 		Roommanagement.getInstance().addRoom(3, "public Video Only Room", 1,
-				"", new Long(16), true, null, false, false, null, false);
+				"", new Long(16), true, null, false, false, null, false, null);
 
 		Roommanagement.getInstance().addRoom(3,
 				"public Video And Whiteboard Room", 1, "", new Long(16), true,
-				null, false, false, null, false);
+				null, false, false, null, false, null);
 
 		Roommanagement.getInstance().addRoom(3, "public Restricted Room", restricted_Id,
-				"", new Long(10), true, null, false, false, null, false);
+				"", new Long(10), true, null, false, false, null, false, null);
 		
 		long room2 = Roommanagement.getInstance().addRoom(3,
 				"private Conference Room", 1, "", new Long(16), false, null,
-				false, false, null, false);
+				false, false, null, false, null);
 		Roommanagement.getInstance().addRoomToOrganisation(3, room2, 1);
 
 		Roommanagement.getInstance().addRoom(3, 
 				"public Audience Room", 2, "", new Long(32), true, null, 
-				false, false, null, false);
+				false, false, null, false, null);
 
 		long room4 = Roommanagement.getInstance().addRoom(3,
 				"private Audience Room", 2, "", new Long(32), false, null, 
-				false, false, null, false);
+				false, false, null, false, null);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room4, 1);
 

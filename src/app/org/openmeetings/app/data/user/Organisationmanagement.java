@@ -425,6 +425,9 @@ public class Organisationmanagement {
 				orgUser.setComment(comment);
 				long id = (Long) session.save(orgUser);
 				tx.commit();
+				
+				//We need this flush
+				session.flush();
 				HibernateUtil.closeSession(idf);
 				return id;
 			} else {

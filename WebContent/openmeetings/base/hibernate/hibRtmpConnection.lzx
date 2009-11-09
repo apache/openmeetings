@@ -190,7 +190,7 @@
     <netRemoteCallHib name="logoutUser" funcname="xmlcrm.logoutUser"
         remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" 
         isCallBackHandler="true">
-        <netparam><method name="getValue"> return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="sendCallBack">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("sendCallBack logoutUser: ",value);    

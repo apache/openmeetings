@@ -878,7 +878,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @param room_id
 	 * @return
 	 */
-	public synchronized HashMap<String,RoomClient> setRoomValues(Long room_id, Boolean becomeModerator){
+	public synchronized HashMap<String,RoomClient> setRoomValues(Long room_id, 
+			Boolean becomeModerator, Boolean isSuperModerator){
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -886,6 +887,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			currentClient.setRoom_id(room_id);
 			currentClient.setRoomEnter(new Date());
+			
+			//This can be set without checking for Moderation Flag
+			currentClient.setIsSuperModerator(isSuperModerator);
+			
 			this.clientListManager.updateClientByStreamId(streamid, currentClient);
 			
 			//Log the User
@@ -953,7 +958,38 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						currentClient.setIsMod(true);
 					} else {
 						log.debug("Room is already somebody so set this user not to be moderation role");
-						currentClient.setIsMod(false);
+						
+						if (becomeModerator) {
+							currentClient.setIsMod(true);
+							
+							//There is a need to send an extra Event here, cause at this moment there could be 
+							//already somebody in the Room waiting
+							
+							//Notify all clients of the same scope (room)
+							Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+							for (Set<IConnection> conset : conCollection) {
+								for (IConnection conn : conset) {
+									if (conn != null) {
+										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+										if( !streamid.equals(rcl.getStreamid())){
+											//It is not needed to send back that event to the actuall Moderator
+											//as it will be already triggered in the result of this Function 
+											//in the Client
+											if (conn instanceof IServiceCapableConnection) {
+												((IServiceCapableConnection) conn).invoke("setNewModerator",new Object[] { currentClient }, this);
+												log.debug("sending setNewModerator to " + conn);
+											}
+										}
+									}
+								}	
+							}
+							
+						} else {
+							//The current User is not a Teacher/Admin or whatever Role that should get the 
+							//Moderation 
+							currentClient.setIsMod(false);
+						}
+						
 					}
 					
 				}

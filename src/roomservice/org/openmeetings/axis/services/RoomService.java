@@ -133,7 +133,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							false, false, null
-							, false);
+							, false, null);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -153,7 +153,7 @@ public class RoomService {
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
-							appointment, isDemoRoom, demoTime, isModeratedRoom);
+							appointment, isDemoRoom, demoTime, isModeratedRoom, null);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ",err);
 		}
@@ -212,7 +212,7 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, rooms_id, roomtypes_id, name, ispublic, 
-					comment, numberOfPartizipants, null, appointment, false, null, false);
+					comment, numberOfPartizipants, null, appointment, false, null, false,null);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -234,7 +234,7 @@ public class RoomService {
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
-					appointment, isDemoRoom, demoTime, isModeratedRoom);
+					appointment, isDemoRoom, demoTime, isModeratedRoom,null);
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ",err);
 		}

@@ -190,6 +190,7 @@
 						<netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>  
 						<handler name="ondata" args="value">	
 						<![CDATA[
+                            if ($debug) Debug.write("getRoomsByOrganisationWithoutType ",value);
 							if (value != null) {
 								for (var eg = 0; eg < value.length; eg++) {
 									new lz.roomListItem(parent.inn.inn.inn,{
