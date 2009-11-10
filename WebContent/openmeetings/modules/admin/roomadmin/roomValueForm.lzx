@@ -30,6 +30,7 @@
 		this.numberOfParticipants.selectItem('4');
 		this._organisationslist.clearList();
         this._turnoverlist.clearList();
+        this._listRoomModerators.clearList();
 	</handler>
 	
     <handler name="ondelete" >
@@ -49,8 +50,15 @@
     
     <method name="initFields" args="obj">
     	<![CDATA[
+    	
+    	   if (obj == null) {
+                return;
+            }
+            
     		this.roomsObj = obj;
     		if ($debug) Debug.write("initFields: ",obj);
+    		this.rooms_id = obj.rooms_id;
+    		
 			this.roomname.setAttribute('text',obj.name);
 			this.comment.setAttribute('text',obj.comment);
 			this.ispublic.setValue(obj.ispublic);

@@ -32,14 +32,30 @@
     <simpleLabelButton name="sendBtn" labelid="317" x="120" y="90" >
         <attribute name="showResetBox" value="false" type="boolean" />
     	<handler name="onclick">
-            if (parent.chooseTextType.value==1){
-                parent.resetByLogin.setAttribute('text','');
-            } else {
-                parent.resetByMail.setAttribute('text','');
-            }
-            var urlObject =  lz.Browser.getBaseURL();
-			parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+urlObject.port+urlObject.path+urlObject.file;
-			parent.resetUserPwd.doCall();
+    		<![CDATA[
+                if (parent.chooseTextType.value==1){
+                    parent.resetByLogin.setAttribute('text','');
+                } else {
+                    parent.resetByMail.setAttribute('text','');
+                }
+                
+                //Point URL to actual File
+                var urlObject =  lz.Browser.getBaseURL();
+                //If Port is Null or undefinied use port 80
+                if (urlObject.port!=null && urlObject.port!=undefined){
+                    var port = urlObject.port;
+                    
+                    if (port != 80) {
+                        parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+                    } else {
+                        parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+                    }
+                } else {
+                    parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+                }
+                
+    			parent.resetUserPwd.doCall();
+			]]>
     	</handler>
     </simpleLabelButton>   
     

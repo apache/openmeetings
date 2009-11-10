@@ -34,8 +34,15 @@
                 newy = 20;
             }
             
-            if (this.width + newx + 20 > parent.width) {
-            	newx = parent.width-this.width-20;
+            //if ($debug) Debug.write("1.1",(this.width + newx + 20),parent.width,this.width);
+            
+            var relativeWidth = parent.width;
+            if (relativeWidth > canvas.width) {
+            	relativeWidth = canvas.width;
+            }
+            
+            if (this.width + newx + 20 > relativeWidth) {
+            	newx = relativeWidth-this.width-20;
             }
             
             if (this.height + newy + 20 > parent.height) {

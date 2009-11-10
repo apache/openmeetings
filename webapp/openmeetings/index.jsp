@@ -2,7 +2,7 @@
 <html>
 <head>
 
-
+<meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">

@@ -563,10 +563,12 @@
                 //Debug.write("is swf Presentation");
                 boundingDoUpdateOnInit=false;
             }
+            
+            //if ($debug) Debug.write("this.ObjectByName ",val,this.ObjectByName);
                 
-	    	var x = this.ObjectByName.getAttribute('x');
-	    	var y = this.ObjectByName.getAttribute('y');
-            //Debug.write("doShowObjectBounds: ",x,y);
+	    	var x = this.ObjectByName.x;
+	    	var y = this.ObjectByName.y;
+            //if ($debug) Debug.write("doShowObjectBounds: ",x,y);
 	    	var width = this.ObjectByName.width;
 	    	var height = this.ObjectByName.height;
 	    	if (this.boundingref!=null)this.boundingref.removeIt();

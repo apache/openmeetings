@@ -2335,121 +2335,121 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Non mostrate il test Audio/Video (registrazione) prima di entrare in una conferenza</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>Stanze pubbliche</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>Le stanze pubbliche sono accessibili da tutti gli utenti</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>Stanze private</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>Le stanze private sono accessibili solo dagli utenti della rispettiva organizzazione.</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>Mie stanze</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Le stanze di questa sezione sono create per usi personali. Sono create attraverso il calendario e hanno una data di inizio e di fine. Sono visibili in questa sezione solo per la durata della loro validit√†.</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>Devi essere moderatore per fare questa azione.</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>Assegna moderatore</value>
   </string>
   <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
+    <value>Assegna accesso alla lavagna</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>Assegna accesso a cam/microfono</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>Questa hash di sessione √® gi√† in uso. Non puoi accedere contemporaneamente.</value>
   </string>
   <string id="788" name="dashboard button">
-    <value>START</value>
+    <value>INIZIO</value>
   </string>
   <string id="789" name="exit conference">
-    <value>EXIT</value>
+    <value>ESCI</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>Sei sicuro di voler uscire? Potresti dover pulire i documenti caricati, la lavagna e la chat</value>
   </string>
   <string id="791" name="conference view">
-    <value>Exit conference</value>
+    <value>Esci conferenza</value>
   </string>
   <string id="792" name="main menu">
-    <value>Rooms</value>
+    <value>Stanze</value>
   </string>
   <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>Scegli la stanza per un meeting</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+    <value>E' presente un evento non salvato nel calendario. Per favore salvalo o cancellalo.</value>
   </string>
   <string id="795" name="calendar">
-    <value>Please add at least one attendee for your meeting!</value>
+    <value>Si prega di aggiungere almeno un partecipante per la riunione!</value>
   </string>
   <string id="796" name="calendar">
-    <value>Do you really want to delete this Event?</value>
+    <value>Sei sicuro di voler cancellare questo evento?</value>
   </string>
   <string id="797" name="calendar">
-    <value>Warning</value>
+    <value>Attenzione</value>
   </string>
   <string id="798" name="calendar">
-    <value>Add Event</value>
+    <value>Aggiungi evento</value>
   </string>
   <string id="799" name="calendar">
-    <value>day</value>
+    <value>giorno</value>
   </string>
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>settimana</value>
   </string>
   <string id="801" name="calendar">
-    <value>month</value>
+    <value>mese</value>
   </string>
   <string id="802" name="calendar">
-    <value>Description</value>
+    <value>Descrizione</value>
   </string>
   <string id="803" name="calendar">
-    <value>Attendees</value>
+    <value>Partecipanti</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>OpenMeetings, la tua piattaforma di videoconferenza. Segui le istruzioni premendo il tasto inizio per cominciare subito una videoconferenza, o vai al calendario e pianifica una conferenza per il futuro.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Plan a Meeting</value>
+    <value>Pianifica una conferenza</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+    <value>Per pianificare una conferenza tu puoi aggiungere un evento nel calendario. Per ogni evento sar√† creata un apposita stanza. Tu e tutti gli invitati riceverete una mail con un link per accedere alla stanza.&lt;br/&gt;&lt;br/&gt;Puoi scegliere tra diverse tipologie di stanze con differenti tipologie di layout e mdoerazione. Puoi anche scegliere tra diversi tipi di notifica via email che avvisano dell'evento in calendario.</value>
   </string>
   <string id="807" name="lzcalendar">
-    <value>Need help?</value>
+    <value>Serve aiuto?</value>
   </string>
   <string id="808" name="lzcalendar">
-    <value>Restricted</value>
+    <value>Ristretto</value>
   </string>
   <string id="809" name="lzcalender">
-    <value>Search</value>
+    <value>Cerca</value>
   </string>
   <string id="810" name="lzcalender">
-    <value>Add</value>
+    <value>Aggiungi</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>Non ci sono utenti selezionati. Si prega di scegliere un elemento dalla lista e poi premere aggiungi.</value>
   </string>
   <string id="812" name="lzcalendar">
-    <value>Add Attendee</value>
+    <value>Aggiungi partecipanti</value>
   </string>
   <string id="813" name="lzcalendar">
-    <value>Save</value>
+    <value>Salva</value>
   </string>
   <string id="814" name="lzcalendar">
-    <value>Delete</value>
+    <value>Cancella</value>
   </string>
   <string id="815" name="lzcalendar">
-    <value>Event Details</value>
+    <value>Dettagli evento</value>
   </string>
   <string id="816" name="room admin">
     <value>Default Moderators</value>
