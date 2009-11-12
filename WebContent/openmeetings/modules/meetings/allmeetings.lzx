@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="allmeetings" extends="baseContentView"  bgcolor="white" height="${ canvas.height-130 }">
+<class name="allmeetings" extends="baseContentView" height="${ canvas.height-110 }">
 	<attribute name="finishedTabsQuantity" type="number" value="0"/>	
 	<attribute name="clickedButton" value="null"/>
 			
@@ -23,8 +23,8 @@
 	
 	<handler name="ontabcontentleave">
 		_mainScrollBar.setAttribute("visibility","visible");
-		canvas._chatcontentRPC = null;
-		canvas.thishib.removeClientFromChatNotification.doCall();
+		//canvas._chatcontentRPC = null;
+		//canvas.thishib.removeClientFromChatNotification.doCall();
 	</handler>
     
     <attribute name="refObjItem" value="null" />
@@ -102,7 +102,7 @@
 			
 			<labelText labelid="778" x="30" width="400" multiline="true" />
 			
-			<view y="40" height="${ parent.height-20 }">
+			<view y="40" height="${ parent.height-40 }">
 		    
 				<netRemoteCallHib name="removeClientFromChatNotification" funcname="chatservice.removeClientFromChatNotification"	
 					remotecontext="$once{ canvas.thishib }" >      
@@ -152,10 +152,10 @@
 					</netRemoteCallHib>
 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
+					<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
 						<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" 
 							  		bgcolor="0xFFFFFF" clip="true" >
-							<view name="inn" layout="axis:y;spacing:2"/>
+							<view name="inn" layout="axis:y;spacing:0"/>
 							<vscrollbar />
 						</view>
 					</view>
@@ -164,7 +164,7 @@
 						roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
 							Mar 24 2008 commented by onokeiji@gmal.com
 					 -->
-				<roomListDetails x="510" y="4" name="_roomlistdetails" bgcolor="white" />
+				<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
 			</view>
 		</view>
 	
@@ -176,7 +176,7 @@
 			
 			<labelText labelid="780" x="30" width="400" multiline="true" />
 				
-			<view y="40" height="${ parent.height-20 }">
+			<view y="40" height="${ parent.height-40 }">
 			
 				<!-- Declared conference rooms list -->
 				<view y="4" x="4" height="${ parent.height-4 }">
@@ -212,9 +212,9 @@
 					</netRemoteCallHib> 
 	 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
+					<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
 						<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
-							<view name="inn" layout="axis:y;spacing:2"/>
+							<view name="inn" layout="axis:y;spacing:0"/>
 							<vscrollbar />
 						</view>
 					</view>
@@ -224,7 +224,7 @@
 						roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
 							Mar 24 2008 commented by onokeiji@gmal.com
 					 -->
-				<roomListDetails x="510" y="4" name="_roomlistdetails" bgcolor="white" />
+				<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
 			</view>
   			
 		</view>
@@ -237,7 +237,7 @@
 			<labelText labelid="782" x="30" width="400" multiline="true" />
 			
 			<!-- Declared conference rooms list -->
-			<view y="50" height="${ parent.height-30 }">
+			<view y="50" height="${ parent.height-50 }">
 				
 				<handler name="oninit">
 					canvas.thishib.roomtype = "public";
@@ -281,9 +281,9 @@
 				</netRemoteCallHib> 
 	 
 				<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-				<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
+				<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
 					<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
-						<view name="inn" layout="axis:y;spacing:2"/>
+						<view name="inn" layout="axis:y;spacing:0"/>
 						<vscrollbar />
 					</view>
 				</view>
@@ -293,7 +293,7 @@
 					roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
 						Mar 24 2008 commented by onokeiji@gmal.com
 				 -->
-			<roomListDetails x="510" y="4" name="_roomlistdetails" bgcolor="white"/>
+			<roomListDetails x="510" y="4" name="_roomlistdetails" height="${ parent.height-4 }" />
 			
 		</view>
 		

@@ -27,7 +27,7 @@
 			} else {
 				//Check Warning
     			if ($debug) Debug.warn("Unsaved Item - Show warning");
-    			new lz.labelerrorPopup(canvas,{errorlabelid:794});
+    			new lz.labelerrorPopup(canvas,{errorlabelid:794,makeModal:true});
 			}
 		</handler> 
 	</dateSelector> 
@@ -165,7 +165,7 @@
             		} else {
             			//Check Warning
             			if ($debug) Debug.warn("Unsaved Item - Show warning");
-            			new lz.labelerrorPopup(canvas,{errorlabelid:794});
+            			new lz.labelerrorPopup(canvas,{errorlabelid:794,makeModal:true});
             		}
             	</handler>
             </calButton>

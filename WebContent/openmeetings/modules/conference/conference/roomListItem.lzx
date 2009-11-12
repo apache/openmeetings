@@ -160,7 +160,7 @@
 		</simpleLabelButton>
 
 		<view width="478" bgcolor="$once{ canvas.basebgcolorizer }"
-			height="2" y="48" />
+			height="2" y="49" />
 
 
 		<labelTooltip multiline="true" name="_labeltooltip" />

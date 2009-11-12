@@ -6,6 +6,20 @@
     x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
 
 	<attribute name="error" value="" type="string" />
+	
+	<attribute name="makeModal" value="false" type="boolean" />
+	
+	<handler name="oninit">
+	   if (this.makeModal) {
+	       lz.ModeManager.makeModal(this);
+	   }
+	</handler>
+	
+	<handler name="onclose">
+       if (this.makeModal) {
+           lz.ModeManager.releaseAll();
+       }
+    </handler>
 
 	<view x="4" resource="warning_icon_rsc" y="24" />
 
