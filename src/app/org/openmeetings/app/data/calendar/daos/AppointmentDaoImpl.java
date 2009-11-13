@@ -594,6 +594,8 @@ public class AppointmentDaoImpl {
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
+		
+		session.flush();
 		Query query = session.createQuery(hql);
 		
 		query.setBoolean("mm_deleted", true);

@@ -24,6 +24,7 @@
 		
 		<handler name="onclickedItem" args="obj">
 			//Debug.write("onclickedItem",obj,obj.obj);
+            parent._roomvalueform.hideNewRecordText();
 			parent._roomvalueform.initValueFieldsByObject(obj.obj);
 		</handler>
 		
@@ -57,7 +58,11 @@
 
 	</turnOverList>
 	
-	<roomValueForm name="_roomvalueform" x="402" />
+	<roomValueForm name="_roomvalueform" x="402">
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </roomValueForm>
 		
 </class>
 

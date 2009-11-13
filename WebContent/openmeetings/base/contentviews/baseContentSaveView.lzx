@@ -15,8 +15,13 @@
 	<event name="onnew" />
     <event name="ondelete" />
     <handler name="onsavecompleted" >
-		this._savecontentbar._newRecord.setAttribute('visibility','hidden');
+		this.hideNewRecordText();
 	</handler>
+    
+    <method name="hideNewRecordText">
+        this._savecontentbar._newRecord.setAttribute('visibility','hidden');
+    </method>
+    
 	<event name="onreload" />
 
     <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"

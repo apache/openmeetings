@@ -23,7 +23,8 @@
 		</handler>
 		
 		<handler name="onclickedItem" args="obj">
-			Debug.write("onclickedItem",obj,obj.obj);
+			if ($debug) Debug.write("onclickedItem",obj,obj.obj);
+            parent._confvalueform.hideNewRecordText();
 			parent._confvalueform.initValueFieldsByObject(obj.obj);
 		</handler>
 		
@@ -57,7 +58,11 @@
 
 	</turnOverList>
     
-    <confAdminValueForm name="_confvalueform" x="416" />
+    <confAdminValueForm name="_confvalueform" x="416">
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </confAdminValueForm>
 
         
 </class>

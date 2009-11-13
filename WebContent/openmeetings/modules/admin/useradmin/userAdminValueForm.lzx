@@ -56,6 +56,10 @@
     
     <method name="initFields" args="obj">
     	<![CDATA[
+            if (obj == null) {
+                return;
+            }
+        
 			this.level.selectItem(String(obj.level_id));
 			this.username.setAttribute('text',obj.login);
 			this.firstname.setAttribute('text',obj.firstname);

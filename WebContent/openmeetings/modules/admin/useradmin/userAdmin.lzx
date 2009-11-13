@@ -35,6 +35,7 @@
 		
 		<handler name="onclickedItem" args="obj">
 			//Debug.write("onclickedItem",obj,obj.obj);
+            parent._useradminvalueform.hideNewRecordText();
 			parent._useradminvalueform.initValueFieldsByObject(obj.obj);
 		</handler>
 		
@@ -76,7 +77,11 @@
 
 	</turnOverList>
 	
-	<userAdminValueForm name="_useradminvalueform" x="460" />
+	<userAdminValueForm name="_useradminvalueform" x="460">
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </userAdminValueForm>
 
 </class>
 

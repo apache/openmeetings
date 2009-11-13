@@ -116,6 +116,7 @@
 		
 		<handler name="onclickedItem" args="obj">
 			//if($debug) Debug.write("onclickedItem",obj,obj.obj);
+            parent._fieldvalueform.hideNewRecordText();
 			parent._fieldvalueform.initValueFieldsByObject(obj.obj);
 		</handler>
 		
@@ -154,7 +155,11 @@
     <!-- 361:You need to logout to see any changes. -->
 	<labelText x="470" labelid="361" y="2" resize="true" />  
 	
-	<fieldValueForm name="_fieldvalueform" x="470" y="60" />
+	<fieldValueForm name="_fieldvalueform" x="470" y="60" >
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </fieldValueForm>
 	
 </class>
 

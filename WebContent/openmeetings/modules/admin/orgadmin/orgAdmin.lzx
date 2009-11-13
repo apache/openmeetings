@@ -23,6 +23,7 @@
 		
 		<handler name="onclickedItem" args="obj">
 			//Debug.write("onclickedItem",obj,obj.obj);
+            parent._orgadminvalueform.hideNewRecordText();
 			parent._orgadminvalueform.initValueFieldsByObject(obj.obj);
 		</handler>
 		
@@ -51,7 +52,11 @@
 
 	</turnOverList>
 	
-	<orgAdminValueForm name="_orgadminvalueform" x="340" />
+	<orgAdminValueForm name="_orgadminvalueform" x="340">
+        <handler name="onnew" args="refObj">
+            parent._turnoverlist.clearSelection();
+        </handler>
+    </orgAdminValueForm>
 	
 </class>
 

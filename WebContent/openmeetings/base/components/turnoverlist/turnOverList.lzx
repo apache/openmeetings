@@ -25,6 +25,12 @@
 		this.start = 0;
 		this.oncallnext.sendEvent();
 	</method>
+    
+    <method name="clearSelection">
+        if (this._selected != null) {
+            this._selected.deselect();
+        }
+    </method>
 	
 	<handler name="onclickedItem" args="itemObj">
 		if (this._selected != null) {

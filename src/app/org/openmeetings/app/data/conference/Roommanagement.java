@@ -38,7 +38,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
  */
 public class Roommanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Roommanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Roommanagement.class);
 
 	private static Roommanagement instance;
 
@@ -290,7 +290,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms.class);
 			crit.setFirstResult(start);
 			crit.setMaxResults(max);
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -314,7 +314,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+				Criteria crit = session.createCriteria(Rooms_Organisation.class);
 				crit.add(Restrictions.ne("deleted", "true"));
 				Criteria subcrit = crit.createCriteria("room");
 				subcrit.add(Restrictions.eq("rooms_id", rooms_id));
@@ -345,7 +345,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
+//				Criteria crit = session.createCriteria(Rooms.class);
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
@@ -381,22 +381,29 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
+				
+				session.flush();
+				session.clear();
+				
 //				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
 //				crit.add(Restrictions.ne("deleted", "true"));			
 //				List ll = crit.list();
+				
 				String queryString = "SELECT r from Rooms r " +
-						"JOIN r.roomtype as rt " +
 						"WHERE " +
-						"r.ispublic=:ispublic and r.deleted=:deleted";
+						"r.ispublic = :ispublic and r.deleted != :deleted " +
+						"ORDER BY r.name ASC";
+				
 				Query q = session.createQuery(queryString);
-				//
+				
 				q.setBoolean("ispublic", true);
-				q.setString("deleted", "false");
+				q.setString("deleted", "true");
 				
 				List<Rooms> ll = q.list();
+				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.error("### getPublicRooms: size Room List "+ll.size());
@@ -404,12 +411,13 @@ public class Roommanagement {
 			}
 		} catch (HibernateException ex) {
 			log.error("[getPublicRoomsWithoutType] ", ex);
+			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
+			ex2.printStackTrace();
 		}
 		return null;
 	}	
-	
 	
 	/**
 	 * Get Appointed Meetings
@@ -462,7 +470,7 @@ public class Roommanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
+//				Criteria crit = session.createCriteria(Rooms.class);
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));
@@ -531,6 +539,8 @@ public class Roommanagement {
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
 				long returnId = (Long) session.save(r);
+				
+				session.flush();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -538,6 +548,57 @@ public class Roommanagement {
 					Long t = this.updateRoomOrganisations(organisations, r);
 					if (t==null) return null;
 				}
+				
+				if (roomModerators!=null) {
+					RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
+				}
+				
+				return returnId;
+			}
+		} catch (HibernateException ex) {
+			log.error("[addRoom] ", ex);
+		} catch (Exception ex2) {
+			log.error("[addRoom] ", ex2);
+		}
+		return null;
+	}
+	
+	public Long addRoomByMod(long user_level,String name, long roomtypes_id, String comment, Long numberOfPartizipants,
+			boolean ispublic, Long organisation_id,
+			Boolean appointment,
+			Boolean isDemoRoom,
+			Integer demoTime,
+			Boolean isModeratedRoom, 
+			List roomModerators){
+		
+		log.debug("addRoom");
+		
+		try {
+			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)){
+				Rooms r = new Rooms();
+				r.setName(name);
+				r.setComment(comment);
+				r.setStarttime(new Date());
+				r.setNumberOfPartizipants(numberOfPartizipants);
+				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+				r.setIspublic(ispublic);
+				
+				r.setAppointment(appointment);
+				
+				r.setIsDemoRoom(isDemoRoom);
+				r.setDemoTime(demoTime);
+				
+				r.setIsModeratedRoom(isModeratedRoom);
+				
+				r.setDeleted("false");
+				Object idf = HibernateUtil.createSession();
+				Session session = HibernateUtil.getSession();
+				Transaction tx = session.beginTransaction();
+				long returnId = (Long) session.save(r);
+				tx.commit();
+				HibernateUtil.closeSession(idf);
+				
+				this.addRoomToOrganisation(3, returnId, organisation_id);
 				
 				if (roomModerators!=null) {
 					RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
@@ -596,7 +657,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
 			crit.add(Restrictions.eq("rooms_organisation_id", rooms_organisation_id));
 			List ll = crit.list();
 			
@@ -627,7 +688,7 @@ public class Roommanagement {
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
 				
-				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+				Criteria crit = session.createCriteria(Rooms_Organisation.class);
 				Criteria subcrit = crit.createCriteria("organisation");
 				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 				Criteria subcritRoom = crit.createCriteria("room");
@@ -660,14 +721,32 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
+				
+				String hql = "SELECT c FROM Rooms_Organisation c " +
+						"WHERE c.organisation.organisation_id = :organisation_id " +
+						"AND c.deleted != :deleted AND c.room.deleted != :deleted " +
+						"AND c.organisation.deleted != :deleted " +
+						"ORDER BY c.room.name ASC";
+				
 				Session session = HibernateUtil.getSession();
+				
 				Transaction tx = session.beginTransaction();
 				
-				Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
-				Criteria subcrit = crit.createCriteria("organisation");
-				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-				crit.add(Restrictions.ne("deleted", "true"));
-				List<Rooms_Organisation> ll = crit.list();
+				session.flush();
+				session.clear();
+				
+				Query query = session.createQuery(hql);
+				
+				query.setLong("organisation_id", organisation_id);
+				query.setString("deleted", "true");
+				
+				List<Rooms_Organisation> ll = query.list();
+				
+//				Criteria crit = session.createCriteria(Rooms_Organisation.class);
+//				Criteria subcrit = crit.createCriteria("organisation");
+//				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
+//				crit.add(Restrictions.ne("deleted", "true"));
+//				List<Rooms_Organisation> ll = crit.list();
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
@@ -677,9 +756,11 @@ public class Roommanagement {
 				log.error("[notauthentificated] "+ user_level);
 			}
 		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
+			log.error("[getPublicRoomsWithoutType] ", ex);
+			ex.printStackTrace();
 		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
+			log.error("[getPublicRoomsWithoutType] ", ex2);
+			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -708,7 +789,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -740,7 +821,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -766,7 +847,7 @@ public class Roommanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			Criteria subcrit2 = crit.createCriteria("room");
@@ -797,7 +878,7 @@ public class Roommanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
 			Criteria subcrit = crit.createCriteria("room");
 			subcrit.add(Restrictions.eq("rooms_id", rooms_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -925,6 +1006,12 @@ public class Roommanagement {
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
 				session.update(r);
+				
+				session.flush();
+				session.clear();
+				
+				session.refresh(r);
+				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -932,6 +1019,56 @@ public class Roommanagement {
 					Long t = this.updateRoomOrganisations(organisations, r);
 					if (t==null) return null;
 				}
+				if (roomModerators!=null) {
+					RoomModeratorsDaoImpl.getInstance().updateRoomModeratorByUserList(roomModerators,r.getRooms_id());
+				}
+				
+				return r.getRooms_id();
+			}
+		} catch (HibernateException ex) {
+			log.error("[updateRoom] ", ex);
+		} catch (Exception ex2) {
+			log.error("[updateRoom] ", ex2);
+		}
+		return null;
+	}
+	
+	public Long updateRoomByMod(long user_level, long rooms_id, long roomtypes_id, String name,
+			boolean ispublic, String comment, Long numberOfPartizipants, Long organisations,
+			Boolean appointment,
+			Boolean isDemoRoom,
+			Integer demoTime,
+			Boolean isModeratedRoom,
+			List roomModerators){
+		try {
+			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
+			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)){
+				Rooms r = this.getRoomById(rooms_id);
+				r.setComment(comment);
+				
+				r.setIspublic(ispublic);
+				r.setNumberOfPartizipants(numberOfPartizipants);
+				r.setName(name);
+				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+				r.setUpdatetime(new Date());
+				
+
+				r.setIsDemoRoom(isDemoRoom);
+				r.setDemoTime(demoTime);
+				
+				r.setAppointment(appointment);
+				
+				r.setIsModeratedRoom(isModeratedRoom);
+				
+				Object idf = HibernateUtil.createSession();
+				Session session = HibernateUtil.getSession();
+				Transaction tx = session.beginTransaction();
+				session.update(r);
+				tx.commit();
+				HibernateUtil.closeSession(idf);
+				
+				//FIXME: Organizations will not be changed when you do an update as Moderator
+				
 				if (roomModerators!=null) {
 					RoomModeratorsDaoImpl.getInstance().updateRoomModeratorByUserList(roomModerators,r.getRooms_id());
 				}
