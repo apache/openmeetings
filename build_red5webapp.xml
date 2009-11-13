@@ -535,7 +535,7 @@
 	<target name="hudson" depends="dist">
 		<mkdir dir="${build.target}${build.number.hudson}"/>
 		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip"
-		       basedir="${dist.dir}/${project.distname}" />
+		       basedir="${dist.dir}/red5" />
 	</target>
 
     <!-- Build of junit tests
