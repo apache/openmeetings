@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2007 Adobe Systems Incorporated. All Rights Reserved. -->
+
+<!-- XML Schema for socket policy files -->
+<!-- Refinement of generic schema at PolicyFile.xsd -->
+
+<!-- No target namespace. Flash Player will not parse policy files that
+		 use explicit namespace qualification (e.g. <pf:cross-domain-policy>),
+		 so we place our types in the unqualified namespace to discourage
+		 qualification in policy files. -->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Difference from generic schema: "by-content-type" and "by-ftp-filename" not allowed -->
+	<xsd:simpleType name="meta-policy-attribute">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="all"/>
+			<xsd:enumeration value="master-only"/>
+			<xsd:enumeration value="none"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Same as generic schema -->
+	<xsd:simpleType name="domain-attribute">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\*|(\*?[A-Za-z0-9\-\.]+)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Same as generic schema -->
+	<xsd:simpleType name="ports-attribute">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\*|([0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Same as generic schema -->
+	<xsd:simpleType name="secure-attribute">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="true"/>
+			<xsd:enumeration value="false"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Same as generic schema -->
+	<xsd:complexType name="site-control-element">
+		<xsd:attribute name="permitted-cross-domain-policies" use="required" type="meta-policy-attribute"/>
+	</xsd:complexType>
+
+	<!-- Difference from generic schema: "to-ports" required, default for "secure" -->
+	<xsd:complexType name="allow-access-element">
+		<xsd:attribute name="domain" use="required" type="domain-attribute"/>
+		<xsd:attribute name="to-ports" use="required" type="ports-attribute"/>
+		<xsd:attribute name="secure" use="optional" type="secure-attribute" default="false"/>
+	</xsd:complexType>
+
+	<!-- Difference from generic schema: "allow-http-request-headers-from" not allowed -->
+	<xsd:complexType name="cross-domain-policy-element">
+		<xsd:sequence>
+			<xsd:element name="site-control" minOccurs="0" maxOccurs="1" type="site-control-element"/>
+			<xsd:element name="allow-access-from" minOccurs="0" maxOccurs="unbounded" type="allow-access-element"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Same as generic schema -->
+	<xsd:element name="cross-domain-policy" type="cross-domain-policy-element"/>
+
+</xsd:schema>
+
+<!-- End of file. -->

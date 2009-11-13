@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+    
+    
+    <!-- Class for Methods which can be invoked by the client -->
+    <bean id="whiteboardservice.service"  
+        class="org.openmeetings.app.remote.WhiteBoardService">
+        <property name="scopeApplicationAdapter" ref="web.handler" />
+        <property name="clientListManager" ref="openmeetings.ClientListManager" />
+        <property name="whiteBoardObjectListManager" ref="openmeetings.WhiteBoardObjectListManager" />
+    </bean>     
+                    
+</beans>

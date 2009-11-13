@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE cross-domain-policy SYSTEM "/xml/dtds/cross-domain-policy.dtd">
+<!--
+	Socket policy file for Red5
+	@author Paul Gregoire (mondain@gmail.com)
+	
+	Documentation: http://www.adobe.com/devnet/flashplayer/articles/socket_policy_files.html 
+-->
+<!-- Policy file for xmlsocket://socks.example.com -->
+<cross-domain-policy> 
+
+	<!-- This is a master socket policy file -->
+	<!-- No other socket policies on the host will be permitted -->
+	<site-control permitted-cross-domain-policies="master-only"/>
+
+	<!-- Instead of setting to-ports="*", administrator's can use ranges and commas -->
+	<!-- This will allow access to ports 123, 456, 457 and 458 -->
+	<!-- allow-access-from domain="swf.example.com" to-ports="123,456-458" / -->
+   
+	<!-- This allows a wide range of ports to localhost requestors -->
+	<allow-access-from domain="localhost" to-ports="20-65535" />
+	<allow-access-from domain="*.local" to-ports="20-65535"/>
+	
+</cross-domain-policy>
+
