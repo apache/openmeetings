@@ -9,6 +9,8 @@
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
 	<!-- hudson config -->
+	<property environment="env"/>
+
 	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
 	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
 	
@@ -539,7 +541,7 @@
 	
 	<target name="hudson" depends="dist">
 		<mkdir dir="${build.target}+${build.number.hudson}"/>
-		  <zip destfile="${build.target}+${build.number}/openmeetings_no${build.number.hudson}.zip"
+		<zip destfile="${build.target}${build.number.hudson}/openmeetings_no${build.number.hudson}.zip"
 		       basedir="${dist.dir}/${project.distname}" />
 	</target>
 
