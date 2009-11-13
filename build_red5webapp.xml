@@ -9,8 +9,8 @@
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
 	<!-- hudson config -->
-	<property name="build.number" value="${env.BUILD_NUMBER}" />
-	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/root/builds/" />
+	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
+	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
 	
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
@@ -538,8 +538,8 @@
 	</target>
 	
 	<target name="hudson" depends="dist">
-		<mkdir dir="${build.target}+${build.number}"/>
-		  <zip destfile="${build.target}+${build.number}/openmeetings_no${build.number}.zip"
+		<mkdir dir="${build.target}+${build.number.hudson}"/>
+		  <zip destfile="${build.target}+${build.number}/openmeetings_no${build.number.hudson}.zip"
 		       basedir="${dist.dir}/${project.distname}" />
 	</target>
 
