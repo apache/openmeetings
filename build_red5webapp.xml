@@ -8,6 +8,9 @@
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
+	<!-- hudson config -->
+	<property name="build.number" value="${BUILD_NUMBER}" />
+	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/hudson/builds/" />
 	
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
@@ -532,6 +535,12 @@
 
 	    	   <test name="org.openmeetings.server.TestSocket" />
 	    </junit>
+	</target>
+	
+	<target name="hudson" depends="dist">
+		<mkdir dir="${build.target}+${build.number}"/>
+		  <zip destfile="${build.target}+${build.number}/openmeetings_no${build.number}.zip"
+		       basedir="${dist.dir}/${project.distname}" />
 	</target>
 
     <!-- Build of junit tests
