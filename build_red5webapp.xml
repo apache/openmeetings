@@ -9,8 +9,8 @@
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
 	<!-- hudson config -->
-	<property name="build.number" value="${BUILD_NUMBER}" />
-	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/hudson/builds/" />
+	<property name="build.number" value="${env.BUILD_NUMBER}" />
+	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/root/builds/" />
 	
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
