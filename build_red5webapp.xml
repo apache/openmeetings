@@ -313,9 +313,11 @@
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
+    	<!--
         <manifestclasspath property="jar.classpath" jarfile="openmeetings.jar">
             <classpath refid="compile.classpath"/>
         </manifestclasspath>
+        -->
         <jar destfile="${dist.dir}/${project.distname}/WEB-INF/lib/openmeetings.jar">
             <fileset dir="${classes.dir}">
                 <include name="**"/>
