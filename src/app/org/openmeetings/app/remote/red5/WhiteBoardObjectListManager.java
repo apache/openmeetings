@@ -30,7 +30,7 @@ public class WhiteBoardObjectListManager {
 	}
 	
 	/*
-	 * Room items ‡ Whiteboard
+	 * Room items a Whiteboard
 	 */
 	public synchronized HashMap<String,List> getWhiteBoardObjectListByRoomId(Long room_id){
 		HashMap<String,List> roomList = whiteBoardObjectList.get(room_id);

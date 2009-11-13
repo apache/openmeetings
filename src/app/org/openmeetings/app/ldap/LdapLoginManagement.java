@@ -231,7 +231,7 @@ public class LdapLoginManagement {
 			return null;
 		}
 		
-		// Prüfen, ob user bereits vorhanden ist
+		// Pruefen, ob user bereits vorhanden ist
 		
 		Users u = null;
 		
