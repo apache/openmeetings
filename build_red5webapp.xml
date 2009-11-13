@@ -541,7 +541,7 @@
 	
 	<target name="hudson" depends="dist">
 		<mkdir dir="${build.target}${build.number.hudson}"/>
-		<zip destfile="${build.target}${build.number.hudson}/openmeetings_no${build.number.hudson}.zip"
+		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${env.SVN_REVISION }.zip"
 		       basedir="${dist.dir}/${project.distname}" />
 	</target>
 
