@@ -11,6 +11,15 @@
         this.setAttribute("src","config.xml?random="+d.getTime());
         this.doRequest();
     </handler>
+    <handler name="ondata">
+        if ($debug) Debug.write("ondata");
+    </handler>
+    <handler name="onerror" args="e">
+        if ($debug) Debug.write("onerror",e);
+    </handler>
+    <handler name="ontimeout" args="e">
+        if ($debug) Debug.write("ontimeout",e);
+    </handler>
 </dataset>
 
 </library>

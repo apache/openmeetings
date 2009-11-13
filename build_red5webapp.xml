@@ -7,7 +7,8 @@
     <property name="test.src.dir" value="${basedir}/src/test"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/bin"/>
-    
+	
+	
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
     <property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
@@ -28,6 +29,20 @@
 
     <!-- libraries -->
     <property name="project.lib" value="./lib"/>
+	
+	<!-- LPS Properties -->
+	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/${project.distname}/" />
+	<property name="laszlo.home" value="${basedir}/WebContent"/>
+	<property name="laszlo.src.dir" value="${basedir}/WebContent/openmeetings"/>
+	<property name="laszlo.debug" value="false"/>
+	<property name="laszlo.proxied" value = "solo"/>
+
+	<path id = "laszlo.lib">
+	    <pathelement location="${laszlo.home}/WEB-INF/lps/server/build" />
+	    <pathelement location="${laszlo.home}/WEB-INF/classes" />
+	    <fileset dir = "${laszlo.home}/WEB-INF/3rd-party/jars/dev" includes="**/*.jar"/>
+	    <fileset dir = "${laszlo.home}/WEB-INF/lib" includes="**/*.jar"/>
+	</path>
 
     <!-- Hibernate -->
     <property name="hibernate.lib" value="${project.lib}/hibernate_331"/>
@@ -178,7 +193,7 @@
     <!-- build webapp -->
 
     <target name="dist" description="binary distribution of OpenMeetings"
-        depends="cleanForBinary, jar, signWebStartJars">
+        depends="cleanForBinary, jar, compile.laszlo.main, signWebStartJars">
         
     </target>
 
@@ -445,6 +460,38 @@
           </path>
         </signjar>  
     </target>
+	
+	<target name = "compile.laszlo.main" depends="compile.laszlo.main.debug">
+	    <java classname = "org.openlaszlo.compiler.Main" fork = "true"
+	        newenvironment="true"
+	        failonerror="true"
+	        dir = "${laszlo.src.dir}"
+	        classpathref="laszlo.lib"
+	       >
+	        <jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
+	        <jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
+	        <jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
+	        <jvmarg value = "-Xms1024M"/>
+	        <jvmarg value = "-Xmx1024M"/>
+	        <arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn main.lzx" />
+	    </java>
+	</target>
+	
+	<target name = "compile.laszlo.main.debug">
+	    <java classname = "org.openlaszlo.compiler.Main" fork = "true"
+	        newenvironment="true"
+	        failonerror="true"
+	        dir = "${laszlo.src.dir}"
+	        classpathref="laszlo.lib"
+	       >
+	        <jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
+	        <jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
+	        <jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
+	        <jvmarg value = "-Xms1024M"/>
+	        <jvmarg value = "-Xmx1024M"/>
+	        <arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn maindebug.lzx" />
+	    </java>
+	</target>
         
     <!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
