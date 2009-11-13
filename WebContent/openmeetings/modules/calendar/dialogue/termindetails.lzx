@@ -257,7 +257,7 @@
                     //canvas[colorchoice+'colors'].setAttribute("isdefault", true);
                     
                     switch (repitechoice) {
-					  case "Täglich":
+					  case "Taeglich":
 					  	parent._isDaily = true;
 					  	parent._isMonthly = false;
 					  	parent._isWeekly = false;
@@ -278,7 +278,7 @@
 					  	parent._isYearly = false;
 					    if ($debug) Debug.write("_isMonthly: ",parent._isMonthly);
 					    break;
-					  case "Jährlich":
+					  case "Jaehrlich":
 					    parent._isYearly = true;
 					    parent._isMonthly = false;
 					    parent._isDaily = false;
@@ -440,7 +440,7 @@
 			</simpleLabelButton>	
 						     		
 			 <!--   <button   width="$once{parent.width / 3}" enabled="true">
-			    	Löschen
+			    	Loeschen
 			    	<handler name="onclick">
 			    	//parent.parent.parent._mitteilung._kategory = 0;
 			    	//parent.parent.closeItem();

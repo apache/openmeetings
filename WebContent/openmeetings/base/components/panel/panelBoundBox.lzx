@@ -68,7 +68,7 @@
 	            var ctx = Math.linearTween(i, sx, tx-sx,steps);    //equations by R.Penner!
 	            var cty = Math.linearTween(i, sy, ty-sy,steps);
 	            //if($debug)  Debug.write("gap2: ",gap);
-	            gap = !gap;    //abwechselnd lücke/nichtlücke
+	            gap = !gap;    //abwechselnd luecke/nichtluecke
 	            if(!gap) {
 	            	//if($debug)  Debug.write(csx,csy,"|",ctx,cty);
     				targetObj.strokeStyle = stroke;

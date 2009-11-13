@@ -196,7 +196,7 @@
                         //canvas[colorchoice+'colors'].setAttribute("isdefault", true);
                         
                         switch (repitechoice) {
-							  case "Täglich":
+							  case "Taeglich":
 							  	parent._isDaily = true;
 							  	if ($debug) Debug.write("_isDaily: ",parent._isDaily);						    
 							    break;
@@ -208,7 +208,7 @@
 							    parent._isMonthly = true;
 							    if ($debug) Debug.write("_isMonthly: ",parent._isMonthly);
 							    break;
-							  case "Jährlich":
+							  case "Jaehrlich":
 							    parent._isYearly = true;
 							    if ($debug) Debug.write("_isYearly: ",parent._isYearly);
 							    break;
@@ -220,10 +220,10 @@
                 </handler> 
                 					
 				<textlistitem text="keine" value="0"/>
-				<textlistitem text="Täglich" value="1"/>
+				<textlistitem text="Taeglich" value="1"/>
              	<textlistitem text="Wochentlich" value="2"/>
               	<textlistitem text="Monatlich" value="3"/> 
-              	<textlistitem text="Jährlich" value="4"/>            
+              	<textlistitem text="Jaehrlich" value="4"/>            
 		 	<!--textitmes-->
 		 	</resetCombobox> 
 		 	
@@ -371,7 +371,7 @@
 			   </view>
 			   
 			 <!--   <button   width="$once{parent.width / 3}" enabled="true">
-			    	Löschen
+			    	Loeschen
 			    	<handler name="onclick">
 			    	//parent.parent.parent._mitteilung._kategory = 0;
 			    	//parent.parent.closeItem();

@@ -99,13 +99,13 @@
 				    		var day = 6;
 			    		}
 			    	
-			    		//if (termin_dauer über mehrere Tage)
+			    		//if (termin_dauer ueber mehrere Tage)
 			    		//erster tag => Termin setzten von startzeitpunkt bis Mitternacht
 			    		
-			    		//für die folge-tage prüfen wie lange der Termin andauert
+			    		//fuer die folge-tage pruefen wie lange der Termin andauert
 			    		//angenommen der Termin ist am Dianstag
-			    		//ist zu prüfen ob Mi, Do, Fr, SA, SO komplett oder Teilweise 
-			    		//auch Termine sind und für jeden Tag ist dann 
+			    		//ist zu pruefen ob Mi, Do, Fr, SA, SO komplett oder Teilweise 
+			    		//auch Termine sind und fuer jeden Tag ist dann 
 			    		//jeweils ein Termin Objekt zu initialisieren.
 			    		
 			    		
@@ -121,7 +121,7 @@
 					    			if ($debug) Debug.write("n:++ ",n);
 					    			// first appointmentday
 					    			if(n==0){
-						    			//if ($debug) Debug.write("termin über mehrere tage :");	
+						    			//if ($debug) Debug.write("termin ueber mehrere tage :");	
 						    			new lz.terminareaWeekView(parent["_day"+day]._tagesansicht._list, {
 		    							y:value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
 		    							height:24*17-2-value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
@@ -190,7 +190,7 @@
 					    			if ($debug) Debug.write("n:++ ",n);
 					    			//first appointmentday
 					    			if(n==0){
-						    			//if ($debug) Debug.write("termin über mehrere tage :");	
+						    			//if ($debug) Debug.write("termin ueber mehrere tage :");	
 						    			new lz.terminareaWeekView(parent["_day"+1]._tagesansicht._list, {
 		    							y:value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,
 		    							height:24*17-2-value[i].appointmentStarttime.getHours()*17+value[i].appointmentStarttime.getMinutes()*1/4,

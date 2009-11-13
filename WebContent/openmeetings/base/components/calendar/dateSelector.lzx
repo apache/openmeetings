@@ -161,7 +161,7 @@
 	
 	<attribute name="dayNamesLabelIds" value="null" />
 	<attribute name="dayLabelNamesLabelIds" value="null" />
-	<attribute name="monthnames" value="['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/> 
+	<attribute name="monthnames" value="['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/> 
 
 
 	<attribute name="firstdayinweek" value="$once{ canvas.firstdayinweek }" type="number" />

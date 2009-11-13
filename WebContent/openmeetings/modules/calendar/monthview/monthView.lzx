@@ -2,7 +2,7 @@
 	
 	<class name="monthView" extends="view">
 		
-	<attribute name="monthnames" value="['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/>
+	<attribute name="monthnames" value="['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/>
 	<attribute name="weekdaynames" value="['So.','Mo.','Di.','Mi.','Do.','Fr.','Sa.']"/>  
 	<attribute name="firstdayinweek" value="$once{ canvas.firstdayinweek }" type="number" />
 	<attribute name="year" value="" type="string" />
@@ -259,7 +259,7 @@
 					        		
 					        		var appointmentLength = new Date(value[k].appointmentEndtime.getTime() - value[k].appointmentStarttime.getTime());//appointment over one day?
 						    		if ($debug) Debug.write("appointmentLength: ",appointmentLength.getDate());
-						    		if ($debug) Debug.write("termin über mehrere tage: ",value[k].appointmentEndtime.getTime() - value[k].appointmentStarttime.getTime());
+						    		if ($debug) Debug.write("termin ueber mehrere tage: ",value[k].appointmentEndtime.getTime() - value[k].appointmentStarttime.getTime());
 						    		//appointment over one day?
 						    		if(appointmentLength.getDate()>1){
 						        		for(var n=0;n<appointmentLength.getDate();n++){
