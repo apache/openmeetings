@@ -12,6 +12,7 @@
 	<property environment="env"/>
 
 	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
+	<property name="build.svn.hudson" value="${env.SVN_REVISION}" />
 	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
 	
     <!-- Axis2 Services -->
@@ -541,7 +542,7 @@
 	
 	<target name="hudson" depends="dist">
 		<mkdir dir="${build.target}${build.number.hudson}"/>
-		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${env.SVN_REVISION }.zip"
+		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip"
 		       basedir="${dist.dir}/${project.distname}" />
 	</target>
 
