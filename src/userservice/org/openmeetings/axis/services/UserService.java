@@ -222,12 +222,12 @@ public class UserService {
 				Sessionmanagement.getInstance().updateUserRemoteSession(SID, xmlString);
 				
 				boolean becomeModerator = false;
-				if (becomeModeratorAsInt == 2) {
+				if (becomeModeratorAsInt != 0) {
 					becomeModerator = true;
 				}
 				
 				boolean showAudioVideoTest = false;
-				if (showAudioVideoTestAsInt == 2) {
+				if (showAudioVideoTestAsInt != 0) {
 					showAudioVideoTest = true;
 				}
 				
