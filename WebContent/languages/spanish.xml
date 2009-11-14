@@ -2443,13 +2443,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Buscar</value>
   </string>
   <string id="810" name="lzcalender">
-  <value>AÃ±adir</value>
+  <value>Añadir</value>
   </string>
   <string id="811" name="lzcalendar">
-  <value>No hay ningÃºn usuario seleccionado. Seleccione primero un Ã­tem de la lista y pulse en AÃ±adir.</value>
+  <value>No hay ningún usuario seleccionado. Seleccione primero un ítem de la lista y pulse en Añadir.</value>
   </string>
   <string id="812" name="lzcalendar">
-  <value>AÃ±adir asistente</value>
+  <value>Añadir asistente</value>
   </string>
   <string id="813" name="lzcalendar">
   <value>Guardar</value>
@@ -2461,72 +2461,72 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Detalles del Evento</value>
   </string>
   <string id="816" name="room admin">
-    <value>Default Moderators</value>
+  <value>Moderadores por defecto</value>
   </string>
   <string id="817" name="room admin">
-    <value>Super</value>
+  <value>Super</value>
   </string>
   <string id="818" name="room admin">
-    <value>ID</value>
+  <value>ID</value>
   </string>
   <string id="819" name="room admin">
-    <value>Name</value>
+  <value>Nombre</value>
   </string>
   <string id="820" name="room admin">
-    <value>E-Mail</value>
+  <value>Email</value>
   </string>
   <string id="821" name="room admin">
-    <value>Add new default Moderator</value>
+  <value>Añadir nuevo Moderador por defecto</value>
   </string>
   <string id="822" name="room admin">
-    <value>Is Super Moderator</value>
+  <value>¿Es supermoderador</value>
   </string>
   <string id="823" name="room admin">
-    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+  <value>Si la sala está moderada, el usuario con nivel previo de moderador o de administrdor se convierte automáticamente en Moderador de la misma al entrar. Si no desea que sea así, y sólo quiere que determinado usuario sea el moderador, utilice la opción de Moderador por defecto.</value>
   </string>
   <string id="824" name="room admin">
-    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+  <value>Un supermoderador es siempre el moderador de una sala cuando entra en ella. Además, nadie puede quitarle la marca de moderación</value>
   </string>
   <string id="825" name="room admin">
-    <value>Apply Super-Moderation to User</value>
+  <value>Aplicar supermoderación al usuario</value>
   </string>
   <string id="826" name="room admin">
-    <value>Remove Super Moderation from User</value>
+  <value>Quitar supermoderación al usuario</value>
   </string>
   <string id="827" name="room admin">
-    <value>D</value>
+  <value>D</value>
   </string>
   <string id="828" name="room admin">
-    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+  <value>Si añade una organización a la sala, sólo los usuarios de dicha organización tendrán acceso a la misma (esto sólo es válido si la marca de Pública está configurada como falsa)</value>
   </string>
   <string id="829" name="room admin">
-    <value>Moderation</value>
+  <value>Moderación</value>
   </string>
   <string id="830" name="room admin">
-    <value>Limitations</value>
+  <value>Limitaciones</value>
   </string>
   <string id="831" name="room admin">
-    <value>Organization</value>
+  <value>Organización</value>
   </string>
   <string id="832" name="confirm action">
-    <value>Are you sure?</value>
+  <value>¿Está Vd. seguro?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+  <value>¿Realmente desea borrar este ítem? ¡Tiene que pulsar en el botón de guardar para almacenar los cambios!</value>
   </string>
   <string id="834" name="user choose error">
-    <value>There is no User selected. Please select first before you add it!</value>
+  <value>No hay ningún usuario seleccionado. Por favor, selecciónelo primero.</value>
   </string>
   <string id="835" name="room admin">
-    <value>Add new Default Moderator</value>
+  <value>Añadir un nuevo moderador por defecto</value>
   </string>
   <string id="836" name="room admin">
-    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+  <value>¿Desea añadir una marca de supermoderador a este usuario? Recuerde que un supermoderador no sólo es el moderador de una sala, sino que además ningún otro moderador podrá borrar la marca de moderación. Necesita guardar el objeto sala para almacenar estas configuraciones.</value>
   </string>
   <string id="837" name="room admin">
-    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+  <value>¿Desea eliminar la marca de supermoderador a este usuario? Necesita guardar el objeto sala para almacenar estas configuraciones.</value>
   </string>
   <string id="838" name="super moderator">
-    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+  <value>Este usuario tiene el rol de supermoderador. No puede quitarle la marca de moderación a un supermoderador.</value>
   </string>
 </language>
