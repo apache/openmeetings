@@ -23,7 +23,6 @@
     	//this.field.setAttribute("bgcolor",0xFFFFFF);
     </handler>
     
-    
     <handler name="ontext" args="txt">
     	<![CDATA[
             

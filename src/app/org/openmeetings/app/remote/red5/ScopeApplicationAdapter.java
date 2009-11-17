@@ -1374,15 +1374,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//In previous version this has been always a Map, now its a List
 			//so I re-wrapp that class to be a Map again.
 			//swagner 13.02.2009
-			log.debug("*..*sendVars1: " + whiteboardObjParam);
-			log.debug("*..*sendVars2: " + whiteboardObjParam.getClass());
-			log.debug("*..*sendVars3: " + whiteboardObjParam.getClass().getName());
+			//log.debug("*..*sendVars1: " + whiteboardObjParam);
+			//log.debug("*..*sendVars2: " + whiteboardObjParam.getClass());
+			//log.debug("*..*sendVars3: " + whiteboardObjParam.getClass().getName());
 			
 			Map whiteboardObj = new HashMap();
 			int i = 0;
 			for (Iterator iter = whiteboardObjParam.iterator();iter.hasNext();) {
 				Object obj = iter.next();
-				log.debug("obj"+obj);
+				//log.debug("obj"+obj);
 				whiteboardObj.put(i, obj);
 				i++;
 			}
@@ -1394,8 +1394,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			Long room_id = currentClient.getRoom_id();	
 				
-			log.debug("***** sendVars: " + whiteboardObj);
+			//log.debug("***** sendVars: " + whiteboardObj);
 			
+			//Store event in list
 			WhiteboardManagement.getInstance().addWhiteBoardObject(room_id, whiteboardObj);
 			
 			int numberOfUsers = 0;

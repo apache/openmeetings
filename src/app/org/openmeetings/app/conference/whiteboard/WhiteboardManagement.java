@@ -28,14 +28,14 @@ public class WhiteboardManagement {
 		try {
 			log.debug("addWhiteBoardObject: "+whiteboardObj);
 			
-			log.debug("whiteboardObj 0: Event: "+whiteboardObj.get(0));
-			log.debug("whiteboardObj 1: Event: "+whiteboardObj.get(1));
-			log.debug("whiteboardObj 2: Event: "+whiteboardObj.get(2));
-			log.debug("whiteboardObj 3: Event: "+whiteboardObj.get(3));
+			//log.debug("whiteboardObj 0: Event: "+whiteboardObj.get(0));
+			//log.debug("whiteboardObj 1: Event: "+whiteboardObj.get(1));
+			//log.debug("whiteboardObj 2: Event: "+whiteboardObj.get(2));
+			//log.debug("whiteboardObj 3: Event: "+whiteboardObj.get(3));
 			
 			//log.debug("whiteboardObj NUMB3: Event: "+whiteboardObj.get(3).getClass().getName());
 			
-			Date dateOfEvent = (Date) whiteboardObj.get(1);
+			//Date dateOfEvent = (Date) whiteboardObj.get(1);
 			String action = whiteboardObj.get(2).toString();	
 			List actionObject = (List) whiteboardObj.get(3);
 			
@@ -47,11 +47,13 @@ public class WhiteboardManagement {
 				//log.debug(actionObject);
 				//log.debug(actionObject.size()-1);
 				//log.debug(actionObject.get(actionObject.size()-1));
-				
-				String objectOID = actionObject.get(actionObject.size()-1).toString();
-				log.debug("objectOID: "+objectOID);
-				roomList.put(objectOID, actionObject);
-				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
+				String objectType = actionObject.get(0).toString();
+				if (!objectType.equals("pointerWhiteBoard")){
+					String objectOID = actionObject.get(actionObject.size()-1).toString();
+					log.debug("objectOID: "+objectOID);
+					roomList.put(objectOID, actionObject);
+					WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
+				}
 			} else if (action.equals("clear")) {
 				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
 				roomList = new HashMap<String,List>();
@@ -66,7 +68,7 @@ public class WhiteboardManagement {
 					|| action.equals("editText") || action.equals("swf")) {
 				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
 				String objectOID = actionObject.get(actionObject.size()-1).toString();
-				List roomItem = roomList.get(objectOID);
+				//List roomItem = roomList.get(objectOID);
 				roomList.put(objectOID, actionObject);
 				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
 			} else {

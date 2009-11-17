@@ -3,7 +3,12 @@ package org.openmeetings.app.documents;
 import java.io.File;
 import java.util.HashMap;
 
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class GenerateThumbs {
+	
+	private static final Logger log = Red5LoggerFactory.getLogger(GenerateThumbs.class);
 	
 	private static GenerateThumbs instance;
 
@@ -25,10 +30,18 @@ public class GenerateThumbs {
 				+ File.separatorChar;
 
 		String[] argv = new String[] {
-				GenerateImage.getPathToImageMagic(), "-thumbnail",
-				Integer.toString(thumbSize), filepath + ".jpg",
+				GenerateImage.getPathToImageMagic(), 
+				"-thumbnail",
+				Integer.toString(thumbSize), 
+				filepath + ".jpg",
 				folder + pre + name + ".jpg" };
 
+		log.debug("START generateThumb ################# ");
+		for (int i=0;i<argv.length;i++) {
+			log.debug(" i "+i+" argv-i "+argv[i]);
+		}
+		log.debug("END generateThumb ################# ");
+		
 		return GenerateSWF.executeScript("generateThumb", argv);
 	}
 
