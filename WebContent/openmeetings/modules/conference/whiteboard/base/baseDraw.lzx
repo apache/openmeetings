@@ -357,7 +357,7 @@
 	</method>
              
 	<handler name="onmousedown" >
-		//Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
+		if ($debug) Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
 			if (this.letterObjectIsActive){
 				this.currentletterObj.drawtoArray();
@@ -708,8 +708,10 @@
 			//Debug.write(actionObject,actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
 			this.remoteWmlLoader(actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
 		} else if (action=="editText"){
-			this.editTextByHistory(actionObject,this);
-		} else if (action=="initgetVars"){
+            this.editTextByHistory(actionObject,this);
+        } else if (action=="sendItemToFront"){
+            this.bringItemToFrontByName(actionObject[1]);
+        } else if (action=="initgetVars"){
 			//Debug.write("initUser isMod ",canvas.ismoderator,actionObject);
 			if (canvas.ismoderator){
 				//Debug.write("send all whiteBoard objects to new user");

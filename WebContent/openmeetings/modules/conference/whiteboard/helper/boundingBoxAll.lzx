@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+    
 <include href="utils/states/resizestatemin.lzx"/>
 
 <!--
@@ -10,7 +11,9 @@
     this is the selection Box for all Whiteboard Objects
  -->
     
-<class name="boundingBoxAll" extends="view">
+<class name="boundingBoxAll" extends="view" 
+       onmouseover="this.applyScrollbarToObject()" onmouseout="this.removeScrollbarToObject()" >
+    
 <!-- 
 	<method name="removeIt">
 		canvas._drawarea.setAttribute('boundingIsActive',true);
@@ -232,13 +235,22 @@
     </method>
     
     <method name="applyScrollbarToObject">
-        if (this.objRef.typeOfObject == 'swf'){
-            setCurrentMouseWheelObject(this._inner._scrollstv);
-        }
+        <![CDATA[
+            //if ($debug) Debug.write("-- applyScrollbarToObject --",this.objRef.typeOfObject);
+	        if (this.objRef.typeOfObject == 'swf'){
+	            if (canvas.ismoderator || canvas.isAllowedToDraw) {
+                    //if ($debug) Debug.write("-- setCurrentMouseWheelObject --",this.objRef._scrollstv);
+                    setCurrentMouseWheelObject(this.objRef._scrollstv);
+                }
+	        }
+        ]]>
     </method>
     
     <method name="removeScrollbarToObject">
         if (this.objRef.typeOfObject == 'swf'){
+            //Well disable, you can always disable without any problem
+            //and in case you do exactly switch the moderation now
+            //it will remove it in any case
             disableCurrentMouseWheelObject();
         }
     </method>
@@ -252,8 +264,7 @@
    	</dragstate>
 	
 	<view name="_innerDrag" width="${ parent.width }" height="${ parent.height }"
-    	onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()"
-        onmouseover="this.parent.applyScrollbarToObject()" onmouseout="this.parent.removeScrollbarToObject()">
+    	onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()">
 		<handler name="oninit">
 	        var newMenu = new LzContextMenu();
 	        newMenu.hideBuiltInItems();

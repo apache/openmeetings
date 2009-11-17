@@ -5,7 +5,7 @@
 	   width="${ parent.parent.width-1 }" height="80" title="Properties" >
 	
 	<attribute name="ignoreUpdates" value="false" type="boolean" />
-	
+    
 	<method name="setObjectBounds" args="x,y,width,height">
 		if ($debug) Debug.write("setObjectBounds: ",x,y,width,height);
 		this._content._xvalue.setAttribute('text',x);
@@ -263,9 +263,11 @@
 			</handler>
 		</changeWidthSlider> 
 
-	    <propertyPanelLetterButton name="_italic" x="286" y="24" itemResourceName="italic" />
+	    <propertyPanelLetterButton name="_italic" x="286" y="24" labelid="86"
+                                   itemResourceName="italic" />
 	    
-	    <propertyPanelLetterButton name="_bold" x="312" y="24" itemResourceName="bold" />
+	    <propertyPanelLetterButton name="_bold" x="312" y="24" labelid="87"
+                                   itemResourceName="bold" />
 		
 		<view name="_delemiter" width="2" bgcolor="$once{ canvas.baseMousecolorizer }" 
 			  height="$once{ parent.height - this.y - 4 }" y="20" x="338"/>
@@ -277,7 +279,7 @@
             <attribute name="sendSelection" value="true" type="boolean"/>
             <handler name="onselect" args="sel">
                 if (this.sendSelection) {
-                    parent.parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
+                    parent.parent.parent._drawareaMask._drawarea.setCurrentDocument(sel.value);
                 }
             </handler>
         </resetCombobox>
@@ -298,8 +300,13 @@
             </handler>
 			
 			<method name="addCurrentObject" args="itemObj">
-                if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
-                parent.currentDocument.addItem(itemObj.fileName,itemObj.name);
+                //if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
+                var docName = itemObj.standardFileName;
+		        if (docName.length == 0) {
+		            docName = itemObj.fileName;
+		        }
+		        
+		        parent.currentDocument.addItem(docName,itemObj.name);
                 parent.currentDocument.sendSelection = false;
                 parent.currentDocument.selectItem(itemObj.name);
                 parent.currentDocument.sendSelection = true;

@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +24,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 
 public class DownloadHandler extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(DownloadHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(DownloadHandler.class);
 	
 	private static final String defaultImageName = "deleted.jpg";
 	private static final String defaultProfileImageName = "profile_pic.jpg";
@@ -28,6 +32,19 @@ public class DownloadHandler extends HttpServlet {
 	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
 	private static final String defaultSWFName = "deleted.swf";
 	private static final String defaultPDFName = "deleted.pdf";
+
+//	public void doFilter(ServletRequest servletRequest,
+//            ServletResponse servletResponse,
+//            FilterChain filterChain) {
+//		
+//		HttpServletRequest req = (HttpServletRequest)servletRequest;
+//	
+//		try {
+//			req.setCharacterEncoding("UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//			log.error("doFilter",e);
+//		}
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -41,6 +58,8 @@ public class DownloadHandler extends HttpServlet {
 			IOException {
 
 		try {
+			httpServletRequest.setCharacterEncoding("UTF-8");
+			
 			log.debug("\nquery = " + httpServletRequest.getQueryString());
 			log.debug("\n\nfileName = " + httpServletRequest.getParameter("fileName"));
 			log.debug("\n\nparentPath = " + httpServletRequest.getParameter("parentPath"));

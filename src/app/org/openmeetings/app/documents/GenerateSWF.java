@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 
 public class GenerateSWF {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class);
 	
 	private static GenerateSWF instance;
 

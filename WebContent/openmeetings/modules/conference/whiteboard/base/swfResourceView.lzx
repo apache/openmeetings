@@ -6,6 +6,8 @@
     
     <attribute name="refObj" value="null" />
 	<attribute name="alterModus" value="true" type="boolean" />
+    
+    <attribute name="standardFileName" value="" type="string"/>
 	
 	<attribute name="recorderModus" value="false" type="boolean" />
 	
@@ -206,8 +208,10 @@
         
     </view>    
     
-    <vscrollbar name="_scrollstv" /> 
-    <hscrollbar name="_scrollsth" />
+    <vscrollbar name="_scrollstv"
+                visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" /> 
+    <hscrollbar name="_scrollsth"
+                visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />
         
 </class>
 

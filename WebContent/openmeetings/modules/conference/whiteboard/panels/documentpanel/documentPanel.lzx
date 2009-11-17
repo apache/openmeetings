@@ -55,8 +55,14 @@
 <class name="horizontalDocumentIconBar" extends="view" y="22" x="4">
 	
 	<method name="addCurrentObject" args="itemObj">
-		if ($debug) Debug.write("addCurrentObject ",itemObj.fileName,itemObj.name);
-		this.currentDocument.addItem(itemObj.fileName,itemObj.name);
+		if ($debug) Debug.write("addCurrentObject ",itemObj.standardFileName,itemObj.fileName,itemObj.name);
+		
+        var docName = itemObj.standardFileName;
+        if (docName.length == 0) {
+            docName = itemObj.fileName;
+        }
+        
+        this.currentDocument.addItem(docName,itemObj.name);
 		this.currentDocument.sendSelection = false;
 		this.currentDocument.selectItem(itemObj.name);
 		this.currentDocument.sendSelection = true;

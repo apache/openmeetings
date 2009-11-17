@@ -7,7 +7,9 @@
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
 	<mainToolsHPanelSeperator />
 	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+    <!--
 	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+     -->
 	<mainToolsHPanelSeperator />
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
 						resoureceItem="menupointer_rsc" />
@@ -29,7 +31,9 @@
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
 	<mainToolsVPanelSeperator />
 	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+    <!--
 	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+     -->
 	<mainToolsVPanelSeperator />	
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
 						resoureceItem="menupointer_rsc" />
@@ -46,7 +50,7 @@
 </class>
 	
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
-	   width="393" height="33" title="" docking="true"
+	   width="365" height="33" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   leftClassPanel="mainToolsLeftPanel"
@@ -54,13 +58,13 @@
 	   bottomClassPanel="mainToolsTopPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="true"
-	   hWidth="33" hHeight="393">
+	   hWidth="33" hHeight="365">
 	
 	<horizontalMenuIconBar x="20" y="4" />
 </class>	
 	
 <class name="mainToolsLeftPanel" extends="baseLeftPanel" 
-	   width="33" height="393" title="" docking="true"
+	   width="33" height="365" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   topClassPanel="mainToolsTopPanel"
@@ -68,7 +72,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="false"
-	   vWidth="393" vHeight="33">
+	   vWidth="365" vHeight="33">
 	
 	<verticalMenuIconBar x="3" y="20" />
 </class>
@@ -126,7 +130,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="true"
-	   hWidth="32" hHeight="366">
+	   hWidth="32" hHeight="340">
 	
 	<horizontalMenuIconBar />
 </class>
@@ -140,7 +144,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="false"
-	   vWidth="366" vHeight="32">
+	   vWidth="340" vHeight="32">
 	
 	<verticalMenuIconBar />
 </class>  

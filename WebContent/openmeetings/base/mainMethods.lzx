@@ -528,9 +528,14 @@
 
 <method name="getIsModeratorByPublicSID" args="publicSID">
 	<![CDATA[
+    
+        if ($debug) Debug.write("getIsModeratorByPublicSID ",publicSID);
+    
 	    for (var i=0;i<canvas.currentModeratorList.length;i++) {
             
             var item = canvas.currentModeratorList[i];
+            
+            if ($debug) Debug.write("publicSID ? item.publicSID ",publicSID,item.publicSID);
             
             if (publicSID == item.publicSID) {
                 return true;

@@ -7,6 +7,8 @@
 	<attribute name="itemResourceName" value="" type="string" />
 	<attribute name="currentVal" value="false" type="boolean" />
 	
+    <attribute name="labelid" value="87" type="number"/>
+    
 	<attribute name="enabled" value="false" type="boolean"/>
 	
 	<handler name="onmouseover">
@@ -40,7 +42,8 @@
     	  visibility="${ (parent.enabled) ? 'visible' : 'hidden' }"
     	  opacity="0.5" bgcolor="0xFFFFFF" clickable="true" showhandcursor="false" />
     
-    <labelTooltip x="2" y="2" labelid="87" fontstyle="bold" />
+    <labelTooltip x="2" y="2" labelid="$once{ parent.labelid }" />
+    
 </class>
     
 </library>

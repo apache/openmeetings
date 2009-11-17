@@ -934,8 +934,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										//as it will be already triggered in the result of this Function 
 										//in the Client
 										if (conn instanceof IServiceCapableConnection) {
-											((IServiceCapableConnection) conn).invoke("setNewModerator",new Object[] { currentClient }, this);
-											log.debug("sending setNewModerator to " + conn);
+											((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { currentClient }, this);
+											log.debug("sending setNewModeratorByList to " + conn);
 										}
 									}
 								}
@@ -962,6 +962,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						if (becomeModerator) {
 							currentClient.setIsMod(true);
 							
+							//Update the Client List
+							this.clientListManager.updateClientByStreamId(streamid, currentClient);
+							
+							List<RoomClient> modRoomList = this.clientListManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+							
 							//There is a need to send an extra Event here, cause at this moment there could be 
 							//already somebody in the Room waiting
 							
@@ -972,12 +977,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									if (conn != null) {
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 										if( !streamid.equals(rcl.getStreamid())){
-											//It is not needed to send back that event to the actuall Moderator
+											//It is not needed to send back that event to the actual Moderator
 											//as it will be already triggered in the result of this Function 
 											//in the Client
 											if (conn instanceof IServiceCapableConnection) {
-												((IServiceCapableConnection) conn).invoke("setNewModerator",new Object[] { currentClient }, this);
-												log.debug("sending setNewModerator to " + conn);
+												((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { modRoomList }, this);
+												log.debug("sending setNewModeratorByList to " + conn);
 											}
 										}
 									}
@@ -1028,6 +1033,34 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							if(member.getInvitor()){
 								log.debug("User " + userIdInRoomClient + " is moderator due to flag in MeetingMember record");
 								currentClient.setIsMod(true);
+								
+								//Update the Client List
+								this.clientListManager.updateClientByStreamId(streamid, currentClient);
+								
+								List<RoomClient> modRoomList = this.clientListManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+								
+								//There is a need to send an extra Event here, cause at this moment there could be 
+								//already somebody in the Room waiting
+								
+								//Notify all clients of the same scope (room)
+								Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+								for (Set<IConnection> conset : conCollection) {
+									for (IConnection conn : conset) {
+										if (conn != null) {
+											RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+											if( !streamid.equals(rcl.getStreamid())){
+												//It is not needed to send back that event to the actual Moderator
+												//as it will be already triggered in the result of this Function 
+												//in the Client
+												if (conn instanceof IServiceCapableConnection) {
+													((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { modRoomList }, this);
+													log.debug("sending setNewModeratorByList to " + conn);
+												}
+											}
+										}
+									}	
+								}
+								
 								moderator_set = true;
 								this.clientListManager.updateClientByStreamId(streamid, currentClient);
 								break;
@@ -1064,6 +1097,34 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (clientListRoom.size()==1 && moderator_set == false){
 						log.debug("");
 						currentClient.setIsMod(true);
+						
+						//Update the Client List
+						this.clientListManager.updateClientByStreamId(streamid, currentClient);
+						
+						List<RoomClient> modRoomList = this.clientListManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+						
+						//There is a need to send an extra Event here, cause at this moment there could be 
+						//already somebody in the Room waiting
+						
+						//Notify all clients of the same scope (room)
+						Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+						for (Set<IConnection> conset : conCollection) {
+							for (IConnection conn : conset) {
+								if (conn != null) {
+									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+									if( !streamid.equals(rcl.getStreamid())){
+										//It is not needed to send back that event to the actual Moderator
+										//as it will be already triggered in the result of this Function 
+										//in the Client
+										if (conn instanceof IServiceCapableConnection) {
+											((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { modRoomList }, this);
+											log.debug("sending setNewModeratorByList to " + conn);
+										}
+									}
+								}
+							}	
+						}
+						
 						this.clientListManager.updateClientByStreamId(streamid, currentClient);
 					}
 				}

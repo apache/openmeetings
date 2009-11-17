@@ -12,17 +12,19 @@
     	Invoked by the Library directly
     	Loads a SWFPresenation to the whiteBoard
      -->
-    <method name="loadSWFPresentationSynced" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+    <method name="loadSWFPresentationSynced" args="url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName">
   		var now = new Date();
   		//This invokes a Method which is in the remoteWhiteboard.lzx
   		this.startNewObjectSyncProcess.uniqueObjectSyncName = fileName + now.getTime();
   		this.startNewObjectSyncProcess.doCall();
+        //if ($debug) Debug.write("loadSWFPresentationSynced",url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName);
         this.addPresentationToLayer(this,url,'swfpresentationobject'+this.getCounter(),
         	0,0,0,0,
         	true,
         	url,fileName,moduleName,parentPath,room,domain,slideNumber,
         	100,0,0,0,0,
-        	this.startNewObjectSyncProcess.uniqueObjectSyncName );
+        	this.startNewObjectSyncProcess.uniqueObjectSyncName,
+            standardFileName);
     </method>
     
     <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
@@ -48,15 +50,15 @@
 		
 		adds the SWF-Object to the Layer
 	 -->
-  	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName">
+  	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName">
         <![CDATA[
-            //if ($debug) Debug.write("addPresentationToLayer",obj,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber);
+            if ($debug) Debug.write("addPresentationToLayer",standardFileName);
             //only show if it is not part of wml-file-object
             //if (!this.isWmlLoaderImage) {
             //    this.loadimageDataWinRef = new lz.loadWhiteboardWindow(canvas.main_content._content.inner,{refObj:this});
             //    this.loadimageDataWinRef.setMessage(canvas.getLabelName(this.imageLoadMessageId));
             //}
-        	if ($debug) Debug.write("addPresentationToLayer uniqueObjectSyncName:",uniqueObjectSyncName,innerwidth,innerheight);
+        	//if ($debug) Debug.write("addPresentationToLayer uniqueObjectSyncName:",uniqueObjectSyncName,innerwidth,innerheight);
             
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
                     'fileName=' + encodeURIComponent(fileName) +
@@ -75,6 +77,7 @@
             	room:room,domain:domain,slideNumber:slideNumber,
             	//width:width,height:height,
             	currentzoom:currentzoom,
+                standardFileName:standardFileName,
             	innerwidth:innerwidth,innerheight:innerheight,
             	innerx:innerx,innery:innery,
             	uniqueObjectSyncName:uniqueObjectSyncName});
@@ -133,7 +136,7 @@
             actionObject[actionObject.length-2],false,actionObject[2],actionObject[3],actionObject[4],actionObject[5],
             actionObject[6],actionObject[7],
             actionObject[8],actionObject[16],actionObject[11],actionObject[12],actionObject[9],actionObject[10],
-            actionObject[17]);
+            actionObject[17],actionObject[18]);
     </method>
     
     <!-- 
@@ -149,7 +152,7 @@
   			false,
   			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
   			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
-  			actionObject[9],actionObject[10],actionObject[17]);
+  			actionObject[9],actionObject[10],actionObject[17],actionObject[18]);
   	</method>
   	
 	<!--- 
@@ -166,7 +169,7 @@
   			false,
   			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
   			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
-  			actionObject[9],actionObject[10],actionObject[17]);
+  			actionObject[9],actionObject[10],actionObject[17],actionObject[18]);
   	</method>
   	
   	<!--
@@ -178,7 +181,7 @@
   		this.addPresentationToLayerRecording(refObj,actionObject[1],actionObject[actionObject.length-1],actionObject[actionObject.length-5],actionObject[actionObject.length-4],actionObject[actionObject.length-3],actionObject[actionObject.length-2],false,actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],actionObject[9],actionObject[10]);
   	</method>
   	
-  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage">
+  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName">
 		var actionObject = new Array();
 	    actionObject.push('swf');//0
 	    actionObject.push(urlname);//1
@@ -198,6 +201,7 @@
         actionObject.push(initheight);//15
         actionObject.push(currentzoom);//16
         actionObject.push(uniquObjectSyncName);//17
+        actionObject.push(standardFileName);//18
 		actionObject.push(this.counter);
 	    actionObject.push(posx);
 	    actionObject.push(posy);
@@ -296,7 +300,8 @@
                 this.syncImageRefObj._swfView.width,this.syncImageRefObj._swfView.height,
                 this.syncImageRefObj.zoomlevel,this.syncImageRefObj.currentzoomFactor,
                 this.syncImageRefObj.initwidth,this.syncImageRefObj.initheight,
-                this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage);
+                this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage,
+                this.syncImageRefObj.standardFileName);
         
 		//set modus to hand so users can directly select that image
 		this.setModus('swf');
@@ -422,8 +427,24 @@
     <method name="setCurrentDocument" args="itemRefName">
         this.ObjectByName = this.getObjectByName(itemRefName);
         this.doUpdateDocumentToolBar();
+        
+        if ($debug) Debug.write("setCurrentDocument ",itemRefName,this.ObjectByName);
+        
         //FIXME: This should also bringt to front the object for all participants
-        this.ObjectByName.bringtToFront();
+        this.sendItemToFront(itemRefName);
+        this.bringItemToFrontByName(itemRefName);
+    </method>
+    
+    <method name="sendItemToFront" args="itemRefName">
+        var actionObject = new Array();
+        actionObject[0] = 'item';
+        actionObject[1] = itemRefName;
+        this.onsharedMessage('sendItemToFront',actionObject);
+    </method>    
+    
+    <method name="bringItemToFrontByName" args="itemRefName">
+        this.ObjectByName = this.getObjectByName(itemRefName);
+        this.ObjectByName.bringToFront();
     </method>
     
     <method name="doUpdateDocumentToolBar">

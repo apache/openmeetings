@@ -114,7 +114,7 @@
         
         
         <method name="loadSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
-            canvas._drawarea.loadSWFPresentationSynced(url,fileName,moduleName,parentPath,room,domain,slideNumber);
+            canvas._drawarea.loadSWFPresentationSynced(url,fileName,moduleName,parentPath,room,domain,slideNumber,"");
         </method>
         
         <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
