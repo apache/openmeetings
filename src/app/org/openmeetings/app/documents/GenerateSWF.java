@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -43,7 +45,23 @@ public class GenerateSWF {
 		try {
 			Runtime rt = Runtime.getRuntime();
 			returnMap.put("command", Arrays.toString(argv));
-			Process proc = rt.exec(argv);
+			
+			//By using the process Builder we have access to modify the environment variables
+			//that is handy to set variables to run it inside eclipse
+			ProcessBuilder pb = new ProcessBuilder(argv);
+			
+			Map<String, String> env = pb.environment();
+			
+//			for (Iterator<String> iter = env.keySet().iterator();iter.hasNext();) {
+//				String key = iter.next();
+//				
+//				System.out.println("key "+key+" value "+env.get(key));
+//				//log.debug("key "+key);
+//				
+//			}
+
+			Process proc = pb.start();
+
 			//1-minute timeout for command execution
 			long timeout = 60000;
 			

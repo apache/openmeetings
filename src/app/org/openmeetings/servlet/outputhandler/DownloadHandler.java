@@ -98,11 +98,14 @@ public class DownloadHandler extends HttpServlet {
 
 				if (moduleName.equals("videoconf1")) {
 					if (parentPath.length() != 0) {
-						
-						working_dir = working_dir + roomName
-								+ File.separatorChar + parentPath
-								+ File.separatorChar;
-						
+						if (parentPath.equals("/")) {
+							working_dir = working_dir + roomName
+									+ File.separatorChar;
+						} else {
+							working_dir = working_dir + roomName
+										+ File.separatorChar + parentPath
+										+ File.separatorChar;
+						}
 					} else {
 						working_dir = current_dir + roomName
 								+ File.separatorChar;
