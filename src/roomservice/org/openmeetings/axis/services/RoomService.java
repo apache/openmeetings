@@ -161,6 +161,52 @@ public class RoomService {
 	}
 
 	/**
+	 * 
+         * @param SID
+         * @param name
+         * @param roomtypes_id
+         * @param comment
+         * @param numberOfPartizipants
+         * @param ispublic
+	 * @param appointment
+	 * @param isDemoRoom
+	 * @param demoTime
+	 * @param isModeratedRoom
+	 * @param externalUserId
+	 * @param externalUserType
+         * @return
+         */
+	public Long getRoomIdByExternalId(String SID, String name,
+                        Long roomtypes_id ,
+                        String comment, Long numberOfPartizipants,
+                        Boolean ispublic,
+                        Boolean appointment,
+                        Boolean isDemoRoom,
+                        Integer demoTime,
+                        Boolean isModeratedRoom,
+			Long externalRoomId, 
+			String externalRoomType ) {
+                try {
+			Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
+			Long roomId = null;
+			if (room == null) {
+				Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+                		Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
+                                                        numberOfPartizipants, ispublic, null,
+                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
+							externalRoomId, externalRoomType);
+			} else {
+				roomId = room.getRooms_id();
+			}
+			return roomId;
+                } catch (Exception err) {
+                        log.error("[addRoomWithModeration] ",err);
+                }
+                return new Long (-1);
+        }
+
+	/**
 	 * TODO: Fix Organization Issue
 	 * 
 	 * @deprecated use updateRoomWithModeration

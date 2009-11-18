@@ -203,6 +203,56 @@ public class Roommanagement {
 		}
 		return null;
 	}	
+
+        /**
+         * Get a Rooms-Object or NULL
+         * @param externalRoomId
+         * @return Rooms-Object or NULL
+         */
+        public Rooms getRoomByExternalId(Long externalRoomId, String externalRoomType, long roomtypes_id){
+                log.debug("getRoombyExternalId : " + externalRoomId + " - " + externalRoomType + " - " + roomtypes_id);
+                try {
+                        String hql = "select c from Rooms as c JOIN c.roomtype as rt " + 
+					"where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType " + 
+					"AND rt.roomtypes_id = :roomtypes_id AND c.deleted != :deleted";
+                        Object idf = HibernateUtil.createSession();
+                        Session session = HibernateUtil.getSession();
+                        Transaction tx = session.beginTransaction();
+                        Query query = session.createQuery(hql);
+                        query.setLong("externalRoomId", externalRoomId);
+			query.setString("externalRoomType", externalRoomType);
+			query.setLong("roomtypes_id", roomtypes_id);
+                        query.setString("deleted", "true");
+                        List ll = query.list();
+                        tx.commit();
+                        HibernateUtil.closeSession(idf);
+                        if (ll.size()>0){
+                                return (Rooms) ll.get(0);
+                        }
+                        else{
+                                log.error("Could not find room " + externalRoomId);
+                        }
+                } catch (HibernateException ex) {
+                        log.error("[getRoomByExternalId] ", ex);
+                } catch (Exception ex2) {
+                        log.error("[getRoomByExternalId] ", ex2);
+                }
+                return null;
+        }
+
+        public Rooms getRoomByExternalId(long user_level, Long externalRoomId, String externalRoomType, long roomtypes_id){
+                try {
+                        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
+                                return this.getRoomByExternalId(externalRoomId, externalRoomType, roomtypes_id);
+                        }
+                        else
+                                log.error("getRoombyExternalId : Userlevel" +  user_level + " not allowed");
+                } catch (Exception ex2) {
+                        log.error("[getRoomByExternalId] ", ex2);
+                }
+                return null;
+        }
+
 	
 	public SearchResult getRooms(long user_level, int start, int max, String orderby, boolean asc){
 		try {
@@ -562,7 +612,7 @@ public class Roommanagement {
 		}
 		return null;
 	}
-	
+
 	public Long addRoomByMod(long user_level,String name, long roomtypes_id, String comment, Long numberOfPartizipants,
 			boolean ispublic, Long organisation_id,
 			Boolean appointment,
@@ -613,6 +663,77 @@ public class Roommanagement {
 		}
 		return null;
 	}
+
+
+        /**
+         * adds/check a new Record to the table rooms with external fields
+         * @param name
+         * @param roomtypes_id
+         * @param ispublic
+         * @return id of (the newly created) room or NULL
+         */
+        public Long addExternalRoom(long user_level,String name, long roomtypes_id, String comment, Long numberOfPartizipants,
+                        boolean ispublic, List organisations,
+                        Boolean appointment,
+                        Boolean isDemoRoom,
+                        Integer demoTime,
+                        Boolean isModeratedRoom,
+                        List roomModerators,
+			Long externalRoomId,
+                        String externalRoomType){
+
+                log.debug("addExternalRoom");
+
+                try {
+                        if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+                                Rooms r = new Rooms();
+                                r.setName(name);
+                                r.setComment(comment);
+                                r.setStarttime(new Date());
+                                r.setNumberOfPartizipants(numberOfPartizipants);
+                                r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+                                r.setIspublic(ispublic);
+
+                                r.setAppointment(appointment);
+
+                                r.setIsDemoRoom(isDemoRoom);
+                                r.setDemoTime(demoTime);
+
+                                r.setIsModeratedRoom(isModeratedRoom);
+
+                                r.setDeleted("false");
+
+				r.setExternalRoomId(externalRoomId);
+				r.setExternalRoomType(externalRoomType);
+
+                                Object idf = HibernateUtil.createSession();
+                                Session session = HibernateUtil.getSession();
+                                Transaction tx = session.beginTransaction();
+                                long returnId = (Long) session.save(r);
+
+                                session.flush();
+                                tx.commit();
+                                HibernateUtil.closeSession(idf);
+
+                                if (organisations!=null){
+                                        Long t = this.updateRoomOrganisations(organisations, r);
+                                        if (t==null) return null;
+                                }
+
+                                if (roomModerators!=null) {
+                                        RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
+                                }
+
+                                return returnId;
+                        }
+                } catch (HibernateException ex) {
+                        log.error("[addExternalRoom] ", ex);
+                } catch (Exception ex2) {
+                        log.error("[addExternalRoom] ", ex2);
+                }
+                return null;
+        }
+
 	
 	/**
 	 * adds a new record to the table rooms_organisation

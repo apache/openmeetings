@@ -24,6 +24,10 @@ public class Rooms {
 	private Long numberOfPartizipants = new Long(4);
 	
 	private Boolean appointment;
+
+	//Vars to simulate external Rooms
+	private Long externalRoomId;
+	private String externalRoomType;
 	
 	/**
 	 * Layout of Room
@@ -403,5 +407,29 @@ public class Rooms {
 	public void setIsModeratedRoom(Boolean isModeratedRoom) {
 		this.isModeratedRoom = isModeratedRoom;
 	}
+
+        /**
+ 	  * @hibernate.property
+          *  column="externalRoomId"
+          *  type="long"
+          */
+        public Long getExternalRoomId() {
+                return externalRoomId;
+        }
+        public void setExternalRoomId(Long externalRoomId) {
+                this.externalRoomId = externalRoomId;
+        }
+
+        /**
+          * @hibernate.property
+          *  column="externalRoomType"
+          *  type="string"
+          */
+        public String getExternalRoomType() {
+                return externalRoomType;
+        }
+        public void setExternalRoomType(String externalRoomType) {
+                this.externalRoomType = externalRoomType;
+        }
 	
 }

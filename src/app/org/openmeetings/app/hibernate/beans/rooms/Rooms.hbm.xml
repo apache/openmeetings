@@ -18,5 +18,7 @@
     <property name="isDemoRoom" type="boolean" column="isdemoroom"/>
     <property name="demoTime" type="integer" column="demo_time"/>
     <property name="isModeratedRoom" type="boolean" column="ismoderatedroom"/>
+    <property name="externalRoomId" type="long" column="externalRoomId"/>
+    <property name="externalRoomType" type="string" column="externalRoomType"/>
   </class>
 </hibernate-mapping>

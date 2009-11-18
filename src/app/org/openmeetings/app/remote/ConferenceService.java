@@ -342,6 +342,18 @@ public class ConferenceService {
         Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
         return Roommanagement.getInstance().getRoomById(user_level,rooms_id);
 	}
+
+        /**
+         *
+         * @param SID
+         * @param rooms_id
+         * @return
+         */
+        public Rooms getRoomByExternalId(String SID, Long externalUserId, String externalUserType, long roomtypes_id){
+        	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+        	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+        	return Roommanagement.getInstance().getRoomByExternalId(user_level,externalUserId,externalUserType,roomtypes_id);
+        }
 	
 	/**
 	 * gets a list of all availible rooms
