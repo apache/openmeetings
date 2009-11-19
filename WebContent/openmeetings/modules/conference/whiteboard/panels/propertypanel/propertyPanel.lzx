@@ -310,15 +310,23 @@
                 parent.currentDocument.sendSelection = false;
                 parent.currentDocument.selectItem(itemObj.name);
                 parent.currentDocument.sendSelection = true;
+                
+                parent._clickLayer.setAttribute("visibility","hidden");
             </method>
             
             <method name="removeDocument" args="refItemName">
                 parent.currentDocument.removeItem(refItemName);
-                parent.currentDocument.selectItemAt(0);
+                if (parent.currentDocument.getNumItems() != 0) {
+                    parent.currentDocument.selectItemAt(0);
+                    parent._clickLayer.setAttribute("visibility","hidden");
+                } else {
+                	parent._clickLayer.setAttribute("visibility","visible");
+                }
             </method>
             
             <method name="clearDocumentsBar">
                 parent.currentDocument.reset();
+                parent._clickLayer.setAttribute("visibility","visible");
             </method>
             
             <drawDocumentPanelItem name="b3" modi="doc_first" resoureceItem="doc_first" 
@@ -350,6 +358,11 @@
             <labelText y="6" labelid="253" />
             
 		</view>
+		
+		<!-- 340 -->
+		<view name="_clickLayer" clickable="true" opacity="0.75" x="340"
+			  width="460" height="$once{ parent.height - this.y - 4 }" 
+			  y="20" showhandcursor="false" bgcolor="0xFFFFFF" />
 		
 	</view>
 
