@@ -379,7 +379,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationReminderLink");
 		
 		try{
-			String invitation_link = baseUrl+"?lzr=swf8&lzt=swf&invitationHash="+invitationHash;
+			String invitation_link = baseUrl+"?lzproxied=solo&lzr=swf8&lzt=swf&invitationHash="+invitationHash;
 			
 			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			
@@ -595,7 +595,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject, String invitationsHash, Long appointMentId, Long organizer_userId, Boolean invitor){
 		try {
 				
-			String invitation_link = baseurl+"?lzr=swf8&lzt=swf&invitationHash="+invitationsHash;
+			String invitation_link = baseurl+"?lzproxied=solo&lzr=swf8&lzt=swf&invitationHash="+invitationsHash;
 			
 			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
@@ -664,7 +664,7 @@ public class Invitationmanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				
-				String invitation_link = baseurl+"?lzr=swf8&lzt=swf&domain="+domain+"&room="+room+"&roomtype="+roomtype+"&email="+email+"&roomid="+room_id;
+				String invitation_link = baseurl+"?lzproxied=solo&lzr=swf8&lzt=swf&domain="+domain+"&room="+room+"&roomtype="+roomtype+"&email="+email+"&roomid="+room_id;
 				
 				Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 		        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
