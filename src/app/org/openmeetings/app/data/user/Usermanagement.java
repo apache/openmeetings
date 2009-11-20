@@ -1150,7 +1150,7 @@ public class Usermanagement {
 					Users savedUser = UsersDaoImpl.getInstance().getUser(user_id);
 					savedUser.setAge((Date) values.get("age"));
 					savedUser.setFirstname(values.get("firstname").toString());
-					savedUser.setLastname(values.get("firstname").toString());
+					savedUser.setLastname(values.get("lastname").toString());
 					savedUser.setTitle_id(Integer.parseInt(values.get("title_id").toString()));
 					
 					String password = values.get("password").toString();
