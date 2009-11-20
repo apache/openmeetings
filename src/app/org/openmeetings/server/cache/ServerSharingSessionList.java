@@ -18,6 +18,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
 import org.openmeetings.server.beans.ServerSharingViewerBean;
 import org.openmeetings.server.beans.ServerStatusBean;
@@ -142,6 +143,51 @@ public class ServerSharingSessionList {
 		} catch (Exception err) {
 			log.error("[startSession] ",err);
 		}
+	}
+	
+	public static Boolean updateCursorPosition(ServerFrameCursorStatus cPosition) {
+		try {
+			
+			if (sharingSessions.containsKey(cPosition.getPublicSID())) {
+				
+				ServerSharingSessionBean serverSharingSessionBean = sharingSessions.get(cPosition.getPublicSID());
+				
+				serverSharingSessionBean.setServerFrameCursorStatus(cPosition);
+				
+				
+				/* #################################
+				 * Send Cursor Position to ODSP-Connections
+				 * 
+				 */
+				ServerSocketMinaProcess.sendCursorPositionToSession(cPosition);
+				
+				/* #################################
+				 * Send Cursor to trigger HTTP-Connections
+				 * 
+				 */
+				ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
+				if (scopeApplicationAdapter != null) {
+					ScopeApplicationAdapter.getInstance().sendScreenSharingCursorPos(cPosition);
+				}
+				
+				sharingSessions.put(cPosition.getPublicSID(),serverSharingSessionBean);
+				
+			} else {
+				
+				log.debug("Number of Sessions: "+sharingSessions.size());
+				
+				for (Iterator<String> iter = sharingSessions.keySet().iterator();iter.hasNext();) {
+					log.debug("available Sessions : "+iter.next());
+				}
+				
+				throw new Exception("updateCursorPosition where no Session is - Session already Closed? "+cPosition.getPublicSID());
+				
+			}
+			
+		} catch (Exception err) {
+			log.error("[updateCursorPosition]",err);
+		}
+		return false;
 	}
 	
 	

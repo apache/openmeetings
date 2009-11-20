@@ -6,6 +6,7 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
 import org.red5.logging.Red5LoggerFactory;
@@ -177,6 +178,34 @@ public class ServerDesktopRequestDecoder extends CumulativeProtocolDecoder {
 						serverFrameBeanState.tileWidth = null;
 
 		                return true;
+	        		} else if (serverFrameBeanState.mode == 5) {
+	        			
+	        			ServerFrameCursorStatus serverFrameCursorStatus = new ServerFrameCursorStatus();
+	        			
+	        			serverFrameCursorStatus.setMode(serverFrameBeanState.mode);
+	        			serverFrameCursorStatus.setSequenceNumber(serverFrameBeanState.sequenceNumber);
+	        			serverFrameCursorStatus.setPublicSID(serverFrameBeanState.publicSID);
+	        			serverFrameCursorStatus.setX(serverFrameBeanState.xValue);
+	        			serverFrameCursorStatus.setY(serverFrameBeanState.yValue);
+	        			
+	        			//Write the result to the Handler
+		        		out.write(serverFrameCursorStatus);
+	        			
+	        			//Reset the Buffer Values
+		        		serverFrameBeanState.mode = null;
+		        		serverFrameBeanState.sequenceNumber = null;
+		        		serverFrameBeanState.lengthSecurityToken = null;
+						serverFrameBeanState.xValue = null;
+						serverFrameBeanState.yValue = null;
+						serverFrameBeanState.width = null;
+						serverFrameBeanState.height = null;
+						serverFrameBeanState.lengthPayload = null;
+						serverFrameBeanState.publicSID = null;
+						serverFrameBeanState.imageBytes = null;
+						serverFrameBeanState.tileHeight = null;
+						serverFrameBeanState.tileWidth = null;
+	        			
+	        			return true;
 	        		}
 	        		
 	        	} else {

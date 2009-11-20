@@ -37,7 +37,9 @@ import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.StreamService;
 import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
+import org.openmeetings.server.beans.messages.ScreenSharingCursor;
 import org.openmeetings.server.beans.messages.ScreenSharingMessage;
 import org.openmeetings.server.beans.messages.ScreenSharingNewFrame;
 import org.openmeetings.server.cache.ServerSharingSessionList;
@@ -1728,7 +1730,77 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 	
-	
+	public synchronized void sendScreenSharingCursorPos(ServerFrameCursorStatus cursorStatus) {
+		try {
+			
+			ScreenSharingCursor screenSharingCursor = new ScreenSharingCursor();
+			screenSharingCursor.setX(cursorStatus.getX());
+			screenSharingCursor.setY(cursorStatus.getY());
+				
+			String publicSID = cursorStatus.getPublicSID();
+			
+			IScope globalScope = getContext().getGlobalScope();
+			IScope webAppKeyScope = globalScope.getScope(ScopeApplicationAdapter.webAppRootKey);
+			
+			//log.debug("webAppKeyScope "+webAppKeyScope);
+			
+			//Get Room Id to send it to the correct Scope
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			
+			if (currentClient == null) {
+				return;
+				//throw new Exception("Could not Find RoomClient on List "+publicSID);
+			}
+			//default Scope Name
+			String scopeName = "hibernate";
+			if (currentClient.getRoom_id() != null) {
+				scopeName = currentClient.getRoom_id().toString();
+			}
+			
+			IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
+			
+			//log.debug("scopeHibernate "+scopeHibernate);
+			
+			if (scopeHibernate!=null){
+				//Notify the clients of the same scope (room) with user_id
+				
+				Collection<Set<IConnection>> conCollection = webAppKeyScope.getScope(scopeName).getConnections();
+				for (Set<IConnection> conset : conCollection) {
+					for (IConnection conn : conset) {
+						if (conn != null) {
+							
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+							//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
+							
+							//Do not send to self and only to registered viewers
+							if (!rcl.getPublicSID().equals(publicSID)){
+								
+								boolean sharerOnList = false;
+								for (int i=0;i<rcl.getSharerSIDs().size();i++) {
+									sharerOnList = true;
+									break;
+								}
+								
+								if (sharerOnList) {
+									//log.debug("IS EQUAL ");
+									((IServiceCapableConnection) conn).invoke("newScreenCursorPosition",new Object[] { screenSharingCursor }, this);
+									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+screenSharingCursor);
+								}
+							}
+						}
+					}
+				}
+
+			} else {
+				//Scope not yet started
+				throw new Exception("ScreenSharing Message but no Scope to send");
+			}
+			
+		} catch (Exception err) {
+			log.error("[sendScreenSharingMessage] ",err);
+			err.printStackTrace();
+		}
+	}
 
 	public synchronized void sendScreenSharingFrame(ServerFrameBean serverFrameBean) {
 		try {

@@ -33,7 +33,9 @@ public class ServerSharingSessionBean {
 	private int tileWidth;
 	private int tileHeight;
 	
-	List<ServerFrameBean> serverFrameBeans = new LinkedList<ServerFrameBean>();
+	private ServerFrameCursorStatus serverFrameCursorStatus;
+	
+	private List<ServerFrameBean> serverFrameBeans = new LinkedList<ServerFrameBean>();
 
 	public Long getSessionId() {
 		return sessionId;
@@ -153,6 +155,7 @@ public class ServerSharingSessionBean {
 	public void setTileHeight(int tileHeight) {
 		this.tileHeight = tileHeight;
 	}
+	
 	public boolean isDeleted() {
 		return deleted;
 	}
@@ -160,5 +163,12 @@ public class ServerSharingSessionBean {
 		this.deleted = deleted;
 	}
 	
+	public ServerFrameCursorStatus getServerFrameCursorStatus() {
+		return serverFrameCursorStatus;
+	}
+	public void setServerFrameCursorStatus(
+			ServerFrameCursorStatus serverFrameCursorStatus) {
+		this.serverFrameCursorStatus = serverFrameCursorStatus;
+	}
 	
 }

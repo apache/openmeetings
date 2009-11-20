@@ -1322,6 +1322,17 @@
         </handler>   
     </netRemoteCallHib>  
     
+    <!-- newScreenCursorPosition
+     -->
+    <netRemoteCallHib name="newScreenCursorPosition" funcname="newScreenCursorPosition">
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("newScreenCursorPosition: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+    
     <netRemoteCallHib name="newScreenFrame" funcname="newScreenFrame">
         <handler name="ondata" args="value">
             <![CDATA[

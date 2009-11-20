@@ -136,7 +136,7 @@ public class ClientCaptureScreen {
 		clientCursorStatus.setX(x);
 		clientCursorStatus.setY(y);
 		
-		ClientTransportMinaPool.sendMessage(clientCursorStatus);
+		//ClientTransportMinaPool.sendMessage(clientCursorStatus);
 		
 	}
 

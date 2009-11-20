@@ -26,6 +26,7 @@ import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
 import org.openmeetings.server.beans.ServerSharingViewerBean;
 import org.openmeetings.server.beans.ServerStatusBean;
@@ -48,6 +49,28 @@ public class ServerSocketMinaProcess {
 	
 	public static final int port = 4445;
 	
+	public static void sendCursorPositionToSession(ServerFrameCursorStatus cursorStatus) {
+		try {
+			
+			List<ServerSharingViewerBean> viewersList = ServerSharingViewersList.getViewersByPublicSID(cursorStatus.getPublicSID());
+			
+			if (viewersList == null) {
+				//No Viewers registered via ODSP-Connection
+				return;
+			}
+			
+			for (ServerSharingViewerBean serverSharingViewerBean : viewersList) {
+				
+				IoSession session = ServerSocketMinaProcess.getSessionById(serverSharingViewerBean.getSessionId());
+				session.write(cursorStatus);
+				
+			}
+			
+		} catch (Exception err) {
+			log.error("[sendCursorPositionToSession]",err);
+		}
+	}
+	
 	public static void sendStatusToSession(ServerStatusBean serverStatusBean) {
 		try {
 			
@@ -61,13 +84,12 @@ public class ServerSocketMinaProcess {
 			for (ServerSharingViewerBean serverSharingViewerBean : viewersList) {
 				
 				IoSession session = ServerSocketMinaProcess.getSessionById(serverSharingViewerBean.getSessionId());
-				
-				
 				session.write(serverStatusBean);
+				
 			}
 			
 		} catch (Exception err) {
-			log.error("[sendMessageToSession]",err);
+			log.error("[sendStatusToSession]",err);
 		}
 	}
 	
@@ -84,9 +106,8 @@ public class ServerSocketMinaProcess {
 			for (ServerSharingViewerBean serverSharingViewerBean : viewersList) {
 				
 				IoSession session = ServerSocketMinaProcess.getSessionById(serverSharingViewerBean.getSessionId());
-				
-				
 				session.write(serverFrameBean);
+				
 			}
 			
 		} catch (Exception err) {
@@ -247,6 +268,16 @@ public class ServerSocketMinaProcess {
 		} catch (Exception err) {
 			log.error("[recvServerFrameBean]",err);
 		}
+	}
+	
+	/**
+	 * @param remoteAddress
+	 */
+	public void updateClientCursor(SocketAddress remoteAddress, ServerFrameCursorStatus serverFrameCursorStatus) {
+		// TODO Auto-generated method stub
+		
+		ServerSharingSessionList.updateCursorPosition(serverFrameCursorStatus);
+
 	}
 
 	/**

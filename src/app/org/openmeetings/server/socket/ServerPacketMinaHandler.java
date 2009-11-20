@@ -8,6 +8,7 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
 import org.red5.logging.Red5LoggerFactory;
@@ -64,6 +65,14 @@ public class ServerPacketMinaHandler extends IoHandlerAdapter {
 			SocketAddress remoteAddress = session.getRemoteAddress();
 			
 			server.recvServerViewerRegisterBean(remoteAddress, session.getId(), (ServerViewerRegisterBean) message);
+			
+		}
+		
+		if (message instanceof ServerFrameCursorStatus) {
+			
+			SocketAddress remoteAddress = session.getRemoteAddress();
+			
+			
 			
 		}
 		
