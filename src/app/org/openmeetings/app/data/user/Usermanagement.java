@@ -127,7 +127,9 @@ public class Usermanagement {
 						hql +=	" OR ";
 					}
 					hql +=	"( " +
-								"lower(u.lastname) LIKE lower('%"+searchItems[i]+"%') OR lower(u.firstname) LIKE lower('%"+searchItems[i]+"%') " +
+								"lower(u.lastname) LIKE lower('%"+searchItems[i]+"%') " +
+								"OR lower(u.firstname) LIKE lower('%"+searchItems[i]+"%') " +
+								"OR lower(u.login) LIKE lower('%"+searchItems[i]+"%') " +
 								"OR lower(u.adresses.email) LIKE lower('%"+searchItems[i]+"%') " +
 								//"OR lower(u.titel) LIKE lower('%"+searchItems[i]+"%') " +
 								//"OR lower(u.email) LIKE lower('%"+searchItems[i]+"%') " +

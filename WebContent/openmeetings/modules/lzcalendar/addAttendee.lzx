@@ -74,7 +74,7 @@
 			this.addHeaderItem(146,70);
 			this.addHeaderItem(148,136);
 			this.addHeaderItem(149,136);
-			this.addHeaderItem(137,140);
+			this.addHeaderItem(137,138);
 			this.getAllUserBySearchRange.doCall();
 		</handler>
 		

@@ -497,7 +497,7 @@
 		 	
                 <!-- fixed size input text is best for large multiline text,
                  so it is good to declare with values for width/height -->
-                <labelText name="_descrLabel" y="90" x="10" labelid="619" width="60"/>
+                <labelText name="_descrLabel" y="90" x="10" labelid="802" width="60"/>
                 <inputtextbox name="txt" x="10" y="110" multiline="true" pixellock="true"
                     width="175" height="210" datapath="comment/@value" visible="true"/>
                     

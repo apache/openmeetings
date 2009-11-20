@@ -1282,7 +1282,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Farbe auswählen</value>
   </string>
   <string id="426" name="painttools_line_disable">
-    <value>Randfarbe da/aktivieren</value>
+    <value>Randfarbe de/aktivieren</value>
   </string>
   <string id="427" name="painttools_fill_disable">
     <value>Füllfarbe ändern</value>
