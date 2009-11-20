@@ -1222,6 +1222,9 @@ public class Usermanagement {
 	 */
 	public Long resetUser(String email, String username, String appLink) {
 		try {
+			
+			log.debug("resetUser "+email);
+			
 			//check if Mail given
 			if (email.length()>0){
 				Adresses addr = Addressmanagement.getInstance().retrieveAddressByEmail(email);
@@ -1260,7 +1263,7 @@ public class Usermanagement {
 		log.debug("User: "+us.getLogin());
 		us.setResethash(ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(loginData));
 		UsersDaoImpl.getInstance().updateUser(us);
-		String reset_link = appLink+"?hash="+us.getResethash();
+		String reset_link = appLink+"?lzproxied=solo&hash="+us.getResethash();
 		
 		String email = us.getAdresses().getEmail();
 		

@@ -102,26 +102,35 @@ public class Addressmanagement {
 	}
 	
 	/**
-	 * @author o.becherer
+	 * @author o.becherer, swagner
 	 * @param email
 	 * @return
 	 */
 	public Adresses retrieveAddressByEmail(String email) throws Exception{
 		log.debug("retrieveAddressByEmail : " + email);
 		
-		String hql = "select c from Adresses as c where c.email = :email and c.deleted = :deleted";
+		String hql = "select c from Adresses as c " +
+				"where c.email LIKE :email";
+				//"and c.deleted != :deleted";
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setString("email", email);
-		query.setString("deleted", "false");
+		//query.setString("deleted", "true");
 		
-		Adresses addr = (Adresses) query.uniqueResult();
+		List<Adresses> addr = query.list();
+		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 	
-		return addr;
+		log.debug("retrieveAddressByEmail "+addr.size());
+		
+		if (addr.size() > 0) {
+			return addr.get(0);
+		}
+		
+		return null;
 	}
 	
 	/**
