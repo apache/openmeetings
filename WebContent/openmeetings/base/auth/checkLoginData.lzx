@@ -279,7 +279,8 @@
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("loginUser: ",value);
+            	if ($debug) Debug.write("loginUser: ",value);
+            	
                 if (!(value<0)){
                     
                     if (this.parent._savelogindata.getValue()) {
@@ -327,9 +328,12 @@
                     }
                     
                     hib.userlang = Number(parent.languages.getValue());
+                    
+                    if ($debug) Debug.write("value.organisation_users ",value.organisation_users);
+                    
                     hib.userobject = value;
                     if (value.organisation_users.length==0){
-                        Debug.warn("this user has no Organisation ");
+                        if ($debug) Debug.warn("this user has no Organisation ");
                     } else if (value.organisation_users.length==1){
                         hib.currentdomain = value.organisation_users[0].organisation.name;
                         hib.currentdomainObj = value.organisation_users[0].organisation;

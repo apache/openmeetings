@@ -171,6 +171,7 @@ public class MainService implements IPendingServiceCallback {
     		
     		Sessionmanagement.getInstance().updateUserOrg(SID, organization_id);
     		
+    		return 1L;
     	} catch (Exception err) {
     		log.error("[setCurrentUserOrganization]",err);
     	}

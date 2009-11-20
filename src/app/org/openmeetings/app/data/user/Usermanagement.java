@@ -217,6 +217,9 @@ public class Usermanagement {
 			query.setString("deleted", "true");
 			
 			List<Users> ll = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
 			log.debug("debug SIZE: " + ll.size());
 			
@@ -224,6 +227,10 @@ public class Usermanagement {
 				return new Long(-10);
 			} else {
 				Users users = (Users) ll.get(0);
+				
+				//Refresh User Object
+				users = this.refreshUserObject(users);
+				
 				if (ManageCryptStyle.getInstance().getInstanceOfCrypt().verifyPassword(userpass, users.getPassword())) {
 					log.info("chsum OK: "+ users.getUser_id());
 					Boolean bool = Sessionmanagement.getInstance().updateUser(SID, users.getUser_id(),storePermanent, language_id);
@@ -246,6 +253,12 @@ public class Usermanagement {
 					if (currentClient!=null){
 						currentClient.setUser_id(users.getUser_id());
 					}
+					
+//					System.out.println("loginUser "+users.getOrganisation_users());
+//					if (users.getOrganisation_users() != null) {
+//						System.out.println("loginUser size "+users.getOrganisation_users().size());
+//					}
+					
 					return users;
 				} else {
 					return new Long(-11);
@@ -258,6 +271,28 @@ public class Usermanagement {
 			log.error("[loginUser]: ",ex2);
 		}
 		return new Long(-1);
+	}
+	
+	public Users refreshUserObject(Users us) {
+		try {
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			session.flush();
+			session.refresh(us);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return us;
+		} catch (HibernateException ex) {
+			log.error("[loginUser]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[loginUser]: ",ex2);
+		}
+		return null;
 	}
 	
 	public Users loginUserByRemoteHash(String SID, String remoteHash) {

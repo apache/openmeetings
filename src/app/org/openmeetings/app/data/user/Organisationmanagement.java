@@ -424,10 +424,11 @@ public class Organisationmanagement {
 				orgUser.setStarttime(new Date());
 				orgUser.setComment(comment);
 				long id = (Long) session.save(orgUser);
-				tx.commit();
 				
 				//We need this flush
 				session.flush();
+				
+				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return id;
 			} else {
