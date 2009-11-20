@@ -177,8 +177,28 @@
     
         <!--- @keywords private  -->
     <method name="_removeDragState" args="obj">
-        lz.Cursor.unlock();
-        this.dragger.remove();
+    	<![CDATA[
+	        lz.Cursor.unlock();
+	        
+	        if (this.x < 0) {
+	        	this.setAttribute("x",20);
+	        }
+	        
+	        if (this.y < 0) {
+	        	this.setAttribute("y",20);
+	        }
+	        
+	        if (this.x+this.width > parent.width) {
+	        	this.setAttribute("x",parent.width - this.width - 20);
+	        }
+	        
+	        if (this.y+this.height > parent.height) {
+	        	this.setAttribute("y",parent.height - this.height - 20);
+	        }
+	        
+	        this.dragger.remove();
+        
+        ]]>
     </method>
 
 	<view name="_innertop" width="${parent.width-2 }" 
