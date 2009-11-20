@@ -59,11 +59,17 @@
 	</method>
 	<method name="__LZFileDelete">
 		//Debug.write("__LZFileDelete 3");
-		this.parent.deleteFile.String2 = canvas.uploadmoduleimgfolder;
+		new lz.confirmationSingle(canvas.main_content._content.inner,{
+					labelid:840,labeliderror:839,refObj:this,
+					showCheckBox:false});
+    </method>
+    
+    <method name="sendConfirmation" args="yesno" >
+        this.parent.deleteFile.String2 = canvas.uploadmoduleimgfolder;
 		//Debug.write("this.parent.deleteFile.String2 3",this.parent.deleteFile.String2);
 		this.parent.deleteFile.String1 = this.filename;
 		this.parent.deleteFile.doCall();
-	</method>
+    </method>
   
 	<method name="__LZFileAddDirect">
 		<![CDATA[
