@@ -14,7 +14,7 @@
 		<![CDATA[
 			if($debug) Debug.write("chatTabItemEmoticons/WIDTH: "+this.width);
 	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	        		+canvas.httpRootKey+'/DownloadHandler?fileName=CHAT'
+	        		+canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
 	        		+'&moduleName=chat&parentPath=&room_id='
 	        		+'&remoteUserid='+this.user_id
 	        		+'&sid='+canvas.sessionId;
@@ -63,7 +63,8 @@
 						}
 						t += items[i][2];
 						//Debug.write(x,y);
-						var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+'/public/emoticons/'+items[i][1];
+						var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+
+										canvas.httpRootKey + 'public/emoticons/'+items[i][1];
 						var m = new lz.chatInnerSmily(parent,{x:x+this.x,y:y+this.y,iconlabel:items[i][3]});
 						m.setSource(swfurl);
 					}
