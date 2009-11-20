@@ -2172,166 +2172,166 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Вы не можете рисовать на доске. Вам нужно либо стать модератором, либо получить от модератора право рисовать на доске. Вы можете попросить модератора предоставить вам такое право.</value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>Свойства документа</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>Запустить клиент (внешний)</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>Запустить клиент (HTTP)</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>Пользователь хочет сделать свой экран общим. Хотите увидеть его экран?</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>В данный момент вы публикуете ваш экран. Чтобы прекратить публикацию, нажмите кнопку "Stop" клиента</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>Сессия публикации экрана</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
+    <value>Вы уже опубликовали ваш экран</value>
   </string>
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>Просмотрщик рабочего стола</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>Выйти</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>Публикатор экрана</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Click Start to publish your screen</value>
+    <value>Нажмите, чтобы начать публиковать ваш экран</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>Начать сеанс: сделать экран общим</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Остановить сеанс</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Select your screen area:</value>
+    <value>Выберите область экрана</value>
   </string>
   <string id="735" name="sharing client">
-    <value>Change width</value>
+    <value>Изменить ширину</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>Участник закончил публиковать свой рабочий стол</value>
   </string>
   <string id="737" name="sharing client">
-    <value>Change height</value>
+    <value>Изменить высоту</value>
   </string>
   <string id="738" name="sharing client">
-    <value>X-Offset</value>
+    <value>Смещение X</value>
   </string>
   <string id="739" name="sharing client">
-    <value>Y-Offset</value>
+    <value>Смещение Y</value>
   </string>
   <string id="740" name="sharing client">
-    <value>Width:</value>
+    <value>Ширина:</value>
   </string>
   <string id="741" name="sharing client">
-    <value>Height:</value>
+    <value>Высота:</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
+    <value>Соединение завершено сервером</value>
   </string> 
   <string id="743" name="sharing viewer">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>Запустить внешний</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>If you close this session completely you are not able to restart the viewer for this session.</value>
+    <value>Полностью закрыв сессию, вы не сможете больше перезапустить просмотрщик для этой сессии</value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Confirm Closing Viewer Session</value>
+    <value>Подтвердите закрытие сессии просмотрщика</value>
   </string> 
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>Сделать экран общим</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>Сессия записи</value>
   </string>
   <string id="749" name="co-browser">
-    <value>Co-Browsing</value>
+    <value>Совместный просмотр</value>
   </string>
   <string id="750" name="co-browser">
-    <value>Ooops, ... Firefox on Windows does not show clear Co-Browsing. Please use another Browser for using the Co-Browsing feature.</value>
+    <value>К сожалению, Firefox на ОС Windows не поддерживает совместный просмотр. Используйте другой браузер.</value>
   </string>
   <string id="751" name="co-browser">
-    <value>Previous</value>
+    <value>Предыдущая</value>
   </string>
   <string id="752" name="co-browser">
-    <value>Next</value>
+    <value>Следующая</value>
   </string>
   <string id="753" name="co-browser">
-    <value>Reload</value>
+    <value>Перегрузить</value>
   </string>
   <string id="754" name="co-browser">
-    <value>Home</value>
+    <value>Домашняя страница</value>
   </string>
   <string id="755" name="co-browser">
-    <value>Load</value>
+    <value>Загрузить</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Add this website as Default website to your Profile.</value>
+    <value>Добавить в ваш профиль эту веб-страницу как страницу по умолчанию</value>
   </string>
   <string id="757" name="test setup">
-    <value>Test Setup</value>
+    <value>Настройки теста</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Проверьте установки микрофона и камеры перед тем, как войти в комнату. Запишите 5-секундное тестовое видео. После записи можно проиграть видео и проверить качество картинки и звука.</value>
   </string>
   <string id="759" name="test setup">
-    <value>Don't show this test anymore</value>
+    <value>Больше не показывать этот тест</value>
   </string>
   <string id="760" name="test setup">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>Начать конференцию</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>Do not ask again</value>
+    <value>Больше не спрашивать</value>
   </string>
   <string id="763" name="test setup">
-    <value>REC</value>
+    <value>ЗАПИСЬ</value>
   </string>
   <string id="764" name="test setup">
-    <value>PLAY</value>
+    <value>ПРОИГРАТЬ</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>Можно продолжить без тестирования, если не планируете публиковать ваш голос и видео. Участники без аудио и видео могут использовать доску, публиковать свой экран, а также участвовать в чате.</value>
   </string>
   <string id="766" name="test setup">
-    <value>STOP</value>
+    <value>СТОП</value>
   </string>
   <string id="767" name="test setup">
-    <value>Level-Meter</value>
+    <value>Уровень звука</value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>Нажмите Старт</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>Участвуйте в конференции</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>Начните лекцию</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>Выберите комнаты</value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>Проверьте аудио и видео</value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>Участвуйте в конференции</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>Как участвовать в конференции:</value>
   </string>
   <string id="775" name="test setup">
     <value>Start Recording</value>
@@ -2536,5 +2536,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="842" name="salutation">
     <value>Dr.</value>
+  </string>
+  <string id="843" name="property panel whiteboard">
+    <value>Properties</value>
   </string>
 </language>

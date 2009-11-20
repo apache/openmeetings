@@ -94,7 +94,7 @@
 	    <labelTooltip multiline="true" labelid="389" />
     </simpleLabelButton>       
     
-	<turnOverList name="_turnoverlist" width="460" height="${ canvas.height - 190 }" x="2" y="60" 
+	<turnOverList name="_turnoverlist" width="460" height="${ canvas.height - 170 }" x="2" y="60" 
 		orderby="fieldvalues_id" step="25" asc="true">
         
         <attribute name="language_id" value="0" type="number" />

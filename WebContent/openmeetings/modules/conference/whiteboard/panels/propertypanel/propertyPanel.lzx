@@ -2,7 +2,7 @@
 <library>
     
 <class name="propertyPanel" extends="basePropertyPanel" 
-	   width="${ parent.parent.width-1 }" height="80" title="Properties" >
+	   width="${ parent.parent.width-1 }" height="80" labelid="843" >
 	
 	<attribute name="ignoreUpdates" value="false" type="boolean" />
     

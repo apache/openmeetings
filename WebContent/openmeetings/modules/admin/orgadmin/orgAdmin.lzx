@@ -4,7 +4,7 @@
 <!--- Organization administration module for ADMIN.-->
 <class name="orgAdmin" extends="baseContentView">
 	
-	<turnOverList name="_turnoverlist" width="320" height="600" x="2" y="0" 
+	<turnOverList name="_turnoverlist" width="320" height="${ canvas.height - 110 }" x="2" y="0" 
 		orderby="organisation_id" step="50" asc="true">
 
 		<handler name="oninit">

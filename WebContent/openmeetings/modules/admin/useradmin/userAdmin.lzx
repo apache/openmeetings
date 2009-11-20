@@ -14,7 +14,7 @@
     	</handler>
     </simpleLabelButton>
 
-	<turnOverList name="_turnoverlist" width="440" height="${ canvas.height - 160 }" x="2" y="30" 
+	<turnOverList name="_turnoverlist" width="440" height="${ canvas.height - 140 }" x="2" y="30" 
 		orderby="user_id" step="50" asc="true">
 
 		<handler name="oninit">

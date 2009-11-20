@@ -4,8 +4,8 @@
 <!--- Admin module to configure the Conference or Audience room.-->
 <class name="roomClient" extends="baseContentView">	
 	
-	<turnOverList name="_turnoverlist" width="780" height="600" x="2" y="0" 
-		orderby="rooms_id" step="50" asc="true">
+	<turnOverList name="_turnoverlist" width="780" height="${ canvas.height - 110 }" 
+              x="2" y="0" orderby="rooms_id" step="50" asc="true">
 
 		<handler name="oninit">
 			this.addHeaderItem(599,80);

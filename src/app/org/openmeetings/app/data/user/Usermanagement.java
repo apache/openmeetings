@@ -1339,7 +1339,8 @@ public class Usermanagement {
 		
 		String hql = "SELECT c from Users AS c " +
 				"WHERE " +
-				"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
+				"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  )" +
+				"AND c.externalUserId IS NULL " +
 				"AND c.deleted != :deleted";
 		
 		Object idf = HibernateUtil.createSession();

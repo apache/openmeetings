@@ -2533,4 +2533,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="842" name="salutation">
     <value>Dr.</value>
   </string>
+  <string id="843" name="property panel whiteboard">
+    <value>Properties</value>
+  </string>
 </language>
