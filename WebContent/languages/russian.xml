@@ -61,7 +61,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Новый опрос</value>
   </string>
   <string id="19" name="newpollheader">
-    <value>Новый опрос для конференции.</value>
+    <value>Новый опрос для конференции</value>
   </string>
   <string id="20" name="question">
     <value>Вопрос:</value>
@@ -73,7 +73,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Создать</value>
   </string>
   <string id="23" name="infomessage">
-    <value>Информация: каждый связанный пользователь получает сообщение с новым опросом.</value>
+    <value>Информация: каждый подключённый пользователь получает сообщение с новым опросом.</value>
   </string>
   <string id="24" name="creatpoll">
     <value>Создать опрос</value>
@@ -172,10 +172,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Отменить</value>
   </string>
   <string id="56" name="reconeectneeded">
-    <value>Вы должны войти заново, чтобы активировать изменения.</value>
+    <value>Чтобы активировать изменения, войдите заново</value>
   </string>
   <string id="57" name="editsetup">
-    <value>Изменить установки.</value>
+    <value>Изменить установки</value>
   </string>
   <string id="58" name="course">
     <value>Курс:</value>
@@ -328,7 +328,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Выдается ошибка, просьба связаться с административной группой</value>
   </string>
   <string id="108" name="Authlogin">
-    <value>Логин</value>
+    <value>Вход</value>
   </string>
   <string id="109" name="Authuser">
     <value>Пользователь:</value>
@@ -721,7 +721,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Запрещено делать ваш экран общим</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>iiiiiiСделать экран общим</value>
+    <value>Сделать экран общим</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
     <value>Неверная ширина канала: невозможно синхронизовать экран. Некоторые кадры будут пропущены. Если это сообщение появляется слишком часто, Вы можете попросить модератора ухудшить качество соединения.</value>
@@ -1132,7 +1132,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ваши установки</value>
   </string>
   <string id="376" name="dashboard">
-    <value>привет,</value>
+    <value>Привет,</value>
   </string>
   <string id="377" name="dashboard">
     <value>Редактировать ваш профиль</value>
@@ -1222,7 +1222,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Эта комната полна. Попробуйте через несколько минут.</value>
   </string>
   <string id="404" name="roomsList">
-    <value>клик на комнату для деталей</value>
+    <value>Кликните на комнату для деталей</value>
   </string>
   <string id="405" name="roomslist">
     <value>Чат с пользователями этой комнаты:</value>
@@ -1312,7 +1312,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Гость</value>
   </string>
   <string id="434" name="recordingslist_recordedby">
-    <value>By:</value>
+    <value>По:</value>
   </string>
   <string id="435" name="recordings_table_head_name">
     <value>Имя</value>
@@ -1366,7 +1366,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>без аудио и видео (статическое изображение)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>Никакое аудио/видео с вашего PC не будет опубликовано, опубликована будет только картинка из вашего профиля. Выберите эту установку, если вы испытываете проблемы с шириной канала или если у вас медленное соединение с Интернетом</value>  </string>
+    <value>Аудио/видео с вашего компьютера не будет опубликовано, опубликована будет только картинка из вашего профиля. Выберите эту установку, если вы испытываете проблемы с шириной канала или если у вас медленное соединение с Интернетом</value>  </string>
   <string id="453" name="calendar_dayname_monday">
     <value>ПН</value>
   </string>
@@ -1518,13 +1518,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Текст сообщения:</value>
   </string>
   <string id="503" name="invitation_text_click_text">
-    <value>Для того, чтобы принять участие в совещании, кликните на следующий линк:</value>
+    <value>Для того, чтобы принять участие в совещании, нажмите на следую ссылку:</value>
   </string>
   <string id="504" name="invitation_text_click_text_link">
-    <value>Кликните здесь для того, чтобы войти в комнату совещаний</value>
+    <value>Нажмите здесь для того, чтобы войти в комнату совещаний</value>
   </string>
   <string id="505" name="invitation_text_click_text_help">
-    <value>Если Вы испытываете проблемы с линком, скопируйте этот URL в браузер:</value>
+    <value>Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
     <value>OpenMeetings SignUp</value>
@@ -1557,7 +1557,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Кликните здесь, и введите новый пароль</value>
   </string>
   <string id="516" name="reset_password_template_text3_link">
-    <value>Если Вы испытываете проблемы с линком, скопируйте этот URL в браузер:</value>
+    <value>Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
     <value>Переустановка пароля OpenMeetings</value>
@@ -1635,7 +1635,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Корректный логин, но эта сессия неактивна или не записана на сервере. Вам нужно получит новый ID сессии и перелогиниться</value>
   </string>
   <string id="542" name="errorcode_setUserObject">
-    <value> SessionId не залогинен или не имеет прав администратора . Чтобы встраивать новых пользователей, SOAP Gateway'ю нужен пользователь с правами администратора.</value>
+    <value>SessionId не залогинен или не имеет прав администратора. Чтобы встраивать новых пользователей, SOAP Gateway'ю нужен пользователь с правами администратора.</value>
   </string>
   <string id="543" name="errorcode_loginByRemoteUser">
     <value>У этой сессии нет connected Remoteuser-Data. Либо вы не вызвали SOAP-Gateway перед доступом к приложению, либо используете неверный ID сессии.</value>
@@ -1779,7 +1779,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Логин</value>
   </string>
   <string id="590" name="room Administration roomclients list">
-    <value>D</value>
+    <value>У</value>
   </string>  
   <string id="591" name="swf sync message">
     <value>Загрузка документа. Подождите, пока клиент синхронизируется.</value>
@@ -1836,7 +1836,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Этот пользователь - модератор в этой комнате</value>
   </string>
   <string id="609" name="participents panel">
-    <value>Пользователю разрешено рисовать на достке</value>
+    <value>Пользователю разрешено рисовать на доске</value>
   </string>
   <string id="610" name="participents panel">
     <value>(Ре)старт аудио/видео или изменение установок устройства</value>
@@ -1887,10 +1887,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Для того, чтобы принять участие в совещании, кликните на следующий линк:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
-    <value>Кликните здесь для того, чтобы войти в комнату совещаний</value>
+    <value>Нажмите здесь для того, чтобы войти в комнату совещаний</value>
   </string>
   <string id="627" name="inv_reminder_text_click_text_help">
-    <value>Если Вы испытываете проблемы с линком, скопируйте этот URL в браузер:</value>
+    <value>Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:</value>
   </string>  
   <string id="628" name="btn_search_intern">
     <value>имеющиеся пользователи</value>
@@ -2004,7 +2004,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Этот метод можно вызвать, только используя аккаунт администратора.</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>Не было сессии, ассоциирущийся с этим ID.</value>
+    <value>Не было сессии, ассоциирующийся с этим ID.</value>
   </string>
   <string id="666" name="error message moderation">
     <value>Это - аккаунт администратора или модератора. Вы можете редактировать его только через панель адмиинистрирования.</value>
@@ -2016,22 +2016,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Кликните для верификации вашего e-mail.</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Для этого Хеша не найдено пользоватей.</value>
+    <value>Для этого Хеша не найдено пользователей.</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>Этот пользователь уже активирован!</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Вы успешно кативировали ваш аккаунт</value>
+    <value>Вы успешно активировали ваш аккаунт</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Логиньтес сейчас</value>
+    <value>Входите сейчас</value>
   </string>
   <string id="673" name="loginErrorMessage = user was not activated">
     <value>Ваш аккаунт не активирован. Сначала перейдите по ссылке, полученной в письме, которое вы получили при регистрации.</value>
   </string>
   <string id="674" name="register verification message">
-    <value>Вы успешно зарегистрировались. Вам отпревлено письмо с кодом проверки. Проверьте вашу почту.</value>
+    <value>Вы успешно зарегистрировались. Вам отправлено письмо с кодом проверки. Проверьте вашу почту.</value>
   </string>
   <string id="675" name="participants panel">
     <value>Снять роль модератора у этого пользователя</value>
@@ -2097,7 +2097,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>желает сделать своё Аудио/Видео общим. Для того, чтобы разрешить или запретить пользователям делать Аудио/Видео общим, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
   </string>
   <string id="696" name="moderation message">
-    <value>Нужно подожать, пока модератор войдёт в комнату.</value>
+    <value>Нужно подождать, пока модератор войдёт в комнату.</value>
   </string>
   <string id="697" name="calendar button">
     <value>Отменить</value>
@@ -2334,210 +2334,211 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Как участвовать в конференции:</value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>Начать запись</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+    <value>Не показывать Аудио/Видео (запись) при входе в конференцию</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>Публичные комнаты</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>Публичными комнатами могут воспользоваться все пользователи</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>Приветные комнаты</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>Приватными комнатами могут воспользоваться только пользователи, принадлежащие той же организации</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>Мои комнаты</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Комнаты этой секции - для персонального использования. Они созданы через календарь, у них есть начало и конец жизни. Эти комнаты перечислены в этой секции только то время, пока ими можно воспользоваться.
+</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>Для этого действия вы должны быть модератором</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>Подать заявку на модерацию</value>
   </string>
   <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
+    <value>Подать заявку на доступ к доске</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>Подать заявку на доступ к камере и микрофону</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>Хеш-код этой сессии уже использован. Нельзя использовать его дважды.</value>
   </string>
   <string id="788" name="dashboard button">
-    <value>START</value>
+    <value>СТАРТ</value>
   </string>
   <string id="789" name="exit conference">
-    <value>EXIT</value>
+    <value>ВЫХОД</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>Вы на самом деле хотите выйти? Возможно, вам нужно удалить загруженные документы, очистить доску и историю чата.</value>
   </string>
   <string id="791" name="conference view">
-    <value>Exit conference</value>
+    <value>Выйти из конференции</value>
   </string>
   <string id="792" name="main menu">
-    <value>Rooms</value>
+    <value>Комнаты</value>
   </string>
   <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>Выберите комнату для совещания</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+    <value>В календаре есть несохранённые события. Сохраните их, или удалите.</value>
   </string>
   <string id="795" name="calendar">
-    <value>Please add at least one attendee for your meeting!</value>
+    <value>Добавьте хотя бы одного участника в это совещание</value>
   </string>
   <string id="796" name="calendar">
-    <value>Do you really want to delete this Event?</value>
+    <value>Вы на самом деле хотите удалить это событие?</value>
   </string>
   <string id="797" name="calendar">
-    <value>Warning</value>
+    <value>Предупреждение</value>
   </string>
   <string id="798" name="calendar">
-    <value>Add Event</value>
+    <value>Добавить событие</value>
   </string>
   <string id="799" name="calendar">
-    <value>day</value>
+    <value>день</value>
   </string>
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>неделя</value>
   </string>
   <string id="801" name="calendar">
-    <value>month</value>
+    <value>месяц</value>
   </string>
   <string id="802" name="calendar">
-    <value>Description</value>
+    <value>Описание</value>
   </string>
   <string id="803" name="calendar">
-    <value>Attendees</value>
+    <value>Участники</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>OpenMeetings, платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт", и участвовать в конференции или 2) перейти в календарь и назначить время конференции.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Plan a Meeting</value>
+    <value>Запланировать совещание</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+    <value>Для того чтобы назначить конференцию, добавьте новое событие в календарь. Для каждого события в календаре будет создана отдельная комната. Вы и все участники получите e-mail со ссылкой на комнату.&lt;br/&gt;&lt;br/&gt;Вы можете выбрать различные типы комнат - у каждого типа своя схема общения и модерации. Также можно выбрать различные типы e-mail нотификации.</value>
   </string>
   <string id="807" name="lzcalendar">
-    <value>Need help?</value>
+    <value>Нужна помощь?</value>
   </string>
   <string id="808" name="lzcalendar">
-    <value>Restricted</value>
+    <value>Ограниченная</value>
   </string>
   <string id="809" name="lzcalender">
-    <value>Search</value>
+    <value>Поиск</value>
   </string>
   <string id="810" name="lzcalender">
-    <value>Add</value>
+    <value>Добавить</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>Ни один пользователь не выбран. Сначала выберите пункт из списка, а затем нажмите "Добавить".</value>
   </string>
   <string id="812" name="lzcalendar">
-    <value>Add Attendee</value>
+    <value>Добавить участника</value>
   </string>
   <string id="813" name="lzcalendar">
-    <value>Save</value>
+    <value>Сохранить</value>
   </string>
   <string id="814" name="lzcalendar">
-    <value>Delete</value>
+    <value>Удалить</value>
   </string>
   <string id="815" name="lzcalendar">
-    <value>Event Details</value>
+    <value>Детали события</value>
   </string>
   <string id="816" name="room admin">
-    <value>Default Moderators</value>
+    <value>Модератор по умолчанию</value>
   </string>
   <string id="817" name="room admin">
-    <value>Super</value>
+    <value>Супермодератор</value>
   </string>
   <string id="818" name="room admin">
     <value>ID</value>
   </string>
   <string id="819" name="room admin">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="820" name="room admin">
-    <value>E-Mail</value>
+    <value>e-mail</value>
   </string>
   <string id="821" name="room admin">
-    <value>Add new default Moderator</value>
+    <value>Добавить нового модератора по умолчанию</value>
   </string>
   <string id="822" name="room admin">
-    <value>Is Super Moderator</value>
+    <value>Является супермодератором</value>
   </string>
   <string id="823" name="room admin">
-    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+    <value>Если комната модерируется, пользователь с правами модератора или администратора автоматически становятся модераторами, когда входят в комнату. Если вам это не нужно, а Вы лишь хотите, чтобы определённый пользователь стал модератором, используйте опцию "модератор по умолчанию".</value>
   </string>
   <string id="824" name="room admin">
-    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+    <value>Супермодератор всегда становится модератором, когда входит в комнату. Никто не может снять флаг модерации у него.</value>
   </string>
   <string id="825" name="room admin">
-    <value>Apply Super-Moderation to User</value>
+    <value>Сделать пользователя супермодератором</value>
   </string>
   <string id="826" name="room admin">
-    <value>Remove Super Moderation from User</value>
+    <value>Снять флаг супермодерации с пользователя</value>
   </string>
   <string id="827" name="room admin">
-    <value>D</value>
+    <value>У</value>
   </string>
   <string id="828" name="room admin">
-    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+    <value>Если для комнаты вы добавите организацию, то только пользователи из этой организации будут иметь доступ к ней (Это действительно только если флаг isPublic не установлен)</value>
   </string>
   <string id="829" name="room admin">
-    <value>Moderation</value>
+    <value>Модерация</value>
   </string>
   <string id="830" name="room admin">
-    <value>Limitations</value>
+    <value>Ограничения</value>
   </string>
   <string id="831" name="room admin">
-    <value>Organization</value>
+    <value>Организация</value>
   </string>
   <string id="832" name="confirm action">
-    <value>Are you sure?</value>
+    <value>Вы уверены?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+    <value>Вы действительно хотите удалить эту запись? Чтобы запомнить эти изменения, нажмите кнопку сохранения</value>
   </string>
   <string id="834" name="user choose error">
-    <value>There is no User selected. Please select first before you add it!</value>
+    <value>Ни один пользователь не выбран. Пожалуйста, выберите пользователя</value>
   </string>
   <string id="835" name="room admin">
-    <value>Add new Default Moderator</value>
+    <value>Добавить нового модератора по умолчанию</value>
   </string>
   <string id="836" name="room admin">
-    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+    <value>Хотите добавить флаг супермодератора этому пользователю? Чтобы сохранить эти данные, вам нужно сохранить объект комнаты.</value>
   </string>
   <string id="837" name="room admin">
-    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+    <value>Вы действительно хотите удалить флаг супермодератора у того пользователя? Чтобы сохранить эти данные, вам нужно сохранить объект комнаты.</value>
   </string>
   <string id="838" name="super moderator">
-    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+    <value>Этот пользователь - супермодератор. Вы не можете удалить флаг модератора у Супермодертора.</value>
   </string>
   <string id="839" name="confirm delete">
-    <value>Do you really want to delete this File/Folder?</value>
+    <value>Вы действительно хотите удалить этот файл/папку?</value>
   </string>
   <string id="840" name="confirm delete">
-    <value>Delete File/Folder?</value>
+    <value>Удалить этот файл/папку?</value>
   </string>
   <string id="841" name="salutation">
-    <value>Mrs.</value>
+    <value>Г-жа</value>
   </string>
   <string id="842" name="salutation">
-    <value>Dr.</value>
+    <value>Д-р</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+    <value>Свойства</value>
   </string>
 </language>
