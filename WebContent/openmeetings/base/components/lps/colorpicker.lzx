@@ -30,11 +30,11 @@
     <attribute name="mycolorString" type="string" value="0x000000"/>
     <attribute name="listener" type="expression"/>
     <handler name="onclick">
-        listener.changeColor(this.getAttribute('mycolor'));
+        listener.changeColor(this.mycolor);
         listener.close();
     </handler>
     <handler name="ondblclick">
-        listener.changeColor(this.getAttribute('mycolor'));
+        listener.changeColor(this.mycolor);
         listener.close();
     </handler>    
     <labelTooltip text="${ parent.mycolorString }" />
