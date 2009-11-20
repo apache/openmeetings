@@ -187,8 +187,10 @@ public class ImportInitvalues {
 
 	public void loadSalutations() {
 
-		Salutationmanagement.getInstance().addUserSalutation("Mister", 261);
-		Salutationmanagement.getInstance().addUserSalutation("Miss", 262);
+		Salutationmanagement.getInstance().addUserSalutation("Mr", 261);
+		Salutationmanagement.getInstance().addUserSalutation("Ms", 262);
+		Salutationmanagement.getInstance().addUserSalutation("Mrs", 841);
+		Salutationmanagement.getInstance().addUserSalutation("Dr", 842);
 
 	}
 

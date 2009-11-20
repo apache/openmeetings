@@ -139,7 +139,7 @@
 	        <handler name="oninit" >
 	            <![CDATA[
 	            for (var i=0;i<canvas.salutationsInitValues.length;i++){
-	                this.addItem(canvas.salutationsInitValues[i].name,canvas.salutationsInitValues[i].salutations_id);
+	                this.addItem(canvas.salutationsInitValues[i].label.value,canvas.salutationsInitValues[i].salutations_id);
 	            }
 	            this.selectItem(String(canvas.salutationsInitValues[0].salutations_id));
 	            ]]>

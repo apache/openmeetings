@@ -2594,4 +2594,16 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="838" name="super moderator">
     <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
   </string>
+  <string id="839" name="confirm delete">
+    <value>Do you really want to delete this File/Folder?</value>
+  </string>
+  <string id="840" name="confirm delete">
+    <value>Delete File/Folder?</value>
+  </string>
+  <string id="841" name="salutation">
+    <value>Mrs.</value>
+  </string>
+  <string id="842" name="salutation">
+    <value>Dr.</value>
+  </string>
 </language>

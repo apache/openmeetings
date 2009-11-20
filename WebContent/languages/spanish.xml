@@ -2529,4 +2529,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="838" name="super moderator">
   <value>Este usuario tiene el rol de supermoderador. No puede quitarle la marca de moderación a un supermoderador.</value>
   </string>
+  <string id="839" name="confirm delete">
+    <value>Do you really want to delete this File/Folder?</value>
+  </string>
+  <string id="840" name="confirm delete">
+    <value>Delete File/Folder?</value>
+  </string>
+  <string id="841" name="salutation">
+    <value>Mrs.</value>
+  </string>
+  <string id="842" name="salutation">
+    <value>Dr.</value>
+  </string>
 </language>
