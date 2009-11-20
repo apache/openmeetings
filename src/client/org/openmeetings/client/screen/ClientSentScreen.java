@@ -1,6 +1,7 @@
 package org.openmeetings.client.screen;
 
 import org.apache.log4j.Logger;
+import org.openmeetings.client.transport.ClientTransportMinaPool;
 import org.openmeetings.screen.codec.CaptureScreenByMode;
  
 /**
@@ -29,7 +30,7 @@ public class ClientSentScreen extends Thread {
 					new CaptureScreenByMode();
 				}
 
-				//Wait for half 200 milliseconds for the next run
+				//Wait for 500 milliseconds for the next run
 				ClientSentScreen.sleep(500);
 			
 			}

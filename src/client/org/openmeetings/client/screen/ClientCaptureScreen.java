@@ -19,6 +19,7 @@ import com.sun.media.Log;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
+import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientImageFrame;
 import org.openmeetings.client.beans.ClientVirtualScreenBean;
@@ -120,6 +121,22 @@ public class ClientCaptureScreen {
 			}
 			
 		}
+		
+		
+		ClientCursorStatus clientCursorStatus = new ClientCursorStatus();
+		clientCursorStatus.setSequenceNumber(ClientConnectionBean.getFrameNumber());
+		clientCursorStatus.setPublicSID(ClientConnectionBean.publicSID);
+		
+		PointerInfo a = MouseInfo.getPointerInfo();
+		Point mouseP = a.getLocation();
+		
+		Integer x = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getX())).intValue();
+		Integer y = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getY())).intValue();
+		
+		clientCursorStatus.setX(x);
+		clientCursorStatus.setY(y);
+		
+		ClientTransportMinaPool.sendMessage(clientCursorStatus);
 		
 	}
 

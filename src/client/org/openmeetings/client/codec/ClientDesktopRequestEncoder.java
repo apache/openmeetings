@@ -8,6 +8,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.openmeetings.client.beans.ClientConnectionBean;
+import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientStatusBean;
 import org.openmeetings.client.beans.ClientViewerRegisterBean;
@@ -143,6 +144,39 @@ public class ClientDesktopRequestEncoder implements ProtocolEncoder {
 			buffer.put(this.convertIntToByteArray(lengthSecurityToken));//4 Byte
 			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
 			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
+			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
+			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
+			buffer.put(this.convertIntToByteArray(0));//4 Byte => this data is not needed
+			buffer.put(securityTokenAsByte);//32 Byte usually
+			
+			//byte counter
+			ClientCaptureScreen.frameCalculated += frameSize;
+			if (ClientStartScreen.instance!=null) {
+				ClientStartScreen.instance.updateScreen();
+			}
+			
+			buffer.flip();
+			
+	        out.write(buffer);
+			
+    	} else if (message instanceof ClientCursorStatus) {
+    		
+    		ClientCursorStatus clientCursorStatus = (ClientCursorStatus) message;
+    		
+    		byte[] securityTokenAsByte = clientCursorStatus.getPublicSID().getBytes();
+    		
+    		Integer lengthSecurityToken = securityTokenAsByte.length;
+    		
+    		Integer frameSize = 4 * 8 + lengthSecurityToken;
+    		
+    		IoBuffer buffer = IoBuffer.allocate(frameSize, false);
+    		
+    		//mode is 6
+			buffer.put(this.convertIntToByteArray(clientCursorStatus.getMode()));// 4 Byte 
+			buffer.put(this.convertIntToByteArray(ClientConnectionBean.getFrameNumber()));//4 Byte
+			buffer.put(this.convertIntToByteArray(lengthSecurityToken));//4 Byte
+			buffer.put(this.convertIntToByteArray(clientCursorStatus.getX()));//4 Byte => X-Position
+			buffer.put(this.convertIntToByteArray(clientCursorStatus.getY()));//4 Byte => Y-Position
 			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
 			buffer.put(this.convertIntToByteArray(0));//4 Byte => Empty
 			buffer.put(this.convertIntToByteArray(0));//4 Byte => this data is not needed
