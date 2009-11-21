@@ -1733,7 +1733,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	public synchronized void sendScreenSharingCursorPos(ServerFrameCursorStatus cursorStatus) {
 		try {
 			
+			//log.debug("sendScreenSharingCursorPos ");
+			
 			ScreenSharingCursor screenSharingCursor = new ScreenSharingCursor();
+			screenSharingCursor.setS(cursorStatus.getPublicSID());
 			screenSharingCursor.setX(cursorStatus.getX());
 			screenSharingCursor.setY(cursorStatus.getY());
 				
@@ -1761,7 +1764,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			//log.debug("scopeHibernate "+scopeHibernate);
 			
-			if (scopeHibernate!=null){
+			if (scopeHibernate != null){
 				//Notify the clients of the same scope (room) with user_id
 				
 				Collection<Set<IConnection>> conCollection = webAppKeyScope.getScope(scopeName).getConnections();
@@ -1784,7 +1787,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								if (sharerOnList) {
 									//log.debug("IS EQUAL ");
 									((IServiceCapableConnection) conn).invoke("newScreenCursorPosition",new Object[] { screenSharingCursor }, this);
-									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+screenSharingCursor);
+									//log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+screenSharingCursor);
 								}
 							}
 						}
@@ -1859,7 +1862,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								if (sharerOnList) {
 									//log.debug("IS EQUAL ");
 									((IServiceCapableConnection) conn).invoke("newScreenFrame",new Object[] { screenSharingNewFrame }, this);
-									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+screenSharingNewFrame);
+									//log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+screenSharingNewFrame);
 								}
 							}
 						}

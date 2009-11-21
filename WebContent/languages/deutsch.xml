@@ -1813,7 +1813,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Raum / Bereich</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Benutzeranbindung ausloggen</value>
+    <value>Ausloggen</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
     <value>Benutzeranbindung ausloggen</value>
@@ -2534,5 +2534,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="843" name="property panel whiteboard">
     <value>Properties</value>
+  </string>
+  <string id="844" name="screen sharer">
+    <value>Show mouse position to viewers</value>
   </string>
 </language>

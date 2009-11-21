@@ -2609,4 +2609,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="843" name="property panel whiteboard">
     <value>Properties</value>
   </string>
+  <string id="844" name="screen sharer">
+    <value>Show mouse position to viewers</value>
+  </string>
 </language>

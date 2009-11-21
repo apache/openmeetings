@@ -1328,7 +1328,11 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("newScreenCursorPosition: ",value);
+                //if ($debug) Debug.write("newScreenCursorPosition: ",value);
+                var screenObj = canvas._screens.searchForSession(value.s);
+                if (screenObj != null) {
+                    screenObj.updateCursor(value.x,value.y);
+                }
             ]]>
         </handler>   
     </netRemoteCallHib>

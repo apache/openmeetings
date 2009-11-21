@@ -72,6 +72,7 @@
     				parent._useradminvalueform.initValueFieldsByObject(records[0]);
     			}
 	    	}
+            this.sendInitialWidthUpdate();
 	    	]]>
 	    </method>
 

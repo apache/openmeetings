@@ -9,7 +9,7 @@
 
 		<handler name="oninit">
 			this.addHeaderItem(188,60);
-			this.addHeaderItem(189,186);
+			this.addHeaderItem(189,184);
 			this.addHeaderItem(190,134);
 			this.getRooms.doCall();
 		</handler>
@@ -53,6 +53,7 @@
                     parent._roomModerateValueForm.initValueFieldsByObject(records[0]);
                 }
             }
+            this.sendInitialWidthUpdate();
 	    	]]>
 	    </method>
 

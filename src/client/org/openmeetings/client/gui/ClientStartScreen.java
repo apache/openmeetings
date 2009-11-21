@@ -53,6 +53,7 @@ public class ClientStartScreen {
 	JLabel vscreenHeightLabel;
 	JSpinner jVScreenWidthSpin;
 	JSpinner jVScreenHeightSpin;
+	JCheckBox jCheckBoxEnableMouseSend;
 	
 	JLabel vScreenIconLeft;
 	JLabel vScreenIconRight;
@@ -73,7 +74,7 @@ public class ClientStartScreen {
 	public String label740 = "SharingScreen Width:";
 	public String label741 = "SharingScreen Height:";
 	public String label742 = "Connection was closed by Server";
-	
+	public String label844 = "Show Mouse Position at viewers";
 
 	public void initMainFrame() {
 		try {
@@ -156,6 +157,26 @@ public class ClientStartScreen {
 			});
 			exitButton.setBounds(290, 380, 200, 24);
 			t.add(exitButton);
+			
+			jCheckBoxEnableMouseSend = new JCheckBox(this.label844, true);
+			jCheckBoxEnableMouseSend.setOpaque(true);
+			jCheckBoxEnableMouseSend.setBackground(Color.WHITE);
+			//jCheckBoxEnableMouseSend.setPreferredSize(new Dimension(10, 380));
+			
+			// Define ChangeListener
+		    ChangeListener changeListener = new ChangeListener() {
+		      public void stateChanged(ChangeEvent changeEvent) {
+		        AbstractButton abstractButton =
+		          (AbstractButton)changeEvent.getSource();
+		        ButtonModel buttonModel = abstractButton.getModel();
+		        ClientConnectionBean.sendMousePosition = buttonModel.isSelected();
+		      }
+		    };
+		    jCheckBoxEnableMouseSend.addChangeListener(changeListener);
+		    
+		    t.add(jCheckBoxEnableMouseSend);
+		    
+		    jCheckBoxEnableMouseSend.setBounds(10, 380, 240, 24);
 			
 			Image im_left = ImageIO.read(ClientStartScreen.class.getResource("/background.png"));	
 			ImageIcon iIconBack = new ImageIcon(im_left);
@@ -354,6 +375,7 @@ public class ClientStartScreen {
 			this.label740 = textArray[9];
 			this.label741 = textArray[10];
 			this.label742 = textArray[11];
+			this.label844 = textArray[12];
 			
 		}
 		

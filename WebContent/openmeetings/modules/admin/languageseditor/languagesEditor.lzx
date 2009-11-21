@@ -101,7 +101,7 @@
 
 		<handler name="oninit">
 			this.addHeaderItem(350,120);
-			this.addHeaderItem(351,126);
+			this.addHeaderItem(351,124);
 			this.addHeaderItem(352,200);
 			this.getFieldsByLanguage.doCall();
 		</handler>
@@ -147,6 +147,7 @@
 	                        fieldvalue:records[i].fieldlanguagesvalue.value
                         });
                 }
+                this.sendInitialWidthUpdate();
 	    	]]>
 	    </method>
 

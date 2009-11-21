@@ -72,7 +72,8 @@ public class ServerPacketMinaHandler extends IoHandlerAdapter {
 			
 			SocketAddress remoteAddress = session.getRemoteAddress();
 			
-			
+			//log.debug("incoming ServerFrameCursorStatus");
+			server.updateClientCursor(remoteAddress, (ServerFrameCursorStatus) message);
 			
 		}
 		

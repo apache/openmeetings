@@ -65,6 +65,10 @@ setNewSource
     </sharingScreenImage>
     
 </class>
+
+<class name="cursorObject" extends="view" resource="menupointer_rsc">
+    
+</class>
     
 <!---
     View for recorded contents list.
@@ -76,6 +80,8 @@ setNewSource
     <attribute name="sharerPublicSID" value="" type="string" />
     
     <attribute name="httpSessionStarted" value="false" type="boolean"/>
+    
+    <attribute name="currentCursorObject" value="null"/>
     
     <handler name="oninit">
         <![CDATA[
@@ -292,6 +298,14 @@ setNewSource
            
            //new lz.sharingScreenImage(this,{name:nameImage,x:x,y:y,src:downloadurl});
         ]]>
+    </method>
+    
+    <method name="updateCursor" args="x,y">
+        if (this.currentCursorObject == null) {
+            this.currentCursorObject = new lz.cursorObject(this._subcontent._content);
+        }
+        this.currentCursorObject.setAttribute("x",x);
+        this.currentCursorObject.setAttribute("y",y);
     </method>
     
     <view width="${ this.parent.width }" height="${ this.parent.height }" 

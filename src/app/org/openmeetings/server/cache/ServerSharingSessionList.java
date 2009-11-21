@@ -150,6 +150,8 @@ public class ServerSharingSessionList {
 			
 			if (sharingSessions.containsKey(cPosition.getPublicSID())) {
 				
+				//log.debug("found sharingSessions");
+				
 				ServerSharingSessionBean serverSharingSessionBean = sharingSessions.get(cPosition.getPublicSID());
 				
 				serverSharingSessionBean.setServerFrameCursorStatus(cPosition);

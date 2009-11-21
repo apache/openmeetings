@@ -47,6 +47,7 @@
 	    	for (var i=0;i<records.length;i++){
 	    		new lz.orgAdminListItem(this._innerlist._inn._inn,{obj:records[i],organisation_id:records[i].organisation_id,orgname:records[i].name});
 	    	}
+            this.sendInitialWidthUpdate();
 	    	]]>
 	    </method>
 

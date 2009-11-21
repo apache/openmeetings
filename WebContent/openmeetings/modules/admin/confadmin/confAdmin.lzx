@@ -9,7 +9,7 @@
 
 		<handler name="oninit">
 			this.addHeaderItem(264,80);
-			this.addHeaderItem(265,166);
+			this.addHeaderItem(265,164);
             this.addHeaderItem(598,150);
 			this.getAllConf.doCall();
 		</handler>
@@ -53,6 +53,7 @@
                         conf_value:records[i].conf_value
                     });
 	    	}
+            this.sendInitialWidthUpdate();
 	    	]]>
 	    </method>
 

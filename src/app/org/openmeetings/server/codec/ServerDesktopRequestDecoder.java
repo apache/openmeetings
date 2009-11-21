@@ -178,7 +178,8 @@ public class ServerDesktopRequestDecoder extends CumulativeProtocolDecoder {
 						serverFrameBeanState.tileWidth = null;
 
 		                return true;
-	        		} else if (serverFrameBeanState.mode == 5) {
+		                
+	        		} else if (serverFrameBeanState.mode == 6) {
 	        			
 	        			ServerFrameCursorStatus serverFrameCursorStatus = new ServerFrameCursorStatus();
 	        			

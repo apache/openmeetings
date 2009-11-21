@@ -30,6 +30,8 @@ public class ClientConnectionBean {
 	
 	public static Date startDate;
 	
+	public static boolean sendMousePosition = true;
+	
 	/**Intervall Settings**/
 	
 	public static int intervallSeconds = 1;
