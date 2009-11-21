@@ -13,10 +13,12 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import org.openmeetings.client.beans.ClientConnectionBean;
+import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientStatusBean;
 import org.openmeetings.client.codec.ClientDesktopCodecSharingFactory;
@@ -59,6 +61,7 @@ public class ClientPacketMinaProcess extends IoHandlerAdapter {
 			log.debug("Default Send Buffer Size "+connector.getSessionConfig().getSendBufferSize());
 			
 			connector.getSessionConfig().setSendBufferSize(8192*8);
+			connector.getSessionConfig().setTcpNoDelay(true);
 			
 			connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ClientDesktopCodecSharingFactory()));
 			
@@ -157,6 +160,18 @@ public class ClientPacketMinaProcess extends IoHandlerAdapter {
 				}
 				
 			}
+			
+		}
+		
+		if (message instanceof ClientCursorStatus) {
+			
+			ClientCursorStatus clientCursorStatus = (ClientCursorStatus) message;
+			
+			SocketAddress remoteAddress = session.getRemoteAddress();
+			
+			log.debug("Recv Status Bean "+clientCursorStatus.getMode());
+			
+			ClientViewerScreen.instance.updateCursor(clientCursorStatus);
 			
 		}
 		

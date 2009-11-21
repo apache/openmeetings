@@ -5,6 +5,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
+import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientStatusBean;
 import org.apache.log4j.Logger;
@@ -148,6 +149,45 @@ public class ClientDesktopRequestDecoder extends CumulativeProtocolDecoder {
 	        		serverFrameBeanState.publicSID = new String(byteBuffer);
 	        		
 	        		log.debug("publicSID SET "+serverFrameBeanState.publicSID);
+	        		
+	        		if (serverFrameBeanState.mode == 6) {
+	        			
+		        		ClientCursorStatus clientCursorStatus = new ClientCursorStatus();
+	        			
+		        		clientCursorStatus.setMode(serverFrameBeanState.mode);
+		        		clientCursorStatus.setSequenceNumber(serverFrameBeanState.sequenceNumber);
+		        		clientCursorStatus.setPublicSID(serverFrameBeanState.publicSID);
+		        		clientCursorStatus.setX(serverFrameBeanState.xValue);
+		        		clientCursorStatus.setY(serverFrameBeanState.yValue);
+		        		
+		        		log.debug("Out Buffer Full clientCursorStatus Bean");
+		        		
+		        		//Write the result to the Handler
+		        		out.write(clientCursorStatus);
+		        		
+		        		//Reset the Buffer Values
+		        		serverFrameBeanState.mode = null;
+		        		serverFrameBeanState.sequenceNumber = null;
+		        		serverFrameBeanState.lengthSecurityToken = null;
+						serverFrameBeanState.xValue = null;
+						serverFrameBeanState.yValue = null;
+						serverFrameBeanState.width = null;
+						serverFrameBeanState.height = null;
+						serverFrameBeanState.lengthPayload = null;
+						serverFrameBeanState.publicSID = null;
+						serverFrameBeanState.imageBytes = null;
+						serverFrameBeanState.tileHeight = null;
+						serverFrameBeanState.tileWidth = null;
+		        		
+		        		return true;
+	        			
+	        		} else {
+	        			
+	        			return false;
+	        			
+	        		}
+	        		
+	        		
 	        	} else {
 	            	return false;
 	            }
@@ -255,7 +295,48 @@ public class ClientDesktopRequestDecoder extends CumulativeProtocolDecoder {
 	        	} else {
 	            	return false;
 	            }
-	        }
+	        } 
+	        
+	        
+//	        if (serverFrameBeanState.tileHeight == null && 
+//	        		(serverFrameBeanState.mode == 6)) {
+//	        	//try to set the lengthPayload
+//	        	if (in.remaining() >= 4) {
+//	        		serverFrameBeanState.tileHeight = in.getInt();
+//	        		
+//	        		ClientCursorStatus clientCursorStatus = new ClientCursorStatus();
+//
+//	        		clientCursorStatus.setMode(serverFrameBeanState.mode);
+//	        		clientCursorStatus.setSequenceNumber(serverFrameBeanState.sequenceNumber);
+//	        		clientCursorStatus.setPublicSID(serverFrameBeanState.publicSID);
+//	        		clientCursorStatus.setX(serverFrameBeanState.xValue);
+//	        		clientCursorStatus.setY(serverFrameBeanState.yValue);
+//	        		
+//	        		log.debug("Out Buffer Full Status Bean");
+//	        		
+//	        		//Write the result to the Handler
+//	        		out.write(clientCursorStatus);
+//	        		
+//	        		//Reset the Buffer Values
+//	        		serverFrameBeanState.mode = null;
+//	        		serverFrameBeanState.sequenceNumber = null;
+//	        		serverFrameBeanState.lengthSecurityToken = null;
+//					serverFrameBeanState.xValue = null;
+//					serverFrameBeanState.yValue = null;
+//					serverFrameBeanState.width = null;
+//					serverFrameBeanState.height = null;
+//					serverFrameBeanState.lengthPayload = null;
+//					serverFrameBeanState.publicSID = null;
+//					serverFrameBeanState.imageBytes = null;
+//					serverFrameBeanState.tileHeight = null;
+//					serverFrameBeanState.tileWidth = null;
+//	        		
+//	        		return true;
+//	        		
+//	        	} else {
+//	            	return false;
+//	            }
+//	        }
 			
 			return false;
 			

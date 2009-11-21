@@ -115,20 +115,20 @@ public class ServerPacketMinaHandler extends IoHandlerAdapter {
 
 		log.debug("Session created... ################ ");
 
-//		session.getConfig().setMinReadBufferSize(49152);
+//		session.getConfig().setMinReadBufferSize(65535);
 //		session.getConfig().setMaxReadBufferSize(65535);
-//		session.getConfig().setReadBufferSize(49152);
-		
+//		session.getConfig().setReadBufferSize(65535);
 //		
+////		
 //		if (session.getConfig() instanceof SocketSessionConfig) {
 //			
 //			log.debug("CONFIG SET TO new Buffer Size ... ################ ");
 //			
 //            ((SocketSessionConfig) session.getConfig()).setReceiveBufferSize(49152);
 //            
-//            
+//            ((SocketSessionConfig) session.getConfig()).setTcpNoDelay(true);
 //        }
-		
+//		
 		session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
 		
 		SocketAddress remoteAddress = session.getRemoteAddress();

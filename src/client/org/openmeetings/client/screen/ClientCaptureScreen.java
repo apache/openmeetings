@@ -122,21 +122,22 @@ public class ClientCaptureScreen {
 			
 		}
 		
-		
-		ClientCursorStatus clientCursorStatus = new ClientCursorStatus();
-		clientCursorStatus.setSequenceNumber(ClientConnectionBean.getFrameNumber());
-		clientCursorStatus.setPublicSID(ClientConnectionBean.publicSID);
-		
-		PointerInfo a = MouseInfo.getPointerInfo();
-		Point mouseP = a.getLocation();
-		
-		Integer x = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getX())).intValue();
-		Integer y = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getY())).intValue();
-		
-		clientCursorStatus.setX(x);
-		clientCursorStatus.setY(y);
-		
-		ClientTransportMinaPool.sendMessage(clientCursorStatus);
+		if (ClientConnectionBean.sendMousePosition){
+			ClientCursorStatus clientCursorStatus = new ClientCursorStatus();
+			clientCursorStatus.setSequenceNumber(ClientConnectionBean.getFrameNumber());
+			clientCursorStatus.setPublicSID(ClientConnectionBean.publicSID);
+			
+			PointerInfo a = MouseInfo.getPointerInfo();
+			Point mouseP = a.getLocation();
+			
+			Integer x = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getX())).intValue();
+			Integer y = Long.valueOf(Math.round(ClientConnectionBean.imgQuality * mouseP.getY())).intValue();
+			
+			clientCursorStatus.setX(x);
+			clientCursorStatus.setY(y);
+			
+			ClientTransportMinaPool.sendMessage(clientCursorStatus);
+		}
 		
 	}
 

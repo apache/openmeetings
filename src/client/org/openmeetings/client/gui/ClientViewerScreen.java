@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
+import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientViewerRegisterBean;
 import org.openmeetings.client.transport.ClientTransportMinaPool;
@@ -48,11 +49,15 @@ public class ClientViewerScreen {
 	private JLabel textWarningArea;
 	private JScrollPane scrollPane;
 	private JPanel scrollContent;
+	private ImageIcon menupointer;
+	private ImagePanel menupointerPanel;
 	
 	private String label728 = "Desktop Viewer";
 	private String label729 = "exit";
 	public String label736 = "End of Session";
 	public String label742 = "Connection was closed by Server";
+	
+	private boolean mousePointerLoaded = false;
 	
 	private List<ImagePanel> imageScreens = new LinkedList<ImagePanel>();
 	
@@ -104,6 +109,9 @@ public class ClientViewerScreen {
 	//		 make Web Start happy
 	//		 see http://developer.java.sun.com/developer/bugParade/bugs/4155617.html
 			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
+			
+			
+			menupointer = createImageIcon("/menupointer.png");
 			
 			Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 			
@@ -205,6 +213,11 @@ public class ClientViewerScreen {
 		
 	}
 	
+	protected static ImageIcon createImageIcon(String path) throws Exception {
+	    java.net.URL imgURL = ClientStartScreen.class.getResource(path);
+	    return new ImageIcon(imgURL);
+	}
+	
 	public void showWarningPopUp(String warning){
 		JOptionPane.showMessageDialog(t, warning);
 	}
@@ -230,6 +243,33 @@ public class ClientViewerScreen {
 			
 			log.error("[doInitMessage]",err);
 			
+		}
+	}
+	
+	public void updateCursor(ClientCursorStatus clientCursorStatus) {
+		try {
+			
+			this.showBandwidthWarning("Receive updateCursor");;
+			
+			if (true) return;
+			
+			if (!this.mousePointerLoaded) {
+				
+				this.menupointerPanel = new ImagePanel(clientCursorStatus.getX(), clientCursorStatus.getY());
+				this.menupointerPanel.setBounds(clientCursorStatus.getX(), clientCursorStatus.getY(), 22, 22);
+				
+				this.menupointerPanel.setImages(menupointer.getImage(), 22, 22);
+				
+			}
+			
+			this.menupointerPanel.setBounds(clientCursorStatus.getX(), clientCursorStatus.getY(), 22, 22);
+			this.menupointerPanel.repaint();
+			
+			//this.menupointerPanel.setImages(menupointer.getImage(), 22, 22);
+			
+		} catch (Exception ex) {
+			log.error("[add]",ex);
+			this.showWarningPopUp(ex.getMessage());
 		}
 	}
 	
@@ -292,13 +332,13 @@ public class ClientViewerScreen {
 			iPanel.setImages(bufferedImage,clientFrameBean.getWidth(),clientFrameBean.getHeight());
 			
 			
-			
 			//contentPane.repaint();
 			//t.setVisible(true);
 			
 			
 		} catch (Exception err) {
 			log.error("[add]",err);
+			//this.showWarningPopUp(err.getMessage());
 		}
 	}
 	
@@ -327,6 +367,7 @@ public class ClientViewerScreen {
 			//contentPane.add(iPanel);
 			
 			scrollContent.add(iPanel);
+			scrollContent.setComponentZOrder(iPanel, 1);
 			
 			imageScreens.add(iPanel);
 			

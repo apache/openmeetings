@@ -9,6 +9,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.openmeetings.server.beans.ServerFrameBean;
+import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
 
 import java.util.zip.*;
@@ -105,6 +106,46 @@ public class ServerDesktopRequestEncoder implements ProtocolEncoder {
 			buffer.flip();
 			
 	        out.write(buffer);
+    		
+    	} else if (message instanceof ServerFrameCursorStatus) {
+    		
+    		ServerFrameCursorStatus cursorStatus = (ServerFrameCursorStatus) message;
+    		
+    		byte[] securityTokenAsByte = cursorStatus.getPublicSID().getBytes();
+    		
+    		Integer lengthSecurityToken = securityTokenAsByte.length;
+    		
+    		Integer frameSize = 4 * 8 + lengthSecurityToken;
+    		
+    		IoBuffer buffer = IoBuffer.allocate(frameSize, false);
+    		
+    		log.debug("######################### 1Send Cursor Bean "+cursorStatus.getMode());
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### Send Cursor Bean");
+    		log.debug("######################### 9Send Cursor Bean");
+    		
+    		//mode is 6
+			buffer.put(this.convertIntToByteArray(cursorStatus.getMode()));// 4 Byte 
+			buffer.put(this.convertIntToByteArray(cursorStatus.getSequenceNumber()));//4 Byte
+			buffer.put(this.convertIntToByteArray(lengthSecurityToken));//4 Byte
+			buffer.put(this.convertIntToByteArray(cursorStatus.getX()));//4 Byte
+			buffer.put(this.convertIntToByteArray(cursorStatus.getY()));//4 Byte
+			buffer.put(this.convertIntToByteArray(0));//4 Byte
+			buffer.put(this.convertIntToByteArray(0));//4 Byte
+			buffer.put(this.convertIntToByteArray(0));//4 Byte => this data is not needed
+			buffer.put(securityTokenAsByte);//32 Byte usually
+			
+			buffer.flip();
+			
+	        //out.write(buffer);
     		
     	}
 
