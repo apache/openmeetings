@@ -26,6 +26,13 @@ public class RoomClient {
 	
 	private String scope = "";
 	
+	private int vWidth = 0;
+	private int vHeight = 0;
+	private int vX = 0;
+	private int vY = 0;
+	
+	private String streamPublishName = "";
+	
 	/*
 	 * an unique PUBLIC id,
 	 * this ID is needed as people can reconnect and will get a new 
@@ -49,6 +56,8 @@ public class RoomClient {
 	private Boolean canDraw = false;
 	private Date connectedSince;
 	private String formatedDate;
+	
+	private Boolean isScreenClient = false;
 	
 	/*
 	 * the color of the user, only needed in 4x4 Conference, in these rooms each user has its own
@@ -564,6 +573,48 @@ public class RoomClient {
 	}
 	public void setIsSuperModerator(Boolean isSuperModerator) {
 		this.isSuperModerator = isSuperModerator;
+	}
+
+	public Boolean getIsScreenClient() {
+		return isScreenClient;
+	}
+	public void setIsScreenClient(Boolean isScreenClient) {
+		this.isScreenClient = isScreenClient;
+	}
+
+	public int getVWidth() {
+		return vWidth;
+	}
+	public void setVWidth(int width) {
+		vWidth = width;
+	}
+
+	public int getVHeight() {
+		return vHeight;
+	}
+	public void setVHeight(int height) {
+		vHeight = height;
+	}
+
+	public int getVX() {
+		return vX;
+	}
+	public void setVX(int vx) {
+		vX = vx;
+	}
+
+	public int getVY() {
+		return vY;
+	}
+	public void setVY(int vy) {
+		vY = vy;
+	}
+
+	public String getStreamPublishName() {
+		return streamPublishName;
+	}
+	public void setStreamPublishName(String streamPublishName) {
+		this.streamPublishName = streamPublishName;
 	}
 	
 }

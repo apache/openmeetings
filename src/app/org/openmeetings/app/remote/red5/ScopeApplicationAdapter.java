@@ -175,13 +175,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			String streamId = client.getId();
 			
 			log.debug("### Client connected to OpenMeetings, register Client StreamId: " 
-					+ streamId + " scope "+ room.getName());
+					+ streamId + " scope "+ room.getName() );
 			
 			//Set StreamId in Client
 			service.invoke("setId", new Object[] { streamId },this);
 
+			String swfURL = "";
+			if (conn.getConnectParams().get("swfUrl") != null) {
+				swfURL = conn.getConnectParams().get("swfUrl").toString();
+			}
+			
 			RoomClient rcm = this.clientListManager.addClientListItem(streamId, room.getName(), conn.getRemotePort(), 
-					conn.getRemoteAddress(), conn.getConnectParams().get("swfUrl").toString());
+					conn.getRemoteAddress(), swfURL);
 			
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("ClientConnect", rcm.getUser_id(), 
@@ -191,6 +196,37 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.error("roomJoin",err);
 		}		
 		return true;
+	}
+	
+	public synchronized void setConnectionAsSharingClient(Map map) {
+		try {
+			
+			IConnection conn = Red5.getConnectionLocal();
+			IServiceCapableConnection service = (IServiceCapableConnection) conn;
+			
+			log.debug("### setConnectionAsSharingClient: ");
+			
+			RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+
+			if (rcl != null) {
+				rcl.setIsScreenClient(true);
+				
+				rcl.setVX(Integer.parseInt(map.get("screenX").toString()));
+				rcl.setVY(Integer.parseInt(map.get("screenY").toString()));
+				rcl.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
+				rcl.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+				
+				log.debug("screen x,y,width,height "+rcl.getVX()+" "+rcl.getVY()+" "+rcl.getVWidth()+" "+rcl.getVHeight());
+				
+				this.clientListManager.updateClientByStreamId(conn.getClient().getId(), rcl);
+				
+			} else {
+				throw new Exception("Could not find Screen Sharing Client "+conn.getClient().getId());
+			}
+			
+		} catch (Exception err){
+			log.error("[setConnectionAsSharingClient]",err);
+		}		
 	}
 	
 	/**
@@ -236,6 +272,35 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IConnection current = Red5.getConnectionLocal();
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			//In case its a screen sharing we start a new Video for that
+			if (currentClient.getIsScreenClient()) {
+			
+				log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
+				
+				//Notify all users of the same Scope
+				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+				for (Set<IConnection> conset : conCollection) {
+					for (IConnection conn : conset) {
+						if (conn != null) {
+							if (conn instanceof IServiceCapableConnection) {
+								if (conn.equals(current)){
+									continue;
+								} else {
+									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+									//log.debug("is this users still alive? :"+rcl);
+									//Check if the Client is in the same room and same domain 
+									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+									iStream.invoke("stopRed5ScreenSharing",new Object[] { currentClient }, this);
+									log.debug("send Notification to");
+								}
+							}
+						}
+					}
+				}
+				
+			}
 			
 			//The Room Client can be null if the Client left the room by using logicalRoomLeave
 			if (currentClient != null) {
@@ -400,32 +465,67 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// Notify all the clients that the stream had been started
 			log.debug("start streamPublishStart broadcast start: "+ stream.getPublishedName() + "CONN " + current);
 			
-			//Notify all users of the same Scope
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-							if (conn.equals(current)){
-								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (rcl.getIsRecording()){
-									StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
-								}
-								continue;
-							} else {
-								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								//log.debug("is this users still alive? :"+rcl);
-								//Check if the Client is in the same room and same domain 
-								IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-								//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-								iStream.invoke("newStream",new Object[] { currentClient }, this);
-								if (rcl.getIsRecording()){
-									StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
+			//In case its a screen sharing we start a new Video for that
+			if (currentClient.getIsScreenClient()) {
+				
+				currentClient.setStreamPublishName(stream.getPublishedName());
+				
+				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
+				
+				log.debug("start streamPublishStart Is Screen Sharing ");
+				
+				//Notify all users of the same Scope
+				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+				for (Set<IConnection> conset : conCollection) {
+					for (IConnection conn : conset) {
+						if (conn != null) {
+							if (conn instanceof IServiceCapableConnection) {
+								if (conn.equals(current)){
+									continue;
+								} else {
+									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+									//log.debug("is this users still alive? :"+rcl);
+									//Check if the Client is in the same room and same domain 
+									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+									iStream.invoke("newRed5ScreenSharing",new Object[] { currentClient }, this);
+									log.debug("send Notification to");
 								}
 							}
 						}
 					}
 				}
+				
+			} else {
+			
+				//Notify all users of the same Scope
+				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+				for (Set<IConnection> conset : conCollection) {
+					for (IConnection conn : conset) {
+						if (conn != null) {
+							if (conn instanceof IServiceCapableConnection) {
+								if (conn.equals(current)){
+									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+									if (rcl.getIsRecording()){
+										StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
+									}
+									continue;
+								} else {
+									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+									//log.debug("is this users still alive? :"+rcl);
+									//Check if the Client is in the same room and same domain 
+									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+									iStream.invoke("newStream",new Object[] { currentClient }, this);
+									if (rcl.getIsRecording()){
+										StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
+									}
+								}
+							}
+						}
+					}
+				}
+			
 			}
 			
 		} catch (Exception err) {
@@ -625,6 +725,49 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.error("[addModerator]",err);
 		}
 		return -1L;
+	}
+	
+	public void setNewCursorPosition(Object item) {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			
+			log.debug("[setNewCursorPosition]"+item);
+			
+			Map cursor = (Map) item;
+			
+			log.debug("[setNewCursorPosition x]"+cursor.get("cursor_x"));
+			//log.debug("[setNewCursorPosition y]"+cursor.get("cursor_y"));
+			//log.debug("[setNewCursorPosition publicSID]"+cursor.get("publicSID"));
+			
+			//Notify all users of the same Scope
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							if (conn.equals(current)){
+								continue;
+							} else {
+								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+								//log.debug("is this users still alive? :"+rcl);
+								//Check if the Client is in the same room and same domain 
+								IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+								//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+								iStream.invoke("newRed5ScreenCursor",new Object[] { cursor }, this);
+								log.debug("send Notification to");
+							}
+						}
+					}
+				}
+			}
+			
+			
+		} catch (Exception err) {
+			log.error("[setNewCursorPosition]",err);
+		}
 	}
 	
 	public synchronized Long removeModerator(String publicSID) {

@@ -14,10 +14,13 @@ import org.red5.io.flv.impl.FLVReader;
 import org.red5.io.flv.impl.Tag;
 import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
+import org.red5.server.api.IConnection;
+import org.red5.server.api.Red5;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.event.IEventDispatcher;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPClient;
 import org.red5.server.net.rtmp.INetStreamEventHandler;
@@ -37,6 +40,9 @@ import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -169,8 +175,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	{
 		try {
 
-			UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
-			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
+			//UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
+			//UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
 
 			t = new JFrame("Desktop Publisher");
 			contentPane = t.getContentPane();
@@ -256,6 +262,51 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	{
 		textWarningArea.setText(warning);
 	}
+	
+	synchronized public void sendCursorStatus() {
+		try {
+			
+			PointerInfo a = MouseInfo.getPointerInfo();
+			Point mouseP = a.getLocation();
+			
+			Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
+			Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
+	
+			HashMap cursorPosition = new HashMap();
+			cursorPosition.put("publicSID",this.publishName);
+			cursorPosition.put("cursor_x",x);
+			cursorPosition.put("cursor_y",y);
+						
+			invoke("setNewCursorPosition",new Object[] { cursorPosition }, this);
+			
+		} catch (Exception err) {
+			System.out.println("captureScreenStart Exception: ");
+			System.err.println(err);
+			textArea.setText("Exception: "+err);
+			logger.error("[sendCursorStatus]",err);
+		}
+	}
+	
+	synchronized public void setConnectionAsSharingClient() {
+		try {
+			
+			logger.debug("setConnectionAsSharingClient" );
+			
+			HashMap map = new HashMap();
+			map.put("screenX",VirtualScreenBean.vScreenSpinnerX);
+			map.put("screenY",VirtualScreenBean.vScreenSpinnerY);
+			map.put("screenWidth",VirtualScreenBean.vScreenSpinnerWidth);
+			map.put("screenHeight",VirtualScreenBean.vScreenSpinnerHeight);
+			
+			invoke("setConnectionAsSharingClient",new Object[] { map }, this);
+			
+		} catch (Exception err) {
+			System.out.println("captureScreenStart Exception: ");
+			System.err.println(err);
+			textArea.setText("Exception: "+err);
+			logger.error("[sendCursorStatus]",err);
+		}
+	}
 
 	private void captureScreenStart()
 	{
@@ -294,7 +345,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void startStream( String host, String app, int port, String publishName) {
-
+    	
         System.out.println( "ScreenShare startStream" );
         this.publishName = publishName;
 
@@ -359,36 +410,47 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void resultReceived( IPendingServiceCall call ) {
+    	try {
+    		logger.debug( "service call result: " + call );
 
-        logger.debug( "service call result: " + call );
-
-        if ( "connect".equals( call.getServiceMethodName() ) )
-        {
-			createStream( this );
-
-		} else {
-			publishStreamId = (Integer) call.getResult();
-			logger.debug( "createPublishStream result stream id: " + publishStreamId );
-			logger.debug( "publishing video by name: " + publishName );
-			publish( publishStreamId, publishName, "live", this );
-
-			logger.debug( "setup capture thread");
-
-			capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
-										VirtualScreenBean.vScreenSpinnerY,
-										VirtualScreenBean.vScreenSpinnerWidth,
-										VirtualScreenBean.vScreenSpinnerHeight);
-
-			if (thread == null)
-			{
-				thread = new Thread(capture);
-				thread.start();
-			}
-			capture.start();
-
-			startButton.setEnabled(false);
-			stopButton.setEnabled(true);
-        }
+	        if ( call.getServiceMethodName().equals("connect") ) {
+	        	
+	        	setConnectionAsSharingClient();
+	
+	        } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
+				
+				logger.debug("call get Method Name "+call.getServiceMethodName());
+				createStream( this );
+				
+			} else if (call.getServiceMethodName().equals("createStream")) {
+					
+				publishStreamId = (Integer) call.getResult();
+				logger.debug( "createPublishStream result stream id: " + publishStreamId );
+				logger.debug( "publishing video by name: " + publishName );
+				publish( publishStreamId, publishName, "live", this );
+	
+				logger.debug( "setup capture thread");
+	
+				capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
+											VirtualScreenBean.vScreenSpinnerY,
+											VirtualScreenBean.vScreenSpinnerWidth,
+											VirtualScreenBean.vScreenSpinnerHeight);
+	
+				if (thread == null)
+				{
+					thread = new Thread(capture);
+					thread.start();
+				}
+				capture.start();
+	
+				startButton.setEnabled(false);
+				stopButton.setEnabled(true);
+					
+			}	
+	        
+    	} catch (Exception err) {
+    		logger.error("[resultReceived]",err);
+    	}
     }
 
 
@@ -498,7 +560,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			final int blockWidth = 32;
 			final int blockHeight = 32;
 
-			final int timeBetweenFrames = 1000; //frameRate
+			final int timeBetweenFrames = 750; //frameRate
 
 			int frameCounter = 0;
 
@@ -533,6 +595,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 					final int spent = (int) (System.currentTimeMillis() - ctime);
 
+					sendCursorStatus();
+					
 					Thread.sleep(Math.max(0, timeBetweenFrames - spent));
 				}
 			}
