@@ -3,8 +3,6 @@
 	
 <debug width="450" x="460" y="600" height="100" />
   
-<include href="incubator/lzcombobox.lzx" />
-  
 <!--- NetConnection -->  
 <attribute name="_nc" value="null" />
 
@@ -209,7 +207,7 @@
 			<!--- Settings -->
 			<view width="450">
 				<text text="Camera:" />
-				<resetCombobox align="right" width="350" id="camDevices" editable="false">
+				<combobox align="right" width="350" id="camDevices" editable="false">
 					<handler name="oninit">
 						<![CDATA[
 							//Get all availible Cam's
@@ -222,7 +220,7 @@
 							this.selectItem(String(r));  
 						]]>
 					</handler>
-				</resetCombobox>
+				</combobox>
 			</view>
 			<!--- Width -->
 			<view width="450">
@@ -274,7 +272,7 @@
 			<!--- Choose Microphone -->
 			<view width="450">
 				<text text="Microphone:" />
-				<resetCombobox align="right" width="350" id="micDevices" editable="false">
+				<combobox align="right" width="350" id="micDevices" editable="false">
 					<handler name="oninit">
 						<![CDATA[
 							//Get all availible Cam's
@@ -287,7 +285,7 @@
 							this.selectItem(String(r));  
 						]]>
 					</handler>
-				</resetCombobox>
+				</combobox>
 			</view>	
 			<!--- Audio-Rate -->
 			<view width="450">

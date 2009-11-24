@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jnlp spec='1.0+' codebase='http://btg199251:8080/screen' href='screenshare.jnlp'> 
+	<information> 
+		<title>Red5 ScreenShare</title> 
+		<vendor>Dele Olajide</vendor> 
+		<homepage>http://code.google.com/p/red5screnshare/</homepage>
+		<description>Red5 ScreenShare</description> 
+		<description kind='short'>An Open Source Screen Share Java application for Adobe Flash using Red5</description> 
+		<offline-allowed/> 
+	</information>
+	<security>
+	    <all-permissions/>
+	</security>	
+	<resources> 
+	<j2se version='1.4+'/> 
+        <jar href='screenshare.jar'/> 
+    </resources> 
+    <application-desc main-class='org.redfire.screen.ScreenShare'>
+    	<argument>my_red5_server.com</argument> 
+    	<argument>oflaDemo</argument> 
+    	<argument>1935</argument> 
+    	<argument>screen_share</argument>     	
+    </application-desc> 
+</jnlp> 

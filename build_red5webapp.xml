@@ -8,6 +8,12 @@
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
+	<!-- screen.out.dir -->
+	<property name="screen.out.dir" value="${basedir}/screen_compile" />
+	
+	<!-- screen.src.dir -->
+	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
+	
 	<!-- hudson config -->
 	<property environment="env"/>
 
@@ -79,7 +85,10 @@
     <property name="java2swf.lib" value="${project.lib}/java2swf" />
 	<!-- Junit -->
     <property name="junit.lib" value="${project.lib}/junit" />
-    
+	
+	<!-- screenshare.lib -->
+    <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
+	
     <!-- compile classpath -->
     <path id="compile.classpath">
         <fileset dir="${log4j.lib}" includes="*.jar"/>
@@ -99,6 +108,11 @@
         <fileset dir="${java2swf.lib}" includes="*.jar"/>
         <fileset dir="${jmf.lib}" includes="*.jar"/>
     	<fileset dir="${junit.lib}" includes="*.jar"/>
+    </path>
+	
+	<!-- screenshare classpath -->
+	<path id="screenshare.classpath">
+        <fileset dir="${screenshare.lib}" includes="*.jar"/>
     </path>
 
     <!-- xDoclet classpath -->
@@ -151,13 +165,11 @@
             <pathelement location="${xdoclet2.lib.dir}/lib/commons-jexl-1.0.jar"/>
             <pathelement location="${xdoclet2.lib.dir}/lib/picocontainer-1.0.jar"/>
         </path>
-
         <taskdef
             name="xdoclet2"
             classname="org.xdoclet.ant.XDocletTask"
             classpathref="xdoclet2.task.classpath"
             />
-
     </target>
 
     <target name="remove" depends="xdoclet2" >
@@ -193,13 +205,18 @@
         </xdoclet2>
     </target>
     
-    
     <!-- end of xdoclet 2 -->
 
     <!-- build webapp -->
 
     <target name="dist" description="binary distribution of OpenMeetings"
         depends="cleanForBinary, jar, compile.laszlo.main, signWebStartJars">
+        
+    </target>
+	
+	<!-- compiles the sources without the laszlo client -->
+	<target name="dist-test" description="binary distribution of OpenMeetings"
+        depends="cleanForBinary, jar, signWebStartJars">
         
     </target>
 
@@ -226,7 +243,8 @@
 
     <!-- Check timestamp on files -->
     <target name="prepare">
-        <mkdir dir="${dist.dir}"/>
+    	<mkdir dir="${screen.out.dir}" />
+        <mkdir dir="${dist.dir}" />
         <copy todir="${dist.dir}" filtering="true">
             <fileset dir="server">
                 <exclude name="**/*.fla"/>
@@ -272,6 +290,8 @@
 
     <!-- Copy any resource or configuration files -->
     <target name="resources">
+    	
+    	<!-- Main Applications -->
         <copy todir="${main.out.dir}" includeEmptyDirs="yes">
             <fileset dir="${main.src.dir}">
                 <patternset>
@@ -292,7 +312,8 @@
                     <include name="**/*.vm"/>
                     <exclude name="hibernate.properties"/>
                 </patternset>
-            </fileset>          
+            </fileset>  
+        	
             <fileset dir="${templates.src.dir}">
                 <patternset>
                     <include name="**/*.conf"/>
@@ -304,6 +325,17 @@
                 </patternset>
             </fileset>          
         </copy>
+    	
+    	<!-- Screen Share Application -->
+        <copy todir="${screen.out.dir}" includeEmptyDirs="yes">
+            <fileset dir="${screen.src.dir}">
+                <patternset>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.png"/>
+                </patternset>
+            </fileset>
+        </copy>
+    	
     </target>
 
     <!-- Compile JAR -->
@@ -311,11 +343,12 @@
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
-    	<!--
         <manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
             <classpath refid="compile.classpath"/>
         </manifestclasspath>
-        -->
+    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+            <classpath refid="screenshare.classpath"/>
+        </manifestclasspath>
         <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
             <fileset dir="${classes.dir}">
                 <include name="**"/>
@@ -431,6 +464,17 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
+    	<!-- Screen Share -->
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare/red5-screenshare.jar">
+            <fileset dir="${screen.out.dir}">
+                <include name="**/**"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar2.classpath}"/>
+            </manifest>
+        </jar>
         
     </target>
     
@@ -454,6 +498,10 @@
             >
           <path>
             <fileset dir="${dist.dir}/red5/webapps/${project.distname}/screen" >
+                 <include name="**/*.jar" />
+                
+            </fileset>
+          	<fileset dir="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare" >
                  <include name="**/*.jar" />
                 
             </fileset>
@@ -496,7 +544,7 @@
     <!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
     <target name="compile" depends="prepare, resources">
-        <echo message="${main.out.dir}"></echo>
+        <echo message="Compile main to ${main.out.dir}"></echo>
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
         </javac>
@@ -520,7 +568,12 @@
         </javac>
         <javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
-        </javac>        
+        </javac> 
+    	<echo message="Compile screen share to ${screen.out.dir}"></echo>
+    	<!-- compile screen share -->
+    	<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
+            <classpath refid="screenshare.classpath"/>
+        </javac>
     </target>
 	
 	<target name="doStartServer" depends="compile">
@@ -557,6 +610,7 @@
     
     <target name="cleanForBinary" description="Clean For Binary">
         <delete dir="${dist.dir}"/>
+    	<delete dir="${screen.out.dir}"/>
         <delete dir="${main.out.dir}"/>
         <delete file="filetest.keystore" />
     </target>
