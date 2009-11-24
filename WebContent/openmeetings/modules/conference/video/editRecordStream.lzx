@@ -138,6 +138,13 @@
 		    _micro.setUseEchoSuppression(true);
 
 	    	switch (settings){
+                case "s":
+                    this.myvideocontainer.setAttribute("visibility","hidden");
+                    break;
+                case "vs":
+                    videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+                    this.myvideocontainer.setAttribute("visibility","visible");
+                    break;
 	    		case "av":
 	    			videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
                     this.myvideocontainer.setAttribute("visibility","visible");
@@ -171,11 +178,14 @@
     <labelText labelid="447" fontsize="11" x="10" y="20" width="$once{ parent.width-20 }" />
     
     <resetCombobox fontsize="11" name="availibleSettings" x="10" y="40" width="280" editable="false">
+        
         <handler name="oninit">
             <![CDATA[
 				this.addItem(canvas.getLabelName(448),"av");
 				this.addItem(canvas.getLabelName(449),"a");
 				this.addItem(canvas.getLabelName(450),"v");
+                //this.addItem(canvas.getLabelName(845),"s");
+                //this.addItem(canvas.getLabelName(846),"sv");
 				this.addItem(canvas.getLabelName(451),"n");
             
 				var r = "av";
@@ -193,6 +203,7 @@
 
             ]]>
         </handler>
+        
         <handler name="onselect">
         	<![CDATA[
         		var camVisible = "visible";

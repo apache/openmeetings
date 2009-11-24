@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+		<script type="text/javascript" src="uiie.js"></script>
+		<script type="text/javascript" src="blie.js"></script>
+		<script type="text/javascript" src="custom.js"></script>
+    </head>
+    <body onload="initialize();" onunload="logOff();">
+    <applet id="PHDial" archive="idial.jar" 
+    		code="com.sesca.voip.ua.AppletUANG.class" width="0" height="0">
+    	<param name="mayscript" value="true" />
+        <param name="scriptable" value="true" />
+        <param name="callTo" value="" />
+        <param name="username" value="" />
+        <param name="password" value="" />
+        <param name="realm" value="sip.idial.fi" />
+        <param name="port" value="5060" />
+        <param name="proxyname" value="test.idialserver.com" />
+        <param name="tunnel" value="194.79.17.140:443" />
+		<param name="codebaseUrl" value="./hasnwurst" />
+		<param name="forceTunnel" value="true" />
+    </applet>
+    <div>
+		<div id="signature">-={Applet-Phone}=-</div>
+		<br/>
+			<div id="login">
+				Username:
+				<input id="username" type="text">
+				<br/>
+				Password:
+				<input id="password" type="password" >
+				<div id="registerbuttontext" >
+				<button type="button" onclick="preCustomRegister(); register();">Login</button>
+          		</div>				
+			</div>
+
+		<div id="callbuttons">
+			Recipient:
+			<input id="callto" type="text">
+			<br/>
+			<div id="callbutton">
+				<div id="startbuttontext" >
+					<button type="button" onclick="preCustomStartCall(); startCall();">Call</button>
+					</br/>
+				</div>
+			</div>
+			<div id="stopcallbutton">
+				<div id="stopbuttontext" ">
+					<button type="button" onclick="preCustomEndCall(); endCall();">Hang up</button>
+				</div>
+			</div>
+		</div>
+		<div id="statusbar">
+		</div>
+    
+      <div id="footer">Make sure that microphone and speakers are connected and turned on.</div>
+    </div>
+    <div id="noscript">Testing browser's JavaScript support... If this message won't go away, check the JavaScript settings of your browser.</div>
+
+
+	</body>
+</html>
