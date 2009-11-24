@@ -7,7 +7,7 @@
       <generator class="increment"/>
     </id>
     <property name="additionalname" type="string" column="additionalname"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="fax" type="string" column="fax"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>
     <many-to-one outer-join="true" not-null="false" column="state_id" lazy="false" cascade="none" name="states" class="org.openmeetings.app.hibernate.beans.adresses.States"/>

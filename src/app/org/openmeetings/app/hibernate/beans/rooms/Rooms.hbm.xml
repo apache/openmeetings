@@ -6,7 +6,7 @@
     <id column="rooms_id" name="rooms_id">
       <generator class="increment"/>
     </id>
-    <property name="comment" type="text" column="comment"/>
+    <property name="comment" type="text" column="comment_field"/>
     <property name="name" type="string" column="name"/>
     <many-to-one outer-join="true" not-null="false" column="roomtypes_id" lazy="false" cascade="none" name="roomtype" class="org.openmeetings.app.hibernate.beans.rooms.RoomTypes"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>

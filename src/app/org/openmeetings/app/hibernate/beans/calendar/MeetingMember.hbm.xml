@@ -17,7 +17,7 @@
     <property name="starttime" type="java.util.Date" column="starttime"/>
     <property name="updatetime" type="java.util.Date" column="updatetime"/>
     <property name="deleted" type="boolean" column="deleted"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="invitor" type="boolean" column="invitor"/>
   </class>
 </hibernate-mapping>

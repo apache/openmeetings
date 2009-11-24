@@ -78,7 +78,7 @@ public class Navisub {
     
     /**
      * @hibernate.property
-     *  column="comment"
+*  column="comment_field"
      *  type="string"
      */ 
     public String getComment() {

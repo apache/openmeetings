@@ -6,7 +6,7 @@
     <id column="users_usergroups_id" name="users_usergroups_id">
       <generator class="increment"/>
     </id>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>
     <property name="updatetime" type="java.util.Date" column="updatetime"/>
     <property name="deleted" type="string" column="deleted"/>

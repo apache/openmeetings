@@ -7,7 +7,7 @@
       <generator class="increment"/>
     </id>
     <property name="action" type="string" column="action"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="icon" type="string" column="icon"/>
     <property name="isleaf" type="boolean" column="isleaf"/>
     <property name="isopen" type="boolean" column="isopen"/>

@@ -26,7 +26,7 @@ public class Userdata {
 
     /**
      * @hibernate.property
-     *  column="comment"
+*  column="comment_field"
      *  type="string"
      */ 
 	public String getComment() {

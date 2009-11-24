@@ -6,7 +6,7 @@
     <id column="data_id" name="data_id">
       <generator class="increment"/>
     </id>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="data" type="string" column="data"/>
     <property name="data_key" type="string" column="data_key"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>

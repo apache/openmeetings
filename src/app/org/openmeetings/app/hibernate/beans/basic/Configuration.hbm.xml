@@ -6,7 +6,7 @@
     <id column="configuration_id" name="configuration_id">
       <generator class="increment"/>
     </id>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="conf_key" type="string" column="conf_key"/>
     <property name="conf_value" type="string" column="conf_value"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>

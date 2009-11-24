@@ -61,7 +61,7 @@ public class Rooms {
     
     /**
      * @hibernate.property
-     *  column="comment"
+*  column="comment_field"
      *  type="text"
      */ 
 	public String getComment() {

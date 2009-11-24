@@ -9,7 +9,7 @@
     <property name="conferenceType" type="string" column="conferencetype"/>
     <many-to-one outer-join="true" not-null="false" column="room_setup" lazy="false" cascade="none" name="room_setup" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
     <property name="roomRecordingsTableString" type="string" column="roomrecordingstablestring"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="initwhiteboardvarsInXml" type="text" column="initwhiteboardvars_in_xml"/>
     <property name="recordingName" type="string" column="recordingname"/>
     <property name="starttime" type="java.util.Date" column="starttime"/>

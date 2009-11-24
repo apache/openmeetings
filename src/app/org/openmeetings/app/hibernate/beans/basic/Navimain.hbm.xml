@@ -9,7 +9,7 @@
     <property name="action" type="string" column="action"/>
     <property name="level_id" type="long" column="level_id"/>
     <property name="global_id" type="long" column="global_id"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="icon" type="string" column="icon"/>
     <property name="isleaf" type="boolean" column="isleaf"/>
     <property name="isopen" type="boolean" column="isopen"/>

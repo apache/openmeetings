@@ -104,7 +104,7 @@ public class Organisation_Users {
 
     /**
      * @hibernate.property
-     *  column="comment"
+*  column="comment_field"
      *  type="string"
      */ 	
     public String getComment() {

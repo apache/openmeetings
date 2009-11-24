@@ -87,7 +87,7 @@ public class RoomRecording {
 	
 	/**
      * @hibernate.property
-     *  column="comment"
+*  column="comment_field"
      *  type="string"
      */
 	public String getComment() {
