@@ -364,7 +364,7 @@ public class MainService implements IPendingServiceCallback {
     		
     		String clientURL = Red5.getConnectionLocal().getRemoteAddress();
     		
-    		System.out.println("swfURL "+clientURL);
+    		log.debug("swfURL "+clientURL);
     		
     		SOAPLogin soapLogin = SOAPLoginDAO.getInstance().getSOAPLoginByHash(secureHash);
     		
@@ -373,12 +373,12 @@ public class MainService implements IPendingServiceCallback {
     			if (soapLogin.getAllowSameURLMultipleTimes()) {
     				
     				if (!soapLogin.getClientURL().equals(clientURL)) {
-    					System.out.println("does not equal "+clientURL);
+    					log.debug("does not equal "+clientURL);
     					return -42L;
     				}
     				
     			} else {
-    				System.out.println("Already used "+secureHash);
+    				log.debug("Already used "+secureHash);
     				return -42L;
     			}
     		} 
