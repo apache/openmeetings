@@ -722,7 +722,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Compartición prohibida</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>Compartir su escritorio</value>
+    <value>Compartir escritorio</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
     <value>Problemas de conexión: Su ancho de banda es insuficiente y se perderá la información. Si el mensaje se repite con frecuencia solicite al moderador reducir la calidad de imagen y audio.</value>
@@ -858,7 +858,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>http://groups.google.com/group/openmeetings-user</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
-    <value>Enviar aviso</value>
+    <value>Enviar "bug"</value>
   </string>
   <string id="285" name="dashboard_rsslistitemlinktext">
     <value>más</value>
@@ -2428,7 +2428,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>OpenMeetings, su Plataforma Web de Videoconferencia. Sólo siga las instrucciones, presione el botón para iniciar inmediatamente o vaya al Calendario para programar un Encuentro más adelante.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Planificar un Encuentro</value>
+    <value>Planificar Encuentro</value>
   </string>
   <string id="806" name="lzcalendar">
     <value>Para planificar una conferencia, añada un nuevo Evento en el Calendario. Para cada Evento se creará automáticamente una Sala de (vídeo)conferencia. Usted y el resto de asistentes recibirán un correo con un enlace de la sala.&lt;br/&gt;&lt;br/&gt;Puede escoger entre diferentes tipos de salas con diferentes diseños y sistemas de moderación. También puede escoger entre diferentes tipos de notificación de correo que se envían en cada evento del calendario.</value>
@@ -2530,27 +2530,27 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Este usuario tiene el rol de supermoderador. No puede quitarle la marca de moderación a un supermoderador.</value>
   </string>
   <string id="839" name="confirm delete">
-    <value>Do you really want to delete this File/Folder?</value>
+  <value>¿Realmente desea borrar este Archivo/Directorio?</value>
   </string>
   <string id="840" name="confirm delete">
-    <value>Delete File/Folder?</value>
+  <value>¿Borrar Archivo/Directorio?</value>
   </string>
   <string id="841" name="salutation">
-    <value>Mrs.</value>
+  <value>Sra.</value>
   </string>
   <string id="842" name="salutation">
-    <value>Dr.</value>
+  <value>Sr.</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+  <value>Propiedades</value>
   </string>
   <string id="844" name="screen sharer">
-    <value>Show mouse position to viewers</value>
+  <value>Mostrar la posición del ratón a los participantes</value>
   </string>
   <string id="845" name="publish option">
-    <value>Share Audio with SIP Applet</value>
+  <value>Compartir Audio con el applet SIP</value>
   </string>
   <string id="846" name="publish option">
-    <value>Share Audio with SIP and Video with Flash</value>
+  <value>Compartir Audio con SIP y Vídeo con Flash</value>
   </string>
 </language>
