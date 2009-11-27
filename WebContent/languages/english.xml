@@ -2170,10 +2170,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Document Properties</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>Start Java</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>Start Flash</value>
   </string>
   <string id="724" name="sharing session">
     <value>A user want to share his screen. Do you want to see it?</value>
@@ -2236,7 +2236,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancel</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>Start Java</value>
   </string>
   <string id="745" name="sharing viewer">
     <value>If you close this session completely you are not able to restart the viewer for this session.</value>

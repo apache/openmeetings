@@ -33,7 +33,8 @@ public class SOAPLoginDAO {
 	}
 	
 	public String addSOAPLogin(String sessionHash, Long room_id, 
-				boolean becomemoderator, boolean showAudioVideoTest) {
+				boolean becomemoderator, boolean showAudioVideoTest,
+				boolean allowSameURLMultipleTimes) {
 		try {
 			
 			String thistime = "TIME_"+(new Date().getTime());
@@ -48,6 +49,7 @@ public class SOAPLoginDAO {
 			soapLogin.setCreated(new Date());
 			soapLogin.setUsed(false);
 			soapLogin.setRoom_id(room_id);
+			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
 			soapLogin.setHash(hash);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
@@ -71,6 +73,7 @@ public class SOAPLoginDAO {
 		}
 		return null;
 	}
+	
 	
 	public SOAPLogin getSOAPLoginByHash(String hash) {
 		try {

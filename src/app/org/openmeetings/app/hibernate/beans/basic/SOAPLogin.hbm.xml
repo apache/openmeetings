@@ -14,5 +14,7 @@
     <property name="useDate" type="java.util.Date" column="use_date"/>
     <property name="becomemoderator" type="boolean" column="becomemoderator"/>
     <property name="showAudioVideoTest" type="boolean" column="showaudiovideotest"/>
+    <property name="allowSameURLMultipleTimes" type="boolean" column="allow_same_url_multiple_times"/>
+    <property name="clientURL" type="string" column="client_url"/>
   </class>
 </hibernate-mapping>

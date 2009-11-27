@@ -38,6 +38,7 @@ import org.openmeetings.app.data.conference.Feedbackmanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rss.LoadAtomRssFeed;
 
 
@@ -361,32 +362,48 @@ public class MainService implements IPendingServiceCallback {
     public Object secureLoginByRemote(String secureHash) {
     	try {
     		
+    		String clientURL = Red5.getConnectionLocal().getRemoteAddress();
+    		
+    		System.out.println("swfURL "+clientURL);
+    		
     		SOAPLogin soapLogin = SOAPLoginDAO.getInstance().getSOAPLoginByHash(secureHash);
     		
     		if (soapLogin.getUsed()) {
-    			return -42L;
-    		} else {
     			
-    			Long loginReturn = this.loginUserByRemote(soapLogin.getSessionHash());
-    			
-    			if (loginReturn == null) {
-    				return -1L;
-    			} else if (loginReturn < 0) {
-    				return loginReturn;
+    			if (soapLogin.getAllowSameURLMultipleTimes()) {
+    				
+    				if (!soapLogin.getClientURL().equals(clientURL)) {
+    					System.out.println("does not equal "+clientURL);
+    					return -42L;
+    				}
+    				
     			} else {
-    				
-    				soapLogin.setUsed(true);
-    				
-    				SOAPLoginDAO.getInstance().updateSOAPLogin(soapLogin);
-    				
-    				//Hide the admin session Hash from the public user
-    				soapLogin.setSessionHash("****");
-    				
-    				return soapLogin;
-    				
+    				System.out.println("Already used "+secureHash);
+    				return -42L;
     			}
+    		} 
     			
-    		}
+			Long loginReturn = this.loginUserByRemote(soapLogin.getSessionHash());
+			
+			if (loginReturn == null) {
+				return -1L;
+			} else if (loginReturn < 0) {
+				return loginReturn;
+			} else {
+				
+				soapLogin.setUsed(true);
+				
+				soapLogin.setClientURL(clientURL);
+				
+				SOAPLoginDAO.getInstance().updateSOAPLogin(soapLogin);
+				
+				//Hide the admin session Hash from the public user
+				soapLogin.setSessionHash("****");
+				
+				return soapLogin;
+				
+			}
+    			
     		
     	} catch (Exception err) {
     		log.error("[secureLoginByRemote]",err);

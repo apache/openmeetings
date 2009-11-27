@@ -18,6 +18,8 @@ public class SOAPLogin {
 	private Date useDate;
 	private Boolean becomemoderator;
 	private Boolean showAudioVideoTest;
+	private Boolean allowSameURLMultipleTimes;
+	private String clientURL;
 	
 	/**
      * 
@@ -127,5 +129,30 @@ public class SOAPLogin {
 	public void setShowAudioVideoTest(Boolean showAudioVideoTest) {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="allow_same_url_multiple_times"
+     *  type="boolean"
+     */
+	public Boolean getAllowSameURLMultipleTimes() {
+		return allowSameURLMultipleTimes;
+	}
+	public void setAllowSameURLMultipleTimes(Boolean allowSameURLMultipleTimes) {
+		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="client_url"
+     *  type="string"
+     */
+	public String getClientURL() {
+		return clientURL;
+	}
+	public void setClientURL(String clientURL) {
+		this.clientURL = clientURL;
+	}
+	
 	
 }
