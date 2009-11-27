@@ -2618,4 +2618,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="846" name="publish option">
     <value>Share Audio with SIP and Video with Flash</value>
   </string>
+  <string id="847" name="document panel">
+    <value>Full-Fit</value>
+  </string>
 </language>

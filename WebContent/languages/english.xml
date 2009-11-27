@@ -169,7 +169,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ok</value>
   </string>
   <string id="55" name="cancel2">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="56" name="reconeectneeded">
     <value>You need to reconnect.</value>
@@ -211,7 +211,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>User Info</value>
   </string>
   <string id="69" name="cleardrawarea">
-    <value>Clear DrawArea</value>
+    <value>Clear Whiteboard</value>
   </string>
   <string id="70" name="undo">
     <value>Undo</value>
@@ -229,10 +229,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Paint</value>
   </string>
   <string id="75" name="drawline">
-    <value>Draw line</value>
+    <value>Draw Line</value>
   </string>
   <string id="76" name="drawu">
-    <value>Draw underline</value>
+    <value>Draw Underline</value>
   </string>
   <string id="77" name="rect">
     <value>Rectangle</value>
@@ -250,16 +250,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Apply for moderation</value>
   </string>
   <string id="82" name="apply">
-    <value>apply</value>
+    <value>Apply</value>
   </string>
   <string id="83" name="cancel">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="84" name="mod">
     <value>Become moderator</value>
   </string>
   <string id="85" name="close">
-    <value>close</value>
+    <value>Close</value>
   </string>
   <string id="86" name="italic">
     <value>italic</value>
@@ -274,13 +274,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>A User wants to apply for moderation, you can either grant him only access to the whiteboard or completely switch the moderation role. User:</value>
   </string>
   <string id="90" name="accept">
-    <value>accept</value>
+    <value>Accept</value>
   </string>
   <string id="91" name="reject">
-    <value>reject</value>
+    <value>Reject</value>
   </string>
   <string id="92" name="cancel">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="93" name="sendmodrequestmessage">
     <value>Sending request to following Users</value>
@@ -307,7 +307,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ellipse</value>
   </string>
   <string id="101" name="close">
-    <value>close</value>
+    <value>Close</value>
   </string>
   <string id="102" name="AuthError">
     <value>input data error</value>
@@ -493,7 +493,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Calendar</value>
   </string>
   <string id="163" name="savewindow_btn">
-    <value>close</value>
+    <value>Close</value>
   </string>
   <string id="164" name="organisationtablelist_idrow">
     <value>Organisation-ID</value>
@@ -532,16 +532,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Add</value>
   </string>
   <string id="176" name="orgvalue_userwin">
-    <value>remove organisation</value>
+    <value>Remove Organisation</value>
   </string>
   <string id="177" name="orgvalue_userlist">
     <value>User</value>
   </string>
   <string id="178" name="orgvalue_userlistadd">
-    <value>add user</value>
+    <value>Add user</value>
   </string>
   <string id="179" name="orgvalue_userlistdelete">
-    <value>delete user</value>
+    <value>Delete user</value>
   </string>
   <string id="180" name="orgvalue_userwinheader">
     <value>Add user to Organization</value>
@@ -568,7 +568,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Conferencerooms</value>
   </string>
   <string id="188" name="roomadmin_header">
-    <value>id</value>
+    <value>ID</value>
   </string>
   <string id="189" name="roomadmin_header">
     <value>Name</value>
@@ -595,13 +595,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Comment</value>
   </string>
   <string id="197" name="whiteboard_saveicon">
-    <value>save and export</value>
+    <value>Save and Export</value>
   </string>
   <string id="198" name="whiteboard_openicon">
     <value>load</value>
   </string>
   <string id="199" name="whiteboard_saveaswinheader">
-    <value>save as</value>
+    <value>Save As</value>
   </string>
   <string id="200" name="whiteboard_saveaswintext">
     <value>Filename</value>
@@ -610,34 +610,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>filename</value>
   </string>
   <string id="202" name="whiteboard_saveaswinbtn1">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="203" name="whiteboard_saveaswinbtn2">
-    <value>save</value>
+    <value>Save</value>
   </string>
   <string id="204" name="rpcerrorwin_header">
     <value>Error</value>
   </string>
   <string id="205" name="loadwml_header">
-    <value>loading</value>
+    <value>Loading</value>
   </string>
   <string id="206" name="loadwml_messsload">
-    <value>objects loaded</value>
+    <value>Objects loaded</value>
   </string>
   <string id="207" name="loadwml_messsync">
-    <value>snychronizing clients, clients to wait:</value>
+    <value>Synchronizing, Users to wait:</value>
   </string>
   <string id="208" name="loadimage_messload">
     <value>Loading Imagedata</value>
   </string>
   <string id="209" name="loadimage_messsync">
-    <value>snychronizing clients, clients to wait:</value>
+    <value>Synchronizing, Users to wait:</value>
   </string>
   <string id="210" name="loadwml_confirmheader">
-    <value>clear drawarea</value>
+    <value>Clear Whiteboard</value>
   </string>
   <string id="211" name="loadwml_confirmmess">
-    <value>clear drawarea, all data on whiteboard will be lost</value>
+    <value>Clear Whiteboard, all data on Whiteboard will be lost</value>
   </string>
   <string id="212" name="loadwml_confirmmess2">
     <value>Confirm before loading a file</value>
@@ -1294,7 +1294,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Change Linewidth</value>
   </string>
   <string id="430" name="close_small_popups">
-    <value>close</value>
+    <value>Close</value>
   </string>
   <string id="431" name="paint_tool_letter">
     <value>change Fontsize</value>
@@ -1681,7 +1681,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Synchronizing</value>
   </string>
   <string id="559" name="Synchronizing message">
-    <value>Synchronizing Users, please wait</value>
+    <value>Synchronizing, please wait</value>
   </string>
   <string id="560" name="exportToSVG">
     <value>&lt;u&gt;Download as SVG&lt;/u&gt;</value>
@@ -2191,7 +2191,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Desktop Viewer</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>Stop Sharing</value>
   </string>
   <string id="730" name="sharing client">
     <value>Desktop Sharer</value>
@@ -2203,7 +2203,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Start Sharing</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Pause Sharing</value>
   </string>
   <string id="734" name="sharing client">
     <value>Select your screen area:</value>
@@ -2278,7 +2278,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Test Setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Use Audio or Video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</value>
   </string>
   <string id="759" name="test setup">
     <value>Don't show this test anymore</value>
@@ -2543,5 +2543,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="846" name="publish option">
     <value>Share Audio with SIP and Video with Flash</value>
+  </string>
+  <string id="847" name="document panel">
+    <value>Full-Fit</value>
   </string>
 </language>

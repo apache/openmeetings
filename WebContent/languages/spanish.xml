@@ -2553,4 +2553,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="846" name="publish option">
   <value>Compartir Audio con SIP y Vídeo con Flash</value>
   </string>
+  <string id="847" name="document panel">
+    <value>Full-Fit</value>
+  </string>
 </language>
