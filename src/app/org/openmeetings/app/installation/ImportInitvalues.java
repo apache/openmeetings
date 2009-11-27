@@ -326,6 +326,12 @@ public class ImportInitvalues {
 					"firstname", email, new java.util.Date(), "street", "no",
 					"fax", "zip", 1, "town", 0, false, null, "phone", "", false);
 
+			log.debug("Installation - User Added user-Id "+user_id);
+			
+			if (user_id < 0) {
+				throw new Exception("Could not add user user returns a negative error message: "+user_id);
+			}
+			
 			//Add default group
 			Long organisation_id = Organisationmanagement.getInstance()
 					.addOrganisation(defaultOrganisationName, user_id);

@@ -76,6 +76,7 @@
                     +'&domain='+hib.conferencedomain
                     +'&sid='+canvas.sessionId
                     +'&red5httpport='+canvas.red5httpport
+                    +'&rtmpPort='+canvas.rtmpport
                     +'&publicSID='+canvas.publicSID
                     +'&httpRootKey='+canvas.httpRootKey
                     +'&languageAsString='+hib.userlang

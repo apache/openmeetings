@@ -3,6 +3,12 @@
 
 	<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
      
+    <resource name="btn_presenter_minimize">
+        <frame src="minimize_up.swf" />
+        <frame src="minimize_mo.swf" />
+        <frame src="minimize_dn.swf" />
+    </resource>
+    
 	<resource name="btn_presenter_close">
         <frame src="close_up.png" />
         <frame src="close_mo.png" />

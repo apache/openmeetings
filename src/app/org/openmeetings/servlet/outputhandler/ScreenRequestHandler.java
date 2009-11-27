@@ -23,6 +23,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rtp.RTPScreenSharingSession;
 import org.openmeetings.app.rtp.RTPStreamingHandler;
 import org.openmeetings.app.templates.ScreenCastTemplate;
@@ -31,80 +32,6 @@ import org.openmeetings.server.socket.ServerSocketMinaProcess;
 public class ScreenRequestHandler extends VelocityViewServlet {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(ScreenRequestHandler.class, "openmeetings");
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
-	 */
-	
-	//Fix for red5-0.7.x
-	
-//	@Override
-//	protected void service(HttpServletRequest httpServletRequest,
-//			HttpServletResponse httpServletResponse) throws ServletException,
-//			IOException {
-//
-//		try {
-//			String sid = httpServletRequest.getParameter("sid");
-//			if (sid == null) {
-//				sid = "default";
-//			}
-//			System.out.println("sid: " + sid);
-//
-//			Long users_id = Sessionmanagement.getInstance().checkSession(sid);
-//			long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-//
-//			if (user_level > 0) {
-//				String room = httpServletRequest.getParameter("room");
-//				if(room == null) room = "default";
-//
-//				String domain = httpServletRequest.getParameter("domain");
-//				if(domain == null) domain = "default";	
-//				
-//				String rtmphostlocal = httpServletRequest.getParameter("rtmphostlocal");
-//				if (rtmphostlocal == null) rtmphostlocal="default";
-//				
-//				String red5httpport = httpServletRequest.getParameter("red5httpport");
-//				if (red5httpport == null) red5httpport="default";
-//				
-//				//make a complete name out of domain(organisation) + roomname
-//				String roomName = domain+"_"+room;
-//				//trim whitespaces cause it is a directory name
-//				roomName = StringUtils.deleteWhitespace(roomName);
-//				
-//				String current_dir = getServletContext().getRealPath("/");
-//				System.out.println("Current_dir: "+current_dir);				
-//				
-//				String jnlpString = ScreenCastTemplate.getInstance(current_dir).getScreenTemplate(rtmphostlocal, red5httpport, sid, room, domain);
-//				
-//				// Add the Folder for the Room
-//
-//				String requestedFile = roomName+".jnlp";
-//				System.out.println("requestedFile: " + requestedFile);
-//				System.out.println("jnlpString: " + jnlpString);				
-//
-//				httpServletResponse.reset();
-//				httpServletResponse.resetBuffer();
-//				OutputStream out = httpServletResponse.getOutputStream();
-//				httpServletResponse.setContentType("application/x-java-jnlp-file");
-//				httpServletResponse.setHeader("Content-Disposition","Inline; filename=\"" + requestedFile + "\"");
-//
-//				out.write(jnlpString.getBytes());
-//
-//				out.flush();
-//				out.close();
-//
-//				
-//				//return getVelocityEngine().getTemplate("screencast_template.vm");
-//			}
-//
-//		} catch (Exception er) {
-//			log.error("[ScreenRequestHandler]",er);
-//			System.out.println("Error downloading: " + er);
-//		}
-//	}
 	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,
@@ -304,6 +231,25 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 							ctx.put("PORT", ServerSocketMinaProcess.port);
 							log.debug("Creating JNLP Template for TCP solution");
 							
+						}
+						else if (conf_i == 4) {
+							
+							// Red5-Screen Share with RTMP Client
+							template = "screenshare.vm";
+							
+							codebase = "http://"+rtmphostlocal+":"+red5httpport+httpRootKey+"red5-screenshare";
+						    
+						    ctx.put("codebase", codebase);
+							ctx.put("red5-host", rtmphostlocal);
+							ctx.put("red5-app", ScopeApplicationAdapter.webAppRootKey+"/"+room);
+						    
+							String rtmpPort = httpServletRequest.getParameter("rtmpPort");
+							if (rtmpPort == null) {
+								new Exception("rtmpPort is empty: "+rtmpPort);
+								return null;
+							}
+							ctx.put("rtmp-port", rtmpPort);
+						    
 						}
 						else
 							log.debug("Creating JNLP Template for default solution");

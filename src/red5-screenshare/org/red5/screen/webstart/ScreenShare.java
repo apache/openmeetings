@@ -175,8 +175,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	{
 		try {
 
-			//UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
-			//UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
+			UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
+			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
 
 			t = new JFrame("Desktop Publisher");
 			contentPane = t.getContentPane();

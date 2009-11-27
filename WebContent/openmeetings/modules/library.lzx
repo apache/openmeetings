@@ -23,6 +23,8 @@
      -->
     
     <include href="sharing/" />
+    <include href="screenSharer2/" />
+    
     <!-- -->
     <include href="lzcalendar/" />
     

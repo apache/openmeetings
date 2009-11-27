@@ -61,7 +61,7 @@
     <attribute name="fullToolBar" value="true" type="boolean" />
     
     <attribute name="maximazable" value="true" type="boolean" />
-    <attribute name="minimazable" value="true" type="boolean" />
+    <attribute name="minimazable" value="false" type="boolean" />
     
     <!--- @keywords private if this window is dragable -->
     <attribute name="isdragable" value="true" type="boolean" />
@@ -129,6 +129,10 @@
         }
 		this.destroy();
 	</method>
+    
+    <method name="minimize">
+        
+    </method>
 	
 	<method name="toggleopen">
 		//////Debug.write("this.isopen",this.isopen);
@@ -354,7 +358,7 @@
 	
 	<dragstate name="dragger" />
     
-	<view width="${ this.parent.width }" height="${ this.parent.height }" 
+	<view name="_bg" width="${ this.parent.width }" height="${ this.parent.height }" 
         bgcolor="$once{ canvas.basebgcolorizer }" > 
         <view width="${ this.parent.width-2 }" height="${ this.parent.height-2 }"
              x="1" y="1" bgcolor="0xEEF0EB" />
@@ -393,6 +397,21 @@
 			resize="true" fontstyle="bold" fgcolor="white" />
 	    <view name="_toolbar" visibility="$once{ ((parent.parent.fullToolBar) ? 'visible' : 'hidden' ) }" 
 	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:2" y="2">     
+            
+            <view name="_minimize"
+                visibility="$once{ ((parent.parent.parent.minimazable) ? 'visible' : 'hidden' ) }" 
+                resource="btn_presenter_minimize"
+                onmouseover="this.setAttribute('frame',2)"
+                onmouseout="this.setAttribute('frame',1)"
+                onmousedown="this.setAttribute('frame',3)"
+                onmouseup="this.setAttribute('frame',1)" >
+                <handler name="onclick">
+                    this.setAttribute('frame',2);
+                    this.parent.parent.parent.minimize();
+                </handler>
+                <labelTooltip labelid="431" />
+            </view>
+            
 	        <view name="_close"
 	            visibility="$once{ ((parent.parent.parent.closable) ? 'visible' : 'hidden' ) }"
 	            resource="btn_presenter_close"

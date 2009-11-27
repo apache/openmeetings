@@ -219,6 +219,12 @@
         depends="cleanForBinary, jar, signWebStartJars">
         
     </target>
+	
+	<!-- compiles the sources only with laszlo debug client -->
+	<target name="dist-debug" description="binary distribution of OpenMeetings"
+        depends="cleanForBinary, jar, compile.laszlo.main.debug, signWebStartJars">
+        
+    </target>
 
     <!-- Export SQL schema using mapping files and hibernate configuration -->
 <!--    <target name="Export SQL Schema" depends="Generate Mappings">

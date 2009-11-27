@@ -77,7 +77,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	   
 	//The Global WebApp Path
 	public static String webAppPath = "";
-	public static String webAppRootKey = "openmeetings";
+	public static String webAppRootKey = "openmeetings";//FIXME
 	public static String configDirName = "conf";
 	
 	public static String configKeyCryptClassName = null;

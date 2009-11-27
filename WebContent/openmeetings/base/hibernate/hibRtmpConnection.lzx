@@ -885,6 +885,21 @@
         </netRemoteCallHib>
         
         <!--
+            Red5 Screen Sharing
+            newRed5ScreenSharing
+         -->
+        <netRemoteCallHib name="newRed5ScreenSharing" funcname="newRed5ScreenSharing">
+            <netparam><method name="getValue">return null;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write(" onResult newRed5ScreenSharing : ",value);   
+                    
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
+        <!--
         public synchronized Long applyForModeration(String publicSID)
          -->
         <netRemoteCallHib name="applyForModeration" funcname="applyForModeration"

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="screenSharingDialog" extends="guiPresenter" labelid="18"
+    docking="true" resizeable="false" closable="true" 
+    width="200" x="$once{ parent.width - this.width - 20 }" height="140">
+    
+    <view x="4" resource="warning_icon_rsc" y="24" />
+
+    <view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+        <text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+            multiline="true" width="312" selectable="true" />
+    </view>
+	
+    <simpleLabelButton labelid="25" width="100" x="290" y="$once{ parent.height-22 }" 
+        onclick="this.parent.close();" />
+
+</class>
+
+</library>
