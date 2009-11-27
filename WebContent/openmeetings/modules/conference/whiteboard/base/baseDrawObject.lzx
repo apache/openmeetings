@@ -419,6 +419,9 @@
                 }
                 this.ObjectByName.slideNumber =  this.ObjectByName._swfView.frame;
                 this.doUpdateDocumentToolBar();
+                
+                if ($debug) Debug.info("doDocumentAction :: sendCurrentSWFObject");
+                
                 this.sendCurrentSWFObject(this.ObjectByName);
             }
         ]]>
@@ -459,21 +462,25 @@
     
     <method name="doUpdateDocumentToolBar">
     	<![CDATA[
-        
-            if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
-        
         	if (this.modernToolbar) {
                 //@deprecated
                 //this code is not valdi for the latest dev anymore, only inside for 
                 //backward compatibility
-    	        this.parent.parent._documentmenu._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
-    	        this.parent.parent._documentmenu._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
-    	        this.parent.parent._documentmenu._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
-        	} else {
+    	        //this.parent.parent._documentmenu._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
+    	        //this.parent.parent._documentmenu._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
+    	        //this.parent.parent._documentmenu._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
+        	
+            } else {
                 
         		var docToolbar = this.getDocumentToolBar();
         		
+                if ($debug) Debug.write("doUpdateDocumentToolBar ",docToolbar.parent.parent.ignoreUpdates);
+                docToolbar.parent.parent.ignoreUpdates = true;
+                
         		if (this.ObjectByName && this.ObjectByName._swfView) {
+                    
+                    if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
+                    
         			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
                     docToolbar._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
                     docToolbar._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
@@ -484,9 +491,28 @@
                     docToolbar._zoom.setAttribute('text',"100");
                     docToolbar.parent._fullFit.setValue(false);
         		}
+                
+                docToolbar.parent.parent.ignoreUpdates = false;
     	        
         	}
     	]]>
+    </method>
+    
+    <method name="doFullFit" args="v">
+        <![CDATA[
+            if (this.ObjectByName && this.ObjectByName.typeOfObject=="swf") {    
+                if (v) {
+                    if ($debug) Debug.write("Do Full Fit");
+                    this.ObjectByName.fullFit = true;
+                    this.ObjectByName._swfView.initialLoadFullFit();
+                } else {
+                    this.ObjectByName.fullFit = false;
+                }
+                
+                if ($debug) Debug.info("doFullFit sendCurrentSWFObject :: ",this.ObjectByName.name);
+                this.sendCurrentSWFObject(this.ObjectByName);
+            }
+        ]]>
     </method>
     
     <method name="doDeleteFromDocumentsBar" args="itemRefName">
@@ -501,7 +527,7 @@
     
     <method name="sendCurrentSWFObject" args="objRef">
 		<![CDATA[
-           // //Debug.write("UpdateByObject : ",objRef,objRef.name);
+            if ($debug) Debug.write("sendCurrentSWFObject :: ",objRef,objRef.name);
             var objName = objRef.name;
             for (var eg=0;eg<this.baseactionobjectList.length;eg++){
                 if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
@@ -526,11 +552,9 @@
     <method name="remoteObjectUpdate" args="lastactionObject">
         <![CDATA[
         
-            if ($debug) Debug.write("remoteObjectUpdate: ",this,lastactionObject);
-        
-            return;
-            
             var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
+            
+            if ($debug) Debug.write("remoteObjectUpdate :: ",obj.fullFit);
             obj._swfView.doSendChangeValue = false;
 			obj.slideNumber = lastactionObject[8];
 			obj._swfView.setAttribute('x',lastactionObject[9]);
@@ -540,8 +564,18 @@
             obj.zoomlevel = lastactionObject[13];
             obj.currentzoomFactor = lastactionObject[16];
             obj.fullFit = lastactionObject[19];
+            
+            if ($debug) Debug.write("DO initialLoadFullFit ?? ",obj.fullFit);
+            
+            if (obj.fullFit) {
+                if ($debug) Debug.write("DO initialLoadFullFit !! ");
+                obj._swfView.initialLoadFullFit();
+            }
+            
             obj._swfView.setAttribute('frame',obj.slideNumber);
             obj._swfView.doSendChangeValue = true;
+            
+            this.doUpdateDocumentToolBarByParticipant(obj.name);
             
             this.remoteUpdateBaseObjectList(lastactionObject);
         ]]>

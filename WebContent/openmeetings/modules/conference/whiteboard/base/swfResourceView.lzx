@@ -47,7 +47,7 @@
         
         <!-- Do not send update events in case 
             this is sync event broadcasted by another user -->
-        <attribute name="doSendChangeValue" value="true" type="boolean" />
+        <attribute name="doSendChangeValue" value="false" type="boolean" />
         
         <handler name="onframe" args="i">
             ////Debug.write("onframe",i);
@@ -91,7 +91,7 @@
         </handler>        
         
         <method name="sendObject" args="itemRef">
-            if ($debug) Debug.write("sendObject ");
+            if ($debug) Debug.info("sendObject :: sendCurrentSWFObject");
             this.parent.parent.sendCurrentSWFObject(this.parent);
             this.timeisInited=false;
         </method>
@@ -100,27 +100,14 @@
             <![CDATA[
             
                 if (parent.fullFit) {
+                    
+                    if ($debug) Debug.write(" -- fullFit -- ");
+                    
+                    var newwidth = (parent.initwidth/100)*80;
+                    var newheight = (parent.initheight/100)*80;
+                    
                     if (this.width > parent.width || this.height > parent.height) {
                         
-                        if ($debug) Debug.write(" -- fullFit -- ");
-                        
-                        //At this moment the initwidth is the same as the current width
-                        var twentyPercentStepsWidth = this.width/5;
-                        var twentyPercentStepsHeight = this.height/5;
-                        var factor = 0;
-                        
-                            
-                        //if (this.width - (twentyPercentStepsWidth*i) < parent.width 
-                        //            && this.width - (twentyPercentStepsHeight*i) < parent.height ) {
-                        //      
-                        //    factor = i;
-                        //    break;
-                        //                
-                        //}
-                        
-                        var newwidth = (parent.initwidth/100)*80;
-                        var newheight = (parent.initheight/100)*80;
-                
                         if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
                             
                             parent.currentzoomFactor = 80;
@@ -168,10 +155,12 @@
                         
                         }
                         
-	                    this.setAttribute('width',newwidth);
-	                    this.setAttribute('height',newheight);
-                    
                     }
+                    
+                    if ($debug) Debug.write("initialLoadFullFit",parent.currentzoomFactor);
+                        
+                    this.setAttribute('width',newwidth);
+                    this.setAttribute('height',newheight);
                 }
             
             ]]>
@@ -233,6 +222,8 @@
                 }
 
                 this.parent.refObj.layers.push(this.parent);			
+                
+                this.doSendChangeValue = true;
                 
                 this.oninit.sendEvent();
                 //this.parent.refObj.parent.parent.isloadedImage.sendEvent(this);

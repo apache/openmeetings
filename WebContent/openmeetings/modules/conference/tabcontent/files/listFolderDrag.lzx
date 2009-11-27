@@ -7,7 +7,7 @@
     text="$once{ '     '+this.foldername }" bgcolor="0xFFFFFF" >
     
     <handler name="onmouseover">
-        this.setAttribute('bgcolor',0x799FCE);
+        this.setAttribute('bgcolor',canvas.baseMousecolorizer);
     </handler>
     <handler name="onmouseout">
         this.setAttribute('bgcolor',0xFFFFFF)

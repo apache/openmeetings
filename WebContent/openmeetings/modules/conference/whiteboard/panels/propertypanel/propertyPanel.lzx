@@ -93,9 +93,10 @@
 	
 	<method name="loadPanelByBoundingBox" args="drawArea,objRef">
 		if ($debug) Debug.write("loadPanelByBoundingBox objRef: ",objRef);
-		this.ignoreUpdates = true;
 		
         this.loadPanelByModus(drawArea);
+        
+        this.ignoreUpdates = true;
         
         if (objRef.name.indexOf('swf') >= 0) {
             
@@ -241,6 +242,8 @@
                     return;
                 }
                 if ($debug) Debug.write("onvalue Full Fit ",v);
+                
+                parent.parent.parent._drawareaMask._drawarea.doFullFit(v);
             </handler>
 	    </labelCheckbox>        
 		
