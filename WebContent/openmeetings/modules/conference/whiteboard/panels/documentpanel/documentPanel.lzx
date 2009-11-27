@@ -9,7 +9,11 @@
 	
 	<handler name="onclick">
 		//if ($debug) Debug.write("parent.parent.parent.parent: ",parent.parent.parent.parent);
-		parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction(this.modi);
+		if (parent.parent.parent.ignoreUpdates) {
+            return;
+        }
+        
+        parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction(this.modi);
 	</handler>
 	
 	<labelTooltip name="__labeltooltip" labelid="$once{ parent.labelid }" />

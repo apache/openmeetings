@@ -10,6 +10,8 @@
     <attribute name="standardFileName" value="" type="string"/>
 	
 	<attribute name="recorderModus" value="false" type="boolean" />
+    
+    <attribute name="fullFit" value="true" type="boolean" />
 	
 	<attribute name="baseurl" value="" type="string" />
 	<attribute name="fileName" value="" type="string" />
@@ -94,9 +96,91 @@
             this.timeisInited=false;
         </method>
         
+        <method name="initialLoadFullFit">
+            <![CDATA[
+            
+                if (parent.fullFit) {
+                    if (this.width > parent.width || this.height > parent.height) {
+                        
+                        if ($debug) Debug.write(" -- fullFit -- ");
+                        
+                        //At this moment the initwidth is the same as the current width
+                        var twentyPercentStepsWidth = this.width/5;
+                        var twentyPercentStepsHeight = this.height/5;
+                        var factor = 0;
+                        
+                            
+                        //if (this.width - (twentyPercentStepsWidth*i) < parent.width 
+                        //            && this.width - (twentyPercentStepsHeight*i) < parent.height ) {
+                        //      
+                        //    factor = i;
+                        //    break;
+                        //                
+                        //}
+                        
+                        var newwidth = (parent.initwidth/100)*80;
+                        var newheight = (parent.initheight/100)*80;
+                
+                        if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
+                            
+                            parent.currentzoomFactor = 80;
+                            parent.currentzoom = 80;
+                            
+                        } else {
+                        
+                            newwidth = (parent.initwidth/100)*60;
+                            newheight = (parent.initheight/100)*60;
+                    
+                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
+                                
+                                parent.currentzoomFactor = 80;
+                                parent.currentzoom = 80;
+                           
+                            } else {
+                            
+	                            newwidth = (parent.initwidth/100)*40;
+	                            newheight = (parent.initheight/100)*40;
+	                    
+	                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
+	                                
+                                    parent.currentzoomFactor = 40;
+                                    parent.currentzoom = 40;
+                                    
+	                            } else {
+	                            
+		                            newwidth = (parent.initwidth/100)*20;
+		                            newheight = (parent.initheight/100)*20;
+		                    
+		                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
+		                                
+                                        parent.currentzoomFactor = 20;
+                                        parent.currentzoom = 20;
+                                        
+		                            } else {
+                                        
+                                        if ($debug) Debug.write(" COULD NOT SHRINK smaller then 20");
+                                        
+                                    }
+                                
+                                }
+                            
+                            }
+                        
+                        }
+                        
+	                    this.setAttribute('width',newwidth);
+	                    this.setAttribute('height',newheight);
+                    
+                    }
+                }
+            
+            ]]>
+        </method>
+        
         <handler name="onload">
             <![CDATA[
-                if ($debug) Debug.write("onload: ",this.width,this,height,this);
+                if ($debug) Debug.info("onload: ",this.width,this,height);
+                
                 ////Debug.write("onload: ",this.stop);
                 this.stop();
                 this.setAttribute('play',false);             
@@ -111,12 +195,29 @@
                 if (this.parent.recorderModus) {
 					this.parent.refObj.storeTempValsAndLoadSyncListSWFRecording(this.parent);
 				} else if (this.parent.alterModus){
+                    
+                    //this code is invoked when the Moderator loads the Document
+                    
                     this.parent.refObj.storeTempValsAndLoadSyncListSWF(this.parent);
-                    //if ($debug) Debug.write("==> doShowObjectBounds ");
+                    if ($debug) Debug.write("==> doShowObjectBounds MOD ");
+                    
+                    this.initialLoadFullFit();
+                    
                     this.parent.refObj.doShowObjectBounds(this.parent.name);
                     this.parent.refObj.doUpdateDocumentToolBar();
                 } else {
+                    
+                    //this code is invoked when any participants syncronizes and loads the document
+                    //because a Moderator has loaded it
+                    
+                    if ($debug) Debug.write("==> doShowObjectBounds Participant ");
+                    
+                    this.initialLoadFullFit();
+                    
                     this.parent.refObj.sendLoadNotificationSWF(this.parent);
+                    
+                    this.parent.refObj.doUpdateDocumentToolBarByParticipant(this.parent.name);
+                    
                 }
                 
                 if ($debug) Debug.write("swf loaded -2- ",this.parent.refObj.isWmlLoaderImage);
@@ -205,6 +306,14 @@
                 }
             ]]>
         </handler> 
+        
+        <handler name="onwidth" args="w">
+            if ($debug) Debug.write("onwidth ",w);
+        </handler>
+        
+        <handler name="onheight" args="h">
+            if ($debug) Debug.write("onheight ",h);
+        </handler>
         
     </view>    
     

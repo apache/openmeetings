@@ -12,7 +12,8 @@
  -->
     
 <class name="boundingBoxAll" extends="view" 
-       onmouseover="this.applyScrollbarToObject()" onmouseout="this.removeScrollbarToObject()" >
+       onmouseover="this.applyScrollbarToObject()" 
+       onmouseout="this.removeScrollbarToObject()" >
     
 <!-- 
 	<method name="removeIt">
@@ -70,7 +71,9 @@
 			this.setAttribute('height',this.eheight);	
 			this.setStartValues();		
 			if ($debug) Debug.write("Update Property Panel Settings to Object Properties ",this.objRef.name);
-			if (this.objRef.name.indexOf('rectangle') >= 0){
+			
+            //FIXME - Add Ellipse, Line and Free Draw Tool to it
+            if (this.objRef.name.indexOf('rectangle') >= 0){
 				if ($debug) Debug.write("this.objRef._innerRect ",this.objRef._innerRect);
 				
 				if ($debug) Debug.write("strokeStyle: ",this.objRef._innerRect.strokeStyle);
@@ -93,9 +96,11 @@
 				
 				if ($debug) Debug.write("lineWidth: ",this.objRef._innerRect.lineWidth);
 				this.whiteboardRef.currentrectangleineWidth = this.objRef._innerRect.lineWidth;
-				this.whiteboardRef.parent.parent._propertyPanel.loadPanelByModus(this.whiteboardRef,'rectangle');
 				
 			}
+            
+            this.whiteboardRef.parent.parent._propertyPanel.loadPanelByBoundingBox(this.whiteboardRef,this.objRef);
+            
 			this.doUpdateAction();
 		]]>
 	</handler>

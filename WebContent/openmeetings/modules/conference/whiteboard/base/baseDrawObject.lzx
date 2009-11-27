@@ -24,7 +24,9 @@
         	url,fileName,moduleName,parentPath,room,domain,slideNumber,
         	100,0,0,0,0,
         	this.startNewObjectSyncProcess.uniqueObjectSyncName,
-            standardFileName);
+            standardFileName,true);
+            
+        
     </method>
     
     <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
@@ -50,7 +52,7 @@
 		
 		adds the SWF-Object to the Layer
 	 -->
-  	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName">
+  	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName,fullFit">
         <![CDATA[
             if ($debug) Debug.write("addPresentationToLayer",standardFileName);
             //only show if it is not part of wml-file-object
@@ -75,8 +77,7 @@
             	x:posx,y:posy,alterModus:alterModus,
             	baseurl:baseurl,fileName:fileName,moduleName:moduleName,parentPath:parentPath,
             	room:room,domain:domain,slideNumber:slideNumber,
-            	//width:width,height:height,
-            	currentzoom:currentzoom,
+            	currentzoom:currentzoom,fullFit:fullFit,
                 standardFileName:standardFileName,
             	innerwidth:innerwidth,innerheight:innerheight,
             	innerx:innerx,innery:innery,
@@ -93,7 +94,7 @@
   	
   	<!--
   		TODO: check Recording
-  	-->
+  	
   	<method name="addPresentationToLayerRecording" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery">
         <![CDATA[
             //Debug.write("addPresentationToLayer",obj,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber);
@@ -127,6 +128,7 @@
             return this.currentlayer;
 		]]>
   	</method>  	
+    -->
     
     <method name="addSWFToLayerHistory" args="actionObject,refObj,isWmlLoader">
         this.isWmlLoaderImage = isWmlLoader;
@@ -136,7 +138,7 @@
             actionObject[actionObject.length-2],false,actionObject[2],actionObject[3],actionObject[4],actionObject[5],
             actionObject[6],actionObject[7],
             actionObject[8],actionObject[16],actionObject[11],actionObject[12],actionObject[9],actionObject[10],
-            actionObject[17],actionObject[18]);
+            actionObject[17],actionObject[18],actionObject[19]);
     </method>
     
     <!-- 
@@ -152,7 +154,7 @@
   			false,
   			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
   			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
-  			actionObject[9],actionObject[10],actionObject[17],actionObject[18]);
+  			actionObject[9],actionObject[10],actionObject[17],actionObject[18],actionObject[19]);
   	</method>
   	
 	<!--- 
@@ -169,19 +171,20 @@
   			false,
   			actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],
   			actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],
-  			actionObject[9],actionObject[10],actionObject[17],actionObject[18]);
+  			actionObject[9],actionObject[10],actionObject[17],actionObject[18],actionObject[19]);
   	</method>
   	
   	<!--
   		TODO: Check Recording Process
-  	 -->
+  	 
   	<method name="addSWFToLayerHistoryRecording" args="actionObject,refObj,isWmlLoader">
 		this.isWmlLoaderImage = isWmlLoader;
         this.baseactionobjectList.push(actionObject);	
   		this.addPresentationToLayerRecording(refObj,actionObject[1],actionObject[actionObject.length-1],actionObject[actionObject.length-5],actionObject[actionObject.length-4],actionObject[actionObject.length-3],actionObject[actionObject.length-2],false,actionObject[2],actionObject[3],actionObject[4],actionObject[5],actionObject[6],actionObject[7],actionObject[8],actionObject[16],actionObject[11],actionObject[12],actionObject[9],actionObject[10]);
   	</method>
+    -->
   	
-  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName">
+  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName,fullFit">
 		var actionObject = new Array();
 	    actionObject.push('swf');//0
 	    actionObject.push(urlname);//1
@@ -202,6 +205,7 @@
         actionObject.push(currentzoom);//16
         actionObject.push(uniquObjectSyncName);//17
         actionObject.push(standardFileName);//18
+        actionObject.push(fullFit);//19
 		actionObject.push(this.counter);
 	    actionObject.push(posx);
 	    actionObject.push(posy);
@@ -301,7 +305,8 @@
                 this.syncImageRefObj.zoomlevel,this.syncImageRefObj.currentzoomFactor,
                 this.syncImageRefObj.initwidth,this.syncImageRefObj.initheight,
                 this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage,
-                this.syncImageRefObj.standardFileName);
+                this.syncImageRefObj.standardFileName,
+                this.syncImageRefObj.fullFit);
         
 		//set modus to hand so users can directly select that image
 		this.setModus('swf');
@@ -447,23 +452,37 @@
         this.ObjectByName.bringToFront();
     </method>
     
+    <method name="doUpdateDocumentToolBarByParticipant" args="itemObjName">
+        this.ObjectByName = this.getObjectByName(itemObjName);
+        this.doUpdateDocumentToolBar();
+    </method>
+    
     <method name="doUpdateDocumentToolBar">
     	<![CDATA[
+        
+            if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
+        
         	if (this.modernToolbar) {
+                //@deprecated
+                //this code is not valdi for the latest dev anymore, only inside for 
+                //backward compatibility
     	        this.parent.parent._documentmenu._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
     	        this.parent.parent._documentmenu._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
     	        this.parent.parent._documentmenu._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
         	} else {
+                
         		var docToolbar = this.getDocumentToolBar();
         		
         		if (this.ObjectByName && this.ObjectByName._swfView) {
         			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
                     docToolbar._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
                     docToolbar._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
+                    docToolbar.parent._fullFit.setValue(this.ObjectByName.fullFit);
         		} else {
         			docToolbar._currentSlideNo.setAttribute('text',"0");
                     docToolbar._totalSlideNo.setAttribute('text',"0");
                     docToolbar._zoom.setAttribute('text',"100");
+                    docToolbar.parent._fullFit.setValue(false);
         		}
     	        
         	}
@@ -494,6 +513,7 @@
                     this.baseactionobjectList[eg][12] = objRef._swfView.height;
                     this.baseactionobjectList[eg][13] = objRef.zoomlevel;
                     this.baseactionobjectList[eg][16] = objRef.currentzoomFactor;
+                    this.baseactionobjectList[eg][19] = objRef.fullFit;
                     var newA = this.baseactionobjectList[eg];
                     if (newA[0]=='paint') newA[1] = new Array();				
                     this.onsharedMessage('swf',newA);	
@@ -505,8 +525,12 @@
     
     <method name="remoteObjectUpdate" args="lastactionObject">
         <![CDATA[
+        
+            if ($debug) Debug.write("remoteObjectUpdate: ",this,lastactionObject);
+        
+            return;
+            
             var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
-            ////Debug.write("remoteObjectUpdate: ",this,lastactionObject,obj);
             obj._swfView.doSendChangeValue = false;
 			obj.slideNumber = lastactionObject[8];
 			obj._swfView.setAttribute('x',lastactionObject[9]);
@@ -515,9 +539,10 @@
             obj._swfView.setAttribute('height',lastactionObject[12]);
             obj.zoomlevel = lastactionObject[13];
             obj.currentzoomFactor = lastactionObject[16];
+            obj.fullFit = lastactionObject[19];
             obj._swfView.setAttribute('frame',obj.slideNumber);
             obj._swfView.doSendChangeValue = true;
-            //obj. 
+            
             this.remoteUpdateBaseObjectList(lastactionObject);
         ]]>
     </method>
