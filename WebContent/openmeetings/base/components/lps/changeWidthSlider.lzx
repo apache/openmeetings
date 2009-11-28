@@ -10,6 +10,8 @@
     <attribute name="initialNumberInit" value="1" type="number"/>
     <attribute name="initialNumber" value="3" type="number"/>
     
+    <attribute name="boxPosition" value="down" type="string"/>
+    
     <attribute name="labelid" value="429" type="number"/>
     
     <event name="onplus" />

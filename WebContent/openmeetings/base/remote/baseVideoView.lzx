@@ -10,6 +10,9 @@
  -->
 
 <class name="baseVideoView" width="${parent.width}" height="${parent.height}">
+    
+    <attribute name="__LZmovieClipRef" value="null"/>
+    
 	<method name="init">
 		super.init();
 		var mc = immediateparent.sprite.attachResourceToChildView("__LZvideo", this.sprite);
@@ -21,31 +24,38 @@
         this.applySizeToVid();
         if ($debug) Debug.write("init");
 	</method>
+    
 	<method name="applySizeToVid">
 		var vid = this._getflashvideo();
 		vid._width = this.width;
         vid._height = this.height;
 	</method>
+    
     <handler name="onwidth" args="w">
          this.applySizeToVid();
     </handler> 
+    
     <handler name="onheight" args="h">
         this.applySizeToVid();
     </handler>
+    
 	<method name="_getflashvideo">
 		<![CDATA[
             return this.__LZmovieClipRef.__lzvideo;
         ]]>
     </method> 
+    
     <!--- shows the Video (can be a Cam-Instance or a NetStream) in the View -->
     <method name="attachVideo" args="video">
     	var vid = this._getflashvideo();
     	vid.attachVideo(video);
     </method>
+    
     <method name="clear">
     	this.attachVideo(null);
 		this.__LZmovieClipRef.__lzvideo.clear();
 	</method>
+    
 </class>
 
 

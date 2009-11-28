@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!---
+	Contains no microphone or camera Object, this view can only 
+	subscribe to a video or live-stream
+
+ -->
+					   
+<class name="videoObjectPlayScreenShare" extends="view">
+	
+    <baseVideoStream name="_videostream" bgcolor="black" 
+          width="${parent.width}" height="${parent.height}" />
+        
+</class>
+
+</library>

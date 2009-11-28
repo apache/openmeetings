@@ -2547,4 +2547,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="847" name="document panel">
     <value>Full-Fit</value>
   </string>
+  <string id="848" name="screen share">
+    <value>View Screen</value>
+  </string>
+  <string id="849" name="screen share">
+    <value>The user</value>
+  </string>
+  <string id="850" name="screen share">
+    <value>wants to share its screen. Do you want to see it?</value>
+  </string>
+  <string id="851" name="screen share">
+    <value>Close</value>
+  </string>
 </language>

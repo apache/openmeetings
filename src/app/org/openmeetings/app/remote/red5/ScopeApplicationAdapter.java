@@ -460,7 +460,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
-			Long room_id = currentClient.getRoom_id();	
 						
 			// Notify all the clients that the stream had been started
 			log.debug("start streamPublishStart broadcast start: "+ stream.getPublishedName() + "CONN " + current);
@@ -469,6 +468,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			if (currentClient.getIsScreenClient()) {
 				
 				currentClient.setStreamPublishName(stream.getPublishedName());
+				
+				RoomClient currentScreenUser = this.clientListManager.getClientByPublicSID(stream.getPublishedName());
+				
+				currentClient.setFirstname(currentScreenUser.getFirstname());
+				currentClient.setLastname(currentScreenUser.getLastname());
 				
 				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 				
@@ -737,6 +741,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.debug("[setNewCursorPosition]"+item);
 			
 			Map cursor = (Map) item;
+			cursor.put("streamPublishName",currentClient.getStreamPublishName());
 			
 			log.debug("[setNewCursorPosition x]"+cursor.get("cursor_x"));
 			//log.debug("[setNewCursorPosition y]"+cursor.get("cursor_y"));

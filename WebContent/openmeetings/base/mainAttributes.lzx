@@ -305,4 +305,6 @@ and some more references to temp-objects
 
 <attribute name="currentRoomObject" value="null"/>
 
+<attribute name="screenSharingDialogContainer" value="null"/>
+
 </library>

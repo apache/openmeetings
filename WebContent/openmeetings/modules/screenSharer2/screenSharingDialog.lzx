@@ -1,19 +1,177 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+    
+<class name="screenSharingDialogContainer" extends="view" 
+       width="${parent.width }" height="${ parent.height }">
+    
+    <method name="clearAllSessions">
+        <![CDATA[
+            for (var eg in this.subviews) {
+                this.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+    
+    <method name="searchForSession" args="streamPublishName">
+        <![CDATA[
+        
+            for (var i=0;i<this.subviews.length;i++) {
+                if (this.subviews[i].initObject.streamPublishName == streamPublishName) {
+                    return this.subviews[i];
+                }
+            }
+            
+            if ($debug) Debug.write("No Screen Session "+streamPublishName);
+            return null;
+        ]]>
+    </method>
+    
+</class>    
 
 <class name="screenSharingDialog" extends="guiPresenter" labelid="18"
     docking="true" resizeable="false" closable="true" 
-    width="200" x="$once{ parent.width - this.width - 20 }" height="140">
+    width="200" x="${ canvas.width - this.width - 20 }" height="100">
     
-    <view x="4" resource="warning_icon_rsc" y="24" />
-
-    <view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
-        <text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
-            multiline="true" width="312" selectable="true" />
+    <attribute name="isStarted" value="false" type="boolean" />
+    
+    <attribute name="currentCursorObject" value="null" />
+    
+    <attribute name="initObject" value="null"/>
+    
+    <handler name="oninit">
+        var tString = canvas.getLabelName(849)
+                        + " " + this.initObject.firstname 
+                        + " " + this.initObject.lastname
+                        + " " + canvas.getLabelName(850);
+                        
+        this._initText._infoText.setAttribute("text",tString);
+    </handler>
+    
+    <method name="startViewerSession">
+        <![CDATA[
+        
+            this.isStarted = true;
+            
+            this._subcontent.setAttribute("visibility","visible");
+            
+            this._initText.setAttribute("visibility","hidden");
+        
+            this._showScreenSharing._y.setAttribute("to",0);
+            this._showScreenSharing._height.setAttribute("to",canvas.height);
+            this._showScreenSharing._width.setAttribute("to",canvas.width);
+        
+            this._showScreenSharing.doStart();
+            
+            if ($debug) Debug.write("this.initObject ",this.initObject);
+            
+            this._subcontent._content._video.setAttribute("width",this.initObject.VWidth);
+            this._subcontent._content._video.setAttribute("height",this.initObject.VHeight);
+            
+            this._subcontent._content._video._videostream.playStream(this.initObject.streamPublishName,-1);
+            
+        ]]>
+    </method>
+    
+    <method name="doMinimize">
+        <![CDATA[
+           
+           this.isStarted = false;
+           
+           this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
+           this._showScreenSharing._height.setAttribute("to",100);
+           this._showScreenSharing._width.setAttribute("to",280);
+           
+           this._showScreenSharing.doStart();
+           
+           this._subcontent.setAttribute("visibility","hidden");
+           
+        ]]>
+    </method>
+    
+    <method name="updateCursor" args="x,y">
+        if (this.currentCursorObject == null) {
+            this.currentCursorObject = new lz.cursorObject(this._subcontent._content);
+        }
+        this.currentCursorObject.setAttribute("x",x);
+        this.currentCursorObject.setAttribute("y",y);
+    </method>    
+    
+    <view name="_initText">
+        
+        <!--
+        <view x="4" resource="warning_icon_rsc" y="24" />
+         -->
+         
+        <labelText name="_infoText" labelid="724" width="230" 
+                   x="10" y="26" multiline="true" />
+    
+        <simpleLabelButton name="_startButton" labelid="848" x="10" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.startViewerSession();
+            </handler>
+        </simpleLabelButton> 
+          
+        <simpleLabelButton name="_closeButton" labelid="851" x="138" width="124" y="78">
+            <handler name="onclick">
+                parent.parent.close();
+            </handler>
+        </simpleLabelButton>   
+        
     </view>
-	
-    <simpleLabelButton labelid="25" width="100" x="290" y="$once{ parent.height-22 }" 
-        onclick="this.parent.close();" />
+    
+    <view name="_subcontent" width="${ parent.width }" visibility="hidden"
+          y="20" height="${ parent.height - 48 }" clip="true">
+        
+        <view name="_content">
+            
+            <videoObjectPlayScreenShare name="_video" />
+            
+        </view>
+        
+        <vscrollbar />
+        <hscrollbar />
+        
+    </view>    
+    
+    <view name="_zoombar" x="10" visibility="hidden" y="${ parent.height-22 }">
+        
+	    <changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
+              boxPosition="up" initialNumber="100" maximum="200">
+            <handler name="oninitialNumber" args="i">
+                if (parent.parent.isStarted) {
+                    
+                    var newWidth = parent.parent.initObject.VWidth * (i/100);
+                    var newHeight = parent.parent.initObject.VHeight * (i/100);
+                    
+                    parent.parent._subcontent._content._video.setAttribute("width",newWidth);
+                    parent.parent._subcontent._content._video.setAttribute("height",newHeight);
+                    
+                }
+            </handler>
+        </changeWidthSlider>
+        
+	    <labelText x="64" y="6" labelid="253" />    
+	</view>
+    
+    <simpleLabelButton name="_close" visibility="hidden"
+        labelid="25" width="100" x="${ parent.width-102 }" 
+        y="${ parent.height-22 }" onclick="this.parent.close();" />
+        
+    <animatorgroup name="_showScreenSharing" start="false" 
+                   process="simultaneous" duration="1000" >
+        <handler name="onstop">
+            if ($debug) Debug.write("onstop this._y.to ",this._y.to);
+            if (!parent.isStarted) {
+                parent._initText.setAttribute("visibility","visible");
+            } else {
+                parent._zoombar.setAttribute("visibility","visible");
+                parent._close.setAttribute("visibility","visible");
+            }
+        </handler>
+        <animator name="_y" attribute="y" to="0" />
+        <animator name="_height" attribute="height" />
+        <animator name="_width" attribute="width" />
+    </animatorgroup>        
 
 </class>
 

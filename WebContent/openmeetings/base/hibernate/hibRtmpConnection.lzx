@@ -21,7 +21,7 @@
     <!-- refreshing the session regulary -->
     <attribute name="refreshDelegate" value="null" />
     
-   <!-- UserId-->
+    <!-- UserId-->
     <attribute name="UserID" value="1" type="number" />
     <!-- reconnect after each conferenceView -->
     <attribute name="reconnectAfterRoomleft" type="boolean" value="false" />
@@ -742,27 +742,37 @@
         <netRemoteCallHib name="newStream" funcname="newStream">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
-                Debug.write("newStream: ",value);
+                if ($debug) Debug.write("newStream: ",value);
+                if (value.isScreenClient) {
+                    return;
+                }
                 canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname); 
             </handler>   
-        </netRemoteCallHib>    
+        </netRemoteCallHib> 
+           
         <netRemoteCallHib name="closeStream" funcname="closeStream">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
-                Debug.write("**** closeStream: ",value);
-                //free the VideoContainer
-                canvas._videocontainer.closeStreamClient(value.publicSID); 
-                canvas.setAttribute('numberofpartners',canvas.getAttribute('numberofpartners')-1);       
+                if ($debug) Debug.write("**** closeStream: ",value);
+                if (value.isScreenClient) {
+                    if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName);   
+                } else {
+	                //free the VideoContainer
+	                canvas._videocontainer.closeStreamClient(value.publicSID); 
+	                canvas.setAttribute('numberofpartners',canvas.getAttribute('numberofpartners')-1);
+                }
                 //TODO:check first current tab
             </handler>   
-        </netRemoteCallHib>       
+        </netRemoteCallHib>  
+             
         <netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 ////Debug.write("clientregisterRoom: ",value);
                 //parent.getClientListScope.doCall();  
             </handler>   
-        </netRemoteCallHib>                 
+        </netRemoteCallHib>   
+                      
         <netRemoteCallHib name="roomDisconnect" funcname="roomDisconnect">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
@@ -884,6 +894,21 @@
             </handler>   
         </netRemoteCallHib>
         
+        <netRemoteCallHib name="newRed5ScreenCursor" funcname="newRed5ScreenCursor">
+            <netparam><method name="getValue">return null;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);   
+                    if (canvas.screenSharingDialogContainer != null) {
+                        var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+                        obj.updateCursor(value.cursor_x,value.cursor_y);
+                    }
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
+        
         <!--
             Red5 Screen Sharing
             newRed5ScreenSharing
@@ -894,7 +919,12 @@
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
                     if ($debug) Debug.write(" onResult newRed5ScreenSharing : ",value);   
-                    
+                    if (canvas.screenSharingDialogContainer == null) {
+                        canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+                    }
+                    new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
+		                        initObject:value 
+		                    }); 
                 ]]>
             </handler>   
         </netRemoteCallHib>

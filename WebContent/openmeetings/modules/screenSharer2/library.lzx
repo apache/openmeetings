@@ -3,6 +3,7 @@
     
 	
 	<include href="screenSharingDialog.lzx" />
-
+    <include href="videoObjectPlayScreenShare.lzx" />
+    
 
 </library>
