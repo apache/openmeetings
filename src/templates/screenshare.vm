@@ -29,6 +29,7 @@
     	<argument>$red5-host</argument> 
     	<argument>$red5-app</argument> 
     	<argument>$rtmp-port</argument> 
-    	<argument>$PUBLIC_SID</argument>     	
+    	<argument>$PUBLIC_SID</argument>   
+    	<argument>$LABELSHARER</argument>     	
     </application-desc> 
 </jnlp> 

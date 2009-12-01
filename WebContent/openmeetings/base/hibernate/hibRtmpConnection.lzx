@@ -755,7 +755,13 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("**** closeStream: ",value);
                 if (value.isScreenClient) {
-                    if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName);   
+                    if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
+                    
+                    if (canvas.screenSharingDialogContainer != null) {
+                        var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+                        obj.doClose();
+                    }
+                    
                 } else {
 	                //free the VideoContainer
 	                canvas._videocontainer.closeStreamClient(value.publicSID); 
@@ -899,7 +905,7 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);   
+                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);   
                     if (canvas.screenSharingDialogContainer != null) {
                         var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
                         obj.updateCursor(value.cursor_x,value.cursor_y);

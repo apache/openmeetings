@@ -113,6 +113,20 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String host = "btg199251";
 	public String app = "oflaDemo";
 	public int port = 1935;
+	
+	private String label730 = "Desktop Publisher";
+	private String label731 = "This application will publish your screen";
+	private String label732 = "Start Sharing";
+	private String label733 = "Stop Sharing";
+	public String label734 = "Select your screen Area:";
+	public String label735 = "Change width";
+	public String label737 = "Change height";
+	public String label738 = "SharingScreen X:";
+	public String label739 = "SharingScreen Y:";
+	public String label740 = "SharingScreen Width:";
+	public String label741 = "SharingScreen Height:";
+	public String label742 = "Connection was closed by Server";
+	public String label844 = "Show Mouse Position at viewers";
 
 	public Float imgQuality = new Float(0.40);
 
@@ -128,11 +142,34 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	{
 		instance = new ScreenShare();
 
-		if (args.length == 4) {
+		if (args.length == 5) {
+			
+			
 			instance.host = args[0];
 			instance.app = args[1];
 			instance.port = Integer.parseInt(args[2]);
 			instance.publishName = args[3];
+			
+			String labelTexts = args[4];
+			
+			if (labelTexts.length() > 0) {
+				String[] textArray = labelTexts.split(";");
+				
+				instance.label730 = textArray[0];
+				instance.label731 = textArray[1];
+				instance.label732 = textArray[2];
+				instance.label733 = textArray[3];
+				instance.label734 = textArray[4];
+				instance.label735 = textArray[5];
+				instance.label737 = textArray[6];
+				instance.label738 = textArray[7];
+				instance.label739 = textArray[8];
+				instance.label740 = textArray[9];
+				instance.label741 = textArray[10];
+				instance.label742 = textArray[11];
+				instance.label844 = textArray[12];
+				
+			}
 
 		} else {
 			instance = null;
@@ -174,11 +211,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public void createWindow()
 	{
 		try {
+			
+			ImageIcon start_btn = createImageIcon("/webstart_play.png");
+			ImageIcon stop_btn = createImageIcon("/webstart_stop.png");
 
 			UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
 			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
 
-			t = new JFrame("Desktop Publisher");
+			t = new JFrame(this.label730);
 			contentPane = t.getContentPane();
 			contentPane.setBackground(Color.WHITE);
 			textArea = new JLabel();
@@ -188,25 +228,25 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			textArea.setText("This application will publish your screen");
 			textArea.setBounds(10, 0, 400,24);
 
-			startButton = new JButton( "start Sharing" );
+			startButton = new JButton( this.label732, start_btn );
 			startButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					captureScreenStart();
 				}
 			});
-			startButton.setBounds(10, 50, 200, 24);
+			startButton.setBounds(30, 34, 200, 32);
 			t.add(startButton);
 
 
-			stopButton = new JButton( "stop Sharing" );
+			stopButton = new JButton( this.label733, stop_btn );
 			stopButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					captureScreenStop();
 				}
 			});
-			stopButton.setBounds(220, 50, 200, 24);
+			stopButton.setBounds(290, 34, 200, 32);
 			stopButton.setEnabled(false);
 			t.add(stopButton);
 
@@ -226,7 +266,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					System.exit(0);
 				}
 			});
-			exitButton.setBounds(190, 370, 200, 24);
+			exitButton.setBounds(290, 380, 200, 24);
 			t.add(exitButton);
 
 			Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
@@ -244,18 +284,24 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 			});
 			t.pack();
+			t.setLocation(30, 30);
 			t.setSize(500, 440);
 			t.setVisible(true);
 			t.setResizable(false);
 
 
-			System.err.println("initialized");
+			logger.debug("initialized");
 
 		} catch (Exception err)
 		{
-			System.out.println("createWindow Exception: ");
+			logger.error("createWindow Exception: ",err);
 			err.printStackTrace();
 		}
+	}
+	
+	protected static ImageIcon createImageIcon(String path) throws Exception {
+	    java.net.URL imgURL = ScreenShare.class.getResource(path);
+	    return new ImageIcon(imgURL);
 	}
 
 	public void showBandwidthWarning(String warning)
@@ -301,8 +347,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			invoke("setConnectionAsSharingClient",new Object[] { map }, this);
 			
 		} catch (Exception err) {
-			System.out.println("captureScreenStart Exception: ");
-			System.err.println(err);
+			logger.error("captureScreenStart Exception: ",err);
 			textArea.setText("Exception: "+err);
 			logger.error("[sendCursorStatus]",err);
 		}
@@ -317,8 +362,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			startStream(host, app, port, publishName);
 
 		} catch (Exception err) {
-			System.out.println("captureScreenStart Exception: ");
-			System.err.println(err);
+			logger.error("captureScreenStart Exception: ",err);
 			textArea.setText("Exception: "+err);
 		}
 	}
@@ -331,8 +375,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			stopButton.setEnabled(false);
 
 		} catch (Exception err) {
-			System.out.println("captureScreenStop Exception: ");
-			System.err.println(err);
+			logger.error("captureScreenStop Exception: ",err);
 			textArea.setText("Exception: "+err);
 		}
 	}
@@ -346,7 +389,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
     public void startStream( String host, String app, int port, String publishName) {
     	
-        System.out.println( "ScreenShare startStream" );
+    	logger.debug( "ScreenShare startStream" );
         this.publishName = publishName;
 
         videoTs = 0;

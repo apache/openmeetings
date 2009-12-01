@@ -274,7 +274,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			
 			//In case its a screen sharing we start a new Video for that
-			if (currentClient.getIsScreenClient()) {
+			if (currentClient != null && currentClient.getIsScreenClient() != null && currentClient.getIsScreenClient()) {
 			
 				log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
 				

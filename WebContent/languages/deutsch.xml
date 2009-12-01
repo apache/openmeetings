@@ -2533,7 +2533,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dr.</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+    <value>Eigenschaften</value>
   </string>
   <string id="844" name="screen sharer">
     <value>Show mouse position to viewers</value>
@@ -2545,18 +2545,30 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Share Audio with SIP and Video with Flash</value>
   </string>
   <string id="847" name="document panel">
-    <value>Full-Fit</value>
+    <value>Auto-Größe</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+    <value>Bildschirm sehen</value>
   </string>
   <string id="849" name="screen share">
-    <value>The user</value>
+    <value>Der Benutzer</value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+    <value>möchte seinen Bildschirm teilen. Möchten Sie es sehen?</value>
   </string>
   <string id="851" name="screen share">
-    <value>Close</value>
+    <value>Schließen</value>
+  </string>
+  <string id="852" name="screen sharer">
+    <value>Zoom</value>
+  </string>
+  <string id="853" name="screen sharer">
+    <value>The Session was closed by the sharing User!</value>
+  </string>
+  <string id="854" name="screen sharer">
+    <value>Pause</value>
+  </string>
+  <string id="855" name="screen sharer">
+    <value>Neuer Bildschirm verfügbar</value>
   </string>
 </language>

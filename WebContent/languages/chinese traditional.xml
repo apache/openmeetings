@@ -2565,4 +2565,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="851" name="screen share">
     <value>Close</value>
   </string>
+  <string id="852" name="screen sharer">
+    <value>Zoom</value>
+  </string>
+  <string id="853" name="screen sharer">
+    <value>The Session was closed by the sharing User!</value>
+  </string>
+  <string id="854" name="screen sharer">
+    <value>Pause</value>
+  </string>
+  <string id="855" name="screen sharer">
+    <value>New Screen Sharing</value>
+  </string>
 </language>

@@ -28,9 +28,9 @@
     
 </class>    
 
-<class name="screenSharingDialog" extends="guiPresenter" labelid="18"
+<class name="screenSharingDialog" extends="guiPresenter" labelid="855"
     docking="true" resizeable="false" closable="true" 
-    width="200" x="${ canvas.width - this.width - 20 }" height="100">
+    width="270" x="${ canvas.width - this.width - 20 }" height="100">
     
     <attribute name="isStarted" value="false" type="boolean" />
     
@@ -43,7 +43,13 @@
                         + " " + this.initObject.firstname 
                         + " " + this.initObject.lastname
                         + " " + canvas.getLabelName(850);
-                        
+        
+        if (parent.subviews.length > 1) {
+            this.setAttribute("y",((parent.subviews.length-1)*100)+40);
+        } else {
+            this.setAttribute("y",40);
+        }
+        
         this._initText._infoText.setAttribute("text",tString);
     </handler>
     
@@ -77,15 +83,28 @@
            
            this.isStarted = false;
            
+           this._subcontent._content._video._videostream.stop();
+           
            this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
            this._showScreenSharing._height.setAttribute("to",100);
-           this._showScreenSharing._width.setAttribute("to",280);
+           this._showScreenSharing._width.setAttribute("to",270);
            
            this._showScreenSharing.doStart();
+           
+           this._zoombar.setAttribute("visibility","hidden");
+           this._pause.setAttribute("visibility","hidden");
+           this._close.setAttribute("visibility","hidden");
            
            this._subcontent.setAttribute("visibility","hidden");
            
         ]]>
+    </method>
+    
+    <method name="doClose">
+        if (this.isStarted) {
+            this._subcontent._content._video._videostream.stop();
+        }
+        this.close();
     </method>
     
     <method name="updateCursor" args="x,y">
@@ -133,7 +152,23 @@
         
     </view>    
     
-    <view name="_zoombar" x="10" visibility="hidden" y="${ parent.height-22 }">
+    <view name="_zoombar" x="20" visibility="hidden" y="${ parent.height-26 }">
+        
+        <method name="setDefaultZoom">
+            if (parent.initObject.VWidth > parent._subcontent.width) {
+                var newZoom = Math.round((parent._subcontent.width/parent.initObject.VWidth)*100);
+                
+                if ($debug) Debug.write("newZoom ",newZoom);
+                
+                this._zoom.setSliderValue(newZoom);
+                
+                this._zoom.oninitialNumber.sendEvent(newZoom);
+            }
+        </method>
+        
+        <simplelayout axis="x" spacing="2" />
+        
+        <labelText labelid="852" resize="true" y="4" />
         
 	    <changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
               boxPosition="up" initialNumber="100" maximum="200">
@@ -153,9 +188,13 @@
 	    <labelText x="64" y="6" labelid="253" />    
 	</view>
     
+    <simpleLabelButton name="_pause" visibility="hidden"
+        labelid="854" width="100" x="${ parent.width-204 }" 
+        y="${ parent.height-22 }" onclick="this.parent.doMinimize();" />
+    
     <simpleLabelButton name="_close" visibility="hidden"
-        labelid="25" width="100" x="${ parent.width-102 }" 
-        y="${ parent.height-22 }" onclick="this.parent.close();" />
+        labelid="851" width="100" x="${ parent.width-102 }" 
+        y="${ parent.height-22 }" onclick="this.parent.doClose();" />
         
     <animatorgroup name="_showScreenSharing" start="false" 
                    process="simultaneous" duration="1000" >
@@ -165,7 +204,9 @@
                 parent._initText.setAttribute("visibility","visible");
             } else {
                 parent._zoombar.setAttribute("visibility","visible");
+                parent._zoombar.setDefaultZoom();
                 parent._close.setAttribute("visibility","visible");
+                parent._pause.setAttribute("visibility","visible");
             }
         </handler>
         <animator name="_y" attribute="y" to="0" />
