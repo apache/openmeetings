@@ -15,6 +15,7 @@ public class FlvRecordingMetaData {
 	
 	private Date recordStart;
 	private Date recordEnd;
+	private String streamName;
 	
 	private String freeTextUserName;
 	private Boolean isAudioOnly;
@@ -174,5 +175,18 @@ public class FlvRecordingMetaData {
 	public void setIsScreenData(Boolean isScreenData) {
 		this.isScreenData = isScreenData;
 	}
+
+	/**
+     * @hibernate.property
+     *  column="stream_name"
+     *  type="string"
+     */
+	public String getStreamName() {
+		return streamName;
+	}
+	public void setStreamName(String streamName) {
+		this.streamName = streamName;
+	}
+	
 	
 }

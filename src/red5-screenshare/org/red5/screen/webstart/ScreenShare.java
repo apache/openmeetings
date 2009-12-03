@@ -140,9 +140,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String label844 = "Show Mouse Position at viewers";
 	
 	public String label856 = "Recording";
-	public String label857 = "You may record and share your screen at the same time. " +
-			"To enable others to see your screen just hit the start button on the top. " +
-			"To only record the Session it is sufficient to click start recording.";
+	public String label857 = "<HTML>You may record and share your screen at the same time.<br/>" +
+			"To enable others to see your screen just hit the start button on the top.<br/>" +
+			"To only record the Session it is sufficient to click start recording.</HTML>";
 	public String label858 = "Start Recording";
 	public String label859 = "Stop Recording";
 
@@ -295,7 +295,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			textAreaHeaderRecordingDescr = new JLabel(); 
 			textAreaHeaderRecordingDescr.setText(this.label857);
 			contentPane.add(textAreaHeaderRecordingDescr);
-			textAreaHeaderRecordingDescr.setBounds(10, 310, 324, 54);
+			textAreaHeaderRecordingDescr.setBounds(10, 400, 324, 54);
 			
 			//*****
 			//Start Button Recording
@@ -308,7 +308,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					captureScreenStart();
 				}
 			});
-			startButtonRecording.setBounds(30, 400, 200, 32);
+			startButtonRecording.setBounds(30, 380, 200, 32);
 			t.add(startButtonRecording);
 			
 			//*****
@@ -322,7 +322,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					captureScreenStart();
 				}
 			});
-			stopButtonRecording.setBounds(290, 400, 200, 32);
+			stopButtonRecording.setBounds(290, 380, 200, 32);
 			stopButtonRecording.setEnabled(false);
 			t.add(stopButtonRecording);
 			
@@ -344,7 +344,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					System.exit(0);
 				}
 			});
-			exitButton.setBounds(290, 440, 200, 24);
+			exitButton.setBounds(290, 420, 200, 24);
 			t.add(exitButton);
 
 			//*****
@@ -634,7 +634,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 				
 				}
 				
-			} else if (call.getServiceMethodName().equals("sendCursorStatus")) {
+			} else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
 				
 				//Do not do anything
 				

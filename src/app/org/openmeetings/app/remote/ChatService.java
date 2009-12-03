@@ -131,19 +131,22 @@ public class ChatService implements IPendingServiceCallback {
     					if (conn instanceof IServiceCapableConnection) {
     						
     						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-    						log.debug("*..*idremote room_id: " + room_id);
-    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
-    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
-    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-    							log.debug("sending sendVarsToMessageWithClient to " + conn);
-    							if (rcl.getIsRecording()){
-    								StreamService.addChatEvent(rcl.getRoomRecordingName(),hsm);
-    							}							
-    						} else if (rcl.getIsChatNotification()) {
-    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
-    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-    							}
-    						}
+    						
+	    					if (!rcl.getIsScreenClient()) {
+	    						log.debug("*..*idremote room_id: " + room_id);
+	    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
+	    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
+	    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
+	    							log.debug("sending sendVarsToMessageWithClient to " + conn);
+	    							if (rcl.getIsRecording()){
+	    								StreamService.addChatEvent(rcl.getRoomRecordingName(),hsm);
+	    							}							
+	    						} else if (rcl.getIsChatNotification()) {
+	    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
+	    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
+	    							}
+	    						}
+	    					}
     						
 	    			 	}
 	    			}
@@ -318,10 +321,11 @@ public class ChatService implements IPendingServiceCallback {
     					if (conn instanceof IServiceCapableConnection) {
 			
     						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-    						log.debug("*..*idremote: " + rcl.getStreamid());
-    						log.debug("*..*my idstreamid: " + currentClient.getStreamid());
-    						((IServiceCapableConnection) conn).invoke("sendVarsToOverallChat",new Object[] { hsm }, this);
-    						
+    						if (!rcl.getIsScreenClient()) {
+	    						log.debug("*..*idremote: " + rcl.getStreamid());
+	    						log.debug("*..*my idstreamid: " + currentClient.getStreamid());
+	    						((IServiceCapableConnection) conn).invoke("sendVarsToOverallChat",new Object[] { hsm }, this);
+    						}
     					}
     				}
 				}

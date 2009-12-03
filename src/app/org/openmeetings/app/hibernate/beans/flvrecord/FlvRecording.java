@@ -35,6 +35,8 @@ public class FlvRecording {
 	private String deleted;
 	
 	private Long fileSize;
+	
+	private String recorderStreamId;
 
 	/**
 	 *
@@ -252,6 +254,20 @@ public class FlvRecording {
 	public void setRecordEnd(Date recordEnd) {
 		this.recordEnd = recordEnd;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="recorder_stream_id"
+     *  type="string"
+     */
+	public String getRecorderStreamId() {
+		return recorderStreamId;
+	}
+	public void setRecorderStreamId(String recorderStreamId) {
+		this.recorderStreamId = recorderStreamId;
+	}
+	
+	
 	
 	
 }

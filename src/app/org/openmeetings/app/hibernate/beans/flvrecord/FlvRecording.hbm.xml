@@ -7,6 +7,7 @@
       <generator class="increment"/>
     </id>
     <property name="fileName" type="string" column="filename"/>
+    <property name="comment" type="string" column="comment"/>
     <property name="fileHash" type="string" column="filehash"/>
     <property name="parentFileExplorerItemId" type="long" column="parent_fileexploreritem_id"/>
     <property name="room_id" type="long" column="room_id"/>
@@ -22,5 +23,6 @@
     <property name="fileSize" type="long" column="filesize"/>
     <property name="recordStart" type="java.util.Date" column="record_start"/>
     <property name="recordEnd" type="java.util.Date" column="record_end"/>
+    <property name="recorderStreamId" type="string" column="recorder_stream_id"/>
   </class>
 </hibernate-mapping>

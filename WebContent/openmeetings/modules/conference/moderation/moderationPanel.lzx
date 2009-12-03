@@ -152,9 +152,9 @@
         <view y="1" x="2" resource="background_screenview_rsc" />
     </simpleLabelButton>
     
-    <!--
+    <!-- -->
     <labelText name="_inner" fgcolor="0xFF3300" y="4" />
-     -->
+    
     
 </class>
 

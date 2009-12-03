@@ -8,12 +8,26 @@ import java.util.Set;
 
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.openmeetings.app.data.record.dao.ChatvaluesEventDaoImpl;
+import org.openmeetings.app.data.record.dao.RecordingClientDaoImpl;
+import org.openmeetings.app.data.record.dao.RecordingDaoImpl;
+import org.openmeetings.app.data.record.dao.RoomRecordingDaoImpl;
+import org.openmeetings.app.data.record.dao.RoomStreamDaoImpl;
+import org.openmeetings.app.data.record.dao.WhiteBoardEventDaoImpl;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.hibernate.beans.recording.ChatvaluesEvent;
+import org.openmeetings.app.hibernate.beans.recording.RecordingClient;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.hibernate.beans.recording.RoomRecording;
+import org.openmeetings.app.hibernate.beans.recording.RoomStream;
+import org.openmeetings.app.hibernate.beans.recording.WhiteBoardEvent;
+import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
+import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -24,7 +38,7 @@ import org.slf4j.Logger;
 
 public class FLVRecorderService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(FLVRecorderService.class, "openmeetings");
 
 	//Spring Beans
 	private ClientListManager clientListManager = null;
@@ -107,7 +121,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			//Receive flvRecordingId
 			Long flvRecordingId = this.flvRecordingDaoImpl.addFlvRecording("", roomRecordingName, null, currentClient.getUser_id(),
-									room_id, now, null, currentClient.getUser_id(), comment);
+									room_id, now, null, currentClient.getUser_id(), comment, currentClient.getStreamid());
 			
 			//Update Client and set Flag
 			currentClient.setIsRecording(true);
@@ -121,21 +135,34 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							log.error("is this users still alive? :"+rcl);
-							//Check if the Client is in the same room and same domain 
-								
-							((IServiceCapableConnection) conn).invoke("startedRecording",new Object[] { currentClient }, this);
 							
-							//If its a screen client we need another type of Meta Data
+							log.debug("is this users still alive? :"+rcl);
+							
+							//FIXME: Check if this function is really in use at the moment	
+							if (!rcl.getIsScreenClient()) {
+								((IServiceCapableConnection) conn).invoke("startedRecording",new Object[] { currentClient }, this);
+							}
+							
+							//If its the recording client we need another type of Meta Data
 							if (rcl.getIsScreenClient()) {
 							
-								String streamName_Screen = generateFileName(Long.valueOf(rcl.getStreamPublishName()).toString());
+								if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
+									
+									String streamName_Screen = generateFileName(rcl.getStreamPublishName().toString());
+									
+									//Start FLV Recording
+									recordShow(conn, rcl.getStreamPublishName(), streamName_Screen);
+									
+									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
+																			rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
+																						false, false, true, streamName_Screen);
+									
+									//Add Meta Data
+									rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+									
+									this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
 								
-								recordShow(conn, rcl.getStreamPublishName(), streamName_Screen);
-								
-								this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
-										rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
-													false, false, true);
+								}
 								
 							} else if 
 							//if the user does publish av, a, v
@@ -143,18 +170,24 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							(rcl.getAvsettings().equals("av") || 
 									rcl.getAvsettings().equals("a")){	
 								
-								String streamName = generateFileName(Long.valueOf(rcl.getBroadCastID()).toString());
+								String streamName = generateFileName(String.valueOf(rcl.getBroadCastID()).toString());
 								
+								//Start FLV recording
 								recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName);
 								
+								//Add Meta Data
 								boolean isAudioOnly = false;
 								if (rcl.getAvsettings().equals("a")){
 									isAudioOnly = true;
 								}
 								
-								this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
-										rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
-													isAudioOnly, false, false);
+								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
+																	rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
+																				isAudioOnly, false, false, streamName);
+								
+								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+								
+								this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
 								
 							} 
 								
@@ -192,5 +225,83 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.error("Error while saving stream: " + streamName, e);
 		}
 	}	
-
+	
+	/**
+	 * Stops recording the publishing stream for the specified
+	 * IConnection.
+	 *
+	 * @param conn
+	 */
+	public static void stopRecordingShow(IConnection conn, String broadcastId) throws Exception {
+		log.debug("** stopRecordingShow: "+conn);
+		log.debug("### Stop recording show for broadcastId: "+ broadcastId + " || " + conn.getScope().getContextPath());
+		ClientBroadcastStream stream = (ClientBroadcastStream) ScopeApplicationAdapter.getInstance().
+												getBroadcastStream(conn.getScope(), broadcastId);
+		// Stop recording.
+		stream.stopRecording();
+	}
+	
+	public Long stopRecordAndSave(IScope scope, String roomrecordingName, RoomClient currentClient){
+		try {
+			log.debug("stopRecordAndSave "+currentClient.getUsername()+","+currentClient.getUserip());
+			
+			
+			//get all stream and stop recording them
+			Collection<Set<IConnection>> conCollection = scope.getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							
+							RoomClient rcl = ClientListManager.getInstance().getClientByStreamId(conn.getClient().getId());
+							
+							//FIXME: Check if this function is really in use at the moment	
+//							if (!rcl.getIsScreenClient()) {
+//								((IServiceCapableConnection) conn).invoke("stoppedRecording",new Object[] { currentClient }, this);
+//							}
+							
+							log.debug("is this users still alive? :"+rcl);
+							
+							if (rcl.getIsScreenClient()) {
+								
+								if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
+								
+									//Stop FLV Recording
+									stopRecordingShow(conn, rcl.getStreamPublishName());
+									
+									//Update Meta Data
+									this.flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(),new Date());
+								}
+								
+							} else if (rcl.getAvsettings().equals("av") || 
+									rcl.getAvsettings().equals("a")){	
+								
+								stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString() );
+								
+								//Update Meta Data
+								this.flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(),new Date());
+								
+							}
+							
+						}
+					}
+				}
+			}				
+			
+			//Store to database
+			Long flvRecordingId = currentClient.getFlvRecordingId();
+			
+			this.flvRecordingDaoImpl.updateFlvRecordingEndTime(flvRecordingId, new Date());
+			
+			//Reset values
+			currentClient.setFlvRecordingId(null);
+			
+			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+			
+		} catch (Exception err) {
+			log.error("[stopRecordAndSave]",err);
+		}
+		return new Long(-1);
+	}
+	
 }

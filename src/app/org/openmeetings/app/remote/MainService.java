@@ -206,15 +206,18 @@ public class MainService implements IPendingServiceCallback {
 	    			for (Set<IConnection> conset : conCollection) {
 		    			for (IConnection cons : conset) {
 		    				if (cons != null) {
-		    					if (cons instanceof IServiceCapableConnection) {
-			    					if (!cons.equals(current)){
-			    						//log.error("sending roomDisconnect to " + cons);
-			    						//RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
-			    						//Send to all connected users
-										((IServiceCapableConnection) cons).invoke("roomConnect",new Object[] { currentClient }, this);
-										//log.error("sending roomDisconnect to " + cons);
-			    					}
-			    				}
+		    					RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
+		    					if (!rcl.getIsScreenClient()) {
+			    					if (cons instanceof IServiceCapableConnection) {
+				    					if (!cons.equals(current)){
+				    						//log.error("sending roomDisconnect to " + cons);
+				    						//RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
+				    						//Send to all connected users
+											((IServiceCapableConnection) cons).invoke("roomConnect",new Object[] { currentClient }, this);
+											//log.error("sending roomDisconnect to " + cons);
+				    					}
+				    				}
+		    					}
 		    			 	}
 		    			}
 	    			}
@@ -299,15 +302,18 @@ public class MainService implements IPendingServiceCallback {
 	    			for (Set<IConnection> conset : conCollection) {
 		    			for (IConnection cons : conset) {
 		    				if (cons != null) {
-		    					if (cons instanceof IServiceCapableConnection) {
-			    					if (!cons.equals(current)){
-			    						//log.error("sending roomDisconnect to " + cons);
-			    						//RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
-			    						//Send to all connected users
-										((IServiceCapableConnection) cons).invoke("roomConnect",new Object[] { currentClient }, this);
-										//log.error("sending roomDisconnect to " + cons);
-			    					}
-			    				}
+		    					RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
+		    					if (!rcl.getIsScreenClient()) {
+			    					if (cons instanceof IServiceCapableConnection) {
+				    					if (!cons.equals(current)){
+				    						//log.error("sending roomDisconnect to " + cons);
+				    						//RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
+				    						//Send to all connected users
+											((IServiceCapableConnection) cons).invoke("roomConnect",new Object[] { currentClient }, this);
+											//log.error("sending roomDisconnect to " + cons);
+				    					}
+				    				}
+		    					}
 		    			 	}
 		    			}
 	    			}
