@@ -1416,7 +1416,22 @@
             ]]>
         </handler>   
     </netRemoteCallHib>  
-     
+    
+    
+    <!-- Recording of Meetings -->
+    <netRemoteCallHib name="checkForRecording" funcname="flvrecorderservice.checkForRecording">
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("checkForRecording: ",value);
+                if (value == null) {
+                    new lz.recordingStartWin(canvas.main_content._content.inner);
+                } else {
+                    new lz.errorPopupUserInfo(canvas,{error:canvas.getLabelName(418),user:value});
+                }
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
     
 </class>
 

@@ -126,6 +126,9 @@ public class RoomClient {
 	private Boolean isRecording = false;
 	private String roomRecordingName;
 	
+	private Long flvRecordingId;
+	private Long flvRecordingMetaDataId;
+	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
 	 * Only interesting in the Event Modus
@@ -615,6 +618,22 @@ public class RoomClient {
 	}
 	public void setStreamPublishName(String streamPublishName) {
 		this.streamPublishName = streamPublishName;
+	}
+
+	public Long getFlvRecordingId() {
+		return flvRecordingId;
+	}
+
+	public void setFlvRecordingId(Long flvRecordingId) {
+		this.flvRecordingId = flvRecordingId;
+	}
+
+	public Long getFlvRecordingMetaDataId() {
+		return flvRecordingMetaDataId;
+	}
+
+	public void setFlvRecordingMetaDataId(Long flvRecordingMetaDataId) {
+		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
 	
 }

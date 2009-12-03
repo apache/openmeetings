@@ -761,6 +761,10 @@ public class StreamService implements IPendingServiceCallback {
 		return new Long(-1);
 	}
 	
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public RoomClient checkForRecording(){
 		try {
 			IConnection current = Red5.getConnectionLocal();

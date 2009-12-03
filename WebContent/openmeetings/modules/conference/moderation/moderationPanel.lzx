@@ -102,9 +102,9 @@
         <labelTooltip inittwice="true" labelid="84" />      
     </simpleLabelButton>
     
-    <!-- --> 
-    <!-- Uncomment when the recording functionality is back
-    
+    <!-- 
+        Uncomment when the recording functionality is back
+     -->
     <labelText labelid="417" y="6" width="100" fgcolor="0xFFFFFF"
                visibility="$once{ canvas.showRecording }" />
     
@@ -116,7 +116,7 @@
             }
         </handler>
         <handler name="onclick">
-            this.parent.checkForRecording.doCall();         
+            canvas.thishib.checkForRecording.doCall();         
         </handler>
         <view resource="start_recording_conf" x="3" y="1" />
         <labelTooltip labelid="415" />
@@ -131,9 +131,6 @@
         <labelTooltip labelid="416" />
     </simpleLabelButton>   
     
-    -->
-        
-    
     <netRemoteCallHib name="stopRecordMeetingStream" remotecontext="$once{ canvas.thishib }"
         funcname="streamservice.stopRecordMeetingStream"  >
         <netparam><method name="getValue">return parent.parent.recordingsName;</method></netparam>
@@ -142,23 +139,6 @@
             Debug.write("+++++++++++++++++ stopRecordingShow: ",value); 
         </handler>  
     </netRemoteCallHib>     
-    
-    <netRemoteCallHib name="checkForRecording" funcname="streamservice.checkForRecording" 
-                      remotecontext="$once{ canvas.thishib }" >  
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            Debug.write("+++++++++++++++++ checkForRecording: ",value); 
-            parent.recordingUser = value;
-            if (parent.initial){
-                parent.initial = false;
-            } else if (value==null) {
-                new lz.recordingStartWin(canvas.main_content._content.inner,{modpanel:parent});
-            } else {
-                new lz.errorPopupUserInfo(canvas,{error:canvas.getLabelName(418),user:value});
-            }
-            parent.setMessage();
-        </handler>  
-    </netRemoteCallHib>  
    
     <simpleLabelButton labelid="239" height="24" name="_doShare" style="itemStyle"
                        width="180" y="2" enabled="${  canvas.ismoderator }">
@@ -168,17 +148,6 @@
         </handler>
         <view y="1" x="2" resource="background_screenview_rsc" />
     </simpleLabelButton>
-    
-    <!--
-    <simpleLabelButton labelid="415" height="24" name="_doRecord" style="itemStyle"
-                       width="180" y="2" enabled="${  canvas.ismoderator }">
-        <handler name="onclick">
-            //Start Streen Grabbing Incl.-Recording
-            this.parent.checkForApplyScreen("yes");
-        </handler>
-        <view resource="start_recording_conf" x="3" y="1" />
-    </simpleLabelButton>
-     -->
     
     <labelText name="_inner" fgcolor="0xFF3300" y="4" />
     

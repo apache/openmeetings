@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="flvrecording_metadata" lazy="false" name="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData">
+    <id column="flvrecording_metadata_id" name="flvRecordingMetaDataId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="flvrecording_id" lazy="false" cascade="none" name="flvRecording" class="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording"/>
+    <property name="recordStart" type="java.util.Date" column="record_start"/>
+    <property name="recordEnd" type="java.util.Date" column="record_end"/>
+    <property name="freeTextUserName" type="java.util.Date" column="free_text_user_name"/>
+    <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
+    <property name="isVideoOnly" type="boolean" column="is_video_only"/>
+    <property name="insertedBy" type="long" column="inserted_by"/>
+    <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="updated" type="java.util.Date" column="updated"/>
+    <property name="isScreenData" type="boolean" column="is_screen_data"/>
+  </class>
+</hibernate-mapping>

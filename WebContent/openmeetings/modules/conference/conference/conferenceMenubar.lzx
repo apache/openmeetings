@@ -175,9 +175,15 @@
             <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
             <menuseparator/> 
             <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
-            	<handler name="onselect" args="sel">
-            		canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
-            	</handler>
+                <handler name="onselect" args="sel">
+                    canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+                </handler>
+            </_labelMenuItem>
+            <menuseparator/> 
+            <_labelMenuItem labelid="415" enabled="${ canvas.ismoderator }">
+                <handler name="onselect" args="sel">
+                    canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+                </handler>
             </_labelMenuItem>
             <menuseparator/> 
             <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
