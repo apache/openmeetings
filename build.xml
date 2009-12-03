@@ -7,6 +7,12 @@
     <property name="test.src.dir" value="${basedir}/src/test"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/temp"/>
+	
+	<!-- screen.out.dir -->
+	<property name="screen.out.dir" value="${basedir}/screen_compile" />
+	
+	<!-- screen.src.dir -->
+	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />	
     
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
@@ -27,24 +33,69 @@
     <property file="${conf.dir}/hibernate.properties" />
 
     <!-- libraries -->
-    <property name="project.lib" value="./WebContent/WEB-INF/lib"/>
+    <property name="project.lib" value="./lib"/>
 
-    <!-- Web-Start -->
-    <property name="webstart.lib" value="./WebContent/screen"/>
+	 <!-- Hibernate -->
+    <property name="hibernate.lib" value="${project.lib}/hibernate_331"/>
 	
-	<!-- Junit Lib
+    <!-- Log4j -->
+    <property name="log4j.lib" value="${project.lib}/log4j" />
+    <!-- xDoclet -->
+    <property name="xdoclet.lib" value="${project.lib}/xdoclet" />
+    <!-- Jakarta commons -->
+    <property name="jakarta.common.lib" value="${project.lib}/jakarta-commons" />
+    <!--JDBC Drivers-->
+    <property name="database.lib" value="${project.lib}/database" />
+    <property name="red5.lib" value="${project.lib}/red5_08rc3" />
+    <property name="upload.lib" value="${project.lib}/upload" />
+    <property name="xstream.lib" value="${project.lib}/xstream" />
+    <property name="junit.lib" value="${project.lib}/junit" />
+    <property name="web.lib" value="${project.lib}" />
+    <property name="ical.lib" value="${project.lib}/ical4j" />
+    <!-- Apache Axis2 -->
+    <property name="axis2.lib" value="${project.lib}/axis2-1.3" />
+    <!-- JMF Libe -->
+    <property name="jmf.lib" value="${project.lib}/jmf" />
+    <!-- SLF4J -->
+    <property name="slf4j.lib" value="${project.lib}/slf4j" />
+    <!-- Apache Velocity -->
+    <property name="velocity.lib" value="${project.lib}/velocity" />
+    <!-- Apache Batik -->
+    <property name="batik.lib" value="${project.lib}/batik_17" />
+    <property name="java2swf.lib" value="${project.lib}/java2swf" />
+	<!-- Junit -->
+    <property name="junit.lib" value="${project.lib}/junit" />
 	
-	This part could be removed in the future, we have
-	to use Spring Mock Objects 
-	 -->
-    <property name="junit.lib" value="${basedir}/lib/junit"/>
+	<!-- screenshare.lib -->
+    <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
     
+	<!-- screenshare.lib -->
+    <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
+    	
     <!-- compile classpath -->
     <path id="compile.classpath">
-    	<pathelement location="${basedir}/WebContent/WEB-INF/classes" />
+        <fileset dir="${log4j.lib}" includes="*.jar"/>
+        <fileset dir="${hibernate.lib}" includes="*.jar"/>
         <fileset dir="${project.lib}" includes="*.jar"/>
-        <fileset dir="${webstart.lib}" includes="*.jar"/>
+        <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
+        <fileset dir="${red5.lib}" includes="*.jar"/>
+        <fileset dir="${upload.lib}" includes="*.jar"/>
+        <fileset dir="${xstream.lib}" includes="*.jar"/>
+        <fileset dir="${junit.lib}" includes="*.jar"/>
+        <fileset dir="${web.lib}" includes="*.jar"/>
+        <fileset dir="${slf4j.lib}" includes="*.jar"/>
+        <fileset dir="${axis2.lib}" includes="*.jar"/>
+        <fileset dir="${velocity.lib}" includes="*.jar"/>
+        <fileset dir="${batik.lib}" includes="*.jar"/>
+        <fileset dir="${ical.lib}" includes="*.jar"/>
+        <fileset dir="${java2swf.lib}" includes="*.jar"/>
+        <fileset dir="${jmf.lib}" includes="*.jar"/>
     	<fileset dir="${junit.lib}" includes="*.jar"/>
+    </path>
+	
+	<!-- screenshare classpath -->
+	<path id="screenshare.classpath">
+        <fileset dir="${screenshare.lib}" includes="*.jar"/>
     </path>
 
     <!-- start of xdoclet2 -->
@@ -153,6 +204,7 @@
 
 	<target name="prepare">
         <mkdir dir="${main.out.dir}"/>
+		<mkdir dir="${screen.out.dir}" />
 	</target>
 	
     <!-- Check timestamp on files
@@ -223,6 +275,17 @@
                 </patternset>
             </fileset>          
         </copy>
+    	
+    	<!-- Screen Share Application -->
+        <copy todir="${screen.out.dir}" includeEmptyDirs="yes">
+            <fileset dir="${screen.src.dir}">
+                <patternset>
+                    <include name="**/*.xml"/>
+                    <include name="**/*.png"/>
+                </patternset>
+            </fileset>
+        </copy>
+    	
     </target>
     
 
@@ -349,6 +412,18 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
+    	
+    	<!-- Screen Share -->
+        <jar destfile="${basedir}/WebContent/red5-screenshare/red5-screenshare.jar">
+            <fileset dir="${screen.out.dir}">
+                <include name="**/**"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar2.classpath}"/>
+            </manifest>
+        </jar>
         
     </target>
     
@@ -372,6 +447,10 @@
             >
           <path>
             <fileset dir="${basedir}/WebContent/screen" >
+                 <include name="**/*.jar" />
+                
+            </fileset>
+          	<fileset dir="${basedir}/WebContent/red5-screenshare" >
                  <include name="**/*.jar" />
                 
             </fileset>
@@ -406,7 +485,11 @@
         </javac>
         <javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
-        </javac>        
+        </javac>
+    	<!-- compile screen share -->
+    	<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
+            <classpath refid="screenshare.classpath"/>
+        </javac>
     </target>
 	
 	<target name="doStartServer" depends="compile">
@@ -437,6 +520,7 @@
     <target name="cleanForBinary" description="Clean For Binary">
         <delete dir="${dist.dir}"/>
         <delete dir="${main.out.dir}"/>
+    	<delete dir="${screen.out.dir}"/>
         <delete file="filetest.keystore" />
     </target>
 
