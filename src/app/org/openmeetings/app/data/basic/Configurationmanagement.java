@@ -44,7 +44,7 @@ public class Configurationmanagement {
  
 	public Configuration getConfKey(long user_level, String CONF_KEY) {
 		try {
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				Configuration configuration = null;
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
