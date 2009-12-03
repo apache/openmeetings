@@ -8,7 +8,9 @@ import java.util.Vector;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
@@ -94,23 +96,23 @@ public class LdapAuthBase {
 	    	ldap_admin_dn = "";
 	    
 	    if(!ldap_auth_type.equals(LDAP_AUTH_TYPE_NONE) && ldap_admin_dn.length() > 0){
-	    	log.debug("Authentification to LDAP - Server start");
+	    	log.debug("\n\nAuthentification to LDAP - Server start");
 	    	try {
 	    		loginToLdapServer();
 	    	
 	    		authContext = new InitialDirContext(ldapAuthenticateProperties);
 	    	} catch (Exception ae){
-	    		log.error("Authentification on LDAP Server failed : " + ae.getMessage());
+	    		log.error("\n\nAuthentification on LDAP Server failed : " + ae.getMessage());
 	    		return false;
 	    	}
 	    }
 	    
 	    else{
-	    	log.debug("Connection to LDAP - Server start (without Server login)");
+	    	log.debug("\n\nConnection to LDAP - Server start (without Server login)");
 	    	try{
 	    		authContext = new InitialDirContext(ldapAuthenticateProperties);
 	    	}catch(Exception e){
-	    		log.error("Connection to LDAP Server failed : " + e.getMessage());
+	    		log.error("\n\nConnection to LDAP Server failed : " + e.getMessage());
 	    		return false;
 	    	}
 	    }
@@ -196,7 +198,6 @@ public class LdapAuthBase {
 				    		 if(obj != null)
 				    			 val = String.valueOf(obj);
 			    		 }
-			    		 
 			    		 innerMap.put(key,val );
 			    	 }
 			     }
@@ -213,4 +214,33 @@ public class LdapAuthBase {
 	}
 	
 	//-------------------------------------------------------------------------------------------------------
+
+	/**
+	 * @param searchBase
+	 * @return
+	 */
+	public HashMap<String, String> getUidCnHashMap(String searchBase) {
+		HashMap<String, String> uidCnDictionary = new HashMap<String, String>();
+
+		SearchControls searchCtls = new SearchControls();
+		searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+		NamingEnumeration<SearchResult> results = null;
+		try {
+			results = authContext.search(searchBase, "objectclass=person",  searchCtls);
+			while (results.hasMore()) {
+				SearchResult searchResult = (SearchResult) results.next();
+				String cn = searchResult.getName();
+				Attributes attributes = searchResult.getAttributes();
+				Attribute attrib = attributes.get("uid");
+				
+				if (attrib != null) {
+					String uid = (String) attrib.get();
+					uidCnDictionary.put(uid, cn);
+				}
+			}
+		} catch (NamingException e) {
+			log.error("Error occured on LDAP Search : " + e.getMessage());
+		}
+		return uidCnDictionary;
+	}
 }

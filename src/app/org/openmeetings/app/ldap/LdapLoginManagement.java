@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
+import java.util.Scanner;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -37,6 +38,7 @@ public class LdapLoginManagement {
 	public static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
 	public static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
 	public static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_base";
+	public static final String CONFIGKEY_LDAP_SERVER_TYPE = "ldap_server_type"; //for OpenLDAP use only
 	public static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
 	
 	public static final String CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL = "field_user_principal";
@@ -167,8 +169,7 @@ public class LdapLoginManagement {
 	 * 
 	 */
 	//----------------------------------------------------------------------------------------
-	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID, 
-			Boolean storePermanent, Long language_id) {
+	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID) {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 		
 		// Retrieve Configuration Data
@@ -188,6 +189,10 @@ public class LdapLoginManagement {
 		
 		// Connection URL
 		String ldap_url = configData.get(CONFIGKEY_LDAP_URL);
+
+		//for OpenLDAP only
+		// LDAP SERVER TYPE to search accordingly
+		String ldap_server_type = configData.get(CONFIGKEY_LDAP_SERVER_TYPE);
 		
 		// Username for LDAP SERVER himself
 		String ldap_admin_dn = configData.get(CONFIGKEY_LDAP_ADMIN_DN);
@@ -197,7 +202,7 @@ public class LdapLoginManagement {
 				
 		// SearchScope for retrievment of userdata
 		String ldap_search_scope = configData.get(CONFIGKEY_LDAP_SEARCH_SCOPE);
-		
+
 		// FieldName for Users's Prinicipal Name
 		String ldap_fieldname_user_principal = configData.get(CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL);
 		
@@ -222,16 +227,41 @@ public class LdapLoginManagement {
 		ldap_admin_dn = ldap_admin_dn.replaceAll(":", "=");
 		
 		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn, ldap_passwd, ldap_auth_type);
+
+		log.debug("authenticating admin...");
+		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
 		
-		try{
-			if(!lAuth.authenticateUser(user, passwd))
-				return new Long(-11);
-		}catch(Exception e ){
-			log.error("Error on LdapAuth : " + e.getMessage());
-			return null;
+		log.debug("Checking server type...");
+		String ldapUserDN = user;
+		//for OpenLDAP only
+		if (ldap_server_type.equalsIgnoreCase("OpenLDAP")) {
+			log.debug("LDAP server is OpenLDAP");
+			log.debug("LDAP search base" + ldap_search_scope);
+			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(ldap_search_scope);
+			if (uidCnDictionary.get(user) != null){
+				ldapUserDN = uidCnDictionary.get(user) + "," + ldap_search_scope;
+				log.debug("Authentication with DN: "+ldapUserDN);
+			}
+			try{
+				if(!lAuth.authenticateUser(ldapUserDN, passwd)) {
+					log.error(ldapUserDN + " not authenticated.");
+					return new Long(-11);
+				}
+			}catch(Exception e ){
+				log.error("Error on LdapAuth : " + e.getMessage());
+				return null;
+			}
+		} else {
+			try{
+				if(!lAuth.authenticateUser(user, passwd))
+					return new Long(-11);
+			}catch(Exception e ){
+				log.error("Error on LdapAuth : " + e.getMessage());
+				return null;
+			}
 		}
 		
-		// Pruefen, ob user bereits vorhanden ist
+		// Prüfen, ob user bereits vorhanden ist
 		
 		Users u = null;
 		
@@ -259,9 +289,8 @@ public class LdapLoginManagement {
 			attributes.add(LDAP_KEY_TOWN); // Town
 			attributes.add(LDAP_KEY_PHONE); // Phone
 			
-			
 			Vector<HashMap<String, String>> result = lAuth.getData(ldap_search_scope, ldap_search_filter, attributes);
-			
+
 			if(result == null || result.size() < 1){
 				log.error("Error on Ldap request - no result for user " + user);
 				return new Long(-10);
@@ -286,7 +315,7 @@ public class LdapLoginManagement {
 				}
 				
 				// Update Session
-				Boolean bool = Sessionmanagement.getInstance().updateUser(SID, userid, storePermanent, language_id);
+				Boolean bool = Sessionmanagement.getInstance().updateUser(SID, userid);
 				
 				if (bool==null){
 					//Exception
@@ -323,7 +352,7 @@ public class LdapLoginManagement {
 			}
 			
 			// Update Session
-			Boolean bool = Sessionmanagement.getInstance().updateUser(SID, u.getUser_id(), storePermanent, language_id);
+			Boolean bool = Sessionmanagement.getInstance().updateUser(SID, u.getUser_id());
 			
 			if (bool==null){
 				//Exception
