@@ -129,6 +129,8 @@ public class RoomClient {
 	private Long flvRecordingId;
 	private Long flvRecordingMetaDataId;
 	
+	private Boolean screenPublishStarted;
+	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
 	 * Only interesting in the Event Modus
@@ -635,5 +637,15 @@ public class RoomClient {
 	public void setFlvRecordingMetaDataId(Long flvRecordingMetaDataId) {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
+
+	public Boolean getScreenPublishStarted() {
+		return screenPublishStarted;
+	}
+
+	public void setScreenPublishStarted(Boolean screenPublishStarted) {
+		this.screenPublishStarted = screenPublishStarted;
+	}
+	
+	
 	
 }

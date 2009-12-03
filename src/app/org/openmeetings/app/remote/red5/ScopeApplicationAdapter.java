@@ -32,6 +32,7 @@ import org.openmeetings.app.quartz.scheduler.QuartzMeetingReminderJob;
 import org.openmeetings.app.quartz.scheduler.QuartzRecordingJob;
 import org.openmeetings.app.quartz.scheduler.QuartzSessionClear;
 import org.openmeetings.app.remote.ConferenceService;
+import org.openmeetings.app.remote.FLVRecorderService;
 import org.openmeetings.app.remote.MeetingMemberService;
 import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.StreamService;
@@ -44,6 +45,7 @@ import org.openmeetings.server.beans.messages.ScreenSharingMessage;
 import org.openmeetings.server.beans.messages.ScreenSharingNewFrame;
 import org.openmeetings.server.cache.ServerSharingSessionList;
 import org.openmeetings.server.socket.ServerSocketMinaProcess;
+import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
@@ -60,13 +62,14 @@ import org.slf4j.Logger;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	IPendingServiceCallback, IStreamAwareScopeHandler {
+
+	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, "openmeetings");
 	
 	//Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;
 	private EmoticonsManager emoticonsManager = null;
 	private WhiteBoardService whiteBoardService = null;
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, "openmeetings");
+	private FLVRecorderService flvRecorderService = null;
 
 	//This is the Folder where all executables are written
 	//TODO:fix hardcoded name of webapp
@@ -108,6 +111,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	}
 	public synchronized void setWhiteBoardService(WhiteBoardService whiteBoardService) {
 		this.whiteBoardService = whiteBoardService;
+	}
+	public FLVRecorderService getFlvRecorderService() {
+		return flvRecorderService;
+	}
+	public void setFlvRecorderService(FLVRecorderService flvRecorderService) {
+		this.flvRecorderService = flvRecorderService;
 	}
 
 	public synchronized void resultReceived(IPendingServiceCall arg0) {
@@ -198,35 +207,169 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return true;
 	}
 	
-	public synchronized void setConnectionAsSharingClient(Map map) {
+	public synchronized Map screenSharerAction(Map map) {
 		try {
 			
-			IConnection conn = Red5.getConnectionLocal();
-			IServiceCapableConnection service = (IServiceCapableConnection) conn;
+			IConnection current = Red5.getConnectionLocal();
+			IServiceCapableConnection service = (IServiceCapableConnection) current;
+			
+			
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			Map returnMap = new HashMap();
+			returnMap.put("result", "stopAll");
+			
+			if (currentClient != null) {
+				
+				boolean stopStreaming = Boolean.valueOf(map.get("stopStreaming").toString());
+				boolean stopRecording = Boolean.valueOf(map.get("stopRecording").toString());
+				
+				
+				if (stopStreaming) {
+					
+					log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
+					
+					//Notify all users of the same Scope
+					Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+					for (Set<IConnection> conset : conCollection) {
+						for (IConnection conn : conset) {
+							if (conn != null) {
+								if (conn instanceof IServiceCapableConnection) {
+									if (conn.equals(current)){
+										continue;
+									} else {
+										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+										//log.debug("is this users still alive? :"+rcl);
+										//Check if the Client is in the same room and same domain 
+										IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+										//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+										iStream.invoke("stopRed5ScreenSharing",new Object[] { currentClient }, this);
+										log.debug("send Notification to");
+									}
+								}
+							}
+						}
+					}
+					
+					if (currentClient.getIsRecording()) {
+						
+						returnMap.put("result", "stopSharingOnly");
+						
+					}
+					
+				}
+				
+				if (stopRecording) {
+					
+					
+					
+					
+				}
+			
+				
+			}
+			
+			return returnMap;
+			
+		} catch (Exception err){
+			log.error("[screenSharerAction]",err);
+		}	
+		return null;
+	}
+	
+	public synchronized Map setConnectionAsSharingClient(Map map) {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			//IServiceCapableConnection service = (IServiceCapableConnection) current;
 			
 			log.debug("### setConnectionAsSharingClient: ");
 			
-			RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 
-			if (rcl != null) {
-				rcl.setIsScreenClient(true);
+			if (currentClient != null) {
 				
-				rcl.setVX(Integer.parseInt(map.get("screenX").toString()));
-				rcl.setVY(Integer.parseInt(map.get("screenY").toString()));
-				rcl.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
-				rcl.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+				boolean startRecording = Boolean.valueOf(map.get("startRecording").toString());
+				boolean startStreaming = Boolean.valueOf(map.get("startStreaming").toString());
 				
-				log.debug("screen x,y,width,height "+rcl.getVX()+" "+rcl.getVY()+" "+rcl.getVWidth()+" "+rcl.getVHeight());
+				//Set this connection to be a RTMP-Java Client
+				currentClient.setIsScreenClient(true);
 				
-				this.clientListManager.updateClientByStreamId(conn.getClient().getId(), rcl);
+				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
+				
+				Map returnMap = new HashMap();
+				returnMap.put("alreadyPublished", false);
+				
+				//if is already started screen sharing, then there is no need to start it again
+				if (currentClient.getScreenPublishStarted() != null && currentClient.getScreenPublishStarted()) {
+					returnMap.put("alreadyPublished", true);
+				}
+				
+				if (startStreaming) {
+					
+					currentClient.setVX(Integer.parseInt(map.get("screenX").toString()));
+					currentClient.setVY(Integer.parseInt(map.get("screenY").toString()));
+					currentClient.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
+					currentClient.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+					
+					log.debug("screen x,y,width,height "+currentClient.getVX()+" "+currentClient.getVY()+" "+currentClient.getVWidth()+" "+currentClient.getVHeight());
+					
+					log.debug("publishName "+map.get("publishName"));
+					
+					currentClient.setStreamPublishName(map.get("publishName").toString());
+				
+					RoomClient currentScreenUser = this.clientListManager.getClientByPublicSID(currentClient.getStreamPublishName());
+					
+					currentClient.setFirstname(currentScreenUser.getFirstname());
+					currentClient.setLastname(currentScreenUser.getLastname());
+					
+					//This is duplicated, but its not sure that in the meantime somebody requests this Client Object Info
+					this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
+					
+					log.debug("start streamPublishStart Is Screen Sharing ");
+					
+					//Notify all users of the same Scope
+					Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+					for (Set<IConnection> conset : conCollection) {
+						for (IConnection conn : conset) {
+							if (conn != null) {
+								if (conn instanceof IServiceCapableConnection) {
+									if (conn.equals(current)){
+										continue;
+									} else {
+										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+										//log.debug("is this users still alive? :"+rcl);
+										//Check if the Client is in the same room and same domain 
+										IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+										//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+										iStream.invoke("newRed5ScreenSharing",new Object[] { currentClient }, this);
+										log.debug("send Notification to");
+									}
+								}
+							}
+						}
+					}
+				
+				}
+				
+				if (startRecording) {
+					
+					String recordingName = "Recording "+CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+					
+					this.flvRecorderService.recordMeetingStream( recordingName, "");
+					
+				}
+				
+				return returnMap;
 				
 			} else {
-				throw new Exception("Could not find Screen Sharing Client "+conn.getClient().getId());
+				throw new Exception("Could not find Screen Sharing Client "+current.getClient().getId());
 			}
 			
 		} catch (Exception err){
 			log.error("[setConnectionAsSharingClient]",err);
-		}		
+		}	
+		return null;
 	}
 	
 	/**
@@ -273,34 +416,34 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			
-			//In case its a screen sharing we start a new Video for that
-			if (currentClient != null && currentClient.getIsScreenClient() != null && currentClient.getIsScreenClient()) {
-			
-				log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
-				
-				//Notify all users of the same Scope
-				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-				for (Set<IConnection> conset : conCollection) {
-					for (IConnection conn : conset) {
-						if (conn != null) {
-							if (conn instanceof IServiceCapableConnection) {
-								if (conn.equals(current)){
-									continue;
-								} else {
-									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									//log.debug("is this users still alive? :"+rcl);
-									//Check if the Client is in the same room and same domain 
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-									iStream.invoke("stopRed5ScreenSharing",new Object[] { currentClient }, this);
-									log.debug("send Notification to");
-								}
-							}
-						}
-					}
-				}
-				
-			}
+//			//In case its a screen sharing we start a new Video for that
+//			if (currentClient != null && currentClient.getIsScreenClient() != null && currentClient.getIsScreenClient()) {
+//			
+//				log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
+//				
+//				//Notify all users of the same Scope
+//				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+//				for (Set<IConnection> conset : conCollection) {
+//					for (IConnection conn : conset) {
+//						if (conn != null) {
+//							if (conn instanceof IServiceCapableConnection) {
+//								if (conn.equals(current)){
+//									continue;
+//								} else {
+//									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+//									//log.debug("is this users still alive? :"+rcl);
+//									//Check if the Client is in the same room and same domain 
+//									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+//									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+//									iStream.invoke("stopRed5ScreenSharing",new Object[] { currentClient }, this);
+//									log.debug("send Notification to");
+//								}
+//							}
+//						}
+//					}
+//				}
+//				
+//			}
 			
 			//The Room Client can be null if the Client left the room by using logicalRoomLeave
 			if (currentClient != null) {
@@ -467,38 +610,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//In case its a screen sharing we start a new Video for that
 			if (currentClient.getIsScreenClient()) {
 				
-				currentClient.setStreamPublishName(stream.getPublishedName());
-				
-				RoomClient currentScreenUser = this.clientListManager.getClientByPublicSID(stream.getPublishedName());
-				
-				currentClient.setFirstname(currentScreenUser.getFirstname());
-				currentClient.setLastname(currentScreenUser.getLastname());
+				currentClient.setScreenPublishStarted(true);
 				
 				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
-				
-				log.debug("start streamPublishStart Is Screen Sharing ");
-				
-				//Notify all users of the same Scope
-				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-				for (Set<IConnection> conset : conCollection) {
-					for (IConnection conn : conset) {
-						if (conn != null) {
-							if (conn instanceof IServiceCapableConnection) {
-								if (conn.equals(current)){
-									continue;
-								} else {
-									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									//log.debug("is this users still alive? :"+rcl);
-									//Check if the Client is in the same room and same domain 
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-									iStream.invoke("newRed5ScreenSharing",new Object[] { currentClient }, this);
-									log.debug("send Notification to");
-								}
-							}
-						}
-					}
-				}
 				
 			} else {
 			
@@ -738,12 +852,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			
-			log.debug("[setNewCursorPosition]"+item);
+			//log.debug("[setNewCursorPosition]"+item);
 			
 			Map cursor = (Map) item;
 			cursor.put("streamPublishName",currentClient.getStreamPublishName());
 			
-			log.debug("[setNewCursorPosition x]"+cursor.get("cursor_x"));
+			//log.debug("[setNewCursorPosition x]"+cursor.get("cursor_x"));
 			//log.debug("[setNewCursorPosition y]"+cursor.get("cursor_y"));
 			//log.debug("[setNewCursorPosition publicSID]"+cursor.get("publicSID"));
 			
@@ -762,7 +876,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 								//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
 								iStream.invoke("newRed5ScreenCursor",new Object[] { cursor }, this);
-								log.debug("send Notification to");
+								//log.debug("send Notification to");
 							}
 						}
 					}

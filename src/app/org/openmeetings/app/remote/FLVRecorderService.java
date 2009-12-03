@@ -4,10 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
-import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
@@ -23,8 +21,6 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class FLVRecorderService implements IPendingServiceCallback {
 	

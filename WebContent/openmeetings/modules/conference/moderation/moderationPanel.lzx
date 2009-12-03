@@ -105,6 +105,8 @@
     <!-- 
         Uncomment when the recording functionality is back
      -->
+     
+    <!--
     <labelText labelid="417" y="6" width="100" fgcolor="0xFFFFFF"
                visibility="$once{ canvas.showRecording }" />
     
@@ -138,7 +140,8 @@
             //The onResult-Handler will be called be the rtmpconnection
             Debug.write("+++++++++++++++++ stopRecordingShow: ",value); 
         </handler>  
-    </netRemoteCallHib>     
+    </netRemoteCallHib>  
+     -->   
    
     <simpleLabelButton labelid="239" height="24" name="_doShare" style="itemStyle"
                        width="180" y="2" enabled="${  canvas.ismoderator }">
@@ -149,7 +152,9 @@
         <view y="1" x="2" resource="background_screenview_rsc" />
     </simpleLabelButton>
     
+    <!--
     <labelText name="_inner" fgcolor="0xFF3300" y="4" />
+     -->
     
 </class>
 

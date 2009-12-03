@@ -103,6 +103,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public JLabel vscreenHeightLabel;
 	public JSpinner jVScreenWidthSpin;
 	public JSpinner jVScreenHeightSpin;
+	
+	public JLabel textAreaHeaderRecording;
+	public JLabel textAreaHeaderRecordingDescr;
+	public JButton startButtonRecording;
+	public JButton stopButtonRecording;
 
 	public JLabel vScreenIconLeft;
 	public JLabel vScreenIconRight;
@@ -113,6 +118,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String host = "btg199251";
 	public String app = "oflaDemo";
 	public int port = 1935;
+	
+	public boolean startRecording = false;
+	public boolean stopRecording = false;
+	
+	public boolean startStreaming = false;
+	public boolean stopStreaming = false;
 	
 	private String label730 = "Desktop Publisher";
 	private String label731 = "This application will publish your screen";
@@ -127,6 +138,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String label741 = "SharingScreen Height:";
 	public String label742 = "Connection was closed by Server";
 	public String label844 = "Show Mouse Position at viewers";
+	
+	public String label856 = "Recording";
+	public String label857 = "You may record and share your screen at the same time. " +
+			"To enable others to see your screen just hit the start button on the top. " +
+			"To only record the Session it is sufficient to click start recording.";
+	public String label858 = "Start Recording";
+	public String label859 = "Stop Recording";
 
 	public Float imgQuality = new Float(0.40);
 
@@ -225,24 +243,34 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			textArea.setBackground(Color.WHITE);
 			contentPane.setLayout(null);
 			contentPane.add(textArea);
-			textArea.setText("This application will publish your screen");
+			
+			//*****
+			//Header Overall
+			textArea.setText(this.label731);
 			textArea.setBounds(10, 0, 400,24);
 
+			//*****
+			//Start Button Screen Sharing
 			startButton = new JButton( this.label732, start_btn );
 			startButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
+					startRecording = false;
+					startStreaming = true;
 					captureScreenStart();
 				}
 			});
 			startButton.setBounds(30, 34, 200, 32);
 			t.add(startButton);
 
-
+			//*****
+			//Stop Button Screen Sharing
 			stopButton = new JButton( this.label733, stop_btn );
 			stopButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
+					stopRecording = false;
+					stopStreaming = true;
 					captureScreenStop();
 				}
 			});
@@ -252,12 +280,62 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 			//add the small screen thumb to the JFrame
 			new VirtualScreen();
-
+			
+			//*****
+			//Text Recording
+			textAreaHeaderRecording = new JLabel(); 
+			
+			//FIXME: Set Font to bold
+			//textAreaHeaderRecording.setB
+			
+			textAreaHeaderRecording.setText(this.label856);
+			contentPane.add(textAreaHeaderRecording);
+			textAreaHeaderRecording.setBounds(10, 310, 300, 24);
+			
+			textAreaHeaderRecordingDescr = new JLabel(); 
+			textAreaHeaderRecordingDescr.setText(this.label857);
+			contentPane.add(textAreaHeaderRecordingDescr);
+			textAreaHeaderRecordingDescr.setBounds(10, 310, 324, 54);
+			
+			//*****
+			//Start Button Recording
+			startButtonRecording = new JButton( this.label858, start_btn );
+			startButtonRecording.addActionListener( new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					startRecording = true;
+					startStreaming = false;
+					captureScreenStart();
+				}
+			});
+			startButtonRecording.setBounds(30, 400, 200, 32);
+			t.add(startButtonRecording);
+			
+			//*****
+			//Stop Button Recording
+			stopButtonRecording = new JButton( this.label859, stop_btn );
+			stopButtonRecording.addActionListener( new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					stopRecording = true;
+					stopStreaming = false;
+					captureScreenStart();
+				}
+			});
+			stopButtonRecording.setBounds(290, 400, 200, 32);
+			stopButtonRecording.setEnabled(false);
+			t.add(stopButtonRecording);
+			
+			//*****
+			//Text Warning
 			textWarningArea = new JLabel();
 			contentPane.add(textWarningArea);
-			textWarningArea.setBounds(10, 310, 400,54);
+			textWarningArea.setBounds(10, 410, 420,54);
 			//textWarningArea.setBackground(Color.WHITE);
-
+			
+			
+			//*****
+			//Exit Button
 			exitButton = new JButton( "exit" );
 			exitButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
@@ -266,9 +344,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					System.exit(0);
 				}
 			});
-			exitButton.setBounds(290, 380, 200, 24);
+			exitButton.setBounds(290, 440, 200, 24);
 			t.add(exitButton);
 
+			//*****
+			//Background Image
 			Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
 			ImageIcon iIconBack = new ImageIcon(im_left);
 
@@ -285,7 +365,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			});
 			t.pack();
 			t.setLocation(30, 30);
-			t.setSize(500, 440);
+			t.setSize(500, 480);
 			t.setVisible(true);
 			t.setResizable(false);
 
@@ -333,6 +413,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 		}
 	}
 	
+	
+	@SuppressWarnings("unchecked")
 	synchronized public void setConnectionAsSharingClient() {
 		try {
 			
@@ -344,12 +426,16 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			map.put("screenWidth",VirtualScreenBean.vScreenSpinnerWidth);
 			map.put("screenHeight",VirtualScreenBean.vScreenSpinnerHeight);
 			
+			map.put("publishName", this.publishName);
+			map.put("startRecording", this.startRecording);
+			map.put("startStreaming", this.startStreaming);
+			
 			invoke("setConnectionAsSharingClient",new Object[] { map }, this);
 			
 		} catch (Exception err) {
-			logger.error("captureScreenStart Exception: ",err);
-			textArea.setText("Exception: "+err);
-			logger.error("[sendCursorStatus]",err);
+			logger.error("setConnectionAsSharingClient Exception: ",err);
+			textArea.setText("Error: "+err.getLocalizedMessage());
+			logger.error("[setConnectionAsSharingClient]",err);
 		}
 	}
 
@@ -366,14 +452,27 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			textArea.setText("Exception: "+err);
 		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	private void captureScreenStop()
 	{
 		try {
-			stopStream();
-			startButton.setEnabled(true);
-			stopButton.setEnabled(false);
-
+			
+			logger.debug("INVOKE screenSharerAction" );
+			
+			HashMap map = new HashMap();
+			map.put("stopStreaming", this.stopStreaming);
+			map.put("stopRecording", this.stopRecording);
+			
+			invoke("screenSharerAction",new Object[] { map }, this);
+			
+			if (this.stopStreaming) {
+				startButton.setEnabled(true);
+				stopButton.setEnabled(false);
+			} else {
+				startButtonRecording.setEnabled(true);
+				stopButtonRecording.setEnabled(false);
+			}
 		} catch (Exception err) {
 			logger.error("captureScreenStop Exception: ",err);
 			textArea.setText("Exception: "+err);
@@ -454,7 +553,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
     public void resultReceived( IPendingServiceCall call ) {
     	try {
-    		logger.debug( "service call result: " + call );
+    		
+    		//logger.debug( "service call result: " + call );
 
 	        if ( call.getServiceMethodName().equals("connect") ) {
 	        	
@@ -463,7 +563,28 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	        } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
 				
 				logger.debug("call get Method Name "+call.getServiceMethodName());
-				createStream( this );
+				
+				Object o = call.getResult();
+				
+				logger.debug("Result Map Type "+o.getClass().getName());
+				
+				Map returnMap = (Map) o;
+				
+				logger.debug("result "+returnMap.get("result"));
+				
+				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+					logger.debug("key "+iter.next());
+				}
+				
+				if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
+					
+					logger.debug("Stream not yet started - do it ");
+					
+					createStream( this );
+				} else {
+					logger.debug("The Stream was already started ");
+				}
+				
 				
 			} else if (call.getServiceMethodName().equals("createStream")) {
 					
@@ -489,7 +610,39 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 				startButton.setEnabled(false);
 				stopButton.setEnabled(true);
 					
-			}	
+			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
+				
+				logger.debug("call get Method Name "+call.getServiceMethodName());
+				
+				Object o = call.getResult();
+				
+				logger.debug("Result Map Type "+o.getClass().getName());
+				
+				Map returnMap = (Map) o;
+				
+				logger.debug("result "+returnMap.get("result"));
+				
+				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+					logger.debug("key "+iter.next());
+				}
+				
+				if (returnMap.get("result").equals("stopAll")) {
+				
+					logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
+					
+					stopStream();
+				
+				}
+				
+			} else if (call.getServiceMethodName().equals("sendCursorStatus")) {
+				
+				//Do not do anything
+				
+			} else {
+				
+				logger.debug("Unkown method "+call.getServiceMethodName());
+				
+			}
 	        
     	} catch (Exception err) {
     		logger.error("[resultReceived]",err);

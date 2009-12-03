@@ -41,6 +41,7 @@
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
         <property name="emoticonsManager" ref="openmeetings.EmoticonsManager" />
         <property name="whiteBoardService" ref="whiteboardservice.service" />
+        <property name="flvRecorderService" ref="flvrecorderservice.service" />
     </bean>
         
     <bean id="openmeetings.ClientListManager"
