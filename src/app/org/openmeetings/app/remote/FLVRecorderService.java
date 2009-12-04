@@ -154,7 +154,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									recordShow(conn, rcl.getStreamPublishName(), streamName_Screen);
 									
 									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
-																			rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
+																			rcl.getFirstname()+" "+rcl.getLastname(), now, 
 																						false, false, true, streamName_Screen);
 									
 									//Add Meta Data
@@ -168,7 +168,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							//if the user does publish av, a, v
 							//But we only record av or a, video only is not interesting
 							(rcl.getAvsettings().equals("av") || 
-									rcl.getAvsettings().equals("a")){	
+									rcl.getAvsettings().equals("a") || 
+									rcl.getAvsettings().equals("v")){	
 								
 								String streamName = generateFileName(String.valueOf(rcl.getBroadCastID()).toString());
 								
@@ -182,7 +183,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								}
 								
 								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
-																	rcl.getFirstname()+" "+rcl.getLastname(), null, now, 
+																	rcl.getFirstname()+" "+rcl.getLastname(), now, 
 																				isAudioOnly, false, false, streamName);
 								
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
@@ -232,13 +233,26 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 *
 	 * @param conn
 	 */
-	public static void stopRecordingShow(IConnection conn, String broadcastId) throws Exception {
-		log.debug("** stopRecordingShow: "+conn);
-		log.debug("### Stop recording show for broadcastId: "+ broadcastId + " || " + conn.getScope().getContextPath());
-		ClientBroadcastStream stream = (ClientBroadcastStream) ScopeApplicationAdapter.getInstance().
-												getBroadcastStream(conn.getScope(), broadcastId);
-		// Stop recording.
-		stream.stopRecording();
+	public void stopRecordingShow(IConnection conn, String broadcastId) {
+		try {
+			
+			log.debug("** stopRecordingShow: "+conn);
+			log.debug("### Stop recording show for broadcastId: "+ broadcastId + " || " + conn.getScope().getContextPath());
+			
+			Object streamToClose = ScopeApplicationAdapter.getInstance().
+											getBroadcastStream(conn.getScope(), broadcastId);
+			
+			if (streamToClose == null) {
+				log.debug("Could not aquire Stream, maybe already closed");
+			}
+			
+			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
+			// Stop recording.
+			stream.stopRecording();
+			
+		} catch (Exception err) {
+			log.error("[stopRecordingShow]",err);
+		}
 	}
 	
 	public Long stopRecordAndSave(IScope scope, String roomrecordingName, RoomClient currentClient){
@@ -274,7 +288,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								}
 								
 							} else if (rcl.getAvsettings().equals("av") || 
-									rcl.getAvsettings().equals("a")){	
+									rcl.getAvsettings().equals("a") || 
+									rcl.getAvsettings().equals("v")){	
 								
 								stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString() );
 								
@@ -302,6 +317,105 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.error("[stopRecordAndSave]",err);
 		}
 		return new Long(-1);
+	}
+	
+	
+	public void stopRecordingShowForClient(IConnection conn, RoomClient rcl) {
+		try {
+			//this cannot be handled here, as to stop a stream and to leave a room is not
+			//the same type of event.
+			//StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName, rcl.getUserip(), false);
+			log.error("### stopRecordingShowForClient: "+rcl.getIsRecording()+","+rcl.getUsername()+","+rcl.getUserip());
+			
+			if (rcl.getIsScreenClient()) {
+				
+				if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
+				
+					//Stop FLV Recording
+					//FIXME: Is there really a need to stop it manually if the user just 
+					//stops the stream?
+					stopRecordingShow(conn, rcl.getStreamPublishName());
+					
+					//Update Meta Data
+					this.flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(),new Date());
+				}
+				
+			} else if ((rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v") 
+					|| rcl.getAvsettings().equals("av"))){
+				
+				//FIXME: Is there really a need to stop it manually if the user just 
+				//stops the stream?
+				stopRecordingShow(conn,String.valueOf(rcl.getBroadCastID()).toString());
+				
+				//Update Meta Data
+				this.flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(),new Date());
+			}
+			
+		} catch (Exception err) {
+			log.error("[stopRecordingShowForClient]",err);
+		}
+	}
+	
+	public void addRecordingByStreamId(IConnection conn, String streamId, 
+			RoomClient rcl, Long flvRecordingId) {
+		try {
+			
+			Date now = new Date();
+			
+			//If its the recording client we need another type of Meta Data
+			if (rcl.getIsScreenClient()) {
+			
+				if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
+					
+					String streamName_Screen = generateFileName(rcl.getStreamPublishName().toString());
+					
+					log.debug("##############  ADD SCREEN OF SHARER :: "+rcl.getStreamPublishName());
+					
+					//Start FLV Recording
+					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen);
+					
+					Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
+															rcl.getFirstname()+" "+rcl.getLastname(), now, 
+																		false, false, true, streamName_Screen);
+					
+					//Add Meta Data
+					rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+					
+					this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
+				
+				}
+				
+			} else if 
+			//if the user does publish av, a, v
+			//But we only record av or a, video only is not interesting
+			(rcl.getAvsettings().equals("av") || 
+					rcl.getAvsettings().equals("a") || 
+					rcl.getAvsettings().equals("v")){	
+				
+				String streamName = generateFileName(String.valueOf(rcl.getBroadCastID()).toString());
+				
+				//Start FLV recording
+				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName);
+				
+				//Add Meta Data
+				boolean isAudioOnly = false;
+				if (rcl.getAvsettings().equals("a")){
+					isAudioOnly = true;
+				}
+				
+				Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
+													rcl.getFirstname()+" "+rcl.getLastname(), now, 
+																isAudioOnly, false, false, streamName);
+				
+				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+				
+				this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
+				
+			} 
+				
+		} catch (Exception err) {
+			log.error("[addRecordingByStreamId]",err);
+		}	
 	}
 	
 }

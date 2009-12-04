@@ -83,7 +83,7 @@ public class FlvRecordingMetaData {
 	/**
      * @hibernate.property
      *  column="free_text_user_name"
-     *  type="java.util.Date"
+     *  type="string"
      */
 	public String getFreeTextUserName() {
 		return freeTextUserName;

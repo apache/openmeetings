@@ -211,7 +211,7 @@ public class StreamService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public Long stopRecordMeetingStream(String roomrecordingName){
+	public Long _stopRecordMeetingStream(String roomrecordingName){
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
@@ -239,14 +239,14 @@ public class StreamService implements IPendingServiceCallback {
 				}
 			}
 			
-			return stopRecordAndSave(current.getScope(), roomrecordingName, currentClient);
+			return _stopRecordAndSave(current.getScope(), roomrecordingName, currentClient);
 		} catch (Exception err) {
 			log.error("[stopRecordAndSave]",err);
 		}
 		return new Long(-1);
 	}
 	
-	public static Long stopRecordAndSave(IScope scope, String roomrecordingName, RoomClient currentClient){
+	public static Long _stopRecordAndSave(IScope scope, String roomrecordingName, RoomClient currentClient){
 		try {
 			log.debug("stopRecordAndSave "+currentClient.getUsername()+","+currentClient.getUserip());
 			RoomRecording roomRecording = roomRecordingList.get(roomrecordingName);
@@ -274,8 +274,8 @@ public class StreamService implements IPendingServiceCallback {
 								if (!conferenceType.equals("audience") || rcl.getIsMod()){
 									//stop the recorded flv and add the event to the notifications
 									log.debug("*** sendClientBroadcastNotifications Any Client is Recording - stop that");
-									StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName, rcl.getUserip(), false);
-									stopRecordingShowForClient(conn, rcl, roomrecordingName, true);
+									StreamService._addRoomClientEnterEventFunc(rcl, roomrecordingName, rcl.getUserip(), false);
+									_stopRecordingShowForClient(conn, rcl, roomrecordingName, true);
 								}
 							}
 							
@@ -422,7 +422,7 @@ public class StreamService implements IPendingServiceCallback {
 	 * @param roomrecordingName
 	 * @param doStopStream
 	 */
-	public static void stopRecordingShowForClient(IConnection conn, RoomClient rcl, 
+	public static void _stopRecordingShowForClient(IConnection conn, RoomClient rcl, 
 			String roomrecordingName, boolean doStopStream) {
 		try {
 			//this cannot be handled here, as to stop a stream and to leave a room is not
@@ -565,7 +565,7 @@ public class StreamService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public static void addRecordingByStreamId(IConnection conn, String streamId, 
+	public static void _addRecordingByStreamId(IConnection conn, String streamId, 
 			RoomClient rcl, String roomrecordingName) {
 		try {
 			RoomRecording roomRecording = roomRecordingList.get(roomrecordingName);
@@ -663,7 +663,7 @@ public class StreamService implements IPendingServiceCallback {
 	}
 	
 	
-	public static void addRoomClientAVSetEvent(RoomClient rcl, String roomrecordingName, 
+	public static void _addRoomClientAVSetEvent(RoomClient rcl, String roomrecordingName, 
 			String remoteAdress) {
 		try {
 			RoomRecording roomRecording = roomRecordingList.get(roomrecordingName);
@@ -687,7 +687,7 @@ public class StreamService implements IPendingServiceCallback {
 		}	
 	}	
 	
-	public static void addRoomClientEnterEventFunc(RoomClient rcl, String roomrecordingName, 
+	public static void _addRoomClientEnterEventFunc(RoomClient rcl, String roomrecordingName, 
 				String remoteAdress, boolean enter) {
 		try {
 			RoomRecording roomRecording = roomRecordingList.get(roomrecordingName);
@@ -715,7 +715,7 @@ public class StreamService implements IPendingServiceCallback {
 		}	
 	}	
 
-	public Long clientCancelRecording(String roomrecordingName){
+	public Long _clientCancelRecording(String roomrecordingName){
 		try {
 			
 			IConnection current = Red5.getConnectionLocal();

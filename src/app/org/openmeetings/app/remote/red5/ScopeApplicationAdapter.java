@@ -307,26 +307,27 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					returnMap.put("alreadyPublished", true);
 				}
 				
+				currentClient.setVX(Integer.parseInt(map.get("screenX").toString()));
+				currentClient.setVY(Integer.parseInt(map.get("screenY").toString()));
+				currentClient.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
+				currentClient.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+				
+				log.debug("screen x,y,width,height "+currentClient.getVX()+" "+currentClient.getVY()+" "+currentClient.getVWidth()+" "+currentClient.getVHeight());
+				
+				log.debug("publishName :: "+map.get("publishName"));
+				
+				currentClient.setStreamPublishName(map.get("publishName").toString());
+			
+				RoomClient currentScreenUser = this.clientListManager.getClientByPublicSID(currentClient.getStreamPublishName());
+				
+				currentClient.setFirstname(currentScreenUser.getFirstname());
+				currentClient.setLastname(currentScreenUser.getLastname());
+				
+				//This is duplicated, but its not sure that in the meantime somebody requests this Client Object Info
+				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
+				
 				if (startStreaming) {
 					
-					currentClient.setVX(Integer.parseInt(map.get("screenX").toString()));
-					currentClient.setVY(Integer.parseInt(map.get("screenY").toString()));
-					currentClient.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
-					currentClient.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
-					
-					log.debug("screen x,y,width,height "+currentClient.getVX()+" "+currentClient.getVY()+" "+currentClient.getVWidth()+" "+currentClient.getVHeight());
-					
-					log.debug("publishName "+map.get("publishName"));
-					
-					currentClient.setStreamPublishName(map.get("publishName").toString());
-				
-					RoomClient currentScreenUser = this.clientListManager.getClientByPublicSID(currentClient.getStreamPublishName());
-					
-					currentClient.setFirstname(currentScreenUser.getFirstname());
-					currentClient.setLastname(currentScreenUser.getLastname());
-					
-					//This is duplicated, but its not sure that in the meantime somebody requests this Client Object Info
-					this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 					
 					log.debug("start streamPublishStart Is Screen Sharing ");
 					
@@ -549,25 +550,31 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								/*
 								 * Check if the Client does still exist on the list
 								 */
-								if (rcl != null && !rcl.getIsScreenClient()) {
+								if (rcl != null) {
 									
 									/*
 									 * Do not send back to sender, but actually all other clients should receive this message
 									 * swagner  01.10.2009
 									 */
-									if (!currentClient.getStreamid().equals(rcl.getStreamid()) && !rcl.getIsScreenClient()){
+									if (!currentClient.getStreamid().equals(rcl.getStreamid())){
 										
 										
-										//Send to all connected users	
-										((IServiceCapableConnection) cons).invoke("roomDisconnect",new Object[] { currentClient }, this);
-										log.debug("sending roomDisconnect to " + cons);
+										if (!rcl.getIsScreenClient()) {
+											//Send to all connected users	
+											((IServiceCapableConnection) cons).invoke("roomDisconnect",new Object[] { currentClient }, this);
+											log.debug("sending roomDisconnect to " + cons);
+										}
 										
 										//add Notification if another user is recording
 										log.debug("###########[roomLeave]");
 										if (rcl.getIsRecording()){
 											log.debug("*** roomLeave Any Client is Recording - stop that");
-											StreamService.addRoomClientEnterEventFunc(rcl, rcl.getRoomRecordingName(), rcl.getUserip(), false);
-											StreamService.stopRecordingShowForClient(cons, currentClient, rcl.getRoomRecordingName(), false);
+											//StreamService.addRoomClientEnterEventFunc(rcl, rcl.getRoomRecordingName(), rcl.getUserip(), false);
+											//StreamService.stopRecordingShowForClient(cons, currentClient, rcl.getRoomRecordingName(), false);
+											
+											//this.flvRecorderService.stopRecordingShowForClient(cons, currentClient, false);
+											
+											this.flvRecorderService.stopRecordingShowForClient(cons, currentClient);
 										}
 										
 									}
@@ -620,39 +627,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 				
-			} else {
+			}
+
 			
-				//Notify all users of the same Scope
-				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-				for (Set<IConnection> conset : conCollection) {
-					for (IConnection conn : conset) {
-						if (conn != null) {
-							if (conn instanceof IServiceCapableConnection) {
-								if (conn.equals(current)){
-									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (rcl.getIsRecording()){
-										StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
-									}
-									continue;
-								} else {
-									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									//log.debug("is this users still alive? :"+rcl);
-									//Check if the Client is in the same room and same domain 
-									if (!rcl.getIsScreenClient()) {
-										IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-										//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-										iStream.invoke("newStream",new Object[] { currentClient }, this);
-										if (rcl.getIsRecording()){
-											StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRoomRecordingName());
-										}
-									}
+			
+			
+			//Notify all users of the same Scope
+			//We need to iterate through the streams to cathc if anybody is recording
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							if (conn.equals(current)){
+								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+								if (rcl.getIsRecording()){
+									//StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+									
+									this.flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+									
 								}
+								continue;
+							} else {
+								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+								//log.debug("is this users still alive? :"+rcl);
+								//Check if the Client is in the same room and same domain 
+								
+									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+									if (!rcl.getIsScreenClient()) {
+										iStream.invoke("newStream",new Object[] { currentClient }, this);
+									}
+									
+									if (rcl.getIsRecording()){
+										//StreamService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+										this.flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+										
+									}
+								
 							}
 						}
 					}
 				}
-			
 			}
+			
 			
 		} catch (Exception err) {
 			log.error("[streamPublishStart]",err);
@@ -717,14 +735,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								//there is a Bug in the current implementation of the appDisconnect
 								if (clientFunction.equals("closeStream")){
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
-										if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
-											log.debug("*** sendClientBroadcastNotifications Any Client is Recording - stop that");
-											StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
-										}
-										// Don't notify current client
-										current.ping();
+									if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
+										log.debug("*** sendClientBroadcastNotifications Any Client is Recording - stop that");
+										//StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
+										this.flvRecorderService.stopRecordingShowForClient(conn, currentClient);
 									}
+									// Don't notify current client
+									current.ping();
 								}
 								continue;
 							} else {
@@ -735,14 +752,35 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
 									iStream.invoke(clientFunction,new Object[] { rc }, this);
-									log.debug("sending notification to " + conn+" ID: ");
-			
-									//if this close stream event then stop the recording of this stream
-									if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
-										log.debug("*** sendClientBroadcastNotifications Any Client is Recording - stop that");
-										StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
-									}
 								}
+								
+								log.debug("sending notification to " + conn+" ID: ");
+			
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								log.debug("closeStream ????????????? "+clientFunction);
+								
+								if (clientFunction.equals("closeStream")) {
+									
+									log.debug("closeStream ================> "+rcl.getIsRecording());
+									
+									
+								}
+								//if this close stream event then stop the recording of this stream
+								if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
+									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
+									//StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
+									this.flvRecorderService.stopRecordingShowForClient(conn, currentClient);
+								}
+									
+								
 							}
 						}
 					}
@@ -1087,9 +1125,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								log.debug("sending setUserObjectNewOneFour to " + conn);
 								
 								//if somebody is recording in this room add the event
-								if (rcl.getIsRecording()) {
-									StreamService.addRoomClientAVSetEvent(currentClient, rcl.getRoomRecordingName(), conn.getRemoteAddress());
-								}
+//								if (rcl.getIsRecording()) {
+//									StreamService.addRoomClientAVSetEvent(currentClient, rcl.getRoomRecordingName(), conn.getRemoteAddress());
+//								}
 							}
 						}
 					}
@@ -1614,7 +1652,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										//if any user in this room is recording add this client to the list
 										if (rcl.getIsRecording()) {
 											log.debug("currentClient "+currentClient.getPublicSID());
-											StreamService.addRoomClientEnterEventFunc(currentClient, rcl.getRoomRecordingName(), currentClient.getUserip(), true);
+											//StreamService.addRoomClientEnterEventFunc(currentClient, rcl.getRoomRecordingName(), currentClient.getUserip(), true);
 										}							
 									}
 								}

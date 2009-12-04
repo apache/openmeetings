@@ -9,7 +9,7 @@
     <many-to-one outer-join="true" not-null="false" column="flvrecording_id" lazy="false" cascade="none" name="flvRecording" class="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording"/>
     <property name="recordStart" type="java.util.Date" column="record_start"/>
     <property name="recordEnd" type="java.util.Date" column="record_end"/>
-    <property name="freeTextUserName" type="java.util.Date" column="free_text_user_name"/>
+    <property name="freeTextUserName" type="string" column="free_text_user_name"/>
     <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
     <property name="isVideoOnly" type="boolean" column="is_video_only"/>
     <property name="insertedBy" type="long" column="inserted_by"/>

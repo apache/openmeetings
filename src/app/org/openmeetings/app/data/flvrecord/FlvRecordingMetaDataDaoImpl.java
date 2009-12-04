@@ -80,7 +80,7 @@ public class FlvRecordingMetaDataDaoImpl {
 	}
 	
 	public Long addFlvRecordingMetaData(Long flvRecordingId, String freeTextUserName, 
-					Date recordEnd, Date recordStart, Boolean isAudioOnly, Boolean isVideoOnly, 
+					Date recordStart, Boolean isAudioOnly, Boolean isVideoOnly, 
 					Boolean isScreenData, String streamName) {
 		try { 
 			
@@ -92,7 +92,6 @@ public class FlvRecordingMetaDataDaoImpl {
 			flvRecordingMetaData.setFreeTextUserName(freeTextUserName);
 			flvRecordingMetaData.setInserted(new Date());
 			
-			flvRecordingMetaData.setRecordEnd(recordEnd);
 			flvRecordingMetaData.setRecordStart(recordStart);
 			
 			flvRecordingMetaData.setIsAudioOnly(isAudioOnly);
