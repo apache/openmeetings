@@ -328,6 +328,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 				if (startStreaming) {
 					
+					returnMap.put("modus", "startStreaming");
 					
 					log.debug("start streamPublishStart Is Screen Sharing ");
 					
@@ -358,6 +359,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				}
 				
 				if (startRecording) {
+					
+					returnMap.put("modus", "startRecording");
 					
 					String recordingName = "Recording "+CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 					
@@ -756,23 +759,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								
 								log.debug("sending notification to " + conn+" ID: ");
 			
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								log.debug("closeStream ????????????? "+clientFunction);
-								
-								if (clientFunction.equals("closeStream")) {
-									
-									log.debug("closeStream ================> "+rcl.getIsRecording());
-									
-									
-								}
 								//if this close stream event then stop the recording of this stream
 								if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
 									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");

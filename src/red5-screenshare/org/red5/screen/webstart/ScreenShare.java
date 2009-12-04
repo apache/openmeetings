@@ -142,8 +142,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String label844 = "Show Mouse Position at viewers";
 	
 	public String label856 = "Recording";
-	public String label857 = "<HTML>You may record and share your screen at the same time.<br/>" +
-			"To enable others to see your screen just hit the start button on the top.<br/>" +
+	public String label857 = "<HTML>You may record and share your screen at the same time." +
+			"To enable others to see your screen just hit the start button on the top." +
 			"To only record the Session it is sufficient to click start recording.</HTML>";
 	public String label858 = "Start Recording";
 	public String label859 = "Stop Recording";
@@ -291,15 +291,17 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			
 			//FIXME: Set Font to bold
 			//textAreaHeaderRecording.setB
-			
+			//Font f = textAreaHeaderRecording.getFont();
+			//textAreaHeaderRecording.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+
 			textAreaHeaderRecording.setText(this.label856);
 			contentPane.add(textAreaHeaderRecording);
-			textAreaHeaderRecording.setBounds(10, 310, 300, 24);
+			textAreaHeaderRecording.setBounds(10, 300, 480, 24);
 			
 			textAreaHeaderRecordingDescr = new JLabel(); 
 			textAreaHeaderRecordingDescr.setText(this.label857);
 			contentPane.add(textAreaHeaderRecordingDescr);
-			textAreaHeaderRecordingDescr.setBounds(10, 400, 324, 54);
+			textAreaHeaderRecordingDescr.setBounds(10, 320, 480, 54);
 			
 			//*****
 			//Start Button Recording
@@ -589,10 +591,22 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					logger.debug("Stream not yet started - do it ");
 					
 					createStream( this );
+					
 				} else {
 					logger.debug("The Stream was already started ");
 				}
 				
+				if (returnMap.get("modus") != null) {
+					if (returnMap.get("modus").toString().equals("startStreaming")) {
+						this.startButton.setEnabled(false);
+						this.stopButton.setEnabled(true);
+					} else if (returnMap.get("modus").toString().equals("startRecording")) {
+						this.startButtonRecording.setEnabled(false);
+						this.stopButtonRecording.setEnabled(true);
+					}
+				} else {
+					throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
+				}
 				
 			} else if (call.getServiceMethodName().equals("createStream")) {
 					
@@ -615,12 +629,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 				}
 				capture.start();
 	
-				startButton.setEnabled(false);
-				stopButton.setEnabled(true);
-					
 			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
 				
-				logger.debug("call get Method Name "+call.getServiceMethodName());
+				logger.debug("call ### get Method Name "+call.getServiceMethodName());
 				
 				Object o = call.getResult();
 				

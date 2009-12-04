@@ -111,8 +111,8 @@
         if (this.currentCursorObject == null) {
             this.currentCursorObject = new lz.cursorObject(this._subcontent._content);
         }
-        this.currentCursorObject.setAttribute("x",x);
-        this.currentCursorObject.setAttribute("y",y);
+        this.currentCursorObject.setAttribute("x",x * (this._zoombar._zoom.initialNumber/100));
+        this.currentCursorObject.setAttribute("y",y * (this._zoombar._zoom.initialNumber/100));
     </method>    
     
     <view name="_initText">
