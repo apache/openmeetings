@@ -17,8 +17,8 @@ import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.ldap.config.ConfigReader;
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -29,7 +29,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class LdapLoginManagement {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(Usermanagement.class, "openmeetings");
+	private static final Logger log = Logger.getLogger(Usermanagement.class);
 
 	private static LdapLoginManagement instance = null;
 	
@@ -232,9 +232,9 @@ public class LdapLoginManagement {
 		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
 		
 		log.debug("Checking server type...");
-		String ldapUserDN = user;
 		//for OpenLDAP only
 		if (ldap_server_type.equalsIgnoreCase("OpenLDAP")) {
+			String ldapUserDN = user;
 			log.debug("LDAP server is OpenLDAP");
 			log.debug("LDAP search base" + ldap_search_scope);
 			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(ldap_search_scope);
