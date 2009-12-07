@@ -13,7 +13,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Réunion</value>
   </string>
   <string id="3" name="classroom">
-    <value>Auditorium</value>
+    <value>Conférence</value>
   </string>
   <string id="4" name="settings">
     <value>Paramètres</value>
@@ -388,7 +388,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Organisations</value>
   </string>
   <string id="128" name="headconf">
-    <value>Salles de Conférences</value>
+    <value>Salles</value>
   </string>
   <string id="129" name="conf_pub">
     <value>Publique</value>
@@ -562,10 +562,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Entrer</value>
   </string>
   <string id="186" name="navi_roomadmin">
-    <value>Salles de conférence</value>
+    <value>Salles</value>
   </string>
   <string id="187" name="roomadmin_header">
-    <value>Salles de conférence</value>
+    <value>Salles</value>
   </string>
   <string id="188" name="roomadmin_header">
     <value>ID</value>
@@ -826,7 +826,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Utilisateurs</value>
   </string>
   <string id="274" name="organisation_usersicondelete">
-    <value>Effacer l'utilisateur de l'organisation</value>
+    <value>Effacer l'organisation</value>
   </string>
   <string id="275" name="organisation_usersdeletedhead">
     <value>Effacer</value>
@@ -841,10 +841,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Raccourcis</value>
   </string>
   <string id="279" name="dashboard_quicklinkConf">
-    <value>Aller à la conférence</value>
+    <value>Aller à la réunion</value>
   </string>
   <string id="280" name="dashboard_quicklinkAudit">
-    <value>Aller à l'auditorium</value>
+    <value>Aller à la conférence</value>
   </string>
   <string id="281" name="dashboard_quicklinksupport">
     <value>Aide et support</value>
@@ -856,7 +856,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>http://groups.google.com/group/openmeetings-user</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
-    <value>Signaler un bug!</value>
+    <value>Un bug!</value>
   </string>
   <string id="285" name="dashboard_rsslistitemlinktext">
     <value>Détail</value>
@@ -889,7 +889,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Réunions privées</value>
   </string>
   <string id="295" name="subnavi">
-    <value>Auditorium publique</value>
+    <value>Auditorium public</value>
   </string>
   <string id="296" name="subnavi">
     <value>Auditorium privé</value>
@@ -922,10 +922,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Configuration</value>
   </string>
   <string id="306" name="conferencebar">
-    <value>Configuration Micro/Caméra</value>
+    <value>Config. Micro/Caméra</value>
   </string>
   <string id="307" name="conferencebar">
-    <value>Configuration du tableau blanc</value>
+    <value>Config. du tableau blanc</value>
   </string>
   <string id="308" name="conferencebar">
     <value>Sortir</value>
@@ -934,7 +934,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Retours aux salles</value>
   </string>
   <string id="310" name="conferencebar">
-    <value>Déconnexion</value>
+    <value>Quitter</value>
   </string>
   <string id="311" name="loginwindow">
     <value>Mot de passe oublié ?</value>
@@ -970,7 +970,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Un email contenant un lien vous a été envoyé. Si vous n'avez pas reçu d'email, vérifiez votre antispam et redemandez une confirmation.</value>
   </string>
   <string id="322" name="errortype">
-    <value>Déconnexion</value>
+    <value>Quitter</value>
   </string>
   <string id="323" name="errortype">
     <value>Message</value>
@@ -1033,7 +1033,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Impossible de sauvegarder l'adresse</value>
   </string>
   <string id="343" name="useradmin">
-    <value>Utilisateur ajouté. Si vous ne l'avez pas assigner à une organisation, faites-le. Sinon il ne pourra pas se connecter.</value>
+    <value>Utilisateur ajouté. Si vous ne l'avez pas assigné à une organisation, faites-le. Sinon il ne pourra pas se connecter.</value>
   </string>
   <string id="344" name="adminforms">
     <value>Nouvel enregistrement</value>
@@ -1141,7 +1141,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Nouveau(x) Message(s) :</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Déposer une nouvelle image</value>
+    <value>Nouvelle image</value>
   </string>
   <string id="380" name="backuppanel">
     <value>Détails utilisateurs</value>
@@ -1360,7 +1360,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Pas d'audio ni de video (image statique)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>Aucun flux Audio/Video ne seront émis, à la place l'image de votre profil sera montrée. Choisissez cette configuration en cas de problèmes de bande passante ou si votre connexion internet est lente.</value>
+    <value>Aucun flux Audio/Video ne sera émis, à la place l'image de votre profil sera montrée. Choisissez cette configuration en cas de problème de bande passante ou si votre connexion internet est lente.</value>
   </string>
   <string id="453" name="calendar_dayname_monday">
     <value>LU</value>
@@ -1759,7 +1759,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Accéder aux réunions en cours&lt;br/&gt;Tout le monde pourra parler et entendre l'ensemble des conversations.</value>
   </string>
   <string id="585" name="tooltip main-menu">
-    <value>Accéder aux auditoriums en cours&lt;br/&gt;Le droit de parole est réservée au conférencier. Vous ne pourrez qu'écouter.</value>
+    <value>Accéder aux conférences en cours&lt;br/&gt;Le droit de parole est réservée au conférencier. Vous ne pourrez qu'écouter.</value>
   </string>
   <string id="586" name="tooltip main-menu">
     <value>Créer un utilisateur, une réunion, une organisation.&lt;br/&gt; + changer la configuration</value>
@@ -1792,7 +1792,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Quitter</value>
   </string>
   <string id="596" name="upload Dialog">
-    <value>Séléctionner un fichier</value>
+    <value>Sélectionner un fichier</value>
   </string>
   <string id="597" name="administration navigation">
     <value>Connexions</value>
@@ -1828,394 +1828,394 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Téléphone</value>
   </string>
   <string id="608" name="participents panel">
-    <value>User is the Moderator of this Room</value>
+    <value>Modérateur de cette réunion</value>
   </string>
   <string id="609" name="participents panel">
-    <value>User is allowed to draw on the Whiteboard</value>
+    <value>Autorisé à dessiner sur tableau blanc</value>
   </string>
   <string id="610" name="participents panel">
-    <value>(Re) Start Audio/Video or change Device Settings</value>
+    <value>(Re) Démarrer Audio/Vidéo ou changer les paramètres</value>
   </string>
   <string id="611" name="participents panel">
-    <value>Allow this User to draw on the Whiteboard</value>
+    <value>Autoriser cet utilisateur à dessiner sur tableau blanc</value>
   </string>
   <string id="612" name="participents panel">
-    <value>Remove ability to draw on whiteboard</value>
+    <value>Retirer le droit de dessiner sur tableau blanc.</value>
   </string>
   <string id="613" name="conferencePanels">
-    <value>Users</value>
+    <value>Utilisateurs</value>
   </string>
   <string id="614" name="conferencePanels">
-    <value>Files</value>
+    <value>Fichiers</value>
   </string>
   <string id="615" name="conferencePanels">
-    <value>Whiteboard</value>
+    <value>Tableau blanc</value>
   </string>
   <string id="616" name="conferencePanels">
     <value>Chat</value>
   </string>
   <string id="617" name="organization choose info">
-    <value>Your account is assigned to multiple Organizations. Please choose one for this Session.</value>
+    <value>Votre compte est assigné à plusieurs organisations. Choisissez-en une pour cette session.</value>
   </string>
   <string id="618" name="error message room full">
-    <value>This room is full at the moment. Please try again later.</value>
+    <value>Le nombre max d'utilisateur est atteint. Essayez plus tard s.v.p</value>
   </string>
   <string id="619" name="roomtypes">
-    <value>Room Type</value>
+    <value>Type salle</value>
   </string>
   <string id="620" name="appointed_room">
-    <value>Appointment Room</value>
+    <value>Réunion unitaire</value>
   </string>
   <string id="621" name="servertime">
-    <value>Server Time</value>
+    <value>Heure serveur</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
     <value>OpenMeetings - Reminder</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
-    <value>Message from User:</value>
+    <value>Message de l'utilisateur:</value>
   </string>
   <string id="624" name="inv_reminder_text_message">
     <value>Message:</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>Cliquer sur ce lien pour participer à la réunion:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
-    <value>Click here to enter room</value>
+    <value>Cliquer ici pour entrer dans la salle</value>
   </string>
   <string id="627" name="inv_reminder_text_click_text_help">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>Si vous avez un problème avec le lien, le copier-coller dans votre navigateur s.v.p:</value>
   </string>
   <string id="628" name="btn_search_intern">
-    <value>search intern</value>
+    <value>recherche interne</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>extern users</value>
+    <value>utilisateurs extérieurs</value>
   </string>
   <string id="630" name="lbl_prename">
-    <value>pre name</value>
+    <value>prénom</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>name</value>
+    <value>nom</value>
   </string>
   <string id="632" name="lbl_email">
     <value>E-mail</value>
   </string>
   <string id="633" name="logoutConfirm_title">
-    <value>Confirm logout</value>
+    <value>Confirmer la sortie</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
-    <value>Are you sure you want to logout now?</value>
+    <value>Êtes-vous sûr de vouloir quitter ?</value>
   </string>
   <string id="635" name="main menu">
     <value>Actions</value>
   </string>
   <string id="636" name="room admin">
-    <value>Demo Room</value>
+    <value>Salle Démo</value>
   </string>
   <string id="637" name="room admin">
-    <value>Demo Time</value>
+    <value>Heure Démo</value>
   </string>
   <string id="638" name="meeting Timer">
-    <value>Meeting Timer</value>
+    <value>Temps de réunion</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>This Room is a Demo Room. To disable this warning you either should get a private meeting room for your personal usage or set up an own Server. You will be automatically logged off in:</value>
+    <value>C'est une salle de Démo. Pour désactiver ce message vous devez utiliser une réunion privée pour votre usage personnel ou avoir votre propre serveur. Vous allez être automatiquement déconnecté dans:</value>
   </string>
   <string id="640" name="meeting room administration">
-    <value>Moderated</value>
+    <value>Modération</value>
   </string>
   <string id="641" name="moderated room waiting message">
-    <value>Please wait untill the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.</value>
+    <value>S.V.P attendez que le Modérateur rejoigne la salle.&lt;br/&gt;Le Modérateur peut-être un Enseignant,&lt;br/&gt;l'Administrateur ou le Créateur de&lt;br/&gt; cette réunion.</value>
   </string>
   <string id="642" name="error popup">
     <value>Ok</value>
   </string>
   <string id="643" name="window screensharing">
-    <value>Incoming Screen Sharing</value>
+    <value>Nouveau partage d'écran</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>There is a new Screen Sharing incoming from the User:</value>
+    <value>C'est un nouveau partage d'écran de cet utilisateur:</value>
   </string>
   <string id="645" name="window screen sharing">
-    <value>Start Sharing</value>
+    <value>Démarrer le partage</value>
   </string>
   <string id="646" name="calendar">
-    <value>Add new Meeting</value>
+    <value>Ajouter une nouvelle réunion</value>
   </string>
   <string id="647" name="calendar">
-    <value>Meeting Room</value>
+    <value>Salle de réunion</value>
   </string>
   <string id="648" name="calendar">
-    <value>Event Room</value>
+    <value>Salle de conférence</value>
   </string>
   <string id="649" name="main menu moderation">
     <value>Moderation</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>Moderate Users</value>
+    <value>Modérer les utilisateurs</value>
   </string>
   <string id="651" name="menu moderation">
-    <value>Moderate Rooms</value>
+    <value>Salles modérées</value>
   </string>
   <string id="652" name="moderator org">
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>Do you want to change this User to become a Moderator of that Organization?</value>
+    <value>Voulez-vous que cet utilisateur devienne un modérateur de cette Organisation ?</value>
   </string>
   <string id="654" name="error message">
-    <value>Please choose an Organization before you try to add a User to it!</value>
+    <value>Choisissez une Organisation avant de lui ajouter un utilisateur s.v.p!</value>
   </string>
   <string id="655" name="choose user window">
-    <value>Organization - Moderator</value>
+    <value>Organisation - Modérateur</value>
   </string>
   <string id="656" name="moderator org users">
-    <value>Do you really want to delete this User from the Organization?</value>
+    <value>Voulez-vous réellement supprimer cet utilisateur de cette Organisation?</value>
   </string>
   <string id="657" name="org moderation">
-    <value>This User is Moderator</value>
+    <value>Cet utilisateur est un modérateur</value>
   </string>
   <string id="658" name="org moderation">
-    <value>This User is No-Moderator</value>
+    <value>Cet utilisateur n'est pas un modérateur</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>Do you want this User to be not a Moderator of this Organization?</value>
+    <value>Voulez-vous que cet utilisateur ne soit pas un modérateur de cette Organisation?</value>
   </string>
   <string id="660" name="moderation">
-    <value>Add or delete Users or Rooms within your Organization</value>
+    <value>Ajouter ou supprimer des utilisateurs ou salles de votre Organisation</value>
   </string>
   <string id="661" name="delete confirm question">
-    <value>Do you really want to delete this record?</value>
+    <value>Voulez-vous réellement supprimer cet enregistrement?</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>Do you really want to delete this user from your organization? You will only delete the connection between the user and your organization, to really delete the user itself you have to login into the Administration-Panel.</value>
+    <value>Voulez-vous réellement supprimer cet utilisateur de votre organisation? Vous supprimez seulement le lien entre cet utilisateur et votre organsisation, pour supprimer réeelement cet utilisateur vous devez aller sur le panneau d'administration.</value>
   </string>
   <string id="663" name="error message self deleting">
-    <value>You cannot delete your own User!</value>
+    <value>Vous ne pouvez pas vous supprimer!</value>
   </string>
   <string id="664" name="error message auth">
-    <value>This Method needs a Adminstration Account to be invoked!</value>
+    <value>Cette méthode nécessite des droits d'administration.</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>There was no Session associated with this ID.</value>
+    <value>Il n'y a pas de session associée à cet ID.</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>This is an Administrator or Moderator account. You can only edit this account through the Administration Panel.</value>
+    <value>C'est un compte d'administration ou de modérateur. Vous ne pouvez l'éditer qu'au travers du panneau d'administration.</value>
   </string>
   <string id="667" name="email verification">
-    <value>To complete your registration please click on the following link. Or copy the URL to your browser bar.</value>
+    <value>Pour terminer votre enregistrement cliquez sur le lien suivant. Ou copiez l'URL dans la barre de votre navigateur.</value>
   </string>
   <string id="668" name="email verification">
-    <value>Click to verify your E-Mail</value>
+    <value>Cliquez pour vérifier votre E-Mail</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>No user was found for this Hash.</value>
+    <value>Aucun utilisateur pour ce Hash.</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>This user is already activated!</value>
+    <value>Cet utilisateur est déjà activé!</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>You did successfully activate your account!</value>
+    <value>Vous avez activé votre compte avec succès!</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Login Now</value>
+    <value>Se connecter maintenant</value>
   </string>
   <string id="673" name="loginErrorMessage = user was not activated">
-    <value>Your account is not activated. First use the link in the Email you've received during registration.</value>
+    <value>Votre compte n'est pas actif. Utilisez le lien dans l'Email que vous avez reçu pour l'enregistrement.</value>
   </string>
   <string id="674" name="register verification message">
-    <value>You successfully signed up. We've send an EMail with a verification Code to your Mail. Please check your Inbox.</value>
+    <value>Vous êtes enregistré. Nous vous avons envoyé un Email avec un code de vérification. Regardez votre boite de messagerie.</value>
   </string>
   <string id="675" name="participants panel">
-    <value>Remove Moderation Role from this User</value>
+    <value>Enlever le rôle de modérateur à cet utilisateur</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Grant Moderation Rights to this User</value>
+    <value>Donner les droits de modération à cet utilisateur</value>
   </string>
   <string id="677" name="event user list">
-    <value>User</value>
+    <value>Utilisateur</value>
   </string>
   <string id="678" name="event user list">
-    <value>Access to whiteboard</value>
+    <value>Accès au tableau blanc</value>
   </string>
   <string id="679" name="event user list">
-    <value>Moderator</value>
+    <value>Modérateur</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderation: Please choose any User on the List to grant him access to the Whiteboard, Moderation or Video.</value>
+    <value>Modération: s.v.p choisissez un utilisateur de cette liste pour lui donner accès au tableau blanc, à la modération ou à la vidéo.</value>
   </string>
   <string id="681" name="event user list">
-    <value>This User is already Moderator, so he has automatically the right to draw.</value>
+    <value>Cet utilisateur est déjà modérateur, donc il a le droit de dessiner.</value>
   </string>
   <string id="682" name="event user list error">
-    <value>This is you! You cannot remove the Moderation rights from yourself.</value>
+    <value>Il s'agit de vous! Vous ne pouvez pas vous retirer &lt;br/&gt;les droits de modération.</value>
   </string>
   <string id="683" name="event user list">
-    <value>Allow this User to Publish his Audio / Video</value>
+    <value>Autoriser cet utilisateur à publier son Audio/Vidéo</value>
   </string>
   <string id="684" name="event user list">
-    <value>Remove Audio/Video of this User</value>
+    <value>Supprimer Audio/Vidéo de cet utilisateur</value>
   </string>
   <string id="685" name="event user list">
-    <value>I would like to get the moderation of this room</value>
+    <value>Je souhaiterais obtenir le modération de cette salle.</value>
   </string>
   <string id="686" name="event user list">
-    <value>I would like to draw on whiteboard</value>
+    <value>Je souhaiterais dessiner sur le tableau blanc</value>
   </string>
   <string id="687" name="event user list">
-    <value>I would like to share my Audio/Video</value>
+    <value>Je souhaiterais partager mon Audio/Vidéo</value>
   </string>
   <string id="688" name="event user list">
-    <value>You are moderator of this room</value>
+    <value>Vous êtes le modérateur de cette salle.</value>
   </string>
   <string id="689" name="event user list">
-    <value>You are allowed to draw on whiteboard</value>
+    <value>Vous êtes autorisé à dessiner sur le tableau blanc.</value>
   </string>
   <string id="690" name="event user list">
-    <value>You are allowed to share your Audio/Video</value>
+    <value>Vous êtes autorisé à partager votre Audio/Vidéo.</value>
   </string>
   <string id="691" name="errortype">
-    <value>Message to Moderator</value>
+    <value>Message au modérateur</value>
   </string>
   <string id="692" name="apply for mod message">
-    <value>The User</value>
+    <value>L'utilisateur</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>would like to get the Moderation. Use the status Icons next to the user in the List of Users to add or remove the Moderation.</value>
+    <value>&lt;br/&gt;demande la modération. Utilisez l'icône dans la liste des &lt;br/&gt;utilisateurs pour ajouter ou enlever la modération.</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</value>
+    <value>&lt;br/&gt;demande l'accès au tableau blanc. Utilisez l'icône dans la &lt;br/&gt;liste des utilisateurs pour ajouter ou enlever le&lt;br/&gt; droit de dessiner sur le tableau blanc.</value>
   </string>
   <string id="695" name="695">
-    <value>would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</value>
+    <value>&lt;br/&gt;demande le partage Audio/Vidéo. Utilisez l'icône dans la liste &lt;br/&gt;des utilisateurs pour ajouter ou enlever le droit&lt;br/&gt;de partager l'Audio/Vidéo.</value>
   </string>
   <string id="696" name="moderation message">
-    <value>You have to wait untill a Moderator enters the room.</value>
+    <value>Vous devez attendre qu'un modérateur participe à la salle.</value>
   </string>
   <string id="697" name="calendar button">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </string>
   <string id="698" name="calendar button">
-    <value>Save</value>
+    <value>Sauver</value>
   </string>
   <string id="699" name="calendar component">
-    <value>Day</value>
+    <value>Jour</value>
   </string>
   <string id="700" name="calendar component">
-    <value>Month</value>
+    <value>Mois</value>
   </string>
   <string id="701" name="calendar component">
-    <value>Year</value>
+    <value>Année</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Upload File</value>
+    <value>Charger le fichier</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Add Folder</value>
+    <value>Ajouter un dossier</value>
   </string>
   <string id="704" name="file explorer">
-    <value>Refresh</value>
+    <value>Rafraîchir</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Trash</value>
+    <value>Poubelle</value>
   </string>
   <string id="706" name="file explorer">
-    <value>My Files (Home Drive)</value>
+    <value>Mes fichiers personnels</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Room Files (Public Drive)</value>
+    <value>Les fichiers de la salle (Public)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Add File</value>
+    <value>Ajouter un fichier</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Add Folder</value>
+    <value>Ajouter un dossier</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Delete Folder</value>
+    <value>Supprimer un dossier</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Edit Name</value>
+    <value>Modifier le nom</value>
   </string>
   <string id="712" name="file explorer">
-    <value>New Folder</value>
+    <value>Nouveau dossier</value>
   </string>
   <string id="713" name="file explorer">
-    <value>Are you sure you want to delete this Item?</value>
+    <value>Êtes-vous sûr de vouloir supprimer cet item?</value>
   </string>
   <string id="714" name="user admin">
-    <value>Search</value>
+    <value>Recherche</value>
   </string>
   <string id="715" name="user admin">
-    <value>Search</value>
+    <value>Recherche</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Open Document</value>
+    <value>Ouvrir le document</value>
   </string>
   <string id="717" name="file explorer">
-    <value>Show all Files (Tree View)</value>
+    <value>Montrer tous les fichiers (Vue arbre)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Close Document</value>
+    <value>Fermer le document</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Delete File</value>
+    <value>Supprimer le fichier</value>
   </string>
   <string id="720" name="file explorer">
-    <value>You are not allowed to draw anything on the Whiteboard. You have to become Moderator or at least get the Right to edit Whiteboard. You may ask a Moderator to give you that right.</value>
+    <value>Tableau blanc non autorisé.</value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>Propriétés Document</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>+net +long</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>conseillé</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>Un utilisateur souhaite partager son écran. Voulez-vous le voir ?</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>Vous partagez actuellement votre écran. Pour arrêter ce partage , cliquez sur le bouton Exit de la fenêtre de partage.</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>Session de partage</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
+    <value>Vous partagez déjà votre écran!</value>
   </string>
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>Vue d'ecran</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>Sortie</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>Partage d'ecran</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Click Start to publish your screen</value>
+    <value>Cliquez sur Partager pour publier votre ecran</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>Partager</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Arreter</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Select your screen area:</value>
+    <value>Selectionner la partie d'ecran:</value>
   </string>
   <string id="735" name="sharing client">
-    <value>Change width</value>
+    <value>Changer la largeur</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>La session de partage est terminée!</value>
   </string>
   <string id="737" name="sharing client">
-    <value>Change height</value>
+    <value>Changer la hauteur</value>
   </string>
   <string id="738" name="sharing client">
     <value>X-Offset</value>
@@ -2224,31 +2224,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Y-Offset</value>
   </string>
   <string id="740" name="sharing client">
-    <value>Width:</value>
+    <value>Largeur:</value>
   </string>
   <string id="741" name="sharing client">
-    <value>Height:</value>
+    <value>Hauteur:</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
-  </string>  
+    <value>La connection a été fermée par le serveur</value>
+  </string>
   <string id="743" name="sharing viewer">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>+ net</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>If you close this session completely you are not able to restart the viewer for this session.</value>
+    <value>Si vous fermez cette session vous ne pourrez plus redemarrer le partage pour cette session.</value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Confirm Closing Viewer Session</value>
+    <value>Confirmez la fermeture de cette session de partage</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>Ecran partage</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>Enregistrement de la session</value>
   </string>
   <string id="749" name="co-browser">
     <value>Co-Browsing</value>
@@ -2257,40 +2257,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ooops, ... Firefox on Windows does not show clear Co-Browsing. Please use another Browser for using the Co-Browsing feature.</value>
   </string>
   <string id="751" name="co-browser">
-    <value>Previous</value>
+    <value>Précédent</value>
   </string>
   <string id="752" name="co-browser">
-    <value>Next</value>
+    <value>Suivant</value>
   </string>
   <string id="753" name="co-browser">
-    <value>Reload</value>
+    <value>Rechargement</value>
   </string>
   <string id="754" name="co-browser">
-    <value>Home</value>
+    <value>Accueil</value>
   </string>
   <string id="755" name="co-browser">
-    <value>Load</value>
+    <value>Chargement</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Add this website as Default website to your Profile.</value>
+    <value>Ajouter ce site Web comme site par défaut pour votre profil</value>
   </string>
   <string id="757" name="test setup">
     <value>Test Setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Testez votre micro et votre caméra avant d'entrer dans la réunion en enregistrant quelques secondes. Vous pourrez alors rejouer votre enregistrement pour vérification.</value>
   </string>
   <string id="759" name="test setup">
-    <value>Don't show this test anymore</value>
+    <value>Ne plus montrer ce test (modifiable dans le profil)</value>
   </string>
   <string id="760" name="test setup">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>Début de réunion</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>Do not ask again</value>
+    <value>Ne plus poser cette question</value>
   </string>
   <string id="763" name="test setup">
     <value>REC</value>
@@ -2299,160 +2299,160 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>PLAY</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>Vous pouvez continuer sans tester si vous ne pensez pas publier votre voix ou votre vidéo. Les participants sans Audio ou Video peuvent utiliser le tableau blanc , partager leur écran ou écrire des messages.</value>
   </string>
   <string id="766" name="test setup">
     <value>STOP</value>
   </string>
-  <string id="767" name="test setup">
-    <value>Level-Meter</value>
+  <string id="767" name="767">
+    <value>Niveau</value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>Cliquer sur Début</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>Commencer la réunion</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>Commencer la conférence</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>Choisir la salle</value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>Auto-test</value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>Commencer la réunion</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>Chronologie d'emploi:</value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>Début d'enregist.</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+    <value>Ne pas montrer le test Audio / Vidéo (Enregistrement) avant d'entrer en réunion.</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>Salles publiques</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>Les salles publiques sont accessibles à tous les utilisateurs.</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>Salles privées</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>Les salles privées ne sont accessibles qu'aux utilisateurs de l'organisation pour laquelle elles ont été créées.</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>Mes salles</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Ici les salles sont créées pour un usage personnel.Elles sont créées par le calendrier et ont une date début et de fin. Elles ne sont listées ici que tant qu'elles sont valides dans le jour J (aujourd'hui).</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>Vous devez être modérateur pour faire celà.</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>Demander la modération</value>
   </string>
   <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
+    <value>Demander l'accès au tableau blanc</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>Demander l'accès à camera/micro</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>Ce Session Hash est déjà utilisé. Vous ne pouvez l'utiliser deux fois.</value>
   </string>
   <string id="788" name="dashboard button">
-    <value>START</value>
+    <value>DEBUT</value>
   </string>
   <string id="789" name="exit conference">
-    <value>EXIT</value>
+    <value>Sortie</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>Voulez-vous réellement sortir? Vous devriez peut-être préalablement nettoyer les documents chargés, le tableau blanc ou les messages instantanés.</value>
   </string>
   <string id="791" name="conference view">
-    <value>Exit conference</value>
+    <value>Sortie de réunion</value>
   </string>
   <string id="792" name="main menu">
-    <value>Rooms</value>
+    <value>Salles</value>
   </string>
   <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>Choisir une salle pour la réunion</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+    <value>Il y a un évènement non sauvegardé dans le calendrier. S.V.P sauvegardez le ou supprimez le.</value>
   </string>
   <string id="795" name="calendar">
-    <value>Please add at least one attendee for your meeting!</value>
+    <value>SVP ajoutez au moins un participant à votre réunion</value>
   </string>
   <string id="796" name="calendar">
-    <value>Do you really want to delete this Event?</value>
+    <value>Voulez-vous réellement supprimer cet évènement?</value>
   </string>
   <string id="797" name="calendar">
-    <value>Warning</value>
+    <value>Attention</value>
   </string>
   <string id="798" name="calendar">
-    <value>Add Event</value>
+    <value>Ajouter un évènement</value>
   </string>
   <string id="799" name="calendar">
-    <value>day</value>
+    <value>jour</value>
   </string>
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>semaine</value>
   </string>
   <string id="801" name="calendar">
-    <value>month</value>
+    <value>mois</value>
   </string>
   <string id="802" name="calendar">
     <value>Description</value>
   </string>
   <string id="803" name="calendar">
-    <value>Attendees</value>
+    <value>Participants</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>OpenMeetings, votre plateforme de conférence Web. Suivez les instructions.&lt;br/&gt;Pressez le bouton Début pour commencer une réunion immédiatement ou allez au calendrier pour planifier une réunion.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Plan a Meeting</value>
+    <value>Planifier</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+    <value>Pour planifier une réunion vous pouvez créer un évènement dans le calendrier. Pour chaque évènement du calendrier une réunion sera créée automatiquement. Chaque participant recevra un email avec un lien vers la réunion.&lt;br/&gt;&lt;br/&gt;Vous pouvez choisir différents types de réunion avec des présentations et modérations différentes. Vous pouvez aussi choisir différents types de notification par email.</value>
   </string>
   <string id="807" name="lzcalendar">
-    <value>Need help?</value>
+    <value>Besoin d'aide?</value>
   </string>
   <string id="808" name="lzcalendar">
-    <value>Restricted</value>
+    <value>Accès réservé</value>
   </string>
   <string id="809" name="lzcalender">
-    <value>Search</value>
+    <value>Recherche</value>
   </string>
   <string id="810" name="lzcalender">
-    <value>Add</value>
+    <value>Ajouter</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>Il n'y a pas d'utilisateur sélectionné. SVP choisissez un utilisateur dans la liste.</value>
   </string>
   <string id="812" name="lzcalendar">
-    <value>Add Attendee</value>
+    <value>Ajouter un participant</value>
   </string>
   <string id="813" name="lzcalendar">
-    <value>Save</value>
+    <value>Sauvegarde</value>
   </string>
   <string id="814" name="lzcalendar">
-    <value>Delete</value>
+    <value>Supprimer</value>
   </string>
   <string id="815" name="lzcalendar">
-    <value>Event Details</value>
+    <value>Détails de l'évènement</value>
   </string>
   <string id="816" name="room admin">
-    <value>Default Moderators</value>
+    <value>Modérateurs par défaut</value>
   </string>
   <string id="817" name="room admin">
     <value>Super</value>
@@ -2461,34 +2461,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ID</value>
   </string>
   <string id="819" name="room admin">
-    <value>Name</value>
+    <value>Nom</value>
   </string>
   <string id="820" name="room admin">
     <value>E-Mail</value>
   </string>
   <string id="821" name="room admin">
-    <value>Add new default Moderator</value>
+    <value>Ajouter un nouveau modérateur par défaut</value>
   </string>
   <string id="822" name="room admin">
-    <value>Is Super Moderator</value>
+    <value>C'est le super modérateur</value>
   </string>
   <string id="823" name="room admin">
-    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+    <value>Si la salle est modérée, un utilisateur avec le niveau Modérateur ou Administrateur est automatiquement Modérateur s'il participe à la réunion. Si vous ne voulez pas de ce fonctionnement et que voulez qu'un certain utilisateur devienne Modérateur utilisez l'option Modérateur par défaut.</value>
   </string>
   <string id="824" name="room admin">
-    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+    <value>Un Super Modérateur est toujours Modérateur quand il participe à une réunion, et personne ne peut lui retirer ce droit</value>
   </string>
   <string id="825" name="room admin">
-    <value>Apply Super-Moderation to User</value>
+    <value>Appliquer la Super-Modération à cet utilisateur</value>
   </string>
   <string id="826" name="room admin">
-    <value>Remove Super Moderation from User</value>
+    <value>Retirer la Super-Modération à cet utilisateur</value>
   </string>
   <string id="827" name="room admin">
     <value>D</value>
   </string>
   <string id="828" name="room admin">
-    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+    <value>Si vous spécifiez une organisation pour la réunion, seuls les utilisateurs qui appartiennent à cette organisation y ont accès (S'il ne s'agit pas d'une réunion publique!)</value>
   </string>
   <string id="829" name="room admin">
     <value>Moderation</value>
@@ -2497,34 +2497,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Limitations</value>
   </string>
   <string id="831" name="room admin">
-    <value>Organization</value>
+    <value>Organisation</value>
   </string>
   <string id="832" name="confirm action">
-    <value>Are you sure?</value>
+    <value>Êtes-vous sûr?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+    <value>Voulez-vous réellement supprimer cet item? Vous devez utiliser le bouton Sauvegarde pour garder les modifications!</value>
   </string>
   <string id="834" name="user choose error">
-    <value>There is no User selected. Please select first before you add it!</value>
+    <value>Aucun utilisateur sélectionné. SVP sélectionnez en un avant de l'ajouter!</value>
   </string>
   <string id="835" name="room admin">
-    <value>Add new Default Moderator</value>
+    <value>Ajouter un nouveau Modérateur par défaut</value>
   </string>
   <string id="836" name="room admin">
-    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+    <value>Voulez-vous que cet utilisateur soit Super-Modérateur? Un Super-Modérateur n'est pas seulement Modérateur de la réunion mais aussi il ne peut être enlevé par aucun autre Modérateur. Vous devez sauvegarder la salle pour sauvegarder ces paramètres!</value>
   </string>
   <string id="837" name="room admin">
-    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+    <value>Voulez-vous retirer la Super-Modération à cet utilisateur? Vous devez sauvegarder la salle pour sauvegarder ces paramètres!</value>
   </string>
   <string id="838" name="super moderator">
-    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+    <value>Cet utilisateur est un Super-Modérateur. Vous ne pouvez pas enlever la modération à un Super-Modérateur!</value>
   </string>
   <string id="839" name="confirm delete">
-    <value>Do you really want to delete this File/Folder?</value>
+    <value>Voulez-vous réellement supprimer ce fichier/dossier?</value>
   </string>
   <string id="840" name="confirm delete">
-    <value>Delete File/Folder?</value>
+    <value>Supprimer Fichier/Dossier?</value>
   </string>
   <string id="841" name="salutation">
     <value>Mrs.</value>
@@ -2533,42 +2533,42 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dr.</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+    <value>Propriétés</value>
   </string>
   <string id="844" name="screen sharer">
-    <value>Show mouse position to viewers</value>
+    <value>Montrer la souris sur l'ecran</value>
   </string>
   <string id="845" name="publish option">
-    <value>Share Audio with SIP Applet</value>
+    <value>Partager l'audio avec SIP Applet</value>
   </string>
   <string id="846" name="publish option">
-    <value>Share Audio with SIP and Video with Flash</value>
+    <value>Partager l'Audio avec SIP et la vidéo avec Flash</value>
   </string>
   <string id="847" name="document panel">
     <value>Full-Fit</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+    <value>Voir écran</value>
   </string>
   <string id="849" name="screen share">
-    <value>The user</value>
+    <value>L'utilisateur </value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+    <value>souhaite partager son écran. Voulez-vous le voir?</value>
   </string>
   <string id="851" name="screen share">
-    <value>Close</value>
+    <value>Fermer</value>
   </string>
   <string id="852" name="screen sharer">
     <value>Zoom</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>The Session was closed by the sharing User!</value>
+    <value>La session a été fermée par l'utilisateur qui partageait son écran!</value>
   </string>
   <string id="854" name="screen sharer">
     <value>Pause</value>
   </string>
   <string id="855" name="screen sharer">
-    <value>New Screen Sharing</value>
+    <value>Nouveau partage d'écran</value>
   </string>
 </language>
