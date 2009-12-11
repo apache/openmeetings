@@ -1,8 +1,10 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.gui;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
+
+import org.red5.screen.webstart.ScreenShare;
 
 
 public class VirtualScreenWidthMouseListener extends MouseInputAdapter  {

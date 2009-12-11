@@ -17,6 +17,8 @@
 		<j2se version='1.4+'/> 
         <jar href='red5-screenshare.jar'/> 
         <jar href="apache-commons.jar"/> 
+        <jar href="commons-httpclient-3.1.jar"/> 
+        <jar href="commons-codec-1.4.jar"/> 
         <jar href="apache-mina.jar"/> 
         <jar href="bouncycastle.jar"/> 
         <jar href="kunststoff.jar"/> 
@@ -25,10 +27,10 @@
         <jar href="slf4j.jar"/>
         <jar href="spring.jar"/> 
     </resources> 
-    <application-desc main-class='org.red5.screen.webstart.ScreenShare'>
+    <application-desc main-class='$startUpClass'>
     	<argument>$red5-host</argument> 
     	<argument>$red5-app</argument> 
-    	<argument>$rtmp-port</argument> 
+    	<argument>$port</argument> 
     	<argument>$PUBLIC_SID</argument>   
     	<argument>$LABELSHARER</argument>     	
     </application-desc> 

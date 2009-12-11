@@ -1,6 +1,9 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.tgui;
 
 import javax.swing.event.MouseInputAdapter;
+
+import org.red5.screen.webstart.ScreenShareRTMPT;
+
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 
@@ -12,12 +15,12 @@ public class VirtualScreenMouseListener extends MouseInputAdapter  {
 
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) ) ;
+		ScreenShareRTMPT.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) ) ;
 	}
 
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		ScreenShareRTMPT.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -41,10 +44,10 @@ public class VirtualScreenMouseListener extends MouseInputAdapter  {
 		int newYPosition = VirtualScreenBean.vScreenSpinnerY-(this.y-newY);
 		//System.out.println(newX+" "+newY+" "+newXPosition);
 		if (newXPosition>=0) {
-			ScreenShare.instance.jVScreenXSpin.setValue(newXPosition);
+			ScreenShareRTMPT.instance.jVScreenXSpin.setValue(newXPosition);
 		}
 		if (newYPosition>=0) {
-			ScreenShare.instance.jVScreenYSpin.setValue(newYPosition);
+			ScreenShareRTMPT.instance.jVScreenYSpin.setValue(newYPosition);
 		}
 	}
 

@@ -1,17 +1,18 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.gui;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
+import org.red5.screen.webstart.ScreenShare;
 
-public class VirtualScreenXMouseListener extends MouseInputAdapter  {
+public class VirtualScreenYMouseListener extends MouseInputAdapter  {
 
-	private double x = 0;
+	private double y = 0;
 
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR) ) ;
+		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR) ) ;
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -22,7 +23,8 @@ public class VirtualScreenXMouseListener extends MouseInputAdapter  {
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		VirtualScreen.instance.showWarning=false;
-		this.x = e.getX();
+		this.y = e.getY();
+//		System.out.println(this.x+" "+this.y);
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -31,16 +33,17 @@ public class VirtualScreenXMouseListener extends MouseInputAdapter  {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		double newX = e.getX();
-		int delta = Long.valueOf(Math.round(this.x-newX)).intValue();
-		int newXPosition = VirtualScreenBean.vScreenSpinnerX-delta;
-		int newWidth = VirtualScreenBean.vScreenSpinnerWidth+delta;
+		double newY = e.getY();
 
-		//System.out.println(newX+" "+newXPosition+" "+newWidth);
-		if (newXPosition>=0 && newWidth>=0) {
+		int delta = Long.valueOf(Math.round(this.y-newY)).intValue();
+		int newYPosition = VirtualScreenBean.vScreenSpinnerY-delta;
+		int newHeight = VirtualScreenBean.vScreenSpinnerHeight+delta;
+
+//		System.out.println(delta+" "+newYPosition+" "+newHeight);
+		if (newYPosition>=0 && newHeight>=0) {
 			VirtualScreen.instance.doUpdateBounds=false;
-			ScreenShare.instance.jVScreenXSpin.setValue(newXPosition);
-			ScreenShare.instance.jVScreenWidthSpin.setValue(newWidth);
+			ScreenShare.instance.jVScreenYSpin.setValue(newYPosition);
+			ScreenShare.instance.jVScreenHeightSpin.setValue(newHeight);
 			VirtualScreen.instance.doUpdateBounds=true;
 			VirtualScreen.instance.updateVScreenBounds();
 

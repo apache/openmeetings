@@ -14,8 +14,8 @@ import org.red5.io.flv.impl.FLVReader;
 import org.red5.io.flv.impl.Tag;
 import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
-import org.red5.screen.webstart.gui.VirtualScreen;
-import org.red5.screen.webstart.gui.VirtualScreenBean;
+import org.red5.screen.webstart.tgui.VirtualScreen;
+import org.red5.screen.webstart.tgui.VirtualScreenBean;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.event.IEvent;
@@ -35,6 +35,7 @@ import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.red5.server.net.rtmp.event.SerializeUtils;
+import org.red5.server.net.rtmpt.RTMPTClient;
 import org.red5.server.stream.AbstractClientStream;
 import org.red5.server.stream.IStreamData;
 import org.red5.server.stream.message.RTMPMessage;
@@ -67,10 +68,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class ScreenShare extends RTMPClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
+public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
 
-    private static final Logger logger = LoggerFactory.getLogger( ScreenShare.class );
-    public static ScreenShare instance = null;
+    private static final Logger logger = LoggerFactory.getLogger( ScreenShareRTMPT.class );
+    public static ScreenShareRTMPT instance = null;
 
     public boolean startPublish = false;
     public Integer playStreamId;
@@ -121,7 +122,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 	public String host = "btg199251";
 	public String app = "oflaDemo";
-	public int port = 1935;
+	public int port = 8088;
 	
 	public boolean startRecording = false;
 	public boolean stopRecording = false;
@@ -160,11 +161,16 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     //
     // ------------------------------------------------------------------------
 
-	private ScreenShare() {};
+	private ScreenShareRTMPT() {};
 	
 	public static void main(String[] args)
 	{
-		instance = new ScreenShare();
+		
+		logger.debug("############## ScreenShareRTMPT ##################");
+		logger.debug("main "+args.length);
+		
+		
+		instance = new ScreenShareRTMPT();
 
 		if (args.length == 5) {
 			
@@ -211,9 +217,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     // Wrapper - Constructor for testing
     //
     // ------------------------------------------------------------------------
-	public ScreenShare(String host, String app, Integer port, String publishName)
+	public ScreenShareRTMPT(String host, String app, Integer port, String publishName)
 	{
-		instance = new ScreenShare();
+		instance = new ScreenShareRTMPT();
 
 		instance.host = host;
 		instance.app = app;
@@ -357,7 +363,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 			//*****
 			//Background Image
-			Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
+			Image im_left = ImageIO.read(ScreenShareRTMPT.class.getResource("/background.png"));
 			ImageIcon iIconBack = new ImageIcon(im_left);
 
 			JLabel jLab = new JLabel(iIconBack);
@@ -388,7 +394,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	}
 	
 	protected static ImageIcon createImageIcon(String path) throws Exception {
-	    java.net.URL imgURL = ScreenShare.class.getResource(path);
+	    java.net.URL imgURL = ScreenShareRTMPT.class.getResource(path);
 	    return new ImageIcon(imgURL);
 	}
 

@@ -239,16 +239,27 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 							
 							codebase = "http://"+rtmphostlocal+":"+red5httpport+httpRootKey+"red5-screenshare";
 						    
+							String connectionType = httpServletRequest.getParameter("connectionType");
+							if (connectionType == null) {
+								new Exception("No connectionType ");
+							}
+							
+							String startUpClass = "org.red5.screen.webstart.ScreenShare";
+							if (connectionType.equals("rtmpt")) {
+								startUpClass = "org.red5.screen.webstart.ScreenShareRTMPT";
+							}
+							
+							ctx.put("startUpClass", startUpClass);
 						    ctx.put("codebase", codebase);
 							ctx.put("red5-host", rtmphostlocal);
 							ctx.put("red5-app", ScopeApplicationAdapter.webAppRootKey+"/"+room);
 						    
-							String rtmpPort = httpServletRequest.getParameter("rtmpPort");
-							if (rtmpPort == null) {
-								new Exception("rtmpPort is empty: "+rtmpPort);
+							String port = httpServletRequest.getParameter("port");
+							if (port == null) {
+								new Exception("port is empty: ");
 								return null;
 							}
-							ctx.put("rtmp-port", rtmpPort);
+							ctx.put("port", port);
 						    
 						}
 						else

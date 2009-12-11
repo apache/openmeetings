@@ -110,7 +110,7 @@
             } else if (this.reconnectionAction){
                 this.connect();
   	 	    } else if (this.reconnectAfterRoomleft) {
-                Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
+                if ($debug) Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
                 this.counterror=0;
                 this.connect();
             } else {

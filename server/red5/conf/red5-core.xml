@@ -127,7 +127,7 @@
 	</bean>
 		
 	<!-- RTMPT -->
-<!--
+<!-- -->
 	<bean id="rtmpt.server" class="org.red5.server.net.rtmpt.TomcatRTMPTLoader" init-method="init" lazy-init="true">
 	
 		<property name="webappFolder" value="${red5.root}/webapps" />
@@ -161,7 +161,7 @@
 		</property>		
 
 	</bean>
--->
+
 	
 	<!-- RTMPS -->
 <!--

@@ -1,4 +1,4 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.gui;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -15,6 +15,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.red5.screen.webstart.BlankArea;
+import org.red5.screen.webstart.ScreenShare;
 
 
 public class VirtualScreen {

@@ -1,21 +1,24 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.tgui;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
-public class VirtualScreenYMouseListener extends MouseInputAdapter  {
+import org.red5.screen.webstart.ScreenShareRTMPT;
+
+
+public class VirtualScreenHeightMouseListener extends MouseInputAdapter  {
 
 	private double y = 0;
 
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR) ) ;
+		ScreenShareRTMPT.instance.t.setCursor( Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR) ) ;
 	}
 
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		ScreenShareRTMPT.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -34,14 +37,12 @@ public class VirtualScreenYMouseListener extends MouseInputAdapter  {
 		double newY = e.getY();
 
 		int delta = Long.valueOf(Math.round(this.y-newY)).intValue();
-		int newYPosition = VirtualScreenBean.vScreenSpinnerY-delta;
-		int newHeight = VirtualScreenBean.vScreenSpinnerHeight+delta;
+		int newHeight = VirtualScreenBean.vScreenSpinnerHeight-delta;
 
-//		System.out.println(delta+" "+newYPosition+" "+newHeight);
-		if (newYPosition>=0 && newHeight>=0) {
+		//System.out.println(delta+" "+newHeight);
+		if ((VirtualScreenBean.vScreenSpinnerY+newHeight)<=VirtualScreenBean.screenHeightMax) {
 			VirtualScreen.instance.doUpdateBounds=false;
-			ScreenShare.instance.jVScreenYSpin.setValue(newYPosition);
-			ScreenShare.instance.jVScreenHeightSpin.setValue(newHeight);
+			ScreenShareRTMPT.instance.jVScreenHeightSpin.setValue(newHeight);
 			VirtualScreen.instance.doUpdateBounds=true;
 			VirtualScreen.instance.updateVScreenBounds();
 

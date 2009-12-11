@@ -1,4 +1,4 @@
-package org.red5.screen.webstart;
+package org.red5.screen.webstart.gui;
 
 import java.awt.Robot;
 
