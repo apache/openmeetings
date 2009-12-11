@@ -446,7 +446,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ID</value>
   </string>
   <string id="147" name="admin_userlist_login">
-    <value>Entrar</value>
+    <value>Usuario</value>
   </string>
   <string id="148" name="admin_userlist_firstnam">
     <value>nombre</value>
@@ -488,7 +488,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>activo</value>
   </string>
   <string id="161" name="useralter_admin_organisation">
-    <value>organizaciones</value>
+    <value>Organizaciones</value>
   </string>
   <string id="162" name="calendar_iconlabel">
     <value>calendario</value>
@@ -1068,7 +1068,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Valor de los campos</value>
   </string>
   <string id="354" name="languageseditor">
-    <value>Nombre de la etiqueta</value>
+    <value>Nombre</value>
   </string>
   <string id="355" name="languageseditor">
     <value>Valor de la etiqueta</value>
@@ -1146,25 +1146,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Subir imagen</value>
   </string>
   <string id="380" name="backuppanel">
-    <value>Datos de usuario - Exportar</value>
+    <value>Exportación de datos de usuario</value>
   </string>
   <string id="381" name="backuppanel">
-    <value>¡Todas las organizaciones deben existir!</value>
+    <value>¡Deben existir todas las organizaciones!</value>
   </string>
   <string id="382" name="backuppanel">
-    <value>iniciar proceso de exportación</value>
+    <value>Exportar usuarios</value>
   </string>
   <string id="383" name="backuppanel">
-    <value>Por organización</value>
+    <value>Exportar por organización</value>
   </string>
   <string id="384" name="backuppanel">
-    <value>iniciar proceso de exportación</value>
+    <value>Iniciar proceso de exportación</value>
   </string>
   <string id="385" name="backuppanel">
-    <value>Datos de usuario - Importar</value>
+    <value>Importación de datos de usuario</value>
   </string>
   <string id="386" name="backuppanel">
-    <value>seleccionar archivo de usuarios.xml</value>
+    <value>Seleccionar archivo xml</value>
   </string>
   <string id="387" name="languageseditor">
     <value>importar</value>
@@ -1774,7 +1774,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Crear usuarios, salas, organizaciones&lt;br/&gt; + cambios en la configuración</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>Usuarios actuales en esta Sala</value>
+    <value>Usuarios en la Sala</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
@@ -1822,13 +1822,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Sala / Ámbito</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Echar a un usuario</value>
+    <value>Expulsar al usuario</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Echar a un usuario</value>
+    <value>Expulsar</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>¿Está seguro de querer echar a este cliente de la conexión?&lt;br/&gt; El cliente será echado de la Sala, pero podrá volver a autenticarse de nuevo.</value>
+    <value>¿Está seguro de querer expulsar a este cliente de la conexión?&lt;br/&gt; El cliente será expulsado de la Sala, pero podrá volver a autenticarse de nuevo.</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>Su sesión ha sido cerrada por el administrador o el moderador.</value>
@@ -1915,7 +1915,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Confirmar Salir</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
-    <value>¿Está seguro de que desea salir ahora?</value>
+    <value>¿Está seguro de que desea salir?</value>
   </string>
   <string id="635" name="main menu">
     <value>Acciones</value>
@@ -2428,7 +2428,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>OpenMeetings, su Plataforma Web de Videoconferencia. Sólo siga las instrucciones, presione el botón para iniciar inmediatamente o vaya al Calendario para programar un Encuentro más adelante.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Planificar Encuentro</value>
+    <value>Progr. Encuentro</value>
   </string>
   <string id="806" name="lzcalendar">
     <value>Para planificar una conferencia, añada un nuevo Evento en el Calendario. Para cada Evento se creará automáticamente una Sala de (vídeo)conferencia. Usted y el resto de asistentes recibirán un correo con un enlace de la sala.&lt;br/&gt;&lt;br/&gt;Puede escoger entre diferentes tipos de salas con diferentes diseños y sistemas de moderación. También puede escoger entre diferentes tipos de notificación de correo que se envían en cada evento del calendario.</value>
@@ -2482,7 +2482,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>¿Es supermoderador</value>
   </string>
   <string id="823" name="room admin">
-  <value>Si la sala está moderada, el usuario con nivel previo de moderador o de administrdor se convierte automáticamente en Moderador de la misma al entrar. Si no desea que sea así, y sólo quiere que determinado usuario sea el moderador, utilice la opción de Moderador por defecto.</value>
+  <value>Si la sala está moderada, quien sea ya moderador seguirá siéndolo. Si no desea que sea así, y sólo quiere que determinado usuario sea el moderador, utilice la opción de Moderador por defecto.</value>
   </string>
   <string id="824" name="room admin">
   <value>Un supermoderador es siempre el moderador de una sala cuando entra en ella. Además, nadie puede quitarle la marca de moderación</value>
@@ -2536,10 +2536,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>¿Borrar Archivo/Directorio?</value>
   </string>
   <string id="841" name="salutation">
-  <value>Sra.</value>
+  <value>Dña.</value>
   </string>
   <string id="842" name="salutation">
-  <value>Sr.</value>
+  <value>D.</value>
   </string>
   <string id="843" name="property panel whiteboard">
   <value>Propiedades</value>
@@ -2554,30 +2554,30 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Compartir Audio con SIP y Vídeo con Flash</value>
   </string>
   <string id="847" name="document panel">
-    <value>Full-Fit</value>
+  <value>Pantalla completa</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+  <value>Ver pantalla</value>
   </string>
   <string id="849" name="screen share">
-    <value>The user</value>
+  <value>El usuario</value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+  <value>desea compartir su pantalla. ¿Desea visualizarla?</value>
   </string>
   <string id="851" name="screen share">
-    <value>Close</value>
+  <value>Cerrar</value>
   </string>
   <string id="852" name="screen sharer">
-    <value>Zoom</value>
+  <value>Zoom</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>The Session was closed by the sharing User!</value>
+  <value>La sesión ha sido cerrada por quien compartía pantalla</value>
   </string>
   <string id="854" name="screen sharer">
-    <value>Pause</value>
+  <value>Pausa</value>
   </string>
   <string id="855" name="screen sharer">
-    <value>New Screen Sharing</value>
+  <value>Compartir pantalla</value>
   </string>
 </language>
