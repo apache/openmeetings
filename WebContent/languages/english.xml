@@ -1249,7 +1249,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Play / Pause</value>
   </string>
   <string id="415" name="record">
-    <value>Start recording</value>
+    <value>Record this Meeting</value>
   </string>
   <string id="416" name="record">
     <value>stop recording</value>
@@ -1258,7 +1258,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Recording:</value>
   </string>
   <string id="418" name="record_error_msg">
-    <value>There is already somebody recording at the moment:</value>
+    <value>There is already somebody recording in this meeting!</value>
   </string>
   <string id="419" name="record_message">
     <value>Recording! By User:</value>
@@ -2570,5 +2570,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="855" name="screen sharer">
     <value>New Screen Sharing</value>
+  </string>
+  <string id="856" name="presenter mini icon">
+    <value>Minimize</value>
+  </string>
+  <string id="857" name="presenter mini icon">
+    <value>Maximize</value>
   </string>
 </language>

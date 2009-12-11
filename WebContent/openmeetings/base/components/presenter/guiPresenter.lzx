@@ -61,7 +61,14 @@
     <attribute name="fullToolBar" value="true" type="boolean" />
     
     <attribute name="maximazable" value="true" type="boolean" />
-    <attribute name="minimazable" value="false" type="boolean" />
+    
+    <attribute name="minimazable" value="true" type="boolean" />
+    
+    <attribute name="minimized" value="false" type="boolean" />
+    
+    <attribute name="customMinimizeMethod" value="false" type="boolean" />
+    
+    <attribute name="initialHeight" value="0" type="number"/>
     
     <!--- @keywords private if this window is dragable -->
     <attribute name="isdragable" value="true" type="boolean" />
@@ -131,7 +138,64 @@
 	</method>
     
     <method name="minimize">
-        
+        <![CDATA[
+	        this.setAttribute("minimized",true);
+	        
+	        this._titlebar._toolbar._minimize.setAttribute("visibility","hidden");
+	        this._titlebar._toolbar._maximize2.setAttribute("visibility","visible");
+	        
+	        if (this.customMinimizeMethod) {
+	            return;
+	        }
+	        
+	        for (var eg in this.subviews) {
+	            if (this.subviews[eg].name != "_titlebar" 
+	                    && this.subviews[eg].name != "_bg") {
+	                 this.subviews[eg].setAttribute("visibility","hidden");   
+	            }
+	        }
+            
+	        this.initialHeight = this.height;
+	        //this.setAttribute("height",20);
+            this._minimizeZoom.setAttribute("to",20);
+            this._minimizeZoom.doStart();
+        ]]>
+    </method>
+    
+    <method name="reminimize">
+        <![CDATA[
+	        this.setAttribute("minimized",false);
+	        
+	        this._titlebar._toolbar._minimize.setAttribute("visibility","visible");
+	        this._titlebar._toolbar._maximize2.setAttribute("visibility","hidden");
+	        
+	        if (this.customMinimizeMethod) {
+	            return;
+	        }
+	        
+	        //this.setAttribute("height",this.initialHeight); 
+            this._minimizeZoom.setAttribute("to",this.initialHeight);
+            this._minimizeZoom.doStart();
+        ]]>
+    </method>
+    
+    <method name="reminimizeComplete">
+        <![CDATA[
+	        if (!this.minimized) {
+	            
+	            for (var eg in this.subviews) {
+	                if (this.subviews[eg].name != "_titlebar" 
+	                        && this.subviews[eg].name != "_bg") {
+	                     this.subviews[eg].setAttribute("visibility","visible");   
+	                }
+	            }
+	            
+	            if (!this.resizeable) {
+	                this._resizeview.setAttribute("visibility","hidden");   
+	            }
+	        
+	        }
+        ]]>
     </method>
 	
 	<method name="toggleopen">
@@ -396,35 +460,34 @@
 		<text fontsize="10" name="_title" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
 			resize="true" fontstyle="bold" fgcolor="white" />
 	    <view name="_toolbar" visibility="$once{ ((parent.parent.fullToolBar) ? 'visible' : 'hidden' ) }" 
-	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:2" y="2">     
+	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
             
-            <view name="_minimize"
+            <miniIconsPresenter name="_minimize"
                 visibility="$once{ ((parent.parent.parent.minimazable) ? 'visible' : 'hidden' ) }" 
-                resource="btn_presenter_minimize"
-                onmouseover="this.setAttribute('frame',2)"
-                onmouseout="this.setAttribute('frame',1)"
-                onmousedown="this.setAttribute('frame',3)"
-                onmouseup="this.setAttribute('frame',1)" >
+                iconRessourceName="btn_presenter_minimize">
                 <handler name="onclick">
-                    this.setAttribute('frame',2);
                     this.parent.parent.parent.minimize();
                 </handler>
-                <labelTooltip labelid="431" />
-            </view>
+                <labelTooltip labelid="856" />
+            </miniIconsPresenter>
             
-	        <view name="_close"
+            <miniIconsPresenter name="_maximize2" visibility="hidden"
+                iconRessourceName="btn_presenter_maximize">
+                <handler name="onclick">
+                    this.parent.parent.parent.reminimize();
+                </handler>
+                <labelTooltip labelid="857" />
+            </miniIconsPresenter>
+            
+	        <miniIconsPresenter name="_close"
 	            visibility="$once{ ((parent.parent.parent.closable) ? 'visible' : 'hidden' ) }"
-	            resource="btn_presenter_close"
-	            onmouseover="this.setAttribute('frame',2)"
-	            onmouseout="this.setAttribute('frame',1)"
-	            onmousedown="this.setAttribute('frame',3)"
-	            onmouseup="this.setAttribute('frame',1)" >
+	            iconRessourceName="btn_presenter_close2">
 	            <handler name="onclick">
-	                this.setAttribute('frame',2);
 	                this.parent.parent.parent.close();
 	            </handler>
 	            <labelTooltip labelid="430" />
-	        </view>  
+	        </miniIconsPresenter>  
+            
 	    </view>  			
 	</view>
     <handler name="onaddsubview" args="v">
@@ -439,6 +502,43 @@
         <labelTooltip text="resize" />
     </view>    
     <resizestate name="rs"/>
+    
+    <animator name="_minimizeZoom" attribute="height" 
+              duration="750" to="20" start="false">
+        <handler name="onstop" args="s">
+            parent.reminimizeComplete();
+        </handler>
+    </animator>
+    
+</class>
+
+<class name="miniIconsPresenter" extends="view">
+    
+    <attribute name="iconRessourceName" value="" type="string"/>
+    
+    <handler name="onmouseover">
+        this._bg.setAttribute("bgcolor",0xFFFFFF);
+        this._bg.setAttribute("visibility","visible");
+    </handler>
+    
+    <handler name="onmouseout">
+        this._bg.setAttribute("visibility","hidden");
+    </handler>
+    
+    <handler name="onmousedown">
+        this._bg.setAttribute("bgcolor",canvas.basebgcolorizer);
+        this._bg.setAttribute("visibility","visible");
+    </handler>
+    
+    <handler name="onmouseup">
+        this._bg.setAttribute("visibility","hidden");
+    </handler>
+    
+    <view name="_bg" visibility="hidden" opacity="0.7"
+          width="14" height="14" x="1" y="1" bgcolor="0xFFFFFF" />
+          
+    <view resource="$once{ parent.iconRessourceName }" />
+    
 </class>
 
 </library>

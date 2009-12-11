@@ -3,11 +3,11 @@
 
 	<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
      
-    <resource name="btn_presenter_minimize">
-        <frame src="minimize_up.swf" />
-        <frame src="minimize_mo.swf" />
-        <frame src="minimize_dn.swf" />
-    </resource>
+    <resource name="btn_presenter_minimize" src="minimize_up.png" />
+    <resource name="btn_presenter_maximize" src="maximize_up.png" />
+    <resource name="btn_presenter_maximize2" src="maximize2_up.png" />
+    
+    <resource name="btn_presenter_close2" src="close_up.png" />
     
 	<resource name="btn_presenter_close">
         <frame src="close_up.png" />

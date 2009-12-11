@@ -2580,4 +2580,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="855" name="screen sharer">
   <value>Compartir pantalla</value>
   </string>
+  <string id="856" name="presenter mini icon">
+    <value>Minimize</value>
+  </string>
+  <string id="857" name="presenter mini icon">
+    <value>Maximize</value>
+  </string>
 </language>

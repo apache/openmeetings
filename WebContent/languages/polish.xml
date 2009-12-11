@@ -2645,4 +2645,10 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="855" name="screen sharer">
     <value>New Screen Sharing</value>
   </string>
+  <string id="856" name="presenter mini icon">
+    <value>Minimize</value>
+  </string>
+  <string id="857" name="presenter mini icon">
+    <value>Maximize</value>
+  </string>
 </language>

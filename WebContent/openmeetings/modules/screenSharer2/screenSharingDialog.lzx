@@ -29,7 +29,7 @@
 </class>    
 
 <class name="screenSharingDialog" extends="guiPresenter" labelid="855"
-    docking="true" resizeable="false" closable="true" 
+    docking="true" resizeable="true" closable="true" 
     width="270" x="${ canvas.width - this.width - 20 }" height="100">
     
     <attribute name="isStarted" value="false" type="boolean" />
@@ -63,8 +63,8 @@
             this._initText.setAttribute("visibility","hidden");
         
             this._showScreenSharing._y.setAttribute("to",0);
-            this._showScreenSharing._height.setAttribute("to",canvas.height);
-            this._showScreenSharing._width.setAttribute("to",canvas.width);
+            this._showScreenSharing._height.setAttribute("to",canvas.height-32);
+            this._showScreenSharing._width.setAttribute("to",canvas.width-260);
         
             this._showScreenSharing.doStart();
             
