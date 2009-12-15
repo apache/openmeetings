@@ -99,7 +99,7 @@ public class MeetingMemberLogic {
 						1, // valid
 						point.getAppointmentStarttime(), // valid from
 						point.getAppointmentEndtime(), // valid to
-						new Long(1), // created by
+						meeting_organizer, // created by
 						point.getAppointmentId(),
 						member.getInvitor()
 					);
