@@ -42,23 +42,6 @@
         
 	</view>
 
-	<view name="mute" x="20" y="${ parent.height - 20 }" 
-		onmouseover="" onmouseup="" resource="mute_btn_rsc" >
-		<attribute name="isload" value="true" type="boolean" />
-		<handler name="onclick">
-			if (this.isload){
-				parent._chatvideoinner._videostream.setVolume(0);
-				this.setAttribute('frame',2);
-				this.isload = false;
-			} else {
-				parent._chatvideoinner._videostream.setVolume(100);
-				this.setAttribute('frame',1);
-				this.isload = true;
-			}
-		</handler>
-		<labelTooltip inittwice="true" labelid="373" />
-	</view>
-
 </class>
 
 </library>

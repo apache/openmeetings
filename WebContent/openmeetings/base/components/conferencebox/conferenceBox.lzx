@@ -16,18 +16,25 @@
     
     <attribute name="textInset" value="10" type="number" />
     
+    <attribute name="initHeight" value="0" type="number"/>
+    
+    <attribute name="closedHeight" value="40" type="number"/>
+    
     <handler name="oninit">
-        this.initHeight = this.height;
+        if (this.initHeight == 0) {
+            this.initHeight = this.height;
+        }
     </handler>
     
     <method name="toggleopen">
         if (this.isopen) {
             this.setAttribute("isopen",false);
-            this.setAttribute("height",40);
+            this.setAttribute("height",this.closedHeight);
             this.content.setAttribute("visibility","hidden");
         } else {
             this.setAttribute("isopen",true);
             this.setAttribute("height",this.initHeight);
+            //if ($debug) Debug.write("toggleopen TRUE ",this.initHeight)
             this.content.setAttribute("visibility","visible");
         }
     </method>
@@ -43,6 +50,7 @@
         
         <view width="${ parent.width }" height="$once{ parent.height }" 
               stretches="both" resource="presenter_thumb_rsc" >
+            
             <handler name="oninit">
                 <![CDATA[
                     this.setTintRGB(canvas.basebgcolorizer,90);

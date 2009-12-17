@@ -6,22 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.openmeetings.app.data.record.dao.ChatvaluesEventDaoImpl;
-import org.openmeetings.app.data.record.dao.RecordingClientDaoImpl;
-import org.openmeetings.app.data.record.dao.RecordingDaoImpl;
-import org.openmeetings.app.data.record.dao.RoomRecordingDaoImpl;
-import org.openmeetings.app.data.record.dao.RoomStreamDaoImpl;
-import org.openmeetings.app.data.record.dao.WhiteBoardEventDaoImpl;
-import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.recording.ChatvaluesEvent;
-import org.openmeetings.app.hibernate.beans.recording.RecordingClient;
+import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
+import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
-import org.openmeetings.app.hibernate.beans.recording.RoomRecording;
-import org.openmeetings.app.hibernate.beans.recording.RoomStream;
-import org.openmeetings.app.hibernate.beans.recording.WhiteBoardEvent;
-import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -417,5 +408,28 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.error("[addRecordingByStreamId]",err);
 		}	
 	}
+	
+	
+	public FLVRecorderObject getFLVExplorerByRoom(String SID) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	FLVRecorderObject fileExplorerObject = new FLVRecorderObject();
+	        	
+	        	fileExplorerObject.setUserHome(this.flvRecordingDaoImpl.getFlvRecordingRootByOwner(users_id));
+	        	
+	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getInstance().getFlvRecordingRootByPublic());
+	        	
+	        	return fileExplorerObject;
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[getFileExplorerByRoom] "+err);
+		}
+		return null;
+	}
+	
 	
 }

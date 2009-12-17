@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="rootFileExplorerItem" extends="baseFLVExplorerItem" isFolder="true" isRoot="true">
+	
+	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
+		<contextmenu>
+            				 
+            <contextmenuitem caption="$once{ canvas.getLabelName(709) }" 
+            				 onselect="parent.parent.parent.addFolder()" />
+            				 
+        </contextmenu>
+        
+        <handler name="onmousetrackover">
+            //if ($debug) Debug.write("onmousetrackover");
+            canvas.currentImagesListdraw.currentDragItem.sendOverItem(parent);
+            this.setAttribute("bgcolor",0x93FE92);
+        </handler>
+        
+        <handler name="onmousetrackout">
+            //if ($debug) Debug.write("onmousetrackout");
+            canvas.currentImagesListdraw.currentDragItem.sendOutItem(parent);
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler>
+        
+        <handler name="onmousetrackup">
+            if ($debug) Debug.write("onmousetrackup");
+            this.setAttribute("bgcolor",0xFFFFFF);
+        </handler> 
+        
+		<handler name="onclick">
+            parent.toggleOpen(true);
+        </handler>
+	</text>
+	
+	<view name="content" x="12" y="18" layout="axis:y;inset:1" visibility="hidden">
+		
+	</view>
+</class>
+
+
+</library>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordContent" extends="baseContentView">	
+
+    <handler name="oninit">
+        
+        _mainScrollBar.setAttribute("visibility","hidden");
+        
+    </handler>
+    
+    <handler name="ontabcontentleave">
+        _mainScrollBar.setAttribute("visibility","visible");
+    </handler>    
+        
+    <lzRecordNavigation name="_navigationArea" />
+    
+    <conferenceBox name="_recordingsViewMain" labelid="858"
+           x="${ parent._navigationArea.width + parent._navigationArea.x }"
+           height="${ canvas.height - 110 - parent._recordingsViewBottom.height }"
+          width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
+        
+        
+        
+    </conferenceBox>
+    
+    
+    <conferenceBox name="_recordingsViewBottom" labelid="859" 
+                   y="${ canvas.height - 110 - this.height }" initHeight="200"
+                   height="32" textInset="30" closeable="true" isopen="false" closedHeight="40"
+                   x="${ parent._navigationArea.width + parent._navigationArea.x }"
+                   width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
+        
+        <view name="content" visibility="hidden" y="32" bgcolor="0xFF3300"
+              width="${ parent.width }" height="168">
+            
+            
+            
+        </view>
+        
+        
+        
+    </conferenceBox>
+
+</class>
+
+
+
+</library>

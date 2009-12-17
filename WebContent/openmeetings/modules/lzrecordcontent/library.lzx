@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	  <resource name="drag_n_drop_rsc">
+        <frame src="resources/icon_drag_no.png" />
+        <frame src="resources/icon_drag_add.png" />
+    </resource>
+    
+    <resource name="file_explorer_add_file_rsc" src="resources/viewmag_plus.png" />
+    <resource name="file_explorer_add_folder_rsc" src="resources/folder_new.png" />
+    <resource name="file_explorer_reload_rsc" src="resources/reload.png" />
+    <resource name="file_explorer_trash_rsc" src="resources/trashcan_empty.png" />
+    
+    <resource name="icon_folder_pre_rsc">
+        <frame src="resources/icon_folder_pre_closed_rsc.png" />
+        <frame src="resources/icon_folder_pre_open_rsc.png" />
+    </resource>
+    
+    <resource name="icon_folder_rsc">
+        <frame src="resources/folder_blue.png" />
+        <frame src="resources/folder_blue_open.png" />
+    </resource>
+    
+    <resource name="file_explorer_close_rsc" src="resources/stop.png" />
+    
+    <resource name="file_explorer_view_tree_rsc" src="resources/view_tree.png" />
+    
+    <resource name="file_explorer_image_rsc" src="resources/image.png" />
+    <resource name="file_explorer_document_rsc" src="resources/x-office-presentation.png" />
+    <resource name="file_explorer_folder_rsc" src="resources/folder_blue_open.png" />
+     
+    <resource name="file_explorer_folder_network_rsc" src="resources/network.png" />
+    <resource name="file_explorer_folder_home_rsc" src="resources/folder_home.png" />
+    
+    <include href="baseChooseIconFLVView.lzx" />
+    <include href="dynamicFLVName.lzx" />
+    <include href="dragItemFLVExplorer.lzx" />
+    <include href="lzRecordContent.lzx" />
+    <include href="lzRecordNavigation.lzx" />
+    <include href="treeitems/" />
+
+</library>

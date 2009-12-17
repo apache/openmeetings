@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordNavigation" extends="view" width="280" height="${ canvas.height-110 }">	
+
+    <attribute name="isOpen" value="true" type="boolean"/>
+    
+    <attribute name="parentFolderId" value="-2" type="number" />
+    
+    <attribute name="_selected" value="null" />
+    
+    <handler name="oninit">
+        lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
+        this.getFLVExplorerByRoom.doCall();
+    </handler>
+    
+    <method name="toggleStatus">
+        if (this.isOpen) {
+            this._doClose.doStart();
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+        } else {
+            this._doOpen.doStart();
+            this.isOpen = true;
+            this._minimizeSidebar._icon.setAttribute("frame",1);
+        }
+    </method>
+    
+    <!--
+        public FLVRecorderObject getFLVExplorerByRoom(String SID)
+     -->
+    <netRemoteCallHib name="getFLVExplorerByRoom" funcname="flvrecorderservice.getFLVExplorerByRoom" 
+        remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
+            parent.parseRootItems(value);
+        </handler>
+    </netRemoteCallHib>  
+    
+     <!--
+        Parse Items and generate Output
+     --> 
+    <method name="parseRootItems" args="roomObject">
+        <![CDATA[
+            this.clearContent();
+            
+            var homeIcon = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(860),
+                                        name:'_home',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_home_rsc',
+                                        isOwner:true,
+                                        refObjListRoot:this
+                                    });
+                                    
+            homeIcon.content.setAttribute("visibility","visible");
+            homeIcon.icon_folder_pre.setAttribute("frame",2);
+            homeIcon._folderIcon.setAttribute("frame",2);
+            
+            //Home area
+            for (var i=0;i<roomObject.userHome.length;i++) {
+                var fileExplorerItem = roomObject.userHome[i];
+                if ($debug) Debug.write("fileExplorerItem -1- ",fileExplorerItem);
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFLVExplorerItem(homeIcon.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else {
+                    new lz.flvExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_image_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+            //Public - Room Area
+            var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(861),
+                                        name:'_roomHome',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_network_rsc',
+                                        refObjListRoot:this
+                                    });
+                                    
+            roomHome.content.setAttribute("visibility","visible");
+            roomHome.icon_folder_pre.setAttribute("frame",2);
+            roomHome._folderIcon.setAttribute("frame",2);
+            
+            //Public area
+            for (var i=0;i<roomObject.roomHome.length;i++) {
+                var fileExplorerItem = roomObject.roomHome[i];
+                if ($debug) Debug.write("fileExplorerItem -2- ",fileExplorerItem);
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFLVExplorerItem(roomHome.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else {
+                    new lz.flvExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.flvRecordingId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_image_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+        ]]>
+    </method>
+    
+    <method name="clearContent">
+        <![CDATA[
+            for (var eg in this._filearea._contentarea.subviews) {
+                this._filearea._contentarea.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+    
+    <method name="addFolder">
+        if (this._selected == null) {
+            this._filearea._contentarea.subviews[0].addFolder();
+        } else {
+            if (this._selected.isFolder) {
+                this._selected.addFolder();
+            } else {
+                if ($debug) Debug.write("this._selected ",this._selected);
+                this._selected.parent.parent.addFolder();
+            }
+        }
+    </method>
+    
+    <method name="selectItem" args="itemRef">
+        if (this._selected != null) {
+            this._selected.deselectItem();
+        }
+        
+        this._selected = itemRef;
+        this._selected.selectItem();
+        
+        //Set parent folder id for next Folder or uploaded file
+        if (this._selected.fileExplorerItemId == 0) {
+            if (this._selected.isOwner) {
+                this.parentFolderId = -2;
+            } else {
+                this.parentFolderId = 0;
+            }
+        } else {
+            this.parentFolderId = this._selected.fileExplorerItemId;
+        }
+        
+    </method>
+        
+    <!--
+        Borders
+     --> 
+    
+    <view name="_bg1" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width-10 }" 
+          x="0" y="0" height="${ parent.height }" />
+          
+    <view name="_bg2" bgcolor="0xFFFFFF" x="1" y="0" width="$once{ parent.width - 12 }" 
+          height="${ parent.height-1 }" />
+    
+    <!--      
+    <view name="_border1a" x="0" y="0" width="1" 
+          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
+    <view name="_border1b" x="${ parent.width-1 }" y="0" width="1" 
+          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
+     -->
+               
+    <view name="_border2" x="0" y="19" width="$once{ parent.width-10 }" 
+          height="1" bgcolor="$once{ canvas.basebgcolorizer }" />     
+    
+    <!--
+        File Tree Content Tabbar
+     --> 
+     
+    <view name="_fileBar" layout="axis:x" x="0" y="0">
+        <baseChooseIconFLVView labelid="703" height="20" width="19" 
+                            resourceN="file_explorer_add_folder_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Add Folder");
+                parent.parent.addFolder();
+            </handler>
+        </baseChooseIconFLVView>
+        <baseChooseIconFLVView labelid="704" height="20" width="19" 
+                            resourceN="file_explorer_reload_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Refresh Folder");
+                parent.parent.getFLVExplorerByRoom.doCall();
+            </handler>
+        </baseChooseIconFLVView>
+        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content Trashbar
+     --> 
+     
+    <view name="_trashBar" layout="axis:x" x="$once{ parent.width - 30 }" y="0">
+        <baseChooseIconFLVView name="_trashIcon" labelid="705" height="20" width="19" 
+                         resourceN="file_explorer_trash_rsc">
+            <attribute name="isTrashCan" value="true" type="boolean" />
+            <handler name="onclick">
+                if ($debug) Debug.write("Delete Folder and Files");
+            </handler>
+            <handler name="onmousetrackover">
+                //if ($debug) Debug.write("onmousetrackover");
+                canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
+                this.onmouseover.sendEvent();
+            </handler>
+            <handler name="onmousetrackout">
+                //if ($debug) Debug.write("onmousetrackout");
+                canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
+                this.onmouseout.sendEvent();
+            </handler>
+            <handler name="onmousetrackup">
+                if ($debug) Debug.write("onmousetrackup");
+                this.onmouseout.sendEvent();
+            </handler> 
+        </baseChooseIconFLVView>
+        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content
+     --> 
+    
+    <view name="_filearea" x="1" y="20" clip="true"
+          height="${ parent.height - 19 }" width="$once{ parent.width - 12 }">
+        
+        <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
+        
+        <attribute name="currentDragItem" value="null" />
+        
+        <handler name="oninit">
+            canvas.currentImagesListdraw = this;
+        </handler>
+        
+        <view name="_contentarea" layout="axis:y;inset:1" />
+        
+        <vscrollbar name="_scrollbar" />
+        <hscrollbar name="_hscrollbar" />
+    </view>    
+
+    <!--
+        Sidebar to minimize
+     -->
+     
+    <view name="_minimizeSidebar" x="$once{ parent.width - 10 }" width="10" 
+          bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">
+        <handler name="onclick">
+            parent.toggleStatus();
+        </handler>
+        <handler name="onmouseover">
+            this._bg1.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg1.setAttribute("visibility","hidden");
+        </handler>
+        
+        <view width="${ parent.width }" height="$once{ parent.height*1.4 }" 
+              stretches="both" resource="presenter_thumb_rsc" >
+            <handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,90);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                    if (color != "" && color != null){
+    
+                        if (brightness == null) { brightness = 0; }
+                        var rgb = color;
+                        var red=(rgb >> 16) & 0xFF;
+                        var green=(rgb >> 8) & 0xFF;
+                        var blue=rgb & 0xFF;
+            
+                        this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                    rb : 0, gb : 0, bb : 0 } );
+                                                    
+                    }
+                ]]>
+            </method>            
+        </view>
+        
+        <view name="_bg1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
+            height="$once{ parent.height }" opacity="0.7" visibility="hidden"/> 
+            
+        <view name="_icon" resource="sidebar_tab_btn" 
+              valign="middle" align="center" />
+    </view>
+        
+    <animator name="_doOpen" attribute="x" to="0" 
+              duration="750" start="false" />
+              
+    <animator name="_doClose" attribute="x" to="-270" 
+              duration="750" start="false" />
+    
+</class>
+
+
+
+</library>

@@ -107,6 +107,8 @@
 		
 		this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
         
+        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
+        
 		this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));  
         
         

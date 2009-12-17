@@ -272,7 +272,7 @@ of the red5-servlet
     Event Room Modules
  -->
 
-<recordModule>recordContent</recordModule>
+<recordModule>lzRecordContent</recordModule>
 
 <!-- #############################################
     Profiles Panel Modules

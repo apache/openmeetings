@@ -85,6 +85,63 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
+	public List<FlvRecording> getFlvRecordingRootByPublic() {
+		try {
+			
+			String hql = "SELECT c FROM FlvRecording c " +
+					"WHERE c.deleted != :deleted " +
+					"AND c.ownerId IS NULL " +
+					"AND c.parentFileExplorerItemId IS NULL " +
+					"ORDER BY c.isFolder DESC, c.fileName ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("deleted", "true");
+			
+			List<FlvRecording> flvRecordingList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingList;
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordingByOwner]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordingByOwner]: ",ex2);
+		}
+		return null;
+	}
+	
+	public List<FlvRecording> getFlvRecordingRootByOwner(Long ownerId) {
+		try {
+			
+			String hql = "SELECT c FROM FlvRecording c " +
+					"WHERE c.deleted != :deleted " +
+					"AND c.ownerId = :ownerId " +
+					"AND c.parentFileExplorerItemId IS NULL " +
+					"ORDER BY c.isFolder DESC, c.fileName ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("deleted", "true");
+			query.setLong("ownerId",ownerId);
+			
+			List<FlvRecording> flvRecordingList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingList;
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordingByOwner]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordingByOwner]: ",ex2);
+		}
+		return null;
+	}
+	
 	public List<FlvRecording> getFlvRecordingByOwner(Long ownerId, Long parentFileExplorerItemId) {
 		try {
 			

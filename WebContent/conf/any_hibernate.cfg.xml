@@ -59,6 +59,8 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/calendar/MeetingMember.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/domain/Organisation.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/domain/Organisation_Users.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/flvrecord/FlvRecording.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/flvrecord/FlvRecordingMetaData.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/invitation/Invitations.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/lang/FieldLanguage.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/lang/Fieldlanguagesvalues.hbm.xml"/>

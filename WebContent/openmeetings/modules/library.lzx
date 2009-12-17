@@ -9,7 +9,7 @@
 	<include href="settings/" />
 
 	<include href="invitation/" />
-
+    <include href="lzrecordcontent/" />
 
 	<include href="dashboard/" />
 

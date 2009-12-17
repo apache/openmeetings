@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+ 
+<class name="flvExplorerItem" extends="baseFLVExplorerItem" isFolder="true">
+	
+    
+	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
+		<contextmenu>
+			
+			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
+							 onselect="parent.parent.parent.editFolderName()" />
+			
+            <contextmenuitem caption="$once{ canvas.getLabelName(719) }" 
+            				 onselect="parent.parent.parent.deleteFile(719)" />
+            				 
+        </contextmenu>
+        
+        <handler name="onmousedown">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.addTimer( parent.mouseDownClickDelegate, 300 );
+        </handler>
+        <handler name="onmouseup">
+        	if (parent.isRoot) {
+                return;
+            }
+            lz.Timer.removeTimer( parent.mouseDownClickDelegate );
+        </handler>
+		<handler name="onclick">
+            parent.toggleOpen(true);
+        </handler>
+	</text>
+	
+
+</class>
+
+
+</library>
