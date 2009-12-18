@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-	  <resource name="drag_n_drop_rsc">
+    <resource name="drag_n_drop_rsc">
         <frame src="resources/icon_drag_no.png" />
         <frame src="resources/icon_drag_add.png" />
     </resource>
+    
+    <resource name="flv_recorder_play_rsc" src="resources/webstart_play.png" />
     
     <resource name="file_explorer_add_file_rsc" src="resources/viewmag_plus.png" />
     <resource name="file_explorer_add_folder_rsc" src="resources/folder_new.png" />
     <resource name="file_explorer_reload_rsc" src="resources/reload.png" />
     <resource name="file_explorer_trash_rsc" src="resources/trashcan_empty.png" />
+    
+    <resource name="icon_flv_recording_video_end_rsc" src="resources/icon_flv_recording_video_end.png" />
+    <resource name="icon_flv_recording_video_start_rsc" src="resources/icon_flv_recording_video_start.png" />
     
     <resource name="icon_folder_pre_rsc">
         <frame src="resources/icon_folder_pre_closed_rsc.png" />

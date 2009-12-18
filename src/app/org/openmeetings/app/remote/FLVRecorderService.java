@@ -4,14 +4,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -35,6 +39,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private ClientListManager clientListManager = null;
 	private FlvRecordingDaoImpl flvRecordingDaoImpl = null;
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
+	private UsersDaoImpl usersDaoImpl;
+	private Roommanagement roommanagement;
 	
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -61,6 +67,20 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void setFlvRecordingMetaDataDaoImpl(
 			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl) {
 		this.flvRecordingMetaDataDaoImpl = flvRecordingMetaDataDaoImpl;
+	}
+	
+	public UsersDaoImpl getUsersDaoImpl() {
+		return usersDaoImpl;
+	}
+	public void setUsersDaoImpl(UsersDaoImpl usersDaoImpl) {
+		this.usersDaoImpl = usersDaoImpl;
+	}
+	
+	public Roommanagement getRoommanagement() {
+		return roommanagement;
+	}
+	public void setRoommanagement(Roommanagement roommanagement) {
+		this.roommanagement = roommanagement;
 	}
 
 	public RoomClient checkForRecording(){
@@ -409,6 +429,161 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		}	
 	}
 	
+	public FlvRecording getFlvRecordingWithMetaData(String SID, Long flvRecordingId) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	FlvRecording flvRecording = this.flvRecordingDaoImpl.getFlvRecordingById(flvRecordingId);
+	        	
+	        	flvRecording.setFlvRecordingMetaData(this.flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataByRecording(flvRecordingId));
+	        	
+	        	if (flvRecording.getInsertedBy() != null) {
+	        		flvRecording.setCreator(this.usersDaoImpl.getUser(flvRecording.getInsertedBy()));
+	        	}
+	        	
+	        	if (flvRecording.getRoom_id() != null) {
+	        		flvRecording.setRoom(this.roommanagement.getRoomById(flvRecording.getRoom_id()));
+	        	}
+	        	
+	        	return flvRecording;
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[getFlvRecordingWithMetaData] ",err);
+			err.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Long deleteFLVOrFolder(String SID, Long flvRecordingId) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        
+	        System.out.println("deleteFLVOrFolder "+flvRecordingId);
+	        
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("deleteFLVOrFolder "+flvRecordingId);
+	        	
+	        	this.flvRecordingDaoImpl.deleteFlvRecording(flvRecordingId);
+	        	
+	        	return flvRecordingId;
+	        }
+		} catch (Exception err){
+			log.error("[deleteFLVOrFolder] ",err);
+		}
+		return null;
+	}
+	
+
+	public List<FlvRecording> getFLVExplorerByParent(String SID, Long parentFileExplorerItemId, Boolean isOwner) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("parentFileExplorerItemId "+parentFileExplorerItemId);
+	        	
+	        	if (parentFileExplorerItemId == 0) {
+	        		if (isOwner) {
+	        			
+	        			return this.flvRecordingDaoImpl.getFlvRecordingByOwner(users_id, parentFileExplorerItemId);
+	        			
+	        		} else {
+	        			
+		        		return this.flvRecordingDaoImpl.getFlvRecordingsPublic();
+		        		
+	        		}
+	        	} else {
+	        		
+	        		return this.flvRecordingDaoImpl.getFlvRecordingByParent(parentFileExplorerItemId);
+	        	}
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[getFLVExplorerByParent] ",err);
+		}
+		return null;
+	}
+	
+
+	public Long addFolder(String SID, Long parentFileExplorerItemId, String fileName, 
+			Boolean isOwner) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("addFolder "+parentFileExplorerItemId);
+	        	
+	        	if (parentFileExplorerItemId == 0 && isOwner) {
+	        		
+	        		return this.flvRecordingDaoImpl.addFlvFolderRecording("", fileName, 
+	        				null, //FileSize
+	        				users_id, 
+	        				null, null, null, //Long room_id, Date recordStart, Date recordEnd 
+	        				users_id, //OwnerID => only set if its directly root in Owner Directory, other Folders and Files
+							//maybe are also in a Home directory but just because their parent is
+	        				"", parentFileExplorerItemId);
+	        		
+	        	} else {
+	        		
+	        		return this.flvRecordingDaoImpl.addFlvFolderRecording("", fileName, 
+	        				null, //FileSize
+	        				users_id, 
+	        				null, null, null, //Long room_id, Date recordStart, Date recordEnd 
+	        				null, //OwnerID => only set if its directly root in Owner Directory, other Folders and Files
+							//maybe are also in a Home directory but just because their parent is
+	        				"", parentFileExplorerItemId);
+	        		
+	        	}
+	        		
+	        }
+		} catch (Exception err){
+			log.error("[addFolder] ",err);
+		}
+		return null;
+	}
+	
+	public Long moveFile(String SID, Long flvRecordingId, Long newParentFileExplorerItemId, Boolean isOwner) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("moveFile "+flvRecordingId);
+	        	
+	        	this.flvRecordingDaoImpl.moveFile(flvRecordingId, newParentFileExplorerItemId, isOwner, users_id);
+							
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[moveFile] ",err);
+		}
+		return null;
+	}
+	
+	public Long updateFileOrFolderName(String SID, Long flvRecordingId, String fileName) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("updateFileOrFolderName "+flvRecordingId);
+	        	
+	        	this.flvRecordingDaoImpl.updateFileOrFolderName(flvRecordingId, fileName);
+	        	
+	        	return flvRecordingId;
+	        }
+		} catch (Exception err){
+			log.error("[updateFileOrFolderName] ",err);
+		}
+		return null;
+	}
 	
 	public FLVRecorderObject getFLVExplorerByRoom(String SID) {
 		try {
@@ -420,13 +595,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        	
 	        	fileExplorerObject.setUserHome(this.flvRecordingDaoImpl.getFlvRecordingRootByOwner(users_id));
 	        	
-	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getInstance().getFlvRecordingRootByPublic());
+	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getFlvRecordingRootByPublic());
 	        	
 	        	return fileExplorerObject;
 	        	
 	        }
 		} catch (Exception err){
-			log.error("[getFileExplorerByRoom] "+err);
+			log.error("[getFileExplorerByRoom] ",err);
 		}
 		return null;
 	}

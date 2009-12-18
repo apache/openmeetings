@@ -11,6 +11,8 @@
     <bean id="flvrecorderservice.service" 
         class="org.openmeetings.app.remote.FLVRecorderService" >
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
+        <property name="usersDaoImpl" ref="openmeetings.UsersDaoImpl" />
+        <property name="roommanagement" ref="openmeetings.Roommanagement" />
         <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
         <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
     </bean> 

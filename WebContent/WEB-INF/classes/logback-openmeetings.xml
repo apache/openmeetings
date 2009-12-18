@@ -59,7 +59,7 @@
     <level value="ERROR"/>
   </logger>
   <root>
-    <level value="DEBUG"/>
+    <level value="ERROR"/>
     <appender-ref ref="FLOG2"/>
     <appender-ref ref="CONSOLE2"/>
   </root>

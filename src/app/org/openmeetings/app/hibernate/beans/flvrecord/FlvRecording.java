@@ -1,6 +1,10 @@
 package org.openmeetings.app.hibernate.beans.flvrecord;
 
 import java.util.Date;
+import java.util.List;
+
+import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.user.Users;
 
 /**
  * 
@@ -37,6 +41,11 @@ public class FlvRecording {
 	private Long fileSize;
 	
 	private String recorderStreamId;
+	
+	//Not Mapped
+	private List<FlvRecordingMetaData> flvRecordingMetaData;
+	private Users creator;
+	private Rooms room;
 
 	/**
 	 *
@@ -267,7 +276,26 @@ public class FlvRecording {
 		this.recorderStreamId = recorderStreamId;
 	}
 	
+	public List<FlvRecordingMetaData> getFlvRecordingMetaData() {
+		return flvRecordingMetaData;
+	}
+	public void setFlvRecordingMetaData(
+			List<FlvRecordingMetaData> flvRecordingMetaData) {
+		this.flvRecordingMetaData = flvRecordingMetaData;
+	}
 	
+	public Users getCreator() {
+		return creator;
+	}
+	public void setCreator(Users creator) {
+		this.creator = creator;
+	}
 	
+	public Rooms getRoom() {
+		return room;
+	}
+	public void setRoom(Rooms room) {
+		this.room = room;
+	}
 	
 }

@@ -26,6 +26,12 @@
         }
     </handler>
     
+    <method name="doOpen">
+        if (!this.isopen) {
+            this.toggleopen();
+        }
+    </method>
+    
     <method name="toggleopen">
         if (this.isopen) {
             this.setAttribute("isopen",false);

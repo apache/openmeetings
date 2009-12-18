@@ -56,13 +56,13 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
-	public List<FlvRecording> getFlvRecordingsPublic(Long parentFileExplorerItemId) {
+	public List<FlvRecording> getFlvRecordingsPublic() {
 		try {
 			
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.deleted != :deleted " +
-					"AND c.ownerId IS NULL " +
-					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
+					"AND (c.ownerId IS NULL OR c.ownerId = 0)  " +
+					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			Object idf = HibernateUtil.createSession();
@@ -70,7 +70,6 @@ public class FlvRecordingDaoImpl {
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql);
 			query.setString("deleted", "true");
-			query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
 			
 			List<FlvRecording> flvRecordingList = query.list();
 			tx.commit();
@@ -91,7 +90,7 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.deleted != :deleted " +
 					"AND c.ownerId IS NULL " +
-					"AND c.parentFileExplorerItemId IS NULL " +
+					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			Object idf = HibernateUtil.createSession();
@@ -119,7 +118,7 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.deleted != :deleted " +
 					"AND c.ownerId = :ownerId " +
-					"AND c.parentFileExplorerItemId IS NULL " +
+					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			Object idf = HibernateUtil.createSession();
@@ -196,6 +195,51 @@ public class FlvRecordingDaoImpl {
 			log.error("[getFlvRecordingByParent]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingByParent]: ",ex2);
+		}
+		return null;
+	}
+	
+	public Long addFlvFolderRecording(String fileHash, String fileName, Long fileSize, Long user_id, 
+			Long room_id, Date recordStart, Date recordEnd, Long ownerId, String comment, 
+			Long  parentFileExplorerItemId) {
+		try { 
+			
+			FlvRecording flvRecording = new FlvRecording();
+			
+			flvRecording.setParentFileExplorerItemId(parentFileExplorerItemId);
+			
+			flvRecording.setDeleted("false");
+			flvRecording.setFileHash(fileHash);
+			flvRecording.setFileName(fileName);
+			flvRecording.setFileSize(fileSize);
+			flvRecording.setInserted(new Date());
+			flvRecording.setInsertedBy(user_id);
+			flvRecording.setIsFolder(true);
+			flvRecording.setIsImage(false);
+			flvRecording.setIsPresentation(false);
+			flvRecording.setIsRecording(true);
+			flvRecording.setComment(comment);
+			
+			flvRecording.setRoom_id(room_id);
+			flvRecording.setRecordStart(recordStart);
+			flvRecording.setRecordEnd(recordEnd);
+			
+			flvRecording.setOwnerId(ownerId);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long flvRecordingId = (Long) session.save(flvRecording);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingId;
+		} catch (HibernateException ex) {
+			log.error("[addFlvRecording]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[addFlvRecording]: ",ex2);
 		}
 		return null;
 	}

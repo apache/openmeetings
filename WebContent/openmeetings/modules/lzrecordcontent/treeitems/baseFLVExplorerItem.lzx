@@ -50,7 +50,7 @@
     		this.icon_folder_pre.setAttribute("frame",2);
     		this.content.setAttribute("visibility","visible");
 			this._folderIcon.setAttribute("frame",2);
-		    this.getFileExplorerByParent.doCall();
+		    this.getFLVExplorerByParent.doCall();
 		}
 	</method>
 	
@@ -75,29 +75,27 @@
     </method>
     
     <method name="deleteFile" args="labelid">
-    	new lz.confirmationBox(canvas,{
-                           x:10,
-                           y:canvas.getMouse("y")-200,
+    	new lz.confirmationSingle(canvas,{
                            refObj:this,
                            labelid:labelid,
                            labeliderror:713,
-                           doAskAgain:false
+                           showCheckBox:false
                         });
     	//this.deleteFileOrFolder();
     </method>
     
     <method name="sendConfirmation" args="bool,askAgain">
         if (bool) {
-            this.deleteFileOrFolder.doCall();
+            this.deleteFLVOrFolder.doCall();
         }
     </method>
     
-    <netRemoteCallHib name="deleteFileOrFolder" funcname="fileservice.deleteFileOrFolder" 
+    <netRemoteCallHib name="deleteFLVOrFolder" funcname="flvrecorderservice.deleteFLVOrFolder" 
         remotecontext="$once{ canvas.thishib }" > 
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam>
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("deleteFileOrFolder: ",value);
+            if ($debug) Debug.write("deleteFLVOrFolder: ",value);
             parent.parent.parent.doOpen();
             parent.refObjListRoot._selected = null;
             parent.refObjListRoot.parentFolderId = -2;
@@ -129,7 +127,7 @@
 			this.icon_folder_pre.setAttribute("frame",2);
             this.content.setAttribute("visibility","visible");
             this._folderIcon.setAttribute("frame",2);
-    		var t = new lz.folderFileExplorerItem(this.content,{
+    		var t = new lz.folderFLVExplorerItem(this.content,{
     			            isOwner:this.isOwner,
     			            isFolder:true,
                 		    fileIcon:'icon_folder_rsc',
@@ -148,8 +146,8 @@
 		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
 	</method>
 	
-	<method name="loadDocument">
-		this.refObjListRoot.loadDocument(this);
+	<method name="loadFLV">
+		this.refObjListRoot.loadFLV(this);
 	</method>
 	
 	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
@@ -190,8 +188,8 @@
             lz.Timer.removeTimer( this.singleClickDelegate );
             if (this.isFolder) {
                 this.doSingleClick(null);
-            } else if (this.isPresentation) {
-                this.loadDocument();
+            } else {
+                this.loadFLV();
             }
         } else {
         	
@@ -237,6 +235,7 @@
 	
 	<method name="deselectItem">
 		this.selected = false;
+        if ($debug) Debug.write(this._fileName);
         this._fileName.setAttribute("bgcolor",0xFFFFFF);
     </method>
 	
@@ -252,14 +251,13 @@
 	   public List<FileExplorerItem> getFileExplorerByParent(String SID, Long parentFileExplorerItemId, 
 	               Long room_id, Boolean isOwner) {
      -->
-	<netRemoteCallHib name="getFileExplorerByParent" funcname="fileservice.getFileExplorerByParent" 
+	<netRemoteCallHib name="getFLVExplorerByParent" funcname="flvrecorderservice.getFLVExplorerByParent" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.parent.fileExplorerItemId;</method></netparam>  
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>  
         <netparam><method name="getValue">return parent.parent.isOwner;</method></netparam>         
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
+            if ($debug) Debug.write("getFLVExplorerByParent: ",value);
             parent.renderFilesAndFolders(value);
         </handler>
     </netRemoteCallHib>  

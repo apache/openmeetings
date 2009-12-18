@@ -32,23 +32,156 @@
     
     <conferenceBox name="_recordingsViewBottom" labelid="859" 
                    y="${ canvas.height - 110 - this.height }" initHeight="200"
-                   height="32" textInset="30" closeable="true" isopen="false" closedHeight="40"
+                   height="32" textInset="30" closeable="true" isopen="false" closedHeight="32"
                    x="${ parent._navigationArea.width + parent._navigationArea.x }"
                    width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
         
-        <view name="content" visibility="hidden" y="32" bgcolor="0xFF3300"
+        <attribute name="pixelFactor" value="5" type="number"/>
+        
+        <attribute name="currentRecording" value="null"/>
+        
+        <method name="showMetaData" args="rec">
+            <![CDATA[
+            
+                this.doOpen();
+            
+                this.currentRecording = rec;
+            
+                if ($debug) Debug.write("showMetaData ",rec);
+                
+                this.content.clearContent();
+            
+                var deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
+                
+                this.pixelFactor = deltaInSeconds/(this.width-16);
+                
+                if ($debug) Debug.write("pixelFactor ",this.pixelFactor);
+                
+                var widthItem = Math.round(deltaInSeconds/this.pixelFactor);
+                
+                new lz.userActivityItem(this.content._content.content.content,{
+						                      width:widthItem,
+                                              userText:canvas.getLabelName(868)
+						                });
+                
+                if ($debug) Debug.write("widthItem ",widthItem);
+                
+                for (var i=0;i<rec.flvRecordingMetaData.length;i++) {
+                    
+                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
+                    var deltaInSeconds = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+                    
+                    var widthItem = Math.round(deltaInSeconds/this.pixelFactor);
+                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
+                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+                    
+	                new lz.userActivityItem(this.content._content.content.content,{
+                                                  x:xItem,width:widthItem,
+	                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
+	                                        });
+                                        
+                }
+                
+                var minutes = Math.floor(deltaInSeconds/60);
+                
+                if ($debug) Debug.write("minutes ",minutes);
+                
+                if (minutes < 60) {
+                    
+                    for (var i=0;i<=minutes;i++) {
+                        
+                        var xItem = Math.round((i*60)/this.pixelFactor);
+                        
+                        if ($debug) Debug.write("devisior ",i,xItem);
+                        
+                        new lz.userActivityDevider(this.content._content.contentDevider,{
+						                          x:xItem,
+                                                  deviderText:i+" min"
+						                        });
+                        
+                    }
+                    
+                } else {
+                    
+                    var items = Math.floor(minutes/10);
+                    
+                    for (var i=0;i<=items;i++) {
+                        
+                        var xItem = Math.round(((i*10)*60)/this.pixelFactor);
+                        
+                        new lz.userActivityDevider(this.content._content.contentDevider,{
+                                                  x:xItem,
+                                                  deviderText:i+" min"
+                                                });
+                        
+                    }
+                    
+                }
+                
+            ]]>
+        </method>
+        
+        <view name="content" visibility="hidden" y="32" bgcolor="0xFFFFFF"
               width="${ parent.width }" height="168">
             
+            <method name="clearContent">
+                this._content.destroy();
+                new lz.flvMetaInfoContentArea(this,{name:'_content'});
+            </method>
             
+            <flvMetaInfoContentArea name="_content" />
             
         </view>
-        
-        
         
     </conferenceBox>
 
 </class>
 
+
+<class name="flvMetaInfoContentArea" extends="view" 
+       width="${ parent.width }" height="168" clip="true">
+    
+    <view name="content" width="${ parent.width }" height="168">
+        
+	    <view name="content" layout="axis:y;spacing:2" />
+	    
+	    <vscrollbar />
+	    <hscrollbar />
+        
+    </view>
+    
+    <view name="contentDevider" x="${ parent.content.content.x }"
+          width="${ parent.width }" height="168" />
+    
+</class>
+
+
+<class name="userActivityItem" extends="view">
+    
+    <attribute name="userText" value="" type="string" />
+    
+    <view name="_middleIcon" width="$once{ parent.width - 20 }" 
+          y="4" x="10" height="8" bgcolor="0x00CC00" />
+          
+    <view name="_startIcon" resource="icon_flv_recording_video_start_rsc" />
+    
+    <view name="_endIcon" align="right"
+          resource="icon_flv_recording_video_start_rsc" />
+    
+    <labelText x="14" text="$once{ parent.userText }" y="-2" />
+    
+</class>
+
+
+<class name="userActivityDevider" extends="view" >
+    
+    <attribute name="deviderText" value="" type="string"/>
+    
+    <view height="154" bgcolor="0x000000" width="1" />
+    
+    <labelText text="$once{ parent.deviderText }" y="134" />
+    
+</class>
 
 
 </library>

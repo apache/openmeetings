@@ -48,12 +48,12 @@
 		</layout>
 	</appender>
 	<root>
-		<level value="ERROR" />
+		<level value="DEBUG" />
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="ERRORFILE" />
 		<!-- -->
-	</root>	<!-- Red5 -->
+	</root>+	<!-- Red5 -->
 	<logger name="org.red5.io">
 		<level value="INFO" />
 	</logger>
@@ -157,7 +157,7 @@
 	<!-- Mina -->			
 	<logger name="org.apache.mina">
 		<level value="WARN" />
-	</logger>		<logger name="org.apache.mina.filter">
+	</logger>	+	<logger name="org.apache.mina.filter">
 		<level value="WARN" />
 	</logger>
 	<logger name="org.apache.mina.filter.thread.ThreadPoolFilter">
@@ -232,46 +232,85 @@
 		<level value="WARN" />
 	</logger>
 	
-	<!-- OpenMeetings
-	<logger name="org.apache.axis2">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.openmeetings">
+    <!-- OpenMeetings
+        <logger name="org.apache.axis2">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.openmeetings">
+            <level value="DEBUG"/>
+        </logger>
+        <logger name="com.mchange.v2">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.hibernate.cache">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.apache.axiom">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.hibernate.jdbc">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.hibernate.SQL">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.apache.commons.httpclient">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.hibernate.tool.hbm2ddl">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="de.hunsicker.jalopy.io">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="org.apache.axis2.enterprise">
+            <level value="ERROR"/>
+        </logger>
+        <logger name="httpclient.wire.header">
+            <level value="ERROR"/>
+        </logger>
+          -->
+    <logger name="org.hibernate">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.openmeetings">
         <level value="DEBUG"/>
     </logger>
-	<logger name="com.mchange.v2">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.hibernate.cache">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.apache.axiom">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.hibernate.jdbc">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.hibernate.SQL">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.apache.commons.httpclient">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.hibernate.tool.hbm2ddl">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.hibernate">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="de.hunsicker.jalopy.io">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="org.apache.axis2.enterprise">
-		<level value="ERROR"/>
-	</logger>
-	<logger name="httpclient.wire.header">
-		<level value="ERROR"/>
-	</logger>
-      -->
-  
+    <logger name="org.apache.axis2">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="com.mchange.v2">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.hibernate.cache">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.apache.axiom">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.hibernate.jdbc">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.hibernate.SQL">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.apache.commons.httpclient">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.hibernate.tool.hbm2ddl">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.hibernate">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="de.hunsicker.jalopy.io">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="org.apache.axis2.enterprise">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="httpclient.wire.header">
+        <level value="ERROR"/>
+    </logger> 
+	
 </configuration>

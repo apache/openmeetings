@@ -2651,4 +2651,37 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="857" name="presenter mini icon">
     <value>Maximize</value>
   </string>
+  <string id="858" name="flvrecording">
+    <value>Video</value>
+  </string>
+  <string id="859" name="flvrecording">
+    <value>Recording Timeline</value>
+  </string>
+  <string id="860" name="flvrecording">
+    <value>My Recordings</value>
+  </string>
+  <string id="861" name="flvrecording">
+    <value>Public Recordings</value>
+  </string>
+  <string id="862" name="flvrecording">
+    <value>Info</value>
+  </string>
+  <string id="863" name="flvrecording">
+    <value>Name</value>
+  </string>
+  <string id="864" name="flvrecording">
+    <value>Length</value>
+  </string>
+  <string id="865" name="flvrecording">
+    <value>Date</value>
+  </string>
+  <string id="866" name="flvrecording">
+    <value>By</value>
+  </string>
+  <string id="867" name="flvrecording">
+    <value>PLAY</value>
+  </string>
+  <string id="868" name="flvrecording">
+    <value>Main - Video</value>
+  </string>
 </language>

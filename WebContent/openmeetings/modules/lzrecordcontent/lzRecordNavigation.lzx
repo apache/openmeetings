@@ -10,9 +10,13 @@
 
     <attribute name="isOpen" value="true" type="boolean"/>
     
+    <attribute name="playSelected" value="false" type="boolean"/>
+    
     <attribute name="parentFolderId" value="-2" type="number" />
     
     <attribute name="_selected" value="null" />
+    
+    <attribute name="currentRecording" value="null" />
     
     <handler name="oninit">
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
@@ -67,7 +71,7 @@
             //Home area
             for (var i=0;i<roomObject.userHome.length;i++) {
                 var fileExplorerItem = roomObject.userHome[i];
-                if ($debug) Debug.write("fileExplorerItem -1- ",fileExplorerItem);
+                //if ($debug) Debug.write("fileExplorerItem -1- ",fileExplorerItem);
                 if (fileExplorerItem.isFolder) {
                     new lz.folderFLVExplorerItem(homeIcon.content,{
                                             fileName:fileExplorerItem.fileName,
@@ -105,7 +109,7 @@
             //Public area
             for (var i=0;i<roomObject.roomHome.length;i++) {
                 var fileExplorerItem = roomObject.roomHome[i];
-                if ($debug) Debug.write("fileExplorerItem -2- ",fileExplorerItem);
+                //if ($debug) Debug.write("fileExplorerItem -2- ",fileExplorerItem);
                 if (fileExplorerItem.isFolder) {
                     new lz.folderFLVExplorerItem(roomHome.content,{
                                             fileName:fileExplorerItem.fileName,
@@ -169,6 +173,75 @@
             this.parentFolderId = this._selected.fileExplorerItemId;
         }
         
+        if (itemRef.isFolder) {
+            return;
+        }
+        if ($debug) Debug.write("selectItem",itemRef);
+        this.getFlvRecordingWithMetaData.doCall();
+    </method>
+    
+
+    <netRemoteCallHib name="getFlvRecordingWithMetaData" funcname="flvrecorderservice.getFlvRecordingWithMetaData" 
+        remotecontext="$once{ canvas.thishib }" showLoading="false">   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.parentFolderId;</method></netparam>
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFlvRecordingWithMetaData: ",value);
+            parent.setRecording(value);
+        </handler>
+    </netRemoteCallHib>   
+    
+    <method name="setRecording" args="rec">
+        <![CDATA[
+        
+            if (rec.isFolder) {
+                return;
+            }
+        
+            this.currentRecording = rec;
+        
+            this._recordingsInfo.content._flvName.setAttribute("text",rec.fileName);
+            
+            var deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
+            
+            if ($debug) Debug.write("deltaInSeconds ",deltaInSeconds);
+            
+            var minutes = Math.floor(deltaInSeconds/60);
+            
+            var restSeconds = deltaInSeconds - (minutes*60);
+            
+            var timeInMinutes = minutes+" min "+restSeconds+" sek";
+            
+            if (minutes > 60) {
+                var hours = Math.floor(minutes/60);
+                
+                var restMinutes = minutes - (hours*60);
+                
+                var timeInMinutes = hours+" h "+restMinutes+" min "+restSeconds+" sek";
+            }
+            
+            this._recordingsInfo.content._flvLength.setAttribute("text",timeInMinutes);
+            
+            this._recordingsInfo.content._flvDate.setAttribute("text",parseDateToStringTime(rec.inserted));
+            
+            //this._recordingsInfo.content._flvBy.setAttribute("text",timeInMinutes);
+        
+            if (this.playSelected) {
+                this.playSelected = false;
+                this.playRecording();
+            }
+        ]]>
+    </method>
+    
+    <method name="playRecording">
+        if ($debug) Debug.write("playReording :: ",this.currentRecording);
+        parent._recordingsViewBottom.showMetaData(this.currentRecording);
+    </method>   
+    
+    <method name="loadFLV" args="refObj">
+        if ($debug) Debug.write("loadFLV ",refObj);
+        this.playSelected = true;
+        this.selectItem(refObj);
     </method>
         
     <!--
@@ -179,7 +252,7 @@
           x="0" y="0" height="${ parent.height }" />
           
     <view name="_bg2" bgcolor="0xFFFFFF" x="1" y="0" width="$once{ parent.width - 12 }" 
-          height="${ parent.height-1 }" />
+          height="${ parent.height - 1 - parent._recordingsInfo.height }" />
     
     <!--      
     <view name="_border1a" x="0" y="0" width="1" 
@@ -247,7 +320,8 @@
      --> 
     
     <view name="_filearea" x="1" y="20" clip="true"
-          height="${ parent.height - 19 }" width="$once{ parent.width - 12 }">
+          height="${ parent.height - 21 - parent._recordingsInfo.height }" 
+          width="$once{ parent.width - 12 }">
         
         <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
         
@@ -262,6 +336,42 @@
         <vscrollbar name="_scrollbar" />
         <hscrollbar name="_hscrollbar" />
     </view>    
+    
+    <conferenceBox name="_recordingsInfo" labelid="862" valign="bottom"
+                   textInset="30" closeable="true" isopen="true" closedHeight="32"
+                   width="$once{ parent.width - 12 }" height="160">
+        
+        <view name="content" y="34" bgcolor="0xFFFFFF" 
+              width="$once{ parent.width }" height="$once{ parent.height - 34 }">
+            
+            <labelText labelid="863" y="0" />
+            <labelText name="_flvName" y="0" x="80" multiline="true" height="32" 
+                       width="${ parent.width-80 }"/>
+            
+            <labelText labelid="864" y="34" />
+            <labelText name="_flvLength" y="34" x="80" />
+            
+            <labelText labelid="865" y="58" />
+            <labelText name="_flvDate" y="58" x="80" />
+            
+            <!--
+            <labelText labelid="866" y="72" />
+            <labelText name="_flvBy" y="72" />
+             -->
+            
+            <simpleLabelButton y="86" align="right" text_padding_x="40"
+                              height="26" width="180" labelid="867">
+                <view resource="flv_recorder_play_rsc" x="4" y="2" />
+                <handler name="onclick">
+                    parent.parent.parent.playRecording();
+                </handler>
+            </simpleLabelButton>
+            
+        </view>
+        
+        
+        
+    </conferenceBox>
 
     <!--
         Sidebar to minimize
