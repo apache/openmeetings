@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="rootFileExplorerItem" extends="baseFLVExplorerItem" isFolder="true" isRoot="true">
+<class name="rootFLVExplorerItem" extends="baseFLVExplorerItem" isFolder="true" isRoot="true">
 	
 	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
 		<contextmenu>

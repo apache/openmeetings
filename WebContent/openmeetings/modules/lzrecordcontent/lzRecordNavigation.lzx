@@ -54,7 +54,7 @@
         <![CDATA[
             this.clearContent();
             
-            var homeIcon = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+            var homeIcon = new lz.rootFLVExplorerItem(this._filearea._contentarea,{
                                         open:true,
                                         fileName:canvas.getLabelName(860),
                                         name:'_home',
@@ -93,7 +93,7 @@
             }
             
             //Public - Room Area
-            var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+            var roomHome = new lz.rootFLVExplorerItem(this._filearea._contentarea,{
                                         open:true,
                                         fileName:canvas.getLabelName(861),
                                         name:'_roomHome',
