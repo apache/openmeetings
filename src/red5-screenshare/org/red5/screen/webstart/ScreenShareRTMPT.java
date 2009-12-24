@@ -14,8 +14,8 @@ import org.red5.io.flv.impl.FLVReader;
 import org.red5.io.flv.impl.Tag;
 import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
-import org.red5.screen.webstart.tgui.VirtualScreen;
-import org.red5.screen.webstart.tgui.VirtualScreenBean;
+import org.red5.screen.webstart.gui.VirtualScreen;
+import org.red5.screen.webstart.gui.VirtualScreenBean;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.event.IEvent;
@@ -70,7 +70,7 @@ import javax.swing.event.ChangeListener;
 
 public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
 
-    private static final Logger logger = LoggerFactory.getLogger( ScreenShareRTMPT.class );
+    private static final Logger logger = LoggerFactory.getLogger( ScreenShare.class );
     public static ScreenShareRTMPT instance = null;
 
     public boolean startPublish = false;
@@ -122,7 +122,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
 	public String host = "btg199251";
 	public String app = "oflaDemo";
-	public int port = 8088;
+	public int port = 1935;
 	
 	public boolean startRecording = false;
 	public boolean stopRecording = false;
@@ -130,10 +130,10 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	public boolean startStreaming = false;
 	public boolean stopStreaming = false;
 	
-	private String label730 = "Desktop Publisher";
-	private String label731 = "This application will publish your screen";
-	private String label732 = "Start Sharing";
-	private String label733 = "Stop Sharing";
+	public String label730 = "Desktop Publisher";
+	public String label731 = "This application will publish your screen";
+	public String label732 = "Start Sharing";
+	public String label733 = "Stop Sharing";
 	public String label734 = "Select your screen Area:";
 	public String label735 = "Change width";
 	public String label737 = "Change height";
@@ -144,12 +144,12 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	public String label742 = "Connection was closed by Server";
 	public String label844 = "Show Mouse Position at viewers";
 	
-	public String label856 = "Recording";
-	public String label857 = "<HTML>You may record and share your screen at the same time." +
+	public String label869 = "Recording";
+	public String label870 = "<HTML>You may record and share your screen at the same time." +
 			"To enable others to see your screen just hit the start button on the top." +
 			"To only record the Session it is sufficient to click start recording.</HTML>";
-	public String label858 = "Start Recording";
-	public String label859 = "Stop Recording";
+	public String label871 = "Start Recording";
+	public String label872 = "Stop Recording";
 
 	public Float imgQuality = new Float(0.40);
 	
@@ -165,11 +165,6 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	
 	public static void main(String[] args)
 	{
-		
-		logger.debug("############## ScreenShareRTMPT ##################");
-		logger.debug("main "+args.length);
-		
-		
 		instance = new ScreenShareRTMPT();
 
 		if (args.length == 5) {
@@ -185,6 +180,14 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			if (labelTexts.length() > 0) {
 				String[] textArray = labelTexts.split(";");
 				
+				logger.debug("labelTexts :: "+labelTexts);
+				
+				logger.debug("textArray Length "+textArray.length);
+				
+				for (int i=0;i<textArray.length;i++) {
+					logger.debug(i + " :: " + textArray[i]);
+				}
+				
 				instance.label730 = textArray[0];
 				instance.label731 = textArray[1];
 				instance.label732 = textArray[2];
@@ -198,6 +201,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 				instance.label741 = textArray[10];
 				instance.label742 = textArray[11];
 				instance.label844 = textArray[12];
+				
+				instance.label869 = textArray[13];
+				instance.label870 = "<html>"+textArray[14]+"</html>";
+				instance.label871 = textArray[15];
+				instance.label872 = textArray[16];
 				
 			}
 
@@ -302,18 +310,18 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			//Font f = textAreaHeaderRecording.getFont();
 			//textAreaHeaderRecording.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
 
-			textAreaHeaderRecording.setText(this.label856);
+			textAreaHeaderRecording.setText(this.label869);
 			contentPane.add(textAreaHeaderRecording);
 			textAreaHeaderRecording.setBounds(10, 300, 480, 24);
 			
 			textAreaHeaderRecordingDescr = new JLabel(); 
-			textAreaHeaderRecordingDescr.setText(this.label857);
+			textAreaHeaderRecordingDescr.setText(this.label870);
 			contentPane.add(textAreaHeaderRecordingDescr);
 			textAreaHeaderRecordingDescr.setBounds(10, 320, 480, 54);
 			
 			//*****
 			//Start Button Recording
-			startButtonRecording = new JButton( this.label858, start_btn );
+			startButtonRecording = new JButton( this.label871, start_btn );
 			startButtonRecording.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
@@ -327,7 +335,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			
 			//*****
 			//Stop Button Recording
-			stopButtonRecording = new JButton( this.label859, stop_btn );
+			stopButtonRecording = new JButton( this.label872, stop_btn );
 			stopButtonRecording.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
@@ -363,7 +371,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
 			//*****
 			//Background Image
-			Image im_left = ImageIO.read(ScreenShareRTMPT.class.getResource("/background.png"));
+			Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
 			ImageIcon iIconBack = new ImageIcon(im_left);
 
 			JLabel jLab = new JLabel(iIconBack);
@@ -394,7 +402,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	}
 	
 	protected static ImageIcon createImageIcon(String path) throws Exception {
-	    java.net.URL imgURL = ScreenShareRTMPT.class.getResource(path);
+	    java.net.URL imgURL = ScreenShare.class.getResource(path);
 	    return new ImageIcon(imgURL);
 	}
 

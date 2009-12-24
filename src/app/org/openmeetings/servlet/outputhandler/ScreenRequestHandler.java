@@ -143,6 +143,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				//template = "screencast_odsp_sharertemplate.vm";
 				ctx.put("PORT", ServerSocketMinaProcess.port);
 				
+				log.debug("language_id :: "+language_id);
+				
 				Fieldlanguagesvalues fValue728 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(728L, language_id);
 				Fieldlanguagesvalues fValue729 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(729L, language_id);
 				Fieldlanguagesvalues fValue730 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(730L, language_id);
@@ -159,6 +161,11 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				Fieldlanguagesvalues fValue741 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(741L, language_id);
 				Fieldlanguagesvalues fValue742 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(742L, language_id);
 				Fieldlanguagesvalues fValue844 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(844L, language_id);
+				
+				Fieldlanguagesvalues fValue869 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(869L, language_id);
+				Fieldlanguagesvalues fValue870 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(870L, language_id);
+				Fieldlanguagesvalues fValue871 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(871L, language_id);
+				Fieldlanguagesvalues fValue872 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(872L, language_id);
 				
 				String label_viewer = "Viewer";
 				String label_sharer = "Sharer";
@@ -181,11 +188,15 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 										fValue740.getValue()+";"+ //9
 										fValue741.getValue()+";"+ //10
 										fValue742.getValue()+";"+ //11
-										fValue844.getValue()+";"  //12
+										fValue844.getValue()+";"+ //12
+										fValue869.getValue()+";"+ //13
+										fValue870.getValue()+";"+ //14
+										fValue871.getValue()+";"+ //15
+										fValue872.getValue()+";"  //16
 										;
 				
 				}catch(Exception e){
-					log.error("Error resolving Language labels : " + e.getMessage());
+					log.error("Error resolving Language labels : " , e);
 				}
 				
 				ctx.put("LABELVIEWER", label_viewer);
@@ -233,6 +244,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 							
 						}
 						else if (conf_i == 4) {
+							
+							log.debug("RTMP Sharer labels :: "+label_sharer);
 							
 							// Red5-Screen Share with RTMP Client
 							template = "screenshare.vm";

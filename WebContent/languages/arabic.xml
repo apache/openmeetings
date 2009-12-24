@@ -2611,4 +2611,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="868" name="flvrecording">
     <value>Main - Video</value>
   </string>
+  <string id="869" name="screen share">
+    <value>Recording</value>
+  </string>
+  <string id="870" name="screen share">
+    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+  </string>
+  <string id="871" name="screen share">
+    <value>Start Recording</value>
+  </string>
+  <string id="872" name="screen share">
+    <value>Stop Recording</value>
+  </string>
 </language>

@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
@@ -25,6 +26,7 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
+import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
