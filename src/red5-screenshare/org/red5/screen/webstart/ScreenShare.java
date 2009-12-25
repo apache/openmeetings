@@ -123,6 +123,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public String app = "oflaDemo";
 	public int port = 1935;
 	
+	public Long organization_id = 0L;
+	
 	public boolean startRecording = false;
 	public boolean stopRecording = false;
 	
@@ -153,6 +155,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	public Float imgQuality = new Float(0.40);
 	
 	public Float scaleFactor = 1F;
+	
+	public boolean isConnected = false;
 
     // ------------------------------------------------------------------------
     //
@@ -164,59 +168,66 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	
 	public static void main(String[] args)
 	{
-		instance = new ScreenShare();
-
-		if (args.length == 5) {
-			
-			
-			instance.host = args[0];
-			instance.app = args[1];
-			instance.port = Integer.parseInt(args[2]);
-			instance.publishName = args[3];
-			
-			String labelTexts = args[4];
-			
-			if (labelTexts.length() > 0) {
-				String[] textArray = labelTexts.split(";");
+		try {
+			instance = new ScreenShare();
+	
+			if (args.length == 6) {
 				
-				logger.debug("labelTexts :: "+labelTexts);
 				
-				logger.debug("textArray Length "+textArray.length);
+				instance.host = args[0];
+				instance.app = args[1];
+				instance.port = Integer.parseInt(args[2]);
+				instance.publishName = args[3];
 				
-				for (int i=0;i<textArray.length;i++) {
-					logger.debug(i + " :: " + textArray[i]);
+				String labelTexts = args[4];
+				
+				instance.organization_id = Long.parseLong(args[5]);
+				
+				if (labelTexts.length() > 0) {
+					String[] textArray = labelTexts.split(";");
+					
+					logger.debug("labelTexts :: "+labelTexts);
+					
+					logger.debug("textArray Length "+textArray.length);
+					
+					for (int i=0;i<textArray.length;i++) {
+						logger.debug(i + " :: " + textArray[i]);
+					}
+					
+					instance.label730 = textArray[0];
+					instance.label731 = textArray[1];
+					instance.label732 = textArray[2];
+					instance.label733 = textArray[3];
+					instance.label734 = textArray[4];
+					instance.label735 = textArray[5];
+					instance.label737 = textArray[6];
+					instance.label738 = textArray[7];
+					instance.label739 = textArray[8];
+					instance.label740 = textArray[9];
+					instance.label741 = textArray[10];
+					instance.label742 = textArray[11];
+					instance.label844 = textArray[12];
+					
+					instance.label869 = textArray[13];
+					instance.label870 = "<html>"+textArray[14]+"</html>";
+					instance.label871 = textArray[15];
+					instance.label872 = textArray[16];
+					
 				}
-				
-				instance.label730 = textArray[0];
-				instance.label731 = textArray[1];
-				instance.label732 = textArray[2];
-				instance.label733 = textArray[3];
-				instance.label734 = textArray[4];
-				instance.label735 = textArray[5];
-				instance.label737 = textArray[6];
-				instance.label738 = textArray[7];
-				instance.label739 = textArray[8];
-				instance.label740 = textArray[9];
-				instance.label741 = textArray[10];
-				instance.label742 = textArray[11];
-				instance.label844 = textArray[12];
-				
-				instance.label869 = textArray[13];
-				instance.label870 = "<html>"+textArray[14]+"</html>";
-				instance.label871 = textArray[15];
-				instance.label872 = textArray[16];
-				
+	
+			} else {
+				instance = null;
+				System.out.println("\nRed5 SceenShare: use as java ScreenShare <host> <app name> <port> <stream name>\n Example: SceenShare localhost oflaDemo 1935 screen_stream");
+				System.exit(0);
 			}
-
-		} else {
-			instance = null;
-			System.out.println("\nRed5 SceenShare: use as java ScreenShare <host> <app name> <port> <stream name>\n Example: SceenShare localhost oflaDemo 1935 screen_stream");
-			System.exit(0);
+	
+			logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
+	
+			instance.createWindow();
+			
+		} catch (Exception err) {
+			logger.error("",err);
 		}
-
-		logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
-
-		instance.createWindow();
 	}
 	
     // ------------------------------------------------------------------------
@@ -224,7 +235,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     // Wrapper - Constructor for testing
     //
     // ------------------------------------------------------------------------
-	public ScreenShare(String host, String app, Integer port, String publishName)
+	public ScreenShare(String host, String app, Integer port, String publishName, Long organization_id)
 	{
 		instance = new ScreenShare();
 
@@ -232,6 +243,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 		instance.app = app;
 		instance.port = port;
 		instance.publishName = publishName;
+		instance.organization_id = organization_id;
 
 		logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
 
@@ -340,7 +352,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					// TODO Auto-generated method stub
 					stopRecording = true;
 					stopStreaming = false;
-					captureScreenStart();
+					captureScreenStop();
 				}
 			});
 			stopButtonRecording.setBounds(290, 380, 200, 32);
@@ -455,6 +467,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			map.put("startRecording", this.startRecording);
 			map.put("startStreaming", this.startStreaming);
 			
+			map.put("organization_id", this.organization_id);
+			
 			invoke("setConnectionAsSharingClient",new Object[] { map }, this);
 			
 		} catch (Exception err) {
@@ -468,7 +482,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	{
 		try {
 
-			System.err.println("captureScreenStart");
+			logger.debug("captureScreenStart");
 
 			startStream(host, app, port, publishName);
 
@@ -498,6 +512,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 				startButtonRecording.setEnabled(true);
 				stopButtonRecording.setEnabled(false);
 			}
+			
 		} catch (Exception err) {
 			logger.error("captureScreenStop Exception: ",err);
 			textArea.setText("Exception: "+err);
@@ -522,10 +537,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         kt2 = 0;
 
         try {
-            connect( host, port, app, this );
-
-        }
-        catch ( Exception e ) {
+        	
+        	if (!isConnected) {
+        		connect( host, port, app, this );
+        	} else {
+        		setConnectionAsSharingClient();
+        	}
+        	
+        } catch ( Exception e ) {
             logger.error( "ScreenShare startStream exception " + e );
         }
 
@@ -533,14 +552,17 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void stopStream() {
-
-        System.out.println( "ScreenShare stopStream" );
-
-        try {
+    	try {
+    		
+    		logger.debug( "ScreenShare stopStream" );
+        	
+        	isConnected = false;
+        	
             disconnect();
             capture.stop();
             capture.release();
             thread = null;
+            
         }
         catch ( Exception e ) {
             logger.error( "ScreenShare stopStream exception " + e );
@@ -583,6 +605,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 	        if ( call.getServiceMethodName().equals("connect") ) {
 	        	
+	        	isConnected = true;
 	        	setConnectionAsSharingClient();
 	
 	        } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
@@ -667,6 +690,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					stopStream();
 				
 				}
+				
+				//logger.debug("Stop No Doubt!");
+				//stopStream();
 				
 			} else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
 				

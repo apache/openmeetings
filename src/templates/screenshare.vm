@@ -32,6 +32,7 @@
     	<argument>$red5-app</argument> 
     	<argument>$port</argument> 
     	<argument>$PUBLIC_SID</argument>   
-    	<argument>$LABELSHARER</argument>     	
+    	<argument>$LABELSHARER</argument> 
+    	<argument>$organization_id</argument>   
     </application-desc> 
 </jnlp> 

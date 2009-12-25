@@ -770,6 +770,19 @@
                 //TODO:check first current tab
             </handler>   
         </netRemoteCallHib>  
+        
+        <netRemoteCallHib name="stopRed5ScreenSharing" funcname="stopRed5ScreenSharing">
+            <handler name="ondata" args="value">
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("**** closeStream: ",value);
+                if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
+                
+                if (canvas.screenSharingDialogContainer != null) {
+                    var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
+                    obj.doClose();
+                }
+            </handler>   
+        </netRemoteCallHib> 
              
         <netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
             <handler name="ondata" args="value">
@@ -796,6 +809,14 @@
 			    		canvas._mymod.setMessage();                	
 	                }
                 }
+            </handler>   
+        </netRemoteCallHib>
+        
+        <netRemoteCallHib name="stopRecordingMessage" funcname="stopRecordingMessage">
+            <handler name="ondata" args="value">
+                //The onResult-Handler will be called be the rtmpconnection
+                canvas._mymod.recordingUser = null;
+                canvas._mymod.setMessage();                 
             </handler>   
         </netRemoteCallHib>
         

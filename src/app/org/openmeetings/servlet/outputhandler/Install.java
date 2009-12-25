@@ -163,6 +163,10 @@ public class Install extends VelocityViewServlet {
 					
 					String crypt_ClassName = httpServletRequest.getParameter("crypt_ClassName");
 					
+					String ffmpeg_path = httpServletRequest.getParameter("ffmpeg_path");
+					
+					String sox_path = httpServletRequest.getParameter("sox_path");
+					
 					String ldap_auth_path = httpServletRequest.getParameter("ldap_config_path");
 					String screen_viewer = httpServletRequest.getParameter("screen_viewer");
 					
@@ -182,7 +186,8 @@ public class Install extends VelocityViewServlet {
 					ImportInitvalues.getInstance().loadConfiguration(crypt_ClassName, configdefault, configsmtp, configsmtpport, 
 									configreferer, configmailuser, configmailpass, configdefaultLang, 
 									swf_path, im_path, url_feed, url_feed2,
-									sendEmailAtRegister, sendEmailWithVerficationCode, default_export_font, ldap_auth_path, screen_viewer);
+									sendEmailAtRegister, sendEmailWithVerficationCode, default_export_font, ldap_auth_path, screen_viewer,
+									ffmpeg_path, sox_path);
 					ImportInitvalues.getInstance().loadInitUserAndOrganisation(username, userpass, useremail, orgname);
 					ImportInitvalues.getInstance().loadDefaultRooms();
 					

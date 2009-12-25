@@ -41,6 +41,7 @@ public class FlvRecording {
 	private Long fileSize;
 	
 	private String recorderStreamId;
+	private Long organization_id;
 	
 	//Not Mapped
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
@@ -274,6 +275,18 @@ public class FlvRecording {
 	}
 	public void setRecorderStreamId(String recorderStreamId) {
 		this.recorderStreamId = recorderStreamId;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="organization_id"
+     *  type="long"
+     */
+	public Long getOrganization_id() {
+		return organization_id;
+	}
+	public void setOrganization_id(Long organization_id) {
+		this.organization_id = organization_id;
 	}
 	
 	public List<FlvRecordingMetaData> getFlvRecordingMetaData() {

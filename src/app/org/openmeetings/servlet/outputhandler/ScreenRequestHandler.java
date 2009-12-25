@@ -262,6 +262,14 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 								startUpClass = "org.red5.screen.webstart.ScreenShareRTMPT";
 							}
 							
+							String orgIdAsString = httpServletRequest.getParameter("organization_id");
+							if (orgIdAsString == null) {
+								new Exception("orgIdAsString is empty could not start sharer");
+								return null;
+							}
+							
+							ctx.put("organization_id", orgIdAsString);
+							
 							ctx.put("startUpClass", startUpClass);
 						    ctx.put("codebase", codebase);
 							ctx.put("red5-host", rtmphostlocal);

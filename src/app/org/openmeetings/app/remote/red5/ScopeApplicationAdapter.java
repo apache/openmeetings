@@ -215,11 +215,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IConnection current = Red5.getConnectionLocal();
 			IServiceCapableConnection service = (IServiceCapableConnection) current;
 			
-			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			
 			Map returnMap = new HashMap();
 			returnMap.put("result", "stopAll");
+			
+			
+			log.debug("-----------  ");
 			
 			if (currentClient != null) {
 				
@@ -255,18 +257,55 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						}
 					}
 					
-					if (currentClient.getIsRecording()) {
+					if (currentClient.isStartRecording()) {
 						
 						returnMap.put("result", "stopSharingOnly");
 						
 					}
 					
+					currentClient.setStartStreaming(false);
+					currentClient.setScreenPublishStarted(false);
+					
+					this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+					
 				}
 				
 				if (stopRecording) {
 					
+					if (currentClient.isStartStreaming()) {
+						returnMap.put("result", "stopRecordingOnly");
+					}
 					
+					//Notify all users of the same Scope
+					Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+					for (Set<IConnection> conset : conCollection) {
+						for (IConnection conn : conset) {
+							if (conn != null) {
+								if (conn instanceof IServiceCapableConnection) {
+									if (conn.equals(current)){
+										continue;
+									} else {
+										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+										//log.debug("is this users still alive? :"+rcl);
+										//Check if the Client is in the same room and same domain 
+										if (!rcl.getIsScreenClient()) {
+											IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+											//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+											iStream.invoke("stopRecordingMessage",new Object[] { currentClient }, this);
+											log.debug("send Notification to");
+										}
+									}
+								}
+							}
+						}
+					}
 					
+					this.flvRecorderService.stopRecordAndSave(current.getScope(), currentClient.getRoomRecordingName(), currentClient);
+					
+					currentClient.setStartRecording(false);
+					currentClient.setIsRecording(false);
+					
+					this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
 					
 				}
 			
@@ -298,6 +337,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 				//Set this connection to be a RTMP-Java Client
 				currentClient.setIsScreenClient(true);
+				
+				if (startStreaming) {
+					currentClient.setStartStreaming(true);
+				}
+				
+				if (startRecording) {
+					currentClient.setStartRecording(true);
+				}
+				
+				currentClient.setOrganization_id(Long.parseLong(map.get("organization_id").toString()));
 				
 				this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 				

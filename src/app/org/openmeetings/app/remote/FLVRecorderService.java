@@ -270,7 +270,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			log.debug("stopRecordAndSave "+currentClient.getUsername()+","+currentClient.getUserip());
 			
-			
 			//get all stream and stop recording them
 			Collection<Set<IConnection>> conCollection = scope.getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -317,7 +316,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			//Store to database
 			Long flvRecordingId = currentClient.getFlvRecordingId();
 			
-			this.flvRecordingDaoImpl.updateFlvRecordingEndTime(flvRecordingId, new Date());
+			this.flvRecordingDaoImpl.updateFlvRecordingEndTime(flvRecordingId, new Date(), currentClient.getOrganization_id());
 			
 			//Reset values
 			currentClient.setFlvRecordingId(null);

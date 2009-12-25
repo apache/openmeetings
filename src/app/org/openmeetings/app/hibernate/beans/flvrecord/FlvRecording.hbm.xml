@@ -24,5 +24,6 @@
     <property name="recordStart" type="java.util.Date" column="record_start"/>
     <property name="recordEnd" type="java.util.Date" column="record_end"/>
     <property name="recorderStreamId" type="string" column="recorder_stream_id"/>
+    <property name="organization_id" type="long" column="organization_id"/>
   </class>
 </hibernate-mapping>

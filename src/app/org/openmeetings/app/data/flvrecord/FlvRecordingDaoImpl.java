@@ -288,12 +288,13 @@ public class FlvRecordingDaoImpl {
 	}
 	
 	
-	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd) {
+	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {
 		try {
 			
 			FlvRecording fId = this.getFlvRecordingById(flvRecordingId);
 			
 			fId.setRecordEnd(recordEnd);
+			fId.setOrganization_id(organization_id);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

@@ -70,13 +70,12 @@
     <method name="checkForApplyScreen" args="record">
             <![CDATA[
             
-                
-            
                 var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                     +canvas.httpRootKey+'ScreenRequestHandler?'
                     +'rtmphostlocal='+canvas.rtmphostlocal
                     +'&room='+hib.currentroomid
                     +'&domain='+hib.conferencedomain
+                    +'&organization_id='+hib.currentdomainObj.organisation_id
                     +'&sid='+canvas.sessionId
                     +'&red5httpport='+canvas.red5httpport
                     +'&connectionType='+canvas.thishib.protocollName
@@ -87,7 +86,8 @@
                     +'&record='+record;
 
                 if ($debug) Debug.write(downloadurl); 
-                lz.Browser.loadURL(downloadurl,'_blank');    
+                lz.Browser.loadURL(downloadurl,'_blank');  
+                
             ]]>        
     </method>   
     

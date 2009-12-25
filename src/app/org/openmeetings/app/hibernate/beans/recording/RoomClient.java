@@ -128,6 +128,9 @@ public class RoomClient {
 	
 	private Long flvRecordingId;
 	private Long flvRecordingMetaDataId;
+	private Long organization_id;
+	boolean startRecording = false;
+	boolean startStreaming = false;
 	
 	private Boolean screenPublishStarted;
 	
@@ -625,7 +628,6 @@ public class RoomClient {
 	public Long getFlvRecordingId() {
 		return flvRecordingId;
 	}
-
 	public void setFlvRecordingId(Long flvRecordingId) {
 		this.flvRecordingId = flvRecordingId;
 	}
@@ -633,7 +635,6 @@ public class RoomClient {
 	public Long getFlvRecordingMetaDataId() {
 		return flvRecordingMetaDataId;
 	}
-
 	public void setFlvRecordingMetaDataId(Long flvRecordingMetaDataId) {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
@@ -641,11 +642,29 @@ public class RoomClient {
 	public Boolean getScreenPublishStarted() {
 		return screenPublishStarted;
 	}
-
 	public void setScreenPublishStarted(Boolean screenPublishStarted) {
 		this.screenPublishStarted = screenPublishStarted;
 	}
-	
-	
+
+	public Long getOrganization_id() {
+		return organization_id;
+	}
+	public void setOrganization_id(Long organization_id) {
+		this.organization_id = organization_id;
+	}
+
+	public boolean isStartRecording() {
+		return startRecording;
+	}
+	public void setStartRecording(boolean startRecording) {
+		this.startRecording = startRecording;
+	}
+
+	public boolean isStartStreaming() {
+		return startStreaming;
+	}
+	public void setStartStreaming(boolean startStreaming) {
+		this.startStreaming = startStreaming;
+	}
 	
 }

@@ -233,11 +233,22 @@ function checkEmail()
     	<p>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
     		If this shows a list of options leave this field blank otherwise you have to specify the path to pdf2swf on your system<br/>
     		see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>
-        </li><li>
+        </li>
+        <li>
         <label for="imagemagick_path">ImageMagick Path</label>
     	<input name="imagemagick_path" id="imagemagick_path" size="27" title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path" type="text" />   	
     	<p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>	
     	</li>
+    	<li>
+        <label for="ffmpeg_path">FFMPEG Path</label>
+        <input name="ffmpeg_path" id="ffmpeg_path" size="27" title="Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path" type="text" />    
+        <p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>  
+        </li>
+        <li>
+        <label for="sox_path">SoX Path</label>
+        <input name="sox_path" id="sox_path" size="27" title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path" type="text" />    
+        <p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>  
+        </li>
     </fieldset>      
     
     <fieldset id="userConf2">

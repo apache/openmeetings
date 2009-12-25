@@ -69,7 +69,7 @@ public class ImportInitvalues {
 		 */
 		
 		Navimanagement.getInstance().addGlobalStructure("record", 2, 395,
-				false, true, 1, "record", "true", 583L);
+				false, true, 1, "record", "false", 583L);
 		Navimanagement.getInstance().addMainStructure("recordModule", 1, 395,
 				true, false, 1, "Module Recording Player", 2, "false");
 		
@@ -200,7 +200,8 @@ public class ImportInitvalues {
 			String default_lang_id, String swf_path, String im_path,
 			String url_feed, String url_feed2,
 			String sendEmailAtRegister, String sendEmailWithVerficationCode,
-			String default_export_font, String ldap_auth_path, String screen_viewer) {
+			String default_export_font, String ldap_auth_path, String screen_viewer,
+			String ffmpeg_path, String sox_path) {
 
 		Configurationmanagement
 				.getInstance()
