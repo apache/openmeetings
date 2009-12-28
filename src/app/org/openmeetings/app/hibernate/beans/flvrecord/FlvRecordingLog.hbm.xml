@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="flvrecording_log" lazy="false" name="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingLog">
+    <id column="flvrecording_log_id" name="flvRecordingLogId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="flvrecording_id" lazy="false" cascade="none" name="flvRecording" class="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording"/>
+    <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="msgType" type="string" column="msg_type"/>
+    <property name="fullMessage" type="text" column="ful_message"/>
+    <property name="exitValue" type="string" column="exit_value"/>
+  </class>
+</hibernate-mapping>

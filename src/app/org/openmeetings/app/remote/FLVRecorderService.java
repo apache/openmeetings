@@ -13,6 +13,7 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
+import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
@@ -41,6 +42,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
 	private UsersDaoImpl usersDaoImpl;
 	private Roommanagement roommanagement;
+	private FlvRecorderConverterTask flvRecorderConverterTask;
 	
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -81,6 +83,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	}
 	public void setRoommanagement(Roommanagement roommanagement) {
 		this.roommanagement = roommanagement;
+	}
+	
+	public FlvRecorderConverterTask getFlvRecorderConverterTask() {
+		return flvRecorderConverterTask;
+	}
+	public void setFlvRecorderConverterTask(
+			FlvRecorderConverterTask flvRecorderConverterTask) {
+		this.flvRecorderConverterTask = flvRecorderConverterTask;
 	}
 
 	public RoomClient checkForRecording(){
@@ -124,6 +134,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	
 	public String recordMeetingStream(String roomRecordingName, String comment){
 		try {
+			
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			Long room_id = currentClient.getRoom_id();
@@ -193,9 +204,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									isAudioOnly = true;
 								}
 								
+								boolean isVideoOnly = false;
+								if (rcl.getAvsettings().equals("v")){
+									isVideoOnly = true;
+								}
+								
 								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
 																	rcl.getFirstname()+" "+rcl.getLastname(), now, 
-																				isAudioOnly, false, false, streamName);
+																				isAudioOnly, isVideoOnly, false, streamName);
 								
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 								
@@ -323,6 +339,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
 			
+			log.debug("this.flvRecorderConverterTask ",this.flvRecorderConverterTask);
+			
+			this.flvRecorderConverterTask.startConversionThread(flvRecordingId);
+			
 		} catch (Exception err) {
 			log.error("[stopRecordAndSave]",err);
 		}
@@ -412,10 +432,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				if (rcl.getAvsettings().equals("a")){
 					isAudioOnly = true;
 				}
+				boolean isVideoOnly = false;
+				if (rcl.getAvsettings().equals("v")){
+					isVideoOnly = true;
+				}
 				
 				Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
 													rcl.getFirstname()+" "+rcl.getLastname(), now, 
-																isAudioOnly, false, false, streamName);
+																isAudioOnly, isVideoOnly, false, streamName);
 				
 				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 				

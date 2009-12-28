@@ -53,6 +53,8 @@
             
                 var deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
                 
+                if ($debug) Debug.write("deltaInSeconds ",deltaInSeconds);
+                
                 this.pixelFactor = deltaInSeconds/(this.width-16);
                 
                 if ($debug) Debug.write("pixelFactor ",this.pixelFactor);
@@ -68,19 +70,25 @@
                 
                 for (var i=0;i<rec.flvRecordingMetaData.length;i++) {
                     
-                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
-                    var deltaInSeconds = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+                    if ($debug) Debug.write("isScreenData :: ",rec.flvRecordingMetaData[i].isScreenData);
                     
-                    var widthItem = Math.round(deltaInSeconds/this.pixelFactor);
-                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
-                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+                    if (!rec.flvRecordingMetaData[i].isScreenData) {
+	                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
+	                    var deltaInSeconds = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+	                    
+	                    var widthItem = Math.round(deltaInSeconds/this.pixelFactor);
+	                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
+	                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+	                    
+		                new lz.userActivityItem(this.content._content.content.content,{
+	                                                  x:xItem,width:widthItem,
+		                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
+		                                        });
+                    }    
                     
-	                new lz.userActivityItem(this.content._content.content.content,{
-                                                  x:xItem,width:widthItem,
-	                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
-	                                        });
-                                        
                 }
+                
+                if ($debug) Debug.write("deltaInSeconds :: ",deltaInSeconds,(deltaInSeconds/60));
                 
                 var minutes = Math.floor(deltaInSeconds/60);
                 

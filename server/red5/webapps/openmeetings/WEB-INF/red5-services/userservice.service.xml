@@ -13,6 +13,9 @@
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
         <property name="scopeApplicationAdapter" ref="web.handler" />
     </bean>     
-                    
+           
+    <bean id="openmeetings.UsersDaoImpl"
+        class="org.openmeetings.app.data.user.dao.UsersDaoImpl">
+    </bean>                         
                     
 </beans>

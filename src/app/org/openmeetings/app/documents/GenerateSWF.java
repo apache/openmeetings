@@ -36,7 +36,7 @@ public class GenerateSWF {
 	
 	final static String execExt = isPosix ? "" : ".exe"; 
 
-	static HashMap<String, Object> executeScript(String process, String[] argv) {
+	public static HashMap<String, Object> executeScript(String process, String[] argv) {
 		HashMap<String, Object> returnMap = new HashMap<String, Object>();
 		returnMap.put("process", process);
 		log.debug("process: " + process);

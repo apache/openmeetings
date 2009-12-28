@@ -11,8 +11,11 @@
     <bean id="flvrecorderservice.service" 
         class="org.openmeetings.app.remote.FLVRecorderService" >
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
+        <property name="usersDaoImpl" ref="openmeetings.UsersDaoImpl" />
+        <property name="roommanagement" ref="openmeetings.Roommanagement" />
         <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
         <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
+        <property name="flvRecorderConverterTask" ref="openmeetings.FlvRecorderConverterTask" />
     </bean> 
     
     <bean id="openmeetings.FlvRecordingDaoImpl"
@@ -22,6 +25,29 @@
     <bean id="openmeetings.FlvRecordingMetaDataDaoImpl"
         class="org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl">
     </bean>     
-        
-                    
+    
+    <bean id="openmeetings.FlvRecordingLogDaoImpl"
+        class="org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl">
+    </bean>   
+    
+    <bean id="openmeetings.TaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+    
+    <bean id="openmeetings.FlvRecorderConverterTask" class="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask">
+        <constructor-arg type="org.springframework.core.task.TaskExecutor" 
+                         ref="openmeetings.TaskExecutor" />
+        <constructor-arg type="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverter" ref="openmeetings.FlvRecorderConverter"/>
+    </bean>   
+    
+    <bean id="openmeetings.FlvRecorderConverter" 
+        class="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverter" >
+        <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
+        <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
+        <property name="configurationmanagement" ref="openmeetings.Configurationmanagement" />
+        <property name="flvRecordingLogDaoImpl" ref="openmeetings.FlvRecordingLogDaoImpl" />
+    </bean>     
+      
 </beans>

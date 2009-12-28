@@ -12,5 +12,9 @@
         class="org.openmeetings.app.remote.ConferenceService">
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
     </bean>     
-                    
+     
+    <bean id="openmeetings.Roommanagement"
+        class="org.openmeetings.app.data.conference.Roommanagement">
+    </bean> 
+    
 </beans>

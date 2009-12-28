@@ -254,6 +254,12 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3,
 				"imagemagick_path", im_path, null, "Path to ImageMagick tools");
 
+		Configurationmanagement.getInstance().addConfByKey(3, "sox_path",
+				sox_path, null, "Path To SoX-Tools");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "ffmpeg_path",
+				ffmpeg_path, null, "Path To FFMPEG");
+		
 		Configurationmanagement.getInstance().addConfByKey(3, "rss_feed1",
 				url_feed, null, "Feed URL");
 

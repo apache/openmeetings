@@ -79,6 +79,37 @@ public class FlvRecordingMetaDataDaoImpl {
 		return null;
 	}
 	
+	public List<FlvRecordingMetaData> getFlvRecordingMetaDataAudioFLVsByRecording(Long flvRecordingId) {
+		try { 
+			
+			String hql = "SELECT c FROM FlvRecordingMetaData c " +
+					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
+					"AND (" +
+						"(c.isScreenData = false) " +
+							" AND " +
+						"(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))" +
+					")";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("flvRecordingId", flvRecordingId);
+			
+			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingMetaDatas;
+			
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordingMetaDataByRecording]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordingMetaDataByRecording]: ",ex2);
+		}
+		return null;
+	}
+	
 	public Long addFlvRecordingMetaData(Long flvRecordingId, String freeTextUserName, 
 					Date recordStart, Boolean isAudioOnly, Boolean isVideoOnly, 
 					Boolean isScreenData, String streamName) {

@@ -27,6 +27,9 @@ public class FlvRecordingMetaData {
 	private Date updated;
 	private String deleted;
 	
+	private String wavAudioData;
+	private String fullWavAudioData;
+	
 	/**
 	 *
 	 * @hibernate.id
@@ -188,5 +191,28 @@ public class FlvRecordingMetaData {
 		this.streamName = streamName;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="wav_audio_data"
+     *  type="string"
+     */
+	public String getWavAudioData() {
+		return wavAudioData;
+	}
+	public void setWavAudioData(String wavAudioData) {
+		this.wavAudioData = wavAudioData;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="full_wav_audio_data"
+     *  type="string"
+     */
+	public String getFullWavAudioData() {
+		return fullWavAudioData;
+	}
+	public void setFullWavAudioData(String fullWavAudioData) {
+		this.fullWavAudioData = fullWavAudioData;
+	}
 	
 }

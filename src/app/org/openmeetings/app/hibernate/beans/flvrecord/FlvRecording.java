@@ -47,7 +47,7 @@ public class FlvRecording {
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
 	private Users creator;
 	private Rooms room;
-
+	
 	/**
 	 *
 	 * @hibernate.id

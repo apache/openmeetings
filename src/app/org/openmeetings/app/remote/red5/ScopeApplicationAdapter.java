@@ -335,6 +335,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				boolean startRecording = Boolean.valueOf(map.get("startRecording").toString());
 				boolean startStreaming = Boolean.valueOf(map.get("startStreaming").toString());
 				
+				currentClient.setRoom_id(Long.parseLong(current.getScope().getName()));
+				
 				//Set this connection to be a RTMP-Java Client
 				currentClient.setIsScreenClient(true);
 				
