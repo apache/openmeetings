@@ -12,6 +12,8 @@
 		<frame src="resources/icon_mute.png" />
 		<frame src="resources/icon_mute_red.png" />
 	</resource>
+	
+	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
    
     <include href="videoUserProfilePic.lzx" />
     <include href="remoteUserDetails.lzx" />

@@ -816,7 +816,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			final int blockWidth = 32;
 			final int blockHeight = 32;
 
-			final int timeBetweenFrames = 750; //frameRate
+			final int timeBetweenFrames = 1000; //frameRate
 
 			int frameCounter = 0;
 

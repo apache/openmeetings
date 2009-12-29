@@ -25,7 +25,79 @@
            height="${ canvas.height - 110 - parent._recordingsViewBottom.height }"
           width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
         
+        <attribute name="recordingName" value="" type="string"/>
         
+        <method name="setNewStream" args="recording">
+        	<![CDATA[
+            	this.recordingName = recording.fileHash;
+            	this.getStreamLength.doCall();
+            	
+            	this._content.initW = recording.flvWidth;
+            	this._content.initH = recording.flvHeight;
+            	
+            	var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'DownloadHandler?fileName='+recording.previewImage
+                            +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                            +'&sid='+canvas.sessionId;
+                
+                if($debug) Debug.write("dashboard/downloadurl "+downloadurl);
+            	
+            	this._content._preview.imagePreview.setAttribute("src",downloadurl)
+            	
+            	this._content._preview.bringToFront();
+            	
+            	this._content.setItemContraints(0);
+        	]]>
+        </method>
+        
+        <method name="startStream">
+        	this._content._videostream.bringToFront();
+            this._content._videostream.playStream(this.recordingName,0);
+        </method>
+        
+        <!--
+        getStreamLength(String name) 
+         -->
+        <netRemoteCallHib name="getStreamLength" funcname="getStreamLength" remotecontext="$once{ canvas.thishib }" >      
+            <netparam><method name="getValue"> return parent.parent.recordingName; </method></netparam>
+            <handler name="ondata" args="value">
+                if ($debug) Debug.write("getStreamLength ",value);
+            </handler>
+        </netRemoteCallHib>  
+        
+        <view name="_content" height="${parent.height-32}" y="32">
+        	
+    	    <attribute name="initH" value="640" type="number" />
+            <attribute name="initW" value="480" type="number" />
+    
+    	    <handler name="oninit">
+                <![CDATA[
+                    var prop2 = [this, "height"];
+                    this.applyConstraintMethod("setItemContraints", prop2);
+                    
+                    this.setItemContraints(0);
+                ]]>
+            </handler>
+            <method name="setItemContraints" args="w">
+                <![CDATA[
+                    var w = this.height * this.initW/this.initH;
+                    this.setAttribute("width",w);
+                ]]>
+            </method>
+            <view name="_preview" width="${parent.width}" height="${parent.height}" bgcolor="0x000000">
+            	<image name="imagePreview" stretches="both"
+            		   width="${parent.width}" height="${parent.height}" />
+                <handler name="onclick">
+                    parent.parent.startStream();
+                </handler>		   
+                <view width="60" height="40" valign="middle" opacity="0.7"
+                	  align="center" bgcolor="0xFFFFFF">
+                	<view resource="lz_recorder_play" valign="middle" align="center" />
+                </view>
+            </view>
+            <baseVideoStream name="_videostream" bgcolor="black" y="32"
+                  width="${parent.width}" height="${parent.height}" />
+        </view>
         
     </conferenceBox>
     
@@ -50,6 +122,8 @@
                 if ($debug) Debug.write("showMetaData ",rec);
                 
                 this.content.clearContent();
+                
+                parent._recordingsViewMain.setNewStream(rec);
             
                 var deltaInSeconds = Math.round((rec.recordEnd.getTime() - rec.recordStart.getTime())/1000);
                 

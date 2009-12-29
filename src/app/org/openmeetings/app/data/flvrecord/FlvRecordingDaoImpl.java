@@ -246,7 +246,7 @@ public class FlvRecordingDaoImpl {
 	
 	public Long addFlvRecording(String fileHash, String fileName, Long fileSize, Long user_id, 
 			Long room_id, Date recordStart, Date recordEnd, Long ownerId, String comment, 
-			String recorderStreamId) {
+			String recorderStreamId, Integer width, Integer height) {
 		try { 
 			
 			FlvRecording flvRecording = new FlvRecording();
@@ -266,6 +266,9 @@ public class FlvRecordingDaoImpl {
 			flvRecording.setRoom_id(room_id);
 			flvRecording.setRecordStart(recordStart);
 			flvRecording.setRecordEnd(recordEnd);
+			
+			flvRecording.setWidth(width);
+			flvRecording.setHeight(height);
 			
 			flvRecording.setOwnerId(ownerId);
 			
@@ -348,6 +351,24 @@ public class FlvRecordingDaoImpl {
 			
 			fId.setFileName(fileName);
 			fId.setUpdated(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			session.update(fId);
+			session.flush();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (HibernateException ex) {
+			log.error("[updateFileOrFolderName]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateFileOrFolderName]: ",ex2);
+		}
+	}
+	
+	public void updateFlvRecording(FlvRecording fId) {
+		try {
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

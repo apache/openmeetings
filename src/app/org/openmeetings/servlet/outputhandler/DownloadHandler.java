@@ -114,8 +114,11 @@ public class DownloadHandler extends HttpServlet {
 				working_dir = current_dir+"upload"+File.separatorChar;
 				
 				// Add the Folder for the Room
-
-				if (moduleName.equals("videoconf1")) {
+				if (moduleName.equals("lzRecorderApp")) {
+				
+					working_dir = current_dir + "streams" + File.separatorChar + "hibernate" + File.separatorChar;
+					
+				} else if (moduleName.equals("videoconf1")) {
 					if (parentPath.length() != 0) {
 						if (parentPath.equals("/")) {
 							working_dir = working_dir + roomName

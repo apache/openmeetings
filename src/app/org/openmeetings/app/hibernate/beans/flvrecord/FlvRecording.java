@@ -38,6 +38,13 @@ public class FlvRecording {
 	private Date updated;
 	private String deleted;
 	
+	private Integer width;
+	private Integer height;
+	
+	private Integer flvWidth;
+	private Integer flvHeight;
+	private String previewImage;
+	
 	private Long fileSize;
 	
 	private String recorderStreamId;
@@ -309,6 +316,66 @@ public class FlvRecording {
 	}
 	public void setRoom(Rooms room) {
 		this.room = room;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="width"
+     *  type="int"
+     */
+	public Integer getWidth() {
+		return width;
+	}
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="height"
+     *  type="int"
+     */
+	public Integer getHeight() {
+		return height;
+	}
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="flv_width"
+     *  type="int"
+     */
+	public Integer getFlvWidth() {
+		return flvWidth;
+	}
+	public void setFlvWidth(Integer flvWidth) {
+		this.flvWidth = flvWidth;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="flv_height"
+     *  type="int"
+     */
+	public Integer getFlvHeight() {
+		return flvHeight;
+	}
+	public void setFlvHeight(Integer flvHeight) {
+		this.flvHeight = flvHeight;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="preview_image"
+     *  type="string"
+     */
+	public String getPreviewImage() {
+		return previewImage;
+	}
+	public void setPreviewImage(String previewImage) {
+		this.previewImage = previewImage;
 	}
 	
 }

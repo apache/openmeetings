@@ -226,10 +226,7 @@
             
             //this._recordingsInfo.content._flvBy.setAttribute("text",timeInMinutes);
         
-            if (this.playSelected) {
-                this.playSelected = false;
-                this.playRecording();
-            }
+            this.playRecording();
         ]]>
     </method>
     

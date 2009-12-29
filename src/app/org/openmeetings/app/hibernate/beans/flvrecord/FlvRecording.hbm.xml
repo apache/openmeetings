@@ -25,5 +25,10 @@
     <property name="recordEnd" type="java.util.Date" column="record_end"/>
     <property name="recorderStreamId" type="string" column="recorder_stream_id"/>
     <property name="organization_id" type="long" column="organization_id"/>
+    <property name="width" type="int" column="width"/>
+    <property name="height" type="int" column="height"/>
+    <property name="flvWidth" type="int" column="flv_width"/>
+    <property name="flvHeight" type="int" column="flv_height"/>
+    <property name="previewImage" type="string" column="preview_image"/>
   </class>
 </hibernate-mapping>
