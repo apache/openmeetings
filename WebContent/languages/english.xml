@@ -721,7 +721,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Sharing forbidden</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>Share your Screen</value>
+    <value>Share/Record Screen</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
     <value>Bad Bandwidth: You have not been able to syncronize the Screen. Frames will be dropped. If this Warning is shown often you could ask the moderator to reduce the Quality.</value>
@@ -2605,7 +2605,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>By</value>
   </string>
   <string id="867" name="flvrecording">
-    <value>PLAY</value>
+    <value>Download</value>
   </string>
   <string id="868" name="flvrecording">
     <value>Main - Video</value>
@@ -2621,5 +2621,20 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="872" name="screen share">
     <value>Stop Recording</value>
+  </string>
+  <string id="873" name="flvrecording">
+    <value>Download the FLV-File</value>
+  </string>
+  <string id="874" name="flvrecording">
+    <value>Room</value>
+  </string>
+  <string id="875" name="flvrecording">
+    <value>Play</value>
+  </string>
+  <string id="876" name="flvrecording">
+    <value>Stop</value>
+  </string>
+  <string id="877" name="flvrecording">
+    <value>User has microphone on</value>
   </string>
 </language>

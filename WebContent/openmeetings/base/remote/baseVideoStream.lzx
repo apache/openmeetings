@@ -33,12 +33,16 @@
 		@keywords final -->
 	<attribute name="soundRefMC" value="null" />
 	
+	<event name="onMetaData" />
+	<event name="onPlayStatus" />
+	
 	<!-- save value for restart -->
         <attribute name="streamName" />
         <attribute name="delay" />
 	<!--- @keywords private -->
 	<method name="createStream">
 		this._ns =  new NetStream(this._findnc());
+		var t = this;
 		this._ns.onStatus = function(info) {
 	    	_root.Debug.write("simpleNetStream onStatus",info);
 	    };
@@ -47,9 +51,11 @@
 	    };
 	    this._ns.onPlayStatus = function(info) {
 	    	_root.Debug.write("simpleNetStream onPlayStatus",info);
+	    	t.onPlayStatus.sendEvent(info);
 	    };
 	    this._ns.onMetaData = function(info) {
 	    	_root.Debug.write("simpleNetStream onMetaData",info);
+	    	t.onMetaData.sendEvent(info);
 	    };		
 	</method>
 	

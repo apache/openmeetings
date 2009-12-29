@@ -2696,4 +2696,19 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="872" name="screen share">
     <value>Stop Recording</value>
   </string>
+  <string id="873" name="flvrecording">
+    <value>Download the FLV-File</value>
+  </string>
+  <string id="874" name="flvrecording">
+    <value>Room</value>
+  </string>
+  <string id="875" name="flvrecording">
+    <value>Play</value>
+  </string>
+  <string id="876" name="flvrecording">
+    <value>Stop</value>
+  </string>
+  <string id="877" name="flvrecording">
+    <value>User has microphone on</value>
+  </string>
 </language>

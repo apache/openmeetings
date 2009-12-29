@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    
+<!---
+	View for recorded contents list.
+	When you select 'Recordings' on the top menu, this class shows the list.
+-->
+<class name="lzRecordingsViewMain" extends="conferenceBox" labelid="858"
+           x="${ parent._navigationArea.width + parent._navigationArea.x }"
+           height="${ canvas.height - 110 - parent._recordingsViewBottom.height }"
+          width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
+        
+        <attribute name="recordingName" value="" type="string"/>
+        
+        <attribute name="isPaused" value="false" type="boolean"/>
+        
+        <attribute name="timerDelegate" value="null"/>
+        <attribute name="timerDelegateStarted" value="false" type="boolean"/>
+        
+        <attribute name="deltaInSeconds" value="0" type="number"/>
+        
+        <handler name="oninit">
+        	this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
+        </handler>
+        
+        <method name="setNewStream" args="recording">
+        	<![CDATA[
+        	
+        	    this.stopStream();
+        	    this.isPaused = false;
+        	
+            	this.recordingName = recording.fileHash;
+            	this.getStreamLength.doCall();
+            	
+            	this._content.initW = recording.flvWidth;
+            	this._content.initH = recording.flvHeight;
+            	
+            	var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'DownloadHandler?fileName='+recording.previewImage
+                            +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                            +'&sid='+canvas.sessionId;
+                
+                if($debug) Debug.write("lzRecorder/downloadurl "+downloadurl);
+            	
+            	this._content._preview.imagePreview.setAttribute("src",downloadurl)
+            	
+            	this._content._preview.bringToFront();
+            	
+            	this._content.setItemContraints(0);
+            	
+            	this.deltaInSeconds = Math.round((recording.recordEnd.getTime() - recording.recordStart.getTime())/1000);
+                
+                if ($debug) Debug.write("deltaInSeconds ",this.deltaInSeconds);
+                
+                var minutes = Math.floor(this.deltaInSeconds/60);
+                
+                if ($debug) Debug.write("minutes ",minutes);
+                
+                var restSeconds = this.deltaInSeconds - ( minutes * 60 );
+                
+                this._progress._progressbar._duration.setAttribute("text",minutes+" min "+restSeconds+" sec");
+            	
+        	]]>
+        </method>
+        
+        <method name="calcProgressBar">
+        	<![CDATA[
+        	
+        	   var flvTime = this._content._videostream._ns.time;
+        	   
+        	   //if ($debug) Debug.write("flvTime :: ",flvTime);
+        	   parent._recordingsViewBottom.showProgress(flvTime);
+        	   
+        	   this._progress._progressbar._pointer.setAttribute("visibility","visible");
+        	   
+        	   var tString = "";
+        	   
+        	   if (flvTime > 60) {
+        	   	
+        	   	   var minutes = Math.floor(flvTime/60);
+        	   	   
+        	   	   var restSeconds = Math.round(flvTime) - ( minutes * 60 );
+        	   	   
+        	   	   tString = minutes + " min " + restSeconds + " sec";
+        	   	
+        	   } else {
+        	   	
+        	   	   tString = Math.round(flvTime) + " sec";
+        	   
+        	   }
+        	   
+        	   this._progress._progressbar._time.setAttribute("text",tString);
+        	   
+        	   var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * flvTime);
+        	
+        	   this._progress._progressbar._pointer.setAttribute("x",tNewX);
+        	   
+        	   lz.Timer.addTimer( this.timerDelegate , 1000 );
+        	
+        	]]>
+        </method>
+        
+        <method name="startStream">
+        	if (this.recordingName != "") {
+        		
+        		this.isPaused = false;
+        		
+        		if (!this.timerDelegateStarted) {
+        			this.timerDelegateStarted = true;
+                    lz.Timer.addTimer( this.timerDelegate , 1000 );
+                }
+                
+            	this._content._videostream.bringToFront();
+                this._content._videostream.playStream(this.recordingName,0);
+        	}
+        </method>
+        
+        <method name="toggleStream">
+        	if (this.timerDelegateStarted) {
+        		this.pauseStream();
+        	} else {
+        		this.startStream();
+        	}
+        </method>
+        
+        <method name="pauseStream">
+        	this.isPaused = !this.isPaused;
+        	this._content._videostream._ns.pause(this.isPaused);
+        </method>
+        
+        <method name="seekStream" args="newX">
+            <![CDATA[
+        	
+                if ($debug) Debug.write("seekStream ",newX);
+        	
+                if (this.timerDelegateStarted) {
+        	   	
+                    var flvTime = Math.round( newX / (this._progress._progressbar.width / this.deltaInSeconds) );
+                    
+                    if ($debug) Debug.write("seekStream :: this.deltaInSeconds ",this.deltaInSeconds);
+                    
+                    if ($debug) Debug.write("seekStream :: flvTime ",flvTime);
+                    
+                    this._content._videostream._ns.seek(flvTime);
+        	   	
+                }
+        	
+            ]]>
+        </method>
+        
+        <method name="stopStream">
+        	if (this.timerDelegateStarted) {
+        		this.timerDelegateStarted = false;
+                lz.Timer.removeTimer( this.timerDelegate );
+            }
+            parent._recordingsViewBottom.stopProgress();
+            this._progress._progressbar._time.setAttribute("text","");
+            this._progress._progressbar._pointer.setAttribute("x",0);
+            this._content._preview.bringToFront();
+            this._content._videostream.stop();
+        </method>
+        
+        <view name="_content" height="${ parent.height-32-18 }" y="32">
+        	
+    	    <attribute name="initH" value="480" type="number" />
+            <attribute name="initW" value="640" type="number" />
+    
+    	    <handler name="oninit">
+                <![CDATA[
+                    var prop2 = [this, "height"];
+                    this.applyConstraintMethod("setItemContraints", prop2);
+                    
+                    this.setItemContraints(0);
+                    
+                    this._preview.bringToFront();
+                ]]>
+            </handler>
+            
+            <method name="setItemContraints" args="w">
+                <![CDATA[
+                    var w = this.height * this.initW/this.initH;
+                    this.setAttribute("width",w);
+                ]]>
+            </method>
+            
+            <view name="_preview" width="${parent.width}" height="${parent.height}" bgcolor="0x000000">
+            	<image name="imagePreview" stretches="both"
+            		   width="${parent.width}" height="${parent.height}" />
+                <handler name="onclick">
+                	if ($debug) Debug.write("onclick -- toggleStream");
+                    parent.parent.toggleStream();
+                </handler>		   
+                <view width="60" height="40" valign="middle" opacity="0.7"
+                	  align="center" bgcolor="0xFFFFFF">
+                	<view resource="lz_recorder_play" valign="middle" align="center" />
+                </view>
+            </view>
+            
+            <baseVideoStream name="_videostream" bgcolor="0x000000"
+                  width="${parent.width}" height="${parent.height}">
+            	<handler name="onPlayStatus" args="info">
+            		if ($debug) Debug.write("onPlayStatus ",info);
+            		if (info.code ==  "NetStream.Play.Complete" ) {
+            			parent.parent.stopStream();
+            		}
+            	</handler>
+            	<handler name="onMetaData" args="info">
+                    if ($debug) Debug.write("onMetaData ",info);
+                </handler>
+            </baseVideoStream>
+            
+        </view>
+        
+        <view name="_progress" height="18" valign="bottom" width="${ parent.width }"
+        	                   bgcolor="$once{ canvas.basebgcolorizer }">
+        	
+        	<view resource="flv_recorder_play_small_rsc" y="1" height="16" width="16"
+        		      bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		<handler name="onmouseover">
+                    this.setAttribute("bgcolor",0xFFFFFF);
+                </handler>
+                <handler name="onmouseout">
+                    this.setAttribute("bgcolor",canvas.baseMouseOvercolorizer);
+                </handler>
+        		<handler name="onclick">
+        			parent.parent.startStream();
+        		</handler>
+        		<labelTooltip labelid="875" />
+        	</view>
+        	
+        	<view name="_progressbar" x="16" width="${ parent.width - 32 }" y="1" 
+        		  height="16" bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		
+        		<view x="0" width="${ parent.width }" y="0" height="16" bgcolor="0xFFFFFF" opacity="0.5" /> 
+        		
+        		<handler name="onclick">
+        			parent.parent.seekStream(this.getMouse("x"));
+        		</handler>
+        		
+        		<view name="_pointer" resource="flv_progress_pointer_rsc" visibility="hidden" />
+        		
+        		<text name="_time" resize="true" fontsize="10" />
+        		
+        		<text name="_duration" align="right" resize="true" fontsize="10" />
+        		
+        	</view>
+        	
+        	<view resource="flv_recorder_stop_small_rsc" align="right" y="1" height="16" width="16"
+        		  bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		<handler name="onmouseover">
+        			this.setAttribute("bgcolor",0xFFFFFF);
+        		</handler>
+        		<handler name="onmouseout">
+                    this.setAttribute("bgcolor",canvas.baseMouseOvercolorizer);
+                </handler>
+                <handler name="onclick">
+                    parent.parent.stopStream();
+                </handler>
+                <labelTooltip labelid="876" />
+            </view>
+        	
+        </view>
+        
+</class>
+
+
+
+</library>

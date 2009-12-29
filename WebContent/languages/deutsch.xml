@@ -721,7 +721,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Veröffentlichung abgelehnt</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>Desktop veröffentlichen</value>
+    <value>Share/Record Desktop</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
     <value>Schlechte Bandbreite. Es war nicht möglich alle Bilder des Bildschirms zu laden. Tritt dieser Fehler häufiger auf können Sie den Moderator darum bitten die Qualität zur verringern.</value>
@@ -2621,5 +2621,20 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="872" name="screen share">
     <value>Stop Recording</value>
+  </string>
+  <string id="873" name="flvrecording">
+    <value>Download the FLV-File</value>
+  </string>
+  <string id="874" name="flvrecording">
+    <value>Room</value>
+  </string>
+  <string id="875" name="flvrecording">
+    <value>Play</value>
+  </string>
+  <string id="876" name="flvrecording">
+    <value>Stop</value>
+  </string>
+  <string id="877" name="flvrecording">
+    <value>User has microphone on</value>
   </string>
 </language>

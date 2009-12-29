@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-    
 <!---
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
@@ -220,11 +219,13 @@
                 var timeInMinutes = hours+" h "+restMinutes+" min "+restSeconds+" sek";
             }
             
+            this._recordingsInfo.content.recordingName = rec.fileHash;
+            
             this._recordingsInfo.content._flvLength.setAttribute("text",timeInMinutes);
             
             this._recordingsInfo.content._flvDate.setAttribute("text",parseDateToStringTime(rec.inserted));
             
-            //this._recordingsInfo.content._flvBy.setAttribute("text",timeInMinutes);
+            this._recordingsInfo.content._flvRoom.setAttribute("text",rec.room.name);
         
             this.playRecording();
         ]]>
@@ -341,27 +342,48 @@
         <view name="content" y="34" bgcolor="0xFFFFFF" 
               width="$once{ parent.width }" height="$once{ parent.height - 34 }">
             
+            <attribute name="recordingName" value="" type="string" />
+            
             <labelText labelid="863" y="0" />
             <labelText name="_flvName" y="0" x="80" multiline="true" height="32" 
                        width="${ parent.width-80 }"/>
             
-            <labelText labelid="864" y="34" />
-            <labelText name="_flvLength" y="34" x="80" />
+            <labelText labelid="864" y="20" />
+            <labelText name="_flvLength" y="20" x="80" />
             
-            <labelText labelid="865" y="58" />
-            <labelText name="_flvDate" y="58" x="80" />
+            <labelText labelid="865" y="40" />
+            <labelText name="_flvDate" y="40" x="80" />
             
             <!--
-            <labelText labelid="866" y="72" />
-            <labelText name="_flvBy" y="72" />
+            <labelText labelid="866" y="60" />
+            <labelText name="_flvBy" y="60" />
              -->
             
-            <simpleLabelButton y="86" align="right" text_padding_x="40"
+            <labelText labelid="874" y="60" />
+            <labelText name="_flvRoom" y="60" x="80" />
+            
+            <simpleLabelButton y="100" align="right" text_padding_x="40"
                               height="26" width="180" labelid="867">
-                <view resource="flv_recorder_play_rsc" x="4" y="2" />
+                <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
-                    parent.parent.parent.playRecording();
+                	<![CDATA[
+                	
+                	   if (parent.recordingName == "") {
+                	   	   return;
+                	   }
+                	
+	                   var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                                    +canvas.httpRootKey+'DownloadHandler?fileName='+parent.recordingName
+                                    +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                                    +'&sid='+canvas.sessionId;
+                	
+                        lz.Browser.loadURL(downloadurl,"_parent");
+                	
+                	]]>
                 </handler>
+                
+                <labelTooltip labelid="873" />
+                
             </simpleLabelButton>
             
         </view>

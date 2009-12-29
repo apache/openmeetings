@@ -7,6 +7,12 @@
     </resource>
     
     <resource name="flv_recorder_play_rsc" src="resources/webstart_play.png" />
+    <resource name="flv_recorder_play_small_rsc" src="resources/webstart_play_small.png" />
+    <resource name="flv_recorder_stop_small_rsc" src="resources/webstart_stop_small.png" />
+    <resource name="flv_progress_pointer_rsc" src="resources/progress_pointer.swf" />
+    <resource name="flv_progress_pointer_big_rsc" src="resources/progress_pointer_big.swf" />
+    
+    <resource name="flv_download_rsc" src="resources/tool_drop_target.png" />
     
     <resource name="file_explorer_add_file_rsc" src="resources/viewmag_plus.png" />
     <resource name="file_explorer_add_folder_rsc" src="resources/folder_new.png" />
@@ -42,6 +48,7 @@
     <include href="dragItemFLVExplorer.lzx" />
     <include href="lzRecordContent.lzx" />
     <include href="lzRecordNavigation.lzx" />
+    <include href="contentviews/" />
     <include href="treeitems/" />
 
 </library>
