@@ -30,6 +30,8 @@ public class FlvRecordingMetaData {
 	private String wavAudioData;
 	private String fullWavAudioData;
 	
+	private Boolean audioIsValid;
+	
 	/**
 	 *
 	 * @hibernate.id
@@ -214,5 +216,18 @@ public class FlvRecordingMetaData {
 	public void setFullWavAudioData(String fullWavAudioData) {
 		this.fullWavAudioData = fullWavAudioData;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="audio_is_valid"
+     *  type="boolean"
+     */
+	public Boolean getAudioIsValid() {
+		return audioIsValid;
+	}
+	public void setAudioIsValid(Boolean audioIsValid) {
+		this.audioIsValid = audioIsValid;
+	}
+	
 	
 }
