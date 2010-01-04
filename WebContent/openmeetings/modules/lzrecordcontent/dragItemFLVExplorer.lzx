@@ -105,6 +105,10 @@
     	}
     </method>
     
+    <method name="sendNoConfirmation">
+    	this.destroy();
+    </method>
+    
     <netRemoteCallHib name="deleteFLVOrFolder" funcname="flvrecorderservice.deleteFLVOrFolder" 
         remotecontext="$once{ canvas.thishib }" > 
         

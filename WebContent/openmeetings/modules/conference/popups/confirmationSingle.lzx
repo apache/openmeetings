@@ -63,6 +63,7 @@
     <simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
     	<handler name="onclick">
     		this.parent.close();
+    		this.parent.refObj.sendNoConfirmation();
     	</handler>
     </simpleLabelButton>    
     <simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
