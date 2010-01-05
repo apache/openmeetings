@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd                            
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
+	<!-- This context holds all the networking: mina -->
+
+	<bean id="customEditorConfigurer"
+		class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean
+						class="org.apache.mina.integration.beans.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:/red5.properties" />
+	</bean>
+	
+	<!-- RTMP -->
+	
+	<bean id="rtmpMinaConnManager"
+		class="org.red5.server.net.rtmp.RTMPConnManager">
+	</bean>
+	    
+	<!-- RTMP Handler -->
+	<bean id="rtmpHandler"
+		class="org.red5.server.net.rtmp.RTMPHandler">
+		<property name="server" ref="red5.server" />
+		<property name="statusObjectService" ref="statusObjectService" />
+		<!-- Enable this if you want to allow global scope connections
+		<property name="globalScopeConnectionAllowed" value="true" />
+		-->
+	</bean>
+	
+	<!-- RTMP Mina IO Handler -->
+	<bean id="rtmpMinaIoHandler"
+		class="org.red5.server.net.rtmp.RTMPMinaIoHandler">
+		<property name="handler" ref="rtmpHandler" />
+		<property name="codecFactory" ref="rtmpCodecFactory" />
+		<property name="rtmpConnManager" ref="rtmpMinaConnManager" />
+	</bean>
+	
+	<!-- RTMP Mina Transport -->
+	<bean id="rtmpTransport" class="org.red5.server.net.rtmp.RTMPMinaTransport" init-method="start" destroy-method="stop">
+		<property name="ioHandler" ref="rtmpMinaIoHandler" />
+        <property name="connectors">
+            <list>
+                <bean class="java.net.InetSocketAddress">
+                    <constructor-arg index="0" type="java.lang.String" value="${rtmp.host}" />  
+                    <constructor-arg index="1" type="int" value="${rtmp.port}" />  
+                </bean>
+                <!-- You can now add additional ports and ip addresses
+                <bean class="java.net.InetSocketAddress">
+                    <constructor-arg index="0" type="java.lang.String" value="${rtmp.host}" />  
+                    <constructor-arg index="1" type="int" value="1936" />  
+                </bean>
+                 -->
+            </list>
+        </property>
+		<property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" />
+		<property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
+		<property name="eventThreadsCore" value="${rtmp.event_threads_core}" />
+		<property name="eventThreadsMax" value="${rtmp.event_threads_max}" />
+		<property name="eventThreadsQueue" value="${rtmp.event_threads_queue}" />
+		<property name="eventThreadsKeepalive" value="${rtmp.event_threads_keepalive}" />
+		<!-- This is the interval at which the sessions are polled for stats. If mina monitoring is not
+				enabled, polling will not occur. -->
+		<property name="jmxPollInterval" value="1000" />
+		<property name="tcpNoDelay" value="${rtmp.tcp_nodelay}" />
+	</bean>
+	
+	<!-- RTMP Mina Connection -->
+	<bean id="rtmpMinaConnection" scope="prototype"	class="org.red5.server.net.rtmp.RTMPMinaConnection">
+		<!-- Ping clients every X ms. Set to 0 to disable ghost detection code. -->
+		<property name="pingInterval" value="${rtmp.ping_interval}" />
+		<!-- Disconnect client after X ms of not responding. -->
+		<property name="maxInactivity" value="${rtmp.max_inactivity}" />
+		<!-- Max. time in milliseconds to wait for a valid handshake. -->
+		<property name="maxHandshakeTimeout" value="5000" />
+	</bean>
+	
+	<!-- RTMPT -->
+	
+	<bean id="rtmptConnManager"
+		class="org.red5.server.net.rtmp.RTMPConnManager">
+	</bean>
+	
+	<!-- RTMPT Handler -->
+	<bean id="rtmptHandler"
+		class="org.red5.server.net.rtmpt.RTMPTHandler" autowire="byType">
+		<property name="codecFactory" ref="rtmptCodecFactory" />
+	</bean>
+	
+	<!-- Use injection to store RTMPT handler in servlet -->
+	<bean id="rtmptServlet"
+		class="org.red5.server.net.rtmpt.RTMPTServlet">
+		<property name="handler" ref="rtmptHandler" />
+		<property name="rtmpConnManager" ref="rtmptConnManager" />
+	</bean>
+	
+	<!-- RTMPT Connection -->
+	<bean id="rtmptConnection" scope="prototype"
+		class="org.red5.server.net.rtmpt.RTMPTConnection">
+		<!-- Ping clients every X ms. Set to 0 to disable ghost detection code. -->
+		<property name="pingInterval" value="${rtmpt.ping_interval}" />
+		<!-- Disconnect client after X ms of not responding. -->
+		<property name="maxInactivity" value="${rtmpt.max_inactivity}" />
+		<!-- Max. time in milliseconds to wait for a valid handshake. -->
+		<property name="maxHandshakeTimeout" value="5000" />
+	</bean>
+		
+	<!-- RTMPT -->
+<!-- -->
+
+	<bean id="rtmpt.server" class="org.red5.server.tomcat.rtmpt.RTMPTLoader" init-method="init" lazy-init="true">
+	
+		<property name="webappFolder" value="${red5.root}/webapps" />
+		
+		<property name="connector">
+			<bean class="org.apache.catalina.connector.Connector">
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11NioProtocol" />	
+				<property name="port"><value>${rtmpt.port}</value></property>
+				<property name="enableLookups"><value>false</value></property>
+			</bean>
+		</property>
+
+		<property name="connectionProperties">
+			<map>
+				<entry key="maxKeepAliveRequests" value="${rtmpt.max_keep_alive_requests}"/>
+				<entry key="useExecutor" value="true"/>
+				<entry key="maxThreads" value="${rtmpt.max_threads}"/>
+				<entry key="acceptorThreadCount" value="${rtmpt.acceptor_thread_count}"/>
+				<entry key="processorCache" value="${rtmpt.processor_cache}"/>
+			</map>
+		</property>
+		
+		<property name="host">
+			<bean class="org.apache.catalina.core.StandardHost">
+				<property name="name" value="${rtmpt.host}" />
+				<property name="unpackWARs" value="false" />
+				<property name="autoDeploy" value="false" />
+				<property name="xmlValidation" value="false" />
+				<property name="xmlNamespaceAware" value="false" />
+			</bean>	   
+		</property>		
+
+	</bean>
+
+	
+	<!-- RTMPS -->
+    
+    <bean id="rtmpsMinaIoHandler"
+        class="org.red5.server.net.rtmps.RTMPSMinaIoHandler">
+        <property name="handler" ref="rtmpHandler" />
+        <property name="codecFactory" ref="rtmpCodecFactory" />
+        <property name="rtmpConnManager" ref="rtmpMinaConnManager" />
+        <property name="keyStorePassword" value="${rtmps.keystorepass}" />
+        <property name="keystoreFile" value="conf/keystore" />
+    </bean>
+    
+    <bean id="rtmpsTransport" class="org.red5.server.net.rtmp.RTMPMinaTransport" init-method="start" destroy-method="stop">
+        <property name="ioHandler" ref="rtmpsMinaIoHandler" />
+        <property name="connectors">
+            <list>
+                <bean class="java.net.InetSocketAddress">
+                    <constructor-arg index="0" type="java.lang.String" value="${rtmps.host}" />  
+                    <constructor-arg index="1" type="int" value="${rtmps.port}" />  
+                </bean>
+            </list>
+        </property>
+        <property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" />
+        <property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
+        <property name="eventThreadsCore" value="${rtmp.event_threads_core}" />
+        <property name="eventThreadsMax" value="${rtmp.event_threads_max}" />
+        <property name="eventThreadsQueue" value="${rtmp.event_threads_queue}" />
+        <property name="eventThreadsKeepalive" value="${rtmp.event_threads_keepalive}" />
+        <!-- This is the interval at which the sessions are polled for stats. If mina monitoring is not
+                enabled, polling will not occur. -->
+        <property name="jmxPollInterval" value="1000" />
+        <property name="tcpNoDelay" value="${rtmp.tcp_nodelay}" />
+    </bean>
+	
+<!--
+	<bean id="rtmps.server" class="org.red5.server.tomcat.rtmps.RTMPSLoader" init-method="init" lazy-init="true">
+	
+		<property name="webappFolder" value="${red5.root}/webapps" />
+		
+		<property name="connector">
+			<bean class="org.apache.catalina.connector.Connector">
+				<constructor-arg type="java.lang.String" value="org.apache.coyote.http11.Http11NioProtocol" />	
+				<property name="port" value="${rtmps.port}" />
+				<property name="redirectPort" value="${rtmp.port}" />
+			</bean>			
+		</property>	
+		
+		<property name="host">
+			<bean class="org.apache.catalina.core.StandardHost">
+				<property name="name" value="${rtmps.host}" />
+				<property name="unpackWARs" value="false" />
+				<property name="autoDeploy" value="false" />
+				<property name="xmlValidation" value="false" />
+				<property name="xmlNamespaceAware" value="false" />
+			</bean>	   
+		</property>		
+	
+		<property name="connectionProperties">
+			<map>
+				<entry>
+					<key><value>port</value></key>
+					<value>${rtmps.port}</value>
+				</entry>
+				<entry>
+					<key><value>redirectPort</value></key>
+					<value>${rtmp.port}</value>
+				</entry>
+				<entry>
+					<key><value>SSLEnabled</value></key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key><value>sslProtocol</value></key>
+					<value>TLS</value>
+				</entry>
+				<entry>
+					<key><value>clientAuth</value></key>
+					<value>false</value>
+				</entry>
+				<entry>
+					<key><value>keystoreFile</value></key>
+					<value>conf/keystore</value>
+				</entry>
+				<entry>
+					<key><value>keystorePass</value></key>
+					<value>${rtmps.keystorepass}</value>
+				</entry>
+				<entry>
+					<key><value>keystoreType</value></key>
+					<value>JKS</value>
+				</entry>
+				<entry key="maxKeepAliveRequests" value="${rtmps.max_keep_alive_requests}"/>
+				<entry key="useExecutor" value="true"/>
+				<entry key="maxThreads" value="${rtmps.max_threads}"/>
+				<entry key="acceptorThreadCount" value="${rtmps.acceptor_thread_count}"/>
+				<entry key="processorCache" value="${rtmps.processor_cache}"/>
+			</map>
+		</property>	
+
+		<property name="valves">
+      		<list>
+	    		<bean id="valve.access" class="org.apache.catalina.valves.AccessLogValve">
+	                <property name="directory" value="log" />
+	                <property name="prefix" value="${rtmps.host}_rtmps_access." />
+	                <property name="suffix" value=".log" />
+	                <property name="pattern" value="common" />
+	                <property name="resolveHosts" value="false" />
+	                <property name="rotatable" value="true" />
+	        	</bean>
+        	</list>
+        </property>			
+	
+	</bean>	
+-->
+	
+	<!-- Enable when you need it. - - >
+	<bean id="rtmpProxyTransport" class="org.red5.server.net.rtmp.RTMPMinaTransport" init-method="start" destroy-method="stop">
+		<property name="ioHandler" ref="debugProxyIoHandler" />
+		<property name="address" value="${proxy.source_host}" />
+		<property name="port" value="${proxy.source_port}" />
+		<property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" />
+		<property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
+		<property name="eventThreadsCore" value="${rtmp.event_threads_core}" />
+		<property name="eventThreadsMax" value="${rtmp.event_threads_max}" />
+		<property name="eventThreadsQueue" value="${rtmp.event_threads_queue}" />
+		<property name="eventThreadsKeepalive" value="${rtmp.event_threads_keepalive}" />
+	</bean>
+    
+	<bean id="debugProxyIoHandler"
+		class="org.red5.server.net.proxy.DebugProxyHandler">
+		<property name="codecFactory" ref="rtmpCodecFactory" />
+		<property name="forward" value="${proxy.destination_host}:${proxy.destination_port}" />
+		<property name="dumpTo" value="./webapps/dump/" />
+	</bean>
+	-->
+</beans>
