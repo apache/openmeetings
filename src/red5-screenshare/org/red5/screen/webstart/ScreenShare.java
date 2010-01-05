@@ -323,12 +323,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 			textAreaHeaderRecording.setText(this.label869);
 			contentPane.add(textAreaHeaderRecording);
-			textAreaHeaderRecording.setBounds(10, 300, 480, 24);
+			textAreaHeaderRecording.setBounds(10, 340, 480, 24);
 			
 			textAreaHeaderRecordingDescr = new JLabel(); 
 			textAreaHeaderRecordingDescr.setText(this.label870);
 			contentPane.add(textAreaHeaderRecordingDescr);
-			textAreaHeaderRecordingDescr.setBounds(10, 320, 480, 54);
+			textAreaHeaderRecordingDescr.setBounds(10, 360, 480, 54);
 			
 			//*****
 			//Start Button Recording
@@ -341,7 +341,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					captureScreenStart();
 				}
 			});
-			startButtonRecording.setBounds(30, 380, 200, 32);
+			startButtonRecording.setBounds(30, 420, 200, 32);
 			t.add(startButtonRecording);
 			
 			//*****
@@ -355,7 +355,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					captureScreenStop();
 				}
 			});
-			stopButtonRecording.setBounds(290, 380, 200, 32);
+			stopButtonRecording.setBounds(290, 420, 200, 32);
 			stopButtonRecording.setEnabled(false);
 			t.add(stopButtonRecording);
 			
@@ -363,7 +363,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			//Text Warning
 			textWarningArea = new JLabel();
 			contentPane.add(textWarningArea);
-			textWarningArea.setBounds(10, 410, 420,54);
+			textWarningArea.setBounds(10, 450, 420,54);
 			//textWarningArea.setBackground(Color.WHITE);
 			
 			
@@ -377,7 +377,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					System.exit(0);
 				}
 			});
-			exitButton.setBounds(290, 420, 200, 24);
+			exitButton.setBounds(290, 460, 200, 32);
 			t.add(exitButton);
 
 			//*****
@@ -398,7 +398,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			});
 			t.pack();
 			t.setLocation(30, 30);
-			t.setSize(500, 480);
+			t.setSize(500, 530);
 			t.setVisible(true);
 			t.setResizable(false);
 

@@ -609,7 +609,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public FLVRecorderObject getFLVExplorerByRoom(String SID) {
+	public FLVRecorderObject getFLVExplorerByRoom(String SID, Long organization_id) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
@@ -619,7 +619,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        	
 	        	fileExplorerObject.setUserHome(this.flvRecordingDaoImpl.getFlvRecordingRootByOwner(users_id));
 	        	
-	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getFlvRecordingRootByPublic());
+	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getFlvRecordingRootByPublic(organization_id));
 	        	
 	        	return fileExplorerObject;
 	        	

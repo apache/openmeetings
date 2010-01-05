@@ -143,7 +143,7 @@
     <netRemoteCallHib name="refreshSession" funcname="userservice.refreshSession" showLoading="false" >    
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>   
         <handler name="ondata" args="value">
-            if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
+            //if ($debug) Debug.write("hibRtmpConnection/refreshSession [",value,"]");
             lz.Timer.addTimer( parent.refreshDelegate, canvas.refreshSession );
         </handler>
     </netRemoteCallHib>

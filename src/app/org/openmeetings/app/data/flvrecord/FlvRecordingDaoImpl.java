@@ -84,12 +84,13 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
-	public List<FlvRecording> getFlvRecordingRootByPublic() {
+	public List<FlvRecording> getFlvRecordingRootByPublic(Long organization_id) {
 		try {
 			
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.deleted != :deleted " +
 					"AND c.ownerId IS NULL " +
+					"AND c.organization_id = :organization_id " +
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
@@ -97,6 +98,7 @@ public class FlvRecordingDaoImpl {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql);
+			query.setLong("organization_id", organization_id);
 			query.setString("deleted", "true");
 			
 			List<FlvRecording> flvRecordingList = query.list();

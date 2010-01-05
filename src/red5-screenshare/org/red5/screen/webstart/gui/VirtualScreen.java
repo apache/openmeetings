@@ -307,6 +307,7 @@ public class VirtualScreen {
 			ScreenShare.instance.vScreenIconLeft.setLocation(
 					Long.valueOf(Math.round(newvScreenX)).intValue()+30-16,
 					Long.valueOf(Math.round(newvScreenY)).intValue()+162+(Long.valueOf(Math.round(newvScreenHeight)).intValue()/2));
+			
 			ScreenShare.instance.vScreenIconRight.setLocation(
 					Long.valueOf(Math.round(newvScreenX)).intValue()+30+Long.valueOf(Math.round(newvScreenWidth)).intValue()-16,
 					Long.valueOf(Math.round(newvScreenY)).intValue()+162+((Long.valueOf(Math.round(newvScreenHeight)).intValue())/2));

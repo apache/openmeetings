@@ -320,8 +320,8 @@
 			        this.setColorTransform( { ra : red, ga : green, ba : blue,
 			                            		rb : 0, gb : 0, bb : 0 } );
 			                            		
-			        if($debug) Debug.write("explorerBox/setTintRGB",this);
-			        if($debug) Debug.write("explorerBox/setTintRGB", { ra : red, ga : green, ba : blue, rb : 0, gb : 0, bb : 0 } );
+			        //if($debug) Debug.write("explorerBox/setTintRGB",this);
+			        //if($debug) Debug.write("explorerBox/setTintRGB", { ra : red, ga : green, ba : blue, rb : 0, gb : 0, bb : 0 } );
 			    }
 			    ]]>
 			</method>            

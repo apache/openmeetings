@@ -138,7 +138,7 @@ public class FlvRecorderConverter {
 
 				log.debug("START stripAudioFromFLVs ################# ");
 				for (int i = 0; i < argv.length; i++) {
-					log.debug(" i " + i + " argv-i " + argv[i]);
+					//log.debug(" i " + i + " argv-i " + argv[i]);
 				}
 				log.debug("END stripAudioFromFLVs ################# ");
 
@@ -189,7 +189,7 @@ public class FlvRecorderConverter {
 
 					log.debug("START addAudioToWaves ################# ");
 					for (int i = 0; i < argv_sox.length; i++) {
-						log.debug(" i " + i + " argv-i " + argv_sox[i]);
+						//log.debug(" i " + i + " argv-i " + argv_sox[i]);
 					}
 					log.debug("END addAudioToWaves ################# ");
 
@@ -240,7 +240,7 @@ public class FlvRecorderConverter {
 				String iString = "";
 				for (int i = 0; i < argv_full_sox.length; i++) {
 					iString += argv_full_sox[i] + " ";
-					log.debug(" i " + i + " argv-i " + argv_full_sox[i]);
+					//log.debug(" i " + i + " argv-i " + argv_full_sox[i]);
 				}
 				log.debug(iString);
 				log.debug("END mergeAudioToWaves ################# ");
@@ -274,7 +274,7 @@ public class FlvRecorderConverter {
 				String tString = "";
 				for (int i = 0; i < argv_full_sox.length; i++) {
 					tString += argv_full_sox[i] + " ";
-					log.debug(" i " + i + " argv-i " + argv_full_sox[i]);
+					//log.debug(" i " + i + " argv-i " + argv_full_sox[i]);
 				}
 				log.debug(tString);
 				log.debug("END generateSampleAudio ################# ");
@@ -341,9 +341,15 @@ public class FlvRecorderConverter {
 
 			}
 			
-			flvWidth = Double.valueOf((1 * Math.floor((flvWidth + 0.5) / 1))).intValue();
-			flvHeight = Double.valueOf((1 * Math.floor((flvHeight + 0.5) / 1))).intValue();
+			log.debug("flvWidth -1- "+flvWidth);
+			log.debug("flvHeight -1- "+flvHeight);
+			
+			flvWidth = Double.valueOf((Math.floor(flvWidth / 16)) * 16).intValue();
+			flvHeight = Double.valueOf((Math.floor(flvHeight / 16)) * 16).intValue();
 
+			log.debug("flvWidth -2- "+flvWidth);
+			log.debug("flvHeight -2- "+flvHeight);
+			
 			flvRecording.setFlvWidth(flvWidth);
 			flvRecording.setFlvHeight(flvHeight);
 
@@ -359,7 +365,7 @@ public class FlvRecorderConverter {
 			String tString = "";
 			for (int i = 0; i < argv_fullFLV.length; i++) {
 				tString += argv_fullFLV[i] + " ";
-				log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+				//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
 			}
 			log.debug(tString);
 			log.debug("END generateFullFLV ################# ");
@@ -389,7 +395,7 @@ public class FlvRecorderConverter {
 			String kString = "";
 			for (int i = 0; i < argv_previewFLV.length; i++) {
 				kString += argv_previewFLV[i] + " ";
-				log.debug(" i " + i + " argv-i " + argv_previewFLV[i]);
+				//log.debug(" i " + i + " argv-i " + argv_previewFLV[i]);
 			}
 			log.debug(kString);
 			log.debug("END previewFullFLV ################# ");

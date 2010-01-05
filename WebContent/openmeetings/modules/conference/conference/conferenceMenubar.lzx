@@ -69,7 +69,8 @@
             <menuseparator/> 
             <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
             	<handler name="onselect" args="sel">
-            		canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+                    if ($debug) Debug.write("checkSharerSession.doCall");
+            		canvas._mymod.checkSharerSession.doCall();
             	</handler>
             </_labelMenuItem>
             <menuseparator/>
