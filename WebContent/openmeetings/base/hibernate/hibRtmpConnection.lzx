@@ -989,7 +989,7 @@
                     	parent.addModerator.doCall();
                     } else if (value == 2) {
                     	//Ask the Moderator
-                    	canvas.thishib.sendMessageWithClient.sendMessage("applyForModeration",null);
+                    	parent.sendMessageWithClient.sendMessage("applyForModeration",null);
                     } else if (value == 3) {
                     	new lz.labelerrorPopup(canvas,{errorlabelid:696});
                     }
@@ -1137,7 +1137,12 @@
                     parent.disconnect();
                 } else if (value.message[0]=='applyforMod'){
                     //canvas.currentModApply
-                    if (canvas.streamid!=value.client.streamid) new lz.responseForModeration(canvas.main_content._content.inner,{userobject:value.client,clientId:value.client.streamid});
+                    if (canvas.streamid!=value.client.streamid) {
+                        new lz.responseForModeration(canvas.main_content._content.inner,{
+					                                            userobject:value.client,
+					                                            clientId:value.client.streamid
+				                                            });
+                    }
                 } else if (value.message[0]=='applyModAnswer'){
                     canvas.currentModApply.setUserAnswer(value);
                 } else if (value.message[0]=='chat'){

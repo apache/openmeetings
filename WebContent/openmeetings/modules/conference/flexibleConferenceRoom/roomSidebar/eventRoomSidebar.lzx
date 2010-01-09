@@ -86,7 +86,9 @@
         <conferenceRoomSidebarTabButton name="userTabButton" selected="true"
                 currentIconRsc="users_tab_btn" x="0" labelid="613" />
         
-        <conferenceRoomSidebarTabButton name="filesTabButton" currentIconRsc="files_tab_btn"
+        <conferenceRoomSidebarTabButton name="filesTabButton" 
+                visible="${ (!parent.parent.restricted) ? true : (((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false ))) }"                     
+                currentIconRsc="files_tab_btn"
                 x="$once{ ((parent.width-2)/2)+2 }" labelid="614" />
         
     </view>

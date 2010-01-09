@@ -2640,4 +2640,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="878" name="sharing client">
     <value>Stop Sharing</value>
   </string>
+  <string id="879" name="room config">
+    <value>Allow User Questions</value>
+  </string>
+  <string id="880" name="room config">
+    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+  </string>
+  <string id="881" name="room config">
+    <value>Rights</value>
+  </string>  
 </language>

@@ -58,6 +58,8 @@ public class Rooms {
 	
 	//If this is true all participants of a meeting have to wait for the moderator to come into the room
 	private Boolean isModeratedRoom;
+	
+	private Boolean allowUserQuestions;
     
     /**
      * @hibernate.property
@@ -408,28 +410,40 @@ public class Rooms {
 		this.isModeratedRoom = isModeratedRoom;
 	}
 
-        /**
- 	  * @hibernate.property
-          *  column="externalRoomId"
-          *  type="long"
-          */
-        public Long getExternalRoomId() {
-                return externalRoomId;
-        }
-        public void setExternalRoomId(Long externalRoomId) {
-                this.externalRoomId = externalRoomId;
-        }
+    /**
+ 	 * @hibernate.property
+     *  column="externalRoomId"
+     *  type="long"
+     */
+    public Long getExternalRoomId() {
+            return externalRoomId;
+    }
+    public void setExternalRoomId(Long externalRoomId) {
+            this.externalRoomId = externalRoomId;
+    }
 
-        /**
-          * @hibernate.property
-          *  column="externalRoomType"
-          *  type="string"
-          */
-        public String getExternalRoomType() {
-                return externalRoomType;
-        }
-        public void setExternalRoomType(String externalRoomType) {
-                this.externalRoomType = externalRoomType;
-        }
+    /**
+     * @hibernate.property
+     *  column="externalRoomType"
+     *  type="string"
+     */
+    public String getExternalRoomType() {
+            return externalRoomType;
+    }
+    public void setExternalRoomType(String externalRoomType) {
+            this.externalRoomType = externalRoomType;
+    }
 	
+	/**
+     * @hibernate.property
+     *  column="allow_user_questions"
+     *  type="boolean"
+     */    
+	public Boolean getAllowUserQuestions() {
+		return allowUserQuestions;
+	}
+	public void setAllowUserQuestions(Boolean allowUserQuestions) {
+		this.allowUserQuestions = allowUserQuestions;
+	}
+    
 }

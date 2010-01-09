@@ -20,5 +20,6 @@
     <property name="streamName" type="string" column="stream_name"/>
     <property name="wavAudioData" type="string" column="wav_audio_data"/>
     <property name="fullWavAudioData" type="string" column="full_wav_audio_data"/>
+    <property name="audioIsValid" type="boolean" column="audio_is_valid"/>
   </class>
 </hibernate-mapping>

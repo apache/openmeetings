@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="flexibleConferenceRoom" extends="baseContentView" destroyByMethod="true" >
-	
-	<attribute name="roomobj" value="null" />
-    
-    <attribute name="meetingTimer" value="null" />
+<class name="flexibleConferenceRoom" extends="baseConferenceRoom">
 
     <handler name="oninit">
-    	
-    	_mainScrollBar.setAttribute("visibility","hidden");
-    	
-		if ($debug) Debug.write("roomobj: ",this.roomobj);
-		canvas.currentRoomObject = this.roomobj;
-		
-        canvas._mainbgcontentNavi.setAttribute('height',0);
-        canvas.setAttribute('naviHeightDelta',28);
         new lz.conferenceMenubar(canvas._conferencemenu);
+        
+        new lz.moderationPanel(canvas._conferencemenu,{
+                    name:'_moderationPanel',align:'right',
+                    allowUserQuestions:this.roomobj.allowUserQuestions
+                });          
+        
         //,{x:this.roomobj.moderationPanelXPosition}
-        new lz.moderationPanel(canvas._conferencemenu,{name:'_moderationPanel',align:'right'});
         canvas._conferencemenu.setAttribute('visibility','visible');
 		
         if(roomobj.appointment){

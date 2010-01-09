@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="restrictedConferenceRoom" extends="baseContentView" destroyByMethod="true" >
-	
-	<attribute name="roomobj" value="null" />
-    
-    <attribute name="meetingTimer" value="null" />
+<class name="restrictedConferenceRoom" extends="baseConferenceRoom">
 
     <handler name="oninit">
-    	
-    	_mainScrollBar.setAttribute("visibility","hidden");
-    	
-		if ($debug) Debug.write("roomobj: ",this.roomobj);
-		
-		canvas.currentRoomObject = this.roomobj;
-		
-        canvas._mainbgcontentNavi.setAttribute('height',0);
-        canvas.setAttribute('naviHeightDelta',28);
         new lz.restrictedConferenceMenubar(canvas._conferencemenu);
-        //,{x:this.roomobj.moderationPanelXPosition}
-        new lz.moderationPanel(canvas._conferencemenu,{name:'_moderationPanel',align:'right'});
+        
+        new lz.moderationPanel(canvas._conferencemenu,{
+                    name:'_moderationPanel',align:'right',
+                    allowUserQuestions:this.roomobj.allowUserQuestions
+                });  
+                
         canvas._conferencemenu.setAttribute('visibility','visible');
 		
         if ($debug) Debug.write("this.roomobj ",this.roomobj);
@@ -94,7 +85,8 @@
         </handler>
     </netRemoteCallHib>
     
-    <eventRoomSidebar name="_sidePanel" restricted="true" listType="eventUserListTableWithNames" />
+    <eventRoomSidebar name="_sidePanel" restricted="true" 
+                      listType="eventUserListTableWithNames" />
     
     <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
        height="200" x="${ parent._sidePanel.width }"  
@@ -109,7 +101,7 @@
     </conferenceBox>
        
     <fixedWhiteboardPanel name="_whiteboard" labelid="615"
-        y="0" x="${ parent._sidePanel.width }"
+        y="0" x="${ parent._sidePanel.width }" restricted="true" 
         width="${ canvas.width - parent._sidePanel.width }"
         height="${ canvas.height - (parent._chatPanelStrict.height+22) }" />
     

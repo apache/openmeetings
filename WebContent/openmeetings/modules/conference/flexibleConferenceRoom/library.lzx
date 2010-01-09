@@ -11,6 +11,7 @@
 	</resource>
 	
 	<include href="roomSidebar/" />
+    <include href="baseConferenceRoom.lzx" />
 	<include href="fixedWhiteboardPanel.lzx" />
     <include href="flexibleConferenceRoom.lzx" />
     <include href="flexibleEventRoom.lzx" />

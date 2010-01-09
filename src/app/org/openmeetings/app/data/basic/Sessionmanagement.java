@@ -389,7 +389,7 @@ public class Sessionmanagement {
 	}
 	
 	
-	public Boolean updateUserWithoutSession(String SID, long USER_ID) {
+	public Boolean updateUserWithoutSession(String SID, Long USER_ID) {
 		try {
 			log.debug("updateUser User: "+USER_ID+" || "+SID);
 			

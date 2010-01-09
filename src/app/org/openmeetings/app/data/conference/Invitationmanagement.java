@@ -115,7 +115,7 @@ public class Invitationmanagement {
 				invitation.setDeleted("false");
 				
 				Users us = UsersDaoImpl.getInstance().getUser(createdBy);
-				String hashRaw = us.getLogin()+us.getUser_id()+(System.currentTimeMillis());
+				String hashRaw = "HASH"+(System.currentTimeMillis());
 				invitation.setHash(MD5.do_checksum(hashRaw));
 				
 				invitation.setInvitedBy(us);

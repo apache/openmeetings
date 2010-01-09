@@ -134,7 +134,17 @@
          -->
 	</class>    
 	
-	<class name="restrictedConferenceMenubar" extends="menubar" height="28" style="itemStyle">
+	<class name="restrictedConferenceMenubar" 
+           extends="menubar" height="28" style="itemStyle">
+        
+        <handler name="oninit">
+            <![CDATA[
+                if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
+                    if ($debug) Debug.write("this mbarcontent ",this);
+                    this._exitbtn.destroy();
+                }
+            ]]>
+        </handler>  
         
         <simpleLabelButton labelid="789" name="_exitbtn" text_x="32"
         				   width="80" style="itemStyle" height="28">
@@ -149,71 +159,69 @@
         	<labelTooltip labelid="309" />
         </simpleLabelButton>
         
-        <!-- file menu -->
-        <_labelMenu labelid="245" width="250">
-            <handler name="oninit">
-                <![CDATA[
-                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
-                    	if ($debug) Debug.write("this mbarcontent ",this);
-                        parent._exitbtn.destroy();
-                    }
-                ]]>
-            </handler>  
-            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }" />
-            <menuseparator/>  
-            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ canvas.ismoderator }" />
-            <!--
-            <menuseparator/>  
-            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
-             -->
-        </_labelMenu> 
+        <menubar x="80" style="itemStyle" height="28" 
+              visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+            
+	        <!-- file menu -->
+	        <_labelMenu labelid="245" width="250"
+	                >
+	            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/>  
+	            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ canvas.ismoderator }" />
+	            <!--
+	            <menuseparator/>  
+	            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
+	             -->
+	        </_labelMenu> 
+	        
+	        <_labelMenu labelid="635" width="250">
+	            <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/> 
+	            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
+	                <handler name="onselect" args="sel">
+	                    canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
+	                </handler>
+	            </_labelMenuItem>
+	            <menuseparator/> 
+	            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/>  
+	            <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
+	            	<handler name="onselect" args="sel">
+	            		//Ask for Right to Draw on Whiteboard
+	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+	            	</handler>
+	            </_labelMenuItem>
+	            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
+	            	<handler name="onselect" args="sel">
+	            		if (canvas.ismoderator) {
+			                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+			                //the notification and the broadcasting Bit is set for this User
+			                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+			                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+			                canvas.thishib.setBroadCastingFlag.doCall(); 
+			            } else {
+			                //Apply for Right to Share Audio/Video
+			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+			            }
+	            	</handler>
+	            </_labelMenuItem>
+	            <menuseparator/>
+	            <!--
+	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/>
+	             -->
+	            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
+	        </_labelMenu>  
         
-        <_labelMenu labelid="635" width="250">
-            <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
-            <menuseparator/> 
-            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
-                <handler name="onselect" args="sel">
-                    canvas._conferencemenu._moderationPanel.checkSharerSession.doCall();
-                </handler>
-            </_labelMenuItem>
-            <menuseparator/> 
-            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
-            <menuseparator/>  
-            <_labelMenuItem labelid="302" command="cmd_applyforMod" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
-            	<handler name="onselect" args="sel">
-            		//Ask for Right to Draw on Whiteboard
-            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
-            	</handler>
-            </_labelMenuItem>
-            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
-            	<handler name="onselect" args="sel">
-            		if (canvas.ismoderator) {
-		                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
-		                //the notification and the broadcasting Bit is set for this User
-		                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-		                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-		                canvas.thishib.setBroadCastingFlag.doCall(); 
-		            } else {
-		                //Apply for Right to Share Audio/Video
-		                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
-		            }
-            	</handler>
-            </_labelMenuItem>
-            <menuseparator/>
-            <!--
-            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
-            <menuseparator/>
-             -->
-            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
-        </_labelMenu>  
+        </menubar>
         
 	</class>
 	

@@ -25,6 +25,8 @@
     <attribute name="iamgex" value="" type="string" />
     <attribute name="imagey" value="" type="string" />
     
+    <attribute name="restricted" value="false" type="boolean" />
+    
     <event name="onsharedMessage" />
     
     <attribute name="sendObject" value="null" />
@@ -33,6 +35,10 @@
     <attribute name="confirmdialog" value="null" />
     
     <attribute name="documentmenuIsInited" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        if ($debug) Debug.info("Init Whiteboard ",this.restricted);
+    </handler>
 
     <method name="sendConfirmation" args="yesno,askagain" >
         
@@ -371,7 +377,7 @@
              visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
     	
         <mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer" 
-             visible="${ ((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true )) }"/>
+             visible="${ (parent.parent.restricted) ? false : (((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true ))) }"/>
     	
     	<!--
     	<documentIconTopPanel x="100" valign="bottom" name="_documentPanel"

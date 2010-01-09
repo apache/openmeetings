@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="baseConferenceRoom" extends="baseContentView" destroyByMethod="true" >
+	
+	<attribute name="roomobj" value="null" />
+    
+    <attribute name="meetingTimer" value="null" />
+
+    <handler name="oninit">
+        
+        _mainScrollBar.setAttribute("visibility","hidden");
+        
+        if ($debug) Debug.write("roomobj: ",this.roomobj);
+        
+        canvas.currentRoomObject = this.roomobj;
+        canvas._mainbgcontentNavi.setAttribute('height',0);
+        canvas.setAttribute('naviHeightDelta',28);
+        
+    </handler>
+    
+</class>
+
+</library>

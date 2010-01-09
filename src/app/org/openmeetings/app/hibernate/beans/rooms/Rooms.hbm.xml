@@ -20,5 +20,6 @@
     <property name="isModeratedRoom" type="boolean" column="ismoderatedroom"/>
     <property name="externalRoomId" type="long" column="externalRoomId"/>
     <property name="externalRoomType" type="string" column="externalRoomType"/>
+    <property name="allowUserQuestions" type="boolean" column="allow_user_questions"/>
   </class>
 </hibernate-mapping>

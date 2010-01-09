@@ -256,7 +256,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancel</value>
   </string>
   <string id="84" name="mod">
-    <value>Become moderator</value>
+    <value>I have a question</value>
   </string>
   <string id="85" name="close">
     <value>Close</value>
@@ -910,7 +910,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderation</value>
   </string>
   <string id="302" name="conferencebar">
-    <value>I want to ask a question</value>
+    <value>I have a question</value>
   </string>
   <string id="303" name="conferencebar">
     <value>Polls</value>
@@ -2059,7 +2059,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Remove Audio/Video of this User</value>
   </string>
   <string id="685" name="event user list">
-    <value>I want to ask a question</value>
+    <value>I have a question</value>
   </string>
   <string id="686" name="event user list">
     <value>I would like to draw on whiteboard</value>
@@ -2083,7 +2083,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>The User</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>would like to get the Moderation. Use the status Icons next to the user in the List of Users to add or remove the Moderation.</value>
+    <value>would like to ask a question.&lt;br/&gt;&lt;br/&gt; &lt;i&gt;(Use the status Icons next to the user in the List of Users to add or remove the Moderation.)&lt;7i&gt;</value>
   </string>
   <string id="694" name="apply for whiteboard">
     <value>would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</value>
@@ -2639,5 +2639,14 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="878" name="sharing client">
     <value>Stop Sharing</value>
+  </string>
+  <string id="879" name="room config">
+    <value>Allow User Questions</value>
+  </string>
+  <string id="880" name="room config">
+    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+  </string>
+  <string id="881" name="room config">
+    <value>Rights</value>
   </string>
 </language>

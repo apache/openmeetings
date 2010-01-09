@@ -563,7 +563,8 @@ public class Roommanagement {
 			Boolean isDemoRoom,
 			Integer demoTime,
 			Boolean isModeratedRoom, 
-			List roomModerators){
+			List roomModerators,
+			Boolean allowUserQuestions){
 		
 		log.debug("addRoom");
 		
@@ -576,6 +577,7 @@ public class Roommanagement {
 				r.setNumberOfPartizipants(numberOfPartizipants);
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setIspublic(ispublic);
+				r.setAllowUserQuestions(allowUserQuestions);
 				
 				r.setAppointment(appointment);
 				
@@ -619,7 +621,8 @@ public class Roommanagement {
 			Boolean isDemoRoom,
 			Integer demoTime,
 			Boolean isModeratedRoom, 
-			List roomModerators){
+			List roomModerators,
+			Boolean allowUserQuestions){
 		
 		log.debug("addRoom");
 		
@@ -633,6 +636,7 @@ public class Roommanagement {
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setIspublic(ispublic);
 				
+				r.setAllowUserQuestions(allowUserQuestions);
 				r.setAppointment(appointment);
 				
 				r.setIsDemoRoom(isDemoRoom);
@@ -679,7 +683,7 @@ public class Roommanagement {
                         Integer demoTime,
                         Boolean isModeratedRoom,
                         List roomModerators,
-			Long externalRoomId,
+                    	Long externalRoomId,
                         String externalRoomType){
 
                 log.debug("addExternalRoom");
@@ -703,8 +707,8 @@ public class Roommanagement {
 
                                 r.setDeleted("false");
 
-				r.setExternalRoomId(externalRoomId);
-				r.setExternalRoomType(externalRoomType);
+								r.setExternalRoomId(externalRoomId);
+								r.setExternalRoomType(externalRoomType);
 
                                 Object idf = HibernateUtil.createSession();
                                 Session session = HibernateUtil.getSession();
@@ -1102,7 +1106,8 @@ public class Roommanagement {
 			Boolean isDemoRoom,
 			Integer demoTime,
 			Boolean isModeratedRoom,
-			List roomModerators){
+			List roomModerators,
+			Boolean allowUserQuestions){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1114,7 +1119,7 @@ public class Roommanagement {
 				r.setName(name);
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setUpdatetime(new Date());
-				
+				r.setAllowUserQuestions(allowUserQuestions);
 
 				r.setIsDemoRoom(isDemoRoom);
 				r.setDemoTime(demoTime);
@@ -1160,7 +1165,8 @@ public class Roommanagement {
 			Boolean isDemoRoom,
 			Integer demoTime,
 			Boolean isModeratedRoom,
-			List roomModerators){
+			List roomModerators,
+			Boolean allowUserQuestions){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkModLevel(user_level)){
@@ -1172,7 +1178,7 @@ public class Roommanagement {
 				r.setName(name);
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setUpdatetime(new Date());
-				
+				r.setAllowUserQuestions(allowUserQuestions);
 
 				r.setIsDemoRoom(isDemoRoom);
 				r.setDemoTime(demoTime);

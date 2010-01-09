@@ -64,9 +64,9 @@
         <netparam><method name="getValue">return parent.parent.clientId;</method></netparam>
         <handler name="ondata" args="value">
         	<![CDATA[
-            //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("sendMessageWithClientById : ",value);
-			this.parent.close();
+	            //The onResult-Handler will be called be the rtmpconnection
+	            //Debug.write("sendMessageWithClientById : ",value);
+				this.parent.close();
             ]]>
         </handler>   
     </netRemoteCallHib> 

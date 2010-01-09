@@ -30,6 +30,7 @@
 		this.numberOfParticipants.selectItem('4');
 		this._organisationslist.clearList();
         this._turnoverlist.clearList();
+        this.allowUserQuestions.setValue(true);
         this._listRoomModerators.clearList();
 	</handler>
 	
@@ -82,6 +83,12 @@
                 this.isDemoRoom.setValue(true);
             } else {
                 this.isDemoRoom.setValue(false);
+            }
+            
+            if (obj.allowUserQuestions != null && obj.allowUserQuestions){
+                this.allowUserQuestions.setValue(true);
+            } else {
+                this.allowUserQuestions.setValue(false);
             }
                 
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
@@ -159,6 +166,8 @@
             this.sendObject["demoTime"] = parent.demoTime.getText();
             
             this.sendObject["roomModerators"] = parent._listRoomModerators.getValues();
+
+            this.sendObject["allowUserQuestions"] = parent.allowUserQuestions.getValue();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -241,7 +250,8 @@
     
     <view resource="messagebox_info_rsc" x="0" y="340" />
     
-    <labelText labelid="828" x="24" y="340" multiline="true" width="370" />    
+    <labelText labelid="828" x="24" y="340" fontstyle="italic"
+               multiline="true" width="370" />    
      
     <labelText labelid="191" width="200" y="390" resize="false" x="2"/>     
      
@@ -317,11 +327,25 @@
             </handler>
         </labelCheckbox>   
 	
-    <!-- Is Demo Room -->
+    <!-- Demo Time -->
     <labelText labelid="637" width="200" y="550" resize="false" x="2"/>  
         <customEdittext name="demoTime" y="546" x="120" width="270" regexpType="number"
                         text="" /> 
                         
+     
+    <!-- Rights -->
+    <labelText labelid="881" width="200" y="580" fontstyle="bold"
+               resize="false" x="2"/>    
+     
+    <!-- allowUserQuestions -->          
+    <labelText labelid="879" width="200" y="610" resize="false" x="2"/>  
+        <labelCheckbox name="allowUserQuestions" width="270" y="610" x="130" fontsize="11" />
+    
+    <!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="630" />
+    
+    <labelText labelid="880" x="24" y="630"  fontstyle="italic"
+               multiline="true" width="370" /> 
                                
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="200" y="40" resize="false" 
@@ -374,7 +398,8 @@
     
     <view resource="messagebox_info_rsc" x="400" y="290" />
     
-    <labelText labelid="823" x="424" y="290" multiline="true" width="270" />
+    <labelText labelid="823" x="424" y="290"  fontstyle="italic"
+               multiline="true" width="270" />
         
     
     <labelText labelid="816" width="200" y="380" resize="false" x="400"/>  

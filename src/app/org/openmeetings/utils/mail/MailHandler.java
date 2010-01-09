@@ -83,7 +83,7 @@ public class MailHandler {
 			//smtpPort 25 or 587
 			props.put("mail.smtp.host", smtpServer);
 			props.put("mail.smtp.port", smtpPort);
-			props.put("mail.smtp.starttls.enable","true");
+			//props.put("mail.smtp.starttls.enable","true");
 
 			Session session = null;
 			if (emailUsername != null && emailUsername.length() > 0

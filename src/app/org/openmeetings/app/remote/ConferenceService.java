@@ -465,7 +465,8 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("isDemoRoom").toString()),
 	        			demoTime,
 	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
-	        			roomModerators);
+	        			roomModerators,
+	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()));
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -476,7 +477,8 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("isDemoRoom").toString()),
 	        			demoTime,
 	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
-	        			roomModerators);
+	        			roomModerators,
+	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()));
 	        }
 	        
 		} catch (Exception e){

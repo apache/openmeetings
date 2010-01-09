@@ -3,7 +3,10 @@
 
 <class name="fixedWhiteboardPanel" extends="conferenceBox" labelid="615">
     
-    <fixedWhiteBoard name="_whiteboard" y="34" x="1">
+    <attribute name="restricted" value="false" type="boolean" />
+    
+    <fixedWhiteBoard name="_whiteboard" y="34" x="1" 
+                     restricted="$once{ parent.restricted }">
         <handler name="onsharedMessage" args="obj">
             //Debug.write("send: ",obj);
             canvas.objWhiteboard = obj;
