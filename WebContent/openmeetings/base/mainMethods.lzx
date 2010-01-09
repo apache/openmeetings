@@ -188,6 +188,8 @@
         if (becomemoderator != undefined) {
         	if (becomemoderator == "2"){
                 canvas.becomemoderator = true;
+            } else {
+                canvas.becomemoderator = false;
             }
         }
         
@@ -508,14 +510,7 @@
         	
         	var item = canvas.currentModeratorList[i];
         	
-        	var cItem = canvas._mymod.currentModerators.getItem(item.publicSID);
-        	
-        	if (cItem == null) {
-        	    canvas._mymod.currentModerators.addItem(item.firstname + ' ' + item.lastname,item.publicSID);
-        	} else {
-        		if ($debug) Debug.warn("Already Moderator in Combobox List");
-        	}
-        	
+    
         	if (canvas.publicSID == item.publicSID) {
         		isCurrentModerator = true;
         	}
@@ -527,6 +522,17 @@
         canvas._mymod.currentModerators.selectItemAt(0);
 	]]>
 </method> 
+
+<!--
+var cItem = canvas._mymod.currentModerators.getItem(item.publicSID);
+
+if (cItem == null) {
+    canvas._mymod.currentModerators.addItem(item.firstname + ' ' + item.lastname,item.publicSID);
+} else {
+    if ($debug) Debug.warn("Already Moderator in Combobox List");
+}
+ -->
+            
 
 <method name="getIsModeratorByPublicSID" args="publicSID">
 	<![CDATA[

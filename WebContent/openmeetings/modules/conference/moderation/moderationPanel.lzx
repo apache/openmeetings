@@ -70,12 +70,21 @@
     <method name="checkForApplyScreen" args="record">
             <![CDATA[
             
+                var organisation_id = 1;
+                
+                if ($debug) Debug.write(hib.userobject); 
+                if ($debug) Debug.write(hib.currentdomainObj); 
+                
+                if (hib.currentdomainObj != null) {
+                    organisation_id = hib.currentdomainObj.organisation_id
+                }
+            
                 var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                     +canvas.httpRootKey+'ScreenRequestHandler?'
                     +'rtmphostlocal='+canvas.rtmphostlocal
                     +'&room='+hib.currentroomid
                     +'&domain='+hib.conferencedomain
-                    +'&organization_id='+hib.currentdomainObj.organisation_id
+                    +'&organization_id='+organisation_id
                     +'&sid='+canvas.sessionId
                     +'&red5httpport='+canvas.red5httpport
                     +'&connectionType='+canvas.thishib.protocollName
@@ -91,10 +100,12 @@
             ]]>        
     </method>   
     
+    <!--
     <labelText name="mymodText" resize="true" fgcolor="0xFFFFFF" y="6" labelid="98" />
     
     <resetCombobox name="currentModerators" width="170" y="4" editable="false"
                        shownitems="7" />
+     -->
     
     <simpleLabelButton name="mod_btn" width="30" height="24" y="2" style="itemStyle">
         <handler name="onclick">

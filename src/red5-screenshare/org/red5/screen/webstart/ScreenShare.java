@@ -151,6 +151,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			"To only record the Session it is sufficient to click start recording.</HTML>";
 	public String label871 = "Start Recording";
 	public String label872 = "Stop Recording";
+	public String label878 = "Stop Sharing";
 
 	public Float imgQuality = new Float(0.40);
 	
@@ -212,6 +213,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 					instance.label870 = "<html>"+textArray[14]+"</html>";
 					instance.label871 = textArray[15];
 					instance.label872 = textArray[16];
+					instance.label878 = textArray[17];
 					
 				}
 	
@@ -369,7 +371,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			
 			//*****
 			//Exit Button
-			exitButton = new JButton( "exit" );
+			exitButton = new JButton( this.label878 );
 			exitButton.addActionListener( new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub

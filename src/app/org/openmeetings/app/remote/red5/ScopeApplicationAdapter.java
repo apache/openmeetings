@@ -473,9 +473,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			log.debug("roomLeave " + client.getId() + " "+ room.getClients().size() + " " + room.getContextPath() + " "+ room.getName());
 			
-			IConnection current = Red5.getConnectionLocal();
+			//IConnection current = Red5.getConnectionLocal();
 			
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(client.getId());
+			
+			log.debug("currentClient :1: "+currentClient.getIsScreenClient());
+			log.debug("currentClient :2: "+currentClient.getStreamPublishName());
+			log.debug("currentClient :3: "+currentClient.getSwfurl());
 			
 //			//In case its a screen sharing we start a new Video for that
 //			if (currentClient != null && currentClient.getIsScreenClient() != null && currentClient.getIsScreenClient()) {
@@ -554,7 +558,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			log.debug("currentClient "+currentClient);
 			log.debug("currentScope "+currentScope);
-			log.debug("currentClient "+currentClient.getRoom_id());
+			//log.debug("currentClient "+currentClient.getRoom_id());
 			
 			Long room_id = currentClient.getRoom_id();
 			
@@ -1285,6 +1289,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						//There is a need to send an extra Event here, cause at this moment there could be 
 						//already somebody in the Room waiting
 						
+						//Update the Client List
+						this.clientListManager.updateClientByStreamId(streamid, currentClient);
+						
+						List<RoomClient> modRoomList = this.clientListManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
+						
 						//Notify all clients of the same scope (room)
 						Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 						for (Set<IConnection> conset : conCollection) {
@@ -1297,7 +1306,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 											//as it will be already triggered in the result of this Function 
 											//in the Client
 											if (conn instanceof IServiceCapableConnection) {
-												((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { currentClient }, this);
+												((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { modRoomList }, this);
 												log.debug("sending setNewModeratorByList to " + conn);
 											}
 										}
@@ -1340,7 +1349,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								for (IConnection conn : conset) {
 									if (conn != null) {
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-										if (!rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
 											if( !streamid.equals(rcl.getStreamid())){
 												//It is not needed to send back that event to the actual Moderator
 												//as it will be already triggered in the result of this Function 
@@ -1828,6 +1837,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// Check if this User is the Mod:
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			if (currentClient == null) {
+				return -1;
+			}
+			
 			Long room_id = currentClient.getRoom_id();	
 				
 			//log.debug("***** sendVars: " + whiteboardObj);
@@ -1851,7 +1865,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (!rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {

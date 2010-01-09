@@ -166,6 +166,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				Fieldlanguagesvalues fValue870 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(870L, language_id);
 				Fieldlanguagesvalues fValue871 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(871L, language_id);
 				Fieldlanguagesvalues fValue872 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(872L, language_id);
+				Fieldlanguagesvalues fValue878 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(878L, language_id);
 				
 				String label_viewer = "Viewer";
 				String label_sharer = "Sharer";
@@ -192,7 +193,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 										fValue869.getValue()+";"+ //13
 										fValue870.getValue()+";"+ //14
 										fValue871.getValue()+";"+ //15
-										fValue872.getValue()+";"  //16
+										fValue872.getValue()+";"+  //16
+										fValue878.getValue()+";"  //16
 										;
 				
 				}catch(Exception e){

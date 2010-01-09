@@ -279,6 +279,9 @@ public class ImportInitvalues {
 				default_export_font, null, "The Name of the Font used for exporting/render Images from Whiteboard" +
 						"The Font has to exist on the Server which runs Red5");
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "default.rpc.userid",
+				""+1, null, "The User-Id of the Control User in OpenMeetings");
+			
 	}
 
 	public void loadDefaultRooms() {

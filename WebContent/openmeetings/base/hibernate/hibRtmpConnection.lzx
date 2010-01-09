@@ -389,6 +389,16 @@
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
+            if (value == null) {
+                new lz.errorPopup(canvas,{error:"Missing User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
+            }
+            hib.userobject = value;
+            if (value.organisation_users.length > 0){
+                hib.currentdomain = value.organisation_users[0].organisation.name;
+                hib.currentdomainObj = value.organisation_users[0].organisation;
+            } else {
+                new lz.errorPopup(canvas,{error:"Missing Organization in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
+            }
             if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
             if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
             if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
@@ -506,6 +516,8 @@
                     
                     if (value.level_id >= 2) {
                         canvas.becomemoderator = true;
+                    } else {
+                        canvas.becomemoderator = false;
                     }
                     
                     if (value.sessionData == null) {
@@ -759,7 +771,9 @@
                     
                     if (canvas.screenSharingDialogContainer != null) {
                         var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
-                        obj.doClose();
+                        if (obj) {
+                            obj.doClose();
+                        }
                     }
                     
                 } else {
@@ -796,6 +810,9 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("roomDisconnect: ",value);
+                if (value.isScreenClient) {
+                    return;
+                }
                 if (canvas._overallchatcontent!=null){
                 	var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
                 	parentObj.removeItemById(value.user_id);

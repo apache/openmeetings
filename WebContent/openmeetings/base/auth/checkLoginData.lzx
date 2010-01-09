@@ -325,6 +325,8 @@
                     
                     if (value.level_id >= 2) {
                     	canvas.becomemoderator = true;
+                    } else {
+                        canvas.becomemoderator = false;
                     }
                     
                     hib.userlang = Number(parent.languages.getValue());

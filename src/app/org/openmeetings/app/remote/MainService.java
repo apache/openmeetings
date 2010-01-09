@@ -493,8 +493,15 @@ public class MainService implements IPendingServiceCallback {
      * this function logs a user into if he enteres the app directly into a room
      * @param SID
      */
-    public void markSessionAsLogedIn(String SID){
-    	Sessionmanagement.getInstance().updateUserWithoutSession(SID, -1);
+    public Users markSessionAsLogedIn(String SID){
+    	try {
+	    	Sessionmanagement.getInstance().updateUserWithoutSession(SID, -1);
+	    	Configuration conf = Configurationmanagement.getInstance().getConfKey(3l, "default.rpc.userid");
+	    	return Usermanagement.getInstance().getUserById(Long.parseLong(conf.getConf_value()));
+    	} catch (Exception err) {
+    		log.error("[markSessionAsLogedIn]",err);
+    	}
+    	return null;
     }
     
     /**

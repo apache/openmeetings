@@ -62,8 +62,8 @@ public class GenerateSWF {
 
 			Process proc = pb.start();
 
-			//1-minute timeout for command execution
-			long timeout = 60000;
+			//2-minute timeout for command execution
+			long timeout = 60000*2;
 			
 			ErrorStreamWatcher errorWatcher = new ErrorStreamWatcher(proc);
 			Worker worker = new Worker(proc);

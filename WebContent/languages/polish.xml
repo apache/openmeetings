@@ -2711,4 +2711,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="877" name="flvrecording">
     <value>User has microphone on</value>
   </string>
+  <string id="878" name="sharing client">
+    <value>Stop Sharing</value>
+  </string>
 </language>

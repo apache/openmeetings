@@ -140,7 +140,11 @@ public class ClientListManager {
 				log.debug("getClientList key: "+key);
 				RoomClient rcl = clientList.get(key);
 				//same room, same domain
-				if (room_id!=null && room_id.equals(rcl.getRoom_id())) roomClientList.put(key, rcl);
+				if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
+					if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
+						roomClientList.put(key, rcl);
+					}
+				}
 			}
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]",err);

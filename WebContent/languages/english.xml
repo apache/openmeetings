@@ -910,7 +910,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderation</value>
   </string>
   <string id="302" name="conferencebar">
-    <value>Apply for Moderation</value>
+    <value>I want to ask a question</value>
   </string>
   <string id="303" name="conferencebar">
     <value>Polls</value>
@@ -2059,7 +2059,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Remove Audio/Video of this User</value>
   </string>
   <string id="685" name="event user list">
-    <value>I would like to get the moderation of this room</value>
+    <value>I want to ask a question</value>
   </string>
   <string id="686" name="event user list">
     <value>I would like to draw on whiteboard</value>
@@ -2577,10 +2577,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="857" name="presenter mini icon">
     <value>Maximize</value>
   </string>
-  <string id="858" name="858">
+  <string id="858" name="flvrecording">
     <value>Video</value>
   </string>
-  <string id="859" name="">
+  <string id="859" name="flvrecording">
     <value>Recording Timeline</value>
   </string>
   <string id="860" name="flvrecording">
@@ -2636,5 +2636,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="877" name="flvrecording">
     <value>User has microphone on</value>
+  </string>
+  <string id="878" name="sharing client">
+    <value>Stop Sharing</value>
   </string>
 </language>
