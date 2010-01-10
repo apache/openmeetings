@@ -2581,61 +2581,61 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Compartir pantalla</value>
   </string>
   <string id="856" name="presenter mini icon">
-    <value>Minimize</value>
+    <value>Minimizar</value>
   </string>
   <string id="857" name="presenter mini icon">
-    <value>Maximize</value>
+    <value>Maximizar</value>
   </string>
   <string id="858" name="flvrecording">
-    <value>Video</value>
+    <value>Vídeo</value>
   </string>
   <string id="859" name="flvrecording">
-    <value>Recording Timeline</value>
+    <value>Línea temporal de grabación</value>
   </string>
   <string id="860" name="flvrecording">
-    <value>My Recordings</value>
+    <value>Mis grabaciones</value>
   </string>
   <string id="861" name="flvrecording">
-    <value>Public Recordings</value>
+    <value>Grabaciones públicas</value>
   </string>
   <string id="862" name="flvrecording">
     <value>Info</value>
   </string>
   <string id="863" name="flvrecording">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="864" name="flvrecording">
-    <value>Length</value>
+    <value>Longitud</value>
   </string>
   <string id="865" name="flvrecording">
-    <value>Date</value>
+    <value>Fecha</value>
   </string>
   <string id="866" name="flvrecording">
-    <value>By</value>
+    <value>Por</value>
   </string>
   <string id="867" name="flvrecording">
     <value>PLAY</value>
   </string>
   <string id="868" name="flvrecording">
-    <value>Main - Video</value>
+    <value>Vídeo - Principal</value>
   </string>
   <string id="869" name="screen share">
-    <value>Recording</value>
+    <value>Grabación</value>
   </string>
   <string id="870" name="screen share">
-    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+    <value>Puede grabar y compartir su pantalla a la vez. Para permitir que otros vean su pantalla, pulse en el botón -iniciar- de la parte superior. Para grabar la sesión, es suficiente con pulsar en iniciar grabación.</value>
   </string>
   <string id="871" name="screen share">
-    <value>Start Recording</value>
+    <value>Iniciar Grabación</value>
   </string>
   <string id="872" name="screen share">
-    <value>Stop Recording</value>
+    <value>Parar Grabación</value>
   </string>
   <string id="873" name="flvrecording">
-    <value>Download the FLV-File</value>
+    <value>Descargar el archivo FLV</value>
   </string>
   <string id="874" name="flvrecording">
-    <value>Room</value>
+    <value>Sala</value>
   </string>
   <string id="875" name="flvrecording">
     <value>Play</value>
@@ -2644,18 +2644,18 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Stop</value>
   </string>
   <string id="877" name="flvrecording">
-    <value>User has microphone on</value>
+    <value>El usuario tiene el micrófono activado</value>
   </string>
   <string id="878" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Detener compartir</value>
   </string>
   <string id="879" name="room config">
-    <value>Allow User Questions</value>
+    <value>Permitir preguntas del usuario</value>
   </string>
   <string id="880" name="room config">
-    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+    <value>Desactive esto para impedir que ningún usuario le moleste en esta sala. Al hacerlo, el botón para solicitar la moderación no será visible.</value>
   </string>
   <string id="881" name="room config">
-    <value>Rights</value>
+    <value>Permisos</value>
   </string>  
 </language>
