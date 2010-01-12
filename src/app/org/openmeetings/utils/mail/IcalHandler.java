@@ -56,7 +56,7 @@ public class IcalHandler {
 	
 	/**
 	 * Konstruktor with DefaultTimeZone
-	 * @param methodType (@see IcalHandler Cosntants)
+	 * @param methodType (@see IcalHandler Constants)
 	 * @throws Exception
 	 */
 	public IcalHandler(String methodType){
