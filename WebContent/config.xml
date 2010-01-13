@@ -75,7 +75,7 @@ of the red5-servlet
     the result of this notification is that you see the green-light highlighted if
     a remote user is speaking
  -->
-<loudnessAcitviation>7</loudnessAcitviation>  
+<loudnessAcitviation>0</loudnessAcitviation>  
     
 <!--
     OpenMeetings-Webapp Name
