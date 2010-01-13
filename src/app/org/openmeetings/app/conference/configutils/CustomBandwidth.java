@@ -1,13 +1,14 @@
 package org.openmeetings.app.conference.configutils;
 
-import org.red5.server.api.stream.support.SimpleBandwidthConfigure;
+//import org.red5.server.api.stream.support.SimpleBandwidthConfigure;
 
 /**
  * 
  * @author swagner
  *
  */
-public class CustomBandwidth extends SimpleBandwidthConfigure{
+//extends SimpleBandwidthConfigure
+public class CustomBandwidth {
  
 	private String groupName = "";
 	private String description = "";

@@ -9,14 +9,21 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 public class FlvRecorderConverter {
 
@@ -28,11 +35,11 @@ public class FlvRecorderConverter {
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
 	private Configurationmanagement configurationmanagement;
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl;
 
 	public FlvRecordingDaoImpl getFlvRecordingDaoImpl() {
 		return flvRecordingDaoImpl;
 	}
-
 	public void setFlvRecordingDaoImpl(FlvRecordingDaoImpl flvRecordingDaoImpl) {
 		this.flvRecordingDaoImpl = flvRecordingDaoImpl;
 	}
@@ -40,7 +47,6 @@ public class FlvRecorderConverter {
 	public FlvRecordingMetaDataDaoImpl getFlvRecordingMetaDataDaoImpl() {
 		return flvRecordingMetaDataDaoImpl;
 	}
-
 	public void setFlvRecordingMetaDataDaoImpl(
 			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl) {
 		this.flvRecordingMetaDataDaoImpl = flvRecordingMetaDataDaoImpl;
@@ -49,7 +55,6 @@ public class FlvRecorderConverter {
 	public Configurationmanagement getConfigurationmanagement() {
 		return configurationmanagement;
 	}
-
 	public void setConfigurationmanagement(
 			Configurationmanagement configurationmanagement) {
 		this.configurationmanagement = configurationmanagement;
@@ -58,12 +63,19 @@ public class FlvRecorderConverter {
 	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
 		return flvRecordingLogDaoImpl;
 	}
-
 	public void setFlvRecordingLogDaoImpl(
 			FlvRecordingLogDaoImpl flvRecordingLogDaoImpl) {
 		this.flvRecordingLogDaoImpl = flvRecordingLogDaoImpl;
 	}
-
+	
+	public FlvRecordingMetaDeltaDaoImpl getFlvRecordingMetaDeltaDaoImpl() {
+		return flvRecordingMetaDeltaDaoImpl;
+	}
+	public void setFlvRecordingMetaDeltaDaoImpl(
+			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl) {
+		this.flvRecordingMetaDeltaDaoImpl = flvRecordingMetaDeltaDaoImpl;
+	}
+	
 	public void startConversion(Long flvRecordingId) {
 		try {
 
@@ -142,8 +154,7 @@ public class FlvRecorderConverter {
 				}
 				log.debug("END stripAudioFromFLVs ################# ");
 
-				returnLog
-						.add(GenerateSWF.executeScript("generateFFMPEG", argv));
+				returnLog.add(GenerateSWF.executeScript("generateFFMPEG", argv));
 
 				// check if the resulting Audio is valid
 				File output_wav = new File(outputWav);
@@ -157,24 +168,121 @@ public class FlvRecorderConverter {
 						flvRecordingMetaData.setAudioIsValid(true);
 					}
 				}
-
+				
 				if (flvRecordingMetaData.getAudioIsValid()) {
+					
 					// Strip Wave to Full Length
-					String hashFileFullName = flvRecordingMetaData
-							.getStreamName()
-							+ "_FULL_WAVE.wav";
+					String outputGapFullWav = outputWav;
+					
+					//Fix Gaps in Audio
+					List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = this.flvRecordingMetaDeltaDaoImpl.getFlvRecordingMetaDeltaByMetaId(flvRecordingMetaData.getFlvRecordingMetaDataId());
+					
+					int counter = 0;
+					
+					for (FlvRecordingMetaDelta flvRecordingMetaDelta : flvRecordingMetaDeltas) {
+						
+						String inputFile = outputGapFullWav;
+						
+						// Strip Wave to Full Length
+						String hashFileGapsFullName = flvRecordingMetaData.getStreamName()
+											+ "_GAP_FULL_WAVE_"+counter+".wav";
+						outputGapFullWav = streamFolderName + hashFileGapsFullName;
+						
+						String[] argv_sox = null;
+							
+						if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
+							
+							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							
+							//Add the item at the beginning
+							argv_sox = new String[] { this.getPathToSoX(),
+									inputFile, outputGapFullWav, "pad",
+									String.valueOf(gapSeconds).toString() };
+							
+						} else {
+							
+							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							float posSeconds = ( flvRecordingMetaDelta.getTimeStamp() - flvRecordingMetaDelta.getDeltaTime() - 47 ) /1000;
+							
+							//Add the item in-between
+							argv_sox = new String[] { this.getPathToSoX(),
+									inputFile, outputGapFullWav, "pad",
+									""+String.valueOf(gapSeconds).toString()
+									+"@"+String.valueOf(posSeconds).toString() };
+
+						}
+						
+						log.debug("START addGapAudioToWaves ################# ");
+						String commandHelper = " ";
+						for (int i = 0; i < argv_sox.length; i++) {
+							commandHelper += argv_sox[i];
+							//log.debug(" i " + i + " argv-i " + argv_sox[i]);
+						}
+						log.debug(" commandHelper " + commandHelper);
+						log.debug("END addGapAudioToWaves ################# ");
+
+						returnLog.add(GenerateSWF.executeScript("fillGap",argv_sox));
+						
+						counter++;
+						
+					}
+					
+//					// Strip Wave to Full Length
+//					String hashFileNormalizeName = flvRecordingMetaData.getStreamName()
+//												+ "_FULL_NORMALIZE.wav";
+//					String outputNormalizeWav = streamFolderName + hashFileNormalizeName;
+//					
+//					//Normalize Sound
+////					$SOX "$1" "$2" \
+////					   16   remix - \
+////					   17   highpass 100 \
+////					   18   norm \
+////					   19   compand 0.05,0.2 6:-54,-90,-36,-36,-24,-24,0,-12 0 -90 0.1 \
+////					   20   vad -T 0.6 -p 0.2 -t 5 \
+////					   21   fade 0.1 \
+////					   22   reverse \
+////					   23   vad -T 0.6 -p 0.2 -t 5 \
+////					   24   fade 0.1 \
+////					   25   reverse \
+////					   26   norm -0.5
+//
+//					String[] argv_sox_normalize = new String[] { this.getPathToSoX(),
+//							outputGapFullWav, outputNormalizeWav, 
+//							"remix","-",
+//							"highpass","100",
+//							"norm",
+//							"compand","0.05,0.2","6:-54,-90,-36,-36,-24,-24,0,-12","0","-90","0.1",
+//							"vad","-T","0.6","-p","0.2","-t","5",
+//							"fade","0.1",
+//							"reverse",
+//							"vad","-T","0.6","-p","0.2","-t","5",
+//							"fade","0.1",
+//							"reverse",
+//							"norm","-0.5"};
+//
+//					log.debug("START startNormalizeToWaves ################# ");
+//					String argv_sox_normalizeString = "";
+//					for (int i = 0; i < argv_sox_normalize.length; i++) {
+//						argv_sox_normalizeString +=  " "+argv_sox_normalize[i];
+//						//log.debug(" i " + i + " argv-i " + argv_sox[i]);
+//					}
+//					log.debug("argv_sox_normalize: "+argv_sox_normalize);
+//					log.debug("END endNormalizeToWaves ################# ");
+//
+//					returnLog.add(GenerateSWF.executeScript("normalizeWave",argv_sox_normalize));
+					
+					
+					
+					// Strip Wave to Full Length
+					String hashFileFullName = flvRecordingMetaData.getStreamName()
+												+ "_FULL_WAVE.wav";
 					String outputFullWav = streamFolderName + hashFileFullName;
 
-					listOfFullWaveFiles.add(outputFullWav);
-
-					flvRecordingMetaData.setFullWavAudioData(hashFileFullName);
-
 					// Calculate delta at beginning
-					Long deltaTimeStartMilliSeconds = flvRecordingMetaData
-							.getRecordStart().getTime()
-							- flvRecording.getRecordStart().getTime();
-					Float startPadding = Float
-							.parseFloat(deltaTimeStartMilliSeconds.toString()) / 1000;
+					Long deltaTimeStartMilliSeconds = flvRecordingMetaData.getRecordStart().getTime()
+															- flvRecording.getRecordStart().getTime();
+					
+					Float startPadding = Float.parseFloat(deltaTimeStartMilliSeconds.toString()) / 1000;
 
 					// Calculate delta at ending
 					Long deltaTimeEndMilliSeconds = flvRecording.getRecordEnd()
@@ -184,17 +292,95 @@ public class FlvRecorderConverter {
 							.parseFloat(deltaTimeEndMilliSeconds.toString()) / 1000;
 
 					String[] argv_sox = new String[] { this.getPathToSoX(),
-							outputWav, outputFullWav, "pad",
+							outputGapFullWav, outputFullWav, "pad",
 							startPadding.toString(), endPadding.toString() };
 
 					log.debug("START addAudioToWaves ################# ");
+					String padString = "";
 					for (int i = 0; i < argv_sox.length; i++) {
+						padString += " "+argv_sox[i];
 						//log.debug(" i " + i + " argv-i " + argv_sox[i]);
 					}
+					log.debug("padString :: "+padString);
 					log.debug("END addAudioToWaves ################# ");
 
-					returnLog.add(GenerateSWF.executeScript("generateWave",
-							argv_sox));
+					returnLog.add(GenerateSWF.executeScript("generateWave",argv_sox));
+					
+					//Fix for Audio Length - Invalid Audio Length in Recorded Files
+					//Audio must match 100% the the Video
+					log.debug("############################################");
+					log.debug("Trim Audio to Full Length -- Start");
+					File aFile = new File(outputFullWav);
+					
+					if (!aFile.exists()) {
+						throw new Exception("Audio File does not exist , could not extract the Audio correctly");
+					}
+					
+					AudioInputStream aInputStream = AudioSystem.getAudioInputStream(aFile);
+					AudioFormat aFormat = aInputStream.getFormat(); 
+					long frameLength = aInputStream.getFrameLength();
+					float frameRate = aFormat.getFrameRate();
+					
+					double audioLength = Math.round(frameLength / frameRate); 
+					
+					log.debug("audioLength "+audioLength);
+					
+					double audioShouldLength = Math.round( (flvRecordingMetaData.getRecordEnd().getTime() - flvRecordingMetaData.getRecordStart().getTime()) / 1000);
+					
+					log.debug("audioShouldLength "+audioShouldLength);
+					
+					double missingLength = audioShouldLength - audioLength;
+					
+					log.debug("missingLength "+missingLength);
+					
+					//audioLength == 100
+					//
+					//1 == audioLength
+					//(0.5 / audioLength) * audioShouldLength
+					
+					double percentage = audioShouldLength / audioLength;
+					
+					log.debug("percentage "+percentage);
+					
+					//1 => 1
+					//0.75 => 1.3333
+					//0.5 => 2
+					//0.25 => 4
+					//0.125 => 8
+					
+					double scaleFactor = 1 / percentage;
+					
+					log.debug("scaleFactor "+scaleFactor);
+					
+					//sox myout.wav outwavTempo2.wav tempo 0.85
+					
+					String hashFileTrimFullName = flvRecordingMetaData.getStreamName()
+														+ "_FULL_TRIM_WAVE.wav";
+					String outputFullTrimWav = streamFolderName + hashFileTrimFullName;
+					
+					String[] argv_sox2 = new String[] { this.getPathToSoX(),
+							outputFullWav, outputFullTrimWav, "tempo",
+							""+scaleFactor, ""+30 };
+
+					log.debug("START trimAudioToWaves ################# ");
+					String tString = "";
+					for (int i = 0; i < argv_sox2.length; i++) {
+						tString += argv_sox2[i];
+						//log.debug(" i " + i + " argv-i " + argv_sox[i]);
+					}
+					log.debug(tString);
+					log.debug("END tAudioToWaves ################# ");
+
+					returnLog.add(GenerateSWF.executeScript("trimWave",argv_sox2));
+					
+					log.debug("Trim Audio to Full Length -- End");
+					log.debug("############################################");
+					
+					flvRecordingMetaData.setFullWavAudioData(hashFileTrimFullName);
+					
+					//Finally add it to the row!
+					listOfFullWaveFiles.add(outputFullTrimWav);
+					
 				}
 
 				this.getFlvRecordingMetaDataDaoImpl()
@@ -218,7 +404,7 @@ public class FlvRecorderConverter {
 			if (listOfFullWaveFiles.size() == 1) {
 
 				outputFullWav = listOfFullWaveFiles.get(0);
-
+				
 				flvRecordingMetaDataOfScreen
 						.setFullWavAudioData(hashFileFullName);
 

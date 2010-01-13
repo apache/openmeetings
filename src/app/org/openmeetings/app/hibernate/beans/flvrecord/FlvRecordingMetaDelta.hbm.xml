@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="flvrecording_meta_delta" lazy="false" name="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta">
+    <id column="flvrecording_meta_delta_id" name="flvRecordingMetaDeltaId">
+      <generator class="increment"/>
+    </id>
+    <property name="flvRecordingMetaDataId" type="long" column="flvrecording_metadata_id"/>
+    <property name="timeStamp" type="int" column="time_stamp"/>
+    <property name="deltaTime" type="long" column="delta_time"/>
+    <property name="trimFile" type="string" column="trim_file"/>
+    <property name="padFile" type="string" column="pad_file"/>
+  </class>
+</hibernate-mapping>
