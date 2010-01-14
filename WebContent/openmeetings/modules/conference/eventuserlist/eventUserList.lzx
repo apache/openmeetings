@@ -133,7 +133,7 @@
    	 -->
     <method name="getVideoObjectByPublicSID" args="publicSID">
     	<![CDATA[
-    		if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+    		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
     		
     		var videoContainer = this._videoviewcontent;
             if (this.userNewVideoContainer) {

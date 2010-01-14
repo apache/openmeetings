@@ -188,9 +188,22 @@ public class FlvRecorderConverter {
 											+ "_GAP_FULL_WAVE_"+counter+".wav";
 						outputGapFullWav = streamFolderName + hashFileGapsFullName;
 						
+						flvRecordingMetaDelta.setWaveOutPutName(hashFileGapsFullName);
+						
 						String[] argv_sox = null;
+						
+						if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
 							
-						if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
+							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							
+							if (gapSeconds > 0) {
+								//Add the item at the end
+								argv_sox = new String[] { this.getPathToSoX(),
+										inputFile, outputGapFullWav, "pad",
+										"0",String.valueOf(gapSeconds).toString() };
+							}
+							
+						} else if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
 							
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
 							
@@ -202,7 +215,7 @@ public class FlvRecorderConverter {
 						} else {
 							
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
-							float posSeconds = ( flvRecordingMetaDelta.getTimeStamp() - flvRecordingMetaDelta.getDeltaTime() - 47 ) /1000;
+							float posSeconds = ( flvRecordingMetaDelta.getTimeStamp() - flvRecordingMetaDelta.getDeltaTime() - 50 ) /1000;
 							
 							//Add the item in-between
 							argv_sox = new String[] { this.getPathToSoX(),
@@ -213,9 +226,10 @@ public class FlvRecorderConverter {
 						}
 						
 						log.debug("START addGapAudioToWaves ################# ");
+						log.debug("START addGapAudioToWaves ################# Delta-ID :: "+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId());
 						String commandHelper = " ";
 						for (int i = 0; i < argv_sox.length; i++) {
-							commandHelper += argv_sox[i];
+							commandHelper += " "+argv_sox[i];
 							//log.debug(" i " + i + " argv-i " + argv_sox[i]);
 						}
 						log.debug(" commandHelper " + commandHelper);
@@ -223,6 +237,7 @@ public class FlvRecorderConverter {
 
 						returnLog.add(GenerateSWF.executeScript("fillGap",argv_sox));
 						
+						this.flvRecordingMetaDeltaDaoImpl.updateFlvRecordingMetaDelta(flvRecordingMetaDelta);
 						counter++;
 						
 					}
@@ -325,7 +340,7 @@ public class FlvRecorderConverter {
 					
 					log.debug("audioLength "+audioLength);
 					
-					double audioShouldLength = Math.round( (flvRecordingMetaData.getRecordEnd().getTime() - flvRecordingMetaData.getRecordStart().getTime()) / 1000);
+					double audioShouldLength = (Math.round( (flvRecordingMetaData.getRecordEnd().getTime() - flvRecordingMetaData.getRecordStart().getTime()) / 1000))-2;
 					
 					log.debug("audioShouldLength "+audioShouldLength);
 					

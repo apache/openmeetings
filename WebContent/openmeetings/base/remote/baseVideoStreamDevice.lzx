@@ -117,7 +117,7 @@
 		]]>
 	</handler>    
 	<method name="sendNotification">
-		if ($debug) Debug.write("Level sendNotification ",this.isgreater);
+		//if ($debug) Debug.write("Level sendNotification ",this.isgreater);
   		this.objMessage = new Array ();
   		this.objMessage[0] = 'audioActivity';
   		this.objMessage[1] = this.isgreater;

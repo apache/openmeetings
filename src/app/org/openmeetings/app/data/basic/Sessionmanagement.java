@@ -198,11 +198,11 @@ public class Sessionmanagement {
 				sessiondata = sessions.get(0);
 			}
 			
-			if (sessiondata!=null)  {
-				log.debug("checkSession USER_ID: "+sessiondata.getUser_id());
-			} else {
-				log.debug("Session IS NULL SID: "+SID);
-			}
+//			if (sessiondata!=null)  {
+//				log.debug("checkSession USER_ID: "+sessiondata.getUser_id());
+//			} else {
+//				log.debug("Session IS NULL SID: "+SID);
+//			}
 				
 			//Update the Session Object
 			if (sessiondata!=null) updatesession(SID);

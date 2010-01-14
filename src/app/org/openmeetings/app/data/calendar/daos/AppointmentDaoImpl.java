@@ -626,56 +626,56 @@ public class AppointmentDaoImpl {
 	 */
 	//---------------------------------------------------------------------------------------------
 	public List<Appointment> getTodaysAppoitmentsForAllUsers( ){
-		log.debug("getTodaysAppoitmentsForAllUsers");	
-		
-		String hql = "SELECT app from MeetingMember mm " + 
-		"JOIN mm.appointment as app " + 
-		"WHERE mm.deleted!= :mm_deleted " + 
-		"AND app.deleted!= :app_deleted "+
-		"AND  " +
-		"app.appointmentStarttime between :starttime " + 
-		"AND " + 
-		" :endtime";
-		
-		
-		Date startDate = new Date();
-		startDate.setHours(0);
-		startDate.setMinutes(0);
-		startDate.setSeconds(1);
-		
-		Date endDate = new Date();
-		endDate.setHours(23);
-		endDate.setMinutes(59);
-		endDate.setSeconds(59);
-		
-		Timestamp startStamp = new Timestamp(startDate.getTime());
-		Timestamp stopStamp = new Timestamp(endDate.getTime());
-		
-		
-		System.out.println("StartTime : " + startDate);
-		System.out.println("EndTime : " + endDate);
-		
-		
 		try{
-		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
-		Query query = session.createQuery(hql);
-		
-		query.setBoolean("mm_deleted", true);
-		query.setString("app_deleted", "true");
-		
-		query.setTimestamp("starttime", startStamp);
-		query.setTimestamp("endtime", stopStamp);
-		
-		
-		List<Appointment> listAppoints = query.list();
-		tx.commit();
-		HibernateUtil.closeSession(idf);
-		
-		return listAppoints;
+			
+		    //log.debug("getTodaysAppoitmentsForAllUsers");	
+			
+			String hql = "SELECT app from MeetingMember mm " + 
+						"JOIN mm.appointment as app " + 
+						"WHERE mm.deleted!= :mm_deleted " + 
+						"AND app.deleted!= :app_deleted "+
+						"AND  " +
+						"app.appointmentStarttime between :starttime " + 
+						"AND " + 
+						" :endtime";
+			
+			
+			Date startDate = new Date();
+			startDate.setHours(0);
+			startDate.setMinutes(0);
+			startDate.setSeconds(1);
+			
+			Date endDate = new Date();
+			endDate.setHours(23);
+			endDate.setMinutes(59);
+			endDate.setSeconds(59);
+			
+			Timestamp startStamp = new Timestamp(startDate.getTime());
+			Timestamp stopStamp = new Timestamp(endDate.getTime());
+			
+			
+			//System.out.println("StartTime : " + startDate);
+			//System.out.println("EndTime : " + endDate);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			
+			query.setBoolean("mm_deleted", true);
+			query.setString("app_deleted", "true");
+			
+			query.setTimestamp("starttime", startStamp);
+			query.setTimestamp("endtime", stopStamp);
+			
+			
+			List<Appointment> listAppoints = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return listAppoints;
 		}catch(Exception e){
-			log.error("Error in getTodaysAppoitmentsForAllUsers : " + e.getMessage());
+			log.error("Error in getTodaysAppoitmentsForAllUsers : " , e);
 			return null;
 		}
 	}

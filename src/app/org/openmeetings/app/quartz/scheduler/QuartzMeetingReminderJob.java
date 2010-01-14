@@ -12,7 +12,7 @@ public class QuartzMeetingReminderJob implements IScheduledJob {
 	private static Logger log = Red5LoggerFactory.getLogger(QuartzMeetingReminderJob.class, "openmeetings");
 
 	public void execute(ISchedulingService service) {
-		log.debug("QuartzMeetingReminderJob.execute");
+		//log.debug("QuartzMeetingReminderJob.execute");
 		try {
 			AppointmentLogic.getInstance().doScheduledMeetingReminder();
 		

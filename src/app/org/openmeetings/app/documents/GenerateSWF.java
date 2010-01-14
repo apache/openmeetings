@@ -62,8 +62,9 @@ public class GenerateSWF {
 
 			Process proc = pb.start();
 
-			//2-minute timeout for command execution
-			long timeout = 60000*2;
+			//20-minute timeout for command execution
+			//FFMPEG conversion of Recordings may take a real long time until its finished
+			long timeout = 60000*20;
 			
 			ErrorStreamWatcher errorWatcher = new ErrorStreamWatcher(proc);
 			Worker worker = new Worker(proc);

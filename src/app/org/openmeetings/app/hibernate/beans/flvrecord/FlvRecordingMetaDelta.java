@@ -1,5 +1,7 @@
 package org.openmeetings.app.hibernate.beans.flvrecord;
 
+import java.util.Date;
+
 /**
  * 
  * @hibernate.class table="flvrecording_meta_delta"
@@ -12,8 +14,12 @@ public class FlvRecordingMetaDelta {
 	private Long flvRecordingMetaDataId;
 	private Integer timeStamp;
 	private Long deltaTime;
-	private String trimFile;
-	private String padFile;
+	private Boolean isEndPadding;
+	private String waveOutPutName;
+	private Integer dataLengthPacket;
+	private Long receivedAudioDataLength;
+	private Date startTime;
+	private Date currentTime;
 	
 	/**
 	 *
@@ -66,26 +72,74 @@ public class FlvRecordingMetaDelta {
 	
 	/**
      * @hibernate.property
-     *  column="trim_file"
-     *  type="string"
-     */	
-	public String getTrimFile() {
-		return trimFile;
+     *  column="is_end_padding"
+     *  type="boolean"
+     */
+	public Boolean getIsEndPadding() {
+		return isEndPadding;
 	}
-	public void setTrimFile(String trimFile) {
-		this.trimFile = trimFile;
+	public void setIsEndPadding(Boolean isEndPadding) {
+		this.isEndPadding = isEndPadding;
 	}
 	
 	/**
      * @hibernate.property
-     *  column="pad_file"
+     *  column="wave_out_put_name"
      *  type="string"
-     */		
-	public String getPadFile() {
-		return padFile;
+     */	
+	public String getWaveOutPutName() {
+		return waveOutPutName;
 	}
-	public void setPadFile(String padFile) {
-		this.padFile = padFile;
+	public void setWaveOutPutName(String waveOutPutName) {
+		this.waveOutPutName = waveOutPutName;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="data_length_packet"
+     *  type="int"
+     */		
+	public Integer getDataLengthPacket() {
+		return dataLengthPacket;
+	}
+	public void setDataLengthPacket(Integer dataLengthPacket) {
+		this.dataLengthPacket = dataLengthPacket;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="received_audio_data_length"
+     *  type="long"
+     */		
+	public Long getReceivedAudioDataLength() {
+		return receivedAudioDataLength;
+	}
+	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
+		this.receivedAudioDataLength = receivedAudioDataLength;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="start_time"
+     *  type="java.util.Date"
+     */
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="current_event_time"
+     *  type="java.util.Date"
+     */	
+	public Date getCurrentTime() {
+		return currentTime;
+	}
+	public void setCurrentTime(Date currentTime) {
+		this.currentTime = currentTime;
 	}
 	
 }

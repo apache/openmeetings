@@ -180,7 +180,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 																						false, false, true, streamName_Screen);
 									
 									//Start FLV Recording
-									recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, flvRecordingMetaDataId);
+									recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, flvRecordingMetaDataId, true);
 									
 									//Add Meta Data
 									rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
@@ -218,7 +218,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
 								
 								//Start FLV recording
-								recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId);
+								recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId, false);
 								
 							} 
 								
@@ -267,7 +267,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * @param flvRecordingMetaDataId
 	 * @throws Exception
 	 */
-	private static void recordShow(IConnection conn, String broadcastid, String streamName, Long flvRecordingMetaDataId) throws Exception {
+	private static void recordShow(IConnection conn, String broadcastid, 
+			String streamName, Long flvRecordingMetaDataId, boolean isScreenData) throws Exception {
 		try {
 			log.debug("Recording show for: " + conn.getScope().getContextPath());
 			log.debug("Name of CLient and Stream to be recorded: "+broadcastid);		
@@ -279,7 +280,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					.getBroadcastStream(conn.getScope(), broadcastid);
 		
 			// Save the stream to disk.
-			stream.addStreamListener(new StreamTranscodingListener(streamName, conn.getScope(), flvRecordingMetaDataId));
+			stream.addStreamListener(new StreamTranscodingListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
 			
 			//stream.saveAs(streamName, false);
 		} catch (Exception e) {
@@ -483,7 +484,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 																		false, false, true, streamName_Screen);
 					
 					//Start FLV Recording
-					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, flvRecordingMetaDataId);
+					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, flvRecordingMetaDataId, true);
 					
 					//Add Meta Data
 					rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
@@ -516,7 +517,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 																isAudioOnly, isVideoOnly, false, streamName);
 				
 				//Start FLV recording
-				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId);
+				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId, false);
 				
 				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 				

@@ -565,7 +565,7 @@
      -->
     <method name="getVideoObjectByPublicSID" args="publicSID">
         <![CDATA[
-            if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
+            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
             
             //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
             //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);

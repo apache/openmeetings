@@ -44,6 +44,11 @@ public class StreamTranscodingListener implements IStreamListener {
 	private int startTimeStamp = -1;
 	
 	private int lastTimeStamp = -1;
+	
+	private int lastStreamPacketTimeStamp = -1;
+	private Date startedSessionTimeDate = null;
+	
+	private long byteCount = 0;
 
 	private String folderPath = null;
 
@@ -54,12 +59,17 @@ public class StreamTranscodingListener implements IStreamListener {
 	private String streamName = "";
 
 	private boolean isClosed = false;
+
+	private boolean isScreenData = false;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, "openmeetings");
 
 	
-	public StreamTranscodingListener(String streamName, IScope scope, Long flvRecordingMetaDataId) {
+	public StreamTranscodingListener(String streamName, IScope scope, 
+			Long flvRecordingMetaDataId, boolean isScreenData) {
 		super();
+		this.startedSessionTimeDate = new Date();
+		this.isScreenData  = isScreenData;
 		this.streamName  = streamName;
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 		this.flvRecordingMetaDeltas = new LinkedList<FlvRecordingMetaDelta>();
@@ -80,6 +90,30 @@ public class StreamTranscodingListener implements IStreamListener {
 				return;
 			}
 			
+			if (streampacket.getTimestamp() == 0) {
+				return;
+			}
+			
+			if (this.isScreenData) {
+				//Screen Recorder has No Audio
+				if (streampacket.getDataType() == 8) {
+					return;
+				}
+			} else {
+				//Audio Recorder needs no Video
+				if (streampacket.getDataType() == 9) {
+					return;
+				}
+			}
+			
+			IoBuffer data = streampacket.getData().asReadOnlyBuffer();
+			
+			if (data.limit() == 0) {
+				return;
+			}
+			
+			this.byteCount += data.limit();
+
 			long deltaTime = 0;
 			
 			//log.debug("hasAudio :: "+streampacket.getDataType()); //8 == audio data
@@ -124,6 +158,8 @@ public class StreamTranscodingListener implements IStreamListener {
 				
 				int timeStamp = streampacket.getTimestamp();
 				
+				this.lastStreamPacketTimeStamp = streampacket.getTimestamp();
+				
 				timeStamp -= startTimeStamp;
 				
 				if (lastTimeStamp == -1) {
@@ -146,13 +182,18 @@ public class StreamTranscodingListener implements IStreamListener {
 				
 				//Try to fix missing packets, Standard packet Sizes are 46/47 ms long
 				
-				if (deltaTime > 51){
+				if (deltaTime > 55){
 					
 					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 					
 					flvRecordingMetaDelta.setDeltaTime(deltaTime);
 					flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
 					flvRecordingMetaDelta.setTimeStamp(timeStamp);
+					flvRecordingMetaDelta.setIsEndPadding(false);
+					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
+					flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
+					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
+					flvRecordingMetaDelta.setCurrentTime(new Date());
 					
 					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
 					
@@ -184,8 +225,6 @@ public class StreamTranscodingListener implements IStreamListener {
 	            ITag tag = new Tag();
 	            tag.setDataType(streampacket.getDataType());
 	            
-	            IoBuffer data = streampacket.getData().asReadOnlyBuffer();
-	
 	            //log.debug("data.limit() :: "+data.limit());
 				tag.setBodySize(data.limit());
 				tag.setTimestamp(timeStamp);
@@ -224,8 +263,6 @@ public class StreamTranscodingListener implements IStreamListener {
 				ITag tag = new Tag();
 	            tag.setDataType(streampacket.getDataType());
 	            
-	            IoBuffer data = streampacket.getData().asReadOnlyBuffer();
-	
 	            //log.debug("data.limit() :: "+data.limit());
 				tag.setBodySize(data.limit());
 				tag.setTimestamp(timeStamp);
@@ -302,27 +339,60 @@ public class StreamTranscodingListener implements IStreamListener {
 	}
     
 	public void closeStream() throws Exception {
-		if (writer != null) {
-			
-			log.debug("#################### closeStream ########################");
-			FLVWriter flvWriter = (FLVWriter) writer;
-			//log.debug("duration: "+flvWriter.getDuration());
-			log.debug(writer.getClass().getName());
-			
-			writer.close();
-			
-			this.isClosed  = true;
+		if (writer != null && !this.isClosed) {
 			try {
 				
-				for (FlvRecordingMetaDelta flvRecordingMetaDelta : this.flvRecordingMetaDeltas) {
+				log.debug("#################### -start- closeStream ########################");
+				log.debug("#################### -start- closeStream ########################");
+				FLVWriter flvWriter = (FLVWriter) writer;
+				//log.debug("duration: "+flvWriter.getDuration());
+				//log.debug(writer.getClass().getName());
+				
+				writer.close();
+				
+				this.isClosed  = true;
+				
+				if (!this.isScreenData) {
 					
-					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+					//We do not add any End Padding or count the gaps for the Screen Data, 
+					//cause there is no!
+					
+					long deltaRecordingTime = new Date().getTime() - this.startedSessionTimeDate.getTime();
+					 
+					log.debug("lastTimeStamp :: "+this.lastTimeStamp);
+					log.debug("lastStreamPacketTimeStamp :: "+this.lastStreamPacketTimeStamp);
+					log.debug("deltaRecordingTime :: "+deltaRecordingTime);
+					
+					long deltaTimePaddingEnd = deltaRecordingTime - this.lastTimeStamp;
+					
+					log.debug("deltaTimePaddingEnd :: "+deltaTimePaddingEnd);
+					
+					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
+					
+					flvRecordingMetaDelta.setDeltaTime(deltaTimePaddingEnd);
+					flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
+					flvRecordingMetaDelta.setTimeStamp(this.lastTimeStamp);
+					flvRecordingMetaDelta.setIsEndPadding(true);
+					flvRecordingMetaDelta.setDataLengthPacket(null);
+					flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
+					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
+					flvRecordingMetaDelta.setCurrentTime(new Date());
+					
+					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
+					
+				}
+				
+				for (FlvRecordingMetaDelta flvRecordingMetaDeltaLoop : this.flvRecordingMetaDeltas) {
+					
+					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
 					
 				}
 				
 			} catch (Exception err) {
 				log.error("[closeStream]",err);
 			}
+			log.debug("#################### -end- closeStream ########################");
+			log.debug("#################### -end- closeStream ########################");
 		}
 	}
 	

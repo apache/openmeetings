@@ -80,4 +80,25 @@ public class FlvRecordingMetaDeltaDaoImpl {
 		return null;
 	}
 	
+	public Long updateFlvRecordingMetaDelta(FlvRecordingMetaDelta flvRecordingMetaDelta) {
+		try { 
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			session.update(flvRecordingMetaDelta);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingMetaDelta.getFlvRecordingMetaDataId();
+		} catch (HibernateException ex) {
+			log.error("[updateFlvRecordingMetaDelta]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateFlvRecordingMetaDelta]: ",ex2);
+		}
+		return null;
+	}	
+	
 }

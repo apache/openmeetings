@@ -243,13 +243,13 @@ public class AppointmentLogic {
 	 */
 	//----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder(){
-		log.debug("doScheduledMeetingReminder");
+		//log.debug("doScheduledMeetingReminder");
 		
 		
 		List<Appointment> points = AppointmentDaoImpl.getInstance().getTodaysAppoitmentsForAllUsers();
 		
 		if(points==null || points.size() < 1){
-			log.debug("doScheduledMeetingReminder : no Appointments today");
+			//log.debug("doScheduledMeetingReminder : no Appointments today");
 			return;
 		}
 		
