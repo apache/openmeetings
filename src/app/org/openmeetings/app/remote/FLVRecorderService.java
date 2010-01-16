@@ -282,6 +282,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			ClientBroadcastStream stream = (ClientBroadcastStream) ScopeApplicationAdapter.getInstance()
 					.getBroadcastStream(conn.getScope(), broadcastid);
 		
+			
 			// Save the stream to disk.
 			if (isScreenData) {
 				stream.addStreamListener(new StreamScreenListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));

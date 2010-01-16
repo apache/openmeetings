@@ -33,6 +33,8 @@ public class StreamAudioListener extends ListenerAdapter {
 
 	private int duration = 0;
 	
+	private int purePacketLastTimeStamp = 0;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioListener.class, "openmeetings");
 
 	public StreamAudioListener(String streamName, IScope scope,
@@ -41,9 +43,100 @@ public class StreamAudioListener extends ListenerAdapter {
 		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
 	}
 
+	
+	
+	public void streamResetEvent() {
+		
+		try {
+		
+			FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
+			
+			flvRecordingMetaDelta.setDeltaTime(0L);
+			flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
+			flvRecordingMetaDelta.setTimeStamp(0);
+			flvRecordingMetaDelta.setDebugStatus("RESET TYPE :: ");
+			flvRecordingMetaDelta.setIsStartPadding(true);
+			flvRecordingMetaDelta.setIsEndPadding(false);
+			flvRecordingMetaDelta.setDataLengthPacket(0);
+			flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
+			flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
+			flvRecordingMetaDelta.setStreamCreationTime(null);
+			flvRecordingMetaDelta.setStreamCreationTimeDate(null);
+			flvRecordingMetaDelta.setPacketTimeStamp(lastTimeStamp);
+			
+			Date current_date = new Date();
+			Long deltaTimeStamp = current_date.getTime() - this.startedSessionTimeDate.getTime();
+			
+			//this.duration = Math.max(this.duration, 0 + this.writer.getOffset());
+			flvRecordingMetaDelta.setDuration(0);
+			
+			Long missingTime = deltaTimeStamp - 0;
+			
+			flvRecordingMetaDelta.setMissingTime(missingTime);
+			
+			flvRecordingMetaDelta.setCurrentTime(current_date);
+			flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
+			flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
+			
+			this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
+			
+			FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+			
+			this.offset += lastTimeStamp;
+			
+		} catch (Exception e) {
+			log.error("[packetReceived]",e);
+		}
+		
+	}
+
+
+
 	@Override
 	public void packetReceived(IBroadcastStream broadcastStream, IStreamPacket streampacket) {
 		try {
+			
+			
+//			//Here we handle Reseted timestamps!
+//			if (startTimeStamp != -1) {
+//				
+//				long deltaTimeBetweenTimeStampes = purePacketLastTimeStamp - streampacket.getTimestamp();
+//				
+//				System.out.println("deltaTimeBetweenTimeStampes "+deltaTimeBetweenTimeStampes);
+//				
+//				if (deltaTimeBetweenTimeStampes < -100) {
+//					
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("We have detected a Reset in the TimeStamps!");
+//					
+//					System.out.println("streampacket.getTimestamp() :: "+streampacket.getTimestamp());
+//					System.out.println("purePacketLastTimeStamp :: "+purePacketLastTimeStamp);
+//					System.out.println("startTimeStamp :: "+startTimeStamp);
+//					
+//					int debugTimeStamp = purePacketLastTimeStamp - startTimeStamp;
+//					
+//					System.out.println("debugTimeStamp :: "+debugTimeStamp);
+//					System.out.println("offset :: "+offset);
+//					
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					log.debug("############################################");
+//					
+//					this.offset += debugTimeStamp;
+//					
+//				}
+//				purePacketLastTimeStamp = streampacket.getTimestamp();
+//			}
 			
 			//We only care about audio at this moment
 			if (streampacket.getDataType() == 8) {
@@ -78,6 +171,7 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
 					flvRecordingMetaDelta.setTimeStamp(0);
 					flvRecordingMetaDelta.setDebugStatus("INIT AUDIO");
+					flvRecordingMetaDelta.setOffset(this.offset);
 					flvRecordingMetaDelta.setIsStartPadding(true);
 					flvRecordingMetaDelta.setIsEndPadding(false);
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
@@ -85,6 +179,7 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
 					flvRecordingMetaDelta.setStreamCreationTime(broadcastStream.getCreationTime());
 					flvRecordingMetaDelta.setStreamCreationTimeDate(new Date(broadcastStream.getCreationTime()));
+					flvRecordingMetaDelta.setPacketTimeStamp(streampacket.getTimestamp());
 					
 					Date current_date = new Date();
 					Long deltaTimeStamp = current_date.getTime() - this.startedSessionTimeDate.getTime();
@@ -101,6 +196,8 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 					
 					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
+					
+					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 					
 					//That will be not bigger then long value
 					startTimeStamp = (int) (streampacket.getTimestamp() - delta);
@@ -136,6 +233,8 @@ public class StreamAudioListener extends ListenerAdapter {
 				
 				timeStamp -= startTimeStamp;
 				
+				timeStamp += this.offset;
+				
 				if (lastTimeStamp == -1) {
 					deltaTime = timeStamp; 
 				} else {
@@ -153,11 +252,14 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setTimeStamp(timeStamp);
 					flvRecordingMetaDelta.setDebugStatus("RUN AUDIO");
 					flvRecordingMetaDelta.setIsStartPadding(false);
+					flvRecordingMetaDelta.setOffset(this.offset);
 					flvRecordingMetaDelta.setIsEndPadding(false);
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
 					flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
 					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
-					
+					flvRecordingMetaDelta.setStreamCreationTime(broadcastStream.getCreationTime());
+					flvRecordingMetaDelta.setStreamCreationTimeDate(new Date(broadcastStream.getCreationTime()));
+					flvRecordingMetaDelta.setPacketTimeStamp(streampacket.getTimestamp());
 					
 					Date current_date = new Date();
 					Long deltaTimeStamp = current_date.getTime() - this.startedSessionTimeDate.getTime();
@@ -174,6 +276,8 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 					
 					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
+					
+					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 					
 				}
 				
@@ -242,7 +346,7 @@ public class StreamAudioListener extends ListenerAdapter {
 				
 				for (FlvRecordingMetaDelta flvRecordingMetaDeltaLoop : this.flvRecordingMetaDeltas) {
 					
-					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
+					//FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
 					
 				}
 				

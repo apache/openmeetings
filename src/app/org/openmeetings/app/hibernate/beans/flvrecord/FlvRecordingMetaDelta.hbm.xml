@@ -9,19 +9,20 @@
     <property name="flvRecordingMetaDataId" type="long" column="flvrecording_metadata_id"/>
     <property name="timeStamp" type="int" column="time_stamp"/>
     <property name="deltaTime" type="long" column="delta_time"/>
-    <property name="waveOutPutName" type="string" column="wave_out_put_name"/>
-    <property name="dataLengthPacket" type="int" column="data_length_packet"/>
-    <property name="receivedAudioDataLength" type="long" column="received_audio_data_length"/>
-    <property name="startTime" type="java.util.Date" column="start_time"/>
-    <property name="currentTime" type="java.util.Date" column="current_event_time"/>
     <property name="deltaTimeStamp" type="long" column="delta_time_stamp"/>
+    <property name="packetTimeStamp" type="int" column="packet_time_stamp"/>
+    <property name="startTimeStamp" type="int" column="start_time_stamp"/>
     <property name="missingTime" type="long" column="missing_time"/>
     <property name="duration" type="int" column="duration"/>
-    <property name="startTimeStamp" type="int" column="start_time_stamp"/>
+    <property name="startTime" type="java.util.Date" column="start_time"/>
+    <property name="currentTime" type="java.util.Date" column="current_event_time"/>
     <property name="isEndPadding" type="boolean" column="is_end_padding"/>
     <property name="isStartPadding" type="boolean" column="is_start_padding"/>
     <property name="debugStatus" type="string" column="debug_status"/>
     <property name="streamCreationTime" type="long" column="stream_creation_time"/>
     <property name="streamCreationTimeDate" type="java.util.Date" column="stream_creation_time_date"/>
+    <property name="waveOutPutName" type="string" column="wave_out_put_name"/>
+    <property name="dataLengthPacket" type="int" column="data_length_packet"/>
+    <property name="receivedAudioDataLength" type="long" column="received_audio_data_length"/>
   </class>
 </hibernate-mapping>

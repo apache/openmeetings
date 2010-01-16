@@ -413,5 +413,10 @@ public class StreamTranscodingListener implements IStreamListener {
 			log.debug("#################### -end- closeStream ########################");
 		}
 	}
+
+	public void streamResetEvent() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

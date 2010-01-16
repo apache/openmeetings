@@ -35,6 +35,8 @@ public class ListenerAdapter implements IStreamListener {
 
 	protected boolean isScreenData = false;
 	
+	protected Long offset = 0L;
+	
 	protected String streamName = "";
 	
 	public ListenerAdapter(String streamName, IScope scope, 
@@ -93,6 +95,6 @@ public class ListenerAdapter implements IStreamListener {
 		IStreamableFile flv = service.getStreamableFile(this.file);
 		this.writer = flv.getWriter();
 
-	}	
+	}
 
 }

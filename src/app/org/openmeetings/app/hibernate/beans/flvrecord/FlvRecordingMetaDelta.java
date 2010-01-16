@@ -17,9 +17,11 @@ public class FlvRecordingMetaDelta {
 	private Date startTime;
 	private Date currentTime;
 	private Long deltaTimeStamp;
+	private Long offset;
 	private Long missingTime;
 	private Integer duration;
 	private Integer startTimeStamp;
+	private Integer packetTimeStamp;
 	private String waveOutPutName;
 	private Integer dataLengthPacket;
 	private Long receivedAudioDataLength;
@@ -80,66 +82,6 @@ public class FlvRecordingMetaDelta {
 	
 	/**
      * @hibernate.property
-     *  column="wave_out_put_name"
-     *  type="string"
-     */	
-	public String getWaveOutPutName() {
-		return waveOutPutName;
-	}
-	public void setWaveOutPutName(String waveOutPutName) {
-		this.waveOutPutName = waveOutPutName;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="data_length_packet"
-     *  type="int"
-     */		
-	public Integer getDataLengthPacket() {
-		return dataLengthPacket;
-	}
-	public void setDataLengthPacket(Integer dataLengthPacket) {
-		this.dataLengthPacket = dataLengthPacket;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="received_audio_data_length"
-     *  type="long"
-     */		
-	public Long getReceivedAudioDataLength() {
-		return receivedAudioDataLength;
-	}
-	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
-		this.receivedAudioDataLength = receivedAudioDataLength;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="start_time"
-     *  type="java.util.Date"
-     */
-	public Date getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="current_event_time"
-     *  type="java.util.Date"
-     */	
-	public Date getCurrentTime() {
-		return currentTime;
-	}
-	public void setCurrentTime(Date currentTime) {
-		this.currentTime = currentTime;
-	}
-	
-	/**
-     * @hibernate.property
      *  column="delta_time_stamp"
      *  type="long"
      */		
@@ -148,6 +90,41 @@ public class FlvRecordingMetaDelta {
 	}
 	public void setDeltaTimeStamp(Long deltaTimeStamp) {
 		this.deltaTimeStamp = deltaTimeStamp;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="packet_time_stamp"
+     *  type="int"
+     */
+	public Integer getPacketTimeStamp() {
+		return packetTimeStamp;
+	}
+	public void setPacketTimeStamp(Integer packetTimeStamp) {
+		this.packetTimeStamp = packetTimeStamp;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="packet_time_stamp"
+     *  type="long"
+     */
+	public Long getOffset() {
+		return offset;
+	}
+	public void setOffset(Long offset) {
+		this.offset = offset;
+	}
+	/**
+     * @hibernate.property
+     *  column="start_time_stamp"
+     *  type="int"
+     */		
+	public Integer getStartTimeStamp() {
+		return startTimeStamp;
+	}
+	public void setStartTimeStamp(Integer startTimeStamp) {
+		this.startTimeStamp = startTimeStamp;
 	}
 	
 	/**
@@ -176,14 +153,26 @@ public class FlvRecordingMetaDelta {
 	
 	/**
      * @hibernate.property
-     *  column="start_time_stamp"
-     *  type="int"
-     */		
-	public Integer getStartTimeStamp() {
-		return startTimeStamp;
+     *  column="start_time"
+     *  type="java.util.Date"
+     */
+	public Date getStartTime() {
+		return startTime;
 	}
-	public void setStartTimeStamp(Integer startTimeStamp) {
-		this.startTimeStamp = startTimeStamp;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="current_event_time"
+     *  type="java.util.Date"
+     */	
+	public Date getCurrentTime() {
+		return currentTime;
+	}
+	public void setCurrentTime(Date currentTime) {
+		this.currentTime = currentTime;
 	}
 	
 	/**
@@ -246,6 +235,40 @@ public class FlvRecordingMetaDelta {
 		this.streamCreationTimeDate = streamCreationTimeDate;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="wave_out_put_name"
+     *  type="string"
+     */	
+	public String getWaveOutPutName() {
+		return waveOutPutName;
+	}
+	public void setWaveOutPutName(String waveOutPutName) {
+		this.waveOutPutName = waveOutPutName;
+	}
 	
+	/**
+     * @hibernate.property
+     *  column="data_length_packet"
+     *  type="int"
+     */		
+	public Integer getDataLengthPacket() {
+		return dataLengthPacket;
+	}
+	public void setDataLengthPacket(Integer dataLengthPacket) {
+		this.dataLengthPacket = dataLengthPacket;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="received_audio_data_length"
+     *  type="long"
+     */		
+	public Long getReceivedAudioDataLength() {
+		return receivedAudioDataLength;
+	}
+	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
+		this.receivedAudioDataLength = receivedAudioDataLength;
+	}
 	
 }
