@@ -45,7 +45,7 @@ public class StreamAudioListener extends ListenerAdapter {
 	public void packetReceived(IBroadcastStream broadcastStream, IStreamPacket streampacket) {
 		try {
 			
-			//We only are concerned about audio at this moment
+			//We only care about audio at this moment
 			if (streampacket.getDataType() == 8) {
 			
 				if (this.isClosed) {
