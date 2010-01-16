@@ -192,7 +192,18 @@ public class FlvRecorderConverter {
 						
 						String[] argv_sox = null;
 						
-						if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
+						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
+							
+							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							
+							if (gapSeconds > 0) {
+								//Add the item at the beginning
+								argv_sox = new String[] { this.getPathToSoX(),
+										inputFile, outputGapFullWav, "pad",
+										String.valueOf(gapSeconds).toString(),"0" };
+							}
+							
+						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
 							
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
 							
@@ -225,20 +236,24 @@ public class FlvRecorderConverter {
 
 						}
 						
-						log.debug("START addGapAudioToWaves ################# ");
-						log.debug("START addGapAudioToWaves ################# Delta-ID :: "+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId());
-						String commandHelper = " ";
-						for (int i = 0; i < argv_sox.length; i++) {
-							commandHelper += " "+argv_sox[i];
-							//log.debug(" i " + i + " argv-i " + argv_sox[i]);
+						if (argv_sox != null) {
+							log.debug("START addGapAudioToWaves ################# ");
+							log.debug("START addGapAudioToWaves ################# Delta-ID :: "+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId());
+							String commandHelper = " ";
+							for (int i = 0; i < argv_sox.length; i++) {
+								commandHelper += " "+argv_sox[i];
+								//log.debug(" i " + i + " argv-i " + argv_sox[i]);
+							}
+							log.debug(" commandHelper " + commandHelper);
+							log.debug("END addGapAudioToWaves ################# ");
+	
+							returnLog.add(GenerateSWF.executeScript("fillGap",argv_sox));
+							
+							this.flvRecordingMetaDeltaDaoImpl.updateFlvRecordingMetaDelta(flvRecordingMetaDelta);
+							counter++;
+						} else {
+							outputGapFullWav = inputFile;
 						}
-						log.debug(" commandHelper " + commandHelper);
-						log.debug("END addGapAudioToWaves ################# ");
-
-						returnLog.add(GenerateSWF.executeScript("fillGap",argv_sox));
-						
-						this.flvRecordingMetaDeltaDaoImpl.updateFlvRecordingMetaDelta(flvRecordingMetaDelta);
-						counter++;
 						
 					}
 					

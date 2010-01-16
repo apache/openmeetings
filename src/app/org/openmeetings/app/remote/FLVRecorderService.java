@@ -14,6 +14,9 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
+import org.openmeetings.app.data.flvrecord.listener.ListenerAdapter;
+import org.openmeetings.app.data.flvrecord.listener.StreamAudioListener;
+import org.openmeetings.app.data.flvrecord.listener.StreamScreenListener;
 import org.openmeetings.app.data.flvrecord.listener.StreamTranscodingListener;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -280,9 +283,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					.getBroadcastStream(conn.getScope(), broadcastid);
 		
 			// Save the stream to disk.
-			stream.addStreamListener(new StreamTranscodingListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
-			
-			//stream.saveAs(streamName, false);
+			if (isScreenData) {
+				stream.addStreamListener(new StreamScreenListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
+			} else {
+				stream.addStreamListener(new StreamAudioListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
+			}
+			//Just for Debug Purpose
+			stream.saveAs(streamName+"_DEBUG", false);
 		} catch (Exception e) {
 			log.error("Error while saving stream: " + streamName, e);
 		}
@@ -340,13 +347,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				
 				IStreamListener iStreamListener = iter.next();
 				
-				StreamTranscodingListener streamTranscodingListener = (StreamTranscodingListener) iStreamListener;
+				ListenerAdapter listenerAdapter = (ListenerAdapter) iStreamListener;
 				
-				log.debug("Stream Closing ?? "+streamTranscodingListener.getFlvRecordingMetaDataId()+ " " +flvRecordingMetaDataId);
+				log.debug("Stream Closing ?? "+listenerAdapter.getFlvRecordingMetaDataId()+ " " +flvRecordingMetaDataId);
 				
-				if (streamTranscodingListener.getFlvRecordingMetaDataId().equals(flvRecordingMetaDataId)) {
+				if (listenerAdapter.getFlvRecordingMetaDataId().equals(flvRecordingMetaDataId)) {
 					log.debug("Stream Closing :: "+flvRecordingMetaDataId);
-					streamTranscodingListener.closeStream();
+					listenerAdapter.closeStream();
 				}
 				
 			}
@@ -354,6 +361,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			for (IStreamListener iStreamListener : stream.getStreamListeners()) {
 				stream.removeStreamListener(iStreamListener);
 			}
+			
+			// Just for Debugging
+			stream.stopRecording();
 			
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]",err);

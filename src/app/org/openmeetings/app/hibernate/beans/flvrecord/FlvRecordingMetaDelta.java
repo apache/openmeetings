@@ -14,12 +14,20 @@ public class FlvRecordingMetaDelta {
 	private Long flvRecordingMetaDataId;
 	private Integer timeStamp;
 	private Long deltaTime;
-	private Boolean isEndPadding;
+	private Date startTime;
+	private Date currentTime;
+	private Long deltaTimeStamp;
+	private Long missingTime;
+	private Integer duration;
+	private Integer startTimeStamp;
 	private String waveOutPutName;
 	private Integer dataLengthPacket;
 	private Long receivedAudioDataLength;
-	private Date startTime;
-	private Date currentTime;
+	private Boolean isEndPadding;
+	private Boolean isStartPadding;
+	private String debugStatus;
+	private Long streamCreationTime;
+	private Date streamCreationTimeDate;
 	
 	/**
 	 *
@@ -68,18 +76,6 @@ public class FlvRecordingMetaDelta {
 	}
 	public void setDeltaTime(Long deltaTime) {
 		this.deltaTime = deltaTime;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="is_end_padding"
-     *  type="boolean"
-     */
-	public Boolean getIsEndPadding() {
-		return isEndPadding;
-	}
-	public void setIsEndPadding(Boolean isEndPadding) {
-		this.isEndPadding = isEndPadding;
 	}
 	
 	/**
@@ -141,5 +137,115 @@ public class FlvRecordingMetaDelta {
 	public void setCurrentTime(Date currentTime) {
 		this.currentTime = currentTime;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="delta_time_stamp"
+     *  type="long"
+     */		
+	public Long getDeltaTimeStamp() {
+		return deltaTimeStamp;
+	}
+	public void setDeltaTimeStamp(Long deltaTimeStamp) {
+		this.deltaTimeStamp = deltaTimeStamp;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="missing_time"
+     *  type="long"
+     */	
+	public Long getMissingTime() {
+		return missingTime;
+	}
+	public void setMissingTime(Long missingTime) {
+		this.missingTime = missingTime;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="duration"
+     *  type="int"
+     */		
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="start_time_stamp"
+     *  type="int"
+     */		
+	public Integer getStartTimeStamp() {
+		return startTimeStamp;
+	}
+	public void setStartTimeStamp(Integer startTimeStamp) {
+		this.startTimeStamp = startTimeStamp;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_end_padding"
+     *  type="boolean"
+     */
+	public Boolean getIsEndPadding() {
+		return isEndPadding;
+	}
+	public void setIsEndPadding(Boolean isEndPadding) {
+		this.isEndPadding = isEndPadding;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_start_padding"
+     *  type="boolean"
+     */	
+	public Boolean getIsStartPadding() {
+		return isStartPadding;
+	}
+	public void setIsStartPadding(Boolean isStartPadding) {
+		this.isStartPadding = isStartPadding;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="debug_status"
+     *  type="string"
+     */		
+	public String getDebugStatus() {
+		return debugStatus;
+	}
+	public void setDebugStatus(String debugStatus) {
+		this.debugStatus = debugStatus;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="stream_creation_time"
+     *  type="long"
+     */	
+	public Long getStreamCreationTime() {
+		return streamCreationTime;
+	}
+	public void setStreamCreationTime(Long streamCreationTime) {
+		this.streamCreationTime = streamCreationTime;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="stream_creation_time_date"
+     *  type="java.util.Date"
+     */		
+	public Date getStreamCreationTimeDate() {
+		return streamCreationTimeDate;
+	}
+	public void setStreamCreationTimeDate(Date streamCreationTimeDate) {
+		this.streamCreationTimeDate = streamCreationTimeDate;
+	}
+	
+	
 	
 }

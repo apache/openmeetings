@@ -61,6 +61,8 @@ public class StreamTranscodingListener implements IStreamListener {
 	private boolean isClosed = false;
 
 	private boolean isScreenData = false;
+
+	private int duration;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, "openmeetings");
 
@@ -90,10 +92,6 @@ public class StreamTranscodingListener implements IStreamListener {
 				return;
 			}
 			
-			if (streampacket.getTimestamp() == 0) {
-				return;
-			}
-			
 			if (this.isScreenData) {
 				//Screen Recorder has No Audio
 				if (streampacket.getDataType() == 8) {
@@ -104,6 +102,15 @@ public class StreamTranscodingListener implements IStreamListener {
 				if (streampacket.getDataType() == 9) {
 					return;
 				}
+			}
+			
+			if (startTimeStamp == -1) {
+				startTimeStamp = streampacket.getTimestamp();
+			}
+			
+			if (streampacket.getTimestamp() <= 0) {
+				log.warn("Negative TimeStamp");
+				return;
 			}
 			
 			IoBuffer data = streampacket.getData().asReadOnlyBuffer();
@@ -117,10 +124,6 @@ public class StreamTranscodingListener implements IStreamListener {
 			long deltaTime = 0;
 			
 			//log.debug("hasAudio :: "+streampacket.getDataType()); //8 == audio data
-			
-			if (startTimeStamp == -1) {
-				startTimeStamp = streampacket.getTimestamp();
-			}
 			
 			if (writer == null) {
 				
@@ -193,7 +196,22 @@ public class StreamTranscodingListener implements IStreamListener {
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
 					flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
 					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
-					flvRecordingMetaDelta.setCurrentTime(new Date());
+					
+					
+					Date current_date = new Date();
+					Long deltaTimeStamp = this.startedSessionTimeDate.getTime() - current_date.getTime();
+					
+					this.duration = Math.max(this.duration, timeStamp + this.writer.getOffset());
+					flvRecordingMetaDelta.setDuration(this.duration);
+					
+					Long missingTime = deltaTimeStamp - timeStamp;
+					
+					flvRecordingMetaDelta.setMissingTime(missingTime);
+					
+					flvRecordingMetaDelta.setCurrentTime(current_date);
+					flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
+					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
+					
 					
 					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
 					
