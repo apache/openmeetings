@@ -619,7 +619,32 @@ public class FlvRecorderConverter {
 			returnLog.add(GenerateSWF.executeScript("generateFullFLV",
 					argv_previewFLV));
 
+			
+			String alternateDownloadName = "flvRecording_"
+						+ flvRecording.getFlvRecordingId() + ".avi";
+			String alternateDownloadFullName = streamFolderGeneralName
+					+ alternateDownloadName;
+			
+			String[] argv_alternateDownload = new String[] { this.getPathToFFMPEG(),
+					"-i", outputFullFlv, alternateDownloadFullName };
+
+			log.debug("START alternateDownLoad ################# ");
+			log.debug(argv_previewFLV.toString());
+			String sString = "";
+			for (int i = 0; i < argv_alternateDownload.length; i++) {
+				sString += argv_alternateDownload[i] + " ";
+				//log.debug(" i " + i + " argv-i " + argv_previewFLV[i]);
+			}
+			log.debug(kString);
+			log.debug("END alternateDownLoad ################# ");
+
+			returnLog.add(GenerateSWF.executeScript("alternateDownload",
+					argv_alternateDownload));			
+			
+			flvRecording.setAlternateDownload(alternateDownloadName);
+			
 			this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+			
 
 			for (HashMap<String, Object> returnMap : returnLog) {
 				this.flvRecordingLogDaoImpl.addFLVRecordingLog(

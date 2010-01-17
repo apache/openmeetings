@@ -17,6 +17,7 @@ public class FlvRecording {
 	private long flvRecordingId;
 	
 	private String fileName;
+	private String alternateDownload;
 	private String fileHash;
 	private String comment;
 	
@@ -377,5 +378,18 @@ public class FlvRecording {
 	public void setPreviewImage(String previewImage) {
 		this.previewImage = previewImage;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="alternate_download"
+     *  type="string"
+     */	
+	public String getAlternateDownload() {
+		return alternateDownload;
+	}
+	public void setAlternateDownload(String alternateDownload) {
+		this.alternateDownload = alternateDownload;
+	}
+	
 	
 }

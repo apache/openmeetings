@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:lang="http://www.springframework.org/schema/lang"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd                            
-	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd                            
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd">
 	<!-- This context holds all the networking: mina -->
 
 	<bean id="customEditorConfigurer"
@@ -66,10 +66,8 @@
         </property>
 		<property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" />
 		<property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
-		<property name="eventThreadsCore" value="${rtmp.event_threads_core}" />
-		<property name="eventThreadsMax" value="${rtmp.event_threads_max}" />
-		<property name="eventThreadsQueue" value="${rtmp.event_threads_queue}" />
-		<property name="eventThreadsKeepalive" value="${rtmp.event_threads_keepalive}" />
+		<property name="connectionThreads" value="${rtmp.connect_threads}" />
+		<property name="ioThreads" value="${rtmp.io_threads}" />
 		<!-- This is the interval at which the sessions are polled for stats. If mina monitoring is not
 				enabled, polling will not occur. -->
 		<property name="jmxPollInterval" value="1000" />
@@ -118,7 +116,6 @@
 		
 	<!-- RTMPT -->
 <!-- -->
-
 	<bean id="rtmpt.server" class="org.red5.server.tomcat.rtmpt.RTMPTLoader" init-method="init" lazy-init="true">
 	
 		<property name="webappFolder" value="${red5.root}/webapps" />
@@ -177,10 +174,8 @@
         </property>
         <property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" />
         <property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
-        <property name="eventThreadsCore" value="${rtmp.event_threads_core}" />
-        <property name="eventThreadsMax" value="${rtmp.event_threads_max}" />
-        <property name="eventThreadsQueue" value="${rtmp.event_threads_queue}" />
-        <property name="eventThreadsKeepalive" value="${rtmp.event_threads_keepalive}" />
+		<property name="connectionThreads" value="${rtmp.connect_threads}" />
+		<property name="ioThreads" value="${rtmp.io_threads}" />
         <!-- This is the interval at which the sessions are polled for stats. If mina monitoring is not
                 enabled, polling will not occur. -->
         <property name="jmxPollInterval" value="1000" />

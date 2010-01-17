@@ -2723,4 +2723,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="881" name="room config">
     <value>Rights</value>
   </string>  
+  <string id="882" name="flvrecording">
+    <value>Download as AVI</value>
+  </string>  
 </language>

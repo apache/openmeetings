@@ -221,6 +221,7 @@
             }
             
             this._recordingsInfo.content.recordingName = rec.fileHash;
+            this._recordingsInfo.content.alternateName = rec.alternateDownload;
             
             this._recordingsInfo.content._flvLength.setAttribute("text",timeInMinutes);
             
@@ -344,6 +345,7 @@
               width="$once{ parent.width }" height="$once{ parent.height - 34 }">
             
             <attribute name="recordingName" value="" type="string" />
+            <attribute name="alternateName" value="" type="string" />
             
             <labelText labelid="863" y="0" />
             <labelText name="_flvName" y="0" x="80" multiline="true" height="32" 
@@ -364,7 +366,7 @@
             <labelText name="_flvRoom" y="60" x="80" />
             
             <simpleLabelButton y="100" align="right" text_padding_x="40"
-                              height="26" width="180" labelid="867">
+                              height="26" width="$once{ parent.width / 2 }" labelid="867">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
                 	<![CDATA[
@@ -386,6 +388,31 @@
                 <labelTooltip labelid="873" />
                 
             </simpleLabelButton>
+            
+            
+            <simpleLabelButton y="100" align="left" text_padding_x="40" 
+                              height="26" width="$once{ parent.width / 2 }" labelid="867">
+                <view resource="flv_download_rsc" x="4" y="2" />
+                <handler name="onclick">
+                	<![CDATA[
+                	
+                	   if (parent.recordingName == "") {
+                	   	   return;
+                	   }
+                	
+	                   var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                                    +canvas.httpRootKey+'DownloadHandler?fileName='+parent.alternateName
+                                    +'&moduleName=lzRecorderApp&parentPath=&room_id='
+                                    +'&sid='+canvas.sessionId;
+                	
+                        lz.Browser.loadURL(downloadurl,"_parent");
+                	
+                	]]>
+                </handler>
+                
+                <labelTooltip labelid="882" />
+                
+            </simpleLabelButton>            
             
         </view>
         

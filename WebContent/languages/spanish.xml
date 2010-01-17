@@ -2658,4 +2658,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="881" name="room config">
     <value>Permisos</value>
   </string>  
+  <string id="882" name="flvrecording">
+    <value>Download as AVI</value>
+  </string>  
 </language>

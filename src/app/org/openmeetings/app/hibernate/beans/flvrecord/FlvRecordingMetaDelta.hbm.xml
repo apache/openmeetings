@@ -11,6 +11,7 @@
     <property name="deltaTime" type="long" column="delta_time"/>
     <property name="deltaTimeStamp" type="long" column="delta_time_stamp"/>
     <property name="packetTimeStamp" type="int" column="packet_time_stamp"/>
+    <property name="offset" type="long" column="offset"/>
     <property name="startTimeStamp" type="int" column="start_time_stamp"/>
     <property name="missingTime" type="long" column="missing_time"/>
     <property name="duration" type="int" column="duration"/>

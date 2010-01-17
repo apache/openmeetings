@@ -138,6 +138,8 @@ public class StreamAudioListener extends ListenerAdapter {
 //				purePacketLastTimeStamp = streampacket.getTimestamp();
 //			}
 			
+			//log.debug("streampacket.getTimestamp() :: "+streampacket.getTimestamp());
+			
 			//We only care about audio at this moment
 			if (streampacket.getDataType() == 8) {
 			
@@ -200,13 +202,13 @@ public class StreamAudioListener extends ListenerAdapter {
 					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 					
 					//That will be not bigger then long value
-					startTimeStamp = (int) (streampacket.getTimestamp() - delta);
+					startTimeStamp = (int) (streampacket.getTimestamp());
 					
 					//We have to set that to bypass the initial delta
 					lastTimeStamp = startTimeStamp;
 				}
 				
-				long deltaTime = 0;
+				
 				
 				if (writer == null) {
 					
@@ -235,15 +237,16 @@ public class StreamAudioListener extends ListenerAdapter {
 				
 				timeStamp += this.offset;
 				
+				long deltaTime = 0;
 				if (lastTimeStamp == -1) {
-					deltaTime = timeStamp; 
+					deltaTime = 0; //Offset at the beginning is calculated above
 				} else {
 					deltaTime = timeStamp - lastTimeStamp; 
 				}
 				
 				lastTimeStamp = timeStamp;
 				
-				if (deltaTime > 55){
+				if (deltaTime > 75){
 					
 					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 					
@@ -312,43 +315,41 @@ public class StreamAudioListener extends ListenerAdapter {
 				
 				this.isClosed  = true;
 				
-				if (!this.isScreenData) {
-					
-					//We do not add any End Padding or count the gaps for the Screen Data, 
-					//cause there is no!
-					
-					long deltaRecordingTime = new Date().getTime() - this.startedSessionTimeDate.getTime();
-					 
-					log.debug("lastTimeStamp :: "+this.lastTimeStamp);
-					log.debug("lastStreamPacketTimeStamp :: "+this.lastStreamPacketTimeStamp);
-					log.debug("deltaRecordingTime :: "+deltaRecordingTime);
-					
-					long deltaTimePaddingEnd = deltaRecordingTime - this.lastTimeStamp;
-					
-					log.debug("deltaTimePaddingEnd :: "+deltaTimePaddingEnd);
-					
-					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
-					
-					flvRecordingMetaDelta.setDeltaTime(deltaTimePaddingEnd);
-					flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
-					flvRecordingMetaDelta.setTimeStamp(this.lastTimeStamp);
-					flvRecordingMetaDelta.setDebugStatus("END AUDIO");
-					flvRecordingMetaDelta.setIsStartPadding(false);
-					flvRecordingMetaDelta.setIsEndPadding(true);
-					flvRecordingMetaDelta.setDataLengthPacket(null);
-					flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
-					flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
-					flvRecordingMetaDelta.setCurrentTime(new Date());
-					
-					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
-					
-				}
+				//We do not add any End Padding or count the gaps for the Screen Data, 
+				//cause there is no!
 				
-				for (FlvRecordingMetaDelta flvRecordingMetaDeltaLoop : this.flvRecordingMetaDeltas) {
+				long deltaRecordingTime = new Date().getTime() - this.startedSessionTimeDate.getTime();
+				 
+				log.debug("lastTimeStamp :: "+this.lastTimeStamp);
+				log.debug("lastStreamPacketTimeStamp :: "+this.lastStreamPacketTimeStamp);
+				log.debug("deltaRecordingTime :: "+deltaRecordingTime);
+				
+				long deltaTimePaddingEnd = deltaRecordingTime - this.lastTimeStamp;
+				
+				log.debug("deltaTimePaddingEnd :: "+deltaTimePaddingEnd);
+				
+				FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
+				
+				flvRecordingMetaDelta.setDeltaTime(deltaTimePaddingEnd);
+				flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
+				flvRecordingMetaDelta.setTimeStamp(this.lastTimeStamp);
+				flvRecordingMetaDelta.setDebugStatus("END AUDIO");
+				flvRecordingMetaDelta.setIsStartPadding(false);
+				flvRecordingMetaDelta.setIsEndPadding(true);
+				flvRecordingMetaDelta.setDataLengthPacket(null);
+				flvRecordingMetaDelta.setReceivedAudioDataLength(this.byteCount);
+				flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
+				flvRecordingMetaDelta.setCurrentTime(new Date());
+				
+				this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
 					
-					//FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
-					
-				}
+				FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+				
+//				for (FlvRecordingMetaDelta flvRecordingMetaDeltaLoop : this.flvRecordingMetaDeltas) {
+//					
+//					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
+//					
+//				}
 				
 			} catch (Exception err) {
 				log.error("[closeStream]",err);
