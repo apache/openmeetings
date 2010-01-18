@@ -1,89 +1,80 @@
-/* 
-/  Copyright (C) 2009  Risto Känsäkoski - Sesca ISW Ltd
-/  
-/  This file is part of SIP-Applet (www.sesca.com, www.purplescout.com)
-/  
-/  This program is free software; you can redistribute it and/or
-/  modify it under the terms of the GNU General Public License
-/  as published by the Free Software Foundation; either version 2
-/  of the License, or (at your option) any later version.
-/
-/  This program is distributed in the hope that it will be useful,
-/  but WITHOUT ANY WARRANTY; without even the implied warranty of
-/  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/  GNU General Public License for more details.
-/
-/  You should have received a copy of the GNU General Public License
-/  along with this program; if not, write to the Free Software
-/  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+/*
+ * GPL 2
+ *  
+ */ 
 
+function onImReceived(message, from)
+ {
+	customOnImReceived(message, from);
+ }
 function onBusy()
 {
-	customOnBusy();
+	customOnBysy();
+	//statusBar(strings[11].item);showEmail();startActive();
 }
-
 function onTalking()
 {
 	customOnTalking();
+	//statusBar(strings[24].item);
 }
-
 function onNoAnswer()
 {
 	customOnNoAnswer();
+	//statusBar(strings[12].item);startActive();
 }
-
 function onCallEnded()
 {
 	customOnCallEnded();
+	//statusBar(strings[12].item);startActive();
 }
-
 function onNotAvailable()
 {
 	customOnNotAvailable();
+	//statusBar(strings[23].item);showEmail();startActive();
 }
-
 function onRinging()
 {
 	customOnRinging();
+	//statusBar(strings[25].item);
 }
-
-function onTrying()
-{
-	customOnTrying();
-}
-
 function onCalling()
 {
 	customOnCalling();
+	//statusBar(strings[13].item);
 }
-
 function onWrongAddress()
 {
 	customOnWrongAddress();
+	//statusBar(strings[23].item);startActive();
 }
-
 function onRegistrationSuccess(x)
-{ 
+{ //Valmis
 	customOnRegistrationSuccess(x);
+	//statusBar(strings[15].item);
+	//startActive();
 }
 
 function onRegistrationFailure(x)
 {
 	customOnRegistrationFailure(x)
+	//statusBar(strings[22].item);
 }
-
 function onRegistering()
 {
 	customOnRegistering();
+	//statusBar(strings[14].item);
 }
-
 function onLoaded() 
 {
 	customOnLoaded();
-}
-
+	//document.getElementById("PHDial").set_event(5);
+} 	//TODO Component loaded
 function onCallIncoming()
 {
 	customOnCallIncoming();
 }
+function onResponse(x)
+{
+	customOnResponse(x);
+}
+

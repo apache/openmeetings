@@ -1,78 +1,64 @@
-/* 
-/  Copyright (C) 2009  Risto Känsäkoski - Sesca ISW Ltd
-/  
-/  This file is part of SIP-Applet (www.sesca.com, www.purplescout.com)
-/  
-/  This program is free software; you can redistribute it and/or
-/  modify it under the terms of the GNU General Public License
-/  as published by the Free Software Foundation; either version 2
-/  of the License, or (at your option) any later version.
-/
-/  This program is distributed in the hope that it will be useful,
-/  but WITHOUT ANY WARRANTY; without even the implied warranty of
-/  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/  GNU General Public License for more details.
-/
-/  You should have received a copy of the GNU General Public License
-/  along with this program; if not, write to the Free Software
-/  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+/*
+ * GPL 2
+ *  
+ */ 
 
 function setCallTo(callTo)
 {
-	document.getElementById("PHDial").jsSetCallTo(callTo);
+document.getElementById("PHDial").jsSetCallTo(callTo);
 }
-
 function setUsername(username)
 {
-	document.getElementById("PHDial").jsSetUsername(username);
+document.getElementById("PHDial").jsSetUsername(username);
 }
-
+function setAuthID(id)
+{
+document.getElementById("PHDial").jsSetAuthID(id);
+}
 function setPassword(password)
 {
-	document.getElementById("PHDial").jsSetPassword(password);
+document.getElementById("PHDial").jsSetPassword(password);
 }
-
 function setRealm(realm)
 {
-	document.getElementById("PHDial").jsSetRealm(realm);
+document.getElementById("PHDial").jsSetRealm(realm);
 }
-
 function setPort(port)
 {
-	document.getElementById("PHDial").jsSetPort(port);
+document.getElementById("PHDial").jsSetPort(port);
 }
-
 function setSipProxy(proxy)
 {
-	document.getElementById("PHDial").jsSetSipProxy(port);
+document.getElementById("PHDial").jsSetSipProxy(port);
 }
-
 function setTunnel(tunnel)
 {
-	document.getElementById("PHDial").jsSetTunnel(tunnel);
+document.getElementById("PHDial").jsSetTunnel(tunnel);
 }
-
 function setHTTPProxy(proxy)
 {
-	// NYI
+// NYI
 }
-
+function getIdentityString()
+{
+var identity = document.getElementById("PHDial").jsGetIdentity();
+return identity;
+}
 function startCall()
 {
 	document.getElementById("PHDial").set_event(102);
+	//stopActive();
 }
-
 function endCall()
 {
 	document.getElementById("PHDial").set_event(103);
+	//startActive();
 }
-
 function acceptCall()
 {
 	document.getElementById("PHDial").set_event(104);
+	
 }
-
 function refuseCall()
 {
 	document.getElementById("PHDial").set_event(105);
@@ -81,8 +67,50 @@ function refuseCall()
 
 function register()
 {
+	//document.getElementById("PHDial").jsSetUsername(document.getElementById("username").value);
+	//document.getElementById("PHDial").jsSetPassword(document.getElementById("password").value);
 	document.getElementById("PHDial").set_event(101);
-
+	//startActive();
+}
+function onIMSend()
+{
+	document.getElementById("PHDial").jsSetCallTo(document.getElementById("callto").value);		
+	
+	var sender = "<font class=\"immessage_to\">" + 'Sip Applet' + " </font>";
+	var msg = document.getElementById("immessageform").imMessageArea.value;
+	
+	if(msg.length == 0 || msg.length > 400)
+		return false;
+	
+	msg = removeHTMLTags(msg);	
+	
+	customOnImSend(msg, sender);
+	
+	document.getElementById("immessageform").imMessageArea.value = "";
+	sendIMMessage(msg);
 }
 
+function sendIMMessage(message)
+{
+	document.getElementById("PHDial").set_IMMessage(message);
+ 	document.getElementById("PHDial").set_event(106); //sendim
+}
+
+function removeHTMLTags(message)
+{
+	var MessageWithoutHTML = message.replace(/<\/?[^>]+(>|$)/g, "");
+	return MessageWithoutHTML;
+}
+/*function startActive()
+*{ 
+*   $('#startbuttontext').css('background-image', "url(/index.php/module/wrapper/resource/idial/item/button_active.gif)");
+*   $('#stopbuttontext').css('background-image', "url(/index.php/module/wrapper/resource/idial/item/button_not_active.gif)");  
+*   $('#stopcallbutton').css('cursor', "default");  
+*   $('#callbutton').css('cursor', "pointer");  
+*}
+*/
+function DTMFButton(number)
+{
+	document.getElementById("PHDial").handleKeyPadEvent(number);
+}
 function dialingPageDeactivate(){document.getElementById("PHDial").set_event(999);}//Not used but must be defined
