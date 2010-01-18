@@ -175,7 +175,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
 									((IServiceCapableConnection) conn).invoke("sendSyncFlag", new Object[] { wSyncLockObject },this);
 								}
@@ -226,7 +228,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 							if (conn != null) {
 								if (conn instanceof IServiceCapableConnection) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
 											returnVal++;
 											((IServiceCapableConnection) conn).invoke("sendSyncCompleteFlag", new Object[] { wSyncLockObject },this);
@@ -290,7 +294,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								log.debug("sending :"+rcl);
 								if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
 									log.debug("sendObjectSyncFlag :"+rcl);
@@ -351,7 +357,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 							if (conn != null) {
 								if (conn instanceof IServiceCapableConnection) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
 											returnVal++;
 											((IServiceCapableConnection) conn).invoke("sendObjectSyncCompleteFlag", new Object[] { wSyncLockObject },this);
@@ -532,11 +540,13 @@ public class WhiteBoardService implements IPendingServiceCallback {
 								if (conn instanceof IServiceCapableConnection) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 									if (rcl != null) {
-										if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
-											((IServiceCapableConnection) conn).invoke("sendSyncCompleteFlag", new Object[] { wSyncLockObject },this);
-										} else if (!rcl.getPublicSID().equals(currentClient.getPublicSID())) {
-											//do not send to current
-											((IServiceCapableConnection) conn).invoke("sendSyncCompleteFlag", new Object[] { wSyncLockObject },this);
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
+											if (!rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+												//do not send to current
+												((IServiceCapableConnection) conn).invoke("sendSyncCompleteFlag", new Object[] { wSyncLockObject },this);
+											}
 										}
 									}
 								}
@@ -568,7 +578,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 							if (conn != null) {
 								if (conn instanceof IServiceCapableConnection) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										if (rcl != null) {
 											((IServiceCapableConnection) conn).invoke("sendImagesSyncCompleteFlag", new Object[] { "remove" },this);
 										} else if (!rcl.getPublicSID().equals(currentClient.getPublicSID())) {

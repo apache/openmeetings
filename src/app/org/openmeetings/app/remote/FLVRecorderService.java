@@ -167,7 +167,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							log.debug("is this users still alive? :"+rcl);
 							
 							//FIXME: Check if this function is really in use at the moment	
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								((IServiceCapableConnection) conn).invoke("startedRecording",new Object[] { currentClient }, this);
 							}
 							

@@ -104,7 +104,9 @@ public class PollService {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						if (!rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
 							if (rcl.getRoom_id().equals(rc.getRoom_id()) && rcl.getRoom_id()!=null){
 								((IServiceCapableConnection) conn).invoke(clientFunction,obj,ScopeApplicationAdapter.getInstance());
 								log.debug("sending "+clientFunction+" to " + conn+" "+conn.getClient().getId());

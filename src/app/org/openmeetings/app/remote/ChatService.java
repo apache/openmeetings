@@ -132,7 +132,9 @@ public class ChatService implements IPendingServiceCallback {
     						
     						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
     						
-	    					if (!rcl.getIsScreenClient()) {
+    						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 	    						log.debug("*..*idremote room_id: " + room_id);
 	    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
 	    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {

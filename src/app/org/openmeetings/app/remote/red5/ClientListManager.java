@@ -141,7 +141,9 @@ public class ClientListManager {
 				RoomClient rcl = clientList.get(key);
 				//same room, same domain
 				if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
-					if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
+					if (rcl.getIsScreenClient() != null && !rcl.getIsScreenClient()) {
+						//continue
+					} else {
 						roomClientList.put(key, rcl);
 					}
 				}

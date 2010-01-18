@@ -245,7 +245,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 										//log.debug("is this users still alive? :"+rcl);
 										//Check if the Client is in the same room and same domain 
-										if (!rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
 											IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 											//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
 											iStream.invoke("stopRed5ScreenSharing",new Object[] { currentClient }, this);
@@ -288,7 +290,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 										//log.debug("is this users still alive? :"+rcl);
 										//Check if the Client is in the same room and same domain 
-										if (!rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
 											IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 											//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
 											iStream.invoke("stopRecordingMessage",new Object[] { currentClient }, this);
@@ -397,7 +401,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 										//log.debug("is this users still alive? :"+rcl);
 										//Check if the Client is in the same room and same domain 
-										if (!rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
 											IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 											//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
 											iStream.invoke("newRed5ScreenSharing",new Object[] { currentClient }, this);
@@ -619,7 +625,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									if (!currentClient.getStreamid().equals(rcl.getStreamid())){
 										
 										
-										if (!rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
 											//Send to all connected users	
 											((IServiceCapableConnection) cons).invoke("roomDisconnect",new Object[] { currentClient }, this);
 											log.debug("sending roomDisconnect to " + cons);
@@ -715,7 +723,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								
 									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										iStream.invoke("newStream",new Object[] { currentClient }, this);
 									}
 									
@@ -806,7 +816,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								continue;
 							} else {
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (!rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
 									log.debug("is this users still alive? :"+rcl);
 									//conn.ping();
 									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
@@ -925,7 +937,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 						log.debug("Send Flag to Client: "+rcl.getUsername());
 						if (conn instanceof IServiceCapableConnection) {
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { currentMods }, this);
 								log.debug("sending setNewModeratorByList to " + conn);
 							}
@@ -966,7 +980,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								continue;
 							} else {
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (!rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
 									//log.debug("is this users still alive? :"+rcl);
 									//Check if the Client is in the same room and same domain 
 									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
@@ -1013,7 +1029,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						if (!rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
 							log.debug("Send Flag to Client: "+rcl.getUsername());
 							if (conn instanceof IServiceCapableConnection) {
 								((IServiceCapableConnection) conn).invoke("setNewModeratorByList",new Object[] { currentMods }, this);
@@ -1053,7 +1071,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						if (!rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
 							log.debug("Send Flag to Client: "+rcl.getUsername());
 							if (conn instanceof IServiceCapableConnection) {
 								((IServiceCapableConnection) conn).invoke("setNewBroadCastingFlag",new Object[] { currentClient }, this);
@@ -1163,7 +1183,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
 								log.debug("sending setUserObjectNewOneFour to " + conn);
 								
@@ -1300,7 +1322,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							for (IConnection conn : conset) {
 								if (conn != null) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										if( !streamid.equals(rcl.getStreamid())){
 											//It is not needed to send back that event to the actuall Moderator
 											//as it will be already triggered in the result of this Function 
@@ -1349,7 +1373,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								for (IConnection conn : conset) {
 									if (conn != null) {
 										RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-										if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
+										if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				    						//continue;
+				    					} else {
 											if( !streamid.equals(rcl.getStreamid())){
 												//It is not needed to send back that event to the actual Moderator
 												//as it will be already triggered in the result of this Function 
@@ -1423,7 +1449,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									for (IConnection conn : conset) {
 										if (conn != null) {
 											RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-											if (!rcl.getIsScreenClient()) {
+											if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					    						//continue;
+					    					} else {
 												if( !streamid.equals(rcl.getStreamid())){
 													//It is not needed to send back that event to the actual Moderator
 													//as it will be already triggered in the result of this Function 
@@ -1489,7 +1517,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							for (IConnection conn : conset) {
 								if (conn != null) {
 									RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									if (!rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
 										if( !streamid.equals(rcl.getStreamid())){
 											//It is not needed to send back that event to the actual Moderator
 											//as it will be already triggered in the result of this Function 
@@ -1691,7 +1721,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								continue;
 							} else {				
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (!rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
 									//log.debug("*** setAudienceModus Found Client to " + conn);
 									//log.debug("*** setAudienceModus Found Client to " + conn.getClient());
 									if (conn instanceof IServiceCapableConnection) {
@@ -1745,7 +1777,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								if (conn instanceof IServiceCapableConnection) {
 									//RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 									((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
@@ -1865,7 +1899,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (rcl.getIsScreenClient() == null || !rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
@@ -1915,7 +1951,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						if (conn != null) {
 							if (conn instanceof IServiceCapableConnection) {
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (!rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
 									//log.debug("*..*idremote: " + rcl.getStreamid());
 									//log.debug("*..*my idstreamid: " + currentClient.getStreamid());
 									if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
@@ -1950,7 +1988,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..*my idstreamid: " + currentClient.getStreamid());
 								((IServiceCapableConnection) conn).invoke("sendVarsToMessage",new Object[] { newMessage }, this);
@@ -1985,7 +2025,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..*my idstreamid: " + currentClient.getStreamid());
 								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
@@ -2026,7 +2068,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//log.debug("### sendMessageById 1 ###"+clientId);
 								//log.debug("### sendMessageById 2 ###"+conn.getClient().getId());
 								if (conn.getClient().getId().equals(clientId)){
@@ -2062,7 +2106,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						if (!rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
 							if (conn instanceof IServiceCapableConnection) {
 								//log.debug("### sendMessageWithClientById 1 ###"+clientId);
 								//log.debug("### sendMessageWithClientById 2 ###"+conn.getClient().getId());
@@ -2176,7 +2222,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 							//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 							
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//Do not send to self and only to registered viewers
 								if (!rcl.getPublicSID().equals(publicSID)){
 									
@@ -2253,7 +2301,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 							//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 							
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//Do not send to self and only to registered viewers
 								if (!rcl.getPublicSID().equals(publicSID)){
 									
@@ -2439,7 +2489,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 							//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 							
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//Send to self for debugging
 								if (!rcl.getPublicSID().equals(publicSID) || true){
 									//log.debug("IS EQUAL ");
@@ -2496,7 +2548,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (!rcl.getIsScreenClient()) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
 								//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 								if (rcl.getPublicSID().equals(publicSID)){
 									//log.debug("IS EQUAL ");

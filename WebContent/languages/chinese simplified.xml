@@ -1864,91 +1864,91 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>你的帐号已与多个组织关联. 请为当前会话选择一个组织.</value>
   </string>  
   <string id="618" name="error message room full">
-    <value>This room is full at the moment. Please try again later.</value>
+    <value>会议室当前满员，请稍后再试</value>
   </string> 
   <string id="619" name="roomtypes">
-    <value>Room Type</value>
+    <value>会议室类型</value>
   </string> 
   <string id="620" name="appointed_room">
-    <value>Appointment Room</value>
+    <value>指定会议室</value>
   </string>
   <string id="621" name="servertime">
-    <value>Server Time</value>
+    <value>服务器时间</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
     <value>OpenMeetings - Reminder</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
-    <value>Message from User:</value>
+    <value>用户信息：</value>
   </string>
   <string id="624" name="inv_reminder_text_message">
-    <value>Message:</value>
+    <value>消息：</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>点击此链接参加会议</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
-    <value>Click here to enter room</value>
+    <value>点击进入会议室</value>
   </string>
   <string id="627" name="inv_reminder_text_click_text_help">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>如果下面的链接无法点击，请将此链接地址复制到浏览器中进行访问：</value>
   </string>
   <string id="628" name="btn_search_intern">
     <value>search intern</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>extern users</value>
+    <value>外部用户</value>
   </string>
   <string id="630" name="lbl_prename">
     <value>pre name</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>name</value>
+    <value>姓名</value>
   </string>
   <string id="632" name="lbl_email">
     <value>E-mail</value>
   </string>
   <string id="633" name="logoutConfirm_title">
-    <value>Confirm logout</value>
+    <value>确认注销</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
-    <value>Are you sure you want to logout now?</value>
+    <value>您确定要注销吗？</value>
   </string>
   <string id="635" name="main menu">
-    <value>Actions</value>
+    <value>操作</value>
   </string>
   <string id="636" name="room admin">
-    <value>Demo Room</value>
+    <value>演示会议室</value>
   </string>
   <string id="637" name="room admin">
-    <value>Demo Time</value>
+    <value>演示时间</value>
   </string>
   <string id="638" name="meeting Timer">
-    <value>Meeting Timer</value>
+    <value>会议室计时器</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>This Room is a Demo Room. To disable this warning you either should get a private meeting room for your personal usage or set up an own Server. You will be automatically logged off in:</value>
+    <value>此会议室只是一个演示。如果不想此警告出现，可以创建一个私人会议室或者设置您自己的服务器。您的登录将会在如下时间内被自动注销：</value>
   </string>
   <string id="640" name="meeting room administration">
     <value>Moderated</value>
   </string>
   <string id="641" name="moderated room waiting message">
-    <value>Please wait untill the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.</value>
+    <value>会议室需要一个主持人，主持人可以是讲座人、管理员或会议室创建者。</value>
   </string>
   <string id="642" name="error popup">
-    <value>Ok</value>
+    <value>确定</value>
   </string>
   <string id="643" name="window screensharing">
-    <value>Incoming Screen Sharing</value>
+    <value>新的屏幕共享</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>There is a new Screen Sharing incoming from the User:</value>
+    <value>屏幕共享，来自用户</value>
   </string>
   <string id="645" name="window screen sharing">
-    <value>Start Sharing</value>
+    <value>开始广播</value>
   </string>
   <string id="646" name="calendar">
-    <value>Add new Meeting</value>
+    <value>添加新会议</value>
   </string>
   <string id="647" name="calendar">
     <value>Meeting Room</value>
@@ -1969,151 +1969,151 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>Do you want to change this User to become a Moderator of that Organization?</value>
+    <value>确定要将此用户设置为部门的主持人？</value>
   </string>
   <string id="654" name="error message">
-    <value>Please choose an Organization before you try to add a User to it!</value>
+    <value>在添加用户前请先选择一个部门</value>
   </string>
   <string id="655" name="choose user window">
-    <value>Organization - Moderator</value>
+    <value>部门-主持人</value>
   </string>
   <string id="656" name="moderator org users">
-    <value>Do you really want to delete this User from the Organization?</value>
+    <value>确定要将此用户从部门中删除？</value>
   </string>
   <string id="657" name="org moderation">
-    <value>This User is Moderator</value>
+    <value>此用户是主持人</value>
   </string>
   <string id="658" name="org moderation">
-    <value>This User is No-Moderator</value>
+    <value>此用户不是主持人</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>Do you want this User to be not a Moderator of this Organization?</value>
+    <value>确定要取消该用户的支持人身份？</value>
   </string>
   <string id="660" name="moderation">
-    <value>Add or delete Users or Rooms within your Organization</value>
+    <value>在部门中添加或删除用户、会议室</value>
   </string>
   <string id="661" name="delete confirm question">
-    <value>Do you really want to delete this record?</value>
+    <value>确定要删除此记录？</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>Do you really want to delete this user from your organization? You will only delete the connection between the user and your organization, to really delete the user itself you have to login into the Administration-Panel.</value>
+    <value>确定要将此用户从部门删除？您只能删除用户与部门之间的关联，如果要删除此用户信息，请登录到管理单元进行操作</value>
   </string>
   <string id="663" name="error message self deleting">
-    <value>You cannot delete your own User!</value>
+    <value>您不能删除自己！</value>
   </string>
   <string id="664" name="error message auth">
-    <value>This Method needs a Adminstration Account to be invoked!</value>
+    <value>此操作只能由管理员进行！</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>There was no Session associated with this ID.</value>
+    <value>没有与此ID关联的会话</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>This is an Administrator or Moderator account. You can only edit this account through the Administration Panel.</value>
+    <value>这是管理员或主持人帐户，您只能在管理模块中进行设置.</value>
   </string>
   <string id="667" name="email verification">
-    <value>To complete your registration please click on the following link. Or copy the URL to your browser bar.</value>
+    <value>要完成注册，请点击下面的链接，或将链接复制到地址栏中进行访问</value>
   </string>
   <string id="668" name="email verification">
-    <value>Click to verify your E-Mail</value>
+    <value>点击此处验证您的邮箱</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>No user was found for this Hash.</value>
+    <value>未找到此用户</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>This user is already activated!</value>
+    <value>此用户已经激活！</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>You did successfully activate your account!</value>
+    <value>您已经成功激活帐户！</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Login Now</value>
+    <value>正在登录</value>
   </string>
   <string id="673" name="loginErrorMessage = user was not activated">
-    <value>Your account is not activated. First use the link in the Email you've received during registration.</value>
+    <value>您的帐户没有激活，请先使用注册时发送给您的邮件中的链接进行激活。</value>
   </string>
   <string id="674" name="register verification message">
-    <value>You successfully signed up. We've send an EMail with a verification Code to your Mail. Please check your Inbox.</value>
+    <value>注册成功！已经将验证码发送到您的邮箱，请查收。</value>
   </string>
   <string id="675" name="participants panel">
-    <value>Remove Moderation Role from this User</value>
+    <value>移除此用户的主持人角色</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Grant Moderation Rights to this User</value>
-  </string>
+    <value>赋予该用户主持的权限</value>
+  </string> 
   <string id="677" name="event user list">
-    <value>User</value>
+    <value>用户</value>
   </string>
   <string id="678" name="event user list">
-    <value>Access to whiteboard</value>
+    <value>使用演示板</value>
   </string>
   <string id="679" name="event user list">
-    <value>Moderator</value>
+    <value>主持人</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderation: Please choose any User on the List to grant him access to the Whiteboard, Moderation or Video.</value>
+    <value>主持:请从列表中选择用户以赋予其使用演示版、主持或视频的权限</value>
   </string>
   <string id="681" name="event user list">
-    <value>This User is already Moderator, so he has automatically the right to draw.</value>
+    <value>此用户是主持人，已经自动拥有书写的权限</value>
   </string>
   <string id="682" name="event user list error">
-    <value>This is you! You cannot remove the Moderation rights from yourself.</value>
+    <value>您不能取消自己的主持人角色</value>
   </string>
   <string id="683" name="event user list">
-    <value>Allow this User to Publish his Audio / Video</value>
+    <value>允许该用户发布声音或视频</value>
   </string>
   <string id="684" name="event user list">
-    <value>Remove Audio/Video of this User</value>
-  </string>
+    <value>禁止该用户发布声音或视频</value>
+  </string> 
   <string id="685" name="event user list">
-    <value>I would like to get the moderation of this room</value>
+    <value>我需要成为此会议室的主持人</value>
   </string>
   <string id="686" name="event user list">
-    <value>I would like to draw on whiteboard</value>
+    <value>我需要在演示板上进行书写</value>
   </string>
   <string id="687" name="event user list">
-    <value>I would like to share my Audio/Video</value>
+    <value>我需要共享声音和视频</value>
   </string>
   <string id="688" name="event user list">
-    <value>You are moderator of this room</value>
+    <value>您是会议室的主持人</value>
   </string>
   <string id="689" name="event user list">
-    <value>You are allowed to draw on whiteboard</value>
+    <value>您可以在演示板上进行书写了</value>
   </string>
   <string id="690" name="event user list">
-    <value>You are allowed to share your Audio/Video</value>
+    <value>您可以接收声音和视频了</value>
   </string>
   <string id="691" name="errortype">
-    <value>Message to Moderator</value>
+    <value>主持人消息</value>
   </string>
   <string id="692" name="apply for mod message">
-    <value>The User</value>
+    <value>用户</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>would like to get the Moderation. Use the status Icons next to the user in the List of Users to add or remove the Moderation.</value>
+    <value>如果要成为主持人，请在用户列表中，通过该用户的状态图标进行设置</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</value>
+    <value>如果要在演示板上书写，请在用户列表中，通过该用户的状态图标添加或删除此用户的书写权限。</value>
   </string>
   <string id="695" name="695">
-    <value>would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</value>
+    <value>如果要共享声音和视频，请在用户列表中，通过该用户的状态图标设置是否共享此用户的声音和图像。</value>
   </string>
   <string id="696" name="moderation message">
-    <value>You have to wait untill a Moderator enters the room.</value>
+    <value>会议室中必需有一个主持人</value>
   </string>
   <string id="697" name="calendar button">
-    <value>Cancel</value>
+    <value>取消</value>
   </string>
   <string id="698" name="calendar button">
-    <value>Save</value>
+    <value>保存</value>
   </string>
   <string id="699" name="calendar component">
-    <value>Day</value>
+    <value>日</value>
   </string>
   <string id="700" name="calendar component">
-    <value>Month</value>
+    <value>月</value>
   </string>
   <string id="701" name="calendar component">
-    <value>Year</value>
+    <value>年</value>
   </string>
   <string id="702" name="file explorer">
     <value>Upload File</value>
@@ -2176,10 +2176,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Document Properties</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Start Client (external)</value>
+    <value>Start Java</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Start Client (HTTP)</value>
+    <value>Start Flash</value>
   </string>
   <string id="724" name="sharing session">
     <value>A user want to share his screen. Do you want to see it?</value>
@@ -2192,12 +2192,12 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="727" name="sharing session">
     <value>You are already sharing your desktop!</value>
-  </string> 
+  </string>
   <string id="728" name="sharing client">
     <value>Desktop Viewer</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Exit</value>
+    <value>Stop Sharing</value>
   </string>
   <string id="730" name="sharing client">
     <value>Desktop Sharer</value>
@@ -2209,7 +2209,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Start Sharing</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Pause Sharing</value>
   </string>
   <string id="734" name="sharing client">
     <value>Select your screen area:</value>
@@ -2237,12 +2237,12 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="742" name="sharing client">
     <value>Connection was closed by Server</value>
-  </string> 
+  </string>
   <string id="743" name="sharing viewer">
     <value>Cancel</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Start External</value>
+    <value>Start Java</value>
   </string>
   <string id="745" name="sharing viewer">
     <value>If you close this session completely you are not able to restart the viewer for this session.</value>
@@ -2284,7 +2284,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Test Setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Use Audio or Video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</value>
   </string>
   <string id="759" name="test setup">
     <value>Don't show this test anymore</value>
@@ -2310,7 +2310,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="766" name="test setup">
     <value>STOP</value>
   </string>
-  <string id="767" name="test setup">
+  <string id="767" name="767">
     <value>Level-Meter</value>
   </string>
   <string id="768" name="start view">
@@ -2611,7 +2611,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>By</value>
   </string>
   <string id="867" name="flvrecording">
-    <value>PLAY</value>
+    <value>Download</value>
   </string>
   <string id="868" name="flvrecording">
     <value>Main - Video</value>
@@ -2654,8 +2654,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="881" name="room config">
     <value>Rights</value>
-  </string> 
+  </string>
   <string id="882" name="flvrecording">
     <value>Download as AVI</value>
-  </string>   
+  </string>
 </language>
