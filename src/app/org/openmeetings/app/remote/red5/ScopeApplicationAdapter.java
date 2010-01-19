@@ -483,7 +483,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(client.getId());
 			
-			log.debug("currentClient :1: "+currentClient.getIsScreenClient());
+			log.debug("currentClient :1a: "+currentClient);
+			log.debug("currentClient :1b: "+currentClient.getIsScreenClient());
 			log.debug("currentClient :2: "+currentClient.getStreamPublishName());
 			log.debug("currentClient :3: "+currentClient.getSwfurl());
 			
@@ -1301,7 +1302,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				if (room.getIsModeratedRoom()) {
 					
 					//if this is a Moderated Room then the Room can be only locked off by the Moderator Bit
-					List<RoomClient> clientModeratorListRoom = this.clientListManager.getCurrentModeratorByRoom(room_id);
+					//List<RoomClient> clientModeratorListRoom = this.clientListManager.getCurrentModeratorByRoom(room_id);
 					
 					//If there is no Moderator yet we have to check if the current User has the Bit set to true to 
 					//become one, otherwise he won't get Moderation and has to wait
@@ -1552,13 +1553,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		try {
 
 			HashMap <String,RoomClient> roomClientList = new HashMap<String,RoomClient>();
+			
+			//log.debug("roomClientList :: Number of Users :: "+roomClientList.size()+" ::room_id:: "+room_id);
 
 			HashMap<String,RoomClient> clientListRoom = this.clientListManager.getClientListByRoom(room_id);
 			for (Iterator<String> iter=clientListRoom.keySet().iterator();iter.hasNext();) {
 				String key = (String) iter.next();
 				RoomClient rcl = this.clientListManager.getClientByStreamId(key);
-				log.debug("#+#+#+#+##+## logicalRoomEnter ClientList key: "+rcl.getRoom_id()+" "+room_id);
-				log.debug("set to ++ for client: "+rcl.getStreamid());
+				//log.debug("#+#+#+#+##+## logicalRoomEnter ClientList key: "+rcl.getRoom_id()+" "+room_id);
+				//log.debug("set to ++ for client: "+rcl.getStreamid());
 				//Add user to List
 				roomClientList.put(key, rcl);
 			}

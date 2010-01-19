@@ -228,6 +228,11 @@ public class FlvRecorderConverter {
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
 							float posSeconds = ( flvRecordingMetaDelta.getTimeStamp() - flvRecordingMetaDelta.getDeltaTime() - 50 ) /1000;
 							
+							if (posSeconds < 0) {
+								log.error("posSeconds is Negative, this should never happen! flvRecordingMetaDeltaId ::"+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId()+" posSeconds :: "+posSeconds);
+								posSeconds = 0;
+							}
+							
 							//Add the item in-between
 							argv_sox = new String[] { this.getPathToSoX(),
 									inputFile, outputGapFullWav, "pad",

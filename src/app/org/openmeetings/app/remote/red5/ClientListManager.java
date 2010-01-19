@@ -57,6 +57,8 @@ public class ClientListManager {
 			
 			clientList.put(rcm.getStreamid(),rcm);
 			
+			//log.error(" :: addClientListItem :: "+clientList.size());
+			
 			return rcm;
 		} catch (Exception err) {
 			log.error("[addClientListItem]",err);
@@ -114,6 +116,7 @@ public class ClientListManager {
 		try {
 			if (clientList.containsKey(streamId)){
 				clientList.remove(streamId);
+				//log.debug(":: removeClient ::"+clientList.size());
 				return true;
 			} else {
 				log.debug("Tried to remove a non existing Client "+streamId);
@@ -137,11 +140,11 @@ public class ClientListManager {
 		try {			
 			for (Iterator<String> iter=clientList.keySet().iterator();iter.hasNext();) {
 				String key = (String) iter.next();
-				log.debug("getClientList key: "+key);
+				//log.debug("getClientList key: "+key);
 				RoomClient rcl = clientList.get(key);
 				//same room, same domain
 				if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
-					if (rcl.getIsScreenClient() != null && !rcl.getIsScreenClient()) {
+					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 						//continue
 					} else {
 						roomClientList.put(key, rcl);
