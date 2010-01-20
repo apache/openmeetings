@@ -307,7 +307,7 @@ public class MainService implements IPendingServiceCallback {
 		    			for (IConnection cons : conset) {
 		    				if (cons != null) {
 		    					RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
-		    					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    					if (rcl != null && rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 		    						//continue;
 		    					} else {
 			    					if (cons instanceof IServiceCapableConnection) {
