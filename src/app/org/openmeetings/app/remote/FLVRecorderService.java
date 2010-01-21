@@ -131,9 +131,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	private static String generateFileName(String streamid) throws Exception{
+	private static String generateFileName(Long flvRecording_id, String streamid) throws Exception{
 		String dateString = CalendarPatterns.getTimeForStreamId(new java.util.Date());
-		return streamid+"_"+dateString;
+		return "rec_"+flvRecording_id+"_stream_"+streamid+"_"+dateString;
 		
 	}
 	
@@ -178,7 +178,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							
 								if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
 									
-									String streamName_Screen = generateFileName(rcl.getStreamPublishName().toString());
+									String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
 									
 									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl.addFlvRecordingMetaData(flvRecordingId, 
 																			rcl.getFirstname()+" "+rcl.getLastname(), now, 
@@ -201,7 +201,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									rcl.getAvsettings().equals("a") || 
 									rcl.getAvsettings().equals("v")){	
 								
-								String streamName = generateFileName(String.valueOf(rcl.getBroadCastID()).toString());
+								String streamName = generateFileName(flvRecordingId, String.valueOf(rcl.getBroadCastID()).toString());
 								
 								//Add Meta Data
 								boolean isAudioOnly = false;
@@ -292,7 +292,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				stream.addStreamListener(new StreamAudioListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
 			}
 			//Just for Debug Purpose
-			//stream.saveAs(streamName+"_DEBUG", false);
+			stream.saveAs(streamName+"_DEBUG", false);
 		} catch (Exception e) {
 			log.error("Error while saving stream: " + streamName, e);
 		}
@@ -366,7 +366,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 			
 			// Just for Debugging
-			//stream.stopRecording();
+			stream.stopRecording();
 			
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]",err);
@@ -488,7 +488,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 				if (rcl.getFlvRecordingId() != null && rcl.getScreenPublishStarted() != null && rcl.getScreenPublishStarted()) {
 					
-					String streamName_Screen = generateFileName(rcl.getStreamPublishName().toString());
+					String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
 					
 					log.debug("##############  ADD SCREEN OF SHARER :: "+rcl.getStreamPublishName());
 					
@@ -513,7 +513,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					rcl.getAvsettings().equals("a") || 
 					rcl.getAvsettings().equals("v")){	
 				
-				String streamName = generateFileName(String.valueOf(rcl.getBroadCastID()).toString());
+				String streamName = generateFileName(flvRecordingId, String.valueOf(rcl.getBroadCastID()).toString());
 				
 				//Add Meta Data
 				boolean isAudioOnly = false;

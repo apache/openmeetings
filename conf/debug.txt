@@ -1,0 +1,6 @@
+process-generateFFMPEG<br/>error-FFmpeg version UNKNOWN, Copyright (c) 2000-2007 Fabrice Bellard, et al.  configuration: --prefix=/sw --mandir=/sw/share/man --enable-shared --enable-gpl --enable-pp --enable-swscaler --enable-pthreads --enable-x11grab --enable-liba52 --enable-libamr-nb --enable-libfaac --enable-libfaad --enable-libgsm --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --disable-mmx --disable-iwmmxt --disable-altivec  libavutil version: 49.6.0  libavcodec version: 51.49.0  libavformat version: 52.2.0  built on Feb 14 2009 13:01:06, gcc: 4.0.1 (Apple Inc. build 5465)
+
+/Users/sebastianwagner/Documents/workspaces/workspace_openmeetings/ROOT/dist/red5/./webapps/openmeetings/streams/5/rec_1_stream_18_21_01_2010_15_46_05.flv: no such file or directory<br/>
+
+
+command-[ffmpeg, -i, /Users/sebastianwagner/Documents/workspaces/workspace_openmeetings/ROOT/dist/red5/./webapps/openmeetings/streams/5/rec_1_stream_18_21_01_2010_15_46_05.flv, /Users/sebastianwagner/Documents/workspaces/workspace_openmeetings/ROOT/dist/red5/./webapps/openmeetings/streams/5/rec_1_stream_18_21_01_2010_15_46_05_WAVE.wav]<br/>exitValue-1<br/>

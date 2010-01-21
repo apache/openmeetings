@@ -320,11 +320,10 @@ public class FlvRecorderConverter {
 					Float startPadding = Float.parseFloat(deltaTimeStartMilliSeconds.toString()) / 1000;
 
 					// Calculate delta at ending
-					Long deltaTimeEndMilliSeconds = flvRecording.getRecordEnd()
-							.getTime()
-							- flvRecordingMetaData.getRecordEnd().getTime();
-					Float endPadding = Float
-							.parseFloat(deltaTimeEndMilliSeconds.toString()) / 1000;
+					Long deltaTimeEndMilliSeconds = flvRecording.getRecordEnd().getTime()
+															- flvRecordingMetaData.getRecordEnd().getTime();
+					
+					Float endPadding = Float.parseFloat(deltaTimeEndMilliSeconds.toString()) / 1000;
 
 					String[] argv_sox = new String[] { this.getPathToSoX(),
 							outputGapFullWav, outputFullWav, "pad",
@@ -339,7 +338,7 @@ public class FlvRecorderConverter {
 					log.debug("padString :: "+padString);
 					log.debug("END addAudioToWaves ################# ");
 
-					returnLog.add(GenerateSWF.executeScript("generateWave",argv_sox));
+					returnLog.add(GenerateSWF.executeScript("addStartEndToAudio",argv_sox));
 					
 					//Fix for Audio Length - Invalid Audio Length in Recorded Files
 					//Audio must match 100% the the Video
@@ -360,7 +359,7 @@ public class FlvRecorderConverter {
 					
 					log.debug("audioLength "+audioLength);
 					
-					double audioShouldLength = (Math.round( (flvRecordingMetaData.getRecordEnd().getTime() - flvRecordingMetaData.getRecordStart().getTime()) / 1000))-2;
+					double audioShouldLength = (Math.round( (flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime()) / 1000))-2;
 					
 					log.debug("audioShouldLength "+audioShouldLength);
 					

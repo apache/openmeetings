@@ -14,6 +14,7 @@ public class FlvRecordingMetaDelta {
 	private Long flvRecordingMetaDataId;
 	private Integer timeStamp;
 	private Long deltaTime;
+	private Long lastTimeStamp;
 	private Date startTime;
 	private Date currentTime;
 	private Long deltaTimeStamp;
@@ -78,6 +79,18 @@ public class FlvRecordingMetaDelta {
 	}
 	public void setDeltaTime(Long deltaTime) {
 		this.deltaTime = deltaTime;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="last_time_stamp"
+     *  type="long"
+     */	
+	public Long getLastTimeStamp() {
+		return lastTimeStamp;
+	}
+	public void setLastTimeStamp(Long lastTimeStamp) {
+		this.lastTimeStamp = lastTimeStamp;
 	}
 	
 	/**
@@ -270,5 +283,6 @@ public class FlvRecordingMetaDelta {
 	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
 		this.receivedAudioDataLength = receivedAudioDataLength;
 	}
+	
 	
 }

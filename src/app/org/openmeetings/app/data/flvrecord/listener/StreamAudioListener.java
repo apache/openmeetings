@@ -25,7 +25,7 @@ public class StreamAudioListener extends ListenerAdapter {
 	
 	private int startTimeStamp = -1;
 	
-	private int lastTimeStamp = -1;
+	private Integer lastTimeStamp = -1;
 	
 	private int lastStreamPacketTimeStamp = -1;
 	
@@ -244,6 +244,8 @@ public class StreamAudioListener extends ListenerAdapter {
 					deltaTime = timeStamp - lastTimeStamp; 
 				}
 				
+				Long preLastTimeStamp = Long.parseLong(lastTimeStamp.toString());
+				
 				lastTimeStamp = timeStamp;
 				
 				if (deltaTime > 75){
@@ -255,6 +257,7 @@ public class StreamAudioListener extends ListenerAdapter {
 					flvRecordingMetaDelta.setTimeStamp(timeStamp);
 					flvRecordingMetaDelta.setDebugStatus("RUN AUDIO");
 					flvRecordingMetaDelta.setIsStartPadding(false);
+					flvRecordingMetaDelta.setLastTimeStamp(preLastTimeStamp);
 					flvRecordingMetaDelta.setOffset(this.offset);
 					flvRecordingMetaDelta.setIsEndPadding(false);
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
