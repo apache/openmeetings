@@ -48,7 +48,7 @@
 		</layout>
 	</appender>
 	<root>
-		<level value="ERROR" />
+		<level value="DEBUG" />
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="ERRORFILE" />
@@ -149,10 +149,6 @@
 	<logger name="org.red5.server.webapp.oflaDemo">
 		<level value="WARN" />
 	</logger>
-	
-	<logger name="org.openmeetings">
-        <level value="DEBUG" />
-    </logger>	
     
 	<!-- Mina -->			
 	<logger name="org.apache.mina">
@@ -274,6 +270,9 @@
         <level value="ERROR"/>
     </logger>
     <logger name="org.openmeetings">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="org.openlaszlo">
         <level value="DEBUG"/>
     </logger>
     <logger name="org.apache.axis2">

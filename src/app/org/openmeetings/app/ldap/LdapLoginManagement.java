@@ -462,6 +462,9 @@ public class LdapLoginManagement {
 		Long newUserId = null;
 		
 		try{
+			
+			//CHeck if LDAP Users get a SIP Account Issue 1099
+			
 			newUserId= Usermanagement.getInstance().registerUserInit(
 				2,//user_level
 				1,//level_id
@@ -484,7 +487,9 @@ public class LdapLoginManagement {
 				null,
 				phone,
 				"",//BaseURL is empty as we do not send an Email here
-				false);//send verification code
+				false,//send verification code
+				"","",""//sip_user, sip_pass, sip_auth
+				);
 		}catch(Exception e){
 			log.error("Error creating user : " + e.getMessage());
 		}

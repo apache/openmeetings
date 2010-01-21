@@ -294,7 +294,11 @@ public class UserService {
 	        			Long.valueOf(argObjectMap.get("states_id").toString()).longValue(), argObjectMap.get("town").toString(), 
 	        			0,
 	        			true,
-	        			organisations, argObjectMap.get("phone").toString(),"",false); 	
+	        			organisations, argObjectMap.get("phone").toString(),
+	        			"",false,
+		        		argObjectMap.get("sip_user").toString(),
+		        		argObjectMap.get("sip_pass").toString(),
+		        		argObjectMap.get("sip_auth").toString()); 	
     		} else {
 		        return Usermanagement.getInstance().updateUser(user_level,user_idClient, 
 		        		Long.valueOf(argObjectMap.get("level_id").toString()).longValue(), argObjectMap.get("login").toString(), 
@@ -309,7 +313,11 @@ public class UserService {
 		        		Integer.valueOf(argObjectMap.get("status").toString()).intValue(),
 		        		organisations,
 		        		Integer.valueOf(argObjectMap.get("title_id").toString()).intValue(),
-		        		argObjectMap.get("phone").toString()); 
+		        		argObjectMap.get("phone").toString(),
+		        		argObjectMap.get("sip_user").toString(),
+		        		argObjectMap.get("sip_pass").toString(),
+		        		argObjectMap.get("sip_auth").toString()
+		        		); 
     		}
     	} catch (Exception ex) {
     		log.error("[saveOrUpdateUser]: ",ex);

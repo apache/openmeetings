@@ -19,12 +19,14 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.user.dao.UserSipDataDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.hibernate.beans.user.Userdata;
 import org.openmeetings.app.hibernate.beans.user.Userlevel;
 import org.openmeetings.app.hibernate.beans.user.Users;
@@ -459,11 +461,12 @@ public class Usermanagement {
 			Date age, String street, String additionalname, String zip, long states_id, String town,
 			int availible, String telefon, String fax,
 			String mobil, String email, String comment, int status, List organisations,
-			int title_id, String phone) {
+			int title_id, String phone, String sip_user, String sip_pass, String sip_auth) {
 
 		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level) && user_id != 0) {
 			try {
 				Users us = UsersDaoImpl.getInstance().getUser(user_id);
+				
 				// Check for duplicates
 				boolean checkName = true;
 				
@@ -489,7 +492,7 @@ public class Usermanagement {
 					us.setAvailible(availible);
 					us.setStatus(status);
 					us.setTitle_id(title_id);
-					
+					 
 					if (level_id != 0)
 						us.setLevel_id(new Long(level_id));
 					if (password.length() != 0) {
@@ -509,7 +512,33 @@ public class Usermanagement {
 						Organisationmanagement.getInstance().updateUserOrganisationsByUser(us, organisations);
 					}
 					
-//					log.info("USER " + us.getLastname());
+					
+					if (us.getUserSipData() == null) {
+						UserSipData userSipData = new UserSipData();
+						
+						userSipData.setUsername(sip_user);
+						userSipData.setUserpass(sip_pass);
+						userSipData.setAuthId(sip_auth);
+						
+						Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+						
+						us.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+						
+					} else {
+						
+						UserSipData userSipData = UserSipDataDaoImpl.getInstance().getUserSipDataById(us.getUserSipData().getUserSipDataId());
+						
+						userSipData.setUsername(sip_user);
+						userSipData.setUserpass(sip_pass);
+						userSipData.setAuthId(sip_auth);
+						
+						UserSipDataDaoImpl.getInstance().updateUserSipData(userSipData);
+						
+						us.setUserSipData(userSipData);
+						
+					}
+					
+					//log.info("USER " + us.getLastname());
 					Object idf = HibernateUtil.createSession();
 					Session session = HibernateUtil.getSession();
 					Transaction tx = session.beginTransaction();
@@ -821,9 +850,12 @@ public class Usermanagement {
 					sendConfirmation = true;
 				}
 				
+				//TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
+				
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
-										language_id, true, new LinkedList(), phone, baseURL, sendConfirmation);
+										language_id, true, new LinkedList(), phone, baseURL, 
+										sendConfirmation,"","","");
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -873,7 +905,8 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage, 
-			List organisations, String phone, String baseURL, Boolean sendConfirmation) throws Exception {
+			List organisations, String phone, String baseURL, Boolean sendConfirmation, 
+			String sip_user, String sip_pass, String sip_auth) throws Exception {
 		//TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -904,7 +937,9 @@ public class Usermanagement {
 						status = 0;
 					}
 					
-					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, Userpass,address_id, age, hash);
+					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
+									Userpass,address_id, age, hash, 
+									sip_user, sip_pass, sip_auth);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -958,7 +993,8 @@ public class Usermanagement {
 	 */
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
-			String userpass, long adress_id, Date age, String hash) {
+			String userpass, long adress_id, Date age, String hash, 
+			String sip_user, String sip_pass, String sip_auth) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
@@ -974,6 +1010,16 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
+			
+			UserSipData userSipData = new UserSipData();
+			
+			userSipData.setUsername(sip_user);
+			userSipData.setUserpass(sip_pass);
+			userSipData.setAuthId(sip_auth);
+			
+			Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+			
+			users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
 			
 			// this is needed cause the language is not a needed data at
 			// registering

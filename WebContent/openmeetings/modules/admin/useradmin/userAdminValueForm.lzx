@@ -36,6 +36,9 @@
         this.adress_comment.setAttribute('text','');
         this.status.selectItem(String('1'));
         this._organisationslist.clearList();
+        this.sip_user.setAttribute('text','');
+        this.sip_pass.setAttribute('text','');
+        this.sip_auth.setAttribute('text','');
 	</handler>
 	
     <handler name="ondelete" >
@@ -79,6 +82,16 @@
 			this._organisationslist.clearList();
 			for (var i=0;i<obj.organisation_users.length;i++){
 				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
+			}
+			
+			if (obj.userSipData != null) {
+				this.sip_user.setAttribute('text',obj.userSipData.username);
+		        this.sip_pass.setAttribute('text',obj.userSipData.userpass);
+		        this.sip_auth.setAttribute('text',obj.userSipData.authId);
+			} else {
+				this.sip_user.setAttribute('text','');
+		        this.sip_pass.setAttribute('text','');
+		        this.sip_auth.setAttribute('text','');
 			}
         ]]>
     </method>
@@ -140,6 +153,9 @@
 			this.sendObject["title_id"] = Number(this.parent.salutation.getValue());
   			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
   			
+  			this.sendObject["sip_user"] = this.parent.sip_user.getText();
+  			this.sendObject["sip_pass"] = this.parent.sip_pass.getText();
+  			this.sendObject["sip_auth"] = this.parent.sip_auth.getText();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -259,6 +275,7 @@
 		//if (this.user_id!=0)
 			new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.user_id});
 	</method>	
+	
 	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="542" x="430"
 		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
 		<method name="confirmDelete">
@@ -266,8 +283,30 @@
 				for (var i in this.parent._organisationslist._selected)	this.parent._organisationslist.removeItem(this.parent._organisationslist._selected[i].value);
 		</method>
 	</baseChooseIcon>
+	
+    <!--Moderated -->
+    <labelText labelid="883" width="200" y="650" resize="false" 
+               x="0" fontstyle="bold" />   
+    
+    <view resource="messagebox_info_rsc" x="0" y="670" />
+    
+    <labelText labelid="884" x="24" y="670"  fontstyle="italic"
+               multiline="true" width="364" />
 
-        
+    <labelText labelid="885" width="200" y="730" resize="false" x="2"/>
+        <customEdittext name="sip_user" y="730" x="120" width="270"  
+        				text="" />
+        				
+	<labelText labelid="886" width="200" y="760" resize="false" x="2"/>
+        <customEdittext name="sip_pass" y="760" x="120" width="270"  
+        				text="" />
+        				
+    <labelText labelid="887" width="200" y="790" resize="false" x="2"/>
+        <customEdittext name="sip_auth" y="790" x="120" width="270"  
+        				text="" />
+        				
+	<view y="850" />        				
+        				        				
 </class>
 
 </library>
