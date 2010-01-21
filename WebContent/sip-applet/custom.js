@@ -79,6 +79,7 @@ function customOnLoaded()
 }
 function preCustomRegister()
 {
+	//alert("authid :: "+document.getElementById("authid").value);
 	setUsername(document.getElementById("username").value);
 	setPassword(document.getElementById("password").value);
 	setAuthID(document.getElementById("authid").value);

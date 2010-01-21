@@ -49,14 +49,24 @@ function togglePad(){
 }
 
 function statusBar(msg){
-      if (document.getElementById("statusbar")) {
-       // for better debugging
-	   //document.getElementById("statusbar").innerHTML += '<br/>' + msg;
-	   
-	  // for normal use
-	  document.getElementById("statusbar").innerHTML = msg;	   
-      }
+	
+	var lzappRef = document.getElementById("lzapp");
+	
+	if (lzappRef) {
+	
+		if (document.getElementById("lzapp").sipStatusMessage){
+			//alert("Found lzapp --asipStatusMessage--");
+			document.getElementById("lzapp").sipStatusMessage(msg);
+		} else {
+			alert("Could Not Find lzapp --sipStatusMessage-- "+msg);
+		}
+	
+	} else {
+		alert("Could Not Find lzapp "+msg);
+	}
+	
 }
+
 function customOnRegistrationSuccess(s){
 	$('#login').hide();
 	$('#callbuttons').show();
@@ -74,14 +84,31 @@ function customOnRegistering(){
 }
 function customOnLoaded()
 {
-	statusBar("Waiting for user action");
+	statusBar("Waiting for user action -1- ");
 }
+
 function preCustomRegister()
 {
 	setUsername(document.getElementById("username").value);
 	setPassword(document.getElementById("password").value);
 	setAuthID(document.getElementById("authid").value);
 }
+
+function omCustomRegister(username,password,authid)
+{
+	
+	
+	
+	//setUsername(username);
+	//setPassword(password);
+	//setAuthID(authid);
+	
+	statusBar("Call omCustomRegister");
+	
+	return "omCustomRegisterReturn";
+}
+
+
 function preCustomStartCall()
 {
 	setCallTo(document.getElementById("callto").value);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<script>
+<![CDATA[
+
+flash.external.ExternalInterface.addCallback("sipStatusMessage", null, sipStatusMessage);
+
+function sipStatusMessage(msg) {
+	
+	if ($debug) Debug.write("sipStatusMessage :: ",msg);
+	
+}
+
+function callbackLoginSipUser(returnValue) {
+                	
+	if ($debug) Debug.write("callback ",returnValue);
+	
+}
+
+function loginSipUser() {
+	
+	if ($debug) Debug.write("loginSipUser :: ");
+	
+    lz.Browser.callJS("omCustomRegister",callbackLoginSipUser,"user","pass","");
+	
+}
+
+]]>
+</script>
+		
+</library>

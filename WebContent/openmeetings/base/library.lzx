@@ -15,6 +15,7 @@
 -->
 	<!-- for main.lzx -->
     <include href="functions.lzx" />	
+    <include href="sipfunctions.lzx" />	
 	<include href="mainAttributes.lzx" /> 
 	<include href="mainDatasets.lzx" /> 
 	<include href="mainMethods.lzx" /> 
