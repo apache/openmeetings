@@ -172,6 +172,12 @@
         <servlet-name>MethodGateway</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.MethodGateway</servlet-class>
     </servlet>
+    <servlet>
+        <description>DefaultIndex</description>
+        <display-name>DefaultIndex</display-name>
+        <servlet-name>DefaultIndex</servlet-name>
+        <servlet-class>org.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
+    </servlet>    
     <servlet-mapping>
         <servlet-name>DownloadHandler</servlet-name>
         <url-pattern>/DownloadHandler</url-pattern>
@@ -260,6 +266,10 @@
     <servlet-mapping>
         <servlet-name>MethodGateway</servlet-name>
         <url-pattern>/MethodGateway</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DefaultIndex</servlet-name>
+        <url-pattern>/sipindex.html</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

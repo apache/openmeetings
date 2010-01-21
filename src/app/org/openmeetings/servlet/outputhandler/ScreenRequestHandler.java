@@ -115,7 +115,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				ctx.put("rtmphostlocal", rtmphostlocal); //rtmphostlocal
 			    ctx.put("red5httpport", red5httpport); //red5httpport
 			    
-			    System.out.println("httpRootKey "+httpRootKey);
+			    log.debug("httpRootKey "+httpRootKey);
 			    
 			    String codebase = "http://"+rtmphostlocal+":"+red5httpport+httpRootKey+"screen";
 			    
