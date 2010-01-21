@@ -11,7 +11,6 @@ function initialize()
   $('#immessagewindow').hide();  
   $('#keypadwindow').hide();    
   $('#authbox').hide();
-  alert(strings[10].item);
    if (!document.PHDial){
       alert("init failed");//init failed
    }

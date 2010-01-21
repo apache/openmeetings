@@ -19,7 +19,7 @@
   </appender>
   <appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [%t] - %m%n</pattern>
+      <pattern>%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [[%t]] - %m%n</pattern>
     </layout>
   </appender>
   <logger name="org.apache.axis2">
