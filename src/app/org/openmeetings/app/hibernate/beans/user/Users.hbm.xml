@@ -32,5 +32,6 @@
     <property name="activatehash" type="string" column="activatehash"/>
     <property name="externalUserId" type="long" column="externalUserId"/>
     <property name="externalUserType" type="string" column="externalUserType"/>
+    <many-to-one outer-join="true" insert="true" column="userSipDataId" lazy="false" update="true" name="userSipData" class="org.openmeetings.app.hibernate.beans.user.UserSipData"/>
   </class>
 </hibernate-mapping>

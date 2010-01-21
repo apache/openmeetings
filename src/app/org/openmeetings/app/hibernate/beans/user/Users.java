@@ -45,20 +45,31 @@ public class Users {
     
     private Set organisation_users;
     
+    private UserSipData userSipData;
+    
     //Vars to simulate external Users
     private Long externalUserId;
     private String externalUserType;
     
     private Sessiondata sessionData;
     
-    
-    //TODO: Fehlende adressids fuer rechnung und lieferadresse
-
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
     
+    /**
+     * 
+     * @hibernate.id
+     *  column="user_id"
+     *  generator-class="increment"
+     */ 	
+	public Long getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}	
 
     /**
 	 * @hibernate.many-to-one
@@ -75,8 +86,7 @@ public class Users {
 	public void setAdresses(Adresses adresses) {
 		this.adresses = adresses;
 	}
-
-    
+	
     /**
      * @hibernate.property
      *  column="age"
@@ -237,20 +247,6 @@ public class Users {
 		this.title_id = title_id;
 	}
 	
-    /**
-     * 
-     * @hibernate.id
-     *  column="user_id"
-     *  generator-class="increment"
-     */ 	
-	public Long getUser_id() {
-		return user_id;
-	}
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
-	}
-
-	
 	public Usergroups[] getUsergroups() {
 		return usergroups;
 	}
@@ -401,7 +397,21 @@ public class Users {
 	public void setSessionData(Sessiondata sessionData) {
 		this.sessionData = sessionData;
 	}
-	
-	
+
+    /**
+	 * @hibernate.many-to-one
+	 * column = "userSipDataId"
+	 * class = "org.openmeetings.app.hibernate.beans.user.UserSipData"
+	 * insert="true"
+	 * update="true"
+	 * outer-join="true"
+	 * lazy="false"
+     */	
+	public UserSipData getUserSipData() {
+		return userSipData;
+	}
+	public void setUserSipData(UserSipData userSipData) {
+		this.userSipData = userSipData;
+	}
 	
 }

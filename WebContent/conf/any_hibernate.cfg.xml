@@ -77,16 +77,18 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/recording/RoomRecording.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/recording/RoomStream.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/recording/WhiteBoardEvent.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomModerators.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomTypes.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms.hbm.xml"/>
-    <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomModerators.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms_Organisation.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Salutations.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/user/UserSipData.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userdata.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Usergroups.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userlevel.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users_Usergroups.hbm.xml"/>
+    
 	</session-factory>
 
 </hibernate-configuration>
