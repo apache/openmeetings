@@ -1168,16 +1168,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>导入</value>
   </string>
   <string id="388" name="languageseditor">
-    <value>导出为 XML - 这些文件能用于: 
-		- 创建项目 
-		- 导入到另一个系统 
-		- 备份 
-		- 自定义 
-		- 放入language 目录,可以在下一次安装使用</value>
+    <value>导出为 XML - 这些文件能用于: - 创建项目 - 导入到另一个系统 - 备份 - 自定义 - 放入language 目录,可以在下一次安装使用</value>
   </string>
   <string id="389" name="languageseditor">
-    <value>选择一个语言文件导入. 在下拉框中选择正确的语言! 
-		不管文件的名称是什么, 将覆盖当前的语言!</value>
+    <value>选择一个语言文件导入. 在下拉框中选择正确的语言! 不管文件的名称是什么, 将覆盖当前的语言!</value>
   </string>
   <string id="390" name="importwindow">
     <value>导入 - 选择文件</value>
@@ -1235,7 +1229,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="408" name="roomslist">
     <value>自从:</value>
-  </string>	
+  </string>
   <string id="409" name="record">
     <value>播放记录</value>
   </string>
@@ -1262,7 +1256,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="417" name="record">
     <value>记录中:</value>
-  </string>	
+  </string>
   <string id="418" name="record_error_msg">
     <value>现在已经有人在记录:</value>
   </string>
@@ -1304,7 +1298,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="431" name="paint_tool_letter">
     <value>修改 字体大小</value>
-  </string>	
+  </string>
   <string id="432" name="recordingslist_delete">
     <value>删除记录</value>
   </string>
@@ -1389,7 +1383,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="459" name="calendar_dayname_sunday">
     <value>日</value>
   </string>
-  <string id="460" name="calendar_dayname_MondayLabel">
+  <string id="460" name="calendar_dayname_monday">
     <value>星期一</value>
   </string>
   <string id="461" name="calendar_dayname_TuesdayLabel">
@@ -1457,7 +1451,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="482" name="roomadmin_labelNumberOfParticipants">
     <value>参与者</value>
-  </string>	
+  </string>
   <string id="483" name="roomValue_advancedSettings">
     <value>显示布局设置</value>
   </string>
@@ -1499,13 +1493,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="496" name="roomAdmin_layout_files">
     <value>宽 | 高</value>
-  </string>	
+  </string>
   <string id="497" name="moderator_gone_message">
     <value>主持人已离开房间. 现在无人演示. 你可以申请为主持人或者等待.</value>
   </string>
   <string id="498" name="moderator_message_event_no_mod">
     <value>此房间没有主持人, 但是有参与者. 你可以申请为主持人或者等待.</value>
-  </string>	
+  </string>
   <string id="499" name="feedback_template_subject">
     <value>反馈 OpenMeetings</value>
   </string>
@@ -1562,7 +1556,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="517" name="reset_password_mail_subject">
     <value>OpenMeetings 重置密码</value>
-  </string>	
+  </string>
   <string id="518" name="dateRegExpError">
     <value>请输入一个有效的日期, 比如 24.12.2001 (天.月.年)</value>
   </string>
@@ -1631,7 +1625,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="540" name="audio_video">
     <value>同步 音频/视频</value>
-  </string>	
+  </string>
   <string id="541" name="errorCode_invalidSession">
     <value>登录有效, 但是会话没有激活或保存在服务器上. 你必须重新登录获取新的会话.</value>
   </string>
@@ -1643,7 +1637,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="544" name="debug_message_recording">
     <value>记录功能处于Beta!</value>
-  </string>	
+  </string>
   <string id="545" name="propertyPanelXValue">
     <value>x</value>
   </string>
@@ -1670,16 +1664,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="553" name="propertyOpacitySlider">
     <value>改变透明度</value>
-  </string>	
+  </string>
   <string id="554" name="browserOpen">
     <value>浏览器打开</value>
-  </string>	
+  </string>
   <string id="555" name="browserClose">
     <value>浏览器关闭</value>
-  </string>	
+  </string>
   <string id="556" name="connectionLostMessage">
     <value>与服务器的连接已丢失. 你需要重新载入程序或检查网络.</value>
-  </string>  
+  </string>
   <string id="557" name="557">
     <value>指针</value>
   </string>
@@ -1769,7 +1763,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="586" name="tooltip main-menu">
     <value>创建用户, 房间, 组织&lt;br/&gt; + 修改配置</value>
-  </string>  
+  </string>
   <string id="587" name="room Administration roomclients list">
     <value>目前有用户在此房间中</value>
   </string>
@@ -1781,10 +1775,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="590" name="room Administration roomclients list">
     <value>D</value>
-  </string>  
+  </string>
   <string id="591" name="swf sync message">
     <value>载入文档中. 所有用户正在同步，请稍等.</value>
-  </string>  
+  </string>
   <string id="592" name="upload dialog">
     <value>上传结束, 正在转换文档 ...</value>
   </string>
@@ -1805,7 +1799,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="598" name="confadmin value list">
     <value>值</value>
-  </string>  
+  </string>
   <string id="599" name="connection administration panel">
     <value>Streamid</value>
   </string>
@@ -1829,7 +1823,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="606" name="kick user message dialog">
     <value>你的会话已经被管理员或主持人关闭.</value>
-  </string> 
+  </string>
   <string id="607" name="useralterself_phone">
     <value>电话</value>
   </string>
@@ -1859,16 +1853,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="616" name="conferencePanels">
     <value>聊天</value>
-  </string>   
+  </string>
   <string id="617" name="organization choose info">
     <value>你的帐号已与多个组织关联. 请为当前会话选择一个组织.</value>
-  </string>  
+  </string>
   <string id="618" name="error message room full">
     <value>会议室当前满员，请稍后再试</value>
-  </string> 
+  </string>
   <string id="619" name="roomtypes">
     <value>会议室类型</value>
-  </string> 
+  </string>
   <string id="620" name="appointed_room">
     <value>指定会议室</value>
   </string>
@@ -1930,7 +1924,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>此会议室只是一个演示。如果不想此警告出现，可以创建一个私人会议室或者设置您自己的服务器。您的登录将会在如下时间内被自动注销：</value>
   </string>
   <string id="640" name="meeting room administration">
-    <value>Moderated</value>
+    <value>主持</value>
   </string>
   <string id="641" name="moderated room waiting message">
     <value>会议室需要一个主持人，主持人可以是讲座人、管理员或会议室创建者。</value>
@@ -1951,10 +1945,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>添加新会议</value>
   </string>
   <string id="647" name="calendar">
-    <value>Meeting Room</value>
+    <value>会议室</value>
   </string>
   <string id="648" name="calendar">
-    <value>Event Room</value>
+    <value>活动室</value>
   </string>
   <string id="649" name="main menu moderation">
     <value>Moderation</value>
@@ -2039,7 +2033,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="676" name="participants panel">
     <value>赋予该用户主持的权限</value>
-  </string> 
+  </string>
   <string id="677" name="event user list">
     <value>用户</value>
   </string>
@@ -2063,7 +2057,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="684" name="event user list">
     <value>禁止该用户发布声音或视频</value>
-  </string> 
+  </string>
   <string id="685" name="event user list">
     <value>我需要成为此会议室的主持人</value>
   </string>
@@ -2116,64 +2110,64 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>年</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Upload File</value>
+    <value>上载文件</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Add Folder</value>
+    <value>新建目录</value>
   </string>
   <string id="704" name="file explorer">
-    <value>Refresh</value>
+    <value>刷新</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Trash</value>
+    <value>回收站</value>
   </string>
   <string id="706" name="file explorer">
-    <value>My Files (Home Drive)</value>
+    <value>我的文件(Home Drive)</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Room Files (Public Drive)</value>
+    <value>会议室文件 (Public Drive)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Add File</value>
+    <value>新建文件</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Add Folder</value>
+    <value>新建文件夹</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Delete Folder</value>
+    <value>删除文件夹</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Edit Name</value>
+    <value>编辑文件名</value>
   </string>
   <string id="712" name="file explorer">
-    <value>New Folder</value>
+    <value>新建文件夹</value>
   </string>
   <string id="713" name="file explorer">
-    <value>Are you sure you want to delete this Item?</value>
+    <value>您确定要删除此项目？</value>
   </string>
   <string id="714" name="user admin">
-    <value>Search</value>
+    <value>搜索</value>
   </string>
   <string id="715" name="user admin">
-    <value>Search</value>
+    <value>搜索</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Open Document</value>
+    <value>打开文档</value>
   </string>
   <string id="717" name="file explorer">
-    <value>Show all Files (Tree View)</value>
+    <value>显示所有文件 (Tree View)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Close Document</value>
+    <value>关闭文档</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Delete File</value>
+    <value>删除文件</value>
   </string>
   <string id="720" name="file explorer">
-    <value>You are not allowed to draw anything on the Whiteboard. You have to become Moderator or at least get the Right to edit Whiteboard. You may ask a Moderator to give you that right.</value>
+    <value>你没有绘画白板的权限。你必须是版主，或赋予你绘画白板的权利。你可以向版主申请绘画白板的权利。</value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>文档属性</value>
   </string>
   <string id="722" name="sharing session">
     <value>Start Java</value>
@@ -2182,46 +2176,46 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Start Flash</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>用户希望分享他的屏幕。你想看到它吗？</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>你正在分享你的屏幕。点击停止按钮可以中止分享会话。</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>分享会话</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
+    <value>你正在分享你的屏幕！</value>
   </string>
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>桌面浏览器</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>停止分享</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>桌面共享器</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Click Start to publish your screen</value>
+    <value>单击开始发布您的屏幕</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>开始分享</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Pause Sharing</value>
+    <value>暂停分享</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Select your screen area:</value>
+    <value>选择你的屏幕区域：</value>
   </string>
   <string id="735" name="sharing client">
-    <value>Change width</value>
+    <value>改变宽度</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>共享器已经结束会话！</value>
   </string>
   <string id="737" name="sharing client">
-    <value>Change height</value>
+    <value>改变高度</value>
   </string>
   <string id="738" name="sharing client">
     <value>X-Offset</value>
@@ -2230,31 +2224,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Y-Offset</value>
   </string>
   <string id="740" name="sharing client">
-    <value>Width:</value>
+    <value>宽：</value>
   </string>
   <string id="741" name="sharing client">
-    <value>Height:</value>
+    <value>高：</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
+    <value>连接被服务器关闭</value>
   </string>
   <string id="743" name="sharing viewer">
-    <value>Cancel</value>
+    <value>取消</value>
   </string>
   <string id="744" name="sharing viewer">
     <value>Start Java</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>If you close this session completely you are not able to restart the viewer for this session.</value>
+    <value>如果你关闭本次会话，你将不能再重启本次会话的共享浏览器！</value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Confirm Closing Viewer Session</value>
+    <value>确认关闭浏览会话</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>分享屏幕</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>录制会话</value>
   </string>
   <string id="749" name="co-browser">
     <value>Co-Browsing</value>
@@ -2281,187 +2275,187 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Add this website as Default website to your Profile.</value>
   </string>
   <string id="757" name="test setup">
-    <value>Test Setup</value>
+    <value>测试音频视频配置</value>
   </string>
   <string id="758" name="test setup">
-    <value>Use Audio or Video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>你在进入会议室前，可以使用音频视频测试来录制几秒钟的声音图像。然后通过回放你的录像录音来检查你的声音图像是否正常。</value>
   </string>
   <string id="759" name="test setup">
-    <value>Don't show this test anymore</value>
+    <value>下次不要再显示这个测试对话框</value>
   </string>
   <string id="760" name="test setup">
-    <value>Cancel</value>
+    <value>取消</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>开始进入会议室</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>Do not ask again</value>
+    <value>不要再次询问</value>
   </string>
   <string id="763" name="test setup">
-    <value>REC</value>
+    <value>录制</value>
   </string>
   <string id="764" name="test setup">
-    <value>PLAY</value>
+    <value>播放</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>如果你不打算发表你的声音或图片，你可以不进行测试。没有音频或视频的参与者仍然可以使用白板，分享他们的屏幕或发布聊天消息。</value>
   </string>
   <string id="766" name="test setup">
-    <value>STOP</value>
+    <value>停止</value>
   </string>
   <string id="767" name="767">
-    <value>Level-Meter</value>
+    <value>声音电平表</value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>按下开始</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>开始会议</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>开始演讲</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>选择会议室</value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>检查音频视频设置</value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>开始会议</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>参加视频会议的步骤如下:</value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>开始录制</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+    <value>下次进入会议前不要再显示视频音频测试（录制）对话框</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>公共会议室</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>公共会议室－－所有用户都能访问。</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>私有会议室</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>私有会议室－－只允许同组织的用户访问。</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>个人会议室</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>个人会议室只供个人使用。 通过日历来设置会议的开始和结束日期时间。它们仅仅在有效期内罗列在此。</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>这个操作需要主持人权限。</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>申请成为主持人</value>
   </string>
   <string id="785" name="menu option">
-    <value>Apply for whiteboard access</value>
+    <value>申请使用白板权限</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>申请使用音频视频权限</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>本次会话Hash已经使用，你不能同时使用两次。</value>
   </string>
   <string id="788" name="dashboard button">
-    <value>START</value>
+    <value>开始</value>
   </string>
   <string id="789" name="exit conference">
-    <value>EXIT</value>
+    <value>退出</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>你真的退出会议吗？建议你清除你上载的文件、白板和聊天记录。</value>
   </string>
   <string id="791" name="conference view">
-    <value>Exit conference</value>
+    <value>退出会议</value>
   </string>
   <string id="792" name="main menu">
-    <value>Rooms</value>
+    <value>会议室</value>
   </string>
   <string id="793" name="main menu">
-    <value>Choose a room for a meeting</value>
+    <value>选择会议室</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+    <value>日历中存在未有保存的事件。请选择保存它或删除它。</value>
   </string>
   <string id="795" name="calendar">
-    <value>Please add at least one attendee for your meeting!</value>
+    <value>请为你的会议添加至少一名与会者。</value>
   </string>
   <string id="796" name="calendar">
-    <value>Do you really want to delete this Event?</value>
+    <value>你真的要删除你的事件?</value>
   </string>
   <string id="797" name="calendar">
-    <value>Warning</value>
+    <value>警告</value>
   </string>
   <string id="798" name="calendar">
-    <value>Add Event</value>
+    <value>添加事件</value>
   </string>
   <string id="799" name="calendar">
-    <value>day</value>
+    <value>日</value>
   </string>
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>周</value>
   </string>
   <string id="801" name="calendar">
-    <value>month</value>
+    <value>月</value>
   </string>
   <string id="802" name="calendar">
-    <value>Description</value>
+    <value>描述</value>
   </string>
   <string id="803" name="calendar">
-    <value>Attendees</value>
+    <value>与会者</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>本远程视频会议系统是一个用来召开远程视频会议、培训演讲、审查文件的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划。</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Plan a Meeting</value>
+    <value>预约会议</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+    <value>要建立一个会议，您可以添加日历上的一个新的事件。对于每个日历事件将自动创建一个会议室。你和每一个与会者将获得一个到房间链接的电子邮件。&lt;br/&gt;&lt;br/&gt;您可以选择不同的房间类型有不同的布局和适度系统。您也可以为每日历事件选择不同的电子邮件通知发送类型</value>
   </string>
   <string id="807" name="lzcalendar">
-    <value>Need help?</value>
+    <value>需要帮助吗？</value>
   </string>
   <string id="808" name="lzcalendar">
     <value>Restricted</value>
   </string>
   <string id="809" name="lzcalender">
-    <value>Search</value>
+    <value>搜索</value>
   </string>
   <string id="810" name="lzcalender">
-    <value>Add</value>
+    <value>添加</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>没有选择用户。请从列表中选择一个项目，然后点击添加。</value>
   </string>
   <string id="812" name="lzcalendar">
-    <value>Add Attendee</value>
+    <value>添加与会者</value>
   </string>
   <string id="813" name="lzcalendar">
-    <value>Save</value>
+    <value>保存</value>
   </string>
   <string id="814" name="lzcalendar">
-    <value>Delete</value>
+    <value>删除</value>
   </string>
   <string id="815" name="lzcalendar">
-    <value>Event Details</value>
+    <value>活动详情</value>
   </string>
   <string id="816" name="room admin">
-    <value>Default Moderators</value>
+    <value>默认主持人</value>
   </string>
   <string id="817" name="room admin">
-    <value>Super</value>
+    <value>超级用户</value>
   </string>
   <string id="818" name="room admin">
     <value>ID</value>
@@ -2473,28 +2467,28 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>E-Mail</value>
   </string>
   <string id="821" name="room admin">
-    <value>Add new default Moderator</value>
+    <value>添加一个新的默认主持人</value>
   </string>
   <string id="822" name="room admin">
-    <value>Is Super Moderator</value>
+    <value>是超级主持人</value>
   </string>
   <string id="823" name="room admin">
-    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+    <value>如果房间拥有主持配置，那么拥有主持权限或管理员权限的人进入会议室后，将自动获取这个会议室的主持权。如果你不希望这样，而且你希望指定一个用户主持这个会议室，请使用默认主持人选项。</value>
   </string>
   <string id="824" name="room admin">
-    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+    <value>一个超级主持人进入房间时，他将自动获取这个会议室的主持权限。没有人能取消他的主持权限。</value>
   </string>
   <string id="825" name="room admin">
-    <value>Apply Super-Moderation to User</value>
+    <value>为用户申请超级主持权限</value>
   </string>
   <string id="826" name="room admin">
-    <value>Remove Super Moderation from User</value>
+    <value>取消超级主持权限</value>
   </string>
   <string id="827" name="room admin">
     <value>D</value>
   </string>
   <string id="828" name="room admin">
-    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+    <value>如果为会议室添加专属组织，那么只有该组织成员才能进入该会议室。（仅仅对公共会议室有效！）</value>
   </string>
   <string id="829" name="room admin">
     <value>Moderation</value>
@@ -2506,31 +2500,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Organization</value>
   </string>
   <string id="832" name="confirm action">
-    <value>Are you sure?</value>
+    <value>你确认吗？</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+    <value>你真的确认需要删除这个项目吗？你需要点击保存按钮来保存更改！</value>
   </string>
   <string id="834" name="user choose error">
-    <value>There is no User selected. Please select first before you add it!</value>
+    <value>没有用户被选择。添加前你必须先选择用户！</value>
   </string>
   <string id="835" name="room admin">
-    <value>Add new Default Moderator</value>
+    <value>添加新的默认主持人</value>
   </string>
   <string id="836" name="room admin">
-    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+    <value>你确认要赋予该用户超级主持人权限吗？注意：其他主持人是无法取消超级主持人权限的。你需要保存房间对象来保存这些设置！</value>
   </string>
   <string id="837" name="room admin">
-    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+    <value>你确认要取消该用户的超级主持人权限吗？ 你需要保存房间对象来保存这些设置！</value>
   </string>
   <string id="838" name="super moderator">
-    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+    <value>这个是超级主持人！你不能取消一个超级主持人的权限！</value>
   </string>
   <string id="839" name="confirm delete">
-    <value>Do you really want to delete this File/Folder?</value>
+    <value>你真的要删除这个文件/文件夹？</value>
   </string>
   <string id="840" name="confirm delete">
-    <value>Delete File/Folder?</value>
+    <value>删除文件/文件夹?</value>
   </string>
   <string id="841" name="salutation">
     <value>Mrs.</value>
@@ -2539,10 +2533,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dr.</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+    <value>属性</value>
   </string>
   <string id="844" name="screen sharer">
-    <value>Show mouse position to viewers</value>
+    <value>在共享器中显示鼠标位置</value>
   </string>
   <string id="845" name="publish option">
     <value>Share Audio with SIP Applet</value>
@@ -2554,108 +2548,108 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Full-Fit</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+    <value>显示屏幕</value>
   </string>
   <string id="849" name="screen share">
-    <value>The user</value>
+    <value>用户</value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+    <value>想分享他的屏幕。你想看到它吗？</value>
   </string>
   <string id="851" name="screen share">
-    <value>Close</value>
+    <value>关闭</value>
   </string>
   <string id="852" name="screen sharer">
-    <value>Zoom</value>
+    <value>缩放</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>The Session was closed by the sharing User!</value>
+    <value>本次会话已经被发布分享用户关闭！</value>
   </string>
   <string id="854" name="screen sharer">
-    <value>Pause</value>
+    <value>暂停</value>
   </string>
   <string id="855" name="screen sharer">
-    <value>New Screen Sharing</value>
+    <value>新的屏幕分享</value>
   </string>
   <string id="856" name="presenter mini icon">
-    <value>Minimize</value>
+    <value>最小化</value>
   </string>
   <string id="857" name="presenter mini icon">
-    <value>Maximize</value>
+    <value>最大化</value>
   </string>
   <string id="858" name="flvrecording">
-    <value>Video</value>
+    <value>视频</value>
   </string>
   <string id="859" name="flvrecording">
-    <value>Recording Timeline</value>
+    <value>录制时间线</value>
   </string>
   <string id="860" name="flvrecording">
     <value>My Recordings</value>
   </string>
   <string id="861" name="flvrecording">
-    <value>Public Recordings</value>
+    <value>公共记录</value>
   </string>
   <string id="862" name="flvrecording">
-    <value>Info</value>
+    <value>信息</value>
   </string>
   <string id="863" name="flvrecording">
-    <value>Name</value>
+    <value>名称</value>
   </string>
   <string id="864" name="flvrecording">
-    <value>Length</value>
+    <value>长度</value>
   </string>
   <string id="865" name="flvrecording">
-    <value>Date</value>
+    <value>日期</value>
   </string>
   <string id="866" name="flvrecording">
     <value>By</value>
   </string>
   <string id="867" name="flvrecording">
-    <value>Download</value>
+    <value>下载</value>
   </string>
   <string id="868" name="flvrecording">
-    <value>Main - Video</value>
+    <value>主 - 视频</value>
   </string>
   <string id="869" name="screen share">
-    <value>Recording</value>
+    <value>录制</value>
   </string>
   <string id="870" name="screen share">
-    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+    <value>你可以同时录制和分享你的屏幕。你可以点击上面的开始按钮来让其他与会者看到你的屏幕。如果仅仅是录制会话，那点击开始录制按钮就足够了。</value>
   </string>
   <string id="871" name="screen share">
-    <value>Start Recording</value>
+    <value>开始录制</value>
   </string>
   <string id="872" name="screen share">
-    <value>Stop Recording</value>
+    <value>停止录制</value>
   </string>
   <string id="873" name="flvrecording">
-    <value>Download the FLV-File</value>
+    <value>下载 FLV 格式文件</value>
   </string>
   <string id="874" name="flvrecording">
-    <value>Room</value>
+    <value>会议室</value>
   </string>
   <string id="875" name="flvrecording">
-    <value>Play</value>
+    <value>播放</value>
   </string>
   <string id="876" name="flvrecording">
-    <value>Stop</value>
+    <value>停止</value>
   </string>
   <string id="877" name="flvrecording">
-    <value>User has microphone on</value>
+    <value>用户打开麦克风</value>
   </string>
   <string id="878" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>停止分享</value>
   </string>
   <string id="879" name="room config">
-    <value>Allow User Questions</value>
+    <value>允许所有用户发问</value>
   </string>
   <string id="880" name="room config">
-    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+    <value>关闭这个功能可以防止任何用户在你会议室捣乱。影响效果是向主持人发问的按钮是不可见的。</value>
   </string>
   <string id="881" name="room config">
-    <value>Rights</value>
+    <value>权利</value>
   </string>
   <string id="882" name="flvrecording">
-    <value>Download as AVI</value>
+    <value>下载 AVI 格式文件</value>
   </string>
 </language>
