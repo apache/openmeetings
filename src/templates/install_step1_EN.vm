@@ -310,7 +310,66 @@ function checkEmail()
 	    	
     	</p>
         
-    </fieldset>       
+    </fieldset>    
+
+    <fieldset id="sip">
+    
+		<legend>SIP Configuration</legend>    
+		
+		<li>
+        <label for="sip_enable">Enable SIP</label>
+    	<select name="sip_enable" id="sip_enable" size="1">
+    		<option value="yes">Yes</option>
+	      	<option value="no" selected>No</option>
+	    </select><br />	
+	    </li>
+		<p>
+            Enable to load the SIP Applet in the Client and 
+            call the SIP Applet whenever you enter a Room
+        </p>
+        
+		<li>
+        <label for="sip_realm">SIP Realm</label>
+        <input name="sip_realm" id="sip_realm" size="27" title="" type="text" />    
+        <p>So called *Domain of the SIP Provider*</p>  
+        </li>
+        
+    	<li>
+        <label for="sip_port">SIP Port</label>
+        <input name="sip_port" id="sip_port" size="27" title="" type="text" />    
+        <p>SIP Port</p>  
+        </li>
+        
+        <li>
+        <label for="sip_proxyname">SIP Proxy</label>
+        <input name="sip_proxyname" id="sip_proxyname" size="27" title="" type="text" />    
+        <p>SIP Proxy name (this is the outbound proxy)</p>  
+        </li>
+        
+        <li>
+        <label for="sip_tunnel">SIP Tunnel</label>
+        <input name="sip_tunnel" id="sip_tunnel" size="27" title="" type="text" />    
+        <p>SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443</p>  
+        </li>
+        
+        <li>
+        <label for="sip_codebase">SIP Codebase</label>
+        <input name="sip_codebase" id="sip_codebase" size="27" title="" type="text" />    
+        <p>The Base-URL to load the Ringtone from</p>  
+        </li>
+        
+        <li>
+        <label for="sip_forcetunnel">SIP Forcetunnel</label>
+        <select name="sip_forcetunnel" id="sip_forcetunnel" size="1">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+        </select><br /> 
+        </li>
+        <p>
+            Force usage of the tunnel
+        </p>
+        
+    </fieldset>    
         	  
         	
     <fieldset>

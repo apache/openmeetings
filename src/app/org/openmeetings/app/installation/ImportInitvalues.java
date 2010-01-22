@@ -201,7 +201,12 @@ public class ImportInitvalues {
 			String url_feed, String url_feed2,
 			String sendEmailAtRegister, String sendEmailWithVerficationCode,
 			String default_export_font, String ldap_auth_path, String screen_viewer,
-			String ffmpeg_path, String sox_path) {
+			String ffmpeg_path, String sox_path, String sip_enable, String sip_realm,
+			String sip_port,
+			String sip_proxyname,
+			String sip_tunnel,
+			String sip_codebase,
+			String sip_forcetunnel) {
 
 		Configurationmanagement
 				.getInstance()
@@ -281,7 +286,37 @@ public class ImportInitvalues {
 		
 		Configurationmanagement.getInstance().addConfByKey(3, "default.rpc.userid",
 				""+1, null, "The User-Id of the Control User in OpenMeetings");
+		
+		
+		// ***************************************
+		// ***************************************
+		// SIP Configuration Values
+		// ***************************************
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.enable",
+				sip_enable, null, "Enable to load the SIP Applet in the Client and " +
+						"call the SIP Applet whenever you enter a Room");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.realm",
+				sip_realm, null, "So called *Domain of the SIP Provider*");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.port",
+				sip_port, null, "SIP Port");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.proxyname",
+				sip_proxyname, null, "SIP Proxy name (this is the outbound proxy)");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.tunnel",
+				sip_tunnel, null, "SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
 			
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.codebase",
+				sip_codebase, null, "The Base-URL to load the Ringtone from");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.forcetunnel",
+				sip_forcetunnel, null, "Force usage of the tunnel");
+		
+		
+		
 	}
 
 	public void loadDefaultRooms() {

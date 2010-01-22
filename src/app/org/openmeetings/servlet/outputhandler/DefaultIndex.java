@@ -30,54 +30,67 @@ public class DefaultIndex extends VelocityViewServlet {
 			
 			String template = "sip_template.vm";
 			
-			//SIP_REALM
-			Configuration SIP_REALM = Configurationmanagement.getInstance().getConfKey(3L, "SIP_REALM");
-			if (SIP_REALM == null) {
-				ctx.put("SIP_REALM", "");
+			//Enable SIP Template or not 
+			Configuration SIP_ENABLE = Configurationmanagement.getInstance().getConfKey(3L, "sip.enable");
+			
+			if (SIP_ENABLE == null || !SIP_ENABLE.getConf_value().equals("yes")) {
+				
+				template = "usual_template.vm";
+				
 			} else {
-				ctx.put("SIP_REALM", SIP_REALM.getConf_value());
+				
+				//Set all the Params for the Applet Configuration
+			
+				//SIP_REALM
+				Configuration SIP_REALM = Configurationmanagement.getInstance().getConfKey(3L, "sip.realm");
+				if (SIP_REALM == null) {
+					ctx.put("SIP_REALM", "");
+				} else {
+					ctx.put("SIP_REALM", SIP_REALM.getConf_value());
+				}
+				
+				//SIP_PORT
+				Configuration SIP_PORT = Configurationmanagement.getInstance().getConfKey(3L, "sip.port");
+				if (SIP_PORT == null) {
+					ctx.put("SIP_PORT", "");
+				} else {
+					ctx.put("SIP_PORT", SIP_PORT.getConf_value());
+				}
+				
+				//SIP_PROXYNAME
+				Configuration SIP_PROXYNAME = Configurationmanagement.getInstance().getConfKey(3L, "sip.proxyname");
+				if (SIP_PROXYNAME == null) {
+					ctx.put("SIP_PROXYNAME", "");
+				} else {
+					ctx.put("SIP_PROXYNAME", SIP_PROXYNAME.getConf_value());
+				}
+				
+				//SIP_TUNNEL
+				Configuration SIP_TUNNEL = Configurationmanagement.getInstance().getConfKey(3L, "sip.tunnel");
+				if (SIP_TUNNEL == null) {
+					ctx.put("SIP_TUNNEL", "");
+				} else {
+					ctx.put("SIP_TUNNEL", SIP_TUNNEL.getConf_value());
+				}
+				
+				//SIP_CODEBASE
+				Configuration SIP_CODEBASE = Configurationmanagement.getInstance().getConfKey(3L, "sip.codebase");
+				if (SIP_CODEBASE == null) {
+					ctx.put("SIP_CODEBASE", "");
+				} else {
+					ctx.put("SIP_CODEBASE", SIP_CODEBASE.getConf_value());
+				}
+				
+				//SIP_FORCETUNNEL
+				Configuration SIP_FORCETUNNEL = Configurationmanagement.getInstance().getConfKey(3L, "sip.forcetunnel");
+				if (SIP_FORCETUNNEL == null) {
+					ctx.put("SIP_FORCETUNNEL", "");
+				} else {
+					ctx.put("SIP_FORCETUNNEL", SIP_FORCETUNNEL.getConf_value());
+				}
 			}
 			
-			//SIP_PORT
-			Configuration SIP_PORT = Configurationmanagement.getInstance().getConfKey(3L, "SIP_PORT");
-			if (SIP_PORT == null) {
-				ctx.put("SIP_PORT", "");
-			} else {
-				ctx.put("SIP_PORT", SIP_PORT.getConf_value());
-			}
-			
-			//SIP_PROXYNAME
-			Configuration SIP_PROXYNAME = Configurationmanagement.getInstance().getConfKey(3L, "SIP_PROXYNAME");
-			if (SIP_PROXYNAME == null) {
-				ctx.put("SIP_PROXYNAME", "");
-			} else {
-				ctx.put("SIP_PROXYNAME", SIP_PROXYNAME.getConf_value());
-			}
-			
-			//SIP_TUNNEL
-			Configuration SIP_TUNNEL = Configurationmanagement.getInstance().getConfKey(3L, "SIP_TUNNEL");
-			if (SIP_TUNNEL == null) {
-				ctx.put("SIP_TUNNEL", "");
-			} else {
-				ctx.put("SIP_TUNNEL", SIP_TUNNEL.getConf_value());
-			}
-			
-			//SIP_CODEBASE
-			Configuration SIP_CODEBASE = Configurationmanagement.getInstance().getConfKey(3L, "SIP_CODEBASE");
-			if (SIP_CODEBASE == null) {
-				ctx.put("SIP_CODEBASE", "");
-			} else {
-				ctx.put("SIP_CODEBASE", SIP_CODEBASE.getConf_value());
-			}
-			
-			//SIP_FORCETUNNEL
-			Configuration SIP_FORCETUNNEL = Configurationmanagement.getInstance().getConfKey(3L, "SIP_FORCETUNNEL");
-			if (SIP_FORCETUNNEL == null) {
-				ctx.put("SIP_FORCETUNNEL", "");
-			} else {
-				ctx.put("SIP_FORCETUNNEL", SIP_FORCETUNNEL.getConf_value());
-			}
-			
+			//Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {
 				ctx.put("SWF_URL", "main.swf8.swf");
@@ -88,7 +101,7 @@ public class DefaultIndex extends VelocityViewServlet {
 			String SWF_PARAMS = "";
 			String SWF_FLASHVARS = "";
 			
-			//We fake oen param that is needed for all
+			//Load params from URL and set into wrapper code
 			if (httpServletRequest.getParameterMap() != null) {
 				for (Iterator<String> iter = httpServletRequest.getParameterMap().keySet().iterator();iter.hasNext();) {
 					String paramKey = iter.next();
@@ -114,8 +127,6 @@ public class DefaultIndex extends VelocityViewServlet {
 				SWF_PARAMS += paramKey+"="+defaultValuesMap.get(paramKey)+"&";
 				SWF_FLASHVARS += paramKey+"="+defaultValuesMap.get(paramKey)+"&amp;";
 			}
-			
-			//SWF_FLASHVARS += "lzt=swf&amp;lzproxied=solo&amp;lzr=swf8&amp;bgcolor=%23ffffff&amp;width=100%25&amp;height=100%25&amp;__lzurl=maindebug.lzx%3Flzt%3Dswf%26lzproxied%3Dsolo%26lzr%3Dswf8&amp;__lzminimumversion=8&amp;id=lzapp";
 			
 			ctx.put("SWF_PARAMS", SWF_PARAMS);
 			ctx.put("SWF_FLASHVARS", SWF_FLASHVARS);
