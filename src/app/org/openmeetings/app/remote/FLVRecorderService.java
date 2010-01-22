@@ -292,7 +292,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				stream.addStreamListener(new StreamAudioListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
 			}
 			//Just for Debug Purpose
-			stream.saveAs(streamName+"_DEBUG", false);
+			//stream.saveAs(streamName+"_DEBUG", false);
 		} catch (Exception e) {
 			log.error("Error while saving stream: " + streamName, e);
 		}
@@ -366,7 +366,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 			
 			// Just for Debugging
-			stream.stopRecording();
+			//stream.stopRecording();
 			
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]",err);

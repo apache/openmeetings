@@ -483,11 +483,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(client.getId());
 			
-			log.debug("currentClient :1a: "+currentClient);
-			log.debug("currentClient :1b: "+currentClient.getIsScreenClient());
-			log.debug("currentClient :2: "+currentClient.getStreamPublishName());
-			log.debug("currentClient :3: "+currentClient.getSwfurl());
-			
 //			//In case its a screen sharing we start a new Video for that
 //			if (currentClient != null && currentClient.getIsScreenClient() != null && currentClient.getIsScreenClient()) {
 //			

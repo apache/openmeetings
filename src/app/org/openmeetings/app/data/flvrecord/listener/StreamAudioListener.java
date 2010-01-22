@@ -25,6 +25,8 @@ public class StreamAudioListener extends ListenerAdapter {
 	
 	private int startTimeStamp = -1;
 	
+	private long initialDelta = 0;
+	
 	private Integer lastTimeStamp = -1;
 	
 	private int lastStreamPacketTimeStamp = -1;
@@ -165,11 +167,11 @@ public class StreamAudioListener extends ListenerAdapter {
 					
 					//Calculate the delta between the initial start and the first audio-packet data
 					
-					long delta = new Date().getTime() - this.startedSessionTimeDate.getTime();
+					this.initialDelta = new Date().getTime() - this.startedSessionTimeDate.getTime();
 					
 					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 					
-					flvRecordingMetaDelta.setDeltaTime(delta);
+					flvRecordingMetaDelta.setDeltaTime(this.initialDelta);
 					flvRecordingMetaDelta.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
 					flvRecordingMetaDelta.setTimeStamp(0);
 					flvRecordingMetaDelta.setDebugStatus("INIT AUDIO");
@@ -202,10 +204,10 @@ public class StreamAudioListener extends ListenerAdapter {
 					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 					
 					//That will be not bigger then long value
-					startTimeStamp = (int) (streampacket.getTimestamp());
+					this.startTimeStamp = (int) (streampacket.getTimestamp());
 					
 					//We have to set that to bypass the initial delta
-					lastTimeStamp = startTimeStamp;
+					//lastTimeStamp = startTimeStamp;
 				}
 				
 				
@@ -233,7 +235,7 @@ public class StreamAudioListener extends ListenerAdapter {
 				
 				this.lastStreamPacketTimeStamp = streampacket.getTimestamp();
 				
-				timeStamp -= startTimeStamp;
+				timeStamp -= this.startTimeStamp;
 				
 				timeStamp += this.offset;
 				
@@ -327,7 +329,7 @@ public class StreamAudioListener extends ListenerAdapter {
 				log.debug("lastStreamPacketTimeStamp :: "+this.lastStreamPacketTimeStamp);
 				log.debug("deltaRecordingTime :: "+deltaRecordingTime);
 				
-				long deltaTimePaddingEnd = deltaRecordingTime - this.lastTimeStamp;
+				long deltaTimePaddingEnd = deltaRecordingTime - this.lastTimeStamp - this.initialDelta;
 				
 				log.debug("deltaTimePaddingEnd :: "+deltaTimePaddingEnd);
 				
