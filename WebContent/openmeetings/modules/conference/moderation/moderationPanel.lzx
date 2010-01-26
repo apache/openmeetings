@@ -169,7 +169,7 @@
    
     <simpleLabelButton name="_doShare" labelid="239" height="24" 
                visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
-               style="itemStyle" width="180" y="2">
+               style="itemStyle" width="210" y="2">
         <handler name="onclick">
             //canvas._drawarea.setModus('plain');          
             this.parent.checkSharerSession.doCall();
