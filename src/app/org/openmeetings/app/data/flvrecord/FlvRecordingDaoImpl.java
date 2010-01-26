@@ -44,6 +44,9 @@ public class FlvRecordingDaoImpl {
 			query.setLong("flvRecordingId", flvRecordingId);
 			
 			FlvRecording flvRecording = (FlvRecording) query.uniqueResult();
+			
+			session.refresh(flvRecording);
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			

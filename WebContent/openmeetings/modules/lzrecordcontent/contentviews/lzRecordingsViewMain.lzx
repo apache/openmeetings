@@ -96,7 +96,7 @@
                 
         		} else {
         			
-    				new lz.labelerrorPopup(canvas,{errorlabelid:887});
+    				new lz.labelerrorPopup(canvas,{errorlabelid:888});
         			
         		}
             	

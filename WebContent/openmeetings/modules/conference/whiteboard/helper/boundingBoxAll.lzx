@@ -12,8 +12,7 @@
  -->
     
 <class name="boundingBoxAll" extends="view" 
-       onmouseover="this.applyScrollbarToObject()" 
-       onmouseout="this.removeScrollbarToObject()" >
+        >
     
 <!-- 
 	<method name="removeIt">
@@ -32,6 +31,8 @@
 	<attribute name="ey" value="0" type="number" />
 	<attribute name="ewidth" value="0" type="number" />
 	<attribute name="eheight" value="0" type="number" />
+	
+	<attribute name="innerInsetScrollbars" value="0" type="number"/>
 	
 	<attribute name="startdragX" value="0" type="number" />
 	<attribute name="startdragY" value="0" type="number" />
@@ -62,7 +63,7 @@
 		<![CDATA[
 		    if (!this.boundingDoUpdateOnInit) {
 		    	if ($debug) Debug.write("DESTROY the clickable view");
-		    	this._innerDrag.destroy();
+		    	//this._innerDrag.destroy();
 		    }
 		
 			this.setAttribute('x',this.ex);
@@ -97,7 +98,9 @@
 				if ($debug) Debug.write("lineWidth: ",this.objRef._innerRect.lineWidth);
 				this.whiteboardRef.currentrectangleineWidth = this.objRef._innerRect.lineWidth;
 				
-			}
+			} else if (this.objRef.name.indexOf('swf') >= 0) {
+                this.setAttribute("innerInsetScrollbars",16);
+            }
             
             this.whiteboardRef.parent.parent._propertyPanel.loadPanelByBoundingBox(this.whiteboardRef,this.objRef);
             
@@ -268,8 +271,12 @@
 		<text x="2" y="2" text="${ 'x: '+parent.getAttributeRelative('x',parent.objRef)+' y: '+parent.getAttributeRelative('y',parent.objRef) }" bgcolor="white"/>   	
    	</dragstate>
 	
-	<view name="_innerDrag" width="${ parent.width }" height="${ parent.height }"
-    	onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()">
+	<view name="_innerDrag" width="${ parent.width-parent.innerInsetScrollbars }" 
+		  height="${ parent.height-parent.innerInsetScrollbars }" 
+		  onmouseover="parent.applyScrollbarToObject()" 
+          onmouseout="parent.removeScrollbarToObject()"
+		  onmousedown="parent._applyDragstateFromThis()" 
+    	onmouseup="parent._removeDragstateFromThis()">
 		<handler name="oninit">
 	        var newMenu = new LzContextMenu();
 	        newMenu.hideBuiltInItems();
@@ -304,7 +311,8 @@
 	</view>    
      --> 
     
-	<baseChooseIcon resourceN="deleteIcon" x="${ parent.width-this.width }" y="0" labelid="80" width="22" height="22">
+	<baseChooseIcon resourceN="deleteIcon" y="0" labelid="80" width="22" height="22"
+					x="${ parent.width-this.width-parent.innerInsetScrollbars }" >
 		<handler name="onclick">
 			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
 			this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
