@@ -167,7 +167,7 @@
                         
                         var xItem = Math.round((i*60)/this.pixelFactor);
                         
-                        if ($debug) Debug.write("devisior ",i,xItem);
+                        //if ($debug) Debug.write("devisior ",i,xItem);
                         
                         new lz.userActivityDevider(this.content._content.contentDevider,{
 						                          x:xItem,

@@ -3,12 +3,15 @@ package org.openmeetings.app.data.flvrecord;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingLog;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -27,6 +30,29 @@ public class FlvRecordingLogDaoImpl {
 		}
 		return instance;
 	}
+	
+	public List<FlvRecordingLog> getFLVRecordingLogByRecordingId(Long flvRecordingId){
+		try {
+			String hql = "select c from FlvRecordingLog as c where flvRecording.flvRecordingId = :flvRecordingId";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("flvRecordingId", flvRecordingId);
+			List<FlvRecordingLog> flvRecordingList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingList;
+			
+		} catch (HibernateException ex) {
+			log.error("[getFLVRecordingLogByRecordingId] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getFLVRecordingLogByRecordingId] ", ex2);
+		}
+		return null;
+	}	
 	
 	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, HashMap<String, Object> returnMap) {
 		try { 
@@ -66,4 +92,5 @@ public class FlvRecordingLogDaoImpl {
 		}
 		return -1L;
 	}
+	
 }

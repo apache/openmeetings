@@ -234,6 +234,25 @@ function parseDateToStringTime(dateObj){
     if (m<10) m = "0"+m;        
     return d+'.'+mo+'.'+y+' '+h+':'+m;
 }
+
+function parseDateToStringTimeSecunds(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m; 
+    var s = dateObj.getSeconds();
+    if (s<10) s = "0"+s; 
+    return d+'.'+mo+'.'+y+' '+h+':'+m+':'+s;
+}
+
 function parseStringToDate(t){
     // if($debug) Debug.write("FUNC/parseStringToDate",t);
     if (t.length==10){

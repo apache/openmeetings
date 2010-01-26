@@ -16,6 +16,7 @@
         <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
         <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
         <property name="flvRecorderConverterTask" ref="openmeetings.FlvRecorderConverterTask" />
+        <property name="flvRecordingLogDaoImpl" ref="openmeetings.FlvRecordingLogDaoImpl" />
     </bean> 
     
     <bean id="openmeetings.FlvRecordingDaoImpl"

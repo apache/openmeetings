@@ -144,29 +144,37 @@ public class FlvRecorderConverter {
 				String outputWav = streamFolderName + hashFileName;
 
 				flvRecordingMetaData.setWavAudioData(hashFileName);
+				
+				File inputFlvFile = new File(inputFlv);
+				
+				if (inputFlvFile.exists()) {
 
-				String[] argv = new String[] { this.getPathToFFMPEG(), "-i",
-						inputFlv, outputWav };
-
-				log.debug("START stripAudioFromFLVs ################# ");
-				for (int i = 0; i < argv.length; i++) {
-					//log.debug(" i " + i + " argv-i " + argv[i]);
-				}
-				log.debug("END stripAudioFromFLVs ################# ");
-
-				returnLog.add(GenerateSWF.executeScript("generateFFMPEG", argv));
-
-				// check if the resulting Audio is valid
-				File output_wav = new File(outputWav);
-
-				if (!output_wav.exists()) {
-					flvRecordingMetaData.setAudioIsValid(false);
-				} else {
-					if (output_wav.length() == 0) {
+					String[] argv = new String[] { this.getPathToFFMPEG(), "-i",
+							inputFlv, outputWav };
+	
+					log.debug("START stripAudioFromFLVs ################# ");
+					for (int i = 0; i < argv.length; i++) {
+						//log.debug(" i " + i + " argv-i " + argv[i]);
+					}
+					log.debug("END stripAudioFromFLVs ################# ");
+	
+					returnLog.add(GenerateSWF.executeScript("generateFFMPEG", argv));
+	
+					// check if the resulting Audio is valid
+					File output_wav = new File(outputWav);
+	
+					if (!output_wav.exists()) {
 						flvRecordingMetaData.setAudioIsValid(false);
 					} else {
-						flvRecordingMetaData.setAudioIsValid(true);
+						if (output_wav.length() == 0) {
+							flvRecordingMetaData.setAudioIsValid(false);
+						} else {
+							flvRecordingMetaData.setAudioIsValid(true);
+						}
 					}
+				
+				} else {
+					flvRecordingMetaData.setAudioIsValid(false);
 				}
 				
 				if (flvRecordingMetaData.getAudioIsValid()) {

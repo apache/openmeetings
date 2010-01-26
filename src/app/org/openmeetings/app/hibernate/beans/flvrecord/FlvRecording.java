@@ -55,6 +55,7 @@ public class FlvRecording {
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
 	private Users creator;
 	private Rooms room;
+	private List<FlvRecordingLog> flvRecordingLog;
 	
 	/**
 	 *
@@ -390,6 +391,12 @@ public class FlvRecording {
 	public void setAlternateDownload(String alternateDownload) {
 		this.alternateDownload = alternateDownload;
 	}
-	
+
+	public List<FlvRecordingLog> getFlvRecordingLog() {
+		return flvRecordingLog;
+	}
+	public void setFlvRecordingLog(List<FlvRecordingLog> flvRecordingLog) {
+		this.flvRecordingLog = flvRecordingLog;
+	}
 	
 }

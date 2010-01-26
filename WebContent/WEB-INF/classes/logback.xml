@@ -42,8 +42,8 @@
 			</Pattern>
 		</layout>
 	</appender>
-	<root>
-		<level value="DEBUG" />
+	<root>   
+		<level value="ERROR" />
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="ERRORFILE" />

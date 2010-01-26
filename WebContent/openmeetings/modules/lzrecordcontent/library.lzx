@@ -44,6 +44,7 @@
     <resource name="file_explorer_folder_home_rsc" src="resources/folder_home.png" />
     
     <include href="baseChooseIconFLVView.lzx" />
+    <include href="messageRecordingWin.lzx" />
     <include href="dynamicFLVName.lzx" />
     <include href="dragItemFLVExplorer.lzx" />
     <include href="lzRecordContent.lzx" />

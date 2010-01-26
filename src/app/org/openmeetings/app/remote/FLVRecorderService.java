@@ -11,6 +11,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
@@ -48,6 +49,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private UsersDaoImpl usersDaoImpl;
 	private Roommanagement roommanagement;
 	private FlvRecorderConverterTask flvRecorderConverterTask;
+	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
 	
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -96,6 +98,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void setFlvRecorderConverterTask(
 			FlvRecorderConverterTask flvRecorderConverterTask) {
 		this.flvRecorderConverterTask = flvRecorderConverterTask;
+	}
+	
+	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
+		return flvRecordingLogDaoImpl;
+	}
+	public void setFlvRecordingLogDaoImpl(
+			FlvRecordingLogDaoImpl flvRecordingLogDaoImpl) {
+		this.flvRecordingLogDaoImpl = flvRecordingLogDaoImpl;
 	}
 
 	public RoomClient checkForRecording(){
@@ -560,6 +570,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        	if (flvRecording.getRoom_id() != null) {
 	        		flvRecording.setRoom(this.roommanagement.getRoomById(flvRecording.getRoom_id()));
 	        	}
+	        	
+	        	flvRecording.setFlvRecordingLog(this.flvRecordingLogDaoImpl.getFLVRecordingLogByRecordingId(flvRecordingId));
 	        	
 	        	return flvRecording;
 	        	

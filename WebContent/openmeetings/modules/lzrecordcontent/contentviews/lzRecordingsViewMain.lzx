@@ -27,39 +27,78 @@
         <method name="setNewStream" args="recording">
         	<![CDATA[
         	
-        	    this.stopStream();
+        		this.stopStream();
         	    this.isPaused = false;
+        	    
+        	    
+        	    var hasFailed = false;
+        			
+    			var tLogString = "";
+    			var headerMessage = "<br/>"+canvas.getLabelName(889);
+    			
+    			//Check if recording is not yet completed or if it has failed
+    			for (var i = 0;i<recording.flvRecordingLog.length;i++) {
+    				
+    				if (recording.flvRecordingLog[i].exitValue != "0") {
+    					
+    					hasFailed = true;
+    					tLogString += headerMessage 
+    								+ parseDateToStringTimeSecunds(recording.flvRecordingLog[i].inserted)
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].msgType
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].fullMessage
+    								+ '<br/>';
+    					
+    				}
+    				
+    			}
+    			
+    			if (hasFailed) {
+    				
+    				if ($debug) Debug.write("tLogString "+tLogString);
+					//var tString = canvas.getLabelName(887) + tLogString;
+					
+					new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:887});
+					
+				} else if (recording.previewImage != null && recording.previewImage != "") {
         	
-            	this.recordingName = recording.fileHash;
-            	this.getStreamLength.doCall();
-            	
-            	this._content.initW = recording.flvWidth;
-            	this._content.initH = recording.flvHeight;
-            	
-            	var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                            +canvas.httpRootKey+'DownloadHandler?fileName='+recording.previewImage
-                            +'&moduleName=lzRecorderApp&parentPath=&room_id='
-                            +'&sid='+canvas.sessionId;
+	            	this.recordingName = recording.fileHash;
+	            	this.getStreamLength.doCall();
+	            	
+	            	this._content.initW = recording.flvWidth;
+	            	this._content.initH = recording.flvHeight;
+	            	
+	            	var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	                            +canvas.httpRootKey+'DownloadHandler?fileName='+recording.previewImage
+	                            +'&moduleName=lzRecorderApp&parentPath=&room_id='
+	                            +'&sid='+canvas.sessionId;
+	                
+	                if($debug) Debug.write("lzRecorder/downloadurl "+downloadurl);
+	            	
+	            	this._content._preview.imagePreview.setAttribute("src",downloadurl)
+	            	
+	            	this._content._preview.bringToFront();
+	            	
+	            	this._content.setItemContraints(0);
+	            	
+	            	this.deltaInSeconds = Math.round((recording.recordEnd.getTime() - recording.recordStart.getTime())/1000);
+	                
+	                if ($debug) Debug.write("deltaInSeconds ",this.deltaInSeconds);
+	                
+	                var minutes = Math.floor(this.deltaInSeconds/60);
+	                
+	                if ($debug) Debug.write("minutes ",minutes);
+	                
+	                var restSeconds = this.deltaInSeconds - ( minutes * 60 );
+	                
+	                this._progress._progressbar._duration.setAttribute("text",minutes+" min "+restSeconds+" sec");
                 
-                if($debug) Debug.write("lzRecorder/downloadurl "+downloadurl);
-            	
-            	this._content._preview.imagePreview.setAttribute("src",downloadurl)
-            	
-            	this._content._preview.bringToFront();
-            	
-            	this._content.setItemContraints(0);
-            	
-            	this.deltaInSeconds = Math.round((recording.recordEnd.getTime() - recording.recordStart.getTime())/1000);
-                
-                if ($debug) Debug.write("deltaInSeconds ",this.deltaInSeconds);
-                
-                var minutes = Math.floor(this.deltaInSeconds/60);
-                
-                if ($debug) Debug.write("minutes ",minutes);
-                
-                var restSeconds = this.deltaInSeconds - ( minutes * 60 );
-                
-                this._progress._progressbar._duration.setAttribute("text",minutes+" min "+restSeconds+" sec");
+        		} else {
+        			
+    				new lz.labelerrorPopup(canvas,{errorlabelid:887});
+        			
+        		}
             	
         	]]>
         </method>
