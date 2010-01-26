@@ -46,7 +46,7 @@
     
     <method name="setMessage">
         <![CDATA[
-            Debug.write("setMessage: ",this.recordingUser);
+            if ($debug) Debug.write("setMessage: ",this.recordingUser);
             if (this.recordingUser!=null){
                 var tString = canvas.getLabelName(419) + " "
                         + this.recordingUser.username+" " 

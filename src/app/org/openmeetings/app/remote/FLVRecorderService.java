@@ -437,6 +437,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			//Reset values
 			currentClient.setFlvRecordingId(null);
+			currentClient.setIsRecording(false);
 			
 			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
 			
@@ -450,6 +451,33 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return new Long(-1);
 	}
 	
+	public RoomClient checkLzRecording() {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			
+			log.debug("getCurrentRoomClient -2- "+streamid);
+			
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			
+			HashMap<String,RoomClient> roomList = this.clientListManager.getClientListByRoomAll(currentClient.getRoom_id());
+			
+			for (Iterator<String> iter = roomList.keySet().iterator();iter.hasNext();) {
+				
+				RoomClient rcl = roomList.get(iter.next());
+				
+				if (rcl.getIsRecording()) {
+					return rcl;
+				}
+				
+			}
+			
+			
+		} catch (Exception err) {
+			log.error("[checkLzRecording]",err);
+		}
+		return null;
+	}
 	
 	public void stopRecordingShowForClient(IConnection conn, RoomClient rcl) {
 		try {

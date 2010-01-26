@@ -25,7 +25,7 @@
 
 	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
 		<text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
-			multiline="true" width="312" selectable="true" />
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
 	</view>
     
     <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 

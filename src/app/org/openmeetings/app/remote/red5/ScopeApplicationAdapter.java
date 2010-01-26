@@ -324,6 +324,37 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 	
+	public List<RoomClient> checkRed5ScreenSharing() {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			
+			log.debug("checkScreenSharing -2- "+streamid);
+			
+			List<RoomClient> screenSharerList = new LinkedList<RoomClient>();
+			
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			
+			HashMap<String,RoomClient> roomList = this.clientListManager.getClientListByRoomAll(currentClient.getRoom_id());
+			
+			for (Iterator<String> iter = roomList.keySet().iterator();iter.hasNext();) {
+				
+				RoomClient rcl = roomList.get(iter.next());
+				
+				if (rcl.getIsScreenClient()) {
+					screenSharerList.add(rcl);
+				}
+				
+			}
+			
+			return screenSharerList;
+			
+		} catch (Exception err) {
+			log.error("[checkScreenSharing]",err);
+		}
+		return null;
+	}
+	
 	public synchronized Map setConnectionAsSharingClient(Map map) {
 		try {
 			

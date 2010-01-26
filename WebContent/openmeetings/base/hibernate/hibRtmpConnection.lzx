@@ -961,17 +961,49 @@
             <netparam><method name="getValue">return null;</method></netparam>
             <handler name="ondata" args="value">
                 <![CDATA[
+                
                     //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write(" onResult newRed5ScreenSharing : ",value);   
-                    if (canvas.screenSharingDialogContainer == null) {
-                        canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 1 : ",value);  
+                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 2 : ",value.streamid); 
+                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 3 : ",canvas.streamid); 
+                    
+                    if ($debug) Debug.write(" onResult newRed5ScreenSharing 4 : ",value.streamPublishName); 
+                    if ($debug) Debug.write(" onResult newRed5ScreenSharing 5 : ",canvas.publicSID); 
+                    
+                    if (value.streamPublishName != canvas.publicSID) {
+                        if (canvas.screenSharingDialogContainer == null) {
+                            canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+                        }
+                        new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
+    		                        initObject:value 
+    		                    }); 
+                    } else {
+                    	if ($debug) Debug.warn("Self Screen Sharing");
                     }
-                    new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
-		                        initObject:value 
-		                    }); 
                 ]]>
             </handler>   
         </netRemoteCallHib>
+        
+        <netRemoteCallHib name="checkRed5ScreenSharing" funcname="checkRed5ScreenSharing">
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write(" onResult checkRed5ScreenSharing : ",value);  
+                    
+                    if (value != null) {
+                        
+                        for (var eg in value) {
+                        	parent.newRed5ScreenSharing.ondata.sendEvent(value[eg]);
+                        }
+                    	
+                    } else {
+                        if ($debug) Debug.warn("Self Screen Sharing");
+                    }
+                    
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
         
         <!--
         public synchronized Long applyForModeration(String publicSID)
@@ -1301,14 +1333,14 @@
 	<netRemoteCallHib name="removeClientFromChatNotification"
 		funcname="chatservice.removeClientFromChatNotification" >      
     	<handler name="ondata" args="value">
-    		Debug.write("removeClientFromChatNotification: ",value);
+    		if ($debug) Debug.write("removeClientFromChatNotification: ",value);
     	</handler>
     </netRemoteCallHib>
     
    <!-- recordContentings Notifications -->
 	<netRemoteCallHib name="stopedRecording" funcname="stopedRecording" >      
     	<handler name="ondata" args="value">
-    		Debug.write("stopedRecording: ",value);
+    		if ($debug) Debug.write("stopedRecording: ",value);
     		canvas._mymod.recordingUser = null;
     		canvas._mymod.setMessage();
     	</handler>
@@ -1316,16 +1348,27 @@
     
 	<netRemoteCallHib name="startedRecording" funcname="startedRecording" >      
     	<handler name="ondata" args="value">
-    		Debug.write("startedRecording: ",value);
+    		if ($debug) Debug.write("startedRecording: ",value);
     		canvas._mymod.recordingUser = value;
     		canvas._mymod.setMessage();
     	</handler>
     </netRemoteCallHib>
     
+    <netRemoteCallHib name="checkLzRecording" funcname="flvrecorderservice.checkLzRecording" >      
+        <handler name="ondata" args="value">
+            if ($debug) Debug.write("checkLzRecording: ",value);
+            if (value != null) {
+                canvas._mymod.recordingUser = value;
+                canvas._mymod.setMessage();
+            }
+            parent.checkRed5ScreenSharing.doCall();
+        </handler>
+    </netRemoteCallHib>
+    
     <!-- notifications for Overall-Chat -->
 	<netRemoteCallHib name="sendVarsToOverallChat" funcname="sendVarsToOverallChat" >      
     	<handler name="ondata" args="value">
-    		Debug.write("sendVarsToOverallChat: ",value);
+    		if ($debug) Debug.write("sendVarsToOverallChat: ",value);
     		if (canvas._overallchatcontent!=null){
     			canvas._overallchatcontent.addChatHistory(value.message,value.client);
     		}
@@ -1334,7 +1377,7 @@
 
 	<netRemoteCallHib name="roomConnect" funcname="roomConnect" >      
     	<handler name="ondata" args="value">
-    		Debug.write("roomConnect: ",value);
+    		if ($debug) Debug.write("roomConnect: ",value);
     		if (canvas._overallchatcontent!=null){
     			var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants._list;
     			new lz.chatParticipants(parentObj,{user_id:value.user_id,username:value.firstname+", "+value.lastname});				

@@ -157,6 +157,22 @@ public class ClientListManager {
 		return roomClientList;
 	}
 	
+	public synchronized HashMap<String,RoomClient> getClientListByRoomAll(Long room_id){
+		HashMap <String,RoomClient> roomClientList = new HashMap<String,RoomClient>();
+		try {			
+			for (Iterator<String> iter=clientList.keySet().iterator();iter.hasNext();) {
+				String key = (String) iter.next();
+				//log.debug("getClientList key: "+key);
+				RoomClient rcl = clientList.get(key);
+				//same room, same domain
+				roomClientList.put(key, rcl);
+			}
+		} catch (Exception err) {
+			log.error("[getClientListByRoom]",err);
+		}
+		return roomClientList;
+	}
+	
 	/**
 	 * get the current Moderator in this room
 	 * 

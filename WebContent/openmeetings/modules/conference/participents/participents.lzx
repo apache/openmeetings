@@ -530,7 +530,7 @@
             }
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
-            canvas._mymod.checkForRecording.doCall();
+            canvas.thishib.checkLzRecording.doCall();
             canvas._chatcontent.doInit();               
         </handler>  
     </netRemoteCallHib>
