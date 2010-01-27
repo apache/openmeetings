@@ -1,5 +1,6 @@
-<html>
+ï»¿<html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta http-equiv="cache-control" content="no-cache" />
         <meta http-equiv="pragma" content="no-cache" />
         <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
@@ -61,10 +62,11 @@
 			<table>
 				<tr>
 					<td><button type="button" onclick="toggleIM();">Chat</button></td>
-					<td><button type="button" onclick="togglePad();">Keypad</button></td>					
+					<td><button type="button" onclick="togglePad();">Keypad</button></td>
+					<td><button type="button" onclick="togglePresence();">Presence</button></td>
 				</tr>
 			</table>
-		</div>		
+		</div>
 		<!-- div for IM-message -->
 		<div id="immessagewindow">
 			<form id="immessageform" name="mail" method="post" action="">
@@ -124,12 +126,33 @@
 			</form>
 		</div>
 		<!-- /div for keypad -->
+		<!-- div for presence -->
+		<div id="presencewindow">
+			<form id="presenceform" name="pres" method="post" action="">
+			My presence:
+			<select id="presenceState">
+			<option value="open">Open</option>
+			<option value="closed">Closed</option>
+			</select>
+			<br/>
+			Personal note:
+			<input id="presenceNote" type="text"/>
+			<button type="button" onclick="customPublish();">Publish</button>
+			<br/><br/>
+						Presentity to subscribe:
+						<input id="presentity" type="text" >
+						<button type="button" onclick="customSubscribe();">Subscribe</button>
+						<button type="button" onclick="customUnSubscribe();">Unsubscribe</button>																
+						<br/><br/>
+			Current subscriptions:			
+			<div id="presentityTable"></div>			
+			</form>
+		</div>
+		<!-- /div for presence -->		
 		<div id="statusbar">
 		</div>
-      <div id="footer">Make sure that microphone and speakers are connected and turned on.</div>
-    </div>
-    <div id="noscript">Testing browser's JavaScript support... If this message won't go away, check the JavaScript settings of your browser.</div>
-
-
+Â Â Â Â Â  <div id="footer">Make sure that microphone and speakers are connected and turned on.</div>
+Â Â Â  </div>
+Â Â Â  <div id="noscript">Testing browser's JavaScript support... If this message won't go away, check the JavaScript settings of your browser.</div>
 	</body>
 </html>
