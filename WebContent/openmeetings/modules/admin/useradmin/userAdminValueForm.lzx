@@ -285,23 +285,23 @@
 	</baseChooseIcon>
 	
     <!--Moderated -->
-    <labelText labelid="883" width="200" y="650" resize="false" 
+    <labelText labelid="893" width="200" y="650" resize="false" 
                x="0" fontstyle="bold" />   
     
     <view resource="messagebox_info_rsc" x="0" y="670" />
     
-    <labelText labelid="884" x="24" y="670"  fontstyle="italic"
+    <labelText labelid="894" x="24" y="670"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="885" width="200" y="730" resize="false" x="2"/>
+    <labelText labelid="895" width="200" y="730" resize="false" x="2"/>
         <customEdittext name="sip_user" y="730" x="120" width="270"  
         				text="" />
         				
-	<labelText labelid="886" width="200" y="760" resize="false" x="2"/>
+	<labelText labelid="896" width="200" y="760" resize="false" x="2"/>
         <customEdittext name="sip_pass" y="760" x="120" width="270"  
         				text="" />
         				
-    <labelText labelid="887" width="200" y="790" resize="false" x="2"/>
+    <labelText labelid="897" width="200" y="790" resize="false" x="2"/>
         <customEdittext name="sip_auth" y="790" x="120" width="270"  
         				text="" />
         				

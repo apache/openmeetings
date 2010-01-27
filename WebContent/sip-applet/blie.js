@@ -18,6 +18,11 @@ function onTalking()
 	customOnTalking();
 	//statusBar(strings[24].item);
 }
+
+function onAudioSettings() {
+	statusBar("onAudioSettings Called");
+}
+
 function onNoAnswer()
 {
 	customOnNoAnswer();

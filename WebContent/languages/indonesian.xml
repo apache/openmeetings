@@ -2679,4 +2679,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="891" name="flvrecording">
     <value>Ok</value>
   </string>  
+  <string id="892" name="sip applet">
+    <value>SIP Applet is not Ready</value>
+  </string>
+  <string id="893" name="user administration">
+    <value>SIP-Account Settings</value>
+  </string>
+  <string id="894" name="user administration">
+    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+  </string>
+  <string id="895" name="user administration">
+    <value>SIP-User</value>
+  </string>
+  <string id="896" name="user administration">
+    <value>Sip-Pass</value>
+  </string>
+  <string id="897" name="user administration">
+    <value>Sip-Auth-Id</value>
+  </string>
+  <string id="898" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+  </string>
+  <string id="899" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+  </string>
+  <string id="900" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
 </language>

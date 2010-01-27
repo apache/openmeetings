@@ -87,6 +87,11 @@
             //lz.Timer.addTimer( this.refreshDelegate, 60000 );
             lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
 			canvas.thishib.loaderVar.setProgress();
+			
+			//check and get the Applet SIP Status
+			getAppletStatus();
+			
+			//Load Session Data
             this.getsessiondata.callRPC();    
         }    
     </handler>
@@ -351,7 +356,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="700" type="number" />    
+    	<attribute name="max" value="800" type="number" />    
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 
@@ -370,6 +375,7 @@
 		            	parent.getRoomTypes.doCall();
 		            } else {
 		            	parent.initlanguageLoaded=true;
+		            	
 					    if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
 					    		|| canvas.directUserLogin || canvas.secureRemoteUserLogin){
 					    	canvas.thishib.loaderVar.setProgress();
@@ -384,38 +390,59 @@
 			]]>
         </handler>  
     </netRemoteCallHib>
-         
+        
+    <!--
+        There must be a temporary SIP-Account created at this moment
+     -->  
     <netRemoteCallHib name="markSessionAsLogedIn" funcname="xmlcrm.markSessionAsLogedIn" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
+                        
             if (value == null) {
                 new lz.errorPopup(canvas,{error:"Missing User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
             }
+            
+            if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
+             
             hib.userobject = value;
+             
             if (value.organisation_users.length > 0){
                 hib.currentdomain = value.organisation_users[0].organisation.name;
                 hib.currentdomainObj = value.organisation_users[0].organisation;
             } else {
                 new lz.errorPopup(canvas,{error:"Missing Organization in User Object, set the Configuration value of the key 'default.rpc.userid' to a valid user Id that has at least one Organization assigned in the OpenMeetings Administrion Configuration Panel "});
             }
-            if ($debug) Debug.write("markSessionAsLogedIn1 ",value);
-            if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
-            if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
-            if ($debug) Debug.write("markSessionAsLogedIn4 ",canvas.isinitRoomDirect);
-            if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
-            if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
-            if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
-            if (canvas.secureRemoteUserLogin) {
-            	parent.secureLoginByRemote.doCall();
-            } else if (canvas.isinitRoomDirect){
-            	parent.getInvitationByHash.doCall();   
-            } else if (canvas.remoteUserLogin) {
-            	parent.loginUserByRemote.doCall();   
-            } else if (canvas.directUserLogin) {
-                //show Nick Name or Password Protection Dialog
-                canvas.initroomid = Number(canvas.directRoomId);
-                parent.getRoomById.doCall();
+            
+            //At this moment we have to check that the user does get a valid 
+            //SIP-Account, if the Applet is enabled and ready
+            
+            //=> We need to login the SIP Applet
+            if (sipIsEnabled()) {
+                if ($debug) Debug.write(" -- sipIsEnabled -- ");
+                
+                loginSipUser(hib.userobject.userSipData);
+                
+            } else {
+                
+                if ($debug) Debug.write("markSessionAsLogedIn2 ",canvas.sessionId);
+                if ($debug) Debug.write("markSessionAsLogedIn3 ",canvas.initroomid);
+                if ($debug) Debug.write("markSessionAsLogedIn4 ",canvas.isinitRoomDirect);
+                if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
+                if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
+                if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
+                if (canvas.secureRemoteUserLogin) {
+                	parent.secureLoginByRemote.doCall();
+                } else if (canvas.isinitRoomDirect){
+                	parent.getInvitationByHash.doCall();   
+                } else if (canvas.remoteUserLogin) {
+                	parent.loginUserByRemote.doCall();   
+                } else if (canvas.directUserLogin) {
+                    //show Nick Name or Password Protection Dialog
+                    canvas.initroomid = Number(canvas.directRoomId);
+                    parent.getRoomById.doCall();
+                }
+                
             }
         </handler>  
     </netRemoteCallHib> 
@@ -497,6 +524,7 @@
     
     <netRemoteCallHib name="loginByRemember" funcname="xmlcrm.loginByRemember" >
     	<attribute name="currentHashSession" value="" type="string"/>
+    	<attribute name="sipLoader" value="null"/>   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.currentHashSession;</method></netparam> 
         <handler name="ondata" args="value">
@@ -542,8 +570,18 @@
                    
                     if (found) {
                         hib.getLanguageByIdAndMax.start = 0;
-                        hib.getLanguageByIdAndMax.doCall();
-                        canvas.focusOnItem = null;
+                        
+                        //Perform the Login to the SIP Applet
+                        if (sipIsEnabled()) {
+                            if ($debug) Debug.write(" -- sipIsEnabled -- ");
+                            
+                            this.sipLoader = new lz.sipLoader(canvas);
+                            loginSipUser(hib.userobject.userSipData,this);
+                            
+                        } else {
+                        	hib.getLanguageByIdAndMax.doCall();
+                        	canvas.focusOnItem = null;
+                        }
                     } else {
                     	if ($debug) Debug.write("No Organization Found to assign");
                     	new lz.checkLoginData(canvas.main_content._content.inner);
@@ -554,6 +592,11 @@
          	   	   new lz.checkLoginData(canvas.main_content._content.inner);
          	   }
          	]]>
+        </handler>
+        <handler name="onSipSuccess">
+        	this.sipLoader.destroy();
+        	hib.getLanguageByIdAndMax.doCall();
+        	canvas.focusOnItem = null;
         </handler>
     </netRemoteCallHib>
     

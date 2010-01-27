@@ -1393,6 +1393,8 @@ public class Usermanagement {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		
+		session.flush();
+		
 		Query query = session.createQuery(hql);
 		query.setString("userOrEmail", userOrEmail);
 		query.setString("deleted", "true");

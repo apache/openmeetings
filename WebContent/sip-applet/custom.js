@@ -3,6 +3,8 @@
  *  
  */ 
 
+var appletIsLoaded = false;
+
 function initialize()
 {
   $('#noscript').hide();
@@ -66,29 +68,36 @@ function statusBar(msg){
 		}
 	
 	} else {
-		alert("Could Not Find lzapp "+msg);
+		//This does happen one time on init
+		//alert("Could Not Find lzapp "+msg);
 	}
 	
 }
 
+function getAppletStatus(){
+	return appletIsLoaded;
+}
+
 function customOnRegistrationSuccess(s){
-	$('#login').hide();
-	$('#callbuttons').show();
-	$('#toolbar').show();
 	//statusBar(strings[15].item+":"+s);
 	statusBar("Ready. Using transport: "+s);
+	document.getElementById("lzapp").sipLoginSuccess(s);
 }
 function customOnRegistrationFailure(x){
 	//statusBar(strings[22].item);
 	statusBar("Login failed");
+	document.getElementById("lzapp").sipLoginFail(x);
 }
 function customOnRegistering(){
 	//statusBar(strings[14].item);
 	statusBar("Logging in");
 }
+
 function customOnLoaded()
 {
-	statusBar("Waiting for user action");
+	appletIsLoaded = true;
+	//At this moment the lz-App is not yet loaded
+	//statusBar("Waiting for user action");
 }
 function preCustomRegister()
 {
@@ -100,10 +109,10 @@ function preCustomRegister()
 function omCustomRegister(username,password,authid)
 {  
 	
-	//setUsername(username);
-	//setPassword(password);
-	//setAuthID(authid);
-	alert("Call omCustomRegister");
+	setUsername(username);
+	setPassword(password);
+	setAuthID(authid);
+	
 	statusBar("Call omCustomRegister");
 	
 	return "omCustomRegisterReturn";

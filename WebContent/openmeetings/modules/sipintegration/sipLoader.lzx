@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+<class name="sipLoader" extends="view" bgcolor="0xFFFFFF"
+	   align="center" valign="middle" 
+	   width="${ this._label.width + 50 }" height="40">
+
+    <view resource="warning_icon_rsc" x="10" y="10" />
+
+    <labelText labelid="900" name="_label"
+    		   fontsize="11" y="10" x="40" />
+    
+</class>
+
+</library>

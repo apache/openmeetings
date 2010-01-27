@@ -45,8 +45,12 @@ public class UsersDaoImpl {
 				Transaction tx = session.beginTransaction();
 				Query query = session.createQuery("select c from Users as c where c.user_id = :user_id");
 				query.setLong("user_id", user_id);
+				
+				session.flush();
+				
 				Users users = (Users) query.uniqueResult();
 				session.refresh(users);
+				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				

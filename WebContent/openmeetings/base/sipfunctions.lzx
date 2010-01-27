@@ -4,7 +4,12 @@
 <script>
 <![CDATA[
 
+var appletIsLoaded = false;
+var returnObject = null
+
 flash.external.ExternalInterface.addCallback("sipStatusMessage", null, sipStatusMessage);
+flash.external.ExternalInterface.addCallback("sipLoginSuccess", null, sipLoginSuccess);
+flash.external.ExternalInterface.addCallback("sipLoginFail", null, sipLoginFail);
 
 function sipStatusMessage(msg) {
 	
@@ -12,18 +17,91 @@ function sipStatusMessage(msg) {
 	
 }
 
-function callbackLoginSipUser(returnValue) {
-                	
-	if ($debug) Debug.write("callback ",returnValue);
-	
+function sipLoginSuccess(msg) {
+    
+    if ($debug) Debug.write("sipLoginSuccess :: ",msg);
+    
+    returnObject.onSipSuccess.sendEvent();
+    
 }
 
-function loginSipUser() {
+function sipLoginFail(msg) {
+    
+    if ($debug) Debug.write("sipLoginFail :: ",msg);
+    
+    //In case its an Admin Account we send the success message anyway
+    //So that he can check the User-SIP Data or other SIP credentials
+    
+    if (hib.userobject.level_id >= 2) {
+    	new lz.labelerrorPopup(canvas,{errorlabelid:898});
+        returnObject.onSipSuccess.sendEvent();
+    } else {
+    	new lz.labelerrorPopup(canvas,{errorlabelid:899});
+    }
+    
+}
+
+function callbackgetAppletStatus(returnValue) {
+                    
+    if ($debug) Debug.write("callbackgetAppletStatus ",returnValue);
+    
+    appletIsLoaded = returnValue;
+    
+    if (appletIsLoaded) {
+    	if ($debug) Debug.info("SIP Applet is Ready !");
+    } else {
+    	new lz.labelerrorPopup(canvas,{errorlabelid:892});
+    	if ($debug) Debug.warn("SIP Applet is not Ready");
+    }
+    
+}
+
+function sipIsEnabled(){
+	return appletIsLoaded;
+}
+
+function getAppletStatus() {
+    
+    if ($debug) Debug.write("initializeSIPApplet :: ");
+    
+    lz.Browser.callJS("getAppletStatus",callbackgetAppletStatus);
+    
+}
+
+function callbackLoginSipUser(returnValue) {
+                    
+    if ($debug) Debug.write("callbackLoginSipUser ",returnValue);
+    
+    registerSIPUser();
+    
+}
+
+function loginSipUser(userSipData,regObject) {
 	
 	if ($debug) Debug.write("loginSipUser :: ");
 	
-    lz.Browser.callJS("omCustomRegister",callbackLoginSipUser,"user","pass","");
+	if ($debug) Debug.write("loginSipUser :1: ",userSipData.username);
+	if ($debug) Debug.write("loginSipUser :2: ",userSipData.userpass);
+	if ($debug) Debug.write("loginSipUser :3: ",userSipData.authId);
 	
+	returnObject = regObject;
+	
+    lz.Browser.callJS("omCustomRegister",callbackLoginSipUser,userSipData.username,userSipData.userpass,userSipData.authId);
+	
+}
+
+function callbackregister(returnValue) {
+                    
+    if ($debug) Debug.write("callbackregister ",returnValue);
+    
+}
+
+function registerSIPUser(userSipData) {
+    
+    if ($debug) Debug.write("loginSipUser :: ");
+    
+    lz.Browser.callJS("register",callbackregister);
+    
 }
 
 ]]>

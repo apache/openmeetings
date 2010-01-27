@@ -101,7 +101,6 @@ img {
     lz.embed.lzapp.onload = function loaded() {
       // called when this application is done loading
     }
-    initialize();
 </script>
 
 

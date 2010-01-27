@@ -46,6 +46,10 @@ function getBrowserInfo() {
 	return navigator.userAgent;
 }
 
+function getAppletStatus(){
+    return false;
+}
+
 </script>
 	
 <style type="text/css">
