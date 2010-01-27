@@ -11,8 +11,9 @@ function initialize()
   $('#immessagewindow').hide();  
   $('#keypadwindow').hide();    
   $('#authbox').hide();
+  $('#presencewindow').hide();
    if (!document.PHDial){
-      alert("init failed");//init failed
+      alert(strings[10].item);//init failed
    }
 }
  
@@ -46,6 +47,9 @@ function toggleIM(){
 }
 function togglePad(){
    $('#keypadwindow').toggle();
+}
+function togglePresence(){
+   $('#presencewindow').toggle();
 }
 
 function statusBar(msg){
@@ -84,9 +88,8 @@ function customOnRegistering(){
 }
 function customOnLoaded()
 {
-	statusBar("Waiting for user action -1- ");
+	statusBar("Waiting for user action");
 }
-
 function preCustomRegister()
 {
 	setUsername(document.getElementById("username").value);
@@ -95,19 +98,16 @@ function preCustomRegister()
 }
 
 function omCustomRegister(username,password,authid)
-{
-	
-	
+{  
 	
 	//setUsername(username);
 	//setPassword(password);
 	//setAuthID(authid);
-	
+	alert("Call omCustomRegister");
 	statusBar("Call omCustomRegister");
 	
 	return "omCustomRegisterReturn";
 }
-
 
 function preCustomStartCall()
 {
@@ -154,4 +154,49 @@ function customOnResponse(x)
 }
 function preCustomEndCall()
 {
+}
+function customSubscribe(){
+	subscribe(document.getElementById("presentity").value);
+}
+function customUnSubscribe(){
+	unSubscribe(document.getElementById("presentity").value);
+}
+function customPublish()
+{
+	note = document.getElementById("presenceNote").value;
+	bo = document.getElementById("presenceState").value;
+	publish(bo, note);
+}
+function customPresence(x,y,value)
+{
+	document.getElementById("statusbar").innerHTML +=':'+x+':'+y+':'+value+'<br/>';
+}
+function customPresence1(array)
+{
+	document.getElementById("presentityTable").innerHTML = '<table border="1"><tr><td>Presentity</td><td>Subscription status'+
+		'</td><td>Presence</td><td>Note</td></tr>';
+	for (index in array)
+		{
+		document.getElementById("presentityTable").innerHTML +='<tr>'+
+			'<td>'+array[index][0]+'</td>'+
+			'<td>'+array[index][1]+'</td>'+
+			'<td>'+array[index][2]+'</td>'+
+			'<td>'+array[index][3]+'</td></tr>';
+		}
+	document.getElementById("presentityTable").innerHTML +='</table>';
+}
+function customPresenceTableChange(array)
+{
+	var table='<table border="1"><tr><td>Presentity</td><td>Subscription status'+
+		'</td><td>Presence</td><td>Note</td></tr>';
+	for (index in array)
+		{
+		table +='<tr>'+
+			'<td>'+array[index][0]+'</td>'+
+			'<td>'+array[index][1]+'</td>'+
+			'<td>'+array[index][2]+'</td>'+
+			'<td>'+array[index][3]+'</td></tr>';
+		}
+	table +='</table>';
+	document.getElementById("presentityTable").innerHTML = table;
 }
