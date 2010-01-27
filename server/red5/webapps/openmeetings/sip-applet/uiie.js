@@ -114,3 +114,19 @@ function DTMFButton(number)
 	document.getElementById("PHDial").handleKeyPadEvent(number);
 }
 function dialingPageDeactivate(){document.getElementById("PHDial").set_event(999);}//Not used but must be defined
+
+function subscribe(presentity)
+{
+	document.getElementById("PHDial").jsSubscribe(presentity);	
+	document.getElementById("PHDial").set_event(121); // subscribe
+}
+function unSubscribe(presentity)
+{
+	document.getElementById("PHDial").jsUnSubscribe(presentity);
+	document.getElementById("PHDial").set_event(122); // unsubscribe
+}
+function publish(st, note)
+{
+	document.getElementById("PHDial").jsPublish(st, note);
+	document.getElementById("PHDial").set_event(123); // publish
+}

@@ -2,7 +2,8 @@
  * GPL 2
  *  
  */ 
-
+var presentities = [];
+  
 function onImReceived(message, from)
  {
 	customOnImReceived(message, from);
@@ -76,5 +77,20 @@ function onCallIncoming()
 function onResponse(x)
 {
 	customOnResponse(x);
+}
+function onPreseceUpdate(x, y, value)
+{
+	if (x==0 && y==0) presentities=new Array();
+	if (typeof presentities[x] == 'undefined')
+		presentities[x]=new Array();
+	presentities[x][y]=value;
+
+}
+function onPresenceTableChange(empty)
+{
+	if (!empty)
+		customPresenceTableChange(presentities);
+	else 
+		customPresenceTableChange(new Array());
 }
 
