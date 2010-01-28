@@ -341,7 +341,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 				RoomClient rcl = roomList.get(iter.next());
 				
-				if (rcl.getIsScreenClient()) {
+				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
 				
