@@ -45,12 +45,12 @@ function callbackgetAppletStatus(returnValue) {
                     
     if ($debug) Debug.write("callbackgetAppletStatus ",returnValue);
     
-    appletIsLoaded = returnValue;
-    
-    if (appletIsLoaded) {
+    if (returnValue) {
+    	appletIsLoaded = returnValue;
     	if ($debug) Debug.info("SIP Applet is Ready !");
     } else {
-    	new lz.labelerrorPopup(canvas,{errorlabelid:892});
+    	
+    	//new lz.labelerrorPopup(canvas,{errorlabelid:892});
     	if ($debug) Debug.warn("SIP Applet is not Ready");
     }
     

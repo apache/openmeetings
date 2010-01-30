@@ -18,11 +18,17 @@
         <attribute name="timerDelegate" value="null"/>
         <attribute name="timerDelegateStarted" value="false" type="boolean"/>
         
+        <attribute name="recordingLog" value="" type="string"/>
+        
         <attribute name="deltaInSeconds" value="0" type="number"/>
         
         <handler name="oninit">
         	this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
         </handler>
+        
+        <method name="showLog">
+        	new lz.messageRecordingWin(canvas,{error:this.recordingLog,labelTitleId:903});
+        </method>
         
         <method name="setNewStream" args="recording">
         	<![CDATA[
@@ -35,6 +41,8 @@
         			
     			var tLogString = "";
     			var headerMessage = "<br/>"+canvas.getLabelName(889);
+    			
+    			this.recordingLog = "";
     			
     			//Check if recording is not yet completed or if it has failed
     			for (var i = 0;i<recording.flvRecordingLog.length;i++) {
@@ -52,6 +60,14 @@
     					
     				}
     				
+    				this.recordingLog += headerMessage 
+    								+ parseDateToStringTimeSecunds(recording.flvRecordingLog[i].inserted)
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].msgType
+    								+ '<br/>'
+    								+ recording.flvRecordingLog[i].fullMessage
+    								+ '<br/>';
+    				
     			}
     			
     			if (hasFailed) {
@@ -62,7 +78,7 @@
 					new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:887});
 					
 				} else if (recording.previewImage != null && recording.previewImage != "") {
-        	
+					
 	            	this.recordingName = recording.fileHash;
 	            	this.getStreamLength.doCall();
 	            	

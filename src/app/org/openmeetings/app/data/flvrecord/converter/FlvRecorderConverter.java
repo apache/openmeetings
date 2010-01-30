@@ -187,6 +187,8 @@ public class FlvRecorderConverter {
 					
 					int counter = 0;
 					
+					long startGap = 0;
+					
 					for (FlvRecordingMetaDelta flvRecordingMetaDelta : flvRecordingMetaDeltas) {
 						
 						String inputFile = outputGapFullWav;
@@ -203,6 +205,8 @@ public class FlvRecorderConverter {
 						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
 							
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							
+							startGap = flvRecordingMetaDelta.getDeltaTime();
 							
 							if (gapSeconds > 0) {
 								//Add the item at the beginning
@@ -234,11 +238,11 @@ public class FlvRecorderConverter {
 						} else {
 							
 							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
-							float posSeconds = ( flvRecordingMetaDelta.getTimeStamp() - flvRecordingMetaDelta.getDeltaTime() - 50 ) /1000;
+							float posSeconds = ( ( flvRecordingMetaDelta.getTimeStamp() + startGap ) - flvRecordingMetaDelta.getDeltaTime() - 50 ) /1000;
 							
 							if (posSeconds < 0) {
-								log.error("posSeconds is Negative, this should never happen! flvRecordingMetaDeltaId ::"+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId()+" posSeconds :: "+posSeconds);
-								posSeconds = 0;
+								throw new Exception("posSeconds is Negative, this should never happen! flvRecordingMetaDeltaId ::"+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId()+" posSeconds :: "+posSeconds);
+								//posSeconds = 0;
 							}
 							
 							//Add the item in-between
@@ -349,7 +353,7 @@ public class FlvRecorderConverter {
 					returnLog.add(GenerateSWF.executeScript("addStartEndToAudio",argv_sox));
 					
 					//Fix for Audio Length - Invalid Audio Length in Recorded Files
-					//Audio must match 100% the the Video
+					//Audio must match 100% the Video
 					log.debug("############################################");
 					log.debug("Trim Audio to Full Length -- Start");
 					File aFile = new File(outputFullWav);

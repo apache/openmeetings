@@ -347,23 +347,30 @@
             <attribute name="recordingName" value="" type="string" />
             <attribute name="alternateName" value="" type="string" />
             
-            <labelText labelid="863" y="0" />
-            <labelText name="_flvName" y="0" x="80" multiline="true" height="32" 
+            <view name="_show_log" resource="recorder_show_log_rsc" y="-2" x="$once{ parent.width - 18 }">
+            	<handler name="onclick" args="clickObj">
+            		parent.parent.parent.parent._recordingsViewMain.showLog();
+            	</handler>
+            	<labelTooltip labelid="902" />
+            </view>
+            
+            <labelText labelid="863" y="16" />
+            <labelText name="_flvName" y="16" x="80" multiline="true" height="32" 
                        width="${ parent.width-80 }"/>
             
-            <labelText labelid="864" y="20" />
-            <labelText name="_flvLength" y="20" x="80" />
+            <labelText labelid="864" y="36" />
+            <labelText name="_flvLength" y="36" x="80" />
             
-            <labelText labelid="865" y="40" />
-            <labelText name="_flvDate" y="40" x="80" />
+            <labelText labelid="865" y="56" />
+            <labelText name="_flvDate" y="56" x="80" />
             
             <!--
             <labelText labelid="866" y="60" />
             <labelText name="_flvBy" y="60" />
              -->
             
-            <labelText labelid="874" y="60" />
-            <labelText name="_flvRoom" y="60" x="80" />
+            <labelText labelid="874" y="76" />
+            <labelText name="_flvRoom" y="76" x="80" />
             
             <simpleLabelButton y="100" align="right" text_padding_x="40"
                               height="26" width="$once{ parent.width / 2 }" labelid="884">

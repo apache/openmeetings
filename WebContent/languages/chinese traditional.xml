@@ -2712,4 +2712,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="900" name="sip status message">
     <value>Logging in to SIP-Gateway ...</value>
   </string>
+  <string id="901" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
+  <string id="902" name="flvrecording">
+    <value>Show Log</value>
+  </string>
+  <string id="903" name="flvrecording">
+    <value>Log messages from post recorder process</value>
+  </string>
 </language>

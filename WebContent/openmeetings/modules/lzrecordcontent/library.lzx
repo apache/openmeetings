@@ -43,6 +43,8 @@
     <resource name="file_explorer_folder_network_rsc" src="resources/network.png" />
     <resource name="file_explorer_folder_home_rsc" src="resources/folder_home.png" />
     
+    <resource name="recorder_show_log_rsc" src="resources/messagebox_info.png" />
+    
     <include href="baseChooseIconFLVView.lzx" />
     <include href="messageRecordingWin.lzx" />
     <include href="dynamicFLVName.lzx" />
