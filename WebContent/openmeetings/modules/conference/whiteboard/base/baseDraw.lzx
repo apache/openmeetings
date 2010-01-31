@@ -21,6 +21,8 @@
   	<attribute name="endx" value="0" type="number" />
   	<attribute name="endy" value="0" type="number" />
   	
+  	<attribute name="restricted" value="false" type="boolean"/>
+  	
   	<!-- This Counter just adds, it dosen't shows the absolute number of items
   		(ask this.layers.length to get the number of drawings) -->
   	<attribute name="counter" value="0" type="number" />
@@ -446,7 +448,9 @@
 		        ////Debug.write("onmouseup: ",this.letterObjectIsActive,this.currentletterObj);	        
 				this.checkStepLayers();
 	        } else {
-                this.endPointerWhiteBoard();
+	        	if (!this.restricted) {
+                    this.endPointerWhiteBoard();
+	        	}
             }
 		]]>
 	</handler>  

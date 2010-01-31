@@ -152,8 +152,9 @@
     	  y="0" name="_drawareaMask" clip="true" bgcolor="white" >
     	
     	
-        <remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true"
-        			  width="${parent.width}" height="${parent.height}" >
+        <remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" 
+        				  restricted="$once{ parent.parent.restricted }"
+        				  width="${parent.width}" height="${parent.height}" >
             <attribute name="initH"/>
             <attribute name="initW"/>
             <handler name="oninit">
