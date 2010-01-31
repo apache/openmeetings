@@ -515,16 +515,16 @@
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setRoomValues1: ",value);
-            if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
+            //if ($debug) Debug.write("setRoomValues1: ",value);
+            //if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
             
-            if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            
             for (var i in value){
                 if ( value[i].streamid == canvas.streamid ) {
                     canvas.isAllowedToDraw = value[i].canDraw;
                 }
-
-                if ($debug) Debug.write("getClientListScope value: ",value[i]);
+                //if ($debug) Debug.write("getClientListScope value: ",value[i]);
                 this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
                               '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
             }

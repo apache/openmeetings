@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+<class name="loadWhiteboardWindow" extends="labelText" multiline="true" resize="false" 
+	   width="260" align="right" y="${ parent.height - this.height - 10 }" 
+	   bgcolor="0xFFFFFF" fgcolor="0xFF3300">
+    
+    <attribute name="refObj" value="null" />
+    
+    <handler name="onclick">
+    	this.destroy();
+    </handler>
+    
+    <method name="close">
+        this.destroy();
+    </method>    
+    
+    <method name="setMessage" args="mess">
+        this.setAttribute('text',mess);
+    </method>
+    
+</class>
+
+<!--
 <class name="loadWhiteboardWindow" extends="labelExplorerBox" labelid="205"
     docking="true" width="260" x="$once{ parent.width/2 - this.width/2 }" y="200" height="100">
     
@@ -22,5 +43,6 @@
 		width="250" x="5" resize="false" />
 
 </class>
+ -->
 
 </library>

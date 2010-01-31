@@ -35,7 +35,7 @@
         </handler>
         
 		<view name="r" resource="chatbgitem" width="${parent.width}" 
-            height="${parent.height}" />
+            height="${parent.height}" stretches="both" />
 
         <baseVideoStream name="_videostream" bgcolor="black" 
               width="${parent.width}" height="${parent.height}" />

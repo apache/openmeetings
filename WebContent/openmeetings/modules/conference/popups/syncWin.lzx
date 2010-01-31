@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
-
+	
+<class name="syncWin" extends="labelText" multiline="true" resize="false" 
+       width="260" align="right" y="${ parent.height - this.height - 10 }" 
+       bgcolor="0xFFFFFF" fgcolor="0xFF3300">
+    
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="labeliderror" value="0" type="number" />
+    
+    <handler name="oninit">
+        this.setAttribute('text',canvas.getLabelName(this.labeliderror));
+    </handler>    
+    
+    <method name="close">
+    	this.destroy();
+    </method>
+    
+    <handler name="onclick">
+        this.destroy();
+    </handler>
+    
+    <method name="setMessage" args="mess">
+        this.setAttribute('text',mess);
+    </method>
+    
+</class>
+	
+<!--
 <class name="syncWin" extends="labelExplorerBox" labelid="558"
         docking="true" resizeable="false" closable="true" width="250"
         x="$once{ canvas.width/2 - this.width/2 }" height="140">
@@ -23,5 +50,6 @@
     </view>
 
 </class>
+ -->
 
 </library>

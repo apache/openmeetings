@@ -368,7 +368,7 @@
 		-->
 	<method name="loadNextObjectFromList">
 		<![CDATA[
-			Debug.write("loadNextObjectFromList");
+			if ($debug) Debug.write("loadNextObjectFromList");
 			this.loadfileDataIndex++;
 			if (this.loadfileDataIndex<this.loadfileData.length){
 				var txt = (this.loadfileDataIndex+1)+'/'+this.loadfileData.length+' '+this._loadmessageTxt;
@@ -418,7 +418,7 @@
 		have loaded the file completely, check it every 1 seconds -->
 	<method name="startWmlsyncCheck">
 		<![CDATA[
-            Debug.write("startWmlsyncCheck: ");
+            if ($debug) Debug.write("startWmlsyncCheck: ");
 			if (this._loadingUsers.length==0 || this.isInitLoader){
                 //Debug.write("wmlsyncComplete ");
 				this.wmlsyncComplete();
@@ -469,12 +469,12 @@
 		gets its own *sync* complete nofification
 		 -->
 	<method name="sendCompleteWmlSync" args="client">
-		Debug.write("sendCompleteWmlSync: ",client);
+		if ($debug) Debug.write("sendCompleteWmlSync: ",client);
 		this.loadfileDataWinRef.close();
 		if (this.isinitRecordingLoad){
 			this.isinitRecordingLoad = false;
-			Debug.write("this.isinitRecordingLoad",this);
-			Debug.write(this.parent.parent.parent.parent);
+			if ($debug) Debug.write("this.isinitRecordingLoad",this);
+			if ($debug) Debug.write(this.parent.parent.parent.parent);
 			this.parent.parent.parent.parent.timeLineAction();
 		}
 		//Debug.write("this.loadfileDataWinRef closed: ",this.loadfileDataWinRef);
@@ -482,13 +482,13 @@
 		if (this.isInitLoader){
 			//check if this is conferenceView or audienceView modus
 			if (canvas.thishib.modus == "conference"){
-				Debug.write("############## editRecordStream 2 xyz");
+				if ($debug) Debug.write("############## editRecordStream 2 xyz");
 				new lz.editRecordStream(canvas.main_content._content.inner);	
 			} else if(canvas.thishib.modus == "audience"){
 				//check in audince modus if this user is the current moderator
 				//this users cannot be the moderator cause he has downloaded
 				//some objects from teh current moderator
-				Debug.warn("WARNING 2 - ERROR - this users cannot be the moderator cause he has downloaded some objects from teh current moderator");
+				if ($debug) Debug.warn("WARNING 2 - ERROR - this users cannot be the moderator cause he has downloaded some objects from teh current moderator");
 			}
 		}
 	</method>
