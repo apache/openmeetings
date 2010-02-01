@@ -24,7 +24,30 @@
         } else {
             this.b3.onclick.sendEvent();
         }
-    </method>    
+    </method>   
+    
+    <datapointer id="pointer" name="pointer" xpath="languagesSet:/" rerunxpath="true"> 
+    	<method name="processData"> 
+    		if ($debug) Debug.write("Process data of DATAPOINTER: ");
+    		if ($debug) Debug.write("combo language : " + parent.languages.getValue());
+            
+            this.selectChild();
+            
+            if ($debug) Debug.write(" xQuery  : " + this.xpathQuery( 'language_id/text()' ));
+      		
+      		do { 
+      			if (this.xpathQuery( 'language_id/text()' ) == parent.languages.getValue()) { 
+      				if ($debug) Debug.write("LANGUAGE FOUND : " + this.xpathQuery( 'name/text()' ));
+      				if ($debug) Debug.write("LANGUAGE FOUND RTL: " + this.xpathQuery( 'rtl/text()' ));
+      				
+      				canvas.setAttribute('isrtl', this.xpathQuery( 'rtl/text()' ));
+      				
+      				break;
+            	} 
+            	
+      		} while (this.selectNext()); 
+    	</method> 
+  	</datapointer>  
     
     <attribute name="refObj" value="null" />
     <attribute name="childObj" value="null" />
@@ -251,6 +274,11 @@
         <handler name="onclick">
             this.parent.errormess.setAttribute('text','');
             this.parent.loginUser.doCall();
+            
+             <!-- Setting the RTL Flag global -->
+             this.parent.pointer.setXPath('languagesSet:/');
+             this.parent.pointer.processData();
+            
         </handler>
     </simpleLabelButton>   
         
