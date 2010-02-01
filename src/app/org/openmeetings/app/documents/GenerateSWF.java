@@ -96,6 +96,10 @@ public class GenerateSWF {
 			    errorWatcher.interrupt();
 			    inputWatcher.interrupt();
 			    Thread.currentThread().interrupt();
+			    
+			    returnMap.put("error", ex.getMessage());
+				returnMap.put("exitValue", -1);
+				
 			    throw ex;
 			} 
 			finally 

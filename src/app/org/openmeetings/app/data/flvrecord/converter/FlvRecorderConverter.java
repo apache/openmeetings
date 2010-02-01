@@ -187,7 +187,7 @@ public class FlvRecorderConverter {
 					
 					int counter = 0;
 					
-					long startGap = 0;
+					double startGap = 0;
 					
 					for (FlvRecordingMetaDelta flvRecordingMetaDelta : flvRecordingMetaDeltas) {
 						
@@ -204,9 +204,9 @@ public class FlvRecorderConverter {
 						
 						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
 							
-							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
 							
-							startGap = flvRecordingMetaDelta.getDeltaTime();
+							startGap = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue();
 							
 							if (gapSeconds > 0) {
 								//Add the item at the beginning
@@ -217,7 +217,7 @@ public class FlvRecorderConverter {
 							
 						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
 							
-							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
 							
 							if (gapSeconds > 0) {
 								//Add the item at the end
@@ -228,7 +228,7 @@ public class FlvRecorderConverter {
 							
 						} else if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
 							
-							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
 							
 							//Add the item at the beginning
 							argv_sox = new String[] { this.getPathToSoX(),
@@ -237,8 +237,8 @@ public class FlvRecorderConverter {
 							
 						} else {
 							
-							float gapSeconds = flvRecordingMetaDelta.getDeltaTime()/1000;
-							float posSeconds = ( ( flvRecordingMetaDelta.getTimeStamp() + startGap ) - flvRecordingMetaDelta.getDeltaTime() - 50 ) /1000;
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
+							double posSeconds = ( ( Double.valueOf(flvRecordingMetaDelta.getTimeStamp().toString()).doubleValue() + startGap ) - Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue() - 50 ) /1000;
 							
 							if (posSeconds < 0) {
 								throw new Exception("posSeconds is Negative, this should never happen! flvRecordingMetaDeltaId ::"+flvRecordingMetaDelta.getFlvRecordingMetaDeltaId()+" posSeconds :: "+posSeconds);
