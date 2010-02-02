@@ -106,7 +106,7 @@ public class DefaultIndex extends VelocityViewServlet {
 				for (Iterator<String> iter = httpServletRequest.getParameterMap().keySet().iterator();iter.hasNext();) {
 					String paramKey = iter.next();
 					SWF_FLASHVARS += paramKey+"="+httpServletRequest.getParameterMap().get(paramKey)+"&amp;";
-					
+					SWF_PARAMS += paramKey+"="+httpServletRequest.getParameterMap().get(paramKey)+"&amp;";
 				}
 			}
 			
@@ -118,14 +118,18 @@ public class DefaultIndex extends VelocityViewServlet {
 			defaultValuesMap.put("bgcolor","%23ffffff");
 			defaultValuesMap.put("width","100%25");
 			defaultValuesMap.put("height","100%25");
-			defaultValuesMap.put("__lzurl","maindebug.lzx%3Flzt%3Dswf%26lzproxied%3Dsolo%26lzr%3Dswf8");
+			//defaultValuesMap.put("__lzurl","main.lzx%3Flzt%3Dswf%26lzproxied%3Dsolo%26lzr%3Dswf8");
 			defaultValuesMap.put("__lzminimumversion","8");
 			defaultValuesMap.put("id","lzapp");
 			
 			for (Iterator<String> iter = defaultValuesMap.keySet().iterator();iter.hasNext();) {
 				String paramKey = iter.next();
-				SWF_PARAMS += paramKey+"="+defaultValuesMap.get(paramKey)+"&";
-				SWF_FLASHVARS += paramKey+"="+defaultValuesMap.get(paramKey)+"&amp;";
+				SWF_PARAMS += paramKey+"="+defaultValuesMap.get(paramKey);
+				SWF_FLASHVARS += paramKey+"="+defaultValuesMap.get(paramKey);
+				if (iter.hasNext()) {
+					SWF_PARAMS += "&";
+					SWF_FLASHVARS += "&amp;";
+				}
 			}
 			
 			ctx.put("SWF_PARAMS", SWF_PARAMS);

@@ -3,6 +3,7 @@ package org.openmeetings.app.data.calendar.management;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 import org.slf4j.Logger;
@@ -98,7 +99,8 @@ public class AppointmentLogic {
 	public Long saveAppointment(String appointmentName, Long userId, String appointmentLocation,String appointmentDescription, 
 			Date appointmentstart, Date appointmentend, 
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, 
-			Long remind, Long roomType, String baseUrl){
+			Long remind, List mmClient, Long roomType, String baseUrl,
+			Long language_id){
 		
 		log.debug("Appointmentlogic.saveAppointment");
 		
@@ -159,15 +161,32 @@ public class AppointmentLogic {
 		
 		try{
 			Long id =  AppointmentDaoImpl.getInstance().addAppointment(appointmentName, userId, appointmentLocation, appointmentDescription,
-				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, room);
+				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, room, language_id, false, "");
 		
 			
 			// Adding Invitor as Meetingmember
 			Users user = Usermanagement.getInstance().getUserById(userId); 
 			
-			MeetingMemberLogic.getInstance().addMeetingMember(user.getFirstname(), user.getLastname(), "", "", id, userId, user.getAdresses().getEmail(), baseUrl, userId, true);
+			MeetingMemberLogic.getInstance().addMeetingMember(user.getFirstname(), user.getLastname(), "", "", id, 
+						userId, user.getAdresses().getEmail(), baseUrl, userId, true, language_id, false, "");
 			
 			
+			//add items
+		    if(mmClient !=null){
+		    	
+			    for (int i = 0; i < mmClient.size(); i++) {
+		    		
+			    	Map clientMember = (Map)mmClient.get(i);
+			    	
+	    			//Not In Remote List available - extern user
+	    			MeetingMemberLogic.getInstance().addMeetingMember(clientMember.get("firstname").toString(), 
+	    							clientMember.get("lastname").toString(), 
+	    							"0", "0", id, null,  clientMember.get("email").toString(), baseUrl, 
+	    							userId, new Boolean(false), language_id, false, "");
+		   		
+		    	}
+		    }
+		    
 			return id;
 		}catch(Exception err){
 			log.error("[saveAppointment]",err);
@@ -342,13 +361,15 @@ public class AppointmentLogic {
 	 */
 	public Long updateAppointment(Long appointmentId, String appointmentName, String appointmentDescription, 
 			Date appointmentstart, Date appointmentend,
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind, List mmClient , Long user_id, String baseUrl){
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, 
+			Long remind, List mmClient , Long user_id, String baseUrl,
+			Long language_id, Boolean isPasswordProtected, String password){
 		
 		try {
 			return AppointmentDaoImpl.getInstance().updateAppointment(appointmentId, 
 					appointmentName, appointmentDescription, appointmentstart, 
 					appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, 
-					mmClient, user_id, baseUrl);
+					mmClient, user_id, baseUrl, language_id, isPasswordProtected, password);
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
 		}
@@ -356,11 +377,12 @@ public class AppointmentLogic {
 	}
 	
 	public Long updateAppointmentByTime(Long appointmentId, 
-			Date appointmentstart, Date appointmentend, Long user_id, String baseUrl){
+			Date appointmentstart, Date appointmentend, Long user_id, 
+			String baseUrl, Long language_id){
 		
 		try {
 			return AppointmentDaoImpl.getInstance().updateAppointmentByTime(appointmentId, 
-					appointmentstart, appointmentend, user_id, baseUrl);
+					appointmentstart, appointmentend, user_id, baseUrl, language_id);
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
 		}

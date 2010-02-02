@@ -24,5 +24,8 @@
     <property name="isDaily" type="boolean" column="isdaily"/>
     <many-to-one outer-join="true" not-null="false" column="room_id" lazy="false" cascade="none" name="room" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
     <property name="icalId" type="string" column="icalId"/>
+    <property name="language_id" type="long" column="language_id"/>
+    <property name="isPasswordProtected" type="boolean" column="is_password_protected"/>
+    <property name="password" type="string" column="password"/>
   </class>
 </hibernate-mapping>

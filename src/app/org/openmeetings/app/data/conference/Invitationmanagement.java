@@ -75,7 +75,7 @@ public class Invitationmanagement {
 	public Long addInvitationLink(Long user_level, String username, String message,
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
-			Date validFrom, Date validTo, Long createdBy, String baseUrl
+			Date validFrom, Date validTo, Long createdBy, String baseUrl, Long language_id
 			){
 			String validFromString = "";
 			String validToString = "";
@@ -132,8 +132,10 @@ public class Invitationmanagement {
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
-				if (invitationId>0){
-					this.sendInvitionLink(username, message, baseurl, email, subject, invitation.getHash(), validFromString, validToString);
+				if (invitationId > 0) {
+					this.sendInvitionLink(username, message, baseurl, email,
+							subject, invitation.getHash(), validFromString,
+							validToString, language_id);
 					return invitationId;
 				}
 				
@@ -208,7 +210,8 @@ public class Invitationmanagement {
 	 * @param member
 	 */
 	//-----------------------------------------------------------------------------------------------
-	public void updateInvitation(Appointment ment, MeetingMember member,Long canceling_user_id){
+	public void updateInvitation(Appointment ment, MeetingMember member,
+				Long canceling_user_id, Long language_id){
 		
 		log.debug("updateInvitation");
 		
@@ -238,7 +241,7 @@ public class Invitationmanagement {
 		}
 		else if(ment.getRemind().getTypId() == 3){
 			try{
-				sendInvitationIcalUpdateMail(member.getEmail(), member.getFirstname() + " " + member.getLastname(), ment, canceling_user_id, member.getInvitor());
+				sendInvitationIcalUpdateMail(member.getEmail(), member.getFirstname() + " " + member.getLastname(), ment, canceling_user_id, member.getInvitor(), language_id);
 			}catch(Exception e){
 				log.error("Error sending IcalUpdateMail for User " + member.getEmail() + " : " + e.getMessage());
 			}
@@ -270,8 +273,8 @@ public class Invitationmanagement {
 	public Long addInvitationIcalLink(Long user_level, String username, String message,
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
-			Date validFrom, Date validTo, Long createdBy, Long appointMentId, Boolean invitor
-			){
+			Date validFrom, Date validTo, Long createdBy, Long appointMentId, Boolean invitor,
+			Long language_id){
 			log.debug("addInvitationIcalLink");
 			
 		try {
@@ -324,9 +327,11 @@ public class Invitationmanagement {
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
-				if (invitationId>0){
-					 this.sendInvitionIcalLink(username, message, baseurl, email, subject, invitation.getHash(), appointMentId, createdBy, invitor);
-					 return invitationId;
+				if (invitationId > 0) {
+					this.sendInvitionIcalLink(username, message, baseurl,
+							email, subject, invitation.getHash(),
+							appointMentId, createdBy, invitor, language_id);
+					return invitationId;
 				}
 			}
 		} catch (HibernateException ex) {
@@ -344,15 +349,16 @@ public class Invitationmanagement {
 	 * 
 	 */
 	private String sendInvitionLink(String username, String message, 
-			String baseurl, String email, String subject, String invitationsHash, String dStart, String dEnd){
+			String baseurl, String email, String subject, 
+			String invitationsHash, String dStart, String dEnd, Long language_id){
 		try {
 				
 			String invitation_link = baseurl+"?lzproxied=solo&invitationHash="+invitationsHash;
 			
-			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
-	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
+//			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
+//	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			
-			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, default_lang_id, dStart, dEnd);
+			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, language_id, dStart, dEnd);
 		
 			return MailHandler.sendMail(email, subject, template);
 
@@ -531,7 +537,9 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	//--------------------------------------------------------------------------------------------------------------
-	private String sendInvitationIcalUpdateMail(String email, String userName, Appointment point, Long organizer_userId, Boolean invitor) throws Exception{
+	private String sendInvitationIcalUpdateMail(String email, String userName, 
+			Appointment point, Long organizer_userId, Boolean invitor,
+			Long language_id) throws Exception{
 		log.debug("sendInvitationIcalUpdateMail");
 		
 		
@@ -592,14 +600,16 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	private String sendInvitionIcalLink(String username, String message, 
-			String baseurl, String email, String subject, String invitationsHash, Long appointMentId, Long organizer_userId, Boolean invitor){
+			String baseurl, String email, String subject, String invitationsHash, 
+			Long appointMentId, Long organizer_userId, Boolean invitor, 
+			Long language_id){
 		try {
 				
 			String invitation_link = baseurl+"?lzproxied=solo&lzr=swf8&lzt=swf&invitationHash="+invitationsHash;
 			
-			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
-	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
-			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, default_lang_id, "", "");
+//			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
+//	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
+			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, language_id, "", "");
 		
 			IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 			

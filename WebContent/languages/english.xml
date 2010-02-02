@@ -1609,7 +1609,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>The Invitation was already used. This type of Invitation cannot be re-used.</value>
   </string>
   <string id="535" name="invitation_error">
-    <value>This Invitation-Code is not valid.</value>
+    <value>This Invitation-Code is not valid. The Invitation through the Link is only valid for the time of the Meeting! You cannot access the Room before or after the Meeting through that Link!</value>
   </string>
   <string id="536" name="invitation_pass">
     <value>Password:</value>
@@ -2720,5 +2720,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="905" name="sip login">
     <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+  </string>
+  <string id="906" name="moderator pop up">
+    <value>Get Moderation</value>
   </string>
 </language>

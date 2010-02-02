@@ -93,13 +93,15 @@ public class CalendarService {
 			String appointmentLocation, String appointmentDescription,
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind, Long roomType, String baseUrl) {
+			Long categoryId, Long remind, List mmClient, 
+			Long roomType, String baseUrl, Long language_id) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
+			
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
 
@@ -109,7 +111,7 @@ public class CalendarService {
 						appointmentName, users_id, appointmentLocation,
 						appointmentDescription, appointmentstart,
 						appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-						categoryId, remind, roomType, baseUrl);
+						categoryId, remind, mmClient, roomType, baseUrl, language_id);
 
 				return id;
 			} else {
@@ -123,7 +125,8 @@ public class CalendarService {
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, String baseurl) {
+			Date appointmentstart, Date appointmentend, String baseurl, 
+			Long language_id) {
 		try {
 
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -141,7 +144,7 @@ public class CalendarService {
 				return AppointmentLogic.getInstance().updateAppointmentByTime(
 						appointmentId, 
 						appointmentstart, appointmentend, 
-						users_id, baseurl);
+						users_id, baseurl, language_id);
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -156,7 +159,7 @@ public class CalendarService {
 			String appointmentDescription, Date appointmentstart,
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List mmClient, Long roomType, String baseurl) {
+			List mmClient, Long roomType, String baseurl, Long language_id) {
 		try {
 
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -186,7 +189,7 @@ public class CalendarService {
 						appointmentId, appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl);
+						users_id, baseurl, language_id, false, "");
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);

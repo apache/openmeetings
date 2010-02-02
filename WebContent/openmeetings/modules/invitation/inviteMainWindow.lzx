@@ -78,12 +78,12 @@
 						var port = urlObject.port;
 						
 						if (port != 80) {
-							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
 						} else {
-							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 						}
 					} else {
-						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 					}
 					
 					if( $debug ) Debug.write("parent.baseUrl: ",parent.baseUrl);
@@ -104,8 +104,9 @@
 		</simpleLabelButton>
 	   
 	      <netRemoteCallHib name="sendInvitationHash" funcname="invitationservice.sendInvitationHash" remotecontext="$once{ canvas.thishib }" >    
+        		
         		<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
-			<netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
+			    <netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
 	            <netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
 	            <netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 	            <netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
@@ -119,7 +120,8 @@
 	            <netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
 	            <netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
 	            <netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
-
+                <netparam><method name="getValue">return hib.userlang;</method></netparam>
+                
 	            <handler name="ondata" args="value">
 	            	<![CDATA[
 	                	//The onResult-Handler will be called be the rtmpconnection

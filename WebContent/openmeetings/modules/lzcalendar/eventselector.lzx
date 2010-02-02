@@ -411,12 +411,12 @@
 								var port = urlObject.port;
 								
 								if (port != 80) {
-									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
 								} else {
-									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 								}
 							} else {
-								this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+								this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 							}
 		            		
 		            		this.updateAppointmentTimeOnly.appointementId = Number(appointementId);
@@ -446,6 +446,7 @@
 			<netparam><method name="getValue">return parent.parent.startDate2;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.endDate2;</method></netparam>
 			<netparam><method name="getValue">return parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
 			
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[

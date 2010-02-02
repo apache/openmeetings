@@ -102,14 +102,15 @@
 					var port = urlObject.port;
 					
 					if (port != 80) {
-						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path+urlObject.file;
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
 					} else {
-						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 					}
 				} else {
-					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path+urlObject.file;
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 				}
 						
+				if ($debug) Debug.write("urlObject ",urlObject);
 	            if ($debug) Debug.write("parent.baseUrl ",this.baseUrl);
             ]]>
         </handler>
@@ -152,6 +153,10 @@
         			return;
         		}
         		
+        		if ($debug) Debug.write("this.arrayMeetingMember :: ",this.arrayMeetingMember);
+        		
+        		if ($debug) Debug.write("this.baseUrl :: ",this.baseUrl);
+        		
         		if (this.appointementId == "0" || this.appointementId == 0) {
         			if ($debug) Debug.write("ADD");
         			this.saveAppointment.doCall();
@@ -165,6 +170,7 @@
 
 		<netRemoteCallHib name="saveAppointment" funcname="calendarservice.saveAppointment" 
 							  remotecontext="$once{ canvas.thishib }" >     
+							  
 			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
 			<netparam><method name="getValue">return parent.parent.summary.content.title.text;</method></netparam>	
 			<netparam><method name="getValue">return '';</method></netparam>
@@ -177,8 +183,10 @@
 			<netparam><method name="getValue">return false;</method></netparam>
 			<netparam><method name="getValue">return 1;</method></netparam>
 			<netparam><method name="getValue">return parent.parent._erinnerungatr;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.arrayMeetingMember;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.roomtype;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
 			
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[
@@ -213,10 +221,10 @@
 			<netparam><method name="getValue">return false;</method></netparam>
 			<netparam><method name="getValue">return '1';</method></netparam>
 			<netparam><method name="getValue">return parent.parent._erinnerungatr;</method></netparam>
-			
 			<netparam><method name="getValue">return parent.parent.arrayMeetingMember;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.roomtype</method></netparam>
 			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
 			
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[

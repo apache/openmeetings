@@ -43,6 +43,9 @@ public class Appointment {
 	private String icalId;
 	
 	private List<MeetingMember> meetingMember;
+	private Long language_id;
+	private Boolean isPasswordProtected;
+	private String password;
 
 	/**
      * 
@@ -326,7 +329,41 @@ public class Appointment {
 		this.icalId = icalId;
 	}
 	
+	/**
+	 * @hibernate.property
+	 * column="language_id"
+	 * type="long"
+	 */
+	public Long getLanguage_id() {
+		return language_id;
+	}
+	public void setLanguage_id(Long languageId) {
+		language_id = languageId;
+	}
 	
+	/**
+	 * @hibernate.property
+	 * column="is_password_protected"
+	 * type="boolean"
+	 */
+	public Boolean getIsPasswordProtected() {
+		return isPasswordProtected;
+	}
+	public void setIsPasswordProtected(Boolean isPasswordProtected) {
+		this.isPasswordProtected = isPasswordProtected;
+	}
+	
+	/**
+	 * @hibernate.property
+	 * column="password"
+	 * type="string"
+	 */
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 	
 }

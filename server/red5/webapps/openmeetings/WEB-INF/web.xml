@@ -7,6 +7,13 @@
         <param-value>default</param-value>
     </context-param>
     
+	<welcome-file-list>
+		<welcome-file>sipindex.html</welcome-file>
+		<welcome-file>login.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+	</welcome-file-list>
+    
     <!-- Custom logging like described in Paul Gregoire Patch: 
     http://gregoire.org/2008/09/18/logging-work-around/
     THIS WILL NOT WORK for us as we can hardly rewrite all logging statements of hibernate

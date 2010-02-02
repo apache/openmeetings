@@ -2795,4 +2795,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="905" name="sip login">
     <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
   </string>
+  <string id="906" name="moderator pop up">
+    <value>Get Moderation</value>
+  </string>
 </language>

@@ -13,7 +13,7 @@
 		<vscrollbar />
 	</view>
     
-    <simpleLabelButton x="20" labelid="84" y="200" width="200">
+    <simpleLabelButton x="20" labelid="906" y="200" width="200">
 		<handler name="onclick">
 			//new lz.applyForModeration(canvas.main_content._content.inner);
 			canvas.thishib.applyForModeration.doCall();

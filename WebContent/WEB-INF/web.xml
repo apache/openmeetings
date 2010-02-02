@@ -64,6 +64,7 @@
     <url-pattern>/close/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
+  	<welcome-file>sipindex.html</welcome-file>
     <welcome-file>login.html</welcome-file>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>

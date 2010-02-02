@@ -42,7 +42,9 @@ public class MeetingMemberLogic {
 	 */
 	//------------------------------------------------------------------------------------------------------------------------------
 	public Long addMeetingMember(String firstname, String lastname, String memberStatus,
-			String appointmentStatus, Long appointmentId, Long userid, String email, String baseUrl, Long meeting_organizer, Boolean invitor){
+			String appointmentStatus, Long appointmentId, Long userid, String email, 
+			String baseUrl, Long meeting_organizer, Boolean invitor, 
+			Long language_id, Boolean isPasswordProtected, String password){
 		
 		try{
 			Long memberId =  MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  memberStatus,
@@ -61,48 +63,54 @@ public class MeetingMemberLogic {
 				return null;
 			}
 			
+			
+			
+			log.debug(":::: addMeetingMember ..... "+point.getRemind().getTypId());
+			
 			if(point.getRemind().getTypId() == 1){
 				log.debug("no reminder required");
 			} else if(point.getRemind().getTypId() == 2){
 				log.debug("Reminder for Appointment : simple email");
+				
 				invitationId = Invitationmanagement.getInstance().addInvitationLink(
-						new Long(2), //userlevel
-						firstname + " " + lastname, //username
-						"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
-						baseUrl, // baseURl
-						email, //email
-						"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
-						point.getRoom().getRooms_id(), // room_id
-						"public",
-						false, // passwordprotected
-						"", // invitationpass
-						1, // valid
-						point.getAppointmentStarttime(), // valid from
-						point.getAppointmentEndtime(), // valid to
-						meeting_organizer, // created by
-						baseUrl
+							new Long(2), //userlevel
+							firstname + " " + lastname, //username
+							"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
+							baseUrl, // baseURl
+							email, //email
+							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
+							point.getRoom().getRooms_id(), // room_id
+							"public",
+							isPasswordProtected, // passwordprotected
+							password, // invitationpass
+							2, // valid
+							point.getAppointmentStarttime(), // valid from
+							point.getAppointmentEndtime(), // valid to
+							meeting_organizer, // created by
+							baseUrl, language_id
 						);
 				
-			}
-			else if(point.getRemind().getTypId() == 3){
+			} else if(point.getRemind().getTypId() == 3){
 				log.debug("Reminder for Appointment : iCal mail");
-						invitationId = Invitationmanagement.getInstance().addInvitationIcalLink(new Long(2), //userlevel
-						firstname + " " + lastname, //username
-						"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
-						baseUrl, // baseURl
-						email, //email
-						"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
-						point.getRoom().getRooms_id(), // room_id
-						"public",
-						false, // passwordprotected
-						"", // invitationpass
-						1, // valid
-						point.getAppointmentStarttime(), // valid from
-						point.getAppointmentEndtime(), // valid to
-						meeting_organizer, // created by
-						point.getAppointmentId(),
-						member.getInvitor()
-					);
+				
+				invitationId = Invitationmanagement.getInstance().addInvitationIcalLink(new Long(2), //userlevel
+							firstname + " " + lastname, //username
+							"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
+							baseUrl, // baseURl
+							email, //email
+							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
+							point.getRoom().getRooms_id(), // room_id
+							"public",
+							isPasswordProtected, // passwordprotected
+							password, // invitationpass
+							2, // valid
+							point.getAppointmentStarttime(), // valid from
+							point.getAppointmentEndtime(), // valid to
+							meeting_organizer, // created by
+							point.getAppointmentId(),
+							member.getInvitor(), language_id
+						);
+				
 			}
 			
 			// Setting InvitationId within MeetingMember

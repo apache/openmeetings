@@ -144,6 +144,10 @@
 		
 		//Check for Invitation
 		var invitationHash = lz.Browser.getInitArg('invitationHash');
+		
+		if ($debug) Debug.info("###################### -1 ");
+		if ($debug) Debug.info("invitationHash :: ",invitationHash);
+		
 		if (invitationHash != undefined){
 			canvas.isinitRoomDirect = true;
 			canvas.invitationHash = invitationHash;
@@ -154,6 +158,8 @@
 			canvas.secureRemoteUserLogin = true;
 			canvas.secureHash = secureHash;
 		}
+		
+		if ($debug) Debug.info("###################### -2 ");
 		
 		//sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
 		var sid = lz.Browser.getInitArg('sid');

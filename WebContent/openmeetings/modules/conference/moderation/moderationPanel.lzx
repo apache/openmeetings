@@ -123,7 +123,7 @@
             canvas.thishib.applyForModeration.doCall();
         </handler>  
         <view x="7" y="4" name="infoview" resource="applyformodicon" />
-        <labelTooltip inittwice="true" labelid="84" />      
+        <labelTooltip inittwice="true" labelid="906" />      
     </simpleLabelButton>
     
     <!-- 

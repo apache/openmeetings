@@ -44,7 +44,8 @@ public class InvitationService implements IPendingServiceCallback {
 	public String sendInvitationHash(String SID, String username, String message, 
 			String baseurl, String email, String subject, Long room_id,String conferencedomain, 
     		Boolean isPasswordProtected, String invitationpass, Integer valid, 
-    		Date validFromDate, String validFromTime, Date validToDate, String validToTime){
+    		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
+    		Long language_id){
     	
     	log.debug("sendInvitationHash: ");
     	
@@ -83,7 +84,7 @@ public class InvitationService implements IPendingServiceCallback {
     	Long invitationId =  Invitationmanagement.getInstance().addInvitationLink(user_level, username, message, 
     			baseurl, email, subject, room_id, conferencedomain,
     			isPasswordProtected, invitationpass, 
-    			valid, dFrom, dTo, users_id, baseurl);
+    			valid, dFrom, dTo, users_id, baseurl, language_id);
     	
     	if(invitationId != null)
     		return "success";

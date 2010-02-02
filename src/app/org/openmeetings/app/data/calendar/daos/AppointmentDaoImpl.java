@@ -129,7 +129,9 @@ public class AppointmentDaoImpl {
 	//----------------------------------------------------------------------------------------------------------------------------
 	public Long addAppointment(String appointmentName, Long userId, String appointmentLocation,String appointmentDescription, 
 			Date appointmentstart, Date appointmentend, 
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind, Rooms room) {
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, 
+			Long categoryId, Long remind, Rooms room, Long language_id, 
+			Boolean isPasswordProtected, String password) {
 		try {
 			
 			Appointment ap = new Appointment();
@@ -146,6 +148,9 @@ public class AppointmentDaoImpl {
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
+			ap.setLanguage_id(language_id);
+			ap.setIsPasswordProtected(isPasswordProtected);
+			ap.setPassword(password);
 			ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
 			ap.setAppointmentCategory(AppointmentCategoryDaoImpl.getInstance().getAppointmentCategoryById(categoryId));
 			ap.setRoom(room);
@@ -210,7 +215,9 @@ public class AppointmentDaoImpl {
 	//----------------------------------------------------------------------------------------------------------
 	public Long updateAppointment(Long appointmentId, String appointmentName, String appointmentDescription, 
 			Date appointmentstart, Date appointmentend,
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind, List mmClient, Long users_id, String baseUrl) {
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, 
+			Long categoryId, Long remind, List mmClient, Long users_id, String baseUrl,
+			Long language_id, Boolean isPasswordProtected, String password) {
 		
 			log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
@@ -228,6 +235,9 @@ public class AppointmentDaoImpl {
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
+			ap.setLanguage_id(language_id);
+			ap.setIsPasswordProtected(isPasswordProtected);
+			ap.setPassword(password);
 			//ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
 			ap.setAppointmentCategory(AppointmentCategoryDaoImpl.getInstance().getAppointmentCategoryById(categoryId));
 						
@@ -271,7 +281,7 @@ public class AppointmentDaoImpl {
 		    	}
 		    	else{
 		    		// Notify member of changes
-		    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id);
+		    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id);
 		    		
 		    	}
 		    }
@@ -295,9 +305,22 @@ public class AppointmentDaoImpl {
 		    		
 		    		if (!found) {
 		    			
-		    			//Not In Remote List available - extern user
-		    			MeetingMemberLogic.getInstance().addMeetingMember(clientMember.get("firstname").toString(), clientMember.get("lastname").toString(), "0", "0", appointmentId, null,  clientMember.get("email").toString(), baseUrl, users_id, new Boolean(false));
-		    			
+						// Not In Remote List available - extern user
+						MeetingMemberLogic.getInstance().addMeetingMember(
+								clientMember.get("firstname").toString(),
+								clientMember.get("lastname").toString(), 
+								"0", //member - Status
+								"0", //appointement - Status
+								appointmentId, 
+								null, //UserId
+								clientMember.get("email").toString(), //Email to send to
+								baseUrl, //URL to send to
+								users_id, //organizer
+								new Boolean(false), //invitor
+								language_id, 
+								isPasswordProtected, 
+								password);
+
 		    		}
 		   		
 		    	}
@@ -315,7 +338,8 @@ public class AppointmentDaoImpl {
 	
 	
 	public Long updateAppointmentByTime(Long appointmentId, 
-			Date appointmentstart, Date appointmentend, Long users_id, String baseUrl) {
+			Date appointmentstart, Date appointmentend, Long users_id, String baseUrl, 
+			Long language_id) {
 		
 			log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
@@ -344,7 +368,7 @@ public class AppointmentDaoImpl {
 		    for (MeetingMember memberRemote : meetingsRemoteMembers) {
 		    	
 	    		// Notify member of changes
-	    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id);
+	    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id);
 		    		
 		    }
 		    
