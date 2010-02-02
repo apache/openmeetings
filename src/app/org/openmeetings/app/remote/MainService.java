@@ -500,7 +500,7 @@ public class MainService implements IPendingServiceCallback {
     public Users markSessionAsLogedIn(String SID){
     	try {
 	    	Sessionmanagement.getInstance().updateUserWithoutSession(SID, -1L);
-	    	Configuration conf = Configurationmanagement.getInstance().getConfKey(3l, "default.rpc.userid");
+	    	Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.rpc.userid");
 	    	return Usermanagement.getInstance().getUserById(Long.parseLong(conf.getConf_value()));
     	} catch (Exception err) {
     		log.error("[markSessionAsLogedIn]",err);

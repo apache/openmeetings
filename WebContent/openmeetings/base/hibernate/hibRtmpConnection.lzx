@@ -238,7 +238,7 @@
         <netparam><method name="getValue">return canvas.lastName;</method></netparam>      
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setUsername: ",value);   
+            if ($debug) Debug.write("setUsernameReconnect: ",canvas.user_id,value);   
             parent.reconnectComplete();
         </handler>  
     </netRemoteCallHib>    
@@ -327,7 +327,10 @@
 				if (value!=null){
 					
 					canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
-					canvas.setAttribute('user_id',value.user_id);
+					
+					//Somehow this leads to a bug in the implementation
+					//canvas.setAttribute('user_id',value.user_id);
+                    
                     canvas.setAttribute('firstName',value.firstname);
                     canvas.setAttribute('lastName',value.lastname);
                     canvas.setAttribute('mail','');
@@ -417,6 +420,8 @@
              
             hib.userobject = value;
              
+            canvas.user_id = hib.userobject.user_id;
+            
             if (value.organisation_users.length > 0){
                 hib.currentdomain = value.organisation_users[0].organisation.name;
                 hib.currentdomainObj = value.organisation_users[0].organisation;
@@ -667,7 +672,7 @@
             <netparam><method name="getValue">return canvas.lastName;</method></netparam>      
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("setUsername: ",value);
+                if ($debug) Debug.write("setUsernameAndSession: ",canvas.user_id,value);
                 canvas.thishib.loaderVar.setProgress();
                 parent.getNavi.doCall();                    
             </handler>  
