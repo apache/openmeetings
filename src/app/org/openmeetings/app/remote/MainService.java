@@ -734,7 +734,28 @@ public class MainService implements IPendingServiceCallback {
     		return null;
     	}
 	}
-
+	
+	public Boolean getSIPModuleStatus(){
+		try {
+			
+			Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "sip.enable");
+			
+			if (conf == null) {
+				return false;
+			} else {
+				
+				if (conf.getConf_value().equals("yes")) {
+					return true;
+				}
+				
+			}
+			
+		} catch (Exception err) {
+			log.error("[getSIPModuleStatus]",err);
+		}
+		return false;
+	}
+	
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 		log.debug("[resultReceived]"+arg0);

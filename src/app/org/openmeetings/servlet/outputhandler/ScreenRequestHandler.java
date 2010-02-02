@@ -49,7 +49,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			Long users_id = Sessionmanagement.getInstance().checkSession(sid);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 
-			if (user_level > 0) {
+			//if (user_level > 0) {
 				
 				String publicSID = httpServletRequest.getParameter("publicSID");
 				if (publicSID == null) {
@@ -137,7 +137,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				httpServletResponse.setHeader("Content-Disposition","Inline; filename=\"" + requestedFile + "\"");
 		        
 				// Check , which screenviewer is to be used
-				org.openmeetings.app.hibernate.beans.basic.Configuration conf = Configurationmanagement.getInstance().getConfKey(user_level, "screen_viewer");
+				org.openmeetings.app.hibernate.beans.basic.Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "screen_viewer");
 				
 				String template = "screencast_odsp_sharertemplate.vm";
 				//template = "screencast_odsp_sharertemplate.vm";
@@ -301,9 +301,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				
 				return getVelocityEngine().getTemplate(template);
 			
-			}
+			//}
 			
-			return null;
+			//return null;
 			
 		} catch (Exception er) {
 			log.error("[ScreenRequestHandler]",er);

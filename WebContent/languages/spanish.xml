@@ -2724,4 +2724,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="903" name="flvrecording">
     <value>Log messages from post recorder process</value>
   </string>
+  <string id="904" name="sip login">
+    <value>SIP-Applet Message</value>
+  </string>
+  <string id="905" name="sip login">
+    <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+  </string>
 </language>

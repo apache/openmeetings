@@ -170,9 +170,19 @@
             if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
             canvas.publicSID = value;     
             canvas.thishib.loaderVar.setProgress();
-            parent.getLanguages.doCall();
+            parent.getSIPModuleStatus.doCall();
         </handler>  
     </netRemoteCallHib>
+    
+    <netRemoteCallHib name="getSIPModuleStatus" funcname="xmlcrm.getSIPModuleStatus" >      
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            if ($debug) Debug.write("hibRtmpConnection/getSIPModuleStatus [",value,"]");
+            canvas.thishib.sip_enabled = value;
+            canvas.thishib.loaderVar.setProgress();
+            parent.getLanguages.doCall();
+        </handler>  
+    </netRemoteCallHib>    
      
     <netRemoteCallHib name="overwritePublicSID" funcname="overwritePublicSID" >     
     	<netparam><method name="getValue"> return canvas.publicSID;</method></netparam>
@@ -571,13 +581,22 @@
                     if (found) {
                         hib.getLanguageByIdAndMax.start = 0;
                         
-                        //Perform the Login to the SIP Applet
-                        if (sipIsEnabled()) {
-                            if ($debug) Debug.write(" -- sipIsEnabled -- ");
-                            
-                            this.sipLoader = new lz.sipLoader(canvas);
-                            loginSipUser(hib.userobject.userSipData,this);
-                            
+                        if (canvas.thishib.sip_enabled) {
+                            //Perform the Login to the SIP Applet
+                            if (sipIsEnabled()) {
+                            	
+                                if ($debug) Debug.write(" -- sipIsEnabled -- ");
+                                
+                                this.sipLoader = new lz.sipLoader(canvas);
+                                loginSipUser(hib.userobject.userSipData,this);
+                                
+                            } else {
+                            	
+                            	new lz.confirmationSingle(canvas.main_content._content.inner,{
+                            	           labelid:904,labeliderror:905,
+                            	           refObj:this,showCheckBox:false});
+                            	
+                            }
                         } else {
                         	hib.getLanguageByIdAndMax.doCall();
                         	canvas.focusOnItem = null;
@@ -593,11 +612,18 @@
          	   }
          	]]>
         </handler>
+        
+        <method name="sendConfirmation" args="yesno" >
+            this.sipLoader = new lz.sipLoader(canvas);
+            loginSipUser(hib.userobject.userSipData,this);
+        </method>
+        
         <handler name="onSipSuccess">
         	this.sipLoader.destroy();
         	hib.getLanguageByIdAndMax.doCall();
         	canvas.focusOnItem = null;
         </handler>
+        
     </netRemoteCallHib>
     
     

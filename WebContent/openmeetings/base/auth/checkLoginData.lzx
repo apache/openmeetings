@@ -275,9 +275,12 @@
             this.parent.errormess.setAttribute('text','');
             this.parent.loginUser.doCall();
             
-             <!-- Setting the RTL Flag global -->
-             this.parent.pointer.setXPath('languagesSet:/');
-             this.parent.pointer.processData();
+            //Recheck the Applet Status 
+            getAppletStatus();
+            
+            <!-- Setting the RTL Flag global -->
+            this.parent.pointer.setXPath('languagesSet:/');
+            this.parent.pointer.processData();
             
         </handler>
     </simpleLabelButton>   
@@ -371,15 +374,24 @@
                         hib.setCurrentUserOrganization.doCall();
                         hib.getLanguageByIdAndMax.start = 0;
                         
-                        //Perform the Login to the SIP Applet
-                        if (sipIsEnabled()) {
-                            if ($debug) Debug.write(" -- sipIsEnabled -- ");
+                        if (canvas.thishib.sip_enabled) {
+                            //Perform the Login to the SIP Applet
+                            if (sipIsEnabled()) {
+                                if ($debug) Debug.write(" -- sipIsEnabled -- ");
+                                
+                                parent.setAttribute("visibility","hidden");
+                                this.sipLoader = new lz.sipLoader(canvas);
+                                
+                                loginSipUser(hib.userobject.userSipData,this);
+                            } else {
+                            	
+                            	new lz.labelerrorPopup(canvas,{error:'SIP Applet is not ready!'});
+                            	
+                            	hib.getLanguageByIdAndMax.doCall();
+                                canvas.focusOnItem = null;
+                                parent.close();
                             
-                            parent.setAttribute("visibility","hidden");
-                            this.sipLoader = new lz.sipLoader(canvas);
-                            
-                            loginSipUser(hib.userobject.userSipData,this);
-                            
+                            }
                         } else {
                         	
                         	hib.getLanguageByIdAndMax.doCall();
