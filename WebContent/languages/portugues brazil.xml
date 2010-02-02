@@ -2538,4 +2538,181 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="844" name="screen sharer">
     <value>Mostra a posição do mouse para os espectadores</value>
   </string>
+  <string id="845" name="publish option">
+    <value>Share Audio with SIP Applet</value>
+  </string>
+  <string id="846" name="publish option">
+    <value>Share Audio with SIP and Video with Flash</value>
+  </string>
+  <string id="847" name="document panel">
+    <value>Full-Fit</value>
+  </string>
+  <string id="848" name="screen share">
+    <value>View Screen</value>
+  </string>
+  <string id="849" name="screen share">
+    <value>The user</value>
+  </string>
+  <string id="850" name="screen share">
+    <value>wants to share its screen. Do you want to see it?</value>
+  </string>
+  <string id="851" name="screen share">
+    <value>Close</value>
+  </string>
+  <string id="852" name="screen sharer">
+    <value>Zoom</value>
+  </string>
+  <string id="853" name="screen sharer">
+    <value>The Session was closed by the sharing User!</value>
+  </string>
+  <string id="854" name="screen sharer">
+    <value>Pause</value>
+  </string>
+  <string id="855" name="screen sharer">
+    <value>New Screen Sharing</value>
+  </string>
+  <string id="856" name="presenter mini icon">
+    <value>Minimize</value>
+  </string>
+  <string id="857" name="presenter mini icon">
+    <value>Maximize</value>
+  </string>
+  <string id="858" name="flvrecording">
+    <value>Video</value>
+  </string>
+  <string id="859" name="flvrecording">
+    <value>Recording Timeline</value>
+  </string>
+  <string id="860" name="flvrecording">
+    <value>My Recordings</value>
+  </string>
+  <string id="861" name="flvrecording">
+    <value>Public Recordings</value>
+  </string>
+  <string id="862" name="flvrecording">
+    <value>Info</value>
+  </string>
+  <string id="863" name="flvrecording">
+    <value>Name</value>
+  </string>
+  <string id="864" name="flvrecording">
+    <value>Length</value>
+  </string>
+  <string id="865" name="flvrecording">
+    <value>Date</value>
+  </string>
+  <string id="866" name="flvrecording">
+    <value>By</value>
+  </string>
+  <string id="867" name="flvrecording">
+    <value>PLAY</value>
+  </string>
+  <string id="868" name="flvrecording">
+    <value>Main - Video</value>
+  </string>
+  <string id="869" name="screen share">
+    <value>Recording</value>
+  </string>
+  <string id="870" name="screen share">
+    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+  </string>
+  <string id="871" name="screen share">
+    <value>Start Recording</value>
+  </string>
+  <string id="872" name="screen share">
+    <value>Stop Recording</value>
+  </string>
+  <string id="873" name="flvrecording">
+    <value>Download the FLV-File</value>
+  </string>
+  <string id="874" name="flvrecording">
+    <value>Room</value>
+  </string>
+  <string id="875" name="flvrecording">
+    <value>Play</value>
+  </string>
+  <string id="876" name="flvrecording">
+    <value>Stop</value>
+  </string>
+  <string id="877" name="flvrecording">
+    <value>User has microphone on</value>
+  </string>
+  <string id="878" name="sharing client">
+    <value>Stop Sharing</value>
+  </string>
+  <string id="879" name="room config">
+    <value>Allow User Questions</value>
+  </string>
+  <string id="880" name="room config">
+    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+  </string>
+  <string id="881" name="room config">
+    <value>Rights</value>
+  </string>  
+  <string id="882" name="flvrecording">
+    <value>Download as AVI</value>
+  </string>  
+  <string id="883" name="flvrecording">
+    <value>FLV</value>
+  </string>
+  <string id="884" name="flvrecording">
+    <value>AVI</value>
+  </string>
+  <string id="885" name="flvrecording">
+    <value>Raw Screenvideo</value>
+  </string>
+  <string id="886" name="flvrecording">
+    <value>Audio only</value>
+  </string>
+  <string id="887" name="flvrecording">
+    <value>The have been errors while processing the Recording.</value>
+  </string>
+  <string id="888" name="flvrecording">
+    <value>The Recording is not yet ready for watching. Please retry in a couple of minutes again.</value>
+  </string>
+  <string id="889" name="flvrecording">
+    <value>Log:</value>
+  </string>
+  <string id="890" name="flvrecording">
+    <value>Recorder Message</value>
+  </string>
+  <string id="891" name="flvrecording">
+    <value>Ok</value>
+  </string>
+  <string id="892" name="sip applet">
+    <value>SIP Applet is not Ready</value>
+  </string>
+  <string id="893" name="user administration">
+    <value>SIP-Account Settings</value>
+  </string>
+  <string id="894" name="user administration">
+    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+  </string>
+  <string id="895" name="user administration">
+    <value>SIP-User</value>
+  </string>
+  <string id="896" name="user administration">
+    <value>Sip-Pass</value>
+  </string>
+  <string id="897" name="user administration">
+    <value>Sip-Auth-Id</value>
+  </string>
+  <string id="898" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+  </string>
+  <string id="899" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+  </string>
+  <string id="900" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
+  <string id="901" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
+  <string id="902" name="flvrecording">
+    <value>Show Log</value>
+  </string>
+  <string id="903" name="flvrecording">
+    <value>Log messages from post recorder process</value>
+  </string>
 </language>
