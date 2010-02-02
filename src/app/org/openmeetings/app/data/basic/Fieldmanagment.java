@@ -61,9 +61,14 @@ public class Fieldmanagment {
 			HibernateUtil.closeSession(idf);
 			
 			FieldLanguage fieldLanguage = FieldLanguageDaoImpl.getInstance().getFieldLanguageById(language_id);
-
+			
+			log.debug("Getting FieldById for Language " + fieldLanguage.getName());
+			
 			//Check for Right To Left Languages
 			if (fieldLanguage.getRtl()) {
+				
+				log.debug("Language requieres RTL");
+				
 				Fieldlanguagesvalues remote = flv;
 				Fieldlanguagesvalues toAdd = new Fieldlanguagesvalues();
 				toAdd.setFieldlanguagesvalues_id(remote.getFieldlanguagesvalues_id());
@@ -82,6 +87,8 @@ public class Fieldmanagment {
 				
 				return toAdd;
 			} else {
+				log.debug("Language doesnt requiere RTL");
+				
 				return flv;
 			}
 			
@@ -192,9 +199,12 @@ public class Fieldmanagment {
 			HibernateUtil.closeSession(idf);
 			
 			FieldLanguage fieldLanguage = FieldLanguageDaoImpl.getInstance().getFieldLanguageById(language_id);
-
+			
+			log.debug("Getting Labels for Language " + fieldLanguage.getName());
+			
 			//Check for Right To Left Languages
 			if (fieldLanguage.getRtl()) {
+				log.debug("Language requieres RTL!");
 				
 				List<Map> returnRtlList = new LinkedList<Map>();
 				//List<Fieldlanguagesvalues> returnRtlList = new LinkedList<Fieldlanguagesvalues>();
@@ -222,6 +232,7 @@ public class Fieldmanagment {
 				
 				return returnRtlList;
 			} else {
+				log.debug("Language doesnt requiere RTL!");
 				
 				return returnList;
 				
@@ -264,10 +275,14 @@ public class Fieldmanagment {
 //				
 //			}
 			
+			
 			FieldLanguage fieldLanguage = FieldLanguageDaoImpl.getInstance().getFieldLanguageById(language_id);
 
+			log.debug("GEtting all fields by language : " + fieldLanguage.getName());
+			
 			//Check for Right To Left Languages
 			if (fieldLanguage.getRtl()) {
+				log.debug("language : " + fieldLanguage.getName() + " requieres RTL");
 				
 				List<Fieldlanguagesvalues> returnRtlList = new LinkedList<Fieldlanguagesvalues>();
 				
@@ -293,6 +308,7 @@ public class Fieldmanagment {
 				
 				return returnRtlList;
 			} else {
+				log.debug("language : " + fieldLanguage.getName() + " requieres NO RTL");
 				
 				return returnList;
 				

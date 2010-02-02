@@ -435,8 +435,9 @@ public class ImportInitvalues {
 			Element item = it.next();
 			String country = item.getText();
 			Integer id = Integer.valueOf(item.attribute("id").getValue()).intValue();
-			Boolean rtl = Boolean.valueOf(item.attribute("rightToLeft").getValue()).booleanValue();
-
+			
+			String rtl = item.attribute("rightToLeft").getValue();
+			
 			LinkedHashMap<String,Object> lang = new LinkedHashMap<String,Object>();
 			lang.put("id", id);
 			lang.put("name", country);
@@ -492,6 +493,10 @@ public class ImportInitvalues {
 	}
 	//------------------------------------------------------------------------------
 	
+	/**
+	 * Loading initial Language from xml Files into database
+	 */
+	//------------------------------------------------------------------------------
 	public void loadInitLanguages(String filePath) throws Exception {
 
 		this.loadCountriesFiles(filePath);
@@ -513,7 +518,15 @@ public class ImportInitvalues {
 			log.debug("loadInitLanguages lang: " + lang);
 
 			String langName = (String) lang.get("name");
-			Boolean langRtl = (Boolean) lang.get("rtl");
+			String rtl = (String) lang.get("rtl");
+			
+			System.out.println("loadInitLanguages rtl from xml: " + rtl);
+
+			Boolean langRtl = false;
+			
+			if(rtl != null && rtl.equals("true"))
+				langRtl = true;
+			
 			Long languages_id = FieldLanguageDaoImpl.getInstance().addLanguage(langName,langRtl);
 
 			SAXReader reader = new SAXReader();
@@ -551,5 +564,7 @@ public class ImportInitvalues {
 		}
 
 	}
+	//------------------------------------------------------------------------------
+	
 
 }

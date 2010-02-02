@@ -15,6 +15,7 @@ import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 
+
 public class LanguageImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(LanguageImport.class, "openmeetings");
 	
