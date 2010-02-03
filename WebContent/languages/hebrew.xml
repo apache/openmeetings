@@ -2652,4 +2652,76 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="882" name="flvrecording">
     <value>Download as AVI</value>
   </string>
+  <string id="883" name="flvrecording">
+    <value>FLV</value>
+  </string>
+  <string id="884" name="flvrecording">
+    <value>AVI</value>
+  </string>
+  <string id="885" name="flvrecording">
+    <value>Raw Screenvideo</value>
+  </string>
+  <string id="886" name="flvrecording">
+    <value>Audio only</value>
+  </string>
+  <string id="887" name="flvrecording">
+    <value>The have been errors while processing the Recording.</value>
+  </string>
+  <string id="888" name="flvrecording">
+    <value>The Recording is not yet ready for watching. Please retry in a couple of minutes again.</value>
+  </string>
+  <string id="889" name="flvrecording">
+    <value>Log:</value>
+  </string>
+  <string id="890" name="flvrecording">
+    <value>Recorder Message</value>
+  </string>
+  <string id="891" name="flvrecording">
+    <value>Ok</value>
+  </string>
+  <string id="892" name="sip applet">
+    <value>SIP Applet is not Ready</value>
+  </string>
+  <string id="893" name="user administration">
+    <value>SIP-Account Settings</value>
+  </string>
+  <string id="894" name="user administration">
+    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+  </string>
+  <string id="895" name="user administration">
+    <value>SIP-User</value>
+  </string>
+  <string id="896" name="user administration">
+    <value>Sip-Pass</value>
+  </string>
+  <string id="897" name="user administration">
+    <value>Sip-Auth-Id</value>
+  </string>
+  <string id="898" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+  </string>
+  <string id="899" name="sip status message">
+    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+  </string>
+  <string id="900" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
+  <string id="901" name="sip status message">
+    <value>Logging in to SIP-Gateway ...</value>
+  </string>
+  <string id="902" name="flvrecording">
+    <value>Show Log</value>
+  </string>
+  <string id="903" name="flvrecording">
+    <value>Log messages from post recorder process</value>
+  </string>
+  <string id="904" name="sip login">
+    <value>SIP-Applet Message</value>
+  </string>
+  <string id="905" name="sip login">
+    <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+  </string>
+  <string id="906" name="moderator pop up">
+    <value>Get Moderation</value>
+  </string>
 </language>
