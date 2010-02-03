@@ -108,7 +108,7 @@
     			parent._uploadtab.setAttribute('visible',true);
     		} else {
     			var t = new lz.uploadTab(this.parent,{name:'_uploadtab'});
-    			t.onvisible.sendEvent();
+    			t.onvisible.sendEvent(true);
     			parent.uploadTapIsInited = true;
     		}
     		if (parent.membersTapIsInited) parent._participants.setAttribute('visible',false);
@@ -127,7 +127,7 @@
     			parent._participants.setAttribute('visible',true);
     		} else {
     			var t = new lz.participantsPanel(this.parent,{name:'_participants'});
-    			t.onvisible.sendEvent();
+    			t.onvisible.sendEvent(true);
     			parent.membersTapIsInited = true;
     		} 
     		this.setAttribute('opacity',1);

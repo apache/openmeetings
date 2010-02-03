@@ -1196,7 +1196,7 @@
                 		Debug.warn("Not Used");
                         canvas.addChatHistory(value);
                     } else if(value[0]=='fileslist'){
-                        canvas.currentImagesListdraw.parent.onvisible.sendEvent();
+                        canvas.currentImagesListdraw.parent.onvisible.sendEvent(true);
                     }
                 ]]>
             </handler>   

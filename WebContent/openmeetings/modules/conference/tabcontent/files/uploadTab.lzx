@@ -161,14 +161,14 @@
 		
 	<view resource="refresh_file_rsc" y="2" x="$once{ parent.width -64 }" >
 		<handler name="onclick">
-			this.parent.onvisible.sendEvent();
+			this.parent.onvisible.sendEvent(true);
 		</handler>
 		<labelTooltip labelid="16" />
 	</view>
 	<view resource="folder_top_rsc" y="2" x="$once{ parent.width -46 }" >
 		<handler name="onclick">
 			canvas.setAttribute('uploadmoduleimgfolder','');
-			this.parent.onvisible.sendEvent();
+			this.parent.onvisible.sendEvent(true);
 		</handler>
 		<labelTooltip labelid="17" />
 	</view>	
