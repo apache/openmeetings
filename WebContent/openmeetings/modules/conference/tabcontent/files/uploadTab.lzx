@@ -25,11 +25,13 @@
         this.getListOfFiles.doCall();
     </handler>
 
-    <handler name="onvisible">
-        if ($debug) Debug.write("this.isinited",this.isinited);
-        if (this.isinited){
-            this.getListOfFiles.doCall();
-        }
+    <handler name="onvisible" args="v">
+    	<![CDATA[
+            //if ($debug) Debug.write("this.isinited",this.isinited);
+            if (this.isinited && v){
+                this.getListOfFiles.doCall();
+            }
+        ]]>
     </handler>
     
     <method name="renderItems" >
