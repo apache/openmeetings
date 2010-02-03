@@ -373,7 +373,7 @@
             <labelText name="_flvRoom" y="76" x="80" />
             
             <simpleLabelButton y="100" align="right" text_padding_x="40"
-                              height="26" width="$once{ parent.width / 2 }" labelid="884">
+                              height="26" width="$once{ parent.width / 2 }" labelid="883">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
                 	<![CDATA[
@@ -398,7 +398,7 @@
             
             
             <simpleLabelButton y="100" align="left" text_padding_x="40" 
-                              height="26" width="$once{ parent.width / 2 }" labelid="883">
+                              height="26" width="$once{ parent.width / 2 }" labelid="884">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
                 	<![CDATA[

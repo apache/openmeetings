@@ -2008,7 +2008,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	public synchronized int sendMessage(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			//RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 				
 			//Send to all Clients of that Scope(Room)
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
@@ -2017,7 +2017,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+							if (rcl == null || (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())) {
 	    						//continue;
 	    					} else {
 								//log.debug("*..*idremote: " + rcl.getStreamid());

@@ -206,7 +206,7 @@ public class FlvRecordingDaoImpl {
 	
 	public Long addFlvFolderRecording(String fileHash, String fileName, Long fileSize, Long user_id, 
 			Long room_id, Date recordStart, Date recordEnd, Long ownerId, String comment, 
-			Long  parentFileExplorerItemId) {
+			Long  parentFileExplorerItemId, Long organization_id) {
 		try { 
 			
 			FlvRecording flvRecording = new FlvRecording();
@@ -224,6 +224,7 @@ public class FlvRecordingDaoImpl {
 			flvRecording.setIsPresentation(false);
 			flvRecording.setIsRecording(true);
 			flvRecording.setComment(comment);
+			flvRecording.setOrganization_id(organization_id);
 			
 			flvRecording.setRoom_id(room_id);
 			flvRecording.setRecordStart(recordStart);

@@ -275,7 +275,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	}
 	
 	/**
-	 * Start recording the published stream for the specified broadcastid
+	 * Start recording the published stream for the specified broadcast-Id
 	 * @param conn
 	 * @param broadcastid
 	 * @param streamName
@@ -299,6 +299,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			if (isScreenData) {
 				stream.addStreamListener(new StreamScreenListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
 			} else {
+				   
+				log.debug("stream "+stream);
+				log.debug("streamName "+streamName);
+				log.debug("conn.getScope() "+conn.getScope());
+				log.debug("flvRecordingMetaDataId "+flvRecordingMetaDataId);
+				log.debug("isScreenData "+isScreenData);
+				
 				stream.addStreamListener(new StreamAudioListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData));
 			}
 			//Just for Debug Purpose
@@ -356,23 +363,27 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
-			for (Iterator<IStreamListener> iter = stream.getStreamListeners().iterator();iter.hasNext();) {
+			if (stream.getStreamListeners() != null) {
 				
-				IStreamListener iStreamListener = iter.next();
-				
-				ListenerAdapter listenerAdapter = (ListenerAdapter) iStreamListener;
-				
-				log.debug("Stream Closing ?? "+listenerAdapter.getFlvRecordingMetaDataId()+ " " +flvRecordingMetaDataId);
-				
-				if (listenerAdapter.getFlvRecordingMetaDataId().equals(flvRecordingMetaDataId)) {
-					log.debug("Stream Closing :: "+flvRecordingMetaDataId);
-					listenerAdapter.closeStream();
+				for (Iterator<IStreamListener> iter = stream.getStreamListeners().iterator();iter.hasNext();) {
+					
+					IStreamListener iStreamListener = iter.next();
+					
+					ListenerAdapter listenerAdapter = (ListenerAdapter) iStreamListener;
+					
+					log.debug("Stream Closing ?? "+listenerAdapter.getFlvRecordingMetaDataId()+ " " +flvRecordingMetaDataId);
+					
+					if (listenerAdapter.getFlvRecordingMetaDataId().equals(flvRecordingMetaDataId)) {
+						log.debug("Stream Closing :: "+flvRecordingMetaDataId);
+						listenerAdapter.closeStream();
+					}
+					
 				}
 				
-			}
+				for (IStreamListener iStreamListener : stream.getStreamListeners()) {
+					stream.removeStreamListener(iStreamListener);
+				}
 			
-			for (IStreamListener iStreamListener : stream.getStreamListeners()) {
-				stream.removeStreamListener(iStreamListener);
 			}
 			
 			// Just for Debugging
@@ -665,7 +676,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	
 
 	public Long addFolder(String SID, Long parentFileExplorerItemId, String fileName, 
-			Boolean isOwner) {
+							Boolean isOwner, Long organization_id) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
@@ -681,7 +692,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        				null, null, null, //Long room_id, Date recordStart, Date recordEnd 
 	        				users_id, //OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 							//maybe are also in a Home directory but just because their parent is
-	        				"", parentFileExplorerItemId);
+	        				"", parentFileExplorerItemId,
+	        				organization_id);
 	        		
 	        	} else {
 	        		
@@ -691,7 +703,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        				null, null, null, //Long room_id, Date recordStart, Date recordEnd 
 	        				null, //OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 							//maybe are also in a Home directory but just because their parent is
-	        				"", parentFileExplorerItemId);
+	        				"", parentFileExplorerItemId,
+	        				organization_id);
 	        		
 	        	}
 	        		
