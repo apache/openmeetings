@@ -93,37 +93,44 @@ public class UserService {
         return null;
 	}
 	
-    public Long addNewUser(String username, String userpass, String lastname, String firstname,
+    public Long addNewUser(String SID, String username, String userpass, String lastname, String firstname,
     					String email, String  additionalname, String street, String zip, String 
     					fax, long states_id, String town, long language_id, String baseURL) throws AxisFault {
     	try {
+    		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
 	    	
-    		Long user_id = Usermanagement.getInstance().registerUser(
-				    			username, userpass, 
-				    			lastname, firstname, email, 
-				    			new Date(), street, additionalname, 
-				    			fax, zip, 
-				    			states_id, 
-				    			town, 
-				    			language_id, 
-				    			"",
-				    			baseURL);
-    		
-    		if (user_id < 0) {
-    			return user_id;
-    		}
-    		
-    		Users user = Usermanagement.getInstance().getUserById(user_id);
-    		
-    		//activate the User
-    		user.setStatus(1);
-            user.setUpdatetime(new Date());
-
-            Usermanagement.getInstance().updateUser(user);
-    		
-    		
-    		return user_id;
-    		
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+					
+	    		Long user_id = Usermanagement.getInstance().registerUser(
+					    			username, userpass, 
+					    			lastname, firstname, email, 
+					    			new Date(), street, additionalname, 
+					    			fax, zip, 
+					    			states_id, 
+					    			town, 
+					    			language_id, 
+					    			"",
+					    			baseURL);
+	    		
+	    		if (user_id < 0) {
+	    			return user_id;
+	    		}
+	    		
+	    		Users user = Usermanagement.getInstance().getUserById(user_id);
+	    		
+	    		//activate the User
+	    		user.setStatus(1);
+	            user.setUpdatetime(new Date());
+	
+	            Usermanagement.getInstance().updateUser(user);
+	    		
+	    		
+	    		return user_id;
+	    		
+	    	} else {
+	    		return new Long(-26);
+	    	}
 		} catch (Exception err){
 			log.error("setUserObject",err);
 			throw new AxisFault(err.getMessage());
