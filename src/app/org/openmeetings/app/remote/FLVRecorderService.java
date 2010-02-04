@@ -471,6 +471,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			
+			
+			log.debug("getCurrentRoomClient -#########################- "+currentClient.getRoom_id());
+			
 			HashMap<String,RoomClient> roomList = this.clientListManager.getClientListByRoomAll(currentClient.getRoom_id());
 			
 			for (Iterator<String> iter = roomList.keySet().iterator();iter.hasNext();) {

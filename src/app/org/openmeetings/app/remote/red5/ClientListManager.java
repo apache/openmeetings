@@ -164,8 +164,11 @@ public class ClientListManager {
 				String key = (String) iter.next();
 				//log.debug("getClientList key: "+key);
 				RoomClient rcl = clientList.get(key);
-				//same room, same domain
-				roomClientList.put(key, rcl);
+				
+				if (rcl.getRoom_id().equals(room_id)) {
+					//same room
+					roomClientList.put(key, rcl);
+				}
 			}
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]",err);
