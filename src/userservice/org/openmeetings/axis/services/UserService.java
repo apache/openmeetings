@@ -1,7 +1,10 @@
 package org.openmeetings.axis.services;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.apache.axis2.AxisFault;
 import org.openmeetings.app.remote.MainService;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
@@ -15,6 +18,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.beans.basic.RemoteSessionObject;
 
 import com.thoughtworks.xstream.XStream;
@@ -89,6 +93,43 @@ public class UserService {
         return null;
 	}
 	
+    public Long addNewUser(String username, String userpass, String lastname, String firstname,
+    					String email, String  additionalname, String street, String zip, String 
+    					fax, long states_id, String town, long language_id, String baseURL) throws AxisFault {
+    	try {
+	    	
+    		Long user_id = Usermanagement.getInstance().registerUser(
+				    			username, userpass, 
+				    			lastname, firstname, email, 
+				    			new Date(), street, additionalname, 
+				    			fax, zip, 
+				    			states_id, 
+				    			town, 
+				    			language_id, 
+				    			"",
+				    			baseURL);
+    		
+    		if (user_id < 0) {
+    			return user_id;
+    		}
+    		
+    		Users user = Usermanagement.getInstance().getUserById(user_id);
+    		
+    		//activate the User
+    		user.setStatus(1);
+            user.setUpdatetime(new Date());
+
+            Usermanagement.getInstance().updateUser(user);
+    		
+    		
+    		return user_id;
+    		
+		} catch (Exception err){
+			log.error("setUserObject",err);
+			throw new AxisFault(err.getMessage());
+		}    			
+    }
+	
 	/**
 	 * 
 	 * @param SID
@@ -97,9 +138,10 @@ public class UserService {
 	 * @param profilePictureUrl
 	 * @param email
 	 * @return
+	 * @throws AxisFault 
 	 */
 	public Long setUserObject(String SID, String username, String firstname, String lastname, 
-			String profilePictureUrl, String email){
+			String profilePictureUrl, String email) throws AxisFault{
 		log.debug("UserService.setUserObject");
 	     
 		try {
@@ -132,8 +174,9 @@ public class UserService {
 			}
 		} catch (Exception err){
 			log.error("setUserObject",err);
+			throw new AxisFault(err.getMessage());
 		}
-		return new Long(-1);			
+		//return new Long(-1);			
 	}
 	
 	/**
@@ -150,9 +193,10 @@ public class UserService {
 	 * @param externalUserId the User Id of the external System
 	 * @param externalUserType the Name of the external system, for example you can run several external system and one meeting server
 	 * @return
+	 * @throws AxisFault 
 	 */
 	public Long setUserObjectWithExternalUser(String SID, String username, String firstname, String lastname, 
-			String profilePictureUrl, String email, Long externalUserId, String externalUserType){
+			String profilePictureUrl, String email, Long externalUserId, String externalUserType) throws AxisFault{
 		log.debug("UserService.setUserObject");
 	     
 		try {
@@ -187,13 +231,13 @@ public class UserService {
 			}
 		} catch (Exception err){
 			log.error("setUserObjectWithExternalUser",err);
-		}
-		return new Long(-1);			
+			throw new AxisFault(err.getMessage());
+		}			
 	}
 	
 	public String setUserObjectAndGenerateRoomHash(String SID, String username, String firstname, String lastname, 
 			String profilePictureUrl, String email, Long externalUserId, String externalUserType,
-			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt){
+			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt) throws AxisFault{
 		log.debug("UserService.setUserObject");
 	     
 		try {
@@ -243,6 +287,7 @@ public class UserService {
 			}
 		} catch (Exception err){
 			log.error("setUserObjectWithAndGenerateRoomHash",err);
+			throw new AxisFault(err.getMessage());
 		}
 		return ""+new Long(-1);			
 	}

@@ -35,12 +35,16 @@ public class RoomService {
 			//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
 			if (roomList!=null && roomList.size()!=0) {
 				//roomsListObject.setRoomList(roomList);
-				roomsListObject.setRoomList(new LinkedList<Rooms>());
+				Rooms[] roomItems = new Rooms[roomList.size()];
+				int count = 0;
 				for (Iterator<Rooms>it = roomList.iterator();it.hasNext();){
 					Rooms room = it.next();
 					room.setCurrentusers(null);
-					roomsListObject.getRoomList().add(room);
+					roomItems[count] = room;
+					count++;
 				}
+				
+				roomsListObject.setRoomList(roomItems);
 			}
 			log.debug("roomList SIZE: "+roomList.size());
 			return roomsListObject;
@@ -50,8 +54,24 @@ public class RoomService {
 		}
 	}
 	
-	public List<RoomTypes> getRoomTypes(String SID){
-		return ConferenceService.getInstance().getRoomTypes(SID);
+	public RoomTypes[] getRoomTypes(String SID) throws AxisFault{
+		try {
+			List<RoomTypes> rommTypesList = ConferenceService.getInstance().getRoomTypes(SID);
+			RoomTypes[] roomTypesArray = new RoomTypes[rommTypesList.size()];
+			
+			int count = 0;
+			for (Iterator<RoomTypes>it = rommTypesList.iterator();it.hasNext();){
+				RoomTypes roomType = it.next();
+				roomTypesArray[count] = roomType;
+				count++;
+			}
+			
+			return roomTypesArray;
+			
+		} catch (Exception err) {
+			log.error("[getRoomTypes]",err);
+			throw new AxisFault(err.getMessage());
+		}
 	}
 	
 	public Rooms getRoomById(String SID, long rooms_id){

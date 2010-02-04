@@ -277,8 +277,8 @@ public class UserService {
 	        }	   
 	        
 	        
-	        System.out.println("Mail : " + argObjectMap.get("email").toString());
-	        System.out.println("Phone : " + argObjectMap.get("phone").toString());
+	        log.debug("Mail : " + argObjectMap.get("email").toString());
+	        log.debug("Phone : " + argObjectMap.get("phone").toString());
 
 	        //log.error("saveOrUpdateUser6: "+age);
 	       
