@@ -308,7 +308,8 @@
         	<![CDATA[
         		canvas.thishib.loaderVar.close();
             	//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("loginUserByRemote: ",value);
+				if ($debug) Debug.write("loginUserByRemote -1-: ",value);
+				if ($debug) Debug.write("loginUserByRemote -2-: ",canvas.remoteUserSid);
 				if (value<0){
 					
 				} else {
@@ -328,8 +329,8 @@
 					
 					canvas.setAttribute('currentuser',value.firstname+" "+value.lastname);
 					
-					//Somehow this leads to a bug in the implementation
-					//canvas.setAttribute('user_id',value.user_id);
+					//Somehow this leads to a bug in the implementation of the secure User Login
+					canvas.setAttribute('user_id',value.user_id);
                     
                     canvas.setAttribute('firstName',value.firstname);
                     canvas.setAttribute('lastName',value.lastname);

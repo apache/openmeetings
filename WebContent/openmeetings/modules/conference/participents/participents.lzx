@@ -167,6 +167,8 @@
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
         
+        	if ($debug) Debug.write("fadeText :: ",this.refObj);
+        
             //Do Load the Custom Moodle Profilee Picture
             if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
                 
