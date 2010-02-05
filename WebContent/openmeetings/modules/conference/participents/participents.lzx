@@ -174,7 +174,7 @@
                 
                 if (this.refObj.externalUserId == 1) {
                     //Means it is a guest
-                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.jpg";
+                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.png";
                 } else {
                     var downloadurl = canvas.moodleWwwRoot+"/user/pix.php/"+ this.refObj.externalUserId +"/f2.jpg";
                 }
