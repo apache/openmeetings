@@ -633,6 +633,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 					createStream( this );
 					
 				} else {
+
+					if (this.capture != null) {
+						this.capture.resetBuffer();
+					}
+					
 					logger.debug("The Stream was already started ");
 				}
 				
@@ -730,10 +735,10 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
         kt++;
 
-        if ( kt < 10 ) {
-            logger.debug( "+++ " + videoData );
-            System.out.println( "+++ " + videoData);
-        }
+//        if ( kt < 10 ) {
+//            logger.debug( "+++ " + videoData );
+//            System.out.println( "+++ " + videoData);
+//        }
 
         RTMPMessage rtmpMsg = new RTMPMessage();
         rtmpMsg.setBody( videoData );
@@ -757,6 +762,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
 		private volatile boolean active = true;
 		private volatile boolean stopped = false;
+		private byte[] previousItems = null;
 
 		// ------------------------------------------------------------------------
 		//
@@ -806,6 +812,9 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			active = false;
 		}
 
+		public void resetBuffer() {
+			this.previousItems = null;
+		}
 
 		// ------------------------------------------------------------------------
 		//
@@ -826,8 +835,8 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			{
 				Robot robot = new Robot();
 
-				byte[] previous = null;
-
+				this.previousItems = null;
+				
 				while (active)
 				{
 					final long ctime = System.currentTimeMillis();
@@ -861,11 +870,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 					{
 						timestamp += (1000000 / timeBetweenFrames);
 
-						final byte[] screenBytes = encode(current, previous, blockWidth, blockHeight, scaledWidth, scaledHeight);
+						final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
 						pushVideo( screenBytes.length, screenBytes, timestamp);
-						previous = current;
+						this.previousItems = current;
 
-						if (++frameCounter % 100 == 0) previous = null;
+						if (++frameCounter % 100 == 0) this.previousItems = null;
 					}
 					catch (Exception e)
 					{
