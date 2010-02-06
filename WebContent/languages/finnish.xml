@@ -2723,4 +2723,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="906" name="moderator pop up">
     <value>Get Moderation</value>
   </string>
+  <string id="907" name="lzcalendar">
+    <value>Save Appointment Changes</value>
+  </string>
+  <string id="908" name="lzcalendar">
+    <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
+  </string>
 </language>

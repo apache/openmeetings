@@ -404,24 +404,12 @@
 		            		
 		            		if ($debug) Debug.write("Do save and update item ",appointementId);
 		            		
-		            		//Point URL to actual File
-				            var urlObject =  lz.Browser.getBaseURL();
-							//If Port is Null or undefinied use port 80
-							if (urlObject.port!=null && urlObject.port!=undefined){
-								var port = urlObject.port;
-								
-								if (port != 80) {
-									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-								} else {
-									this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-								}
-							} else {
-								this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-							}
-		            		
 		            		this.updateAppointmentTimeOnly.appointementId = Number(appointementId);
 		            		
-		            		this.updateAppointmentTimeOnly.doCall();
+		            		new lz.confirmationSingle(canvas.main_content._content.inner,{
+                            	           labelid:907,labeliderror:908,height:160,
+                            	           refObj:this,showCheckBox:false});
+                            	           
 		            	}
 		            	
 		            }
@@ -430,6 +418,33 @@
 	                lz.Timer.removeTimer( this.startDragDel );
 	            } 
             ]]>
+        </method>
+        
+        <method name="sendConfirmation">
+        	<![CDATA[
+        	
+        		//Point URL to actual File
+	            var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
+					
+					if (port != 80) {
+						this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
+					} else {
+						this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+					}
+				} else {
+					this.updateAppointmentTimeOnly.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+				}
+        		
+        		this.updateAppointmentTimeOnly.doCall();
+        	]]>
+        </method>
+        
+        <method name="sendNoConfirmation">
+        	parent.calgrid.reloadAll();
+        	this.hide();
         </method>
         
         <!--
