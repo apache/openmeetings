@@ -2731,4 +2731,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="908" name="lzcalendar">
     <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
   </string>
+  <string id="909" name="flv recorder error message">
+    <value>To access other recordings you have to login the OpenMeetings Application.</value>
+  </string>
 </language>

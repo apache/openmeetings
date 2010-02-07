@@ -2657,10 +2657,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="881" name="room config">
     <value>Permisos</value>
-  </string>  
+  </string> 
   <string id="882" name="flvrecording">
-    <value>Download as AVI</value>
-  </string>  
+    <value>Descargar como AVI</value>
+  </string>
   <string id="883" name="flvrecording">
     <value>FLV</value>
   </string>
@@ -2671,72 +2671,75 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Raw Screenvideo</value>
   </string>
   <string id="886" name="flvrecording">
-    <value>Audio only</value>
+    <value>Sólo audio</value>
   </string>
   <string id="887" name="flvrecording">
-    <value>The have been errors while processing the Recording.</value>
+    <value>Ha habido errores mientras se procesaba la grabación.</value>
   </string>
   <string id="888" name="flvrecording">
-    <value>The Recording is not yet ready for watching. Please retry in a couple of minutes again.</value>
+    <value>La grabación aún no esta lista. Inténtelo de nuevo en un par de minutos.</value>
   </string>
   <string id="889" name="flvrecording">
     <value>Log:</value>
   </string>
   <string id="890" name="flvrecording">
-    <value>Recorder Message</value>
+    <value>Mensaje del grabador:</value>
   </string>
   <string id="891" name="flvrecording">
     <value>Ok</value>
   </string>
   <string id="892" name="sip applet">
-    <value>SIP Applet is not Ready</value>
+    <value>El applet SIP no está listo</value>
   </string>
   <string id="893" name="user administration">
-    <value>SIP-Account Settings</value>
+    <value>Configuración de la cuenta SIP</value>
   </string>
   <string id="894" name="user administration">
-    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+    <value>Configuración SIP para cada usuario. Puede activar o desactivar SIP desde Administración > Configuración (Key: enable_sip). Los datos SIP de cada usuario deberían crearse automáticamente.</value>
   </string>
   <string id="895" name="user administration">
-    <value>SIP-User</value>
+    <value>Usuario SIP</value>
   </string>
   <string id="896" name="user administration">
-    <value>Sip-Pass</value>
+    <value>Contraseña SIP</value>
   </string>
   <string id="897" name="user administration">
-    <value>Sip-Auth-Id</value>
+    <value>ID Aut-SIP</value>
   </string>
   <string id="898" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+    <value>La autenticación SIP ha fallado. Debería comprobar los datos de autenticación de su proveedor SIP y de la cuenta SIP de cada usuario. Como administrador, podrá autenticarse y comprobar la configuración. Si entra como usuario o como moderador, cualquier intento de interacción será bloqueado.</value>
   </string>
   <string id="899" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+    <value>La autenticación SIP ha fallado. Contacte con el servicio técnico.</value>
   </string>
   <string id="900" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Autenticando en la puerta de enlace SIP...</value>
   </string>
   <string id="901" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Autenticando en la puerta de enlace SIP...</value>
   </string>
   <string id="902" name="flvrecording">
-    <value>Show Log</value>
+    <value>Mostrar Log</value>
   </string>
   <string id="903" name="flvrecording">
-    <value>Log messages from post recorder process</value>
+    <value>Mensajes Log del proceso de postgrabación</value>
   </string>
   <string id="904" name="sip login">
-    <value>SIP-Applet Message</value>
+    <value>Mensaje del applet SIP</value>
   </string>
   <string id="905" name="sip login">
-    <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+    <value>El applet SIP no está listo. Por favor, acepte el applet y pulse OK.</value>
   </string>
   <string id="906" name="moderator pop up">
-    <value>Get Moderation</value>
-  </string>
+    <value>Solicitar la moderación</value>
+  </string> 
   <string id="907" name="lzcalendar">
-    <value>Save Appointment Changes</value>
+    <value>Guardar cambios de la cita</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
+    <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? <br/><br/>Todos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
+  </string>
+  <string id="909" name="flv recorder error message">
+    <value>To access other recordings you have to login the OpenMeetings Application.</value>
   </string>
 </language>
