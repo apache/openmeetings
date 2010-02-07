@@ -53,6 +53,11 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="showAudioVideoTest" value="true" type="boolean" />
 
+<!--
+	Id of the Recording that is played when access the Recordings Player via Direct Link URL
+ -->
+<attribute name="roomRecordingId" value="0" type="number" />
+
 <!--- Name of the Application -->
 <attribute name="currentappname" value="OpenMeetings" type="string" />   
 <attribute name="currentappnameurl" value="OpenMeetings" type="string" />   

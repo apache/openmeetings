@@ -82,7 +82,7 @@
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
 <class name="lzRecordingsViewBottom" extends="conferenceBox" labelid="859" 
-                   y="${ canvas.height - 110 - this.height }" initHeight="200"
+                   y="${ canvas.height - canvas.naviHeightDelta - this.height }" initHeight="200"
                    height="32" textInset="30" closeable="true" isopen="false" closedHeight="32"
                    x="${ parent._navigationArea.width + parent._navigationArea.x }"
                    width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">

@@ -84,7 +84,7 @@ public class FieldLanguage {
 	/**
      * @hibernate.property
      *  column="rtl"
-     *  type="Boolean"
+     *  type="boolean"
      */	
 	public Boolean getRtl() {
 		return rtl;

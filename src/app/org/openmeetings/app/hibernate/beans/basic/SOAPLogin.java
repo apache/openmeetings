@@ -20,6 +20,7 @@ public class SOAPLogin {
 	private Boolean showAudioVideoTest;
 	private Boolean allowSameURLMultipleTimes;
 	private String clientURL;
+	private Long roomRecordingId;
 	
 	/**
      * 
@@ -154,5 +155,16 @@ public class SOAPLogin {
 		this.clientURL = clientURL;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="room_recording_id"
+     *  type="long"
+     */ 	
+	public Long getRoomRecordingId() {
+		return roomRecordingId;
+	}
+	public void setRoomRecordingId(Long roomRecordingId) {
+		this.roomRecordingId = roomRecordingId;
+	}
 	
 }

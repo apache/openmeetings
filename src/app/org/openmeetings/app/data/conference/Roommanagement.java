@@ -570,6 +570,7 @@ public class Roommanagement {
 		
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
 				Rooms r = new Rooms();
 				r.setName(name);
 				r.setComment(comment);

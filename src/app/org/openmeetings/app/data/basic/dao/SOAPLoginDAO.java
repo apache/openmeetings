@@ -34,7 +34,7 @@ public class SOAPLoginDAO {
 	
 	public String addSOAPLogin(String sessionHash, Long room_id, 
 				boolean becomemoderator, boolean showAudioVideoTest,
-				boolean allowSameURLMultipleTimes) {
+				boolean allowSameURLMultipleTimes, Long recording_id) {
 		try {
 			
 			String thistime = "TIME_"+(new Date().getTime());
@@ -51,6 +51,7 @@ public class SOAPLoginDAO {
 			soapLogin.setRoom_id(room_id);
 			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
 			soapLogin.setHash(hash);
+			soapLogin.setRoomRecordingId(recording_id);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);

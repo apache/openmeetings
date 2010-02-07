@@ -294,6 +294,8 @@
 					canvas.initroomid = value.room_id;
 					canvas.becomemoderator = value.becomemoderator;
                     canvas.showAudioVideoTest = value.showAudioVideoTest;
+                    
+                    canvas.roomRecordingId = value.roomRecordingId;
 					
 					parent.getCurrentRoomClient.doCall();
 				}
@@ -341,7 +343,14 @@
                     canvas.setAttribute('language','');
                     //canvas.setAttribute('currentuser',value.login);
                     
-					parent.getRoomById.doCall();
+                    if (canvas.roomRecordingId > 0) {
+						//parent.getRoomById.doCall();
+						var obj = new Array();
+						obj["action"] = "recordModule";
+						loadContent(obj,null,null);
+                    } else {
+                    	parent.getRoomById.doCall();
+                    }
 				}
             ]]>
         </handler>   

@@ -283,7 +283,7 @@ public class UserService {
 				}
 				
 				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, 
-															becomeModerator,showAudioVideoTest,false);
+															becomeModerator,showAudioVideoTest,false, null);
 				
 				if (hash != null) {
 					return hash;
@@ -341,7 +341,53 @@ public class UserService {
 				}
 				
 				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, 
-															becomeModerator,showAudioVideoTest,true);
+															becomeModerator,showAudioVideoTest,true, null);
+				
+				if (hash != null) {
+					return hash;
+				}
+				
+			} else {
+				return ""+new Long(-26);
+			}
+		} catch (Exception err){
+			log.error("setUserObjectWithAndGenerateRoomHash",err);
+		}
+		return ""+new Long(-1);			
+	}
+	
+	public String setUserObjectAndGenerateRecordingHashByURL(String SID, String username, String firstname, String lastname,
+					Long externalUserId, String externalUserType, Long recording_id){
+		log.debug("UserService.setUserObject");
+	     
+		try {
+	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, "", 
+						"", "", externalUserId, externalUserType);
+				
+				log.debug("username "+username);
+				log.debug("firstname "+firstname);
+				log.debug("lastname "+lastname);
+				log.debug("profilePictureUrl "+"");
+				log.debug("email "+"");
+				log.debug("externalUserId "+externalUserId);
+				log.debug("externalUserType " +externalUserType);
+				
+				//XStream xStream = new XStream(new XppDriver());
+				XStream xStream = new XStream(new DomDriver("UTF-8"));
+				xStream.setMode(XStream.NO_REFERENCES);
+				String xmlString = xStream.toXML(remoteSessionObject);
+				
+				log.debug("xmlString "+xmlString);
+				
+				Sessionmanagement.getInstance().updateUserRemoteSession(SID, xmlString);
+				
+				
+				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, null, 
+															false,false,true, recording_id);
 				
 				if (hash != null) {
 					return hash;

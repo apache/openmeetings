@@ -19,10 +19,25 @@
     
     <handler name="oninit">
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
-        this.getFLVExplorerByRoom.doCall();
+        if (canvas.roomRecordingId == 0) {
+        	this.getFLVExplorerByRoom.doCall();
+        } else {
+        	_mainScrollBar.setAttribute("visibility","hidden");
+	        canvas._mainbgcontentNavi.setAttribute('height',0);
+	        canvas.setAttribute('naviHeightDelta',0);
+        	this.parentFolderId = canvas.roomRecordingId;
+        	this.getFlvRecordingWithMetaData.doCall();
+        	this._doClose.doStart();
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+        }
     </handler>
     
     <method name="toggleStatus">
+    	if (canvas.roomRecordingId != 0) {
+    		new lz.labelerrorPopup(canvas,{errorlabelid:909});
+    		return;
+    	}
         if (this.isOpen) {
             this._doClose.doStart();
             this.isOpen = false;
@@ -479,7 +494,8 @@
               duration="750" start="false" />
               
     <animator name="_doClose" attribute="x" to="-270" 
-              duration="750" start="false" />
+              duration="750" start="false">
+    </animator>
     
 </class>
 

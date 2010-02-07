@@ -8,7 +8,7 @@
 -->
 <class name="lzRecordingsViewMain" extends="conferenceBox" labelid="858"
            x="${ parent._navigationArea.width + parent._navigationArea.x }"
-           height="${ canvas.height - 110 - parent._recordingsViewBottom.height }"
+           height="${ canvas.height - canvas.naviHeightDelta - parent._recordingsViewBottom.height }"
           width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
         
         <attribute name="recordingName" value="" type="string"/>

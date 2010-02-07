@@ -59,6 +59,40 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
+	public List<FlvRecording> getFlvRecordingByExternalRoomType(String externalRoomType) {
+		try { 
+			
+			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: "+externalRoomType);
+			
+			String hql = "SELECT c FROM FlvRecording c, Rooms r " +
+					"WHERE c.room_id = r.rooms_id " +
+					"AND r.externalRoomType LIKE :externalRoomType " +
+					"AND c.deleted != :deleted ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("externalRoomType", externalRoomType);
+			query.setString("deleted", "true");
+			
+			List<FlvRecording> flvRecordingList = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			
+			log.debug("getFlvRecordingByExternalRoomType :: "+flvRecordingList.size());
+			
+			return flvRecordingList;
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordingByExternalRoomType]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordingByExternalRoomType]: ",ex2);
+		}
+		return null;
+	}
+	
 	public List<FlvRecording> getFlvRecordingsPublic() {
 		try {
 			

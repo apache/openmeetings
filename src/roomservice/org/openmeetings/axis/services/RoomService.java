@@ -8,11 +8,14 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 
+import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.rooms.RoomsList;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
@@ -28,10 +31,9 @@ public class RoomService {
 //		return ConferenceService.getInstance().getRoomsByOrganisationAndType(SID, organisation_id, roomtypes_id);
 //	}
 	
-	public RoomsList getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault{
+	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault{
 		try {
 			List<Rooms> roomList = ConferenceService.getInstance().getRoomsPublic(SID, roomtypes_id);
-			RoomsList roomsListObject = new RoomsList();
 			//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
 			if (roomList!=null && roomList.size()!=0) {
 				//roomsListObject.setRoomList(roomList);
@@ -44,15 +46,92 @@ public class RoomService {
 					count++;
 				}
 				
-				roomsListObject.setRoomList(roomItems);
+				return roomItems;
 			}
 			log.debug("roomList SIZE: "+roomList.size());
-			return roomsListObject;
+			return null;
 		} catch (Exception err) {
 			log.error("[getRoomsPublic] ",err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
+	
+	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(String SID, String externalRoomType) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				return FlvRecordingDaoImpl.getInstance().getFlvRecordingByExternalRoomType(externalRoomType);
+				
+			}
+			
+			return null;
+		} catch (Exception err) {
+			log.error("[getFlvRecordingByExternalRoomType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}	
+	
+	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				List<FlvRecording> recordingList = FlvRecordingDaoImpl.getInstance().getFlvRecordingByExternalRoomType(externalRoomType);
+				
+				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+				if (recordingList!=null && recordingList.size()!=0) {
+					//roomsListObject.setRoomList(roomList);
+					FlvRecording[] recordingListItems = new FlvRecording[recordingList.size()];
+					int count = 0;
+					for (Iterator<FlvRecording>it = recordingList.iterator();it.hasNext();){
+						FlvRecording flvRecording = it.next();
+						recordingListItems[count] = flvRecording;
+						count++;
+					}
+					
+					return recordingListItems;
+				}
+				
+				return null;
+			}
+			
+			return null;
+		} catch (Exception err) {
+			log.error("[getFlvRecordingByExternalRoomType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+//	public RoomsList getRoomsByExternalType(String SID, String externalType) throws AxisFault{
+//		try {
+//			List<Rooms> roomList = ConferenceService.getInstance().getRoomsByExternalType(SID, externalType);
+//			RoomsList roomsListObject = new RoomsList();
+//			//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+//			if (roomList!=null && roomList.size()!=0) {
+//				//roomsListObject.setRoomList(roomList);
+//				Rooms[] roomItems = new Rooms[roomList.size()];
+//				int count = 0;
+//				for (Iterator<Rooms>it = roomList.iterator();it.hasNext();){
+//					Rooms room = it.next();
+//					room.setCurrentusers(null);
+//					roomItems[count] = room;
+//					count++;
+//				}
+//				
+//				roomsListObject.setRoomList(roomItems);
+//			}
+//			log.debug("roomList SIZE: "+roomList.size());
+//			return roomsListObject;
+//		} catch (Exception err) {
+//			log.error("[getRoomsPublic] ",err);
+//			throw new AxisFault(err.getMessage());
+//		}
+//	}
 	
 	public RoomTypes[] getRoomTypes(String SID) throws AxisFault{
 		try {
@@ -181,6 +260,24 @@ public class RoomService {
 		return new Long (-1);
 	}
 	
+	/**
+	 * this SOAP Method has an additional param to enable or disable the
+	 * buttons to apply for moderation
+	 * this does only work in combination with the room-type restricted
+	 * 
+	 * @param SID
+	 * @param name
+	 * @param roomtypes_id
+	 * @param comment
+	 * @param numberOfPartizipants
+	 * @param ispublic
+	 * @param appointment
+	 * @param isDemoRoom
+	 * @param demoTime
+	 * @param isModeratedRoom
+	 * @param allowUserQuestions
+	 * @return
+	 */
 	public Long addRoomWithModerationAndQuestions(String SID, String name,
 			Long roomtypes_id ,
 			String comment, Long numberOfPartizipants,
@@ -374,4 +471,24 @@ public class RoomService {
 		}
 		return null;
 	}
+	 
+
+	public Long addRoomWithModerationAndExternalType(String SID, String name,
+			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
+			Integer demoTime, Boolean isModeratedRoom, String externalRoomType) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			return Roommanagement.getInstance().addExternalRoom(user_level, name,
+					roomtypes_id, comment, numberOfPartizipants, ispublic,
+					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+					null, null, externalRoomType);
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+		}
+		return new Long(-1);
+	}
+		
 }

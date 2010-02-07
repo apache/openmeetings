@@ -16,5 +16,6 @@
     <property name="showAudioVideoTest" type="boolean" column="showaudiovideotest"/>
     <property name="allowSameURLMultipleTimes" type="boolean" column="allow_same_url_multiple_times"/>
     <property name="clientURL" type="string" column="client_url"/>
+    <property name="roomRecordingId" type="long" column="room_recording_id"/>
   </class>
 </hibernate-mapping>
