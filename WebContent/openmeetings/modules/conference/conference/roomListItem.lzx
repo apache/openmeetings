@@ -98,8 +98,10 @@
 			} else if (this.roomType == 2) {
 				this.roomClassName = canvas.eventRoomModule;
 			} else if (this.roomType == 3) {
-				this.roomClassName = "restrictedConferenceRoom";
-			} else {
+                this.roomClassName = "restrictedConferenceRoom";
+            } else if (this.roomType == 4) {
+                this.roomClassName = "interviewConferenceRoom";
+            } else {
 				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
 			}
 			//the conferencedomain is no more interesting, swagner 07.10.2009

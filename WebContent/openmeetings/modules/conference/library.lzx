@@ -14,6 +14,7 @@
 	<include href="browser/"/>  
          -->
     <include href="participents/" /> 
+    <include href="interviewuserlist/" /> 
     <include href="eventuserlist/" />
     <include href="browser/" />
     <include href="testsetup/" />

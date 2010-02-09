@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="interviewRoomSidebar" extends="view" width="280" 
+       height="${ canvas.height - 28 }" y="0" clip="true">
+    
+    <attribute name="selected" value="null" />
+    
+    <attribute name="isOpen" value="true" type="boolean"/>
+    
+    <attribute name="restricted" value="true" type="boolean" />
+   
+    <attribute name="listType" value="eventUserListTable" type="string" />
+    
+    <method name="doSelection" args="itemRef">
+        <![CDATA[
+            if (this.selected != null) {
+                this.selected.deselect();
+            }
+            
+            this.selected = itemRef;
+            this.selected.select();
+          
+        ]]>
+    </method>
+    
+    <method name="toggleStatus">
+        if (this.isOpen) {
+            this._doClose.doStart();
+            this.isOpen = false;
+            this._minimizeSidebar._icon.setAttribute("frame",2);
+        } else {
+            this._doOpen.doStart();
+            this.isOpen = true;
+            this._minimizeSidebar._icon.setAttribute("frame",1);
+        }
+    </method>
+    
+    <view name="_head" width="$once{ parent.width-2 }" height="34">
+        <view width="${ parent.width }" height="$once{ parent.height }" 
+              stretches="both" resource="presenter_thumb_rsc" >
+            <handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,90);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                    if (color != "" && color != null){
+    
+                        if (brightness == null) { brightness = 0; }
+                        var rgb = color;
+                        var red=(rgb >> 16) & 0xFF;
+                        var green=(rgb >> 8) & 0xFF;
+                        var blue=rgb & 0xFF;
+            
+                        this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                    rb : 0, gb : 0, bb : 0 } );
+                                                    
+                    }
+                ]]>
+            </method>            
+        </view>
+        
+        <conferenceRoomSidebarTabButton name="userTabButton" selected="true"
+                currentIconRsc="users_tab_btn" x="0" labelid="613" />
+        
+    </view>
+    
+    <interviewUserList name="_videocontainer" y="36"
+			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 
+			   height="${ parent.height-36 }" />
+    
+    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
+          bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">
+        <handler name="onclick">
+            parent.toggleStatus();
+        </handler>
+        <handler name="onmouseover">
+            this._bg1.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg1.setAttribute("visibility","hidden");
+        </handler>
+        
+        <view width="${ parent.width }" height="$once{ parent.height*1.4 }" 
+              stretches="both" resource="presenter_thumb_rsc" >
+            <handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,90);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                    if (color != "" && color != null){
+    
+                        if (brightness == null) { brightness = 0; }
+                        var rgb = color;
+                        var red=(rgb >> 16) & 0xFF;
+                        var green=(rgb >> 8) & 0xFF;
+                        var blue=rgb & 0xFF;
+            
+                        this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                    rb : 0, gb : 0, bb : 0 } );
+                                                    
+                    }
+                ]]>
+            </method>            
+        </view>
+        
+        <view name="_bg1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
+            height="$once{ parent.height }" opacity="0.7" visibility="hidden"/> 
+            
+        <view name="_icon" resource="sidebar_tab_btn" 
+              valign="middle" align="center" />
+    </view>
+    
+    <animator name="_doOpen" attribute="width" to="$once{ parent.width }" 
+              duration="750" start="false" />
+              
+    <animator name="_doClose" attribute="width" to="10" 
+              duration="750" start="false" />
+    
+</class>
+
+</library>

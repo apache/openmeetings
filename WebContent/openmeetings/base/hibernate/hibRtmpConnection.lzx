@@ -730,7 +730,8 @@
                 	
                 	var messageAlreadyThrown = false;
                 	
-                	if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
+                	//if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
+                	
                     if (canvas.ismoderator){
                     	if (this.parent.modus == "conference"){
                         	if ($debug) Debug.write("############## editRecordStream 3");

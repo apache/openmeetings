@@ -367,10 +367,6 @@
 		<![CDATA[
 			//if ($debug) Debug.write("disconnectclient: ",publicSID);
 			
-			canvas._mymod.currentModerators.removeItem(publicSID);
-			canvas._mymod.currentModerators.clearSelection();
-			canvas._mymod.currentModerators.selectItemAt(0);
-			
 			var obj = this.getVideoObjectByPublicSID(publicSID);
             var objList = this._participents.getVideoObjectByPublicSID(publicSID);
 			

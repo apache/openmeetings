@@ -84,9 +84,9 @@ public class OpenXGClient {
 		    String digest = this.digest_calculate(new Object[]{client_id,userId,domain,adminId,client_secret});
 		    
 //		    $digest = digest_calculate($client_id, $userid, $domain,
-//				     $adminid, $client_secret);
-//	  $params = array(client_id=>$client_id, digest=>$digest, userid=>$userid,
-//			  domain=>$domain, adminid=>$adminid);
+//			$adminid, $client_secret);
+//	  		$params = array(client_id=>$client_id, digest=>$digest, userid=>$userid,
+//			domain=>$domain, adminid=>$adminid);
 		    
 		    //function user_info($userid, $domain, $adminid, &$error)
 		    Object[] params = new Object[]{client_id,digest,userId,domain,adminId};

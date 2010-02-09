@@ -382,8 +382,13 @@
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             } else if (roomTypeId==3){
-            	
-            	new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomObj:roomObj});
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomObj:roomObj});
+                //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
+                 
+            } else if (roomTypeId==4){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"interviewConferenceRoom",roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             }   
@@ -510,8 +515,6 @@
         
         var isCurrentModerator = false;
         
-        canvas._mymod.currentModerators.reset();
-        
         for (var i=0;i<canvas.currentModeratorList.length;i++) {
         	
         	var item = canvas.currentModeratorList[i];
@@ -525,7 +528,6 @@
         
         this.setAttribute('ismoderator',isCurrentModerator);
         
-        canvas._mymod.currentModerators.selectItemAt(0);
 	]]>
 </method> 
 
