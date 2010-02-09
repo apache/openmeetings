@@ -14,6 +14,8 @@
   <attribute name="ratioH" value="1" />
   <handler name="oninit">
      <![CDATA[
+        if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.name);
+     
         //Display widget defined in mother class
         this.syncuser.bringToFront()
         this._loudness.bringToFront();

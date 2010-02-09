@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-    <class name="resetCombobox" extends="combobox" 
+    <class name="resetCombobox" extends="combobox" editable="false" shownitems="12"
     	   style="componentStyle" itemclassname="labeldTextListItem">
     
         <method name="reset" >

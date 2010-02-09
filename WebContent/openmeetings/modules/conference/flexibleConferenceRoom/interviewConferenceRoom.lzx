@@ -24,8 +24,6 @@
             }
         }
         
-        this._chatPanelStrict.toggleopen();
-        
     </handler>
     
     <handler name="ontabcontentleave">
@@ -83,13 +81,34 @@
     <interviewRoomSidebar name="_sidePanel" 
                       listType="eventUserListTableWithNames" />
                       
-    <view name="_whiteboardInterview">
+    <view name="_whiteboardInterview" x="${ parent._sidePanel.width }" 
+    	  width="${ canvas.width - parent._sidePanel.width }" >
+    	
     	<handler name="oninit">
     		canvas._drawarea = this;
     	</handler>
     	<handler name="onopenWhiteBoard" >
-    		if ($debug) Debug.write("- onopenWhiteBoard -");
+    		if ($debug) Debug.write("-- onOpenWhiteBoard --");
         </handler>
+        
+        <method name="newInterviewStarting" args="refObj">
+        	<![CDATA[
+        	   this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
+        	]]>
+        </method>
+        
+        <view name="_videoviewcontent" width="${ parent.width }">
+        	<interviewVideoBox name="interviewVideoBox1" interviewPodId="1" >
+            
+            </interviewVideoBox>
+            
+            <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" >
+                
+            </interviewVideoBox>
+        </view>
+        
+        
+        
     </view>
     
     <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
@@ -98,12 +117,6 @@
        width="${ canvas.width - parent._sidePanel.width }">
         <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
     </conferenceBox>
-    
-    <!--
-        ###############################
-        This is the container for all Videos
-     -->
-    <view name="_videoviewcontent" />
     
 </class>
 

@@ -21,7 +21,7 @@
      ]]>
   </handler>
 
-	<view name="_chatvideoinner" x="1" y="20" height="${parent.height-20}" width="${parent.width-2}">
+	<view name="_chatvideoinner" x="1" y="20" height="${parent.height-21}" width="${parent.width-2}">
 		<view name="r" resource="chatbgitem" x="1" y="2" stretches="both" 
 			  width="$once{parent.width}" height="$once{parent.height}" />
 		<handler name="oninit">

@@ -106,8 +106,7 @@
     
     <labelText name="n3" labelid="111" width="200" y="86" resize="false" x="2"/>  
         
-        <resetCombobox name="languages" width="230" y="84" x="120" editable="false"
-                       shownitems="7">
+        <resetCombobox name="languages" width="230" y="84" x="120" >
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" 
                 value="$path{ 'language_id/text()' }" />
             <handler name="oninit">
@@ -143,7 +142,7 @@
 
     <labelText name="n5" text="Color-Style" width="200" y="116" resize="false" x="2"/>  
         
-        <resetCombobox name="colors" width="230" y="114" x="120" editable="false">
+        <resetCombobox name="colors" width="230" y="114" x="120">
             <attribute name="initselect" value="true" type="boolean" />
             <handler name="oninit">
                 this.addItem('redorange','redorange');

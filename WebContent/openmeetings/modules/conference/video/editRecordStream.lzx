@@ -84,7 +84,11 @@
     	<handler name="ondata" args="value">
         	<![CDATA[
         		if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-        		parent.myvideocontainer = canvas._videocontainer.getNewVideoObject(canvas.publicSID);
+        		if (parent.myvideocontainer == null) {
+                    parent.myvideocontainer = canvas._videocontainer.getNewVideoObject(canvas.publicSID);
+        		} else {
+        			parent.myvideocontainer.publicSID = canvas.publicSID;
+        		}
         		
         		if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
         		if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);

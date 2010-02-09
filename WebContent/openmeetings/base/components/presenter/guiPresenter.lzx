@@ -60,9 +60,9 @@
     <!--- @keywords private show minimize, maximize, close buttons -->
     <attribute name="fullToolBar" value="true" type="boolean" />
     
-    <attribute name="maximazable" value="true" type="boolean" />
+    <attribute name="maximizable" value="true" type="boolean" />
     
-    <attribute name="minimazable" value="true" type="boolean" />
+    <attribute name="minimizable" value="true" type="boolean" />
     
     <attribute name="minimized" value="false" type="boolean" />
     
@@ -463,7 +463,7 @@
 	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
             
             <miniIconsPresenter name="_minimize"
-                visibility="$once{ ((parent.parent.parent.minimazable) ? 'visible' : 'hidden' ) }" 
+                visibility="$once{ ((parent.parent.parent.minimizable) ? 'visible' : 'hidden' ) }" 
                 iconRessourceName="btn_presenter_minimize">
                 <handler name="onclick">
                     this.parent.parent.parent.minimize();

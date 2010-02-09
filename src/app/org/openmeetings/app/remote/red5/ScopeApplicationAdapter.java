@@ -164,7 +164,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Spring Definition does not work here, its too early, Instance is not set yet
 			EmoticonsManager.getInstance().loadEmot(scope);
 			
-			OpenXGClient.getInstance().testConnection();
+			//OpenXGClient.getInstance().testConnection();
 			//ServerSocketMinaProcess serverSocketMinaProcess = new ServerSocketMinaProcess();
 			
 			//serverSocketMinaProcess.doInitSocket();

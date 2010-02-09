@@ -46,7 +46,7 @@
 <class name="colorRow" layout="axis:x;spacing:-1" />
     
 <class name="colorpicker" extends="guiPresenter" labelid="425" isdragable="false" 
-    minimazable="false" maximazable="false" fullToolBar="true" 
+    minimizable="false" maximizable="false" fullToolBar="true" 
     resizeable="false" width="250" height="154" >
     
     <attribute name="btnRef" value="null" />

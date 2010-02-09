@@ -1353,7 +1353,7 @@
         <netRemoteCallHib name="newMessageByRoomAndDomain" funcname="newMessageByRoomAndDomain">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("newMessageByRoomAndDomain: ",value);    
+                //if ($debug) Debug.write("newMessageByRoomAndDomain: ",value);    
                 <![CDATA[
                     if (value.message=='desktop'){
                         canvas._drawarea.incomingScreenSharing(value);
@@ -1379,6 +1379,9 @@
                         canvas._drawarea.startStreaming(value);
                     } else if (value.message=='stopStreaming'){
                         canvas._drawarea.stopStreaming(value);
+                    } else if (value.message=='allowInterview'){
+                        if ($debug) Debug.write("allowInterview",value);
+                        canvas._drawarea.newInterviewStarting(value);
                     }
                 ]]>    
             </handler>  
