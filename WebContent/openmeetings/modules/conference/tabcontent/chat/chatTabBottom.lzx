@@ -16,6 +16,12 @@
 				x="1" y="1" bgcolor="white" >
 				<handler name="onkeyup" args="key">
 	                <![CDATA[
+	                if ($debug) Debug.write("onkeyup");
+	                
+	                var reverse = canvas.reverseAll(parent.getText());
+	                if ($debug) Debug.write("reverse : ", reverse);
+	                
+	               // parent.setText(reverse);
 	                // 13 is return
 	                if ((key==27) || (key==13)) {
 	                	this.parent.parent._button._button.onclick.sendEvent();
@@ -68,7 +74,7 @@
                 parent.objMessage[2] = 'newtextmessage';
                 parent.objMessage[3] = hib.userobject.login;
                 var message = this.parent.parent.message.getText();
-                if (parent.parent._inverseWording.getValue()) message = canvas.reverseWordingsBySplit(message)
+                //if (parent.parent._inverseWording.getValue()) message = canvas.reverseAll(message)
                 parent.objMessage[4] = message;
                 parent.objMessage[5] = canvas.currentusercolor;
                 parent.objMessage[6] = canvas.currentuserpos;

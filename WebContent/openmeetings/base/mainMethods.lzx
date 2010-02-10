@@ -629,6 +629,20 @@ if (cItem == null) {
             }
         }
         return str;
+        
+    ]]>
+</method> 
+
+<method name="reverseAll" args="str">
+    <![CDATA[
+        var words_arr = str.split( "" ); // an array of chars
+        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+        {
+            str += words_arr[ words_arr.length - i - 1 ];
+            
+        }
+        return str;
+        
     ]]>
 </method> 
     

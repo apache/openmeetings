@@ -14,6 +14,7 @@
 	<handler name="oninit">
 		<![CDATA[
 			if($debug) Debug.write("chatTabItem/WIDTH: "+this.width);
+			if($debug) Debug.write("chatTab Item on init");
 	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	        		+canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
 	        		+'&moduleName=chat&parentPath=&room_id='
@@ -21,6 +22,15 @@
 	        		+'&sid='+canvas.sessionId;
 	        //Debug.write("downloadurl "+downloadurl);
 	        this._userpic.setAttribute('src',downloadurl);	
+	        
+	        if(canvas.isrtl == 'true'){
+	        	this.header_user.stAttribute('textalign', 'right');
+	        	this.header_time.setAttribute('align', 'left');
+	        	this.multi.setAttribute('textalign', 'right');
+	        }
+	        
+	        
+	        
 	        
 	        //Debug.write("TIME: "+this.usertime);
         ]]>
@@ -31,13 +41,18 @@
 	
 	<text text="$once{ parent.username }" x="40" resize="false" fontsize="10"
 		  width="$once{ parent.width - 40 }" bgcolor="$once{ parent.usercolor }"
-		  selectable="true" />
-	<text text="$once{ parent.usertime }" align="right" fontsize="10" selectable="true" />
+		  selectable="true" name="header_user">
+		  
+	</text>
+	<text text="$once{ parent.usertime }" align="right" fontsize="10" selectable="true" name="header_time" >
+		
+	</text>
 	
 	
 	
 	<text multiline="true" x="40" y="20" fontsize="10" text="$once{ parent.cbtext }"
-		  width="220" selectable="true" >
+		  width="220" selectable="true" name="multi">
+		 
 	</text>
 
 </class>

@@ -2,7 +2,23 @@
 <library>
 
 <class name="customInputtext" extends="inputtext">
-	
+	  
+	 <handler name="onfocus">
+	 
+	 	if ($debug) Debug.write("customInputtext onFocus : ", canvas.isrtl);
+	 		
+	 
+		 if(canvas.isrtl == 'true'){
+	 		if ($debug) Debug.write("customInputtext onFocus : RTL is set");
+	 		this.setAttribute('textalign', 'right');
+        }
+        else{
+        	if ($debug) Debug.write("customInputtext onFocus : RTL is NOT set");
+      		this.setAttribute('textalign', 'left');
+        
+        }
+	 </handler>	  
+	  
 	 <handler name="ontext" args="txt">
         <![CDATA[
             
