@@ -57,8 +57,10 @@
     
     <method name="startInterView">
     	if ($debug) Debug.write("startInterView :: ");
-    	new lz.editRecordStream(canvas.main_content._content.inner,{
-                	   myvideocontainer:this._videoBroadCast
+    	new lz.editRecordStream(this,{
+                	   myvideocontainer:this._videoBroadCast,
+                	   doDefaultAnimation:false,
+                	   align:'center',valign:'middle'
                 	});
     </method>
 

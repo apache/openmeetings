@@ -14,7 +14,7 @@
  -->
  
 <class name="editRecordStream"  extends="labelExplorerBox" labelid="51"
-	width="300" height="250" x="14" y="40" >
+	width="300" height="250" x="14" y="-340" >
 
     <attribute name="myvideocontainer" value="null" />
     
@@ -26,6 +26,9 @@
     <attribute name="remoteMessage" value="null" />
     
     <attribute name="isSyncUpdate" value="false" type="boolean" />
+    
+    <attribute name="doDefaultAnimation" value="true" type="boolean" />
+    
 	<handler name="oninit">
 		<![CDATA[
 			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);			
@@ -45,6 +48,10 @@
 				this.remoteMessage[0] = 'avsettings';
 				this.remoteMessage[2] = this.chosenSetting;        	
 	        	this.getBroadCastId.doCall();		
+	        } else {
+	        	if (this.doDefaultAnimation) {
+	        		this._chooseDeviceAnimation.doStart();
+	        	}
 	        }
             
         ]]>
@@ -178,6 +185,8 @@
 	        this.close();
         ]]>
     </method>    
+    
+    <animator name="_chooseDeviceAnimation" start="false" attribute="y" to="40" duration="750" />
 
     <labelText labelid="447" fontsize="11" x="10" y="20" width="$once{ parent.width-20 }" />
     
@@ -307,7 +316,7 @@
             t.getLocal('userdata');
             var g = t.getData('userdata');
             var save = g["savecamdata"];
-            Debug.write("savecamdata save: ",save);
+            if ($debug) Debug.write("savecamdata save: ",save);
             if(save) this.setValue(true);
         </handler>         
     </labelCheckbox>
