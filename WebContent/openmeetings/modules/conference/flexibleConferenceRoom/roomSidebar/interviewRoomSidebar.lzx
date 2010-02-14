@@ -68,7 +68,7 @@
     </view>
     
     <interviewUserList name="_videocontainer" y="36"
-			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 
+			   width="$once{ parent.width-10 }" 
 			   height="${ parent.height-36 }" />
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 

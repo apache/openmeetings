@@ -165,7 +165,7 @@ public class ClientListManager {
 				//log.debug("getClientList key: "+key);
 				RoomClient rcl = clientList.get(key);
 				
-				if (rcl.getRoom_id().equals(room_id)) {
+				if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(room_id)) {
 					//same room
 					roomClientList.put(key, rcl);
 				}

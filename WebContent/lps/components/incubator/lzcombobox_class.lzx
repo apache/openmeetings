@@ -3,7 +3,9 @@
     <include href="base/basedatacombobox.lzx" />
     <include href="lz/plainfloatinglist.lzx" />
     <include href="styledtext.lzx"/>
+    <!--
     <include href="tooltip/tooltip.lzx"/>
+     -->
 
     <stylesheet>
         lzcombobox{
@@ -138,7 +140,9 @@
             <view name="arr" resource="lzcombobox_downarrow_icon_rsc" options="ignorelayout" 
                   x="${ parent.rgt.x - this.width + 2 }" y="1" />
 
+			<!--
             <tooltip text="${classroot.tooltip}"/>
+             -->
             
             <!--- @keywords private -->
             <handler name="onisopen" reference="parent">

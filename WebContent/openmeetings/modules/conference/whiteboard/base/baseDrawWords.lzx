@@ -139,7 +139,7 @@
     </resizestate>
 	<view resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
 		onmousedown="parent.rs.apply()" onmouseup="parent._removeResizestateFromThis()" >
-		<tooltip text="Resize this Object" />
+		<labelTooltip text="Resize this Object" />
 	</view>    
 </class>
 
