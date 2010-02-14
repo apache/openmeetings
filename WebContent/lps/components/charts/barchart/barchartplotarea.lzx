@@ -1,0 +1,91 @@
+<library>
+    <include href="../common/datalabel.lzx"/>
+    <!--- @keywords private
+     plotarea of barchart -->
+    <class name="barchartplotarea" extends="virtualdrawview"
+                 x="0" y="0" width="${parent.width}" height="${parent.height}" >
+        <!--- Data Bar pool 
+              @keywords private -->
+        <viewspool name="_barspool" parentview="${parent}" viewclass="databar"/>
+        <!--- Data Label pool 
+              @keywords private -->
+        <viewspool name="_datalabelpool" parentview="${parent}" viewclass="datalabel"/>
+
+        <!--- Renders the data bar, tooltip and datalabel, also applies them the style if it was specified
+            @param array xseries: x series of the chart
+            @param array yseries: y series of the chart
+            @param Array tooltipseries: the tooltip values
+            @param Array labelseries: the label values
+            @param Style style: style of the chart
+            @param Number offset: The offset
+            @param Number width: The bar width
+              @keywords private -->
+        <method name="renderSeries" args="xseries, yseries, tooltipseries, labelseries, style, offset, width">
+        <![CDATA[ 
+            var x = offset;
+
+            if(xseries != null){
+                for(var i = 0; i < xseries.length; i++)
+                {                
+                    var v = renderBar(i + offset, width, yseries[i], style );
+                    if(tooltipseries != null)
+                        v.tooltip = tooltipseries[i];
+    
+                    if ( parent.datalabelEnabled && labelseries != null){
+                        if(labelseries[i] != "null" && labelseries[i] != null && labelseries[i] != ''){
+                            var label = _datalabelpool.getView();
+                            var lx = v.x + v.width + 5;
+                            label.setAttribute('style', style.label);
+                            label.render(labelseries[i]);
+        
+                            label.setAttribute('x', lx+label.width>this.width?this.width-label.width:lx );
+                            label.setAttribute('y', v.y + v.height);
+                            label.bringToFront();
+                        }
+                    }
+                }
+            }
+        ]]>
+        </method>
+                
+        <!--- render the bar
+            @param Number x: the x value
+            @param Number width: The bar width
+            @param Number height: the bar height
+            @param Style style: the style
+              @keywords private -->
+        <method name="renderBar" args="x, width, height, style">            
+        <![CDATA[   
+            var v = _barspool.getView();
+
+            v.setAttribute('visible', false);
+            v.setAttribute('x', this._xoffset);
+            v.setAttribute('y', x * this._yscale + this._yoffset);
+            v.setAttribute('width', height * this._xscale);
+            v.setAttribute('height', width * this._yscale);
+            v.style = style;
+            v.render();
+            v.setAttribute('visible', true);
+
+            return v;
+        ]]>
+        </method>
+
+        <!--- clear the bar and label pool 
+              @keywords private -->
+        <method name="clear">            
+            super.clear();
+            _barspool.reclaimAll();            
+            _datalabelpool.reclaimAll();
+        </method>
+    </class>
+    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->
