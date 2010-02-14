@@ -1,0 +1,51 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2008 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+
+<canvas layout="axis: y">
+  <include href="incubator/ulink.lzx"/>
+  <include href="incubator/tooltip/tooltip.lzx"/>
+  
+  <dataset name="ds">
+    <link name="OpenLaszlo.org" href="http://openlaszlo.org"/>
+    <link name="LaszloSystems.com" href="http://laszlosystems.com"/>
+    <link name="BlogBox.com" href="http://blogbox.com"/>
+  </dataset>
+  
+  <text><i><u>&lt;ulink&gt;</u></i></text>
+  
+  <ulink href="http://openlaszlo.org">OpenLaszlo.org</ulink>
+
+  <ulink href="http://openlaszlo.org" text="text attribute"/>
+  
+  <ulink href="http://openlaszlo.org">tooltip
+    <tooltip>This is a tool tip.</tooltip>
+  </ulink>
+  
+  <ulink href="http://openlaszlo.org"><b>HTML content</b></ulink>
+  
+  <ulink href="http://openlaszlo.org" hoverTags="b">bold hover</ulink>
+  
+  <ulink href="http://openlaszlo.org" hoverTags="b u">bold underline hover</ulink>
+  
+  <ulink href="http://openlaszlo.org" hoverTags="&lt;b&gt;&lt;u&gt;">html hover</ulink>
+  
+  <ulink href="http://openlaszlo.org" color="red" hoverColor="green">custom color</ulink>
+  
+  <vbox options="ignorelayout" x="150">
+    <text><i><u>databound</u></i></text>
+    <ulink datapath="ds:/link" text="$path{'@name'}" href="$path{'@href'}">
+      <tooltip text="$path{'@href'}"/>
+    </ulink>
+  </vbox>
+  
+  <vbox x="300" options="ignorelayout">
+    <text><i><u>&lt;text&gt;&lt;a&gt;</u></i></text>
+    <text><a href="http://openlaszlo.org">OpenLaszlo.org</a></text>
+    <text/>
+    <text>(Note that the link above does not change when you hover over it.)</text>
+  </vbox>
+  
+</canvas>

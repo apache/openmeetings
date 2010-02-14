@@ -1,0 +1,19 @@
+<canvas bgcolor="0x7F7FBB">
+<include href="incubator/iconradioitem.lzx"/>
+
+<goldstyle id="goldish" isdefault="true"/>
+
+    <baselist x="20" y="20" layout="axis:x;spacing:5">
+        <iconradioitem id="gLeft" bgcolor="0x7F7FBB" name="up" rightrsc="" width="22" />
+        <iconradioitem id="gMiddle" name="mid" bgcolor="0x7F7FBB" leftrsc="" rightrsc="" width="22"/>
+        <iconradioitem id="gRight" leftrsc="" bgcolor="0x7F7FBB" width="22" />
+    </baselist>
+
+</canvas>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

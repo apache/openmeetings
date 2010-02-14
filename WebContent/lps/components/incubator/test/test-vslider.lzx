@@ -1,0 +1,20 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<canvas>
+  <include href="../vslider.lzx"/>
+  <vslider height="140" y="20" x="50" 
+           initvalue="20" minvalue="-40" maxvalue="+100" />
+  
+  <vslider height="100" y="20" x="100" initvalue="20" />
+  
+  <vslider height="210" y="20" x="150" initvalue="20" switchaxis="true" />
+  
+  <vslider height="300" y="20" x="200" switchaxis="true" 
+           initvalue="0" minvalue="-240" maxvalue="+400" />
+  
+  <vslider height="400" y="20" x="250" 
+           initvalue="80" minvalue="40" maxvalue="300" />
+
+</canvas>

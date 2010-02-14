@@ -1,0 +1,29 @@
+<library>
+
+    <dataset name="dsTreeData">
+        <root>
+        </root>
+    </dataset>
+
+
+    <dataset name="dsTreeLoader" type="http" src="sampledata.xml"
+             ondata="gDataMan.loadedTreeData( this.getFirstChild() )" />
+
+    <node id="gDataMan">
+        <attribute name="loadnode" value="null"/>
+
+        <method name="loadAdditionalTreeData" args="atnode">
+            this.setAttribute( "loadnode", atnode );
+            dsTreeLoader.doRequest();
+        </method>
+
+        <method name="loadedTreeData" args="ldata">
+            loadnode.setAttribute( "childNodes", ldata.childNodes );
+        </method>
+    </node>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

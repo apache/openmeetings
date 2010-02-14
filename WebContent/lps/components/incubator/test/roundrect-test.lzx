@@ -1,0 +1,88 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+
+<canvas layout="axis: y; spacing: 5">
+  <include href="../roundrect.lzx"/>
+  <class name="row" layout="axis: x; spacing: 5">
+    <attribute name="label" type="string"/>
+    <text width="100" text="${parent.label}"/>
+  </class>
+  
+  <row label="Sampler:">
+    <roundrect backgroundStartColor="red" backgroundStartOpacity="1"
+               backgroundStopColor="red" backgroundStopOpacity="0.25">
+      <text>Default</text>
+      <text>layout</text>
+      <text>is</text>
+      <text>vertical.</text>
+    </roundrect>
+    <roundrect width="150">
+      <text>No background</text>
+    </roundrect>
+    <roundrect backgroundStartColor="red"/>
+    <roundrect borderColor="green" boxShadowColor="green"/>
+    <roundrect width="300" height="50"
+               backgroundStopColor="blue"
+               backgroundGradientOrientation="horizontal"/>
+  </row>
+  
+  <row label="Border color:">
+    <roundrect/>
+    <roundrect borderColor="red"/>
+    <roundrect borderColor="green"/>
+    <roundrect borderColor="blue"/>
+    <roundrect borderColor="yellow"/>
+  </row>
+  
+  <row label="Border width:">
+    <roundrect borderWidth="1"/>
+    <roundrect borderRadius="10" borderWidth="1"/>
+    <roundrect borderWidth="5"/>
+    <roundrect borderRadius="10" borderWidth="5"/>
+    <roundrect borderWidth="10"/>
+    <roundrect borderRadius="10" borderWidth="10"/>
+    <roundrect borderWidth="20"/>
+    <roundrect borderRadius="10" borderWidth="20"/>
+  </row>
+  
+  <row label="Border radius:">
+    <roundrect borderRadius="0"/>
+    <roundrect borderRadius="0"  borderWidth="10"/>
+    <roundrect borderRadius="5"/>
+    <roundrect borderRadius="5"  borderWidth="10"/>
+    <roundrect borderRadius="10"/>
+    <roundrect borderRadius="10" borderWidth="10"/>
+    <roundrect borderRadius="20"/>
+    <roundrect borderRadius="20" borderWidth="10"/>
+  </row>
+  
+  <row label="Background:">
+    <roundrect backgroundStartColor="red"/>
+    <roundrect backgroundStopColor="red"/>
+    <roundrect backgroundStartColor="red" backgroundStartOpacity="0.5"/>
+    <roundrect backgroundStopColor="red" backgroundStopOpacity="0.5"/>
+    <roundrect backgroundStartColor="red"
+               backgroundStartOpacity="0.75" backgroundStopOpacity="0.5"/>
+    <roundrect backgroundStartColor="blue"
+               backgroundGradientOrientation="horizontal"/>
+    <roundrect backgroundStartColor="blue"
+               backgroundGradientOrientation="vertical"/>
+    <roundrect backgroundStartColor="#F00"
+               backgroundStopColor="#0F0"/>
+  </row>
+  
+  <row label="Shadows:">
+    <roundrect boxShadowColor="black"/>
+    <roundrect boxShadowColor="black" boxShadowX="0"/>
+    <roundrect boxShadowColor="black" boxShadowY="0"/>
+    <roundrect boxShadowColor="red" boxShadowOpacity="1.0"/>
+    <roundrect boxShadowColor="red" boxShadowOpacity="0.75"/>
+    <roundrect boxShadowColor="red"/>
+    <roundrect boxShadowColor="blue"/>
+    <roundrect boxShadowColor="green" boxShadowX="10"/>
+    <roundrect boxShadowColor="yellow" boxShadowY="10"/>
+  </row>
+</canvas>

@@ -1,0 +1,53 @@
+<!-- sample tree node implementation; inherits baseopttreenode-->
+<library>
+    <include href="resources.lzx"/>
+    <include href="incubator/opttree/baseopttreenode.lzx"/>
+    
+    <class name="treenode" extends="baseopttreenode">
+        <view resource="folder" frame="${ classroot.open ? 2 : 1 }"/>
+
+        <attribute name="mousein" value="false"/>
+
+        <attribute name="bgcolor" value="${ mousein ? 0xCCCCEE  :
+                                            ( highlight ? 0xEECCCC : null ) }"/>
+
+        <text name="label" x="22" datapath="@name"/>
+
+        <handler name="onmouseover">
+            this.setAttribute( "mousein", true );
+        </handler>
+
+        <handler name="onmouseout">
+            this.setAttribute( "mousein", false );
+        </handler>
+
+        <method name="setSelected" args="s">
+            label.setAttribute( "fgcolor", s ? 0xFF0000 : 0x000000 );
+        </method>
+
+        <handler name="onclick">
+            <![CDATA[ 
+            parent.setOpen( datapath.p, !open );
+            parent.select( this );
+            ]]>
+        </handler>
+
+        <handler name="onopen">
+            <![CDATA[ 
+            if ( !open ) return;
+            var p = datapath.p;
+            if ( !p ) return;
+            var cn = p.childNodes;
+            if ( !cn || !cn.length ){
+                gDataMan.loadAdditionalTreeData( p );
+            }
+            ]]>
+        </handler>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008-2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

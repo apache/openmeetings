@@ -1,0 +1,124 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2006, 2009 Laszlo Systems, Inc. All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<canvas width="500" height="500">
+    <include href="incubator/tooltipManager.lzx"/>
+    <include href="incubator/shadowbox.lzx"/>
+  
+  
+  <dataset name="tooltip_messages">
+    <tooltips>
+        <row key="button1" value="Hi! I'm the message for button one. Ciao. Sono il messaggio per il tasto uno." />
+        <row key="button2" value="Hi! I'm the message for button two. Bonjour. Je suis le message pour le bouton deux."/>
+        <row key="button3" value="Hi! I'm the message for button three. ????. ?? ?? 3? ?? ??? ??."/>
+        <row key="button4" value="Hi! I'm the message for button four. Hallo. Ich bin die Anzeige für Taste vier."/>
+        <row key="button5" value="Hi! I'm the message for button five. Hello. Eu sou a mensagem para a tecla cinco."/>
+        <row key="button6" value="You should not see this"/>
+    </tooltips>
+  </dataset>
+  
+
+  
+  <view bgcolor="#ABCDEF" width="100%" height="100%">
+    <tooltipManager id="myManager" 
+        datapath="tooltip_messages:/tooltips" 
+        messages="row" 
+        component_identifier="name" 
+        tooltip_obj="$once{the_one_tooltip_object}"
+        
+        delay="300"
+        >
+        
+        <!-- override the default tooltip gui. this one is exactly the same but with a background of green... -->
+        <!-- comment the child and the attribute tooltip_obj to see the default -->
+        <view id="the_one_tooltip_object" bgcolor="#aaffaa" width="${theText.width+2}" height="${theText.height+2}" pixellock="true">
+            <attribute name="text" type="html" value="Default Value"/>
+            
+            <view bgcolor="black" y="0" width="${parent.width}" height="1"/>
+            <view bgcolor="black" y="${parent.height-1}"    width="${parent.width}" height="1"/>
+            <view bgcolor="black" x="0"                        height="${parent.height}" width="1"/>
+            <view bgcolor="black" x="${parent.width-1}"        height="${parent.height}" width="1"/>
+            
+            <handler name="ontext">
+                theText.setAttribute("text",this['text']);
+            </handler>
+            <text name="theText" resize="true" text="${parent.text}" x="1" y="1"/>
+        </view>
+     
+    </tooltipManager>
+    
+
+    <button 
+            name="button1"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="100"
+            y="100"
+            > 1 Mouse Over Me!
+    </button>
+    
+    <button 
+            name="button2"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="-10"
+            y="470"
+            > 2 Mouse Over Me!
+    </button>
+    
+    
+    <button 
+            name="button3"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="410"
+            y="470"
+            > 3 Mouse Over Me!
+    </button>
+    
+    <button 
+            name="button4"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="-10"
+            y="0"
+            > 4 Mouse Over Me!
+    </button>
+    
+    <button 
+            name="button5"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="410"
+            y="0"
+            > 5 Mouse Over Me!
+    </button>
+    
+    <button 
+            name="button6"
+            onmouseover="Debug.write('mouseover')" 
+            onmouseout="Debug.write('mouseout')"
+            oninit="myManager.register(this)"
+            x="300"
+            y="100"
+            > 6 Mouse Over Me!
+            <attribute name="tooltip" value="This is *not* from the dataset" type="html"/>
+    </button>
+    
+    <view x="10" y="140" width="400" height="300" bgcolor="white">
+        <text multiline="true" width="100%" height="100%">
+            All components that wish to be registered for "toolbarability" must register itself in the oninit call
+        </text>
+    </view>
+  </view>
+  
+  
+  
+</canvas>

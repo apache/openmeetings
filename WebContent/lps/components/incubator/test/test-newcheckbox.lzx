@@ -1,0 +1,62 @@
+<canvas debug="true" width="1000" height="800">
+
+    <debug x="250" height="500" /> 
+
+    <include href="base/baseform.lzx"/>
+    <include href="incubator/newcheckbox.lzx"/>
+
+    <dataset name="mydset">
+        <value>true</value>
+        <value>false</value>
+    </dataset>
+
+    <baseform id="myform" x="20" y="20" layout="spacing:3">
+
+        <newcheckbox id="c1" value="true">
+            <handler name="onvalue">
+                Debug.write('c1 value', this.value);
+            </handler>
+            <handler name="onchanged">
+                Debug.write('c1 changed', this.changed);
+            </handler>
+        </newcheckbox>
+
+        <newcheckbox id="c2" value="false">
+            <handler name="onvalue">
+                Debug.write('c2 value', this.value);
+            </handler>
+            <handler name="onchanged">
+                Debug.write('c2 changed', this.changed);
+            </handler>
+        </newcheckbox>
+
+        <newcheckbox id="c3" datapath="mydset:/value[1]/text()">
+            <handler name="onvalue">
+                Debug.write('c3 value', this.value);
+            </handler>
+            <handler name="onchanged">
+                Debug.write('c3 changed', this.changed);
+            </handler>
+        </newcheckbox>
+
+        <newcheckbox id="c4" datapath="mydset:/value[2]/text()">
+            <handler name="onvalue">
+                Debug.write('c4 value', this.value);
+            </handler>
+            <handler name="onchanged">
+                Debug.write('c4 changed', this.changed);
+            </handler>
+        </newcheckbox>
+
+        <handler name="onchanged" args="changed">
+            Debug.write('myform changed', this.changed, changed);
+        </handler>
+
+    </baseform>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
