@@ -3,7 +3,7 @@
 ################################################################################
 ##
 ##  ADOBE SYSTEMS INCORPORATED
-##  Copyright 2007 Adobe Systems Incorporated
+##  Copyright 2007, 2009, 2010 Adobe Systems Incorporated
 ##  All Rights Reserved.
 ##
 ##  NOTICE: Adobe permits you to use, modify, and distribute this file
@@ -42,6 +42,6 @@ fi
 
 # don't use $FLEX_HOME in this variable because it may contain spaces,
 # instead put it on the java args directly, with double-quotes around it
-VMARGS="-Xmx384m -Dsun.io.useCanonCaches=false"
+VMARGS="-Xmx640m -Dsun.io.useCanonCaches=false"
 
 java $VMARGS $SETUP_SH_VMARGS -jar "$FLEX_HOME/lib/mxmlc.jar" +flexlib="$FLEX_HOME/frameworks" "$@"
