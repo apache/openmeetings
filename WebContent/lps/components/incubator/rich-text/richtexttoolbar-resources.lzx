@@ -1,0 +1,29 @@
+<library>
+
+    <resource name="bold_icon_rsc" src="resources/bold.png"/>
+    <resource name="italic_icon_rsc" src="resources/italic.png"/>
+    <resource name="underline_icon_rsc" src="resources/underline.png"/>
+    
+    <resource name="bullet_icon_rsc" src="resources/bullet_list.png"/>
+    <resource name="indent_icon_rsc" src="resources/indent.png"/>
+    <resource name="outdent_icon_rsc" src="resources/outdent.png"/>
+    
+    <resource name="lft_align_icon_rsc" src="resources/lft_align.png"/>
+    <resource name="center_icon_rsc" src="resources/center.png"/>
+    <resource name="rt_align_icon_rsc" src="resources/rt_align.png"/>
+    
+    <resource name="link_icon_rsc" src="resources/link.png" />
+    <resource name="resetfmt_icon_rsc" src="resources/reset.png" />
+
+    <resource name="rte_btn">
+        <frame src="resources/rte_btn_up.swf"/>
+        <frame src="resources/rte_btn_mo.swf"/>
+        <frame src="resources/rte_btn_dn.swf"/>
+    </resource>
+    
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2006 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

@@ -1,0 +1,146 @@
+<library>
+    <!-- temp removed to integrate platform and emerald-->
+    <!--include href="../emerald-contrib/baseedittext.lzx"/-->
+    <include href="extensions/views/richinputtext.lzx" />
+    <!-- _richinternalinputtext
+         class for use in windowtext takes its parent's arguments
+         when it constructs 
+        @keywords private -->
+    <class name="_richinternalinputtext" extends="richinputtext">
+        <!--- True means that setValue called internal inputtext and inputtext
+              should not call setValue back. -->
+        <attribute name="ignorecallup" value="false" />
+
+        <!--- Values like password and textwidth, which can't be changed at
+              runtime, must be passed in early to inputtext .
+              @keywords private -->
+        <method name="construct" args="parent, args">
+            // args from parent
+            if ( parent['password'] != null )  args.password = parent.password;
+            parent._field = this;
+            super.construct(  parent, args );
+        </method>
+        
+        <handler name="oninit">
+            this.setHTML(true);
+        </handler>        
+
+        <!--- Sent if whenever the focus moves into _internalinputtext. 
+            @param Object s: view that is losing focus -->
+        <handler name="onfocus" args="s">
+            if (parent['onfocus']) parent.onfocus.sendEvent(s);
+        </handler>
+        <!--- Sent if whenever the focus moves out of _internalinputtext. 
+            @param Object s: view that is gaining focus -->
+        <handler name="onblur" args="s">
+            if (parent['onblur']) parent.onblur.sendEvent(s);
+        </handler>
+        <!--- Sent whenever a user enters a valid new character. -->
+        <handler name="ontext">
+            if (! this.ignorecallup) {
+                parent.setValue(this.getText(),false,true);
+            }
+            this.ignorecallup = false;
+        </handler>
+        <!--- Get focus bracket for _internalinputtext to be the dimensions of
+              baseedittext.
+              @keywords private -->
+        <method name="getFocusRect" >
+           var fx = parent.getAttributeRelative('x',canvas);
+           var fy = parent.getAttributeRelative('y',canvas);
+           var fw = parent.getAttributeRelative('width',canvas);
+           var fh = parent.getAttributeRelative('height',canvas);
+           return [fx,fy,fw,fh];
+        </method>
+        <!-- Used so that we can put a getPrevSelection method on an instance of
+             this class.
+        @return view: the view to which the selection should move - one earlier in the order -->
+        <method name="getPrevSelection" >
+            if ( parent['getPrevSelection'] )  return parent.getPrevSelection()
+            return null; // default tab order occurs
+        </method>
+        <!-- Used so that we can put a getNextSelection method on an instance of
+             this class.
+            @return view: the view to which the selection should move - one later in the order-->
+        <method name="getNextSelection" >
+            if ( parent['getNextSelection'] )  return parent.getNextSelection()
+            return null; // default tab order occurs
+        </method>
+    </class>
+
+
+    <!--- This component provides the look and feel for rich editable text, data
+          binding, and focus events. -->
+    <class name="baserichedittext" extends="baseedittext">
+
+        <!--- Append text to either the plaintext or the htmltext, while
+              preserving the plaintext-ness of this editor.
+              @param String str: string to append
+              @param Boolean isHTML: true if the text to append is HTML, else
+              false for plain text. 
+              @param Boolean isinitvalue: true if the appended text should be
+              considered the initial value. -->
+        <method name="appendText" args="str,isHTML,isinitvalue">
+            this._field.appendText(str, isHTML); 
+
+            // Set value of richedittext and send event.
+            this.setValue(this._field.getText(),isinitvalue);
+        </method>
+
+        <!--- Wrapper to setValue. 
+             @param Boolean isinitvalue: true if the appended text should be\
+            @param String t: text string
+             considered the initial value. -->
+        <method name="setHTMLText" args="t,isinitvalue">
+            this._field.setHTMLText(t);
+
+            // Set value of richedittext and send event.
+            this.setValue(this._field.getText(),isinitvalue);
+        </method>
+
+        <!--- Returns the contents as html text. 
+              @return String: text containing html formatting information. -->
+        <method name="getHTMLText">
+            if (this._initcomplete) {
+                return this._field.getHTMLText();
+            } else {
+                return this._initialtext;
+            }
+        </method>
+        
+        <!---
+            Applies the format to the text between start and end. 
+            @param textformat format: format to apply region. 
+            @param Number start: start index of text to format.
+            @param Number end: end index of text to format.
+        -->
+        <method name="setTextFormat" args="format, start, end">
+            this._field.setTextFormat(format, start, end); 
+        </method>
+
+        <!---
+            Gets the format of the text in the specified region.
+            @param Number start: start index to get text format.
+            @param Number end: end index to get text format.
+            @return textformat format: the text format of the range of characters 
+        -->
+        <method name="getTextFormat" args ="start, end">
+            return this._field.getTextFormat(start, end); 
+        </method>
+        
+        <!--- Replace region with a particular string. If start and end are the
+              same, insert into that position.
+              @param Number start: start index to replace text.
+              @param Number end: end index to replace text.
+              @param String str: string to replace region with. -->
+        <method name="replaceText" args="start, end, str">
+            this._field.replaceText(start, end, str);                 
+        </method>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

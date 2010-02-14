@@ -1,0 +1,26 @@
+<canvas>
+
+    <!-- this test case provides an example of using the platform basic Rich Text Editor -->
+    <!-- As an lzunit test, it just makes sure this file compiles without warnings. --> 
+    <include href="lzunit"/>
+    
+    <!-- include RTE dependencies -->
+    <include href="incubator/rich-text/richtexteditor.lzx"/>
+    
+    <view name="rtetestview" width="650" x="50" height="200">
+        <!-- declare an instance of the richtexteditor class -->
+        <richtexteditor/>
+    </view>
+
+    <TestSuite>
+        <TestCase>
+        </TestCase>
+    </TestSuite>
+    
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

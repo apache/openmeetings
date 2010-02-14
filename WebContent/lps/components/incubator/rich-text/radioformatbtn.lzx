@@ -1,0 +1,34 @@
+<library>
+    <include href="../iconradioitem.lzx"/>
+    
+    <!--- radioformatbtn
+        A button class based for formatting options which come in radio groups,
+        ie, alignment and indent/bullet list. This doesn't actually apply
+        any formatting; the radiogroup which parents these buttons should
+        write onselect to actually apply the format to something. --> 
+    <class name="radioformatbtn" extends="iconradioitem" style="formatbtn_style">
+        <attribute name="toolbar" value="$once{this.parent.parent}" />
+        <attribute name="editor" value="$once{this.parent.parent.editor}" />
+    
+        <handler name="onmouseover">
+            this.editor.saveSelectionRegion(); 
+            if (parent['onmouseover']) parent.onmouseover.sendEvent();
+        </handler>
+        
+        <handler name="onselect">
+            if (this.isinited) {
+                var color = ( this.selected ? this.style.flag1 : this.style.flag0 ); 
+                if (this['left'])   this.setTint(this.left,   color); 
+                if (this['middle']) this.setTint(this.middle, color);
+                if (this['right'])  this.setTint(this.right,  color);
+            }
+        </handler>
+        
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

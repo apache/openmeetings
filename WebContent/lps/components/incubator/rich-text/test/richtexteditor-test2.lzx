@@ -1,0 +1,42 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<canvas debug="true" width="100%" height="100%" >
+    <debug fontsize="12" oninit="Debug.showInternalProperties = true" />
+    
+    <!-- include RTE dependencies -->
+    <include href="incubator/rich-text/richtexteditor.lzx"/>
+    
+    <simplelayout axis="y" spacing="2" />
+    
+    <text>RTE 1</text>
+    <view name="rte1" width="650" x="50" height="200">
+        <!-- declare an instance of the richtexteditor class -->
+        <richtexteditor name="rte"/>
+    </view>
+    
+    <text>RTE 2</text>
+    <view name="rte2" width="650" x="50" height="200">
+        <!-- declare an instance of the richtexteditor class -->
+        <richtexteditor name="rte"/>
+    </view>
+    
+    
+    <button text="Get HTML Text From RTE 1">
+        <handler name="onclick">
+            if ($debug) Debug.write(canvas.rte1.rte.getText());
+        </handler>
+    </button>
+    
+    
+    <button text="Copy HTML Text from RTE 1 to RTE 2">
+        <handler name="onclick">
+            if ($debug) Debug.write(canvas.rte1.rte.getText());
+            canvas.rte2.rte.setText(canvas.rte1.rte.getText())
+        </handler>
+    </button>
+   
+</canvas>
+

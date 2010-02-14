@@ -1,0 +1,161 @@
+ <library>
+
+     <!--- 
+
+         formatfontsize 
+
+         A class which wraps up the font face combobox and associated data
+
+     -->
+
+     
+
+     <!-- dependencies  -->
+
+     
+
+     <!-- Data: Font Size
+
+         inside of a state because datasets get instantiated upon application init
+
+         the state delays instantiation until the RTE is used. -->
+
+
+         <dataset name="fontsizes">
+
+         <sz value="11">11</sz>
+
+         <sz value="12">12</sz>
+
+         <sz value="14">14</sz>
+
+         <sz value="18">18</sz>
+
+         <sz value="24">24</sz>
+
+         <sz value="36">36</sz>
+
+         <sz value="72">72</sz>
+
+         </dataset>
+
+
+     
+
+     <class name="formatfontsize" extends="lzcombobox" width="50" shownitems="7" focusable="false"
+
+         style="sidebarbutton_style" itemdatapath="fontsizes:/sz" listwidth="${this.bkgnd.mid.width}">
+
+         
+
+         <attribute name="editor" value="null"/>
+
+         <attribute name="toolbar" value="$once{this.parent}" />
+
+         
+
+         <tooltip>Choose font size</tooltip>      
+
+         
+
+         <!---  @keywords private
+
+             Set my initial value to be the editor's default font size.
+
+             Register tool with toolbar -->
+
+         <method name="init">
+
+             super.init();
+
+             toolbar.registerTool(this,"size");
+
+         </method>
+
+         <!---  @keywords private
+
+             apply state for late instantiation of local data -->
+
+         <method name="construct" args="parent, args">
+
+             super.construct(parent, args);
+
+         </method>
+
+         
+
+         <!---  @keywords private -->
+
+         <handler name="onselect"><![CDATA[
+                this.setChanged(true); 
+                //------------------------------------------------------------
+
+                // make sure that we call into editor if this combobox has
+
+                // changed, i.e., it contains an initial value. -pk
+
+                //------------------------------------------------------------
+
+                if (this.changed && this.toolbar._passthruchanges) {                   
+                    if (this.editor) {
+                        this.editor.setFormatAttribute("size", this.getValue()); 
+                        this.editor.delegateRestoreSelection(); 
+                    }
+
+                } 
+                ]]>
+
+         </handler>
+
+         
+         <!-- When we get an editor to hook up to, make this menu's value
+            match up to the default font of the editor.  -->
+         <handler name="oneditor" args="e">
+             this.setValue(this.editor.defaultfontsize, true);
+         </handler>
+         
+
+         <!--- method broadcast out by the toolbar for clearing tool's state -->
+
+         <method name="reset">
+
+             rollback();
+
+         </method>
+
+         
+
+         <!--- method broadcast out by the toolbar for setting tool's state -->
+
+         <method name="setState" args="state">
+
+             this.setValue(state); 
+
+         </method>
+
+         
+
+         <!-- Save the selection region before another widget gets focus. -->
+
+         <handler name="onmouseover">
+
+             this.editor.saveSelectionRegion();
+
+         </handler>
+
+         
+
+     </class>
+
+     
+
+ </library>
+
+ 
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+
