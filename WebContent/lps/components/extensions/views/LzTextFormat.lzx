@@ -1,0 +1,66 @@
+<library>
+ 
+<!---
+    An object to specify the format of a text object.  Used only in 
+    Javascript by richinputtext.setTextFormat.
+    @shortdesc Formats rich text
+--> 
+<class name="textformat" extends="node">
+    
+    <attribute name="font" type="string" />
+    <attribute name="size"   /> 
+    <attribute name="color" type="color" />
+    <attribute name="bold" type="boolean" />
+    <attribute name="italic" type="boolean"  />
+    <attribute name="underline" type="boolean" />
+    <attribute name="url" type="string" />
+    <attribute name="target" type="string" />
+    <attribute name="align" />
+    <attribute name="leftmargin"  /> 
+    <attribute name="rightmargin"  />
+    <attribute name="indent"  />
+    <attribute name="leading"  />
+
+    <method name="construct" args="parent, args">
+        this.font = null;
+        this.size = null;
+        this.color = null;
+        this.bold = null;
+        this.italic = null; 
+        this.underline= null; 
+        this.url = null; 
+        this.target = null;     
+        this.align = null; 
+        this.leftmargin = null; 
+        this.rightmargin = null; 
+        this.indent = null; 
+        this.leading = null; 
+        
+        super.construct(parent, arguments);
+    </method>
+
+    <!--- Creates an html tag matching this format. --> 
+    <method name="toHTML">
+        var str = "&lt;font ";
+
+        if (this.font) str += 'face="' + this.font +'" ';
+        if (this.size) str += 'size="' + this.size +'" '; 
+        
+        str += "&gt;";
+        return str;
+    </method>
+</class>
+
+<!---
+    LzTextFormat is deprecated.  Use 'textformat' instead.
+    @keyword deprecated
+-->
+<class name="LzTextFormat" extends="textformat"
+    oninit="Debug.warn('`LzTextFormat` is deprecated.  Use `textformat`.')"/>
+    
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

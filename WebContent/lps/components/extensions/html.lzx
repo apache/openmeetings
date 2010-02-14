@@ -1,0 +1,356 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+
+<library>
+  <switch>
+    <when runtime="dhtml">
+    </when>
+    <otherwise>
+<script when="immediate">
+// proxy object for browser lz.embed.iframemanager
+lz.embed.iframemanager = new LzInheritedHash();
+lz.embed.iframemanager.owners = new LzInheritedHash();
+lz.embed.iframemanager.create = function(owner, name, scrollbars) {
+    lz.Browser.callJS('lz.embed.iframemanager.create', function (id) { 
+        lz.embed.iframemanager.owners[id] = owner;
+        owner.setiframeid(id); 
+    }, canvas.id, name, scrollbars);
+}
+lz.embed.iframemanager.setPosition = function(id, x, y, width, height, v, z) {
+    lz.Browser.callJS('lz.embed.iframemanager.setPosition', null, id, x, y, width, height, v, z);
+}
+lz.embed.iframemanager.setSrc = function(id, src, history) {
+    lz.Browser.callJS('lz.embed.iframemanager.setSrc', null, id, src, history);
+}
+lz.embed.iframemanager.setVisible = function(id, v) {
+    lz.Browser.callJS('lz.embed.iframemanager.setVisible', null, id, v);
+}
+lz.embed.iframemanager.bringToFront = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.bringToFront', null, id);
+}
+lz.embed.iframemanager.sendToBack = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.sendToBack', null, id);
+}
+lz.embed.iframemanager.scrollBy = function(id, x, y) {
+    lz.Browser.callJS('lz.embed.iframemanager.scrollBy', null, id, x, y);
+}
+lz.embed.iframemanager.__gotload = function(id) {
+    var view = lz.embed.iframemanager.owners[id];
+    if (view) view.__gotload();
+}
+lz.embed.iframemanager.__gotMouseEvent = function(id, eventname) {
+    var view = lz.embed.iframemanager.owners[id];
+    if (view) LzMouseKernel.handleMouseEvent(view, eventname);
+}
+lz.embed.iframemanager.__destroy = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.__destroy', null, id);
+}
+lz.embed.iframemanager.callJavascript = function(id, methodName, callbackDel, args) {
+    var callback = null;
+    if (callbackDel) callback = function(retVal) {
+                                    callbackDel.execute(retVal);
+                                };
+    lz.Browser.callJS('lz.embed.iframemanager.callJavascript', callback, id, methodName, null, args);
+}
+
+lz.embed.iframemanager.setSendMouseEvents = function(id, send) {
+    lz.Browser.callJS('lz.embed.iframemanager.setSendMouseEvents', null, id, send);
+}
+
+lz.embed.iframemanager.setShowNativeContextMenu = function(id, show, showwarning) {
+    <![CDATA[
+    if ($debug && showwarning) {
+        Debug.warn("The shownativecontextmenu attribute won't work in runtimes other than dhtml.");
+    }
+    ]]>
+}
+
+lz.embed.iframemanager.storeSelection = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.storeSelection', null, id);
+}
+
+lz.embed.iframemanager.restoreSelection = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.restoreSelection', null, id);
+}
+</script>
+</otherwise>
+</switch>
+
+<class name="html" extends="view">
+    <doc>
+      <tag name="shortdesc"><text>Adds the capability to display HTML pages.</text></tag>
+      <text>
+        <p><tagname>html</tagname> is a <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag> that displays HTML pages.</p> 
+        
+        <p>For best results in Flash, set the wmode attribute to 'transparent' when embedding the application.  See examples/extensions/html-swf.jsp for an example.  See examples/extensions/html.lzx for an example of embedding <tagname>html</tagname> in a window.</p>
+        
+        <example><programlisting class="code">
+&lt;canvas&gt; 
+    &lt;view y="50" width="100%" height="300" bgcolor="blue" onmousedown="res.apply()" onmouseup="res.remove()"&gt;
+        &lt;resizestate name="res"/&gt;
+        &lt;dragstate name="drg"/&gt;
+        &lt;text width="100%" bgcolor="gray" onmousedown="parent.drg.apply()" onmouseup="parent.drg.remove()"&gt;Drag here&lt;/text&gt;
+        &lt;html id="ht" src="http://google.com/" x="15" y="15" width="${parent.width - 30}" height="${parent.height - 30}"/&gt;
+    &lt;/view&gt;
+&lt;/canvas&gt;
+        </programlisting></example>
+                
+        <p><classname>html</classname> extends <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag>,
+        which is the fundamental visual class of LZX.</p>
+      </text>
+    </doc>
+
+    <!--- If true, the html tag will have scrollbars.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="scrollbars" type="boolean" value="true"/>
+    <!--- If true, the html tag is currently loading
+          @type Boolean
+          @access public
+          @keywords readonly
+    -->
+    <attribute name="loading" type="boolean" value="false"/>
+    <!--- If true, the html tag is ready to receive commands
+          @type Boolean
+          @access public
+          @keywords readonly
+    -->
+    <attribute name="ready" value="false"/>
+    <!--- If true, the html tag will set browser history.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="history" value="true"/>
+    <!--- The minimum height of the iframe: embedded swfs won't load with a size less than 1
+          @type Number
+          @access number
+    -->
+    <attribute name="minimumheight" type="number" value="0"/>
+    <!--- The minimum width of the iframe: embedded swfs won't load with a size less than 1
+          @type Number
+          @access number
+    -->
+    <attribute name="minimumwidth" type="number" value="0"/>
+    <!--- If true, attempt to listen for mouse events on the iframe.  Cross-domain security restrictions apply, so if the content loaded in the iframe is from a different domain, mouse events won't be sent.
+          @type Boolean
+          @access boolean
+    -->
+    <attribute name="mouseevents" type="boolean" value="true"/>
+    <setter name="mouseevents" args="send">
+    <![CDATA[
+        this.mouseevents = send;
+        if (this['iframeid']) {
+            lz.embed.iframemanager.setSendMouseEvents(this.iframeid, send);
+        } else {
+            this.__mouseevents = send;
+        }
+        if (this['onmouseevents'] && this.onmouseevents.ready) this.onmouseevents.sendEvent(send);
+    ]]>
+    </setter>
+    <!--- If true, show native context menus in the iframe.  Otherwise, show OpenLaszlo context menus.  Note that this only works in DHTML because it's not possible to programatically display a context menu in Flash.
+          @type Boolean
+          @access boolean
+    -->
+    <attribute name="shownativecontextmenu" type="boolean" value="true"/>
+    <setter name="shownativecontextmenu" args="show">
+    <![CDATA[
+        this.shownativecontextmenu = show;
+        if (this['iframeid']) {
+            lz.embed.iframemanager.setShowNativeContextMenu(this.iframeid, show, true);
+        } else {
+            this.__shownativecontextmenu = show;
+        }
+        if (this['onshownativecontextmenu'] && this.onshownativecontextmenu.ready) this.onshownativecontextmenu.sendEvent(show);
+    ]]>
+    </setter>
+    <!--- Sets the view to listen to for x/y/width/height change events.  Defaults to this.parent.
+          @type LzView
+          @access public
+    -->
+    <attribute name="target" value="${this.parent}"/>
+    <!--- Sets the name/target of the html iframe.
+          @type String
+          @access public
+    -->
+    <attribute name="framename" value="" type="string"/>
+    <event name="onload"/>
+    <event name="onready"/>
+    <setter name="target" args="t">
+        if (t == null) return;
+        this.target = t;
+        if (this['_posdel']) {
+            this._posdel.unregisterAll();
+        } else {
+            this._posdel = new LzDelegate(this, '__updatepos'); 
+        }
+        if (t != this) {
+            this._posdel.register(this, 'onwidth');
+            this._posdel.register(this, 'onheight');
+        }
+        this._posdel.register(this.target, 'onwidth');
+        this._posdel.register(this.target, 'onheight');
+        if ($dhtml) {
+            // x and y are implicit
+        } else {
+            this._posdel.register(this.target, 'onx');
+            this._posdel.register(this.target, 'ony');
+        }
+        //Debug.write(t);
+        this.__updatepos(null);
+        if (this['ontarget']) this.ontarget.sendEvent(t);
+    </setter>
+
+    <!--- Sets the visibility of the html tag
+          @type Boolean
+          @access public
+    -->
+    <attribute name="visible" type="boolean" value="true"/>
+    <setter name="visible" args="v">
+        this.visible = v;
+        if (this['iframeid']) lz.embed.iframemanager.setVisible(this.iframeid, v);
+        if (this['onvisible']) this.onvisible.sendEvent(v);
+    </setter>
+
+    <!--- Sets the URL the html tag should load
+          @type String
+          @access public
+    -->
+    <attribute name="src" type="text"/>
+    <event name="onsrc"/>
+    <setter name="src" args="s">
+        this.src = s;
+        this.setAttribute('loading', true);
+        if (this['iframeid']) {
+            lz.embed.iframemanager.setSrc(this.iframeid, s, this.history);
+        } else {
+            this.__srcset = s;
+        }
+        this.onsrc.sendEvent(s);
+    </setter>
+
+    <!--- @access private -->
+    <method name="init">
+        super.init();
+        if ($dhtml) {
+            var i = lz.embed.iframemanager.create(this, this.framename, this.scrollbars, this.sprite.__LZdiv, 0, canvas);
+        } else {
+            var i = lz.embed.iframemanager.create(this, this.framename, this.scrollbars);
+        }
+        if (i) this.setiframeid(i);
+    </method>
+
+    <!--- @access private -->
+    <method name="__updatepos" args="ignore">
+        if (! this['iframeid']) return;
+
+        if ($dhtml) {
+            // pass in null x/y to skip positioning
+            var x = null;
+            var y = null;
+            var z = this.sprite.getZ();
+        } else {
+            var x = this.getAttributeRelative("x", canvas);
+            var y = this.getAttributeRelative("y", canvas);
+            var z = this.target.sprite.getZ();
+        }
+        var width = Math.max(this.width, this.minimumwidth);
+        var height = Math.max(this.height, this.minimumheight);
+        lz.embed.iframemanager.setPosition(this.iframeid, x, y, width, height, this.visible, z);
+    </method>
+    <!--- @access private -->
+    <method name="setiframeid" args="id">
+        //Debug.write('setiframeid', id, this)
+        this.iframeid = id;
+        if (this['isfront']) this.bringToFront();
+        if (this['__srcset']) lz.embed.iframemanager.setSrc(id, this.__srcset, this.history);
+        this.__updatepos(null);
+        if ($dhtml) {
+            this.setAttribute('clickable', true);
+        }
+        this.setAttribute('ready', true);
+        if (this['__mouseevents']) lz.embed.iframemanager.setSendMouseEvents(id, this.__mouseevents);
+        if (this['__shownativecontextmenu']) lz.embed.iframemanager.setShowNativeContextMenu(id, this.__shownativecontextmenu);
+    </method>
+    <!--- @access private -->
+    <method name="__gotload">
+        if (this['src'] == null) return;
+        this.setAttribute('loading', false);
+        this.__updatepos(null);
+        this.onload.sendEvent();
+    </method>
+    <method name="bringToFront">
+        super.bringToFront();
+        if (this['isfront'] == true || ! this['iframeid']) return;
+        this.isfront = true;
+        if ($dhtml) {
+            lz.embed.iframemanager.setZ(this.iframeid, this.sprite.getZ());
+        } else {
+            lz.embed.iframemanager.bringToFront(this.iframeid);
+        }
+    </method>
+    <method name="sendToBack">
+        super.sendToBack();
+        if (this['isfront'] == false || ! this['iframeid']) return;
+        this.isfront = false;
+        if (this['iframeid']) lz.embed.iframemanager.sendToBack(this.iframeid);
+        if ($dhtml) {
+            lz.embed.iframemanager.setZ(this.iframeid, this.sprite.getZ());
+        } else {
+            lz.embed.iframemanager.sendToBack(this.iframeid);
+        }
+    </method>
+    <!---
+      Scrolls the html tag to a specific position.
+      @param Number x: x position to scroll to
+      @param Number y: y position to scroll to
+    -->
+    <method name="scrollBy" args="x, y">
+        if (this['iframeid']) lz.embed.iframemanager.scrollBy(this.iframeid, x, y);
+    </method>
+    <!---
+      Calls a method in the the loaded page.
+      @param String methodName: The name of the method to call
+      @param LzDelegate callbackDel: An optional LzDelegate which will be called with the return value from the method call.
+      @param args: Optional arguments to pass to the method.
+    -->
+    <method name="callJavascript" args="methodName, callbackDel = null, ...args">
+        lz.embed.iframemanager.callJavascript(this.iframeid, methodName, callbackDel, args);
+    </method>
+    <!---
+      Restores a selection in the iframe.  Currently only works in IE 7.
+    -->
+    <method name="restoreSelection">
+        lz.embed.iframemanager.restoreSelection(this.iframeid);
+    </method>
+    <!---
+      Stores a selection from the iframe, to be restored later by restoreSelection().  Currently only works in IE 7.
+    -->
+    <method name="storeSelection">
+        lz.embed.iframemanager.storeSelection(this.iframeid);
+    </method>
+    <!--- @keywords private -->
+    <method name="destroy">
+        if (this['iframeid']) lz.embed.iframemanager.__destroy(this.iframeid);
+        <!-- TODO: remove when cleanup is automatic -->
+        if (this._posdel) {
+            this._posdel.unregisterAll();
+        }
+        super.destroy();
+    </method>
+    <switch>
+        <when runtime="dhtml">
+        <!--- @access private -->
+        <handler name="onmouseover">
+            <![CDATA[
+            if (! this['iframeid']) return;
+            LzMouseKernel.disableMouseTemporarily();
+            ]]>
+        </handler>
+        </when>
+    </switch>
+</class>
+</library>
