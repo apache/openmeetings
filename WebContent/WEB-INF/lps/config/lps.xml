@@ -48,7 +48,7 @@
     <!-- See http://jakarta.apache.org/log4j/docs/.  -->
     <!-- =========================================== -->
     <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j">
-        <priority value="ERROR" />
+
         <appender name="lps" class="org.apache.log4j.RollingFileAppender">
 
             <!-- ==================================================== -->
@@ -73,12 +73,12 @@
         </appender>
         
         <logger name="org.openlaszlo" additivity="false">
-            <priority value="ERROR" />
+            <priority value="info" />
             <appender-ref ref="lps" />
         </logger>
 
         <logger name="org.apache.axis" additivity="false">
-            <priority value="ERROR" />
+            <priority value="warn" />
             <appender-ref ref="lps" />
         </logger>
 

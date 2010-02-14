@@ -15,7 +15,8 @@
   
   <xsl:template name="containerdiv">
     <xsl:param name="methodname" />
-      <p>By default, applications are placed inside a new div with the id 'Container' appended to the app id, or '<code><xsl:value-of select="/canvas/@id"/>Container</code>' for the application above.  To place the application inside an existing div, you can specify the div's id as an argument to <code>lz.embed.<xsl:value-of select="$methodname"/>({... appenddivid: 'divid'})</code>.  Alternatively, you can change the id of an existing div or add a new one, e.g. '<code>&lt;div id="<xsl:value-of select="/canvas/@id"/>Container">...&lt;/div></code>'.</p>
+      <h2>Embedding applications in an existing HTML div</h2>
+      <p>By default, applications are placed inside a new div with the id 'Container' appended to the app id, or '<code><xsl:value-of select="/canvas/@id"/>Container</code>' for the application above.  To place the application inside an existing div, you can specify the div's id as an argument to <code>lz.embed.<xsl:value-of select="$methodname"/>({... appenddivid: 'divid'})</code>.  Alternatively, you can change the id of an existing div or add a new one, e.g. '<code>&lt;div id="<xsl:value-of select="/canvas/@id"/>Container">...&lt;/div></code>'. For best results, please ensure the div you wish to append to appears before the call to <code>lz.embed.<xsl:value-of select="$methodname"/>()</code>.</p>
   </xsl:template>
 
   <xsl:template name="solodeployment">
@@ -29,12 +30,39 @@
       <p>To disable the history feature for an application, you can set the <code>history</code> argument to false, e.g. <code>lz.embed.<xsl:value-of select="$methodname"/>({... history: false}...)</code>.</p>
   </xsl:template>
 
-  <xsl:template name="exampledeployment">
-      <p>Click <a href="{/canvas/request/@url}?lzt=html{/canvas/request/@query_args}">here</a> to see an example deployment page.</p>
-      
+  <xsl:template name="querystringoptions">
+    <xsl:param name="methodname" />
+       <p>Arguments passed into <code>lz.embed.<xsl:value-of select="$methodname"/>({...})</code> can be overridden by adding them to the query string when the app is loaded, with 'lz' prepended to the name.  Currently, the 'lzusemastersprite', 'lzskipchromeinstall', 'lzcancelkeyboardcontrol', 'lzcancelmousewheel', 'lzhistory', 'lzaccessible', 'lzapproot', 'lzserverroot' and 'lzwmode' properties are supported.  For example, to test this application with the mousewheel disabled, add <code>lzcancelmousewheel=true</code> to the app's URL, e.g <code><xsl:value-of select="/canvas/request/@url"/>?lzt=html<xsl:value-of select="/canvas/request/@query_args"/>&amp;lzcancelmousewheel=true</code>.  Please adjust your wrapper HTML to reflect these settings in <code>lz.embed.<xsl:value-of select="$methodname"/>({...})</code> when you get them the way you'd like.</p>
+  </xsl:template>
+
+  <xsl:template name="dhtmloptions">
       <p>If the HTML is located in a different directory than the
       lzx source file, the value of the 'url' parameter will need to
-      be changed.</p>
+      be changed and the 'approot' parameter specified as a URL with a trailing slash, e.g.:</p>
+
+<pre>
+&lt;script type="text/javascript"&gt;
+    lz.embed.dhtml({url: 'url/to/app/<xsl:value-of select="/canvas/request/@url"/>?lzt=object<xsl:value-of select="/canvas/request/@query_args"/>', bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', approot: 'url/to/app/'});
+    lz.embed.<xsl:value-of select="/canvas/@id"/>.onload = function loaded() {
+        //Called when the application finishes loading
+    }
+&lt;/script></pre>
+
+    <p>To prevent the application from grabbing mousewheel events and keyboard events for tab, arrow and enter keys, set the <code>cancelkeyboardcontrol</code> argument to true, e.g. <code>lz.embed.dhtml({... cancelkeyboardcontrol: true}...)</code>.</p>
+    <p>To skip prompts to install the Google chrome frame in IE 6, set the <code>skipchromeinstall</code> argument to true, e.g. <code>lz.embed.dhtml({... skipchromeinstall: true}...)</code>.</p>
+    <p>To use a single sprite resource when possible, set the <code>usemastersprite</code> argument to true, e.g. <code>lz.embed.dhtml({... usemastersprite: true}...)</code>.</p>
+  </xsl:template>
+
+    <xsl:template name="cancelmousewheel">
+    <xsl:param name="methodname" />
+      <p>To disable the mouse wheel for an application, you can set the <code>cancelmousewheel</code> argument to true, e.g. <code>lz.embed.<xsl:value-of select="$methodname"/>({... cancelmousewheel: true}...)</code>.</p>
+  </xsl:template>
+
+  <xsl:template name="exampledeployment">
+      <p>Click <a href="{/canvas/request/@url}?lzt=html{/canvas/request/@query_args}">here</a> to see an example deployment page.</p>
+
+      <h2>Optional arguments for embedding</h2>
+      <p>Each runtime has optional arguments that can be specified when the application is embedded on the page.</p>
   </xsl:template>
 
   <xsl:template match="/">
@@ -121,20 +149,25 @@
 &lt;/script></pre>
 
       <xsl:call-template name="exampledeployment"/>
-      
+
       <xsl:call-template name="disablehistory"><xsl:with-param name="methodname" select="'swf'" /></xsl:call-template>
+
+      <xsl:call-template name="cancelmousewheel"><xsl:with-param name="methodname" select="'swf'" /></xsl:call-template>
 
       <xsl:call-template name="containerdiv"><xsl:with-param name="methodname" select="'swf'" /></xsl:call-template>
 
-      <p>You can also use the <code>js</code> request type to generate
+      <!--p>UNSUPPORTED! You can also use the <code>js</code> request type to generate
       the call to <code>lz.embed.swf()</code>:</p>
       
       <pre>&lt;script src="<xsl:value-of select="/canvas/request/@url"/>?lzt=js" type="text/javascript"&gt;
-&lt;/script></pre>
+&lt;/script></pre-->
 
-      <p>To upgrade the Flash player where necessary, specify a version number with the second argument to <code>lz.embed.swf(properties[, minimumVersion])</code>.  The default version number is 7.  Currently, Safari requires Flash 8, and will automatically use that version and upgrade the player where required.  This example would always use Flash Player 8 or later: 
-      <pre>lz.embed.swf({url: '<xsl:value-of select="/canvas/request/@url"/>?lzt=swf<xsl:value-of select="/canvas/request/@query_args"/>', bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', accessible: '<xsl:value-of select="/canvas/@accessible"/>'}, 8)</pre> 
+      <h2>Specifying the version of Flash to be used</h2>
+      <p>To upgrade the Flash player where necessary, specify a version number with the second argument to <code>lz.embed.swf(properties[, minimumVersion])</code>.  The default version number is 10, to help ensure users update their players for security reasons.  This example would always use Flash Player 11 or later: 
+      <pre>lz.embed.swf({url: '<xsl:value-of select="/canvas/request/@url"/>?lzt=swf<xsl:value-of select="/canvas/request/@query_args"/>', bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', accessible: '<xsl:value-of select="/canvas/@accessible"/>'}, 11)</pre> 
       </p>
+
+      <xsl:call-template name="solodeployment"><xsl:with-param name="jspname" select="'solo-deploy'" /></xsl:call-template>
 
 <h2>Passing Parameters to SOLO applications</h2>
 <p>
@@ -144,15 +177,9 @@ If you are deploying a SOLO application and wish to pass parameters down to the 
 <p>
 Here is an example call to <code>lz.embed.swf()</code> that passes all of the query params down to the Laszlo app undamaged:</p>
 <pre>
-lz.embed.swf({url: 'main.lzx.lzr=swf7.swf?'+window.location.search.substring(1), bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', accessible: '<xsl:value-of select="/canvas/@accessible"/>'});
+lz.embed.swf({url: 'main.lzx.swf9.swf?'+window.location.search.substring(1), bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', accessible: '<xsl:value-of select="/canvas/@accessible"/>'});
 </pre>
-<p>
 
-The thing that's different is the alteration to <code>main.lzx.lzr=swf7.swf? </code>from <code>main.lzx?lzt=swf</code> and the addition of 
-<code>'+window.location.search.substring(1)'</code> to read the query string from the URL typed into the browser
-</p>
-
-      <xsl:call-template name="solodeployment"><xsl:with-param name="jspname" select="'solo-deploy'" /></xsl:call-template>
 
 </xsl:when><xsl:otherwise>
 
@@ -185,9 +212,26 @@ The thing that's different is the alteration to <code>main.lzx.lzr=swf7.swf? </c
 
       <xsl:call-template name="disablehistory"><xsl:with-param name="methodname" select="'dhtml'" /></xsl:call-template>
 
+      <xsl:call-template name="cancelmousewheel"><xsl:with-param name="methodname" select="'dhtml'" /></xsl:call-template>
+
+      <xsl:call-template name="dhtmloptions"/>
+
+      <xsl:call-template name="querystringoptions"><xsl:with-param name="methodname" select="'dhtml'" /></xsl:call-template>
+
       <xsl:call-template name="containerdiv"><xsl:with-param name="methodname" select="'dhtml'" /></xsl:call-template>
 
       <xsl:call-template name="solodeployment"><xsl:with-param name="jspname" select="'solo-dhtml-deploy'" /></xsl:call-template>
+
+<h2>Passing Parameters to SOLO applications</h2>
+<p>
+If you are deploying a SOLO application and wish to pass parameters down to the application from the browser location bar, you need to make some
+ modifications to the stock html wrapper page that the server provides. 
+</p>
+<p>
+Here is an example call to <code>lz.embed.dhtml()</code> that passes all of the query params down to the Laszlo app undamaged:</p>
+<pre>
+lz.embed.dhtml({url: 'main.lzx.js?'+window.location.search.substring(1), bgcolor: '<xsl:value-of select="/canvas/@bgcolor"/>', width: '<xsl:value-of select="/canvas/@width"/>', height: '<xsl:value-of select="/canvas/@height"/>', id: '<xsl:value-of select="/canvas/@id"/>', accessible: '<xsl:value-of select="/canvas/@accessible"/>'});
+</pre>
 </xsl:otherwise></xsl:choose>
 
       <h2>Accessing applications from browser JavaScript</h2>
@@ -201,6 +245,14 @@ The thing that's different is the alteration to <code>main.lzx.lzr=swf7.swf? </c
       <pre>
 lz.embed.<xsl:value-of select="/canvas/@id"/>.onload = function loaded() {
     ...
+}
+      </pre>
+      </p>
+
+      <p>To update the page with load progress information, use: 
+      <pre>
+lz.embed.<xsl:value-of select="/canvas/@id"/>.onloadstatus = function loadstatus(p) {
+    // called with a percentage (0-100) indicating load progress
 }
       </pre>
       </p>

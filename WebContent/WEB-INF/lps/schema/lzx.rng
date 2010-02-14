@@ -1830,6 +1830,11 @@
           <data type="token" datatypeLibrary=""/>
         </attribute>
         <optional>
+          <attribute name="style">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
           <interleave>
             <optional>
               <attribute name="value">

@@ -50,7 +50,7 @@
           <xsl:call-template name="overview-row">
             <xsl:with-param name="name" select="'LFC'"/>
             <xsl:with-param name="href" select="'#includes'"/>
-            <xsl:with-param name="size" select="stats/include/@size"/>
+            <xsl:with-param name="size" select="sum(stats/include/@size)"/>
           </xsl:call-template>
           <xsl:call-template name="overview-row">
             <xsl:with-param name="name" select="'Class Definitions'"/>
