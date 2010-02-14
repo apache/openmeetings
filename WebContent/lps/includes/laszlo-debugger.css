@@ -1,0 +1,61 @@
+/*
+  @!@!@!@!@ ATTENTION EDITORS OF THIS FILE @!@!@!@!@
+
+  If you edit this file, please validate your work using http://jigsaw.w3.org/css-validator/
+*/
+
+body
+{
+	font-family: monospace;
+	font-size: medium;
+	/* simulate 11/13pt */
+	line-height: 118%;
+	color: black;
+	background-color: white;
+}
+
+/* Debug link styles */
+span.DEBUG, span.INFO, span.WARNING, span.ERROR, span.TRACE, span.MONITOR, span.INSPECT {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+span.INSPECT {
+    color: #0000ff;
+    text-decoration: underline;
+}
+
+/* Debugger prompts are span.DEBUG */
+span.DEBUG, span.DEBUG, span.TRACE, span.MONITOR
+{
+	color: #00cc00;
+	background-color: white;
+}
+
+span.INFO
+{
+	color: #0066cc;
+	background-color: white;
+}
+
+span.WARNING
+{
+	color: #ff9900;
+	background-color: white;
+}
+
+span.ERROR
+{
+	color: #ff0000;
+	background-color: white;
+}
+
+/* Debug.addText */
+span.OUTPUT
+{
+    white-space: pre;
+}
+/*
+ * Copyright 2006, 2007, 2008 Laszlo Systems, Inc.  All Rights Reserved.
+ * Use is subject to license terms.
+ */

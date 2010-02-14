@@ -1,0 +1,62 @@
+/*
+  @!@!@!@!@ ATTENTION EDITORS OF THIS FILE @!@!@!@!@
+
+  If you edit this file, please validate your work using http://jigsaw.w3.org/css-validator/
+*/
+
+/* http://www.quirksmode.org/css/100percheight.html */
+html, body {
+    /* http://www.quirksmode.org/css/100percheight.html */
+    height: 100%;
+    /* prevent browser decorations */
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+}
+img { border: 0 none; }
+
+/* Holds compiler warnings */
+#warning
+{
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  color: black;
+  background-color: #fcc;
+  padding: 1pt 1pt 1pt 2pt;
+}
+
+/* Holds the console */
+#console
+{
+  color: black;
+  background-color: #bbb;
+  height: 70px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+/* Alternate console */
+#console-large
+{
+  color: black;
+  background-color: #bbb;
+  height: 370px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+/* Holds the console and info output */
+#footer { width: 100%; }
+
+.error, .warning, .info
+{
+  font-family: sans-serif;
+  font-size: smaller;
+}
+
+/* * Stylesheet for LPS console */
+
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2001-2007, 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/
