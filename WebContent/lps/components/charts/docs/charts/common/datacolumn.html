@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>datacolumn</title>
+    <link href="http://www.laszlosystems.com/favicon.ico" rel="icon"/>
+    <link href="styles.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="head">
+      <h1>
+            &lt;datacolumn&gt;
+          </h1>
+    </div>
+    <div class="description">
+      <p><p>datacolumn contain a list of values of a series. List of values typically are data for x series,
+y series, tooltip series and datalabel series.</p></p>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Attributes
+          </h2>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">columndatapath</span>
+        </div>
+        <div class="attrDesc"><p>the name of the column in the datapath for the series</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datadone</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>true when data had been loaded at least once</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">datatype</span>
+          (default: string)
+        </div>
+        <div class="attrDesc"><p>type of data: string or number</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">values</span>
+        </div>
+        <div class="attrDesc"><p>array of data representing the series values</p>&nbsp;
+      </div>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Methods
+          </h2>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">clearCache</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">clear the cache</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getDataPath</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc"/>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getMax</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">get the max value of the columns for the series</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getMin</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">get the min value of the columns for the series</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">getNestedAttribute</span>
+          <span class="methodTitleParams">
+          (<span class="param">attName</span>)
+        </span>
+        </div>
+        <div class="methodDesc">get a attribute that is of the current class or inherited from
+the parent.<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">attName</span>
+              (String)
+            
+            -
+            the name of the attribute</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">processData</span>
+          <span class="methodTitleParams">
+          (<span class="param">value</span>)
+        </span>
+        </div>
+        <div class="methodDesc">method to preprocess the data<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">value</span>
+            -
+            </div>
+        </div>&nbsp;
+    </div>
+    </div>
+    <hr/>
+    <p class="copyright">
+          Copyright 2002-2005 <a href="http://www.laszlosystems.com/" target="_top">Laszlo Systems, Inc.</a>
+          All Rights Reserved. Unauthorized use, duplication or distribution is strictly
+          prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to
+          license terms.
+        </p>
+  </body>
+</html>

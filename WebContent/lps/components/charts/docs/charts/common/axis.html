@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>axis</title>
+    <link href="http://www.laszlosystems.com/favicon.ico" rel="icon"/>
+    <link href="styles.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="head">
+      <h1>
+            &lt;axis&gt;
+          </h1>
+    </div>
+    <div class="description">
+      <p><p>A abstract class that represents one of the axes of a rectangular chart. In general, axis isn't instantiated directly</p></p>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Attributes
+          </h2>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">axisEnabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable or disable the axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">columnName</span>
+        </div>
+        <div class="attrDesc"><p>Indicates the column name associated to the axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">interval</span>
+          (default: null)
+        </div>
+        <div class="attrDesc"><p>Indicates the interval of values between the tic marks of the axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">labelReposEnabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>Attribute that controls if the labels are vertically repositioned to avoid overlaping</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">labelrotation</span>
+          (default: horizontal)
+        </div>
+        <div class="attrDesc"><p>Indicates the axis title rotation can be 'horizontal' or 'vertical'</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">majorInterval</span>
+          (default: 5)
+        </div>
+        <div class="attrDesc"><p>Allows to customize the interval of the Major Tics Marks</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">majorTickEnabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable Major Tics Marks</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">maximum</span>
+          (default: null)
+        </div>
+        <div class="attrDesc"><p>Numerical value that indicates the Maximum value in the axis can be positive or negative value</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">minimum</span>
+          (default: null)
+        </div>
+        <div class="attrDesc"><p>Numerical value that indicates the Minimum value in the axis can be positive or negative value</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">minorTickEnabled</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>enable minor Tics Marks</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">tickMarksLabelsEnabled</span>
+          (default: true)
+        </div>
+        <div class="attrDesc"><p>enable the rendering of tic Marks labels</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">ticklabelcolumn</span>
+        </div>
+        <div class="attrDesc"><p>Data Column that is used to override the values of Tic Marks labels</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">title</span>
+        </div>
+        <div class="attrDesc"><p>Axis title label</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">titleLocation</span>
+          (default: default)
+        </div>
+        <div class="attrDesc"><p>Indicates the placement of the Axis title possible values: 'low','high','default'</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">titleX</span>
+          (default: null)
+        </div>
+        <div class="attrDesc"><p>Indicates the placement in X position of the Axis title</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">titleY</span>
+          (default: null)
+        </div>
+        <div class="attrDesc"><p>Indicates the placement in Y position of the Axis title</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">type</span>
+        </div>
+        <div class="attrDesc"><p>Indicates the axis type can be 'linear' or 'categorical'</p>&nbsp;
+      </div>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Methods
+          </h2>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">processData</span>
+          <span class="methodTitleParams">
+          (<span class="param">pLabel</span>)
+        </span>
+        </div>
+        <div class="methodDesc">Method for extensible label rendering<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">pLabel</span>
+              (string)
+            
+            -
+            a label text</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">render</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">Render method render Axis Title, Axis lines, Tic Marks and TickMarks labels</div>&nbsp;
+    </div>
+    </div>
+    <hr/>
+    <p class="copyright">
+          Copyright 2002-2005 <a href="http://www.laszlosystems.com/" target="_top">Laszlo Systems, Inc.</a>
+          All Rights Reserved. Unauthorized use, duplication or distribution is strictly
+          prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to
+          license terms.
+        </p>
+  </body>
+</html>

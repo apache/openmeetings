@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>rectangularchart</title>
+    <link href="http://www.laszlosystems.com/favicon.ico" rel="icon"/>
+    <link href="styles.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="head">
+      <h1>
+            &lt;rectangularchart&gt;
+          </h1>
+    </div>
+    <div class="description">
+      <p><p>class that provides all common features for the rectangular charts like line, bar and column</p></p>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Attributes
+          </h2>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultmaxx</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc">&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultmaxy</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc">&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultminx</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc">&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">defaultminy</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc">&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">horizontalGridLines</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>Determines if the horizontal grid lines are going to be used</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">maxx</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc"><p>The maximum virtual value to be rendered in the 'x' axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">maxy</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc"><p>The maximum virtual value to be rendered in the 'y' axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">minx</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc"><p>The minimum virtual value to be rendered in the 'x' axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">miny</span>
+          (default: 0)
+        </div>
+        <div class="attrDesc"><p>The minimum virtual value to be rendered in the 'y' axis</p>&nbsp;
+      </div>
+      </div>
+      <div xmlns="" class="attribute">
+        <div class="attrTitle">
+          <span class="attrName">verticalGridLines</span>
+          (default: false)
+        </div>
+        <div class="attrDesc"><p>Determines if the vertical grid lines are going to be used</p>&nbsp;
+      </div>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h2>
+            Methods
+          </h2>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">changeBound</span>
+          <span class="methodTitleParams">
+          (<span class="param">newminx</span>
+            <span class="param">, newminy</span>
+            <span class="param">, newmaxx</span>
+            <span class="param">, newmaxy</span>
+            <span class="param">, animated</span>
+            <span class="param">, undoable</span>)
+        </span>
+        </div>
+        <div class="methodDesc">change the virtual boundary of the rectangular chart<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">newminx</span>
+              (Number)
+            
+            -
+            the new min x of the boundary</div>
+          <div class="parameter">
+            <span class="methodParam">newminy</span>
+              (Number)
+            
+            -
+            the new min y of the boundary</div>
+          <div class="parameter">
+            <span class="methodParam">newmaxx</span>
+              (Number)
+            
+            -
+            the new max x of the boundary</div>
+          <div class="parameter">
+            <span class="methodParam">newmaxy</span>
+              (Number)
+            
+            -
+            the new max y of the boundary</div>
+          <div class="parameter">
+            <span class="methodParam">animated</span>
+              (Number)
+            
+            -
+            the animation duration in milliseconds. 0 for no animation</div>
+          <div class="parameter">
+            <span class="methodParam">undoable</span>
+              (Number)
+            
+            -
+            deterimine if the action can be undo</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">customizeMinMax</span>
+          <span class="methodTitleParams">
+          (<span class="param">pMinX</span>
+            <span class="param">, pMaxX</span>
+            <span class="param">, pMinY</span>
+            <span class="param">, pMaxY</span>)
+        </span>
+        </div>
+        <div class="methodDesc">Allows to customize the minimum and maxium data value.<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">pMinX</span>
+              (Number)
+            
+            -
+            the new minimum value in 'x' of the chart.</div>
+          <div class="parameter">
+            <span class="methodParam">pMaxX</span>
+              (Number)
+            
+            -
+            the new maximum value in 'x' of the chart.</div>
+          <div class="parameter">
+            <span class="methodParam">pMinY</span>
+              (Number)
+            
+            -
+            the new minimum value in 'y' of the chart.</div>
+          <div class="parameter">
+            <span class="methodParam">pMaxY</span>
+              (Number)
+            
+            -
+            the new maximum value in 'y' of the chart.</div>
+        </div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">render</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc">render the chart</div>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">renderHorizontalGridlines</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc"/>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">renderValuePoint</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc"/>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">renderVerticalGridlines</span>
+          <span class="methodTitleParams">
+          ()
+        </span>
+        </div>
+        <div class="methodDesc"/>&nbsp;
+    </div>
+      <div xmlns="" class="method">
+        <div class="methodTitle">
+          <span class="methodName">undo</span>
+          <span class="methodTitleParams">
+          (<span class="param">duration</span>)
+        </span>
+        </div>
+        <div class="methodDesc">undo the last chart zoom interaction to the one previous<div class="paramlabel">Parameters:</div>
+          <div class="parameter">
+            <span class="methodParam">duration</span>
+            -
+            </div>
+        </div>&nbsp;
+    </div>
+    </div>
+    <hr/>
+    <p class="copyright">
+          Copyright 2002-2005 <a href="http://www.laszlosystems.com/" target="_top">Laszlo Systems, Inc.</a>
+          All Rights Reserved. Unauthorized use, duplication or distribution is strictly
+          prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to
+          license terms.
+        </p>
+  </body>
+</html>
