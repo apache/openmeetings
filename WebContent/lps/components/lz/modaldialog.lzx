@@ -1,0 +1,118 @@
+<library>
+    <include href="lz/button.lzx" />
+    <include href="lz/windowpanel.lzx" />
+    <include href="utils/layouts/simplelayout.lzx"/>
+    <include href="utils/layouts/resizelayout.lzx"/>
+
+   <!-- A modal dialog window. -->
+    <class name="modaldialog" extends="windowpanel"
+        x="${(immediateparent.width - this.width)/2}"
+        y="${(immediateparent.height - this.height)/3}"
+        focustrap="true"
+        visible="false">
+
+        <!--- The left inset for the dialog contents from the edge of the
+              window inner frame. -->
+        <attribute name="content_inset_left" value="14"/>
+        <!--- The top inset for the dialog contents from the edge of the window
+              inner frame. -->
+        <attribute name="content_inset_top" value="10"/>
+        <!--- The right inset for the dialog contents from the edge of the
+              window inner frame -->
+        <attribute name="content_inset_right" value="14"/>
+        <!--- The bottom inset for the dialog contents from the edge of the
+              window inner frame. -->
+        <attribute name="content_inset_bottom" value="10"/>
+
+        <!--- @keywords private -->
+        <attribute name="defaultplacement" value="mdcontent" type="string"/>
+        <view name="mdpadding"
+            width="${mdcontent.width + parent.content_inset_left + parent.content_inset_right}"
+            height="${mdcontent.height + parent.content_inset_top + parent.content_inset_bottom}">
+            <view x="${classroot.content_inset_left}" y="${classroot.content_inset_top}"
+                name="mdcontent">
+            <state applied="${!classroot._usecontentwidth}">
+                <attribute name="width" value="${parent.immediateparent.width
+                     - classroot.content_inset_left- classroot.content_inset_right }"/>
+            </state>
+            <state applied="${!classroot._usecontentheight}">
+                <attribute name="height"
+                    value="${parent.immediateparent.height
+                            - classroot.content_inset_top- classroot.content_inset_bottom}"/>
+            </state>
+            <!-- this is the "defaultplacement" view -->
+            </view>
+        </view>
+
+        <!--- Opens the dialog (use this method, not setVisible). While the
+              dialog is open, the user will not be able to interact with other
+              windows or UI elements in the application. -->
+        <method name="open">
+            //need to show this before taking the mode, so that any default
+            //buttons contained by the this window will get hasdefault=true
+            this.setAttribute('visible',  true );
+            lz.ModeManager.makeModal( this );
+            this.bringToFront();
+        </method>
+
+        <!--- Closes the dialog. -->
+        <method name="close" args="...ignore">
+            this.setAttribute('visible',  false );
+            lz.Focus.clearFocus();
+            lz.ModeManager.release( this );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="passModeEvent" args="event_name, view">
+            return false;
+        </method>
+
+        <doc>
+            <tag name="shortdesc"><text>
+                A modal dialog
+            </text></tag>
+            <text>
+                <p>
+                    The <tagname>modaldialog</tagname> tag creates a moveable 
+                    floating view. When opened, the user cannot interact with 
+                    any other part of the application until the dialog is 
+                    closed. A modal dialog is typically declared on the canvas. 
+                    It is automatically centered horizontally and appears 
+                    vertically at the top third of the screen. The position can 
+                    be altered by setting an explicit x and y position in the tag.
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="300">
+  <modaldialog name="mydialog" width="300" height="200">
+    <text>Are you really sure you want to do something?</text>
+    <view align="right" layout="axis:x; spacing:20">
+      <button onclick="parent.parent.close()">Cancel</button>
+      <button onclick="parent.parent.close()" isdefault="true">OK</button>
+    </view>
+    <simplelayout spacing="5"/>
+  </modaldialog>
+
+  <button onclick="canvas.mydialog.open()">Open Dialog</button>
+</canvas>
+                    ]]>
+                </example>
+            <p><b>See Also:</b></p>
+
+              <ul>
+                  <li>
+                     <literal>modaldialog</literal> and <sgmltag class="element" role="lz.alert">&lt;alert&gt;</sgmltag>
+                  </li>
+              </ul>
+            </text>
+        </doc>
+
+   </class>
+
+   
+ </library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,118 @@
+<library>
+    <include href="base/baselistitem.lzx" />
+
+     <!--- A simple listitem that is usually declared inside of a list. -->
+     <class name="listitem"
+            width="100%"
+            extends="baselistitem"  > <!-- before... width="${parent.width - parent['rightinset']}" -->
+
+        <!--- The height of the listitem. -->
+        <attribute name="height" value="20" />
+
+        <!--- This is a protected attribute of baselistitem and the default value of
+             onClick is replaced with onmousetrackup so that the parent.select()
+             function is not called twice.
+             @keywords private -->
+        <attribute name="_selectonevent" value="onmousetrackup" />
+
+        <!--- @keywords private -->
+        <attribute name="_ipclassroot"  value="$once{immediateparent.classroot}"/>
+
+        <!--- @keywords private -->
+        <attribute name="hilited"  value="false"/>
+
+        <!--- Mouse methods
+        Note: don't need to unhilite listitem, parent view
+              will do this when another listitem is hilited
+              @keywords private -->
+        <handler name="onmousetrackover" >
+            _ipclassroot.setHilite( this );
+        </handler>
+
+        <!--- @keywords private -->
+        <handler name="onmouseover" >
+            if ( !immediateparent.tracking ) {
+                _ipclassroot.setHilite( this );
+               }
+        </handler>
+
+        <!--- @keywords private -->
+        <handler name="onmouseout" >
+            if ( !immediateparent.tracking ) {
+                _ipclassroot.setHilite( null );
+               }
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="setSelected" args="isSelected" >
+            super.setSelected(isSelected);
+            if (this._initcomplete) _applystyle(this.style);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="setHilite" args="ishilited" >
+            if (ishilited != this.hilited) {
+                this.hilited = ishilited;
+                if (this._initcomplete) _applystyle(this.style);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="ontrackgroup" reference="immediateparent.classroot" args="tg"  >
+            // TODO: check to see if this is working?
+            lz.Track.register(this,tg);
+        </handler>
+
+         <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                if (_enabled) {
+                    if (selected)
+                        this.setAttribute('bgcolor', style.selectedcolor)
+                    else if ( hilited )
+                        this.setAttribute('bgcolor', style.hilitecolor);
+                    else
+                        this.setAttribute('bgcolor', style.textfieldcolor);
+                } else {
+                   this.setAttribute('bgcolor', style.textfieldcolor);
+                }
+            }
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_showEnabled"> <![CDATA[
+             setAttribute('clickable', _enabled);
+             if (_initcomplete) {
+                _applystyle(this.style);
+            }
+        ]]>
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              a listitem is an element of a list
+          </text></tag>
+          <text>
+            <p>A <classname>listitem</classname> is an element with a value that
+              is contained within a list.  As with
+              <classname>baselistitem</classname>, the selected attribute will be
+              true when selected.</p> 
+
+            <example>
+              &lt;canvas height="80"&gt;
+              &lt;list&gt;
+              &lt;listitem value="1" selected="true"/&gt;
+              &lt;listitem value="2" /&gt;
+              &lt;/list&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+
+     </class> <!-- END listitem -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

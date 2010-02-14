@@ -1,0 +1,98 @@
+<library>
+    <include href="base/baseslider.lzx"/>
+
+    <!-- a slider component allowing for easy selection of a value within a range -->
+    <class name="slider" extends="baseslider">
+
+        <slidertrack/>
+
+        <state applied="${this.classroot.showrange}">
+            <text y="${classroot.track.y + classroot.track.height + 2}"
+                text="${classroot.presentAttribute('minvalue', classroot.type)}" fgcolor="${classroot.style ? classroot.style.textcolor : this.fgcolor}"
+            />
+            <text y="${this.classroot.track.y + this.classroot.track.height + 2}" resize="true"
+                x="${classroot.track.x+classroot.track.width-width}"
+                text="${classroot.presentAttribute('maxvalue', classroot.type)}" fgcolor="${classroot.style ? classroot.style.textcolor : this.fgcolor}"
+            />
+        </state>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            track.setAttribute('bgcolor', s.bordercolor);
+            track.background.setAttribute('bgcolor', s.basecolor);
+            track.filled.setAttribute('bgcolor', s.selectedcolor);
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>
+                A slider.
+            </text></tag>
+            <text>
+                <p>
+                    The <tagname>slider</tagname> tag creates a slider which allows 
+                    for easy selection of a single value between a provided range. 
+                    Options exist for setting the range, showing the range values, 
+                    showing the selected value while dragged, and showing a fill bar. 
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="60">
+  <slider x="20" y="20" width="300" value="50"/>
+</canvas>
+                    ]]>
+                </example>
+            </text>
+        </doc>
+    </class>
+
+    <!--- the inner track on which the sliderthumb rides -->
+    <class name="slidertrack" extends="baseslidertrack">
+        <!--- @keywords private -->
+        <attribute name="showfill" value="${parent.showfill}" type="number"/>
+
+        <view name="background" bgcolor="red"
+            height="${parent.height-(2*parent.classroot.bordersize)}"
+            width="${parent.width-(2*parent.classroot.bordersize)}"
+            x="${ parent.classroot.bordersize }"
+            y="${ (parent.height-height)/2 }"
+        />
+        <!-- the filled area -->
+        <view name="filled" bgcolor="0xff9933" opacity=".8" visible="${classroot.showfill}"
+            height="${parent.height-(2*parent.classroot.bordersize)}"
+            width="${Math.max(0,Math.min(classroot.thumb.x+classroot.thumb.width,parent.width)-(2*parent.classroot.bordersize))}"
+            y="${ (parent.height-height)/2 }"
+            x="${ parent.classroot.bordersize }"
+        />
+
+        <sliderthumb name="thumb"/>
+    </class>
+
+    <!--- the visual thumb the user drags to select a value -->
+    <class name="sliderthumb" extends="basesliderthumb">
+      <doc>
+        <tag name="shortdesc"><text>
+            A slider.
+        </text></tag>
+        <text>
+
+          <p>The <tagname>slider</tagname> tag creates a slider which allows for
+            easy selection of a single value between a provided range.  Options
+            exist for setting the range, showing the range values, showing the
+            selected value while dragged, and showing a fill bar.
+          </p>
+
+          <example>
+            &lt;canvas height="60"&gt;
+            &lt;slider x="20" y="20" width="300" value="50"/&gt;
+            &lt;/canvas&gt;
+          </example>
+          </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,81 @@
+<library>
+    <include href="lz/basefloatinglist.lzx" /> 
+        
+    <!-- used for plainfloatinglist -->    
+    <resource name="shadow_right" src="resources/floatinglist/v_shdw.swf" />
+    <resource name="shadow_bottom" src="resources/floatinglist/h_shdw.swf" />
+    <resource name="shadow_corner" src="resources/floatinglist/corner_shdw.png" />        
+
+    <!--- The shadows width and height are set to the width and height of the view
+          it is trying to apply a shadow to.
+          @keywords private -->
+    <class name="_plainfloatshadow" >
+        <!-- number of pixels pulled in from right and bottom sides -->
+        <attribute name="inset" value="10" />
+        <attribute name="offsety" value="10" />
+        <attribute name="shadowsize" value="1.5" />
+        
+        <view resource="shadow_right" stretches="height" 
+              x="${parent.width}" y="${parent.shadowsize}" 
+              height="${parent.height - parent.shadowsize}" />
+              
+        <view resource="shadow_bottom" stretches="width"
+              y="${parent.height}" x="${parent.shadowsize}" 
+              width="${parent.width - parent.shadowsize}" />
+              
+        <view resource="shadow_corner" stretches="width" 
+              x="${parent.width}"
+              y="${parent.height}" />
+    </class>
+    
+    <class name="plainfloatinglist" extends="basefloatinglist">
+    
+        <!--- @keywords private -->
+        <attribute name="shadowcrn"     value="0" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this.bkgnd.sendToBack();
+            this.bringToFront();
+        </method>
+        
+        <!--- @keywords private -->
+        <setter name="bgcolor" args="c" >
+            if ( !isinited ) return;
+            this.bkgnd.borderview.setAttribute('bgcolor', c);
+        </setter>
+
+        <!-- initially this view will cover the contents of the list.
+             this is rectified oninit by sending this.sendToBack()
+             -->
+        <view name="bkgnd" ignoreplacement="true"
+              width="100%" height="100%"  >
+            <_plainfloatshadow name="shdw" width="100%" height="100%" opacity=".6" />
+            <view name="borderview" 
+                  width="100%" 
+                  height="100%" 
+                  bgcolor="0x808080" />
+        </view>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              a floatinglist with plain appearance that appears above other components 
+          </text></tag>
+          <text>
+
+<seealso>
+<component-design id="floatinglist" title="Floating List"/>
+</seealso>
+
+          </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

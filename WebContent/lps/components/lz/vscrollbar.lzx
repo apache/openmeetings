@@ -1,0 +1,147 @@
+<library>
+    <include href="base/basebuttonrepeater.lzx" />
+    <include href="base/basescrollbar.lzx" />
+    <include href="utils/layouts/stableborderlayout.lzx"/>
+    <include href="scrollbar_yresources.lzx"/>
+
+<class name="vscrollbar" extends="basescrollbar"
+    bgcolor="0x595959"
+    axis="y">
+
+    <!--- If this is defined, it will be used as the scrollbar's background
+          color when it is disabled. If not provided, the scrollbar will use
+          the bgcolor of its closest parent that has a bgcolor defined.  -->
+    <attribute name="disabledbgcolor" value="null"/>
+    <!--- @keywords private -->
+    <attribute name="width" value="14"/>
+
+    <handler name="oninit" reference="canvas" >
+        this._showEnabled();
+    </handler>
+    
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        <![CDATA[
+        if (!_enabled) {
+            var newbgcolor = this.disabledbgcolor;
+            if (newbgcolor == null) {
+                var p = immediateparent;
+                while (p.bgcolor == null && p != canvas) {
+                    p = p.immediateparent;
+                }
+                newbgcolor = p.bgcolor;
+                if (newbgcolor == null) newbgcolor = 0xffffff;
+            }
+            this.setAttribute('bgcolor', newbgcolor);
+        } else {
+            this.setAttribute('bgcolor', 0x595959);
+        }
+        super._showEnabled();
+    ]]>
+    </method>
+
+
+    <!-- up arrow -->
+    <view name="toparrow">
+        <basescrollarrow x="1" y="1"
+            resource="lzscrollbar_ybuttontop_rsc"
+            direction="-1"/>
+    </view>
+    <view name="scrolltrack">
+        <!-- top of the scroll track -->
+        <basescrolltrack name="top"
+            x="1" resource="lzscrollbar_ytrack_rsc" stretches="height"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3"
+            direction="-1">
+            <attribute name="height" value="${parent.thumb.y}"/>
+            <attribute name="width" value="${parent.width}"/>
+        </basescrolltrack>
+
+        <!-- thumb -->
+         <basescrollthumb name="thumb" x="1">
+             <view resource="lzscrollbar_ythumbtop_rsc"/>
+             <view resource="lzscrollbar_ythumbmiddle_rsc" stretches="both"/>
+             <view resource="lzscrollbar_ythumbbottom_rsc"/>
+             <stableborderlayout axis="y"/>
+             <!-- note: stableborderlayout only acts on the first three views -->
+             <view resource="lzscrollbar_ythumbgripper_rsc" x="1"
+                 height="${Math.min(200, parent.height-16)}" width="11"
+                 clip="true" valign="middle"/>
+        </basescrollthumb>
+
+        <!-- bottom of the scroll track -->
+        <basescrolltrack name="bottom"
+            x="1" resource="lzscrollbar_ytrack_rsc" stretches="height"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3">
+            <attribute name="y" value="${parent.thumb.y+parent.thumb.height}"/>
+            <attribute name="height"
+                value="${parent.height - parent.thumb.y - parent.thumb.height}"/>
+            <attribute name="width" value="${parent.width}"/>
+        </basescrolltrack>
+
+
+    </view>     <!-- scrolltrack -->
+
+    <!-- down arrow -->
+    <view height="14" name="bottomarrow">
+        <basescrollarrow x="1"
+            resource="lzscrollbar_ybuttonbottom_rsc"/>
+    </view>
+    <stableborderlayout axis="y"/>
+    <doc>
+      <tag name="shortdesc"><text>
+          Provides a vertical scrollbar.
+      </text></tag>
+      <text>
+
+        <p>This tag creates a vertical scrollbar.  If you do not specify a
+          <attribute>scrolltarget</attribute> the scrollbar will automatically
+          be aligned to the right and size its height to its parent's height.
+          It is expected that the parent view be smaller than the scrolltarget
+          and set <code>clip=true</code>.  The scrolling effect is produced by
+          moving the scrolltarget while its visible region is clipped by the
+          parent view.</p>
+
+        <p>If you would like the target view to start scrolled, simply set its
+          y position to a negative number.  For example, <code>y=-10</code> will
+          cause the view to be scrolled 10 pixels.
+        </p>
+
+        <note>If you have no horizontal scrollbars in your application, using
+          the <tagname>vscrollbar</tagname> tag will make the applications
+          slightly smaller, than if you were to use <code>&lt;scrollbar
+            axis="y"&gt;</code>.</note>
+        
+        <example role="live-example" title="Simple scrollbar">
+          &lt;canvas height="160" bgcolor="silver"&gt;
+               &lt;view name="main" x="20" y="20" bgcolor="white"
+                        width="100" height="80" clip="true"&gt;
+                  &lt;text multiline="true"&gt;
+                      1&lt;br/&gt;2&lt;br/&gt;3&lt;br/&gt;4&lt;br/&gt;5&lt;br/&gt;6&lt;br/&gt;7&lt;br/&gt;8&lt;br/&gt;9&lt;br/&gt;10
+                  &lt;/text&gt;
+                  &lt;vscrollbar/&gt;
+               &lt;/view&gt;
+          &lt;/canvas&gt;
+        </example>
+
+        
+        <p>In the example above, the scrolltarget is the
+          <varname>contents</varname> view. A scrollbar moves its
+          <attribute>scrolltarget</attribute> along its axis.  The attribute
+          that is controlled by the scrollbar may be specified as the
+          <attribute>scrollattr</attribute>, overriding the default value of
+          <code>x</code> or <code>y</code>.</p>
+          </text>
+        </doc>
+
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

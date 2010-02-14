@@ -1,0 +1,332 @@
+<!--
+    Class: windowpanel
+    implements an area of the screen that can be dragged or closed
+    by the user, may display a text name in the top area.
+-->
+<library>
+    <include href="base/basebutton.lzx" />
+    <include href="base/basewindow.lzx" />
+    <include href="base/resizeview.lzx" />
+    <include href="utils/layouts/stableborderlayout.lzx"/>
+
+    <!-- 9 piece window resource -->
+    <resource name="window_TL_rsc">
+        <frame src="resources/window/top_lft_slct.swf"/>
+        <frame src="resources/window/top_lft_dslct.swf"/>
+        <frame src="resources/window/top_lft_slct.swf"/> <!--resource does not change on drag-->
+        <frame src="resources/window/top_lft_dsbl.swf"/>
+        <frame src="resources/window/top_lft_slct.swf"/>
+    </resource>
+    <resource name="window_TM_rsc">
+        <frame src="resources/window/top_mid_slct.swf"/>
+        <frame src="resources/window/top_mid_dslct.swf"/>
+        <frame src="resources/window/top_mid_slct.swf"/> <!--resource does not change on drag-->
+        <frame src="resources/window/top_mid_dsbl.swf"/>
+        <frame src="resources/window/top_mid_slct.swf"/>
+    </resource>
+    <resource name="window_TR_rsc">
+        <frame src="resources/window/top_rt_slct.swf"/>
+        <frame src="resources/window/top_rt_dslct.swf"/>
+        <frame src="resources/window/top_rt_drag.swf"/>
+        <frame src="resources/window/top_rt_dsbl.swf"/>
+        <frame src="resources/window/top_rt_slct.swf"/>
+    </resource>
+
+    <resource name="window_ML_rsc">
+        <frame src="resources/window/mid_lft_slct.swf"/>
+        <frame src="resources/window/mid_lft_dslct.swf"/>
+        <frame src="resources/window/mid_lft_slct.swf"/> <!--resource does not change on drag-->
+        <frame src="resources/window/mid_lft_dsbl.swf"/>
+        <frame src="resources/window/mid_lft_slct.swf"/>
+    </resource>
+    <resource name="window_MM_rsc">
+        <frame src="resources/window/mid_mid_slct.swf"/>
+        <frame src="resources/window/mid_mid_dslct.swf"/>
+        <frame src="resources/window/mid_mid_slct.swf"/> <!--resource does not change on drag-->
+        <frame src="resources/window/mid_mid_dsbl.swf"/>
+        <frame src="resources/window/mid_mid_slct.swf"/>
+    </resource>
+    <resource name="window_MR_rsc">
+        <frame src="resources/window/mid_rt_slct.swf"/>
+        <frame src="resources/window/mid_rt_dslct.swf"/>
+        <frame src="resources/window/mid_rt_drag.swf"/>
+        <frame src="resources/window/mid_rt_dsbl.swf"/>
+        <frame src="resources/window/mid_rt_slct.swf"/>
+    </resource>
+
+    <resource name="window_BL_rsc">
+        <frame src="resources/window/bot_lft_slct.swf"/>
+        <frame src="resources/window/bot_lft_dslct.swf"/>
+        <frame src="resources/window/bot_lft_drag.swf"/>
+        <frame src="resources/window/bot_lft_dsbl.swf"/>
+        <frame src="resources/window/bot_lft_slct.swf"/>
+    </resource>
+    <resource name="window_BM_rsc">
+        <frame src="resources/window/bot_mid_slct.swf"/>
+        <frame src="resources/window/bot_mid_dslct.swf"/>
+        <frame src="resources/window/bot_mid_drag.swf"/>
+        <frame src="resources/window/bot_mid_dsbl.swf"/>
+        <frame src="resources/window/bot_mid_slct.swf"/>
+    </resource>
+    <resource name="window_BR_rsc">
+        <frame src="resources/window/bot_rt_slct.swf"/>
+        <frame src="resources/window/bot_rt_dslct.swf"/>
+        <frame src="resources/window/bot_rt_drag.swf"/>
+        <frame src="resources/window/bot_rt_dsbl.swf"/>
+        <frame src="resources/window/bot_rt_slct.swf"/>
+    </resource>
+
+     <!-- window widget resources -->
+    <resource name="window_gripper_rsc">
+        <frame src="resources/window/gripper_slct.png"/>
+        <frame src="resources/window/gripper_dslct.png"/>
+        <frame src="resources/window/gripper_dsbl.png"/>
+    </resource>
+
+    <resource name="window_closebtn_rsc">
+        <frame src="resources/window/closebtn_up.swf"/>
+        <frame src="resources/window/closebtn_mo.swf"/>
+        <frame src="resources/window/closebtn_dn.swf"/>
+        <frame src="resources/window/closebtn_dsbl.swf"/>
+    </resource>
+
+    <resource name="window_resizebtn_rsc">
+        <frame src="resources/window/resizebtn_up.swf"/>
+        <frame src="resources/window/resizebtn_mo.swf"/>
+        <frame src="resources/window/resizebtn_dn.swf"/>
+        <frame src="resources/window/resizebtn_dsbl.swf"/>
+    </resource>
+
+    <class name="windowpanel" extends="basewindow">
+        <!--- the title of a window : this string appears at the top
+              of the window. -->
+        <attribute name="title" value="" type="string"/>
+        <!--- If true, the window will have a close control. -->
+        <attribute name="closeable" value="false"/>
+        <!--- The left inset for the window content area. -->
+        <attribute name="inset_left" value="6"/>
+        <!--- The top inset for the window content area. -->
+        <attribute name="inset_top" value="22"/>
+        <!--- The right inset for the window content area. -->
+        <attribute name="inset_right" value="11"/>
+        <!--- The bottom inset for the window content area. -->
+        <attribute name="inset_bottom" value="20"/>
+        <!--- The top inset for the window title area. -->
+        <attribute name="titlearea_inset_top" value="6"/>
+        <!--- @access private -->
+        <attribute name="defaultplacement" value="content" type="string"/>
+
+        <state applied="${parent._usecontentwidth}">
+            <attribute name="width" value="${this.content.width + this.inset_left + this.inset_right}" />
+        </state>
+        <state applied="${parent._usecontentheight}">
+            <attribute name="height" value="${this.content.height + this.inset_top + this.inset_bottom}" />
+        </state>
+
+        <!--- @keywords private -->
+        <setter name="bgcolor" args="c"> <![CDATA[
+            // DON'T call the super setter, we take over bgcolor to control
+            // the bgcolor of the content pane.
+            this.bgcolor = c;
+            var event = this['onbgcolor'];
+            if (event && event.ready) {
+                event.sendEvent(c);
+            }
+        ]]> </setter>
+
+        <!--- @keywords private -->
+        <attribute name="_usecontentwidth" value="true"/>
+        <!--- @keywords private -->
+        <attribute name="_usecontentheight" value="true"/>
+
+        <!--- @keywords private -->
+        <method name="construct" args="p,args"> <![CDATA[
+            super.construct(p, args);
+            // need to set these attributes before subviews are created
+            // otherwise they will calculate width/height incorrectly
+            setAttribute('_usecontentwidth', !hassetwidth);
+            setAttribute('_usecontentheight', !hassetheight);
+        ]]> </method>
+
+        <!--- @keywords private -->
+        <method name="init"> 
+            super.init();
+            checkMinSize();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="checkMinSize">
+          <![CDATA[
+            // need to check minwidth/height after subviews have inited
+            // just in case the window is sized by content, yet too small
+            if (this.width <  this.minwidth ) {
+                if ( !this._usecontentwidth ){
+                    Debug.write( "requested width smaller than minwidth," +
+                                 " ignored: "+ this);
+                }
+                this.setAttribute('width', this.minwidth);
+            }
+            if (this.height <  this.minheight) {
+                if ( !this._usecontentheight ){
+                    Debug.write( "requested height smaller than minheight," +
+                                " ignored: "+ this );
+                }
+                this.setAttribute('height', this.minheight);
+            }
+           ]]> 
+        </method>
+
+        <resizeview_x name="top" width="100%" frame="${parent.state}" height="13.9"
+            left="window_TL_rsc" middle="window_TM_rsc" right="window_TR_rsc">
+        </resizeview_x>
+
+        <resizeview_x name="middle" width="100%" frame="${parent.state}"
+            left="window_ML_rsc" middle="window_MM_rsc" right="window_MR_rsc">
+        </resizeview_x>
+
+        <resizeview_x name="bottom" width="100%" frame="${parent.state}"
+            left="window_BL_rsc" middle="window_BM_rsc" right="window_BR_rsc">
+        </resizeview_x>
+
+        <stableborderlayout axis="y"/>
+
+        <!-- stableborderlayout only acts on the first 3 views -->
+
+        <view name="title_area"
+            x="${classroot.inset_left}" y="${classroot.titlearea_inset_top}"
+            width="${classroot.width-classroot.inset_left-classroot.inset_right}">
+            <layout name="titlelayout">
+                <method name="init">
+                    super.init();
+                    this.updateDelegate.register( parent,  "onwidth");
+                </method>
+                <method name="addSubview" args="newsub">
+                    if (newsub.name == "title") {
+                        this.updateDelegate.register( newsub,  "ontext");
+                    } else if (newsub.name != "gripper") {
+                        this.updateDelegate.register( newsub,  "onwidth");
+                    }
+                    super.addSubview( newsub );
+                </method>
+                <method name="update" args="v=null">
+                    <![CDATA[
+                    if ( this.locked ) return;
+                    var gripper_left = 15, gripper_right = 15;
+                    var padding = 4;
+                    var iconwidth = (parent.icon.width > 0) ? parent.icon.width + padding : parent.icon.width;
+                    var twidth=0;
+                    if (parent.title.getText() == "") {
+                        parent.gripper_left.setAttribute('width', parent.width - parent.controls.x);
+                        parent.gripper_right.setAttribute('width', 0);
+                        return;
+                    } else {
+                        parent.gripper_left.setAttribute('width', gripper_left);
+                        twidth = parent.title.getTextWidth();
+                        twidth = Math.ceil(twidth);
+                    }
+
+                    var next_x = gripper_left + padding;
+                    parent.icon.setAttribute('x', next_x);
+                    next_x += iconwidth;
+                    parent.title.setAttribute('x', next_x);
+
+                    parent.controls.setAttribute('x', parent.width - parent.controls.width);
+
+                    var availspace = parent.width - iconwidth - parent.controls.width
+                        - gripper_left - gripper_right - padding*2;
+                    if (twidth > availspace) {
+                         twidth = availspace;
+                    }
+                    parent.title.setAttribute('width', twidth);
+
+                    //var gripper_padding = 0;
+                    //if (twidth > 0) gripper_padding = 4;
+                    next_x += twidth + padding;
+
+                    parent.gripper_right.setAttribute('x', next_x);
+                    parent.gripper_right.setAttribute('width', parent.controls.x - next_x);
+                    ]]>
+                </method>
+            </layout>
+            <view name="gripper_left" y="1" resource="window_gripper_rsc" width="16"
+                clip="true" frame="${classroot.state}" />
+
+            <view name="icon"/>
+            <text name="title" fgcolor="${classroot['style'] ? classroot.style.textcolor : null}"
+                opacity="${classroot.state == 2 ? .7 : 1}"
+                    text="${classroot.title}" y="-1" resize="false" width="100%"/>
+            <view name="gripper_right" y="1" resource="window_gripper_rsc"
+                clip="true" frame="${classroot.state}"/>
+
+            <view name="controls">
+                <state name="closeable" applied="${classroot.closeable}">
+                    <basebutton x="2" name="close_btn" styleable="true"
+                        resource="window_closebtn_rsc"
+                        onclick="classroot.close()" />
+                </state>
+            </view>
+
+        </view>
+
+        <view name="content" x="${parent.inset_left}" y="${parent.inset_top}"
+            bgcolor="${classroot.bgcolor}" clip="true">
+            <state applied="${!classroot._usecontentwidth}">
+                <attribute name="width" value="${classroot.width - classroot.inset_left - classroot.inset_right}"/>
+            </state>
+            <state applied="${!classroot._usecontentheight}">
+                <attribute name="height" value="${classroot.height - classroot.inset_bottom - classroot.inset_top}"/>
+            </state>
+            <!-- this is the defaultplacement view -->
+        </view>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            //setTint(this.title_area.gripper_left, color, brightness);
+            //setTint(this.title_area.gripper_right, color, brightness);
+            setTint(this.top, s.basecolor);
+            setTint(this.middle, s.basecolor);
+            setTint(this.bottom, s.basecolor);
+            title_area.title.setAttribute('fgcolor', s.textcolor);
+            if (this.bgcolor == null) {
+                this.content.setAttribute("bgcolor", s.bgcolor);
+            }
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              A draggable panel that provides common behavior for various window classes.
+          </text></tag>
+          <text>
+
+            <p>The <tagname>windowpanel</tagname> tag creates a floating view that
+              has a title area and can be moved by the user.  It provides common
+              behavior for <classname>window</classname>,
+              <classname>modaldialog</classname>, and
+              <classname>alert</classname>.</p>
+
+            <example class="code" title="window panel">
+              &lt;canvas height="150"&gt;
+              &lt;windowpanel x="10" y="10" width="200" height="100"
+              title="windowpanel" closeable="true"&gt;
+              &lt;text&gt;Hello&lt;/text&gt;
+              &lt;/windowpanel&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <seealso>
+              <classes>window modaldialog alert</classes>
+              <component-design id="windowpanel" title="Window Panel"/>
+            </seealso>
+
+          </text>
+        </doc>
+
+    </class>
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

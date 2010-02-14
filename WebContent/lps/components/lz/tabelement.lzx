@@ -1,0 +1,185 @@
+<library>
+    <include href="utils/layouts/resizelayout.lzx" />
+    <include href="../base/basebutton.lzx" />
+    <include href="../base/basetabelement.lzx" />
+
+    <!--- Tabelement button resource. -->
+    <resource name="tabrsrc" >
+        <frame src="resources/tabslider/tab_slider_up.swf" />
+        <frame src="resources/tabslider/tab_slider_mo.swf" />
+        <frame src="resources/tabslider/tab_slider_dn.swf" />
+    </resource>
+
+    <!--- Tabelement shadow resource. -->
+    <resource name="tabshadow"  src="resources/tabslider/tab_element_shdw.swf" />
+
+    <!-- Tabelements are children of tabslider. They have a header and a content
+         region. If additional art (like icons) need to be contained in the
+         header region, then simply add placement='header' to any view and
+         adjust the text_x attribute of tabelement to shift the text over. -->
+    <class name="tabelement" extends="basetabelement" styleable="true">
+        <!--- Default placement for views placed in tabelement is 'content'. -->
+        <attribute name="defaultplacement" value="content" type="string"/>
+
+        <!--- The top inset for content appearing within a tabelement. Default
+              is the containing tabslider's inset_top value. -->
+        <attribute name="inset_top" value="${parent.inset_top}"/>
+        <!--- The right inset for content appearing within a tabelement. Default
+              is the containing tabslider's inset_right value. -->
+        <attribute name="inset_right" value="${parent.inset_right}"/>
+        <!--- The bottom inset for content appearing within a tabelement. Default
+              is the containing tabslider's inset_bottom value. -->
+        <attribute name="inset_bottom" value="${parent.inset_bottom}"/>
+        <!--- The left inset for content appearing within a tabelement. Default
+              is the containing tabslider's inset_left value. -->
+        <attribute name="inset_left" value="${parent.inset_left}"/>
+
+        <!--- The x position of the text field in the header area. -->
+        <attribute name="text_x" value="4"/>
+
+        <!--- The y position of the text field in the header area. Default is centered. -->
+        <attribute name="text_y"
+            value="${this.top.header.height/2 - this.top.header.txt.height/2}"/>
+
+        <!--- The height of the shadow. -->
+        <attribute name="shadowheight" value="4"/>
+
+        <!--- Boolean to set the shadow of this tabelement. -->
+        <attribute name="shadowvisible" value="true"/>
+
+        <!--- This is not being used.
+              @keywords private -->
+        <attribute name="contentopacity" value="0.5"/>
+
+        <!--- The offset to shift header contents when the mouse is down.
+              @keywords private -->
+        <attribute name="_mdoffset" value="2"/>
+
+        <!--- Insets the header art on the x-axis. -->
+        <attribute name="headerpadding"   value="0" />
+
+        <view name="top" width="100%" height="${parent.headerheight}"
+              oninit="this.bringToFront()" >
+            <basebutton name="bkgnd" resource="tabrsrc" styleable="true"
+                x="${classroot.headerpadding}"
+                width="${parent.width - 2*classroot.headerpadding}" 
+                height="100%" stretches="both" >
+                <handler name="onmousedown">
+                    classroot.container.shdw.setAttribute('visible', false);
+
+                    parent.header.setAttribute('y', classroot._mdoffset);
+                </handler>
+                <handler name="onmouseup">
+                    classroot.container.shdw.setAttribute('visible', classroot.shadowvisible);
+                    parent.header.setAttribute('y', 0);
+               </handler>
+               <handler name="onclick">
+                   classroot.parent.select(classroot);
+                   lz.Focus.setFocus( this.classroot , false );
+               </handler>
+            </basebutton>
+            <view name="header" width="100%" height="100%" >
+                <text name="txt"
+                      x="${classroot.text_x}"
+                      y="${classroot.text_y}"
+                      text="${classroot.text}" resize="true"/>
+            </view>
+        </view>
+        <view name="container" options="releasetolayout"
+              width="100%" >           <!-- height="20" -->
+            <!-- swatchview -->
+            <view name="content"
+                  x="${classroot.inset_left}"
+                  y="${classroot.inset_top}" 
+                  bgcolor="${classroot.bgcolor}"           
+                  width="${ Math.max(parent.width - classroot.inset_left - classroot.inset_right, 0 ) }" 
+                  height="${ Math.max(parent.height - classroot.inset_top - classroot.inset_bottom, 0) }" 
+                  clip="true" visible="${classroot.contentvisible}"/>
+            <view name="shdw"
+                  resource="tabshadow"
+                  stretches="both"
+                  width="100%"
+                  height="$once{classroot.shadowheight}"
+                  visible="$once{classroot.shadowvisible}"
+                  opacity=".3"/>
+        </view>
+        <resizelayout axis="y"/>
+
+        <!--- Overrides baselistitem's setHilite.
+              @param boolean dohilite: true if you want to hilite-->
+        <method name="setHilite" args="dohilite">
+            top.header.txt.setAttribute('fgcolor',
+                dohilite ? style.texthilitecolor : style.textcolor);
+            if (dohilite)
+                 top.bkgnd.onmouseover.sendEvent(top.bkgnd);
+            else
+                 top.bkgnd.onmouseout.sendEvent(top.bkgnd);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                super._applystyle(s);
+                this.top.header.txt.setAttribute("fgcolor", s.textcolor);
+                if (this.bgcolor == null) {
+                    this.container.setAttribute("bgcolor", s.bgcolor);
+                }
+                this.top.setAttribute('bgcolor', s.bordercolor);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doSpaceDown">
+            this.top.bkgnd.doSpaceDown();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doSpaceUp">
+            this.top.bkgnd.doSpaceUp();
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>
+                A tab element view that is opened and closed in conjunction with a tabslider.
+            </text></tag>
+            <text>
+                <p>
+                    <classname>tabelement</classname> is a non-visual view contained within a 
+                    <xref linkend="lz.tabslider"/> that opens and closes when directed by a tabslider.
+                    In practice, the <classname>tabelement</classname> class can be extended to 
+                    create whatever look and feel is desired. The following example demonstrates how 
+                    that is done.
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="200">
+  <include href="lz/tabslider.lzx" />
+
+  <!-- Custom tabelement -->
+  <class name="mytabelement" extends="tabelement" bgcolor="blue">
+    <!-- classroot.parent = reference to tabslider -->
+    <view placement="header" bgcolor="red" height="100%" width="100%">
+      <text name="title" x="2" y="1" text="${classroot.text}"/>
+    </view>
+  </class>
+
+  <!-- Use custom tabelement -->
+  <tabslider bgcolor="yellow" width="100" height="200" spacing="2">
+    <mytabelement text="Tab 1">
+      <view bgcolor="white" width="30" height="30"/>
+    </mytabelement>
+    <mytabelement text="Tab 2"/>
+    <mytabelement text="Tab 3"/>
+  </tabslider>
+</canvas>
+                    ]]>
+                </example>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
