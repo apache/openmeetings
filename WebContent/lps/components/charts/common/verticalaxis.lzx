@@ -1,0 +1,167 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/strokestyle.lzx"/>
+    <include href="../common/label.lzx"/>
+    <include href="axis.lzx"/>
+<!-- Begin Vertical Axis Class -->
+<!--- Represents the Y axis on the rectangular chart, extends from Axis class
+     @access public
+        -->
+    <class name="verticalaxis" extends="axis">
+    <!--- @keyword private-->
+    <attribute name="datacolumn" type="string" value="y" />
+    <!--- Init
+        @keyword private
+        -->
+    <method name="init">    
+            this.setAttribute('width', objStroke.strokeWidth);
+            super.init();
+    </method>    
+    <!--- Render the vertical axis line
+        @keyword private 
+        -->   
+    <method name="renderAxis"> 
+    <![CDATA[     
+        this.minimumRender = parent.miny;
+        this.maximumRender = parent.maxy;
+
+        objStroke.renderStroke(0, 0, 0, this.height);
+
+    ]]>
+    </method>
+    <!--- Render axis title 
+        @keyword private
+        -->   
+    <method name="renderTitle">
+    <![CDATA[
+     if ( this.titleX == null && this.titleY == null ){
+            switch( titleLocation ) {
+                case "high":                    
+                    this.titleView.setAttribute('x', (this.width + this.style.tickmajor.length)+titleGap);
+                    this.titleView.setAttribute('y', (this.height)/2);
+                    break;
+            
+                case "low":
+                    this.titleView.setAttribute('x', -(this.width + this.tickMarksView.width)- titleGap - titleView.width);
+                    this.titleView.setAttribute('y', (this.height)/2);
+                    if ( this.titleView.embeddedFont(style.label.fontname) ){
+                        if ( style.label.fontangle > 20 &&  style.label.fontangle < 45)
+                            this.titleView.setAttribute('x', this.titleView.x + this.titleView.width/4);
+                        else if ( (style.label.fontangle > 45 &&  style.label.fontangle < 90) || (style.label.fontangle > 220 &&  style.label.fontangle <= 270))
+                            this.titleView.setAttribute('x', this.titleView.x + this.titleView.width/2);
+                        else if ( style.label.fontangle >= 90 &&  style.label.fontangle < 220)
+                            this.titleView.setAttribute('x', this.titleView.x + this.titleView.width);
+                    }
+                    break;
+            
+                case "default":
+                    this.titleView.setAttribute('x', - (this.titleView.width/2));
+                    this.titleView.setAttribute('y', - this.titleGap - this.titleView.height);
+                    break;
+            }
+        } else {
+            this.titleView.setAttribute('x', this.titleX);
+            this.titleView.setAttribute('y', this.titleY);
+        }
+            ]]>
+    </method>
+    
+    <!--- setter for scale and offset 
+        @keyword private
+    -->   
+    <method name="setScaleAndOffset">
+        <![CDATA[                       
+        this.scale = this.height / (this.maximum - this.minimum);
+        this.offset = - this.minimum * this.scale;    
+
+        //flip y                    
+        this.offset = this.height - this.offset;
+        this.scale = - this.scale;                                             
+        ]]>
+    </method>
+    <!---  Method to return a pixel position given graph data
+        @param Number pInput: for linear charts a graphicable data.
+        @keyword private
+        -->
+    <method name="getPixelDistance" args="pInput">
+    <![CDATA[
+        //FIXME : Find out why the current pixel rate is not accurate
+        return ((pInput - this.minimumRender) * (this.height/(this.maximumRender - this.minimumRender)));
+    ]]>
+    </method> 
+    <!--- Get the length of the axis.
+         @keyword private
+        -->
+    <method name="getAxisLength">
+    <![CDATA[
+        return this.height;
+    ]]>        
+    </method>
+    <!---  Check label location and change placement to avoid labels
+            overlaping
+            @keywords private -->
+    <method name="reposLabels" args="pMarks"></method>
+    
+    <!---   Render a tick mark
+            @param Number pOffset: displacement depending on the position of the tickmark
+            @param Number pPos: actual tickmark position along the axis
+            @param expression pStyle: tickmark style object to use on the render
+            @keywords private -->
+    <method name="renderTickMark" args="pOffset,pPos,pStyle"> <![CDATA[
+            this.beginPath();
+            
+            this.moveTo(- pOffset, this.height-pPos);
+            this.lineTo(pStyle.length-pOffset , this.height-pPos);
+             
+            //set color
+            this.strokeStyle = pStyle.color;
+            this.lineWidth = pStyle.size;
+            //complete line
+            this.stroke();
+        ]]>
+    </method>
+    <!--- Set label position
+            @keywords private -->
+    <method name="setLabelPos" args="pLabel,pOffset,pTW,pTH,pPos">
+    <![CDATA[
+        pLabel.setAttribute('x', -pOffset-pTW);
+        pLabel.setAttribute('y', this.height-pPos-(pTH/2) );
+
+        if ( (pLabel.getTextWidth() + this.style.tickmajor.length) >= this.tickMarksView.width )
+            this.tickMarksView.setAttribute('width', this.style.tickmajor.length + pLabel.getTextWidth());
+
+    ]]> 
+    </method>  
+    <!--- Render tickmarks 
+    @keyword private  -->    
+    <method name="renderTick"> <![CDATA[
+            if (type.toUpperCase()=='CATEGORICAL') {
+                renderCategoricalTick();
+            } else if (type.toUpperCase()=='LINEAR') {
+                renderLinearTick();
+            }
+       ]]> </method>
+    <doc>
+      <tag name="shortdesc"><text>
+          a vertical axis for a chart
+      </text></tag>
+      <text>
+
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+
+    </class>
+ </library>
+<!-- End Vertical Axis Class -->
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

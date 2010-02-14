@@ -1,0 +1,32 @@
+<library>
+    <include href="label.lzx"/>
+    <!-- Begin Tickmark Label Class -->
+    <!--- @keyword private Represents the tickmark text which appears on a computerized note -->
+    <class name="tickmarklabel" extends="label">
+    <!--- Attribute to handle style set optimization
+        @keyword private -->
+        <attribute name="styleSet" type="boolean" value="false"/>
+
+        <!--- Set text 
+            @param string txt: text to be updated
+            -->
+        <method name="render" args="txt">
+               //do not set style twice
+               if(styleSet) {
+                    this.textContent.setAttribute('text', txt);  
+               } else {
+                    super.render(txt);
+                    styleSet = true;
+               }
+        </method>
+    </class>
+    
+    <!-- End Tickmark Label Class -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@ -->

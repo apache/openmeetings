@@ -1,0 +1,150 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <!---
+      datamarker for the chart
+      @access public
+      -->
+    <class name="datamarker" extends="drawview">
+        <!--- @keywords private -->
+        <attribute name="locationx" type="number" value="0"/>
+        <!--- @keywords private -->
+        <attribute name="locationy" type="number" value="0"/>
+        <!--- @keywords private -->
+        <attribute name="style" type="string" value=""/>
+        <!--- @keywords private -->
+        <attribute name="tooltip" type="string" value=""/>         
+        <!--- view to handle the image 
+            @keyword private-->
+        <view name="pointrepresentation" stretches="both" x="0" y="0" />    
+            
+        <!--- Render value point -->
+        <method name="renderValuePoint">
+        <![CDATA[ 
+            //resize this view
+            this.pointrepresentation.setAttribute('width', this.style.point.width);
+            this.pointrepresentation.setAttribute('height', this.style.point.height);
+                   //Check if it is a figure or an image
+            if( this.style.point.image != null ) {
+                //Must be a resource
+                this.pointrepresentation.setSource(this.style.point.image);
+                this.pointrepresentation.setAttribute('stretches', both);
+                this.pointrepresentation.setAttribute('opacity', this.style.point.opacity);
+            } else if (this.style.point.shape=='circle' || 
+                       this.style.point.shape=='triangle' ||
+                       this.style.point.shape=='square' ||
+                       this.style.point.shape=='diamond' ||
+                       this.style.point.shape=='fourpoint') {
+                        
+                        this.fillStyle = this.style.point.color;
+                        this.strokeStyle = this.style.point.strokeStyle;
+                        this.lineWidth = this.style.point.lineWidth;
+                        this.globalAlpha = this.style.point.opacity;
+                        this.beginPath();
+                        
+                        if (this.style.point.shape=='circle') {
+                                            
+                            this.lineTo(0, this.pointrepresentation.height/2);
+                            this.quadraticCurveTo(0, 0, this.pointrepresentation.width/2, 0);
+                            this.quadraticCurveTo(this.pointrepresentation.width, 0, this.pointrepresentation.width, this.pointrepresentation.height/2);
+                            this.quadraticCurveTo(this.pointrepresentation.width, this.pointrepresentation.height, this.pointrepresentation.width/2, this.pointrepresentation.height);
+                            this.quadraticCurveTo(0, this.pointrepresentation.height, 0, this.pointrepresentation.height/2);
+                            
+                        } else if(this.style.point.shape=='triangle') {
+                        
+                            this.lineTo(0, this.pointrepresentation.height);                         
+                            this.lineTo(this.pointrepresentation.width/2, 0);
+                            this.lineTo(this.pointrepresentation.width,this.pointrepresentation.height);
+
+                        } else if(this.style.point.shape=='square') {
+                            this.lineTo(this.pointrepresentation.width, 0);
+                            this.lineTo(this.pointrepresentation.width, this.pointrepresentation.height);
+                            this.lineTo(0, this.pointrepresentation.height);
+                            this.lineTo(0, 0);
+                        } else if(this.style.point.shape=='diamond') {
+                            this.lineTo(this.pointrepresentation.width/2, 0);
+                            this.lineTo(this.pointrepresentation.width, this.pointrepresentation.height/2);
+                            this.lineTo(this.pointrepresentation.width/2, this.pointrepresentation.height);
+                            this.lineTo(0, this.pointrepresentation.height/2);
+                        } else if(this.style.point.shape=='fourpoint') {
+                            this.lineTo(this.pointrepresentation.width/2, 0);
+                            this.lineTo(this.pointrepresentation.width*.6, this.pointrepresentation.height*.4);
+                            this.lineTo(this.pointrepresentation.width, this.pointrepresentation.height/2);
+                            this.lineTo(this.pointrepresentation.width*.6, this.pointrepresentation.height*.6);
+                            this.lineTo(this.pointrepresentation.width/2, this.pointrepresentation.height);
+                            this.lineTo(this.pointrepresentation.width*.4, this.pointrepresentation.height*.6);
+                            this.lineTo(0, this.pointrepresentation.height/2);
+                            this.lineTo(this.pointrepresentation.width*.4, this.pointrepresentation.height*.4);
+                        }
+
+                        this.closePath();
+                        
+                        //check if fill is gradient
+                        if( this.style.point.gradient == 'radial' || this.style.point.gradient == 'linear' ) {
+                            this.gradientFill();
+                        } else {
+                            this.fill();   
+                        }
+                        
+                        //check for stroke
+                        if( this.strokeStyle != null){
+                            this.stroke();
+                        }
+           
+                        this.pointrepresentation.setAttribute('visible',false);
+                            
+                    } else {                            
+                            this.pointrepresentation.setAttribute('opacity', this.style.point.opacity);
+                            this.pointrepresentation.setAttribute('bgcolor', this.style.point.color);
+                            this.pointrepresentation.setAttribute('visible',true);
+                    }
+        ]]>
+        </method>
+        <!--- Add gradient fill to the current shape being drawn-->
+        <method name="gradientFill">
+        <![CDATA[ 
+             this.globalAlpha = 0;
+             var mygradient = null;
+             
+             if (this.style.point.gradient == 'radial') {             
+                mygradient = this.createRadialGradient(this.pointrepresentation.width/2, this.pointrepresentation.height/2, 0, this.pointrepresentation.width, this.pointrepresentation.height, 0);
+            } else {
+                mygradient = this.createLinearGradient(0,0,this.pointrepresentation.width,this.pointrepresentation.height);
+            }
+
+            if (mygradient) {
+                mygradient.addColorStop(0, 0xffffff);
+                this.globalAlpha = 1;
+                mygradient.addColorStop(1, this.style.point.color);                
+                this.fillStyle = mygradient;
+            }
+            this.fill();   
+        ]]>
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              a marker for a collection of data
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+    
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

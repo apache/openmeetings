@@ -1,0 +1,31 @@
+<!---
+      @access public
+      @topic Components
+      @subtopic Charts
+  -->
+<library>
+  <include href="axis.lzx" />
+  <include href="chart.lzx" />
+  <include href="databar.lzx" />
+  <include href="datalabel.lzx" />
+  <include href="datamarker.lzx" />
+  <include href="datapoints.lzx" />
+  <include href="dataseries.lzx" />
+  <include href="datatip.lzx" />
+  <include href="horizontalaxis.lzx" />
+  <include href="label.lzx" />
+  <include href="legend.lzx" />
+  <include href="rectangularchart.lzx" />
+  <include href="tickmarklabel.lzx" />
+  <include href="valueline.lzx" />
+  <include href="valuepoints.lzx" />
+  <include href="valueregion.lzx" />
+  <include href="verticalaxis.lzx" />
+  <include href="viewspoolmanager.lzx" />
+  <include href="virtualdrawview.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
