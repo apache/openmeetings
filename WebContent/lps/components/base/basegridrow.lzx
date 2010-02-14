@@ -1,0 +1,204 @@
+<library>
+    <include href="base/basecomponent.lzx" />
+
+    <class name="basegridrow" extends="basecomponent">
+        <attribute name="placement" value="rowparent" type="string"/>
+        <attribute name="defaultplacement" value="check" type="string"/>
+        <attribute name="selectable" type="boolean"/>
+        <attribute name="clickable" value="$once{selectable}"/>
+        <attribute name="selected" value="false"/>
+        <event name="onselected"/>
+        <attribute name="x" value="${ownerGrid.header.hcontent.x}"/>
+        <attribute name="focusable" value="true"/>
+        <attribute name="focustrap" value="true"/>
+
+        <attribute name="ownerGrid" value="null"/>
+
+        <attribute name="highlighted" value="false"/>
+        <attribute name="highlightColor" type="color" value="black"/>
+        <attribute name="selectedColor" type="color" value="black"/>
+        <attribute name="regularColor" type="color" value="black"/>
+        <attribute name="styleRegularColor" type="color" value="black"/>
+        <attribute name="lineColor" type="color"  value="black"/>
+
+        <attribute name="width" value="${Math.max( 
+                        ownerGrid.header.hcontent.width, ownerGrid.width )}" />
+
+        <!--- @keywords private (set by ownerGrid)-->
+        <attribute name="needsSetRegularColor" type="boolean"/>
+        <attribute name="bgcolor" 
+                   value="${this.getBGColor( this.highlighted, this.selected )}"/>
+
+        <method name="getBGColor" args="hi=null, sel=null">
+            if ( this.selected ) return this.selectedColor;
+            if ( this.highlighted ) return this.highlightColor;
+            return this.regularColor;
+        </method>
+
+        <method name="updateBGColor">
+            var nbg = this.getBGColor();
+            if ( nbg != this.bgcolor ){
+                this.setAttribute('bgcolor', nbg );
+            }
+        </method>
+
+        <method name="setRegularColor" >
+            <![CDATA[
+            var pos = 0;
+            if (this.datapath != null && this.datapath.isValid()) {
+                pos = this.datapath.xpathQuery( 'position()' );
+            }
+            var nextColor = null;
+            if ( pos % 2 == 0 )  nextColor = ownerGrid.bgcolor0;
+            if ( pos % 2 == 1 )  nextColor = ownerGrid.bgcolor1;
+            if ( nextColor == null ) nextColor = styleRegularColor;
+            if ( this.regularColor != nextColor ){
+                this.regularColor = nextColor;
+                this.updateBGColor();
+            }
+            ]]>
+        </method>
+
+        <handler name="ondata">
+            if ( this.needsSetRegularColor ) this.setRegularColor();
+            if ( highlighted ){
+                this.setAttribute( "highlighted" ,  false );
+            }
+            if ( ownerGrid.rowheight == null ){
+                ownerGrid._setRowHeight( this.height );
+            }
+        </handler>
+
+        <handler name="onfocus">
+            <![CDATA[ 
+            var n = parent.classroot.getIndexForItem( this );
+            //this forces the next row to be in view, if possible
+            //it's called only for its for side effect
+            parent.classroot.getItemAt( n + 1 );
+            var dir = lz.Keys.isKeyDown( 'shift' ) ? -1 : 1;
+            if ( lz.Focus.lastfocus && lz.Focus.lastfocus.childOf( this ) ){
+                //because we can't tell if this is getting the focus as a
+                //result of tab or shift-tab, we need to check the key ourselves
+                //don't get confused by shift key!
+                immediateparent.classroot.clearSelection( );
+                var nextsel = this.getAdjacentRow( dir );
+            } else{
+                var nextsel = dir == 1? this.getNextSelection() :
+                                        this.getPrevSelection();
+            }
+            lz.Focus.setFocus( nextsel );
+            ]]>
+        </handler>
+
+        <method name="getPrevSelection">
+            <![CDATA[
+            var n = lz.Focus.getPrev( this );
+            if ( n && n.childOf(this ) ) return n;
+            else {
+                return getAdjacentRow( 1 ) || n;
+            }
+            ]]>
+        </method>
+        <method name="getNextSelection">
+            <![CDATA[
+            var n = lz.Focus.getNext( this );
+            if ( n && n.childOf(this ) ) return n;
+            else {
+                return getAdjacentRow( 1 ) || n;
+            }
+            ]]>
+        </method>
+
+        <method name="getAdjacentRow" args="dir">
+            <![CDATA[
+            var n = parent.classroot.getIndexForItem( this );
+            return parent.classroot.getItemAt( n + dir );
+            ]]>
+        </method>
+
+        <method name="setSelected" args="s">
+            <![CDATA[
+            this.selected = s;
+            if ( s ){
+                ownerGrid._setHiliteview( this , false );
+            }
+            if (this.onselected) this.onselected.sendEvent(this);
+            ]]>
+        </method>
+
+        <method name="determinePlacement" args="v,p,a">
+            if ( typeof( a.ownerColumn ) != "undefined" ){
+                v.parent = a.ownerColumn;
+            }
+            return this;
+        </method>
+
+        <method name="select">
+            if ( !immediateparent.classroot.selectable ) return;
+            immediateparent.classroot.select( this );
+        </method>
+
+        <handler name="onclick">
+            lz.Focus.setFocus( ownerGrid );
+            this.select();
+        </handler>
+
+        <handler name="onmouseover" >
+            this.domouseover();
+        </handler>
+        <method name="domouseover" >
+            if ( !selectable ) return;
+
+            parent.classroot._setHiliteview( this , true );
+
+            // See LPP-6516. Don't disable focus because extra mouseover
+            // events occur in FF2/dhtml. Enable the next line when fixed
+            //    this.setAttribute( 'focusable' , false );
+        </method>
+
+        <handler name="onmouseout" >
+            this.domouseout();
+        </handler>
+        <method name="domouseout" >
+            if ( !selectable ) return;
+            this.setAttribute( "highlighted" , false );
+            this.setAttribute( 'focusable' , true );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            this.setAttribute ( "highlightColor", s.hilitecolor );
+            this.setAttribute ( "selectedColor", s.selectedcolor );
+            this.setAttribute ( "styleRegularColor", s.bgcolor );
+            this.setAttribute ( "lineColor", s.bordercolor );
+            this.setRegularColor();
+            this.updateBGColor();
+        </method>
+
+        <state applied="$once{parent.ownerGrid.showhlines}">
+            <view bgcolor="${parent.lineColor}" height="1" 
+                  options="ignorelayout">
+                <attribute name="width" value="${Math.max( 
+                                        parent.ownerGrid.header.hcontent.width, 
+                                        parent.ownerGrid.width )}" />
+            </view>
+        </state>
+        <!--- @keywords private Register the dependency of each row cell with
+              its column owner.-->
+        <handler name="onaddsubview" args="sv">
+            if ( !sv [ "ownerColumn"] ) return;
+            sv.applyConstraintMethod("_updateCellBounds", [sv.ownerColumn, "x", sv.ownerColumn, "colwidth"]);
+        </handler>
+        <doc>
+          <tag name="shortdesc"><text></text></tag>
+          <text>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

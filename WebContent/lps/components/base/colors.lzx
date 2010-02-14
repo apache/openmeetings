@@ -1,0 +1,81 @@
+<library>
+
+    <!-- These colors are built in:
+    black = 0x000000
+    green = 0x008000
+    silver = 0xC0C0C0
+    lime = 0x00FF00
+    gray = 0x808080
+    olive = 0x808000
+    white = 0xFFFFFF
+    yellow = 0xFFFF00
+    maroon = 0x800000
+    navy = 0x000080
+    red = 0xFF0000
+    blue = 0x0000FF
+    purple = 0x800080
+    teal = 0x008080
+    fuchsia = 0xFF00FF
+    aqua = 0x00FFFF -->
+
+<!---
+  These colors appear to have names similar to the X11 color names,
+  but the values do not always correspond.  They are just here as an
+  example of how one might define custom named colors, over and above
+  the W3C CSS3 standard colors that are built-in
+-->
+
+<script when="immediate">
+    lz.colors.offwhite = 0xf2f2f2;
+    lz.colors.gray10 = 0x1a1a1a;
+    lz.colors.gray20 = 0x333333;
+    lz.colors.gray30 = 0x4d4d4d;
+    lz.colors.gray40 = 0x666666;
+    lz.colors.gray50 = 0x7f7f7f;
+    lz.colors.gray60 = 0x999999;
+    lz.colors.gray70 = 0xb3b3b3;
+    lz.colors.gray80 = 0xcccccc;
+    lz.colors.gray90 = 0xe5e5e5;
+    
+    lz.colors.iceblue1 = 0x325693;
+    lz.colors.iceblue2 = 0x5381CE;
+    lz.colors.iceblue3 = 0xBAC4D5;
+    lz.colors.iceblue4 = 0xD5E4F3;
+    lz.colors.iceblue5 = 0xEEF1F5;
+    
+    lz.colors.palegreen1 = 0x417641;
+    lz.colors.palegreen2 = 0xB3D3B3;
+    lz.colors.palegreen3 = 0xC0D49D;
+    lz.colors.palegreen4 = 0xD3EAAA;
+    lz.colors.palegreen5 = 0xEFF1E8;
+    
+    lz.colors.gold1 = 0x8E6409;
+    lz.colors.gold2 = 0xCBB14B;
+    lz.colors.gold3 = 0xE6CF74;
+    lz.colors.gold4 = 0xF8E496;
+    
+    lz.colors.sand1 = 0xD4C6A1;
+    lz.colors.sand2 = 0xD9D7C2;
+    lz.colors.sand3 = 0xF2EEDB;
+    lz.colors.sand4 = 0xF3EEE1;
+    
+    lz.colors.ltpurple1 = 0x645698;
+    lz.colors.ltpurple2 = 0xB7B0D1;
+    lz.colors.ltpurple3 = 0xCBC1ED;
+    lz.colors.ltpurple4 = 0xE9E7F0;
+    
+    lz.colors.grayblue = 0xBEC2C8;
+    lz.colors.graygreen = 0xC0CCC0;
+    lz.colors.graypurple = 0x9F9DB1;
+   
+    lz.colors.ltblue = 0xDDDDFF;
+    lz.colors.ltgreen = 0xDDFFDD;
+</script>
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

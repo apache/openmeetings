@@ -1,0 +1,1007 @@
+<library>
+
+    <include href="base/treeselector.lzx" />
+    <include href="base/basecomponent.lzx" />
+    <include href="utils/layouts/simplelayout.lzx" />
+    <!--==========-->
+    <!-- BASETREE -->
+    <!--==========-->
+    <!--- An abstract base class to build tree controls. -->
+    <class name="basetree" extends="basecomponent" focusable="false">
+
+        <!--- @access private -->
+        <attribute name="defaultplacement" value="children" type="string"/>
+
+        <!--- Check to see if this tree is open. -->
+        <attribute name="open" value="false" type="boolean" 
+                   setter="_setOpen(open)"/>
+
+        <!--- Flag to close other siblings when this tree is open. -->
+        <attribute name="closesiblings" value="false" type="boolean" />
+
+        <!--- Close all immediate children when this tree is closed. -->
+        <attribute name="closechildren" value="false" type="boolean" />
+
+        <!--- Auto scroll if tree is clipped. -->
+        <attribute name="autoscroll" value="false" type="boolean" />
+
+        <!--- Check to see if this tree is selected. Default is false, except
+              for the root of a tree, which its selected attribute is set to
+              true. -->
+        <attribute name="selected" value="false" type="boolean"
+                   setter="_setSelected(selected)" />
+
+        <!--- Spacing to indent trees on the x-axis. -->
+        <attribute name="xindent" value="10" type="number" />
+
+        <!--- Spacing to indent trees on the y-axis. -->
+        <attribute name="yindent" value="20" type="number" />
+
+        <!--- Meaningful only with data replication. If true, it will
+              recursively follow the datapath's children.
+              @keywords final -->
+        <attribute name="recurse" value="true" type="boolean" />
+
+        <!--- Meaningful only in root tree. If false, the root item is invisible
+              and its children are displayed.
+              @keywords final -->
+        <attribute name="showroot" value="true" type="boolean" />
+
+        <!--- Meaningful only in root. Whether to multiselect items.
+              @keywords final -->
+        <attribute name="multiselect" value="false" type="boolean" />
+
+        <!--- Meaningful only in root. Flag to toggle selected nodes.
+              @keywords final -->
+        <attribute name="toggleselected" value="false" type="boolean" />
+
+        <!--- Meaningful only in root. Flag to select a tree on focus.
+              @keywords final -->
+        <attribute name="focusselect" value="false" type="boolean" />
+
+        <!--- If true, this tree is focused.
+              @keywords readonly -->
+        <attribute name="focused" value="false" type="boolean" />
+
+        <!--- Meaningful only in root. If focusselect is false and focusoverlay
+              is true, then focus has a visual bracket overlay over the focused
+              tree. -->
+        <attribute name="focusoverlay" value="false" type="boolean" />
+
+        <!--- Layout for children. -->
+        <attribute name="layout" value="class: simplelayout; axis: y; spacing: 0" />
+        
+        <!--- If true, this basetree is a leaf node. -->
+        <attribute name="isleaf" value="false" type="boolean" 
+                   setter="_setIsLeaf(isleaf)" />
+
+        <!--- Child subview number selected. Default to the first one. This will
+              get set when key press moves up and down. 
+              @keywords private -->
+        <attribute name="_currentChild" value="0" type="number" />
+
+        <!--- The last focused tree. Only available in the root.
+              @keywords private -->
+        <attribute name="_lastfocused" value="null" type="boolean" />
+
+        <!--- The selection manager. Only available in the root. 
+              @keywords private -->
+        <attribute name="_selector" value="null" type="expression" />
+
+        <!--- This event gets triggered whenever this tree is open. The open
+              value of this tree is also sent. -->
+        <event name="onopen" />
+        <!--- This event gets triggered whenever this tree is selected. The
+              value of the selection (true or false) is sent with this
+              event.
+              Note the args of this has changed from the previous release. -->
+        <event name="onselected" />
+        <!--- This event gets triggered whenever this tree is selected. This
+              tree is sent with the event. The tree root also receives this
+              event. -->
+        <event name="onselect" />
+
+        <!--- This event gets triggered whenever this tree is focused. The value
+              of the focus (true or false) is sent with this event. -->
+        <event name="onfocused" />
+        <!--- This event gets triggered whenever the tree's focus is
+              changed. This tree is sent with the event. The tree root also
+              receives this event.-->
+        <event name="onfocus" />
+
+        <!--- reference to the defaultplacement view by default this is
+              'children' but it could be modified by subclass 
+              @keywords private -->
+        <attribute name="_children" value="null"/>
+        <!--- @keywords private -->
+        <method name="init">
+        <![CDATA[
+            if (this.datapath) {
+                createChildTrees();
+            }
+
+            super.init();
+
+            if (canvas['accessible']) {
+                this._accessibleState.setAttribute('applied', true);
+            }
+
+            if ( this._children == null ) {
+                this._children = this.searchSubnodes( "name" , this.defaultplacement );
+            }
+
+            if (this.isRoot()) {
+
+                var focusItem = this.item;
+                if ( ! this.showroot ) {
+                    this.item.destroy();
+                    this.item = null;
+                    this.setAttribute("open", true);
+                    this.children.setAttribute("x", 0);
+                    this.children.setAttribute("y", 0);
+                    var sv = this.children.subviews;
+                    if (sv && (sv[0])  is lz.basetree) {
+                        focusItem = sv[0].item;
+                    }
+                }
+
+                this._selector = new lz.treeselector(this,
+                    { multiselect: this.multiselect,
+                      toggle: this.toggleselected });
+
+
+                if (canvas['accessible']) {
+                    this.getChildIds();
+                    //this.setAAActive();
+
+                    var mc = this.getMCRef();
+                    mc._accImpl = {};
+                    mc._accImpl.stub = false;
+                    mc._accImpl.master = this;
+
+                    mc._accImpl.get_accRole = function(childId) {
+                        return childId == 0 ? 
+                        // ROLE_SYSTEM_OUTLINE
+                                0x23:
+                        // ROLE_SYSTEM_OUTLINEITEM
+                                0x24;
+                    }
+
+                    mc._accImpl.get_accName = function(childId) {
+                        var r = this.master.getRoot();
+                        var item = r.nodebychildid[childId];
+                        if (! item) return '';
+
+                        var desc = item.text + r.getLocationDescription(item);
+                        // Debug.debug('get_accName', childId, desc);
+
+                        return desc;
+                    }
+
+                    mc._accImpl.get_accState = function(childId) {
+                        // STATE_SYSTEM_NORMAL
+                        var state = 0x00000000;
+                        if (! this.master.enabled) {
+                            //STATE_SYSTEM_UNAVAILABLE
+                            state |= 0x00000001;
+                        } else {
+                            //STATE_SYSTEM_FOCUSABLE
+                            state |= 0x00100000;
+                            if (this.master.focused) {
+                                //STATE_SYSTEM_FOCUSED
+                                state |= 0x00000004;
+                            }
+                        }
+                        
+                        // root elements are regular components, return early
+                        if (childId == 0) return state;
+
+                        // STATE_SYSTEM_SELECTABLE
+                        state |= 0x00200000
+
+                        var r = this.master.getRoot();
+                        var item = r.nodebychildid[childId];
+                        if (! item) return;
+
+                        if (! item.isleaf) {
+                            if (item.open) {
+                                //STATE_SYSTEM_EXPANDED;
+                                state |= 0x00000200;
+                            } else {
+                                //STATE_SYSTEM_COLLAPSED;
+                                state |= 0x00000400;
+                            }
+                        }
+
+                        if (item.focused) {
+                            state |= 
+                                //STATE_SYSTEM_SELECTED
+                                0x00000002 | 
+                                //STATE_SYSTEM_FOCUSED
+                                0x00000004;
+                        }
+                        // Debug.debug('get_accState', childId, state);
+                        return state;
+                    }
+
+                    mc._accImpl.get_accDefaultAction = function(childId) {
+                        if (childId <= 0) return;
+
+                        var r = this.master.getRoot();
+                        var item = r.nodebychildid[childId];
+                        if (! item) return '';
+
+                        // Debug.debug('get_accDefaultAction', childId);
+                        if (! item.isleaf) {
+                            return item.open ? "Collapse" : "Expand";
+                        }
+
+                        return '';
+                    }
+
+                    mc._accImpl.accDoDefaultAction = function(childId) {
+                        if (childId <= 0) return;
+
+                        var r = this.master.getRoot();
+                        var item = r.nodebychildid[childId];
+                        if (! item) return;
+
+                        if (! item.isleaf) {
+                            var val = ! item.open;
+                            for (var i = childId; i > 0; i--) { 
+                                var parent = r.nodebychildid[i];
+                                //Debug.info('opening', r.nodebychildid[i]);
+                
+                                if (! parent.open) parent.setAttribute('open', true);
+                            }
+                            item.setAttribute('open', val);
+                        }
+                    }
+
+                    mc._accImpl.getChildIdArray = function() {
+                        //this.master.getChildIds();
+                        var l = this.master.getLength();
+                        var a = new Array(l);
+                        for (var i:int = 0; i < l; i++) {
+                            a[i] = i + 1;
+                        }
+                        return a;
+                    }
+
+                    /**  A Tree item reports its depth as its value.
+                     *   The Tree itself reports no value.
+                     */
+                    mc._accImpl.get_accValue = function(childId) {
+                        if (childId < 0) return;
+                        var r = this.master.getRoot();
+                        if (childId > 0) {
+                            var item = r.nodebychildid[childId];
+                            //Debug.write('get_accValue', childId, item.getDepth(item), item);
+                            if (item) return item.getDepth(item) + '';
+                        } else {
+                            var focused = r._selected;
+                            var desc = focused.text + r.getLocationDescription(focused);
+                            // Debug.warn('get_accValue', desc);
+                            return desc;
+                        }
+                        return '';
+                    }
+
+                }
+
+
+                // Call this only after selector is created
+                this.changeFocus(focusItem.parent);
+            }
+
+            // Make sure selector knows about me being selected
+            if (this.selected) this._setSelected(true);
+        ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="destroy">
+            // Close, destroy child windows first to reduce stack usage
+            if (this['children']) {
+                this.openChildren (false);
+                this.children.destroy();
+            }
+            super.destroy();
+        </method>
+
+        <!--- Method to recurse and create subtrees when replicating data. 
+              @keywords private -->
+        <method name="createChildTrees">
+        <![CDATA[
+            var count = this.datapath.getNodeCount();
+
+            // Since text nodes 'count', skip if has text and only one
+            if (count == 0 || count == 1 && this.datapath.getNodeText() != "") {
+                return;
+            }
+
+            // Don't recurse if we have children.
+            if (this.children.subviews != null &&
+                this.children.subviews.length != 0) {
+                this.recurse = false;
+            }
+
+            if (! this.recurse) return;
+
+            // Replication manager overrides clone's _instanceAttrs, so we have
+            // to redo them here.
+            var args = {};
+            for (var a in this._instanceAttrs) {
+                if (a == 'id') continue;
+                if (a == 'showroot') continue; // skip for non-root trees
+                args[a] = this._instanceAttrs[a]
+            }
+
+            // Check to see if we have a datapath. Most likely, the clone won't
+            // have a datapath, so use clone manager's datapath.
+            if (this.datapath['xpath'] != null) {
+                args.datapath = this.datapath.xpath;
+            } else if (this.cloneManager.xpath != null) {
+                args.datapath = this.cloneManager.xpath;
+            } else {
+                // couldn't find xpath for recursion
+                return;
+            }
+
+            // This is a class, not a tagname
+            var c = this.getChildClass();
+            if (c != null) {
+                new c(this, args, null, true);
+            }
+        ]]>
+        </method>
+
+        <!--- Setter for open attribute. Leaf nodes are always closed.
+              @param boolean o: if true, this tree is open
+              @keywords private -->
+        <method name="_setOpen" args="o">
+        <![CDATA[
+            if (_initcomplete && this.isleaf) {
+                this.open = false;
+                return;
+            }
+
+            if (this.closesiblings && ! this.isRoot()) {
+                var siblings = parent.children.subviews;
+                if (siblings['length'] != null) {
+                    for (var i=0; i < siblings.length; i++) {
+                        // .open may not have been created the first
+                        // time through this loop
+                        if (siblings[i]['open'] && siblings[i] != this) {
+                            siblings[i].setAttribute("open", false);
+                        }
+                    }
+                }
+            }
+
+            // Do this because datapaths only evaluate to strings
+            if (typeof(o) == "string") {
+                o = (o == "true" );
+            } else if (o == null) {
+                o = false;
+            }
+
+            this.open = o;
+            if (!_initcomplete) return;
+
+            if ( ! this.isRoot() ) {
+
+                // Close other siblings.
+                if (this.closesiblings) {
+                    var siblings = parent._children.subviews;
+                    for (var i=0; i < siblings.length; i++) {
+                        if (siblings[i].open && siblings[i] != this) {
+                            // don't want to re-enter this routine
+                            siblings[i].open = false;
+                            siblings[i].openChildren(false);
+                            if (siblings[i].onopen) {
+                                siblings[i].onopen.sendEvent(false);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var sv = this._children.subviews;
+
+            if (this.closechildren && sv) {
+                for (var i=0; i < sv.length; i++) {
+                    if (sv[i].open) {
+                        sv[i].setAttribute("open", false);
+                    }
+                }
+            }
+
+            openChildren(o);
+            if (this.onopen) this.onopen.sendEvent(o);
+        ]]>
+        </method>
+
+        <!--- Calls selector to select this tree.
+              @param boolean s: whether or not this tree is selected
+              @keywords private -->
+        <method name="_setSelected" args="s">
+        <![CDATA[
+
+            // Add tree to selector
+            if (_initcomplete) {
+                var r = this.getRoot();
+                if (s) {
+                    r._selector.select(this);
+                } else {
+                    r._selector.unselect(this);
+                }
+            } else {
+                // Do this because datapaths only evaluate to strings
+                if (typeof(s) == "string") {
+                    s = (s == "true" );
+                }
+                this.setSelected(s);
+            }
+        ]]>
+        </method>
+
+        <!--- Setter for isleaf attribute. 
+              @param boolean leaf: if true, this tree is a leaf.
+              @keywords private -->
+        <method name="_setIsLeaf" args="leaf">
+            // do this because datapaths only evaluate to strings
+            if (typeof(leaf) == "string") {
+                leaf = (leaf == "true" );
+            } else if (leaf == null) {
+                leaf = false;
+            }
+            this.isleaf = leaf;
+        </method>
+
+        <!--- Returns class to use for instantiating replicated tree children.
+              If tree is leaf, return null, since we don't care to instantiate
+              any more subtrees. Override this method to instantiate different
+              classes. -->
+        <method name="getChildClass">
+            if (this.isleaf) return null;
+            return this.constructor;
+        </method>
+
+        <!--- Check to see if this is the root of the tree.
+              @return Boolean: true if this tree is the root, otherwise
+              false. -->
+        <method name="isRoot">
+            return ! (parent is lz.basetree);
+        </method>
+
+        <!--- Get the root of this tree. 
+              @return basetree: the root of this tree. -->
+        <method name="getRoot">
+            var v = this;
+            var p = v.parent;
+            while (p is lz.basetree) {
+                v = v.parent;
+                p = v.parent;
+            }
+            return v;
+        </method>
+
+        <!--- Called when tree is selected using keyboard. Default
+              action is to select the tree. -->
+        <method name="keySelect">
+            this.setAttribute("selected", true);
+        </method>
+
+        <!--- Get current tree selection.  
+              @return Object: if multiselect is true, an array of basetrees,
+              else the selected basetree. If none selected, returns null. -->
+        <method name="getSelection">
+            var root = this.getRoot() ;
+            var selection = root._selector.getSelection();
+            if (root._selector.multiselect) {
+                return selection;
+            } else if (selection.length == 0) {
+               return null;
+            } else {
+               return selection[0];
+            }
+        </method>
+
+        <!--- Called by selectionmanager when this is selected or
+              unselected.
+              @param Boolean s: whether tree is selected or not.
+              @keywords private -->
+        <method name="setSelected" args="s">
+        <![CDATA[
+            this.selected = s;
+            var root = this.getRoot();
+            root._selected = this;
+            if (root.onselect) root.onselect.sendEvent(this);
+            if (this != root && this.onselect) this.onselect.sendEvent(this);
+            if (this.onselected) this.onselected.sendEvent(s);
+        ]]>           
+        </method>
+
+        <!--- Change the focus to new tree and unfocus the previous focused
+              tree. If the focusselect for the tree is true, this method will also
+              select the focused tree. 
+              @param Basetree focusedTree: the tree to focus. If null, the
+              current tree is focused. -->
+        <method name="changeFocus" args="focusedTree">
+        <![CDATA[
+            if (focusedTree == null) focusedTree = this;
+
+            var ftRoot = focusedTree.getRoot();
+
+            // Remove last focused item's focus
+            if (ftRoot._lastfocused) {
+                ftRoot._lastfocused.setTreeFocus(false,ftRoot);                
+            }
+
+            // Set correct _currentChild settings.
+            if (focusedTree != ftRoot) {
+                var index = focusedTree.parent.getChildIndex(focusedTree);
+                if (index != -1) {
+                    focusedTree.parent.setAttribute("_currentChild", index);
+                }
+            }
+
+            ftRoot.setAttribute("_lastfocused", focusedTree);
+            // See lastfocus to new focused tree
+            focusedTree.setTreeFocus(true,ftRoot);
+
+            // If focusselect, don't use focusoverlay.
+            var useFocusOverlay = ftRoot.focusoverlay;
+            if (ftRoot.focusselect) {
+                useFocusOverlay = false;
+            }
+            lz.Focus.setFocus(focusedTree.item, useFocusOverlay);
+            if (ftRoot.focusselect) focusedTree.setAttribute("selected", true);
+            if (ftRoot.autoscroll) focusedTree.doAutoScroll(ftRoot);
+        ]]>
+        </method>
+
+        <!--- Autoscroll if this tree is outside of scroll view.
+              @param Basetree root: the root of this tree. 
+              @keywords private -->
+        <method name="doAutoScroll" args="root">
+        <![CDATA[
+            if (root.height > root.parent.height) {
+                var relY = this.getAttributeRelative('y', root);
+                if (relY < 0) {
+                    root.setAttribute('y', root.y - relY);
+                    return;
+                }
+
+                var delta = root.parent.height - relY - this.item.height;
+                if (delta < 0) {
+                    root.setAttribute('y', root.y + delta);
+                }
+            }
+        ]]>
+        </method>
+
+
+        <!--- Set the focus of this tree. This will not onfocus the last focused
+              tree. Use changeFocus() for to do that.
+              @param Boolean focus: true you want the tree focused, else false.
+              @keywords private
+              -->
+        <method name="setTreeFocus" args="focus,root">
+        <![CDATA[
+            if (this['item']) {
+               this.item.setAttribute("focusable", focus);
+            }
+            this.setAttribute("focused", focus);
+            if (root == null) root = this.getRoot();
+            if (root.onfocus) root.onfocus.sendEvent(this);
+            if (this != root && this.onfocus) this.onfocus.sendEvent(this);
+            if (this.onfocused) this.onfocused.sendEvent(focus);
+        ]]>
+        </method>
+
+        <!--- Get the child index of the child passed in.
+              @param LzView child: a child view of the current tree.
+              @return Number: the child index of the view. If not a child,
+              returns -1.  -->
+        <method name="getChildIndex" args="child">
+        <![CDATA[
+            var l = this.children.subviews
+            if (l != null) {
+                for (var i=0; i < l; i++) {
+                    if (children.subviews[i] == child) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        ]]>
+        </method>
+
+        <!--- Keyboard focus on parent. If no parent exists, keep focus on
+              current tree. 
+              @keywords private -->
+        <method name="_focusParent">
+        <![CDATA[
+            // Make sure there's a parent to select.
+            if (this.isRoot() || parent.item == null) return;
+
+            this.setAttribute("_currentChild", 0);
+            this.changeFocus(parent);
+        ]]>
+        </method>
+
+        <!--- Keyboard focus on first child. If none exists, keep focus on
+              current tree.
+              @keywords private -->
+        <method name="_focusFirstChild">
+        <![CDATA[
+            var n = 0;
+            if (children.subviews && 
+                (children.subviews[n]) is lz.basetree) {
+                this.setAttribute("_currentChild", n);
+                this.changeFocus(children.subviews[n]);
+            }
+        ]]>
+        </method>
+
+        <!--- Keyboard focus on last child. If none exist, keep focus on current
+              tree.
+              @keywords private -->
+        <method name="_focusLastChild">
+        <![CDATA[
+            var n = children.subviews.length - 1;
+            if (children.subviews &&
+                (children.subviews[n]) is lz.basetree) {
+                var last = children.subviews[n];
+                if (last.open && last.children.subviews) {
+                    var next = last.children.subviews.length -1;
+                    if ((last.children.subviews[next]) is lz.basetree) {
+                        last._focusLastChild();
+                        return;
+                    }
+                }                    
+                this.setAttribute("_currentChild", n);
+                this.changeFocus(children.subviews[n]);
+            }
+        ]]>
+        </method>
+
+        <!--- Keyboard focus on previous sibling. If we're the first sibling,
+              calls _focusParent(). If none exists, keep focus on current
+              tree.
+              @keywords private -->
+        <method name="_focusPreviousSibling">
+        <![CDATA[
+            // Make sure we're not root
+            if (this.isRoot()) return;
+
+            // if we're the first sibling, previous goes to parent
+            if (parent._currentChild == 0) {
+                this. _focusParent();
+                return;
+            }
+
+            var prev = parent._currentChild - 1;
+            parent.setAttribute("_currentChild", prev);
+
+            // If previous sibling is open, select last child of that sibling
+            var sibling = parent.children.subviews[prev]
+            if (sibling.open && sibling.children.subviews && 
+                (sibling.children.subviews[0]) is lz.basetree) {
+                sibling._focusLastChild();
+            } else {
+                this.changeFocus(sibling);
+            }
+        ]]>
+        </method>
+
+        <!--- Keyboard focus on next sibling. If we're not root, focus on
+              parent's next sibling, else keep focus on current tree.
+              @keywords private -->
+        <method name="_focusNextSibling">
+        <![CDATA[
+            // Make sure we're not root
+            if (this.isRoot()) return;
+
+            var next = parent._currentChild + 1;
+            if (next < parent.children.subviews.length) {
+                parent.setAttribute("_currentChild", next);
+                this.changeFocus(parent.children.subviews[next]);
+            } else if (! this.isRoot()) {
+                parent._focusNextSibling();
+            }
+        ]]>
+        </method>
+
+        <!--- @keyword private
+              Map keyboard navigation for tree. 
+              Space (32): call keySelect().
+              Left (37): close tree if open, else focus on parent.
+              Up (38): focus on previous sibling.
+              Right (39): open tree if closed, else focus on first child. 
+              Down (40): focus on first child if open, else focus next sibling.
+              -->
+        <method name="keyboardNavigate" args="kc">
+        <![CDATA[
+            if (kc == 32) { // space
+                this.keySelect();
+            } else if (kc == 37) { // left
+                if (this.open) {
+                    this.setAttribute("open", false);
+                } else {
+                    this._focusParent();
+                }
+            } else if (kc == 38) { // up
+                this._focusPreviousSibling();
+            } else if (kc == 39) { // right
+                if (! this.open) {
+                    this.setAttribute("open", true);
+                } else {
+                    this._focusFirstChild();
+                }
+            } else if (kc == 40) { // down
+                if (this.open && 
+                    this.children.subviews &&
+                    (this.children.subviews[0]) is lz.basetree) {
+                    this._focusFirstChild();
+                } else {
+                    this._focusNextSibling();
+                }
+            }
+        ]]>
+        </method>
+
+        <!-- View to place basetree node item. This is where the visual
+             component of the tree goes. -->
+        <view name="item">
+            <!--- @keywords private -->
+            <handler name="onkeydown" args="kc">
+                classroot.keyboardNavigate(kc);
+            </handler>
+        </view>
+
+        <method name="openChildren" args="o"> <![CDATA[
+            var makevisible = ( o && children.subviews != null );
+            children.setAttribute("visible", makevisible);
+            ]]>
+        </method>
+
+        <!-- accessibility support begins here -->
+        <method name="getChildIds">
+            <![CDATA[
+            var nodebychildid = [0, this];
+            var childidfromnodeid = {};
+            childidfromnodeid[this.getUID()] = 1;
+
+            var children = [].concat(this.children.subviews);
+            while (children.length) {
+                var n = children.shift();
+                if (n.visible && n is lz.basetree) {
+                    childidfromnodeid[n.getUID()] = nodebychildid.length;
+                    nodebychildid.push(n);
+                    if (n.children.subviews.length) {
+                        children = children.concat(n.children.subviews);
+                    }
+                }
+            }
+            this.nodebychildid = nodebychildid;
+            this.childidfromnodeid = childidfromnodeid;
+            //Debug.warn('getChildIds', nodebychildid, childidfromnodeid);
+            ]]>
+        </method>
+
+        <method name="getLength">
+            var r = this.getRoot();
+            var length = r.nodebychildid.length;
+            //Debug.warn('getLength', length);
+            // compute number of items in tree
+            return length;
+        </method>
+
+        <method name="getDepth" args="treenode">
+            <![CDATA[
+            // 1-based offset
+            var count = 2;
+            var p = treenode.parent;
+            var root = treenode.getRoot();
+            if (treenode === root) return 1;
+            while (p && p != root && p != canvas) {
+                if (p is lz.basetree) count++;
+                p = p.parent
+            }
+            //Debug.warn('getDepth', count, treenode);
+            return count;
+            ]]>
+        </method>
+
+        <method name="getLocationDescription" args="treenode">
+            <![CDATA[
+            var siblings = treenode.immediateparent.subviews;
+            //Debug.warn('getLocationDescription', treenode, siblings);
+            var offset = 1;
+            var size = 0;
+            if (siblings) {
+                var len = siblings.length;
+                for (var i = 0; i < len; i++) {
+                    var child = siblings[i];
+                    if (child is lz.basetree) {
+                        size++;
+                        if (child === treenode) {
+                            offset = size;
+                        }
+                    }
+                }
+            }
+
+            //Debug.info('getLocationDescription', offset + ' of ' + size, this);
+
+            return ', ' + offset + ' of ' + size;
+            ]]>
+        </method>
+
+        <!-- View to place child trees. -->
+        <view name="children" x="${parent.xindent}" y="${parent.yindent}">
+            <method name="init"> <![CDATA[
+                this.setAttribute("visible", classroot.open && this.subviews != null );
+                super.init();
+                ]]>
+            </method>
+            <handler name="onaddsubview">
+            <![CDATA[
+                // If this is the first one added, send event.
+                if (this.subviews.length == 1 && classroot.open) {
+                    setAttribute("visible", true);
+                }
+            ]]>
+            </handler>
+
+        </view>
+
+        <state name="_accessibleState">
+            <!--- @keywords private -->
+            <attribute name="EVENT_OBJECT_NAMECHANGE" type="number" value="0x800c"/>
+            <!--- @keywords private -->
+            <attribute name="EVENT_OBJECT_SELECTION" type="number" value="0x8006"/>
+            <!--- @keywords private -->
+            <attribute name="EVENT_OBJECT_STATECHANGE" type="number" value="0x800a"/>
+            <!--- @keywords private -->
+            <attribute name="EVENT_OBJECT_FOCUS" type="number" value="0x8005"/>
+            <!--- @keywords private -->
+            <handler name="onfocused" args="f">
+                <![CDATA[
+                var r = this.getRoot();
+                if (! r || ! r.childidfromnodeid) return;
+                var childId = r.childidfromnodeid[this.getUID()];
+                // Debug.info('onfocused', f, childId);
+                if (f && childId >= 0) {
+                    r.sendAAEvent(childId, EVENT_OBJECT_FOCUS);
+                    r.sendAAEvent(childId, EVENT_OBJECT_SELECTION);
+                    if ($as2) {
+                        Selection.setFocus(this.getMCRef());
+                    }
+                }
+                ]]>
+            </handler>
+
+            <!--- @keywords private -->
+            <handler name="onopen" args="isopen">
+                //if (isopen) return;
+                // only send when being closed...
+                var r = this.getRoot();
+                    var childId = r.childidfromnodeid[this.getUID()];
+                    //if (childId >= 0) {
+                        r.sendAAEvent(childId, EVENT_OBJECT_STATECHANGE);
+                        // Debug.debug('onopen', isopen, childId);
+                    //}
+            </handler>
+
+            <!--- @keywords private -->
+            <handler name="ontext" args="l">
+                var r = this.getRoot();
+                var childId = r.childidfromnodeid[this.getUID()];
+                r.sendAAEvent(childId, EVENT_OBJECT_NAMECHANGE);
+                lz.Browser.updateAccessibility();
+            </handler>
+        </state>
+
+        <doc>
+          <tag name="shortdesc"><text>An abstract base class to build tree controls.</text></tag>
+          <text>
+            <p>You can subclass <classname>basetree</classname> to build a tree
+            control with your own look and feel. Basetree has two content areas:
+            <varname>item</varname> and <varname>children</varname>. The
+            <varname>item</varname> view is where the visual component of the tree
+            should be placed. Any view that you want to place in the tree node
+            should be placed in <varname>item</varname>. You can use
+            <code>placement="item"</code>. The <varname>children</varname> view is
+            the defaultplacement for basetree.</p>
+            
+            <p>The following diagram demonstrates how <varname>item</varname> and
+            <varname>children</varname> are associated in tree. Since
+            <classname>basetree</classname> has no visual component,
+            <classname>tree</classname> is used here for demonstration
+            purposes.</p>
+            
+            <img src="images/basetree/basetree-diagram.png"/>
+            
+            <p>
+              When the <classname>basetree</classname> expands recursively, the datapath must be
+              a relative reference to the dataset. If an absolute
+              refrence is used, the same nodes would be selected over
+              and over forever, resulting in and endless loop.
+
+              For example, this will hang in an endless loop: 
+
+              <programlisting>
+              &lt;dataset name="navdata"&gt;
+                &lt;navmenu&gt;
+                  &lt;section /&gt;
+                &lt;/navmenu&gt;
+              &lt;/dataset&gt;
+
+
+              &lt;view x="10" y="10" layout="axis: x; spacing: 10"&gt;
+                &lt;basetree width="160" height="20" datapath="navdata:/navmenu" /&gt;
+              &lt;/view&gt;
+              </programlisting>
+
+              It needs to be rewritten to have a relative datapath in the recursively expanding
+              tree node. 
+
+              <programlisting>
+                &lt;basetree width="160" height="20" datapath="navdata:/navmenu"&gt;
+                  &lt;basetree width="160" height="20" datapath="*" /&gt;
+                &lt;/basetree&gt;
+              </programlisting>
+            </p>
+
+            <example title="Basetree subclass with echoed text node">
+            &lt;canvas height="200"&gt;
+              &lt;include href="base/basetree.lzx"/&gt;
+            
+              &lt;class name="echotree" extends="basetree"&gt;
+                &lt;view placement="item" layout="axis: x; spacing: 2" 
+                      bgcolor="${classroot.selected
+                                ? classroot.style.selectedcolor 
+                                : classroot.parent.bgcolor}"&gt;
+                  &lt;handler name="onclick"&gt;
+                    classroot.changeFocus();
+                    if (! classroot.isleaf) {
+                      classroot.setAttribute("open", ! classroot.open);
+                    }
+                  &lt;/handler&gt;
+                  &lt;text text="${classroot.text}" resize="true" /&gt;
+                  &lt;text text="${classroot.text}" resize="true" /&gt;
+                &lt;/view&gt;
+              &lt;/class&gt;
+            
+              &lt;view x="20" y="20" layout="axis: x; spacing: 10"&gt;
+                &lt;echotree&gt;paragraph
+                  &lt;echotree&gt;sentence
+                    &lt;echotree&gt;words
+                      &lt;echotree isleaf="true"&gt;letter&lt;/echotree&gt;
+                      &lt;echotree isleaf="true"&gt;number&lt;/echotree&gt;
+                      &lt;echotree isleaf="true"&gt;punctuation&lt;/echotree&gt;
+                    &lt;/echotree&gt;
+                  &lt;/echotree&gt;
+                &lt;/echotree&gt;
+              &lt;/view&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <seealso>
+            <classes>tree</classes>
+            </seealso>
+          </text>
+        </doc>
+
+    </class> <!-- basetree -->
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

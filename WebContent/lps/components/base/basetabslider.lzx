@@ -1,0 +1,290 @@
+<library>
+    <include href="base/baselist.lzx" />
+    <include href="utils/layouts/simplelayout.lzx"/>
+
+
+    <!--- This class is a non-visual container that animates and coordinates the
+          sliding of basetabelements. -->
+    <class name="basetabslider" extends="baselist"
+           styleable="false"
+           layout="class: simplelayout" 
+           oninit="_setSpacing(spacing)"> <!-- so layout gets spacing oninit -->
+
+        <!--- The duration of the tabs openning and closing. -->
+        <attribute name="slideduration"   value="300" />
+
+        <!--- The spacing of the tabs. -->
+        <attribute name="spacing" value="0" setter="_setSpacing(spacing)"/>
+
+        <!--- resetHeight() should only get called from setSpacing not during
+              init.
+              @keywords private -->
+        <attribute name="_spacinginitdone" value="false" />
+
+        <!--- The default height of every tab when closed. -->
+        <attribute name="mintabheight"    value="22" />
+
+        <!--- @keywords private -->
+        <attribute name="opennedtab"      value="null" />
+        
+        <!--- The top inset for content appearing within a tabelement. -->
+        <attribute name="inset_top" value="8"/>
+        
+        <!--- The left inset for content appearing within a tabelement. -->
+        <attribute name="inset_left" value="8"/>
+        
+        <!--- The bottom inset for content appearing within a tabelement. -->
+        <attribute name="inset_bottom" value="8"/>
+        
+        <!--- The right inset for content appearing within a tabelement. -->
+        <attribute name="inset_right" value="8"/>
+
+        <!--- @keywords private -->
+        <attribute name="totalminheight"  value="0" />
+
+        <!--- @keywords private -->
+        <attribute name="availableheight" value="0" />
+
+        <!--- Deprecated. See todo 3570.
+             @keywords private -->
+        <attribute name="hilite" value="false" />
+
+        <!--- @keywords private -->
+        <attribute name="_defaultview" value="null" />
+
+        <!--- @keywords private -->
+        <method name="init" >
+            // all subviews should now be created so call calcheight
+            // so the tebelements can reference it
+            this.calcAvailableHeight();
+
+            // do inherited and send oninit events
+            super.init();
+        </method>
+
+        <!--- Recalculate the available height and update the opened tab. 
+              @keywords private-->
+        <method name="resetHeight" >
+            this.calcAvailableHeight();
+            var opentab = this.getSelection();
+            if ( opentab ) {
+                if (opentab instanceof Array) {
+                    opentab = opentab[0];
+                }
+                opentab.setAttribute("height",
+                    opentab['minheight'] + this.availableheight);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setSpacing" args="sp">
+            // TODO: a max spacing size
+            this.spacing = sp;
+            if (this._initcomplete) {
+                var cv = null;
+                if ( this.defaultplacement != null ) {
+                    cv = this.searchSubviews( "name", this.defaultplacement );
+                } 
+                if (cv == null) cv = this;
+                cv.layouts[0].setAttribute('spacing', sp);
+                if (this._spacinginitdone) {
+                    this.resetHeight();
+                } else {
+                   this._spacinginitdone = true;
+               }
+            } 
+        </method>
+
+
+        <!--- Set the height of the basetabslider. Overrides LzView setter
+              @param Number h: the height. -->
+        <setter name="height" args="h" >
+            if ( h != height ) {
+                super.setAttribute('height', h);
+                this.resetHeight();
+            }
+        </setter>
+
+
+        <!--- Select a tabelement.
+              @param LzView item: the tabelement to select. -->
+        <method name="select" args="item" >
+        <![CDATA[
+            // Override the select method of baselist so a tabelement that is
+            // already open does not get a close call
+            if ( this._initcomplete ) {
+                var sel = this.getSelection();
+                if ( sel ) {
+                    if (!toggleselected) {
+                        if (sel instanceof Array && sel[0] == item) return;
+                        if (sel == item) return;
+                    }
+                }
+                this._selector.select( item );
+                var v =  this.getValue();
+                this.setAttribute('value', v );
+
+                //this is duplicated from baselist, but the superclass method
+                //isn't called
+                if ( this._hiliteview && this._hiliteview.enabled) {
+                    this._hiliteview['setHilite'](false);
+                }
+
+                this.setAttribute( 'doesenter', false );
+
+            } else {
+                this._initialselection = item;
+            }
+        ]]>
+        </method>
+
+        <!--- @access private -->
+        <handler name="onaddsubview" method="doAddSubview"/>
+
+        <!--- Called when an item is added to the tabslider.
+              @param LzView v: view to be added. -->
+        <method name="doAddSubview" args="v" >
+            if ( this.itemclassname == "" ){
+                this.__itemclass = v.constructor;
+            }
+            if ( typeof(v.minheight) == "undefined" ) {
+                // no minheight was defined so assign the parent
+                // value before calling calcAvailableHeight
+                if ( v instanceof lz.basetabelement ) v.setAttribute('minheight', this.mintabheight);
+            }
+            // v.setAttribute('height', v.minheight);
+
+            this.calcAvailableHeight();
+            var opentab = this.getSelection();
+            if ( opentab ) {
+                if (opentab instanceof Array) {
+                    opentab = opentab[0];
+                }
+                opentab.setAttribute("height",
+                    opentab['minheight'] + this.availableheight);
+            }
+        </method>
+
+        <!--- @param basetabelement tabelement: tabelement to open. 
+              @param boolean withAnimation: unused.
+              @deprecated use this.select(atabview) instead -->
+        <method name="openTab" args="tabelement,withAnimation=false" > <![CDATA[
+            var didopen = false;
+            var ot = this._selector.getSelection()[0];
+            if ( ot != tabelement ){
+                this._selector.select(tabelement);
+                this.opennedtab = tabelement;
+                didopen = true;
+            }
+            return didopen;
+        ]]> </method>
+
+        <!--- Open next tabelement. Nothing will be opened if the last
+              basetabelement is encountered.
+              @return boolean: true if it was able to open the next
+              tabelement. -->
+        <method name="openNext" > <![CDATA[
+            var ot = this._selector.getSelection()[0];
+            var index = -1;
+            for ( var i = 0; i < this._defaultview.subviews.length; i++ ) {
+                if ( ot == this._defaultview.subviews[i] ) index = i;
+            }
+            index += 1;
+            if ( index < this._defaultview.subviews.length ) 
+                 return openTab(this._defaultview.subviews[index]);
+            else
+                return false;
+        ]]> </method>
+
+        <!--- Add the new item (instantiated using itemclassname) and a new
+              tabelement.
+              @param String txt: The name of the tabelement. 
+              @param Object value: The value of the tabelement. -->
+        <method name="addItem" args="txt, value=null" > <![CDATA[
+            var v = new lz[this.itemclassname](this,{text:txt, value:value});
+            this.onheight.sendEvent(); // force an update
+        ]]> </method>
+
+        <!--- Calculate the height available to place items in
+              basetabslider. -->
+        <method name="calcAvailableHeight" > <![CDATA[
+           var cv = null;
+           if ( this.defaultplacement != null ) {
+               cv = this.searchSubviews( "name", this.defaultplacement );
+           }
+           if ( cv == null) cv = this;
+           this._defaultview = cv;
+           if ( cv['subviews'] ) {
+                if ( !cv['layouts'] ) return;
+                var tmh = 0;
+                for( var m=0; m < cv.subviews.length; m++ ) {
+                    var sv = cv.subviews[m]
+                    if ( sv.visible && sv instanceof lz.basetabelement ) {
+                        tmh += sv['minheight'] + spacing;
+                    }
+                }
+                // don't need spacing on last element
+                tmh -= spacing;
+
+                // set the corresponding height of the attributes
+                this.setAttribute('availableheight',
+                  Math.max(0,cv.height - tmh));
+                this.setAttribute('totalminheight',tmh);
+            }
+        ]]> </method>
+        <doc>
+          <tag name="shortdesc"><text>A non-visual container that animates and coordinates the sliding of basetabelements</text></tag>
+          <text>
+            <p>A <classname>basetabslider</classname> coordinates the opening and
+            closing of its <classname>basetabelement</classname>s contained within
+            its scope. <classname>basetabslider</classname> and
+            <classname>basetabelement</classname> have no visual aspects. The
+            <classname>tabslider</classname> class (which extends
+            <classname>basetabslider</classname>) does contain a visual UI and
+            shows how <classname>basetabslider</classname> can be extended to
+            create your own visual framework for a unique tab slider.</p>
+            
+            <p>An example of the use of these classes is shown below. In order to
+            make the base classes visible, background colors have been assigned to
+            them.</p>
+            
+            <example>
+            &lt;canvas height="220"&gt;
+              &lt;include href="base/basetabslider.lzx"/&gt;
+              &lt;basetabslider bgcolor="yellow" width="100" 
+                            height="200" mintabheight="40" 
+                            spacing="2" slideduration="300"&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%"/&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%"/&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%"/&gt;
+              &lt;/basetabslider&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>The <attribute>mintabheight</attribute> specified for a
+            <classname>basetabslider</classname> applies to all of its
+            <classname>basetabelement</classname>s except those
+            <classname>basetabelement</classname>s that define it for themselves,
+            as demonstrated in the following example.</p>
+            
+            <example>
+            &lt;canvas height="220"&gt;
+              &lt;include href="base/basetabslider.lzx"/&gt;
+              &lt;basetabslider bgcolor="yellow" width="100" 
+                            height="200" mintabheight="40" 
+                            spacing="2" slideduration="300"&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%"/&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%" minheight="15"/&gt;
+                &lt;basetabelement clickable="true" bgcolor="red" width="100%"/&gt;
+              &lt;/basetabslider&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+   </class> <!-- END: basetabslider -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
