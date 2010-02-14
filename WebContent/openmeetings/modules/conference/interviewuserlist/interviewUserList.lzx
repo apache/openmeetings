@@ -167,6 +167,8 @@
 				//do add others
                 this._participents.addItem(object);
                 
+                if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+                
 				if (object.isBroadcasting) {
 					
 					if ($debug) Debug.write("###### object.isBroadcasting ########");
