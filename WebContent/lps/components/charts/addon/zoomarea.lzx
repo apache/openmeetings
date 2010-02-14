@@ -1,0 +1,175 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <!--- An abstract class that provide basic zooming ability. 
+        Allow subclasses to modify the look and feel
+        and action to be taken
+        @access public
+    -->     
+    <class name="basezoomarea" visible="false">
+        <!--- the chart instance -->
+        <attribute name="chart" type="expression"/>
+        <!--- @keyword private -->
+        <attribute name="plotarea" type="expression"/>
+        <!--- user is selecting or not -->
+        <attribute name="selecting" type="boolean" value="false"/>
+        <!--- @keyword private -->
+        <attribute name="startx" type="number"/>
+        <!--- @keyword private -->
+        <attribute name="starty" type="number"/>
+        <!--- @keyword private -->
+        <attribute name="endx" type="number"/>
+        <!--- @keyword private -->
+        <attribute name="endy" type="number"/>
+        <!--- enable zoom area -->
+        <attribute name="enabled" type="boolean" value="true"/>
+        <!--- zoom animation duration -->
+        <attribute name="duration" type="number" value="500"/>
+        <!--- @keyword private -->
+        <attribute name="selectionDel"/>
+
+        <!--- @keyword private -->
+        <method name="init">
+        <![CDATA[
+            super.init();
+            if(this["chart"] == null)
+            {
+                this["chart"] = parent;
+            } 
+            var del = new LzDelegate(this, "setup");
+            del.register(this.chart, 'oninitdone');            
+        ]]>
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="setup">
+        <![CDATA[
+            this.plotarea = this.chart.plotarea; 
+            var del = new LzDelegate(this, 'plotmousedown');
+            del.register(this.chart.plotarea, 'onmousedown');            
+        ]]>
+        </method>
+        
+        
+
+        <!--- @keyword private -->
+        <method name="plotmousedown">
+        <![CDATA[
+
+            if(!this.enabled)
+            {
+                return;
+            }
+                                
+            if(!parent.containsPt(plotarea.getMouse("x"), plotarea.getMouse("y")))
+            {
+                return;
+            }
+
+            this.setAttribute('x', parent.getMouse("x"));
+            this.setAttribute('y', parent.getMouse("y"));
+            this.setAttribute('width', 0);
+            this.setAttribute('height', 0);
+            this.setAttribute('visible', true);
+            
+            if(!this["selectionDel"])
+            {
+                this.selectionDel = new LzDelegate(this, 'adjustSize');
+            }
+            this.selectionDel.unregisterAll();
+            this.selectionDel.register(lz.Idle, 'onidle');
+            this.setAttribute("selecting", true);
+        ]]>
+        </method>
+        
+        <!--- @private keyword
+            start finish selection 
+        -->
+        <handler name="onmouseup" reference="lz.GlobalMouse" args="who">
+        <![CDATA[
+            if(!this.selecting) return;
+            
+            this.selectionDel.unregisterAll();
+            this.setAttribute('visible', false);
+                        
+            if(this.width < 2) return;
+            if(this.height < 2) return;
+            this.setAttribute("startx", plotarea.getMouse("x") - this.width);
+            this.setAttribute("starty", plotarea.getMouse("y") - this.height);
+            this.setAttribute("endx", this.startx + this.width);
+            this.setAttribute("endy", this.starty + this.height); 
+            this.setAttribute("selecting", false);
+            
+            
+            
+            Debug.write("startx: " + startx);
+            Debug.write("starty: " + starty);
+            Debug.write("endx: " + endx);
+            Debug.write("endy: " + endy);
+
+            var virtualStartX = plotarea.toVirtualX(startx);
+            var virtualStartY = plotarea.toVirtualY(starty);
+            var virtualEndX = plotarea.toVirtualX(endx);
+            var virtualEndY = plotarea.toVirtualY(endy);
+                
+            //Debug.write("startx: " + virtualStartX );
+            //Debug.write("starty: " + virtualStartY);
+            //Debug.write("endx: " + virtualEndX);
+            //Debug.write("endy: " + virtualEndY);
+            this.select(virtualStartX, virtualEndY, virtualEndX, virtualStartY, this.duration, true);
+            
+        ]]>
+        </handler>
+        
+        <!--- @keyword private -->
+        <method name="adjustSize">
+        <![CDATA[
+            var newWidth = parent.getMouse("x") - this.x;
+            var newHeight = parent.getMouse("y") - this.y;
+            if (newWidth <= 0)
+            {
+                newWidth = 1;                                  
+            }
+            if (newHeight <= 0)
+            {
+                newHeight = 1;                
+            }
+            this.setAttribute('height', newHeight);
+            this.setAttribute('width', newWidth);
+        ]]>
+        </method>
+        
+        <!--- abstract method that allow subclasses to provide custom action after selection
+            @param Number minx: min x of the zooomarea
+            @param Number miny: min y of the zooomarea
+            @param Number maxx: max y of the zooomarea
+            @param Number maxy: max y of the zooomarea
+         -->
+        <method name="select" args="minx, miny, maxx, maxy">        
+        </method>
+        <view/>
+    </class>
+    
+    <!--- chart zoom area -->
+    <class name="zoomarea" extends="basezoomarea" bgcolor="blue" opacity="0.4">
+        <doc>
+          <text>
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+        <!--- change the chart to the virtual boundary 
+            @param Number minx: min x of the zooomarea
+            @param Number miny: min y of the zooomarea
+            @param Number maxx: max y of the zooomarea
+            @param Number maxy: max y of the zooomarea
+         -->
+        <method name="select" args="minx, miny, maxx, maxy">
+            chart.changeBound(minx, miny, maxx, maxy, this.duration, true);
+        </method>      
+    </class>
+</library> 
+<!-- Copyright 2008 Laszlo Systems, Inc.  All Rights Reserved. Use is subject to license terms. -->
+
