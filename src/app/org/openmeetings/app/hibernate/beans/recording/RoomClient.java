@@ -145,6 +145,8 @@ public class RoomClient {
     private String externalUserType;
     
     private List<String> sharerSIDs = new LinkedList<String>();
+    
+    private Integer interviewPodId = null;
 	
 	/*
 	 * Zombie Flag
@@ -666,5 +668,13 @@ public class RoomClient {
 	public void setStartStreaming(boolean startStreaming) {
 		this.startStreaming = startStreaming;
 	}
+
+	public Integer getInterviewPodId() {
+		return interviewPodId;
+	}
+	public void setInterviewPodId(Integer interviewPodId) {
+		this.interviewPodId = interviewPodId;
+	}
+	
 	
 }

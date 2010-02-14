@@ -66,12 +66,19 @@
 
     <method name="sendConfirmation" args="publicSID">
     	if ($debug) Debug.write("sendConfirmation :: ",publicSID);
-    	this.sendMessageWithClientByPublicSID.publicSID = publicSID;
-    	this.sendMessageWithClientByPublicSID.messageObject = new Object();
-    	this.sendMessageWithClientByPublicSID.messageObject["message"] = "allowInterview";
-    	this.sendMessageWithClientByPublicSID.messageObject["action"] = "showVideoDeviceSettings";
-    	this.sendMessageWithClientByPublicSID.messageObject["interviewPodId"] = this.interviewPodId;
-    	this.sendMessageWithClientByPublicSID.doCall();
+    	
+    	canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
+        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+        canvas.thishib.setBroadCastingFlag.interviewPodId = this.interviewPodId;
+        canvas.thishib.setBroadCastingFlag.doCall(); 
+        
+    	//this.sendMessageWithClientByPublicSID.publicSID = publicSID;
+    	//this.sendMessageWithClientByPublicSID.messageObject = new Object();
+    	//this.sendMessageWithClientByPublicSID.messageObject["message"] = "allowInterview";
+    	//this.sendMessageWithClientByPublicSID.messageObject["action"] = "showVideoDeviceSettings";
+    	//this.sendMessageWithClientByPublicSID.messageObject["interviewPodId"] = this.interviewPodId;
+    	//this.sendMessageWithClientByPublicSID.doCall();
+    	
     	return true;
     </method>
     
@@ -105,7 +112,7 @@
 	</simpleLabelButton>
     	
     	
-    <videoObjectPlayBroadcast name="_videoPlay" visibility="hidden" 
+    <videoObjectPlayBroadcast name="_videoPlay" isInterview="true" visibility="hidden" 
     						  width="$once{ parent.width }" height="$once{ parent.height }" />
     
     

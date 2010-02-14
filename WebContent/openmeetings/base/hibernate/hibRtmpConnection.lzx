@@ -843,7 +843,7 @@
                 if (value.isScreenClient) {
                     return;
                 }
-                canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname); 
+                canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId); 
             </handler>   
         </netRemoteCallHib> 
            
@@ -993,8 +993,10 @@
         <netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
             <attribute name="publicSIDOfNewModerator" value="0" type="string" />
             <attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
+            <attribute name="interviewPodId" value="0" type="number" />
             <netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
             <netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
+            <netparam><method name="getValue">return parent.interviewPodId;</method></netparam>
             <handler name="ondata" args="value">
                 <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
@@ -1012,7 +1014,13 @@
                     if (canvas.publicSID == value.publicSID) {
                         if ($debug) Debug.write("Its about You ",value);
                         if (value.isBroadcasting) {
-                            new lz.editRecordStream(canvas.main_content._content.inner);
+                        	
+                        	if (canvas.thishib.modus == "interview") {
+                        	   canvas._drawarea.newInterviewStarting(value);
+                        	} else {
+                        		new lz.editRecordStream(canvas.main_content._content.inner);
+                        	}
+                            
                             canvas.setAttribute("isBroadCasting",true);
                         } else {
                         	canvas.setAttribute("isBroadCasting",false);
@@ -1379,9 +1387,8 @@
                         canvas._drawarea.startStreaming(value);
                     } else if (value.message=='stopStreaming'){
                         canvas._drawarea.stopStreaming(value);
-                    } else if (value.message=='allowInterview'){
-                        if ($debug) Debug.write("allowInterview",value);
-                        canvas._drawarea.newInterviewStarting(value);
+                    } else {
+                        if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
                     }
                 ]]>    
             </handler>  

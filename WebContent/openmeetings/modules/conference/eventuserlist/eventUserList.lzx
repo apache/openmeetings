@@ -172,6 +172,8 @@
 				//do add others
                 this._participents.addItem(object);
                 
+                //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+                
 				if (object.isBroadcasting) {
 					
     	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
@@ -233,13 +235,17 @@
 		]]>
 	</method>
 		
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname">
+    <!--
+        invoked whenever a User starts to Stream Video in this Room, 
+        interviewPodId has only a meaning in the Room Type Interview
+     -->        
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
 		<![CDATA[
 			//if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
 			var obj = this.getVideoObjectByPublicSID(publicSID);
 			
 			if (obj == null) {
-                obj = this.getNewVideoObjectByPos(rcl.publicSID);
+                obj = this.getNewVideoObjectByPos(publicSID);
             }
 			
 			//if ($debug) Debug.write("startStream obj: ",obj);

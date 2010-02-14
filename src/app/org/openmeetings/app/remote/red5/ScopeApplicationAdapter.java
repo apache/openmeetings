@@ -1077,10 +1077,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return -1L;
 	}
 
-	public synchronized Long setBroadCastingFlag(String publicSID, boolean value) {
+	public synchronized Long setBroadCastingFlag(String publicSID, boolean value, Integer interviewPodId) {
 		try {
 			
-			log.debug("*..*addModerator publicSID: " + publicSID);
+			log.debug("*..*setBroadCastingFlag publicSID: " + publicSID);
 			
 			IConnection current = Red5.getConnectionLocal();
 			//String streamid = current.getClient().getId();
@@ -1090,7 +1090,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			if (currentClient == null) {
 				return -1L;
 			}
+			
 			currentClient.setIsBroadcasting(value);
+			currentClient.setInterviewPodId(interviewPodId);
+			
 			//Put the mod-flag to true for this client
 			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
 			
@@ -1114,7 +1117,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 			
 		} catch (Exception err) {
-			log.error("[addModerator]",err);
+			log.error("[setBroadCastingFlag]",err);
 		}
 		return -1L;
 	}

@@ -601,6 +601,9 @@
             
             //Do init only in case this stream is NOT the same as we are
             if (streamid!=canvas.streamid){
+            	
+            	//if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+            	
                 var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
                 myvideocontainer.clientVars = object;
                 myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
@@ -657,7 +660,11 @@
         ]]>
     </method>
         
-    <method name="startStream" args="publicSID,broadcastId,firstname,lastname">
+    <!--
+        invoked whenever a User starts to Stream Video in this Room, 
+        interviewPodId has only a meaning in the Room Type Interview
+     -->        
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
         <![CDATA[
             //if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
             var obj = this.getVideoObjectByPublicSID(publicSID);

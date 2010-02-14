@@ -58,6 +58,9 @@
             this.clientVars['User']='No User Connected';
             
             if (this.isInterview) {
+            	this._toolbar._showusercontext.setAttribute("visibility","hidden");
+            	this._toolbar._minimize.setAttribute("visibility","hidden");
+            	this._resizeview.setAttribute("visibility","hidden");
             	return;
             }
             var prop1 = [this, "width"];

@@ -102,7 +102,7 @@
     	var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
     	
     	if (obj == null) {
-    		obj = this.getNewVideoObjectByPos(rcl.publicSID);
+    		obj = this.getNewVideoObjectByPos(rcl.publicSID,rcl.interviewPodId);
     	}
     	
     	if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
@@ -142,11 +142,13 @@
     			if ($debug) Debug.write("getVideoObjectByBroadCastId3: ",videoContainer.subviews[i]._videoPlay.publicSID);
     			if ($debug) Debug.write("getVideoObjectByBroadCastId4: ",videoContainer.subviews[i]._videoBroadCast.publicSID);
     			//if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",videoContainer.subviews[i].clientVars.streamid,videoContainer.subviews[i].clientVars.user_id);
-    			if (videoContainer.subviews[i]._videoPlay.publicSID==publicSID){
-    				return videoContainer.subviews[i];
+    			if (videoContainer.subviews[i]._videoPlay.publicSID == publicSID){
+    				videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
+    				return videoContainer.subviews[i]._videoPlay;
     			}
-    			if (videoContainer.subviews[i]._videoBroadCast.publicSID==publicSID){
-                    return videoContainer.subviews[i];
+    			if (videoContainer.subviews[i]._videoBroadCast.publicSID == publicSID){
+    				videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
+                    return videoContainer.subviews[i]._videoPlay;
                 }
     		}
     		
@@ -159,7 +161,8 @@
 
 	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
 		<![CDATA[
-			if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+			if ($debug) Debug.write("addItem :: ",object);
+			//if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
             
             //Do init only in case this stream is NOT the same as we are
 			if (streamid!=canvas.streamid){
@@ -167,13 +170,13 @@
 				//do add others
                 this._participents.addItem(object);
                 
-                if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+                if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting,object.interviewPodId);
                 
 				if (object.isBroadcasting) {
 					
 					if ($debug) Debug.write("###### object.isBroadcasting ########");
 					
-    	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+    	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID,object.interviewPodId);
     		  		myvideocontainer.clientVars = object;
     		  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
     		  		if ($debug) Debug.write("object.avsettings: ",object.avsettings);
@@ -215,7 +218,7 @@
     		if (canvas.publicSID != object.publicSID){
     			
     			if (object.isBroadcasting) {
-                    var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+                    var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID,object.interviewPodId);
         	  		myvideocontainer.clientVars = object;
         	  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
         	  		if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
@@ -232,13 +235,16 @@
 		]]>
 	</method>
 		
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname">
+    <!--
+        invoked whenever a User starts to Stream Video in this Room
+     -->		
+	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
 		<![CDATA[
 			//if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
 			var obj = this.getVideoObjectByPublicSID(publicSID);
 			
 			if (obj == null) {
-                obj = this.getNewVideoObjectByPos(rcl.publicSID);
+                obj = this.getNewVideoObjectByPos(publicSID,interviewPodId);
             }
 			
 			//if ($debug) Debug.write("startStream obj: ",obj);
@@ -280,8 +286,11 @@
 		you can only play a stream not publish you a/v with this object
 		@param string broadcastId broadcastId
 	 -->
-	<method name="getNewVideoObjectByPos" args="publicSID">
+	<method name="getNewVideoObjectByPos" args="publicSID,interviewPodId">
 		<![CDATA[
+		
+            if ($debug) Debug.write("getNewVideoObjectByPos :: ",publicSID,interviewPodId);
+		
 			var obj = this.getVideoObjectByPublicSID(publicSID);
 			
 			if (obj!=null){
@@ -290,13 +299,18 @@
 			
             var videoContainer = canvas._drawarea._videoviewcontent;
             
-            //Get a Free VideoView Slot
-            var newx = videoContainer.subviews.length*20;
-            var newy = 0;
-            if ((newx+300)>=canvas.width) {
-                newx = 20;
-                newy += 140;
+            for (var i=0;i<videoContainer.subviews.length;i++) {
+            	
+            	if (videoContainer.subviews[i].interviewPodId == interviewPodId) {
+            		videoContainer.subviews[i]._videoPlay.publicSID = publicSID;
+            		if ($debug) Debug.write("videoContainer.subviews[i] ",videoContainer.subviews[i]);
+            		videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
+            		return videoContainer.subviews[i]._videoPlay;
+            	}
+            	
             }
+            
+            if ($debug) Debug.error("Interview Room Error :: Could not find right Interview Pod [interviewPodId,publicSID] ",interviewPodId,publicSID);
             
 			return null;
 		]]>
