@@ -1,0 +1,384 @@
+<!---
+      @topic Incubator
+      @subtopic Opttree
+  -->
+<library>
+    <!--- A keyboard navigable (with arrow keys) tree control that supports 
+         selection and dynamic data loading. This tree must be backed by an
+         XML DOM datastructure and presented within a clipping region. 
+         
+         The datapath for an opttree must resolve to a single LzDataElement
+         which is the undisplayed root of the tree. -->
+    <class name="opttree" focusable="true">
+        <!--- The xpath expression to use to retrieve nodes out of the 
+              datapath. -->
+        <attribute name="nodepath" value="*" type="string"/>
+
+        <!--- The name of the class to use to represent nodes in the tree.-->
+        <attribute name="nodeclass" type="string"
+                   setter="setNodeInst( nodeclass )"/>
+
+        <!--- (Protected) The attribute name to use in the data to mark a
+              a node as open.-->
+        <attribute name="openattr" value="__OPTTREE_META_open" type="string"/>
+        <!--- (Protected) An xpath that selects the openattr attribute from
+              a node. This should match openattr but prepend the '@' symbol.
+              This cannot be when=always or when=once because it is used as
+              a reference in a $path expression in baseopttreenode -->
+        <attribute name="openattrpath" 
+                   value="@__OPTTREE_META_open" type="string"/>
+
+        <!--- (Protected) The attribute name to use in the data to mark a
+              a node's depth in the tree hierarchy -->
+        <attribute name="depthattr" value="__OPTTREE_META_depth" type="string"/>
+        <!--- (Protected) An xpath that selects the depthattr attribute from
+              a node. This should match depthattr but prepend the '@' symbol.
+              This cannot be when=always or when=once because it is used as
+              a reference in a $path expression n baseopttreenode -->
+        <attribute name="depthattrpath" 
+                   value="@__OPTTREE_META_depth" type="string"/>
+
+        <attribute name="nodecollection" 
+                   value="${ opttreecontroller.nodelist }"/>
+
+        <attribute name="nodelist" value="nodecollection" when="always"
+                   setter="this.nodeinst.datapath.setNodes( nodelist )"/>
+
+        <include href="opttreecontroller.lzx"/>
+
+        <dataselectionmanager name="selman">
+        </dataselectionmanager>
+
+        <!--- @keywords private -->
+        <method name="setNodeInst" args="nc">
+            this.nodeclass = lz[ nc ];
+            new nodeclass( this , { name : "nodeinst" } ); 
+        </method>
+
+        <!--- Set the tree node that represents the given LzDataElement to 
+              be open. Open elements display their children; not open elements
+              do not.
+              @param LzDataElement p: The LzDataElement to set this on.
+              @param boolean val: The new value for the "open" attribute for 
+                                  the given LzDataElement. -->
+        <method name="setOpen" args="p , val">
+            p.setAttr( openattr, val ? "true" : "false" );
+        </method>
+
+        <method name="recursiveOpen" args="p, val">
+            <![CDATA[ 
+            opttreecontroller.lock( p );
+            this.setOpen( p , val );
+            var c = opttreecontroller.getChildNodes( p );
+            if (c != null) {
+                for ( var k=0, len=c.length; k<len; k++){
+                    this.recursiveOpen( c[ k ] , val );
+                }
+            }
+            opttreecontroller.unlock( p );
+            ]]>
+        </method>
+
+        <method name="setAllOpen" args="val">
+            <![CDATA[ 
+            var ilist = opttreecontroller.getChildNodes( datapath.p );
+            if (ilist != null) {
+                opttreecontroller.lock( "ao" );
+                for ( var k=0, len=ilist.length; k<len; k++ ){
+                    this.recursiveOpen( ilist[ k ], val );
+                }
+                opttreecontroller.unlock( "ao" );
+            }
+            ]]>
+        </method>
+
+        <!--- Make the element
+              be open. Open elements display their children; not open elements
+              do not.-->
+        <method name="select" args="el">
+            if (el != null) {
+                selman.select( el );
+            } else {
+                selman.clearSelection();
+            }
+        </method>
+
+        <!--- The keyboard nav highlighted baseopttreenode or null. This
+              attribute is read-only. -->
+        <attribute name="highlighted" value="null"/>
+
+        <!--- Sets the keyboard selection (highlight) to the given 
+              baseopttreenode. 
+              @params baseopttreenode who: The baseopttreenode to give the 
+                                           keyboard highlight to. -->
+        <handler name="onkeyup" args="k">
+            var curr = this.highlighted;
+
+            if ( !curr ){
+                var cls = this.nodeinst.clones;
+                if ( !cls.length ) return;
+                this.select( cls[ 0 ] );
+                return;
+            }
+
+            if ( k == 38 || k == 40 ){
+                //up down
+                var dir = k - 39;
+                var cl = this._findNextClone( curr , dir );
+                this.select( cl );
+            } else if ( k == 37 ){
+                //left
+                if ( curr.open ) {
+                    this.setOpen( curr.datapath.p , false );
+                }else {
+                    var pnode = curr.datapath.p.parentNode;
+                    if ( pnode == datapath.p ) return;
+                    var cl = this._findInClones( pnode );
+                    var wentin = false;
+                    while( cl == null ){
+                        wentin = true;
+                        this._adjustMargin( - 1 );
+                        cl = this._findInClones( pnode );
+                    }
+                    if ( wentin ) this._adjustMargin( - 1 );
+                    this.select( cl );
+                }
+            } else if ( k == 39 ){
+                //right
+                if ( !curr.open ) {
+                    this.setOpen( curr.datapath.p , true );
+                }else {
+                    var cl = this._findNextClone( curr , 1 );
+                    this.select( cl );
+                }
+            } else if ( k == 32 || k == 13 ){
+                if ( highlighted ){
+                    highlighted.doSelected();
+                }
+            }
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="_findNextClone" args="who, dir">
+            <![CDATA[ 
+            //returns the next clone in the flattened list given an existing
+            //clone and a direction to move in. adjusts the position of the
+            //opttree within its clipping region if necessary.
+            var cls = this.nodeinst.clones;
+            if ( !cls.length ) return null;
+
+            var clnum = null;
+            for ( var i = 0; i < cls.length; i++ ){
+                if ( cls[ i ] == who ) {
+                    clnum = i;
+                    break;
+                }
+            }
+            if ( clnum == null ) return null;
+
+            var nextnum = clnum + dir;
+            var nextone = null;
+            if  ( nextnum >= 0 && nextnum < cls.length ){
+                var nextone =  cls[ nextnum ];
+            } 
+
+            if ( nextone ){
+                var itheight = cls[ 0 ].height;
+                var adjy = nextone.y + y;  
+                if ( adjy < itheight ){
+                    this._adjustMargin( -1 );
+                } else if ( adjy > mask.height - 2*itheight ){
+                    this._adjustMargin( 1 );
+                }
+                return nextone;
+            }
+
+            var clptr = who.datapath.p;
+            var clptrnum = null;
+
+            var nodes = this.nodeinst.nodes;
+
+            var clptrnum = null;
+            for ( var i = 0; i < nodes.length; i++ ){
+                if ( nodes[ i ] == clptr ) {
+                    clptrnum = i;
+                    break;
+                }
+            }
+
+            var nexthnode = nodes[ clptrnum + dir ];
+
+            this._adjustMargin( nextnum < 0 ? -1 : 1 );
+
+            return this._findInClones( nexthnode );
+
+            ]]>
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_adjustMargin" args="dir">
+            //moves the opttree up or down (depending on the dir) in within
+            //its clipping region.
+            var cls = this.nodeinst.clones;
+            var itheight = cls[ 0 ].height;
+            var adj = itheight * -dir;
+            var ny = y + adj;
+            this.setAttribute('y', Math.min( 0 , Math.max( mask.height - height, ny ) ) );
+
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_findInClones" args="p">
+            <![CDATA[ 
+            //finds the clone pointing to the given LzDataElement or returns
+            //null if that clone is not mapped
+            var cls = this.nodeinst.clones;
+            for ( var i = 0; i < cls.length; i++ ){
+                if ( cls[ i ].datapath.p == p ) {
+                    return cls[ i ];
+                }
+            }
+            return null;
+            ]]>
+        </method>
+
+        <attribute name="dragee" value="null"/>
+        <attribute name="dragged" value="null"/>
+
+        <view name="_clicker" height="1" bgcolor="black"
+              visible="false" width="100%">
+
+            <attribute name="movedel"
+                       value="$once{ new lz.Delegate( this, '_updatePos' ) }"/>
+
+            <method name="drag" args="on">
+                if ( on ){
+                    movedel.register( lz.Idle, "onidle" );
+                } else {
+                    movedel.unregisterAll();
+                    this.setAttribute('visible',  false );
+                }
+            </method>
+
+            <method name="_updatePos" args="ignore=null">
+                <![CDATA[
+                var py = parent.getMouse( 'y' );
+                var czero = parent.nodeinst.clones[ 0 ];
+                var cy = czero.y;
+                var ay = py - cy;
+                var h = czero.height;
+                var rem = ( py - czero.y ) % h; 
+
+
+                if ( rem < h * .25 ){
+                    //it's over this one
+                    this.dragisover = false;
+                    this.cpos = Math.floor( ( py - czero.y ) / h );
+                } else if ( rem > h *.75 ){
+                    this.dragisover = false;
+                    this.cpos = Math.ceil( ( py - czero.y ) / h );
+                } else {
+                    this.dragisover = true;
+                    this.cpos = Math.floor( ( py - czero.y ) / h );
+                }
+
+                if ( this.dragisover ){
+                    parent.select( parent.nodeinst.clones[ this.cpos ] );
+                } else {
+                    this.setAttribute('y', cy + this.cpos * h );
+                    parent.select( null );
+                }
+
+                if ( visible != !this.dragisover ){
+                    this.setAttribute('visible',  !this.dragisover );
+                }
+                ]]>
+            </method>
+        </view>
+
+        <!--- @access private -->
+        <method name="_setupDrag">
+            this.dragged = new nodeclass( this );
+            dragged.setAttribute('visible',  false );
+            this.dragupdel = new lz.Delegate( this, "_updateDragged" );
+            this.dragindent = dragged.indent;
+        </method>
+
+        <method name="beginDrag" args="who, ix, iy">
+            this._ydragoff = iy;
+            if ( !dragged ){
+                this._setupDrag();
+            }
+            dragged.setAttributeRelative( 'x', who );
+
+            dragged.setAttribute('visible',  true );
+            this.dragdata = who.datapath.p;
+            var dragparent = this.dragdata.parentNode
+
+            dragparent.removeChild( this.dragdata );
+
+            var dpc = this._findInClones( dragparent );
+            if ( dpc ) dpc.checkChildren();
+
+            dragged.datapath.setPointer( this.dragdata );
+            dragged.bringToFront();
+
+            this.dragupdel.register( lz.Idle, "onidle" );
+            _clicker.drag( true );
+
+        </method>
+
+        <!--- @access private -->
+        <method name="_updateDragged" args="ignore=null">
+            dragged.setAttribute('y', this.getMouse( 'y' ) - this._ydragoff );
+        </method>
+
+        <method name="endDrag" args="who">
+            <![CDATA[
+            this.dragupdel.unregisterAll();
+            dragged.setAttribute('visible',  false );
+            _clicker.drag( false );
+
+            if ( _clicker.dragisover ){
+                var p = selman.getSelection()[ 0 ].p;
+                if ( p.childNodes && p.childNodes.length ){
+                    p.insertBefore( this.dragdata , p.getFirstChild() );
+                } else {
+                    p.appendChild( this.dragdata );
+                }
+                this._findInClones( p ).checkChildren();
+            } else {
+                var cn = _clicker.cpos;
+                var ac = this.nodeinst.clones[ cn - 1 ];
+                if ( !ac ){
+                    return;
+                }
+                //p is the node we want to be after 
+                var p = ac.datapath.p;
+                if ( p.attributes[ openattr ] == "true" &&
+                     ac.datapath.xpathQuery( nodepath ) ){
+                    p.insertBefore( this.dragdata , p.getFirstChild() );
+                } else{
+                    var ns = p.getNextSibling(); 
+                    if ( ns ){
+                        ns.parentNode.insertBefore( this.dragdata , ns );
+                    } else {
+                        p.parentNode.appendChild( this.dragdata );
+                    }
+                }
+            }
+
+            this.updateHierarchy( this.dragdata );
+            ]]>
+        </method>
+
+        <method name="updateHierarchy" args="p">
+            //Debug.write( 'update', p );
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
