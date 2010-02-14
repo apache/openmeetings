@@ -1,0 +1,71 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<library>
+
+<class name="colormenuitem"
+      width="22" height="22" bgcolor="0x000000">
+      <attribute name="mycolor"/>
+      <handler name="onmousetrackover">
+          setAttribute('bgcolor', 0xdedede); // hilite: gray
+      </handler>
+      <handler name="onmousetrackout">
+          setAttribute('bgcolor', 0x000000); // normal: black
+      </handler>
+</class>
+
+<class name="colorspot" extends="colormenuitem">
+      <view name="spot" bgcolor="${parent.mycolor}"
+          x="1" y="1" width="${parent.width-2}" height="${parent.height-2}"/>
+    <handler name="onmousetrackup">
+        parent.setnewcolor(this.spot.bgcolor);
+    </handler>
+
+</class>
+
+
+<class name="colormenu" visible="false" x="10" y="10" extends="basetrackgroup"
+    tracking="${visible}" options="ignorelayout">
+    <attribute name="owner" value="null"/>
+    <method name="setnewcolor" args="newcolor">
+        parent.setAttribute('bgcolor', newcolor);
+    </method>
+
+    <method name="open" args="refview">
+         this.owner = refview;
+         var newx = this.owner.getAttributeRelative('x', canvas);
+         var newy = this.owner.getAttributeRelative('y', canvas);
+         if (newx + width > canvas.width) {
+            newx -= width;
+         }
+         this.setAttribute('x', newx - 5);
+         this.setAttribute('y', newy - 5);
+         this.bringToFront();
+         this.setAttribute('visible', true);
+         lz.Track.activate('mymenu');
+    </method>
+    <method name="close">
+         this.setAttribute('visible', false);
+         lz.Track.deactivate('mymenu');
+    </method>
+    <simplelayout axis="x"/>
+    <colorspot mycolor="0x0000ff"/>
+    <colorspot mycolor="0x00ff00"/>
+    <colorspot mycolor="0xffff00"/>
+    <colorspot mycolor="0xffffff"/>
+    <colorspot mycolor="0xff0000"/>
+    <colormenuitem mycolor="null">
+        <view name="spot" bgcolor="white"
+            x="1" y="1" width="${parent.width-2}" height="${parent.height-2}">
+            <text resize="true" align="center" valign="middle">null</text>
+
+            </view>
+        <handler name="onmousetrackup">
+            parent.setnewcolor(null);
+        </handler>
+
+    </colormenuitem>
+</class>
+
+</library>

@@ -1,0 +1,39 @@
+<library>
+    <!-- This little bit of code puts a white box in the top left corner
+         that gives time to app init in milliseconds.-->
+    <class name="frametimer" visible="true" initstage="late" options="ignorelayout"
+        bgcolor="black" height="${this.fps_text.height+2}"
+        width="143">
+        <attribute name="fps" value="0" type="number"/>
+        <attribute name="delta" value="0" type="number"/>
+        <!--- @keywords private : internal -->
+        <attribute name="__times" value="[]"/>
+
+        <handler name="oninit" reference="canvas">
+            this.bringToFront();
+        </handler>
+        <handler name="onidle" reference="lz.Idle" args="t">
+            // number of timestamps to keep
+            var maxsize = 31;
+            this.__times.push(t);
+
+            var numframes = this.__times.length;
+            if (numframes > maxsize) {
+                numframes = maxsize;
+                this.__times.shift();
+            }
+            var duration = t - this.__times[0];   
+
+            this.setAttribute('fps', numframes / (duration / 1000));  // in secs
+            this.setAttribute('delta', duration / numframes);
+        </handler>
+
+        <text y="1" x="1" name="fps_text" text="${'fps: '+ Math.round(classroot.fps)}" width="50" bgcolor="white"/>
+        <text y="1" x="52" text="${'ms/frame: ' + Math.round(classroot.delta)}" width="90" bgcolor="white"/>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008-2009 Laszlo Systems, Inc.  All Rights Reserved.   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

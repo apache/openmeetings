@@ -1,0 +1,22 @@
+<library>
+    <!-- This little bit of code puts a white box in the top left corner
+         that gives time to app init in milliseconds.-->
+    <class name="inittimer" bgcolor="white" visible="true" options="ignorelayout">
+        <handler name="oninit" reference="canvas">
+            var d = new LzDelegate( mytext , "tellTime" );
+            lz.Idle.callOnIdle( d );
+            this.bringToFront();
+        </handler>
+        <text id="mytext" resize="true">
+            <method name="tellTime" args="t">
+                this.setAttribute('text', "Time taken: " + t );
+            </method>
+        </text>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
