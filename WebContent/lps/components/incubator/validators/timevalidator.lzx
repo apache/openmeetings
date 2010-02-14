@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************
+* [[validators/timevalidator]]
+*
+* 2006/04/15 ver. 1.0.0 release
+* luca ritossa
+* web:http://www.ciberman.net
+* mail:luca.ritossa@ciberman.net
+********************************************************
+-->
+<library>
+    <include href="basevalidator.lzx" />
+
+    <!--- timevalidator class -->
+    <class name="timevalidator" extends="basevalidator">
+        <!--- The time format attribute. Default: hh:mi:ss
+              hh = hour
+              mi = minutes
+              ss = seconds 
+              The separator must be the same ss specified in "separator" attribute -->
+        <attribute name="format" type="string" value="hh:mi:ss" />
+
+        <!--- Separator must be the same as specified in "format" attribute
+              it's needed to prevent input with different separator -->
+        <attribute name="separator" type="string" value=":" />
+
+        <!--- Warning message when the two attribute "format" and "separator" have different separator's char -->
+        <attribute name="incongruentSeparatorErrorstring" type="string" value="Warning! Two different separators are defined in format and separator attribute" />
+
+        <!--- The five attributes above are five different message errors -->
+        <attribute name="invalidformatErrorstring"    type="string" value="Please input the time in a valid format" />
+        <attribute name="invalidHourErrorstring"      type="string" value="Please enter hour between 0 and 23" />
+        <attribute name="invalidMinutesErrorstring"   type="string" value="Please enter minutes between 0 and 59" />
+        <attribute name="invalidSecondsErrorstring"   type="string" value="Please enter seconds between 0 and 59" />
+        <attribute name="invalidSeparatorErrorstring" type="string" value="Please enter a valid separator" />
+
+        <!--- This method is called everytime the onkeyup or ontext are fired (see basevalidator class).
+              @param string val:
+              @return boolean: true if validation ok
+              -->
+        <method name="doValidation" args="val">
+            <![CDATA[
+            var valtext = this.getValueText(val);
+
+            // First of all I check that "format" and "separator" attributes have the same separator.
+            if(!this.isCongruentSeparator()){
+                this.setErrorstring(this.incongruentSeparatorErrorstring);
+                return false;
+            }
+
+            if(this.required && valtext.length < 1){
+                this.setErrorstring(this.requiredErrorstring);
+                return false;
+            }
+
+            if(valtext != ""){
+                if(!this.isValidLength(valtext)){
+                    this.setErrorstring(this.invalidformatErrorstring + " " +  this.format);
+                    return false;
+                }
+                if(!this.isValidHour(valtext)){
+                    this.setErrorstring(this.invalidHourErrorstring);
+                    return false;
+                }
+                if(!this.isValidMinutes(valtext)){
+                    this.setErrorstring(this.invalidMinutesErrorstring);
+                    return false;
+                }
+                if(!this.isValidSeconds(valtext)){
+                    this.setErrorstring(this.invalidSecondsErrorstring);
+                    return false;
+                }
+                if(!this.isValidSeparator(valtext)){
+                    this.setErrorstring(this.invalidSeparatorErrorstring + " " + this.separator);
+                    return false;
+                }
+            }
+
+            this.setErrorstring("");
+            return true;
+            ]]>
+        </method>
+
+        <!--- Check if the length of input text is the same of declared format.
+              @param string value: value to check
+              @return boolean: true if length ok -->
+        <method name="isValidLength" args="value">
+            if(this.format.length == value.length)
+                return true;
+            else
+                return false;
+        </method>
+
+        <!--- Check if hour is valid (for now only 00-23... no AM/PM manager).
+              @param string value: input text
+              @return boolean: true if hour ok -->
+        <method name="isValidHour" args="value">
+            <![CDATA[
+            var hour = getHour(value);
+
+            if(isInt(hour)){
+                var intHour = parseInt(hour, 10);
+                if( -1 < intHour && intHour < 24)
+                    return true;
+            }
+
+            return false;
+            ]]>
+        </method>
+
+        <!--- Check if minutes are valid (00-59).
+              @param string value: input text
+              @return boolean: true if minutes ok -->
+        <method name="isValidMinutes" args="value">
+            <![CDATA[
+            var minutes = getMinutes(value);
+
+            if(isInt(minutes)){
+                var intMinutes = parseInt(minutes, 10);
+                if(-1 < intMinutes && intMinutes < 60)
+                    return true;
+            }
+
+            return false;
+            ]]>
+        </method>
+
+        <!--- Check if seconds are valid (00-59).
+              @param string value: input text
+              @return boolean: true if seconds ok -->
+        <method name="isValidSeconds" args="value">
+            <![CDATA[
+            var seconds = getSeconds(value);
+
+            if(isInt(seconds)){
+                var intSeconds = parseInt(seconds, 10);
+                if(-1 < intSeconds && intSeconds < 60)
+                    return true;
+            }
+
+            return false;
+            ]]>
+        </method>
+
+        <!--- Check if separator is the same in "format" and "separator" attributes.
+              @return boolean: true if they are congruent -->
+        <method name="isCongruentSeparator">
+            <![CDATA[
+            if (this.separator.length > 0){
+                if (this.format.indexOf(this.separator) == -1){
+                    return false;
+                }
+            }
+  
+            return true;
+            ]]>
+        </method>
+
+        <!--- Check if the user has inputted the right separator.
+              @param string value: input text
+              @return boolean: true if separator ok -->
+        <method name="isValidSeparator" args="value">
+            <![CDATA[
+            if (this.separator.length > 0){
+                var i = 0;
+
+                while (i <= value.length){
+                   var ls_subformat = this.format.substring(i, this.format.length);
+                   var ls_subvalue  = value.substring(i, value.length);
+                   var idx = ls_subformat.indexOf(this.separator);
+
+                   if (idx > 0){
+                     if (ls_subvalue.substring(idx, idx+1) != this.separator && idx > 0){
+                         return false;
+                     }
+                     i = i + idx + 1;
+                   }
+                   else{
+                     return true;
+                   }
+
+                   i = i + 1;
+                }
+            }
+            return true;
+        ]]>
+        </method>
+
+        <!--- Check if value is integer.
+              @param string value: value to check
+              @return boolean: true if it's integer -->
+        <method name="isInt" args="value">
+            return ! isNaN(value);
+        </method>
+
+        <!--- Retrieve the hour from inputted text based on "format" attribute
+              @param string value: input text
+              @return string: two chars... maybe hour -->
+        <method name="getHour" args="value">
+            var idx = this.format.indexOf("hh");
+            return value.substring(idx, idx+2);
+        </method>
+
+        <!--- Retrieve the minutes from inputted text based on "format" attribute
+              @param string value: input text
+              @return string: two chars... maybe minutes -->
+        <method name="getMinutes" args="value">
+            var idx = this.format.indexOf("mi")
+            return value.substring(idx, idx+2);
+        </method>
+
+        <!--- Retrieve the seconds from inputted text based on "format" attribute
+              @param string value: input text
+              @return string: two chars... maybe seconds -->
+        <method name="getSeconds" args="value">
+            var idx = this.format.indexOf("ss")
+            return value.substring(idx, idx+2);
+        </method>
+    </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2008 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms. *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

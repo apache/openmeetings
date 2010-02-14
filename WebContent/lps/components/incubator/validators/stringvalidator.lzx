@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************
+* [[validators/stringvalidator]]
+* 2005/12/21 ver.2.0.0
+* 2005/12/06 ver.1.0.1 add trim attribute [togawa manabu]
+*
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp 
+********************************************************
+-->
+<!---
+      @topic Incubator
+      @subtopic Validators
+  -->
+<library>
+    <include href="basevalidator.lzx" />
+    
+    <class name="stringvalidator" extends="basevalidator">
+        <attribute name="maxLength" type="number" value="255" />
+        <attribute name="minLength" type="number" value="0" />
+        <attribute name="trim" type="boolean" value="false" />
+        
+        <attribute name="minErrorstring" type="string" value="this string is shorter than the minimum allowed length." />
+        <attribute name="maxErrorstring" type="string" value="this string is longer than the maximum allowed length." />
+        
+        <method name="doValidation"  args="val">
+            <![CDATA[
+
+            var valtext = getValueText(val);
+
+            var textlength = valtext.length;
+
+            if(this.required && textlength < 1){
+                this.setErrorstring(this.requiredErrorstring);
+                return false;
+            }
+            
+            if(valtext != ""){
+                if(textlength < minLength){
+                    this.setErrorstring(this.minErrorstring);
+                    return false;
+                }
+                if(maxLength < textlength){
+                    this.setErrorstring(this.maxErrorstring);
+                    return false;
+                }
+            }
+        
+                        
+            this.setErrorstring("");
+            return true;
+            ]]>
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2007 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
