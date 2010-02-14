@@ -1,0 +1,81 @@
+<spots>
+        <polygon text="Maine">
+                <point x="230" y="168" order="1" />
+                <point x="204" y="102" order="2" />
+                <point x="226" y="22" order="3" />
+                <point x="261" y="23" order="4" />
+                <point x="301" y="89" order="5" />
+        </polygon>
+        <polygon text="New Hampshire">
+                <point x="194" y="192" order="1" />
+                <point x="191" y="138" order="2" />
+                <point x="200" y="130" order="3" />
+                <point x="198" y="103" order="4" />
+                <point x="204" y="102" order="5" />
+                <point x="230" y="179" order="6" />
+        </polygon>
+        <polygon text="Vermont">
+                <point x="174" y="195" order="1" />
+                <point x="155" y="124" order="2" />
+                <point x="197" y="112" order="3" />
+                <point x="200" y="130" order="4" />
+                <point x="191" y="138" order="5" />
+                <point x="194" y="192" order="6" />
+        </polygon>
+        <polygon text="Massachuttes">
+                <point x="176" y="220" order="1" />
+                <point x="174" y="195" order="2" />
+                <point x="235" y="184" order="3" />
+                <point x="236" y="223" order="4" />
+                <point x="226" y="208" order="5" />
+        </polygon>
+        <polygon text="Rhode Island">
+                <point x="221" y="233" order="1" />
+                <point x="216" y="211" order="2" />
+                <point x="226" y="209" order="3" />
+                <point x="229" y="228" order="4" />
+        </polygon>
+        <polygon text="Connecticuit">
+                <point x="182" y="251" order="1" />
+                <point x="175" y="220" order="2" />
+                <point x="216" y="211" order="3" />
+                <point x="221" y="233" order="4" />
+        </polygon>
+        <polygon text="New York">
+                <point x="182" y="251" order="1" />
+                <point x="132" y="232" order="2" />
+                <point x="25" y="253" order="3" />
+                <point x="24" y="242" order="4" />
+                <point x="36" y="209" order="5" />
+                <point x="99" y="187" order="6" />
+                <point x="95" y="166" order="7" />
+                <point x="120" y="134" order="8" />
+                <point x="155" y="125" order="9" />
+        </polygon>
+        <polygon text="New Jersey">
+                <point x="146" y="303" order="1" />
+                <point x="159" y="290" order="2" />
+                <point x="144" y="275" order="3" />
+                <point x="151" y="250" order="4" />
+                <point x="173" y="257" order="5" />
+                <point x="177" y="301" order="6" />
+                <point x="166" y="324" order="7" />
+                <point x="146" y="316" order="8" />
+        </polygon>
+        <polygon text="Pennsylvania">
+                <point x="144" y="304" order="1" />
+                <point x="19" y="331" order="2" />
+                <point x="6" y="257" order="3" />
+                <point x="131" y="232" order="4" />
+                <point x="151" y="250" order="5" />
+                <point x="144" y="277" order="6" />
+                <point x="159" y="289" order="7" />
+        </polygon>
+        <polygon text="Delaware">
+                <point x="148" y="349" order="1" />
+                <point x="137" y="309" order="2" />
+                <point x="141" y="309" order="3" />
+                <point x="160" y="336" order="4" />
+                <point x="162" y="345" order="5" />
+        </polygon>
+</spots>
