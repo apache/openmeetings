@@ -1,0 +1,412 @@
+<library>
+    <include href="lz/list.lzx" /> 
+
+    <class name="basefloatinglist" extends="list"
+           options="ignorelayout" x="-1000" y="-1000">
+        <!--- @keywords private -->
+        <attribute name="owner" />
+        <!--- @keywords private -->
+        <attribute name="wouldbename" value="" type="string" />
+
+        <!--- Where this floatinglist should attach to its owner. Possible
+              values: bottom, top, left, right.  In the event of a canvas
+              out-of-bounds, the floating list will attach in a visible
+              location. -->
+        <attribute name="attach" value="bottom" type="string"/>    
+        <!--- @keywords private -->
+        <attribute name="_currentattachy" value="bottom" type="string"/>
+        <!--- @keywords private -->
+        <attribute name="_currentattachx" value="bottom" type="string"/>
+
+        <!--- The view to which this floatinglist will attach. By default, this
+              will be the lexical parent.  The style of the attachtarget will be
+              inherited. -->
+        <attribute name="attachtarget"  value="null" 
+                           setter="this.setAttachTarget(attachtarget)" />
+        <!--- The distance from the attachtarget. -->
+        <attribute name="attachoffset"  value="0" />
+
+        <!--- @keywords private -->
+        <attribute name="_updateAttachPosDel" value="null" />
+
+        <!--- Number of items originally requested to display.
+              @keywords private -->
+        <attribute name="_origshownitems" value="-2" type="number" />
+
+        <!--- our style is contrained to the style of our attachtarget
+            TODO: [hqm 2006-09] LPP-2820 
+            attachtarget is sometimes null, should it be initialized with a sentinel?
+              @keywords private -->
+        <attribute name="style" value="${attachtarget ? attachtarget['style'] : null}"/>
+        
+        <!--- Set the target to which the floating list will attach.  Set the
+              "attach" attribute for attachment location relative to this attach
+              target. Our style will be inherited from this attachtarget.
+              @param LzView target: the target to attach the floatinglist. -->
+        <method name="setAttachTarget" args="target" >
+            this.attachtarget = target;
+            if (visible) updateAttachLocation();
+            // track attachtarget position
+            var del = this._updateAttachPosDel;
+            if (del) {
+                del.unregisterAll();
+                if (target) {
+                    for (var p = target; p !== canvas; p = p.immediateparent) {
+                        del.register(p, 'onx');
+                        del.register(p, 'ony');
+                    }
+                }
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="construct" args="parent,args" >
+            // keep a reference to its lexical parent
+            this.owner = parent;
+
+            if ( typeof( args.name ) != 'undefined'  )  {
+                var flname = args.name; // save value of name arg
+                args.name = null;    // zero name field. doing 'delete args.name'
+                                     // doesn't work in this case.
+                this.wouldbename = flname;
+                this.owner[flname] = this; // have parent point to me via owner attribute
+            }
+
+            // construct this view on the canvas width a default name
+            super.construct(canvas,args);
+ 
+            // reset _parentcomponent
+            var p = this.owner;
+            while (p !== canvas) {
+                if (p instanceof lz.basecomponent) {
+                    this._parentcomponent = p;
+                    break;
+                }
+                p = p.immediateparent;
+            }
+
+            // Since we are constructed on the canvas, we need to
+            // listen for out parent being destroyed and clean up after
+            // ourselves.
+            new lz.Delegate(this, '_handledestroy', parent, 'ondestroy');
+            this._updateAttachPosDel = new lz.Delegate(this, '_doUpdateAttachLocation');
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_handledestroy" args="ignore" >
+            this.destroy();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="destroy" >
+          // make sure owner and attachTarget don't know about us.
+          if (this.owner != null) {
+              if (this['wouldbename'] != null) {
+                this.owner[this.wouldbename] = null;
+              }
+              this.owner = null;
+          }
+          this.setAttachTarget(null);
+          this._updateAttachPosDel = null;
+
+          // Have to remove ourselves from the canvas
+          var svs = canvas.subviews;
+          for (var i = svs.length -1; i >= 0; i--) {
+            if (svs[i] === this) {
+              svs.splice(i, 1);
+              break;
+            }
+          }
+          // Have to remove ourselves from the canvas
+          var sns = canvas.subnodes;
+          for (var i = sns.length -1; i >= 0; i--) {
+            if (sns[i] === this) {
+              sns.splice(i, 1);
+              break;
+            }
+          }
+          super.destroy();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            if (this.attachtarget==null) {
+                this.setAttachTarget( owner );
+            }
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="getMenuCapHeight">
+          return 0;
+        </method>
+        
+        <!--- @keywords private -->
+        <attribute name="_constraintsApplied" value="false"/>
+        
+        <!--- @keywords private -->
+        <method name="_setScroll"  > <![CDATA[
+            var sv0 = this.interior.content.subviews[0];
+            var svHeight = sv0 ? sv0.height : 20;
+            var own_y = attachtarget.getAttributeRelative('y',canvas);
+
+            var menuCapHeight = getMenuCapHeight();
+            
+            // check which position allows for more items to be displayed
+            var maxHeightFromTop    = own_y;
+            var maxHeightFromBottom = canvas.height - 
+                (own_y + attachtarget.height + attachoffset + menuCapHeight);
+
+            var startY = 0;
+            var myAttach = "top";
+            var maxHeight = maxHeightFromTop;
+            if (maxHeightFromBottom > maxHeightFromTop) {
+                myAttach = "bottom";
+                startY = own_y + attachtarget.height + attachoffset;
+                maxHeight = maxHeightFromBottom;
+            }
+
+            // calculate number of items and height of list to display
+            var items = Math.floor((maxHeight + spacing - menuCapHeight) / (svHeight + spacing));
+            var myHeight = items * (svHeight + spacing ) - spacing + menuCapHeight;
+
+            // recalculate height if default attachment is left or right
+            if (attach == "left" || attach == "right") {
+                myHeight += svHeight + spacing;
+                items++;
+                if (myAttach == "bottom") {
+                    startY -= attachtarget.height + attachoffset;
+                } else {
+                    startY += attachtarget.height;
+                }
+            }
+
+            // calculate exact position to place list if we are to attach on top
+            if (myAttach == "top") {
+                startY += maxHeightFromTop - myHeight + menuCapHeight;
+            }
+
+            this.setAttribute('y', startY);
+            this.setAttribute('_currentattachy', myAttach);
+            this._keepshownitems = true;
+            this._setShownItems(items);
+            this._keepshownitems = false;
+            this.setAttribute('scrollable', true);
+        ]]></method>
+
+        <!--- @keywords private -->
+        <attribute name="_keepshownitems" value="false" type="boolean" />
+
+        <!--- Save original shown items unless overridden by user call or is initial call.
+              @keywords private -->
+        <method name="_setShownItems" args="n">
+        <![CDATA[
+            super._setShownItems(n);
+            if (this._origshownitems == -2 || ! this._keepshownitems ) {
+                this._origshownitems = n;
+            }
+        ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="_doUpdateAttachLocation" args="ignore" ><![CDATA[
+            this.updateAttachLocation();
+        ]]></method>
+
+        <!--- Adjusts the location of the floatinglist relative to its
+              attachtarget, taking into account the attach location and the
+              canvas bounds. -->
+        <method name="updateAttachLocation" > <![CDATA[
+            // Adjust x and y relative to the attachtarget as appropriate to adhere to the requested attach location.
+            // In the event that the floatinglist intersects the canvas bounds, the attach location
+            // will be temporarily changed in order to be fully visible.
+            if ( !isinited ) return;
+            if (!attachtarget) return;
+
+            // Adjust X
+            var doneonce = false;
+            var validattach = attach;
+            var own_x = attachtarget.getAttributeRelative('x',canvas);
+            while (true) {
+                if (validattach=="bottom" || validattach=="top") {
+                    var tmp_x = own_x;
+                    if (tmp_x < 0) {
+                        //if our left edge isn't visible move list to left edge
+                        tmp_x = 0;
+                    } else if (tmp_x + attachtarget.width > canvas.width) {
+                        tmp_x = canvas.width - this.width;
+                    } else if (tmp_x + this.width > canvas.width) {
+                        tmp_x = (own_x + attachtarget.width) - this.width;
+                    }
+                    this.setAttribute( 'x' , tmp_x );
+                    break;
+                } else
+                if (validattach=="left") {
+                    var tmp_x = own_x - this.width;
+                    if (tmp_x > 0) {
+                        this.setAttribute( 'x' , tmp_x );
+                        this.setAttribute( '_currentattachx', 'left' );
+                        break;
+                    } else {
+                        validattach = "right";
+                    }
+                }
+                if (validattach=="right") {
+                    var tmp_x = own_x + attachtarget.width; // why -1?
+                    if (tmp_x + this.width < canvas.width ) {
+                        this.setAttribute( 'x' , tmp_x );
+                        this.setAttribute( '_currentattachx', 'right' );
+                        break;
+                    } else {
+                        // avoid infinite loop
+                        if (! doneonce) {
+                            validattach = "left";
+                            doneonce = true;
+                        } else {
+                            // default right
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // Adjust Y
+            this._keepshownitems = true;
+            this._setShownItems(this._origshownitems);
+            this._keepshownitems = false;
+            this.setAttribute('scrollable', false);
+
+            var doneonce = false;
+            var validattach = attach;
+
+            //NOTE: we are using calcMyHeight() here because height is returning the wrong value
+            var menuCapHeight = getMenuCapHeight();
+            var myHeight = this.calcMyHeight() + menuCapHeight;
+            var own_y = attachtarget.getAttributeRelative('y',canvas);
+            while (true) {
+                if ( validattach=="left" || validattach=="right" ) {
+                    if ( own_y + myHeight < canvas.height ) {
+                        this.setAttribute( 'y' , own_y );
+                        this.setAttribute( '_currentattachy', 'bottom' );
+                        break;
+                    } else {
+                        validattach = "top";
+                    }
+                } else
+                if ( validattach=="bottom" ) {
+                    var tmp_y = own_y + attachtarget.height + attachoffset;
+                    if ( tmp_y + myHeight < canvas.height ) {
+                       this.setAttribute( 'y' , tmp_y );
+                       this.setAttribute( '_currentattachy', 'bottom' );
+                       break;
+                    } else {
+                       validattach = "top";
+                    }
+                }
+                if ( validattach=="top" ) {
+                    var tmp_y = own_y - myHeight;
+                    // if the orignal attempt was to attach it to left or right
+                    // add back the height of the attachtarget so that the bottom
+                    // of the floatinglist is flush with the bottom of the attachtarget
+                    if ( attach == 'right' || attach == 'left' )tmp_y += attachtarget.height;
+                    if ( tmp_y > 0 ) {
+                        this.setAttribute( 'y' , tmp_y + menuCapHeight);
+                        this.setAttribute( '_currentattachy', 'top' );
+                        break;
+                    } else {
+                        // avoid infinite loop
+                        if (! doneonce) {
+                            validattach = "bottom";
+                            doneonce = true;
+                        } else {
+                            this._setScroll();
+                            break;
+                        }
+                    }
+                }
+            }
+        ]]>
+        </method>
+        
+        <!-- onmousedown event is sent by listitem
+             @keywords private -->
+        <handler name="onmousedown">
+            this.owner.onmousedown.sendEvent();
+            this.bringToFront();
+        </handler>
+        
+        <!-- recalculate position when width changes
+             @keywords private -->
+        <handler name="onwidth">
+          this.updateAttachLocation();
+        </handler>
+        
+        <!-- recalculate position when height changes
+             @keywords private -->
+        <handler name="onheight">
+          this.updateAttachLocation();
+        </handler>
+        
+        <!--- @keywords private -->
+        <handler name="onvisible" args="v">
+            if (v) {
+                updateAttachLocation();
+            } else {
+                this.setAttribute('x', -1000);
+                this.setAttribute('y', -1000);
+            }
+        </handler>
+        
+        <!--- @keywords private -->
+        <method name="toString">
+            return "floatinglist: wouldbename,owner = " + this.wouldbename + "," + this.owner;
+        </method> 
+        
+        <!--- For focus control - next focus from here is relative to our owner.
+              @keywords private -->
+        <method name="getNextSelection">
+            var next = owner.getNextSelection();
+            return next;
+        </method>
+        
+        <!--- For focus control. Defer to owner's context.
+              @keywords private -->
+        <method name="getPrevSelection">
+            // A floating list should not know the structure of its owner
+            // and because it is not part of the owner's view hiearchy
+            // the owner should determine what 'shift tab' does here
+            return owner.resolveSelection();
+        </method>
+        
+        <!--- @keywords private -->
+        <handler name="onblur" >
+        <![CDATA[
+            if ( this.owner != "undefined" && this.owner['onblur']) {
+                this.owner.onblur.sendEvent();
+            }
+        ]]>
+        </handler>
+        
+        <doc>
+            <tag name="shortdesc"><text>
+                base class for floatinglist
+            </text></tag>
+            <text>
+                <p>
+                   This is a base component with no visible elements that implements 
+                   the functionality of a floating list. See <xref linkend="lz.floatinglist"/>
+                   and <xref linkend="lz.plainfloatinglist"/> for concrete extensions of this
+                   base class.
+                </p>
+
+            </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

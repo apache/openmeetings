@@ -1,0 +1,232 @@
+<library>
+    <include href="base/basebutton.lzx" />
+    <include href="base/basecomponent.lzx" />
+    <include href="base/swatchview.lzx" />
+<!-- These are the resources for a rectangular 3 piece Laszlo Button-->
+    <resource name="lzbutton_face_rsc">
+        <frame src="resources/button/simpleface_up.swf" />
+        <frame src="resources/button/simpleface_mo.swf" />
+        <frame src="resources/button/simpleface_dn.swf" />
+        <frame src="resources/button/simpleface_dsbl.swf" />
+    </resource>
+    <resource name="lzbutton_bezel_inner_rsc">
+        <frame src="resources/bezel_inner_up.swf" />
+        <frame src="resources/bezel_inner_up.swf" />
+        <frame src="resources/bezel_inner_dn.swf" />
+        <frame src="resources/outline_dsbl.swf" />
+    </resource>
+    <resource name="lzbutton_bezel_outer_rsc">
+        <frame src="resources/bezel_outer_up.swf" />
+        <frame src="resources/bezel_outer_up.swf" />
+        <frame src="resources/bezel_outer_dn.swf" />
+        <frame src="resources/transparent.swf" />
+        <frame src="resources/default_outline.swf"/>
+    </resource>
+
+<!--
+ This is a simple rectangular button with a text label.
+ If no height is given, the default height is used and a special
+ resource configuration is employed which prevents the
+ button from being able to be resized at runtime in the y-axis, but which is
+ significantly lighter weight than the standard <b><i>Button</i></b>
+ configuration.
+-->
+<class name="button" extends="basebutton"
+    clickable="true" pixellock="true" styleable="true">
+    <!--- if true, the enter key will activate this button (call its onclick
+         handler) if it is enclosed in a form.  It will also have a visually
+         distinct look to indicate to the user -->
+    <attribute name="focusable" value="true"/>
+
+    <!--- the amount of space to add horizontally when sizing button to its
+        text. -->
+    <attribute name="text_padding_x" value="11" type="number"/>
+    <!--- the amount of space to add vertically  when sizing button to its
+        text. -->
+    <attribute name="text_padding_y" value="4" type="number"/>
+
+    <!--- the x position of the button text. default: centered -->
+    <attribute name="text_x"
+        value="${this.width/2 - this._title.width/2}" type="number"/>
+    <!--- the y position of the button text. default: centered -->
+    <attribute name="text_y"
+        value="${this.height/2 - this._title.height/2}" type="number"/>
+
+    <!--- @keywords private -->
+    <attribute name="width" value="${this._title.width + 2*this.text_padding_x}"/>
+    <!--- @keywords private -->
+    <attribute name="height" value="${this._title.height + 2*this.text_padding_y}"/>
+
+    <!--- 1=up, 2=down, allows title to shift a but when button is depressed
+          @keywords private -->
+    <attribute name="buttonstate" value="1" type="number"/>
+
+    <!--- @keywords private -->
+    <attribute name="titleshift" value="${this.buttonstate == 1 ? 0 : 1}"
+            type="number"/>
+    <!--- @keywords private -->
+    <attribute name="leftalign" value="false" type="number"/>
+    <!--- @keywords private -->
+    <attribute name="maxframes" value="4"/>
+
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        showUp();
+        setAttribute('clickable', _enabled);
+    </method>
+
+    <!--- @keywords private -->
+    <attribute name="doesenter" value="true"/>
+
+    <!--- @keywords private -->
+    <method name="showDown" args="sd=null">
+        if (this.hasdefault) {
+            this._outerbezel.setAttribute('frame', 5 );
+        } else {
+            this._outerbezel.setAttribute('frame', this.downResourceNumber );
+        }
+        this._face.setAttribute('frame', this.downResourceNumber );
+        this._innerbezel.setAttribute('frame', this.downResourceNumber );
+        setAttribute('buttonstate', 2);
+
+    </method>
+
+    <!--- @keywords private -->
+    <method name="showUp" args="sd=null">
+        if (_enabled) {
+            if (this.hasdefault) {
+                this._outerbezel.setAttribute('frame', 5 );
+            } else {
+                this._outerbezel.setAttribute('frame', this.normalResourceNumber );
+            }
+            this._face.setAttribute('frame', this.normalResourceNumber );
+            this._innerbezel.setAttribute('frame', this.normalResourceNumber );
+            if (this.style) this._title.setAttribute("fgcolor", this.style.textcolor);
+        } else {
+            if (this.style) this. _title.setAttribute("fgcolor", this.style.textdisabledcolor);
+            this._face.setAttribute('frame', this.disabledResourceNumber );
+            this._outerbezel.setAttribute('frame', this.disabledResourceNumber );
+            this._innerbezel.setAttribute('frame', this.disabledResourceNumber );
+        }
+
+        setAttribute('buttonstate', 1);
+    </method>
+
+    <!--- @keywords private -->
+    <method name="showOver" args="sd=null">
+        if (this.hasdefault) {
+            this._outerbezel.setAttribute('frame', 5 );
+        } else {
+            this._outerbezel.setAttribute('frame', this.overResourceNumber );
+        }
+        this._face.setAttribute('frame', this.overResourceNumber );
+        this._innerbezel.setAttribute('frame', this.overResourceNumber );
+        setAttribute('buttonstate', 1);
+    </method>
+
+    <handler name="onhasdefault">
+        <![CDATA[
+        if ( this._initcomplete ){
+            if ( this.buttonstate == 1 ) showUp();
+        }
+        ]]>
+    </handler>
+
+    <!--- @keywords private -->
+    <method name="_applystyle" args="s">
+        if (this.style != null) {
+            this.textcolor = s.textcolor;
+            this.textdisabledcolor = s.textdisabledcolor;
+            if (enabled) {
+                _title.setAttribute("fgcolor", s.textcolor);
+            } else {
+                _title.setAttribute("fgcolor", s.textdisabledcolor);
+            }
+            setTint( _outerbezel, s.basecolor);
+            setTint( _innerbezel, s.basecolor);
+            setTint( _face, s.basecolor);
+       }
+    </method>
+
+    <!-- button edges:
+        bezel resource uses hairline stroke, Flash Player draws hairline
+        below and to the right of the coordinate -->
+    <view name="_outerbezel" bgcolor="0x919191" x="0" y="0" width="${parent.width-1}" height="${parent.height-1}"/>
+    <view name="_innerbezel" bgcolor="0xFFFFFF" x="1" y="1" width="${parent.width-3}" height="${parent.height-3}"/>
+
+    <view name="_face" resource="lzbutton_face_rsc" stretches="both"
+        x="2" y="2" width="${parent.width-4}" height="${parent.height-4}"/>
+
+    <view name="_innerbezelbottom" > 
+        <view bgcolor="0x585858" x="${parent.parent.width-2}" y="1" width="1" height="${parent.parent.height-2}"/>
+        <view bgcolor="0x585858" x="1" y="${parent.parent.height-2}" width="${parent.parent.width-3}" height="1" />
+    </view>
+    
+    <view name="_outerbezelbottom" > 
+        <view bgcolor="0xFFFFFF" opacity="0.7" x="${parent.parent.width-1}" y="0" width="1" height="${parent.parent.height}"/>
+        <view bgcolor="0xFFFFFF" opacity="0.7" x="0" y="${parent.parent.height-1}" width="${parent.parent.width-1}" height="1" />
+    </view>
+
+
+    <text name="_title"
+            x="${parent.text_x + parent.titleshift}"
+            y="${parent.text_y + parent.titleshift}"
+            text="${parent.text}"
+            resize="true"/>
+ <doc>
+          <tag name="shortdesc"><text>
+              The button class provides a simple pushbutton.</text></tag>
+          <text>
+            <p>The <classname>button</classname> tag provides a simple button. The
+button is rectangular and typically displays a text label describing
+its action. The button adjusts to fit the label.</p>
+
+<example class="code" title="Simple button">
+&lt;canvas height="30"&gt;      
+  &lt;button onclick="animate('x', 100, 1000, true)"&gt;
+    Move me
+  &lt;/button&gt;
+&lt;/canvas&gt;
+</example>
+
+<p>If you need to format the text using additional tags such as
+<tagname>b</tagname>, add the text inside the button tags instead of
+using the <attribute>text</attribute> attribute.</p>
+
+<example class="code" title="XHTML button">
+&lt;canvas height="30"&gt;      
+  &lt;button onclick="animate('x', 100, 1000, true)"&gt;
+    Move &lt;b&gt;me&lt;/b&gt;
+  &lt;/button&gt;
+&lt;/canvas&gt;
+</example>
+
+<p>A <tagname>button</tagname> may contain both XHTML markup, and
+object tags such as <tagname>attribute</tagname> and
+<tagname>method</tagname>.</p>
+
+<example class="code" title="XHTML button">
+&lt;canvas height="30"&gt;      
+  &lt;button onclick="moveHoriz(5);"&gt;
+    Move &lt;b&gt;me&lt;/b&gt;
+    &lt;method name="moveHoriz" args="moveAmount"&gt;
+      this.setAttribute("x", this.x+moveAmount);
+    &lt;/method&gt;
+  &lt;/button&gt;
+&lt;/canvas&gt;
+</example>
+
+<seealso>
+<component-design id="button" title="Button"/>
+</seealso>
+          </text>
+        </doc>
+
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
