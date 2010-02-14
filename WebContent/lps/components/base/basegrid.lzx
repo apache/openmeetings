@@ -1,0 +1,583 @@
+<library>
+    <include href="base/baselist.lzx"/>
+    <include href="base/basegridrow.lzx"/>
+    <include href="base/basegridcolumn.lzx"/>
+    <include href="utils/layouts/resizelayout.lzx"/>
+
+    <!--- An abstract container for data rows, relying on lazy replication
+          to make it possible to display large datasets.-->
+    <class name="basegrid" extends="basecomponent">
+        <!--- The datapath to use for the contents of the grid. By
+              default, this is set to "*", meaning all of the nodes underneath
+              the datacontext of the grid. -->
+        <attribute name="contentdatapath" value="*" type="string" setter="setContentdatapath(contentdatapath)" />
+
+        <!--- @access private -->
+        <attribute name="_selector" value="null"/>
+
+        <!--- Optional height for the rows contained by the grid. If no
+              value is given for this attribute, it will be set to the
+              calculated height of rows. -->
+        <attribute name="rowheight" type="number" value="null"/>
+
+        <!--- Spacing between the rows. -->
+        <attribute name="spacing" value="0" type="number"/>
+
+        <!--- If true, the list will allow for multiple selection, and the 
+              getSelection method will always return a list. If false, only
+              single selection is allowed.-->
+        <attribute name="multiselect" value="true"/>
+
+        <!--- Event sent when the grid selection changes.-->
+        <event name="onselect"/>
+
+        <!--- An array holding the basegridcolumns used by this grid -->
+        <attribute name="columns" value="null"/>
+
+        <!--- If false, the rows are not clickable and the grid does not support selection. -->
+        <attribute name="selectable" value="true"/>
+
+        <!--- @keywords private -->
+        <attribute name="focusable" value="true"/>
+        <!--- The view which is currently hilited.-->
+        <attribute name="hilite" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="_lastmousex" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="_lastmousey" value="null"/>
+
+        <!--- The class to use to construct columns, if the
+              columns are inferred by the basegrid. 
+              @access private -->
+        <attribute name="_columnclass" value="lz.basegridcolumn" when="once"/>
+        <!--- The class to use to construct rows.
+              @access private -->
+        <attribute name="_rowclass" value="lz.basegridrow" when="once"/>
+
+        <!--- A boolean. If true, the grid will keep its width set to the size
+              of the header. This is automatically set to true for grids that
+              do not have a set width.  This is initially set to 0, which means
+              that it is not true, but if it is explicitly set to false, the
+              automatic behavior will be disabled for grids with no set
+              width.-->
+        <attribute name="sizetoheader" value="null" type="expression"/>
+
+        <!--- If true, lines will be drawn (in component's style's bordercolor)
+              vertically at each at each column division. This attribute can be
+              set after instantiation.-->
+        <attribute name="showhlines" type="boolean" value="false"/>
+
+        <!--- If true, lines will be drawn (in component's style's bordercolor)
+              horizontally at each at each row division. This attribute cannot
+              be set after instantiation.-->
+        <attribute name="showvlines" type="boolean" value="false"/>
+
+        <!--- If given, sets the bgcolor for even numbered rows. If not given,
+              the bgcolor for these rows is taken from the style's bgcolor.-->
+        <attribute name="bgcolor0" type="color" value="$immediately{null}"/>
+        <!--- If given, sets the bgcolor for odd numbered rows. If not given,
+              the bgcolor for these rows is taken from the style's bgcolor.-->
+        <attribute name="bgcolor1" type="color" value="$immediately{null}"/>
+
+        <!--- Sets the height of the grid to show a maximum of 'n' items. -->
+        <attribute name="shownitems"   value="-1" 
+                   setter="_setShownItems( shownitems )"/>
+        <!--- @keywords private -->
+        <event name="onshownitems"/>
+
+        <!--- @keywords private -->
+        <attribute name="_sortcol" value="null"/>
+
+        <resizelayout name="mainlayout" axis="y" />
+
+        <view name="header" width="${parent.width}" clip="true">
+            <view name="hcontent"/>
+        </view>
+
+        <view name="content" width="${classroot.width}" clip="true"
+              options="releasetolayout" >
+            <view name="rowparent" width="${parent.width}">
+                <datalistselector name="_selector"
+                                  multiselect="$once{classroot.multiselect}">
+                    <handler name="onconstruct">
+                        classroot._selector = this;
+                    </handler>
+                </datalistselector>
+            </view>
+        </view>
+
+        <state applied="${parent.sizetoheader}">
+            <attribute name="width" 
+                        value="${ header.hcontent.width }"/>
+        </state>
+
+        <!--- 
+             Get the selection for the list.
+             @return Object: <code>null</code> if no selection, an
+             <class>LzDatapointer</class> if single select, or
+             an array of <class>LzDatapointer</class>s if multiselect (default).
+        -->
+        <method name="getSelection">
+            if (this._initcomplete) {
+                // return a single value or an array
+                var sel = this._selector.getSelection();
+                if (multiselect) {
+                    // always return an array for multiselect
+                    return sel;
+                } else {
+                    // single select, just return item or null
+                    if (sel.length == 0) {
+                        return null;
+                    } else  {
+                        return sel[0];
+                    }
+                }
+            } else {
+                return this._initialselection;
+            }
+        </method>
+
+        <method name="setContentdatapath" args="cdp" >
+            if (this.isinited) {
+                this._getReplicator().setAttribute('datapath', cdp );
+            }
+            this.contentdatapath = cdp;
+            if (this["oncontentdatapath"]) {
+                this.oncontentdatapath.sendEvent( cdp );
+            }
+        </method>
+
+        <!--- Move the selection to the next view. -->
+        <method name="selectNext">
+            _moveSelection(1);
+        </method>
+        
+        <!--- Move the selection to the previous view. -->
+        <method name="selectPrev">
+            _moveSelection(-1);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_moveSelection" args="dir"> 
+            <![CDATA[ 
+            if (!dir) dir = 1;
+            var sel = this._selector.getSelection();
+            var next = null;
+            if (sel.length == 0) {
+                next = this._selector.getItemByIndex( 0 );
+            } else {
+                var p = sel[0].p;
+                var repl = content.rowparent.replicator;
+                if ( repl instanceof LzReplicationManager ){
+                    //find selection in nodes list
+                    var nodes = repl.nodes;
+                    var nextp = null;
+                    for ( var i = 0; i < nodes.length; i++ ){
+                        if ( nodes[ i ] == p ){
+                            nextp = nodes[ i + dir ];
+                            next = this._selector.getItemByIndex( i + dir );
+                            break;
+                        }
+                    }
+                }
+            }
+            _selector.ensureItemInView( next );
+            select( next );
+            ]]>
+        </method>
+
+        <!--- Get the number of items in the list.
+              @return Number: number of items. -->
+        <method name="getNumItems">
+            if (!this['_selector']) return 0; // too early
+            return this._selector.getNumItems();
+        </method>
+
+        <!--- Get a particular item by its index. 
+              @param Number index: the index for the item to get.
+              @return basegridrow: the item found, or null, if not. -->
+        <method name="getItemAt" args="index">
+            this._selector._ensureItemInViewByIndex(index);
+            return this._selector.getItemByIndex( index );
+        </method>
+
+        <!--- Get the index for an item.
+              @param basegridrow item: the item for which to find the index
+              @return Number index: the index for the item.-->
+        <method name="getIndexForItem" args="item" >
+            return this._selector.findIndex( item );
+        </method>
+
+        <!--- Find a particular item by its data node. 
+              @param LzDatanode data: the data for the item to get.
+              @return basegridrow item: the item found, or null, if not. -->
+        <method name="getItem" args="data">
+            return this._selector.getItemByData( data );
+        </method>
+
+        <!--- Find the item at the specified index and remove it from the list.
+              @param Number index: the index of the item to remove. -->
+        <method name="removeItemAt" args="index" >
+            var it = this._selector.getItemByIndex( index );
+            it.datapath.deleteNode();
+        </method>
+
+        <!--- Select an item by its datanode. 
+              @param LzDatanode data: the data of the item to select. -->
+        <method name="selectItem" args="data" >
+            var item = this._selector.getItemByData( data );
+            if (item) {
+                select(item);
+            }
+        </method>
+
+        <!--- Select an item by index. 
+              @param Number index: the index of the item to select. -->
+        <method name="selectItemAt" args="index" >
+            var item = this._selector.getItemByIndex( index );
+            if (item) {
+                select(item);
+            }
+        </method>
+
+        <!--- Clear the current selection. -->
+        <method name="clearSelection" >
+            if ( this._initcomplete ){
+                this._setHiliteview( null , false);
+                this._selector.clearSelection();
+            } else {
+                this._initialselection = null;
+                this.defaultselection = null;
+            }
+            if ( this.onselect ) this.onselect.sendEvent();
+        </method>
+
+        <!--- Select an item.
+              @param basegridrow item: the basegridrow to select 
+              (may be an array when multiselect == true) -->
+        <method name="select" args="item" >
+            <![CDATA[
+            if ( ! this.selectable ) return;
+            if (item == null) {
+                //noop
+            } else if (this._initcomplete) {
+                this._selector.select(item);
+            } else {
+                if (multiselect) {
+                    if (this._initialselection == null)
+                        this._initialselection = [];
+                    this._initialselection.push(item);
+                } else {
+                     this._initialselection = item;
+                }
+            }
+
+            if ( this.onselect ) this.onselect.sendEvent(item);
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setHiliteview" args="who, ismouse">
+            <![CDATA[
+            var mousepos = this.getMouse();
+            if (ismouse && this._lastmousex == mousepos.x && this._lastmousey == mousepos.y){
+                //the mouse hasn't moved -- we're getting mouseup because the
+                //grid moved
+                return;
+            }
+            this._lastmousex = mousepos.x;
+            this._lastmousey = mousepos.y;
+            if (this.hilite) { this.hilite.setAttribute( "highlighted" , false ); }
+            this.setAttribute( "hilite" , who );
+            if (who) { who.setAttribute( "highlighted" , true ); }
+            ]]>
+        </method>
+
+        <handler name="onkeydown" method="_dokeydown" />
+        <!--- @keywords private -->
+        <method name="_dokeydown" args="kc">
+            <![CDATA[
+            if ( !selectable ) return;
+            /* select item on 'space' key */
+            if (kc == 32 && this.hilite ) {
+               this.doEnterDown();
+               return;
+            }
+
+            /* handle arrow key navigation
+                37 = left arrow, 38 = up arrow
+                39 = right arrow, 40 = down arrow
+            */
+            if (kc >= 37 && kc <= 40) {
+                this.setAttribute( 'doesenter', true );
+                var s = this.hilite;
+
+                if (s == null) {
+                    s = getSelection();
+                    if (this.multiselect) s = s[0];
+                } if (s == null) {
+                    s = content.rowparent.replicator.clones[ 0 ];
+                }
+
+                var next;
+                if (kc == 39  || kc == 40) {
+                    next = _selector.getNextSubview(s);
+                }
+                if (kc == 37  || kc == 38) {
+                    next = _selector.getNextSubview(s, -1);
+                }
+                if ( this.hilite  ) {
+                    this.hilite.setAttribute( "highlighted" , false );
+                }
+                this.setAttribute( "hilite" , next );
+                if (this.hilite) {
+                    this.hilite.setAttribute( "highlighted" , true );
+                }    
+             }
+            ]]>
+        </method>
+
+        <handler name="onblur" method="_doblur" />
+        <!--- @keywords private -->
+        <method name="_doblur" args="ignore">
+            if (this.hilite) this.hilite.setAttribute( "highlighted" , false );
+            this.setAttribute( "hilite" , null );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doEnterDown">
+            select( this.hilite );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_getReplicator">
+            return this.content.rowparent.replicator;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            <![CDATA[ 
+            this.columns = [];
+            this.makeCellsAndColumns();
+
+            if ( columns.length == 0 ){
+                this.inferDel = null;
+                var haddatapath = true;
+
+                if ( ! this.datapath ) {
+                    haddatapath = false;
+                    var ovisibility = this.visibility;
+                    this.setAttribute('datapath', "." );
+                    this.datapath.setAttribute( "datacontrolsvisibility",
+                                                false );
+                    this.setAttribute('visibility', ovisibility );
+                }
+
+                var cells = this.inferColumns();
+                if ( columns.length == 0 ){
+                    //no data yet?
+                    this.inferDel = new LzDelegate( this, "inferColumns" );
+                    if ( haddatapath ){
+                        this.inferDel.register( this, "ondata" );
+                    } else {
+                        //try to find dataset...
+                        var iof = contentdatapath.indexOf( ":/" );
+                        if ( iof > -1 ){
+
+                            var dset = this.datapath.xpathQuery( 
+                                            contentdatapath.substring( 0 , 
+                                                                   iof + 2 ) );
+                            this.inferDel.register( dset , "ondata" );
+                        }
+                    }
+                }
+            }
+
+            super.init();
+            ]]>
+        </method> 
+
+        <!--- @keywords private -->
+        <method name="makeCellsAndColumns">
+            <![CDATA[ 
+            var svl = header.hcontent.subviews;
+
+            var cells = [];
+            if ( svl ){
+                for ( var i = 0; i< svl.length; i++ ){
+                    if ( svl[ i ] instanceof lz.basegridcolumn ) {
+                        this.columns.push( svl[ i ] );
+                        cells.push( svl[ i ]._getCellForColumn() );
+                    }
+                }
+            }
+            if ( ! this.columns.length ) return;
+            var initArgs = { name: "replicator",
+                             ownerGrid : this ,
+                             selectable : this.selectable };
+
+            if ( this.rowheight ) {
+                initArgs.height = this.rowheight;
+            }
+
+            initArgs.needsSetRegularColor = this.bgcolor0 != null || 
+                                            this.bgcolor1 != null;
+
+            var r = new _rowclass ( content.rowparent , initArgs, cells , true );
+            new lz.datapath( r , { replication : "lazy" , 
+                                  xpath : this.contentdatapath ,
+                                  spacing : this.spacing } );
+
+
+            var noSTH = this.sizetoheader === null;  
+            if ( ! this.hassetwidth ){
+                if ( noSTH ){
+                    this.setAttribute( "sizetoheader", true );
+                } else if ( !this.sizetoheader ){
+                    this.setAttribute('width', this.header.hcontent.width );
+                }
+            }
+            //now force it to be boolean
+            if ( noSTH && !this.sizetoheader){
+                this.setAttribute( "sizetoheader" , false );
+            }
+
+            if ( ! this.hassetheight ){
+                this.setAttribute( "shownitems", (this.shownitems != -1 ? this.shownitems : 8) );//take the value of "shownitems" if provided
+            }
+
+            this.header.bringToFront();
+
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="inferColumns" args="ignore=null" >
+            <![CDATA[ 
+            var res = this.datapath.xpathQuery( this.contentdatapath );
+            if ( ! res ) return;
+            if ( res instanceof Array ) res = res[ 0 ];
+            if ( res != null ){
+                var usename = true;
+                if ( res.attributes ){
+                    for ( var k in res.attributes ){
+                        usename = false;
+                        new _columnclass( this , { datapath : '@' + k,
+                                                  text : k } );
+                    }
+
+                }
+                if ( usename ){
+                        new _columnclass( this , { datapath : 'name()',
+                                                  text : 'name' } );
+                        new _columnclass( this , { datapath : 'text()',
+                                                  text : 'text' } );
+                }
+                this.makeCellsAndColumns();
+                if ( this.columns.length && this.inferDel ){
+                    this.inferDel.unregisterAll();
+                    delete this.inferDel;
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setSortCol" args="who">
+            if ( this._sortcol ){
+                this._sortcol.setAttribute( 'hasSort' , false );
+            } 
+            this.setAttribute( "_sortcol" , who );
+            if ( this._sortcol ){
+                this._sortcol.setAttribute( 'hasSort' , true );
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setShownItems" args="s">
+            this.shownitems = s;
+            if ( this.rowheight == null ) return;
+
+            if(this.isinited){
+                if ( s != -1 ){
+                    var bottompart = this.height - 
+                                        (this.content.y + this.content.height );
+                    this.setAttribute('height', bottompart + this.content.y + s * rowheight );
+                }
+            }
+
+            if ( this.onshownitems ){
+                this.onshownitems.sendEvent ( s );
+            }
+        </method>
+
+        <!--- Removes the current sort if one is set, and restores the 
+              original order of the dataset. -->
+        <method name="clearSort"><![CDATA[
+            var repl = this._getReplicator();
+            if (repl != null && repl is LzReplicationManager) {
+                repl.setOrder( null );
+                this._setSortCol( null );
+                repl.setXPath( repl.xpath );
+            } else {
+                this._setSortCol( null );
+            }
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="_setRowHeight" args="h">
+            this.setAttribute("rowheight", h );
+            if ( this.shownitems != -1 ){
+                this.setAttribute( "shownitems" , this.shownitems );
+            }
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="getNextSelection">
+            <![CDATA[
+            var sel = getSelection();
+            if ( sel instanceof Array ) {
+                sel = sel[ 0 ];
+            }
+            if ( sel && sel.p ) return this._selector.getItemByData( sel.p );
+            ]]>
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>An abstract row-based container for data elements.</text></tag>
+          <text>
+            <p><classname>basegrid</classname> is an abstract container for
+            row-based data stored in a dataset.  Because
+            <classname>basegrid</classname> uses <a
+            href="lz.lazyreplicator.html">lazy replication</a>, it is an efficient way to
+            present large datasets, and it abstracts some of the complications
+            involved in maintaining a selection within a dataset.</p>
+            
+            <example>
+            &lt;canvas height="150"&gt;
+              &lt;dataset name="contacts" request="true"
+                  src="http:resources/contactsdata.xml"/&gt;
+            
+              &lt;basegrid datapath="contacts:/resultset" width="200"
+                           height="150"&gt;
+                &lt;basegridcolumn&gt;
+                  &lt;text placement="header"&gt;Check 'em off&lt;/text&gt;
+                  &lt;checkbox text="$path{ '@displayname'}" 
+                            value="$path{'@checked'}"&gt;
+                    &lt;handler name="onvalue"&gt;
+                      this.parent.parent.datapath.updateData();
+                    &lt;/handler&gt;
+                  &lt;/checkbox&gt;
+                &lt;/basegridcolumn&gt;
+                &lt;scrollbar placement="content"/&gt;
+              &lt;/basegrid&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,69 @@
+ <library>
+   <include href="base/basebutton.lzx" />
+
+   <!-- A basebutton that sends an onmousestilldown event while the mouse is
+        held down. -->
+   <class name="basebuttonrepeater" extends="basebutton">
+       <!---  @keywords private -->
+       <attribute name="_lasttime" value="0" type="number" />
+       <!---  @keywords private -->
+       <attribute name="stillDownDelegate" value="null" type="expression" />
+       <!---  @keywords private -->
+       <attribute name="isMouseDown" value="false" type="boolean" />
+
+       <!--- @keywords public -->
+       <event name="onmousestilldown" />
+
+       <!---  @keywords private -->
+       <method name="stillDownEventGenerator" args="ignore" >
+            var now = (new Date()).getTime();
+            var diff = now - this._lasttime;
+            this._lasttime = now;
+
+            if (this.isMouseDown) {
+                var next;
+                if (diff > 600) {
+                    next = 500;
+                } else {
+                    next = 50;
+                    this.onmousestilldown.sendEvent();
+                }
+                lz.Timer.resetTimer( this.stillDownDelegate, next );
+            }
+       </method>
+
+       <!--- @keywords private -->
+        <handler name="onmousedown">
+            this._lasttime = (new Date()).getTime();
+            this.isMouseDown = true;
+            if (! this.stillDownDelegate) {
+               this.stillDownDelegate = new LzDelegate( this, "stillDownEventGenerator" );
+            }
+            lz.Timer.addTimer( this.stillDownDelegate, 500 );
+        </handler>
+
+        <!--- @keywords private -->
+        <handler name="onmouseup">
+            this.isMouseDown = false;
+            lz.Timer.removeTimer( this.stillDownDelegate );
+        </handler>
+
+        <doc>
+          <tag name="shortdesc"><text>a basebutton that sends an event if the mouse is held down.</text></tag>
+          <text>
+            <p>This class is a simple extension of
+            <classname>basebutton</classname>.  If the user holds the mouse button
+            down over the button (for more than a half second), then an event
+            <event>onmousestilldown</event> will be sent.  The
+            <event>onmousestilldown</event> event will continue to be sent every
+            50 milliseconds until the mouse button is released.</p>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
