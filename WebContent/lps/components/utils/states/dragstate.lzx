@@ -1,0 +1,115 @@
+<library>
+<!--- this state provides standard 'drag' functionality to its immediateparent when applied -->
+<class name="dragstate" extends="state">
+    <!--- 'x', 'y' or 'both' -->
+    <attribute name="drag_axis" value="both" type="string"/>
+
+    <!--- the minimum value for the x attribute. Default : null, no minimum -->
+    <attribute name="drag_min_x" value="null" type="number"/>
+
+    <!--- the maximum value for the x attribute. Default : null, no maximum -->
+    <attribute name="drag_max_x" value="null" type="number"/>
+
+    <!--- the minimum value for the y attribute. Default : null, no minimum -->
+    <attribute name="drag_min_y" value="null" type="number"/>
+
+    <!--- the maximum value for the y attribute. Default : null, no maximum -->
+    <attribute name="drag_max_y" value="null" type="number"/>
+
+    <!--- @keywords private -->
+    <attribute name="__dragstate_ydoffset" value="$once{this.yoffset - this.getMouse( 'y' )}"/>
+    <!--- @keywords private -->
+    <attribute name="y"
+       value="(this.drag_axis == 'both' || this.drag_axis == 'y') ?
+              this.__dragstate_getnewpos('y',
+                this.immediateparent.getMouse( 'y' ) + this.__dragstate_ydoffset)
+           : this.y"
+        when="always"/>
+
+    <!--- @keywords private -->
+    <attribute name="__dragstate_xdoffset" value="$once{this.xoffset - this.getMouse( 'x' )}"/>
+    <!--- @keywords private -->
+    <attribute name="x"
+       value="(this.drag_axis == 'both' || this.drag_axis == 'x') ?
+              this.__dragstate_getnewpos('x',
+                this.immediateparent.getMouse( 'x' ) + this.__dragstate_xdoffset)
+           : this.x"
+        when="always"/>
+
+    <!--- @keywords private -->
+    <method name="__dragstate_getnewpos" args="axis, newpos"> <![CDATA[
+        var min = this['drag_min_' + axis];
+        var max = this['drag_max_' + axis];
+        if ((min != null) && (newpos < min)) newpos = min;
+        if ((max != null) && (newpos > max)) newpos = max;
+        return newpos;
+    ]]>
+    </method>
+    
+    <doc>
+      <tag name="shortdesc"><text>A standard dragging behavior.</text></tag>
+      <text>
+        <p>
+        The dragstate is a class which can be used to make any view draggable.
+        When the dragstate is applied, the view with the dragstate will follow the mouse.
+        </p>
+        <example class="program" id="dragstate-1" title="Simple use of a dragstate">
+        &lt;canvas height="100"&gt;
+            &lt;view bgcolor="blue" width="20" height="20"
+                  onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)"&gt;
+                &lt;dragstate name="dragger"/&gt;
+            &lt;/view&gt;
+        &lt;/canvas&gt;
+        </example>
+        
+        <example class="program" id="dragstate-2" title="Horizontal drag">
+        &lt;canvas height="100"&gt;
+            &lt;view bgcolor="red" width="20" height="20"
+                  onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)"&gt;
+                &lt;dragstate name="dragger" drag_axis="x"/&gt;
+            &lt;/view&gt;
+        &lt;/canvas&gt;
+        </example>
+        
+        <example class="program" id="dragstate-3" 
+            title="Horizontal drag with simple bounds checking">
+        &lt;canvas height="100"&gt;
+            &lt;view bgcolor="red" width="20" height="20"
+                  onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)"&gt;
+                &lt;dragstate name="dragger" drag_axis="x"
+                        drag_min_x="0"  drag_max_x="100"/&gt;
+            &lt;/view&gt;
+        &lt;/canvas&gt;
+        </example>
+        
+        <example class="program" id="dragstate-4"
+            title="Drag within bounds of parent view">
+        &lt;canvas width="500" height="350"&gt;
+            &lt;view bgcolor="blue" x="100" y="40" width="300" height="200"&gt;
+                &lt;view bgcolor="red" width="20" height="20"
+                      onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)"&gt;
+                    &lt;dragstate name="dragger" drag_axis="both"
+                        drag_min_x="0"
+                        drag_max_x="$once{parent.width - this.width}"
+                        drag_min_y="0"
+                        drag_max_y="$once{parent.height - this.height}"/&gt;
+                &lt;/view&gt;
+            &lt;/view&gt;
+        &lt;/canvas&gt;
+        </example>
+        <p>The above example allows the user to drag the red square within the
+        bounds of the larger blue rectangle.  Note that as with all states the
+        dragstate's attributes are evaluated in the context of its parent.  So
+        to refer to the blue view's width, the example uses parent.width, and to
+        refer to the red square's width, the example uses this.width.
+        </p>
+      </text>
+    </doc>
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

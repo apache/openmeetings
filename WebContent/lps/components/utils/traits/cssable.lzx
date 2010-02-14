@@ -1,0 +1,51 @@
+<!-- Copyright 2007-2008 Laszlo Systems --> 
+<library>
+<!-- [todo: max 2-13-2007] moved to bottom of LzNode until <mixin/> is available-->
+<script when="immediate">
+trait cssable {
+
+function initialize () {
+    if (this['_applyCSS']) this._applyCSS();
+}
+var cssPropertyMap = LzDeclaredEvent;
+var cssStyle = LzDeclaredEvent;
+var fontcolor = LzDeclaredEvent;
+
+var cssPropertyMap = null;
+var cssStyle = null;
+var fontcolor = null;
+
+function _applyCSS () {
+      // Look up the style
+      this.cssStyle = LzCSSStyle.getComputedStyle( this );
+      var st = this.cssStyle; // put it in a register
+      if (st != null) {
+          for (var k in this.cssPropertyMap) {
+              var lzxPropertyName = k
+              var cssPropertyName = this.cssPropertyMap[k];                             
+              // Debug.write("cssName ", cssName, ", lzxPropertyName ", lzxPropertyName);              
+              var v = st.getPropertyValue( cssPropertyName ); 
+              
+
+            if (v != null) {
+
+                // Debug.write("setting value ", v , "for property", lzxPropertyName);
+                this.setAttribute(lzxPropertyName, v);
+
+                if (lzxPropertyName == "fontcolor") {
+                    // 
+                    // Special case font color. See LPP-436, LPP-553. 
+                    //         
+                    if (this instanceof lz.text) {
+                        var n = Number(v);
+                        this.setAttribute('fgcolor', n); // must be a color
+                    }
+                }
+                
+              }
+          }
+      }
+}
+}
+</script>
+</library>

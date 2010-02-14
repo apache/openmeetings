@@ -1,0 +1,72 @@
+<library>
+  <switch>
+    <when runtime="swf9">
+      <script when="immediate">
+        Debug.warn('utils/4.1.x_compatibility.lzx is currently included, but is unsupported in swf9.');
+      </script>
+    </when>
+    <otherwise>
+      <script when="immediate">
+        /*
+        * Provides compatibility in 4.2.x with older 4.x code - see 
+        * http://jira.openlaszlo.org/jira/browse/LPP-6931 for details.
+        * Use WEB-INF/lps/server/bin/convert_laszlo.pl and WEB-INF/lps/server/bin/convert_required.pl for scripts to convert the lzx automatically.
+        * 
+        * Based on convert_required.pl
+        * 
+        */
+        Debug.warn('utils/4.1.x_compatibility.lzx is currently included.  Please use convert_required.pl to update your lzx files and remove this include.');
+
+        // global classes
+        var LzNode                  = lz.node;
+        var LzView                  = lz.view;
+        var LzText                  = lz.text;
+        var LzInputText             = lz.inputtext;
+        var LzCanvas                = lz.canvas;
+        var LzScript                = lz.script;
+        var LzAnimatorGroup         = lz.animatorgroup;
+        var LzAnimator              = lz.animator;
+        var LzLayout                = lz.layout;
+        var LzState                 = lz.state;
+        var LzCommand               = lz.command;
+        var LzSelectionManager      = lz.selectionmanager;
+        var LzDataSelectionManager  = lz.dataselectionmanager;
+        var LzDatapointer           = lz.datapointer;
+        var LzDatapath              = lz.datapath;
+        var LzDataset               = lz.dataset;
+        // @devnote - not needed, causes compiler error
+        //LzLibrary               = lz.import;
+        var LzDelegate              = lz.Delegate;
+        var LzParam                 = lz.Param;
+        // service classes
+        var LzTimer                 = lz.Timer;
+        var LzTrack                 = lz.Track;
+        var LzGlobalMouse           = lz.GlobalMouse;
+        var LzKeys                  = lz.Keys;
+        var LzIdle                  = lz.Idle;
+        var LzCursor                = lz.Cursor;
+        var LzModeManager           = lz.ModeManager;
+        var LzInstantiator          = lz.Instantiator;
+        var LzFocus                 = lz.Focus;
+        var LzBrowser               = lz.Browser;
+        var LzHistory               = lz.History;
+        var LzAudio                 = lz.Audio;
+      </script>
+    </otherwise>
+  </switch>
+  <switch>
+    <when runtime="dhtml">
+      <script when="immediate">
+        // more includes for dhtml - these warn in swf8  
+        var LzHTTPDataProvider      = lz.lzhttpdataprovider;
+        var LzDataProvider          = lz.dataprovider;
+        var LzDatasource            = lz.datasource;
+      </script>
+    </when>
+  </switch>
+</library>    
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
