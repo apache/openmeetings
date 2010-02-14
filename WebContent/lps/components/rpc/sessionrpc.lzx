@@ -1,0 +1,256 @@
+<library>
+    
+    <include href="rpc/rpc.lzx" />
+    <include href="rpc/library/javarpc.js" />
+
+    <security>
+        <allow>
+            <pattern>^org\.openlaszlo\.remote\.LZHttpSessionRemote$</pattern>
+        </allow>
+    </security>
+
+    <class name="sessionrpc" extends="rpc">
+
+        <!--- @keywords private -->
+        <attribute name="_attributename" value="none" type="string" />
+        <!--- @keywords private -->
+        <attribute name="_scope" value="none" type="string" />
+        <!--- @keywords private -->
+        <attribute name="_classname" type="string"
+                   value="org.openlaszlo.remote.LZHttpSessionRemote" />
+
+        <!--=================================================================-->
+        <!-- public methods                                                  -->
+        <!--=================================================================-->
+
+        <!--- Loads session object. -->
+        <method name="load">
+            var opts = {
+                loadoption: 'loadonly',
+                classname: this._classname,
+                oname: this._attributename,
+                scope: this._scope
+            }
+
+            LzJavaRPCService.loadObject(this._loadDel, opts, this.secure, 
+                this.secureport);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setup" args="o">
+            var ok = super._setup(o);
+
+            for (var k in this.proxy) {
+                var tpka = this.proxy[k]['args'];
+                if (tpka == null) {
+                    tpka = this.proxy[k].args = {};
+                }
+                tpka.secure = this.secure;
+                tpka.secureport = this.secureport;
+                tpka.scope = this._scope;
+                tpka.attributename = this._attributename;
+            }
+
+            return ok;
+        </method>
+<doc>
+    <tag name="shortdesc"><text>SessionRPC object</text></tag>
+    <text>
+    <p>A class to get an http session object and invoke its methods. Remote method
+        signatures are:</p>
+    
+    
+    <ul>
+        
+        <li>
+            <dfn>getAttribute(name)</dfn>: returns object, array, or primitive 
+            type.</li>
+        
+        <li>
+            <dfn>getAttributeNames()</dfn>: returns array of attribute names.</li>
+        
+        <li>
+            <dfn>getId()</dfn>: returns remote session id</li>
+        
+        <li>
+            <dfn>getMaxInactiveInterval()</dfn>: returns max inactive interval for
+            session.</li>
+        
+        <li>
+            <dfn>invalidate()</dfn>: invalidate remote session.</li>
+        
+        <li>
+            <dfn>isNew()</dfn>: returns true if the client does not yet know about the
+            session or if the client chooses not to join the session.</li>
+        
+        <li>
+            <dfn>removeAttribute(name)</dfn>: remove attribute named name; returns 
+            void.</li>
+        
+        <li>
+            <dfn>setAttribute(name,value)</dfn>: set attribute named name with value; 
+            returns void.</li>
+        
+        <li>
+            <dfn>setMaxInactiveInterval(interval)</dfn>: set max inactive interval for 
+            session.</li>
+        
+    </ul>
+    
+    
+    <p>See <a href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html" shape="rect">
+        javax.servlet.http.HttpSession</a> in the <a href="http://java.sun.com/products/servlet/2.3/javadoc/" shape="rect">Java Servlet API</a>
+        documentation for details.</p>
+        <example>
+    &lt;canvas height="475" debug="true"&gt;
+    
+        &lt;debug x="300" y="20" width="500" height="400" /&gt;
+        
+        &lt;include href="rpc/sessionrpc.lzx" /&gt;
+        
+        &lt;dataset name="idDset" /&gt;
+        
+        &lt;sessionrpc id="session" autoload="false"&gt;
+        
+            &lt;handler name="oninit"&gt;
+                Debug.debug('loading session object...')
+                this.load();
+            &lt;/handler&gt;
+            
+            &lt;handler name="onload"&gt;
+                Debug.debug('session object loaded');
+                canvas.buttons.setAttribute('visible', true);
+            &lt;/handler&gt;        
+            
+            &lt;handler name="ondata" args="data"&gt;
+                Debug.debug("default ondata: %w", data);
+            &lt;/handler&gt;
+            
+            &lt;handler name="onerror" args="error"&gt;
+                Debug.debug("default onerror: %w", error);
+            &lt;/handler&gt;
+            
+            &lt;remotecall funcname="getId" /&gt;
+            
+            &lt;remotecall name="getIdWithDset" funcname="getId" dataobject="idDset" /&gt;
+            
+            &lt;remotecall funcname="getMaxInactiveInterval" /&gt;
+            
+            &lt;remotecall funcname="isNew" /&gt;
+            
+            &lt;remotecall funcname="setMaxInactiveInterval"&gt;
+                &lt;param value="15" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall name="setmyattr" funcname="setAttribute"&gt;
+                &lt;param value="'myattr'" /&gt;
+                &lt;param value="'MY ATTRIBUTE'" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall name="setmyother" funcname="setAttribute"&gt;
+                &lt;param value="'myother'" /&gt;
+                &lt;param value="'MY OTHER'" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall name="getmyattr" funcname="getAttribute"&gt;
+                &lt;param value="'myattr'" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall name="getmyother" funcname="getAttribute"&gt;
+                &lt;param value="${'myother'}" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall funcname="getAttributeNames" /&gt;
+            
+            &lt;remotecall name="removemyattr" funcname="removeAttribute"&gt;
+                &lt;param value="'myattr'" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall name="removemyother" funcname="removeAttribute"&gt;
+                &lt;param value="'myother'" /&gt;
+            &lt;/remotecall&gt;
+        
+        &lt;/sessionrpc&gt;
+        
+        
+        &lt;view name="buttons" x="10" y="10" layout="spacing: 5" visible="false"&gt;
+            &lt;button text="getId" onclick="session.getId.invoke()" /&gt;
+            &lt;button text="getIdWithDset" onclick="session.getIdWithDset.invoke()" /&gt;
+            &lt;view height="20" width="50"&gt;
+                &lt;text datapath="idDset:/text()" width="240" bgcolor="red"/&gt;
+            &lt;/view&gt;
+            &lt;button text="getMaxInactiveInterval" onclick="session.getMaxInactiveInterval.invoke()" /&gt;
+            &lt;button text="isNew" onclick="session.isNew.invoke()" /&gt;
+            &lt;button text="setMaxInactiveInterval" onclick="session.setMaxInactiveInterval.invoke()" /&gt;
+            
+            &lt;view x="20" layout="spacing: 5"&gt;
+            
+                &lt;attribute name="myDel" value="null" type="expression" /&gt;
+                
+                &lt;handler name="oninit"&gt;
+                this.myDel = new LzDelegate(this, 'myhandler');
+                &lt;/handler&gt;
+                
+                &lt;method name="myhandler" args="data"&gt;
+                    Debug.debug('myhandler: %w', data);
+                &lt;/method&gt;
+                
+                &lt;button text="setmyattr" onclick="session.setmyattr.invoke()" /&gt;
+                
+                &lt;button text="setmyother" onclick="session.setmyother.invoke()" /&gt;
+                
+                &lt;button text="getmyattr" onclick="session.getmyattr.invoke()" /&gt;
+                
+                &lt;button text="getmyother" onclick="session.getmyother.invoke()" /&gt;
+                
+                &lt;button text="getmyattr (w/params)" onclick="session.getmyattr.invoke(['myattr'])" /&gt;
+                
+                &lt;button text="getmyattr (w/params and delegate)"&gt;
+                &lt;handler name="onclick"&gt;
+                    session.getmyattr.invoke(['myattr'], parent.mydel);
+                &lt;/handler&gt;
+                &lt;/button&gt;
+                
+                &lt;button text="getAttributeNames" onclick="session.getAttributeNames.invoke()" /&gt;
+                
+                &lt;button text="removemyattr" onclick="session.removemyattr.invoke()" /&gt;
+                
+                &lt;button text="removemyother" onclick="session.removemyother.invoke()" /&gt;
+                
+            &lt;/view&gt;
+        &lt;/view&gt;
+    &lt;/canvas&gt;
+        </example>
+        <b>See Also:</b>
+        <br />
+            <ul>
+                <li>
+                    <sgmltag class="element" role="lz.rpc">&lt;rpc&gt;</sgmltag>
+                </li>
+                <li>
+                    <sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>
+                </li>
+                <li>
+                    <sgmltag class="element" role="lz.webapprpc">&lt;webapprpc&gt;</sgmltag>
+                </li>
+                <li>
+                    <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag>
+                </li>
+                <li>
+                    <a href="../developers/rpc.html" target="laszlo-dguide" shape="rect">Developer's Guide: RPC chapter</a>
+                </li>
+                <li>
+                    <a href="../developers/rpc-javarpc.html" target="laszlo-dguide" shape="rect">Developer's Guide: JavaRPC chapter</a>
+                </li>
+            </ul>
+            
+    </text>
+</doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
