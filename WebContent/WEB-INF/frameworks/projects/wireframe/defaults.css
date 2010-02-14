@@ -1,0 +1,101 @@
+/*
+////////////////////////////////////////////////////////////////////////////////
+//
+//  ADOBE SYSTEMS INCORPORATED
+//  Copyright 2008 Adobe Systems Incorporated
+//  All Rights Reserved.
+//
+//  NOTICE: Adobe permits you to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
+//
+////////////////////////////////////////////////////////////////////////////////
+*/
+
+@namespace "library://ns.adobe.com/flex/spark";
+
+/* Default Skins */
+
+Button
+{
+	skinClass: ClassReference("spark.skins.wireframe.ButtonSkin");
+}
+
+/* TODO: Button.emphasized */
+
+ButtonBar 
+{
+	skinClass: ClassReference("spark.skins.wireframe.ButtonBarSkin");
+}
+
+CheckBox
+{
+	skinClass: ClassReference("spark.skins.wireframe.CheckBoxSkin");
+}
+
+/* TODO: DropDownList */
+
+HScrollBar
+{
+    skinClass: ClassReference("spark.skins.wireframe.HScrollBarSkin");
+}
+
+HSlider
+{
+    skinClass: ClassReference("spark.skins.wireframe.HSliderSkin");
+}
+
+List
+{
+	skinClass: ClassReference("spark.skins.wireframe.ListSkin");
+}
+
+NumericStepper
+{
+    skinClass: ClassReference("spark.skins.wireframe.NumericStepperSkin");
+}
+
+Panel
+{
+	skinClass: ClassReference("spark.skins.wireframe.PanelSkin");
+}
+
+RadioButton
+{
+	skinClass: ClassReference("spark.skins.wireframe.RadioButtonSkin");
+}
+
+Spinner
+{
+    skinClass: ClassReference("spark.skins.wireframe.SpinnerSkin");    
+}
+
+TextArea
+{
+	skinClass: ClassReference("spark.skins.wireframe.TextAreaSkin");
+}
+
+TextInput
+{
+	skinClass: ClassReference("spark.skins.wireframe.TextInputSkin");
+}
+
+ToggleButton
+{
+	skinClass: ClassReference("spark.skins.wireframe.ToggleButtonSkin");
+}
+
+/* TODO: VideoPlayer */
+
+VScrollBar
+{
+	skinClass: ClassReference("spark.skins.wireframe.VScrollBarSkin");
+}
+
+VSlider
+{
+    skinClass: ClassReference("spark.skins.wireframe.VSliderSkin");
+}
+
+global {
+	color: #2B4381;
+}

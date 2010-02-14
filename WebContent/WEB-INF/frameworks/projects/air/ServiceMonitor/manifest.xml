@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<componentPackage>
+    <component id="ServiceMonitor" class="air.net.ServiceMonitor"/>
+    <component id="URLMonitor" class="air.net.URLMonitor"/>
+    <component id="SocketMonitor" class="air.net.SocketMonitor"/>
+</componentPackage>
