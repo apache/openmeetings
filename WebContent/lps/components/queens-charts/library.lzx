@@ -1,0 +1,15 @@
+<!---
+      @topic Charting And Graphing
+      @subtopic Chart Types
+  -->
+<library>
+  <include href="shared/library.lzx"/>
+  <include href="barchart.lzx"/>
+  <include href="linechart.lzx"/>
+  <include href="piechart.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

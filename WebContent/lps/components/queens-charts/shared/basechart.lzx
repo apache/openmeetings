@@ -1,0 +1,357 @@
+<library>
+    <include href="utils/states/dragstate.lzx"/>
+    <include href="label.lzx"/>
+    <include href="legend.lzx"/>
+    <include href="chartzoomer.lzx"/>
+    <include href="basechart.lzx"/>
+    <include href="dataseries.lzx"/>
+
+    <!--- The base class for non-pie charts.  Contains most of the
+        shared attributes and elements.  (Of beta quality.) -->
+    <class name="basechart">
+        <!--- Public attributes. -->
+       
+        <!--- The direction in which the data will be drawn.
+            Accepts values x and y.  (x - vertical bars drawn
+            from left to right.  y - horizontal bars drawn
+            top to bottom.)  Only applicable to barchart, but
+            necessary for certain shared elements. -->
+        <attribute name="drawaxis" type="string" value="x"/>
+        <!--- Width of plotting area. -->
+        <attribute name="plotwidth" type="number"
+            value="${this.width - 1}"/>
+        <!--- Height of plotting area. -->
+        <attribute name="plotheight" type="number"
+            value="${this.height - 1}"/>
+        <!--- Plot area's x position, relative to chart as a whole. -->
+        <attribute name="plotx" type="number" value="0"/>
+        <!--- Plot area's y position, relative to chart as a whole. -->
+        <attribute name="ploty" type="number" value="0"/>
+        <!--- Whether there's a border around the plot area, and if so,
+            what color. -->
+        <attribute name="border" type="color" value="$once{null}"/>
+        <!--- Width of the plot area's border. -->
+        <attribute name="borderwidth" type="number" value="1"/>
+        <!--- Whether to draw a line along the vertical axis, and if so,
+            what color.  (If no color is specified, axis is not drawn.)
+            Note: In barchart, vertical axis is considered the axis
+            that runs parallel to the bars in the chart. -->
+        <attribute name="vaxis" type="color" value="$once{null}"/>
+        <!--- Width of drawn vertical axis. Note: In barchart, vertical
+            axis is considered the axis that runs parallel to the
+            bars in the chart. -->
+        <attribute name="vaxiswidth" type="number" value="3"/>
+        <!--- Whether to draw the horizontal axis, and what color.
+            (If no color is specified, axis is not drawn.) -->
+        <attribute name="haxis" type="color" value="$once{null}"/>
+        <!--- Width of drawn horizontal axis. -->
+        <attribute name="haxiswidth" type="number" value="3"/>
+        <!--- Whether to draw vertical tick marks, and if so,
+            what color.  If no color is specified, ticks are not drawn.
+            These are the tick marks that are drawn vertically, along the
+            bottom axis.  Note: In barchart, setting drawaxis to y changes
+            overall chart orientation, with the "bottom" on the left. -->
+        <attribute name="vtick" type="color" value="$once{null}"/>
+        <!--- Width of drawn vertical tick marks. -->
+        <attribute name="vtickwidth" type="number" value="1"/>
+        <!--- Length of drawn vertical tick marks. -->
+        <attribute name="vticklength" type="number" value="5"/>
+        <!--- Whether to draw horizontal tick marks, and if so,
+            what color.  If no color is specified, ticks are not
+            drawn.  These are the tick marks that are drawn horizontally,
+            along the side axis.  Note: In barchart, setting drawaxis to y
+            changes overall chart orientation, with the "bottom" on the
+            left. -->
+        <attribute name="htick" type="color" value="$once{null}"/>
+        <!--- Width of drawn horizontal tick marks. -->
+        <attribute name="htickwidth" type="number" value="1"/>
+        <!--- Length of drawn horizontal tick marks. -->
+        <attribute name="hticklength" type="number" value="5"/>
+        <!--- Color of vertical tick labels.  If not specified, no
+            labels are drawn. -->
+        <attribute name="vticklabel" type="color" value="$once{null}"/>
+        <!--- Text size of vertical tick labels. -->
+        <attribute name="vticklabelsize" type="number" value="10"/>
+        <!--- Color of horizontal tick labels.  If not specified, no
+            labels are drawn. -->
+        <attribute name="hticklabel" type="color" value="$once{null}"/>
+        <!--- Text size of horizontal tick labels. -->
+        <attribute name="hticklabelsize" type="number" value="10"/>
+        <!--- Whether to have ticks for individual bars, and if so,
+            what color. -->
+        <attribute name="barticks" type="color" value="$once{null}"/>
+        <!--- Whether to label the individual bar ticks, and if so,
+            what color. -->
+        <attribute name="baselabels" type="color" value="$once{null}"/>
+        <!--- Whether to draw a line at zero, and what color.  If
+            no color is specified, line is not drawn. -->
+        <attribute name="drawzero" type="color" value="$once{null}"/>
+        <!--- Width of the line drawn at zero. -->
+        <attribute name="zerowidth" type="number" value="2"/>
+        <!--- Whether to fill the area below zero, and what color.
+            (Will not be drawn if no color specified.) -->
+        <attribute name="belowzero" type="color" value="$once{null}"/>
+        <!--- Opacity for area below zero.  Defaults to a low number
+            for a hazy, translucent effect. -->
+        <attribute name="belowzeroopacity" type="number" value=".2"/>
+        <!--- The color of the zoom selector. -->
+        <attribute name="zoomcolor" type="color" value="#DDDDDD"/>
+        <!--- If desired, a resource can be used in the background.
+            If specified, this view will appear behind the chart,
+            with everything drawn on top of it. -->
+        <attribute name="bgresource" type="string" value=""/>
+        <!--- These four take color values, and if no color is
+            specified, they are not drawn. -->
+        <!--- Horizontal grid bands. -->
+        <attribute name="hgridbands" type="color" value="$once{null}"/>
+        <!--- Vertical grid bands. Note: In barchart, vertical axis is
+            considered the axis that runs parallel to the orientation of
+            the chart. -->
+        <attribute name="vgridbands" type="color" value="$once{null}"/>
+        <!--- Horizontal grid band opacity. -->
+        <attribute name="hbopacity" type="number" value="1"/>
+        <!--- Vertical grid band opacity.  Note: In barchart, vertical
+            axis is considered the axis that runs parallel to the
+            orientation of the chart. -->
+        <attribute name="vbopacity" type="number" value=".5"/>
+        <!--- Color of the horizontal grid lines. -->
+        <attribute name="hgridlines" type="color" value="$once{null}"/>
+        <!--- Color of the vertical grid lines.  Note: In barchart,
+            vertical axis is considered the axis that runs parallel to the
+            orientation of the chart. -->
+        <attribute name="vgridlines" type="color" value="$once{null}"/>
+        <!--- Horizontal grid line spacing.  (Units, not pixels.) -->
+        <attribute name="hgridspacing" type="number" value="0"/>
+        <!--- Vertical grid line spacing.  (Units, not pixels.  In
+            barchart, the space between one bar and the next is
+            considered one unit.) -->
+        <attribute name="vgridspacing" type="number" value="0"/>
+        <!--- Horizontal grid line thickness. -->
+        <attribute name="hgridwidth" type="number" value="1"/>
+        <!--- Vertical grid line thickness. -->
+        <attribute name="vgridwidth" type="number" value="1"/>
+        
+        <!--- Whether to adjust the graph to data. -->
+        <attribute name="adjusttodata" type="boolean" value="false"/>
+        
+        <!--- Grid's maximum displayed value. -->
+        <attribute name="maximum" type="number" value="100"/>
+        <!--- Grid's minimum displayed value. -->
+        <attribute name="minimum" type="number" value="0"/>
+            
+        <!--- The position of the view in which the data is drawn in
+            relation to its parent clipping frame.  Allows data to be
+            dragged or slid around. -->
+        <attribute name="paneslider" type="number" value="0"/>
+
+        <!--- The slider for the alternate direction to paneslider. -->
+        <attribute name="altslider" type="number" value="0"/>
+
+        <!--- Whether bars are able to be dragged or not. -->
+        <attribute name="draggable" type="boolean" value="false"/>
+        <!--- Whether bars are zoomable or not. -->
+        <attribute name="zoomable" type="boolean" value="true"/>
+
+        <!--- Grid's minimum for width.  (If lines are drawn
+            vertically, this controls horizontal visible area.  If lines are drawn
+            horizontally, this controls vertical visible area.  Changing these
+            will allow the user to zoom in and out on a particular area, and
+            will scale data accordingly.)  Note: Not settable in barchart. -->
+        <attribute name="altmaximum" type="number" value="100"/>
+        <!--- Grid's maximum for width.  (If lines are drawn
+            vertically, this controls horizontal visible area.  If lines are drawn
+            horizontally, this controls vertical visible area.  Changing these
+            will allow the user to zoom in and out on a particular area, and
+            will scale data accordingly.)  Note: Not settable in barchart. -->
+        <attribute name="altminimum" type="number" value="0"/>
+
+        <!--- Private attributes. -->
+        
+        <!--- @keywords private
+            Number of dataseries instances. -->
+        <attribute name="seriesnumber" type="number" value="0"/>
+        
+        <!--- @keywords private
+            The distance between zero and the left edge of the chart. -->
+        <attribute name="altzero" type="number"
+            value="${this.scaledaltmin * -1}"/>
+        
+        <!--- @keywords private
+            Number of points in the graph. -->
+        <attribute name="numpoints" type="number" value="0"/>
+        
+        <!--- @keywords private
+            The highest y value from data. -->
+        <attribute name="highesty" type="number" value="0"/>
+        <!--- @keywords private
+            The lowest y value from data. -->
+        <attribute name="lowesty" type="number" value="0"/>
+        <!--- @keywords private
+            The highest x value from data. -->
+        <attribute name="highestx" type="number" value="0"/>
+        <!--- @keywords private
+            The lowest x value from data. -->
+        <attribute name="lowestx" type="number" value="0"/>
+
+        <!--- @keywords private
+            Using the maximum and minimum values, this gives us the
+            number we need to determine pixels per unit. -->
+        <attribute name="scaler" type="number"
+            value="${(this.plotheight / (this.maximum - this.minimum))}"/>
+        <!--- @keywords private
+            Using the data in the other axis, we can figure out the
+            scale for bar units.  (One bar space is one unit.) -->
+        <attribute name="altscaler" type="number"
+            value="${(this.plotwidth / (this.altmaximum - this.altminimum))}"/>
+        
+        <!--- @keywords private
+            The scaled minimum.  (These values are numerical values, not
+            pixel values, so they need to be converted to pixel sizes.  These values
+            determine the size of the drawing area, and will be scaled by the
+            chartscaler.) -->
+        <attribute name="scaledmin" type="number" value="${minimum * scaler}"/>
+        <!--- @keywords private
+            The scaled maximum.  (These values are numerical values, not
+            pixel values, so they need to be converted to pixel sizes.  These values
+            determine the size of the drawing area, and will be scaled by the
+            chartscaler.) -->
+        <attribute name="scaledmax" type="number" value="${maximum * scaler}"/>
+        <!--- @keywords private
+            The scaled minimum in the other direction.  (These values are numerical
+            values, not pixel values, so they need to be converted to pixel sizes.
+            These values determine the size of the drawing area, and will be scaled by
+            the chartscaler.) -->
+        <attribute name="scaledaltmin" type="number" value="${altminimum * altscaler}"/>
+        <!--- @keywords private
+            The scaled maximum in the other direction.  (These values are numerical
+            values, not pixel values, so they need to be converted to pixel sizes.
+            These values determine the size of the drawing area, and will be scaled by
+            the chartscaler.) -->
+        <attribute name="scaledaltmax" type="number" value="${altmaximum * altscaler}"/>
+
+        <!--- @keywords private
+            Prevents things from being drawn over each other in succession. -->
+        <attribute name="rendercomplete" type="boolean" value="false"/>
+
+        <!--- @keywords private
+            A dirty flag to ensure that value changes to maximums and
+            minimums only result in redrawing ticks when the values
+            are manually changed, not changed by the zoomer. -->
+        <attribute name="zooming" type="boolean" value="false"/>
+        
+        <handler name="oninit" method="valueCheck"/>
+        
+        <!-- Public methods. -->
+
+        <!--- Mostly just checks to make sure values are in order. -->
+        <method name="valueCheck" args="ignore">
+            <![CDATA[
+            if(this.draggable && this.zoomable){
+                this.setAttribute('draggable', false);
+                this.setAttribute('zoomable', false);
+                Debug.warn("Chart can only be draggable OR zoomable.");
+            }
+            if(this.minimum >= this.maximum){
+                this.setAttribute('minimum', 0);
+                this.setAttribute('maximum', 100);
+                Debug.warn("Attribute 'minimum' must be smaller than attribute 'maximum'.");
+            }
+            if(this.altminimum >= this.altmaximum){
+                this.setAttribute('minimum', 0);
+                this.setAttribute('maximum', 10);
+                Debug.warn("Attribute 'altminimum' must be smaller than attribute 'altmaximum'.");
+            }
+            ]]>
+        </method>
+        
+        <!--- Locates a subnode of type "chartdata", wherein all the data
+            for the chart can be found. -->
+        <method name="findData">
+            <![CDATA[
+            for(var i = 0; i <= this.subnodes.length; i++){
+                if(subnodes[i] instanceof lz.chartdata){
+                    return i;
+                }
+            }
+            ]]>
+        </method>
+        
+        <!--- Locates a subnode of type "legend". -->
+        <method name="findLegend">
+            <![CDATA[
+            for(var i = 0; i <= this.subnodes.length; i++){
+                if(subnodes[i] instanceof lz.chartlegend){
+                    return i;
+                }
+            }
+            return null;
+            ]]>
+        </method>
+        
+        <!--- Invoked automatically if attribute 'adjusttodata' is true.  Can
+            be invoked manually at runtime.  Adjusts the chart to fill the
+            graph, using the maximum and minimum values found in data. -->
+        <method name="adjustToData">
+            <![CDATA[
+            var snum = this.seriesnumber;
+            var dnode = this.findData();
+            for(var j = 0; j < snum; j++){
+                if(subnodes[dnode].subviews[j].ydata != null){
+                    var ylength = subnodes[dnode].subviews[j].ydata.length;
+                    this.setAttribute('highesty', subnodes[dnode].subviews[j].ydata[0] * 1);
+                    this.setAttribute('lowesty', subnodes[dnode].subviews[j].ydata[0] * 1);
+                    for(var i = 0; i < ylength; i++){
+                        if(subnodes[dnode].subviews[j].ydata[i] > this.highesty){
+                            this.setAttribute('highesty',
+                                subnodes[dnode].subviews[j].ydata[i] * 1);
+                        }
+                        if(subnodes[dnode].subviews[j].ydata[i] < this.lowesty){
+                            this.setAttribute('lowesty',
+                                subnodes[dnode].subviews[j].ydata[i] * 1);
+                        }
+                    }
+                }
+                if(subnodes[dnode].subviews[j].xdata != null){
+                    var xlength = subnodes[dnode].subviews[j].xdata.length;
+                    this.setAttribute('highestx', subnodes[dnode].subviews[j].xdata[0] * 1);
+                    this.setAttribute('lowestx', subnodes[dnode].subviews[j].xdata[0] * 1);
+                    for(var i = 0; i < xlength; i++){
+                        if(subnodes[dnode].subviews[j].xdata[i] > this.highestx){
+                            this.setAttribute('highestx',
+                                subnodes[dnode].subviews[j].xdata[i] * 1);
+                        }
+                        if(subnodes[dnode].subviews[j].xdata[i] < this.lowestx){
+                            this.setAttribute('lowestx',
+                                subnodes[dnode].subviews[j].xdata[i] * 1)
+                        }
+                    }
+                }
+            }
+            this.setAttribute('maximum', this.highesty);
+            this.setAttribute('minimum', this.lowesty);
+            this.datazoom.setAttribute('origmaximum', this.highesty);
+            this.datazoom.setAttribute('origminimum', this.lowesty);
+            if(typeof linechart != 'undefined' && this instanceof lz.linechart){
+                this.setAttribute('altmaximum', this.highestx);
+                this.setAttribute('altminimum', this.lowestx);
+                this.datazoom.setAttribute('origaltmaximum', this.highestx);
+                this.datazoom.setAttribute('origaltminimum', this.lowestx);
+            }
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart or linechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

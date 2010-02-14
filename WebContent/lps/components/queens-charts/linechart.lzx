@@ -1,0 +1,582 @@
+<library>
+    <include href="shared/linechartbacking.lzx"/>
+    <include href="shared/basechart.lzx"/>
+
+    <!--- The linechart class draws data in lines using the
+        information in the child dataseries object(s).
+        (Of beta quality.) -->
+    <class name="linechart" extends="basechart" clip="true">
+        <!--- Private attributes. -->
+        
+        <!--- @keywords private
+            The drawaxis isn't used for linechart, but is included
+            because certain elements ask for it. -->
+        <attribute name="drawaxis" type="string" value="x"/>
+        
+        <!--- @keywords private
+            Indicates the lines have been drawn at least once. -->
+        <attribute name="datadrawn" type="boolean" value="false"/>
+        
+        <!--- @keywords private
+            Used to close the path of the filler drawviews. -->
+        <attribute name="closepoint" type="number" value="0"/>
+        
+        <!--- @keywords private
+            This is used to determine whether the last line was or was not
+            visible, which will prevent the next line from being drawn from
+            a bizarre location. -->
+        <attribute name="lastlinenotvis" type="boolean" value="false"/>
+
+        <handler name="ondata">
+            if(this.adjusttodata == true){
+                this.adjustToData();
+            }
+            this.dataclip.datapane.breakDown();
+            this.clearLines();
+            this.refreshData();
+            this.buildLines();
+            this.chartbg.clearHTickLabels();
+            this.chartbg.clearVTickLabels();
+            this.chartbg.renderAll();
+            if(this.findLegend() != null){
+                if(this.subnodes[this.findLegend()].legenddrawn != true){
+                    this.subnodes[this.findLegend()].buildLegend();
+                }
+            }
+        </handler>
+
+        <!--- Whenever minimum, maximum, altminimum and altmaximum are changed, the
+            chart needs to be redrawn entirely.  (Normally, tick and data labels aren't
+            redrawn, because it would be far too huge a resource drag to continually
+            break down and rebuild them whenever a person zoomed in.  Instead, they're
+            constrained to scale to the appropriate distances from each other.)  When
+            the mins and maxes are changed, however, the scaling gets thrown off for
+            existing objects.  These handlers ensures that when these values are changed,
+            the labels are broken down and redrawn. -->
+        <event name="onminimum"/>
+        <event name="onmaximum"/>
+        <event name="onaltminimum"/>
+        <event name="onaltmaximum"/>
+        <handler name="onminimum">
+            if(this.zooming == false){
+                this.dataclip.datapane.breakDown();
+                this.chartbg.clearHTickLabels();
+                this.datazoom.setAttribute('origminimum', this.minimum);
+                this.chartbg.renderGrid();
+                this.clearLines();
+                this.buildLines();
+            }
+        </handler>
+        <handler name="onmaximum">
+            if(this.zooming == false){
+                this.dataclip.datapane.breakDown();
+                this.chartbg.clearHTickLabels();
+                this.datazoom.setAttribute('origmaximum', this.maximum);
+                this.chartbg.renderGrid();
+                this.clearLines();
+                this.buildLines();
+            }
+        </handler>
+        <handler name="onaltminimum">
+            if(this.zooming == false){
+                this.dataclip.datapane.breakDown();
+                this.chartbg.clearVTickLabels();
+                this.datazoom.setAttribute('origaltminimum', this.altminimum);
+                this.chartbg.renderAltGrid();
+                this.clearLines();
+                this.buildLines();
+            }
+        </handler>
+        <handler name="onaltmaximum">
+            if(this.zooming == false){
+                this.dataclip.datapane.breakDown();
+                this.chartbg.clearVTickLabels();
+                this.datazoom.setAttribute('origaltmaximum', this.altmaximum);
+                this.chartbg.renderAltGrid();
+                this.clearLines();
+                this.buildLines();
+            }
+        </handler>
+        
+        <!--- Clears all the lines, points and fillers and sets flag "datadrawn"
+            to false. -->
+        <method name="clearLines">
+            if(this.dataclip.datapane.pldraw.drawready){
+                this.dataclip.datapane.pldraw.clear();
+            }
+            if(this.dataclip.datapane.ptdraw.drawready){
+                this.dataclip.datapane.ptdraw.clear();
+            }
+            if(this.dataclip.datapane.bfilldraw.drawready){
+                this.dataclip.datapane.bfilldraw.clear();
+            }
+            if(this.dataclip.datapane.afilldraw.drawready){
+                this.dataclip.datapane.afilldraw.clear();
+            }
+            this.setAttribute('datadrawn', false);
+        </method>
+
+        <method name="refreshData">
+            <![CDATA[
+            var snum = this.seriesnumber;
+            var dnode = this.findData();
+            for(var j = 0; j < snum; j++){
+                subnodes[dnode].subviews[j].ondata.sendEvent();
+            }
+            ]]>
+        </method>
+        
+        <!--- Builds all the lines, points, fillers, and labels. -->
+        <method name="buildLines">
+            <![CDATA[
+            var snum = this.seriesnumber;
+            var dnode = this.findData();
+            var spos = 0;
+            for(var j = 0; j < snum; j++){
+                var ld = subnodes[dnode].subviews[j];
+                if(ld.dataenabled == true){
+                    if(ld.ydata != null &&
+                        typeof ld.ydata.length != 'undefined'){
+                        var ylength = ld.ydata.length;
+                        this.setAttribute('numpoints', ylength * snum);
+                        for(var i = 0; i < ylength; i++){
+                            var pointy = (ld.ydata[i]);
+                            var pointx = (ld.xdata[i]);
+                            var truevaluey = ld.ydata[i];
+                            var truevaluex = ld.xdata[i];
+                            var datacolor = ld.datacolor;
+                            var dhover = ld.tooltip;
+                            var aninit = ld.animationinit;
+                            var dataopacity = ld.dataopacity;
+                            var bcolor;
+                            if(ld.colordata != null){
+                                if(typeof ld.colordata[i] !=
+                                    'undefined'){
+                                    bcolor = ld.colordata[i];
+                                } else {
+                                    bcolor = null;
+                                }
+                            } else {
+                                bcolor = ld.datacolor;
+                            }
+                        
+                            var pddata;
+                            if(ld.pointddata != null){
+                                if(typeof ld.pointddata[i] !=
+                                    'undefined'){
+                                    pddata = ld.pointddata[i];
+                                } else {
+                                    pddata = null;
+                                }
+                            } else {
+                                pddata = ld.pointdiameter;
+                            }
+                        
+                            var pvis;
+                            if(ld.pvdata != null &&
+                                typeof ld.pvdata[i] != 'undefined'){
+                                pvis = ld.pvdata[i];
+                            } else if(ld.pvdata != null &&
+                                typeof ld.pvdata[i] == 'undefined' &&
+                                ld.pvdata.length > 1) {
+                                pvis = null;
+                            } else {
+                                pvis = ld.pointsvisible;
+                            }
+                        
+                            var lvis;
+                            if(ld.lvdata != null &&
+                                ld.lvdata.length != 0){
+                                if(typeof ld.lvdata[i] !=
+                                    'undefined'){
+                                    lvis = ld.lvdata[i];
+                                } else {
+                                    lvis = null;
+                                }
+                            } else {
+                                lvis = ld.linesvisible;
+                            }
+                        
+                            var lthick;
+                            if(ld.lthickdata != null &&
+                                ld.lthickdata.length != 0){
+                                if(typeof ld.lthickdata[i] !=
+                                    'undefined'){
+                                    lthick = ld.lthickdata[i];
+                                } else {
+                                    lthick = null;
+                                }
+                            } else {
+                                lthick = ld.linethickness;
+                            }
+                        
+                            if(lvis == null || (typeof xposit == 'undefined' ||
+                                xposit == null || typeof yposit == 'undefined' ||
+                                yposit == null)){
+                                this.setAttribute('lastlinenotvis', true);
+                            }
+                        
+                            var pborder;
+                            if(ld.pborderdata != null){
+                                if(typeof ld.pborderdata[i] !=
+                                    'undefined'){
+                                    pborder = ld.pborderdata[i];
+                                } else {
+                                    pborder = null;
+                                }
+                            } else {
+                                pborder = ld.pointborder;
+                            }
+                        
+                            var pshape;
+                            if(ld.pshapedata != null){
+                                if(typeof ld.pshapedata[i] !=
+                                    'undefined'){
+                                    pshape = ld.pshapedata[i];
+                                } else {
+                                    pshape = null;
+                                }
+                            } else {
+                                pshape = ld.pointshape;
+                            }
+                        
+                            var pbthick;
+                            if(ld.pbwidthdata != null){
+                                if(typeof ld.pbwidthdata[i] !=
+                                    'undefined'){
+                                    pbthick = ld.pbwidthdata[i];
+                                } else {
+                                    pbthick = null;
+                                }
+                            } else {
+                                pbthick = ld.pointborderwidth;
+                            }
+                        
+                            var popac;
+                            if(ld.popacdata != null){
+                                if(typeof ld.popacdata[i] !=
+                                    'undefined'){
+                                    popac = ld.popacdata[i];
+                                } else {
+                                    popac = null;
+                                }
+                            } else {
+                                popac = ld.pointopacity;
+                            }
+                            
+                            var lopac;
+                            if(ld.opacdata != null){
+                                if(typeof ld.opacdata[i] !=
+                                    'undefined'){
+                                    lopac = ld.opacdata[i];
+                                } else {
+                                    lopac = 1;
+                                }
+                            } else {
+                                lopac = (ld.dataopacity != null ? ld.dataopacity : 1);
+                            }
+                        
+                            var bfill = ld.fillbelow;
+                            var fbopac = ld.fbopacity;
+
+                            var fzero = this.minimum * this.scaler * -1;
+                        
+                            if(pointy != undefined){
+                                var yposit = this.dataclip.datapane.height - fzero -
+                                    (pointy * scaler);
+                            } else {
+                                var yposit = pointy;
+                            }
+                            if(pointx != undefined){
+                                var xposit = this.altzero + (pointx * altscaler);
+                            } else {
+                                var xposit = pointx;
+                            }
+                        
+                            if(bfill != null &&
+                                this.dataclip.datapane.bfilldraw.drawready == true){
+                                this.dataclip.datapane.bfilldraw.globalAlpha = fbopac;
+                                this.dataclip.datapane.bfilldraw.fillStyle = bfill;
+                                if(i == spos){
+                                    this.dataclip.datapane.bfilldraw.beginPath();
+                                    this.setAttribute('closepoint', xposit);
+                                    this.dataclip.datapane.bfilldraw.moveTo(xposit,
+                                        this.dataclip.datapane.height - fzero);
+                                }
+                                if(yposit != undefined && xposit != undefined){
+                                    this.dataclip.datapane.bfilldraw.lineTo(xposit, yposit);
+                                }
+                                if(i + 1 == ylength){
+                                    this.dataclip.datapane.bfilldraw.lineTo(xposit,
+                                        this.dataclip.datapane.height - fzero);
+                                    this.dataclip.datapane.bfilldraw.lineTo(this.closepoint,
+                                        this.dataclip.datapane.height - fzero);
+                                    this.dataclip.datapane.bfilldraw.fill();
+                                }
+                            }
+                            
+                            if(this.dataclip.datapane.pldraw.drawready == true){
+                                this.dataclip.datapane.pldraw.globalAlpha = lopac;
+                                this.dataclip.datapane.pldraw.strokeStyle = lvis;
+                                this.dataclip.datapane.pldraw.lineWidth = lthick;
+
+                                if(lvis && (i == spos || this.lastlinenotvis == true)){
+                                    this.dataclip.datapane.pldraw.beginPath();
+                                    this.dataclip.datapane.pldraw.moveTo(xposit, yposit);
+                                }
+                            
+                                if(lvis && (lastcolor != lvis && i > 0 &&
+                                    this.lastlinenotvis == false)){
+                                    this.dataclip.datapane.pldraw.beginPath();
+                                    this.dataclip.datapane.pldraw.moveTo(lastx, lasty);
+                                }
+                            
+                                if(lvis && (yposit != undefined && xposit != undefined)){
+                                    this.dataclip.datapane.pldraw.lineTo(xposit, yposit);
+                                    if(i + 1 == ylength || (lvis != lastcolor && i > 0)){
+                                        this.dataclip.datapane.pldraw.stroke();
+                                    }
+                                }
+                                if(yposit == null){
+                                    this.dataclip.datapane.pldraw.stroke();
+                                    spos++;
+                                }
+                            }
+                            
+                            this.setAttribute('lastlinenotvis', false);
+                            var lastcolor = lvis;
+                            var lastx = xposit;
+                            var lasty = yposit;
+                            
+                            if(pvis && yposit != undefined && xposit != undefined &&
+                                this.dataclip.datapane.ptdraw.drawready == true){
+                                this.drawPoint(pshape, xposit, yposit, pddata, pborder,
+                                    pvis, pbthick, popac);
+                            }
+                            if(ld.labeldata != null &&
+                                yposit != undefined && xposit != undefined &&
+                                this.rendercomplete != true){
+                                var ltxtsize = ld.labeltextsize;
+                                var lborder = ld.labelborder;
+                                var lbwidth = ld.labelborderwidth;
+                                var lbcolor = ld.labelcolor;
+                                var ltcolor = ld.labeltextcolor;
+                                var labelheight = 15;
+                                if(ld.labeldata[i] != null){
+                                    var ltext = ld.labeldata[i];
+                                    new lz.label(dataclip.datapane, {height:labelheight,
+                                        x:xposit, labelnumber:i, y:yposit - labelheight - 3,
+                                        bgcolor:lbcolor, name:"label"+j+i, fadein:false,
+                                        ltext:ltext, labelset:j, ltextsize:ltxtsize,
+                                        lborder:lborder, lbwidth:lbwidth, ltcolor:ltcolor,
+                                        charttype:"line", rvalx:truevaluex, rvaly:truevaluey});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            this.setAttribute('rendercomplete', true);
+            this.setAttribute('datadrawn', true);
+            ]]>
+        </method>
+        
+        <!--- Draws individual points. -->
+        <method name="drawPoint" args="pshape, xposit, yposit, pddata,
+            pborder, pvis, pbthick, popac">
+            <![CDATA[
+            this.dataclip.datapane.ptdraw.strokeStyle = pborder;
+            if(pborder == null){
+                this.dataclip.datapane.ptdraw.strokeStyle = '#000000';
+                pbthick = 0;
+            }
+            this.dataclip.datapane.ptdraw.fillStyle = pvis;
+            this.dataclip.datapane.ptdraw.lineWidth = pbthick;
+            this.dataclip.datapane.ptdraw.globalAlpha = popac;
+            this.dataclip.datapane.ptdraw.beginPath();
+            var rad = pddata / 2;
+            
+            if(pshape == "square"){
+                this.dataclip.datapane.ptdraw.moveTo(xposit - rad, yposit - rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + rad, yposit - rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + rad, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - rad, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - rad, yposit - rad);
+            } else if(pshape == "circle"){
+                this.dataclip.datapane.ptdraw.moveTo(xposit - rad, yposit);
+                this.dataclip.datapane.ptdraw.arc(xposit, yposit, rad, 2 * Math.PI, false);
+            } else if(pshape == "triangle"){
+                this.dataclip.datapane.ptdraw.moveTo(xposit - rad, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit, yposit - rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + rad, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - rad, yposit + rad);
+            } else if(pshape == "diamond"){
+                this.dataclip.datapane.ptdraw.moveTo(xposit, yposit - rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + rad, yposit);
+                this.dataclip.datapane.ptdraw.lineTo(xposit, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - rad, yposit);
+                this.dataclip.datapane.ptdraw.lineTo(xposit, yposit - rad);
+            } else if(pshape == "fourpoint"){
+                this.dataclip.datapane.ptdraw.moveTo(xposit, yposit - rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + (rad * .2),
+                    yposit - (rad * .2));
+                this.dataclip.datapane.ptdraw.lineTo(xposit + rad, yposit);
+                this.dataclip.datapane.ptdraw.lineTo(xposit + (rad * .2),
+                    yposit + (rad * .2));
+                this.dataclip.datapane.ptdraw.lineTo(xposit, yposit + rad);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - (rad * .2),
+                    yposit + (rad * .2));
+                this.dataclip.datapane.ptdraw.lineTo(xposit - rad, yposit);
+                this.dataclip.datapane.ptdraw.lineTo(xposit - (rad * .2),
+                    yposit  - (rad * .2));
+                this.dataclip.datapane.ptdraw.lineTo(xposit, yposit - rad);
+            }
+            if(pvis != null && typeof pvis != 'undefined'){
+                this.dataclip.datapane.ptdraw.fill();
+            }
+            if(pborder != null && typeof pborder != 'undefined'){
+                this.dataclip.datapane.ptdraw.stroke();
+            }
+            ]]>
+        </method>
+        
+        <!--- The backing grid for the chart.  This contains all the background lines,
+            ticks, borders, etc. -->
+        <chartbacking name="chartbg" width="${parent.plotwidth}"
+            height="${parent.plotheight}" x="${parent.plotx}" y="${parent.ploty}"/>
+            
+        <!--- Dataclip is a view at a fixed size that contains an internal
+            view with all the points, lines and labels.  As the internal view datapane is
+            scalable and able to be dragged around, it needs to be clipped. -->
+        <view name="dataclip" width="$once{parent.plotwidth - (parent.borderwidth * 2)}"
+            height="$once{parent.plotheight - (parent.borderwidth * 2)}"
+            x="$once{parent.plotx + parent.borderwidth + 1}"
+            y="$once{parent.ploty + parent.borderwidth}" clip="true">
+            <view name="datapane" x="${parent.parent.paneslider}"
+                y="${parent.parent.altslider}"
+                width="${parent.parent.scaledaltmax - parent.parent.scaledaltmin}"
+                height="${parent.parent.scaledmax - parent.parent.scaledmin}">
+                <handler name="onmousedown">
+                    if(parent.parent.draggable){
+                        dragger.setAttribute('applied', true);
+                    }
+                </handler>
+                <handler name="onmouseup">
+                    if(parent.parent.draggable){
+                        dragger.setAttribute('applied', false);
+                        parent.parent.setAttribute('paneslider', this.x);
+                        parent.parent.setAttribute('altslider', this.y);
+                    }
+                </handler>
+                
+                <!--- Destroys all subviews, specifically labels. -->
+                <method name="breakDown">
+                    <![CDATA[
+                    var killviews = 0;
+                    for(var i = 0; i <= this.subviews.length; i++){
+                        if(this.subviews[i] instanceof lz.label){
+                            killviews++;
+                        }
+                    }
+                    var remainviews = this.subviews.length - killviews;
+                    while(this.subviews.length != remainviews){
+                        for(var j = 0; j <= this.subviews.length; j++){
+                            if(this.subviews[j] instanceof lz.label){
+                                this.subviews[j].destroy();
+                            }
+                        }
+                    }
+                    classroot.setAttribute('rendercomplete', false);
+                    ]]>
+                </method>
+                
+                <!--- Line drawview.  This draws all the lines of the chart. -->
+                <drawview name="pldraw" width="${parent.width}"
+                    height="${parent.height}">
+                    <attribute name="drawready" type="boolean" value="false"/>
+                    <handler name="oncontext">
+                        this.setAttribute('drawready', true);
+                    </handler>
+                </drawview>
+                <!--- Point drawview.  This draws all the points of the chart.  This
+                    is a separate view from the line drawer because this would
+                    otherwise interrupt the direction of the lines from point to
+                    point. -->
+                <drawview name="ptdraw" x="${parent.pldraw.x}" y="${parent.pldraw.y}"
+                    width="${parent.width}" height="${parent.height}">
+                    <attribute name="drawready" type="boolean" value="false"/>
+                    <handler name="oncontext">
+                        this.setAttribute('drawready', true);
+                    </handler>
+                </drawview>
+                <!--- This drawview fills the area below the data line.  It's separate
+                    from the other views for the same reason as described for ptdraw:
+                    it would otherwise interfere with the drawing of the lines. -->
+                <drawview name="bfilldraw" x="${parent.pldraw.x}" y="${parent.pldraw.y}"
+                    width="${parent.width}" height="${parent.height}">
+                    <attribute name="drawready" type="boolean" value="false"/>
+                    <handler name="oncontext">
+                        this.setAttribute('drawready', true);
+                    </handler>
+                </drawview>
+                <!--- Same as bfilldraw, but for the area above the line. -->
+                <drawview name="afilldraw" x="${parent.pldraw.x}" y="${parent.pldraw.y}"
+                    width="${parent.width}" height="${parent.height}">
+                    <attribute name="drawready" type="boolean" value="false"/>
+                    <handler name="oncontext">
+                        this.setAttribute('drawready', true);
+                    </handler>
+                </drawview>
+
+                <dragstate name="dragger" drag_axis="both"
+                    drag_min_x="${parent.width - this.width + 2}"
+                    drag_max_x="0" drag_min_y="${parent.height - this.height + 2}"
+                    drag_max_y="0"/>
+            </view>
+        </view>
+        <!--- This allows one to zoom in and out of the chart. -->
+        <chartzoomer name="datazoom"/>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    The linechart class draws data in lines using the
+                        information in the child dataseries object(s).
+                </text>
+            </tag>
+            <text>
+                <p>This is an example of a simple linechart with minimal customization.  By
+                specifying additional attributes, one can exercise much greater control over
+                the visual appearance of the chart.  (See: /test/charting/ for more detailed
+                examples.)</p>
+
+                <example title="Simple linechart">
+                    &lt;canvas width="800" height="600"&gt;
+
+                        &lt;dataset name="dset" request="true" src="resources/linechart_data_01.xml"/&gt;
+
+                        &lt;linechart name="testchart" width="600" height="400" datapath="dset:/"
+                            minimum="-13" maximum="100" altminimum="0" altmaximum="13"&gt;
+                            &lt;chartdata&gt;
+                                &lt;dataseries xdatapath="data/year[1]/month/@number"
+                                    ydatapath="data/year[1]/month/@projected"
+                                    pointsvisible="#FF9988" linesvisible="#FF9988"
+                                    label="data/year[1]/month/@projected"/&gt;
+                                &lt;dataseries xdatapath="data/year[2]/month/@number"
+                                    ydatapath="data/year[2]/month/@projected"
+                                    pointsvisible="#B68B66" linesvisible="#B68B66"
+                                    label="data/year[2]/month/@projected"/&gt;
+                            &lt;/chartdata&gt;
+                        &lt;/linechart&gt;
+                    &lt;/canvas&gt;
+                </example>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

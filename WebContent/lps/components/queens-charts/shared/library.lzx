@@ -1,0 +1,22 @@
+<!---
+      @topic Charting And Graphing
+      @subtopic Shared
+  -->
+<library>
+  <include href="basechart.lzx"/>
+  <include href="basechartbacking.lzx"/>
+  <include href="label.lzx"/>
+  <include href="legend.lzx"/>
+  <include href="dataseries.lzx"/>
+  <include href="chartzoomer.lzx"/>
+  <include href="barchartbacking.lzx"/>
+  <include href="databar.lzx"/>
+  <include href="wholepie.lzx"/>
+  <include href="piepiece.lzx"/>
+  <include href="linechartbacking.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

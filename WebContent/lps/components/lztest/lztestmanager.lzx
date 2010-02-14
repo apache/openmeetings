@@ -1,0 +1,294 @@
+<!--
+/* X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2009 Laszlo Systems, Inc.  All Rights Reserved.          *
+* Use is subject to license terms.                                        *
+* X_LZ_COPYRIGHT_END ******************************************************/
+-->
+
+<script when="immediate"><![CDATA[
+dynamic class LzTestSuite {
+public var name = "Default Name";
+public var curtest = 0;
+public var totaltests = 0;
+public var passedtests = 0;
+public var failedtests = 0;
+public var tests = [];
+public var results = [];
+
+public function LzTestSuite ( nm:String? = ""){
+    this.name = nm;
+    LzTestManager.addSuite(this);
+}
+
+function addTest( t ) {
+    this.tests.push( t );
+    this.totaltests = this.totaltests + 1;
+}
+
+function printResults() {
+    var countedfailedtests = 0;
+    var countedpassedtests = 0;
+    for (var tc=0, len=this.tests.length; tc<len; tc++) {
+        if (this.results[tc] != "pass") {
+            countedfailedtests += 1;
+        } else {
+            countedpassedtests += 1;
+        }
+    }
+    if ( (countedfailedtests != this.failedtests)
+        || (countedpassedtests != this.passedtests)) {
+            Debug.error("oh nooooo countedpassedtests != this.passedtests OR countedfailedtests != this.failedtests don't match");
+    }
+}
+}
+
+dynamic class LzTestManagerClass extends LzEventable {
+public var totalsuites = 0;
+public var passedsuites = 0;
+public var failedsuites = 0;
+public var suites = [];
+public var cursuite = 0;
+public var results = [];
+public var global = this;
+public var logfile = "lztest.log";
+public var loggingEnabled = false;
+public var testpath = "";
+public var resultstring = "";
+
+public var startTestsDelegate;
+
+function LzTestManagerClass () {
+  this.startTestsDelegate = new LzDelegate(this, "startTests", canvas, "onafterinit");
+}
+
+function startTests ( args ) {
+  with (this) {
+    // Debug.info("LzTestManager is starting tests from canvas.oninit");
+    LzTestManager.runTestSuites();
+    LzTestManager.printSummary();
+    // Debug.info("LzTestManager is done with tests from canvas.oninit");
+  }
+}
+
+function addSuite( s ) {
+    this.suites.push( s );
+    this.totalsuites += 1;
+}
+
+function setupServerLogging() {
+    var lzurl = lz.Browser.getLoadURLAsLzURL();
+    // strip initial "/legals/" from path, to make it relative to LPS servlet base
+    if (lzurl.path) {
+        this.testpath = lzurl.path.substring(lzurl.path.substring(1).indexOf("/")+2) + lzurl.file;
+        this.loggingEnabled = true;
+    } else {
+        this.testpath = "";
+        this.loggingEnabled = false;
+    }
+    //this.resultstring = "start testsuite: "+this.testpath +"\n";
+}
+
+function sendLogData(logfile, msg) {
+    if (!this.loggingEnabled) {
+        return;
+    }
+    // compute the base directory of the current app
+    var url = lz.Browser.getLoadURL();
+    var p1 = url.indexOf("/", 8);
+    var p2 = url.indexOf("/", p1+1);
+    var base = url.substring(0,p2);
+
+    var query = "logfile="+escape(logfile)+"&msg="+escape(msg);
+    var reqstr =  lz.Browser.toAbsoluteURL( base+"/test/lzunit/Logger.jsp?"+query, false );
+    //Debug.write("sendServerLogCommand", reqobj, reqstr);
+    
+    var tloader = new LzHTTPLoader(this, false);
+    tloader.loadSuccess = this.loadComplete;    
+    tloader.open ("GET" , reqstr, /* username */ null, /* password */ null);
+    tloader.send (/* content */ null)
+
+}
+
+
+function loadComplete (loader:LzHTTPLoader, data:*) :void { 
+    if (lz.Browser.getInitArg('close_when_finished') == 'true') {
+        Debug.info('query arg "close_when_finished" is set, closing window.');
+        var cleanupwindow = function () {
+            lz.Browser.callJS("window.close()");
+        }
+        LzTimeKernel.setTimeout(cleanupwindow, 3000);
+    }
+}
+
+function printSummary () {
+    var failedsuitenames = [];
+    var passedsuitenames = [];
+    var countedfailedsuites = 0;
+    var countedpassedsuites = 0;
+    for (var suite=0, len=this.suites.length; suite<len; suite++) {
+        if (this.results[suite] != "pass") {
+            this.suites[suite].printResults();
+            countedfailedsuites += 1;
+            failedsuitenames.push(this.suites[suite].name);
+        } else {
+            passedsuitenames.push(this.suites[suite].name);
+            countedpassedsuites += 1;
+        }
+    }
+    if (countedfailedsuites > 0) {
+        var msg = "Failed " + countedfailedsuites + " suites";
+        for (var s=0, len=failedsuitenames.length; s<len; s++) {
+            msg = msg + ", " + failedsuitenames[s];
+        }
+        Debug.error(msg);
+    }
+
+    if (countedfailedsuites != this.failedsuites) {
+        Debug.error("oh noooo countedfailedsuites != this.failedsuites");
+    }
+    if (countedpassedsuites != this.passedsuites) {
+        Debug.error("countedpassedsuites: " + countedpassedsuites);
+        Debug.error("this.passedsuites: " + this.passedsuites);
+        Debug.error("oh noooo countedpassedsuites != this.passedsuites");
+    }
+
+    if ( this.passedsuites == this.totalsuites ) {
+        Debug.info("Passed all suites.");
+    }
+
+    //this.resultstring += ("failures: "+ countedfailedsuites + "\n");
+    //this.resultstring += ("passed: "+ countedpassedsuites + "\n");
+    ///if ( this.passedsuites == this.totalsuites ) {
+    //   this.resultstring += "status: Passed all suites.\n";
+    //}
+    this.resultstring += "finish_testsuite: "+this.testpath + " failures: "+ countedfailedsuites+ "\n";
+    this.sendLogData(this.logfile, this.resultstring);
+}
+
+function runTestSuites() {
+    this.setupServerLogging();
+    for (var suite=0, len=this.suites.length; suite<len; suite++) {
+        this.results[suite] = "pre";
+        this.cursuite = suite;
+        var suiteObj = this.suites[suite];
+        //Debug.write('******* order of tests:');
+        //for (var item in suiteObj.tests) Debug.write(item);
+        //Debug.write('*******');
+        for (var testcase = 0; testcase < suiteObj.tests.length; testcase++) {
+            //Debug.write('running test: ',testcase);
+            suiteObj.curtest = testcase;
+            var testcaseObj = suiteObj.tests[testcase];
+            suiteObj.results[testcase] = "pre";
+            testcaseObj.apply(suiteObj);
+            if (suiteObj.results[testcase] == "pre") {
+                suiteObj.results[testcase] = "pass";
+                suiteObj.passedtests += 1;
+            } else {
+                suiteObj.failedtests += 1;
+            }
+        }
+        if (this.results[suite] == "pre") {
+            this.results[suite] = "pass";
+            this.passedsuites += 1;
+        } else {
+            this.failedsuites += 1;
+        }
+    }
+}
+
+
+function failAssertion ( msg ) {
+    var ste = this.suites[this.cursuite];
+    if (ste) {
+        var tst = ste.curtest;
+        Debug.error("In suite " + ste.name + ", test " + tst + ", failed assertion: " + msg );
+        // Mark this test case as having failed
+        this.results[this.cursuite] = "fail";
+        // Mark this test suite as having failed
+        this.suites[this.cursuite].results[tst] = "fail";
+    } else {
+        Debug.error("Failed assertion: ", msg);
+    }
+}
+
+function assertTrue (condition, assertion = null) {
+    if (!condition)  {
+        var errmsg = "assertTrue('" + condition + "') failed"
+                    + (assertion ? ': ' + assertion : '');
+        LzTestManager.failAssertion(errmsg);
+    }
+}
+
+
+function assertFalse (condition, assertion = null) {
+    if (condition)  {
+        var errmsg = "assertFalse('" + condition + "') failed"
+                    + (assertion ? ': ' + assertion : '');
+        this.failAssertion(errmsg);
+    }
+}
+
+function assertEquals (expected, actual, message="") {
+    if (! (expected == actual)) {
+        var errmsg = message + " Equals expected " + expected + ", got " + actual;
+        LzTestManager.failAssertion(errmsg);
+    }
+}
+
+function assertNull (object, message="") {
+    if (object !== null) {
+       LzTestManager.failAssertion(message + " Null " + null + object);
+    }
+}
+
+function assertNotNull (object, message="") {
+    if (object === null) {
+       LzTestManager.failAssertion(message + " NotNull " + "non-null value: " + object);
+    }
+}
+
+function assertSame (expected, actual, message="") {
+    if (typeof(expected) == "undefined" && typeof(actual) == "undefined") {
+        return;
+    }
+
+    if (expected !== actual) {
+        LzTestManager.failAssertion(message + " Same: expected " + expected + ", got " + actual);
+    }
+}
+
+function assertNotSame (expected, actual, message="") {
+    if (expected === actual) {
+        var msg = "NotSame " + msg + " expected anything but " + expected + ", got ", actual;
+        LzTestManager.failAssertion(msg);
+    }
+}
+
+function assertUndefined (object, message="") {
+    if (typeof(object) != "undefined") {
+       LzTestManager.failAssertion(message + " undefined value  " + object);
+    }
+}
+
+function assertNotUndefined (object, message="") {
+    if (typeof(object) == "undefined") {
+        LzTestManager.failAssertion(message + " undefined value  " + object); //
+    }
+}
+
+function assertWithin (expected, actual, delta, message="") {
+    // handle infinite expected
+    if (expected == actual) return;
+
+    var error = (actual <= expected) ? (expected - actual) : (actual - expected);
+    // note NaN compares are always false
+    if (! (error <= delta)) {
+        LzTestManager.failAssertion(message + " within " + expected + "\u00B1" + delta + " got " + actual);
+    }
+}
+}
+var LzTestManager:LzTestManagerClass = new LzTestManagerClass();
+
+
+
+]]></script>

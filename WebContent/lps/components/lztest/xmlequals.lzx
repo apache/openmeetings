@@ -1,0 +1,69 @@
+<library>
+<script when="immediate">
+<![CDATA[
+
+// compare two XML objects for lisp-style EQUAL 
+
+// this takes two string
+function xmlstringequals (str1, str2) {
+    var nxml1 = LzXMLParser.parseXML(str1, null, null);
+    var xml1 = LzXMLTranslator.copyXML(nxml1, null, null);
+
+    var nxml2 = LzXMLParser.parseXML(str2, null, null);
+    var xml2 = LzXMLTranslator.copyXML(nxml2, null, null);
+    return xmlequals(xml1, xml2);
+}
+
+
+function xmlequals(x1, x2) {
+  if (x1.nodeType != x2.nodeType) return false;
+  // text node
+  if (x1.nodeType == 3) {
+    if (x1.data != x2.data) return false;
+  } else if (x1.nodeType ==  1){
+    // shouldn't ever happen, childNodes should always be non-null
+    if ( ((x1.childNodes == null) && (x2.childNodes != null)) ||
+         ((x1.childNodes != null) && (x2.childNodes == null))) return false;
+
+    if (x1.childNodes.length != x2.childNodes.length) return false;
+
+    // compare attributes
+    var x1attrs = x1.attributes;
+    var x1keys = [];
+    var x2attrs = x2.attributes;
+    var x2keys = [];
+    for (var attr in x1attrs) {
+      x1keys.push(attr);
+    }
+    for (var attr in x2attrs) {
+      x2keys.push(attr);
+    }
+    var limit = x1keys.length;
+    if (limit != x2keys.length) { return false; }
+    x1keys.sort();
+    x2keys.sort();
+    for (var i = 0; i < limit; i++) {
+      var key = x1keys[i];
+      if (key != x2keys[i]) { return false; }
+      if (x1attrs[key] != x2attrs[key]) { return false; }
+    }
+    // recurse
+    for (var i = 0; i < x1.childNodes.length; i++) {
+      if (!xmlequals(x1.childNodes[i], x2.childNodes[i])) {
+        return false;
+      }
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
+]]>
+    </script>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+</library>
