@@ -1,0 +1,113 @@
+<library>
+    <include href="../common/datalabel.lzx"/>
+    <include href="../common/virtualdrawview.lzx"/>
+    
+    <!--- @keywords private
+     plotarea of column chart -->
+    <class name="columnchartplotarea"   extends="virtualdrawview">
+        <!--- Data Bar pool 
+              @keywords private -->
+        <viewspool name="_barspool" parentview="${parent}" viewclass="databar"/>
+
+        <!--- @keywords private -->     
+        <viewlistmanager name="listmanager"/>
+
+        <!--- Renders the data column, tooltip and datalabel, also applies them the style if it was specified
+            @param array xseries: x series of the chart
+            @param array yseries: y series of the chart
+            @param Array tooltipseries: the tooltip values
+            @param Array labelseries: the label values
+            @param Style style: style of the chart
+            @param Number offset: The offset
+            @param Number width: The bar width
+            @param Number seriesNum: The number of the actual serie
+              @keywords private -->
+        <method name="renderSeries" args="xseries, yseries, tooltipseries, labelseries, style, offset, width, seriesNum, type">
+        <![CDATA[ 
+            var x = offset;
+            var updatedNeeded = style.updateNeeded(this);
+            var labelList = listmanager.getList(this, "datalabel", seriesNum);
+            for(var i = 0; i < xseries.length; i++)
+            {                
+                var barX;
+                if( type.toUpperCase() == "LINEAR" ) {
+                    barX = xseries[i];
+                } else {
+                    barX = i;
+                }
+
+                var v = renderBar(barX + offset, width, yseries[i], style );
+                if(tooltipseries != null)
+                    v.tooltip = tooltipseries[i];
+                
+                if ( parent.datalabelEnabled && labelseries != null){
+                    if (labelseries[i] != "null" && labelseries[i] != null && labelseries[i] != '') {    
+                        var label = labelList.getViewAt(i);
+                        if(updatedNeeded)
+                        {                        
+                            label.setAttribute('style', style.label);
+                            label.render(labelseries[i]);
+                        }
+                        label.bringToFront();
+                        //var ly = v.y + v.height - 25;
+                        var ly = v.y  - 25;
+                        //var lx = v.x - label.width/2 + v.width/2;
+                        var lx = (v.width - label.width)/2 + v.x + 3;
+                    
+                        label.setAttribute('x', lx+label.width>this.width?this.width-label.width:lx<0?2:lx-5);
+                        label.setAttribute('y', ly<this.y?2:ly);
+                        label.setAttribute('visible',  v.x>0 && v.x <this.width )
+                    }
+                }
+            }
+            if(updatedNeeded)
+            {
+                style.markUpdated(this); 
+            }                                          
+        ]]>
+        </method>
+                
+        <!--- render the bar
+            @param Number x: the x value
+            @param Number width: The bar width
+            @param Number height: the bar height
+            @param Style style: style of the chart
+              @keywords private -->
+        <method name="renderBar" args="x, width, height, style">            
+        <![CDATA[   
+            var v = _barspool.getView();
+            v.setAttribute('visible', false);
+            
+            
+            v.setAttribute('x', x * this._xscale + this._xoffset);
+            //v.setAttribute('y', this._yoffset);
+            v.setAttribute('y', this._yoffset-(height*this._yscale*-1));
+            v.setAttribute('width', width * this._xscale);
+            v.setAttribute('height', (height * this._yscale*-1));
+            v.style = style;        
+            v.render()
+            v.setAttribute('visible', true);
+            return v;
+            
+            
+        ]]>
+        </method>
+
+        <!--- clear the bar and label pool 
+              @keywords private -->
+        <method name="clear">            
+            super.clear();
+            _barspool.reclaimAll();            
+            listmanager.reclaimAll();
+        </method>
+    </class>
+    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->
