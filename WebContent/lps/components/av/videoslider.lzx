@@ -1,0 +1,297 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007-2009 Laszlo Systems, Inc.  All Rights Reserved.         *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+    <include href="videovolumebutton.lzx"/>
+    <include href="videotogglebutton.lzx"/>
+    <include href="utils/layouts/stableborderlayout.lzx"/>
+
+
+    <resource name="play_button">
+        <frame src="resources/pause_button_up.png"/>
+        <frame src="resources/pause_button_mo.png"/>
+        <frame src="resources/pause_button_dn.png"/>
+        <frame src="resources/play_button_up.png"/>
+        <frame src="resources/play_button_mo.png"/>
+        <frame src="resources/play_button_dn.png"/>
+    </resource>
+
+
+    <resource name="scroll_track"
+        src="resources/scroll_track.swf"
+    />
+
+    <resource name="thumb"
+        src="resources/thumb.png"
+    />
+
+    <class name="timetext" extends="text">
+        <method name="formatTimeHHMMSS" args="t"> 
+            <![CDATA[
+            if (isNaN(t)) {
+                t = 0;
+            }
+
+            var seconds = 
+                Math.floor(t);
+            var ticks =
+                Math.floor(10 * (t - seconds));
+            var minutes = 
+                Math.floor(seconds / 60);
+
+            seconds = seconds % 60;
+
+            var hours = 
+                Math.floor(minutes / 60);
+
+            minutes = minutes % 60;
+
+            return (
+                ((hours < 10) ? ("0" + hours) : hours) + ":" +
+                ((minutes < 10) ? ("0" + minutes) : minutes) + ":" +
+                ((seconds < 10) ? ("0" + seconds) : seconds));
+
+            ]]>
+        </method>
+    </class>
+
+    <class name="videoslider"
+        bgcolor="0x808080"
+    >
+
+
+        <attribute name="ms" value="null"/>
+
+        <attribute name="value" value="${this.tracking ? this.trackvalue : this.sourcevalue}"/>
+        <attribute name="color" value="0x00ff00"/>
+        <attribute name="time" value="0"/>
+
+        <attribute name="timedisplay" value="${this.tracking ? this.tracktime : this.time}"/>
+
+        <attribute name="totaltime" value="0"/>
+
+        <attribute name="sourcevalue" value="${this.time / (this.totaltime || 1.0)}"/>
+
+        <attribute name="trackvalue" value="0.0"/>
+
+        <attribute name="tracktime" value="${this.trackvalue * this.totaltime}"/>
+
+        <attribute name="tracking" value="false"/>
+
+        <attribute name="trackingDelegate" value="null"/>
+
+        <attribute name="volume" value="${this.controls.volumebutton.volume}"/>
+
+        <!-- if true, display the current and total time -->
+        <attribute name="showTimeDisplay" value="true"/>
+
+        <!-- if true, display a volume control -->
+        <attribute name="showVolumeControl" value="true"/>
+
+        <handler name="ontracking"><![CDATA[
+            if (this.tracking) {
+                if (this.trackingDelegate == null) {
+                    this.trackingDelegate = 
+                        new LzDelegate(this, "handleTracking");
+                }
+                lz.Idle.onidle.addDelegate(
+                    this.trackingDelegate);
+            } else {
+                lz.Idle.onidle.removeDelegate(
+                    this.trackingDelegate);
+            }
+          ]]>
+        </handler>
+
+
+        <method name="handleTracking" args="ignore = null"><![CDATA[
+            var newValue = this.slider.getTrackValue();
+            if (newValue != this.trackvalue) {
+                this.setAttribute("trackvalue", newValue);
+                this.ms.seek(
+                    this.trackvalue * this.totaltime);
+            }
+          ]]>
+        </method>
+
+        <stableborderlayout axis="x"/>
+        <videotogglebutton name="playbutton"
+            width="${parent.height}"
+            height="${parent.height}"
+            resource="play_button"
+            stretches="both"
+            engaged="$once{classroot.ms.paused}"
+            frameTable="$once{
+                [1, 2, 1, 3, 4, 5, 4, 6]}"
+        >
+            <method name="trigger"><![CDATA[
+                super.trigger();
+                if (this.engaged) {
+                    if (!classroot.ms.paused) {
+                        classroot.ms.setAttribute("paused", true); // pause
+                    }
+                } else {
+                    if (classroot.ms.paused) {
+                        classroot.ms.setAttribute("paused", false); // resume
+                    }
+                }
+              ]]>
+            </method>
+
+
+            <handler name="onpaused" reference="classroot.ms"><![CDATA[
+                // Debug.write("videoslider mediastream onpaused", "paused", classroot.ms.paused, "engaged", this.engaged, this);
+                if (classroot.ms.paused) {
+                    if (!this.engaged) {
+                        this.setAttribute("engaged", true);
+                    }
+                    //classroot.ms.stop();
+                } else {
+                    if (this.engaged) {
+                        this.setAttribute("engaged", false);
+                    }
+                }
+              ]]>
+            </handler>
+
+
+        </videotogglebutton>
+
+
+        <view name="slider"
+            height="${parent.height}"
+        >
+
+
+            <attribute name="waspaused" value="true"/>
+
+
+            <handler name="onmousedown"><![CDATA[
+                classroot.setAttribute("tracking", true);
+                this.setAttribute("waspaused", classroot.ms.paused);
+                if (!this.waspaused) {
+                    classroot.ms.setAttribute("paused", true); // pause
+                }
+              ]]>
+            </handler>
+
+
+            <handler name="onmouseup"><![CDATA[
+                classroot.setAttribute("tracking", false);
+                if (!this.waspaused &&
+                    classroot.ms.paused) {
+                    classroot.ms.setAttribute("paused", false); // resume
+                } else {
+                    // FIXME: There is still something funny about dragging 
+                    // the slider while the video is paused. 
+                    // Sometimes, it does not update the
+                    // slider position until you un-pause it. 
+                }
+              ]]>
+            </handler>
+
+
+            <method name="getTrackValue"><![CDATA[
+                var thumbwidth = 
+                    this.thumb.width;
+                var x =
+                    (this.getMouse("x") -
+                         (thumbwidth / 2)) /
+                    Math.max(
+                        1, 
+                        this.width - thumbwidth);
+                //Debug.write("getTrackValue", x);
+                return Math.max(
+                    0.0,
+                    Math.min(
+                        1.0,
+                        x));
+              ]]>
+            </method>
+
+
+            <view name="track"
+                width="${parent.width}"
+                height="${parent.height}"
+                resource="scroll_track"
+                stretches="both"
+            />
+
+
+            <view name="progress"
+                width="${classroot.ms.progress * parent.width}"
+                x="0"
+                y="1"
+                height="${parent.height - 3}"
+                opacity="0.75"
+                bgcolor="${classroot.color}"
+            />
+
+
+            <view name="shadow"
+                x="${parent.thumb.x + parent.thumb.y}"
+                y="1"
+                width="${parent.width - this.x}"
+                height="${parent.height - 3}"
+                bgcolor="0x000000"
+                opacity="0.5"
+                stretches="both"
+            />
+
+
+            <view name="thumb"
+                x="${Math.round((parent.width - this.width) * classroot.value)}"
+                y="0"
+                width="${this.height}"
+                height="${parent.height-1}"
+                resource="thumb"
+                stretches="both"
+            />
+
+
+        </view>
+
+    <view name="controls" layout="axis:x">
+        <view name="timefield"
+          width="140"
+          height="${parent.height}"
+          visible="${classroot.showTimeDisplay}"
+        >
+
+
+            <view name="background"
+                x="0"
+                y="0"
+                width="${parent.width}"
+                height="${parent.height}"
+                bgcolor="0xa0a0a0"
+            />
+
+
+            <timetext name="timefield"
+                resize="true"
+                fontsize="11"
+                x="${(parent.width - this.width) / 2}"
+                y="${(parent.height - this.height) / 2}"
+                text="${
+                    formatTimeHHMMSS(classroot.timedisplay) + 
+                    ' / ' + 
+                    formatTimeHHMMSS(classroot.totaltime)}"
+            />
+
+
+        </view>
+
+
+        <videovolumebutton name="volumebutton"
+            visible="${classroot.showVolumeControl}"
+        />
+    </view>
+
+    </class>
+
+
+</library>

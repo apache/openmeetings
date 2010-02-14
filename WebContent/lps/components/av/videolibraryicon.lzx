@@ -1,0 +1,97 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+
+
+    <resource name="video_no_icon_rsc"
+        src="resources/video_no_icon.gif"
+    />
+
+
+    <class name="videolibraryicon"
+        width="${this.f.width + 2}"
+        height="${this.f.height + 2}"
+        bgcolor="${this.selected ? 0x000000 : (this.over ? 0xffff00 : null)}"
+    >
+
+
+        <attribute name="selected" value="false"/>
+
+        <attribute name="icon" type="string" value="video_no_icon_rsc"/>
+
+        <attribute name="over" value="false"/>
+
+        <attribute name="maxHeight" value="48"/>
+
+
+        <handler name="onmouseover"><![CDATA[
+            this.setAttribute("over", true);
+          ]]>
+        </handler>
+
+
+        <handler name="onmouseout"><![CDATA[
+            this.setAttribute("over", false);
+          ]]>
+        </handler>
+
+
+        <handler name="onclick"><![CDATA[
+            this.setAttribute("selected", true);
+          ]]>
+        </handler>
+
+
+        <view name="f"
+            x="1"
+            y="1"
+            width="${this.f.width + 2}"
+            height="${this.f.height + 2}"
+            bgcolor="${classroot.over ? 0xffff00 : (classroot.selected ? 0xffff00 : null)}"
+        >
+
+            <view name="f"
+                x="1"
+                y="1"
+                width="${this.icon.width + 2}"
+                height="${this.icon.height + 2}"
+                bgcolor="0x000000"
+            >
+
+                <view name="icon"
+                    x="1"
+                    y="1"
+                    resource="${classroot.icon}"
+                    stretches="both"
+                    width="${
+                        Math.min(
+                            (this['resourcewidth'] ? this.resourcewidth : 1),
+                            classroot.maxHeight / this.aspectRatio)}"
+                    height="${
+                        this.width * this.aspectRatio}"
+                >
+
+                    <attribute name="aspectRatio" value="1"/>
+
+                    <handler name="onload"><![CDATA[
+                        if (this.resource != null) {
+                            this.setAttribute("aspectRatio", this.resourceheight / this.resourcewidth);
+                        }
+                      ]]>
+                    </handler>
+
+                </view>
+
+            </view>
+
+        </view>
+
+
+    </class>
+
+
+</library>

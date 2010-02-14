@@ -1,0 +1,64 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+
+
+    <class name="videothumbnail"
+        bgcolor="0x000000"
+    >
+
+
+        <attribute name="type" type="string" value="http"/>
+
+        <attribute name="url" type="string" value=""/>
+
+        <attribute name="thumbnailtime" value="0"/>
+
+        <attribute name="border" value="1"/>
+
+
+        <method name="setVideo" args="url, type"><![CDATA[
+            var ms = 
+                this.vscreen.ms;
+
+            ms.setAttribute("type", type);
+            ms.setAttribute("url", url);
+
+            ms.play();
+          ]]>
+        </method>
+
+
+        <mediastream 
+            name="ms"
+            debug="true" 
+            autoplay="true"
+            autoplayStart="${classroot.thumbnailtime || 0}"
+            autoplayPause="false"
+            autoplayLength="0"
+            autoplayReset="true"
+            type="${classroot.type}" 
+            url="${classroot.url}"
+        />
+
+
+        <videoview 
+            name="vv"
+            x="${parent.border}"
+            y="${parent.border}"
+            width="${parent.width - (2 * parent.border)}"
+            height="${parent.height - (2 * parent.border)}"
+            type="${classroot.type}"
+            stream="$once{classroot.ms}"
+            playvolume="0.0"
+        />
+
+
+    </class>
+
+
+</library>

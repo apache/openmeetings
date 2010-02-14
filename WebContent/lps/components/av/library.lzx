@@ -1,0 +1,21 @@
+<!---
+      @topic Extensions
+      @subtopic Audio-Video
+  -->
+<library>
+  <include href="rtmpstatus.lzx" />
+  <include href="streamscrubber.lzx"/>
+  <include href="streamprogress.lzx"/>
+  <include href="videolibraryicon.lzx" />
+  <include href="videolibrarypopup.lzx" />
+  <include href="videoplayer.lzx" />
+  <include href="videoscreen.lzx" />
+  <include href="videoslider.lzx" />
+  <include href="videothumbnail.lzx" />
+  <include href="videotogglebutton.lzx" />
+  <include href="videovolumebutton.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

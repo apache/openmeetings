@@ -1,0 +1,186 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007-2008 Laszlo Systems, Inc.  All Rights Reserved.         *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+
+    <include href="av/videotogglebutton.lzx"/>
+
+    <resource name="volume_button_rsc">
+        <frame src="resources/volume_button_up.png"/>
+        <frame src="resources/volume_button_mo.png"/>
+        <frame src="resources/volume_button_dn.png"/>
+    </resource>
+
+    <resource name="volume_lines_rsc" src="resources/volume_lines.png"/>
+
+    <resource name="volume_mute_rsc" src="resources/volume_mute.png"/>
+
+
+    <class name="videovolumebutton"
+        height="16"
+        width="32"
+    >
+
+
+        <attribute name="volume" value="${this.mute ? 0.0 : this.volumeInternal}"/>
+        <attribute name="volumeInternal" value="1.0"/>
+        <attribute name="mute" value="false"/>
+        <attribute name="adjusterHeight" value="100"/>
+        <attribute name="adjusterBorder" value="2"/>
+        <attribute name="adjusting" value="${
+            this.button.over || 
+            this.button.tracking || 
+            this.adjuster.over  || 
+            this.adjuster.tracking}"/>
+
+
+        <videotogglebutton name="button"
+            x="0"
+            y="0"
+            resource="volume_button_rsc"
+        >
+            
+        <method name="trigger"><![CDATA[
+            classroot.setAttribute("mute", !classroot.mute);
+          ]]>
+        </method>
+
+
+        </videotogglebutton>
+
+
+        <view name="clipper"
+            x="10"
+            y="0"
+            width="${classroot.volumeInternal * this.lines.width}"
+            height="${this.lines.height}"
+            clip="true"
+        >
+
+            <view name="lines"
+                resource="volume_lines_rsc"
+            />
+
+        </view>
+
+
+        <view name="lines"
+            x="10"
+            y="0"
+            resource="volume_mute_rsc"
+            visible="${classroot.mute}"
+        />
+
+
+        <view name="adjuster"
+            x="0"
+            y="${-this.height}"
+            width="${classroot.button.width}"
+            height="${classroot.adjusterHeight + (2 * classroot.adjusterBorder)}"
+            bgcolor="0x808080"
+            visible="${classroot.adjusting}"
+        >
+
+            <attribute name="over" value="false"/>
+            <attribute name="tracking" value="false"/>
+            <attribute name="trackingDelegate" value="null"/>
+
+
+            <handler name="ondestroy"><![CDATA[
+                if (this.tracking) {
+                    this.setAttribute("tracking", false);
+                }
+              ]]>
+            </handler>
+
+
+            <handler name="onmouseover"><![CDATA[
+                this.setAttribute('over', true);
+              ]]>
+            </handler>
+
+
+            <handler name="onmouseout"><![CDATA[
+                this.setAttribute('over', false);
+              ]]>
+            </handler>
+
+
+            <handler name="onmousedown"><![CDATA[
+                classroot.setAttribute('mute', false);
+                this.setAttribute('tracking', true);
+              ]]>
+            </handler>
+
+
+            <handler name="onmouseup"><![CDATA[
+                this.setAttribute('tracking', false);
+              ]]>
+            </handler>
+
+
+            <handler name="ontracking"><![CDATA[
+                if (this.tracking) {
+                    if (this.trackingDelegate == null) {
+                        this.trackingDelegate = 
+                            new LzDelegate(this, "_handleIdle");
+                    }
+                    lz.Idle.onidle.addDelegate(this.trackingDelegate);
+                    this._handleIdle();
+                } else {
+                    if (this.trackingDelegate != null) {
+                        lz.Idle.onidle.removeDelegate(this.trackingDelegate);
+                        this.trackingDelegate.unregisterAll();
+                    }
+                }
+              ]]>
+            </handler>
+
+
+            <method name="_handleIdle" args="ignore=null"><![CDATA[
+                var y = 
+                    this.getMouse("y") -
+                    classroot.adjusterBorder;
+                var vol = 
+                    Math.max(
+                        0,
+                        Math.min(
+                            1.0,
+                            (1.0 - (y / classroot.adjusterHeight))));
+                if (classroot.volumeInternal != vol) {
+                    classroot.setAttribute("volumeInternal", vol);
+                }
+              ]]>
+            </method>
+
+
+            <view
+                x="${classroot.adjusterBorder}"
+                y="${classroot.adjusterBorder}"
+                width="${parent.width - (classroot.adjusterBorder * 2)}"
+                height="${parent.height - (classroot.adjusterBorder * 2)}"
+                bgcolor="0x000000"
+                opacity="${classroot.mute ? 0.25 : 1.0}"
+            />
+
+
+            <view name="vol"
+                x="${classroot.adjusterBorder}"
+                y="${parent.height - classroot.adjusterBorder - this.height}"
+                width="${parent.width - (classroot.adjusterBorder * 2)}"
+                height="${classroot.volumeInternal * classroot.adjusterHeight}"
+                bgcolor="0xffff00"
+                opacity="${classroot.mute ? 0.25 : 1.0}"
+            />
+
+
+        </view>
+
+
+    </class>
+
+
+</library>

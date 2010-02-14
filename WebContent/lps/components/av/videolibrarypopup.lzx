@@ -1,0 +1,148 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+
+
+    <class name="videolibrarypopup"
+        x="${Math.max(0, Math.min(parent.width - this.width, this.pinX))}"
+        y="${Math.max(0, Math.min(parent.height - this.height, this.pinY))}"
+        width="${Math.min(this.popupWidth, immediateparent.width)}"
+        height="${Math.min(this.popupHeight, immediateparent.height)}"
+        bgcolor="0xffff00"
+        visible="false"
+        options="ignorelayout"
+    >
+
+        <attribute name="atts" value="null"/>
+
+        <attribute name="yourX" value="0"/>
+
+        <attribute name="yourY" value="0"/>
+
+        <attribute name="yourWidth" value="0"/>
+
+        <attribute name="yourHeight" value="0"/>
+
+        <attribute name="pinYourXPos" value="0.5"/>
+
+        <attribute name="pinYourYPos" value="0.0"/>
+
+        <attribute name="pinMyXPos" value="0.5"/>
+
+        <attribute name="pinMyYPos" value="1.0"/>
+
+        <attribute name="pinX" value="${
+            this.yourX +
+            (this.pinYourXPos * this.yourWidth) -
+            (this.pinMyXPos * this.width)}"/>
+
+        <attribute name="pinY" value="${
+            this.yourY +
+            (this.pinYourYPos * this.yourHeight) -
+            (this.pinMyYPos * this.height)}"/>
+
+        <attribute name="popupWidth" value="300"/>
+
+        <attribute name="popupHeight" value="${this.f.height + 2}"/>
+
+        <attribute name="title" type="string" value=""/>
+
+        <attribute name="description" type="string" value=""/>
+
+        <attribute name="url" type="string" value=""/>
+
+        <attribute name="type" type="string" value=""/>
+
+
+        <method name="popup" args="v, atts"><![CDATA[
+            this.setAttribute("atts", atts);
+
+            var x = 0;
+            var y = 0;
+            var vv = v;
+
+            while ((vv != canvas) && (vv != this.immediateparent)) {
+                x += vv.x;
+                y += vv.y;
+                vv = vv.immediateparent;
+            }
+
+            this.setAttribute("title", atts['title']);
+            this.setAttribute("description", atts['description']);
+            this.setAttribute("url", atts['url']);
+            this.setAttribute("type", atts['type']);
+
+            this.setAttribute("yourX", x);
+            this.setAttribute("yourY", y);
+            this.setAttribute("yourWidth", v.width);
+            this.setAttribute("yourHeight", v.height);
+
+            this.bringToFront();
+            this.setAttribute("visible", true);
+
+          ]]>
+        </method>
+
+
+        <method name="popdown" args=""><![CDATA[
+            this.setAttribute("ms", null);
+            this.setAttribute("atts", null);
+            this.setAttribute("url", "");
+            this.setAttribute("type", "");
+            this.setAttribute("visible", false);
+          ]]>
+        </method>
+
+
+        <view name="f"
+            x="1"
+            y="1"
+            width="${parent.width - 2}"
+            height="${this.dlg.height + 2}"
+            bgcolor="0x000000"
+        >
+
+            <view name="dlg"
+                x="1"
+                y="1"
+                width="${parent.width - 2}"
+                bgcolor="0xe0e0e0"
+            >
+
+                <simplelayout 
+                    axis="y"
+                    inset="5"
+                    spacing="5"
+                />
+
+                <text name="title"
+                    x="5"
+                    width="${parent.width - 10}"
+                    text="${classroot.title}"
+                    multiline="true"
+                    fontsize="16"
+                    fontstyle="bold"
+                />
+
+                <text name="description"
+                    x="15"
+                    width="${parent.width - 30}"
+                    text="${classroot.description}"
+                    multiline="true"
+                    fontsize="12"
+                />
+
+                <view name="spacer"/>
+
+            </view>
+
+        </view>
+
+    </class>
+
+
+</library>

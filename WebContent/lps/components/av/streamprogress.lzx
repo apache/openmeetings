@@ -1,0 +1,80 @@
+<library>
+<!--- An instance of this class will set its width relative to the
+      progress of the given stream and its maxwidth attribute. It is
+      green by default; however, to make it appear with a resource, you may
+      set the bgcolor to null and provde a resource (and don't forget to set
+      stretches attribute).
+-->
+<class name="streamprogress">
+    <!--- max width that this will grow to (defaults to parent's width -->
+    <attribute name="maxwidth" value="${parent.width}" type="number"/>
+    <!--- starting/current width (default: 0) -->
+    <attribute name="width" value="0"/>
+    <attribute name="height" value="10"/>
+    <!--- stream for which to show the progress -->
+    <attribute name="stream" value="null"/>
+    <!--- read-only -->
+    <attribute name="time" value="0"/>
+    <!--- read-only -->
+    <attribute name="totaltime" value="0"/>
+    <!--- a value between 0 and 1 indicating how much of the stream has played
+    -->
+    <attribute name="progress" value="0"/>
+    <attribute name="bgcolor" value="green"/>
+
+    <!--- @keywords private -->
+    <event name="onstream"/>
+    <!--- @keywords private -->
+    <event name="ontime"/>
+    <!--- @keywords private -->
+    <event name="ontotaltime"/>
+    <!--- @keywords private -->
+    <event name="onprogress"/>
+    <!--- @keywords private -->
+    <attribute name="_timedel" value="null"/>
+    <!--- @keywords private -->
+    <setter name="stream" args="newStream">
+        Debug.write('progress %w set stream %w', this, newStream);
+        this.stream = newStream;
+        if (!this._timedel) {
+            this._timedel = new LzDelegate(this, "_updateTime");
+        } else { 
+            this._timedel_unregisterAll();
+        }
+        this._timedel.register(this.stream, "ontime");
+        this._timedel.register(this.stream, "ontotaltime");
+        if (this.onstream) this.onstream.sendEvent(this);
+    </setter>
+    <!--- @keywords private -->
+    <method name="_updateTime" args="ignore=null"> <![CDATA[
+        var newTime = false, newTotal = false;
+        if (this.time != this.stream.time) {
+            newTime = true;
+            this.time = this.stream.time;
+        }
+        if (this.totaltime != this.stream.totaltime) {
+            newTotal = true;
+            this.totaltime = this.stream.totaltime;
+        }
+        this.progress = this.totaltime > 0 ?
+            this.time / this.totaltime : 0;
+        
+        this._updateWidth();
+        if (this.ontime && newTime) this.ontime.sendEvent(this);
+        if (this.ontotaltime && newTotal) this.ontotaltime.sendEvent(this);
+        if (this.onprogress) this.onprogress.sendEvent(this);
+        ]]>
+    </method>
+    <!--- called when progress is updated, subclass may provide
+          alternate implementation
+          @keywords protected -->
+    <method name="_updateWidth">
+        this.setAttribute('width',this.maxwidth * this.progress);
+    </method>
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

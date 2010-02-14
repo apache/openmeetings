@@ -1,0 +1,69 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+
+<library>
+
+
+    <class name="videotogglebutton"
+        frame="${this.frameTable[
+                    (this.over ? 1 : 0) +
+                    (this.tracking ? 2 : 0) +
+                    (this.engaged ? 4 : 0)]}"
+    >
+
+
+        <!--- This look-up table maps a state value to a frame index. 
+              Currently 2^3=8 states: 
+              over (2^0=1), tracking (2^1=2) and engaged (2^2=4). -->
+        <attribute name="frameTable" value="$once{
+            [1, 2, 1, 2, 3, 3, 3, 3]}"/>
+
+        <attribute name="over" value="false"/>
+
+        <attribute name="tracking" value="false"/>
+
+        <attribute name="engaged" value="false"/>
+
+        <attribute name="icon" type="string" value=""/>
+
+
+        <handler name="onmouseover"><![CDATA[
+            this.setAttribute('over', true);
+          ]]>
+        </handler>
+
+
+        <handler name="onmouseout"><![CDATA[
+            this.setAttribute('over', false);
+          ]]>
+        </handler>
+
+
+        <handler name="onmousedown"><![CDATA[
+            this.setAttribute('tracking', true);
+          ]]>
+        </handler>
+
+
+        <handler name="onmouseup"><![CDATA[
+            this.setAttribute('tracking', false);
+            if (this.over) {
+                this.trigger();
+            }
+          ]]>
+        </handler>
+
+
+        <method name="trigger"><![CDATA[
+            this.setAttribute("engaged", !this.engaged);
+          ]]>
+        </method>
+
+
+    </class>
+
+
+</library>
