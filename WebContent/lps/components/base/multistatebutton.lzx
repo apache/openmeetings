@@ -1,0 +1,158 @@
+<library>
+    <include href="basebutton.lzx"/>
+    <class name="multistatebutton" extends="basebutton" clickable="true">
+        <!--- the current state -->
+        <attribute name="statenum" type="number" value="0" setter="this.setStateNum(statenum)"/>
+        <!--- the number of frames in a state -->
+        <attribute name="statelength" type="number" value="3" setter="this.setStateLength(statelength)"/>
+        <!--- the largest number allowed for the value of statenum -->
+        <attribute name="maxstate" type="number" value="0"/>
+       
+        <!--- @keywords private -->
+        <attribute name="lastres" type="number" value="1"/>
+        <!--- @keywords private -->
+        <attribute name="frame" value="${this.lastres + (this.statenum * this.statelength)}"/>
+        <!--- @keywords private -->
+        <event name="onstatenum"/>
+        <!--- @keywords private -->
+        <event name="onstatelength"/>
+        <!--- @keywords private -->
+        <method name="showDown" args="sd=null">
+            this.setAttribute('lastres', this.downResourceNumber);
+        </method>
+        <!--- @keywords private -->
+        <method name="showUp" args="sd=null">  <![CDATA[
+            if (!this._enabled &&  this.disabledResourceNumber) {
+                this.setAttribute('lastres', this.disabledResourceNumber);
+            } else {
+                this.setAttribute('lastres', this.normalResourceNumber);
+            }
+        ]]>
+        </method>
+        <!--- @keywords private -->
+        <method name="showOver" args="sd=null">
+            this.setAttribute('lastres', this.overResourceNumber);
+        </method>
+
+        <!--- setter for the statenum attribute -->
+        <method name="setStateNum" args="s">
+            if (s &gt; this.maxstate) {
+                return;
+            }
+            this.statenum = s;
+            if (this.onstatenum) this.onstatenum.sendEvent(s);
+        </method>
+
+        <!--- setter for the statelength attribute -->
+        <method name="setStateLength" args="s">
+            this.statelength = s;
+            if (this.statelength == 2) {
+                this.overResourceNumber = this.normalResourceNumber;
+                if (this.downResourceNumber == 3) {
+                    this.downResourceNumber = 2;
+                }
+            } else if (this.statelength == 1) {
+                this.overResourceNumber = 1;
+                this.downResourceNumber = 1;
+            }
+            if (this.onstatelength) this.onstatelength.sendEvent(s);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_showEnabled"> <![CDATA[
+            reference.setAttribute('clickable', this._enabled);
+            this.showUp();
+        ]]> </method>
+
+        <doc>
+          <tag name="shortdesc"><text>a button with multiple states, such as a toggle button</text></tag>
+          <text>
+            <p>A <classname>multistatebutton</classname> is an extension of the
+            <classname>basebutton</classname> class to address the more general
+            class of buttons that can have multiple states, and where each state
+            has it own mouseup, mouseover, and mousedown images. Like the
+            <classname>basebutton</classname> class, the construction of a
+            <classname>multistatebutton</classname> starts with a multiframe
+            resource.</p>
+            
+            <p>The example below create a play/pause button, using the following
+            resources:</p>
+            
+            <img src="images/multistatebutton/state0-mouseup.jpg" width="40" height="40" />
+            <img src="images/multistatebutton/state0-mouseover.jpg" width="40" height="40" />
+            <img src="images/multistatebutton/state0-mousedown.jpg" width="40" height="40" />
+            <img src="images/multistatebutton/state1-mouseup.jpg" width="40" height="40" />
+            <img src="images/multistatebutton/state1-mouseover.jpg" width="40" height="40" />
+            <img src="images/multistatebutton/state1-mousedown.jpg" width="40" height="40" />
+            
+            <p>With a multistatebutton, the following must be specified explicitly:</p>
+            
+            <dl>
+            <dt>statenum</dt>
+            <dd>the initial state of a button</dd>
+            <dt>statelength</dt>
+            <dd>the number of frames (of a multiframe resource) used for a single button state - NOTE: all states must be the same length</dd>
+            <dt>maxstate</dt>
+            <dd>the total number of states of the button - 1  (since states are counted starting from 0).</dd>
+            </dl>
+            
+            <example filename="multistatebutton-resources.lzx" executable="false">
+            &lt;library&gt;
+              &lt;!-- first create the multi-frame resource and give it a name --&gt;
+              &lt;resource name="mybutton_rsrc"&gt;
+                 &lt;!--  State: 0 --&gt;
+                 &lt;!-- first  frame of state 1 = mouseup   image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state0-mouseup.jpg"/&gt;
+                 &lt;!-- second frame of state 1 = mouseover image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state0-mouseover.jpg"/&gt;
+                 &lt;!-- third  frame of state 1 = mousedown image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state0-mousedown.jpg"/&gt;
+            
+                 &lt;!--  State: 1 --&gt;
+                 &lt;!-- first  frame of state 2 = mouseup image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state1-mouseup.jpg"/&gt;
+                 &lt;!-- second frame of state 2 = mouseover image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state1-mouseover.jpg"/&gt;
+                 &lt;!-- third  frame of state 2 = mousedown image of the button --&gt;
+                 &lt;frame src="resources/multistatebutton/state1-mousedown.jpg"/&gt;
+              &lt;/resource&gt;
+            &lt;/library&gt;
+            </example>
+              
+            <example title="Assigning resources to a button">
+            &lt;canvas height="60"&gt;
+              &lt;include href="multistatebutton-resources.lzx"/&gt;
+            
+              &lt;!-- Second, assign the resource to a basebutton tag --&gt;
+              &lt;multistatebutton name="myButton" resource="mybutton_rsrc"
+                                statenum="0" statelength="3" maxstate="1"/&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>Now, the multistatebutton will stay in state "0" until you switch
+            states. This can be accomplished by calling
+            <code>myButton.setStateNum(number)</code>.</p>
+            
+            <example title="Switching button states">
+            &lt;canvas height="60"&gt;
+              &lt;include href="multistatebutton-resources.lzx"/&gt;
+              
+              &lt;multistatebutton name="myButton" resource="mybutton_rsrc"
+                                statenum="0" statelength="3" maxstate="1"
+                                onclick="this.toggle()"&gt;
+                 &lt;method name="toggle"&gt;
+                    if (this.statenum == 0) this.setStateNum(1)
+                    else this.setStateNum(0)
+                 &lt;/method&gt;
+              &lt;/multistatebutton&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

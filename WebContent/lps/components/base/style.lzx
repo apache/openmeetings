@@ -1,0 +1,256 @@
+<library>
+<include href="base/colors.lzx"/>
+<include href="base/basefocusview.lzx"/>
+<include href="base/basefocusview.lzx"/>
+<include href="base/componentmanager.lzx"/>
+
+<!--- contains style attributes which are applied to components to modify their look -->
+<class name="style" extends="node">
+    <!--- this is a style object
+          @access private
+          @keywords readonly -->
+    <attribute name="isstyle" value="true"/>
+
+    <!--- canvas color, default: null (will use whatever is specified
+        as the canvas bgcolor, default: white) -->
+    <attribute name="canvascolor" value="null" when="once"
+        setter="setCanvasColor( canvascolor )" type="color"/>
+
+    <!--- color for text -->
+    <attribute name="textcolor" value="gray10" when="once"
+        setter="setStyleAttr( textcolor, 'textcolor')"  type="color"/>
+
+    <!--- background color for text areas -->
+    <attribute name="textfieldcolor" value="white" when="once"
+        setter="setStyleAttr( textfieldcolor, 'textfieldcolor' )" type="color"/>
+
+    <!--- used as the text color with 'hilitecolor' to highlight an item,
+        such as when mouse is over a menu item -->
+    <attribute name="texthilitecolor" value="iceblue1" when="once"
+        setter="setStyleAttr( texthilitecolor, 'texthilitecolor')" type="color"/>
+
+    <!--- used as the text color with 'selectedcolor' to color the
+        selected item -->
+    <attribute name="textselectedcolor" value="black" when="once"
+        setter="setStyleAttr( textselectedcolor, 'textselectedcolor')" type="color"/>
+
+    <!--- used as the text color when a component is disabled -->
+    <attribute name="textdisabledcolor" value="gray60" when="once"
+        setter="setStyleAttr( textdisabledcolor, 'textdisabledcolor')" type="color"/>
+
+    <!--- used for colorizing a component, components will typically use
+        varying shades of this color -->
+    <attribute name="basecolor" value="offwhite" when="once"
+        setter="setStyleAttr( basecolor, 'basecolor')" type="color"/>
+
+    <!--- used for colorizing the backgrounds of content areas, such
+          as the background in tabslider's content, and window's content -->
+    <attribute name="bgcolor" value="white" when="once"
+        setter="setStyleAttr( bgcolor, 'bgcolor')" type="color"/>
+
+    <!--- used when the background color changes to highlight an item,
+        such as when mouse is over a menu item -->
+    <attribute name="hilitecolor" value="iceblue4" when="once"
+         setter="setStyleAttr( hilitecolor, 'hilitecolor')" type="color"/>
+
+    <!--- used when an item is selected, such as in a list -->
+    <attribute name="selectedcolor" value="iceblue3" when="once"
+         setter="setStyleAttr( selectedcolor, 'selectedcolor')" type="color"/>
+
+    <!--- used when an item is disabled -->
+    <attribute name="disabledcolor" value="gray30" when="once"
+         setter="setStyleAttr( disabledcolor, 'disabledcolor')" type="color"/>
+
+    <!--- used to color the frame of a component for those that have a visual
+        border -->
+    <attribute name="bordercolor" value="gray40" when="once"
+        setter="setStyleAttr( bordercolor, 'bordercolor')" type="color"/>
+
+    <!--- the line width used in those components that have a visual border -->
+    <attribute name="bordersize" value="1" when="once"
+        setter="setStyleAttr( bordersize, 'bordersize')" type="number"/>
+
+    <!--- background color for menu items, defaults to the 'textfieldcolor' -->
+    <attribute name="menuitembgcolor" value="textfieldcolor"
+        when="once" type="color"/>
+
+    <!--- if true, this style is the default style for components  -->
+    <attribute name="isdefault" value="false" setter="_setdefault(isdefault)"
+        type="boolean"/>
+
+    <!--- @keywords private  -->
+    <event name="onisdefault"/>
+
+    <!--- set a specific style attribute
+          @keywords private -->
+    <method name="_setdefault" args="def"> <![CDATA[
+        this.isdefault = def;
+        if (isdefault) {
+            lz._componentmanager.service.setDefaultStyle(this);
+            if (this['canvascolor'] != null) {
+                 canvas.setAttribute('bgcolor', this.canvascolor);
+            }
+        }
+        if (this.onisdefault) this.onisdefault.sendEvent(this);
+    ]]> </method>
+
+    <!--- @keywords private  -->
+    <event name="onstylechanged"/>
+
+    <!--- set a specific style attribute
+          @keywords private -->
+    <method name="setStyleAttr" args="val, prop"> <![CDATA[
+        this[ prop ] = val;
+        if (this['on' + prop]) this['on' + prop].sendEvent(prop);
+        if (this.onstylechanged) this.onstylechanged.sendEvent(this);
+    ]]> </method>
+
+    <!--- set canvas bgcolor if not already set
+          @keywords private -->
+    <method name="setCanvasColor" args="newcolor"> <![CDATA[
+            if (this.isdefault && newcolor != null) { canvas.setAttribute('bgcolor', newcolor); }
+            this.canvascolor = newcolor;
+            if (this.onstylechanged) this.onstylechanged.sendEvent(this);
+    ]]> </method>
+
+    <!--- returns a new lz.style object which is based on this one
+        with only specified attributes modified
+        <br/>param dictionary args: the attributes for the new lz.style
+    -->
+    <method name="extend" args="args">
+        var temp = new lz.style();
+
+        temp.canvascolor = this.canvascolor;
+        temp.textcolor = this.textcolor;
+        temp.textfieldcolor = this.textfieldcolor;
+        temp.texthilitecolor = this.texthilitecolor;
+        temp.textselectedcolor = this.textselectedcolor;
+        temp.textdisabledcolor = this.textdisabledcolor;
+        temp.basecolor = this.basecolor;
+        temp.bgcolor = this.bgcolor;
+        temp.hilitecolor = this.hilitecolor;
+        temp.selectedcolor = this.selectedcolor;
+        temp.disabledcolor = this.disabledcolor;
+        temp.bordercolor = this.bordercolor;
+        temp.bordersize = this.bordersize;
+        temp.menuitembgcolor = this.menuitembgcolor;
+        temp.isdefault = this.isdefault;
+
+        for (var p in args) {
+            temp[p] = args[p];
+        }
+
+        new LzDelegate(temp, '_forwardstylechanged', this, 'onstylechanged');
+        return temp;
+    </method>
+
+    <!--- called if this style extends another
+        so that the onstylechanged event will get propagated
+        @keywords private -->
+    <method name="_forwardstylechanged" args="v"> <![CDATA[
+        if (this.onstylechanged) this.onstylechanged.sendEvent(this);
+    ]]> </method>
+
+    <doc>
+      <tag name="shortdesc"><text>specifies colors used by components</text></tag>
+      <text>
+          <para condition="dhtml">
+              SWF only: The features described in this section only work in applications compiled to SWF. They do not work in applications compiled to other runtimes. 
+          </para>
+        <p>Styles may be defined to establish a consistent "look" for a group
+        of components.  There are a number of pre-defined styles.  If you
+        don't declare a default style, the OpenLaszlo components will use
+        <varname>whitestyle</varname>. To specify a different default style,
+        define a style with <code>isdefault="true"</code>.</p>
+        
+        <example title="Simple Style Example">
+        &lt;canvas height="60"&gt;
+          &lt;greenstyle name="mystyle" isdefault="true"/&gt;
+          &lt;checkbox&gt;Tell me more&lt;/checkbox&gt;
+          &lt;button&gt;Submit&lt;/button&gt;
+          &lt;simplelayout spacing="10" inset="10"/&gt;
+        &lt;/canvas&gt;
+        </example>
+        
+        <p>There are several styles defined as classes
+        (<varname>whitestyle</varname>, <varname>silverstyle</varname>,
+        <varname>bluestyle</varname>, <varname>greenstyle</varname>,
+        <varname>goldstyle</varname>, and <varname>purplestyle</varname>).
+        You may create an instance of one of these, create a new lz.style, or
+        create an instance with one or more modified attributes.</p>
+        
+        <p>Different styles may be used in different parts of an application,
+        to highlight a single component or to distinguish a group of
+        components.  The style of a component applies to itself and any
+        component within it.</p>
+        
+        <p>In the example below, section one and two of the tabslider and the
+        checkboxes inside them appear gold.  Section Three and the components
+        inside it appear green.</p>
+        
+        <example title="Using Multiple Styles">
+        &lt;canvas height="250"&gt;
+          &lt;goldstyle name="defaultstyle" isdefault="true"/&gt;
+          &lt;greenstyle name="specialstyle"/&gt;
+          &lt;tabslider id="ts1" x="50" y="20"
+                     width="300" height="180"&gt;
+        
+            &lt;tabelement text="Section One" selected="true"&gt;
+              &lt;checkbox&gt;option one&lt;/checkbox&gt;
+            &lt;/tabelement&gt;
+        
+            &lt;tabelement text="Section Two"&gt;
+              &lt;checkbox&gt;option two&lt;/checkbox&gt;
+            &lt;/tabelement&gt;
+        
+            &lt;tabelement text="Section Three" style="$once{specialstyle}"&gt;
+              &lt;radiogroup&gt;
+                &lt;radiobutton&gt;Yes, I want to know more&lt;/radiobutton&gt;
+                &lt;radiobutton&gt;No, I prefer to remain blissfully unaware&lt;/radiobutton&gt;
+                &lt;radiobutton&gt;Please tell my neighbor, who may tell me&lt;/radiobutton&gt;
+              &lt;/radiogroup&gt;
+              &lt;button align="right"&gt;Submit&lt;/button&gt;
+              &lt;simplelayout axis="y" spacing="10"/&gt;
+            &lt;/tabelement&gt;
+          &lt;/tabslider&gt;
+        &lt;/canvas&gt;
+        </example>
+        
+        <p>You may define your own style by declaring values for various style
+        attributes described in the attribute reference below.  For example,
+        the following style uses the default values for most style attributes,
+        but provides custom values for the <attribute>basecolor</attribute>
+        (overall shade of the components) and the
+        <attribute>textcolor</attribute>.</p>
+        
+        <pre>
+        &lt;style name="customstyle" basecolor="0xddddff" textcolor="blue"/&gt;
+        </pre>
+        
+        <p><b>Further reading</b></p>
+        <p>
+        You can see the definitions of the pre-defined styles
+        in:  lps/components/base/defaultstyles.lzx  </p>
+        <p>
+        Named colors are defined in:  lps/components/base/colors.lzx
+        </p>
+      </text>
+    </doc>
+</class>
+
+<!--
+    _componentmanager.service is used to set the default style,
+    so the service must be created before a style instance is
+ -->
+<script>
+
+   lz._componentmanager.service = new lz._componentmanager( canvas , null,
+                                                        null, true );
+</script>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
