@@ -1,0 +1,16 @@
+<!---
+      @topic Extensions
+      @subtopic Audio-Video
+  -->
+<library>
+  <include href="camera.lzx" />
+  <include href="microphone.lzx" />
+  <include href="rtmpconnection.lzx" />
+  <include href="mediadevice.lzx" />
+  <include href="mediastream.lzx" />
+  <include href="videoview.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
