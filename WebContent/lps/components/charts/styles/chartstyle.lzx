@@ -1,0 +1,434 @@
+<!---
+      @access public
+      @topic Components
+      @subtopic Charts
+  -->
+<library>
+<!--- base style for all chart styles
+      @access public
+  -->
+<class name="basestyle"  extends="view" opacity="0">
+
+    <doc><text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+    </text></doc>
+    <!-- below are the methods copied over from the style class of basecomponents -->
+
+    <!--- set a specific style attribute, generating an onstylechanged event
+           -->
+    <method name="setStyleAttr" args="val, prop"> <![CDATA[
+        this[ prop ] = val;
+        if (this['on' + prop]) this['on' + prop].sendEvent(prop);
+        //if (this.onstylechanged) this.onstylechanged.sendEvent(this);
+        this.markChange();
+    ]]> </method>
+
+    <!---  @keywords private
+        returns a new style object which is based on this one
+        with only specified attributes modified
+        <br/>param dictionary args: the attributes for the new style
+    -->
+    <method name="extend" args="args">
+        var temp = {};
+        for (var p in args) {
+            temp[p] = args[p];
+        }
+        temp.__proto__ = this;
+
+        new LzDelegate(temp, '_forwardstylechanged', this, 'onstylechanged');
+        return temp;
+    </method>
+
+    <!--- called if this style extends another
+        so that the onstylechanged event will get propagated
+        @keywords private -->
+    <method name="_forwardstylechanged"> <![CDATA[
+        if (this.onstylechanged) this.onstylechanged.sendEvent(this);
+    ]]> </method>
+
+    <!--- get the root level style -->
+    <method name="getRootStyle">
+        if(this["root"] != null)
+        {           
+        } 
+        else if(this.constructor.tagname == "chartstyle")
+        {
+            this.root = this;            
+        }
+        else
+        {
+            this.root =  parent.getRootStyle();
+        }
+        return this.root;
+        
+    </method>
+    
+    <!--- mark the style as change -->
+    <method name="markChange">
+        this.getRootStyle().markChange();
+    </method>
+    
+    <!--- check if the object have the most updated style 
+        @param Object obj: object to check
+    -->
+    <method name="updateNeeded" args="obj">
+        return this.getRootStyle().updateNeeded(obj);
+    </method>
+    
+    <!--- mark the object to indicate it have the most updated style
+        @param Object obj: object to mark
+     -->
+    <method name="markUpdated" args="obj">
+        //Debug.write("mark root: " + obj);
+        this.getRootStyle().markUpdated(obj);
+    </method>   
+</class>
+
+<!--- style for point and datamarker
+      @access public
+      -->
+<class name="pointstyle" extends="basestyle" width="5" height="5">
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- RGB color -->
+    <attribute name="color" type="color" value="black"/> 
+    <!--- 'circle','square','triangle', [name of resource] -->
+    <attribute name="shape" type="string" value="square"/> 
+    <!--- value between 0-1 --> 
+    <attribute name="opacity" type="number" value="1"/>
+    <!--- 'none', 'linear', 'radial' -->
+    <attribute name="gradient" type="string" value="none" />
+    <!--- image path -->
+    <attribute name="image" type="string" value="${null}"/>
+    <!--- Color of the stroke -->
+    <attribute name="strokeStyle" type="color" value="0x000000"/>
+    <!--- Width of the stroke line -->
+    <attribute name="lineWidth" type="number" value="0"/>
+</class>
+
+<!--- style for point or border
+      @access public
+      -->
+<class name="linestyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- pixel size for the stroke of the line -->
+    <attribute name="size" type="number" value="1"/> 
+    <!--- RGB color on the axis line -->
+    <attribute name="color" type="color" value="0x000000"/>
+    <!--- value between 0-1 -->
+    <attribute name="opacity" type="number" value="1"/>
+    <!--- 'solid', 'dotted' -->
+    <attribute name="type" type="string" value="solid" /> 
+</class>
+
+<!--- style for a region
+      @access public
+      -->
+<class name="regionstyle" extends="basestyle">
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- RGB color on the axis line -->
+    <attribute name="color" type="color" value="0xFF0000"/>
+    <!--- value between 0-1 --> 
+    <attribute name="opacity" type="number" value="0.5" /> 
+    <!--- 'none', 'linear', 'radial' -->
+    <attribute name="gradient" type="string" value="none" /> 
+    <!--- image path -->
+    <attribute name="image" type="string" value="${null}"/>
+    <!-- stretches -->
+    <attribute name="stretches" type="string" value="both"/>
+
+
+</class>
+
+<!--- style object used for anything that contains a label within the chart.
+      @access public
+      -->
+<class name="labelstyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- size of border of label background  -->                  
+    <attribute name="linesize" type="number" value="null"/> 
+    <!--- color of bounding box border -->
+    <attribute name="linecolor" type="color" value="${null}"/> 
+    <!--- color of bounding box fill -->
+    <attribute name="fillcolor" type="color" value="${null}"/>
+    <!--- opacity of bounding box -->   
+    <attribute name="opacity" type="number" value="1" /> 
+    
+    <!--- the number of pixels the font is inset from the border --> 
+    <attribute name="inset" type="number" value="5"/> 
+
+    <!-- Font info for label -->
+    <!--- font --> 
+    <attribute name="font" type="string" value="serif"/>
+    <!--- size of the font -->  
+    <attribute name="fontsize"  type="size" value="8"/> 
+    <!--- color of the font -->
+    <attribute name="fontcolor" type="color" value="0x000000"/>
+    <!--- angle of rotation of the font --> 
+    <attribute name="fontangle" type="number" value="0"/> 
+</class>
+
+
+<!--- tickstyle is used by the axis style to render major and minor ticks on a chart.
+     NOTE: tickstyle extends linestyle
+     @access public
+     -->
+<class name="tickstyle" extends="linestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- length of tick in pixels perpendicualr to the axis -->
+    <attribute  name="length" type="number" value="5"/> 
+    <!--- inside | outside | centered | none  --> 
+    <attribute  name="position" type="string" value="inside"/> 
+  <?STRUCTURE ... 
+      <labelstyle name="label"    /> <!--- an instance of labelstyle -->
+    ?>
+</class>
+
+<!--- valuelinestyle is used to set style to the 
+     NOTE: valuelinestyle extends basestyle
+     @access public
+     -->
+<class name="valuelinestyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+  <?STRUCTURE ... 
+    <linestyle  name="line" /> <!--- instance of linestyle -->
+    <labelstyle name="label" /> <!--- an instance of labelstyle -->
+    <labelstyle name="tip" />
+    ?>
+</class>
+
+<!--- valuepointstyle is used to set style to the 
+     NOTE: valuelinestyle extends basestyle
+     @access public
+     -->
+<class name="valuepointstyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+  <?STRUCTURE ... 
+    <pointstyle name="point"/> <!--- an instance of pointstyle -->
+    <labelstyle name="label" /> <!--- an instance of labelstyle -->
+    <labelstyle name="tip" /> <!--- an instance of labelstyle -->
+    ?>
+</class>
+
+<!--- style for axis
+      @access public
+  -->
+<class name="axisstyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- direction of the axis: x or y -->
+    <attribute name="direction" value="y | x" type="string" />
+
+    <?STRUCTURE ... 
+    <labelstyle name="label"    /> <!--- instance of labelstyle to be used for axis label-->  
+    <linestyle  name="line"     /> <!--- instance of linestyle -->
+    <linestyle  name="gridline" /> <!--- to be used on the plot area to render the line associated with axis -->
+    <tickstyle  name="tickmajor"     /> <!--- instance of tickstyle for the major ticks-->    
+    <tickstyle  name="tickminor"     /> <!--- instance of tickstyle for the major ticks-->    
+    ?>
+
+    
+</class>
+
+<!--- style for plot area
+      @access public
+      -->
+<class name="plotstyle" extends="basestyle">
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- size of border of the plot area -->
+    <attribute name="linesize" type="number" value="0"/> 
+    <!--- color of the border for the plot area -->
+    <attribute name="linecolor" type="color" value="${null}"/> 
+    <!--- bgcolor for the plot area -->
+    <attribute name="fillcolor" type="color" value="0xFFFFFF"/>
+    <!--- opacity of plot background area ( not the opacity of dataseries  )--> 
+    <attribute name="opacity" type="number" value="1"/> 
+</class>
+
+<!--- style for chart background
+      @access public
+      -->
+<class name="chartbgstyle" extends="basestyle">
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <?STRUCTURE ...
+        <linestyle name="line"/>        <!--- instance of linestyle -->
+        <regionstyle name="region"/>    <!--- instance of regionstyle -->
+    ?>
+</class>
+
+<!--- dataseriesstyle is used for drawing the appearance of a dataseries
+      @access public
+  -->
+<class name="datastyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+
+  <?STRUCTURE ... 
+    <pointstyle  name="point"   /> <!--- instance of pointstyle -->
+    <linestyle   name="line"    /> <!--- instance of linestyle -->
+    <regionstyle name="region"  /> <!--- instance of regionstyle for filling bar, pie, and area charts -->
+    <labelstyle  name="label"   /> <!--- instance of labelstyle to be used for label points on the chart -->    
+    <labelstyle  name="tip"     /> <!--- instance of labelstyle to be used for data tips -->     
+    
+    ?>
+    
+</class>
+
+<!--- valueregionstyle is used for drawing the appearance of a value region
+      @access public
+  -->
+<class name="valueregionstyle" extends="basestyle" >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+
+  <?STRUCTURE ... 
+    <linestyle   name="line"    /> <!--- instance of linestyle -->
+    <regionstyle name="region"  /> <!--- instance of regionstyle for filling the rectangular region -->
+    <labelstyle  name="label"   /> <!--- instance of labelstyle to be used for label points on the chart -->    
+    <labelstyle  name="tip"     /> <!--- instance of labelstyle to be used for data tips -->     
+    ?>
+    
+</class>
+
+<!--- style for chart, contain nested level of style extend from basestyle
+      @access public
+  -->
+<class name="chartstyle" extends="basestyle"  >
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    <!--- @keyword private -->
+    <attribute name="datastyleindex" value="0" type="number"/>
+    <attribute name="version" value="0" type="number"/>
+    <!--- contains a set of style objects  described below.
+         Any changes to these style nodes are reported by the charttyle object via 
+         the 'onstylechanged' event. See basestyle.setStyleAttr() defined above -->
+
+   
+    <!--- @keyword private -->
+    <method name="determinePlacement" args="v,p,a" >
+        <!--
+        this method makes sure that all nodes of type "datastyle" go in to the <datastyles/> node shown above.
+        -->
+    </method>
+    
+    <!--- reset the style counter -->
+    <method name="resetDataStyleCycle" >
+        this.datastyleindex = 0;        
+    </method>
+    <!--- 
+           returns the next datastyle object. This method cycles through the children of the datastyles node shown above 
+            --> 
+    <method name="getNextDataStyle" >
+        var temp = this.datastyles.subnodes[this.datastyleindex % this.datastyles.subnodes.length];
+        this.datastyleindex++;  
+        return temp;     
+    </method>
+    <!--- 
+           returns the specific datastyle object. This method cycles through the children of the datastyles node shown above 
+            --> 
+    <method name="getDataStyle" args="index">
+        var temp = this.datastyles.subnodes[index % this.datastyles.subnodes.length];
+        return temp;     
+    </method>
+    
+    <!--- mark the style as change -->
+    <method name="markChange">
+        this.setAttribute("version", this.version + 1);
+    </method>
+    
+    <!--- check if the object have the most updated style 
+        @param Object obj: object to check
+    -->
+    <method name="updateNeeded" args="obj">
+        //Debug.write("obj.version: " + obj["styleversion"]);
+        //Debug.write("this.version: " + this.version);
+        var temp = (this.version != obj["styleversion"]);
+        //Debug.write("compare: " + temp);
+        return temp;
+    </method>
+    
+    <!--- mark the object to indicate it have the most updated style
+        @param Object obj: object to mark
+     -->
+    <method name="markUpdated" args="obj">
+        
+        obj["styleversion"] = this.version;
+        //Debug.write("mark: " + obj);
+        //Debug.write("mark: " + obj["styleversion"]);
+    </method>
+     <event name="onversion" />
+</class>
+
+<!--- list of datastyle
+      @access public
+  -->
+<class name="datastylelist" extends="basestyle">
+    <doc>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+</class>
+
+</library>
+<!-- 
+note:
+line chart: pointstyle, linestyle
+areachart: pointstyle, linestyle, regionstyle
+bar and column chart: regionstyle. linestyle for the border
+-->
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

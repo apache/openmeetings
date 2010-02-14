@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chartstyle name="defaultchartstyle">
+    <plotstyle name="plot" linesize = "3" linecolor = "0x000000" fillcolor = "0xffeeff" opacity = "1"/>
+    <chartbgstyle name="chartbgstyle">
+        <linestyle name="line" size="3"/>
+        <regionstyle name="region" color="0x6699CC" gradient="radial" opacity="0.5"/>
+    </chartbgstyle>
+    <valueregionstyle name="valueregionstyle">
+        <linestyle name="line" color="0x000000" size="1" opacity="1"/>
+        <regionstyle name="region" color="0xB71CB3" opacity="0.8" gradient="linear"/>
+        <labelstyle name="label" font="serif" fontsize="12" fontcolor="0x000000"/>
+        <labelstyle name="tip" font="serif" fontsize="12" fontcolor="0x000000"/>
+    </valueregionstyle>
+    <axisstyle name="haxisstyle">
+        <labelstyle name="label" font="serif" fontsize="16" fontcolor="0x000000" fontangle="90"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="10" size="1">
+            <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0x000000" position="outside" length="5" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="2"/>
+        <linestyle name="gridline" color="0x000000" size="1"/>
+    </axisstyle>
+    <axisstyle name="vaxisstyle">
+        <labelstyle name="label" font="myverity" fontsize="16" fontcolor="0x000000" fontangle="90"/>
+        <tickstyle name="tickmajor" color="0x000000" position="outside" length="10" size="1">
+            <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"/>
+        </tickstyle>
+        <tickstyle name="tickminor" color="0x000000" position="outside" length="5" size="1"/>
+        <linestyle name="axisline" color="0x000000" size="2" />
+        <linestyle name="gridline" color="0x000000" size="1"/>
+    </axisstyle>
+    <valuelinestyle name="valuelinestyle">
+        <linestyle name="line" color="0xFF9999" size="2" opacity="1"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuelinestyle>
+    <valuepointstyle name="valuepointstyle">
+        <pointstyle name="point" width="15" height="15" color="0x00ff00" opacity=".5" shape="triangle" image="../../test/images/master.gif"/>
+        <labelstyle name="label" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        <labelstyle name="tip" font="serif" fontsize="10" fontcolor="0x000000"
+           linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+    </valuepointstyle>
+    <datastylelist name="datastyles">
+        <datastyle>
+            <pointstyle name="point" width="10" height="10" color="0x00ff00" opacity="1" shape="square"/>
+            <linestyle name="line" color="0x0000ff" size="3" opacity="1"/>
+            <regionstyle name="region" color="0xff0000" opacity="1" gradient="radial"/>
+            <labelstyle name="label" font="serif" fontsize="9" fontcolor="0x000000" linecolor="0x000000" fillcolor="0xFFFFC1" linesize="12" fontangle="90"/>
+            <labelstyle name="tip" font="serif" fontsize="8" fontcolor="0x000000"
+               linecolor="0x000000" fillcolor="0xFFFFC1" linesize="2"/>
+        </datastyle>
+    </datastylelist>
+</chartstyle>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2006 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

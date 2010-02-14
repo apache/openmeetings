@@ -1,0 +1,138 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+<!--- @keyword private 
+Implementes the Stroke rendering lines -->
+    <class name="strokestyle" extends="drawview">
+        <!--- Color of the Stroke in  hexadecimal value, default value "0x000000"-->
+        <attribute name="strokeColor" type="color" value="0x000000"/>
+        <!--- String value that indicates the type of the Stroke, possible values : "solid", "dashed" or "dotted". Default value "solid"-->
+        <attribute name="strokeType" type="string" value="solid"/>
+        <!--- -    Numerical value that indicate the thickness of the Stroke line in pixels. Default value ="1"-->
+        <attribute name="strokeWidth" type="number" value="1"/>
+        <!--- Number of pixel of each small line that compose the stylish line. Default value ="10"-->
+        <attribute name="dottedLength" type="number" value="10"/>
+        <!--- Number of pixels of spacing between each small line that compose the stylish line. Default value ="5"-->
+        <attribute name="spaceLength" type="number" value="5"/>
+        <!--- Transparency of the Stroke line values from 0 to 1, default value ="1"-->
+        <attribute name="opacity" type="number" value="1" />
+    
+    <!--- @keyword private-->
+        <method name="init">
+            super.init();                        
+        </method>
+        <!--- @keyword private-->
+        <method name="calculateDimensions" args="aBeginPosX, aBeginPosY, aEndPosX, aEndPosY">
+            <![CDATA[
+                    if (aBeginPosX == aEndPosX) {
+                      this.height = aEndPosY - aBeginPosY;
+                      this.width = this.strokeWidth;
+                    } else if (aBeginPosY == aEndPosY) { 
+                      this.width = aEndPosX - aBeginPosX;
+                      this.height = this.strokeWidth;
+                    } else {
+                        this.height = aEndPosY - aBeginPosY;
+                        this.width = aEndPosX - aBeginPosX;
+                    }
+                    
+            ]]>
+        </method>
+    
+        <method name="renderStroke" args="aBeginPosX, aBeginPosY, aEndPosX, aEndPosY">                            
+            <![CDATA[            
+                var lLength, lRepeat;
+                var deltax, deltay, x, y;
+                var dottedCount = 1;
+                
+                this.calculateDimensions(aBeginPosX, aBeginPosY, aEndPosX, aEndPosY);
+                if ( this.strokeType == 'solid' ){
+                    this.strokeStyle = this.strokeColor;
+                    this.lineWidth = this.strokeWidth;
+                    draw (aBeginPosX, aBeginPosY, aEndPosX, aEndPosY); 
+                } else if( this.strokeType == 'dotted' )  {
+                    this.strokeStyle = this.strokeColor;
+                    this.lineWidth = this.strokeWidth;
+
+                    deltax = Math.abs(aEndPosX - aBeginPosX);        // The difference between the x's
+                    deltay = Math.abs(aEndPosY - aBeginPosY);        // The difference between the y's
+                    x = aBeginPosX;                       // Start x off at the first pixel
+                    y = aBeginPosY;                       // Start y off at the first pixel
+    
+                    if (aEndPosX >= aBeginPosX){     // The x-values are increasing
+                      xinc1 = 1;
+                      xinc2 = 1;
+                    } else {                         // The x-values are decreasing
+                      xinc1 = -1;
+                      xinc2 = -1
+                    }
+    
+                    if (aEndPosY >= aBeginPosY){     // The y-values are increasing
+                      yinc1 = 1;
+                      yinc2 = 1;
+                    } else {                         // The y-values are decreasing
+                      yinc1 = -1;
+                      yinc2 = -1;
+                    }
+    
+                    if (deltax >= deltay){        // There is at least one x-value for every y-value
+                      xinc1 = 0;                  // Don't change the x when numerator >= denominator
+                      yinc2 = 0;                  // Don't change the y for every iteration
+                      den = deltax;
+                      num = deltax / 2;
+                      numadd = deltay;
+                      numpixels = deltax;         // There are more x-values than y-values
+                    } else {                      // There is at least one y-value for every x-value
+                      xinc2 = 0;                  // Don't change the x for every iteration
+                      yinc1 = 0;                  // Don't change the y when numerator >= denominator
+                      den = deltay;
+                      num = deltay / 2;
+                      numadd = deltax;
+                      numpixels = deltay;         // There are more y-values than x-values
+                    }
+    
+                    for (curpixel = 0; curpixel <= numpixels; curpixel++) {
+                        if ( dottedCount>1 && dottedCount<=dottedLength ) {
+                            draw (aBeginPosX, aBeginPosY, x, y); 
+                        } 
+                        dottedCount++;
+                        if ( dottedCount == (dottedLength+spaceLength) ){
+                            dottedCount=0;
+                        }
+                        
+                        aBeginPosX = x;
+                        aBeginPosY=y;
+                    
+                        num += numadd;              // Increase the numerator by the top of the fraction
+                        if (num >= den){            // Check if numerator >= denominator
+                            num -= den;               // Calculate the new numerator value
+                            x += xinc1;               // Change the x as appropriate
+                            y += yinc1;               // Change the y as appropriate
+                        }
+                        x += xinc2;                 // Change the x as appropriate
+                        y += yinc2;                 // Change the y as appropriate
+                    }
+                }
+            ]]>
+            
+        </method>
+        <!--- @keyword private 
+        Render the Stroke line applying the specified style attributes-->
+        <method name="draw" args="aBeginPosX, aBeginPosY, aEndPosX, aEndPosY">
+            this.beginPath();
+            this.moveTo(aBeginPosX, aBeginPosY);
+            this.lineTo(aEndPosX, aEndPosY);
+            this.globalAlpha = this.opacity;
+            this.fill();
+
+            this.stroke();
+            this.closePath();                    
+        </method>
+    </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->
