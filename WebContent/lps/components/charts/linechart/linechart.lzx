@@ -1,0 +1,217 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/chartstyle.lzx"/>
+    <include href="../common/dataseries.lzx"/>
+    <include href="../common/datapoints.lzx"/>
+    <include href="../common/viewspoolmanager.lzx"/>
+    <include href="../common/virtualdrawview.lzx"/>
+    <include href="../common/rectangularchart.lzx"/>
+    <include href="../common/legend.lzx"/>
+    <include href="../common/axis.lzx"/>
+    <include href="../common/datalabel.lzx"/>
+    <include href="../common/valueline.lzx"/>
+    <include href="../common/valuepoints.lzx"/>
+    <include href="../common/valueregion.lzx"/>
+    
+    <include href="linechartplotarea.lzx"/>
+    
+    <!--- A chart class that renders as lines.
+      Inherits from the chart class.
+      (Warning: Of beta quality.)
+      @access public
+      -->
+    <class name="linechart" extends="rectangularchart">
+        <!--- @keyword private -->
+        <method name="init">
+            // this.render() needs the reference to plotarea, so let's get it here
+            plotarea = this.getNodeOfClass("linechartplotarea");
+            _datalabelpool = this.createLabelViewspool();
+            super.init();            
+        </method>    
+
+        <!--- @keyword private 
+            render the plotarea of the chart -->
+        <method name="renderPlotArea">
+        <![CDATA[
+            super.renderPlotArea();
+            _datalabelpool.reclaimAll();
+
+            plotarea.clear();
+            plotarea.setDataBound(this.minx, this.miny, this.maxx, this.maxy);
+            
+            var topseries = this.getDataSeries();
+            
+            var numSeries = topseries ? topseries.getNumDataSeries() : 0;
+
+            for(var i = 0; i < numSeries; i++)
+            {
+                var leafseries = topseries.getDataSeries(i); 
+                var aDataSeriesValues = plotarea.loadDataSeriesValues( leafseries );
+
+                if (leafseries.enabled ){
+                    var ldatastyle = this.style.getDataStyle(i);
+                    var tooltipseries = null;
+                    var labelseries = null;
+
+                    if(leafseries.getDataColumn(haxis.columnName) != null){
+                        var xseries = leafseries.getDataColumn(haxis.columnName).values;
+                    } else {
+                        var xseries = null;
+                    }
+                    if(leafseries.getDataColumn(vaxis.columnName) != null){
+                        var yseries = leafseries.getDataColumn(vaxis.columnName).values;
+                    } else {
+                        var yseries = null;
+                    }
+                    
+                    plotarea.renderSeries( xseries, yseries, ldatastyle );
+                    
+                    if(this.dataPointsEnabled){                                      
+                        if(this.datatipColumn != "null" && leafseries.getDataColumn(this.datatipColumn) != null){
+                            tooltipseries = leafseries.getDataColumn(this.datatipColumn).values;
+                        } 
+                        plotarea.renderDataPoints(xseries, yseries, tooltipseries, ldatastyle, i);                    
+                    }
+                    
+                labeldpath = (leafseries.getDataColumn(vaxis.columnName).labeldatapath == '' ?
+                    leafseries.getDataColumn(haxis.columnName).labeldatapath : leafseries.getDataColumn(vaxis.columnName).labeldatapath);
+                if ( this.datalabelEnabled && labeldpath != ''){
+                    if(leafseries.getDataColumn(this.datalabelColumn) != ''){
+                        labelseries = leafseries.getDataColumn(vaxis.columnName).getDataPath().xpathQuery(labeldpath);
+                    }
+                }
+
+                    plotarea.renderDataLabels(xseries, yseries, labelseries, ldatastyle, i);
+                }
+            }
+        ]]>
+        </method>
+        <linechartplotarea name="plotarea" x="50" y="20" width="500" height="300"/>
+
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    The linechart component allows for the creation of a line chart using series data.
+                </text>
+            </tag>
+            <text>
+                <warning>This component is of Beta quality and is subject to change.</warning>
+                <p>The following is a linechart that uses series data.</p>
+
+                <example title="Simple linechart">
+                    &lt;canvas height="900" width="600"&gt;
+                        &lt;include href="charts/styles/chartstyle.lzx"/&gt;
+                        &lt;include href="charts/addon/zoomarea.lzx"/&gt;
+
+                        &lt;dataset name="baseball"
+                            src="resources/redsox-data.xml"/&gt; 
+                        &lt;font name="myverity" src="verity/verityplus11.ttf"/&gt;    
+
+
+                        &lt;button&gt;undo
+                            &lt;handler name="onclick"&gt;
+                                chart1.undo(500);
+                            &lt;/handler&gt;
+                        &lt;/button&gt;
+                        &lt;button x="100"&gt; show all points
+                            &lt;handler name="onclick"&gt;
+                                chart1.changeBound(chart1.defaultminx, chart1.defaultminy, 
+                                     chart1.defaultmaxx,chart1.defaultmaxy, 1000, true);
+                            &lt;/handler&gt;
+                        &lt;/button&gt;
+                        &lt;view name="title" x="${chart1.width/2}" y="30" &gt;
+                            &lt;text font="serif" fontsize="15" fontstyle="bold" fgcolor="0x0000FF"&gt;
+                              Line Chart with Zoom Interaction
+                            &lt;/text&gt;
+                        &lt;/view&gt;
+                            &lt;!-- LEGEND ASSOCIATED WITH THE CHART --&gt;
+                            &lt;legend name="legendbox" 
+                                    chart="${chart1}"
+                                    legendFont="serif"
+                                    legendFontsize="14" 
+                                    legendborder="false"
+                                    x="600"
+                                    y="350"
+                                    direction="vertical"&gt;
+                              &lt;handler name="onitemmouseclick" args="item"&gt;
+                                  var topseries = this.getChartInstance().getDataSeries();
+
+                                  topseries.getDataSeries(item.identifier).enabled = item.linevisible;
+                                  this.getChartInstance().renderPlotArea();
+                                  item.linevisible = !item.linevisible;
+                              &lt;/handler&gt; 
+                            &lt;/legend&gt;
+
+                        &lt;linechart id="chart1" y="60" width="600" height="500" style="chartstyle01" 
+                            datatipColumn="datatip" dataPointsEnabled="true" datatipEnabled="true"
+                            verticalGridLines="true" horizontalGridLines="false"
+                            datalabelEnabled="true" datalabelColumn="datalabels"
+                            valueregionsenabled="true"&gt;
+
+
+                            &lt;dataseries datapath="baseball:/records"&gt;
+                                &lt;datacolumn name="x" columndatapath="record/@year" datatype="number"/&gt;
+                                &lt;dataseries label="wins"&gt;
+                                    &lt;datacolumn  name="y"   columndatapath="record/@wins"
+                                        datatype="number"/&gt;
+                                    &lt;datacolumn name="datatip" columndatapath="record"&gt;
+                                        &lt;method name="processData" args="d"&gt;
+                                            return "( " + d.attributes.year + ", " + d.attributes.wins +")";
+                                        &lt;/method&gt;
+                                    &lt;/datacolumn&gt;
+                                &lt;/dataseries&gt;
+                                &lt;dataseries label="losses"&gt;
+                                    &lt;datacolumn name="y" columndatapath="record/@losses"
+                                        datatype="number"/&gt;
+                                    &lt;datacolumn name="datatip" columndatapath="record"&gt;
+                                        &lt;method name="processData" args="d"&gt;
+                                            return "( " + d.attributes.year + ", " + d.attributes.losses +
+                                                ")";
+                                        &lt;/method&gt;
+                                    &lt;/datacolumn&gt;
+                                &lt;/dataseries&gt;
+                                &lt;datacolumn name="datalabels" columndatapath="record/@attendance"/&gt;
+                            &lt;/dataseries&gt;
+
+                            &lt;horizontalaxis name="haxis" title="X Axis" interval="10" type="linear"
+                                columnName="x" titleLocation="high"  majorTickEnabled="true"
+                                minorTickEnabled="true"/&gt;
+                            &lt;verticalaxis name="vaxis" title="Y Axis title" type="linear" columnName="y" 
+                                titleLocation="low" minorTickEnabled="false" /&gt;
+
+                            &lt;valuepoints label="(1925,95)" tip="Year: 1925 - Games: 95" datax="1920"
+                                datay="95" /&gt;
+                            &lt;valuepoints label="(1950,78)" tip="Year:1950 - Games: 78" datax="1950"
+                                datay="78" /&gt;
+                            &lt;valuepoints label="(1975,63)" tip="Year:1975 - Games: 63" datax="1975"
+                                datay="63" /&gt;
+                            &lt;valuepoints label="(2000,50)" tip="Year:2000 - Games: 50" datax="2000"
+                                datay="50" /&gt;
+
+                            &lt;valueregion data1="95" data2="110" 
+                                    axis="y" 
+                                    label="Win/Losses Games: 95 to 110"
+                                    tip="Horizontal Value Region"/&gt;
+
+                            &lt;zoomarea duration="2000" enabled="true"/&gt; 
+                        &lt;/linechart&gt;
+                     &lt;/canvas&gt;
+                </example>
+            
+            </text>
+        </doc>
+    </class>
+    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->
