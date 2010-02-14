@@ -1,0 +1,21 @@
+/* * Stylesheet for LPS viewer */
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/
+
+pre {}
+ul.nl {list-style: none; margin-left: 0; padding-left: 0;}
+.starttag {color: #0000B7}
+.endtag {color: #0000B7}
+.attrname {color: #8B0D3A}
+.attrvalue {color: #9A3300}
+.markup {color: #0000B7}
+.name {color: #9A3300}
+.comment {color: gray; }
+.comment-markup {color: gray; }
+.references {}
+.reference-section {}
+.constraint-markup {color: gray}
+.constraint-expression {color: red}
+#sidebar {position: fixed; right: auto; width: 100em; left: 100em; }

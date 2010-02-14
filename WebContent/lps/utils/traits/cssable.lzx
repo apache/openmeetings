@@ -1,0 +1,33 @@
+<!-- Copyright 2006 Laszlo Systems --> 
+<library>
+
+<trait name="cssable">
+  <!-- Attributes are supported -->
+  <attribute name="cssPropertyMap" value="null"/>
+  <attribute name="cssStyle" value="null" />
+  
+  <!-- Declaring this here should work, but doesn't. See LPP-2490 --> 
+  <handler name="onconstruct" method="_applyCSS" />
+  
+  <method name="_applyCSS">
+      // Look up the style
+      this.cssStyle = LzCSSStyle.getComputedStyle( this );
+      var st = this.cssStyle; // put it in a register
+
+      // Debug.write("mystyle is...", mystyle);
+      if (st != null) {
+          for (var k in this.cssPropertyMap) {
+              var lzxPropertyName = k
+              var cssPropertyName = this.cssPropertyMap[k];                             
+              // Debug.write("cssName ", cssName, ", lzxPropertyName ", lzxPropertyName);              
+              var v = st.getPropertyValue( cssPropertyName ); 
+              // this seems to be coming back null. 
+              if (v != null) {
+                // Debug.write("setting value ", v , "for property", lzxPropertyName);
+                  this.setAttribute(lzxPropertyName, v);
+              }
+          }
+      }
+  </method> 
+</trait>
+</library>
