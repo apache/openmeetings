@@ -1,0 +1,51 @@
+<!--
+    radioitem.lzx
+-->
+
+
+<library>
+    <!---  A selectable list item which works like a Radio Button
+            though uses an icon instead of radio button graphics.
+    -->
+    <class name="radioitem" extends="baselistitem">
+        <!---  @keywords private -->
+        <attribute name="_inside" value="false" type="boolean"/>
+        <!---  @keywords private -->
+        <handler name="onmouseover">
+            this.setAttribute('frame', this.selected ? 3 : 2);
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmouseout">
+            this.setAttribute('frame', this.selected ? 3 : 1);
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmousin">
+            this._inside = true;
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmouseup">
+            this.setAttribute('frame', this.selected ? 3 : 1);
+        </handler>
+        <!---  @keywords private -->
+        <method name="setSelected" args="s">
+            <![CDATA[
+                this.selected = s;
+                if (this.onselect) this.onselect.sendEvent(this);
+                if (this.onselected) this.onselected.sendEvent(this);
+                this.setAttribute('frame', s ? 3 : 1);
+
+            ]]>
+        </method>
+        <!---  @keywords private -->
+        <handler name="onmousedown">
+            this.setAttribute('frame', 3);
+        </handler>
+    </class>
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

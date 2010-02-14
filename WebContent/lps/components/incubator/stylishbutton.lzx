@@ -1,0 +1,210 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+
+<include href="base/basebutton.lzx" />
+    
+    <resource name="stylishbutton_left_rsc">
+        <frame src="resources/button/small/sm_btn_up_lft.png" />
+        <frame src="resources/button/small/sm_btn_mo_lft.png" />
+        <frame src="resources/button/small/sm_btn_dn_lft.png" />
+        <frame src="resources/button/small/sm_btn_dsbl_lft.swf" />
+    </resource>
+
+    <resource name="stylishbutton_right_rsc" >
+        <frame src="resources/button/small/sm_btn_up_rt.png" />
+        <frame src="resources/button/small/sm_btn_mo_rt.png" />
+        <frame src="resources/button/small/sm_btn_dn_rt.png" />
+        <frame src="resources/button/small/sm_btn_dsbl_rt.swf" />
+    </resource>
+    
+    <resource name="stylishbutton_middle_rsc">
+        <frame src="resources/button/small/sm_btn_up_mid.swf" />
+        <frame src="resources/button/small/sm_btn_mo_mid.swf" />
+        <frame src="resources/button/small/sm_btn_dn_mid.swf" />
+        <frame src="resources/button/small/sm_btn_dsbl_mid.swf" />
+    </resource>
+    
+<class name="stylishbutton" extends="basebutton"
+    focusable="true"
+    doesenter="true" 
+    pixellock="true"       
+    >
+        <!--- Control the look of the button. These attributes can and should
+              be controlled with css. --> 
+        <attribute name="tint" value="0xD9DCF5" type="color" />
+        <attribute name="font" value="Verdana" />
+        <attribute name="fontsize" value="11" /> 
+        <attribute name="fontcolor" value="0x373B56" type="color" />
+
+        <!--- text to display in the button (can leave empty) -->
+        <attribute name="text"      value=""  />
+        <!--- y position of text, for fine tuning -->
+        <attribute name="texty"       value="0"  />
+
+        <!--- icon resource name prefix -->
+        <attribute name="iconname"       value=""  type="string" />
+        <!--- y position of icon, for fine tuning.
+            if not specified, center the icon vertically. -->
+        <attribute name="icony"       value="0"  />
+
+        <!-- whether to show left resource view, to make a visual edge -->
+        <attribute name="showleftedge"  value="true" />
+        
+        <!-- whether to show right resource view, to make a visual edge -->
+        <attribute name="showrightedge"  value="true"  />
+        
+        <!--- whether to show highlight on left side of button --> 
+        <attribute name="showrightborder" value="false" type="boolean" />
+
+        <!-- the resource name for the middle view --> 
+        <attribute name="leftresource" value="stylishbutton_left_rsc" type="string" />
+
+        <!-- the resource name for the middle view --> 
+        <attribute name="middleresource" value="stylishbutton_middle_rsc" type="string" />
+
+        <!-- the resource name for the middle view --> 
+        <attribute name="rightresource" value="stylishbutton_right_rsc" type="string" />
+        
+        <!--- whether to show shadow on right side of button -->         
+        <attribute name="showleftborder" value="false" type="boolean" />
+        
+        <view name="middle" stretches="width" />
+        
+        <method name="updatePositions">
+        
+            if (this["txt"]) this.txt.setAttribute('text', this.text); 
+        
+            var lw = (this["left"] ? this.left.width : 0) + (this["showleftborder"] ? 1 : 0); 
+            var rw = (this["right"] ? this.right.width : 0) + (this["showrightborder"] ? 1 : 0);
+            var iw = (this["icon"] ? this.icon.width : 0);
+            var tw = (this["txt"] ? this.txt.width : 0);         
+            // used to offset the icon - 0 for no offset
+            var nside=0;
+
+            var curX = 0;
+            var spacing = 0; 
+            var needsWidth = lw + rw + iw + tw; 
+            var extraWidth = Math.max(0, Math.round( (width - needsWidth) / 2)); 
+            
+            if (this["leftborder"]) {
+                this.leftborder.setAttribute('x', curX); 
+                curX += 1; 
+            }
+            
+            // show the left resource
+            if (this["left"]) {
+                this.left.setAttribute('x', curX);
+                curX += this.left.width;
+                // add to offset left
+                nside+=1;
+            }
+
+            // check if this is the right side of the set and adjust icon layout
+            if (this["right"]) {
+                // subtract to offset right
+                nside-=1;
+            } 
+                        
+            // position the middle view.
+            // it goes behind the icon and text
+            middle.setAttribute('x', curX);
+            
+            curX += extraWidth; 
+
+            // position the icon
+            if (this["icon"]) {
+                this.icon.setAttribute('x', Math.round(curX-(.25*iw*(nside)))); 
+                curX += this.icon.width;
+                // Center icon vertically unless icony has been set explicitly
+                this.icon.setAttribute('y', (icony != 0) ? icony : Math.round(height-this.icon.height )/2);
+            }
+            
+            if (this["txt"]) {
+                // position the text
+                this.txt.setAttribute('x', curX);
+                this.txt.setAttribute('text', this.text); 
+                // Center text vertically unless texty was set explicitly
+                this.txt.setAttribute('y', (texty != 0) ? texty : (height-this.txt.height )/2);
+                curX += this.txt.width;
+                curX += spacing;
+            }
+            
+            curX += extraWidth; 
+            middle.setAttribute('width', curX - middle.x);           
+            
+            // position the right thingy
+            if (this["right"]) {
+                this.right.setAttribute('x', curX);
+                curX += this.right.width;
+            } 
+                        
+            if (this["rightborder"]) {
+                this.rightborder.setAttribute('x', curX - 1);
+            }
+
+            this.setAttribute('width', curX); 
+        </method>
+        
+        <method name="init"><![CDATA[
+            super.init();
+            
+            if (showleftedge) {
+                new lz.view(this, {name: "left", resource: this.leftresource, pixellock: true}); 
+                this.setTint(this.left, this.tint);
+                this.left.sendToBack();
+            } 
+            
+            if (showrightedge) {
+                new lz.view(this, {name: "right", resource: this.rightresource, pixellock: true}); 
+                this.setTint(this.right, this.tint);
+                this.right.sendToBack(); 
+            } 
+            
+            if (iconname) { 
+                new lz.view(this, {name: "icon", resource: iconname + "_icon_rsc", pixellock: true});
+            }                        
+
+            // We always have a middle. 
+            middle.setAttribute('resource', middleresource);
+                        
+            if (showleftborder) {
+                new lz.view(this,    {name: "leftborder", bgcolor: 0xFFFFFF, 
+                                     width: 1, y : 1, height: this.height-2, 
+                                    pixellock: true});                 
+            }
+
+            if (showrightborder) {
+                new lz.view(this,    {name: "rightborder", bgcolor: 0x000000, 
+                                    width: 1, y : 0, height: this.height-2,
+                                    pixellock: true})
+            }
+
+            if (text != "") {
+                new lz.text(this, {name: "txt", text: text, fgcolor: fontcolor, resize: true, fontsize: fontsize});
+            }
+
+            this.setTint(this.middle, this.tint); 
+            
+            this.updatePositions(); 
+            
+            // Force the superclass to notice that the zeroth subview has some frames;
+            // This is necessary to get up/over/down/disable to work.
+            this.setResourceViewCount(middle.totalframes);
+            
+            if (! this.enabled && this.frame != this.disabledResourceNumber) {
+                this.setAttribute('frame', this.disabledResourceNumber);
+            }
+
+        ]]> 
+        </method>
+        
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

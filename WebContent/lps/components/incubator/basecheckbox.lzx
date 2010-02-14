@@ -1,0 +1,50 @@
+<library>
+    <include href="base/baseformitem.lzx"/>
+
+    <!--- A checkbox component representing a boolean. -->
+    <class name="basecheckbox" extends="baseformitem">
+
+        <!--- True if it's checked, else false. Default is false. -->
+        <attribute name="value" value="false" setter="setValue(value, false)" />
+
+        <!--- Toggles the value when the space bar is pressed while focused. -->
+        <method name="doSpaceUp">
+            if (this._enabled) this.setValue(!this.value, false);
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onclick" method="doClick" />
+        <method name="doClick" args="ignore">
+            if (this._enabled) this.setValue(!this.value, false);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_showEnabled">
+            if (this['_applystyle']) this._applystyle(this.style);
+        </method>
+        
+        <!--- Setter for 'value' attribute. The checkbox value is always true or
+              false.
+              @param Any value: can be any Javascript type and is evaluated as its
+              boolean equivalent, strings "true" and "false" are treated specially
+              to represent true and false respectively. -->
+        <method name="setValue" args="value,isinitvalue=null">
+            if (this['value'] == value) return;
+
+            if (value == "false") {
+                value = false;
+            } else if (value == "true") {
+                value = true;
+            } else {
+                value = !!value;
+            }
+            super.setValue(value,isinitvalue);
+        </method>
+                
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

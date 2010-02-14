@@ -1,0 +1,80 @@
+<library>
+    <!---
+        A horizontal container for a right-aligned label and text field.
+        usage:
+            @START_CODE
+                <labeledinputtext label="Title" datapath="details/@title" fieldwidth="50"/>
+            @END_CODE
+
+        datapath should be set to resolve to a text value
+    -->
+    <class name="labeledinputtext" extends="view" width="100%" visible="true">
+
+        <!--- the right-aligned label -->
+        <attribute name="label" type="string" />
+
+        <!--- font face -->
+        <attribute name="fontname" type="string" value="Verdana, Arial, sans"/>
+
+        <!--- column for right-aligned label -->
+        <attribute name="labelwidth" type="number" value="68" />
+
+        <!--- label font -->
+        <attribute name="labelfont" type="string" value="${detailslabel_style.font}"/>
+
+        <!--- color of label -->
+        <attribute name="labelcolor" type="number" value="${detailslabel_style.textcolor}"/>
+
+        <!--- label font size -->
+        <attribute name="labelsize" type="string" value="${detailslabel_style.fontsize}"/>
+
+       <!--- color of text -->
+        <attribute name="textcolor" type="string" value="0x000000"/>
+
+        <!--- width of editable text field -->
+        <attribute name="fieldwidth" type="number" value="128"/>
+
+        <!--- @keywords private -->
+        <attribute name="inset" type="number" value="3"/>
+
+        <!--- set this to larger if multiline is true -->
+        <attribute name="fieldheight" type="number" value="18"/>
+
+        <!--- set to true for multiline -->
+        <attribute name="multiline" type="boolean" value="false"/>
+
+        <!--- Maximum length for the editable text field. Default is null
+              (no limit) -->
+        <attribute name="maxlength" value="null" />
+
+        <lzedittext name="editabletext" submitname="${parent.name}" 
+                    fontsize="10" x="$once{classroot.labelwidth}" 
+                    width="$once{classroot.fieldwidth}" styleable="false"
+                    height="$once{classroot.fieldheight}" 
+                    bgcolor="white" font="$once{classroot.fontname}" 
+                    multiline="$once{classroot.multiline}"
+                    maxlength="$once{classroot.maxlength}" />
+
+        <text y="2" x="$once{parent.editabletext.x-this.getTextWidth()}"
+              fgcolor="$once{parent.labelcolor}" 
+              font="$once{classroot.labelfont}"
+              fontsize="$once{classroot.labelsize}" 
+              text="$once{classroot.label + ':'}" />
+
+        <!--- @keywords private -->
+        <method name="applyData" args="txt" >
+            this.editabletext.applyData(txt);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="updateData" args="txt" >
+            return this.editabletext.updateData();
+        </method>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

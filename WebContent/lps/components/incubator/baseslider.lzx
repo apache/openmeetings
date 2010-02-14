@@ -1,0 +1,197 @@
+<library>
+    <include href="base/basevaluecomponent.lzx"/>
+    <include href="lz/button.lzx"/>
+    <include href="utils/states/dragstate.lzx"/>
+    
+    <!--- The base class for implementing sliders representing a range of
+              values. -->
+    <class name="baseslider" extends="basevaluecomponent" width="200" >
+
+        <!--- The height of the track. -->
+        <attribute name="trackheight" value="8" type="number"/>
+        <!--- The width of the thumb. -->
+        <attribute name="thumbwidth" value="10" type="number"/>
+        <!--- The height of the thumb. -->
+        <attribute name="thumbheight" value="18" type="number"/>
+        
+        <!--- The minimum value. -->
+        <attribute name="minvalue" value="0" type="number" />
+        <!--- The maximum value. -->
+        <attribute name="maxvalue" value="100" type="number" />
+
+        <!--- significant digits of precision -->
+        <attribute name="precision" value="0" type="number"/>
+        
+        <!--- Turns on / off the slider's filled area. -->
+        <attribute name="showfill" value="true"/>
+        
+        <!--- Turns on / off the floating value text when the user
+              drags. -->
+        <attribute name="showvalue" value="true" type="boolean"/>
+        
+        <!--- Turns on / off the bounding range text. -->
+        <attribute name="showrange" value="true" type="boolean"/>
+        
+        <!--- How far to move when key navigating. -->
+        <attribute name="keystep" value="2" type="number"/>
+        
+        <!--- The border width. This can be set with a style. -->
+        <attribute name="bordersize" value="1" type="number"/>
+        
+        <!--- @keywords private -->
+        <handler name="oninit">
+            //have to adjust thumb once at start because
+            //neither setValue nor onvalue is getting triggered
+            //when value is set.
+            _adjustThumb();
+        </handler>
+        
+        <!--- Get the minimum value of the slider.
+                      @return Number: the minimum value. -->
+        <method name="getMinValue">
+            return minvalue;
+        </method>
+        <!--- Get the maximum value of the slider.
+                      @return Number: the maximum value. -->
+        <method name="getMaxValue">
+            return maxvalue;
+        </method>
+
+        <!--- Set the minimum value.
+                      @param Number v: the minimum value. -->
+        <method name="setMinValue" args="v">
+            if (this.minvalue == v) return;
+            this.minvalue = v;
+            if (onminvalue) onminvalue.sendEvent();
+            //adjust value
+            if (this.minvalue > this.value) this.setAttribute("value",v);
+            _adjustThumb();
+        </method>
+
+        <!--- Set the maximum value.
+                      @param Number v: the maximum value. -->
+        <method name="setMaxValue" args="v">
+            if (this.maxvalue == v) return;
+            this.maxvalue = v;
+            if (onmaxvalue) onmaxvalue.sendEvent();
+            //adjust value
+            if (this.value > v) this.setAttribute("value",v);
+            _adjustThumb();
+        </method>
+        <!--- Sets the value for the slider that must be within min and
+                      max.
+                      @param Number v: a number between the minimum and maximum
+                      value for the slider. -->
+        <method name="setValue" args="v">
+            if (this.value == v) return;
+            // ensure in bounds
+            v = Math.max(v,this.minvalue);
+            v = Math.min(v,this.maxvalue);
+            this.value = v;
+            if (onvalue) onvalue.sendEvent();
+            if (!isinited) return;
+            _adjustThumb();
+        </method>
+        
+        <!--- Set the value by percentage of range from min to max.
+                      @param Number p: a percentage between the min and
+                      the max. -->
+        <method name="setPercentage" args="p">
+            var diff = this.minvalue-this.maxvalue;
+            setValue( diff*p + this.minvalue );
+        </method>
+        
+        <!--- Get the percentage of the range selected by the value.
+                      @return Number: the percentage selected. -->
+        <method name="getPercentage">
+            return (this.value-this.minvalue) / (this.maxvalue-this.minvalue);
+        </method>
+        
+        <!--- adjusts the thumb location
+              @keywords private -->
+        <method name="_adjustThumb">
+            var perc = getPercentage();
+            var x = Math.round( (this.width-track.thumb.width)*perc );
+            track.thumb.setAttribute('x', x);
+        </method>
+        
+        <!--- @keywords private -->
+        <handler name="onkeydown" args="k">
+            //left arrow
+            if (k==37) this.track.thumb.setAttribute('x', this.track.thumb.x-keystep);
+            else
+            //right arrow
+            if (k==39) this.track.thumb.setAttribute('x', this.track.thumb.x+keystep);
+        </handler>
+        
+        <!--- @keywords private -->
+        <method name="getFocusRect">
+            var fx = this.getAttributeRelative('x',canvas);
+            var fy = this.getAttributeRelative('y',canvas) - 4;
+            var fw = this.getAttributeRelative('width',canvas) + 2;
+            var fh = this.getAttributeRelative('height',canvas) + 6;
+            return [fx,fy,fw,fh];
+        </method>
+    </class><!-- end baseslider class -->
+    
+    <!--- Baseslidertrack expects to be within a baseslider (or its
+          subclass). In other words, its "classroot" should be a slider. -->
+    <class name="baseslidertrack" width="100%" height="${classroot.trackheight}" bgcolor="0x333333" >
+        <handler name="oninit">
+            classroot.track = this;
+        </handler>
+    </class>
+    
+    <!--- Basesliderthumb expects to be within a baseslidertrack (or its
+          subclass). In other words, its "classroot" should be a slidertrack. -->
+    <class name="basesliderthumb" extends="button" width="${parent.classroot.thumbwidth}" height="${parent.classroot.thumbheight}"
+        onmousedown="thedragstate.setAttribute('applied', true);"
+        onmouseup="thedragstate.setAttribute('applied', false);"
+        focusable="false"
+        y="${(parent.height-height)/2}"
+    >
+        
+        <!--- Toggles the floating value text when dragging thumb. -->
+        <attribute name="showvalue" value="${parent.parent.showvalue}"/>
+        
+        <!--- @keywords private -->
+        <dragstate name="thedragstate" drag_axis="x">
+            <text name="t"
+                resize="true"
+                x="${classroot.width/2-width/2}"
+                y="-14"
+                text="${parent.parent.parent.value}"
+                visible="${classroot.showvalue}"
+            />
+        </dragstate>
+
+        <!--- constrain to parents bounds, and adjust slider value when dragged
+              @keywords private -->
+        <setter name="x" args="x">
+            var boundedx = x;
+            if ( x > parent.width-width ) {
+              var constrainX = parent.width-width;
+              boundedx = constrainX;
+            } else
+            if (parent.x > x) {
+              boundedx =  parent.x;
+            }
+            super.setAttribute('x', boundedx);
+            
+            //update slider value
+            var perc = ( (x) / (parent.parent.width-width) );
+            var val = Math.round( (((perc)*(parent.parent.maxvalue-parent.parent.minvalue))+parseFloat(parent.parent.minvalue)) 
+                                           * Math.pow(10,parent.parent.precision) ) / Math.pow(10,parent.parent.precision) ;
+            
+            //only adjust value if user is dragging or left or right key is pressed
+            if (thedragstate.applied || lz.Keys.isKeyDown("leftarrow") || lz.Keys.isKeyDown("rightarrow") ) {
+                parent.parent.setValue(val);
+            }
+        </setter>
+    </class><!-- end basesliderthumb class -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005, 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

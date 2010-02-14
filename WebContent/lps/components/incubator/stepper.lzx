@@ -1,0 +1,147 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<library>
+
+ 
+
+<include href="base/basebuttonrepeater.lzx" />
+
+<include href="lz/scrollbar_yresources.lzx"/>
+
+ 
+
+<resource name="lzedittext_bezel_inner_rsc">
+
+    <frame src="lz/resources/bezel_inner_dn.swf" />
+
+    <frame src="lz/resources/outline_dsbl.swf" />
+
+</resource>
+
+<resource name="lzedittext_bezel_outer_rsc">
+
+    <frame src="lz/resources/bezel_outer_dn.swf" />
+
+    <frame src="lz/resources/transparent.swf" />
+
+</resource>
+
+ 
+
+<class name="stepper" extends="baseformitem" bgcolor="white" width="40">
+
+      <attribute name="numberAlign" value="left" type="string"/>
+
+      <attribute name="minimum" type="number"/>
+
+      <attribute name="maximum" type="number"/>
+
+      <attribute name="step" value="1" type="number"/>
+
+      <attribute name="initialNumber" value="1" type="number"/>
+
+    <view name="_outerbezel" resource="lzedittext_bezel_outer_rsc"
+
+        width="${parent.width-1}" height="${parent.height-1}" stretches="both"/>
+
+    <view name="_innerbezel" resource="lzedittext_bezel_inner_rsc"
+
+        x="1" y="1" width="${parent.width-3}" height="${parent.height-3}" stretches="both"/>
+
+    <view name="_face"
+
+        x="2" y="2" width="${parent.width-4}" height="${parent.height-4}"/>
+
+ 
+
+      <view name="numberView" valign="middle" 
+
+        x="3"
+
+            height="${parent.height - 6}" width="${parent.width-parent.arrowView.width-6}">
+
+            <text valign="middle" align="${classroot.numberAlign}" name="numericValue" 
+
+                  text="${classroot.initialNumber}" resize="true"
+
+                  bgcolor="${classroot.bgcolor}">
+
+                <method name="increment">
+
+                        <![CDATA[
+
+                        var n = Number(this.text) + classroot.step;
+
+                        if ((typeof(classroot.maximum) == 'undefined') || 
+
+                        (typeof(classroot.maximum) != 'undefined' && classroot.maximum >= n)) {
+
+                              this.setAttribute('text', n);
+
+                        }
+
+                        ]]>
+
+                  </method>
+
+                <method name="decrement">
+
+                        <![CDATA[
+
+                        var n = Number(this.text) - classroot.step;
+
+                        if ((typeof(classroot.minimum) == 'undefined') || 
+
+                        (typeof(classroot.minimum) != 'undefined' && classroot.minimum <= n)) {
+
+                              this.setAttribute('text', n);
+
+                        }
+
+                        ]]>
+
+                  </method>
+
+            </text>
+
+      </view>
+
+      <view name="arrowView" align="right">
+
+            <simplelayout axis="y" spacing="0"/>
+
+            <basebuttonrepeater resource="lzscrollbar_ybuttontop_rsc" 
+
+                  onclick="classroot.numberView.numericValue.increment()">
+
+                  <handler name="onmousestilldown">
+
+                        classroot.numberView.numericValue.increment();
+
+                  </handler>
+
+            </basebuttonrepeater>
+
+            <basebuttonrepeater resource="lzscrollbar_ybuttonbottom_rsc" 
+
+                  onclick="classroot.numberView.numericValue.decrement()">
+
+                  <handler name="onmousestilldown">
+
+                        classroot.numberView.numericValue.decrement();
+
+                  </handler>
+
+            </basebuttonrepeater>
+
+      </view>
+
+</class>
+
+ 
+
+</library>
+

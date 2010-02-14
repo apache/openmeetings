@@ -1,0 +1,113 @@
+<library>
+
+<include href="base/basescrollbar.lzx"/>
+<include href="newhscrollbar_resources.lzx"/>
+
+<!--- A scrollbar manipulates the x or y position of a target view that is
+      clipped by its parent, creating a scrolling effect when the user clicks
+      up/down arrows, clicks on the scroll track or drags the thumb. -->
+
+<class name="newhscrollbar" extends="basescrollbar"
+    styleable="true"
+    bgcolor="0x595959"
+    visible="${this.scrollable &amp;&amp; (this.width > 21)}"
+    axis="x">
+
+    <!--- @keywords private -->
+    <attribute name="height" value="17"/>
+    <!--- @keywords private -->
+    <attribute name="_obgcolor" value="$once{this.bgcolor}"/>
+
+    <!-- left arrow -->
+    <view name="leftarrow" width="14">
+        <basescrollarrow x="1" y="1"
+            resource="lzscrollbar_xbuttonleft_rsc"
+            direction="-1"/>
+    </view>
+
+    <view name="scrolltrack" height="$once{parent.height-2}" y="1">
+        <!-- scroll track left of thumb -->
+        <basescrolltrack name="top"
+            resource="lzscrollbar_xtrack_rsc" stretches="width"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3"
+            direction="-1">
+            <attribute name="width" value="${parent.thumb.x}"/>
+            <attribute name="height" value="${parent.height}"/>
+        </basescrolltrack>
+
+        <!-- thumb -->
+        <basescrollthumb name="thumb" y="0">
+            <view resource="lzscrollbar_xthumbleft_rsc"/>
+            <view resource="lzscrollbar_xthumbmiddle_rsc" stretches="both"/>
+            <view resource="lzscrollbar_xthumbright_rsc"/>
+            <stableborderlayout axis="x"/>
+            <!-- note: stableborderlayout only acts on the first three views -->
+            <view resource="lzscrollbar_xthumbgripper_rsc" y="2"
+                  width="${Math.min(200, parent.width-16)}"
+                  clip="true" align="center"/>
+        </basescrollthumb>
+
+        <!-- scroll track right of thumb -->
+        <basescrolltrack name="bottom"
+            resource="lzscrollbar_xtrack_rsc" stretches="width"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3">
+            <attribute name="x" value="${parent.thumb.x+parent.thumb.width}"/>
+            <attribute name="width"
+                value="${parent.width - parent.thumb.x - parent.thumb.width}"/>
+            <attribute name="height" value="${parent.height}"/>
+        </basescrolltrack>
+
+    </view> <!-- scrolltrack -->
+
+    <!-- right arrow -->
+    <view name="rightarrow" width="14">
+        <basescrollarrow y="1"
+            resource="lzscrollbar_xbuttonright_rsc"/>
+    </view>
+    <stableborderlayout axis="x"/>
+
+    <handler name="onothersb">
+        this.otherstate.setAttribute('applied', true);
+    </handler>
+
+    <state name="otherstate">
+        <view name="patch" x="${parent.width}" bgcolor="${parent.style.basecolor}"
+              width="${parent.othersb.width}" height="${parent.height}" 
+              clickable="true" showhandcursor="false" />
+    </state>
+
+    <!--- @keywords private -->
+    <method name="_applystyle" args="s">
+        if (s != null) {
+            this.setTint(this, s.basecolor);
+            this.setTint(this.leftarrow, s.basecolor);
+            this.setTint(this.scrolltrack, s.basecolor);
+            this.setTint(this.rightarrow, s.basecolor);
+        }
+    </method>
+
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        super._showEnabled();
+
+        var enabled = this._enabled;
+        if ( ! enabled ) {
+            this._obgcolor = this.bgcolor;
+        }
+        this.setAttribute('opacity', enabled ? 1 : 0.6 );
+        this.setAttribute('bgcolor', enabled ? this._obgcolor : parent.bgcolor );
+        this.thumb.setAttribute('clickable', enabled );
+        this.thumb.setAttribute('visible', true);
+    </method>
+
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

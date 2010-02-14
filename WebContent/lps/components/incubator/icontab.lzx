@@ -1,0 +1,123 @@
+<library> 
+
+    <resource name="icontab_left_rsc">
+        <frame src="resources/tabs/tab_slct_lft.swf" />
+        <frame src="resources/tabs/tab_dslct_lft.swf" />
+        <frame src="resources/tabs/tab_mo_lft.swf" />
+    </resource>
+    <resource name="icontab_middle_rsc">
+        <frame src="resources/tabs/tab_slct_mid.swf" />
+        <frame src="resources/tabs/tab_dslct_mid.swf" />
+        <frame src="resources/tabs/tab_mo_mid.swf" />
+    </resource>
+    <resource name="icontab_right_rsc">
+        <frame src="resources/tabs/tab_slct_rt.swf" />
+        <frame src="resources/tabs/tab_dslct_rt.swf" />
+        <frame src="resources/tabs/tab_mo_rt.swf" />
+    </resource>
+
+    <!--- A tab item for use in sidebar.lzx - switches between listpanel views -->
+    <class name="icontab" extends="baselistitem" 
+           onmouseover="this.doMouseOver()" 
+           onmouseout="this.doMouseOut()" >
+
+        <!--- text label -->
+        <attribute name="text" type="html" />
+
+        <!--- optional icon for tab -->
+        <attribute name="iconname" value="" type="string" />
+
+        <!--- the y postion of the icon -->
+        <attribute name="icon_y" value="0"  />
+        
+        <!--- the icon and text are contained in one view, and inset_x sets the x for its position -->
+        <attribute name="inset_x" value="10"  />
+
+        <!--- the y offset for the label -->
+        <attribute name="label_y" value="-1"  />
+
+        <!-- TODO: this is similar code to iconbutton ...refactor this in future to reduce code -->
+        <view name="tabs" width="${parent.width}" >
+            <stableborderlayout axis="x" />
+            <view name="l" resource="icontab_left_rsc"  />
+            <view name="m" resource="icontab_middle_rsc" stretches="width"/>
+            <view name="r" resource="icontab_right_rsc" />
+        </view>
+
+        <view name="content" x="${classroot.inset_x}" y="${classroot.selected ? 0 : 1}">
+            <simplelayout axis="x" spacing="3"/>
+            <view name="icon" resource="$once{classroot.iconname + '_icon_rsc'}" y="${classroot.icon_y}"/>
+            <text name="label" resize="true" x="${parent.icon.x + parent.icon.width + 4}" text="${classroot.text}" y="${classroot.label_y}" />
+        </view>
+        
+        <handler name="oninit">
+            if (!this.selected) {
+                this.setFrame(2);
+            }
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="setHilite" args="h">
+            if(h) this.doMouseOver();
+            else this.doMouseOut();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doMouseOver" >
+            if(!selected)
+            {
+                this.setFrame(3);
+                //this.content.label.setAttribute("fgcolor", 0xffffff);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doMouseOut" >
+            if(!selected)
+            {
+                this.setFrame(2);
+                // this.content.label.setAttribute("fgcolor", 0x40408B);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                this.setTint(this.tabs, s.basecolor, 40);
+                this.content.label.setAttribute("fgcolor", s.textcolor);
+                if (s["font"]) this.content.label.setAttribute("font", s.font);
+                if (s["fontsize"]) this.content.label.setAttribute("fontsize", s.fontsize);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="setSelected" args="sel">
+            <![CDATA[
+                super.setSelected(sel);
+
+                if (sel==true){
+                    this.setFrame(1);
+                    this.content.setAttribute("y", 6);
+                    this.bringToFront();
+                } else{
+                    this.content.setAttribute("y", 7);
+                    this.doMouseOut();
+                }
+
+            ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="setFrame" args="f">
+            this.tabs.l.setAttribute('frame', f);
+            this.tabs.m.setAttribute('frame', f);
+            this.tabs.r.setAttribute('frame', f);
+        </method>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

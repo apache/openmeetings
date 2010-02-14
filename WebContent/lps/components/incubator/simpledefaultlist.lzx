@@ -1,0 +1,159 @@
+<library>
+    <!--- A list class that handles a default value. 
+          Input and output for the list is defined to be in this format:
+          <code>
+          <list name="fubar">
+            <item text="foo" value="bar" default="true"/>
+            <item text="goo" value="mar"/>
+          </list>
+          </code>
+         
+          Currently only works with dataoption="lazy" or "pooling"
+    -->
+    <class name="simpledefaultlist" extends="list">
+
+        <!-- methods overridded from baseformitem -->
+        <method name="rollback">
+
+            if (this.changed) {
+               // Replace the data with our archived copy
+               // this will effectively reset our datapath
+                this.datapath.p.parentNode.replaceChild(
+                    this.rollbackvalue,
+                    this.datapath.p );
+                this.setAttribute('changed', false);
+            }
+
+        </method>
+        
+        <!-- simpledefaultlist attributes -->
+        <!--- LzDataElement of the default node 
+              null means the list has no default -->
+        <attribute name="defaultitem" value="null" />
+
+        <!--- Set to true if the default item should be selected whenever
+            data is received -->
+        <attribute name="autoselectdefault" value="true" /> 
+
+        <handler name="ondata" args="d">
+        <![CDATA[ 
+            //Debug.write( "ondata event", d);
+
+
+            this.handleDataChange();    
+                
+                    
+         ]]>
+        </handler>
+
+        <!--- keywords @private -->
+        <method name="handleDataChange">
+
+            this.rollbackvalue = this.datapath.p.cloneNode(true); 
+            // Find the default node in the data
+            this.setAttribute("defaultitem", this.findDefault());
+
+            if (this.autoselectdefault) this.selectDefault();
+
+            this.setChanged(false);
+
+        </method>
+
+        <!--- Searches through the data to find a default item. 
+              Called when data is read into the list
+              @returns: lzDataElement default: dataelement for default
+        -->
+        <method name="findDefault">
+        <![CDATA[ 
+            //Debug.write("finding default", this.data);
+            if (this.datapath.p == null) return null;
+            if (!this.datapath.p.hasChildNodes()) return null;
+            var nodes = this.datapath.p.childNodes;
+            var curnode;
+            // search the data for default="true"
+            for (var i = 0; i < nodes.length; i++) {
+                curnode = nodes[i];
+                
+                if (curnode.attributes["default"] == "true") {
+                    //Debug.write("Found default! ", curnode);
+                    return curnode;
+                }
+            }
+            // Didn't find it, return null
+            return null;
+        ]]>
+        </method>
+
+        <!--- Selects the default item -->
+        <method name="selectDefault">
+            this.selectByData(this.defaultitem)
+        </method>
+
+        <!--- Selects an item based on a dataelement
+            @param LzDataElement data: node to select -->
+        <method name="selectByData" args="data">
+            var view;
+            if(data) {
+                view = this._selector.getItemByData(data);
+
+                select(view); 
+
+            }
+            return view;
+        </method>
+
+        <!--- Returns an XML representation of the data in the list 
+        format:
+            
+        -->
+        <method name="toXML">
+        <![CDATA[      
+
+            if (this.datapath.p == null) return "undefined";
+            
+            return this.datapath.serialize();
+
+        ]]>
+        </method>
+
+        <!--- Sets default item
+            @param view item: list item to make default -->
+        <method name="setDefault" args="item">
+           // Move this to selection manager???
+            this.setDefaultByData(item.data);
+        </method>
+
+        <!--- Sets default item
+            @param LzDataElement item: node to make default -->
+        <method name="setDefaultByData" args="item">
+            if (item == this.defaultitem) return;
+
+        
+           // Set the dataflags
+            if (this.defaultitem) {
+                this.defaultitem.removeAttr("default");
+            }
+            
+
+           this.setAttribute("defaultitem", item);
+           //Debug.write("set default item to ", this.defaultitem);
+           
+            if (this.defaultitem) {
+           this.defaultitem.setAttr("default", "true");
+            }
+            
+            this.setAttribute("changed", true);
+        </method>
+
+        
+        <!--- Should be called when an item has been modified. -->
+        <method name="modify" args="node">
+             this.setAttribute("changed", true); 
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,123 @@
+<canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+
+<!-- 
+
+SWF9 Google Maps API
+
+To use this, get a copy of the map_1_7a.swc from the Googe Map SDK and copy it to
+WEB-INF/flexlib (do not use the map_flex_*.swc library file, it expects the mx applicaton
+framework)
+
+Then compile this app with lzr=swf9
+
+-->
+
+  <script when="immediate"><![CDATA[
+         class FlashMapOL {
+             #passthrough (toplevel: true) {
+                 import com.google.maps.*;
+                 import com.google.maps.controls.*;
+                 import com.google.maps.overlays.*;
+                 import com.google.maps.services.*;
+                 import flash.geom.*;
+                 import flash.events.*;
+             }#
+
+                 var map:Map;
+
+             function createMap() {
+                 map = new Map();
+                 map.addEventListener(MapEvent.MAP_READY, onMapReady);
+                 // Henry's key
+                 map.key = "ABQIAAAAT-bIcrU96-d2UT9ao4fuQhQeYAb4p95ZEYTsQwGDQ7cOBxduDBQsJj99qzzLWoeHwQer1vjPN0wTNg";
+                 map.setSize(new Point(640, 480));
+                 return map;
+             }
+
+             function onMapReady(event:MapEvent):void {
+                 mapwin.ready = true;
+                 map.addEventListener(MapMoveEvent.MOVE_END, onMapMoveEnd);
+                 map.addControl(new ZoomControl());
+                 map.addControl(new PositionControl());
+                 map.addControl(new MapTypeControl());
+                 doGeocode(address.text);
+                 map.setZoom(14);
+
+             }
+             private function onMapMoveEnd(event:MapMoveEvent):void {
+                 var marker:Marker = new Marker(map.getCenter(), new MarkerOptions({draggable: true}));
+                 marker.addEventListener(MapMouseEvent.DRAG_START, function(event:Event):void {
+                     });
+                 marker.addEventListener(MapMouseEvent.DRAG_END, function(event:Event):void {
+                         marker.openInfoWindow(new InfoWindowOptions({content:"Just bouncing along..."}));
+                     });
+                 map.addOverlay(marker);
+             }
+
+             function geocodeSuccess(event:GeocodingEvent):void {
+                 var placemarks:Array = event.response.placemarks;
+                 if (placemarks.length > 0) {
+                     map.setCenter(placemarks[0].point);
+                     var marker:Marker = new Marker(placemarks[0].point);
+                     map.addOverlay(marker);
+                     marker.addEventListener(MapMouseEvent.CLICK,
+                                             function(event:MapMouseEvent):void {
+                                                 marker.openInfoWindow(new InfoWindowOptions({
+                                                         title: "Geocoded Result",
+                                                                 content: placemarks[0].address
+                                                                 }));
+                                             });
+                 }
+             }
+         
+             function doGeocode(address:String):void {
+                 var geocoder:ClientGeocoder = new ClientGeocoder();
+                 geocoder.addEventListener(GeocodingEvent.GEOCODING_SUCCESS,
+                                           geocodeSuccess);
+                 geocoder.addEventListener(GeocodingEvent.GEOCODING_FAILURE,
+                                           function(event:GeocodingEvent):void {
+                                               trace("Geocoding failed");
+                                           });
+                 geocoder.geocode(address);
+             }
+         }
+
+        lz.mapfactory = new FlashMapOL();
+        lz.map = lz.mapfactory.createMap();
+         
+    ]]>
+    </script>
+
+   <window title="Address">
+     <simplelayout axis="x"/>
+     <inputtext id="address" width="300">77 Massachusetts Avenue, Cambridge MA</inputtext>
+     <button onclick="lz.mapfactory.doGeocode(address.text)">Look Up</button>
+   </window>
+
+   <window y="60" id="mapwin" width="640" height="480" resizable="true">
+    <attribute name="ready" value="false"/>
+    <passthrough>
+      import flash.display.*;
+      import flash.geom.*;
+    </passthrough>
+    <handler name="oninit">
+      var sprite:Sprite = this.content.sprite
+      sprite.addChildAt(lz.map, sprite.numChildren);
+   </handler>
+   <handler name="onwidth">
+     lz.map.setSize(new Point(width, height));
+   </handler>
+   <handler name="onheight">
+     lz.map.setSize(new Point(width, height));
+   </handler>
+
+  </window>
+
+
+
+</canvas>

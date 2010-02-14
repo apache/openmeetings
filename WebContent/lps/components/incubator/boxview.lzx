@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--- @topic Incubator 
+      @subtopic Components 
+   -->
+<library>
+        <!---
+                implements the CSS box model in a view that allows for margins, padding, and a border.
+                Allows for an italized title.
+                By default functions the same as a view, but has a 1 pixel black border.
+                v1.0 - Original
+                v1.1 - Bugfix added " - parent.parent.vTitle.height" to vPadding height on !_contentheight state
+                @author Brad Erickson
+         -->
+        <!-- Named for the css box model -->
+        <class name="boxview" extends="view">
+                <!--- Size of the margin --> 
+                <attribute name="marginsize" type="number"
+                value="0"/>
+                <!--- Size of the border -->
+                <attribute name="bordersize" type="number" value="1"/>
+                <!--- Size of the padding -->
+                <attribute name="paddingsize" type="number" value="0"/>
+                <!--- Color of the border, default is black -->
+                <attribute name="bordercolor" type="string" value="0x000000"/>
+                <!--- Background color of the element, default is transparent-->
+                <attribute name="contentbgcolor" type="string" value="" />
+                <!--- Italized title of the view, appears in upper left -->
+                <attribute name="title" type="string" value=""/>
+
+                <!--- Clip content that extends beyond the specified height and width -->
+                <attribute name="clip" value="false" />
+                <!--- @keywords private -->
+                <attribute name="_usecontentwidth" value="true"/>
+                <!--- @keywords private -->
+                <attribute name="_usecontentheight" value="true"/>
+                <!--- @keywords private -->
+                <attribute name="defaultplacement" value="vContent" type="string"/>
+
+
+                <!--- @keywords private -->
+                <method name="construct" args="p,args"> <![CDATA[
+                        super.construct(p, args);
+                        // need to set these attributes before subviews are created
+                        // otherwise they will calculate width/height incorrectly
+                        setAttribute('_usecontentwidth', !hassetwidth);
+                        setAttribute('_usecontentheight', !hassetheight);
+                ]]> </method>
+        
+        <!-- vMargin creates the margin-->
+        <view name="vMargin" layout="axis: y" x="${classroot.marginsize}" y="${classroot.marginsize}">
+                <!-- If size is specified, base size from classroot -->
+                        <state applied="${!classroot._usecontentwidth}">
+                                <attribute name="width" value="${classroot.width - classroot.marginsize*2}"/>
+                        </state>
+                        <state applied="${!classroot._usecontentheight}">
+                                <attribute name="height" value="${classroot.height - classroot.marginsize*2 - vTitle.height}"/>
+                        </state>
+                        <!-- If sized to content, base size from it. -->
+                        <state applied="${classroot._usecontentwidth}">
+                                <attribute name="width" value="${vMiddle.vPadding.vContent.width + classroot.marginsize + classroot.bordersize*2 + classroot.paddingsize*2}"/>
+                        </state>
+                        <state applied="${classroot._usecontentheight}">
+                                <attribute name="height" value="${vMiddle.vPadding.vContent.height + classroot.marginsize + classroot.bordersize*2 + classroot.paddingsize*2 + vTitle.height}"/>
+                        </state>
+                <!-- title doesn't take up space if it is not used -->
+                <view x="5" name="vTitle" clip="true" height="${classroot.title=='' ? 0 : 10}">
+                        <statictext y="-4" resize="true" fontsize="9" fontstyle="italic" text="${classroot.title}" />
+                </view>
+                <view name="vBorderTop" height="${classroot.bordersize}" width="${parent.vMiddle.width}" bgcolor="${classroot.bordercolor}"/>
+                        
+                        <view name="vMiddle" layout="axis: x">
+                        <view name="vBorderLeft" width="${classroot.bordersize}" height="${parent.vPadding.height}" bgcolor="${classroot.bordercolor}"/>
+                        <view name="vPadding" bgcolor="${classroot.contentbgcolor ? classroot.contentbgcolor : null}">
+                                <!-- If size is specified, base size from classroot -->
+                                        <state applied="${!classroot._usecontentwidth}">
+                                                <attribute name="width" value="${classroot.width - classroot.marginsize*2 - classroot.bordersize*2}"/>
+                                        </state>
+                                        <state applied="${!classroot._usecontentheight}">
+                                                <attribute name="height" value="${classroot.height - classroot.marginsize*2 - classroot.bordersize*2 - parent.parent.vTitle.height}"/>
+                                        </state>
+                                        <!-- If sized to content, base size from it. -->
+                                        <state applied="${classroot._usecontentwidth}">
+                                                <attribute name="width" value="${vContent.width + classroot.paddingsize*2}"/>
+                                        </state>
+                                        <state applied="${classroot._usecontentheight}">
+                                                <attribute name="height" value="${vContent.height + classroot.paddingsize*2}"/>
+                                        </state>
+                                        
+                                <view name="vContent" x="${classroot.paddingsize}" y="${classroot.paddingsize}" clip="true">
+                                                <state applied="${!classroot._usecontentwidth}">
+                                                        <attribute name="width" value="${classroot.width - classroot.marginsize*2 - classroot.bordersize*2 - classroot.paddingsize*2}"/>
+                                                </state>
+                                                <state applied="${!classroot._usecontentheight}">
+                                                        <attribute name="height" value="${classroot.height - classroot.marginsize*2 - classroot.bordersize*2 - classroot.paddingsize*2}"/>
+                                                </state>
+                                                <!-- this is the defaultplacement view -->
+                                </view>
+                        </view>
+                        <view name="vBorderRight" width="${classroot.bordersize}" height="${parent.vPadding.height}" bgcolor="${classroot.bordercolor}"/>
+                </view>
+
+                <view name="vBorderBottom" height="${classroot.bordersize}" width="${parent.vMiddle.width}" bgcolor="${classroot.bordercolor}"/>
+                </view>
+        </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

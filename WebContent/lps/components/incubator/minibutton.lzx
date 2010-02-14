@@ -1,0 +1,37 @@
+<library>
+
+<include href="incubator/stylishbutton.lzx"/>
+
+    <resource name="minibutton_left_rsc">
+        <frame src="resources/button/mini/mini_btn_up_lft.png" />
+        <frame src="resources/button/mini/mini_btn_mo_lft.png" />
+        <frame src="resources/button/mini/mini_btn_dn_lft.png" />
+    </resource>
+
+    <resource name="minibutton_right_rsc" >
+        <frame src="resources/button/mini/mini_btn_up_rt.png" />
+        <frame src="resources/button/mini/mini_btn_mo_rt.png" />
+        <frame src="resources/button/mini/mini_btn_dn_rt.png" />
+    </resource>
+    
+    <resource name="minibutton_middle_rsc">
+        <frame src="resources/button/mini/mini_btn_up_mid.swf" />
+        <frame src="resources/button/mini/mini_btn_mo_mid.swf" />
+        <frame src="resources/button/mini/mini_btn_dn_mid.swf" />
+    </resource>
+
+    <class name="minibutton" extends="stylishbutton"
+        leftresource="minibutton_left_rsc"
+        middleresource="minibutton_middle_rsc"
+        rightresource="minibutton_right_rsc"
+        texty="-1"
+        fontsize="9"
+        >
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

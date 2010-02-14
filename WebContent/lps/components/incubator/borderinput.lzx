@@ -1,0 +1,103 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library >
+    <class name="borderinput">
+        <attribute name="changed" value="${this.txt.changed}" />
+        <attribute name="text" setter="this.setText(text, false)" />
+        <attribute name="labelwidth" type="number" value="80"/>
+
+        <!-- label -->
+        <attribute name="label" type="string"
+                   when="once" setter="label_text.setAttribute('text', label)"/>
+
+        <!--- should be an object of type "textstyle" -->
+        <attribute name="labelstyle" value="null" when="once" />
+
+        <!-- text of the label.
+             manually align right by measuring width oninit
+            (assumes text has already been set) -->
+        <text name="label_text" fontsize="11" resize="true" y="2" />
+
+        <view name="border" bgcolor="0xACACBF" x="${parent.labelwidth}"/>
+        
+        <baseedittext name="txt" y="2" fontsize="11" height="17">
+            <_newinternalinputtext name="txt" width="${parent.width}" 
+                                   height="${parent.height}" bgcolor="white" >
+              <!-- so that we can put a getPrevSelection method on an instance of this class -->           
+                <method name="getPrevSelection" >
+                    if ( parent['getPrevSelection'] ) {
+                       return parent.getPrevSelection();
+                    }
+                    return null; // so that default tab order occurs
+                </method>
+
+                <!-- so that we can put a getNextSelection method on an instance of this class -->           
+                <method name="getNextSelection" >
+                    if ( parent['getNextSelection'] )  return parent.getNextSelection()
+                    return null; // so that default tab order occurs
+                </method>
+            </_newinternalinputtext>
+        </baseedittext>
+
+        <!--- @keywords private -->
+        <setter name="width" args="w">
+            super.setAttribute('width', w);
+            if (this.isinited ) {
+                this.border.setAttribute('width', w - this.labelwidth);
+                this.txt.setAttribute('width', w - this.labelwidth - 2);
+
+            }
+        </setter>
+        
+        <!--- Set text for border input.
+              @param String t: text to set. 
+              @param Boolean isinitvalue: true if the text set is the initial
+              value for borderinput. If not true, setting text will cause this
+              borderinput to be considered changed. -->
+        <method name="setText" args="t,isinitvalue">
+            this.txt.setValue(t,isinitvalue);
+        </method>
+        
+        <!-- set the selection for border input.
+            @param Number ns: start of selection range.
+            @param Number ne: end of selection range. -->
+        <method name="setSelection" args="ns,ne=null">
+            this.txt.setSelection(ns,ne);
+        </method>
+
+        <!--- Get text from border input. -->
+        <method name="getText" >
+            return this.txt.value;
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="init" >
+            super.init();
+            this.setAttribute('width', width);
+            this.border.setAttribute('height', this.txt.height + 2 );
+            this.label_text.setAttribute('x', this.labelwidth - 6 - this.label_text.width);
+            this.border.setAttribute('x', this.labelwidth);
+            this.txt.setAttribute('x', this.labelwidth + 1);
+            if (this.labelstyle != null)
+                this._applystyle(this.labelstyle);
+        </method>
+       
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                this.label_text.setAttribute("fgcolor", s.textcolor);
+                this.label_text.setAttribute("font", s.font);
+                this.label_text.setAttribute("fontsize", s.fontsize);
+                this.label_text.setAttribute('x', this.labelwidth - 6 - this.label_text.width);
+           }
+        </method>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

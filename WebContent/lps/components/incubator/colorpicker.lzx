@@ -1,0 +1,244 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+
+  <class name="colorpot" width="13" height="13">
+    <attribute name="mycolor" type="color" value="#000000"/>
+    <attribute name="listener" type="expression"/>
+    <handler name="onclick">
+      listener.changeColor(this.mycolor);
+    </handler>
+    <view bgcolor="#444444" width="13" height="13">
+      <view bgcolor="${classroot.mycolor}"  x="1" y="1" width="11" height="11"/>
+    </view>
+  </class>
+  
+  <class name="colorrow">
+    <simplelayout axis="x" spacing="-1"/>
+  </class>
+  
+  <class name="colorpicker" 
+         extends="window" width="260" height="170" bgcolor="#cccccc">
+    <attribute name="selectedColor" type="number" value="0x000000"/>
+    
+    <handler name="oninit">
+      this.changeColor(0x000000);
+    </handler>
+    
+    <method name="RGBtoHLS" args="r,g,b">
+      <![CDATA[
+        var h,l,s;
+        var max = (Math.max(Math.max(r, g), b))/255;
+        var min = (Math.min(Math.min(r, g), b))/255;
+        var delta = max-min;
+        l = (max+min)/2;
+        s = (max == min) ? 0 : ((l <= 0.5) ? delta/l/2 : delta/(2-l*2));
+        if(r/255 == max) h = (g-b)/delta/255;
+        else if(g/255 == max) h = 2+(b-r)/delta/255;
+        else if(b/255 == max) h = 4+(r-g)/delta/255;
+        h *= 40;
+        if(h < 0) h += 240;
+        h = Math.round(h);
+        return {h:((isNaN(h)) ? 0 : h), l:Math.round(l*240), s:Math.round(s*240)};
+      ]]>
+    </method>
+    
+    <method name="HLStoRGB" args="h,l,s">
+      <![CDATA[
+        var r,g,b;
+        if(s == 0) {
+          r = g = b = Math.round(l/240*255);
+        } else {
+          h /= 240; l /= 240; s /= 240;
+          var temp4,temp3;
+          var temp2 = (l < 0.5) ? l*(s+1) : l+s-l*s;
+          var temp1 = l*2 - temp2;
+          for(var i=0; i<3; i++) {
+            switch(i) {
+              case 0: temp3 = h+1/3; break;
+                case 1: temp3 = h; break;
+                case 2: temp3 = h-1/3; break;
+            }
+            if(temp3 < 0) temp3++;
+            else if(temp3 > 1) temp3--;
+            if(temp3*6 < 1) temp4 = temp1+(temp2-temp1)*6*temp3;
+            else if(temp3*2 < 1) temp4 = temp2;
+            else if(temp3*3 < 2) temp4 = temp1+(temp2-temp1)*((2/3)-temp3)*6;
+            else temp4 = temp1;
+            switch(i) {
+              case 0: r = Math.round(temp4*255); break;
+              case 1: g = Math.round(temp4*255); break;
+              case 2: b = Math.round(temp4*255); break;
+            }
+          }
+      }
+      return {r:r, g:g, b:b};
+    ]]>
+    </method>
+    
+    <text fontsize="8"
+          x="${classroot.s_hue.width + classroot.s_hue.x}"
+          y="${classroot.s_hue.y - 4}">HUE</text>
+    <slider name="s_hue" minvalue="1" maxvalue="240" 
+            trackheight="4"
+            thumbheight="12"
+            x="4" y="80" showrange="false" showvalue="false">
+      <handler name="onvalue">
+        classroot.updateColor();
+      </handler>
+    </slider>
+    
+    <text fontsize="8"
+          x="${classroot.s_bri.width + classroot.s_bri.x}"
+          y="${classroot.s_bri.y - 4}">BRI</text>
+    <slider name="s_bri"  minvalue="1" maxvalue="240" 
+            trackheight="4"
+            thumbheight="12"
+            x="4" y="96" showrange="false"  showvalue="false">
+      <handler name="onvalue">
+        classroot.updateColor();
+      </handler>
+    </slider>
+    
+    <text fontsize="8"
+          x="${classroot.s_sat.width + classroot.s_sat.x}"
+          y="${classroot.s_sat.y - 4}">SAT</text>
+    <slider name="s_sat" minvalue="1" maxvalue="240"
+            trackheight="4"
+            thumbheight="12"
+            x="4" y="112" showrange="false" showvalue="false">
+      <handler name="onvalue" >
+        classroot.updateColor();
+      </handler>
+    </slider>
+    
+    <view name="c2" bgcolor="black" width="30" height="66" y="4" x="206">
+      <view name="current" 
+            x="1" y="1"
+            width="${parent.width -2}" 
+            height="${parent.height -2}" 
+            bgcolor="${classroot.selectedColor}" />
+    </view>
+    
+    <method name="updateColor" >
+      <![CDATA[
+        var rgb = HLStoRGB(s_hue.value, s_bri.value, s_sat.value);
+        var c = rgb.r << 16 | rgb.g << 8 | rgb.b
+        this.setAttribute('selectedColor', c);
+      ]]>
+    </method>
+    
+    <method name="changeColor" args="c">
+      <![CDATA[
+        this.setAttribute('selectedColor', c);
+        var r = (c >> 16) & 0xff;
+        var g = (c >> 8) &  0xff;
+        var b = c & 0xff;
+        var hsl = RGBtoHLS(r,g,b);
+        s_hue.setValue(hsl.h);
+        s_bri.setValue(hsl.l);
+        s_sat.setValue(hsl.s);
+      ]]>
+    </method>
+    
+    <view x="4" y="6">
+      <simplelayout spacing="-1"/>
+      
+      <colorrow>
+        <colorpot listener="$once{classroot}" mycolor="#ff0000"/>
+        <colorpot listener="$once{classroot}" mycolor="#ffff00"/>
+        <colorpot listener="$once{classroot}" mycolor="#00ff00"/>
+        <colorpot listener="$once{classroot}" mycolor="#00ffff"/>
+        <colorpot listener="$once{classroot}" mycolor="#0000ff"/>
+        <colorpot listener="$once{classroot}" mycolor="#ff00ff"/>
+        <colorpot listener="$once{classroot}" mycolor="#ffffff"/>
+        <colorpot listener="$once{classroot}" mycolor="#ebebeb"/>
+        <colorpot listener="$once{classroot}" mycolor="#e1e1e1"/>
+        <colorpot listener="$once{classroot}" mycolor="#d7d7d7"/>
+        <colorpot listener="$once{classroot}" mycolor="#cccccc"/>
+        <colorpot listener="$once{classroot}" mycolor="#c2c2c2"/>
+        <colorpot listener="$once{classroot}" mycolor="#b7b7b7"/>
+        <colorpot listener="$once{classroot}" mycolor="#acacac"/>
+        <colorpot listener="$once{classroot}" mycolor="#a0a0a0"/>
+        <colorpot listener="$once{classroot}" mycolor="#959595"/>
+      </colorrow>
+      <colorrow>
+        <colorpot listener="$once{classroot}" mycolor="#ee1d24"/>
+        <colorpot listener="$once{classroot}" mycolor="#fff100"/>
+        <colorpot listener="$once{classroot}" mycolor="#00a650"/>
+        <colorpot listener="$once{classroot}" mycolor="#00aeef"/>
+        <colorpot listener="$once{classroot}" mycolor="#2f3192"/>
+        <colorpot listener="$once{classroot}" mycolor="#ed008c"/>
+        <colorpot listener="$once{classroot}" mycolor="#898989"/>
+        <colorpot listener="$once{classroot}" mycolor="#7d7d7d"/>
+        <colorpot listener="$once{classroot}" mycolor="#707070"/>
+        <colorpot listener="$once{classroot}" mycolor="#626262"/>
+        <colorpot listener="$once{classroot}" mycolor="#555555"/>
+        <colorpot listener="$once{classroot}" mycolor="#464646"/>
+        <colorpot listener="$once{classroot}" mycolor="#363636"/>
+        <colorpot listener="$once{classroot}" mycolor="#262626"/>
+        <colorpot listener="$once{classroot}" mycolor="#111111"/>
+        <colorpot listener="$once{classroot}" mycolor="#000000"/>
+      </colorrow>
+      
+      <colorrow>
+        <colorpot listener="$once{classroot}" mycolor="#f7977a"/>
+        <colorpot listener="$once{classroot}" mycolor="#fbad82"/>
+        <colorpot listener="$once{classroot}" mycolor="#fdc68c"/>
+        <colorpot listener="$once{classroot}" mycolor="#fff799"/>
+        <colorpot listener="$once{classroot}" mycolor="#c6df9c"/>
+        <colorpot listener="$once{classroot}" mycolor="#a4d49d"/>
+        <colorpot listener="$once{classroot}" mycolor="#81ca9d"/>
+        <colorpot listener="$once{classroot}" mycolor="#7bcdc9"/>
+        <colorpot listener="$once{classroot}" mycolor="#6ccff7"/>
+        <colorpot listener="$once{classroot}" mycolor="#7ca6d8"/>
+        <colorpot listener="$once{classroot}" mycolor="#8293ca"/>
+        <colorpot listener="$once{classroot}" mycolor="#8881be"/>
+        <colorpot listener="$once{classroot}" mycolor="#a286bd"/>
+        <colorpot listener="$once{classroot}" mycolor="#bc8cbf"/>
+        <colorpot listener="$once{classroot}" mycolor="#f49bc1"/>
+        <colorpot listener="$once{classroot}" mycolor="#f5999d"/>
+      </colorrow>
+      
+      <colorrow>
+        <colorpot listener="$once{classroot}" mycolor="#f16c4d"/>
+        <colorpot listener="$once{classroot}" mycolor="#f68e54"/>
+        <colorpot listener="$once{classroot}" mycolor="#fbaf5a"/>
+        <colorpot listener="$once{classroot}" mycolor="#fff467"/>
+        <colorpot listener="$once{classroot}" mycolor="#acd372"/>
+        <colorpot listener="$once{classroot}" mycolor="#7dc473"/>
+        <colorpot listener="$once{classroot}" mycolor="#39b778"/>
+        <colorpot listener="$once{classroot}" mycolor="#16bcb4"/>
+        <colorpot listener="$once{classroot}" mycolor="#00bff3"/>
+        <colorpot listener="$once{classroot}" mycolor="#438ccb"/>
+        <colorpot listener="$once{classroot}" mycolor="#5573b7"/>
+        <colorpot listener="$once{classroot}" mycolor="#5e5ca7"/>
+        <colorpot listener="$once{classroot}" mycolor="#855fa8"/>
+        <colorpot listener="$once{classroot}" mycolor="#a763a9"/>
+        <colorpot listener="$once{classroot}" mycolor="#ef6ea8"/>
+        <colorpot listener="$once{classroot}" mycolor="#f16d7e"/>
+      </colorrow>
+      
+      
+      <colorrow>
+        <colorpot listener="$once{classroot}" mycolor="#9a8575"/>
+        <colorpot listener="$once{classroot}" mycolor="#726357"/>
+        <colorpot listener="$once{classroot}" mycolor="#524842"/>
+        <colorpot listener="$once{classroot}" mycolor="#362f2c"/>
+        <colorpot listener="$once{classroot}" mycolor="#c69c6d"/>
+        <colorpot listener="$once{classroot}" mycolor="#a77c50"/>
+        <colorpot listener="$once{classroot}" mycolor="#8c623a"/>
+        <colorpot listener="$once{classroot}" mycolor="#744b24"/>
+        <colorpot listener="$once{classroot}" mycolor="#613813"/>
+      </colorrow>
+      
+    </view>
+  </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2008 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
