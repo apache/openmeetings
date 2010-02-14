@@ -1,0 +1,145 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/strokestyle.lzx"/>
+    <include href="../common/viewspoolmanager.lzx"/>
+    <include href="extensions/drawview.lzx"/>
+    
+       <!---
+         A pie chart plot area where the pie slices are rendered
+         @access public
+         -->
+        <class name="piechartplotarea"   extends="drawview">
+        <doc>
+          <text>
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+        <!--- Array that holds the attributes regarding the dimension and position
+              of the pie slices
+              TODO::Change type - html
+              @keywords private -->
+        <attribute name="arrPiePieces" type="html" value="null" />
+        <!--- Defines the pie slice's style -->
+        <attribute name="style" type="string" value="null"/>
+    
+        <!--- Piece pool 
+              @keywords private -->
+    <viewspool name="_piepiecespool" parentview="${parent}" viewclass="piepiece"/>
+        <!--- Stroke style object, used to define the pie slice's border
+              @keywords private -->
+        <strokestyle name="objStroke" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this.arrPiePieces = new Array(0);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="searchStrokeStyle"> 
+        <![CDATA[
+            var lStrokeObj = null;
+
+           for (var i=0; i < parent.subnodes.length; i++) {
+                if (parent.subnodes[i].name == this.style) {
+                    lStrokeObj =  parent.subnodes[i];
+                }
+           }
+           //Checks if any Stroke style is defined.
+           if (lStrokeObj != null) {
+               this.objStroke.setAttribute('strokeColor', lStrokeObj.strokeColor)
+               this.objStroke.setAttribute('strokeType', lStrokeObj.strokeType)
+               this.objStroke.setAttribute('strokeWidth', lStrokeObj.strokeWidth)
+           }
+         ]]> 
+         </method>
+
+        <!--- Renders the pie slices -->
+        <method name="renderSeries" args="xseries, yseries, tooltipseries, strokeStyle">
+        <![CDATA[ 
+            _piepiecespool.reclaimAll();
+        
+            searchStrokeStyle();
+            var radius = Math.min(this.width, this.height) / 2.3;   
+            var colors = [0x00FF00, 0xC5276F, 0xB71CB3, 0xF2F200, 0xE46A18];
+            var lowColors = [0x80FF80, 0xFF3399, 0xFF75FF, 0xFFFF84, 0xF98B39]; 
+            //args="x, y, startAngle, arc, radius, yRadius">
+            var sum = this.calcSum(yseries);
+            var angle = 0;
+
+            this.arrPiePieces = new Array(0);
+            
+            if(xseries != null){
+                for(var i = 0; i < xseries.length; i++)
+                {   
+                    var arc = yseries[i] / sum * 360;   
+                    
+                    var lx = this.width/2;
+                    var ly = this.height/2;
+    
+                    var v = _piepiecespool.getView({x : lx, y : ly, width: 0, height : 0});
+                    v.clear();
+                    
+                    //v.tooltip = tooltipseries[i];
+                    
+                    v.setAttribute( "x", lx );
+                    v.setAttribute( "y", ly );
+                    v.setAttribute( "angle", angle );
+                    v.setAttribute( "arcvalue", arc );
+                    v.setAttribute( "radius", radius );
+                      
+                    v.setAttribute( "style", parent.style.getDataStyle(i));
+    
+                    this.arrPiePieces.push(v);
+                    v.renderWedge();
+    
+                    if(tooltipseries != null)
+                    {
+                        v.tooltip = tooltipseries[i];
+                    }
+                    angle += arc;
+                }
+            }
+        ]]>
+        </method>
+        
+        <!--- Calculates the sum of the all the values of the categories
+              @keywords private -->
+        <method name="calcSum" args="arr">
+        <![CDATA[
+            var sum = 0;
+            if(arr != null){
+                for(var i = 0; i < arr.length; i++)
+                {
+                    sum += arr[i];
+                }
+            }
+            return sum;
+        ]]>            
+        </method>
+
+        <!--- Clears the array with the attributes of the pie slices
+              @keywords private -->
+        <method name="clear">
+        <![CDATA[
+            if( this.arrPiePieces != null )
+                while( this.arrPiePieces.length > 0 )
+                    this.arrPiePieces.pop();
+
+            this.arrPiePieces = null;
+        ]]>
+        </method>
+    </class>     
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->
