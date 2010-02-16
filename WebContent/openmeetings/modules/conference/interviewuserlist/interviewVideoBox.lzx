@@ -103,6 +103,7 @@
 			   visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
 		<handler name="onclick" args="refObj">
 			new lz.interviewVideoChooseUser(canvas,{
+				           isInterview:true,
             			   x:this.getAttributeRelative("x",canvas)-10,
             			   y:this.getAttributeRelative("y",canvas)-20,
             			   width:this.width+20,

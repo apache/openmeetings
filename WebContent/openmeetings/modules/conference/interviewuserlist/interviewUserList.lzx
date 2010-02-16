@@ -240,14 +240,15 @@
      -->		
 	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
 		<![CDATA[
-			//if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
+			if ($debug) Debug.write("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
 			var obj = this.getVideoObjectByPublicSID(publicSID);
 			
 			if (obj == null) {
                 obj = this.getNewVideoObjectByPos(publicSID,interviewPodId);
             }
 			
-			//if ($debug) Debug.write("startStream obj: ",obj);
+			if ($debug) Debug.write("startStream obj: ",obj);
+			
 			if (obj != null ){
 				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
 				obj.setAttribute('chatpartnername',firstname+' '+lastname);
@@ -292,6 +293,8 @@
             if ($debug) Debug.write("getNewVideoObjectByPos :: ",publicSID,interviewPodId);
 		
 			var obj = this.getVideoObjectByPublicSID(publicSID);
+			
+			if ($debug) Debug.write("FOUND :: ",obj);
 			
 			if (obj!=null){
 				return obj;
@@ -368,10 +371,13 @@
 			//if ($debug) Debug.write("disconnectclient obj: ",obj);
 			
 			if (obj != null){
+				if ($debug) Debug.write("disconnectclient objList: ",objList);
 				obj.resetValues();
-				obj.destroy();
+				//We will only hide this here cause we will need it again!
+				obj.setAttribute("visibility","hidden");
 			}
             if (objList != null){
+            	if ($debug) Debug.write("disconnectclient objList: ",objList);
                 objList.resetValues();
                 objList.destroy();
             }

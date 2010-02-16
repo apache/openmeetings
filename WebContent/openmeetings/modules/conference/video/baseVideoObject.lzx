@@ -387,9 +387,18 @@
             <handler name="onclick">
                 parent.parent.resetValues();
                 if(!this.parent.parent.isremote) {
-                    if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
-                    new lz.editRecordStream(canvas.main_content._content.inner,{
+                	if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                	if (this.parent.parent.isInterview) {
+                		new lz.editRecordStream(parent.parent.parent,{
+                			    doDefaultAnimation:false,
+                                align:'center',valign:'middle',
+                			    isInterview:true,
+                			    myvideocontainer:parent.parent,
                                 isSyncUpdate:true});
+                	} else {
+                		new lz.editRecordStream(canvas.main_content._content.inner,{
+                                isSyncUpdate:true});
+                	}
                 }
             </handler>
             <labelTooltip labelid="540" />

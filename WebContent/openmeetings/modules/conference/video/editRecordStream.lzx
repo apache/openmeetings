@@ -29,6 +29,8 @@
     
     <attribute name="doDefaultAnimation" value="true" type="boolean" />
     
+    <attribute name="isInterview" value="false" type="boolean" />
+    
 	<handler name="oninit">
 		<![CDATA[
 			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);			
@@ -39,7 +41,8 @@
 	        var save = g["savecamdata"];
 	        //Debug.write("save: ",save,g["cam"],g["mic"]);
             
-            //In case the user presses the Sync Button this box should not close automatically again
+            //In case the user presses the Sync Button this box should 
+            //not close automatically and do the user-prefered values
 	        if(save && !this.isSyncUpdate) {
 	        	this.chosenCam = g["cam"];
 	        	this.chosenMic = g["mic"];
@@ -310,7 +313,7 @@
     		   x="10" y="120" width="$once{ parent.width-20 }" />
     
     <!-- Remember Me -->    
-    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="210">
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="210" >
         <handler name="oninit">
             var t = new lz.sharedObject();
             t.getLocal('userdata');
