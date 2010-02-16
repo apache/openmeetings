@@ -61,7 +61,7 @@
 	            lastname += " *";
 	        }
             
-            new lz.eventUserListItemWithNames(this._table.innerList,{
+            new lz.interviewUserListItem(this._table.innerList,{
     	            user_id:object.user_id,
     	            firstname:object.firstname,
                     isSuperModerator:object.isSuperModerator,
@@ -122,13 +122,13 @@
     	if (canvas.ismoderator) {
     		
         	if (this.selectedItem != null) {
-        		if (this.selectedItem != itemObj) {
-        		    this.selectedItem.deselect();
-        		}
+    		    this.selectedItem.deselect();
         	}
         	
-        	this.selectedItem = itemObj;
-        	this.selectedItem.select();
+        	if (this.selectedItem != itemObj) {
+            	this.selectedItem = itemObj;
+            	this.selectedItem.select();
+        	}
         	
     	}
     	
@@ -155,7 +155,8 @@
     <!--
     <eventUserListTable name="_table" /> 
      -->
-    <view name="moderationPanel" height="0" clip="true" y="${ parent.height - this.height - 2 }">
+    <view name="moderationPanel" height="0" clip="true" 
+    	  y="${ parent.height - this.height - 2 }">
     	
     	<handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
@@ -220,10 +221,10 @@
         	]]>
         </method>
         
-        <labelText labelid="680" width="270" x="0" multiline="true" y="0" />
+        <labelText labelid="912" width="270" x="0" multiline="true" y="0" />
     	
     	<animator name="showItem" attribute="height" 
-    			  to="40" duration="1000" start="false" />
+    			  to="60" duration="1000" start="false" />
     </view>
 
 </class>

@@ -4,6 +4,8 @@
 	
     <include href="interviewUserList.lzx" />
     <include href="interviewVideoBox.lzx" />
+    <include href="interviewModerationMiniIcons.lzx" />
+    <include href="interviewUserListItem.lzx" />
     <include href="interviewListInner.lzx" />
     <include href="moderationMiniIconsInterviewUserList.lzx" />
     

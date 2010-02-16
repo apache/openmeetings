@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="interviewModerationMiniIcons" extends="view" valign="bottom" height="18">
+	
+	<attribute name="isMod" value="false" type="boolean"/>
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+		this.isMod = canvas.getIsModeratorByPublicSID(parent.refObj.publicSID);
+		
+		if ($debug) Debug.write("this.isMod ",this.isMod);
+		
+		if (this.isMod) {
+			this._isMod.setAttribute("visibility","visible");
+			this._isModAddbutton.setAttribute("visibility","hidden");
+		} else {
+			this._isMod.setAttribute("visibility","hidden");
+            this._isModAddbutton.setAttribute("visibility","visible");
+		}
+		
+	</handler>
+        
+    <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" height="16">
+        <handler name="onclick">
+            <![CDATA[
+            
+                if (parent.isSuperModerator) {
+                    new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:838});
+                    return;
+                }
+            
+                //if the label is set and this is a Moderator then this user should
+                //allow the click event => the click event will trigger
+                //this user away from beeing able to draw on the whiteboard
+                if (canvas.ismoderator) {
+                    //Do it 
+                    if ($debug) Debug.write("Do Remove It");
+                    if (parent.parent.refObj.publicSID != canvas.publicSID) {
+                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                        hib.removeModerator.doCall();
+                    } else {
+                    	new lz.labelerrorPopup(canvas,{errorlabelid:682});
+                    }
+                    //parent.parent.setCanDraw.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="675" />
+    </miniIcons>
+    
+    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isMod_rsc" height="16">
+        <handler name="onclick">
+            <![CDATA[
+                //if the label is set and this is a Moderator then this user should
+                //allow the click event => the click event will trigger
+                //this user away from beeing able to draw on the whiteboard
+                if (canvas.ismoderator) {
+                    //Do it 
+                    if ($debug) Debug.write("Do Add It");
+                    hib.addModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                    hib.addModerator.doCall();
+                    //parent.parent.setCanDraw.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="676" />
+    </miniIcons>
+        
+</class>
+
+</library>

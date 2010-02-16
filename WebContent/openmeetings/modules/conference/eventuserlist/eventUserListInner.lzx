@@ -153,14 +153,14 @@
     	
     	if (canvas.ismoderator) {
     		
-        	if (this.selectedItem != null) {
-        		if (this.selectedItem != itemObj) {
-        		    this.selectedItem.deselect();
-        		}
-        	}
-        	
-        	this.selectedItem = itemObj;
-        	this.selectedItem.select();
+            if (this.selectedItem != null) {
+                this.selectedItem.deselect();
+            }
+            
+            if (this.selectedItem != itemObj) {
+                this.selectedItem = itemObj;
+                this.selectedItem.select();
+            }
         	
     	}
     	

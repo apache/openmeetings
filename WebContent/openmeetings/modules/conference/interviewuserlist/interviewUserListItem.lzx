@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="interviewUserListItem" extends="view" showhandcursor="false" 
+	   bgcolor="0xCCCCCC" width="252" height="42">
+	
+	<attribute name="connectedSince" value="" type="string" />
+    <attribute name="isMod" value="" type="string" />
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
+    <attribute name="isSelected" value="false" type="boolean" />
+    
+	<handler name="oninit">
+        <![CDATA[
+        
+            //this._userpic.setAttribute('src',downloadurl); 
+            //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
+            lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
+
+            if (this.isMod) {
+            	this.userStatus.setAttribute("frame",3);
+            }
+               
+            if (canvas.publicSID == this.refObj.publicSID) {
+                //this._userName.setAttribute("fontstyle","bold");
+                this.setAttribute("bgcolor",0x00FF00);
+            }
+            
+            this.updateIcons();
+        ]]>
+    </handler>
+    
+    <method name="updateIconByMod">
+    	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+    	if (this.isMod) {
+            this.userStatus.setAttribute("frame",3);
+        } else if (this.refObj.canDraw) {
+        	this.userStatus.setAttribute("frame",2);
+        } else {
+        	this.userStatus.setAttribute("frame",1);
+        }
+        
+        if (this.isSelected) {
+        	this._miniIcons.oninit.sendEvent();
+        }
+    </method>
+    
+    <method name="fadeText" args="ignore=null"> 
+        <![CDATA[
+        
+            //Do Load the Custom Moodle Profilee Picture
+            if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
+                
+                if (this.refObj.externalUserId == 1) {
+                    //Means it is a guest
+                    var downloadurl = canvas.moodleWwwRoot+"/pix/u/f2.png";
+                } else {
+                    var downloadurl = canvas.moodleWwwRoot+"/user/pix.php/"+ this.refObj.externalUserId +"/f2.jpg";
+                }
+                
+            } else {
+        
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                                    +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
+                                    +'&moduleName=chat&parentPath=&room_id='
+                                    +'&remoteUserid='+this.user_id
+                                    +'&sid='+canvas.sessionId;
+                        
+            }
+            
+            this._userpic.setAttribute('src',downloadurl); 
+        ]]>          
+    </method>
+     
+    <handler name="onmouseover">
+        //this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+    </handler>
+    
+    <handler name="onmouseout">
+        //this.setAttribute('bgcolor',0xFFFFFF);
+    </handler>
+    
+    <handler name="onclick">
+    	parent.parent.parent.selectItem(this);
+    </handler>
+     
+    <method name="select">
+    	if (!this.isSelected) {
+	    	new lz.interviewModerationMiniIcons(this,{name:'_miniIcons',align:'right',
+                isMod:this.isMod,
+                isSuperModerator:this.isSuperModerator});
+	    	this.isSelected = true;
+	    	this._userName.text = "";
+	    	this.showItem.doStart();
+    	}
+    </method>
+    
+    <method name="deselect">
+    	if (this.isSelected) {
+	    	this._miniIcons.destroy();
+	    	this.isSelected = false;
+	    	this._userName.text = this.firstname+' '+this.lastname;
+	    	this.closeItem.doStart();
+    	}
+    </method>
+     
+    <image name="_userpic" stretches="both" x="1" y="1">
+        <handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+            ]]>
+        </handler>
+    </image>
+    
+    <view name="userStatus" align="right" frame="1" 
+    	  resource="userstatus_multiframe_rsc" />
+    
+    <labelText name="_userName" x="41" y="2"
+    		   text="$once{ parent.firstname+' '+parent.lastname }" />
+    
+    <!--
+    <labelTooltip name="_userName" text="$once{ parent.firstname+' '+parent.lastname }" />
+     -->
+     
+    <animatorgroup name="showItem" start="false" process="simultaneous">
+    	<animator attribute="height" to="62" duration="750" />
+    	<animator attribute="width" to="252" duration="750" />
+    </animatorgroup>
+    
+    <animatorgroup name="closeItem" start="false" process="simultaneous">
+        <animator attribute="height" to="42" duration="750" />
+        <animator attribute="width" to="252" duration="750" />
+    </animatorgroup>
+                 
+</class>
+
+</library>
