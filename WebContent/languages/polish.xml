@@ -2807,4 +2807,13 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="909" name="flv recorder error message">
     <value>To access other recordings you have to login the OpenMeetings Application.</value>
   </string>
+  <string id="910" name="interview video pod">
+    <value>Choose the User for this Video</value>
+  </string>
+  <string id="911" name="interview video choose user">
+    <value>Available Users for this Pod</value>
+  </string>
+  <string id="912" name="interview info">
+    <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
+  </string>
 </language>

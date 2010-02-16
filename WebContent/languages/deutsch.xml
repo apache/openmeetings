@@ -259,7 +259,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderator werden</value>
   </string>
   <string id="85" name="close">
-    <value>SchlieÃŸen</value>
+    <value>Schließen</value>
   </string>
   <string id="86" name="italic">
     <value>Kursiv</value>
@@ -307,7 +307,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Kreis</value>
   </string>
   <string id="101" name="close">
-    <value>SchlieÃŸen</value>
+    <value>Schließen</value>
   </string>
   <string id="102" name="AuthError">
     <value>Eingabefehler</value>
@@ -391,7 +391,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Konferenzräume</value>
   </string>
   <string id="129" name="conf_pub">
-    <value>Ã–ffentlich</value>
+    <value>Öffentlich</value>
   </string>
   <string id="130" name="head_org">
     <value>Organisation</value>
@@ -421,7 +421,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Geburtstag</value>
   </string>
   <string id="139" name="useralterself_streetno">
-    <value>StraÃŸe/Nr.</value>
+    <value>Straße/Nr.</value>
   </string>
   <string id="140" name="useralterself_town">
     <value>PLZ/Stadt</value>
@@ -493,7 +493,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Kalender</value>
   </string>
   <string id="163" name="savewindow_btn">
-    <value>SchlieÃŸen</value>
+    <value>Schließen</value>
   </string>
   <string id="164" name="organisationtablelist_idrow">
     <value>Organisations-ID</value>
@@ -589,7 +589,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Typ</value>
   </string>
   <string id="195" name="roomvalue_ispublic">
-    <value>Ã–ffentlich</value>
+    <value>Öffentlich</value>
   </string>
   <string id="196" name="roomvalue_comment">
     <value>Kommentar</value>
@@ -598,7 +598,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Speichern</value>
   </string>
   <string id="198" name="whiteboard_openicon">
-    <value>Ã–ffnen</value>
+    <value>Öffnen</value>
   </string>
   <string id="199" name="whiteboard_saveaswinheader">
     <value>Speichern unter</value>
@@ -760,7 +760,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Objekt verschieben</value>
   </string>
   <string id="252" name="whiteboard_boundingbox_resize">
-    <value>Objekt vergröÃŸern/verkleinern</value>
+    <value>Objekt vergrößern/verkleinern</value>
   </string>
   <string id="253" name="whiteboard_documenttoolbar_zoom">
     <value>%</value>
@@ -874,7 +874,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dateien</value>
   </string>
   <string id="290" name="subnavi">
-    <value>Meine Ãœbersicht</value>
+    <value>Meine Übersicht</value>
   </string>
   <string id="291" name="subnavi">
     <value>Meetings planen</value>
@@ -883,19 +883,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Meine Events</value>
   </string>
   <string id="293" name="subnavi">
-    <value>Ã–ffentliche Meetings</value>
+    <value>Öffentliche Meetings</value>
   </string>
   <string id="294" name="subnavi">
     <value>Private Meetings</value>
   </string>
   <string id="295" name="subnavi">
-    <value>Ã–ffentliche Events</value>
+    <value>Öffentliche Events</value>
   </string>
   <string id="296" name="subnavi">
     <value>Private Events</value>
   </string>
   <string id="297" name="subnavi">
-    <value>Ã–ffentliche Dateien</value>
+    <value>Öffentliche Dateien</value>
   </string>
   <string id="298" name="subnavi">
     <value>Private Dateien</value>
@@ -931,7 +931,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Verlassen</value>
   </string>
   <string id="309" name="conferencebar">
-    <value>Zurück zur Raum-Ãœbersicht</value>
+    <value>Zurück zur Raum-Übersicht</value>
   </string>
   <string id="310" name="conferencebar">
     <value>Abmelden</value>
@@ -997,7 +997,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Die von Ihnen angegebenen Passwörter sind nicht identisch.</value>
   </string>
   <string id="331" name="resetpass">
-    <value>4 oder mehr Buchstaben. GroÃŸ- und Kleinschreibung beachten!</value>
+    <value>4 oder mehr Buchstaben. Groß- und Kleinschreibung beachten!</value>
   </string>
   <string id="332" name="resetpass">
     <value>Passwort gespeichert. Sie können sich nun damit einloggen.</value>
@@ -1126,7 +1126,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Sound an/ausschalten</value>
   </string>
   <string id="374" name="dashboard">
-    <value>Ãœbersicht</value>
+    <value>Übersicht</value>
   </string>
   <string id="375" name="dashboard">
     <value>Ihr Profil</value>
@@ -1294,10 +1294,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Linienstärke ändern</value>
   </string>
   <string id="430" name="close_small_popups">
-    <value>SchlieÃŸen</value>
+    <value>Schließen</value>
   </string>
   <string id="431" name="paint_tool_letter">
-    <value>SchriftgröÃŸe anpassen</value>
+    <value>Schriftgröße anpassen</value>
   </string>
   <string id="432" name="recordingslist_delete">
     <value>Aufnahme löschen</value>
@@ -1564,7 +1564,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Bitte geben Sie eine gültige E-Mail an, zum Beispiel name@mail.com</value>
   </string>
   <string id="520" name="floatRegExpError">
-    <value>Bitte geben Sie eine FlieÃŸkommazahl an, zum Beispiel 1.00</value>
+    <value>Bitte geben Sie eine Fließkommazahl an, zum Beispiel 1.00</value>
   </string>
   <string id="521" name="numberRegExpError">
     <value>Bitte geben Sie eine Ganzzahl an, zum Beispiel 100</value>
@@ -1615,7 +1615,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Passwort:</value>
   </string>
   <string id="537" name="invitation_pass_btn">
-    <value>Ãœberprüfen Sie das Passwort</value>
+    <value>Überprüfen Sie das Passwort</value>
   </string>
   <string id="538" name="invitation_pass_error">
     <value>Falsches Passwort!</value>
@@ -1819,7 +1819,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Benutzeranbindung ausloggen</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>Wollen Sie diesen Benutzer wirklich von dieser Verbingung ausschlieÃŸen?&lt;br/&gt; Diese MaÃŸnahme entfernt den Benutzer lediglich aus dem Raum. Der Benutzer kann sich wieder einloggen.</value>
+    <value>Wollen Sie diesen Benutzer wirklich von dieser Verbingung ausschließen?&lt;br/&gt; Diese Maßnahme entfernt den Benutzer lediglich aus dem Raum. Der Benutzer kann sich wieder einloggen.</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>Ihre Sitzung wurde beendet.</value>
@@ -2005,7 +2005,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Dies ist ein Administrator- oder Moderator-Account. Dieses Account können Sie nur mittels eines Administrator-Tableau bearbeiten.</value>
   </string>
   <string id="667" name="email verification">
-    <value>Um Ihre Registration abzuschlieÃŸen klicken Sie bitte auf den folgenden Link. Oder kopieren Sie die URL(Link) in Ihre Browser-Adressleiste.</value>
+    <value>Um Ihre Registration abzuschließen klicken Sie bitte auf den folgenden Link. Oder kopieren Sie die URL(Link) in Ihre Browser-Adressleiste.</value>
   </string>
   <string id="668" name="email verification">
     <value>Klicken Sie um Ihre E-Mail zu bestätigen</value>
@@ -2158,7 +2158,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Zeige alle Dateien (Baum Ansicht)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Dokument schlieÃŸen</value>
+    <value>Dokument schließen</value>
   </string>
   <string id="719" name="file explorer">
     <value>Datei löschen</value>
@@ -2239,10 +2239,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Extern starten</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>Wenn Sie diese Session schlieÃŸen, können Sie die Session nicht wieder starten.</value>
+    <value>Wenn Sie diese Session schließen, können Sie die Session nicht wieder starten.</value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Sitzung wirklich schlieÃŸen?</value>
+    <value>Sitzung wirklich schließen?</value>
   </string>
   <string id="747" name="sharing viewer">
     <value>Bildschirm teilen</value>
@@ -2278,7 +2278,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Teste Setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Ãœberprüfen Sie Ihre Mikrofon- und Kameraeinstellungen bevor Sie einen Raum betreten und Aufzeichnungen durchführen. Sie können Ihre Aufnahmen im Nachhinein abspielen.</value>
+    <value>Überprüfen Sie Ihre Mikrofon- und Kameraeinstellungen bevor Sie einen Raum betreten und Aufzeichnungen durchführen. Sie können Ihre Aufnahmen im Nachhinein abspielen.</value>
   </string>
   <string id="759" name="test setup">
     <value>Dieses Fenster nicht wieder anzeigen</value>
@@ -2335,10 +2335,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Audio-/Video-Test (Aufnahme) vor dem Betreten einer Konferenz nicht zeigen</value>
   </string>
   <string id="777" name="overview room">
-    <value>Ã–ffentliche Räume</value>
+    <value>Öffentliche Räume</value>
   </string>
   <string id="778" name="overview room">
-    <value>Ã–ffentliche Räume können von allen Benutzern benutzt werden.</value>
+    <value>Öffentliche Räume können von allen Benutzern benutzt werden.</value>
   </string>
   <string id="779" name="overview room">
     <value>Gruppenräume</value>
@@ -2422,7 +2422,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Konferenz planen</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen. Für jeden Kalenderevent wird automatisch ein Konferenzraum angelegt.&lt;br/&gt;&lt;br/&gt;Sie können beim Anlegen der Konferenz zwischen unterschiedlichen Raumtypen wählen. Jeder Raumtyp hat ein leicht anderes Layout und Moderations-System. Sie können auÃŸerdem für jedes Event ein eigene E-Mail-Erinnerung wählen.</value>
+    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen. Für jeden Kalenderevent wird automatisch ein Konferenzraum angelegt.&lt;br/&gt;&lt;br/&gt;Sie können beim Anlegen der Konferenz zwischen unterschiedlichen Raumtypen wählen. Jeder Raumtyp hat ein leicht anderes Layout und Moderations-System. Sie können außerdem für jedes Event ein eigene E-Mail-Erinnerung wählen.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Brauchen Sie Hilfe?</value>
@@ -2732,5 +2732,14 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="909" name="flv recorder error message">
     <value>To access other recordings you have to login the OpenMeetings Application.</value>
+  </string>
+  <string id="910" name="interview video pod">
+    <value>Choose the User for this Video</value>
+  </string>
+  <string id="911" name="interview video choose user">
+    <value>Available Users for this Pod</value>
+  </string>
+  <string id="912" name="interview info">
+    <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
   </string>
 </language>
