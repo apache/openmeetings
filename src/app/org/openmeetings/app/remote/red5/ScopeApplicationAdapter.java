@@ -845,25 +845,26 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								continue;
 							} else {
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-		    						//continue;
-		    					} else {
-									log.debug("is this users still alive? :"+rcl);
-									//conn.ping();
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
-									iStream.invoke(clientFunction,new Object[] { rc }, this);
-								}
-								
-								log.debug("sending notification to " + conn+" ID: ");
-			
-								//if this close stream event then stop the recording of this stream
-								if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
-									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-									//StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
-									this.flvRecorderService.stopRecordingShowForClient(conn, currentClient);
-								}
+								if (rcl != null){
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+			    						//continue;
+			    					} else {
+										log.debug("is this users still alive? :"+rcl);
+										//conn.ping();
+										IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+										//log.info("IServiceCapableConnection ID " + iStream.getClient().getId());
+										iStream.invoke(clientFunction,new Object[] { rc }, this);
+									}
 									
+									log.debug("sending notification to " + conn+" ID: ");
+				
+									//if this close stream event then stop the recording of this stream
+									if (clientFunction.equals("closeStream") && rcl.getIsRecording()){
+										log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
+										//StreamService.stopRecordingShowForClient(conn, currentClient, rcl.getRoomRecordingName(), false);
+										this.flvRecorderService.stopRecordingShowForClient(conn, currentClient);
+									}
+								}
 								
 							}
 						}
@@ -2582,14 +2583,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						//continue;
-	    					} else {
-								//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
-								if (rcl.getPublicSID().equals(publicSID)){
-									//log.debug("IS EQUAL ");
-									((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
-									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+message);
+							if (rcl != null) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
+									//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
+									if (rcl.getPublicSID().equals(publicSID)){
+										//log.debug("IS EQUAL ");
+										((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
+										log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+message);
+									}
 								}
 							}
 						}

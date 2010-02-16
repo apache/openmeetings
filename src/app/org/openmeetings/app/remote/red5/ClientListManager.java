@@ -193,7 +193,7 @@ public class ClientListManager {
 			log.debug("*..*unsetModerator ClientList key: "+rcl.getStreamid());
 //			
 			//Check if the Client is in the same room
-			if(room_id!=null && room_id.equals(rcl.getRoom_id()) && rcl.getIsMod()){
+			if(room_id !=null && room_id.equals(rcl.getRoom_id()) && rcl.getIsMod()){
 				log.debug("found client who is the Moderator: "+rcl);
 				rclList.add(rcl);
 			}				
