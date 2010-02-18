@@ -2743,4 +2743,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="912" name="interview info">
     <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
   </string>
+  <string id="913" name="interview button recording">
+    <value>Start Recording</value>
+  </string>
+  <string id="914" name="interview button recording">
+    <value>Stop Recording</value>
+  </string>
 </language>
