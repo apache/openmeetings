@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
+	<resource name="interview_record_start" src="resources/webstart_play.png" />
+	<resource name="interview_record_stop" src="resources/webstart_stop.png" />
 	
     <include href="interviewUserList.lzx" />
+    <include href="interviewWhiteboard.lzx" />
     <include href="interviewVideoBox.lzx" />
     <include href="interviewModerationMiniIcons.lzx" />
     <include href="interviewUserListItem.lzx" />

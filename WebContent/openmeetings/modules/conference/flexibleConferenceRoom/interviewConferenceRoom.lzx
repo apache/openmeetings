@@ -78,41 +78,25 @@
         </handler>
     </netRemoteCallHib>
     
+    <!--
+        User Panel and Participants List
+     -->
     <interviewRoomSidebar name="_sidePanel" 
                       listType="eventUserListTableWithNames" />
-                      
-    <view name="_whiteboardInterview" x="${ parent._sidePanel.width }" 
-    	  width="${ canvas.width - parent._sidePanel.width }" >
-    	
-    	<handler name="oninit">
-    		canvas._drawarea = this;
-    	</handler>
-    	<handler name="onopenWhiteBoard" >
-    		if ($debug) Debug.write("-- onOpenWhiteBoard --");
-        </handler>
-        
-        <method name="newInterviewStarting" args="refObj">
-        	<![CDATA[
-        	   this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
-        	]]>
-        </method>
-        
-        <view name="_videoviewcontent" width="${ parent.width }">
-        	<interviewVideoBox name="interviewVideoBox1" interviewPodId="1" >
-            
-            </interviewVideoBox>
-            
-            <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" >
-                
-            </interviewVideoBox>
-        </view>
-        
-    </view>
     
+    <!--
+        Whiteboard in Interview Room Type those are the Video Pods
+     -->
+    <interviewWhiteboard name="_whiteboardInterview" x="${ parent._sidePanel.width }" 
+    	  width="${ canvas.width - parent._sidePanel.width }" />
+    
+    <!--
+        Chat Box
+     -->
     <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
-       height="350" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height+22) }" 
-       width="${ canvas.width - parent._sidePanel.width }">
+                   height="350" x="${ parent._sidePanel.width }" bgcolor="0xFFFFFF"
+                   y="${ canvas.height - (this.height+22) }" 
+                   width="${ canvas.width - parent._sidePanel.width }">
         <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
     </conferenceBox>
     

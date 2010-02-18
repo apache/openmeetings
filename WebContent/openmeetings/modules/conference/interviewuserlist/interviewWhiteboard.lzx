@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="interviewWhiteboard" extends="view" clip="true">
+        
+    <handler name="oninit">
+        canvas._drawarea = this;
+    </handler>
+    <handler name="onopenWhiteBoard" >
+        if ($debug) Debug.write("-- onOpenWhiteBoard --");
+    </handler>
+    
+    <method name="newInterviewStarting" args="refObj">
+        <![CDATA[
+           this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
+        ]]>
+    </method>
+    
+    <simplelayout axis="y" spacing="2" />
+    
+    <view name="_videoviewcontent" align="center" >
+        <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" >
+        
+        </interviewVideoBox>
+        
+        <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" >
+            
+        </interviewVideoBox>
+    </view>
+    
+    <view align="center" >
+        
+        <simplelayout axis="x" spacing="2" />
+        
+        <simpleLabelButton name="_start" labelid="913" height="30" width="200">
+        	<handler name="onclick">
+        		if ($debug) Debug.write("Start Recording");
+        	</handler>
+        	<view x="2" y="4" resource="interview_record_start" />
+        </simpleLabelButton>
+        
+        <view width="2" />
+        
+        <simpleLabelButton name="_stop" labelid="914" height="30" width="200">
+            <handler name="onclick">
+                if ($debug) Debug.write("Stop Recording");
+            </handler>
+            <view x="2" y="4" resource="interview_record_stop" />
+        </simpleLabelButton>
+        
+    </view>
+        
+</class>
+
+</library>
