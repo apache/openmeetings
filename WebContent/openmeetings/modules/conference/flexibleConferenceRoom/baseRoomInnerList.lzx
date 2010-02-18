@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--
+
+    This class hold a bunch method that is shared between the 
+    User List of different Room Types
+
+ -->
+
+<class name="baseRoomInnerList" extends="view" >
+	
+    <attribute name="colorArray" value="null" />
+    
+    <handler name="oninit">
+        <![CDATA[
+            //color array
+            this.colorArray = [0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,
+                            0x00FF00,0xFFCC33,0xFF6633,0xFFA500,0xC71585];
+            
+            this.initList();
+        ]]>
+    </handler>
+    
+    <method name="getColorForUser" args="listNumber">
+    	<![CDATA[
+    	   
+    	   return this.colorArray[Math.round(Math.random()*10)];
+    	
+    	]]>
+    </method>
+    
+</class>
+
+</library>

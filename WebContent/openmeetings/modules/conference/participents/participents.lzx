@@ -438,14 +438,11 @@
 </class>
 
  
-<class name="participents" extends="view" 
+<class name="participents" extends="baseRoomInnerList" 
        width="$once{ parent.width }" height="$once{ parent.height-34 }">
 
     <!--- holds a references to the videoview which is broadcasting -->
     <attribute name="broadCastViewRef" value="null" />
-    
-    <!--- colors for each user -->
-    <attribute name="colorArray" value="null" />
     
     <!--
        This is a variable to make it backwards compatible to the old room layout
@@ -455,9 +452,7 @@
     <handler name="oninit">
         //set modus
         canvas.thishib.modus = "conference";
-        //color array
-        this.colorArray = [0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633];
+       
         //set reference, this reference will be cleared at *ontabcontenctleave* event
         canvas._videocontainer=this;
         
@@ -708,7 +703,7 @@
                         publicSID:publicSID,
                         x:newx,y:newy
                     });
-                canvas.currentusercolor = this.colorArray[this.subviews.length];
+                canvas.currentusercolor = this.getColorForUser();
                 this.broadCastViewRef._chatvideoinner.r.destroy();
                 canvas.thishib.setAudienceModus.doCall();
                 this.broadCastViewRef.setAttribute('chatpartnername',hib.userobject.firstname+' '+hib.userobject.lastname);

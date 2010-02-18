@@ -107,12 +107,10 @@
             </interviewVideoBox>
         </view>
         
-        
-        
     </view>
     
     <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
-       height="200" x="${ parent._sidePanel.width }"  
+       height="350" x="${ parent._sidePanel.width }"  
        y="${ canvas.height - (this.height+22) }" 
        width="${ canvas.width - parent._sidePanel.width }">
         <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />

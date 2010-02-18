@@ -24,32 +24,16 @@
 </class>
 
 
-<class name="eventUserListInner" extends="view"  width="$once{ parent.width }" height="${ parent.height }" 
+<class name="eventUserListInner" extends="baseRoomInnerList"  
+	   width="$once{ parent.width }" height="${ parent.height }" 
        bgcolor="$once{ canvas.basebgcolorizer }" >
 	
 	<attribute name="selectedItem" value="null" />
-	
-	<attribute name="colorArray" value="null" />
 	
 	<attribute name="listType" value="eventUserListTable" type="string" />
 	
 	<handler name="oninit">
 		<![CDATA[
-		    //color array
-            this.colorArray = [0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633,
-                            0x4174B1,0x00CC00,0xFFCC33,0xFF6633,0x4174B1,0x00CC00,0xFFCC33,0xFF6633];
             
 			this.initList();
 		]]>
@@ -71,8 +55,9 @@
             	}
             }
             
-            //FIXME: Round Number and make mod(10) to get a number between 1 and 10 for a color
-            canvas.currentusercolor = this.colorArray[this._table.innerList.subviews.length];
+            //FIXME: Maybe the first user should always get the same
+            //color this._table.innerList.subviews.length
+            canvas.currentusercolor = this.getColorForUser();
             
             var lastname = object.lastname;
 	        if (object.isSuperModerator) {
