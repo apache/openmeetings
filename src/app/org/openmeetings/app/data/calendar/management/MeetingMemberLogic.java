@@ -63,8 +63,6 @@ public class MeetingMemberLogic {
 				return null;
 			}
 			
-			
-			
 			log.debug(":::: addMeetingMember ..... "+point.getRemind().getTypId());
 			
 			if(point.getRemind().getTypId() == 1){
@@ -72,7 +70,7 @@ public class MeetingMemberLogic {
 			} else if(point.getRemind().getTypId() == 2){
 				log.debug("Reminder for Appointment : simple email");
 				
-				invitationId = Invitationmanagement.getInstance().addInvitationLink(
+				Invitations invitation = Invitationmanagement.getInstance().addInvitationLink(
 							new Long(2), //userlevel
 							firstname + " " + lastname, //username
 							"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
@@ -87,8 +85,11 @@ public class MeetingMemberLogic {
 							point.getAppointmentStarttime(), // valid from
 							point.getAppointmentEndtime(), // valid to
 							meeting_organizer, // created by
-							baseUrl, language_id
+							baseUrl, language_id, 
+							true
 						);
+				
+				invitationId = invitation.getInvitations_id();
 				
 			} else if(point.getRemind().getTypId() == 3){
 				log.debug("Reminder for Appointment : iCal mail");

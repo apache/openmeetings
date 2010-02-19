@@ -1,6 +1,9 @@
 package org.openmeetings.app.templates;
 
+import java.io.File;
+
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.apache.velocity.app.Velocity;
 import org.red5.server.api.IScope;
@@ -22,16 +25,18 @@ public class VelocityLoader {
 	 */
 	public VelocityLoader(){
 		try {
-			IScope scope = Red5.getConnectionLocal().getScope().getParent();			
-			String current_dir = scope.getResource("WEB-INF/").getFile().getAbsolutePath();	
-            Velocity.init(current_dir+"/velocity.properties");
+			String current_dir = ScopeApplicationAdapter.webAppPath + File.separatorChar;	
+            
+			log.debug("current_dir :: "+current_dir);
+			
+			Velocity.init(current_dir + "WEB-INF" + File.separatorChar + "velocity.properties");
         } catch(Exception e) {
         	log.error("Problem initializing Velocity : " + e );
             System.out.println("Problem initializing Velocity : " + e );
         }
 	}
 	
-	/**
+	/**http://$server:$port/openmeetings/?param=value&param2=value2
 	 * Loads the path by a given string, this is necessary cause if invoked
 	 * by Servlet there is no Red5-Scope availible
 	 * @param path

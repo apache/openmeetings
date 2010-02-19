@@ -81,12 +81,12 @@ public class InvitationService implements IPendingServiceCallback {
     	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
     	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
     	
-    	Long invitationId =  Invitationmanagement.getInstance().addInvitationLink(user_level, username, message, 
+    	Invitations invitation =  Invitationmanagement.getInstance().addInvitationLink(user_level, username, message, 
     			baseurl, email, subject, room_id, conferencedomain,
     			isPasswordProtected, invitationpass, 
-    			valid, dFrom, dTo, users_id, baseurl, language_id);
+    			valid, dFrom, dTo, users_id, baseurl, language_id, true);
     	
-    	if(invitationId != null)
+    	if(invitation != null)
     		return "success";
     	else
     		return "Sys - Error";

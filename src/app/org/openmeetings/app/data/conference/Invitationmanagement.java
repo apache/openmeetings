@@ -72,11 +72,11 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	//---------------------------------------------------------------------------------------------------------
-	public Long addInvitationLink(Long user_level, String username, String message,
+	public Invitations addInvitationLink(Long user_level, String username, String message,
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
-			Date validFrom, Date validTo, Long createdBy, String baseUrl, Long language_id
-			){
+			Date validFrom, Date validTo, Long createdBy, String baseUrl, Long language_id,
+			Boolean sendMail){
 			String validFromString = "";
 			String validToString = "";
 		try {
@@ -132,11 +132,17 @@ public class Invitationmanagement {
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
+				invitation.setInvitations_id(invitationId);
+				
 				if (invitationId > 0) {
-					this.sendInvitionLink(username, message, baseurl, email,
-							subject, invitation.getHash(), validFromString,
-							validToString, language_id);
-					return invitationId;
+					
+					if (sendMail) {
+						this.sendInvitionLink(username, message, baseurl, email,
+								subject, invitation.getHash(), validFromString,
+								validToString, language_id);
+					}
+					
+					return invitation;
 				}
 				
 			}

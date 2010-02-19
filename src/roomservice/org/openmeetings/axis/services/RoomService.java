@@ -1,5 +1,7 @@
 package org.openmeetings.axis.services;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,15 +14,18 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.rooms.RoomsList;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.remote.ConferenceService;
+import org.openmeetings.utils.math.CalendarPatterns;
 
 public class RoomService {
 	
@@ -133,7 +138,7 @@ public class RoomService {
 //		}
 //	}
 	
-	public RoomTypes[] getRoomTypes(String SID) throws AxisFault{
+	public RoomTypes[] getRoomTypes(String SID) throws AxisFault {
 		try {
 			List<RoomTypes> rommTypesList = ConferenceService.getInstance().getRoomTypes(SID);
 			RoomTypes[] roomTypesArray = new RoomTypes[rommTypesList.size()];
@@ -302,12 +307,12 @@ public class RoomService {
 
 	/**
 	 * 
-         * @param SID
-         * @param name
-         * @param roomtypes_id
-         * @param comment
-         * @param numberOfPartizipants
-         * @param ispublic
+     * @param SID
+     * @param name
+     * @param roomtypes_id
+     * @param comment
+     * @param numberOfPartizipants
+     * @param ispublic
 	 * @param appointment
 	 * @param isDemoRoom
 	 * @param demoTime
@@ -489,6 +494,296 @@ public class RoomService {
 			log.error("[addRoomWithModeration] ", err);
 		}
 		return new Long(-1);
+	}
+	
+	/**
+	 * 
+	 * Create a Invitation hash and optionally send it by mail
+	 * the From to Date is as String as some SOAP libraries do not accept 
+	 * Date Objects in SOAP Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the leading zero's)
+	 * 
+	 * @param SID a valid Session Token
+	 * @param username the username of the User that he will get 
+	 * @param room_id the conference room id of the invitation
+	 * @param isPasswordProtected if the invitation is password protected
+	 * @param invitationpass the password for accessing the conference room via the invitation hash
+	 * @param valid the type of validation for the hash 1: endless, 2: from-to period, 3: one-time
+	 * @param validFromDate Date in Format of dd.mm.yyyy only of interest if valid is type 2
+	 * @param validFromTime time in Format of hh:mm only of interest if valid is type 2
+	 * @param validToDate Date in Format of dd.mm.yyyy only of interest if valid is type 2
+	 * @param validToTime time in Format of hh:mm only of interest if valid is type 2
+	 * @return a HASH value that can be made into a URL with http://$OPENMEETINGS_HOST:$PORT/openmeetings/?invitationHash="+invitationsHash;
+	 * @throws AxisFault
+	 */
+	public String getInvitationHash(
+			String SID,
+			String username, 
+			Long room_id, 
+    		Boolean isPasswordProtected, 
+    		String invitationpass, 
+    		Integer valid, 
+    		String validFromDate, 
+    		String validFromTime, 
+    		String validToDate, 
+    		String validToTime) throws AxisFault  {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			
+				Date dFrom = null;
+		    	Date dTo = null;
+		    	
+				if (valid == 2) {
+					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+			    	Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
+			    	
+			    	Integer validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+			    	Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
+			    	
+			    	log.info("validFromHour: "+validFromHour);
+			    	log.info("validFromMinute: "+validFromMinute);
+			    	
+			    	
+			    	Date fromDate = CalendarPatterns.parseDate(validFromDate); //dd.MM.yyyy
+			    	Date toDate = CalendarPatterns.parseDate(validToDate); //dd.MM.yyyy
+			    	
+			    	Calendar calFrom = Calendar.getInstance();
+			    	calFrom.setTime(fromDate);
+			    	calFrom.set(calFrom.get(Calendar.YEAR), calFrom.get(Calendar.MONTH), calFrom.get(Calendar.DATE), validFromHour, validFromMinute, 0);
+			    	
+					Calendar calTo= Calendar.getInstance();
+					calTo.setTime(toDate);
+			    	calTo.set(calTo.get(Calendar.YEAR), calTo.get(Calendar.MONTH), calTo.get(Calendar.DATE), validToHour, validToMinute, 0);
+			    	
+			    	dFrom = calFrom.getTime();
+			    	dTo = calTo.getTime();
+			    	
+			    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+			    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+				} 
+		    	Invitations invitation =  Invitationmanagement.getInstance().addInvitationLink(user_level, 
+		    									username, username, 
+		    									username, username, username, room_id, "",
+								    			isPasswordProtected, invitationpass, 
+								    			valid, dFrom, dTo, users_id, "", 
+								    			1L, false);
+		    	
+		    	if(invitation != null) {
+		    		
+		    		return invitation.getHash();
+		    		
+		    	} else {
+		    		
+		    		return "Sys - Error";
+		    		
+		    	}
+	    	
+			} else {
+	        	return "Need Admin Privileges to perfom the Action";
+	        }		    	
+	    	
+		} catch (Exception err) {
+			log.error("[sendInvitationHash] ", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * Create a Invitation hash and optionally send it by mail
+	 * the From to Date is as String as some SOAP libraries do not accept 
+	 * Date Objects in SOAP Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the leading zero's)
+	 * 
+	 * @param SID a valid Session Token
+	 * @param username the Username of the User that he will get 
+	 * @param message the Message in the Email Body send with the invitation if sendMail is true
+	 * @param baseurl the baseURL for the Infivations link in the Mail Body if sendMail is true
+	 * @param email the Email to send the invitation to if sendMail is true
+	 * @param subject the subject of the Email send with the invitation if sendMail is true
+	 * @param room_id the conference room id of the invitation
+	 * @param conferencedomain the domain of the room (keep empty)
+	 * @param isPasswordProtected if the invitation is password protected
+	 * @param invitationpass the password for accessing the conference room via the invitation hash
+	 * @param valid the type of validation for the hash 1: endless, 2: from-to period, 3: one-time
+	 * @param validFromDate Date in Format of dd.mm.yyyy only of interest if valid is type 2
+	 * @param validFromTime time in Format of hh:mm only of interest if valid is type 2
+	 * @param validToDate Date in Format of dd.mm.yyyy only of interest if valid is type 2
+	 * @param validToTime time in Format of hh:mm only of interest if valid is type 2
+	 * @param language_id the language id of the EMail that is send with the invitation if sendMail is true
+	 * @param sendMail if sendMail is true then the RPC-Call will send the invitation to the email
+	 * @return a HASH value that can be made into a URL with http://$OPENMEETINGS_HOST:$PORT/openmeetings/?invitationHash="+invitationsHash;
+	 * @throws AxisFault
+	 */
+	public String sendInvitationHash(
+			String SID,
+			String username, 
+			String message, 
+			String baseurl, 
+			String email, 
+			String subject, 
+			Long room_id, 
+			String conferencedomain, 
+    		Boolean isPasswordProtected, 
+    		String invitationpass, 
+    		Integer valid, 
+    		String validFromDate, 
+    		String validFromTime, 
+    		String validToDate, 
+    		String validToTime,
+    		Long language_id, 
+    		Boolean sendMail
+    		) throws AxisFault  {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Date dFrom = null;
+		    	Date dTo = null;
+		    	
+		    	if (valid == 2) {
+					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+			    	Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
+			    	
+			    	Integer validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+			    	Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
+			    	
+			    	log.info("validFromHour: "+validFromHour);
+			    	log.info("validFromMinute: "+validFromMinute);
+			    	
+			    	
+			    	Date fromDate = CalendarPatterns.parseDate(validFromDate); //dd.MM.yyyy
+			    	Date toDate = CalendarPatterns.parseDate(validToDate); //dd.MM.yyyy
+			    	
+			    	Calendar calFrom = Calendar.getInstance();
+			    	calFrom.setTime(fromDate);
+			    	calFrom.set(calFrom.get(Calendar.YEAR), calFrom.get(Calendar.MONTH), calFrom.get(Calendar.DATE), validFromHour, validFromMinute, 0);
+			    	
+					Calendar calTo= Calendar.getInstance();
+					calTo.setTime(toDate);
+			    	calTo.set(calTo.get(Calendar.YEAR), calTo.get(Calendar.MONTH), calTo.get(Calendar.DATE), validToHour, validToMinute, 0);
+			    	
+			    	dFrom = calFrom.getTime();
+			    	dTo = calTo.getTime();
+			    	
+			    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+			    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+				} 
+				
+		    	Invitations invitation =  Invitationmanagement.getInstance().addInvitationLink(user_level, username, message, 
+								    			baseurl, email, subject, room_id, "",
+								    			isPasswordProtected, invitationpass, 
+								    			valid, dFrom, dTo, users_id, baseurl, 
+								    			language_id, sendMail);
+		    	
+		    	if(invitation != null) {
+		    		
+		    		return invitation.getHash();
+		    		
+		    	} else {
+		    		
+		    		return "Sys - Error";
+		    		
+		    	}
+		    	
+			} else {
+	        	return "Need Admin Privileges to perfom the Action";
+	        }		    	
+	    	
+		} catch (Exception err) {
+			log.error("[sendInvitationHash] ", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * Create a Invitation hash and optionally send it by mail
+	 * the From to Date is as String as some SOAP libraries do not accept 
+	 * Date Objects in SOAP Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the leading zero's)
+	 * 
+	 * @param SID a valid Session Token
+	 * @param username the Username of the User that he will get 
+	 * @param message the Message in the Email Body send with the invitation if sendMail is true
+	 * @param baseurl the baseURL for the Infivations link in the Mail Body if sendMail is true
+	 * @param email the Email to send the invitation to if sendMail is true
+	 * @param subject the subject of the Email send with the invitation if sendMail is true
+	 * @param room_id the conference room id of the invitation
+	 * @param conferencedomain the domain of the room (keep empty)
+	 * @param isPasswordProtected if the invitation is password protected
+	 * @param invitationpass the password for accessing the conference room via the invitation hash
+	 * @param valid the type of validation for the hash 1: endless, 2: from-to period, 3: one-time
+	 * @param fromDate Date as Date Object only of interest if valid is type 2
+	 * @param toDate Date as Date Object only of interest if valid is type 2
+	 * @param language_id the language id of the EMail that is send with the invitation if sendMail is true
+	 * @param sendMail if sendMail is true then the RPC-Call will send the invitation to the email
+	 * @return a HASH value that can be made into a URL with http://$OPENMEETINGS_HOST:$PORT/openmeetings/?invitationHash="+invitationsHash;
+	 * @throws AxisFault
+	 */
+	public String sendInvitationHashWidthDateObject(
+			String SID,
+			String username, 
+			String message, 
+			String baseurl, 
+			String email, 
+			String subject, 
+			Long room_id, 
+			String conferencedomain, 
+    		Boolean isPasswordProtected, 
+    		String invitationpass, 
+    		Integer valid, 
+    		Date fromDate,
+    		Date toDate, 
+    		Date validTo, 
+    		Long language_id, 
+    		Boolean sendMail
+    		) throws AxisFault  {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+		    	Calendar calFrom = Calendar.getInstance();
+		    	calFrom.setTime(fromDate);
+				
+				Calendar calTo= Calendar.getInstance();
+				calTo.setTime(toDate);
+		    	
+		    	Date dFrom = calFrom.getTime();
+		    	Date dTo = calTo.getTime();
+		    	
+		    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+		    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+		    	
+		    	Invitations invitation =  Invitationmanagement.getInstance().addInvitationLink(user_level, username, message, 
+								    			baseurl, email, subject, room_id, "",
+								    			isPasswordProtected, invitationpass, 
+								    			valid, dFrom, dTo, users_id, baseurl, 
+								    			language_id, sendMail);
+		    	
+		    	if(invitation != null) {
+		    		
+		    		return invitation.getHash();
+		    		
+		    	} else {
+		    		
+		    		return "Sys - Error";
+		    		
+		    	}
+	    	
+			} else {
+	        	return "Need Admin Privileges to perfom the Action";
+	        }
+			
+		} catch (Exception err) {
+			log.error("[sendInvitationHash] ", err);
+			throw new AxisFault(err.getMessage());
+		}
 	}
 		
 }
