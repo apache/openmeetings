@@ -723,7 +723,7 @@ public class RoomService {
 	 * @return a HASH value that can be made into a URL with http://$OPENMEETINGS_HOST:$PORT/openmeetings/?invitationHash="+invitationsHash;
 	 * @throws AxisFault
 	 */
-	public String sendInvitationHashWidthDateObject(
+	public String sendInvitationHashWithDateObject(
 			String SID,
 			String username, 
 			String message, 
@@ -737,7 +737,6 @@ public class RoomService {
     		Integer valid, 
     		Date fromDate,
     		Date toDate, 
-    		Date validTo, 
     		Long language_id, 
     		Boolean sendMail
     		) throws AxisFault  {
