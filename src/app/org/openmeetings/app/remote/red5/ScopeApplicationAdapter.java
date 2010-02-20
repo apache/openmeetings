@@ -39,6 +39,7 @@ import org.openmeetings.app.remote.MeetingMemberService;
 import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.StreamService;
 import org.openmeetings.app.remote.WhiteBoardService;
+import org.openmeetings.app.session.beans.RoomSession;
 import org.openmeetings.app.sip.xmlrpc.OpenXGClient;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
@@ -2606,6 +2607,58 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.error("[sendMessageWithClient] ",err);
 			err.printStackTrace();
 		}		
+	}
+	
+	public synchronized Boolean startInterviewRecording() {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			
+			RoomSession rSession = this.getRoomSessionObject(current.getScope());
+			
+			if (rSession.isInterviewStarted()) {
+				return false;
+			}
+			
+			rSession.setInterviewStarted(true);
+			
+			this.setRoomSessionObject(current.getScope(), rSession);
+			
+			return true;
+			
+		} catch (Exception err) {
+			log.debug("[startInterviewRecording]",err);
+		}
+		return null;
+	}
+	
+	public synchronized RoomSession getRoomSessionObject(IScope currentScope) {
+		try {
+			
+			if (currentScope.hasAttribute("openmeetingsRoomSession")) {
+				
+				log.debug("Has Already the Room Session Object ");
+				
+				return (RoomSession) currentScope.getAttribute("openmeetingsRoomSession");
+				
+			}
+			
+			return new RoomSession();
+			
+		} catch (Exception err) {
+			log.debug("[getRoomSessionObject]",err);
+		}
+		return null;
+	}
+	
+	public synchronized void setRoomSessionObject(IScope currentScope, RoomSession rSession) {
+		try {
+			
+			currentScope.setAttribute("openmeetingsRoomSession", rSession);
+			
+		} catch (Exception err) {
+			log.debug("[setRoomSessionObject]",err);
+		}
 	}
 	
 	/**

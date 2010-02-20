@@ -29,12 +29,25 @@
     </view>
     
     <view align="center" >
+    	
+    	<!--
+    	   public synchronized Boolean startInterviewRecording()
+    	 -->
+        <netRemoteCallHib name="startInterviewRecording" funcname="startInterviewRecording" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    if ($debug) Debug.write("startInterviewRecording: ",value);
+                ]]>
+            </handler>
+        </netRemoteCallHib>      	 
         
         <simplelayout axis="x" spacing="2" />
         
         <simpleLabelButton name="_start" labelid="913" height="30" width="200">
         	<handler name="onclick">
         		if ($debug) Debug.write("Start Recording");
+        		parent.startInterviewRecording.doCall();
         	</handler>
         	<view x="2" y="4" resource="interview_record_start" />
         </simpleLabelButton>

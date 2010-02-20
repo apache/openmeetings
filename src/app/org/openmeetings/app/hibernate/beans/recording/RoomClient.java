@@ -146,6 +146,7 @@ public class RoomClient {
     
     private List<String> sharerSIDs = new LinkedList<String>();
     
+    //Session values for handling the Interviwe Room Type
     private Integer interviewPodId = null;
 	
 	/*
