@@ -19,6 +19,9 @@
     <simplelayout axis="y" spacing="2" />
     
     <view name="_videoviewcontent" align="center" >
+    	
+    	<simplelayout axis="x" spacing="2" />
+    	
         <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" >
         
         </interviewVideoBox>
@@ -51,8 +54,6 @@
         	</handler>
         	<view x="2" y="4" resource="interview_record_start" />
         </simpleLabelButton>
-        
-        <view width="2" />
         
         <simpleLabelButton name="_stop" labelid="914" height="30" width="200">
             <handler name="onclick">
