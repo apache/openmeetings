@@ -119,7 +119,7 @@ public class FlvRecordingMetaDelta {
 	
 	/**
      * @hibernate.property
-     *  column="offset"
+     *  column="offset_time"
      *  type="long"
      */
 	public Long getOffset() {
