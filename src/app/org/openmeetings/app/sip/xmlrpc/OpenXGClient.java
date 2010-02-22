@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 
 public class OpenXGClient {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ClientListManager.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGHttpClient.class, "openmeetings");
 
 	private static OpenXGClient instance = null;
 
@@ -39,60 +39,90 @@ public class OpenXGClient {
 			
 			log.debug("Test Connection");
 			
-		    // Create a trust manager that does not validate certificate chains
-		    TrustManager[] trustAllCerts = new TrustManager[] {
-		        new X509TrustManager() {
-		            public X509Certificate[] getAcceptedIssuers() {
-		                return null;
-		            }
-		 
-		            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-		                // Trust always
-		            }
-		 
-		            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-		                // Trust always
-		            }
-		        }
-		    };
-		 
-		    // Install the all-trusting trust manager
-		    SSLContext sc = SSLContext.getInstance("SSL");
-		    // Create empty HostnameVerifier
-		    HostnameVerifier hv = new HostnameVerifier() {
-		                public boolean verify(String arg0, SSLSession arg1) {
-		                        return true;
-		                }
-		    };
-
-		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		    HttpsURLConnection.setDefaultHostnameVerifier(hv);
-			
+//		    // Create a trust manager that does not validate certificate chains
+//		    TrustManager[] trustAllCerts = new TrustManager[] {
+//		        new X509TrustManager() {
+//		            public X509Certificate[] getAcceptedIssuers() {
+//		                return null;
+//		            }
+//		 
+//		            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+//		                // Trust always
+//		            }
+//		 
+//		            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+//		                // Trust always
+//		            }
+//		        }
+//		    };
+//		 
+//		    // Install the all-trusting trust manager
+//		    SSLContext sc = SSLContext.getInstance("SSL");
+//		    // Create empty HostnameVerifier
+//		    HostnameVerifier hv = new HostnameVerifier() {
+//		                public boolean verify(String arg0, SSLSession arg1) {
+//		                        return true;
+//		                }
+//		    };
+//
+//		    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+//		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//		    HttpsURLConnection.setDefaultHostnameVerifier(hv);
+//			
 			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//			
+//			log.debug("config User Agent "+config.getUserAgent());
 			
-		    config.setServerURL(new URL("https://192.168.1.3/manager/xml_rpc_server.php"));
+			config.setUserAgent("OpenSIPg XML_RPC Client");
+			
+		    config.setServerURL(new URL("http://****/manager/xml_rpc_server.php"));
 		    XmlRpcClient client = new XmlRpcClient();
+		    
 		    client.setConfig(config);
 		    
-		    String client_id = "user_admin";
-		    String client_secret = "*****";
-		    Integer userId = 2;
-		    String domain = "";
-		    Integer adminId = 2;
+		    client.setXmlWriterFactory(new OpenXGXmlWriterFactory());
 		    
-		    String digest = this.digest_calculate(new Object[]{client_id,userId,domain,adminId,client_secret});
+		    String client_id = "user_admin";
+		    String client_secret = "*******";
+		    
+		    
+		    String userid = "067201101";
+		    String domain = "voipt3.multi.fi";
+		    String first_name = "Matti";
+		    String middle_i = "X";
+		    String last_name = "Virtanen";
+		    String password = "password";
+		    String community_code = "999";
+		    String language_code = "fi";
+		    String email = "matti@fun.com";
+		    String adminid = "matti";
+		    
+		    String digest = this.digest_calculate(new Object[]{client_id, userid, domain,
+					 first_name, middle_i, last_name,
+					 password, community_code,
+					 language_code, email, adminid,
+					 client_secret});
 		    
 //		    $digest = digest_calculate($client_id, $userid, $domain,
 //			$adminid, $client_secret);
 //	  		$params = array(client_id=>$client_id, digest=>$digest, userid=>$userid,
 //			domain=>$domain, adminid=>$adminid);
 		    
+		    
+		    log.debug(digest);
+		    
 		    //function user_info($userid, $domain, $adminid, &$error)
-		    Object[] params = new Object[]{client_id,digest,userId,domain,adminId};
+		    Object[] params = new Object[]{
+		    		client_id, digest, userid,
+					  domain, first_name,
+					  middle_i, last_name,
+					  password, community_code,
+					  language_code, email,
+					  adminid};
 		    
+		    Object[] struct = new Object[]{params};
 		    
-		    Object result = client.execute("OpenSIPg.UserInfo", params);
+		    Object result = client.execute("OpenSIPg.UserCreate", struct);
 		    
 		    if (result != null) {
 		    	log.debug(result.getClass().getName());
