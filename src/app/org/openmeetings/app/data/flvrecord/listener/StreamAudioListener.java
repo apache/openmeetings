@@ -40,9 +40,9 @@ public class StreamAudioListener extends ListenerAdapter {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioListener.class, "openmeetings");
 
 	public StreamAudioListener(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData) {
+			Long flvRecordingMetaDataId, boolean isScreenData, boolean isInterview) {
 		// Auto-generated method stub
-		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
+		super(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview);
 	}
 
 	

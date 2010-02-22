@@ -307,7 +307,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						}
 					}
 					
-					this.flvRecorderService.stopRecordAndSave(current.getScope(), currentClient.getRoomRecordingName(), currentClient);
+					this.flvRecorderService.stopRecordAndSave(current.getScope(), currentClient);
 					
 					currentClient.setStartRecording(false);
 					currentClient.setIsRecording(false);
@@ -457,7 +457,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					
 					String recordingName = "Recording "+CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 					
-					this.flvRecorderService.recordMeetingStream( recordingName, "");
+					this.flvRecorderService.recordMeetingStream( recordingName, "" ,false);
 					
 				}
 				
@@ -616,7 +616,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				log.debug("*** roomLeave Current Client is Recording - stop that");
 				//StreamService.stopRecordAndSave(currentScope, currentClient.getRoomRecordingName(), currentClient);
 				
-				this.flvRecorderService.stopRecordAndSave(currentScope, currentClient.getRoomRecordingName(), currentClient);
+				this.flvRecorderService.stopRecordAndSave(currentScope, currentClient);
 				
 				//set to true and overwrite the default one cause otherwise no notification is send
 				currentClient.setIsRecording(true);
@@ -2614,6 +2614,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			IConnection current = Red5.getConnectionLocal();
 			
+			RoomClient current_rcl = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			String publicSID = current_rcl.getPublicSID();
+			
 			RoomSession rSession = this.getRoomSessionObject(current.getScope());
 			
 			if (rSession.isInterviewStarted()) {
@@ -2622,7 +2626,95 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			rSession.setInterviewStarted(true);
 			
+			Map<String,String> interviewStatus = new HashMap<String,String>();
+			interviewStatus.put("action", "start");
+			
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
+						
+						//Start the Recording if there is already any user assigned to any Video Pod
+						
+						if (rcl.getInterviewPodId() != null) {
+							
+						}
+						
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
+							//Send to self for debugging
+							if (!rcl.getPublicSID().equals(publicSID) || true){
+								//log.debug("IS EQUAL ");
+								((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
+								log.debug("sendMessageWithClientByPublicSID interviewStatus"+interviewStatus);
+							}
+						}
+					}
+				}
+			}
+			
+			String recordingName = "Interview "+CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+			
+			this.flvRecorderService.recordMeetingStream( recordingName, "", true);
+			
 			this.setRoomSessionObject(current.getScope(), rSession);
+			
+			return true;
+			
+		} catch (Exception err) {
+			log.debug("[startInterviewRecording]",err);
+		}
+		return null;
+	}
+	
+	public synchronized Boolean stopInterviewRecording() {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			String publicSID = currentClient.getPublicSID();
+			
+			RoomSession rSession = this.getRoomSessionObject(current.getScope());
+			
+			//If no interview is started then leave it alone
+			if (!rSession.isInterviewStarted()) {
+				return false;
+			}
+			
+			this.flvRecorderService.stopRecordAndSave(scope, currentClient);
+			
+			Map<String,String> interviewStatus = new HashMap<String,String>();
+			interviewStatus.put("action", "stop");
+			
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
+						
+						//Stop Recording for that Client
+						
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
+							//Send to self for debugging
+							if (!rcl.getPublicSID().equals(publicSID) || true){
+								//log.debug("IS EQUAL ");
+								((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
+								log.debug("sendMessageWithClientByPublicSID interviewStatus"+interviewStatus);
+							}
+						}
+					}
+				}
+			}
 			
 			return true;
 			

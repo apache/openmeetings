@@ -51,6 +51,8 @@ public class FlvRecording {
 	private String recorderStreamId;
 	private Long organization_id;
 	
+	private Boolean isInterview;
+	
 	//Not Mapped
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
 	private Users creator;
@@ -397,6 +399,18 @@ public class FlvRecording {
 	}
 	public void setFlvRecordingLog(List<FlvRecordingLog> flvRecordingLog) {
 		this.flvRecordingLog = flvRecordingLog;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_interview"
+     *  type="boolean"
+     */	
+	public Boolean getIsInterview() {
+		return isInterview;
+	}
+	public void setIsInterview(Boolean isInterview) {
+		this.isInterview = isInterview;
 	}
 	
 }

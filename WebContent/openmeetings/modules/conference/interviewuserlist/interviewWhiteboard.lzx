@@ -31,7 +31,7 @@
         </interviewVideoBox>
     </view>
     
-    <view align="center" >
+    <view align="center" visible="${ canvas.ismoderator }">
     	
     	<!--
     	   public synchronized Boolean startInterviewRecording()
@@ -41,9 +41,24 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     if ($debug) Debug.write("startInterviewRecording: ",value);
+                    if (!value) {
+                    	new lz.labelerrorPopup(canvas,{errorlabelid:915});
+                    }
                 ]]>
             </handler>
         </netRemoteCallHib>      	 
+        
+        <netRemoteCallHib name="stopInterviewRecording" funcname="stopInterviewRecording" 
+                          remotecontext="$once{ canvas.thishib }" >  
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    if ($debug) Debug.write("stopInterviewRecording: ",value);
+                    if (!value) {
+                    	new lz.labelerrorPopup(canvas,{errorlabelid:916});
+                    }
+                ]]>
+            </handler>
+        </netRemoteCallHib>  
         
         <simplelayout axis="x" spacing="2" />
         
@@ -58,6 +73,7 @@
         <simpleLabelButton name="_stop" labelid="914" height="30" width="200">
             <handler name="onclick">
                 if ($debug) Debug.write("Stop Recording");
+                parent.stopInterviewRecording.doCall();
             </handler>
             <view x="2" y="4" resource="interview_record_stop" />
         </simpleLabelButton>

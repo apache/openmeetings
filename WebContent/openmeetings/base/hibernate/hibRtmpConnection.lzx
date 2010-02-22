@@ -1614,6 +1614,17 @@
         </handler>   
     </netRemoteCallHib>  
     
+    <netRemoteCallHib name="interviewStatus" funcname="flvrecorderservice.interviewStatus">
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("interviewStatus: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>  
+    
+    
+    
 </class>
 
 <hibRtmpConnection name="thishib" id="hib" />

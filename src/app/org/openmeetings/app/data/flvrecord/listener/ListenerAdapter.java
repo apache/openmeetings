@@ -38,9 +38,12 @@ public class ListenerAdapter implements IStreamListener {
 	protected Long offset = 0L;
 	
 	protected String streamName = "";
+
+	private boolean isInterview;
 	
 	public ListenerAdapter(String streamName, IScope scope, 
-			Long flvRecordingMetaDataId, boolean isScreenData) {
+			Long flvRecordingMetaDataId, boolean isScreenData,
+			boolean isInterview) {
 		super();
 		this.startedSessionTimeDate = new Date();
 		this.isScreenData  = isScreenData;
@@ -48,6 +51,7 @@ public class ListenerAdapter implements IStreamListener {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 		this.flvRecordingMetaDeltas = new LinkedList<FlvRecordingMetaDelta>();
 		this.scope = scope;
+		this.isInterview = isInterview;
 	}
 
 	public Long getFlvRecordingMetaDataId() {

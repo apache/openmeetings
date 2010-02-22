@@ -31,5 +31,6 @@
     <property name="flvHeight" type="int" column="flv_height"/>
     <property name="previewImage" type="string" column="preview_image"/>
     <property name="alternateDownload" type="string" column="alternate_download"/>
+    <property name="isInterview" type="boolean" column="is_interview"/>
   </class>
 </hibernate-mapping>

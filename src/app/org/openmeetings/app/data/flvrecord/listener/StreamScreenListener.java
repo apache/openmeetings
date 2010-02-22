@@ -23,8 +23,8 @@ public class StreamScreenListener extends ListenerAdapter {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamScreenListener.class, "openmeetings");
 
 	public StreamScreenListener(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData) {
-		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
+			Long flvRecordingMetaDataId, boolean isScreenData,boolean isInterview) {
+		super(streamName, scope, flvRecordingMetaDataId, isScreenData,isInterview);
 		// Auto-generated constructor stub
 	}
 	

@@ -286,7 +286,7 @@ public class FlvRecordingDaoImpl {
 	
 	public Long addFlvRecording(String fileHash, String fileName, Long fileSize, Long user_id, 
 			Long room_id, Date recordStart, Date recordEnd, Long ownerId, String comment, 
-			String recorderStreamId, Integer width, Integer height) {
+			String recorderStreamId, Integer width, Integer height, Boolean isInterview) {
 		try { 
 			
 			FlvRecording flvRecording = new FlvRecording();
@@ -302,6 +302,7 @@ public class FlvRecordingDaoImpl {
 			flvRecording.setIsPresentation(false);
 			flvRecording.setIsRecording(true);
 			flvRecording.setComment(comment);
+			flvRecording.setIsInterview(isInterview);
 			
 			flvRecording.setRoom_id(room_id);
 			flvRecording.setRecordStart(recordStart);

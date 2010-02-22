@@ -99,6 +99,12 @@
 	after choosing devices -->     
     <method name="setAVSettingsToClient" args="rcl">
     	if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
+    	
+    	if (canvas.publicSID == rcl.publicSID) {
+    		//we do not throw this event back to the same user again!
+    		return;
+    	}
+    	
     	var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
     	
     	if (obj == null) {
@@ -135,12 +141,12 @@
     		//	if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
     		//}
     		
-            if ($debug) Debug.write("getVideoObjectByBroadCastId2 VIEW: ",canvas.publicSID);
+            //if ($debug) Debug.write("getVideoObjectByBroadCastId2 VIEW: ",canvas.publicSID);
             
     		for (var i=0;i<videoContainer.subviews.length;i++){
     			//if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",videoContainer.subviews[i].broadcastId);
-    			if ($debug) Debug.write("getVideoObjectByBroadCastId3: ",videoContainer.subviews[i]._videoPlay.publicSID);
-    			if ($debug) Debug.write("getVideoObjectByBroadCastId4: ",videoContainer.subviews[i]._videoBroadCast.publicSID);
+    			//if ($debug) Debug.write("getVideoObjectByBroadCastId3: ",videoContainer.subviews[i]._videoPlay.publicSID);
+    			//if ($debug) Debug.write("getVideoObjectByBroadCastId4: ",videoContainer.subviews[i]._videoBroadCast.publicSID);
     			//if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",videoContainer.subviews[i].clientVars.streamid,videoContainer.subviews[i].clientVars.user_id);
     			if (videoContainer.subviews[i]._videoPlay.publicSID == publicSID){
     				videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
@@ -240,7 +246,13 @@
      -->		
 	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
 		<![CDATA[
-			if ($debug) Debug.write("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
+			if ($debug) Debug.warn("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
+			
+			if (canvas.publicSID == publicSID) {
+				if ($debug) Debug.warn("startStream Event should never be thrown back to its sender");
+				return;
+			}
+			
 			var obj = this.getVideoObjectByPublicSID(publicSID);
 			
 			if (obj == null) {
@@ -328,10 +340,19 @@
 	<method name="setSpeakingByPos" args="publicSID,bool">
 		<![CDATA[
 			var obj = this.getVideoObjectByPublicSID(publicSID);
+			//if ($debug) Debug.write("setSpeakingByPos :: ",publicSID,bool,obj);
 			if (bool){
-				obj._loudness.loudness.setAttribute('opacity',1);
+				if (canvas.publicSID != publicSID) {
+					obj._loudness.loudness.setAttribute('opacity',1);
+				} else if (obj.parent._videoBroadCast.visibility == "visible") {
+					obj.parent._videoBroadCast._loudness.loudness.setAttribute('opacity',1);
+				}
 			} else {
-				obj._loudness.loudness.setAttribute('opacity',0.2);
+				if (canvas.publicSID != publicSID) {
+					obj._loudness.loudness.setAttribute('opacity',0.2);
+				} else if (obj.parent._videoBroadCast.visibility == "visible") {
+					obj.parent._videoBroadCast._loudness.loudness.setAttribute('opacity',0.2);
+				}
 			}
 		]]>
 	</method>	
