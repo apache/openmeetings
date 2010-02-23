@@ -74,6 +74,7 @@ public class OpenXGClient {
 //			log.debug("config User Agent "+config.getUserAgent());
 			
 			config.setUserAgent("OpenSIPg XML_RPC Client");
+			config.setEncoding("ISO-8859-1");
 			
 		    config.setServerURL(new URL("http://****/manager/xml_rpc_server.php"));
 		    XmlRpcClient client = new XmlRpcClient();

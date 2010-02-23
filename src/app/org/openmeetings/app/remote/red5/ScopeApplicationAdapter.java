@@ -41,6 +41,7 @@ import org.openmeetings.app.remote.StreamService;
 import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.app.session.beans.RoomSession;
 import org.openmeetings.app.sip.xmlrpc.OpenXGClient;
+import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
@@ -165,6 +166,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Spring Definition does not work here, its too early, Instance is not set yet
 			EmoticonsManager.getInstance().loadEmot(scope);
 			
+			OpenXGClient.getInstance().testConnection();
 			//OpenXGClient.getInstance().testConnection();
 			//ServerSocketMinaProcess serverSocketMinaProcess = new ServerSocketMinaProcess();
 			
