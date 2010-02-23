@@ -206,7 +206,18 @@ public class ImportInitvalues {
 			String sip_proxyname,
 			String sip_tunnel,
 			String sip_codebase,
-			String sip_forcetunnel) {
+			String sip_forcetunnel,
+			String sip_openxg_enable,
+			String openxg_wrapper_url,
+			String openxg_client_id,
+			String openxg_client_secret,
+			String openxg_client_domain,
+			String openxg_community_code,
+			String openxg_language_code,
+			String openxg_adminid,
+			String sip_language_phonecode,
+			String sip_phonerange_start,
+			String sip_phonerange) {
 
 		Configurationmanagement
 				.getInstance()
@@ -290,7 +301,7 @@ public class ImportInitvalues {
 		
 		// ***************************************
 		// ***************************************
-		// SIP Configuration Values
+		// SIP Applet Configuration Values
 		// ***************************************
 		
 		Configurationmanagement.getInstance().addConfByKey(3, "sip.enable",
@@ -315,7 +326,51 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "sip.forcetunnel",
 				sip_forcetunnel, null, "Force usage of the tunnel");
 		
+		// ***************************************
+		// ***************************************
+		// OpenXG Configuration Values
+		// ***************************************
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.openxg.enable",
+				sip_openxg_enable, null, "Enable the OpenXG XML-RPC Gateway through the Wrapper URL");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.wrapper.url",
+				openxg_wrapper_url, null, 
+				"openxg_wrapper_url, null, OpenXG XML-RPC Wrapper URL, the Wrapper can only " +
+				"be located on 127.0.01 by default, " +
+				"for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.client.id",
+				openxg_client_id, null, "OpenXG XML-RPC Client ID");
+
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.client.secret",
+				openxg_client_secret, null, "OpenXG XML-RPC Client Secret");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.client.domain",
+				openxg_client_domain, null, "OpenXG Domain");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.community.code",
+				openxg_community_code, null, "OpenXG Community Code");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.language.code",
+				openxg_language_code, null, "OpenXG Language Code");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "openxg.adminid",
+				openxg_adminid, null, "OpenXG Admin ID");
+		
+		// ***************************************
+		// ***************************************
+		// Phone Range Configuration Values
+		// ***************************************
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.language.phonecode",
+				sip_language_phonecode, null, "For example +358 for Finland");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange.start",
+				sip_phonerange_start, null, "The first number in the Range of Phone Numbers in national format");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange",
+				sip_phonerange, null, "Amount of numbers in the Phone Range available");
 		
 	}
 

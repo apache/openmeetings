@@ -76,7 +76,9 @@ public class OpenXGClient {
 			config.setUserAgent("OpenSIPg XML_RPC Client");
 			config.setEncoding("ISO-8859-1");
 			
-		    config.setServerURL(new URL("http://****/manager/xml_rpc_server.php"));
+			config.setGzipCompressing(false);
+			  
+		    config.setServerURL(new URL("http://85.134.48.179/manager/xml_rpc_server.php"));
 		    XmlRpcClient client = new XmlRpcClient();
 		    
 		    client.setConfig(config);

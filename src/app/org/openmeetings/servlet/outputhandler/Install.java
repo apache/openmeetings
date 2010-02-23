@@ -170,6 +170,8 @@ public class Install extends VelocityViewServlet {
 					String ldap_auth_path = httpServletRequest.getParameter("ldap_config_path");
 					String screen_viewer = httpServletRequest.getParameter("screen_viewer");
 					
+					
+					//SIP Applet Configuration
 					String sip_enable = httpServletRequest.getParameter("sip_enable");
 					String sip_realm = httpServletRequest.getParameter("sip_realm");
 					String sip_port = httpServletRequest.getParameter("sip_port");
@@ -177,6 +179,23 @@ public class Install extends VelocityViewServlet {
 					String sip_tunnel = httpServletRequest.getParameter("sip_tunnel");
 					String sip_codebase = httpServletRequest.getParameter("sip_codebase");
 					String sip_forcetunnel = httpServletRequest.getParameter("sip_forcetunnel");
+					
+					
+					//OpenXG / OpenSIPg Configuration
+					String sip_openxg_enable = httpServletRequest.getParameter("sip_openxg_enable");
+					String openxg_wrapper_url = httpServletRequest.getParameter("openxg_wrapper_url");
+					String openxg_client_id = httpServletRequest.getParameter("openxg_client_id");
+					String openxg_client_secret = httpServletRequest.getParameter("openxg_client_secret");
+					String openxg_client_domain = httpServletRequest.getParameter("openxg_client_domain");
+					String openxg_community_code = httpServletRequest.getParameter("openxg_community_code");
+					String openxg_language_code = httpServletRequest.getParameter("openxg_language_code");
+					String openxg_adminid = httpServletRequest.getParameter("openxg_adminid");
+					
+					//SIP Phone Range Configuration
+					String sip_language_phonecode = httpServletRequest.getParameter("sip_language_phonecode");
+					String sip_phonerange_start = httpServletRequest.getParameter("sip_phonerange_start");
+					String sip_phonerange = httpServletRequest.getParameter("sip_phonerange");
+					
 					
 					log.error("step 0+ start init with values. "+username+" ***** "+useremail+" "+orgname+" "+configdefault+" "+configreferer+" "+
 						configsmtp+" "+configmailuser+" "+configmailpass+" "+configdefaultLang + " " +
@@ -202,7 +221,18 @@ public class Install extends VelocityViewServlet {
 									sip_proxyname,
 									sip_tunnel,
 									sip_codebase,
-									sip_forcetunnel);
+									sip_forcetunnel,
+									sip_openxg_enable,
+									openxg_wrapper_url,
+									openxg_client_id,
+									openxg_client_secret,
+									openxg_client_domain,
+									openxg_community_code,
+									openxg_language_code,
+									openxg_adminid,
+									sip_language_phonecode,
+									sip_phonerange_start,
+									sip_phonerange);
 					
 					ImportInitvalues.getInstance().loadInitUserAndOrganisation(username, userpass, useremail, orgname);
 					ImportInitvalues.getInstance().loadDefaultRooms();

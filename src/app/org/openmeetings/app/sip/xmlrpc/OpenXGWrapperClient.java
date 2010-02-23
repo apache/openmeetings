@@ -30,19 +30,21 @@ public class OpenXGWrapperClient {
 		return instance;
 	}
 	
+	/**
+	 * Only for Testing
+	 */
 	public void testConnection() {
-		// TODO Auto-generated method stub
-
-		String userid = "067201101";
-		String domain = "voipt3.multi.fi";
-		String first_name = "Matti";
-		String middle_i = "X";
-		String last_name = "Virtanen";
-		String password = "password";
-		String community_code = "999";
-		String language_code = "fi";
-		String email = "matti@sucks.com";
-		String adminid = "matti";
+		
+		String userid = "****";
+		String domain = "****";
+		String first_name = "****";
+		String middle_i = "****";
+		String last_name = "****";
+		String password = "****";
+		String community_code = "****";
+		String language_code = "****";
+		String email = "****";
+		String adminid = "****";
 		
 		String client_id = "****";
 		String client_secret = "*****";

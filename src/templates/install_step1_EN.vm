@@ -101,7 +101,7 @@ form.cmxform em {
   color: #f00;
 }
 form.cmxform label {
-  width: 120px; /* Width of labels */
+  width: 420px; /* Width of labels */
 }
 form.cmxform fieldset fieldset label {
   margin-left: 123px; /* Width plus 3 (html space) */
@@ -230,24 +230,24 @@ function checkEmail()
 		<li>
         <label for="swftools_path">SWFTools Path</label>
     	<input name="swftools_path" id="swftools_path" size="27" title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path" type="text" />   	
-    	<p>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
+    	<p><i>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
     		If this shows a list of options leave this field blank otherwise you have to specify the path to pdf2swf on your system<br/>
-    		see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>
+    		see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>
         </li>
         <li>
         <label for="imagemagick_path">ImageMagick Path</label>
     	<input name="imagemagick_path" id="imagemagick_path" size="27" title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path" type="text" />   	
-    	<p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>	
+    	<p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>	
     	</li>
     	<li>
         <label for="ffmpeg_path">FFMPEG Path</label>
         <input name="ffmpeg_path" id="ffmpeg_path" size="27" title="Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path" type="text" />    
-        <p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>  
+        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
         </li>
         <li>
         <label for="sox_path">SoX Path</label>
         <input name="sox_path" id="sox_path" size="27" title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path" type="text" />    
-        <p>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></p>  
+        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
         </li>
     </fieldset>      
     
@@ -261,13 +261,13 @@ function checkEmail()
     		title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE"
     		value="org.openmeetings.utils.crypt.MD5Implementation" />  	
 		</li>
-    	<p>
+    	<p><i>
 	    	You can use this default crypt type which is equal to PHP-MD5 function or BSD-Style<BR/>
 	    	encryption by using:<b>org.openmeetings.utils.crypt.MD5CryptImplementation</b><BR/>
 	    	for more information or to write your own Crypt-Style see:<BR/>
 			<a href="http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism" target="_blank">CustomCryptMechanism</a><BR/>
 			You can edit this value later BUT previous created Users and Sessions might be not usable anymore<BR/>
-    	</p>
+    	</i></p>
         
     </fieldset>
     
@@ -281,11 +281,11 @@ function checkEmail()
     		title="Enter the absolute path to a valid ldap config (see om_ldap.cfg within installation directory)"
     		value="" />  	
 		</li>
-    	<p>
+    	<p><i>
 	    	Entering a path pointing to a valid LDAP Configuration File activates LDAP Authentification.<BR/>
 	    	Keep empty, if you want to keep the standard auth method.<BR/>
 	    	Admin users are always authenticated against local database, other user have to enter a valid LDAP password.
-    	</p>
+    	</i></p>
         
     </fieldset>
     
@@ -301,20 +301,20 @@ function checkEmail()
 	        <option value="2">JMF RTP Sharer</option>
 	    </select><br />	
 		</li>
-    	<p>
+    	<p><i>
 	    	The standard Screenviewer is optimized for low-bandwidth areas - You have the possibility of<BR/>
 	    	altering the quality of the screencapture,ie.<BR/>
 	    	The jrDesktop alternative starts immediately without GUI, just stoppable via SysTray Icon, but offers<BR/>
 	    	a higher speed tranferring the screencaptures to the whiteboard<BR/>
 	    	The RTP Sharer transfers Desktop Data as RTP Stream to Server. Best performance and quality is reached using 1024x768 as Screen Resolution<BR/>
 	    	
-    	</p>
+    	</i></p>
         
     </fieldset>    
 
     <fieldset id="sip">
     
-		<legend>SIP Configuration</legend>    
+		<legend>SIP Applet Configuration</legend>    
 		
 		<li>
         <label for="sip_enable">Enable SIP</label>
@@ -323,39 +323,40 @@ function checkEmail()
 	      	<option value="no" selected>No</option>
 	    </select><br />	
 	    </li>
-		<p>
+		<p><i>
             Enable to load the SIP Applet in the Client and 
             call the SIP Applet whenever you enter a Room
-        </p>
+        </i></p>
+        <br />  
         
 		<li>
         <label for="sip_realm">SIP Realm</label>
         <input name="sip_realm" id="sip_realm" size="27" title="" type="text" />    
-        <p>So called *Domain of the SIP Provider*</p>  
+        <p><i>So called *Domain of the SIP Provider*</i></p>  
         </li>
         
     	<li>
         <label for="sip_port">SIP Port</label>
         <input name="sip_port" id="sip_port" size="27" title="" type="text" />    
-        <p>SIP Port</p>  
+        <p><i>SIP Port</i></p>  
         </li>
         
         <li>
         <label for="sip_proxyname">SIP Proxy</label>
         <input name="sip_proxyname" id="sip_proxyname" size="27" title="" type="text" />    
-        <p>SIP Proxy name (this is the outbound proxy)</p>  
+        <p><i>SIP Proxy name (this is the outbound proxy)</i></p>  
         </li>
         
         <li>
         <label for="sip_tunnel">SIP Tunnel</label>
         <input name="sip_tunnel" id="sip_tunnel" size="27" title="" type="text" />    
-        <p>SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443</p>  
+        <p><i>SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443</i></p>  
         </li>
         
         <li>
         <label for="sip_codebase">SIP Codebase</label>
         <input name="sip_codebase" id="sip_codebase" size="27" title="" type="text" />    
-        <p>The Base-URL to load the Ringtone from</p>  
+        <p><i>The Base-URL to load the Ringtone from</i></p>  
         </li>
         
         <li>
@@ -365,11 +366,97 @@ function checkEmail()
             <option value="false">No</option>
         </select><br /> 
         </li>
-        <p>
+        <p><i>
             Force usage of the tunnel
-        </p>
+        </i></p>
         
-    </fieldset>    
+    </fieldset>   
+    
+    <fieldset id="openxg">
+    
+        <legend>OpenXG / OpenSIPg Configuration</legend>    
+        
+        <li>
+        <label for="sip_openxg_enable">Enable OpenXG Wrapper URL</label>
+        <select name="sip_openxg_enable" id="sip_openxg_enable" size="1">
+            <option value="yes">Yes</option>
+            <option value="no" selected>No</option>
+        </select><br /> 
+        </li>
+        <p><i>
+            Enable the OpenXG XML-RPC Gateway through the Wrapper URL
+        </i></p>
+        <br />  
+        
+        <li>
+        <label for="openxg_wrapper_url">OpenXG XML-RPC Wrapper URL</label>
+        <input name="openxg_wrapper_url" id="openxg_wrapper_url" size="27" title="" type="text" />    
+        <p><i>OpenXG XML-RPC Wrapper URL, the Wrapper can only 
+            be located on 127.0.01 by default,
+            for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php </i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_client_id">OpenXG Client ID</label>
+        <input name="openxg_client_id" id="openxg_client_id" size="27" title="" type="text" />    
+        <p><i>OpenXG XML-RPC Client ID </i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_client_secret">OpenXG Client secret</label>
+        <input name="openxg_client_secret" id="openxg_client_secret" size="27" title="" type="text" />    
+        <p><i>OpenXG XML-RPC Client Secret </i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_client_domain">OpenXG Domain</label>
+        <input name="openxg_client_domain" id="openxg_client_domain" size="27" title="" type="text" />    
+        <p><i>OpenXG Domain </i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_community_code">OpenXG Community Code</label>
+        <input name="openxg_community_code" id="openxg_community_code" size="27" title="" type="text" />    
+        <p><i>OpenXG Community Code </i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_language_code">OpenXG Language Code</label>
+        <input name="openxg_language_code" id="openxg_language_code" size="27" title="" type="text" />    
+        <p><i>OpenXG Language Code For example fi for Finland</i></p>  
+        </li>
+        
+        <li>
+        <label for="openxg_adminid">OpenXG Admin ID</label>
+        <input name="openxg_adminid" id="openxg_adminid" size="27" title="" type="text" />    
+        <p><i>OpenXG Admin ID </i></p>  
+        </li>
+        
+    </fieldset>   
+    
+    <fieldset id="sip_phone_configuration">
+    
+        <legend>SIP Phone Range Configuration</legend>    
+        
+        <li>
+        <label for="sip_language_phonecode">Phone language code</label>
+        <input name="sip_language_phonecode" id="sip_language_phonecode" size="27" title="" type="text" />    
+        <p><i>For example +358 for Finland</i></p>  
+        </li>
+        
+        <li>
+        <label for="sip_phonerange_start">Phone range start</label>
+        <input name="sip_phonerange_start" id="sip_phonerange_start" size="27" title="" type="text" />    
+        <p><i>The first number in the Range of Phone Numbers in national format</i></p>  
+        </li>
+        
+        <li>
+        <label for="sip_phonerange">Number of allocated Numbers</label>
+        <input name="sip_phonerange" id="sip_phonerange" size="27" title="" type="text" />    
+        <p><i>Amount of numbers in the Phone Range available</i></p>  
+        </li>
+        
+    </fieldset>
         	  
         	
     <fieldset>
