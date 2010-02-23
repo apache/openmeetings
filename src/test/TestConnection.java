@@ -14,7 +14,7 @@ public class TestConnection {
 //			System.out.println("Test Connection");
 //			
 //			// Get target URL
-//	        String strURL = "http://85.134.48.179/manager/xml_rpc_server.php";
+//	        String strURL = "http:///manager/xml_rpc_server.php";
 //	        // Get file to be posted
 //	        String fileToPost = "createUser.xml";
 //	        
