@@ -36,7 +36,7 @@ public class OpenXGHttpClient {
 			log.debug("Test Connection");
 			
 			// Get target URL
-	        String strURL = "http://****/manager/xml_rpc_server.php";
+	        String strURL = "http://*****/manager/xml_rpc_server.php";
 	        // Get file to be posted
 	        String stringToPost = "<?xml version=\"1.0\" ?>"+ System.getProperty("line.separator") +
 										"<methodCall>"+ System.getProperty("line.separator") +
@@ -66,7 +66,7 @@ public class OpenXGHttpClient {
 										"					<member>"+ System.getProperty("line.separator") +
 										"						<name>domain</name>"+ System.getProperty("line.separator") +
 										"						<value>"+ System.getProperty("line.separator") +
-										"							<string>voipt3multifi</string>"+ System.getProperty("line.separator") +
+										"							<string>voipt3.multi.fi</string>"+ System.getProperty("line.separator") +
 										"						</value>"+ System.getProperty("line.separator") +
 										"					</member>"+ System.getProperty("line.separator") +
 										"					<member>"+ System.getProperty("line.separator") +
@@ -108,7 +108,7 @@ public class OpenXGHttpClient {
 										"					<member>"+ System.getProperty("line.separator") +
 										"						<name>email</name>"+ System.getProperty("line.separator") +
 										"						<value>"+ System.getProperty("line.separator") +
-										"							<string>matti@suckscom</string>"+ System.getProperty("line.separator") +
+										"							<string>matti@sucks.com</string>"+ System.getProperty("line.separator") +
 										"						</value>"+ System.getProperty("line.separator") +
 										"					</member>"+ System.getProperty("line.separator") +
 										"					<member>"+ System.getProperty("line.separator") +
