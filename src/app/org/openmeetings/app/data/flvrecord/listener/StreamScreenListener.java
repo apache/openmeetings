@@ -33,7 +33,7 @@ public class StreamScreenListener extends ListenerAdapter {
 		try {
 			
 			//We only are concerned about video at this moment
-			if (streampacket.getDataType() == 9) {
+			//if (streampacket.getDataType() == 9) {
 			
 				if (this.isClosed) {
 					//Already closed this One
@@ -96,7 +96,7 @@ public class StreamScreenListener extends ListenerAdapter {
 				
 				writer.writeTag(tag);
 			
-			}
+			//}
 			
 		} catch (IOException e) {
 			log.error("[packetReceived]",e);

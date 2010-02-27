@@ -14,6 +14,7 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
+import org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.openmeetings.app.data.flvrecord.listener.ListenerAdapter;
 import org.openmeetings.app.data.flvrecord.listener.StreamAudioListener;
@@ -50,6 +51,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private UsersDaoImpl usersDaoImpl;
 	private Roommanagement roommanagement;
 	private FlvRecorderConverterTask flvRecorderConverterTask;
+	private FlvInterviewConverterTask flvInterviewConverterTask;
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
 	private ScopeApplicationAdapter scopeApplicationAdapter = null;
 	
@@ -102,6 +104,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		this.flvRecorderConverterTask = flvRecorderConverterTask;
 	}
 	
+	public FlvInterviewConverterTask getFlvInterviewConverterTask() {
+		return flvInterviewConverterTask;
+	}
+	public void setFlvInterviewConverterTask(
+			FlvInterviewConverterTask flvInterviewConverterTask) {
+		this.flvInterviewConverterTask = flvInterviewConverterTask;
+	}
+
 	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
 		return flvRecordingLogDaoImpl;
 	}
@@ -310,15 +320,17 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				stream.addStreamListener(new StreamScreenListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData, isInterview));
 			} else {
 				   
-				log.debug("stream "+stream);
-				log.debug("streamName "+streamName);
-				log.debug("conn.getScope() "+conn.getScope());
-				log.debug("flvRecordingMetaDataId "+flvRecordingMetaDataId);
-				log.debug("isScreenData "+isScreenData);
+				log.debug("### stream "+stream);
+				log.debug("### streamName "+streamName);
+				log.debug("### conn.getScope() "+conn.getScope());
+				log.debug("### flvRecordingMetaDataId "+flvRecordingMetaDataId);
+				log.debug("### isScreenData "+isScreenData);
+				log.debug("### isInterview "+isInterview);
 				
 				if (isInterview) {
+					
 					//Additionally record the Video Signal
-					stream.addStreamListener(new StreamScreenListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData, isInterview));
+					stream.addStreamListener(new StreamScreenListener("AV_"+streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData, isInterview));
 				}
 				
 				stream.addStreamListener(new StreamAudioListener(streamName, conn.getScope(), flvRecordingMetaDataId, isScreenData, isInterview));
@@ -484,6 +496,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				this.scopeApplicationAdapter.setRoomSessionObject(scope, rSession);
 				
 				log.debug("==> Implement Post Interview Process");
+				
+				this.flvInterviewConverterTask.startConversionThread(flvRecordingId);
 				
 			}
 			

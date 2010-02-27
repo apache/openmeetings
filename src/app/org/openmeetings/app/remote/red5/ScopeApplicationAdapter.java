@@ -167,7 +167,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Spring Definition does not work here, its too early, Instance is not set yet
 			EmoticonsManager.getInstance().loadEmot(scope);
 			
-			OpenXGHttpClient.getInstance().testConnection();
+			for (Iterator<String> subIterate = scope.getScopeNames();subIterate.hasNext();) {
+				
+				String scopeName = subIterate.next();
+				
+				log.debug("scopeName :: "+scopeName);
+				
+			}
+			
+			//OpenXGHttpClient.getInstance().testConnection();
 			//OpenXGWrapperClient.getInstance().testConnection();
 			//OpenXGClient.getInstance().testConnection();
 			//ServerSocketMinaProcess serverSocketMinaProcess = new ServerSocketMinaProcess();
@@ -2623,6 +2631,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			String publicSID = current_rcl.getPublicSID();
 			
 			RoomSession rSession = this.getRoomSessionObject(current.getScope());
+			
+			log.debug("rSession "+rSession.isInterviewStarted());
 			
 			if (rSession.isInterviewStarted()) {
 				return false;

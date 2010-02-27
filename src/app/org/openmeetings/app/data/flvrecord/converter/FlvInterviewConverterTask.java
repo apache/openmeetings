@@ -5,17 +5,17 @@ import org.springframework.core.task.TaskExecutor;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class FlvRecorderConverterTask {
+public class FlvInterviewConverterTask {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewConverterTask.class);
 
 	//Spring loaded
 	private TaskExecutor taskExecutor;
-	private FlvRecorderConverter flvRecorderConverter;
+	private FlvInterviewConverter flvInterviewConverter;
 	
-	public FlvRecorderConverterTask(TaskExecutor taskExecutor, FlvRecorderConverter flvRecorderConverter) {
+	public FlvInterviewConverterTask(TaskExecutor taskExecutor, FlvInterviewConverter flvInterviewConverter) {
 		this.taskExecutor = taskExecutor;
-		this.flvRecorderConverter = flvRecorderConverter;
+		this.flvInterviewConverter = flvInterviewConverter;
 	}
 
 	public void startConversionThread(final Long flvRecordingId) {
@@ -25,7 +25,7 @@ public class FlvRecorderConverterTask {
 			
 			this.taskExecutor.execute(new Runnable() {
 				public void run() {
-	            	   flvRecorderConverter.startConversion( flvRecordingId );
+						flvInterviewConverter.startConversion( flvRecordingId );
 	               }
 	          });
 			
