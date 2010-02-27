@@ -50,7 +50,7 @@ public class OpenXGXmlWriterFactory implements XmlWriterFactory {
 		try {
 			xw.setWriter(new BufferedWriter(new OutputStreamWriter(pStream, enc)));
 		} catch (UnsupportedEncodingException e) {
-			throw new XmlRpcException("Unsupported encoding: " + enc, e);
+			throw new XmlRpcException(0, "Unsupported encoding: " + enc + e);
 		}
 		return xw;
 	}
