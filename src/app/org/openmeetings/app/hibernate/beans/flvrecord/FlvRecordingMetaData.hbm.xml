@@ -21,5 +21,6 @@
     <property name="wavAudioData" type="string" column="wav_audio_data"/>
     <property name="fullWavAudioData" type="string" column="full_wav_audio_data"/>
     <property name="audioIsValid" type="boolean" column="audio_is_valid"/>
+    <property name="interiewPodId" type="int" column="interiew_pod_id"/>
   </class>
 </hibernate-mapping>

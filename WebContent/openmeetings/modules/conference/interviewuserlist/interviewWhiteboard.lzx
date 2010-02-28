@@ -5,6 +5,7 @@
         
     <handler name="oninit">
         canvas._drawarea = this;
+        this.reloadStatus();
     </handler>
     <handler name="onopenWhiteBoard" >
         if ($debug) Debug.write("-- onOpenWhiteBoard --");
@@ -15,6 +16,27 @@
            this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
         ]]>
     </method>
+    	
+	<method name="reloadStatus">
+		this.getInterviewRecordingStatus.doCall();
+	</method>
+	
+	<!--
+	getInterviewRecordingStatus()
+	 -->
+	<netRemoteCallHib name="getInterviewRecordingStatus" funcname="getInterviewRecordingStatus" 
+                      remotecontext="$once{ canvas.thishib }" >  
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getInterviewRecordingStatus: ",value);
+                if (value) {
+                	parent._recStarted.setAttribute("visibility","visible");
+                } else {
+                	parent._recStarted.setAttribute("visibility","hidden");
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
     
     <simplelayout axis="y" spacing="2" />
     
@@ -31,7 +53,7 @@
         </interviewVideoBox>
     </view>
     
-    <view align="center" visible="${ canvas.ismoderator }">
+    <view name="_interview" align="center" visible="${ canvas.ismoderator }">
     	
     	<!--
     	   public synchronized Boolean startInterviewRecording()
@@ -78,6 +100,10 @@
             <view x="2" y="4" resource="interview_record_stop" />
         </simpleLabelButton>
         
+    </view>
+    
+    <view name="_recStarted" align="center" visibility="hidden">
+    	<labelText labelid="917" />
     </view>
         
 </class>

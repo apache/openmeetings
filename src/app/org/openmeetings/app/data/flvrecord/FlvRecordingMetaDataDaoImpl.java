@@ -142,7 +142,7 @@ public class FlvRecordingMetaDataDaoImpl {
 	
 	public Long addFlvRecordingMetaData(Long flvRecordingId, String freeTextUserName, 
 					Date recordStart, Boolean isAudioOnly, Boolean isVideoOnly, 
-					Boolean isScreenData, String streamName) {
+					Boolean isScreenData, String streamName, Integer interiewPodId) {
 		try { 
 			
 			FlvRecordingMetaData flvRecordingMetaData = new FlvRecordingMetaData();
@@ -160,6 +160,8 @@ public class FlvRecordingMetaDataDaoImpl {
 			flvRecordingMetaData.setIsScreenData(isScreenData);
 			
 			flvRecordingMetaData.setStreamName(streamName);
+			
+			flvRecordingMetaData.setInteriewPodId(interiewPodId);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

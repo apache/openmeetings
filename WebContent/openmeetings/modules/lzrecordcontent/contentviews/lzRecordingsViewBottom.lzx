@@ -108,7 +108,7 @@
             
                 this.currentRecording = rec;
             
-                if ($debug) Debug.write("showMetaData ",rec);
+                if ($debug) Debug.write("showMetaData ");
                 
                 this.content.clearContent();
                 

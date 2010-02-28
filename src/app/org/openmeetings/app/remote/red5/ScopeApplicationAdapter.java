@@ -39,7 +39,6 @@ import org.openmeetings.app.remote.MeetingMemberService;
 import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.StreamService;
 import org.openmeetings.app.remote.WhiteBoardService;
-import org.openmeetings.app.session.beans.RoomSession;
 import org.openmeetings.app.sip.xmlrpc.OpenXGClient;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.app.sip.xmlrpc.OpenXGWrapperClient;
@@ -739,9 +738,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 			}
 
-			
-			
-			
 			//Notify all users of the same Scope
 			//We need to iterate through the streams to cathc if anybody is recording
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
@@ -2621,27 +2617,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}		
 	}
 	
-	public synchronized Boolean startInterviewRecording() {
+	public synchronized Boolean getInterviewRecordingStatus() {
 		try {
 			
 			IConnection current = Red5.getConnectionLocal();
-			
-			RoomClient current_rcl = this.clientListManager.getClientByStreamId(current.getClient().getId());
-			
-			String publicSID = current_rcl.getPublicSID();
-			
-			RoomSession rSession = this.getRoomSessionObject(current.getScope());
-			
-			log.debug("rSession "+rSession.isInterviewStarted());
-			
-			if (rSession.isInterviewStarted()) {
-				return false;
-			}
-			
-			rSession.setInterviewStarted(true);
-			
-			Map<String,String> interviewStatus = new HashMap<String,String>();
-			interviewStatus.put("action", "start");
 			
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -2649,24 +2628,67 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 						
-						//Start the Recording if there is already any user assigned to any Video Pod
-						
-						if (rcl.getInterviewPodId() != null) {
-							
+						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							return true;
 						}
 						
-						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-    						//continue;
-    					} else {
-							//Send to self for debugging
-							if (!rcl.getPublicSID().equals(publicSID) || true){
-								//log.debug("IS EQUAL ");
-								((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
-								log.debug("sendMessageWithClientByPublicSID interviewStatus"+interviewStatus);
-							}
+					}
+				}
+			}
+			
+			
+			return false;
+		} catch (Exception err) {
+			log.error("[getInterviewRecordingStatus]",err);
+		}
+		
+		return null;
+	}
+	
+	public synchronized Boolean startInterviewRecording() {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						
+						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							return false;
 						}
+						
+					}
+				}
+			}
+			
+			
+			
+			RoomClient current_rcl = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			//String publicSID = current_rcl.getPublicSID();
+			
+			//Also set the Recording Flag to Record all Participants that enter later
+			current_rcl.setIsRecording(true);
+			this.clientListManager.updateClientByStreamId(current.getClient().getId(), current_rcl);
+			
+			
+			Map<String,String> interviewStatus = new HashMap<String,String>();
+			interviewStatus.put("action", "start");
+			
+			//Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			//Collection<Set<IConnection>> conCollection2 = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
+						log.debug("-- interviewStatus"+interviewStatus);
+						
 					}
 				}
 			}
@@ -2674,8 +2696,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			String recordingName = "Interview "+CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 			
 			this.flvRecorderService.recordMeetingStream( recordingName, "", true);
-			
-			this.setRoomSessionObject(current.getScope(), rSession);
 			
 			return true;
 			
@@ -2690,21 +2710,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			IConnection current = Red5.getConnectionLocal();
 			
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
-			
-			String publicSID = currentClient.getPublicSID();
-			
-			RoomSession rSession = this.getRoomSessionObject(current.getScope());
-			
-			//If no interview is started then leave it alone
-			if (!rSession.isInterviewStarted()) {
-				return false;
-			}
-			
-			this.flvRecorderService.stopRecordAndSave(scope, currentClient);
-			
-			Map<String,String> interviewStatus = new HashMap<String,String>();
-			interviewStatus.put("action", "stop");
+			boolean found = false;
 			
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -2712,20 +2718,41 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					if (conn != null) {
 						
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
 						
-						//Stop Recording for that Client
-						
-						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-    						//continue;
-    					} else {
-							//Send to self for debugging
-							if (!rcl.getPublicSID().equals(publicSID) || true){
-								//log.debug("IS EQUAL ");
-								((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
-								log.debug("sendMessageWithClientByPublicSID interviewStatus"+interviewStatus);
-							}
+						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							found = true;
 						}
+						
+					}
+				}
+			}
+			
+			if (!found) {
+				return false;
+			}
+			
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			//String publicSID = currentClient.getPublicSID();
+			
+			//Also set the Recording Flag to Record all Participants that enter later
+			currentClient.setIsRecording(false);
+			this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
+			
+			this.flvRecorderService.stopRecordAndSave(scope, currentClient);
+			
+			Map<String,String> interviewStatus = new HashMap<String,String>();
+			interviewStatus.put("action", "stop");
+			
+			//Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						//log.debug("IS EQUAL ");
+						((IServiceCapableConnection) conn).invoke("interviewStatus",new Object[] { interviewStatus }, this);
+						log.debug("sendMessageWithClientByPublicSID interviewStatus"+interviewStatus);
+						
 					}
 				}
 			}
@@ -2736,35 +2763,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.debug("[startInterviewRecording]",err);
 		}
 		return null;
-	}
-	
-	public synchronized RoomSession getRoomSessionObject(IScope currentScope) {
-		try {
-			
-			if (currentScope.hasAttribute("openmeetingsRoomSession")) {
-				
-				log.debug("Has Already the Room Session Object ");
-				
-				return (RoomSession) currentScope.getAttribute("openmeetingsRoomSession");
-				
-			}
-			
-			return new RoomSession();
-			
-		} catch (Exception err) {
-			log.debug("[getRoomSessionObject]",err);
-		}
-		return null;
-	}
-	
-	public synchronized void setRoomSessionObject(IScope currentScope, RoomSession rSession) {
-		try {
-			
-			currentScope.setAttribute("openmeetingsRoomSession", rSession);
-			
-		} catch (Exception err) {
-			log.debug("[setRoomSessionObject]",err);
-		}
 	}
 	
 	/**

@@ -44,6 +44,8 @@
     			
     			this.recordingLog = "";
     			
+    			this.recordingName = recording.fileHash;
+    			
     			//Check if recording is not yet completed or if it has failed
     			for (var i = 0;i<recording.flvRecordingLog.length;i++) {
     				
@@ -157,6 +159,9 @@
         </method>
         
         <method name="startStream">
+        	
+        	if ($debug) Debug.write("startStream ",this.recordingName);
+        	
         	if (this.recordingName != "") {
         		
         		this.isPaused = false;
@@ -167,6 +172,9 @@
                 }
                 
             	this._content._videostream.bringToFront();
+            	
+            	if ($debug) Debug.write("PLAY STREAM ",this.recordingName);
+            	
                 this._content._videostream.playStream(this.recordingName,0);
         	}
         </method>

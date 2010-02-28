@@ -112,6 +112,16 @@ public class FlvInterviewConverter {
 		pathToSoX += "sox";
 		return pathToSoX;
 	}
+	
+	private String getPathToImageMagick() {
+		String pathToImageMagick = this.configurationmanagement.getConfKey(3,
+				"imagemagick_path").getConf_value();
+		if (!pathToImageMagick.equals("") && !pathToImageMagick.endsWith(File.separator)) {
+			pathToImageMagick += File.separator;
+		}
+		pathToImageMagick += "convert";
+		return pathToImageMagick;
+	}
 
 	public void stripAudioFromFLVs(FlvRecording flvRecording) {
 		List<HashMap<String, Object>> returnLog = new LinkedList<HashMap<String, Object>>();
@@ -510,10 +520,230 @@ public class FlvInterviewConverter {
 //			String inputScreenFullFlv = streamFolderName
 //					+ flvRecordingMetaDataOfScreen.getStreamName() + ".flv";
 
+			//Start extracting image sequence
 			
+			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
+				
+				//FLV to 24 FPS Sequence AVI
+				String inputFlv = streamFolderName
+							+ "AV_" + flvRecordingMetaData.getStreamName() + ".flv";
+				
+				File inputFlvFile = new File(inputFlv);
+				
+				if (inputFlvFile.exists()) {
+					
+					//TO 24FPS AVI
+					
+					String outputAVI = streamFolderName
+										+ "AV_" + flvRecordingMetaData.getStreamName() + ".avi";
+					
+					String[] argv_24AVI = new String[] { this.getPathToFFMPEG(), "-i",
+							inputFlv, "-r", "24", "-an", outputAVI  };
+
+					log.debug("START generateImageSequenceAVI ################# ");
+					String tString = "";
+					for (int i = 0; i < argv_24AVI.length; i++) {
+						tString += argv_24AVI[i] + " ";
+						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+					}
+					log.debug(tString);
+					log.debug("END generateImageSequenceAVI ################# ");
+
+					returnLog.add(GenerateSWF.executeScript("generateImageSequenceAVI", 
+							argv_24AVI));
+
+					//TO Image Sequence
+					
+					String outputMetaImageData = streamFolderName + flvRecordingMetaData.getFlvRecordingMetaDataId() 
+														+ File.separatorChar;
+					
+					//Image Folder
+					File imageSequenceFolder = new File(outputMetaImageData);
+					imageSequenceFolder.mkdir();
+					
+					String outputImages = outputMetaImageData + "image%d.jpg";
+					
+					String[] argv_imageSeq = new String[] { this.getPathToFFMPEG(), "-i",
+									outputAVI, outputImages  };
+
+					log.debug("START generateImageSequence ################# ");
+					String iString = "";
+					for (int i = 0; i < argv_imageSeq.length; i++) {
+						iString += argv_imageSeq[i] + " ";
+						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+					}
+					log.debug(iString);
+					log.debug("END generateImageSequence ################# ");
+
+					returnLog.add(GenerateSWF.executeScript("generateImageSequence",
+							argv_imageSeq));
+					
+				}
+				
+			}
 			
+			//Default Image for empty interview video pods
+			String defaultInterviewImage = streamFolderGeneralName + "default_interview_image.jpg";
+			File defaultInterviewImageFile = new File (defaultInterviewImage);
 			
-			String inputScreenFullFlv = null;//FIXME
+			if (!defaultInterviewImageFile.exists()) {
+				throw new Exception("defaultInterviewImageFile does not exist!");
+			}
+			
+			//Create Folder for the output Image Sequence
+			String outputImageMergedDate = streamFolderName + "INTERVIEW_" 
+												+ flvRecording.getFlvRecordingId() + File.separatorChar;
+			
+			//Merged Image Folder
+			File outputImageMergedDateFolder = new File(outputImageMergedDate);
+			outputImageMergedDateFolder.mkdir();
+			
+			//Generate the Single Image by sequencing
+			boolean jobRunning = true;
+			long currentTimeInMilliSeconds = 0;
+			
+			long completeLengthInSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime(); 
+			
+			log.debug("completeLengthInSeconds :: "+completeLengthInSeconds);
+			
+			int sequenceCounter = 0;
+			
+			while (jobRunning) {
+				
+				//Process one Second of Movie
+				String[] interviewPod1Images = new String[24];
+				String[] interviewPod2Images = new String[24];
+				int[] outputFrameNumbers = new int[24];
+				
+				for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
+					
+					long deltaStartRecording = flvRecordingMetaData.getRecordStart().getTime() - flvRecording.getRecordStart().getTime();
+				
+					if (flvRecording.getRecordStart().getTime() + currentTimeInMilliSeconds >= flvRecordingMetaData.getRecordStart().getTime()
+							&&
+							flvRecording.getRecordStart().getTime() + currentTimeInMilliSeconds <= flvRecordingMetaData.getRecordEnd().getTime()) {
+						
+						//Calculate which images should be in here
+						
+						//Calculate the relative starting point
+						long thisImageSequenceStartingPoint = currentTimeInMilliSeconds - deltaStartRecording;
+						
+//						log.debug("-- thisImageSequenceStartingPoint "+thisImageSequenceStartingPoint );
+//						log.debug("-- currentTimeInMilliSeconds "+currentTimeInMilliSeconds );
+//						log.debug("-- deltaStartRecording "+deltaStartRecording );
+						
+						//Calculate the first and following 24 FPS Number
+						int secondToStart = Long.valueOf(thisImageSequenceStartingPoint/1000).intValue();
+						
+						int firstFrame = secondToStart*24;
+						
+						//log.debug("-- secondToStart "+secondToStart + " firstFrame " + firstFrame);
+						
+						for (int i=0;i<24;i++) {
+							
+							String imageName = "image"+(firstFrame + i)+".jpg";
+							
+							log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
+							
+							String outputMetaImageFullData = streamFolderName + flvRecordingMetaData.getFlvRecordingMetaDataId() 
+																+ File.separatorChar + imageName;
+							
+							//log.debug("outputMetaImageFullData :: "+outputMetaImageFullData);
+							
+							File outputMetaImageFullDataFile = new File(outputMetaImageFullData);
+							
+							if (!outputMetaImageFullDataFile.exists()) {
+								outputMetaImageFullData = defaultInterviewImage;
+							}
+							
+							if (flvRecordingMetaData.getInteriewPodId() == 1) {
+								interviewPod1Images[i] = outputMetaImageFullData;
+							} else if (flvRecordingMetaData.getInteriewPodId() == 2){
+								interviewPod2Images[i] = outputMetaImageFullData;
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				//Update Sequence Count
+				for (int i=0;i<24;i++) {
+					outputFrameNumbers[i] = sequenceCounter;
+					sequenceCounter++;
+				}
+				
+				
+				//Now we should have found the needed Images to calculate, in case not we add an empty black screen
+				for (int i=0;i<24;i++) {
+					
+					String outputImageName = outputImageMergedDate + "image" + outputFrameNumbers[i] + ".jpg";
+					
+					if (interviewPod1Images[i] == null) {
+						interviewPod1Images[i] = defaultInterviewImage;
+					}
+					if (interviewPod2Images[i] == null) {
+						interviewPod2Images[i] = defaultInterviewImage;
+					}
+					
+					String[] argv_imageMagick = new String[] { this.getPathToImageMagick(), "+append",
+							interviewPod1Images[i], interviewPod2Images[i], outputImageName  };
+	
+//					log.debug("START generateImageSequence ################# ");
+//					String iString = "";
+//					for (int k = 0; k < argv_imageMagick.length; k++) {
+//						iString += argv_imageMagick[k] + " ";
+//						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+//					}
+//					log.debug(iString);
+//					log.debug("END generateImageSequence ################# ");
+					
+					//log.debug("returnLog "+returnLog);
+					//log.debug("returnLog "+argv_imageMagick);
+					
+					returnLog.add(GenerateSWF.executeScript("generateImageSequence",
+												argv_imageMagick));
+				}
+				
+				currentTimeInMilliSeconds+=1000;
+				
+				log.debug("completeLengthInSeconds|currentTimeInMilliSeconds " + 
+											completeLengthInSeconds + "|" + currentTimeInMilliSeconds);
+				
+				if (currentTimeInMilliSeconds >= completeLengthInSeconds) {
+				
+					jobRunning = false;
+				
+				}
+				
+				
+			}
+			
+			//Generate Movie by sequence of Images
+			
+			String imagescomplete = outputImageMergedDate + "image%d.jpg";
+			
+			String[] argv_generatedMoview = null;
+			
+			String inputScreenFullFlv = streamFolderName + "COMPLETE_INTERVIEW_" 
+											+ flvRecording.getFlvRecordingId() + ".avi";
+
+			argv_generatedMoview = new String[] { this.getPathToFFMPEG(), "-i",
+					imagescomplete, "-r", "24", inputScreenFullFlv };
+
+			log.debug("START generateFullBySequenceFLV ################# ");
+			String tString2 = "";
+			for (int i = 0; i < argv_generatedMoview.length; i++) {
+				tString2 += argv_generatedMoview[i] + " ";
+				//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+			}
+			log.debug(tString2);
+			log.debug("END generateFullBySequenceFLV ################# ");
+
+			returnLog.add(GenerateSWF.executeScript("generateFullBySequenceFLV",
+					argv_generatedMoview));
+
 			
 			File outputFolder = new File(streamFolderGeneralName);
 			if (!outputFolder.exists()) {
@@ -532,54 +762,15 @@ public class FlvInterviewConverter {
 			// final1.flv
 
 			int flvWidth = 640;
-			int flvHeight = 480;
+			int flvHeight = 240;
 
-			if (flvRecording.getWidth() >= 1280
-					|| flvRecording.getWidth() <= 1600) {
-				Double scaleFactor = 2D;
-
-				log.debug("scaleFactor :: " + scaleFactor);
-
-				flvWidth = Double.valueOf(
-						Math.round(flvRecording.getWidth() / scaleFactor))
-						.intValue();
-				flvHeight = Double.valueOf(
-						Math.round(flvRecording.getHeight() / scaleFactor))
-						.intValue();
-
-			} else if (flvRecording.getWidth() > 640) {
-				Double scaleFactor = (Math.floor(flvRecording.getWidth() / 640)) + 1;
-
-				log.debug("scaleFactor :: " + scaleFactor);
-
-				flvWidth = Double.valueOf(
-						Math.round(flvRecording.getWidth() / scaleFactor))
-						.intValue();
-				flvHeight = Double.valueOf(
-						Math.round(flvRecording.getHeight() / scaleFactor))
-						.intValue();
-
-			}
-			
-			log.debug("flvWidth -1- "+flvWidth);
-			log.debug("flvHeight -1- "+flvHeight);
-			
-			flvWidth = Double.valueOf((Math.floor(flvWidth / 16)) * 16).intValue();
-			flvHeight = Double.valueOf((Math.floor(flvHeight / 16)) * 16).intValue();
-
-			log.debug("flvWidth -2- "+flvWidth);
-			log.debug("flvHeight -2- "+flvHeight);
-			
 			flvRecording.setFlvWidth(flvWidth);
 			flvRecording.setFlvHeight(flvHeight);
 
 			String[] argv_fullFLV = null;
 
 			argv_fullFLV = new String[] { this.getPathToFFMPEG(), "-i",
-					inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050",
-					"-acodec", "libmp3lame", "-ab", "32k", "-s",
-					flvWidth + "x" + flvHeight, "-vcodec", "flashsv", "-map",
-					"0.0", "-map", "1.0", outputFullFlv };
+					inputScreenFullFlv, "-i", outputFullWav, outputFullFlv };
 
 			log.debug("START generateFullFLV ################# ");
 			String tString = "";

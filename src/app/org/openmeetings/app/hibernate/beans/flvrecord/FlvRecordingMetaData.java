@@ -32,6 +32,8 @@ public class FlvRecordingMetaData {
 	
 	private Boolean audioIsValid;
 	
+	private Integer interiewPodId;
+	
 	/**
 	 *
 	 * @hibernate.id
@@ -227,6 +229,18 @@ public class FlvRecordingMetaData {
 	}
 	public void setAudioIsValid(Boolean audioIsValid) {
 		this.audioIsValid = audioIsValid;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="interiew_pod_id"
+     *  type="int"
+     */
+	public Integer getInteriewPodId() {
+		return interiewPodId;
+	}
+	public void setInteriewPodId(Integer interiewPodId) {
+		this.interiewPodId = interiewPodId;
 	}
 	
 	

@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
@@ -19,6 +23,10 @@ public class StreamScreenListener extends ListenerAdapter {
 	private int startTimeStamp = -1;
 	
 	private long byteCount = 0;
+
+	private Date startedSessionScreenTimeDate = null;
+
+	private long initialDelta = 0;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamScreenListener.class, "openmeetings");
 
@@ -34,6 +42,14 @@ public class StreamScreenListener extends ListenerAdapter {
 			
 			//We only are concerned about video at this moment
 			//if (streampacket.getDataType() == 9) {
+			
+			if (this.startedSessionScreenTimeDate == null) {
+				
+				this.startedSessionScreenTimeDate = new Date();
+				
+				this.initialDelta = this.startedSessionScreenTimeDate.getTime() - this.startedSessionTimeDate.getTime();
+				
+			}
 			
 				if (this.isClosed) {
 					//Already closed this One
@@ -57,7 +73,7 @@ public class StreamScreenListener extends ListenerAdapter {
 					
 					//Calculate the delta between the initial start and the first audio-packet data
 					
-					long delta = new Date().getTime() - this.startedSessionTimeDate.getTime();
+					long delta = new Date().getTime() - this.startedSessionScreenTimeDate .getTime();
 					
 					//That will be not bigger then long value
 					startTimeStamp = (int) (streampacket.getTimestamp() - delta);
@@ -109,6 +125,14 @@ public class StreamScreenListener extends ListenerAdapter {
 	public void closeStream() throws Exception {
 		if (writer != null && !this.isClosed) {
 			try {
+				
+				//Add Delta in the beginning, this Delta is the Gap between the
+				//device chosen and when the User hits the button in the Flash Security Warning
+				FlvRecordingMetaData flvRecordingMetaData = FlvRecordingMetaDataDaoImpl.getInstance().getFlvRecordingMetaDataById(this.flvRecordingMetaDataId);
+				
+				flvRecordingMetaData.setRecordStart(new Date(flvRecordingMetaData.getRecordStart().getTime() + this.initialDelta));
+				
+				FlvRecordingMetaDataDaoImpl.getInstance().updateFlvRecordingMetaData(flvRecordingMetaData);
 				
 				writer.close();
 				

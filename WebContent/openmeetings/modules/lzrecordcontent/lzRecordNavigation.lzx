@@ -192,6 +192,7 @@
             return;
         }
         if ($debug) Debug.write("selectItem",itemRef);
+        
         this.getFlvRecordingWithMetaData.doCall();
     </method>
     
@@ -201,7 +202,7 @@
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.parent.parentFolderId;</method></netparam>
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFlvRecordingWithMetaData: ",value);
+            if ($debug) Debug.write("getFlvRecordingWithMetaData: ");
             parent.setRecording(value);
         </handler>
     </netRemoteCallHib>   
@@ -249,7 +250,7 @@
     </method>
     
     <method name="playRecording">
-        if ($debug) Debug.write("playReording :: ",this.currentRecording);
+        if ($debug) Debug.write("playReording :: ");
         parent._recordingsViewBottom.showMetaData(this.currentRecording);
     </method>   
     
