@@ -2822,4 +2822,13 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="914" name="interview button recording">
     <value>Stop Recording</value>
   </string>
+  <string id="915" name="interview error message">
+    <value>The recording of the Interview is already started.</value>
+  </string>
+  <string id="916" name="interview error message">
+    <value>The recording is already stopped or not been started yet.</value>
+  </string>
+  <string id="917" name="interview recording message">
+    <value>The recording for this interview is already started!</value>
+  </string>
 </language>
