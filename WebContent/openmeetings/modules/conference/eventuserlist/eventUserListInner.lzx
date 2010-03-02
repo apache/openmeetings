@@ -2,11 +2,11 @@
 <library>
 
 <class name="innerlistViewEventUserListTable" extends="view" width="258" >
-    <wrappinglayout axis="x" spacing="4"/>
+    <wrappinglayout name="_layout" axis="x" spacing="4"/>
 </class>
  
 <class name="innerlistViewEventUserListTableWithNames" extends="view" width="258" >
-    <simplelayout axis="y" spacing="1" />
+    <simplelayout name="_layout" axis="y" spacing="1" />
 </class>
 
 <class name="eventUserListTable" extends="view" y="60" 
@@ -88,11 +88,25 @@
 	                });
             }
             
-            
-            //Broadcast the message about the new user to all participants
-            //FIXME => Why is this message called for every user of the meeting???
-            //canvas.thishib.setAudienceModus.doCall();
+            this.sortUserList();
         ]]>
+    </method>
+    
+    <method name="sortUserList">
+    	<![CDATA[ 
+    	
+    	   function sortByStreamId(a,b) {
+    	   	   
+        	   	if(Number(a.streamid) == Number(b.streamid)) return 0;
+                else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                else return -1;
+    	   	
+    	   }
+    	
+    	   this._table.innerList.subviews.sort(sortByStreamId);
+    	   this._table.innerList._layout.subviews.sort(sortByStreamId);
+           this._table.innerList._layout.update(); 
+    	]]>
     </method>
     
     <method name="initList">

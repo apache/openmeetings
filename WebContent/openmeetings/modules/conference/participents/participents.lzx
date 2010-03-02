@@ -10,39 +10,57 @@
 
     <method name="addItem" args="object">
         <![CDATA[
-        if ($debug) Debug.write("participentList addItem: ",object,object.publicSID);
-        
-        for (var i=0;i<this._table.innerList.subviews.length;i++) {
-            if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
-                //if ($debug) Debug.warn("Already on List, do not add twice");
-                return;
-            }
-        }
-        
-        var lastname = object.lastname;
-        
-        if ($debug) Debug.write("object.isSuperModerator ",object.isSuperModerator);
-        
-        if (object.isSuperModerator) {
-            lastname += " *";
-        }
-        
-        new lz.participentListItem(this._table.innerList,{
-                user_id:object.user_id,
-                isSuperModerator:object.isSuperModerator,
-                firstname:object.firstname,
-                lastname:lastname,
-                width:this.width-18,
-                refObj:object,
-                connectedSince:object.connectedSince,
-                isMod:object.isMod,
-                streamid:object.streamid,
-                username:object.username,
-                formatedDate:object.formatedDate
-            });
+            if ($debug) Debug.write("participentList addItem: ",object,object.publicSID);
             
+            for (var i=0;i<this._table.innerList.subviews.length;i++) {
+                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+                    //if ($debug) Debug.warn("Already on List, do not add twice");
+                    return;
+                }
+            }
+            
+            var lastname = object.lastname;
+            
+            if ($debug) Debug.write("object.isSuperModerator ",object.isSuperModerator);
+            
+            if (object.isSuperModerator) {
+                lastname += " *";
+            }
+            
+            new lz.participentListItem(this._table.innerList,{
+                    user_id:object.user_id,
+                    isSuperModerator:object.isSuperModerator,
+                    firstname:object.firstname,
+                    lastname:lastname,
+                    width:this.width-18,
+                    refObj:object,
+                    connectedSince:object.connectedSince,
+                    isMod:object.isMod,
+                    streamid:object.streamid,
+                    username:object.username,
+                    formatedDate:object.formatedDate
+                });
+            
+            this.sortUserList();
         ]]>
     </method>
+    
+    <method name="sortUserList">
+        <![CDATA[ 
+        
+           function sortByStreamId(a,b) {
+               
+                if(Number(a.streamid) == Number(b.streamid)) return 0;
+                else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                else return -1;
+            
+           }
+        
+           this._table.innerList.subviews.sort(sortByStreamId);
+           this._table.innerList._layout.subviews.sort(sortByStreamId);
+           this._table.innerList._layout.update(); 
+        ]]>
+    </method>    
     
     <method name="clearList">
         this._table.destroy();
@@ -106,8 +124,10 @@
     
 </class>
 
-<class name="innerlistViewParticipentsTable" extends="view" layout="axis:y;spacing:0" 
-    width="258" bgcolor="$once{ canvas.basebgcolorizer }" />
+<class name="innerlistViewParticipentsTable" extends="view" 
+    width="258" bgcolor="$once{ canvas.basebgcolorizer }" >
+	<simplelayout name="_layout" axis="y" spacing="0" />
+</class>
     
 <class name="participentsTable" extends="view" height="${ parent.height-24 }" 
     bgcolor="white" x="2" y="2" clip="true" width="$once{ parent.width-4 }" >

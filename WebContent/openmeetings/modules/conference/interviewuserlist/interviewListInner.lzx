@@ -36,8 +36,6 @@
             	}
             }
             
-            canvas.currentusercolor = this.getColorForUser();
-            
             var lastname = object.lastname;
 	        if (object.isSuperModerator) {
 	            lastname += " *";
@@ -55,11 +53,28 @@
     	            username:object.username,
     	            formatedDate:object.formatedDate
                 });
-                
-            //Broadcast the message about the new user to all participants
-            canvas.thishib.setAudienceModus.doCall();
+            
+            this.sortUserList();
         ]]>
     </method>
+    
+    <method name="sortUserList">
+        <![CDATA[ 
+        
+           function sortByStreamId(a,b) {
+               
+                if(Number(a.streamid) == Number(b.streamid)) return 0;
+                else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                else return -1;
+            
+           }
+        
+           this._table.innerList.subviews.sort(sortByStreamId);
+           this._table.innerList._layout.subviews.sort(sortByStreamId);
+           this._table.innerList._layout.update(); 
+        ]]>
+    </method>
+        
     
     <method name="initList">
     	new lz.interviewListTable(this,{name:'_table'});
