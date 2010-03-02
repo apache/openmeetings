@@ -700,7 +700,7 @@
 			position a newly connected user has => this comment is deprecated! swagner 10.08.2009
 			
 			currentuserpos => is no more important
-		 -->
+		
         <netRemoteCallHib name="setAudienceModus" funcname="setAudienceModus">
             <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>        
             <netparam><method name="getValue">return canvas.currentuserpos;</method></netparam>      
@@ -709,8 +709,8 @@
                 if ($debug) Debug.write("setAudienceModus: ",value);                   
             </handler>  
         </netRemoteCallHib>
-        
-        <!--- Notification of new User -->
+         
+          Notification of new User
         <netRemoteCallHib name="setAudienceModusClient" funcname="setAudienceModusClient">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
@@ -718,7 +718,18 @@
                 canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value); 
                 canvas.setAttribute('numberofpartners',canvas.getAttribute('numberofpartners')+1);                              
             </handler>  
-        </netRemoteCallHib>      
+        </netRemoteCallHib>  
+         -->   
+         
+        <!--- Notification of new User --> 
+        <netRemoteCallHib name="addNewUser" funcname="addNewUser">
+            <handler name="ondata" args="value">
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("addNewUser: ",value);    
+                canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value); 
+                canvas.setAttribute('numberofpartners',canvas.getAttribute('numberofpartners')+1);                              
+            </handler>  
+        </netRemoteCallHib>    
         
         <netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
             <handler name="ondata" args="value">

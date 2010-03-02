@@ -194,7 +194,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 	
 	@Override
-	public synchronized boolean roomJoin(IClient client, IScope room) {
+	public boolean roomJoin(IClient client, IScope room) {
 		log.debug("roomJoin : ");
 		
 		try {
@@ -1310,10 +1310,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * This function is called once a User enters a Room
 	 * 
 	 * @param room_id
+	 * @param colorObj 
 	 * @return
 	 */
 	public synchronized HashMap<String,RoomClient> setRoomValues(Long room_id, 
-			Boolean becomeModerator, Boolean isSuperModerator){
+			Boolean becomeModerator, Boolean isSuperModerator, Long organization_id, 
+			String colorObj){
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -1321,6 +1323,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			currentClient.setRoom_id(room_id);
 			currentClient.setRoomEnter(new Date());
+			currentClient.setOrganization_id(organization_id);
+			
+			currentClient.setUsercolor(colorObj);
 			
 			//This can be set without checking for Moderation Flag
 			currentClient.setIsSuperModerator(isSuperModerator);
@@ -1587,6 +1592,33 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 			
 			
+			//Notify all clients of the same scope (room)
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							if (conn.equals(current)){
+								continue;
+							} else {				
+								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
+									//log.debug("*** setAudienceModus Found Client to " + conn);
+									//log.debug("*** setAudienceModus Found Client to " + conn.getClient());
+									if (conn instanceof IServiceCapableConnection) {
+										((IServiceCapableConnection) conn).invoke("addNewUser",new Object[] { currentClient }, this);
+										log.debug("sending addNewUser to " + conn);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			
 			return clientListRoom;
 		} catch (Exception err){
 			log.error("[setRoomValues]",err);
@@ -1748,7 +1780,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 	
-
+	/**
+	 * 
+	 * @param colorObj
+	 * @param userPos
+	 * @deprecated
+	 * @return
+	 */
 	public synchronized int setAudienceModus(String colorObj, int userPos){
 		try {
 			IConnection current = Red5.getConnectionLocal();

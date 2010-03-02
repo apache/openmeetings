@@ -55,10 +55,6 @@
             	}
             }
             
-            //FIXME: Maybe the first user should always get the same
-            //color this._table.innerList.subviews.length
-            canvas.currentusercolor = this.getColorForUser();
-            
             var lastname = object.lastname;
 	        if (object.isSuperModerator) {
 	            lastname += " *";
@@ -91,8 +87,11 @@
 	    	            formatedDate:object.formatedDate
 	                });
             }
+            
+            
             //Broadcast the message about the new user to all participants
-            canvas.thishib.setAudienceModus.doCall();
+            //FIXME => Why is this message called for every user of the meeting???
+            //canvas.thishib.setAudienceModus.doCall();
         ]]>
     </method>
     

@@ -331,6 +331,27 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
+	public void updateFlvRecordingOrganization(Long flvRecordingId, Long organization_id) {
+		try {
+			
+			FlvRecording fId = this.getFlvRecordingById(flvRecordingId);
+			
+			fId.setOrganization_id(organization_id);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			session.update(fId);
+			session.flush();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (HibernateException ex) {
+			log.error("[deleteFileExplorerItem]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[deleteFileExplorerItem]: ",ex2);
+		}
+	}
 	
 	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {
 		try {

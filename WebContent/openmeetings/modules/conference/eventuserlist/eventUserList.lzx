@@ -68,6 +68,18 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
+                canvas.currentusercolor = parent._participents.getColorForUser();
+                
+                var organisation_id = 1;
+            
+                if ($debug) Debug.write(hib.userobject); 
+                if ($debug) Debug.write(hib.currentdomainObj); 
+                
+                if (hib.currentdomainObj != null) {
+                    organisation_id = hib.currentdomainObj.organisation_id
+                }
+                
+                this.parent.setRoomValues.organisation_id = organisation_id;
 	            this.parent.setRoomValues.doCall();
             
             ]]>
@@ -76,9 +88,12 @@
 
   	<netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
     	<attribute name="applyDefaultModeration" value="false" type="boolean" />
+    	<attribute name="organisation_id" value="0" type="number" />
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
+        <netparam><method name="getValue">return parent.organisation_id;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
 		<handler name="ondata" args="value">
 			//The onResult-Handler will be called be the rtmpconnection
 			//if ($debug) Debug.write("setRoomValues1: ",value);
