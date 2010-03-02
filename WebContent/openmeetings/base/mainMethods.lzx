@@ -224,6 +224,11 @@
             hib.protocollName = "rtmps";
             hib.protocollPort = canvas.rtmpsslport;
         }
+        
+        var directRoomId = lz.Browser.getInitArg('directRoomId');
+        if (directRoomId != undefined){
+        	hib.userScope = directRoomId;
+        }
 	
 		//Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost);	
 		var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;

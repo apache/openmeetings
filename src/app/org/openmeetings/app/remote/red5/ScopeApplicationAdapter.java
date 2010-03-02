@@ -523,7 +523,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * 
 	 */
 	@Override
-	public synchronized void roomLeave(IClient client, IScope room) {
+	public void roomLeave(IClient client, IScope room) {
 		try {
 			
 			log.debug("roomLeave " + client.getId() + " "+ room.getClients().size() + " " + room.getContextPath() + " "+ room.getName());

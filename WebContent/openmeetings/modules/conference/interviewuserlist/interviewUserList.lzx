@@ -21,13 +21,19 @@
         // Reconnect User to its Room Id
         canvas.thishib.userScope = canvas.thishib.currentroomid;
         var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
-        canvas.thishib.setAttribute('src',src);
         
         if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
         
-        canvas.thishib.reconnectionAction = true;
-        canvas.thishib.reconnectObjRef = this;
-        canvas.thishib.disconnect();
+        if (canvas.thishib.src != src) {
+            canvas.thishib.setAttribute('src',src);
+            
+            canvas.thishib.reconnectionAction = true;
+            canvas.thishib.reconnectObjRef = this;
+            canvas.thishib.disconnect();
+        } else {
+            //The user is already in the correct Scope
+            this.reconnectSuccess();
+        }
 	</handler>
                   
     <method name="reconnectSuccess">
