@@ -31,10 +31,10 @@ public class GenerateSWF {
 		return instance;
 	}
 
-	final static boolean isPosix = System.getProperty("os.name").toUpperCase()
+	public final static boolean isPosix = System.getProperty("os.name").toUpperCase()
 			.indexOf("WINDOWS") == -1;
 	
-	final static String execExt = isPosix ? "" : ".exe"; 
+	public final static String execExt = isPosix ? "" : ".exe"; 
 
 	public static HashMap<String, Object> executeScript(String process, String[] argv) {
 		HashMap<String, Object> returnMap = new HashMap<String, Object>();
@@ -43,14 +43,21 @@ public class GenerateSWF {
 		log.debug("args: " + Arrays.toString(argv));
 		
 		try {
-			Runtime rt = Runtime.getRuntime();
+			//Runtime rt = Runtime.getRuntime();
 			returnMap.put("command", Arrays.toString(argv));
 			
 			//By using the process Builder we have access to modify the environment variables
 			//that is handy to set variables to run it inside eclipse
 			ProcessBuilder pb = new ProcessBuilder(argv);
 			
-			Map<String, String> env = pb.environment();
+			//Map<String, String> env = pb.environment();
+			
+			
+//			System.out.println("key "+"pb.toString"+" value "+pb.toString());
+//			
+//			System.out.println("key "+"os.name"+" value "+System.getProperty("os.name").toUpperCase());
+//			System.out.println("key "+"isPosix"+" value "+isPosix);
+//			System.out.println("key "+"execExt"+" value "+execExt);
 			
 //			for (Iterator<String> iter = env.keySet().iterator();iter.hasNext();) {
 //				String key = iter.next();
@@ -71,6 +78,8 @@ public class GenerateSWF {
 			InputStreamWatcher inputWatcher = new InputStreamWatcher(proc);
 			errorWatcher.start();
 			worker.start();
+			
+			
 			inputWatcher.start();
 			try 
 			{

@@ -1,6 +1,11 @@
 package org.openmeetings.app.data.flvrecord.converter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,20 +15,14 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
-import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.crypt.MD5;
+import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
 public class FlvInterviewConverter {
 
@@ -119,7 +118,7 @@ public class FlvInterviewConverter {
 		if (!pathToImageMagick.equals("") && !pathToImageMagick.endsWith(File.separator)) {
 			pathToImageMagick += File.separator;
 		}
-		pathToImageMagick += "convert";
+		pathToImageMagick += "convert"+GenerateSWF.execExt;
 		return pathToImageMagick;
 	}
 
@@ -687,23 +686,29 @@ public class FlvInterviewConverter {
 						interviewPod2Images[i] = defaultInterviewImage;
 					}
 					
-					String[] argv_imageMagick = new String[] { this.getPathToImageMagick(), "+append",
-							interviewPod1Images[i], interviewPod2Images[i], outputImageName  };
-	
-//					log.debug("START generateImageSequence ################# ");
-//					String iString = "";
-//					for (int k = 0; k < argv_imageMagick.length; k++) {
-//						iString += argv_imageMagick[k] + " ";
-//						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-//					}
-//					log.debug(iString);
-//					log.debug("END generateImageSequence ################# ");
-					
-					//log.debug("returnLog "+returnLog);
-					//log.debug("returnLog "+argv_imageMagick);
-					
-					returnLog.add(GenerateSWF.executeScript("generateImageSequence",
-												argv_imageMagick));
+					if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
+						String[] argv_imageMagick = new String[] { this.getPathToImageMagick(), "+append",
+								interviewPod1Images[i], interviewPod2Images[i], outputImageName  };
+		
+	//					log.debug("START generateImageSequence ################# ");
+	//					String iString = "";
+	//					for (int k = 0; k < argv_imageMagick.length; k++) {
+	//						iString += argv_imageMagick[k] + " ";
+	//						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+	//					}
+	//					log.debug(iString);
+	//					log.debug("END generateImageSequence ################# ");
+						
+						//log.debug("returnLog "+returnLog);
+						//log.debug("returnLog "+argv_imageMagick);
+						
+						returnLog.add(GenerateSWF.executeScript("generateImageSequence",
+													argv_imageMagick));
+					} else {
+						
+						returnLog.add(this.processImageWindows(interviewPod1Images[i], interviewPod2Images[i], outputImageName));
+						
+					}
 				}
 				
 				currentTimeInMilliSeconds+=1000;
@@ -858,5 +863,67 @@ public class FlvInterviewConverter {
 			log.error("[stripAudioFromFLVs]", err);
 		}
 	}
+	
+	public HashMap<String,Object> processImageWindows(String file1, String file2, String file3) {
+        HashMap<String,Object> returnMap = new HashMap<String,Object>();
+        returnMap.put("process", "processImageWindows");
+        try {
+                
+                //Init variables
+                String[] cmd;
+                String executable_fileName = "";        
+                String pathToIMagick = this.getPathToImageMagick();
+                
+                String runtimeFile = "interviewMerge.bat";
+                executable_fileName = ScopeApplicationAdapter.batchFileFir
+                			 + new Date().getTime() + runtimeFile;
+                
+                cmd = new String[4];
+                cmd[0] = "cmd.exe";
+                cmd[1] = "/C";
+                cmd[2] = "start";
+                cmd[3] = executable_fileName;
+                
+                log.debug("executable_fileName: "+executable_fileName);
+                
+                //Create the Content of the Converter Script (.bat or .sh File)
+                String fileContent = pathToIMagick +
+                                " " + file1 +
+                                " " + file2 +
+                                " " + "+append" +
+                                " " + file3 +
+                                ScopeApplicationAdapter.lineSeperator + "exit";
+                        
+                //execute the Script
+                FileOutputStream fos = new FileOutputStream(executable_fileName);
+                fos.write(fileContent.getBytes());
+                fos.close();
+                
+                Runtime rt = Runtime.getRuntime();                      
+                returnMap.put("command", cmd.toString());
+                Process proc = rt.exec(cmd);
+                
+                InputStream stderr = proc.getErrorStream();
+                InputStreamReader isr = new InputStreamReader(stderr);
+                BufferedReader br = new BufferedReader(isr);
+                String line = null;
+                String error = "";
+                while ((line = br.readLine()) != null){
+                        error += line;
+                        log.debug("line: "+line);
+                }
+                returnMap.put("error", error);
+                int exitVal = proc.waitFor();
+                log.debug("exitVal: "+exitVal);
+                returnMap.put("exitValue", exitVal);
+                return returnMap;
+        } catch (Throwable t) {
+                t.printStackTrace();
+                returnMap.put("error", t.getMessage());
+                returnMap.put("exitValue", -1);
+                return returnMap;
+        }
+}
+	
 
 }

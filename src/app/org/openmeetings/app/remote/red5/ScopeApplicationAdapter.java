@@ -23,6 +23,7 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
@@ -77,7 +78,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private FLVRecorderService flvRecorderService = null;
 
 	//This is the Folder where all executables are written
-	//TODO:fix hardcoded name of webapp
+	//for windows platform
 	public static String batchFileFir = "webapps"+File.separatorChar
 									+"ROOT"+File.separatorChar
 									+"jod" + File.separatorChar;
@@ -138,7 +139,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//System.out.println("Custom Webapp start UP "+new Date());
 			
 			webAppPath = scope.getResource("/").getFile().getAbsolutePath();
+			batchFileFir = webAppPath + File.separatorChar + "streams" + File.separatorChar;
+			
 			log.debug("webAppPath : "+webAppPath);
+			log.debug("batchFileFir : "+batchFileFir);
 			//batchFileFir = webAppPath + File.separatorChar + "jod" + File.separatorChar;
 			
 			//Only load this Class one time
