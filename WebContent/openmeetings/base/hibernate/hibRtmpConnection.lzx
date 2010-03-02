@@ -456,8 +456,14 @@
                 if ($debug) Debug.write("markSessionAsLogedIn5 ",canvas.remoteUserLogin);
                 if ($debug) Debug.write("markSessionAsLogedIn6 ",canvas.directUserLogin);
                 if ($debug) Debug.write("markSessionAsLogedIn7 ",canvas.directRoomId);
+                if ($debug) Debug.write("markSessionAsLogedIn8 ",canvas.secureRemoteUserLogin);
+                
                 if (canvas.secureRemoteUserLogin) {
+                	
+                    if ($debug) Debug.write("markSessionAsLogedIn == CALL ",canvas.secureHash);
+                 
                 	parent.secureLoginByRemote.doCall();
+                	
                 } else if (canvas.isinitRoomDirect){
                 	parent.getInvitationByHash.doCall();   
                 } else if (canvas.remoteUserLogin) {

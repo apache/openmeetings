@@ -225,9 +225,9 @@
             hib.protocollPort = canvas.rtmpsslport;
         }
         
-        var directRoomId = lz.Browser.getInitArg('directRoomId');
-        if (directRoomId != undefined){
-        	hib.userScope = directRoomId;
+        var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');
+        if (scopeRoomId != undefined){
+        	hib.userScope = scopeRoomId;
         }
 	
 		//Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost);	

@@ -374,6 +374,9 @@ public class MainService implements IPendingServiceCallback {
     public Object secureLoginByRemote(String secureHash) {
     	try {
     		
+    		log.debug("############### secureLoginByRemote "+secureHash);
+    		System.out.println("############### secureLoginByRemote "+secureHash);
+    		
     		String clientURL = Red5.getConnectionLocal().getRemoteAddress();
     		
     		log.debug("swfURL "+clientURL);
