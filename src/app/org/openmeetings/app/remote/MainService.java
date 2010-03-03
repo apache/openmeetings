@@ -407,15 +407,24 @@ public class MainService implements IPendingServiceCallback {
 			} else {
 				
 				soapLogin.setUsed(true);
+				soapLogin.setUseDate(new Date());
 				
 				soapLogin.setClientURL(clientURL);
 				
 				SOAPLoginDAO.getInstance().updateSOAPLogin(soapLogin);
 				
-				//Hide the admin session Hash from the public user
-				soapLogin.setSessionHash("****");
+				//Create Return Object and hide the validated 
+				//sessionHash that is stored server side
+				//this hash should be never thrown back to the user
 				
-				return soapLogin;
+				SOAPLogin returnSoapLogin = new SOAPLogin();
+				
+				returnSoapLogin.setRoom_id(soapLogin.getRoom_id());
+				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
+				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
+				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
+                
+				return returnSoapLogin;
 				
 			}
     			
