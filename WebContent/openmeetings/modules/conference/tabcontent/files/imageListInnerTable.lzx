@@ -106,7 +106,7 @@
 			  <netparam><method name="getValue">return parent.String1;</method></netparam>
 	        <handler name="ondata" args="value">	
 				<![CDATA[
-					Debug.write("  loadwmlObjectToStage ",value); 
+					if ($debug) Debug.write("  loadwmlObjectToStage ",value); 
 					canvas._drawarea.loadwmlObjectToStage(value,this.String1,hib.currentroomid,hib.conferencedomain,true,false);
 				]]>       	     				
 	        </handler>	
@@ -114,10 +114,12 @@
         
         
         <method name="loadSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+            if ($debug) Debug.write("loadSWFPresentation");
             canvas._drawarea.loadSWFPresentationSynced(url,fileName,moduleName,parentPath,room,domain,slideNumber,"");
         </method>
         
         <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
+            if ($debug) Debug.write("checkSWFPresentation");
             return canvas._drawarea.checkSWFPresentation(url,fileName,moduleName,parentPath,room,domain,slideNumber);
         </method>
         
@@ -129,10 +131,11 @@
                         tWhiteBoard = this.subviews[i].checkSWFPresentation(slideNumber);
                         if (!tWhiteBoard) {
                             this.subviews[i].addSWFPresentation(slideNumber);
+                            break;
                         }
                     }
                 }
-                Debug.write("tWhiteBoard: ",tWhiteBoard);
+                if ($debug) Debug.write("tWhiteBoard: ",tWhiteBoard);
             ]]>
         </method>
 		 	 

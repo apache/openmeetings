@@ -6,19 +6,19 @@ import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 
 public class WhiteboardSyncLockObject {
 	
-	private RoomClient roomclient;
+	private String publicSID;
 	private boolean isInitialLoaded = false;
 	private boolean isCurrentLoadingItem = false;
 	
 	private Date addtime;
 	private Date starttime;
 
-	public RoomClient getRoomclient() {
-		return roomclient;
+	public String getPublicSID() {
+		return publicSID;
 	}
 
-	public void setRoomclient(RoomClient roomclient) {
-		this.roomclient = roomclient;
+	public void setPublicSID(String publicSID) {
+		this.publicSID = publicSID;
 	}
 
 	public boolean isInitialLoaded() {

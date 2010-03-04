@@ -1932,7 +1932,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @param whiteboardObj
 	 * @return
 	 */
-	public synchronized int sendVars(ArrayList whiteboardObjParam) {
+	public synchronized void sendVars(ArrayList whiteboardObjParam) {
 		//
 		try {
 			
@@ -1959,7 +1959,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			
 			if (currentClient == null) {
-				return -1;
+				return;
 			}
 			
 			Long room_id = currentClient.getRoom_id();	
@@ -1986,7 +1986,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						//continue;
+	    						continue;
 	    					} else {
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
@@ -1995,17 +1995,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
 									numberOfUsers++;
 								}
-								//log.debug("sending sendVarsToWhiteboard to " + conn);
-								if (rcl.getIsRecording()){
-									StreamService.addWhiteBoardEvent(rcl.getRoomRecordingName(),whiteboardObj);
-								}	
 							}
 						}
 					}						
 				}
 			}			
 			
-			return numberOfUsers;
+			//return numberOfUsers;
 			//} else {
 			//	// log.debug("*..*you are not allowed to send: "+ismod);
 			//	return -1;
@@ -2013,7 +2009,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		} catch (Exception err) {
 			log.error("[sendVars]",err);
 		}
-		return -1;
 	}
 	
 
