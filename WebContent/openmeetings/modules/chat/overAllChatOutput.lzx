@@ -31,7 +31,7 @@
     
     <method name="addChatHistory" args="value,client">
         <![CDATA[
-            if($debug) Debug.write("overAllChatOutput/addChatHistory: ",value,client);
+            //if($debug) Debug.write("overAllChatOutput/addChatHistory: ",value,client);
             //is Right To Left ? not checked for the moment
             if (value[7]){
                 var username = client.firstname+" "+client.lastname;
@@ -40,15 +40,18 @@
             }
             var messageObj = value[9];
             //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
-            if($debug) Debug.write("overAllChatOutput/messageObj: ",messageObj);
+            //if($debug) Debug.write("overAllChatOutput/messageObj: ",messageObj);
             var usercolor = value[5];
+            
             if ( usercolor==null || usercolor==0 || usercolor.length==0 )usercolor=0xCCCCCC;
+            
             new lz.chatTabItemEmoticons(this._cbtext,{
 	                messageObj:messageObj,user_id:value[8],
 	                usercolor:usercolor,
 	                username:username,
 	                usertime:value[1]
                 });
+                
             this.setScrollToMax();              
         ]]> 
     </method>           
