@@ -420,7 +420,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		}
 	}
 	
-	public Long stopRecordAndSave(IScope scope, RoomClient currentClient){
+	public Long stopRecordAndSave(IScope scope, RoomClient currentClient, Long storedFlvRecordingId){
 		try {
 			log.debug("stopRecordAndSave "+currentClient.getUsername()+","+currentClient.getUserip());
 			
@@ -469,6 +469,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			//Store to database
 			Long flvRecordingId = currentClient.getFlvRecordingId();
+			
+			//In the Case of an Interview the stopping client does not mean that its actually the recording client
+			if (storedFlvRecordingId != null) {
+				flvRecordingId = storedFlvRecordingId;
+			}
 			
 			if (flvRecordingId != null) {
 			

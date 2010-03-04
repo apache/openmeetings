@@ -322,7 +322,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						}
 					}
 					
-					this.flvRecorderService.stopRecordAndSave(current.getScope(), currentClient);
+					this.flvRecorderService.stopRecordAndSave(current.getScope(), currentClient, null);
 					
 					currentClient.setStartRecording(false);
 					currentClient.setIsRecording(false);
@@ -631,7 +631,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				log.debug("*** roomLeave Current Client is Recording - stop that");
 				//StreamService.stopRecordAndSave(currentScope, currentClient.getRoomRecordingName(), currentClient);
 				
-				this.flvRecorderService.stopRecordAndSave(currentScope, currentClient);
+				this.flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
 				
 				//set to true and overwrite the default one cause otherwise no notification is send
 				currentClient.setIsRecording(true);
@@ -2748,6 +2748,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IConnection current = Red5.getConnectionLocal();
 			
 			boolean found = false;
+			Long flvRecordingId = null;
 			
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -2757,6 +2758,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 						
 						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							
+							flvRecordingId = rcl.getFlvRecordingId();
+							
 							found = true;
 						}
 						
@@ -2776,7 +2780,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			currentClient.setIsRecording(false);
 			this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 			
-			this.flvRecorderService.stopRecordAndSave(scope, currentClient);
+			this.flvRecorderService.stopRecordAndSave(scope, currentClient, flvRecordingId);
 			
 			Map<String,String> interviewStatus = new HashMap<String,String>();
 			interviewStatus.put("action", "stop");
