@@ -414,7 +414,7 @@
                     if (this.newSlideNumber>0 && this.newSlideNumber<=this.ObjectByName._swfView.totalframes){
                         this.ObjectByName._swfView.setAttribute('frame',this.newSlideNumber);
                     } else {
-                        Debug.warn("Slide Number out of range of that document TotalFrames: ",this.ObjectByName._swfView.totalframes);
+                        if ($debug) Debug.warn("Slide Number out of range of that document TotalFrames: ",this.ObjectByName._swfView.totalframes);
                     }
                 }
                 this.ObjectByName.slideNumber =  this.ObjectByName._swfView.frame;
