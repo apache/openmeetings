@@ -196,7 +196,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public int sendCompletedSyncEvent() {
+	public void sendCompletedSyncEvent() {
 		try {
 			
 			IConnection current = Red5.getConnectionLocal();
@@ -210,10 +210,10 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			
 			if (wSyncLockObject == null) {
 				log.error("WhiteboardSyncLockObject not found for this Client "+syncListRoom);
-				return -2;
+				return;
 			} else if (!wSyncLockObject.isCurrentLoadingItem()) {
 				log.warn("WhiteboardSyncLockObject was not started yet "+syncListRoom);
-				return -3;
+				return;
 			} else {
 				syncListRoom.remove(currentClient.getPublicSID());
 				this.whiteBoardObjectListManager.setWhiteBoardSyncListByRoomid(room_id, syncListRoom);
@@ -240,9 +240,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 							}			
 						}
 					}	
-					return returnVal;
+					//return returnVal;
 				} else {
-					return -4;
+					return;
 				}
 			}
 			
@@ -250,7 +250,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		} catch (Exception err) {
 			log.error("[sendCompletedSyncEvent]",err);
 		}
-		return -1;
+		return;
 	}
 	
 	private int getNumberOfInitialLoaders(Map<String,WhiteboardSyncLockObject> syncListRoom) throws Exception {
