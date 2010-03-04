@@ -590,11 +590,11 @@ public class FlvInterviewConverter {
 			}
 			
 			//Create Folder for the output Image Sequence
-			String outputImageMergedDate = streamFolderName + "INTERVIEW_" 
+			String outputImageMergedData = streamFolderName + "INTERVIEW_" 
 												+ flvRecording.getFlvRecordingId() + File.separatorChar;
 			
 			//Merged Image Folder
-			File outputImageMergedDateFolder = new File(outputImageMergedDate);
+			File outputImageMergedDateFolder = new File(outputImageMergedData);
 			outputImageMergedDateFolder.mkdir();
 			
 			//Generate the Single Image by sequencing
@@ -642,7 +642,7 @@ public class FlvInterviewConverter {
 							
 							String imageName = "image"+(firstFrame + i)+".jpg";
 							
-							log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
+							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
 							
 							String outputMetaImageFullData = streamFolderName + flvRecordingMetaData.getFlvRecordingMetaDataId() 
 																+ File.separatorChar + imageName;
@@ -677,7 +677,7 @@ public class FlvInterviewConverter {
 				//Now we should have found the needed Images to calculate, in case not we add an empty black screen
 				for (int i=0;i<24;i++) {
 					
-					String outputImageName = outputImageMergedDate + "image" + outputFrameNumbers[i] + ".jpg";
+					String outputImageName = outputImageMergedData + "image" + outputFrameNumbers[i] + ".jpg";
 					
 					if (interviewPod1Images[i] == null) {
 						interviewPod1Images[i] = defaultInterviewImage;
@@ -727,7 +727,7 @@ public class FlvInterviewConverter {
 			
 			//Generate Movie by sequence of Images
 			
-			String imagescomplete = outputImageMergedDate + "image%d.jpg";
+			String imagescomplete = outputImageMergedData + "image%d.jpg";
 			
 			String[] argv_generatedMoview = null;
 			
@@ -858,11 +858,38 @@ public class FlvInterviewConverter {
 					audio.delete();
 				}
 			}
+			
+			//Delete all Image temp dirs
+			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
+				String outputMetaImageFullData = streamFolderName 
+								+ flvRecordingMetaData.getFlvRecordingMetaDataId() 
+								+ File.separatorChar ;
+					
+				this.deleteDirectory(new File(outputMetaImageFullData));
+			}
+			
+			this.deleteDirectory(new File(outputImageMergedData));
 
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
 		}
 	}
+	
+	public boolean deleteDirectory(File path) throws Exception {
+	    if( path.exists() ) {
+	      File[] files = path.listFiles();
+	      for(int i=0; i<files.length; i++) {
+	         if(files[i].isDirectory()) {
+	           deleteDirectory(files[i]);
+	         }
+	         else {
+	           files[i].delete();
+	         }
+	      }
+	    }
+	    return( path.delete() );
+	  }
+
 	
 	public HashMap<String,Object> processImageWindows(String file1, String file2, String file3) {
         HashMap<String,Object> returnMap = new HashMap<String,Object>();
@@ -876,15 +903,15 @@ public class FlvInterviewConverter {
                 
                 String runtimeFile = "interviewMerge.bat";
                 executable_fileName = ScopeApplicationAdapter.batchFileFir
-                			 + new Date().getTime() + runtimeFile;
+                			 + runtimeFile;
                 
-                cmd = new String[4];
-                cmd[0] = "cmd.exe";
-                cmd[1] = "/C";
-                cmd[2] = "start";
-                cmd[3] = executable_fileName;
+                cmd = new String[1];
+                //cmd[0] = "cmd.exe";
+                //cmd[1] = "/C";
+                //cmd[2] = "start";
+                cmd[0] = executable_fileName;
                 
-                log.debug("executable_fileName: "+executable_fileName);
+                //log.debug("executable_fileName: "+executable_fileName);
                 
                 //Create the Content of the Converter Script (.bat or .sh File)
                 String fileContent = pathToIMagick +
@@ -894,6 +921,11 @@ public class FlvInterviewConverter {
                                 " " + file3 +
                                 ScopeApplicationAdapter.lineSeperator + "exit";
                         
+                File previous = new File(executable_fileName);
+                if (previous.exists()) {
+                	previous.delete();
+        		}
+                
                 //execute the Script
                 FileOutputStream fos = new FileOutputStream(executable_fileName);
                 fos.write(fileContent.getBytes());
@@ -910,11 +942,11 @@ public class FlvInterviewConverter {
                 String error = "";
                 while ((line = br.readLine()) != null){
                         error += line;
-                        log.debug("line: "+line);
+                        //log.debug("line: "+line);
                 }
                 returnMap.put("error", error);
                 int exitVal = proc.waitFor();
-                log.debug("exitVal: "+exitVal);
+                //log.debug("exitVal: "+exitVal);
                 returnMap.put("exitValue", exitVal);
                 return returnMap;
         } catch (Throwable t) {

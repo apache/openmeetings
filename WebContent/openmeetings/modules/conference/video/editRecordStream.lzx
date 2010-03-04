@@ -139,8 +139,14 @@
 			//Microphone.set
 			if (canvas.vaquality=="best") {
 				_micro.setRate(canvas.microphoneRateBest);
-				if ($debug) Debug.write("_camera.setQuality BEST: ",canvas.bandwidthNeededBest,canvas.camQualityBest);
-				_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+				if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
+				if (this.isInterview) {
+					if ($debug) Debug.warn("IS INTERVIEW ");
+				    _camera.setQuality(0,100);
+				} else {
+					if ($debug) Debug.warn("IS NO INTERVIEW ");
+					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+				}
 			} else {
 				_micro.setRate(canvas.microphoneRateNormal);
 				_micro.setSilenceLevel(canvas.loudnessAcitviation);
@@ -324,7 +330,30 @@
         </handler>         
     </labelCheckbox>
     
-    <simpleLabelButton fontsize="11" labelid="54" x="190" y="180" width="100">
+    <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }" 
+                       labelid="54" x="80" y="180" width="100">
+        <handler name="onclick">
+            this.parent.storelocaldata();
+            this.parent.chosenCam = parent.availibleCams.getValue();
+            this.parent.chosenMic = parent.availibleMics.getValue();
+            this.parent.chosenSetting = parent.availibleSettings.getValue();      
+            this.parent.remoteMessage = new Array();
+            this.parent.remoteMessage[0] = 'avsettings';
+            this.parent.remoteMessage[1] = "0";
+            this.parent.remoteMessage[2] = this.parent.chosenSetting;               
+            this.parent.getBroadCastId.doCall();
+        </handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }" 
+                       labelid="915" x="190" y="180" width="100">
+        <handler name="onclick">
+            this.close();
+        </handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton fontsize="11" visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }" 
+    				   labelid="54" x="190" y="180" width="100">
         <handler name="onclick">
         	this.parent.storelocaldata();
         	this.parent.chosenCam = parent.availibleCams.getValue();

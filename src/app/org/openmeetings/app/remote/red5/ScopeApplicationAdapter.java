@@ -2759,7 +2759,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						
 						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
 							
+							rcl.setIsRecording(false);
+							
 							flvRecordingId = rcl.getFlvRecordingId();
+							
+							rcl.setFlvRecordingId(null);
+							
+							//Reset the Recording Flag to Record all Participants that enter later
+							this.clientListManager.updateClientByStreamId(conn.getClient().getId(), rcl);
 							
 							found = true;
 						}
@@ -2774,11 +2781,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			
-			//String publicSID = currentClient.getPublicSID();
-			
-			//Also set the Recording Flag to Record all Participants that enter later
-			currentClient.setIsRecording(false);
-			this.clientListManager.updateClientByStreamId(current.getClient().getId(), currentClient);
 			
 			this.flvRecorderService.stopRecordAndSave(scope, currentClient, flvRecordingId);
 			

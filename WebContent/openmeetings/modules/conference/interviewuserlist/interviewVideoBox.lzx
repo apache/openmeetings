@@ -57,7 +57,7 @@
     
     <method name="startInterView">
     	if ($debug) Debug.write("startInterView :: ");
-    	new lz.editRecordStream(this,{
+    	new lz.editRecordStream(this,{isInterview:true,
                 	   myvideocontainer:this._videoBroadCast,
                 	   doDefaultAnimation:false,
                 	   align:'center',valign:'middle'
