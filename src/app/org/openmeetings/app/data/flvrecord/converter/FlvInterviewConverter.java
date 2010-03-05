@@ -607,14 +607,16 @@ public class FlvInterviewConverter {
 			
 			log.debug("completeLengthInSeconds :: "+completeLengthInSeconds);
 			
+			int frameRate = 30;
+			
 			int sequenceCounter = 0;
 			
 			while (jobRunning) {
 				
 				//Process one Second of Movie
-				String[] interviewPod1Images = new String[24];
-				String[] interviewPod2Images = new String[24];
-				int[] outputFrameNumbers = new int[24];
+				String[] interviewPod1Images = new String[frameRate];
+				String[] interviewPod2Images = new String[frameRate];
+				int[] outputFrameNumbers = new int[frameRate];
 				
 				for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 					
@@ -633,14 +635,14 @@ public class FlvInterviewConverter {
 //						log.debug("-- currentTimeInMilliSeconds "+currentTimeInMilliSeconds );
 //						log.debug("-- deltaStartRecording "+deltaStartRecording );
 						
-						//Calculate the first and following 24 FPS Number
+						//Calculate the first and following frameRate FPS Number
 						int secondToStart = Long.valueOf(thisImageSequenceStartingPoint/1000).intValue();
 						
-						int firstFrame = secondToStart*24;
+						int firstFrame = secondToStart*frameRate;
 						
 						//log.debug("-- secondToStart "+secondToStart + " firstFrame " + firstFrame);
 						
-						for (int i=0;i<24;i++) {
+						for (int i=0;i<frameRate;i++) {
 							
 							String imageName = "image"+(firstFrame + i)+".png";
 							
@@ -670,14 +672,14 @@ public class FlvInterviewConverter {
 				}
 				
 				//Update Sequence Count
-				for (int i=0;i<24;i++) {
+				for (int i=0;i<frameRate;i++) {
 					outputFrameNumbers[i] = sequenceCounter;
 					sequenceCounter++;
 				}
 				
 				
 				//Now we should have found the needed Images to calculate, in case not we add an empty black screen
-				for (int i=0;i<24;i++) {
+				for (int i=0;i<frameRate;i++) {
 					
 					String outputImageName = outputImageMergedData + "image" + outputFrameNumbers[i] + ".png";
 					
@@ -737,7 +739,7 @@ public class FlvInterviewConverter {
 											+ flvRecording.getFlvRecordingId() + ".avi";
 
 			argv_generatedMoview = new String[] { this.getPathToFFMPEG(), "-i",
-					imagescomplete, "-r", "24", "-qmax", "1", "-qmin", "1", inputScreenFullFlv };
+					imagescomplete, "-r", ""+frameRate, "-qmax", "1", "-qmin", "1", inputScreenFullFlv };
 
 			log.debug("START generateFullBySequenceFLV ################# ");
 			String tString2 = "";
