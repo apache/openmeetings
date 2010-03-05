@@ -212,19 +212,21 @@ public class FlvInterviewConverter {
 						
 						String[] argv_sox = null;
 						
-						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
-							
-							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
-							
-							Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue();
-							
-							if (gapSeconds > 0) {
-								//Add the item at the beginning
-								argv_sox = new String[] { this.getPathToSoX(),
-										inputFile, outputGapFullWav, "pad",
-										String.valueOf(gapSeconds).toString(),"0" };
-							}
-						}
+						//Start Padding is of no use here
+						
+//						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
+//							
+//							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
+//							
+//							Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue();
+//							
+//							if (gapSeconds > 0) {
+//								//Add the item at the beginning
+//								argv_sox = new String[] { this.getPathToSoX(),
+//										inputFile, outputGapFullWav, "pad",
+//										String.valueOf(gapSeconds).toString(),"0" };
+//							}
+//						}
 						
 //						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
 //							
@@ -533,23 +535,23 @@ public class FlvInterviewConverter {
 					
 					//TO 24FPS AVI
 					
-					String outputAVI = streamFolderName
-										+ "AV_" + flvRecordingMetaData.getStreamName() + ".avi";
-					
-					String[] argv_24AVI = new String[] { this.getPathToFFMPEG(), "-i",
-							inputFlv, "-r", "24", "-an", outputAVI  };
-
-					log.debug("START generateImageSequenceAVI ################# ");
-					String tString = "";
-					for (int i = 0; i < argv_24AVI.length; i++) {
-						tString += argv_24AVI[i] + " ";
-						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-					}
-					log.debug(tString);
-					log.debug("END generateImageSequenceAVI ################# ");
-
-					returnLog.add(GenerateSWF.executeScript("generateImageSequenceAVI", 
-							argv_24AVI));
+//					String outputAVI = streamFolderName
+//										+ "AV_" + flvRecordingMetaData.getStreamName() + ".avi";
+//					
+//					String[] argv_24AVI = new String[] { this.getPathToFFMPEG(), "-i",
+//							inputFlv, "-an", "-vcodec", "copy", outputAVI };
+//
+//					log.debug("START generateImageSequenceAVI ################# ");
+//					String tString = "";
+//					for (int i = 0; i < argv_24AVI.length; i++) {
+//						tString += argv_24AVI[i] + " ";
+//						//log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+//					}
+//					log.debug(tString);
+//					log.debug("END generateImageSequenceAVI ################# ");
+//
+//					returnLog.add(GenerateSWF.executeScript("generateImageSequenceAVI", 
+//							argv_24AVI));
 
 					//TO Image Sequence
 					
@@ -560,10 +562,10 @@ public class FlvInterviewConverter {
 					File imageSequenceFolder = new File(outputMetaImageData);
 					imageSequenceFolder.mkdir();
 					
-					String outputImages = outputMetaImageData + "image%d.jpg";
+					String outputImages = outputMetaImageData + "image%d.png";
 					
 					String[] argv_imageSeq = new String[] { this.getPathToFFMPEG(), "-i",
-									outputAVI, outputImages  };
+									inputFlv, "-r", "24", outputImages  };
 
 					log.debug("START generateImageSequence ################# ");
 					String iString = "";
@@ -582,7 +584,7 @@ public class FlvInterviewConverter {
 			}
 			
 			//Default Image for empty interview video pods
-			String defaultInterviewImage = streamFolderGeneralName + "default_interview_image.jpg";
+			String defaultInterviewImage = streamFolderGeneralName + "default_interview_image.png";
 			File defaultInterviewImageFile = new File (defaultInterviewImage);
 			
 			if (!defaultInterviewImageFile.exists()) {
@@ -640,7 +642,7 @@ public class FlvInterviewConverter {
 						
 						for (int i=0;i<24;i++) {
 							
-							String imageName = "image"+(firstFrame + i)+".jpg";
+							String imageName = "image"+(firstFrame + i)+".png";
 							
 							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
 							
@@ -677,7 +679,7 @@ public class FlvInterviewConverter {
 				//Now we should have found the needed Images to calculate, in case not we add an empty black screen
 				for (int i=0;i<24;i++) {
 					
-					String outputImageName = outputImageMergedData + "image" + outputFrameNumbers[i] + ".jpg";
+					String outputImageName = outputImageMergedData + "image" + outputFrameNumbers[i] + ".png";
 					
 					if (interviewPod1Images[i] == null) {
 						interviewPod1Images[i] = defaultInterviewImage;
@@ -727,7 +729,7 @@ public class FlvInterviewConverter {
 			
 			//Generate Movie by sequence of Images
 			
-			String imagescomplete = outputImageMergedData + "image%d.jpg";
+			String imagescomplete = outputImageMergedData + "image%d.png";
 			
 			String[] argv_generatedMoview = null;
 			
@@ -735,7 +737,7 @@ public class FlvInterviewConverter {
 											+ flvRecording.getFlvRecordingId() + ".avi";
 
 			argv_generatedMoview = new String[] { this.getPathToFFMPEG(), "-i",
-					imagescomplete, "-r", "24", inputScreenFullFlv };
+					imagescomplete, "-r", "24", "-qmax", "1", "-qmin", "1", inputScreenFullFlv };
 
 			log.debug("START generateFullBySequenceFLV ################# ");
 			String tString2 = "";
@@ -802,8 +804,10 @@ public class FlvInterviewConverter {
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { this.getPathToFFMPEG(),
-					"-i", outputFullFlv, "-vcodec", "mjpeg", "-vframes", "1",
-					"-an", "-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
+					"-i", outputFullFlv, "-vcodec", "mjpeg",
+					"-vframes","100",
+					"-an", "-f", "rawvideo", 
+					"-s", flvWidth + "x" + flvHeight,
 					outPutJpeg };
 
 			log.debug("START previewFullFLV ################# ");
