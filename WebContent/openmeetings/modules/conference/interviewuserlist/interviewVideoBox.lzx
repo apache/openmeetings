@@ -51,7 +51,7 @@
 	
 </class>
  
-<class name="interviewVideoBox" extends="view" width="322" height="261" bgcolor="0x000000">
+<class name="interviewVideoBox" extends="view" width="322" height="281" bgcolor="0x000000">
 
     <attribute name="interviewPodId" value="0" type="number" />
     

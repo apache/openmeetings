@@ -215,18 +215,20 @@ public class FlvRecorderConverter {
 										inputFile, outputGapFullWav, "pad",
 										String.valueOf(gapSeconds).toString(),"0" };
 							}
+						
+						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
+							
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
+							
+							if (gapSeconds > 0) {
+								//Add the item at the end
+								argv_sox = new String[] { this.getPathToSoX(),
+										inputFile, outputGapFullWav, "pad",
+										"0",String.valueOf(gapSeconds).toString() };
+							}
+							
 						}
 						
-//						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
-//							
-//							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
-//							
-//							if (gapSeconds > 0) {
-//								//Add the item at the end
-//								argv_sox = new String[] { this.getPathToSoX(),
-//										inputFile, outputGapFullWav, "pad",
-//										"0",String.valueOf(gapSeconds).toString() };
-//							}
 //							
 //						} else if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
 //							

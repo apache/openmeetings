@@ -39,7 +39,7 @@ public class ListenerAdapter implements IStreamListener {
 	
 	protected String streamName = "";
 
-	private boolean isInterview;
+	protected boolean isInterview;
 	
 	public ListenerAdapter(String streamName, IScope scope, 
 			Long flvRecordingMetaDataId, boolean isScreenData,

@@ -134,20 +134,23 @@
 			var _micro = Microphone.get(valMic);
 			var _camera = Camera.get(valCam);
 			if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
-			_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+			
 			
 			//Microphone.set
 			if (canvas.vaquality=="best") {
 				_micro.setRate(canvas.microphoneRateBest);
 				if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
 				if (this.isInterview) {
+					_camera.setMode(videoview.width,videoview.height,24,true);
 					if ($debug) Debug.warn("IS INTERVIEW ");
-				    _camera.setQuality(0,100);
+				    _camera.setQuality(0,98);
 				} else {
+					_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
 					if ($debug) Debug.warn("IS NO INTERVIEW ");
 					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
 				}
 			} else {
+				_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
 				_micro.setRate(canvas.microphoneRateNormal);
 				_micro.setSilenceLevel(canvas.loudnessAcitviation);
 				if ($debug) Debug.write("_camera.setQuality NORMAL: ",canvas.bandwidthNeededNormal,canvas.camQualityNormal);

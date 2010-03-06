@@ -110,6 +110,15 @@ public class StreamScreenListener extends ListenerAdapter {
 				tag.setTimestamp(timeStamp);
 				tag.setBody(data);
 				
+				
+				if (this.isInterview) {
+					if (timeStamp <= 500) {
+						//We will cut the first 0.5 seconds 
+						//The First seconds seem to break the Recording Video often
+						return;
+					}
+				}
+				
 				writer.writeTag(tag);
 			
 			//}

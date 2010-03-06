@@ -564,7 +564,8 @@ public class FlvInterviewConverter {
 					String outputImages = outputMetaImageData + "image%d.png";
 					
 					String[] argv_imageSeq = new String[] { this.getPathToFFMPEG(), "-i",
-									inputFlv, "-r", ""+frameRate, outputImages  };
+									inputFlv, "-r", ""+frameRate, "-s", "320x240",
+									outputImages  };
 
 					log.debug("START generateImageSequence ################# ");
 					String iString = "";
@@ -641,7 +642,7 @@ public class FlvInterviewConverter {
 						
 						for (int i=0;i<frameRate;i++) {
 							
-							String imageName = "image"+(firstFrame + i)+".png";
+							String imageName = "image"+(firstFrame + i - (frameRate/2))+".png";
 							
 							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
 							
