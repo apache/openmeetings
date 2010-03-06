@@ -13,7 +13,7 @@
 	</bean>
 
 	<!-- First we load the common context, its shared between all the other contexts -->
-	<!-- Global context serves are the parent to all child contexts. -->
+	<!-- Global context serves as the parent to all child contexts. -->
 	<bean id="red5.common"
   	    class="org.springframework.context.support.FileSystemXmlApplicationContext">
     	<constructor-arg><list><value>classpath:/red5-common.xml</value></list></constructor-arg>

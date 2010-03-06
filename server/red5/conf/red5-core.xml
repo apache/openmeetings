@@ -152,7 +152,7 @@
 
 	
 	<!-- RTMPS -->
-    
+<!-- -->    
     <bean id="rtmpsMinaIoHandler"
         class="org.red5.server.net.rtmps.RTMPSMinaIoHandler">
         <property name="handler" ref="rtmpHandler" />
@@ -176,11 +176,10 @@
         <property name="sendBufferSize" value="${rtmp.send_buffer_size}" />
 		<property name="connectionThreads" value="${rtmp.connect_threads}" />
 		<property name="ioThreads" value="${rtmp.io_threads}" />
-        <!-- This is the interval at which the sessions are polled for stats. If mina monitoring is not
-                enabled, polling will not occur. -->
         <property name="jmxPollInterval" value="1000" />
         <property name="tcpNoDelay" value="${rtmp.tcp_nodelay}" />
     </bean>
+
 	
 <!--
 	<bean id="rtmps.server" class="org.red5.server.tomcat.rtmps.RTMPSLoader" init-method="init" lazy-init="true">
