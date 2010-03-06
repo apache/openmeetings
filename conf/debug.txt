@@ -1,4 +1,1 @@
- - START generateImageSequence #################
-DEBUG 03-04 14:09:44.243 FlvInterviewConverter.java 504974 574 org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverter [openmeetings.TaskExecutor-1]
- - C:\ffmpeg-static\bin\ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\AV_rec_9_stream_2_04_03_2010_14_09_16.avi C
-:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\17\image%d.jpg
+C:\ffmpeg-static\bin\ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\AV_rec_33_stream_0_05_03_2010_13_53_14.flv -r 24 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\40\image%d.png

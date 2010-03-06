@@ -212,32 +212,30 @@ public class FlvInterviewConverter {
 						
 						String[] argv_sox = null;
 						
-						//Start Padding is of no use here
 						
-//						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
-//							
-//							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
-//							
-//							Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue();
-//							
-//							if (gapSeconds > 0) {
-//								//Add the item at the beginning
-//								argv_sox = new String[] { this.getPathToSoX(),
-//										inputFile, outputGapFullWav, "pad",
-//										String.valueOf(gapSeconds).toString(),"0" };
-//							}
-//						}
-						
-//						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
-//							
-//							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
-//							
-//							if (gapSeconds > 0) {
-//								//Add the item at the end
-//								argv_sox = new String[] { this.getPathToSoX(),
-//										inputFile, outputGapFullWav, "pad",
-//										"0",String.valueOf(gapSeconds).toString() };
-//							}
+						if (flvRecordingMetaDelta.getIsStartPadding() != null && flvRecordingMetaDelta.getIsStartPadding()) {
+							
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
+							
+							Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue();
+							
+							if (gapSeconds > 0) {
+								//Add the item at the beginning
+								argv_sox = new String[] { this.getPathToSoX(),
+										inputFile, outputGapFullWav, "pad",
+										String.valueOf(gapSeconds).toString(),"0" };
+							}
+						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
+							
+							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
+							
+							if (gapSeconds > 0) {
+								//Add the item at the end
+								argv_sox = new String[] { this.getPathToSoX(),
+										inputFile, outputGapFullWav, "pad",
+										"0",String.valueOf(gapSeconds).toString() };
+							}
+						}
 //							
 //						} else if (flvRecordingMetaDelta.getDeltaTime().equals(flvRecordingMetaDelta.getTimeStamp())) {
 //							
@@ -522,6 +520,7 @@ public class FlvInterviewConverter {
 //					+ flvRecordingMetaDataOfScreen.getStreamName() + ".flv";
 
 			//Start extracting image sequence
+			int frameRate = 24;
 			
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 				
@@ -565,7 +564,7 @@ public class FlvInterviewConverter {
 					String outputImages = outputMetaImageData + "image%d.png";
 					
 					String[] argv_imageSeq = new String[] { this.getPathToFFMPEG(), "-i",
-									inputFlv, "-r", "24", outputImages  };
+									inputFlv, "-r", ""+frameRate, outputImages  };
 
 					log.debug("START generateImageSequence ################# ");
 					String iString = "";
@@ -606,8 +605,6 @@ public class FlvInterviewConverter {
 			long completeLengthInSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime(); 
 			
 			log.debug("completeLengthInSeconds :: "+completeLengthInSeconds);
-			
-			int frameRate = 30;
 			
 			int sequenceCounter = 0;
 			
@@ -736,10 +733,14 @@ public class FlvInterviewConverter {
 			String[] argv_generatedMoview = null;
 			
 			String inputScreenFullFlv = streamFolderName + "COMPLETE_INTERVIEW_" 
-											+ flvRecording.getFlvRecordingId() + ".avi";
+											+ flvRecording.getFlvRecordingId() + ".flv";
 
-			argv_generatedMoview = new String[] { this.getPathToFFMPEG(), "-i",
-					imagescomplete, "-r", ""+frameRate, "-qmax", "1", "-qmin", "1", inputScreenFullFlv };
+			argv_generatedMoview = new String[] { this.getPathToFFMPEG(), 
+					"-i", imagescomplete, 
+					"-r", ""+frameRate, 
+					"-vcodec", "flv", 
+					"-qmax", "1", "-qmin", "1", 
+					inputScreenFullFlv };
 
 			log.debug("START generateFullBySequenceFLV ################# ");
 			String tString2 = "";
@@ -778,8 +779,13 @@ public class FlvInterviewConverter {
 
 			String[] argv_fullFLV = null;
 
-			argv_fullFLV = new String[] { this.getPathToFFMPEG(), "-i",
-					inputScreenFullFlv, "-i", outputFullWav, outputFullFlv };
+			argv_fullFLV = new String[] { this.getPathToFFMPEG(), 
+					"-r", ""+frameRate, 
+					"-vcodec", "flv", 
+					"-qmax", "1", "-qmin", "1", 
+					"-i", inputScreenFullFlv, 
+					"-i", outputFullWav, 
+					outputFullFlv };
 
 			log.debug("START generateFullFLV ################# ");
 			String tString = "";

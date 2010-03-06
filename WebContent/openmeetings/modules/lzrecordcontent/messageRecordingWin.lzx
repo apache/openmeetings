@@ -2,7 +2,7 @@
 <library>
 
 <class name="messageRecordingWin" extends="guiPresenter" labelid="890" y="100"
-    docking="true" resizeable="false" closable="true" width="400" 
+    docking="true" resizeable="true" closable="true" width="400" 
     x="$once{ parent.width/2 - this.width/2 }" height="240">
     
     <attribute name="error" value="" type="string" />
@@ -13,14 +13,14 @@
 	<labelText labelid="$once{ parent.labelTitleId }" y="24" x="30" />
     
     <view x="2" width="${ parent.width - 4 }" clip="true"
-        				y="48" height="$once{ parent.height-74 }">
+        				y="48" height="${ parent.height-74 }">
         <labelText text="$once{ parent.parent.error }" width="${ parent.width - 18 }"
         		   multiline="true" resize="false" selectable="true" />
         <vscrollbar />
     </view>
 	
     <simpleLabelButton labelid="891" width="100" onclick="this.parent.close();" 
-		   x="$once{ parent.width-104 }" y="$once{ parent.height-22 }" />
+		   x="${ parent.width-104 }" y="${ parent.height-24 }" />
 
 </class>
 
