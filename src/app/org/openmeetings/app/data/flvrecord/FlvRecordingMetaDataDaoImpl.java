@@ -181,7 +181,7 @@ public class FlvRecordingMetaDataDaoImpl {
 		}
 		return null;
 	}
-	
+
 	public Long updateFlvRecordingMetaDataEndDate(Long flvRecordingMetaDataId, 
 										Date recordEnd) {
 		try { 
@@ -189,6 +189,29 @@ public class FlvRecordingMetaDataDaoImpl {
 			FlvRecordingMetaData flvRecordingMetaData = this.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
 			
 			flvRecordingMetaData.setRecordEnd(recordEnd);
+			
+			log.debug("updateFlvRecordingMetaDataEndDate :: Start Date :"+flvRecordingMetaData.getRecordStart());
+			log.debug("updateFlvRecordingMetaDataEndDate :: End Date :"+flvRecordingMetaData.getRecordEnd());
+			
+			this.updateFlvRecordingMetaData(flvRecordingMetaData);
+			
+			return flvRecordingMetaDataId;
+			
+		} catch (HibernateException ex) {
+			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex2);
+		}
+		return null;
+	}
+
+	public Long updateFlvRecordingMetaDataInitialGap(Long flvRecordingMetaDataId, 
+										long initalGap) {
+		try { 
+			
+			FlvRecordingMetaData flvRecordingMetaData = this.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+			
+			flvRecordingMetaData.setInitialGapSeconds(Long.valueOf(initalGap).intValue());
 			
 			this.updateFlvRecordingMetaData(flvRecordingMetaData);
 			

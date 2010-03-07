@@ -284,5 +284,4 @@ public class FlvRecordingMetaDelta {
 		this.receivedAudioDataLength = receivedAudioDataLength;
 	}
 	
-	
 }

@@ -47,7 +47,14 @@ public class StreamScreenListener extends ListenerAdapter {
 				
 				this.startedSessionScreenTimeDate = new Date();
 				
+				//Calculate the delta between the initial start and the first packet data
+				
 				this.initialDelta = this.startedSessionScreenTimeDate.getTime() - this.startedSessionTimeDate.getTime();
+				
+				//This is important for the Interview Post Processing to get
+				//the time between starting the stream and the actual Access to the 
+				//webcam by the Flash Security Dialog
+				FlvRecordingMetaDataDaoImpl.getInstance().updateFlvRecordingMetaDataInitialGap(flvRecordingMetaDataId, this.initialDelta);
 				
 			}
 			
@@ -71,12 +78,8 @@ public class StreamScreenListener extends ListenerAdapter {
 				
 				if (startTimeStamp == -1) {
 					
-					//Calculate the delta between the initial start and the first audio-packet data
-					
-					long delta = new Date().getTime() - this.startedSessionScreenTimeDate .getTime();
-					
 					//That will be not bigger then long value
-					startTimeStamp = (int) (streampacket.getTimestamp() - delta);
+					startTimeStamp = streampacket.getTimestamp();
 				}
 				
 				if (writer == null) {

@@ -225,6 +225,7 @@ public class FlvInterviewConverter {
 										inputFile, outputGapFullWav, "pad",
 										String.valueOf(gapSeconds).toString(),"0" };
 							}
+							
 						} else if (flvRecordingMetaDelta.getIsEndPadding() != null && flvRecordingMetaDelta.getIsEndPadding()) {
 							
 							double gapSeconds = Double.valueOf(flvRecordingMetaDelta.getDeltaTime().toString()).doubleValue()/1000;
@@ -642,7 +643,18 @@ public class FlvInterviewConverter {
 						
 						for (int i=0;i<frameRate;i++) {
 							
-							String imageName = "image"+(firstFrame + i - (frameRate/2))+".png";
+							int currentImageNumber = firstFrame + i;
+							currentImageNumber -= (frameRate/2); //Remove the first half seconds and fill it up with black screens
+							
+							//Remove the first period of Images, this is where the user has started 
+							//to share his Video but does not have agreed in the Flash Security Warning Dialogue
+							Integer initialGapSeconds = flvRecordingMetaData.getInitialGapSeconds();
+							if (initialGapSeconds != null) {
+								int initialMissingImages = Double.valueOf(Math.floor((initialGapSeconds/1000) * frameRate)).intValue();
+								currentImageNumber -= initialMissingImages;
+							}
+							
+							String imageName = "image"+currentImageNumber+".png";
 							
 							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
 							
@@ -783,6 +795,9 @@ public class FlvInterviewConverter {
 			argv_fullFLV = new String[] { this.getPathToFFMPEG(), 
 					"-r", ""+frameRate, 
 					"-vcodec", "flv", 
+					"-ar", "22050",
+					"-ab", "32k", 
+					"-s", flvWidth + "x" + flvHeight,
 					"-qmax", "1", "-qmin", "1", 
 					"-i", inputScreenFullFlv, 
 					"-i", outputFullWav, 
@@ -868,7 +883,7 @@ public class FlvInterviewConverter {
 			for (String fileName : listOfFullWaveFiles) {
 				File audio = new File(fileName);
 				if (audio.exists()) {
-					audio.delete();
+					//audio.delete();
 				}
 			}
 			

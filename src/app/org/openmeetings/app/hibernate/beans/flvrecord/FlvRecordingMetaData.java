@@ -33,6 +33,7 @@ public class FlvRecordingMetaData {
 	private Boolean audioIsValid;
 	
 	private Integer interiewPodId;
+	private Integer initialGapSeconds;
 	
 	/**
 	 *
@@ -66,6 +67,7 @@ public class FlvRecordingMetaData {
 	/**
      * @hibernate.property
      *  column="record_start"
+     *  update="false"
      *  type="java.util.Date"
      */
 	public Date getRecordStart() {
@@ -243,5 +245,15 @@ public class FlvRecordingMetaData {
 		this.interiewPodId = interiewPodId;
 	}
 	
-	
+	/**
+     * @hibernate.property
+     *  column="initial_gap_seconds"
+     *  type="int"
+     */
+	public Integer getInitialGapSeconds() {
+		return initialGapSeconds;
+	}
+	public void setInitialGapSeconds(Integer initialGapSeconds) {
+		this.initialGapSeconds = initialGapSeconds;
+	}
 }

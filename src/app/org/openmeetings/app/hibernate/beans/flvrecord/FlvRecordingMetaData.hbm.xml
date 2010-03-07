@@ -7,7 +7,7 @@
       <generator class="increment"/>
     </id>
     <many-to-one outer-join="true" not-null="false" column="flvrecording_id" lazy="false" cascade="none" name="flvRecording" class="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording"/>
-    <property name="recordStart" type="java.util.Date" column="record_start"/>
+    <property name="recordStart" type="java.util.Date" column="record_start" update="false"/>
     <property name="recordEnd" type="java.util.Date" column="record_end"/>
     <property name="freeTextUserName" type="string" column="free_text_user_name"/>
     <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
@@ -22,5 +22,6 @@
     <property name="fullWavAudioData" type="string" column="full_wav_audio_data"/>
     <property name="audioIsValid" type="boolean" column="audio_is_valid"/>
     <property name="interiewPodId" type="int" column="interiew_pod_id"/>
+    <property name="initialGapSeconds" type="int" column="initial_gap_seconds"/>
   </class>
 </hibernate-mapping>
