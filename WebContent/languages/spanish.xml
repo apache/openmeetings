@@ -2766,4 +2766,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="917" name="interview recording message">
     <value>The recording for this interview is already started!</value>
   </string>
+  <string id="918" name="interview error message">
+    <value>Cancel</value>
+  </string>
+  <string id="919" name="interview error message">
+    <value>The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</value>
+  </string>
 </language>

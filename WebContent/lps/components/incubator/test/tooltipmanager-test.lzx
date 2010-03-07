@@ -13,7 +13,7 @@
         <row key="button1" value="Hi! I'm the message for button one. Ciao. Sono il messaggio per il tasto uno." />
         <row key="button2" value="Hi! I'm the message for button two. Bonjour. Je suis le message pour le bouton deux."/>
         <row key="button3" value="Hi! I'm the message for button three. ????. ?? ?? 3? ?? ??? ??."/>
-        <row key="button4" value="Hi! I'm the message for button four. Hallo. Ich bin die Anzeige für Taste vier."/>
+        <row key="button4" value="Hi! I'm the message for button four. Hallo. Ich bin die Anzeige fuer Taste vier."/>
         <row key="button5" value="Hi! I'm the message for button five. Hello. Eu sou a mensagem para a tecla cinco."/>
         <row key="button6" value="You should not see this"/>
     </tooltips>

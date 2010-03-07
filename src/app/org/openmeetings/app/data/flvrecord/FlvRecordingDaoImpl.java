@@ -358,8 +358,31 @@ public class FlvRecordingDaoImpl {
 			
 			FlvRecording fId = this.getFlvRecordingById(flvRecordingId);
 			
+			fId.setProgressPostProcessing(0);
 			fId.setRecordEnd(recordEnd);
 			fId.setOrganization_id(organization_id);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			session.update(fId);
+			session.flush();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (HibernateException ex) {
+			log.error("[deleteFileExplorerItem]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[deleteFileExplorerItem]: ",ex2);
+		}
+	}
+	
+	public void updateFlvRecordingProgress(Long flvRecordingId, Integer progress) {
+		try {
+			
+			FlvRecording fId = this.getFlvRecordingById(flvRecordingId);
+			
+			fId.setProgressPostProcessing(progress);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

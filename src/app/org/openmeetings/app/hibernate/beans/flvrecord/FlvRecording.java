@@ -52,6 +52,7 @@ public class FlvRecording {
 	private Long organization_id;
 	
 	private Boolean isInterview;
+	private Integer progressPostProcessing;
 	
 	//Not Mapped
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
@@ -412,5 +413,18 @@ public class FlvRecording {
 	public void setIsInterview(Boolean isInterview) {
 		this.isInterview = isInterview;
 	}
+
+	/**
+     * @hibernate.property
+     *  column="progress_post_processing"
+     *  type="int"
+     */	
+	public Integer getProgressPostProcessing() {
+		return progressPostProcessing;
+	}
+	public void setProgressPostProcessing(Integer progressPostProcessing) {
+		this.progressPostProcessing = progressPostProcessing;
+	}
+	
 	
 }

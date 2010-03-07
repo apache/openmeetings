@@ -79,7 +79,9 @@
 					
 					new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:887});
 					
-				} else if (recording.previewImage != null && recording.previewImage != "") {
+				} 
+				
+				if (recording.previewImage != null && recording.previewImage != "") {
 					
 	            	this.recordingName = recording.fileHash;
 	            	this.getStreamLength.doCall();
@@ -114,7 +116,13 @@
                 
         		} else {
         			
-    				new lz.labelerrorPopup(canvas,{errorlabelid:888});
+        			var error = canvas.getLabelName(888);
+        			
+        			if (recording.isInterview) {
+        				error += "<br/>" + canvas.getLabelName(919) + " " + recording.progressPostProcessing + "%";
+        			}
+        			
+    				new lz.labelerrorPopup(canvas,{error:error});
         			
         		}
             	

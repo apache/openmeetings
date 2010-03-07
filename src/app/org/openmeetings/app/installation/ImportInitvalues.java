@@ -388,31 +388,34 @@ public class ImportInitvalues {
 		long interview_Id = Roommanagement.getInstance().addRoomType("interview");
 		log.debug("interview_Id: " + interview_Id);
 		
-		Roommanagement.getInstance().addRoom(3, "public Conference Room", 1,
+		Roommanagement.getInstance().addRoom(3, "public Interview Room", interview_Id,
+				"", new Long(16), true, null, false, false, null, false, null, true);
+		
+		Roommanagement.getInstance().addRoom(3, "public Conference Room", conference_Id,
 				"", new Long(8), true, null, false, false, null, false, null, true);
 
-		Roommanagement.getInstance().addRoom(3, "public Video Only Room", 1,
+		Roommanagement.getInstance().addRoom(3, "public Video Only Room", conference_Id,
 				"", new Long(16), true, null, false, false, null, false, null, true);
 
 		Roommanagement.getInstance().addRoom(3,
-				"public Video And Whiteboard Room", 1, "", new Long(16), true,
+				"public Video And Whiteboard Room", conference_Id, "", new Long(16), true,
 				null, false, false, null, false, null, true);
 
 		Roommanagement.getInstance().addRoom(3, "public Restricted Room", restricted_Id,
 				"", new Long(10), true, null, false, false, null, false, null, true);
 		
 		long room2 = Roommanagement.getInstance().addRoom(3,
-				"private Conference Room", 1, "", new Long(16), false, null,
+				"private Conference Room", conference_Id, "", new Long(16), false, null,
 				false, false, null, false, null, true);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room2, 1);
 
 		Roommanagement.getInstance().addRoom(3, 
-				"public Audience Room", 2, "", new Long(32), true, null, 
+				"public Audience Room", audience_Id, "", new Long(32), true, null, 
 				false, false, null, false, null, true);
 
 		long room4 = Roommanagement.getInstance().addRoom(3,
-				"private Audience Room", 2, "", new Long(32), false, null, 
+				"private Audience Room", audience_Id, "", new Long(32), false, null, 
 				false, false, null, false, null, true);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room4, 1);

@@ -349,9 +349,9 @@
     </simpleLabelButton>
     
     <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }" 
-                       labelid="915" x="190" y="180" width="100">
+                       labelid="918" x="190" y="180" width="100">
         <handler name="onclick">
-            this.close();
+            parent.close();
         </handler>
     </simpleLabelButton>
     

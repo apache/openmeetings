@@ -727,8 +727,14 @@ public class FlvInterviewConverter {
 				
 				currentTimeInMilliSeconds+=1000;
 				
+				double cLength = 100 * ((double)currentTimeInMilliSeconds) / ((double)completeLengthInSeconds);
+				
+				int progress = Double.valueOf(cLength).intValue();
+				
 				log.debug("completeLengthInSeconds|currentTimeInMilliSeconds " + 
-											completeLengthInSeconds + "|" + currentTimeInMilliSeconds);
+						completeLengthInSeconds + "|" + currentTimeInMilliSeconds + "|" + progress + "|" + cLength);
+				
+				FlvRecordingDaoImpl.getInstance().updateFlvRecordingProgress(flvRecording.getFlvRecordingId(), progress);
 				
 				if (currentTimeInMilliSeconds >= completeLengthInSeconds) {
 				
@@ -883,7 +889,7 @@ public class FlvInterviewConverter {
 			for (String fileName : listOfFullWaveFiles) {
 				File audio = new File(fileName);
 				if (audio.exists()) {
-					//audio.delete();
+					audio.delete();
 				}
 			}
 			
@@ -893,10 +899,10 @@ public class FlvInterviewConverter {
 								+ flvRecordingMetaData.getFlvRecordingMetaDataId() 
 								+ File.separatorChar ;
 					
-				//this.deleteDirectory(new File(outputMetaImageFullData));
+				this.deleteDirectory(new File(outputMetaImageFullData));
 			}
 			
-			//this.deleteDirectory(new File(outputImageMergedData));
+			this.deleteDirectory(new File(outputImageMergedData));
 
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
