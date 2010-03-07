@@ -1,1 +1,1 @@
-C:\ffmpeg-static\bin\ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\AV_rec_33_stream_0_05_03_2010_13_53_14.flv -r 24 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\40\image%d.png
+C:\ffmpeg-static\bin\ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\INTERVIEW_49\image%d.jpg -r 24 -vcodec flv -qmax 1 -qmin 1 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\8\COMPLETE_INTERVIEW_49.flv

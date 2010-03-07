@@ -520,7 +520,7 @@ public class FlvInterviewConverter {
 //					+ flvRecordingMetaDataOfScreen.getStreamName() + ".flv";
 
 			//Start extracting image sequence
-			int frameRate = 24;
+			int frameRate = 25;
 			
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 				
@@ -878,10 +878,10 @@ public class FlvInterviewConverter {
 								+ flvRecordingMetaData.getFlvRecordingMetaDataId() 
 								+ File.separatorChar ;
 					
-				this.deleteDirectory(new File(outputMetaImageFullData));
+				//this.deleteDirectory(new File(outputMetaImageFullData));
 			}
 			
-			this.deleteDirectory(new File(outputImageMergedData));
+			//this.deleteDirectory(new File(outputImageMergedData));
 
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
