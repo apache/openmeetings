@@ -1,4 +1,4 @@
-package org.openmeetings.app.sip.xmlrpc;
+package org.openmeetings.app.sip.xmlrpc.test;
 
 import java.net.URL;
 
@@ -16,6 +16,7 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -73,6 +74,11 @@ public class OpenXGClient {
 //			
 //			log.debug("config User Agent "+config.getUserAgent());
 			
+//			XmlRpc.setDriver(uk.co.wilson.xml.MinML);
+//			//XmlRpc.setDriver(driver)
+//			uk.co.wilson.xml.MinML.xmlinfo = true; 
+//			
+			
 			config.setUserAgent("OpenSIPg XML_RPC Client");
 			config.setEncoding("ISO-8859-1");
 			
@@ -86,7 +92,7 @@ public class OpenXGClient {
 		    client.setXmlWriterFactory(new OpenXGXmlWriterFactory());
 		    
 		    String client_id = "user_admin";
-		    String client_secret = "*******";
+		    String client_secret = "******";
 		    
 		    
 		    String userid = "067201101";
@@ -97,7 +103,7 @@ public class OpenXGClient {
 		    String password = "password";
 		    String community_code = "999";
 		    String language_code = "fi";
-		    String email = "matti@fun.com";
+		    String email = "matti@sucks.com";
 		    String adminid = "matti";
 		    
 		    String digest = this.digest_calculate(new Object[]{client_id, userid, domain,
@@ -123,9 +129,9 @@ public class OpenXGClient {
 					  language_code, email,
 					  adminid};
 		    
-		    Object[] struct = new Object[]{params};
+		    //Object[] struct = new Object[]{params};
 		    
-		    Object result = client.execute("OpenSIPg.UserCreate", struct);
+		    Object result = client.execute("OpenSIPg.UserCreate", params);
 		    
 		    if (result != null) {
 		    	log.debug(result.getClass().getName());

@@ -1,4 +1,4 @@
-package org.openmeetings.app.sip.xmlrpc;
+package org.openmeetings.app.sip.xmlrpc.test;
 
 
 import org.apache.ws.commons.serialize.XMLWriter;
@@ -168,92 +168,9 @@ public class OpenXgXmlWriter implements XMLWriter {
 		if (isFlushing()  &&  w != null) {
 			try {
 				
-//				"<?xml version=\"1.0\" ?>"+ System.getProperty("line.separator") +
-//				"<methodCall>"+ System.getProperty("line.separator") +
-//"	<methodName>OpenSIPg.UserCreate</methodName>"+ System.getProperty("line.separator") +
-//"	<params>"+ System.getProperty("line.separator") +
-//"		<param>"+ System.getProperty("line.separator") +
-//"			<value>"+ System.getProperty("line.separator") +
-//"				<struct>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>client_id</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>user_admin</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>digest</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>23fe6626265cb55fc7b631f8c043ea1a</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>userid</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>067201101</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>domain</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>voipt3multifi</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>first_name</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>Matti</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>middle_i</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>X</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>last_name</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>Virtanen</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>password</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>password</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>community_code</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>999</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>language_code</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>fi</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>email</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>matti@suckscom</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"					<member>"+ System.getProperty("line.separator") +
-//"						<name>adminid</name>"+ System.getProperty("line.separator") +
-//"						<value>"+ System.getProperty("line.separator") +
-//"							<string>matti</string>"+ System.getProperty("line.separator") +
-//"						</value>"+ System.getProperty("line.separator") +
-//"					</member>"+ System.getProperty("line.separator") +
-//"				</struct>"+ System.getProperty("line.separator") +
-//"			</value>"+ System.getProperty("line.separator") +
-//"		</param>"+ System.getProperty("line.separator") +
-//"	</params>"+ System.getProperty("line.separator") +
-//"</methodCall>");
+				debugw.write("");
 			
-				debugw.write(this.readFile("/root/openmeetings/red5/webapps/openmeetings/WEB-INF/classes/NewFileISO.xml"));
+				//debugw.write(this.readFile("/root/openmeetings/red5/webapps/openmeetings/WEB-INF/classes/NewFileISO.xml"));
 			
 			
 				log.debug(":: endDocument ::");

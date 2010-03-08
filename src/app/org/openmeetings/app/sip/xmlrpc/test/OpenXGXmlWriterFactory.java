@@ -1,4 +1,4 @@
-package org.openmeetings.app.sip.xmlrpc;
+package org.openmeetings.app.sip.xmlrpc.test;
 
 import java.io.BufferedWriter;
 import java.io.OutputStream;

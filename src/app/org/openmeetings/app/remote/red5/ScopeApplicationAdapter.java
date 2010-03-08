@@ -40,9 +40,9 @@ import org.openmeetings.app.remote.MeetingMemberService;
 import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.StreamService;
 import org.openmeetings.app.remote.WhiteBoardService;
-import org.openmeetings.app.sip.xmlrpc.OpenXGClient;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
-import org.openmeetings.app.sip.xmlrpc.OpenXGWrapperClient;
+import org.openmeetings.app.sip.xmlrpc.test.OpenXGClient;
+import org.openmeetings.app.sip.xmlrpc.test.OpenXGWrapperClient;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
@@ -178,7 +178,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 			}
 			
-			//OpenXGHttpClient.getInstance().testConnection();
+			OpenXGHttpClient.getInstance().openSIPgUserCreateTest();
 			//OpenXGWrapperClient.getInstance().testConnection();
 			//OpenXGClient.getInstance().testConnection();
 			//ServerSocketMinaProcess serverSocketMinaProcess = new ServerSocketMinaProcess();

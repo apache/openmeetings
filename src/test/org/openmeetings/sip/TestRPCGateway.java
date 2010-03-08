@@ -3,7 +3,7 @@ package org.openmeetings.sip;
 //import org.apache.log4j.Logger;
 import junit.framework.TestCase;
 
-import org.openmeetings.app.sip.xmlrpc.OpenXGClient;
+import org.openmeetings.app.sip.xmlrpc.test.OpenXGClient;
 
 public class TestRPCGateway extends TestCase {
 	
