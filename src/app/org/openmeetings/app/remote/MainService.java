@@ -479,7 +479,7 @@ public class MainService implements IPendingServiceCallback {
         				if (user == null) {
 	        				long userId = Usermanagement.getInstance().addUserWithExternalKey(1, 0, 0, userObject.getFirstname(), 
 				        						userObject.getUsername(), userObject.getLastname(), 1L, "", null, null, "", 
-				        						userObject.getExternalUserId(), userObject.getExternalUserType());
+				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true);
 	        				currentClient.setUser_id(userId);
         				} else {
         					currentClient.setUser_id(user.getUser_id());
@@ -597,7 +597,7 @@ public class MainService implements IPendingServiceCallback {
         			regObject.get("fax").toString(), regObject.get("zip").toString(), 
         			Long.valueOf(regObject.get("states_id").toString()).longValue(), regObject.get("town").toString(), 
         			Long.valueOf(regObject.get("language_id").toString()).longValue(), "",
-        			baseURL);
+        			baseURL, true);
     	} catch (Exception ex) {
     		log.error("registerUserByObject",ex);
     	}
@@ -629,7 +629,7 @@ public class MainService implements IPendingServiceCallback {
 				String firstname, String email, Date age, String street, String additionalname, 
 				String fax, String zip, long states_id, String town, long language_id, String phone){
     	return Usermanagement.getInstance().registerUser(Username, Userpass, lastname, firstname, email, 
-    			age, street, additionalname, fax, zip, states_id, town, language_id, phone, "");
+    			age, street, additionalname, fax, zip, states_id, town, language_id, phone, "", true);
 	}	
 	
 	/**

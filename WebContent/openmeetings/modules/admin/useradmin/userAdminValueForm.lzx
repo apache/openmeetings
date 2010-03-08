@@ -36,6 +36,7 @@
         this.adress_comment.setAttribute('text','');
         this.status.selectItem(String('1'));
         this._organisationslist.clearList();
+        this.generateSipUserData.setValue(false);
         this.sip_user.setAttribute('text','');
         this.sip_pass.setAttribute('text','');
         this.sip_auth.setAttribute('text','');
@@ -52,7 +53,7 @@
     <method name="initValueFieldsByObject" args="obj">
 		this.user_id = obj.user_id;
 		if (this.user_id!=0){
-			Debug.write("this.getUserById this.user_id",this.user_id);
+			if ($debug) Debug.write("this.getUserById this.user_id",this.user_id);
 			this.getUserById.doCall();
 		}
     </method>
@@ -83,6 +84,8 @@
 			for (var i=0;i<obj.organisation_users.length;i++){
 				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
 			}
+			
+			this.generateSipUserData.setValue(false);
 			
 			if (obj.userSipData != null) {
 				this.sip_user.setAttribute('text',obj.userSipData.username);
@@ -153,6 +156,7 @@
 			this.sendObject["title_id"] = Number(this.parent.salutation.getValue());
   			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
   			
+  			this.sendObject["generateSipUserData"] = this.parent.generateSipUserData.getValue();
   			this.sendObject["sip_user"] = this.parent.sip_user.getText();
   			this.sendObject["sip_pass"] = this.parent.sip_pass.getText();
   			this.sendObject["sip_auth"] = this.parent.sip_auth.getText();
@@ -284,7 +288,7 @@
 		</method>
 	</baseChooseIcon>
 	
-    <!--Moderated -->
+    <!-- SIP Account Data -->
     <labelText labelid="893" width="200" y="650" resize="false" 
                x="0" fontstyle="bold" />   
     
@@ -293,19 +297,22 @@
     <labelText labelid="894" x="24" y="670"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="895" width="200" y="730" resize="false" x="2"/>
-        <customEdittext name="sip_user" y="730" x="120" width="270"  
+    <labelText labelid="921" width="200" y="730" resize="false" x="2"/>  
+        <labelCheckbox name="generateSipUserData" width="270" y="730" x="140" fontsize="11" />
+
+    <labelText labelid="895" width="200" y="760" resize="false" x="2"/>
+        <customEdittext name="sip_user" y="760" x="120" width="270"  
         				text="" />
         				
-	<labelText labelid="896" width="200" y="760" resize="false" x="2"/>
-        <customEdittext name="sip_pass" y="760" x="120" width="270"  
+	<labelText labelid="896" width="200" y="790" resize="false" x="2"/>
+        <customEdittext name="sip_pass" y="790" x="120" width="270"  
         				text="" />
         				
-    <labelText labelid="897" width="200" y="790" resize="false" x="2"/>
-        <customEdittext name="sip_auth" y="790" x="120" width="270"  
+    <labelText labelid="897" width="200" y="820" resize="false" x="2"/>
+        <customEdittext name="sip_auth" y="820" x="120" width="270"  
         				text="" />
         				
-	<view y="850" />        				
+	<view y="900" />        				
         				        				
 </class>
 

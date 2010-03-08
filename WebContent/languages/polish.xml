@@ -2760,7 +2760,7 @@ transmitowania głosu i obrazu wideo.</value>
     <value>SIP-Account Settings</value>
   </string>
   <string id="894" name="user administration">
-    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically. You can re-create the data by checking "Re-generate SIP Data"</value>
   </string>
   <string id="895" name="user administration">
     <value>SIP-User</value>
@@ -2836,5 +2836,11 @@ transmitowania głosu i obrazu wideo.</value>
   </string>
   <string id="919" name="interview error message">
     <value>The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</value>
+  </string>
+  <string id="920" name="sip creation">
+    <value>You have to enter your password again to auto create the SIP Data</value>
+  </string>
+  <string id="921" name="sip creation">
+    <value>Re-generate SIP Data</value>
   </string>
 </language>

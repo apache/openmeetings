@@ -298,7 +298,8 @@ public class UserService {
 	        			"",false,
 		        		argObjectMap.get("sip_user").toString(),
 		        		argObjectMap.get("sip_pass").toString(),
-		        		argObjectMap.get("sip_auth").toString()); 	
+		        		argObjectMap.get("sip_auth").toString(),
+		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue()); 	
     		} else {
 		        return Usermanagement.getInstance().updateUser(user_level,user_idClient, 
 		        		Long.valueOf(argObjectMap.get("level_id").toString()).longValue(), argObjectMap.get("login").toString(), 
@@ -316,7 +317,8 @@ public class UserService {
 		        		argObjectMap.get("phone").toString(),
 		        		argObjectMap.get("sip_user").toString(),
 		        		argObjectMap.get("sip_pass").toString(),
-		        		argObjectMap.get("sip_auth").toString()
+		        		argObjectMap.get("sip_auth").toString(),
+		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue()
 		        		); 
     		}
     	} catch (Exception ex) {

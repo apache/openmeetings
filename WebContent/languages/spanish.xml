@@ -2772,4 +2772,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="919" name="interview error message">
     <value>The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</value>
   </string>
+  <string id="920" name="sip creation">
+    <value>You have to enter your password again to auto create the SIP Data</value>
+  </string>
+  <string id="921" name="sip creation">
+    <value>Re-generate SIP Data</value>
+  </string>
 </language>

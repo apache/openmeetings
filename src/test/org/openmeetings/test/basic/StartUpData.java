@@ -57,7 +57,7 @@ public class StartUpData extends TestCase {
 				"swagner", "test", "lastname", "firstname", 
 				"seba.wagner@gmail.com", new java.util.Date(), "street", "no", "fax", 
 				"zip", 1, "town", 0, false, null, "phone", "", false,
-				"","","");
+				"","","",false);
 		
 		//Add default group
 		Long organisation_id = Organisationmanagement.getInstance().addOrganisation("default", user_id);

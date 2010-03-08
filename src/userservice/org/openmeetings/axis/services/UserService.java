@@ -111,7 +111,9 @@ public class UserService {
 					    			town, 
 					    			language_id, 
 					    			"",
-					    			baseURL);
+					    			baseURL,
+					    			true //generate SIP Data if the config is enabled
+					    			);
 	    		
 	    		if (user_id < 0) {
 	    			return user_id;

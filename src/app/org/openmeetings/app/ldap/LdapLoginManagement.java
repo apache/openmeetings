@@ -488,7 +488,8 @@ public class LdapLoginManagement {
 				phone,
 				"",//BaseURL is empty as we do not send an Email here
 				false,//send verification code
-				"","",""//sip_user, sip_pass, sip_auth
+				"","","",//sip_user, sip_pass, sip_auth
+				true //generate SIP Data if the config is enabled
 				);
 		}catch(Exception e){
 			log.error("Error creating user : " + e.getMessage());

@@ -435,7 +435,7 @@ public class ImportInitvalues {
 					new Long(3), 3, 1, 1, username, userpass, "lastname",
 					"firstname", email, new java.util.Date(), "street", "no",
 					"fax", "zip", 1, "town", 0, false, null, "phone", "", false,
-					"","","");
+					"","","", false);
 
 			log.debug("Installation - User Added user-Id "+user_id);
 			

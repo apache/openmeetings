@@ -3,6 +3,7 @@ package org.openmeetings.app.sip.xmlrpc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -15,6 +16,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpVersion;
@@ -24,13 +27,20 @@ import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.dom4j.io.DOMReader;
+import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.sip.xmlrpc.custom.OpenXGCustomXMLMarshall;
+import org.openmeetings.app.sip.xmlrpc.custom.OpenXGReturnObject;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
 
 public class OpenXGHttpClient {
 	
@@ -43,71 +53,6 @@ public class OpenXGHttpClient {
 			instance = new OpenXGHttpClient();
 		}
 		return instance;
-	}
-	
-	public void testConnection() {
-		try {
-			
-			log.debug("Test Connection");
-			
-			// Get target URL
-	        String strURL = "http://*****/manager/xml_rpc_server.php";
-	        // Get file to be posted
-	        String stringToPost = "TEST - String";
-	        
-	        
-	        //File f = new File("NewFileISO.xml");
-	        
-	        // Prepare HTTP post
-	        PostMethod post = new PostMethod(strURL);
-	        post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
-
-	        // Request content will be retrieved directly
-	        // from the input stream
-	        //RequestEntity entity = new FileRequestEntity(f, "text/xml; charset=ISO-8859-1"); 
-	        
-	        //String encodedString = this.readFile("/root/openmeetings/red5/webapps/openmeetings/WEB-INF/classes/NewFileISO.xml");
-	        
-	        RequestEntity entity = new ByteArrayRequestEntity(stringToPost.getBytes(Charset.forName("ISO-8859-1")));
-	        
-//	        // Prepare HTTP post
-//	        PostMethod post = new PostMethod(strURL);
-	        
-	        post.getParams().setContentCharset("ISO-8859-1");
-	        post.getParams().setVersion(HttpVersion.HTTP_1_0);
-	        
-	        // Request content will be retrieved directly
-	        // from the input stream
-//	        RequestEntity entity = new StringRequestEntity(stringToPost);
-	        post.setRequestEntity(entity);
-	        
-	        
-	        // Get HTTP client
-	        HttpClient httpclient = new HttpClient();
-	        // Execute request
-            int result = httpclient.executeMethod(post);
-            // Display status code
-            System.out.println("Response status code: " + result);
-            // Display response
-            System.out.println("Response body: ");
-            System.out.println(post.getResponseBodyAsString());
-			
-		} catch (Exception err) {
-			log.error("[testConnection]",err);
-		}
-	}
-	
-	private String readFile(String path) throws IOException {
-		FileInputStream stream = new FileInputStream(new File(path));
-		try {
-			FileChannel fc = stream.getChannel();
-			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc
-					.size());
-			/* Instead of using default, pass in a decoder. */
-			return Charset.forName("ISO-8859-1").decode(bb).toString();
-		} finally {
-			stream.close();
-		}
 	}
 	
 	public String digest_calculate(Object[] params) throws Exception {
@@ -130,7 +75,7 @@ public class OpenXGHttpClient {
 		    String email = "test@test.de";
 		    String password = "password";
 			
-			this.openSIPgUserCreateUser(first_name, middle_i, last_name, email, password);
+		    UserSipData sipData = this.openSIPgUserCreateUser(first_name, middle_i, last_name, email, password);
 		
 		} catch (Exception err) {
 
@@ -139,7 +84,18 @@ public class OpenXGHttpClient {
 		}
 	}
 
-	public void openSIPgUserCreateUser(String first_name, String middle_i, 
+	/**
+	 * 
+	 * Creates a SIP User using the RPC Methods of openXG
+	 * 
+	 * @param first_name
+	 * @param middle_i
+	 * @param last_name
+	 * @param email
+	 * @param password
+	 * @return
+	 */
+	public UserSipData openSIPgUserCreateUser(String first_name, String middle_i, 
 			String last_name, String email, String password) {
 		try {
 			
@@ -148,7 +104,7 @@ public class OpenXGHttpClient {
 			
 			if (sip_openxg_enable == null || !sip_openxg_enable.getConf_value().equals("yes")) {
 				log.debug("SIP is disabled");
-				return;
+				return null;
 			}
 			
 			//client_id and client_secret
@@ -188,7 +144,14 @@ public class OpenXGHttpClient {
 			}
 		    String adminid = openxg_adminid.getConf_value();
 		    
-		    
+		    //sip_language_phonecode, for example +358, is important as port of the 
+		    //number/login for the SIP-User via the applet
+		    Configuration sip_language_phonecode = Configurationmanagement.getInstance().getConfKey(3L, "sip.language.phonecode");
+			
+			if (sip_language_phonecode == null) {
+				throw new Exception("No sip.language.phonecode set in Configuration");
+			}
+			
 		    //Calculate the number in national format
 		    Configuration sip_phonerange_start = Configurationmanagement.getInstance().getConfKey(3L, "sip.phonerange.start");
 		    Configuration sip_phonerange = Configurationmanagement.getInstance().getConfKey(3L, "sip.phonerange");
@@ -205,11 +168,13 @@ public class OpenXGHttpClient {
 		    	throw new Exception("You have no more numbers, you need to allocate more numbers and alter the Configuration value sip.phonerange");
 		    }
 		    
-		    Long useridAsNumber = sipPhoneRangeStart + sipPhoneRange + sipPhoneRangeCurrentIndex;
+		    Long useridAsNumber = sipPhoneRangeStart + sipPhoneRangeCurrentIndex;
 		    
-		    log.debug("(sip_phonerange_start.getConf_value().length()+1) "+(sip_phonerange_start.getConf_value().length()+1));
+		    log.debug("(sip_phonerange_start.getConf_value().length()) "+(sip_phonerange_start.getConf_value().length()+1));
 		    
-		    String userid = String.format("%0"+(sip_phonerange_start.getConf_value().length()+1)+"d", useridAsNumber);
+			//The userid == the Number allocated in National Format!
+			//The userid is calculated on the number of available numbers in the range
+		    String userid = String.format("%0"+(sip_phonerange_start.getConf_value().length())+"d", useridAsNumber);
 		    
 		    sipPhoneRangeCurrentIndex++;
 		    sip_phonerange_currentindex.setConf_value(""+sipPhoneRangeCurrentIndex);
@@ -220,25 +185,71 @@ public class OpenXGHttpClient {
 						 first_name, middle_i, last_name, password, community_code,
 						 language_code, email, adminid, client_secret});
 			
-			this.openSIPgUserCreate(client_id, digest, userid, domain, first_name, 
-					middle_i, last_name, password, community_code, language_code,
-					email, adminid);
+		    OpenXGReturnObject openXGReturnObject = this.openSIPgUserCreate(client_id, digest, userid, domain, first_name, 
+														middle_i, last_name, password, community_code, language_code,
+														email, adminid);
+			
+			log.debug(" Status_code "+openXGReturnObject.getStatus_code());
+        	log.debug(" Status_string "+openXGReturnObject.getStatus_string());
+        	
+        	if (openXGReturnObject.getStatus_code().equals("200")) {
+        		
+        		UserSipData userSipData = new UserSipData();
+        		
+        		userSipData.setUsername(sip_language_phonecode.getConf_value() + useridAsNumber);
+        		userSipData.setUserpass(password);
+        		userSipData.setAuthId(userid);
+        		
+        		return userSipData;
+        		
+        	} else {
+        		
+        		throw new Exception("Could not add SIP User - Gateway response Error Code: "
+	            						+ openXGReturnObject.getStatus_code()+ " Message: "
+	            						+ openXGReturnObject.getStatus_string());
+        		
+        	}
+        	
 		
 		} catch (Exception err) {
 
 			log.error("[openSIPgUserCreateTest]",err);
 			
 		}
+		
+		return null;
 	}
 	
 	
-	
-	public void openSIPgUserCreate(String client_id, String digest, String userid, String domain, 
+	/**
+	 * 
+	 * 
+	 * @param client_id
+	 * @param digest
+	 * @param userid
+	 * @param domain
+	 * @param first_name
+	 * @param middle_i
+	 * @param last_name
+	 * @param password
+	 * @param community_code
+	 * @param language_code
+	 * @param email
+	 * @param adminid
+	 * @return
+	 */
+	public OpenXGReturnObject openSIPgUserCreate(String client_id, String digest, String userid, String domain, 
 			String first_name, String middle_i, String last_name, String password, String community_code, 
 			String language_code, String email, String adminid) {
 		try {
 			
-			String strURL = "https://85.134.48.179:443/manager/xml_rpc_server.php";
+			Configuration openxg_wrapper_url = Configurationmanagement.getInstance().getConfKey(3L, "openxg.wrapper.url");
+			
+			if (openxg_wrapper_url == null) {
+				throw new Exception("No openxg.wrapper.url set in Configuration");
+			}
+			
+			String strURL = openxg_wrapper_url.getConf_value();
 			
 			// Prepare HTTP post
 	        PostMethod post = new PostMethod(strURL);
@@ -254,7 +265,7 @@ public class OpenXGHttpClient {
 	        
 	        RequestEntity entity = new ByteArrayRequestEntity(stringToPost.getBytes(Charset.forName("ISO-8859-1")));
 	        
-//	        // Prepare HTTP post
+	        //Prepare HTTP post
 	        
 	        post.getParams().setContentCharset("ISO-8859-1");
 	        post.getParams().setVersion(HttpVersion.HTTP_1_0);
@@ -272,17 +283,98 @@ public class OpenXGHttpClient {
 	        
 	        // Execute request
             int result = httpclient.executeMethod(post);
+            
             // Display status code
             log.debug("Response status code: " + result);
-            // Display response
-            log.debug("Response body: ");
-            log.debug(post.getResponseBodyAsString());
-			
+            
+            if (result == 200) {
+            	
+            	log.debug("parseReturnBody "+post.getResponseBodyAsString());
+            
+            	return this.parseOpenXGReturnBody(post.getResponseBodyAsStream());
+            
+            } else {
+            	
+            	throw new Exception("Could not connect to OpenXG, check the URL for the Configuration");
+            	
+            }
+            
 		} catch (Exception err) {
 			
 			log.error("[openSIPgUserCreate]",err);
 			
 		}
+		
+		return null;
+	}
+	
+	public OpenXGReturnObject parseOpenXGReturnBody(InputStream inputStream) {
+		try { 
+			
+			OpenXGReturnObject openXGReturnObject = new OpenXGReturnObject();
+			
+			//log.debug("parseReturnBody "+inputStream);
+			
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setValidating( false );
+            factory.setNamespaceAware( false );
+            
+            //get a builder to create a DOM document
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            Document document = builder.parse( inputStream );
+            
+            NodeList members = document.getElementsByTagName("member");
+            
+            //log.debug("members LENGTH "+members.getLength());
+            
+            for (int i=0; i<members.getLength(); i++) {
+            	Element member = (Element) members.item(i);
+            	
+            	NodeList name = member.getElementsByTagName("name");
+            	
+            	//log.debug("Name "+name.item(0).getNodeName());
+            	
+            	Node nameTextNode = name.item(0).getFirstChild();
+            	
+            	//log.debug("getNodeValue "+nameTextNode.getNodeValue());
+            	
+            	if (nameTextNode.getNodeValue().equals("status_code")) {
+            	
+	            	NodeList string = member.getElementsByTagName("string");
+	            	
+	            	//log.debug("Value "+string.item(0).getNodeName());
+	            	
+	            	Node valueTextNode = string.item(0).getFirstChild();
+	            	
+	            	//log.debug("Value "+valueTextNode.getNodeValue());
+	            	
+	            	openXGReturnObject.setStatus_code(valueTextNode.getNodeValue());
+            	
+            	} else if (nameTextNode.getNodeValue().equals("status_string")) {
+            	
+            		NodeList string = member.getElementsByTagName("string");
+	            	
+	            	//log.debug("Value "+string.item(0).getNodeName());
+	            	
+	            	Node valueTextNode = string.item(0).getFirstChild();
+	            	
+	            	//log.debug("Value "+valueTextNode.getNodeValue());
+	            	
+	            	openXGReturnObject.setStatus_string(valueTextNode.getNodeValue());
+            	
+            	}
+            	
+        	}
+            
+            return openXGReturnObject;
+			
+		} catch (Exception err) {
+			
+			log.error("[parseOpenXGReturnBody]",err);
+			
+		}
+		return null;
 	}
 
 

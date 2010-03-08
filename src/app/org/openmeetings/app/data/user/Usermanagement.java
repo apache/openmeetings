@@ -33,6 +33,7 @@ import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.app.templates.ResetPasswordTemplate;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.openmeetings.utils.mail.MailHandler;
@@ -461,7 +462,8 @@ public class Usermanagement {
 			Date age, String street, String additionalname, String zip, long states_id, String town,
 			int availible, String telefon, String fax,
 			String mobil, String email, String comment, int status, List organisations,
-			int title_id, String phone, String sip_user, String sip_pass, String sip_auth) {
+			int title_id, String phone, String sip_user, String sip_pass, String sip_auth, 
+			Boolean generateSipUserData) {
 
 		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level) && user_id != 0) {
 			try {
@@ -481,6 +483,15 @@ public class Usermanagement {
 					// Its a new one - check, whether another user already uses that one...
 					checkEmail = Emailmanagement.getInstance().checkUserEMail(email);
 				}
+				
+				if (generateSipUserData) {
+					
+					if (password.length() == 0) {
+						//Cannot perform a SIP Creation without password re-enter
+						return new Long(-43);
+					}
+				}
+				
 				if (checkName && checkEmail) {
 //					log.info("user_id " + user_id);
 					
@@ -512,8 +523,24 @@ public class Usermanagement {
 						Organisationmanagement.getInstance().updateUserOrganisationsByUser(us, organisations);
 					}
 					
+					if (generateSipUserData) {
+						
+						UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, us.getAdresses().getEmail(), password);
 					
-					if (us.getUserSipData() == null) {
+						if (us.getUserSipData() == null) {
+							Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+						
+							us.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+						} else {
+							
+							us.getUserSipData().setUsername(userSipData.getUsername());
+							us.getUserSipData().setUserpass(userSipData.getUserpass());
+							us.getUserSipData().setAuthId(userSipData.getAuthId());
+							
+							UserSipDataDaoImpl.getInstance().updateUserSipData(us.getUserSipData());
+						}
+						
+					} else if (us.getUserSipData() == null) {
 						UserSipData userSipData = new UserSipData();
 						
 						userSipData.setUsername(sip_user);
@@ -833,7 +860,8 @@ public class Usermanagement {
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, String baseURL) {
+			String town, long language_id, String phone, String baseURL, 
+			boolean generateSipUserData) {
 		try {
 			// Checks if FrontEndUsers can register
 			if (Configurationmanagement.getInstance().getConfKey(3,"allow_frontend_register").getConf_value().equals("1")) {
@@ -855,7 +883,7 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
 										language_id, true, new LinkedList(), phone, baseURL, 
-										sendConfirmation,"","","");
+										sendConfirmation,"","","", generateSipUserData);
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -906,7 +934,7 @@ public class Usermanagement {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage, 
 			List organisations, String phone, String baseURL, Boolean sendConfirmation, 
-			String sip_user, String sip_pass, String sip_auth) throws Exception {
+			String sip_user, String sip_pass, String sip_auth, boolean generateSipUserData) throws Exception {
 		//TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -939,7 +967,7 @@ public class Usermanagement {
 					
 					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
 									Userpass,address_id, age, hash, 
-									sip_user, sip_pass, sip_auth);
+									sip_user, sip_pass, sip_auth, generateSipUserData);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -994,7 +1022,8 @@ public class Usermanagement {
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
 			String userpass, long adress_id, Date age, String hash, 
-			String sip_user, String sip_pass, String sip_auth) {
+			String sip_user, String sip_pass, String sip_auth, 
+			boolean generateSipUserData) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
@@ -1011,15 +1040,25 @@ public class Usermanagement {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			
-			UserSipData userSipData = new UserSipData();
-			
-			userSipData.setUsername(sip_user);
-			userSipData.setUserpass(sip_pass);
-			userSipData.setAuthId(sip_auth);
-			
-			Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
-			
-			users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+			if (generateSipUserData) {
+				
+				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass);
+				
+				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+				
+				users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+				
+			} else {
+				UserSipData userSipData = new UserSipData();
+				
+				userSipData.setUsername(sip_user);
+				userSipData.setUserpass(sip_pass);
+				userSipData.setAuthId(sip_auth);
+				
+				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+				
+				users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+			}
 			
 			// this is needed cause the language is not a needed data at
 			// registering
@@ -1087,16 +1126,22 @@ public class Usermanagement {
 	public Long addUserWithExternalKey(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Long adress_id, Date age, String hash, 
-			Long externalUserId, String externalUserType) {
+			Long externalUserId, String externalUserType, 
+			boolean generateSipUserData) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
 			users.setLogin(login);
 			users.setLastname(lastname);
 			users.setAge(age);
+			
 			if (adress_id != null && adress_id > 0) {
 			    users.setAdresses(Addressmanagement.getInstance().getAdressbyId(adress_id));
+			} else {
+				adress_id = Addressmanagement.getInstance().saveAddress("", "", "", 1L, "", "", "", "", "external@noreply.com");
+				users.setAdresses(Addressmanagement.getInstance().getAdressbyId(adress_id));
 			}
+			
 			users.setAvailible(availible);
 			users.setLastlogin(new Date());
 			users.setLasttrans(new Long(0));
@@ -1105,6 +1150,26 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
+			
+			if (generateSipUserData) {
+				
+				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass);
+				
+				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+				
+				users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+				
+			} else {
+				UserSipData userSipData = new UserSipData();
+				
+				userSipData.setUsername("");
+				userSipData.setUserpass("");
+				userSipData.setAuthId("");
+				
+				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
+				
+				users.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+			}
 			
 			users.setExternalUserId(externalUserId);
 			users.setExternalUserType(externalUserType);

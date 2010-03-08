@@ -335,5 +335,13 @@
       <field name="deleted">false</field>
       <field name="fieldvalues_id">787</field>
       <field name="errortype_id">1</field>
-    </row>  		
+    </row>  
+    <row>
+      <field name="errorvalues_id">43</field>
+      <field name="starttime" />
+      <field name="updatetime" />
+      <field name="deleted">false</field>
+      <field name="fieldvalues_id">920</field>
+      <field name="errortype_id">1</field>
+    </row> 		
 </ROOT>

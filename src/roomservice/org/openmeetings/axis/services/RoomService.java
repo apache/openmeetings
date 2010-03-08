@@ -317,7 +317,7 @@ public class RoomService {
 	 * @param isDemoRoom
 	 * @param demoTime
 	 * @param isModeratedRoom
-	 * @param externalUserId
+	 * @param externalRoomId
 	 * @param externalUserType
          * @return
          */
@@ -329,8 +329,8 @@ public class RoomService {
                         Boolean isDemoRoom,
                         Integer demoTime,
                         Boolean isModeratedRoom,
-			Long externalRoomId, 
-			String externalRoomType ) {
+						Long externalRoomId, 
+						String externalRoomType ) {
                 try {
 			Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
 			Long roomId = null;

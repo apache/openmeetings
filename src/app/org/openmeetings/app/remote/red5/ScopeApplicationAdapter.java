@@ -178,7 +178,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 			}
 			
-			OpenXGHttpClient.getInstance().openSIPgUserCreateTest();
+			//OpenXGHttpClient.getInstance().openSIPgUserCreateTest();
 			//OpenXGWrapperClient.getInstance().testConnection();
 			//OpenXGClient.getInstance().testConnection();
 			//ServerSocketMinaProcess serverSocketMinaProcess = new ServerSocketMinaProcess();
