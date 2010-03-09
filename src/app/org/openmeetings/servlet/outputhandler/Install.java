@@ -148,11 +148,14 @@ public class Install extends VelocityViewServlet {
 					String useremail = httpServletRequest.getParameter("useremail");
 					String orgname = httpServletRequest.getParameter("orgname");
 					String configdefault = httpServletRequest.getParameter("configdefault");
+					
 					String configreferer = httpServletRequest.getParameter("configreferer");
 					String configsmtp = httpServletRequest.getParameter("configsmtp");
 					String configsmtpport = httpServletRequest.getParameter("configsmtpport");
 					String configmailuser = httpServletRequest.getParameter("configmailuser");
 					String configmailpass = httpServletRequest.getParameter("configmailpass");
+					String mailusetls = httpServletRequest.getParameter("mailusetls");
+					
 					String configdefaultLang = httpServletRequest.getParameter("configdefaultLang");
 					String swf_path = httpServletRequest.getParameter("swftools_path");
 					String im_path = httpServletRequest.getParameter("imagemagick_path");
@@ -212,7 +215,7 @@ public class Install extends VelocityViewServlet {
 					ImportInitvalues.getInstance().loadSalutations();
 					
 					ImportInitvalues.getInstance().loadConfiguration(crypt_ClassName, configdefault, configsmtp, configsmtpport, 
-									configreferer, configmailuser, configmailpass, configdefaultLang, 
+									configreferer, configmailuser, configmailpass, mailusetls, configdefaultLang, 
 									swf_path, im_path, url_feed, url_feed2,
 									sendEmailAtRegister, sendEmailWithVerficationCode, default_export_font, ldap_auth_path, screen_viewer,
 									ffmpeg_path, sox_path,

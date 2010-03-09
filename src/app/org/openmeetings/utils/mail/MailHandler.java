@@ -11,6 +11,7 @@ import javax.activation.*;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 
 /**
  * 
@@ -83,7 +84,13 @@ public class MailHandler {
 			//smtpPort 25 or 587
 			props.put("mail.smtp.host", smtpServer);
 			props.put("mail.smtp.port", smtpPort);
-			//props.put("mail.smtp.starttls.enable","true");
+			
+			Configuration conf = Configurationmanagement.getInstance().getConfKey(3, "mail.smtp.starttls.enable");
+			if (conf != null) {
+				if (conf.getConf_value().equals("1")){
+					props.put("mail.smtp.starttls.enable","true");
+				}
+			}
 
 			Session session = null;
 			if (emailUsername != null && emailUsername.length() > 0
@@ -156,7 +163,13 @@ public class MailHandler {
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
-		props.put("mail.smtp.starttls.enable","true");
+		
+		Configuration conf = Configurationmanagement.getInstance().getConfKey(3, "mail.smtp.starttls.enable");
+		if (conf != null) {
+			if (conf.getConf_value().equals("1")){
+				props.put("mail.smtp.starttls.enable","true");
+			}
+		}
 		
 		// Check for Authentification
 		Session session = null;

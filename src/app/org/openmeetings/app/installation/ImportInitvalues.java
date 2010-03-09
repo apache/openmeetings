@@ -196,7 +196,7 @@ public class ImportInitvalues {
 
 	public void loadConfiguration(String crypt_ClassName,
 			String allowfrontendRegister, String smtpServer, String smtpPort,
-			String referer, String mailauthname, String mailauthpass,
+			String referer, String mailauthname, String mailauthpass, String mailusetls, 
 			String default_lang_id, String swf_path, String im_path,
 			String url_feed, String url_feed2,
 			String sendEmailAtRegister, String sendEmailWithVerficationCode,
@@ -260,7 +260,11 @@ public class ImportInitvalues {
 		//
 		Configurationmanagement.getInstance().addConfByKey(3, "email_userpass",
 				mailauthpass, null, "System auth email password");
-		//"EN"
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "mail.smtp.starttls.enable",
+				mailusetls, null, "Enable TLS 1=true, 0=false");
+		
+		//"1" == "EN"
 		Configurationmanagement.getInstance().addConfByKey(3, "default_lang_id",
 				default_lang_id, null, "Default System Language ID see language.xml");
 
