@@ -34,46 +34,46 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>No file available</value>
   </string>
   <string id="10" name="recordbyteacher">
-    <value>Record by Teacher</value>
+    <value>Record by teacher</value>
   </string>
   <string id="11" name="connectedusers">
-    <value>Connected users:</value>
+    <value>Connected users</value>
   </string>
   <string id="12" name="startconf">
     <value>Start a conference</value>
   </string>
   <string id="13" name="myname">
-    <value>My Name</value>
+    <value>My name</value>
   </string>
   <string id="14" name="videoconference">
-    <value>VideoConference</value>
+    <value>Video conference</value>
   </string>
   <string id="15" name="import">
-    <value>File Upload</value>
+    <value>File upload</value>
   </string>
   <string id="16" name="refreshfiles">
     <value>Refresh list</value>
   </string>
   <string id="17" name="tomainfile">
-    <value>To Main File</value>
+    <value>To main file</value>
   </string>
   <string id="18" name="newpoll">
     <value>new poll</value>
   </string>
   <string id="19" name="newpollheader">
-    <value>A new poll for the conference.</value>
+    <value>A new poll for the conference</value>
   </string>
   <string id="20" name="question">
-    <value>Question:</value>
+    <value>Question</value>
   </string>
   <string id="21" name="polltype">
-    <value>Type of poll:</value>
+    <value>Type of poll</value>
   </string>
   <string id="22" name="create">
     <value>Create</value>
   </string>
   <string id="23" name="infomessage">
-    <value>Info: Each connected user receives a message with the new poll.</value>
+    <value>Each connected user receives a message with the new poll</value>
   </string>
   <string id="24" name="creatpoll">
     <value>Create a poll</value>
@@ -91,19 +91,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Poll</value>
   </string>
   <string id="29" name="moderation">
-    <value>Must be Moderator to create an question</value>
+    <value>You must be a moderator to create a question</value>
   </string>
   <string id="30" name="vote">
-    <value>Your vote is registered.</value>
+    <value>Your vote has been registered</value>
   </string>
   <string id="31" name="alreadyvoted">
-    <value>Your have already voted in this poll.</value>
+    <value>Your have already voted in this poll</value>
   </string>
   <string id="32" name="voting">
-    <value>Vote !</value>
+    <value>Vote</value>
   </string>
   <string id="33" name="answer">
-    <value>Your response:</value>
+    <value>Your response</value>
   </string>
   <string id="34" name="yes">
     <value>Yes</value>
@@ -112,25 +112,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>No</value>
   </string>
   <string id="36" name="questionwant">
-    <value>wants to know:</value>
+    <value>wants to know</value>
   </string>
   <string id="37" name="pollresults">
     <value>Poll results</value>
   </string>
   <string id="38" name="question">
-    <value>Question:</value>
+    <value>Question</value>
   </string>
   <string id="39" name="results">
-    <value>Results:</value>
+    <value>Results</value>
   </string>
   <string id="40" name="answers">
-    <value>Answers:</value>
+    <value>Answers</value>
   </string>
   <string id="41" name="nopoll">
-    <value>No polls have been started.</value>
+    <value>No polls have been started</value>
   </string>
   <string id="42" name="votings">
-    <value>Vote!</value>
+    <value>Vote</value>
   </string>
   <string id="43" name="meeting">
     <value>Meeting (max 4 seats)</value>
@@ -151,7 +151,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>enter</value>
   </string>
   <string id="49" name="modleave">
-    <value>The moderator has left the meeting.</value>
+    <value>The moderator has left the meeting</value>
   </string>
   <string id="50" name="systemmessage">
     <value>System information</value>
@@ -160,31 +160,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Choose device</value>
   </string>
   <string id="52" name="choosecam">
-    <value>Choose webcam:</value>
+    <value>Choose webcam</value>
   </string>
   <string id="53" name="choosemic">
-    <value>Choose micro:</value>
+    <value>Choose micro</value>
   </string>
   <string id="54" name="ok">
-    <value>ok</value>
+    <value>OK</value>
   </string>
   <string id="55" name="cancel2">
     <value>Cancel</value>
   </string>
   <string id="56" name="reconeectneeded">
-    <value>You need to reconnect.</value>
+    <value>You need to reconnect</value>
   </string>
   <string id="57" name="editsetup">
-    <value>Edit setup.</value>
+    <value>Edit setup</value>
   </string>
   <string id="58" name="course">
-    <value>Course:</value>
+    <value>Course</value>
   </string>
   <string id="59" name="language">
-    <value>Language:</value>
+    <value>Language</value>
   </string>
   <string id="60" name="ok2">
-    <value>ok</value>
+    <value>OK</value>
   </string>
   <string id="61" name="cancel3">
     <value>Cancel</value>
@@ -193,25 +193,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Clear whiteboard</value>
   </string>
   <string id="63" name="clearwhiteboardquestion">
-    <value>Do you want that the whiteboard to be emptied before a new picture is added?</value>
+    <value>Do you want to empty the whiteboard before a new picture is added?</value>
   </string>
   <string id="64" name="dontaskagain">
     <value>Don't ask again</value>
   </string>
   <string id="65" name="no">
-    <value>no</value>
+    <value>No</value>
   </string>
   <string id="66" name="editsetup2">
     <value>Edit setup</value>
   </string>
   <string id="67" name="needconfirmationwhiteboard">
-    <value>Confirmation request before emptying the whiteboard.</value>
+    <value>Confirm request to empty the whiteboard</value>
   </string>
   <string id="68" name="userinfo">
-    <value>User Info</value>
+    <value>User info</value>
   </string>
   <string id="69" name="cleardrawarea">
-    <value>Clear Whiteboard</value>
+    <value>Clear whiteboard</value>
   </string>
   <string id="70" name="undo">
     <value>Undo</value>
@@ -220,7 +220,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Redo</value>
   </string>
   <string id="72" name="selectobject">
-    <value>Select an Object</value>
+    <value>Select an object</value>
   </string>
   <string id="73" name="text">
     <value>Text</value>
@@ -229,10 +229,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Paint</value>
   </string>
   <string id="75" name="drawline">
-    <value>Draw Line</value>
+    <value>Draw line</value>
   </string>
   <string id="76" name="drawu">
-    <value>Draw Underline</value>
+    <value>Draw underline</value>
   </string>
   <string id="77" name="rect">
     <value>Rectangle</value>
@@ -244,10 +244,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Arrow</value>
   </string>
   <string id="80" name="deletechosen">
-    <value>Delete chosen Item</value>
+    <value>Delete chosen item</value>
   </string>
   <string id="81" name="appliymod">
-    <value>Apply for moderation</value>
+    <value>Apply to be a moderator</value>
   </string>
   <string id="82" name="apply">
     <value>Apply</value>
@@ -271,7 +271,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>WAITING</value>
   </string>
   <string id="89" name="applyMessage">
-    <value>A User wants to apply for moderation, you can either grant him only access to the whiteboard or completely switch the moderation role. User:</value>
+    <value>A user has applied to be a moderator, you can either grant them only access to the whiteboard or completely switch the moderation role. User:</value>
   </string>
   <string id="90" name="accept">
     <value>Accept</value>
@@ -283,7 +283,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancel</value>
   </string>
   <string id="93" name="sendmodrequestmessage">
-    <value>Sending request to following Users</value>
+    <value>Sending the request to the following users</value>
   </string>
   <string id="94" name="accept">
     <value>Accepted</value>
@@ -292,16 +292,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Rejected</value>
   </string>
   <string id="96" name="changemod">
-    <value>Change Moderator</value>
+    <value>Change moderator</value>
   </string>
   <string id="97" name="nonmoderrormessage">
-    <value>You are not moderating this course!</value>
+    <value>You are not the moderator of this course</value>
   </string>
   <string id="98" name="moderator">
-    <value>Moderator:</value>
+    <value>Moderator</value>
   </string>
   <string id="99" name="roomfullmessage">
-    <value>This Room is full. Sorry please try again later.</value>
+    <value>This room is full</value>
   </string>
   <string id="100" name="elllipse">
     <value>Ellipse</value>
@@ -313,58 +313,58 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>input data error</value>
   </string>
   <string id="103" name="min4username">
-    <value>4 or more characters; capitalization matters!</value>
+    <value>Case sensitive with 4 or more characters</value>
   </string>
   <string id="104" name="min4pass">
-    <value>userpass must be at least 4 characters</value>
+    <value>Password must be at least 4 characters in length</value>
   </string>
   <string id="105" name="usernametaken">
-    <value>The username is already taken</value>
+    <value>The username is already used</value>
   </string>
   <string id="106" name="emailtaken">
     <value>The email is already registered</value>
   </string>
   <string id="107" name="emailtaken">
-    <value>System error please contact System-Admins</value>
+    <value>System error please contact the administrator</value>
   </string>
   <string id="108" name="Authlogin">
     <value>Login</value>
   </string>
   <string id="109" name="Authuser">
-    <value>User or EMail:</value>
+    <value>Username or email</value>
   </string>
   <string id="110" name="Authpass">
-    <value>Pass:</value>
+    <value>Password</value>
   </string>
   <string id="111" name="Authlang">
     <value>Language</value>
   </string>
   <string id="112" name="Authreg">
-    <value>Sign In</value>
+    <value>Sign in</value>
   </string>
   <string id="113" name="regformhead">
-    <value>Sign Up</value>
+    <value>Sign up</value>
   </string>
   <string id="114" name="regformuser">
-    <value>User:</value>
+    <value>Username</value>
   </string>
   <string id="115" name="regformpass">
-    <value>Pass:</value>
+    <value>Password</value>
   </string>
   <string id="116" name="regformretype">
-    <value>ReType:</value>
+    <value>Re-enter password</value>
   </string>
   <string id="117" name="regformfirstname">
-    <value>Firstname:</value>
+    <value>First name</value>
   </string>
   <string id="118" name="regformlastname">
-    <value>Lastname:</value>
+    <value>Surname</value>
   </string>
   <string id="119" name="regformmail">
-    <value>Mail:</value>
+    <value>Email address</value>
   </string>
   <string id="120" name="regformstate">
-    <value>Country:</value>
+    <value>Country</value>
   </string>
   <string id="121" name="regformbtn1">
     <value>Register</value>
@@ -388,10 +388,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Organisations</value>
   </string>
   <string id="128" name="headconf">
-    <value>Meeting-Rooms</value>
+    <value>Conference rooms</value>
   </string>
   <string id="129" name="conf_pub">
-    <value>public</value>
+    <value>Public</value>
   </string>
   <string id="130" name="head_org">
     <value>Organisation</value>
@@ -406,16 +406,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Password</value>
   </string>
   <string id="134" name="useralterself_passretype">
-    <value>Retype</value>
+    <value>Re-enter password</value>
   </string>
   <string id="135" name="useralterself_firstname">
-    <value>Firstname</value>
+    <value>Title/first name</value>
   </string>
   <string id="136" name="useralterself_lastname">
-    <value>Lastname</value>
+    <value>Surname</value>
   </string>
   <string id="137" name="useralterself_email">
-    <value>Mail</value>
+    <value>Email address</value>
   </string>
   <string id="138" name="useralterself_birth">
     <value>Birthday</value>
@@ -424,16 +424,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Street/No</value>
   </string>
   <string id="140" name="useralterself_town">
-    <value>ZIP/Town</value>
+    <value>Post code/Town</value>
   </string>
   <string id="141" name="useralterself_state">
     <value>Country</value>
   </string>
   <string id="142" name="useralterself_adresscomment">
-    <value>Adress-Info</value>
+    <value>Address</value>
   </string>
   <string id="143" name="useralterself_header">
-    <value>Userdata</value>
+    <value>User details</value>
   </string>
   <string id="144" name="savemenubar_savelabel">
     <value>Save</value>
@@ -442,22 +442,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Save</value>
   </string>
   <string id="146" name="admin_userlist_user_id">
-    <value>USER-ID</value>
+    <value>User ID</value>
   </string>
   <string id="147" name="admin_userlist_login">
     <value>Login</value>
   </string>
   <string id="148" name="admin_userlist_firstnam">
-    <value>Firstname</value>
+    <value>First name</value>
   </string>
   <string id="149" name="admin_userlist_lastname">
-    <value>Lastname</value>
+    <value>Surname</value>
   </string>
   <string id="150" name="turnoverlist_next">
     <value>Show next</value>
   </string>
   <string id="151" name="turnoverlist_pre">
-    <value>Show pre</value>
+    <value>Show previous</value>
   </string>
   <string id="152" name="savecontent_confirm">
     <value>Delete record</value>
@@ -481,10 +481,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Status</value>
   </string>
   <string id="159" name="useralter_admin_statusItem">
-    <value>disabled</value>
+    <value>Disabled</value>
   </string>
   <string id="160" name="useralter_admin_statusItem">
-    <value>enabled</value>
+    <value>Enabled</value>
   </string>
   <string id="161" name="useralter_admin_organisation">
     <value>Organisations</value>
@@ -496,7 +496,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Close</value>
   </string>
   <string id="164" name="organisationtablelist_idrow">
-    <value>Organisation-ID</value>
+    <value>Organisation ID</value>
   </string>
   <string id="165" name="organisationtablelist_namerow">
     <value>Name</value>
@@ -511,13 +511,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Admin</value>
   </string>
   <string id="169" name="uservalue_levellabel">
-    <value>Userlevel</value>
+    <value>User level</value>
   </string>
   <string id="170" name="orgvalue_header">
     <value>Organisation</value>
   </string>
   <string id="171" name="orgvalue_orgname">
-    <value>name</value>
+    <value>Name</value>
   </string>
   <string id="172" name="orgvalue_orgname">
     <value>Add organisation</value>
@@ -532,7 +532,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Add</value>
   </string>
   <string id="176" name="orgvalue_userwin">
-    <value>Remove Organisation</value>
+    <value>Remove organisation</value>
   </string>
   <string id="177" name="orgvalue_userlist">
     <value>User</value>
@@ -544,7 +544,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Delete user</value>
   </string>
   <string id="180" name="orgvalue_userwinheader">
-    <value>Add user to Organization</value>
+    <value>Add user to organisation</value>
   </string>
   <string id="181" name="orgvalue_userwinsearchfield">
     <value>Search user</value>
@@ -562,10 +562,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Enter</value>
   </string>
   <string id="186" name="navi_roomadmin">
-    <value>Conferencerooms</value>
+    <value>Conference rooms</value>
   </string>
   <string id="187" name="roomadmin_header">
-    <value>Conferencerooms</value>
+    <value>Conference rooms</value>
   </string>
   <string id="188" name="roomadmin_header">
     <value>ID</value>
@@ -574,13 +574,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Name</value>
   </string>
   <string id="190" name="roomadmin_header">
-    <value>public</value>
+    <value>Public</value>
   </string>
   <string id="191" name="roomadmin_header">
     <value>Organisations</value>
   </string>
   <string id="192" name="roomadmin_header">
-    <value>Meetingrooms</value>
+    <value>Conference rooms</value>
   </string>
   <string id="193" name="roomvalue_name">
     <value>Name</value>
@@ -595,19 +595,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Comment</value>
   </string>
   <string id="197" name="whiteboard_saveicon">
-    <value>Save and Export</value>
+    <value>Save and export</value>
   </string>
   <string id="198" name="whiteboard_openicon">
-    <value>load</value>
+    <value>Load</value>
   </string>
   <string id="199" name="whiteboard_saveaswinheader">
-    <value>Save As</value>
+    <value>Save as</value>
   </string>
   <string id="200" name="whiteboard_saveaswintext">
     <value>Filename</value>
   </string>
   <string id="201" name="files">
-    <value>filename</value>
+    <value>Filename</value>
   </string>
   <string id="202" name="whiteboard_saveaswinbtn1">
     <value>Cancel</value>
@@ -625,19 +625,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Objects loaded</value>
   </string>
   <string id="207" name="loadwml_messsync">
-    <value>Synchronizing, Users to wait:</value>
+    <value>Synchronizing, please wait</value>
   </string>
   <string id="208" name="loadimage_messload">
-    <value>Loading Imagedata</value>
+    <value>Loading image</value>
   </string>
   <string id="209" name="loadimage_messsync">
-    <value>Synchronizing, Users to wait:</value>
+    <value>Synchronizing, please wait</value>
   </string>
   <string id="210" name="loadwml_confirmheader">
-    <value>Clear Whiteboard</value>
+    <value>Clear whiteboard</value>
   </string>
   <string id="211" name="loadwml_confirmmess">
-    <value>Clear Whiteboard, all data on Whiteboard will be lost</value>
+    <value>Clear whiteboard, all data on the whiteboard will be lost</value>
   </string>
   <string id="212" name="loadwml_confirmmess2">
     <value>Confirm before loading a file</value>
@@ -661,13 +661,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Send</value>
   </string>
   <string id="219" name="send_invitationwin_btn_cancel">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="220" name="send_chat_text_btn">
-    <value>send</value>
+    <value>Send</value>
   </string>
   <string id="221" name="invited_userwin_header">
-    <value>Userdata</value>
+    <value>User details</value>
   </string>
   <string id="222" name="invited_userwin_subject">
     <value>Your nickname for this conference</value>
@@ -676,10 +676,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Nick</value>
   </string>
   <string id="224" name="invited_userwin_firstname">
-    <value>Firstname</value>
+    <value>First name</value>
   </string>
   <string id="225" name="invited_userwin_lastname">
-    <value>Lastname</value>
+    <value>Surname</value>
   </string>
   <string id="226" name="invited_userwin_mail">
     <value>Email</value>
@@ -688,43 +688,43 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Language</value>
   </string>
   <string id="228" name="invited_userwin_enter">
-    <value>enter</value>
+    <value>Enter</value>
   </string>
   <string id="229" name="invited_userwin_enter">
     <value>Loading</value>
   </string>
   <string id="230" name="invited_userwin_enter">
-    <value>Data loading, please wait!</value>
+    <value>Loading data, please wait</value>
   </string>
   <string id="231" name="user_registerFalsePWD">
-    <value>Wrong Password</value>
+    <value>Wrong password</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Please enter two identical passwords with at least 4 characters</value>
+    <value>Please enter two identical passwords</value>
   </string>
   <string id="233" name="user_registerMailError">
-    <value>Wrong Mail</value>
+    <value>Wrong email</value>
   </string>
   <string id="234" name="user_registerMailErrorHeader">
-    <value>You have entered an invalid Mail-Adress</value>
+    <value>You have entered an invalid email address</value>
   </string>
   <string id="235" name="user_registerSuccess">
-    <value>Registration Complete</value>
+    <value>Registration complete</value>
   </string>
   <string id="236" name="user_registerSuccessHeader">
-    <value>Your account has been created. You can login now.</value>
+    <value>Your account has been created. You can now login.</value>
   </string>
   <string id="237" name="user_sharing_message">
-    <value>You cannot share your screen at the moment. Somebody else already share's its screen.</value>
+    <value>Someone is already sharing their screen</value>
   </string>
   <string id="238" name="user_sharing_messageHeader">
     <value>Sharing forbidden</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>Share/Record Screen</value>
+    <value>Share/record screen</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
-    <value>Bad Bandwidth: You have not been able to syncronize the Screen. Frames will be dropped. If this Warning is shown often you could ask the moderator to reduce the Quality.</value>
+    <value>Unable to syncronize the screen. If this warning is shown often you should ask the moderator to reduce the quality.</value>
   </string>
   <string id="241" name="screen_userlabel">
     <value>Screen of:</value>
@@ -748,19 +748,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Download original document</value>
   </string>
   <string id="248" name="swfpresentation_listsavepdf">
-    <value>Download pdf document</value>
+    <value>Download PDF document</value>
   </string>
   <string id="249" name="swfpresentation_listloadswf">
-    <value>Load Presentation to whiteboard</value>
+    <value>Load presentation to whiteboard</value>
   </string>
   <string id="250" name="navimain_config">
     <value>Configuration</value>
   </string>
   <string id="251" name="whiteboard_boundingbox_drag">
-    <value>Drag this Object</value>
+    <value>Drag this object</value>
   </string>
   <string id="252" name="whiteboard_boundingbox_resize">
-    <value>Resize this Object</value>
+    <value>Resize this object</value>
   </string>
   <string id="253" name="whiteboard_documenttoolbar_zoom">
     <value>%</value>
@@ -787,10 +787,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Zoom ++</value>
   </string>
   <string id="261" name="salutation_mr">
-    <value>Mr.</value>
+    <value>Mr</value>
   </string>
   <string id="262" name="salutation_miss">
-    <value>Ms.</value>
+    <value>Ms</value>
   </string>
   <string id="263" name="navimain_confadmin">
     <value>Configuration</value>
@@ -808,13 +808,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Key</value>
   </string>
   <string id="268" name="confadminform_labelupdated">
-    <value>last update</value>
+    <value>Last update</value>
   </string>
   <string id="269" name="confadminform_labelupdatedby">
-    <value>updatedby</value>
+    <value>Updated by</value>
   </string>
   <string id="270" name="confadminform_labelcomment">
-    <value>comment</value>
+    <value>Comment</value>
   </string>
   <string id="271" name="confadminform_labelkey">
     <value>Value</value>
@@ -826,13 +826,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Users</value>
   </string>
   <string id="274" name="organisation_usersicondelete">
-    <value>delete user from organisation</value>
+    <value>Delete user from organisation</value>
   </string>
   <string id="275" name="organisation_usersdeletedhead">
     <value>D</value>
   </string>
   <string id="276" name="organisation_usersalreadadded">
-    <value>This user is already member of this organisation.</value>
+    <value>This user is already a member of this organisation</value>
   </string>
   <string id="277" name="dashboard_newsheader">
     <value>News</value>
@@ -841,13 +841,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Quicklinks</value>
   </string>
   <string id="279" name="dashboard_quicklinkConf">
-    <value>Goto Conference</value>
+    <value>Goto conference</value>
   </string>
   <string id="280" name="dashboard_quicklinkAudit">
-    <value>Goto Auditorium</value>
+    <value>Goto auditorium</value>
   </string>
   <string id="281" name="dashboard_quicklinksupport">
-    <value>Help and Support</value>
+    <value>Help and support</value>
   </string>
   <string id="282" name="dashboard_quickhomepageurl">
     <value>http://code.google.com/p/openmeetings/</value>
@@ -856,7 +856,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>http://groups.google.com/group/openmeetings-user</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
-    <value>Report a bug!</value>
+    <value>Report a bug</value>
   </string>
   <string id="285" name="dashboard_rsslistitemlinktext">
     <value>more</value>
@@ -868,40 +868,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>User Mailing List (groups.google.com/group/openmeetings-user)</value>
   </string>
   <string id="288" name="login_rememberuser">
-    <value>Remember Login</value>
+    <value>Remember login</value>
   </string>
   <string id="289" name="main_navi">
     <value>Content</value>
   </string>
   <string id="290" name="subnavi">
-    <value>My Home Page</value>
+    <value>My home page</value>
   </string>
   <string id="291" name="subnavi">
-    <value>My Scheduled Meetings</value>
+    <value>My scheduled meetings</value>
   </string>
   <string id="292" name="subnavi">
-    <value>My Scheduled Events</value>
+    <value>My scheduled events</value>
   </string>
   <string id="293" name="subnavi">
-    <value>Public Meetings</value>
+    <value>Public meetings</value>
   </string>
   <string id="294" name="subnavi">
-    <value>Private Meetings</value>
+    <value>Private meetings</value>
   </string>
   <string id="295" name="subnavi">
-    <value>Public Events</value>
+    <value>Public events</value>
   </string>
   <string id="296" name="subnavi">
-    <value>Private Events</value>
+    <value>Private events</value>
   </string>
   <string id="297" name="subnavi">
-    <value>Public Content</value>
+    <value>Public content</value>
   </string>
   <string id="298" name="subnavi">
-    <value>Private Content</value>
+    <value>Private content</value>
   </string>
   <string id="299" name="subnavi">
-    <value>Personal Content</value>
+    <value>Personal content</value>
   </string>
   <string id="300" name="subnavi">
     <value></value>
@@ -922,52 +922,52 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Settings</value>
   </string>
   <string id="306" name="conferencebar">
-    <value>Cam and Mic Settings</value>
+    <value>Camera and mic settings</value>
   </string>
   <string id="307" name="conferencebar">
-    <value>Whiteboard Settings</value>
+    <value>Whiteboard settings</value>
   </string>
   <string id="308" name="conferencebar">
     <value>Exit</value>
   </string>
   <string id="309" name="conferencebar">
-    <value>Back to Rooms</value>
+    <value>Back to rooms</value>
   </string>
   <string id="310" name="conferencebar">
     <value>Logout</value>
   </string>
   <string id="311" name="loginwindow">
-    <value>Forgot your password?</value>
+    <value>Forgotten your password?</value>
   </string>
   <string id="312" name="loginwindow">
-    <value>Reset Password</value>
+    <value>Reset password</value>
   </string>
   <string id="313" name="loginwindow">
-    <value>By Mail</value>
+    <value>Using email address</value>
   </string>
   <string id="314" name="loginwindow">
-    <value>By Login</value>
+    <value>Using login</value>
   </string>
   <string id="315" name="loginwindow">
-    <value>Your Mail</value>
+    <value>Your email address</value>
   </string>
   <string id="316" name="loginwindow">
-    <value>Your Login</value>
+    <value>Your login</value>
   </string>
   <string id="317" name="loginwindow">
-    <value>Send Mail with reset Link</value>
+    <value>Send email with a reset link</value>
   </string>
   <string id="318" name="loginwindow">
-    <value>No such email address was found. Make sure you enter the same email address you used to create your account.</value>
+    <value>No such email address was found. Make sure you entered the same email address you used to create your account.</value>
   </string>
   <string id="319" name="loginwindow">
-    <value>Please enter either a Mail or a Username</value>
+    <value>Please enter either an email address or a username</value>
   </string>
   <string id="320" name="loginwindow">
-    <value>There is no User connected to this Username</value>
+    <value>There is no user connected to this username</value>
   </string>
   <string id="321" name="loginwindow">
-    <value>The email containing a special link has been sent to your email address, please check your mailbox. If you still have not received a email, please adjust your email spam settings and resend confirmation email.</value>
+    <value>The email containing a special link has been sent to your email address</value>
   </string>
   <string id="322" name="errortype">
     <value>Error</value>
@@ -976,124 +976,124 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Message</value>
   </string>
   <string id="324" name="resetpass">
-    <value>Invalid Hash. No User found.</value>
+    <value>No user found</value>
   </string>
   <string id="325" name="resetpass">
-    <value>Reset Your Password</value>
+    <value>Reset your password</value>
   </string>
   <string id="326" name="resetpass">
     <value>Login</value>
   </string>
   <string id="327" name="resetpass">
-    <value>change Password</value>
+    <value>Change password</value>
   </string>
   <string id="328" name="resetpass">
-    <value>new Password</value>
+    <value>New password</value>
   </string>
   <string id="329" name="resetpass">
-    <value>re-enter Password</value>
+    <value>Re-enter password</value>
   </string>
   <string id="330" name="resetpass">
-    <value>The Passwords you entered weren't identical.</value>
+    <value>The passwords you entered weren't identical</value>
   </string>
   <string id="331" name="resetpass">
-    <value>4 or more characters; capitalization matters!</value>
+    <value>Case sensitive with 4 or more characters</value>
   </string>
   <string id="332" name="resetpass">
-    <value>Password set. You can login now.</value>
+    <value>Password set. You can now login.</value>
   </string>
   <string id="333" name="rpccallback">
     <value>OK</value>
   </string>
   <string id="334" name="rpcgeneralerror">
-    <value>Unkown Error. Please report this to your Service-Team.</value>
+    <value>Unknown error. Please report this to the administrator.</value>
   </string>
   <string id="335" name="loginwindow">
     <value>Username not found</value>
   </string>
   <string id="336" name="loginwindow">
-    <value>Invalid Password</value>
+    <value>Invalid password</value>
   </string>
   <string id="337" name="logout">
-    <value>Successfully Logged out</value>
+    <value>Successfully logged out</value>
   </string>
   <string id="338" name="registration">
-    <value>Frontend Registration disabled.</value>
+    <value>Registration disabled</value>
   </string>
   <string id="339" name="registration">
-    <value>Invalid EMail</value>
+    <value>Invalid email address</value>
   </string>
   <string id="340" name="registration">
-    <value>duplicate filename, please choose another filename</value>
+    <value>Duplicate filename, please enter another</value>
   </string>
   <string id="341" name="filebrowser">
-    <value>filename too short</value>
+    <value>Filename too short</value>
   </string>
   <string id="342" name="filebrowser">
-    <value>Could not save Address</value>
+    <value>Could not save the address</value>
   </string>
   <string id="343" name="useradmin">
-    <value>User added but you need to assign this User to an Organisation, otherwise he won't be able to sign-in.</value>
+    <value>User added but you need to assign this user to an organisation, otherwise they won't be able to log in</value>
   </string>
   <string id="344" name="adminforms">
-    <value>New Record</value>
+    <value>New record</value>
   </string>
   <string id="345" name="languageseditor">
-    <value>No Field found with this FieldId.</value>
+    <value>No field found for the ID</value>
   </string>
   <string id="346" name="languageseditor">
-    <value>No Label found for that Field.</value>
+    <value>No label found</value>
   </string>
   <string id="347" name="errormessage">
-    <value>Admin Authorization required</value>
+    <value>Admin authorization required</value>
   </string>
   <string id="348" name="mainnavi">
-    <value>Language-Editor</value>
+    <value>Language editor</value>
   </string>
   <string id="349" name="languageseditor">
     <value>Language</value>
   </string>
   <string id="350" name="languageseditor">
-    <value>Label-ID</value>
+    <value>Label ID</value>
   </string>
   <string id="351" name="languageseditor">
-    <value>Label-Name</value>
+    <value>Label name</value>
   </string>
   <string id="352" name="languageseditor">
     <value>Value</value>
   </string>
   <string id="353" name="languageseditor">
-    <value>Fieldvalues</value>
+    <value>Field values</value>
   </string>
   <string id="354" name="languageseditor">
-    <value>LabelName</value>
+    <value>Label name</value>
   </string>
   <string id="355" name="languageseditor">
-    <value>LabelValue</value>
+    <value>Label value</value>
   </string>
   <string id="356" name="languageseditor">
-    <value>Label-ID</value>
+    <value>Label ID</value>
   </string>
   <string id="357" name="languageseditor">
-    <value>You did only delete the Label NOT the Field! You cannot delete the Field, it may has Labels in other Languages.</value>
+    <value>You have deleted the label</value>
   </string>
   <string id="358" name="languageseditor">
-    <value>Invalid Labelid. The FieldLanguagesvalues_Id cannot be found in the database.</value>
+    <value>Invalid label ID</value>
   </string>
   <string id="359" name="languageseditor">
-    <value>You cannot delete this Field. You can only delete Labels NOT Fields. There is no Label loaded at the moment, wether it is not selected any Field or there is no Label for this Language for that Field defined.</value>
+    <value>You cannot delete this field</value>
   </string>
   <string id="360" name="languageseditor">
-    <value>export</value>
+    <value>Export</value>
   </string>
   <string id="361" name="languageseditor">
-    <value>You need to logout to see any changes.</value>
+    <value>You need to logout for any changes to update</value>
   </string>
   <string id="362" name="languageseditor">
     <value>Add new language</value>
   </string>
   <string id="363" name="languageseditor">
-    <value>delete language</value>
+    <value>Delete language</value>
   </string>
   <string id="364" name="languageseditor">
     <value>Add new language</value>
@@ -1102,7 +1102,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Name</value>
   </string>
   <string id="366" name="languageseditor">
-    <value>add language</value>
+    <value>Add language</value>
   </string>
   <string id="367" name="languageseditor">
     <value>Backup</value>
@@ -1129,145 +1129,145 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>System</value>
   </string>
   <string id="375" name="dashboard">
-    <value>Your Settings</value>
+    <value>Your settings</value>
   </string>
   <string id="376" name="dashboard">
-    <value>hi,</value>
+    <value>Hello</value>
   </string>
   <string id="377" name="dashboard">
     <value>Edit your profile</value>
   </string>
   <string id="378" name="dashboard">
-    <value>New Messages:</value>
+    <value>New messages</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Upload new Image</value>
+    <value>Upload new image</value>
   </string>
   <string id="380" name="backuppanel">
-    <value>Userdata - Export</value>
+    <value>Export user data</value>
   </string>
   <string id="381" name="backuppanel">
-    <value>All organisations must be already existing!</value>
+    <value>All organisations must already exist</value>
   </string>
   <string id="382" name="backuppanel">
-    <value>start export</value>
+    <value>Start export</value>
   </string>
   <string id="383" name="backuppanel">
     <value>By organisation</value>
   </string>
   <string id="384" name="backuppanel">
-    <value>start export</value>
+    <value>Start export</value>
   </string>
   <string id="385" name="backuppanel">
-    <value>Userdata - Import</value>
+    <value>Import user data</value>
   </string>
   <string id="386" name="backuppanel">
-    <value>choose users.xml</value>
+    <value>Choose users.xml</value>
   </string>
   <string id="387" name="languageseditor">
-    <value>import</value>
+    <value>Import</value>
   </string>
   <string id="388" name="languageseditor">
-    <value>Export to XML - These files can be used to:&lt;br/&gt; - Contribute to the project - Import into another System&lt;br/&gt; - Backup - Customization&lt;br/&gt; - Put it into the language-directory for your next installation</value>
+    <value>Export to XML</value>
   </string>
   <string id="389" name="languageseditor">
-    <value>Choose a language file to import. &lt;br/&gt;Choose the right Langauge from the Combobox! &lt;br/&gt;No matter what the name of the file is, &lt;br/&gt;it will be imported into this language!</value>
+    <value>Choose a language file to import</value>
   </string>
   <string id="390" name="importwindow">
-    <value>import - choose file</value>
+    <value>Import</value>
   </string>
   <string id="391" name="recordingsavewin">
     <value>Save as</value>
   </string>
   <string id="392" name="recordingsavewin">
-    <value>Name:</value>
+    <value>Name</value>
   </string>
   <string id="393" name="recordingsavewin">
-    <value>Comment:</value>
+    <value>Comment</value>
   </string>
   <string id="394" name="recordingsavewin">
-    <value>save</value>
+    <value>Save</value>
   </string>
   <string id="395" name="record">
     <value>Recordings</value>
   </string>
   <string id="396" name="recorder">
-    <value>Recordings Viewer</value>
+    <value>Recordings viewer</value>
   </string>
   <string id="397" name="record">
-    <value>Recordings of public and private Rooms</value>
+    <value>Recordings of public and private rooms</value>
   </string>
   <string id="398" name="roomslist">
-    <value>Users :</value>
+    <value>Users</value>
   </string>
   <string id="399" name="roomslist">
-    <value>Joined:</value>
+    <value>Joined</value>
   </string>
   <string id="400" name="roomslist">
     <value></value>
   </string>
   <string id="401" name="roomslist">
-    <value>Users in this Room:</value>
+    <value>Users in this room</value>
   </string>
   <string id="402" name="roomslist">
-    <value>refresh</value>
+    <value>Refresh</value>
   </string>
   <string id="403" name="roomslist">
-    <value>This Room is Full. Try again in a few minutes.</value>
+    <value>This room is full</value>
   </string>
   <string id="404" name="roomsList">
-    <value>click on a room to get details</value>
+    <value>Click on a room to get the room details</value>
   </string>
   <string id="405" name="roomslist">
-    <value>Chat with the users in this Room:</value>
+    <value>Chat with the users in this room</value>
   </string>
   <string id="406" name="roomslist">
-    <value>Room:</value>
+    <value>Room</value>
   </string>
   <string id="407" name="roomslist">
-    <value>Users in this room:</value>
+    <value>Users in this room</value>
   </string>
   <string id="408" name="roomslist">
-    <value>since:</value>
+    <value>since</value>
   </string>
   <string id="409" name="record">
-    <value>play recording</value>
+    <value>Play recording</value>
   </string>
   <string id="410" name="record">
-    <value>Length:</value>
+    <value>Length</value>
   </string>
   <string id="411" name="record">
-    <value>Date:</value>
+    <value>Date</value>
   </string>
   <string id="412" name="record">
-    <value>Recorder Mode! You cannot change any values, this is a recorded File!</value>
+    <value>Recorder mode</value>
   </string>
   <string id="413" name="record">
     <value>Play this recording</value>
   </string>
   <string id="414" name="record">
-    <value>Play / Pause</value>
+    <value>Play/Pause</value>
   </string>
   <string id="415" name="record">
-    <value>Record this Meeting</value>
+    <value>Record this meeting</value>
   </string>
   <string id="416" name="record">
-    <value>stop recording</value>
+    <value>Stop recording</value>
   </string>
   <string id="417" name="record">
-    <value>Recording:</value>
+    <value>Recording</value>
   </string>
   <string id="418" name="record_error_msg">
-    <value>There is already somebody recording in this meeting!</value>
+    <value>Someone is already recording this meeting</value>
   </string>
   <string id="419" name="record_message">
-    <value>Recording! By User:</value>
+    <value>Recording. User:</value>
   </string>
   <string id="420" name="record_cancel">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="421" name="record_cancal_tooltip">
-    <value>Recording will be canceled and not saved.</value>
+    <value>Recording will be canceled and not saved</value>
   </string>
   <string id="422" name="cancel_dialog_resume">
     <value>resume</value>
@@ -1276,31 +1276,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Close this window and resume recording</value>
   </string>
   <string id="424" name="painttools_ellipse_color">
-    <value>change Linecolor</value>
+    <value>Change line colour</value>
   </string>
   <string id="425" name="colorpicker_head">
-    <value>Choose Color</value>
+    <value>Choose colour</value>
   </string>
   <string id="426" name="painttools_line_disable">
-    <value>Disable / Enable Linecolor</value>
+    <value>Disable/enable line colour</value>
   </string>
   <string id="427" name="painttools_fill_disable">
-    <value>change Fillcolor</value>
+    <value>Change fill colour</value>
   </string>
   <string id="428" name="painttools_line_disable">
-    <value>Disable / Enable Fillcolor</value>
+    <value>Disable/enable fill colour</value>
   </string>
   <string id="429" name="change_width_arrow_down_slider">
-    <value>Change Linewidth</value>
+    <value>Change line width</value>
   </string>
   <string id="430" name="close_small_popups">
     <value>Close</value>
   </string>
   <string id="431" name="paint_tool_letter">
-    <value>change Fontsize</value>
+    <value>Change font size</value>
   </string>
   <string id="432" name="recordingslist_delete">
-    <value>Delete Recording</value>
+    <value>Delete recording</value>
   </string>
   <string id="433" name="recordingslist_recordedByGuest">
     <value>Guest</value>
@@ -1318,10 +1318,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Date</value>
   </string>
   <string id="438" name="record_start_cancel">
-    <value>cancel</value>
+    <value>Cancel</value>
   </string>
   <string id="439" name="record_start_start">
-    <value>start</value>
+    <value>Start</value>
   </string>
   <string id="440" name="filesbrowser_table_head_name">
     <value>Name</value>
@@ -1330,13 +1330,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Date</value>
   </string>
   <string id="442" name="chat_clear_history">
-    <value>Delete Server-Chatlog</value>
+    <value>Delete server chat log</value>
   </string>
   <string id="443" name="chat_overall_header">
     <value>Chat</value>
   </string>
   <string id="444" name="chat_send_btn">
-    <value>send message</value>
+    <value>Send message</value>
   </string>
   <string id="445" name="chat_emot_btn">
     <value>Emoticons</value>
@@ -1345,10 +1345,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Emoticons</value>
   </string>
   <string id="447" name="choose_video_settings">
-    <value>Choose Published Devices</value>
+    <value>Choose published devices</value>
   </string>
   <string id="448" name="choose_video_settings_combo">
-    <value>Audio and Video</value>
+    <value>Audio and video</value>
   </string>
   <string id="449" name="choose_video_settings_combo">
     <value>Audio only</value>
@@ -1357,10 +1357,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Video only</value>
   </string>
   <string id="451" name="choose_video_settings_combo">
-    <value>no Audio/Video (static Image)</value>
+    <value>No audio/video (static image)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>No Audio/Video from your PC will be published, instead of that a picture from your profile will be shown. Choose these settings if you have problems with your bandwidth or a very slow Internet connection.</value>
+    <value>No audio/video from your PC will be published, you profile picture will be shown</value>
   </string>
   <string id="453" name="calendar_dayname_monday">
     <value>MO</value>
@@ -1453,25 +1453,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Participants</value>
   </string>
   <string id="483" name="roomValue_advancedSettings">
-    <value>Show Layout Settings</value>
+    <value>Show layout settings</value>
   </string>
   <string id="484" name="roomAdmin_layout_videoX">
     <value>X | Y</value>
   </string>
   <string id="485" name="roomAdmin_layout_videoY">
-    <value>Width | Height</value>
+    <value>Width | height</value>
   </string>
   <string id="486" name="roomAdmin_layout">
-    <value>Video-Container</value>
+    <value>Video container</value>
   </string>
   <string id="487" name="roomAdmin_layout_mod">
-    <value>Moderation-Container</value>
+    <value>Moderation container</value>
   </string>
   <string id="488" name="roomAdmin_layout_mod_pos">
     <value>X</value>
   </string>
   <string id="489" name="roomAdmin_layout_whiteboard">
-    <value>Whiteboard-Container</value>
+    <value>Whiteboard container</value>
   </string>
   <string id="490" name="roomAdmin_layout_whiteboard_show">
     <value>Enabled</value>
@@ -1480,10 +1480,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>X | Y</value>
   </string>
   <string id="492" name="roomAdmin_layout_whiteboard">
-    <value>Width | Height</value>
+    <value>Width | height</value>
   </string>
   <string id="493" name="roomAdmin_layout_files">
-    <value>Files,Chat,Participants - Container</value>
+    <value>Files, chat, participants container</value>
   </string>
   <string id="494" name="roomAdmin_layout_files_show">
     <value>Enabled</value>
@@ -1492,13 +1492,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>X |Y</value>
   </string>
   <string id="496" name="roomAdmin_layout_files">
-    <value>Width | Height</value>
+    <value>Width | height</value>
   </string>
   <string id="497" name="moderator_gone_message">
-    <value>The Moderator has left the Room. No one is presenting at the Moment. You could apply for Moderation or wait.</value>
+    <value>The moderator has left the room. No one is presenting at the moment.</value>
   </string>
   <string id="498" name="moderator_message_event_no_mod">
-    <value>There is no Moderator in this Room, but there are some Participants. You have to apply for Moderation or wait.</value>
+    <value>There is no moderator in this room, but there are some participants. You have to apply to be the moderator or wait.</value>
   </string>
   <string id="499" name="feedback_template_subject">
     <value>Feedback OpenMeetings</value>
@@ -1507,34 +1507,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>OpenMeetings - Invitation</value>
   </string>
   <string id="501" name="invitation_text_from">
-    <value>Message from User:</value>
+    <value>Message from user:</value>
   </string>
   <string id="502" name="invitation_text_message">
     <value>Message:</value>
   </string>
   <string id="503" name="invitation_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>Click this link to participate in the conference:</value>
   </string>
   <string id="504" name="invitation_text_click_text_link">
     <value>Click here to enter room</value>
   </string>
   <string id="505" name="invitation_text_click_text_help">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>If you have problems with the link, please copy and paste this to your browser:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
     <value>OpenMeetings SignUp</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
-    <value>Your userdata:</value>
+    <value>Your userdata</value>
   </string>
   <string id="508" name="registering_mail_text_username">
-    <value>Login:</value>
+    <value>Login</value>
   </string>
   <string id="509" name="registering_mail_text_pass">
-    <value>Pass:</value>
+    <value>Pass</value>
   </string>
   <string id="510" name="registering_mail_text_mail">
-    <value>EMail:</value>
+    <value>EMail</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
     <value>OpenMeetings-Team</value>
@@ -1546,31 +1546,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>OpenMeetings - Reset Password</value>
   </string>
   <string id="514" name="reset_password_template_test_link">
-    <value>Click on this link to enter a new password:</value>
+    <value>Click on this link to enter a new password</value>
   </string>
   <string id="515" name="reset_password_template_text2_link">
-    <value>Click here to enter a new Password</value>
+    <value>Click here to enter a new password</value>
   </string>
   <string id="516" name="reset_password_template_text3_link">
-    <value>if you have problems with the link, please copy and paste this to your browser:</value>
+    <value>If you have problems with the link, please copy and paste this to your browser:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
-    <value>OpenMeetings Password Reset</value>
+    <value>OpenMeetings password reset</value>
   </string>
   <string id="518" name="dateRegExpError">
-    <value>Please enter a valid Date, for example 24.12.2001 (dd.mm.yyyy)</value>
+    <value>Please enter a valid date, for example 24.12.2001 (dd.mm.yyyy)</value>
   </string>
   <string id="519" name="emailRegExpError">
-    <value>Please enter a valid EMail, for example name@mail.com</value>
+    <value>Please enter a valid email address, for example name@mail.com</value>
   </string>
   <string id="520" name="floatRegExpError">
-    <value>Please enter a Float-Number, for example 1.00</value>
+    <value>Please enter a float-number, for example 1.00</value>
   </string>
   <string id="521" name="numberRegExpError">
-    <value>Please enter a Number (Integer), for example 100</value>
+    <value>Please enter an integer number, for example 100</value>
   </string>
   <string id="522" name="phoneRegExpError">
-    <value>Please enter a valid Phone number, for example ++49 0123 123123</value>
+    <value>Please enter a valid phone number, for example ++49 0123 123123</value>
   </string>
   <string id="523" name="timeRegExpError">
     <value>Please enter a valid time, for example 12:23 (hh:mm)</value>
@@ -1591,52 +1591,52 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Period</value>
   </string>
   <string id="529" name="invitation_window_valid">
-    <value>One-Time</value>
+    <value>One time</value>
   </string>
   <string id="530" name="invitation_window_validFromLabel">
-    <value>Valid From:</value>
+    <value>Valid from</value>
   </string>
   <string id="531" name="invitation_window_validToLabel">
-    <value>Valid to:</value>
+    <value>Valid to</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
-    <value>Invitation To OpenMeetings</value>
+    <value>Invitation to OpenMeetings</value>
   </string>
   <string id="533" name="invitation_error">
-    <value>Not Invitation availible for this Invitation-Code</value>
+    <value>No invitation available for this invitation code</value>
   </string>
   <string id="534" name="invitation_error">
-    <value>The Invitation was already used. This type of Invitation cannot be re-used.</value>
+    <value>This invitation was already used</value>
   </string>
   <string id="535" name="invitation_error">
-    <value>This Invitation-Code is not valid. The Invitation through the Link is only valid for the time of the Meeting! You cannot access the Room before or after the Meeting through that Link!</value>
+    <value>The invitation code is invalid</value>
   </string>
   <string id="536" name="invitation_pass">
-    <value>Password:</value>
+    <value>Password</value>
   </string>
   <string id="537" name="invitation_pass_btn">
-    <value>Check Password</value>
+    <value>Check password</value>
   </string>
   <string id="538" name="invitation_pass_error">
-    <value>Invalid Password!</value>
+    <value>Invalid password</value>
   </string>
   <string id="539" name="Browser">
-    <value>Audio_Video</value>
+    <value>Audio/video</value>
   </string>
   <string id="540" name="audio_video">
-    <value>Syncronize Audio/Video</value>
+    <value>Syncronize audio/video</value>
   </string>
   <string id="541" name="errorCode_invalidSession">
-    <value>Login was correct, but the Session you tried is not active or stored on the Server. You have to get a new SessionId and retry login.</value>
+    <value>Login was correct, but the session is not active or stored on the server</value>
   </string>
   <string id="542" name="errorcode_setUserObject">
-    <value>The SessionId is not loggedin or has no Admin rights. The SOAP Gateway needs an User with Admin-Rights to embed new Users.</value>
+    <value>The session ID is not logged in or has no admin rights. The SOAP gateway needs a user with admin rights to embed new users.</value>
   </string>
   <string id="543" name="errorcode_loginByRemoteUser">
-    <value>This Session has no Remoteuser-Data connected. Wether you did not call the SOAP-Gateway before accessing the Application or you are usnig a wrong Session-ID</value>
+    <value>This Session has no remoteuser-data connected. You did not call the SOAP gateway before accessing the application or you are using a wrong session ID</value>
   </string>
   <string id="544" name="debug_message_recording">
-    <value>The recorder is currently Beta!</value>
+    <value>The recorder is currently beta</value>
   </string>
   <string id="545" name="propertyPanelXValue">
     <value>x</value>
@@ -1663,16 +1663,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>height</value>
   </string>
   <string id="553" name="propertyOpacitySlider">
-    <value>Change Transparency</value>
+    <value>Change transparency</value>
   </string>
   <string id="554" name="browserOpen">
-    <value>Browser Open</value>
+    <value>Open browser</value>
   </string>
   <string id="555" name="browserClose">
-    <value>Browser Close</value>
+    <value>Close browser</value>
   </string>
   <string id="556" name="connectionLostMessage">
-    <value>The Connection to the Server is lost. You need to reload the Application or/and check your Network.</value>
+    <value>The connection to the server has been lost</value>
   </string>
   <string id="557" name="557">
     <value>Pointer</value>
@@ -1699,19 +1699,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>&lt;u&gt;Download as TIF&lt;/u&gt;</value>
   </string>
   <string id="565" name="calendarLabel">
-    <value>Reminder:</value>
+    <value>Reminder</value>
   </string>
   <string id="566" name="calendarLabel">
-    <value>Category:</value>
+    <value>Category</value>
   </string>
   <string id="567" name="calendarLabel">
-    <value>Repetition:</value>
+    <value>Repetition</value>
   </string>
   <string id="568" name="calendarLabel">
     <value>none</value>
   </string>
   <string id="569" name="calendarLabel">
-    <value>Location:</value>
+    <value>Location</value>
   </string>
   <string id="570" name="calendarLabel">
     <value>Start</value>
@@ -1720,10 +1720,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>End</value>
   </string>
   <string id="572" name="calendarLabel">
-    <value>Title:</value>
+    <value>Title</value>
   </string>
   <string id="573" name="calendarLabel">
-    <value>Comment:</value>
+    <value>Comment</value>
   </string>
   <string id="574" name="calendarLabel">
     <value>Invite People</value>
@@ -1738,34 +1738,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Yearly</value>
   </string>
   <string id="578" name="alert">
-    <value>Appointment-end is after of appointment-start!</value>
+    <value>Appointment end is after of appointment start</value>
   </string>
   <string id="579" name="alert">
-    <value>Please insert a title!</value>
+    <value>Please insert a title</value>
   </string>
   <string id="580" name="580">
-    <value>RTL</value>
+    <value>Right to left</value>
   </string>
   <string id="581" name="581">
-    <value>Activate this if you write in a right to left language (inverse word order)</value>
+    <value>Activate this if you write in a right to left language</value>
   </string>
   <string id="582" name="tooltip main-menu">
     <value>Dashboard</value>
   </string>
   <string id="583" name="tooltip main-menu">
-    <value>Watch recorded Meetings or Events</value>
+    <value>Watch recorded meetings or events</value>
   </string>
   <string id="584" name="tooltip main-menu">
-    <value>Meeting - Make a conference with 4 (up to 16) Users&lt;br/&gt;everybody will have audio + video access</value>
+    <value>Meeting - make a conference with between 4 and 16 users&lt;br/&gt;and everybody will have audio and video access</value>
   </string>
   <string id="585" name="tooltip main-menu">
-    <value>Event - Make a conference with up to 200 participents&lt;br/&gt;Only the Moderator will have audio/video</value>
+    <value>Event - make a conference with up to 200 participents&lt;br/&gt;but only the moderator will have audio and video access</value>
   </string>
   <string id="586" name="tooltip main-menu">
-    <value>Create users, rooms, organizations&lt;br/&gt; + change configuration</value>
+    <value>Create users, rooms, organisations&lt;br/&gt; and change configuration</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>Users in this Room now</value>
+    <value>Users in this room</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
@@ -1777,22 +1777,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>D</value>
   </string>
   <string id="591" name="swf sync message">
-    <value>Loading Document. Please wait untill all Client have been synchronized.</value>
+    <value>Loading document. Please wait until all clients have been synchronized.</value>
   </string>
   <string id="592" name="upload dialog">
-    <value>Upload complete, converting Document ...</value>
+    <value>Upload complete, converting document</value>
   </string>
   <string id="593" name="upload dialog">
-    <value>Start Upload</value>
+    <value>Start upload</value>
   </string>
   <string id="594" name="upload dialog">
-    <value>Upload and Import Dialog. Please select a File from your Disk.</value>
+    <value>Upload and import dialog. Please select a file.</value>
   </string>
   <string id="595" name="upload Dialog">
     <value>Cancel</value>
   </string>
   <string id="596" name="upload Dialog">
-    <value>Select File</value>
+    <value>Select file</value>
   </string>
   <string id="597" name="administration navigation">
     <value>Connections</value>
@@ -1801,7 +1801,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Value</value>
   </string>
   <string id="599" name="connection administration panel">
-    <value>Streamid</value>
+    <value>Stream ID</value>
   </string>
   <string id="600" name="connection administration panel">
     <value>Login</value>
@@ -1813,31 +1813,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Room / Scope</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Kick User</value>
+    <value>Kick user</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Kick User</value>
+    <value>Kick user</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>Do you really want to kick this Client from the Connection?&lt;br/&gt; This does only remove the Client from the current Room.The Client could re-login again.</value>
+    <value>Do you really want to kick this client from the room?</value>
   </string>
   <string id="606" name="kick user message dialog">
-    <value>Your session has been closed by an Administrator or Moderator.</value>
+    <value>Your session has been closed by an administrator or moderator.</value>
   </string>
   <string id="607" name="useralterself_phone">
     <value>Phone</value>
   </string>
   <string id="608" name="participents panel">
-    <value>User is the Moderator of this Room</value>
+    <value>User is the moderator of this room</value>
   </string>
   <string id="609" name="participents panel">
-    <value>User is allowed to draw on the Whiteboard</value>
+    <value>User is allowed to draw on the whiteboard</value>
   </string>
   <string id="610" name="participents panel">
-    <value>(Re) Start Audio/Video or change Device Settings</value>
+    <value>(Re) Start audio/video or change device settings</value>
   </string>
   <string id="611" name="participents panel">
-    <value>Allow this User to draw on the Whiteboard</value>
+    <value>Allow this user to draw on the whiteboard</value>
   </string>
   <string id="612" name="participents panel">
     <value>Remove ability to draw on whiteboard</value>
@@ -1855,22 +1855,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Chat</value>
   </string>
   <string id="617" name="organization choose info">
-    <value>Your account is assigned to multiple Organizations. Please choose one for this Session.</value>
+    <value>Your account is assigned to multiple organisations. Please choose one for this session.</value>
   </string>
   <string id="618" name="error message room full">
-    <value>This room is full at the moment. Please try again later.</value>
+    <value>This room is full</value>
   </string>
   <string id="619" name="roomtypes">
-    <value>Room Type</value>
+    <value>Room type</value>
   </string>
   <string id="620" name="appointed_room">
-    <value>Appointment Room</value>
+    <value>Appointment room</value>
   </string>
   <string id="621" name="servertime">
-    <value>Server Time</value>
+    <value>Server time</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
-    <value>OpenMeetings - Reminder</value>
+    <value>OpenMeetings - reminder</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
     <value>Message from User:</value>
@@ -1879,7 +1879,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Message:</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-    <value>Click this link to participate in the Meetings:</value>
+    <value>Click this link to participate in the conference:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
     <value>Click here to enter room</value>
@@ -1894,145 +1894,145 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Add external</value>
   </string>
   <string id="630" name="lbl_prename">
-    <value>Firstname</value>
+    <value>First name</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>Lastname</value>
+    <value>Surname</value>
   </string>
   <string id="632" name="lbl_email">
-    <value>E-Mail</value>
+    <value>Email</value>
   </string>
   <string id="633" name="logoutConfirm_title">
     <value>Confirm logout</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
-    <value>Are you sure you want to logout now?</value>
+    <value>Are you sure you want to logout?</value>
   </string>
   <string id="635" name="main menu">
     <value>Actions</value>
   </string>
   <string id="636" name="room admin">
-    <value>Demo Room</value>
+    <value>Demo room</value>
   </string>
   <string id="637" name="room admin">
-    <value>Demo Time</value>
+    <value>Demo time</value>
   </string>
   <string id="638" name="meeting Timer">
-    <value>Meeting Timer</value>
+    <value>Meeting timer</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>This Room is a Demo Room. To disable this warning you either should get a private meeting room for your personal usage or set up an own Server. You will be automatically logged off in:</value>
+    <value>This room is a demo room. You will be automatically logged off in:</value>
   </string>
   <string id="640" name="meeting room administration">
     <value>Moderated</value>
   </string>
   <string id="641" name="moderated room waiting message">
-    <value>Please wait untill the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.</value>
+    <value>Please wait until the moderator has entered the room</value>
   </string>
   <string id="642" name="error popup">
-    <value>Ok</value>
+    <value>OK</value>
   </string>
   <string id="643" name="window screensharing">
-    <value>Incoming Screen Sharing</value>
+    <value>Incoming screen sharing</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>There is a new Screen Sharing incoming from the User:</value>
+    <value>There is a new screen sharing incoming from the User:</value>
   </string>
   <string id="645" name="window screen sharing">
-    <value>Start Sharing</value>
+    <value>Start sharing</value>
   </string>
   <string id="646" name="calendar">
-    <value>Add new Meeting</value>
+    <value>Add new meeting</value>
   </string>
   <string id="647" name="calendar">
-    <value>Meeting Room</value>
+    <value>Meeting room</value>
   </string>
   <string id="648" name="calendar">
-    <value>Event Room</value>
+    <value>Event room</value>
   </string>
   <string id="649" name="main menu moderation">
     <value>Moderation</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>Moderate Users</value>
+    <value>Moderate users</value>
   </string>
   <string id="651" name="menu moderation">
-    <value>Moderate Rooms</value>
+    <value>Moderate rooms</value>
   </string>
   <string id="652" name="moderator org">
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>Do you want to change this User to become a Moderator of that Organization?</value>
+    <value>Do you want to change this user to be a moderator of that organisation?</value>
   </string>
   <string id="654" name="error message">
-    <value>Please choose an Organization before you try to add a User to it!</value>
+    <value>Please choose an organisation before you try to add a user to it</value>
   </string>
   <string id="655" name="choose user window">
-    <value>Organization - Moderator</value>
+    <value>Organisation - moderator</value>
   </string>
   <string id="656" name="moderator org users">
-    <value>Do you really want to delete this User from the Organization?</value>
+    <value>Do you really want to delete this user from the organisation?</value>
   </string>
   <string id="657" name="org moderation">
-    <value>This User is Moderator</value>
+    <value>This user is a moderator</value>
   </string>
   <string id="658" name="org moderation">
-    <value>This User is No-Moderator</value>
+    <value>This user is not a moderator</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>Do you want this User to be not a Moderator of this Organization?</value>
+    <value>Do you not want this user to be a moderator of this organisation?</value>
   </string>
   <string id="660" name="moderation">
-    <value>Add or delete Users or Rooms within your Organization</value>
+    <value>Add or delete users or rooms within your organisation</value>
   </string>
   <string id="661" name="delete confirm question">
     <value>Do you really want to delete this record?</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>Do you really want to delete this user from your organization? You will only delete the connection between the user and your organization, to really delete the user himself you have to login into the Administration-Panel.</value>
+    <value>Do you really want to delete this user from your organisation?</value>
   </string>
   <string id="663" name="error message self deleting">
-    <value>You cannot delete your own User!</value>
+    <value>You cannot delete your own user</value>
   </string>
   <string id="664" name="error message auth">
-    <value>This Method needs an Adminstration Account to be invoked!</value>
+    <value>This method needs an adminstration account to be invoked</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>There was no Session associated with this ID.</value>
+    <value>There was no session associated with this ID</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>This is an Administrator or Moderator account. You can only edit this account through the Administration Panel.</value>
+    <value>This is an administrator or moderator account. You can only edit this account through the Administration Panel.</value>
   </string>
   <string id="667" name="email verification">
-    <value>To complete your registration please click on the following link. Or copy the URL to your browser bar.</value>
+    <value>To complete your registration please click on the following link</value>
   </string>
   <string id="668" name="email verification">
-    <value>Click to verify your E-Mail</value>
+    <value>Click to verify your email</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>No user was found for this Hash.</value>
+    <value>No user was found for this hash</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>This user is already activated!</value>
+    <value>This user is already activated</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>You did successfully activate your account!</value>
+    <value>You successfully activated your account</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>Login Now</value>
+    <value>Login now</value>
   </string>
   <string id="673" name="loginErrorMessage = user was not activated">
-    <value>Your account is not activated. First use the link in the Email you've received during registration.</value>
+    <value>Your account is not activated. Please use the link in the email you received during registration.</value>
   </string>
   <string id="674" name="register verification message">
-    <value>You successfully signed up. We've send an EMail with a verification Code to your Mail. Please check your Inbox.</value>
+    <value>You have successfully signed up. An email with a verification code will be sent to your mailbox.</value>
   </string>
   <string id="675" name="participants panel">
-    <value>Remove Moderation Role from this User</value>
+    <value>Remove moderator role from this user</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Grant Moderation Rights to this User</value>
+    <value>Grant moderator rights to this rser</value>
   </string>
   <string id="677" name="event user list">
     <value>User</value>
@@ -2044,55 +2044,55 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderator</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderation: Please choose any User on the List to grant him access to the Whiteboard, Moderation or Video.</value>
+    <value>Please choose any user on the list to make them a moderator or to grant them access to the whiteboard or video</value>
   </string>
   <string id="681" name="event user list">
-    <value>This User is already Moderator, so he has automatically the right to draw.</value>
+    <value>This user is already a moderator</value>
   </string>
   <string id="682" name="event user list error">
-    <value>This is you! You cannot remove the Moderation rights from yourself.</value>
+    <value>You cannot remove the moderator rights for yourself</value>
   </string>
   <string id="683" name="event user list">
-    <value>Allow this User to Publish his Audio / Video</value>
+    <value>Allow this user to publish their audio/video</value>
   </string>
   <string id="684" name="event user list">
-    <value>Remove Audio/Video of this User</value>
+    <value>Remove audio/video of this user</value>
   </string>
   <string id="685" name="event user list">
     <value>I have a question</value>
   </string>
   <string id="686" name="event user list">
-    <value>I would like to draw on whiteboard</value>
+    <value>I would like to draw on the whiteboard</value>
   </string>
   <string id="687" name="event user list">
-    <value>I would like to share my Audio/Video</value>
+    <value>I would like to share my audio/video</value>
   </string>
   <string id="688" name="event user list">
-    <value>You are moderator of this room</value>
+    <value>You are the moderator of this room</value>
   </string>
   <string id="689" name="event user list">
-    <value>You are allowed to draw on whiteboard</value>
+    <value>You are allowed to draw on the whiteboard</value>
   </string>
   <string id="690" name="event user list">
-    <value>You are allowed to share your Audio/Video</value>
+    <value>You are allowed to share your audio/video</value>
   </string>
   <string id="691" name="errortype">
-    <value>Message to Moderator</value>
+    <value>Message to moderator</value>
   </string>
   <string id="692" name="apply for mod message">
-    <value>The User</value>
+    <value>The user</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>would like to ask a question.&lt;br/&gt;&lt;br/&gt; &lt;i&gt;(Use the status Icons next to the user in the List of Users to add or remove the Moderation.)&lt;7i&gt;</value>
+    <value>would like to ask a question</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</value>
+    <value>would like to draw on whiteboard</value>
   </string>
   <string id="695" name="695">
-    <value>would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</value>
+    <value>would like to share his audio/video</value>
   </string>
   <string id="696" name="moderation message">
-    <value>You have to wait until a Moderator enters the room.</value>
+    <value>You have to wait until a moderator enters the room</value>
   </string>
   <string id="697" name="calendar button">
     <value>Cancel</value>
@@ -2110,10 +2110,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Year</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Upload File</value>
+    <value>Upload file</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Add Folder</value>
+    <value>Add folder</value>
   </string>
   <string id="704" name="file explorer">
     <value>Refresh</value>
@@ -2122,28 +2122,28 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Trash</value>
   </string>
   <string id="706" name="file explorer">
-    <value>My Files (Home Drive)</value>
+    <value>My files (Home Drive)</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Room Files (Public Drive)</value>
+    <value>Room files (Public Drive)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Add File</value>
+    <value>Add file</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Add Folder</value>
+    <value>Add folder</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Delete Folder</value>
+    <value>Delete folder</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Edit Name</value>
+    <value>Edit name</value>
   </string>
   <string id="712" name="file explorer">
-    <value>New Folder</value>
+    <value>New folder</value>
   </string>
   <string id="713" name="file explorer">
-    <value>Are you sure you want to delete this Item?</value>
+    <value>Are you sure you want to delete this item?</value>
   </string>
   <string id="714" name="user admin">
     <value>Search</value>
@@ -2152,22 +2152,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Search</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Open Document</value>
+    <value>Open document</value>
   </string>
   <string id="717" name="file explorer">
-    <value>Show all Files (Tree View)</value>
+    <value>Show all files (Tree View)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Close Document</value>
+    <value>Close document</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Delete File</value>
+    <value>Delete file</value>
   </string>
   <string id="720" name="file explorer">
-    <value>You are not allowed to draw anything on the Whiteboard. You have to become Moderator or at least get the Right to edit Whiteboard. You may ask a Moderator to give you that right.</value>
+    <value>You are not allowed to draw anything on the whiteboard</value>
   </string>
   <string id="721" name="property panel">
-    <value>Document Properties</value>
+    <value>Document properties</value>
   </string>
   <string id="722" name="sharing session">
     <value>Start Java</value>
@@ -2176,34 +2176,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Start Flash</value>
   </string>
   <string id="724" name="sharing session">
-    <value>A user want to share his screen. Do you want to see it?</value>
+    <value>A user wants to share their screen. Do you want to see it?</value>
   </string>
   <string id="725" name="sharing session">
-    <value>You are currently sharing your Desktop. For stopping the Sharing Session please hit the Stop button in the Sharing Client.</value>
+    <value>You are currently sharing your desktop</value>
   </string>
   <string id="726" name="sharing session">
-    <value>Sharing Session</value>
+    <value>Sharing session</value>
   </string>
   <string id="727" name="sharing session">
-    <value>You are already sharing your desktop!</value>
+    <value>You are already sharing your desktop</value>
   </string>
   <string id="728" name="sharing client">
-    <value>Desktop Viewer</value>
+    <value>Desktop viewer</value>
   </string>
   <string id="729" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Stop sharing</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Desktop Sharer</value>
+    <value>Desktop sharer</value>
   </string>
   <string id="731" name="sharing client">
     <value>Click Start to publish your screen</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Start Sharing</value>
+    <value>Start sharing</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Pause Sharing</value>
+    <value>Pause sharing</value>
   </string>
   <string id="734" name="sharing client">
     <value>Select your screen area:</value>
@@ -2212,7 +2212,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Change width</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>The sharer has finished this session</value>
   </string>
   <string id="737" name="sharing client">
     <value>Change height</value>
@@ -2230,7 +2230,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Height:</value>
   </string>
   <string id="742" name="sharing client">
-    <value>Connection was closed by Server</value>
+    <value>Connection was closed by server</value>
   </string>
   <string id="743" name="sharing viewer">
     <value>Cancel</value>
@@ -2239,22 +2239,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Start Java</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>If you close this session completely you are not able to restart the viewer for this session.</value>
+    <value>If you close this session completely you will not be able to restart the viewer for this session</value>
   </string>
   <string id="746" name="sharing viewer">
-    <value>Confirm Closing Viewer Session</value>
+    <value>Confirm closing viewer session</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Share Screen</value>
+    <value>Share screen</value>
   </string>
   <string id="748" name="sharing viewer">
-    <value>Record Session</value>
+    <value>Record session</value>
   </string>
   <string id="749" name="co-browser">
     <value>Co-Browsing</value>
   </string>
   <string id="750" name="co-browser">
-    <value>Ooops, ... Firefox on Windows does not show clear Co-Browsing. Please use another Browser for using the Co-Browsing feature.</value>
+    <value>Please use Internet Explorer and not Firefox for Windows</value>
   </string>
   <string id="751" name="co-browser">
     <value>Previous</value>
@@ -2272,13 +2272,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Load</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Add this website as Default website to your Profile.</value>
+    <value>Add this website as the default website to your profile</value>
   </string>
   <string id="757" name="test setup">
-    <value>Test Setup</value>
+    <value>Test setup</value>
   </string>
   <string id="758" name="test setup">
-    <value>Use Audio or Video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</value>
+    <value>Use audio or video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</value>
   </string>
   <string id="759" name="test setup">
     <value>Don't show this test anymore</value>
@@ -2287,7 +2287,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancel</value>
   </string>
   <string id="761" name="test setup">
-    <value>Start Conference</value>
+    <value>Start conference</value>
   </string>
   <string id="762" name="edit video settings">
     <value>Do not ask again</value>
@@ -2299,73 +2299,73 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>PLAY</value>
   </string>
   <string id="765" name="test setup">
-    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without Audio or Video can still use the Whiteboard, share their Desktop or write Chat messages.</value>
+    <value>You may proceed without testing if you do not plan to publish your voice or picture. Participants without audio or video can still use the whiteboard, share their desktop or write chat messages.</value>
   </string>
   <string id="766" name="test setup">
     <value>STOP</value>
   </string>
   <string id="767" name="767">
-    <value>Level-Meter</value>
+    <value>Level-meter</value>
   </string>
   <string id="768" name="start view">
-    <value>Press Start</value>
+    <value>Press start</value>
   </string>
   <string id="769" name="start view">
-    <value>Start Conference</value>
+    <value>Start conference</value>
   </string>
   <string id="770" name="start view">
-    <value>Start Event</value>
+    <value>Start event</value>
   </string>
   <string id="771" name="start view">
-    <value>Choose Room</value>
+    <value>Choose room</value>
   </string>
   <string id="772" name="start view">
-    <value>Check Setup</value>
+    <value>Check setup</value>
   </string>
   <string id="773" name="start view">
-    <value>Start Conference</value>
+    <value>Start conference</value>
   </string>
   <string id="774" name="start view">
-    <value>How to Conference:</value>
+    <value>How to conference:</value>
   </string>
   <string id="775" name="test setup">
-    <value>Start Recording</value>
+    <value>Start recording</value>
   </string>
   <string id="776" name="test setup">
-    <value>Do not show Audio / Video Test (Recording) before entering a Conference</value>
+    <value>Do not show audio/video test before entering a conference</value>
   </string>
   <string id="777" name="overview room">
-    <value>Public Rooms</value>
+    <value>Public rooms</value>
   </string>
   <string id="778" name="overview room">
-    <value>Public Rooms are accessible for all Users.</value>
+    <value>Public rooms are accessible for all users</value>
   </string>
   <string id="779" name="overview room">
-    <value>Private Rooms</value>
+    <value>Private rooms</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Private Rooms are only accessible for users of the same organization.</value>
+    <value>Private rooms are only accessible for users of the same organisation</value>
   </string>
   <string id="781" name="overview room">
-    <value>My Rooms</value>
+    <value>My rooms</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and an end date. They are only listed in this section as long as they are valid.</value>
   </string>
   <string id="783" name="restricted room">
-    <value>You have to be moderator to do this.</value>
+    <value>You have to be moderator to do this</value>
   </string>
   <string id="784" name="menu option">
-    <value>Apply for moderation</value>
+    <value>Apply to be moderator</value>
   </string>
   <string id="785" name="menu option">
     <value>Apply for whiteboard access</value>
   </string>
   <string id="786" name="menu option">
-    <value>Apply for camera/microphone access</value>
+    <value>Apply for audio/video access</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>This session hash has already been used</value>
   </string>
   <string id="788" name="dashboard button">
     <value>START</value>
@@ -2374,7 +2374,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>EXIT</value>
   </string>
   <string id="790" name="conference view">
-    <value>Do you really want to exit? You might should clear uploaded documents, whiteboard and the chat history.</value>
+    <value>Do you really want to exit?</value>
   </string>
   <string id="791" name="conference view">
     <value>Exit conference</value>
@@ -2386,19 +2386,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Choose a room for a meeting</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved Event in the Calendar. Please either save it or remove it.</value>
+    <value>There is an unsaved event in the Calendar. Please save it or remove it.</value>
   </string>
   <string id="795" name="calendar">
-    <value>Please add at least one attendee for your meeting!</value>
+    <value>Please add at least one attendee for your meeting</value>
   </string>
   <string id="796" name="calendar">
-    <value>Do you really want to delete this Event?</value>
+    <value>Do you really want to delete this event?</value>
   </string>
   <string id="797" name="calendar">
     <value>Warning</value>
   </string>
   <string id="798" name="calendar">
-    <value>Add Event</value>
+    <value>Add event</value>
   </string>
   <string id="799" name="calendar">
     <value>day</value>
@@ -2416,13 +2416,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Attendees</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>OpenMeetings, your Web Conferencing platform</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Plan a Meeting</value>
+    <value>Plan a meeting</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>To set up a conference you can add a new Event in the Calendar. For each Calendar Event there will be automatically a Conference Room created. You and every attendee will get an Email with a Link to the room.&lt;br/&gt;&lt;br/&gt;You can choose between different room types that have different layouts and moderation systems. You can also choose between different notification types for the EMail that is send for every Calendar Event.</value>
+    <value>To setup a conference you can add a new event in the calendar</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Need help?</value>
@@ -2437,7 +2437,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Add</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>There is no user selected</value>
   </string>
   <string id="812" name="lzcalendar">
     <value>Add Attendee</value>
@@ -2449,10 +2449,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Delete</value>
   </string>
   <string id="815" name="lzcalendar">
-    <value>Event Details</value>
+    <value>Event details</value>
   </string>
   <string id="816" name="room admin">
-    <value>Default Moderators</value>
+    <value>Default moderators</value>
   </string>
   <string id="817" name="room admin">
     <value>Super</value>
@@ -2464,31 +2464,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Name</value>
   </string>
   <string id="820" name="room admin">
-    <value>E-Mail</value>
+    <value>Email</value>
   </string>
   <string id="821" name="room admin">
-    <value>Add new default Moderator</value>
+    <value>Add new default moderator</value>
   </string>
   <string id="822" name="room admin">
-    <value>Is Super Moderator</value>
+    <value>Is super moderator</value>
   </string>
   <string id="823" name="room admin">
-    <value>If the Room is moderated, User with Level Moderator or Administrator are automatically Moderator if they enter the Room. If you don't want to specify that and only want a certain User to become Moderator use the Default Moderator option.</value>
+    <value>If the room is moderated, any users with a moderator or administrator level access are automatically set to moderator when they enter the room</value>
   </string>
   <string id="824" name="room admin">
-    <value>A Super Moderator is always a Moderator when he enters a Room, and nobody can remove the Moderation Flag from him</value>
+    <value>A super moderator is always a moderator when they enter a room</value>
   </string>
   <string id="825" name="room admin">
-    <value>Apply Super-Moderation to User</value>
+    <value>Make user a super moderator</value>
   </string>
   <string id="826" name="room admin">
-    <value>Remove Super Moderation from User</value>
+    <value>Remove super moderator from user</value>
   </string>
   <string id="827" name="room admin">
     <value>D</value>
   </string>
   <string id="828" name="room admin">
-    <value>If you add an Organization to the room only users of that Organization have access to it (This is only valid if the isPublic flag is set to false!)</value>
+    <value>If you add an organisation to the room only users of that organisation have access to it</value>
   </string>
   <string id="829" name="room admin">
     <value>Moderation</value>
@@ -2497,40 +2497,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Limitations</value>
   </string>
   <string id="831" name="room admin">
-    <value>Organization</value>
+    <value>Organisation</value>
   </string>
   <string id="832" name="confirm action">
     <value>Are you sure?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Do you really want to delete this Item? You have to press the save button to store the changes!</value>
+    <value>Do you really want to delete this item?</value>
   </string>
   <string id="834" name="user choose error">
-    <value>There is no User selected. Please select first before you add it!</value>
+    <value>There is no user selected</value>
   </string>
   <string id="835" name="room admin">
-    <value>Add new Default Moderator</value>
+    <value>Add new default moderator</value>
   </string>
   <string id="836" name="room admin">
-    <value>Do you want to add the Super Moderation Flag for this User? A Super Moderator is not only Moderator of a Room, but also no other Moderator can remove the Moderation Flag for this User. You need to save the Room Object to save these settings!</value>
+    <value>Do you want to add the super moderation flag for this user?</value>
   </string>
   <string id="837" name="room admin">
-    <value>Do you want to remove the Super Moderation Flag for this User? You need to save the Room Object to save these settings!</value>
+    <value>Do you want to remove the super moderation flag for this user? You need to save the room object to save these settings.</value>
   </string>
   <string id="838" name="super moderator">
-    <value>This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</value>
+    <value>This user is a super moderator. You cannot remove the moderation flag.</value>
   </string>
   <string id="839" name="confirm delete">
-    <value>Do you really want to delete this File/Folder?</value>
+    <value>Do you really want to delete this file/folder?</value>
   </string>
   <string id="840" name="confirm delete">
-    <value>Delete File/Folder?</value>
+    <value>Delete file/folder?</value>
   </string>
   <string id="841" name="salutation">
-    <value>Mrs.</value>
+    <value>Mrs</value>
   </string>
   <string id="842" name="salutation">
-    <value>Dr.</value>
+    <value>Dr</value>
   </string>
   <string id="843" name="property panel whiteboard">
     <value>Properties</value>
@@ -2539,22 +2539,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Show mouse position to viewers</value>
   </string>
   <string id="845" name="publish option">
-    <value>Share Audio with SIP Applet</value>
+    <value>Share audio with SIP applet</value>
   </string>
   <string id="846" name="publish option">
-    <value>Share Audio with SIP and Video with Flash</value>
+    <value>Share audio with SIP and video with Flash</value>
   </string>
   <string id="847" name="document panel">
     <value>Full-Fit</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+    <value>View screen</value>
   </string>
   <string id="849" name="screen share">
     <value>The user</value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+    <value>wants to share their screen. Do you want to see it?</value>
   </string>
   <string id="851" name="screen share">
     <value>Close</value>
@@ -2563,13 +2563,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Zoom</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>The Session was closed by the sharing User!</value>
+    <value>The Session was closed by the sharing user</value>
   </string>
   <string id="854" name="screen sharer">
     <value>Pause</value>
   </string>
   <string id="855" name="screen sharer">
-    <value>New Screen Sharing</value>
+    <value>New screen sharing</value>
   </string>
   <string id="856" name="presenter mini icon">
     <value>Minimize</value>
@@ -2581,13 +2581,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Video</value>
   </string>
   <string id="859" name="flvrecording">
-    <value>Recording Timeline</value>
+    <value>Recording timeline</value>
   </string>
   <string id="860" name="flvrecording">
-    <value>My Recordings</value>
+    <value>My recordings</value>
   </string>
   <string id="861" name="flvrecording">
-    <value>Public Recordings</value>
+    <value>Public recordings</value>
   </string>
   <string id="862" name="flvrecording">
     <value>Info</value>
@@ -2608,19 +2608,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Download</value>
   </string>
   <string id="868" name="flvrecording">
-    <value>Main - Video</value>
+    <value>Main - video</value>
   </string>
   <string id="869" name="screen share">
     <value>Recording</value>
   </string>
   <string id="870" name="screen share">
-    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top.</value>
   </string>
   <string id="871" name="screen share">
-    <value>Start Recording</value>
+    <value>Start recording</value>
   </string>
   <string id="872" name="screen share">
-    <value>Stop Recording</value>
+    <value>Stop recording</value>
   </string>
   <string id="873" name="flvrecording">
     <value>Download the FLV-File</value>
@@ -2638,13 +2638,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>User has microphone on</value>
   </string>
   <string id="878" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Stop sharing</value>
   </string>
   <string id="879" name="room config">
-    <value>Allow User Questions</value>
+    <value>Allow user questions</value>
   </string>
   <string id="880" name="room config">
-    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+    <value>Turn this off to prevent any user from disturbing you in this room</value>
   </string>
   <string id="881" name="room config">
     <value>Rights</value>
@@ -2659,94 +2659,94 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>AVI</value>
   </string>
   <string id="885" name="flvrecording">
-    <value>Raw Screenvideo</value>
+    <value>Raw screenvideo</value>
   </string>
   <string id="886" name="flvrecording">
     <value>Audio only</value>
   </string>
   <string id="887" name="flvrecording">
-    <value>The have been errors while processing the Recording.</value>
+    <value>The have been errors while processing the recording</value>
   </string>
   <string id="888" name="flvrecording">
-    <value>The Recording is not yet ready for watching. Please retry in a couple of minutes again.</value>
+    <value>The recording is not yet ready for watching</value>
   </string>
   <string id="889" name="flvrecording">
     <value>Log:</value>
   </string>
   <string id="890" name="flvrecording">
-    <value>Recorder Message</value>
+    <value>Recorder message</value>
   </string>
   <string id="891" name="flvrecording">
-    <value>Ok</value>
+    <value>OK</value>
   </string>
   <string id="892" name="sip applet">
-    <value>SIP Applet is not Ready</value>
+    <value>SIP applet is not ready</value>
   </string>
   <string id="893" name="user administration">
-    <value>SIP-Account Settings</value>
+    <value>SIP account settings</value>
   </string>
   <string id="894" name="user administration">
-    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically. You can re-create the data by checking "Re-generate SIP Data"</value>
+    <value>SIP settings for each user</value>
   </string>
   <string id="895" name="user administration">
-    <value>SIP-User</value>
+    <value>SIP user</value>
   </string>
   <string id="896" name="user administration">
-    <value>Sip-Pass</value>
+    <value>SIP password</value>
   </string>
   <string id="897" name="user administration">
-    <value>Sip-Auth-Id</value>
+    <value>SIP auth ID</value>
   </string>
   <string id="898" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+    <value>The login to the SIP gateway has failed</value>
   </string>
   <string id="899" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+    <value>The login to the SIP gateway has failed. Contact the administrator.</value>
   </string>
   <string id="900" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Logging onto the SIP gateway...</value>
   </string>
   <string id="901" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Logging onto the SIP gateway...</value>
   </string>
   <string id="902" name="flvrecording">
-    <value>Show Log</value>
+    <value>Show log</value>
   </string>
   <string id="903" name="flvrecording">
     <value>Log messages from post recorder process</value>
   </string>
   <string id="904" name="sip login">
-    <value>SIP-Applet Message</value>
+    <value>SIP applet message</value>
   </string>
   <string id="905" name="sip login">
-    <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+    <value>The SIP applet is not ready. Accept the applet and click OK</value>
   </string>
   <string id="906" name="moderator pop up">
-    <value>Get Moderation</value>
+    <value>Get moderation</value>
   </string>
   <string id="907" name="lzcalendar">
-    <value>Save Appointment Changes</value>
+    <value>Save appointment changes</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
+    <value>The appointment has been changed. Do you want to save these changes?</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>To access other recordings you have to login the OpenMeetings Application.</value>
+    <value>To access other recordings you have to login to the OpenMeetings application</value>
   </string>
   <string id="910" name="interview video pod">
-    <value>Choose the User for this Video</value>
+    <value>Choose the user for this video</value>
   </string>
   <string id="911" name="interview video choose user">
-    <value>Available Users for this Pod</value>
+    <value>Available users for this pod</value>
   </string>
   <string id="912" name="interview info">
-    <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
+    <value>You are a moderator in this interview. You can decide who is speaking in this interview and you can start/stop the recording of the session.</value>
   </string>
   <string id="913" name="interview button recording">
-    <value>Start Recording</value>
+    <value>Start recording</value>
   </string>
   <string id="914" name="interview button recording">
-    <value>Stop Recording</value>
+    <value>Stop recording</value>
   </string>
   <string id="915" name="interview error message">
     <value>The recording of the Interview is already started.</value>
