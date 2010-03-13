@@ -17,6 +17,8 @@ public class ConferenceLog {
 	
 	//NULL means its a Guest/Invited User
 	private Long userId;
+	private Long externalUserId;
+	private String externalUserType;
 	private String streamid;
 	private Long room_id;
 	private String userip;
@@ -134,5 +136,30 @@ public class ConferenceLog {
 	public void setScopeName(String scopeName) {
 		this.scopeName = scopeName;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="external_user_id"
+     *  type="long"
+     */
+	public Long getExternalUserId() {
+		return externalUserId;
+	}
+	public void setExternalUserId(Long externalUserId) {
+		this.externalUserId = externalUserId;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="external_user_type"
+     *  type="string"
+     */
+	public String getExternalUserType() {
+		return externalUserType;
+	}
+	public void setExternalUserType(String externalUserType) {
+		this.externalUserType = externalUserType;
+	}
+
 	
 }

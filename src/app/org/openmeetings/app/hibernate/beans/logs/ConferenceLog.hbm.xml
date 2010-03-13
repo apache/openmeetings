@@ -14,5 +14,7 @@
     <property name="room_id" type="long" column="room_id"/>
     <property name="userip" type="string" column="userip"/>
     <property name="scopeName" type="string" column="scopename"/>
+    <property name="externalUserId" type="long" column="external_user_id"/>
+    <property name="externalUserType" type="string" column="external_user_type"/>
   </class>
 </hibernate-mapping>

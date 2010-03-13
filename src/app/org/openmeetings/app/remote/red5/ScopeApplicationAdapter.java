@@ -219,7 +219,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("ClientConnect", rcm.getUser_id(), 
-					streamId, null, rcm.getUserip(), rcm.getScope());
+					streamId, null, rcm.getUserip(), rcm.getScope(), 
+					rcm.getExternalUserId(), rcm.getExternalUserType());
 
 		} catch (Exception err){
 			log.error("roomJoin",err);
@@ -615,7 +616,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("roomLeave", currentClient.getUser_id(), 
-					currentClient.getStreamid(), room_id, currentClient.getUserip(), "");
+					currentClient.getStreamid(), room_id, currentClient.getUserip(), "", 
+					currentClient.getExternalUserId(), currentClient.getExternalUserType());
 			
 			
 			//Remove User from Sync List's
@@ -1327,13 +1329,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			currentClient.setUsercolor(colorObj);
 			
+			//Inject externalUserId if nothing is set yet
+			if (currentClient.getExternalUserId() == null) {
+				Users us = UsersDaoImpl.getInstance().getUser(currentClient.getUser_id());
+				if (us != null) {
+					currentClient.setExternalUserId(us.getExternalUserId());
+					currentClient.setExternalUserType(us.getExternalUserType());
+				}
+			}
+			
 			//This can be set without checking for Moderation Flag
 			currentClient.setIsSuperModerator(isSuperModerator);
 			
 			this.clientListManager.updateClientByStreamId(streamid, currentClient);
 			
+			
 			//Log the User
-			ConferenceLogDaoImpl.getInstance().addConferenceLog("roomEnter", currentClient.getUser_id(), streamid, room_id, currentClient.getUserip(), "");
+			ConferenceLogDaoImpl.getInstance().addConferenceLog("roomEnter", currentClient.getUser_id(), 
+					streamid, room_id, currentClient.getUserip(), "", 
+					currentClient.getExternalUserId(), currentClient.getExternalUserType());
 			
 			log.debug("##### setRoomValues : " + currentClient.getUsername()+" "+currentClient.getStreamid()); // just a unique number
 
@@ -1763,7 +1777,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				currentClient.setExternalUserType(user.getExternalUserType());
 			}
 			
-			//only fill this value from User-REcord
+			//only fill this value from User-Record
 			//cause invited users have non
 			//you cannot set the firstname,lastname from the UserRecord
 			Users us = UsersDaoImpl.getInstance().getUser(userId);

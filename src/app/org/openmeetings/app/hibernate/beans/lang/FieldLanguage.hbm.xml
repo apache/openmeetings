@@ -10,8 +10,6 @@
     <property name="starttime" type="java.util.Date" column="starttime"/>
     <property name="updatetime" type="java.util.Date" column="updatetime"/>
     <property name="deleted" type="string" column="deleted"/>
-    <property name="rtl">
-      <column name="rtl" sql-type="BOOLEAN"/>
-    </property>
+    <property name="rtl" type="boolean" column="rtl"/>
   </class>
 </hibernate-mapping>
