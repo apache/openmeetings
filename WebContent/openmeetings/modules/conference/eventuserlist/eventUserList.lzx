@@ -18,6 +18,16 @@
 	<!--- colors for each user -->
 	<attribute name="colorArray" value="null" />
 	
+	<attribute name="allowUserQuestions" value="true" type="boolean" />
+	
+	<handler name="onallowUserQuestions" args="bool">
+		if (bool != null) {
+			if (!bool) {
+				this._participents._applyAndStatusIcons.destroy();
+			}
+		}
+	</handler>
+	
 	<handler name="oninit">
 		//set modus
 		canvas.thishib.modus = "audience";

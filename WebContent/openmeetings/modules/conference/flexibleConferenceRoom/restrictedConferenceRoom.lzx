@@ -31,6 +31,8 @@
         
         this._chatPanelStrict.toggleopen();
         
+        canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
+        
     </handler>
     
     <handler name="ontabcontentleave">
