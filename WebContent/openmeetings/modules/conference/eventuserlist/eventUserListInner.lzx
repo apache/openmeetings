@@ -32,6 +32,8 @@
 	
 	<attribute name="listType" value="eventUserListTable" type="string" />
 	
+	<attribute name="sortType" value="alphabetical" type="string" />
+	
 	<handler name="oninit">
 		<![CDATA[
             
@@ -93,19 +95,34 @@
     </method>
     
     <method name="sortUserList">
-    	<![CDATA[ 
-    	
-    	   function sortByStreamId(a,b) {
-    	   	   
-        	   	if(Number(a.streamid) == Number(b.streamid)) return 0;
-                else if(Number(a.streamid) > Number(b.streamid)) return 1;
-                else return -1;
-    	   	
-    	   }
-    	
-    	   this._table.innerList.subviews.sort(sortByStreamId);
-    	   this._table.innerList._layout.subviews.sort(sortByStreamId);
-           this._table.innerList._layout.update(); 
+        <![CDATA[ 
+            
+            if (this.sortType == "alphabetical") {
+            	function sortByName(a,b) {
+                   
+                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+                    else return 0;
+                
+                }
+                
+                this._table.innerList.subviews.sort(sortByName);
+                this._table.innerList._layout.subviews.sort(sortByName);
+                
+            } else {
+                function sortByStreamId(a,b) {
+        	   	   
+            	   	if(Number(a.streamid) == Number(b.streamid)) return 0;
+                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                    else return -1;
+        	   	
+                }
+        	
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            }
+            
+            this._table.innerList._layout.update(); 
     	]]>
     </method>
     

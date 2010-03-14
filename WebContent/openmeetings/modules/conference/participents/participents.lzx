@@ -5,6 +5,8 @@
        bgcolor="$once{ canvas.basebgcolorizer }" >
     <!-- clip="true" -->
     
+    <attribute name="sortType" value="alphabetical" type="string" />    
+    
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
 
@@ -48,17 +50,31 @@
     <method name="sortUserList">
         <![CDATA[ 
         
-           function sortByStreamId(a,b) {
-               
-                if(Number(a.streamid) == Number(b.streamid)) return 0;
-                else if(Number(a.streamid) > Number(b.streamid)) return 1;
-                else return -1;
+            if (this.sortType == "alphabetical") {
+                function sortByName(a,b) {
+                   
+                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+                    else return 0;
+                
+                }
             
-           }
-        
-           this._table.innerList.subviews.sort(sortByStreamId);
-           this._table.innerList._layout.subviews.sort(sortByStreamId);
-           this._table.innerList._layout.update(); 
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            } else {
+                function sortByStreamId(a,b) {
+                   
+                    if(Number(a.streamid) == Number(b.streamid)) return 0;
+                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                    else return -1;
+                
+                }
+            
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            }
+            
+            this._table.innerList._layout.update();  
         ]]>
     </method>    
     
