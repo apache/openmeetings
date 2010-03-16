@@ -723,7 +723,7 @@ public class Invitationmanagement {
 	
 			return inv;
 		}catch(Exception e){
-			log.error("getInvitationsbyId : " + e.getMessage());
+			log.error("getInvitationsbyId : " , e);
 			return null;
 		}
 	}
@@ -792,7 +792,7 @@ public class Invitationmanagement {
 			}
 			
 		} catch (HibernateException ex) {
-			log.error("[getInvitationByHashCode] "+ex);
+			log.error("[getInvitationByHashCode] ",ex);
 		} catch (Exception err) {
 			log.error("[getInvitationByHashCode]",err);
 		}
@@ -813,9 +813,9 @@ public class Invitationmanagement {
 			tx.commit();
 			HibernateUtil.closeSession(idf);		
 		} catch (HibernateException ex) {
-			log.error("[selectMaxFromUsers] "+ex);
+			log.error("[selectMaxFromUsers] ",ex);
 		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] "+ex2);
+			log.error("[selectMaxFromUsers] ",ex2);
 		}
 	}
 	/**
@@ -827,6 +827,7 @@ public class Invitationmanagement {
 	public Object checkInvitationPass(String hashCode, String pass){
 		try {
 			Object obj = this.getInvitationByHashCode(hashCode, false);
+			log.debug("checkInvitationPass - obj: "+obj);
 			if (obj instanceof Invitations){
 				Invitations invitation = (Invitations) obj;
 				if (ManageCryptStyle.getInstance().getInstanceOfCrypt().verifyPassword(pass, invitation.getInvitationpass())){
@@ -838,7 +839,7 @@ public class Invitationmanagement {
 				return obj;
 			}
 		} catch (Exception ex2) {
-			log.error("[checkInvitationPass] "+ex2);
+			log.error("[checkInvitationPass] ",ex2);
 		}
 		return new Long(-1);
 	}
