@@ -112,6 +112,40 @@ public class RoomService {
 		}
 	}
 	
+	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				List<FlvRecording> recordingList = FlvRecordingDaoImpl.getInstance().getFlvRecordingByRoomId(roomId);
+				
+				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+				if (recordingList!=null && recordingList.size()!=0) {
+					//roomsListObject.setRoomList(roomList);
+					FlvRecording[] recordingListItems = new FlvRecording[recordingList.size()];
+					int count = 0;
+					for (Iterator<FlvRecording>it = recordingList.iterator();it.hasNext();){
+						FlvRecording flvRecording = it.next();
+						recordingListItems[count] = flvRecording;
+						count++;
+					}
+					
+					return recordingListItems;
+				}
+				
+				return null;
+			}
+			
+			return null;
+		} catch (Exception err) {
+			log.error("[getFlvRecordingByExternalRoomType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
 //	public RoomsList getRoomsByExternalType(String SID, String externalType) throws AxisFault{
 //		try {
 //			List<Rooms> roomList = ConferenceService.getInstance().getRoomsByExternalType(SID, externalType);
