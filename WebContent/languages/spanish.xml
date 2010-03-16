@@ -10,16 +10,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Conferencia</value>
   </string>
   <string id="2" name="meeting">
-    <value>(Vídeo)Conferencias</value>
+    <value>Reunión</value>
   </string>
   <string id="3" name="classroom">
-    <value>Auditorios</value>
+    <value>Eventos</value>
   </string>
   <string id="4" name="settings">
     <value>Ajustes</value>
   </string>
   <string id="5" name="benutzer">
-    <value>Usuario</value>
+    <value>Perfil</value>
   </string>
   <string id="6" name="admin">
     <value>Administración</value>
@@ -31,10 +31,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Grabar</value>
   </string>
   <string id="9" name="nofile">
-    <value>No se ha seleccionado ningún archivo</value>
+    <value>No hay ningún archivo disponible</value>
   </string>
   <string id="10" name="recordbyteacher">
-    <value>Grabación por el profesor</value>
+    <value>Grabado por el profesor</value>
   </string>
   <string id="11" name="connectedusers">
     <value>Usuarios conectados:</value>
@@ -49,13 +49,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Videoconferencia</value>
   </string>
   <string id="15" name="import">
-    <value>Importar archivo</value>
+    <value>Enviar un archivo</value>
   </string>
   <string id="16" name="refreshfiles">
-    <value>Actualizar lista de archivos</value>
+    <value>Actualizar la lista</value>
   </string>
   <string id="17" name="tomainfile">
-    <value>Elegir archivo como principal</value>
+    <value>Marcar como archivo principal</value>
   </string>
   <string id="18" name="newpoll">
     <value>Nueva encuesta</value>
@@ -73,7 +73,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Crear</value>
   </string>
   <string id="23" name="infomessage">
-    <value>Información: descripción de la encuesta.</value>
+    <value>Información: cada usuario conectado recibe un mensaje con la nueva encuesta.</value>
   </string>
   <string id="24" name="creatpoll">
     <value>Crear encuesta</value>
@@ -97,7 +97,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Su voto ha sido registrado</value>
   </string>
   <string id="31" name="alreadyvoted">
-    <value>Ya ha respondido a la encuesta previamente</value>
+    <value>Ya ha respondido a la encuesta con anterioridad</value>
   </string>
   <string id="32" name="voting">
     <value>Votar</value>
@@ -145,13 +145,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Otros puestos</value>
   </string>
   <string id="47" name="alreadychosen">
-    <value>Ya ha seleccionado.</value>
+    <value>Ya fue seleccionado.</value>
   </string>
   <string id="48" name="enter">
     <value>Entrar</value>
   </string>
   <string id="49" name="modleave">
-    <value>El moderador ha dejado la reunión.</value>
+    <value>El moderador ha abandonado la reunión.</value>
   </string>
   <string id="50" name="systemmessage">
     <value>Información del sistema</value>
@@ -166,7 +166,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Seleccionar micrófono:</value>
   </string>
   <string id="54" name="ok">
-    <value>OK</value>
+    <value>Aceptar</value>
   </string>
   <string id="55" name="cancel2">
     <value>Cancelar</value>
@@ -184,10 +184,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Idioma:</value>
   </string>
   <string id="60" name="ok2">
-    <value>OK</value>
+    <value>Aceptar</value>
   </string>
   <string id="61" name="cancel3">
-    <value>cancelar</value>
+    <value>Cancelar</value>
   </string>
   <string id="62" name="clearwhiteboard">
     <value>Borrar pizarra</value>
@@ -211,7 +211,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Información del usuario</value>
   </string>
   <string id="69" name="cleardrawarea">
-    <value>Limpiar el área de dibujo</value>
+    <value>Limpiar la pizarra</value>
   </string>
   <string id="70" name="undo">
     <value>Deshacer</value>
@@ -247,16 +247,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Borrar el ítem escogido</value>
   </string>
   <string id="81" name="appliymod">
-    <value>Solicitar la moderación</value>
+    <value>Solicitar ser moderador</value>
   </string>
   <string id="82" name="apply">
-    <value>Aplicar</value>
+    <value>Solicitar</value>
   </string>
   <string id="83" name="cancel">
     <value>Cancelar</value>
   </string>
   <string id="84" name="mod">
-    <value>Convertirse en moderador</value>
+    <value>Tengo una pregunta</value>
   </string>
   <string id="85" name="close">
     <value>Cerrar</value>
@@ -271,7 +271,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>En espera...</value>
   </string>
   <string id="89" name="applyMessage">
-    <value>Un usuario solicita la moderación:</value>
+    <value>Un usuario solicita la moderación; puede concederle acceso sólo a la pizarra o cambiar por completo el rol de la moderación. Usuario:</value>
   </string>
   <string id="90" name="accept">
     <value>Aceptar</value>
@@ -292,7 +292,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Rechazado</value>
   </string>
   <string id="96" name="changemod">
-    <value>Cambiar Moderador</value>
+    <value>Cambiar de moderador</value>
   </string>
   <string id="97" name="nonmoderrormessage">
     <value>Usted no es moderador</value>
@@ -307,7 +307,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Elipse</value>
   </string>
   <string id="101" name="close">
-    <value>cerrar</value>
+    <value>Cerrado</value>
   </string>
   <string id="102" name="AuthError">
     <value>error en la introducción de datos</value>
@@ -325,7 +325,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Este email ya está registrado</value>
   </string>
   <string id="107" name="emailtaken">
-    <value>Error, por favor contacte con el administrador del sistema</value>
+    <value>Error del sistema, por favor contacte con el administrador</value>
   </string>
   <string id="108" name="Authlogin">
     <value>Entrar</value>
@@ -373,7 +373,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancelar</value>
   </string>
   <string id="123" name="Authbtn2">
-    <value>Registrar</value>
+    <value>¿No está registrado?</value>
   </string>
   <string id="124" name="dashboard">
     <value>Inicio</value>
@@ -398,10 +398,9 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="131" name="btn_enterroom">
     <value>Entrar</value>
-
   </string>
   <string id="132" name="useralterself_login">
-    <value>Usuario</value>
+    <value>Inicio</value>
   </string>
   <string id="133" name="useralterself_pass">
     <value>Contraseña</value>
@@ -419,13 +418,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Correo Electrónico</value>
   </string>
   <string id="138" name="useralterself_birth">
-    <value>Fecha Nacimiento</value>
+    <value>Fecha nacimiento</value>
   </string>
   <string id="139" name="useralterself_streetno">
     <value>Dirección</value>
   </string>
   <string id="140" name="useralterself_town">
-    <value>Población</value>
+    <value>Código/Población</value>
   </string>
   <string id="141" name="useralterself_state">
     <value>País</value>
@@ -446,28 +445,28 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ID</value>
   </string>
   <string id="147" name="admin_userlist_login">
-    <value>Usuario</value>
+    <value>Inicio</value>
   </string>
   <string id="148" name="admin_userlist_firstnam">
-    <value>nombre</value>
+    <value>Nombre</value>
   </string>
   <string id="149" name="admin_userlist_lastname">
-    <value>apellido</value>
+    <value>Apellido(s)</value>
   </string>
   <string id="150" name="turnoverlist_next">
-    <value>mostrar siguiente</value>
+    <value>Mostrar siguiente</value>
   </string>
   <string id="151" name="turnoverlist_pre">
-    <value>mostrar anterior</value>
+    <value>Mostrar anterior</value>
   </string>
   <string id="152" name="savecontent_confirm">
-    <value>eliminar registro</value>
+    <value>Eliminar registro</value>
   </string>
   <string id="153" name="savecontent_confirm_cancel_btn">
-    <value>cancelar</value>
+    <value>Cancelar</value>
   </string>
   <string id="154" name="savecontent_confirm_confirm_btn">
-    <value>borrar</value>
+    <value>Borrar</value>
   </string>
   <string id="155" name="savemenubar_addlabel">
     <value>Nuevo registro</value>
@@ -482,19 +481,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Estado</value>
   </string>
   <string id="159" name="useralter_admin_statusItem">
-    <value>no activo</value>
+    <value>desactivado</value>
   </string>
   <string id="160" name="useralter_admin_statusItem">
-    <value>activo</value>
+    <value>activado</value>
   </string>
   <string id="161" name="useralter_admin_organisation">
     <value>Organizaciones</value>
   </string>
   <string id="162" name="calendar_iconlabel">
-    <value>calendario</value>
+    <value>Calendario</value>
   </string>
   <string id="163" name="savewindow_btn">
-    <value>cerrar</value>
+    <value>Cerrar</value>
   </string>
   <string id="164" name="organisationtablelist_idrow">
     <value>ID</value>
@@ -506,61 +505,61 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Usuario</value>
   </string>
   <string id="167" name="uservalue_levelid2">
-    <value>moderador</value>
+    <value>Moderador</value>
   </string>
   <string id="168" name="uservalue_levelid3">
-    <value>administrador</value>
+    <value>Administrador</value>
   </string>
   <string id="169" name="uservalue_levellabel">
-    <value>Rol de usuario</value>
+    <value>Nivel de usuario</value>
   </string>
   <string id="170" name="orgvalue_header">
-    <value>organización</value>
+    <value>Organización</value>
   </string>
   <string id="171" name="orgvalue_orgname">
     <value>nombre</value>
   </string>
   <string id="172" name="orgvalue_orgname">
-    <value>añadir organización</value>
+    <value>Añadir organización</value>
   </string>
   <string id="173" name="orgvalue_orgname">
-    <value>añadir organización</value>
+    <value>Añadir organización</value>
   </string>
   <string id="174" name="orgvalue_userwin">
-    <value>cancelar</value>
+    <value>Cancelar</value>
   </string>
   <string id="175" name="orgvalue_userwin">
-    <value>añadir</value>
+    <value>Añadir</value>
   </string>
   <string id="176" name="orgvalue_userwin">
-    <value>eliminar organización</value>
+    <value>Eliminar organización</value>
   </string>
   <string id="177" name="orgvalue_userlist">
-    <value>usuario</value>
+    <value>Usuario</value>
   </string>
   <string id="178" name="orgvalue_userlistadd">
-    <value>añadir usuario</value>
+    <value>Añadir usuario</value>
   </string>
   <string id="179" name="orgvalue_userlistdelete">
-    <value>eliminar usuario</value>
+    <value>Eliminar usuario</value>
   </string>
   <string id="180" name="orgvalue_userwinheader">
-    <value>añadir usuario</value>
+    <value>Añadir usuario</value>
   </string>
   <string id="181" name="orgvalue_userwinsearchfield">
-    <value>buscar usuario</value>
+    <value>Buscar usuario</value>
   </string>
   <string id="182" name="orgvalue_userwinsearchbtn">
-    <value>buscar</value>
+    <value>Buscar</value>
   </string>
   <string id="183" name="orgvalue_userwinsearchresult">
-    <value>usuario</value>
+    <value>Usuario</value>
   </string>
   <string id="184" name="loginwin_chooseorganisation">
-    <value>organización</value>
+    <value>Organización</value>
   </string>
   <string id="185" name="loginwin_chooseorganisationbtn">
-    <value>ingresar</value>
+    <value>Entrar</value>
   </string>
   <string id="186" name="navi_roomadmin">
     <value>Salas</value>
@@ -569,7 +568,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Salas de Conferencia</value>
   </string>
   <string id="188" name="roomadmin_header">
-    <value>id</value>
+    <value>ID</value>
   </string>
   <string id="189" name="roomadmin_header">
     <value>Nombre</value>
@@ -596,49 +595,49 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Comentario</value>
   </string>
   <string id="197" name="whiteboard_saveicon">
-    <value>guardar</value>
+    <value>Guardar y exportar</value>
   </string>
   <string id="198" name="whiteboard_openicon">
     <value>cargar</value>
   </string>
   <string id="199" name="whiteboard_saveaswinheader">
-    <value>guardar como</value>
+    <value>Guardar como</value>
   </string>
   <string id="200" name="whiteboard_saveaswintext">
-    <value>archivo</value>
+    <value>Archivo</value>
   </string>
   <string id="201" name="files">
     <value>archivo</value>
   </string>
   <string id="202" name="whiteboard_saveaswinbtn1">
-    <value>cancelar</value>
+    <value>Cancelar</value>
   </string>
   <string id="203" name="whiteboard_saveaswinbtn2">
-    <value>guardar</value>
+    <value>Guardar</value>
   </string>
   <string id="204" name="rpcerrorwin_header">
-    <value>error</value>
+    <value>Error</value>
   </string>
   <string id="205" name="loadwml_header">
-    <value>cargando</value>
+    <value>Cargando</value>
   </string>
   <string id="206" name="loadwml_messsload">
-    <value>objetos cargados</value>
+    <value>Objetos cargados</value>
   </string>
   <string id="207" name="loadwml_messsync">
-    <value>sincronizando clientes, espere un momento.</value>
+    <value>Sincronizando clientes, espere un momento.</value>
   </string>
   <string id="208" name="loadimage_messload">
     <value>Cargando datos de imagen</value>
   </string>
   <string id="209" name="loadimage_messsync">
-    <value>sincronizando clientes, espere un momento.</value>
+    <value>Sincronizando. Espere, por favor.</value>
   </string>
   <string id="210" name="loadwml_confirmheader">
-    <value>limpiar el área de dibujo</value>
+    <value>Limpiar la pizarra</value>
   </string>
   <string id="211" name="loadwml_confirmmess">
-    <value>limpiar el área de dibujo, toda la información de la pizarra se borrará</value>
+    <value>limpiar la pizarra, toda la información de la pizarra se perderá</value>
   </string>
   <string id="212" name="loadwml_confirmmess2">
     <value>Confirmar antes de cargar un archivo</value>
@@ -671,25 +670,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Datos de usuario</value>
   </string>
   <string id="222" name="invited_userwin_subject">
-    <value>Su pseudónimo para esta conferencia</value>
+    <value>Su nombre para esta conferencia</value>
   </string>
   <string id="223" name="invited_userwin_login">
-    <value>nombre que se mostrará</value>
+    <value>Nombre (apodo)</value>
   </string>
   <string id="224" name="invited_userwin_firstname">
-    <value>nombre</value>
+    <value>Nombre</value>
   </string>
   <string id="225" name="invited_userwin_lastname">
-    <value>apellido</value>
+    <value>Apellido</value>
   </string>
   <string id="226" name="invited_userwin_mail">
-    <value>email</value>
+    <value>Email</value>
   </string>
   <string id="227" name="invited_userwin_lang">
-    <value>idioma</value>
+    <value>Idioma</value>
   </string>
   <string id="228" name="invited_userwin_enter">
-    <value>ingresar</value>
+    <value>Entrar</value>
   </string>
   <string id="229" name="invited_userwin_enter">
     <value>Cargando</value>
@@ -719,10 +718,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>No puede compartir su escritorio en este momento. Alguien más ya está compartiendo su escritorio.</value>
   </string>
   <string id="238" name="user_sharing_messageHeader">
-    <value>Compartición prohibida</value>
+    <value>Compartición no permitida</value>
   </string>
   <string id="239" name="user_doStartScreenViewer">
-    <value>Compartir escritorio</value>
+    <value>Compartir/grabar escritorio</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
     <value>Problemas de conexión: Su ancho de banda es insuficiente y se perderá la información. Si el mensaje se repite con frecuencia solicite al moderador reducir la calidad de imagen y audio.</value>
@@ -819,7 +818,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>comentar</value>
   </string>
   <string id="271" name="confadminform_labelkey">
-    <value>clave</value>
+    <value>Valor</value>
   </string>
   <string id="272" name="turnoverlist_maxresults">
     <value>de</value>
@@ -867,7 +866,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Web del Proyecto (code.google.com/p/openmeetings/)</value>
   </string>
   <string id="287" name="dashboard_quicklinkmailinglistlabel">
-    <value>Lista de correos del Proyecto (groups.google.com/group/openmeetings-user)</value>
+    <value>Lista de correo del Proyecto (groups.google.com/group/openmeetings-user)</value>
   </string>
   <string id="288" name="login_rememberuser">
     <value>Recordar</value>
@@ -912,7 +911,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderación</value>
   </string>
   <string id="302" name="conferencebar">
-    <value>Solicitar la moderación</value>
+    <value>Tengo una pregunta</value>
   </string>
   <string id="303" name="conferencebar">
     <value>Encuestas</value>
@@ -945,31 +944,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Resetear contraseña</value>
   </string>
   <string id="313" name="loginwindow">
-    <value>Audio y Vídeo</value>
+    <value>Por email</value>
   </string>
   <string id="314" name="loginwindow">
-    <value>Chat</value>
+    <value>Por inicio de sesión</value>
   </string>
   <string id="315" name="loginwindow">
-    <value>Pizarra</value>
+    <value>Su email</value>
   </string>
   <string id="316" name="loginwindow">
-    <value>Moderación</value>
+    <value>Su inicio de sesión</value>
   </string>
   <string id="317" name="loginwindow">
-    <value>Archivos</value>
+    <value>Enviar correo con enlace de restablecimiento</value>
   </string>
   <string id="318" name="loginwindow">
-    <value>Usuarios</value>
+    <value>No se ha encontrado esa dirección de correo. Asegúrese de introducir la misma dirección que utilizó al crear la cuenta</value>
   </string>
   <string id="319" name="loginwindow">
-    <value>Encuestas</value>
+    <value>Escriba o su correo o su nombre de usuario</value>
   </string>
   <string id="320" name="loginwindow">
-    <value>No hay nadie conectado con ese nombre de usuario</value>
+    <value>No hay ningún usuario con ese nombre</value>
   </string>
   <string id="321" name="loginwindow">
-    <value>El email contiene un enlace especial que ha sido enviado a su correo. Si no aparece este correo revise la configuración de filtros de spam de su servidor y reenvée este correo nuevamente.</value>
+    <value>Se le ha enviado un correo con un enlace especial. Si no aparece este correo revise la configuración de filtros de spam de su servidor y reenvée este correo nuevamente.</value>
   </string>
   <string id="322" name="errortype">
     <value>Error</value>
@@ -984,7 +983,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Generar contraseña</value>
   </string>
   <string id="326" name="resetpass">
-    <value>Entrar</value>
+    <value>Inicio</value>
   </string>
   <string id="327" name="resetpass">
     <value>cambiar contraseña</value>
@@ -999,13 +998,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Las contraseñas introducidas no son iguales.</value>
   </string>
   <string id="331" name="resetpass">
-    <value>Escriba 4 o más caracteres. Distingue mayúsculas de minúsculas</value>
+    <value>Escriba 4 ó más caracteres. Distingue mayúsculas de minúsculas</value>
   </string>
   <string id="332" name="resetpass">
     <value>La contraseña ha sido cambiada, ahora puede iniciar sesión.</value>
   </string>
   <string id="333" name="rpccallback">
-    <value>OK</value>
+    <value>Aceptar</value>
   </string>
   <string id="334" name="rpcgeneralerror">
     <value>Error desconocido. Envíe esta información al administrador del sistema.</value>
@@ -1020,13 +1019,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ha salido del sistema</value>
   </string>
   <string id="338" name="registration">
-    <value>Se encuentra deshabilitada la opción de registro.</value>
+    <value>Registro desactivado.</value>
   </string>
   <string id="339" name="registration">
     <value>Correo incorrecto</value>
   </string>
   <string id="340" name="registration">
-    <value>archivo duplicado, por favor seleccione otro</value>
+    <value>nombre de archivo duplicado, por favor seleccione otro</value>
   </string>
   <string id="341" name="filebrowser">
     <value>el nombre del archivo es demasiado corto</value>
@@ -1050,16 +1049,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Se necesita autorización del administrador</value>
   </string>
   <string id="348" name="mainnavi">
-    <value>Editor de idiomas</value>
+    <value>Editor de idioma</value>
   </string>
   <string id="349" name="languageseditor">
     <value>Idioma</value>
   </string>
   <string id="350" name="languageseditor">
-    <value>Etiqueta-ID</value>
+    <value>ID de la etiqueta</value>
   </string>
   <string id="351" name="languageseditor">
-    <value>Etiqueta-Nombre</value>
+    <value>Nombre de la etiqueta</value>
   </string>
   <string id="352" name="languageseditor">
     <value>Valor</value>
@@ -1080,7 +1079,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ha eliminado la etiqueta pero no el campo. No se puede eliminar un campo ya que puede tener etiquetas en otros idiomas.</value>
   </string>
   <string id="358" name="languageseditor">
-    <value>Labelid incorrecto. Su FieldLanguagesvalues_Id no se encontró en la base de datos.</value>
+    <value>ID de la etiqueta incorrecto. Su FieldLanguagesvalues_Id no se encontró en la base de datos.</value>
   </string>
   <string id="359" name="languageseditor">
     <value>Usted no puede eliminar este campo, sólo las etiquetas. No hay una etiqueta cargada por el momento o no se encuentra seleccionada ninguna (puede que no exista en el idioma seleccionado).</value>
@@ -1146,25 +1145,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Subir imagen</value>
   </string>
   <string id="380" name="backuppanel">
-    <value>Exportación de datos de usuario</value>
+    <value>Datos de usuario - Exportar</value>
   </string>
   <string id="381" name="backuppanel">
-    <value>¡Deben existir todas las organizaciones!</value>
+    <value>Deben existir todas las organizaciones previamente</value>
   </string>
   <string id="382" name="backuppanel">
-    <value>Exportar usuarios</value>
+    <value>Iniciar la exportación</value>
   </string>
   <string id="383" name="backuppanel">
-    <value>Exportar por organización</value>
+    <value>Por organización</value>
   </string>
   <string id="384" name="backuppanel">
-    <value>Iniciar proceso de exportación</value>
+    <value>Iniciar la exportación</value>
   </string>
   <string id="385" name="backuppanel">
-    <value>Importación de datos de usuario</value>
+    <value>Datos de usuario - Importar</value>
   </string>
   <string id="386" name="backuppanel">
-    <value>Seleccionar archivo xml</value>
+    <value>Seleccione archivo xml</value>
   </string>
   <string id="387" name="languageseditor">
     <value>importar</value>
@@ -1209,7 +1208,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Usuarios:</value>
   </string>
   <string id="399" name="roomslist">
-    <value>En el sistema:</value>
+    <value>Unido:</value>
   </string>
   <string id="400" name="roomslist">
     <value></value>
@@ -1227,7 +1226,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Pulse sobre una sala para ver los detalles</value>
   </string>
   <string id="405" name="roomslist">
-    <value>Escribir a los usuarios de esta sala:</value>
+    <value>Conversar con los usuarios de esta sala:</value>
   </string>
   <string id="406" name="roomslist">
     <value>Sala:</value>
@@ -1293,16 +1292,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Deshabilitar / Habilitar color de línea</value>
   </string>
   <string id="427" name="painttools_fill_disable">
-    <value>cambiar color de relleno</value>
+    <value>Cambiar color de relleno</value>
   </string>
   <string id="428" name="painttools_line_disable">
     <value>Deshabilitar / Habilitar color de relleno</value>
   </string>
   <string id="429" name="change_width_arrow_down_slider">
-    <value>cambiar grosor de línea</value>
+    <value>Cambiar grosor de línea</value>
   </string>
   <string id="430" name="close_small_popups">
-    <value>cerrar</value>
+    <value>Cerrar</value>
   </string>
   <string id="431" name="paint_tool_letter">
     <value>cambiar tamaño de letra</value>
@@ -1356,19 +1355,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Seleccionar dispositivos</value>
   </string>
   <string id="448" name="choose_video_settings_combo">
-    <value>Audio y Vídeo</value>
+    <value>Audio y vídeo</value>
   </string>
   <string id="449" name="choose_video_settings_combo">
-    <value>Sólo Audio</value>
+    <value>Sólo audio</value>
   </string>
   <string id="450" name="choose_video_settings_combo">
-    <value>Sólo Vídeo</value>
+    <value>Sólo vídeo</value>
   </string>
   <string id="451" name="choose_video_settings_combo">
-    <value>Sin Audio/Vídeo (Imagen fija)</value>
+    <value>Sin audio/vídeo (Imagen fija)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>No se transmitirá Audio/Vídeo desde su equipo. En su lugar se mostrará la imagen de su perfil. Seleccione esta configuración si tiene problemas con el ancho de banda de internet.</value>
+    <value>No se transmitirá audio/vídeo desde su equipo. En su lugar se mostrará la imagen de su perfil. Seleccione esta configuración si tiene problemas con el ancho de banda de internet.</value>
   </string>    
   <string id="453" name="calendar_dayname_monday">
     <value>LU</value>
@@ -1470,19 +1469,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ancho | Alto</value>
   </string>
   <string id="486" name="roomAdmin_layout">
-    <value>Contenedor: vídeo</value>
+    <value>Contenedor de vídeo</value>
   </string>
   <string id="487" name="roomAdmin_layout_mod">
-    <value>Contenedor: moderación</value>
+    <value>Contenedor de moderación</value>
   </string>
   <string id="488" name="roomAdmin_layout_mod_pos">
     <value>X</value>
   </string>
   <string id="489" name="roomAdmin_layout_whiteboard">
-    <value>Contenedor: pizarra</value>
+    <value>Contenedor de pizarra</value>
   </string>
   <string id="490" name="roomAdmin_layout_whiteboard_show">
-    <value>Habilitado</value>
+    <value>Activado</value>
   </string>
   <string id="491" name="roomAdmin_layout_whiteboard_pos">
     <value>X | Y</value>
@@ -1491,10 +1490,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Ancho | Alto</value>
   </string>
   <string id="493" name="roomAdmin_layout_files">
-    <value>Contenedor: Archivo,Chat,Participantes</value>
+    <value>Contenedor de archivos, chat, participantes</value>
   </string>
   <string id="494" name="roomAdmin_layout_files_show">
-    <value>Habilitado</value>
+    <value>Activado</value>
   </string>
   <string id="495" name="roomAdmin_layout_files_pos">
     <value>X |Y</value>
@@ -1533,10 +1532,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Registro OpenMeetings</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
-    <value>Su información de usuario:</value>
+    <value>Sus datos de usuario:</value>
   </string>
   <string id="508" name="registering_mail_text_username">
-    <value>Usuario:</value>
+    <value>Inicio:</value>
   </string>
   <string id="509" name="registering_mail_text_pass">
     <value>Contraseña:</value>
@@ -1545,7 +1544,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Correo:</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
-    <value>Equipo-OpenMeetings</value>
+    <value>Openmeetings - Equipo</value>
   </string>
   <string id="512" name="register_mail_subject">
     <value>OpenMeetings - Registro</value>
@@ -1603,10 +1602,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
 
   <string id="530" name="invitation_window_validFromLabel">
-    <value>Desde:</value>
+    <value>Válido desde:</value>
   </string>
   <string id="531" name="invitation_window_validToLabel">
-    <value>Hasta:</value>
+    <value>Válido hasta:</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
     <value>Invitación a OpenMeetings</value>
@@ -1633,16 +1632,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Navegador</value>
   </string>
   <string id="540" name="audio_video">
-    <value>Sincronizar Audio/Vídeo</value>
+    <value>Sincronizar audio/vídeo</value>
   </string>    
   <string id="541" name="errorCode_invalidSession">
     <value>El login es correcto, pero la sesión en la que intenta entrar no está activa o no fue guardada en el servidor. Tiene que iniciar una nueva sesión.</value>
   </string>
   <string id="542" name="errorcode_setUserObject">
-    <value>La SessionId is not loggedin or has no Admin rights. The SOAP Gateway needs an User with Admin-Rights to embed new Users.</value>
+    <value>El ID de la sesión no está iniciado o no tiene permisos de administración. La pasarela SOAP necesita un usuario con permisos de administración para añadir nuevos usuarios.</value>
   </string>
   <string id="543" name="errorcode_loginByRemoteUser">
-    <value>This Session has no Remoteuser-Data connected. Wether you did not call the SOAP-Gateway before accessing the Application or you are usnig a wrong Session-ID</value>
+    <value>Esta sesión no tiene datos del usuario remoto conectado. Quizás no llamó a la pasarela SOAP antes de acceder a la aplicación o está utilizando un ID de sesión incorrecto</value>
   </string>
   <string id="544" name="debug_message_recording">
     <value>El grabador actualmente está en fase beta</value>
@@ -1672,13 +1671,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>altura</value>
   </string>
   <string id="553" name="propertyOpacitySlider">
-    <value>Cambiar Transparencia</value>
+    <value>Cambiar transparencia</value>
   </string>    
   <string id="554" name="browserOpen">
-    <value>Navegador Abrir</value>
+    <value>Abrir el navegador</value>
   </string>    
   <string id="555" name="browserClose">
-    <value>Navegador Cerrar</value>
+    <value>Cerrar el navegador</value>
   </string>    
   <string id="556" name="connectionLostMessage">
     <value>Se ha perdido la conexión con el servidor. Necesita recargar la aplicación y/o comprobar su Red.</value>
@@ -1738,16 +1737,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Invitar a personas</value>
   </string>
   <string id="575" name="calendarLabel">
-    <value>Diariamente</value>
+    <value>Diario</value>
   </string>
   <string id="576" name="calendarLabel">
-    <value>Mensualmente</value>
+    <value>Mensual</value>
   </string>
   <string id="577" name="calendarLabel">
-    <value>Anualmente</value>
+    <value>Anual</value>
   </string>
   <string id="578" name="alert">
-    <value>La cita final va después de la cita de inicio</value>
+    <value>La fecha final va después de la fecha de inicio</value>
   </string>
   <string id="579" name="alert">
     <value>Por favor, ponga un título</value>
@@ -1759,13 +1758,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Active esta opción si la escritura de su idioma va de derecha a izquierda</value>
   </string>
   <string id="582" name="tooltip main-menu">
-    <value>Herramientas</value>
+    <value>Panel de control</value>
   </string>
   <string id="583" name="tooltip main-menu">
     <value>Ver eventos o encuentros grabados</value>
   </string>
   <string id="584" name="tooltip main-menu">
-    <value>Videoconferencia - Reúnase con 4 o más (hasta 16) usuarios&lt;br/&gt;todos tendrán acceso de audio y vídeo.</value>
+    <value>Videoconferencia - Reúnase con 4 ó más (hasta 16) usuarios&lt;br/&gt;todos tendrán acceso de audio y vídeo.</value>
   </string>
   <string id="585" name="tooltip main-menu">
     <value>Auditorio - Reúnase con hasta 200 participantes&lt;br/&gt;sólo el moderador tendrá audio y/o vídeo</value>
@@ -1774,34 +1773,34 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Crear usuarios, salas, organizaciones&lt;br/&gt; + cambios en la configuración</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>Usuarios en la Sala</value>
+    <value>Usuarios en la sala</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
   </string>
   <string id="589" name="room Administration roomclients list">
-    <value>Login</value>
+    <value>Inicio</value>
   </string>
   <string id="590" name="room Administration roomclients list">
     <value>D</value>
   </string>  
   <string id="591" name="swf sync message">
-    <value>Cargando Archivo. Espere hasta que todos los clientes hayan sido sincronizados.</value>
+    <value>Cargando documento. Espere hasta que todos los clientes estén sincronizados.</value>
   </string>  
   <string id="592" name="upload dialog">
-    <value>Subida completa. Convirtiendo el archivo...</value>
+    <value>Subida completa. Convirtiendo documento...</value>
   </string>
   <string id="593" name="upload dialog">
     <value>Iniciar Subida</value>
   </string>
   <string id="594" name="upload dialog">
-    <value>Subir e importar conversación. Por favor, seleccione un archivo de su disco.</value>
+    <value>Diálogo de subir e importar. Por favor, seleccione un archivo de su disco.</value>
   </string>
   <string id="595" name="upload Dialog">
     <value>Cancelar</value>
   </string>
   <string id="596" name="upload Dialog">
-    <value>Seleccionar Archivo</value>
+    <value>Seleccionar archivo</value>
   </string>
   <string id="597" name="administration navigation">
     <value>Conexiones</value>
@@ -1810,10 +1809,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Valor</value>
   </string>  
   <string id="599" name="connection administration panel">
-    <value>Streamid</value>
+    <value>ID de flujo</value>
   </string>
   <string id="600" name="connection administration panel">
-    <value>Login</value>
+    <value>Inicio</value>
   </string>
   <string id="601" name="connection administration panel">
     <value>Conectado desde</value>
@@ -1828,7 +1827,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Expulsar</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>¿Está seguro de querer expulsar a este cliente de la conexión?&lt;br/&gt; El cliente será expulsado de la Sala, pero podrá volver a autenticarse de nuevo.</value>
+    <value>¿Está seguro de querer expulsar a este cliente de la conexión?&lt;br/&gt; El cliente será expulsado de la sala, pero podrá volver a autenticarse de nuevo.</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>Su sesión ha sido cerrada por el administrador o el moderador.</value>
@@ -1837,13 +1836,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Teléfono</value>
   </string>  
   <string id="608" name="participents panel">
-    <value>El usuario es el moderador de esta Sala</value>
+    <value>El usuario es el moderador de esta sala</value>
   </string>
   <string id="609" name="participents panel">
     <value>El usuario tiene permisos para dibujar en la pizarra</value>
   </string>
   <string id="610" name="participents panel">
-    <value>(Re) Iniciar Audio/Vídeo o cambiar la configuración de dispositivos</value>
+    <value>(Re) Iniciar audio/vídeo o cambiar la configuración de dispositivos</value>
   </string>
   <string id="611" name="participents panel">
     <value>Permitir a este usuario dibujar en la pizarra</value>
@@ -1900,19 +1899,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>búsqueda interna</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>usarios externos</value>
+    <value>Añadir externos</value>
   </string>
   <string id="630" name="lbl_prename">
-    <value>nombre</value>
+    <value>Nombre</value>
   </string>
   <string id="631" name="lbl_name">
-    <value>apellidos</value>
+    <value>Apellidos</value>
   </string>
   <string id="632" name="lbl_email">
     <value>E-mail</value>
   </string>
   <string id="633" name="logoutConfirm_title">
-    <value>Confirmar Salir</value>
+    <value>Confirmar la salida</value>
   </string>
   <string id="634" name="logoutConfirm_sure_to_logout_question">
     <value>¿Está seguro de que desea salir?</value>
@@ -1921,31 +1920,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Acciones</value>
   </string>
   <string id="636" name="room admin">
-    <value>Sala Demo</value>
+    <value>Sala de demostración</value>
   </string>
   <string id="637" name="room admin">
-    <value>Hora Demo</value>
+    <value>Hora de la demostración</value>
   </string>
   <string id="638" name="meeting Timer">
-    <value>Temporizador de encuentros</value>
+    <value>Horario del encuentro</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>Esta Sala es demo. Para desactivar este aviso, debería conseguir una sala privada para uso propio o bien configurar su propio Servidor. Será desconectado automáticamente en:</value>
+    <value>Esta es una sala de demostración. Para desactivar este aviso, debería conseguir una sala privada para uso propio o bien configurar su propio Servidor. Será desconectado automáticamente en:</value>
   </string>
    <string id="640" name="meeting room administration">
-    <value>Con moderador</value>
+    <value>Moderado</value>
   </string>  
   <string id="641" name="moderated room waiting message">
     <value>Por favor, espere hasta que el moderador entre en la sala. El moderador puede ser un profesor, el administrador o el creador de esta sala.</value>
   </string>
   <string id="642" name="error popup">
-    <value>Ok</value>
+    <value>Aceptar</value>
   </string>  
   <string id="643" name="window screensharing">
-    <value>Escritorio compartido iniciándose</value>
+    <value>Recibiendo el escritorio compartido</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>Está iniciándose un escritorio compartido del usuario:</value>
+    <value>Hay una nueva recepción de escritorio compartido del usuario:</value>
   </string>
   <string id="645" name="window screen sharing">
     <value>Comenzar a compartir</value>
@@ -1963,19 +1962,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderación</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>Moderar Usuarios</value>
+    <value>Moderar usuarios</value>
   </string>
   <string id="651" name="menu moderation">
-    <value>Moderar Salas</value>
+    <value>Moderar salas</value>
   </string>
   <string id="652" name="moderator org">
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>¿Desea convertir a este usuario en Moderador de esa Organización?</value>
+    <value>¿Desea convertir a este usuario en moderador de esa organización?</value>
   </string>
   <string id="654" name="error message">
-    <value>Por favor, seleccione una Organización antes de intentar incluir a un usuario en la misma.</value>
+    <value>Por favor, seleccione una organización antes de intentar incluir a un usuario en la misma.</value>
   </string>
   <string id="655" name="choose user window">
     <value>Organización - Moderador</value>
@@ -1984,49 +1983,49 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>¿Realmente desea borrar a este usuario de la Organización?</value>
   </string>
   <string id="657" name="org moderation">
-    <value>Este usuario es Moderador</value>
+    <value>Este usuario es moderador</value>
   </string>
   <string id="658" name="org moderation">
-    <value>Este usuario no es Moderador</value>
+    <value>Este usuario no es moderador</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>¿Desea que este usuario deje de ser Moderador de esta Organización?</value>
+    <value>¿Desea que este usuario deje de ser moderador de esta organización?</value>
   </string>
   <string id="660" name="moderation">
-    <value>Añadir o borrar Usuarios y/o Salas en su Organización</value>
+    <value>Añadir o borrar usuarios y/o salas en su organización</value>
   </string>
 <string id="661" name="delete confirm question">
     <value>¿Realmente quiere borrar este registro?</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>¿Realmente quiere borrar a este usuario de su organización? Sólo se borrará la conexión entre el usuario y su organización. En realidad, para borrar al usuario debe ingresar al Panel de Administración.</value>
+    <value>¿Realmente quiere borrar a este usuario de su organización? Sólo se borrará la conexión entre el usuario y su organización. En realidad, para borrar al usuario debe ingresar al Panel de administración.</value>
   </string>
   <string id="663" name="error message self deleting">
     <value>¡Vd no puede borrarse a sí mismo!</value>
   </string>
   <string id="664" name="error message auth">
-    <value>¡Este método necesita una cuenta de Administración para poder ser utilizado!</value>
+    <value>¡Para usar este método necesita de una cuenta de administrador!</value>
   </string>
   <string id="665" name="error message SOAP">
     <value>No hay ninguna sesión asociada a este ID.</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>Esta es una cuenta de Administrador o de Moderador. Sólo puede editar esta cuenta utilizando el Panel de Administración.</value>
+    <value>Esta es una cuenta de administrador o de moderador. Sólo puede editar esta cuenta utilizando el Panel de administración.</value>
   </string>
   <string id="667" name="email verification">
     <value>Para completar su registro, haga el favor de pulsar en el siguiente enlace. Otra opción es copiar la URL en la barra de su navegador.</value>
   </string>
   <string id="668" name="email verification">
-    <value>Pulse para verificar su E-Mail</value>
+    <value>Pulse para verificar su correo</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>No se ha encontrado un usuario para ese algoritmo Hash.</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>¡Este usuario ya fue activado!</value>
+    <value>¡Este usuario ya está activado!</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>¡Ud ha activado su cuenta con éxito!</value>
+    <value>¡Ha activado su cuenta con éxito!</value>
   </string>
   <string id="672" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>Ingrese ahora</value>
@@ -2035,13 +2034,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Su cuenta no está activada. Utilice en primer lugar el enlace que hay en correo recibido al finalizar el proceso de registro.</value>
   </string>
   <string id="674" name="register verification message">
-    <value>Ud se ha registrado con éxito. Le hemos enviado un correo con un código de verificación. Por favor, revise su cuenta de correo.</value>
+    <value>Se ha registrado con éxito. Le hemos enviado un correo con un código de verificación. Por favor, revise su cuenta de correo.</value>
   </string>
   <string id="675" name="participants panel">
-    <value>Quitar el rol de Moderador a este usuario</value>
+    <value>Quitar el rol de moderador a este usuario</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Dar permisos de Moderación a este usuario</value>
+    <value>Dar permisos de moderación a este usuario</value>
   </string>
   <string id="677" name="event user list">
     <value>Usuario</value>
@@ -2053,55 +2052,55 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Moderador</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderación: Por favor, seleccione cualquier usuario de la lista para darle acceso a la Pizarra, Moderación o Vídeo.</value>
+    <value>Moderación: Por favor, seleccione cualquier usuario de la lista para darle acceso a la pizarra, moderación o vídeo.</value>
   </string>
   <string id="681" name="event user list">
-    <value>Este usuario ya es Moderador, así que automáticamente tiene permisos para dibujar.</value>
+    <value>Este usuario ya es moderador, así que automáticamente tiene permisos para dibujar.</value>
   </string>
   <string id="682" name="event user list error">
-    <value>¡Este es Ud! No puede quitarse los permisos de Moderación a sí mismo.</value>
+    <value>¡Este es Vd! No puede quitarse los permisos de moderación a sí mismo.</value>
   </string>
   <string id="683" name="event user list">
-    <value>Permitir a este usuario Publicar su Audio/Vídeo</value>
+    <value>Permitir a este usuario publicar su audio/vídeo</value>
   </string>
   <string id="684" name="event user list">
-    <value>Borrar el Audio/Vídeo de este usuario</value>
+    <value>Borrar el audio/vídeo de este usuario</value>
   </string>
   <string id="685" name="event user list">
-    <value>Me gustaría ser moderador de esta sala</value>
+    <value>Desearía ser moderador de esta sala</value>
   </string>
   <string id="686" name="event user list">
-    <value>Me gustaría utilizar la pizarra</value>
+    <value>Desearía utilizar la pizarra</value>
   </string>
   <string id="687" name="event user list">
-    <value>Desearía compartir mi Audio/Vídeo</value>
+    <value>Desearía compartir mi audio/vídeo</value>
   </string>
   <string id="688" name="event user list">
-    <value>Vd. es el moderador de esta sala</value>
+    <value>Usted es el moderador de esta sala</value>
   </string>
   <string id="689" name="event user list">
     <value>Tiene permisos para dibujar en la pizarra</value>
   </string>
   <string id="690" name="event user list">
-    <value>Tiene permiso para compartir su Audio/Video</value>
+    <value>Tiene permiso para compartir su audio/video</value>
   </string>
   <string id="691" name="errortype">
-    <value>Mensaje al Moderador</value>
+    <value>Mensaje al moderador</value>
   </string>
   <string id="692" name="apply for mod message">
     <value>El Usuario</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>Desearía ser Moderador. Use los iconos de estado próximos al usuario en la Lista de Usuarios para agregar o remover el permiso de Moderación.</value>
+    <value>Desearía ser moderador. Use los iconos de estado próximos al usuario en la Lista de Usuarios para agregar o remover el permiso de moderación.</value>
   </string>
   <string id="694" name="apply for whiteboard">
     <value>desearía utilizar la pizarra. Utilice los iconos que hay junto al nombre del usuario (en la Lista de Usuarios) para agregar o quitar los permisos correspondientes.</value>
   </string>
   <string id="695" name="695">
-    <value>desearía compartir su Audio/Vídeo. Use los iconos que hay junto al nombre de usuario (en la Lista de Usuarios) para agregar o quitar los permisos para compartir Audio/Video.</value>
+    <value>desearía compartir su audio/vídeo. Use los iconos que hay junto al nombre de usuario (en la Lista de Usuarios) para agregar o quitar los permisos para compartir audio/vídeo.</value>
   </string>
   <string id="696" name="moderation message">
-    <value>Debe esperar hasta que un Moderador ingrese a la sala.</value>
+    <value>Debe esperar hasta que un moderador ingrese a la sala.</value>
   </string>
   <string id="697" name="calendar button">
     <value>Cancelar</value>
@@ -2119,10 +2118,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Año</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Subir Archivo</value>
+    <value>Subir archivo</value>
   </string>
   <string id="703" name="file explorer">
-    <value>Añadir Carpeta</value>
+    <value>Añadir carpeta</value>
   </string>
   <string id="704" name="file explorer">
     <value>Actualizar</value>
@@ -2131,25 +2130,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Papelera</value>
   </string>
   <string id="706" name="file explorer">
-    <value>Mis Archivos (Dispositivo personal)</value>
+    <value>Mis archivos (Dispositivo personal)</value>
   </string>
   <string id="707" name="file explorer">
-    <value>Archivos de la Sala (Dispositivo público)</value>
+    <value>Archivos de la sala (Dispositivo público)</value>
   </string>
   <string id="708" name="file explorer">
-    <value>Agregar Archivo</value>
+    <value>Agregar archivo</value>
   </string>
   <string id="709" name="file explorer">
-    <value>Agregar Carpeta</value>
+    <value>Agregar carpeta</value>
   </string>
   <string id="710" name="file explorer">
-    <value>Borrar Carpeta</value>
+    <value>Borrar carpeta</value>
   </string>
   <string id="711" name="file explorer">
-    <value>Editar Nombre</value>
+    <value>Editar nombre</value>
   </string>
   <string id="712" name="file explorer">
-    <value>Nueva Carpeta</value>
+    <value>Nueva carpeta</value>
   </string>
   <string id="713" name="file explorer">
     <value>¿Está seguro de que quiere borrar este ítem?</value>
@@ -2161,31 +2160,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Buscar</value>
   </string>
   <string id="716" name="file explorer">
-    <value>Abrir Documento</value>
+    <value>Abrir documento</value>
   </string>
   <string id="717" name="file explorer">
     <value>Mostrar todos los archivos (Vista de árbol)</value>
   </string>
   <string id="718" name="file explorer">
-    <value>Cerrar Documento</value>
+    <value>Cerrar documento</value>
   </string>
   <string id="719" name="file explorer">
-    <value>Borrar Archivo</value>
+    <value>Borrar archivo</value>
   </string>
    <string id="720" name="file explorer">
-    <value>No tiene permisos para escribir o dibujar en la pizarra. Debe ser moderador o, al menos, tener permisos de edición de la pizarra. Solicíteselo a un Moderador.</value>
+    <value>No tiene permisos para escribir o dibujar en la pizarra. Debe ser moderador o, al menos, tener permisos de edición de la pizarra. Solicíteselo a un moderador.</value>
   </string>
   <string id="721" name="property panel">
     <value>Propiedades</value>
   </string>
   <string id="722" name="sharing session">
-    <value>Iniciar Cliente (externo)</value>
+    <value>Iniciar Java</value>
   </string>
   <string id="723" name="sharing session">
-    <value>Iniciar Cliente (HTTP)</value>
+    <value>Iniciar Flash</value>
   </string>
   <string id="724" name="sharing session">
-    <value>Un usuario desea compartir su pantalla. ¿Desea visualizarlo?</value>
+    <value>Un usuario desea compartir su escritorio. ¿Desea visualizarlo?</value>
   </string>
   <string id="725" name="sharing session">
     <value>Actualmente está compartiendo su escritorio. Para dejar de hacerlo, pulse en el botón Stop en el cliente utilizado.</value>
@@ -2194,28 +2193,28 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Compartiendo sesión</value>
   </string>
   <string id="727" name="sharing session">
-    <value>¡Ya está compartiendo su Escritorio!</value>
+    <value>¡Ya está compartiendo su escritorio!</value>
   </string>
   <string id="728" name="sharing client">
-    <value>Visor de Escritorio</value>
+    <value>Visor de escritorio</value>
   </string>
   <string id="729" name="sharing client">
     <value>Salir</value>
   </string>
   <string id="730" name="sharing client">
-    <value>Compartiendo el Escritorio</value>
+    <value>Compartiendo el escritorio</value>
   </string>
   <string id="731" name="sharing client">
-    <value>Pulse Iniciar para publicar su pantalla</value>
+    <value>Pulse Iniciar para publicar su escritorio</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Iniciar el compartir escritorio</value>
+    <value>Iniciar la compartición</value>
   </string>
   <string id="733" name="sharing client">
-    <value>Finalizar el compartir escritorio</value>
+    <value>Pausar la compartición</value>
   </string>
   <string id="734" name="sharing client">
-    <value>Seleccione el área de su pantalla:</value>
+    <value>Seleccione el área de la pantalla:</value>
   </string>
   <string id="735" name="sharing client">
     <value>Cambiar anchura</value>
@@ -2245,7 +2244,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cancelar</value>
   </string>
   <string id="744" name="sharing viewer">
-    <value>Iniciar Externa</value>
+    <value>Iniciar Java</value>
   </string>
   <string id="745" name="sharing viewer">
     <value>Si cierra esta sesión completamente, no será posible reiniciar el visor durante esta sesión.</value>
@@ -2254,13 +2253,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Confirmar el cierre de la sesión</value>
   </string>
   <string id="747" name="sharing viewer">
-    <value>Compartir pantalla</value>
+    <value>Compartir escritorio</value>
   </string>
   <string id="748" name="sharing viewer">
     <value>Grabar sesión</value>
   </string>
   <string id="749" name="co-browser">
-    <value>Co-Navegación</value>
+    <value>Co-navegación</value>
   </string>
   <string id="750" name="co-browser">
     <value>Hum... Firefox en windows no muestra la co-navegación con claridad. Por favor, utilice otro navegador o cierre esta funcionalidad.</value>
@@ -2281,7 +2280,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Cargar</value>
   </string>
   <string id="756" name="co-browser">
-    <value>Configurar en su perfil este sitio como la página web por defecto.</value>
+    <value>Configurar en su perfil este sitio como predeterminado.</value>
   </string>
   <string id="757" name="test setup">
     <value>Probar configuración</value>
@@ -2299,7 +2298,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Iniciar</value>
   </string>
   <string id="762" name="edit video settings">
-    <value>No pedir de nuevo</value>
+    <value>No volver a preguntar</value>
   </string>
   <string id="763" name="test setup">
     <value>REC</value>
@@ -2326,13 +2325,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Iniciar Evento</value>
   </string>
   <string id="771" name="start view">
-    <value>Ir a la Sala</value>
+    <value>Ir a la sala</value>
   </string>
   <string id="772" name="start view">
     <value>Comprobar Config.</value>
   </string>
   <string id="773" name="start view">
-    <value>Iniciar Conferen.</value>
+    <value>Iniciar Confer.</value>
   </string>
   <string id="774" name="start view">
     <value>Instrucciones Conferencia:</value>
@@ -2398,7 +2397,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Hay un evento sin guardar en el calendario. Por favor, guárdelo o bien bórrelo.</value>
   </string>
   <string id="795" name="calendar">
-    <value>¡Por favor, añada al menos a un participante!</value>
+    <value>¡Añada, al menos, a un participante!</value>
   </string>
   <string id="796" name="calendar">
     <value>¿Realmente desea borrar este evento?</value>
@@ -2431,7 +2430,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Progr. Encuentro</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Para planificar una conferencia, añada un nuevo Evento en el Calendario. Para cada Evento se creará automáticamente una Sala de (vídeo)conferencia. Usted y el resto de asistentes recibirán un correo con un enlace de la sala.&lt;br/&gt;&lt;br/&gt;Puede escoger entre diferentes tipos de salas con diferentes diseños y sistemas de moderación. También puede escoger entre diferentes tipos de notificación de correo que se envían en cada evento del calendario.</value>
+    <value>Para planificar una conferencia, añada un nuevo Evento en el Calendario. Para cada Evento se creará automáticamente una sala de (vídeo)conferencia. Usted y el resto de asistentes recibirán un correo con un enlace de la sala.&lt;br/&gt;&lt;br/&gt;Puede escoger entre diferentes tipos de salas con diferentes diseños y sistemas de moderación. También puede escoger entre diferentes tipos de notificación de correo que se envían en cada evento del calendario.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>¿Necesita ayuda?</value>
@@ -2476,13 +2475,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Email</value>
   </string>
   <string id="821" name="room admin">
-  <value>Añadir nuevo Moderador por defecto</value>
+  <value>Añadir nuevo moderador por defecto</value>
   </string>
   <string id="822" name="room admin">
   <value>¿Es supermoderador</value>
   </string>
   <string id="823" name="room admin">
-  <value>Si la sala está moderada, quien sea ya moderador seguirá siéndolo. Si no desea que sea así, y sólo quiere que determinado usuario sea el moderador, utilice la opción de Moderador por defecto.</value>
+  <value>Si la sala está moderada, quien sea ya moderador seguirá siéndolo. Si no desea que sea así, y sólo quiere que determinado usuario sea el moderador, utilice la opción de moderador por defecto.</value>
   </string>
   <string id="824" name="room admin">
   <value>Un supermoderador es siempre el moderador de una sala cuando entra en ella. Además, nadie puede quitarle la marca de moderación</value>
@@ -2509,7 +2508,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Organización</value>
   </string>
   <string id="832" name="confirm action">
-  <value>¿Está Vd. seguro?</value>
+  <value>¿Está usted seguro?</value>
   </string>
   <string id="833" name="confirm delete">
   <value>¿Realmente desea borrar este ítem? ¡Tiene que pulsar en el botón de guardar para almacenar los cambios!</value>
@@ -2533,7 +2532,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>¿Realmente desea borrar este Archivo/Directorio?</value>
   </string>
   <string id="840" name="confirm delete">
-  <value>¿Borrar Archivo/Directorio?</value>
+  <value>¿Borrar archivo/directorio?</value>
   </string>
   <string id="841" name="salutation">
   <value>Dña.</value>
@@ -2548,22 +2547,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Mostrar la posición del ratón a los participantes</value>
   </string>
   <string id="845" name="publish option">
-  <value>Compartir Audio con el applet SIP</value>
+  <value>Compartir audio con el applet SIP</value>
   </string>
   <string id="846" name="publish option">
-  <value>Compartir Audio con SIP y Vídeo con Flash</value>
+  <value>Compartir audio con SIP y vídeo con Flash</value>
   </string>
   <string id="847" name="document panel">
   <value>Pantalla completa</value>
   </string>
   <string id="848" name="screen share">
-  <value>Ver pantalla</value>
+  <value>Ver escritorio</value>
   </string>
   <string id="849" name="screen share">
   <value>El usuario</value>
   </string>
   <string id="850" name="screen share">
-  <value>desea compartir su pantalla. ¿Desea visualizarla?</value>
+  <value>desea compartir su escritorio. ¿Desea visualizarlo?</value>
   </string>
   <string id="851" name="screen share">
   <value>Cerrar</value>
@@ -2572,13 +2571,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <value>Zoom</value>
   </string>
   <string id="853" name="screen sharer">
-  <value>La sesión ha sido cerrada por quien compartía pantalla</value>
+  <value>La sesión ha sido cerrada por quien compartía escritorio</value>
   </string>
   <string id="854" name="screen sharer">
   <value>Pausa</value>
   </string>
   <string id="855" name="screen sharer">
-  <value>Compartir pantalla</value>
+  <value>Nueva compartición de escritorio</value>
   </string>
   <string id="856" name="presenter mini icon">
     <value>Minimizar</value>
@@ -2614,22 +2613,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Por</value>
   </string>
   <string id="867" name="flvrecording">
-    <value>PLAY</value>
+    <value>Descarga</value>
   </string>
   <string id="868" name="flvrecording">
-    <value>Vídeo - Principal</value>
+    <value>Principal - Vídeo</value>
   </string>
   <string id="869" name="screen share">
     <value>Grabación</value>
   </string>
   <string id="870" name="screen share">
-    <value>Puede grabar y compartir su pantalla a la vez. Para permitir que otros vean su pantalla, pulse en el botón -iniciar- de la parte superior. Para grabar la sesión, es suficiente con pulsar en iniciar grabación.</value>
+    <value>Puede grabar y compartir su escritorio a la vez. Para permitir que otros vean su escritorio, pulse en el botón -iniciar- de la parte superior. Para grabar la sesión, es suficiente con pulsar en iniciar grabación.</value>
   </string>
   <string id="871" name="screen share">
-    <value>Iniciar Grabación</value>
+    <value>Iniciar grabación</value>
   </string>
   <string id="872" name="screen share">
-    <value>Parar Grabación</value>
+    <value>Parar grabación</value>
   </string>
   <string id="873" name="flvrecording">
     <value>Descargar el archivo FLV</value>
@@ -2647,13 +2646,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>El usuario tiene el micrófono activado</value>
   </string>
   <string id="878" name="sharing client">
-    <value>Detener compartir</value>
+    <value>Detener la compartición</value>
   </string>
   <string id="879" name="room config">
     <value>Permitir preguntas del usuario</value>
   </string>
   <string id="880" name="room config">
-    <value>Desactive esto para impedir que ningún usuario le moleste en esta sala. Al hacerlo, el botón para solicitar la moderación no será visible.</value>
+    <value>Desactive esta opción para impedir que ningún usuario le moleste en esta sala. Al hacerlo, el botón para solicitar la moderación no será visible.</value>
   </string>
   <string id="881" name="room config">
     <value>Permisos</value>
@@ -2740,42 +2739,42 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? <br/><br/>Todos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>To access other recordings you have to login the OpenMeetings Application.</value>
+    <value>Para acceder a otras grabaciones, tiene que autenticarse en la aplicación Openmeetings.</value>
   </string>
   <string id="910" name="interview video pod">
-    <value>Choose the User for this Video</value>
+    <value>Seleccione el usuario para este vídeo</value>
   </string>
   <string id="911" name="interview video choose user">
-    <value>Available Users for this Pod</value>
+    <value>Usuarios disponsibles para esta transmisión Pod</value>
   </string>
   <string id="912" name="interview info">
-    <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
+    <value>Usted es moderador en esta entrevista. Puede decidir quién habla así como iniciar / parar la grabación de la sesión.</value>
   </string>
   <string id="913" name="interview button recording">
-    <value>Start Recording</value>
+    <value>Iniciar Grabación</value>
   </string>
   <string id="914" name="interview button recording">
-    <value>Stop Recording</value>
+    <value>Parar Grabación</value>
   </string>
   <string id="915" name="interview error message">
-    <value>The recording of the Interview is already started.</value>
+    <value>La grabación de la entrevista está ya iniciada.</value>
   </string>
   <string id="916" name="interview error message">
-    <value>The recording is already stopped or not been started yet.</value>
+    <value>La grabación está ya parada o bien no ha sido iniciada aún.</value>
   </string>
   <string id="917" name="interview recording message">
-    <value>The recording for this interview is already started!</value>
+    <value>¡Ya se ha iniciado la grabación de esta entrevista!</value>
   </string>
   <string id="918" name="interview error message">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </string>
   <string id="919" name="interview error message">
-    <value>The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</value>
+    <value>El post-proceso de una entrevista lleva cinco veces más tiempo que el de la propia entrevista. El progreso actual de este proceso es el siguiente:</value>
   </string>
   <string id="920" name="sip creation">
-    <value>You have to enter your password again to auto create the SIP Data</value>
+    <value>Tiene que introducir de nuevo su contraseña para autocrear los datos SIP</value>
   </string>
   <string id="921" name="sip creation">
-    <value>Re-generate SIP Data</value>
+    <value>Regenerar datos SIP</value>
   </string>
 </language>
