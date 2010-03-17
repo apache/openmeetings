@@ -425,6 +425,55 @@ public class Roommanagement {
 		return null;
 	}	
 	
+	public List<Rooms> getRoomsByIds(List<Integer> roomIds){
+		try {
+			log.error("getRoomsByIds: roomtypes_id "+roomIds);
+			
+			if (roomIds == null || roomIds.size() == 0) {
+				return new LinkedList<Rooms>();
+			}
+				
+			String queryString = "SELECT r from Rooms r " +
+										"WHERE ";
+			
+			queryString += "(";
+			
+			int i=0;
+			for (Integer room_id : roomIds) {
+				if (i != 0) {
+					queryString += " OR ";
+				}
+				queryString += " rooms_id = " + room_id;
+				i++;
+			}
+			
+			queryString += ")";
+				
+			log.error("### getPublicRooms: create Query "+queryString);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Query q = session.createQuery(queryString);
+			
+			List ll = q.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			log.error("### getPublicRooms: size Room List "+ll.size());
+			
+			return ll;
+			
+			
+		} catch (HibernateException ex) {
+			log.error("[getRoomsByIds] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRoomsByIds] ", ex2);
+		}
+		return null;
+	}
+	
 	public List<Rooms> getPublicRoomsWithoutType(long user_level){
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){

@@ -2,6 +2,7 @@ package org.openmeetings.axis.services;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.remote.ConferenceService;
+import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 public class RoomService {
@@ -190,6 +192,83 @@ public class RoomService {
 			log.error("[getRoomTypes]",err);
 			throw new AxisFault(err.getMessage());
 		}
+	}
+	
+	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1, Integer roomId2, Integer roomId3, Integer roomId4
+			, Integer roomId5, Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9, Integer roomId10) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				LinkedList<Integer> roomIds = new LinkedList<Integer>();
+				
+				if (roomId1 != null && roomId1 > 0) {
+					roomIds.push(roomId1);
+				}
+				if (roomId2 != null && roomId2 > 0) {
+					log.debug("roomId2 :: "+roomId2);
+					roomIds.push(roomId2);
+				}
+				if (roomId3 != null && roomId3 > 0) {
+					roomIds.push(roomId3);
+				}
+				if (roomId4 != null && roomId4 > 0) {
+					roomIds.push(roomId4);
+				}
+				if (roomId5 != null && roomId5 > 0) {
+					roomIds.push(roomId5);
+				}
+				if (roomId6 != null && roomId6 > 0) {
+					roomIds.push(roomId6);
+				}
+				if (roomId7 != null && roomId7 > 0) {
+					roomIds.push(roomId7);
+				}
+				if (roomId8 != null && roomId8 > 0) {
+					roomIds.push(roomId8);
+				}
+				if (roomId9 != null && roomId9 > 0) {
+					roomIds.push(roomId9);
+				}
+				if (roomId10 != null && roomId10 > 0) {
+					roomIds.push(roomId10);
+				}
+				
+				List<Rooms> rooms = Roommanagement.getInstance().getRoomsByIds(roomIds);
+				
+				RoomCountBean[] roomsArray = new RoomCountBean[rooms.size()];
+				
+				int i = 0;
+				for (Rooms room : rooms) {
+					
+					HashMap<String,RoomClient> map = ClientListManager.getInstance().getClientListByRoom(room.getRooms_id());
+					
+					//room.setCurrentusers(new LinkedList<RoomClient>());
+					
+//					for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext(); ) {
+//						room.getCurrentusers().add(map.get(iter.next()));
+//					}
+					
+					RoomCountBean rCountBean = new RoomCountBean();
+					rCountBean.setRoomId(room.getRooms_id());
+					rCountBean.setRoomName(room.getName());
+					rCountBean.setMaxUser(room.getNumberOfPartizipants().intValue());
+					rCountBean.setRoomCount(map.size());
+					
+					roomsArray[i] = rCountBean;
+					i++;
+				}
+				
+				return roomsArray;
+			}
+			
+		} catch (Exception err) {
+			log.error("[getRoomTypes]",err);
+			throw new AxisFault(err.getMessage());
+		}
+		return null;
 	}
 	
 	public Rooms getRoomById(String SID, long rooms_id){
