@@ -212,6 +212,7 @@ public class LdapLoginManagement {
 		if(ldap_auth_type == null)
 			ldap_auth_type = "";
 		
+		
 		if ( ! isValidAuthType(ldap_auth_type) ){
 			log.error("ConfigKey in Ldap Config contains invalid auth type : '" + ldap_auth_type + "' -> Defaulting to " + LdapAuthBase.LDAP_AUTH_TYPE_SIMPLE);	
 			ldap_auth_type = LdapAuthBase.LDAP_AUTH_TYPE_SIMPLE;
@@ -230,6 +231,7 @@ public class LdapLoginManagement {
 
 		log.debug("authenticating admin...");
 		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
+		
 		
 		log.debug("Checking server type...");
 		//for OpenLDAP only
@@ -329,6 +331,9 @@ public class LdapLoginManagement {
 				
 				// Return UserObject
 				Users u2 =  Usermanagement.getInstance().getUserById(userid);
+				
+				//initialize lazy collection
+				Usermanagement.getInstance().refreshUserObject(u2);
 				
 				if(u2 == null)
 					return userid;
