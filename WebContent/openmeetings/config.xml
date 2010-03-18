@@ -267,6 +267,19 @@ of the red5-servlet
 
 <eventRoomModule>flexibleEventRoom</eventRoomModule>
 
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<restrictedRoomModule>restrictedConferenceRoom</restrictedRoomModule>
+
+<!-- #############################################
+    Interview Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
 
 <!-- #############################################
     Event Room Modules

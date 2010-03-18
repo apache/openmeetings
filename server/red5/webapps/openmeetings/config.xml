@@ -21,7 +21,7 @@ Port to use for the Server
 To this port the fallback is done once the default rtmport failed
 this should workaround 99% of all firewalls
  -->
-<rtmpTunnelport>8088</rtmpTunnelport>
+<rtmpTunnelport>8080</rtmpTunnelport>
 
 <rtmpsslport>443</rtmpsslport>
 <!--
@@ -38,7 +38,7 @@ Port to use for the Server
 This port is used to connec to the http-servlet
 of the red5-servlet
  -->
-<red5httpport>5080</red5httpport>
+<red5httpport>8080</red5httpport>
 	
 <!--
 	These colors are the main colors and style the hole application
@@ -93,14 +93,9 @@ of the red5-servlet
     
     If the rtmpt issues is solved sothat several Webapps can use different RTMPT connection
     we might change this value again to its origin / webapp-context
-    
-    If you run openmeetings as .war version: /
-    If you run openmeetings as a native red5-webapp: /$WebAppName/, in most cases /openmeetings/
-    
-    be carefull in adding the slashes in the beginning and end
 
  -->
-<httpRootKey>/openmeetings/</httpRootKey>  
+<httpRootKey>/</httpRootKey>  
     
 <!--
     Window-Effect Settings
@@ -272,6 +267,19 @@ of the red5-servlet
 
 <eventRoomModule>flexibleEventRoom</eventRoomModule>
 
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<restrictedRoomModule>restrictedConferenceRoom</restrictedRoomModule>
+
+<!-- #############################################
+    Interview Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
 
 <!-- #############################################
     Event Room Modules

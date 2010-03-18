@@ -77,6 +77,100 @@ these properties will be overwritten by config.xml -->
 <attribute name="defaultWhiteboardWidth" value="2400" type="number" />
 <attribute name="defaultWhiteboardHeight" value="1200" type="number" />
 
+<!-- Module Configuration -->
+<!-- #############################################
+    Admin Modules
+  -->   
+    
+<attribute name="adminModuleUser" value="userAdmin" type="string" />
+
+<attribute name="adminModuleRoom" value="roomAdmin" type="string" />
+
+<attribute name="adminModuleOrg" value="orgAdmin" type="string" />
+
+<attribute name="adminModuleLanguages" value="languagesEditor" type="string" />
+
+<attribute name="adminModuleConnections" value="roomClient" type="string" />
+
+<attribute name="adminModuleConfiguration" value="confAdmin" type="string" />
+
+<attribute name="adminModuleBackup" value="backupContent" type="string" />
+
+
+<!-- #############################################
+    Moderator Modules
+ -->
+
+<attribute name="moderatorModuleUser" value="userModerate" type="string" />
+
+<attribute name="moderatorModuleRoom" value="roomModerate" type="string" />
+
+
+<!-- #############################################
+    Dashboard Modules
+ -->
+
+<attribute name="dashboardModuleStartScreen" value="mainDashboard" type="string" />
+
+<attribute name="dashboardModuleCalendar" value="lzCalendar" type="string" />
+
+
+<!-- Conference Room Modules -->
+
+<attribute name="conferenceModuleRoomList" value="allmeetings" type="string" />
+
+
+<!-- #############################################
+    Conference Room
+    
+    Room Layout's: flexibleConferenceRoom,conferenceView
+ -->
+
+<attribute name="conferenceRoomModule" value="flexibleConferenceRoom" type="string" />
+
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<attribute name="eventModuleRoomList" value="allEvents" type="string" />
+
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleEventRoom,audienceView
+ -->
+
+<attribute name="eventRoomModule" value="flexibleEventRoom" type="string" />
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<attribute name="restrictedRoomModule" value="restrictedConferenceRoom" type="string" />
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<attribute name="interviewRoomModule" value="interviewConferenceRoom" type="string" />
+
+
+<!-- #############################################
+    Event Room Modules
+ -->
+
+<attribute name="recordModule" value="lzRecordContent" type="string" />
+
+<!-- #############################################
+    Profiles Panel Modules
+ -->
+
+<attribute name="userSettingsModule" value="userSettings" type="string" />
+
 <!-- END OF config.xml attributes
 ##########################################################
  -->

@@ -98,9 +98,9 @@
 			} else if (this.roomType == 2) {
 				this.roomClassName = canvas.eventRoomModule;
 			} else if (this.roomType == 3) {
-                this.roomClassName = "restrictedConferenceRoom";
+                this.roomClassName = canvas.restrictedRoomModule;
             } else if (this.roomType == 4) {
-                this.roomClassName = "interviewConferenceRoom";
+                this.roomClassName = canvas.interviewRoomModule;
             } else {
 				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
 			}

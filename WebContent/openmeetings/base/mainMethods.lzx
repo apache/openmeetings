@@ -105,6 +105,11 @@
         this.setAttribute('eventModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/eventModuleRoomList/text()'));  
         this.setAttribute('eventRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/eventRoomModule/text()'));  
 		
+        this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
+        
+        this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
+        
+        
 		this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
         
         this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
@@ -388,12 +393,12 @@
                  
             } else if (roomTypeId==3){
                 
-                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomObj:roomObj});
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             } else if (roomTypeId==4){
                 
-                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"interviewConferenceRoom",roomObj:roomObj});
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
             }   

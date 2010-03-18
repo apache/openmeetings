@@ -107,7 +107,7 @@
 				
 			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==3){
 				
-				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:"restrictedConferenceRoom",roomObj:canvas.thishib.currentInvitation.room});
+				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
 			}                 
         </handler>  
     </netRemoteCallHib>     
