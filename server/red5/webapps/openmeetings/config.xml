@@ -21,7 +21,7 @@ Port to use for the Server
 To this port the fallback is done once the default rtmport failed
 this should workaround 99% of all firewalls
  -->
-<rtmpTunnelport>8080</rtmpTunnelport>
+<rtmpTunnelport>8088</rtmpTunnelport>
 
 <rtmpsslport>443</rtmpsslport>
 <!--
@@ -38,7 +38,7 @@ Port to use for the Server
 This port is used to connec to the http-servlet
 of the red5-servlet
  -->
-<red5httpport>8080</red5httpport>
+<red5httpport>5080</red5httpport>
 	
 <!--
 	These colors are the main colors and style the hole application
@@ -95,7 +95,7 @@ of the red5-servlet
     we might change this value again to its origin / webapp-context
 
  -->
-<httpRootKey>/</httpRootKey>  
+<httpRootKey>/openmeetings/</httpRootKey>  
     
 <!--
     Window-Effect Settings
