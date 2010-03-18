@@ -161,12 +161,13 @@ public class OpenXGHttpClient {
 		    }
 		    
 		    Long sipPhoneRangeStart = Long.parseLong(sip_phonerange_start.getConf_value());
-		    Long sipPhoneRange = Long.parseLong(sip_phonerange.getConf_value());
+//		    Long sipPhoneRange = Long.parseLong(sip_phonerange.getConf_value());
 		    Long sipPhoneRangeCurrentIndex = Long.parseLong(sip_phonerange_currentindex.getConf_value());
 		    
-		    if (sipPhoneRangeCurrentIndex >= sipPhoneRange) {
-		    	throw new Exception("You have no more numbers, you need to allocate more numbers and alter the Configuration value sip.phonerange");
-		    }
+		    //Not sure anymore if this is really needed, we don't need a number in national format
+//		    if (sipPhoneRangeCurrentIndex >= sipPhoneRange) {
+//		    	throw new Exception("You have no more numbers, you need to allocate more numbers and alter the Configuration value sip.phonerange");
+//		    }
 		    
 		    Long useridAsNumber = sipPhoneRangeStart + sipPhoneRangeCurrentIndex;
 		    
@@ -219,7 +220,6 @@ public class OpenXGHttpClient {
 		
 		return null;
 	}
-	
 	
 	/**
 	 * 

@@ -379,6 +379,9 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange.currentindex",
 				""+0, null, "Number of used Phone Numbers in the sip.phonerange");
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange.conference.currentindex",
+				""+0, null, "Number of used Phone Numbers in the sip.phonerange for the conferences");
+		
 	}
 
 	public void loadDefaultRooms() {
