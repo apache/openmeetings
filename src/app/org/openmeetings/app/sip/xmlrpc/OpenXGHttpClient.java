@@ -1,38 +1,19 @@
 package org.openmeetings.app.sip.xmlrpc;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Date;
 
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpVersion;
+import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.dom4j.io.DOMReader;
-import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
@@ -41,6 +22,10 @@ import org.openmeetings.app.sip.xmlrpc.custom.OpenXGReturnObject;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class OpenXGHttpClient {
 	
@@ -308,6 +293,130 @@ public class OpenXGHttpClient {
 		return null;
 	}
 	
+	
+	
+	public OpenXGReturnObject openSIPgCreateConference() {
+		try {
+			
+			//Check if the OpenXG Gateway is enabled in general
+			Configuration sip_openxg_enable = Configurationmanagement.getInstance().getConfKey(3L, "sip.openxg.enable");
+			
+			if (sip_openxg_enable == null || !sip_openxg_enable.getConf_value().equals("yes")) {
+				log.debug("SIP is disabled");
+				return null;
+			}
+			
+			//client_id and client_secret
+			Configuration openxg_client_id = Configurationmanagement.getInstance().getConfKey(3L, "openxg.client.id");
+			Configuration openxg_client_secret = Configurationmanagement.getInstance().getConfKey(3L, "openxg.client.secret");
+			if (openxg_client_id == null || openxg_client_secret == null) {
+				throw new Exception("openxg.client.id or openxg.client.secret missing in Configuration table");
+			}
+			String client_id = openxg_client_id.getConf_value();
+			String client_secret = openxg_client_secret.getConf_value();
+		    
+			//domain
+			Configuration openxg_client_domain = Configurationmanagement.getInstance().getConfKey(3L, "openxg.client.domain");
+			if (openxg_client_domain == null) {
+				throw new Exception("openxg.client.domain missing in Configuration table");
+			}
+		    String domain = openxg_client_domain.getConf_value();
+			
+			//language_code
+		    Configuration openxg_language_code = Configurationmanagement.getInstance().getConfKey(3L, "openxg.language.code");
+			if (openxg_language_code == null) {
+				throw new Exception("openxg.language.code missing in Configuration table");
+			}
+		    String language_code = openxg_language_code.getConf_value();
+		    
+		    //adminid
+		    Configuration openxg_adminid = Configurationmanagement.getInstance().getConfKey(3L, "openxg.adminid");
+			if (openxg_language_code == null) {
+				throw new Exception("openxg.adminid missing in Configuration table");
+			}
+		    String adminid = openxg_adminid.getConf_value();
+			
+		    Date d = new Date();
+		    long starttime = d.getTime()/1000;
+		    
+		    long endTime = (d.getTime()/1000) + (60 * 60);
+		    
+		    String digest = this.digest_calculate(new Object[]{client_id, "067201101", domain, ""+starttime,
+										     ""+endTime, language_code, adminid,
+										     client_secret});
+		    
+			Configuration openxg_wrapper_url = Configurationmanagement.getInstance().getConfKey(3L, "openxg.wrapper.url");
+			
+			if (openxg_wrapper_url == null) {
+				throw new Exception("No openxg.wrapper.url set in Configuration");
+			}
+			
+			String strURL = openxg_wrapper_url.getConf_value();
+			
+			// Prepare HTTP post
+	        PostMethod post = new PostMethod(strURL);
+	        post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
+
+	        //Get the XML-String representative
+	        String stringToPost = OpenXGCustomXMLMarshall.getInstance().
+	        						openSIPgCreateConference(client_id, digest, "067201101", domain, 
+	        													""+starttime, ""+endTime, 
+						        								language_code, adminid);
+		        							
+	        
+	        log.debug(stringToPost);
+	        
+	        RequestEntity entity = new ByteArrayRequestEntity(stringToPost.getBytes(Charset.forName("ISO-8859-1")));
+	        
+	        //Prepare HTTP post
+	        
+	        post.getParams().setContentCharset("ISO-8859-1");
+	        post.getParams().setVersion(HttpVersion.HTTP_1_0);
+	        
+	        // Request content will be retrieved directly
+	        // from the input stream
+	        post.setRequestEntity(entity);
+	        
+	        Protocol easyhttps = new Protocol("https", (ProtocolSocketFactory)new EasySSLProtocolSocketFactory(), 443);
+	        Protocol.registerProtocol("https", easyhttps);
+
+	        
+	        // Get HTTP client
+	        HttpClient httpclient = new HttpClient();
+	        
+	        // Execute request
+            int result = httpclient.executeMethod(post);
+            
+            // Display status code
+            log.debug("Response status code: " + result);
+            
+            if (result == 200) {
+            	
+            	log.debug("parseReturnBody "+post.getResponseBodyAsString());
+            
+            	return this.parseOpenXGReturnBody(post.getResponseBodyAsStream());
+            
+            } else {
+            	
+            	throw new Exception("Could not connect to OpenXG, check the URL for the Configuration");
+            	
+            }
+            
+		} catch (Exception err) {
+			
+			log.error("[openSIPgUserCreate]",err);
+			
+		}
+		
+		return null;
+	}
+	
+	
+	/**
+	 * 
+	 * @param inputStream
+	 * @return
+	 */
 	public OpenXGReturnObject parseOpenXGReturnBody(InputStream inputStream) {
 		try { 
 			

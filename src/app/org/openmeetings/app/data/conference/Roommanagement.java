@@ -30,6 +30,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 
 /**
  * 
@@ -654,6 +655,8 @@ public class Roommanagement {
 				if (roomModerators!=null) {
 					RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
 				}
+				
+				OpenXGHttpClient.getInstance().openSIPgCreateConference();
 				
 				return returnId;
 			}
