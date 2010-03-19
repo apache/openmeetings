@@ -68,6 +68,19 @@ these properties can be overwritten by config.xml -->
 
 <attribute name="eventRoomModule" value="audienceView" type="string" />
 
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
+ -->
+<attribute name="restrictedRoomModule" value="restrictedConferenceRoom" type="string" />
+
+<!-- #############################################
+    Event Room
+    
+    Room Layouts: interviewConferenceRoom
+ -->
+<attribute name="interviewRoomModule" value="interviewConferenceRoom" type="string" />
 
 <!-- #############################################
     Event Room Modules
