@@ -2769,4 +2769,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="921" name="sip creation">
     <value>Re-generate SIP Data</value>
   </string>
+  <string id="922" name="fileexplorer">
+    <value>You cannot move this file or folder into its own sub folder!</value>
+  </string>
+  <string id="923" name="file explorer ">
+    <value>Home drive size</value>
+  </string>
+  <string id="924" name="file explorer">
+    <value>Public drive size</value>
+  </string>
 </language>
