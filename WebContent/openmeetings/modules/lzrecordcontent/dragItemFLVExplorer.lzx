@@ -79,6 +79,19 @@
     			if (this.overItem.fileExplorerItemId == 0) {
     			    this.moveFile.isOwner = this.overItem.isOwner;
     			}
+    			
+    			//check if this is a home folder or not
+                var checkForOwer = this.overItem.checkForIsOwner();
+                if ($debug) Debug.write("checkForOwer ::",checkForOwer);
+                this.moveFile.moveToHome = checkForOwer;
+                
+                //check that the file is not moved inside itself
+                if (this.overItem.checkForIsChild(this.refObj.fileExplorerItemId)) {
+                    new lz.labelerrorPopup(canvas,{errorlabelid:922});
+                    this.destroy();
+                    return;
+                }
+                
     			this.moveFile.doCall();
     		} else {
     			if ($debug) Debug.warn("Drag to whiteboard !!! ");
@@ -134,6 +147,8 @@
         <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam>
         <netparam><method name="getValue">return parent.newParentFileExplorerItemId;</method></netparam>  
         <netparam><method name="getValue">return parent.isOwner;</method></netparam>  
+        <netparam><method name="getValue">return parent.moveToHome;</method></netparam>
+        
         <handler name="ondata" args="value">    
             if ($debug) Debug.write("moveFile: ",value);
             parent.overItem.doOpen();

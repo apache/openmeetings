@@ -111,6 +111,33 @@
 		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
 	</method>
 	
+	<!--
+        Check if this is the Owner
+     -->
+    <method name="checkForIsOwner">
+        if (this.isRoot) {
+            return this.isOwner;
+        } else {
+            return parent.parent.checkForIsOwner();
+        }
+    </method>
+    
+    <!--
+        Check if the user tries to move a file in its own tree,
+        see moveFile
+     -->
+    <method name="checkForIsChild" args="compareFileExplorerItemId">
+        if (this.isRoot) {
+            return false;
+        } else {
+            if (this.fileExplorerItemId == compareFileExplorerItemId) {
+                return true;
+            } else {
+                return parent.parent.checkForIsChild(compareFileExplorerItemId);
+            }
+        }
+    </method>
+	
 	<method name="doResetSingleClick" args="itmeObj">
 		this.singleClickStarted = false;
 	</method>

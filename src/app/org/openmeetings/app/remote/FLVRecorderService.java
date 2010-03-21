@@ -766,7 +766,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public Long moveFile(String SID, Long flvRecordingId, Long newParentFileExplorerItemId, Boolean isOwner) {
+	public Long moveFile(String SID, Long flvRecordingId, Long newParentFileExplorerItemId, 
+			Boolean isOwner, Boolean moveToHome) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
@@ -776,8 +777,18 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        	log.debug("moveFile "+flvRecordingId);
 	        	
 	        	this.flvRecordingDaoImpl.moveFile(flvRecordingId, newParentFileExplorerItemId, isOwner, users_id);
-							
+				
+	        	FlvRecording flvRecording = this.flvRecordingDaoImpl.getFlvRecordingById(flvRecordingId);
 	        	
+	        	if (moveToHome) {
+	        		//set this file and all subfiles and folders the ownerId
+	        		this.setFileToOwnerOrRoomByParent(flvRecording, users_id);
+	        		
+	        	} else {
+	        		//set this file and all subfiles and folders the room_id
+	        		this.setFileToOwnerOrRoomByParent(flvRecording, null);
+	        		
+	        	}
 	        }
 		} catch (Exception err){
 			log.error("[moveFile] ",err);
@@ -785,6 +796,25 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 	
+	private void setFileToOwnerOrRoomByParent(FlvRecording flvRecording,
+			Long usersId) {
+		try {
+			
+			flvRecording.setOwnerId(usersId);
+			
+			this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+			
+			List<FlvRecording> subFLVItems = this.flvRecordingDaoImpl.getFlvRecordingByParent(flvRecording.getFlvRecordingId());
+			
+			for (FlvRecording subFLVItem : subFLVItems) {
+				this.setFileToOwnerOrRoomByParent(subFLVItem, usersId);
+			}
+			
+		} catch (Exception err){
+			log.error("[setFileToOwnerOrRoomByParent] ",err);
+		}
+	}
+
 	public Long updateFileOrFolderName(String SID, Long flvRecordingId, String fileName) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
