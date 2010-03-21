@@ -1,5 +1,6 @@
 package org.openmeetings.app.remote;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -841,9 +842,26 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        	
 	        	FLVRecorderObject fileExplorerObject = new FLVRecorderObject();
 	        	
-	        	fileExplorerObject.setUserHome(this.flvRecordingDaoImpl.getFlvRecordingRootByOwner(users_id));
+	        	//User Home Recordings
+	        	List<FlvRecording> homeFlvRecordings = this.flvRecordingDaoImpl.getFlvRecordingRootByOwner(users_id);
+	        	long homeFileSize = 0;
 	        	
-	        	fileExplorerObject.setRoomHome(this.flvRecordingDaoImpl.getFlvRecordingRootByPublic(organization_id));
+	        	for (FlvRecording homeFlvRecording : homeFlvRecordings) {
+	        		homeFileSize += this.getSizeOfDirectoryAndSubs(homeFlvRecording);
+	        	}
+	        	
+	        	fileExplorerObject.setUserHome(homeFlvRecordings);
+	        	fileExplorerObject.setUserHomeSize(homeFileSize);
+	        	
+	        	//Public Recordings by Organization
+	        	List<FlvRecording> publicFlvRecordings = this.flvRecordingDaoImpl.getFlvRecordingRootByPublic(organization_id);
+	        	long publicFileSize = 0;
+	        	
+	        	for (FlvRecording publicFlvRecording : publicFlvRecordings) {
+	        		publicFileSize += this.getSizeOfDirectoryAndSubs(publicFlvRecording);
+	        	}
+	        	fileExplorerObject.setRoomHome(publicFlvRecordings);
+	        	fileExplorerObject.setRoomHomeSize(publicFileSize);
 	        	
 	        	return fileExplorerObject;
 	        	
@@ -852,6 +870,47 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.error("[getFileExplorerByRoom] ",err);
 		}
 		return null;
+	}
+
+	private long getSizeOfDirectoryAndSubs(FlvRecording baseFlvRecording) {
+		try {
+			
+			long fileSize = 0;
+			
+			File tFile = new File (ScopeApplicationAdapter.webAppPath + File.separatorChar
+					+ "streams" + File.separatorChar + "hibernate" + File.separatorChar
+					+ baseFlvRecording.getFileHash());
+			if (tFile.exists()) {
+				fileSize += tFile.length();
+			}
+			
+			File dFile = new File (ScopeApplicationAdapter.webAppPath + File.separatorChar
+					+ "streams" + File.separatorChar + "hibernate" + File.separatorChar
+					+ baseFlvRecording.getAlternateDownload());
+			if (dFile.exists()) {
+				fileSize += dFile.length();
+			}
+			
+			File iFile = new File (ScopeApplicationAdapter.webAppPath + File.separatorChar
+					+ "streams" + File.separatorChar + "hibernate" + File.separatorChar
+					+ baseFlvRecording.getPreviewImage());
+			if (iFile.exists()) {
+				fileSize += iFile.length();
+			}
+			
+			List<FlvRecording> flvRecordings = this.flvRecordingDaoImpl.getFlvRecordingByParent(baseFlvRecording.getFlvRecordingId());
+			
+			for (FlvRecording flvRecording : flvRecordings) {
+				fileSize += this.getSizeOfDirectoryAndSubs(flvRecording);
+			}
+			
+			
+			return fileSize;
+			
+		} catch (Exception err){
+			log.error("[getSizeOfDirectoryAndSubs] ",err);
+		}
+		return 0;
 	}
 	
 	

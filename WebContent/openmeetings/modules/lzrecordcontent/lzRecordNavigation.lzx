@@ -69,6 +69,15 @@
         <![CDATA[
             this.clearContent();
             
+            var homeSizeInMBytes = Math.round( (roomObject.userHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._statusArea._userHomeSize.setAttribute("text","" + homeSizeInMBytes + " MBytes");
+            
+            var roomHomeSizeInMBytes = Math.round( (roomObject.roomHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._statusArea._roomHomeSize.setAttribute("text","" + roomHomeSizeInMBytes + " MBytes");
+                        
+            
             var homeIcon = new lz.rootFLVExplorerItem(this._filearea._contentarea,{
                                         open:true,
                                         fileName:canvas.getLabelName(860),
@@ -336,7 +345,7 @@
      --> 
     
     <view name="_filearea" x="1" y="20" clip="true"
-          height="${ parent.height - 21 - parent._recordingsInfo.height }" 
+          height="${ parent.height - 21 - parent._recordingsInfo.height - 40 }" 
           width="$once{ parent.width - 12 }">
         
         <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
@@ -351,7 +360,20 @@
         
         <vscrollbar name="_scrollbar" />
         <hscrollbar name="_hscrollbar" />
-    </view>    
+    </view>  
+    
+    <view name="_statusArea" x="1" y="${ parent._recordingsInfo.y - 40 }" 
+    	   width="$once{ parent.width - 12 }">
+    	
+        <labelText name="_userHomeSizeLabel" labelid="923" />
+        
+        <labelText name="_userHomeSize" align="right" />
+        
+        <labelText name="_roomHomeSizeLabel" labelid="924" y="20" />
+        
+        <labelText name="_roomHomeSize" align="right" y="20" />
+    	
+    </view>  
     
     <conferenceBox name="_recordingsInfo" labelid="862" valign="bottom"
                    textInset="30" closeable="true" isopen="true" closedHeight="32"
