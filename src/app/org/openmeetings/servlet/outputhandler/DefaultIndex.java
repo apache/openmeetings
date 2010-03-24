@@ -33,6 +33,14 @@ public class DefaultIndex extends VelocityViewServlet {
 			//Enable SIP Template or not 
 			Configuration SIP_ENABLE = Configurationmanagement.getInstance().getConfKey(3L, "sip.enable");
 			
+			//SIP_REALM
+			Configuration application_name = Configurationmanagement.getInstance().getConfKey(3L, "application.name");
+			if (application_name == null) {
+				ctx.put("APPLICATION_NAME", "OpenMeetings");
+			} else {
+				ctx.put("APPLICATION_NAME", application_name.getConf_value());
+			}
+			
 			if (SIP_ENABLE == null || !SIP_ENABLE.getConf_value().equals("yes")) {
 				
 				template = "usual_template.vm";

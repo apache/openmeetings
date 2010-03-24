@@ -264,6 +264,9 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "mail.smtp.starttls.enable",
 				mailusetls, null, "Enable TLS 1=true, 0=false");
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "application.name",
+				"OpenMeetings", null, "Name of the Browser Title window");
+		
 		//"1" == "EN"
 		Configurationmanagement.getInstance().addConfByKey(3, "default_lang_id",
 				default_lang_id, null, "Default System Language ID see language.xml");
