@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-    <!-- private class for conferenceMenubar class -->
-    <class name="_labelMenuItem" extends="menuitem" text="labelmenulabelmenulabelmenu"
+      <!-- private class for conferenceMenubar class submenuItems-->
+    <class name="_labelMenuItem" extends="menuitem" text=""
            style="componentStyle">
+        <text id="menuText" text="" align="right" />
         <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+        
         <method name="setLabelId" args="_labelid" >
             this.labelid = _labelid;
-            this.setAttribute('text',canvas.getLabelName(this.labelid));
+            
+            if(canvas.isrtl == 'true'){
+            	menuText.setText(canvas.getLabelName(this.labelid));
+            	this.setAttribute('text','');
+            }
+            else{
+            	this.setAttribute('text',canvas.getLabelName(this.labelid));
+            }
+          
         </method>
-    </class>    
+    </class>  
         
     <!-- private class for conferenceMenubar class -->
     <class name="_labelMenu" extends="menu" text="labelmenulabelmenulabelmenu" >
@@ -42,96 +52,117 @@
         </simpleLabelButton>
         
         <!-- file menu -->
-        <_labelMenu labelid="245" width="250">
-            <handler name="oninit">
-                <![CDATA[
-                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
-                    	if ($debug) Debug.write("this mbarcontent ",this);
-                        parent._exitbtn.destroy();
-                    }
-                ]]>
-            </handler>  
-            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }"/>
-            <menuseparator/>  
-            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
-            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
-            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
-            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
-            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
-            <!--
-            <menuseparator/>  
-            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
-             -->
-        </_labelMenu> 
-        
-        <_labelMenu labelid="635" width="250">
-            <_labelMenuItem labelid="213" command="cmd_invitation" />
-            <menuseparator/> 
-            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
-            	<handler name="onselect" args="sel">
-                    if ($debug) Debug.write("checkSharerSession.doCall");
-            		canvas._mymod.checkSharerSession.doCall();
-            	</handler>
-            </_labelMenuItem>
-            <menuseparator/>
-            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
-            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
-            <menuseparator/>  
-            <_labelMenuItem labelid="784" enabled="${ !canvas.ismoderator }">
-            	<handler name="onselect" args="sel">
-            		//Apply for Moderation
-                	canvas.thishib.applyForModeration.doCall();
-            	</handler>
-            </_labelMenuItem>
-            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
-            	<handler name="onselect" args="sel">
-            		//Ask for Right to Draw on Whiteboard
-            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
-            	</handler>
-            </_labelMenuItem>
-            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
-            	<handler name="onselect" args="sel">
-            		if (canvas.ismoderator) {
-		                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
-		                //the notification and the broadcasting Bit is set for this User
-		                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-		                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-		                canvas.thishib.setBroadCastingFlag.doCall(); 
-		            } else {
-		                //Apply for Right to Share Audio/Video
-		                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
-		            }
-            	</handler>
-            </_labelMenuItem>
-            <menuseparator/>  
-            <!--
-            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
-            <menuseparator/>
-             -->
-            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
-            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
-        </_labelMenu>  
-        
-	   <!-- exit room
-	    <_labelMenu labelid="308" width="250">
-        	    	
+           <_labelMenu labelid="245" width="250">
+	            <handler name="oninit">
+	                <![CDATA[
+	                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
+	                    	if ($debug) Debug.write("this mbarcontent ",this);
+	                        parent._exitbtn.destroy();
+	                    }
+	                    
+	                    if(canvas.isrtl == 'true'){
+	                    	if ($debug) Debug.write("onInit : Setting nokey");
+	                    	lblImport.setCommand(cmd_importFile_nokey);
+	                    }
+	                ]]>
+	            </handler>  
+	            <_labelMenuItem id="lblImport" labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }"/>
+	            <menuseparator/>  
+	            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
+	            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
+	            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
+	            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
+	            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
+	            <!--
+	            <menuseparator/>  
+	            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
+	             -->
+	        </_labelMenu> 
 	        
-           
-	    </_labelMenu>
-	    <_labelMenu labelid="301" width="250">
-	        <_labelMenuItem labelid="302" command="cmd_applyforMod" />
-	    </_labelMenu>
-	      
-
-	    <_labelMenu labelid="305" width="250">
-	        <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
-	        <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
-	    </_labelMenu>   
-	    <_labelMenu labelid="303" width="250">
+	        <_labelMenu labelid="635" width="250">
+	            
+	            <handler name="oninit">
+	                <![CDATA[
+	                   
+	                    if(canvas.isrtl == 'true'){
+	                    	if ($debug) Debug.write("onInit : Setting nokey");
+	                    	lblCamMic.setCommand(cmd_editCamMicSettings_nokey);
+	                    	lblBoard.setCommand(cmd_editBoardSettings_nokey);
+	                    	lblPoll.setCommand(cmd_createPoll_nokey);
+	                    	lblPollResult.setCommand(cmd_pollResults_nokey);
+	                    	lblPollVote.setCommand(cmd_checkPollVoted_nokey);
+	                    }
+	                ]]>
+	            </handler> 
+	            
+	            <_labelMenuItem labelid="213" command="cmd_invitation" />
+	            <menuseparator/> 
+	            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
+	            	<handler name="onselect" args="sel">
+	                    if ($debug) Debug.write("checkSharerSession.doCall");
+	            		canvas._mymod.checkSharerSession.doCall();
+	            	</handler>
+	            </_labelMenuItem>
+	            <menuseparator/>
+	            <_labelMenuItem id="lblCamMic" labelid="306" command="cmd_editCamMicSettings" />
+	            <_labelMenuItem id="lblBoard" labelid="307" command="cmd_editBoardSettings" />
+	            <menuseparator/>  
+	            <_labelMenuItem labelid="784" enabled="${ !canvas.ismoderator }">
+	            	<handler name="onselect" args="sel">
+	            		//Apply for Moderation
+	                	canvas.thishib.applyForModeration.doCall();
+	            	</handler>
+	            </_labelMenuItem>
+	            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
+	            	<handler name="onselect" args="sel">
+	            		//Ask for Right to Draw on Whiteboard
+	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+	            	</handler>
+	            </_labelMenuItem>
+	            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
+	            	<handler name="onselect" args="sel">
+	            		if (canvas.ismoderator) {
+			                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+			                //the notification and the broadcasting Bit is set for this User
+			                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+			                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+			                canvas.thishib.setBroadCastingFlag.doCall(); 
+			            } else {
+			                //Apply for Right to Share Audio/Video
+			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+			            }
+	            	</handler>
+	            </_labelMenuItem>
+	            <menuseparator/>  
+	            <!--
+	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/>
+	             -->
+	            <_labelMenuItem width="250" id="lblPoll" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem width="250" id="lblPollResult" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
+	            <_labelMenuItem width="250" id="lblPollVote" labelid="42" command="cmd_checkPollVoted" />
+	        </_labelMenu>  
 	        
-	    </_labelMenu>    
-         -->
+		   <!-- exit room
+		    <_labelMenu labelid="308" width="250">
+	        	    	
+		        
+	           
+		    </_labelMenu>
+		    <_labelMenu labelid="301" width="250">
+		        <_labelMenuItem id="lblMod" labelid="302" command="cmd_applyforMod" />
+		    </_labelMenu>
+		      
+	
+		    <_labelMenu labelid="305" width="250">
+		        <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" />
+		        <_labelMenuItem labelid="307" command="cmd_editBoardSettings" />
+		    </_labelMenu>   
+		    <_labelMenu labelid="303" width="250">
+		        
+		    </_labelMenu>    
+	         -->
+                 
 	</class>    
 	
 	<class name="restrictedConferenceMenubar" 

@@ -4,29 +4,56 @@
 
 <library>
     
-    <command id="cmd_applyforMod" onselect="canvas.doActionmenu('applyForMod')" key="['ALT','Shift','M']"/>
-    <command id="cmd_createPoll" onselect="canvas.doActionmenu('createPoll')" key="['ALT','Shift','P']"/> 
-    <command id="cmd_pollResults" onselect="canvas.doActionmenu('pollResults')" key="['ALT','Shift','R']"/> 
-    <command id="cmd_checkPollVoted" onselect="canvas.doActionmenu('checkPollVoted')" key="['ALT','Shift','V']"/> 
-    <command id="cmd_importFile" onselect="canvas.doActionmenu('importFile')" key="['ALT','Shift','I']"/> 
-    <command id="cmd_editCamMicSettings" onselect="canvas.doActionmenu('editCamMicSettings')" key="['ALT','Shift','1']"/> 
-    <command id="cmd_editBoardSettings" onselect="canvas.doActionmenu('editBoardSettings')" key="['ALT','Shift','2']"/>   
-    <command id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/> 
+    <class name="confmenucommand" extends="command">
+		<method name="reInit">
+			
+			if($debug) Debug.write("reInit");
+			
+			if(canvas.isrtl == 'true'){
+				if($debug) Debug.write("reInit : resetting key");
+			
+				this.setAttribute('key', '');
+			}
+			
+			if($debug) Debug.write("reInit : not rtl");
+			
+			
+		</method>
+	</class>
+    
+    <confmenucommand id="cmd_applyforMod" onselect="canvas.doActionmenu('applyForMod')" />
+    <confmenucommand id="cmd_createPoll" onselect="canvas.doActionmenu('createPoll')" key="['ALT','Shift','P']"/> 
+    <confmenucommand id="cmd_pollResults" onselect="canvas.doActionmenu('pollResults')" key="['ALT','Shift','R']"/> 
+    <confmenucommand id="cmd_checkPollVoted" onselect="canvas.doActionmenu('checkPollVoted')" key="['ALT','Shift','V']"/> 
+    <confmenucommand id="cmd_importFile" onselect="canvas.doActionmenu('importFile')" key="['ALT','Shift','I']"/> 
+    <confmenucommand id="cmd_editCamMicSettings" onselect="canvas.doActionmenu('editCamMicSettings')" key="['ALT','Shift','1']"/> 
+    <confmenucommand id="cmd_editBoardSettings" onselect="canvas.doActionmenu('editBoardSettings')" key="['ALT','Shift','2']"/>   
+    <confmenucommand id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/> 
+    
+    <confmenucommand id="cmd_applyforMod_nokey" onselect="canvas.doActionmenu('applyForMod')" />
+    <confmenucommand id="cmd_createPoll_nokey" onselect="canvas.doActionmenu('createPoll')" /> 
+    <confmenucommand id="cmd_pollResults_nokey" onselect="canvas.doActionmenu('pollResults')" /> 
+    <confmenucommand id="cmd_checkPollVoted_nokey" onselect="canvas.doActionmenu('checkPollVoted')" /> 
+    <confmenucommand id="cmd_importFile_nokey" onselect="canvas.doActionmenu('importFile')" /> 
+    <confmenucommand id="cmd_editCamMicSettings_nokey" onselect="canvas.doActionmenu('editCamMicSettings')"/> 
+    <confmenucommand id="cmd_editBoardSettings_nokey" onselect="canvas.doActionmenu('editBoardSettings')" />   
+    <confmenucommand id="cmd_quit_nokey" onselect="canvas.doActionmenu('quit')" /> 
     
     <!--
     <command id="cmd_browser_open" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/>   
     <command id="cmd_browser_close" onselect="canvas.doActionmenu('browser_close')" key="['ALT','Shift','b']"/> 
      -->
      
-    <command id="cmd_invitation" onselect="canvas.doAction('invitation')" /> 
+    <confmenucommand id="cmd_invitation" onselect="canvas.doAction('invitation')" /> 
     
-    <command id="cmd_coBrowser" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/> 
-    
-    <command id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" />
-    <command id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" />
-    <command id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" />
-    <command id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" />
-    <command id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />
+    <confmenucommand id="cmd_coBrowser" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/> 
+    <confmenucommand id="cmd_coBrowser_nokey" onselect="canvas.doActionmenu('browser_open')" /> 
+   
+    <confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" />
+    <confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" />
+    <confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" />
+    <confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" />
+    <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />
     
 	    
 	<dataset type="http" name="languageData" request="false" 
