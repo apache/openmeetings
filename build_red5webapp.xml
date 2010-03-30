@@ -255,7 +255,12 @@
             <fileset dir="server">
                 <exclude name="**/*.fla"/>
             </fileset>
-        </copy> 
+        </copy>
+
+        <chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh"/>
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/screen" perm="755" includes="**/*.sh"/>
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/jod" perm="755" includes="**/*.sh"/>
+        
         <copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib">
             <fileset dir="${axis2.lib}">
             </fileset>
@@ -281,6 +286,9 @@
             </fileset>  
             <fileset dir="${jmf.lib}" includes="*.jar"/>
         </copy>
+
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
+
     	<!-- add language files from .war version -->
     	<copy todir="${dist.dir}/red5/webapps/${project.distname}/languages">
     		<fileset dir="WebContent/languages">
