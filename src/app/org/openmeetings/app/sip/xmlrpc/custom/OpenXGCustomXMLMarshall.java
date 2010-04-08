@@ -115,6 +115,60 @@ public class OpenXGCustomXMLMarshall {
 		return stringToPost;
 	}
 	
+	public String openSIPgURIUserIDAdd(String client_id, String digest, 
+			String userid, String domain, 
+			String adminid) {
+		
+//		  $params = array(client_id=>$client_id, digest=>$digest, userid=>$userid,
+//				  domain=>$domain, adminid=>$adminid);
+		
+		String stringToPost = "<?xml version=\"1.0\" ?>"+ 
+								"<methodCall>"+ 
+								"	<methodName>OpenSIPg.UserConferenceAdd</methodName>"+ 
+								"	<params>"+ 
+								"		<param>"+ 
+								"			<value>"+ 
+								"				<struct>"+ 
+								"					<member>"+ 
+								"						<name>client_id</name>"+ 
+								"						<value>"+ 
+								"							<string>"+ client_id +"</string>"+ 
+								"						</value>"+ 
+								"					</member>"+ 
+								"					<member>"+ 
+								"						<name>digest</name>"+ 
+								"						<value>"+ 
+								"							<string>"+ digest +"</string>"+ 
+								"						</value>"+ 
+								"					</member>"+ 
+								"					<member>"+ 
+								"						<name>userid</name>"+ 
+								"						<value>"+ 
+								"							<string>"+ userid +"</string>"+ 
+								"						</value>"+ 
+								"					</member>"+ 
+								"					<member>"+ 
+								"						<name>domain</name>"+ 
+								"						<value>"+ 
+								"							<string>"+ domain +"</string>"+ 
+								"						</value>"+ 
+								"					</member>"+ 
+								"					<member>"+ 
+								"						<name>adminid</name>"+ 
+								"						<value>"+ 
+								"							<string>"+ adminid +"</string>"+ 
+								"						</value>"+ 
+								"					</member>"+ 
+								"				</struct>"+ 
+								"			</value>"+ 
+								"		</param>"+ 
+								"	</params>"+ 
+								"</methodCall>";
+		
+		return stringToPost;								
+		
+	}
+	
 	
 	public String openSIPgCreateConference(String client_id, String digest, 
 							String userid, String domain, 

@@ -171,15 +171,34 @@ public class OpenXGHttpClient {
 						 first_name, middle_i, last_name, password, community_code,
 						 language_code, email, adminid, client_secret});
 			
-		    OpenXGReturnObject openXGReturnObject = this.openSIPgUserCreate(client_id, digest, userid, domain, first_name, 
-														middle_i, last_name, password, community_code, language_code,
-														email, adminid);
+		    //Get the XML-String representative
+	        String stringToPost = OpenXGCustomXMLMarshall.getInstance().
+		        							openSIPgUserCreate(client_id, digest, userid, 
+		        									domain, first_name, middle_i, last_name, password, 
+		        									community_code, language_code, email, adminid);
+	        
+		    
+		    OpenXGReturnObject openXGReturnObject = this.openSIPgPost(stringToPost);
 			
 			log.debug(" Status_code "+openXGReturnObject.getStatus_code());
         	log.debug(" Status_string "+openXGReturnObject.getStatus_string());
         	
         	if (openXGReturnObject.getStatus_code().equals("200")) {
         		
+        		//Add User URI
+        		String digestURI = this.digest_calculate(new Object[]{client_id, userid, domain,
+						 								adminid, client_secret});
+        		
+        		//Get the XML-String representative
+    	        String stringToPostURI = OpenXGCustomXMLMarshall.getInstance().
+    	        							openSIPgURIUserIDAdd(client_id, digestURI, userid, 
+    		        														domain, adminid);
+        		
+    	        OpenXGReturnObject openXGReturnObjectURI = this.openSIPgPost(stringToPostURI);
+    	        
+    	        log.debug(" openXGReturnObjectURI Status Code "+openXGReturnObjectURI.getStatus_code());
+            	log.debug(" openXGReturnObjectURI Status String "+openXGReturnObjectURI.getStatus_string());
+    	        
         		UserSipData userSipData = new UserSipData();
         		
         		userSipData.setUsername(sip_language_phonecode.getConf_value() + useridAsNumber);
@@ -206,83 +225,18 @@ public class OpenXGHttpClient {
 		return null;
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @param client_id
-	 * @param digest
-	 * @param userid
-	 * @param domain
-	 * @param first_name
-	 * @param middle_i
-	 * @param last_name
-	 * @param password
-	 * @param community_code
-	 * @param language_code
-	 * @param email
-	 * @param adminid
-	 * @return
-	 */
-	public OpenXGReturnObject openSIPgUserCreate(String client_id, String digest, String userid, String domain, 
+	
+	public OpenXGReturnObject openSIPgURIUserIDAdd(String client_id, String digest, String userid, String domain, 
 			String first_name, String middle_i, String last_name, String password, String community_code, 
 			String language_code, String email, String adminid) {
 		try {
 			
-			Configuration openxg_wrapper_url = Configurationmanagement.getInstance().getConfKey(3L, "openxg.wrapper.url");
-			
-			if (openxg_wrapper_url == null) {
-				throw new Exception("No openxg.wrapper.url set in Configuration");
-			}
-			
-			String strURL = openxg_wrapper_url.getConf_value();
-			
-			// Prepare HTTP post
-	        PostMethod post = new PostMethod(strURL);
-	        post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
-
-	        //Get the XML-String representative
+			//Get the XML-String representative
 	        String stringToPost = OpenXGCustomXMLMarshall.getInstance().
-		        							openSIPgUserCreate(client_id, digest, userid, 
-		        									domain, first_name, middle_i, last_name, password, 
-		        									community_code, language_code, email, adminid);
-	        
-	        //log.debug(stringToPost);
-	        
-	        RequestEntity entity = new ByteArrayRequestEntity(stringToPost.getBytes(Charset.forName("ISO-8859-1")));
-	        
-	        //Prepare HTTP post
-	        
-	        post.getParams().setContentCharset("ISO-8859-1");
-	        post.getParams().setVersion(HttpVersion.HTTP_1_0);
-	        
-	        // Request content will be retrieved directly
-	        // from the input stream
-	        post.setRequestEntity(entity);
-	        
-	        Protocol easyhttps = new Protocol("https", (ProtocolSocketFactory)new EasySSLProtocolSocketFactory(), 443);
-	        Protocol.registerProtocol("https", easyhttps);
-
-	        
-	        // Get HTTP client
-	        HttpClient httpclient = new HttpClient();
-	        
-	        // Execute request
-            int result = httpclient.executeMethod(post);
-            
-            // Display status code
-            log.debug("Response status code: " + result);
-            
-            if (result == 200) {
-            	
-            	log.debug("parseReturnBody "+post.getResponseBodyAsString());
-            
-            	return this.parseOpenXGReturnBody(post.getResponseBodyAsStream());
-            
-            } else {
-            	
-            	throw new Exception("Could not connect to OpenXG, check the URL for the Configuration");
-            	
-            }
+	        							openSIPgURIUserIDAdd(client_id, digest, userid, 
+		        														domain, adminid);
+			
+	        return this.openSIPgPost(stringToPost);
             
 		} catch (Exception err) {
 			
@@ -363,8 +317,35 @@ public class OpenXGHttpClient {
 	        													""+starttime, ""+endTime, 
 						        								language_code, adminid);
 		        							
+	        return this.openSIPgPost(stringToPost);
+            
+		} catch (Exception err) {
+			
+			log.error("[openSIPgUserCreate]",err);
+			
+		}
+		
+		return null;
+	}
+	
+	public OpenXGReturnObject openSIPgPost(String stringToPost) {
+		try {
+			
+	        Configuration openxg_wrapper_url = Configurationmanagement.getInstance().getConfKey(3L, "openxg.wrapper.url");
+			
+			if (openxg_wrapper_url == null) {
+				throw new Exception("No openxg.wrapper.url set in Configuration");
+			}
 	        
-	        log.debug(stringToPost);
+			String strURL = openxg_wrapper_url.getConf_value();
+			
+			// Prepare HTTP post
+	        PostMethod post = new PostMethod(strURL);
+	        post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
+
+	        
+	        
+	        //log.debug(stringToPost);
 	        
 	        RequestEntity entity = new ByteArrayRequestEntity(stringToPost.getBytes(Charset.forName("ISO-8859-1")));
 	        
@@ -485,6 +466,6 @@ public class OpenXGHttpClient {
 		}
 		return null;
 	}
-
-
+	
+	
 }
