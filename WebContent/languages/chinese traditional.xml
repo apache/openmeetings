@@ -2784,4 +2784,232 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="924" name="file explorer">
     <value>Public drive size</value>
   </string>
+  <string id="925" name="user-admin">
+    <value>License Settings</value>
+  </string>
+  <string id="926" name="user-admin">
+    <value>You can either bind the user to a expire Date or to a maximum number of minutes when you enable licensing.</value>
+  </string>
+  <string id="927" name="user-admin">
+    <value>Check license</value>
+  </string>
+  <string id="928" name="user-admin">
+    <value>Flatrate</value>
+  </string>
+  <string id="929" name="user-admin">
+    <value>Expire date</value>
+  </string>
+  <string id="930" name="user-admin">
+    <value>Seconds left</value>
+  </string>
+  <string id="931" name="user-admin">
+    <value>Total time</value>
+  </string>
+  <string id="932" name="user-license">
+    <value>Your License has expired. You need to buy new minutes (Pay-per-minute) or a volume flatrate.</value>
+  </string>
+  <string id="933" name="user-license">
+    <value>Click and buy</value>
+  </string>
+  <string id="934" name="user-license">
+    <value>Time Left on your account:</value>
+  </string>
+  <string id="935" name="user-license">
+    <value>User License Info</value>
+  </string>
+  <string id="936" name="user-license">
+    <value>Info</value>
+  </string>
+  <string id="937" name="user-license">
+    <value>Close</value>
+  </string>
+  <string id="938" name="license-info">
+    <value>Your license has expired. You need either to buy a minute package (Pay-per-minute) or a volume flatrate.</value>
+  </string>
+  <string id="939" name="user-license">
+    <value>License settings</value>
+  </string>
+  <string id="940" name="user-license">
+    <value>You can either buy minutes to make Web-Conferencing (Pay-per-minute).&lt;br/&gt;&lt;br/&gt; Or you buy a volume flatrate about 3-12 months.&lt;br/&gt;&lt;br/&gt;Sending invitations (direct links into Conference Rooms) or creating conference Rooms via the Calendar with external Users is only allowed with a volume flatrate!</value>
+  </string>
+  <string id="941" name="user-license">
+    <value>Buy 60 Minutes 9,99 EURO (16 Cent per Minute)</value>
+  </string>
+  <string id="942" name="user-license">
+    <value>Buy 5 hours 19,99 EURO (6 Cent per minute)</value>
+  </string>
+  <string id="943" name="user-license">
+    <value>Buy 3 month for 29,99 EURO (9,99 Euro per Month)</value>
+  </string>
+  <string id="944" name="user-license">
+    <value>Buy 6 month for 39,99 EURO (6,66 Euro per month)</value>
+  </string>
+  <string id="945" name="user-license">
+    <value>Pay-per-minute</value>
+  </string>
+  <string id="946" name="user-license">
+    <value>Volume flatrate</value>
+  </string>
+  <string id="947" name="user-license">
+    <value>You have unlimited License</value>
+  </string>
+  <string id="948" name="user-license">
+    <value>Your license will expire at:</value>
+  </string>
+  <string id="949" name="user-license">
+    <value>You bought Pay-per-minute. You still have:</value>
+  </string>
+  <string id="950" name="user-license">
+    <value>Buy new credit!</value>
+  </string>
+  <string id="951" name="user-license">
+    <value>Want your own Server?</value>
+  </string>
+  <string id="952" name="user-license">
+    <value>You would like to have OpenMeetings installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
+  </string>
+  <string id="953" name="user-license">
+    <value>Or send us a message</value>
+  </string>
+  <string id="954" name="user-license">
+    <value>Answer to:</value>
+  </string>
+  <string id="955" name="user-license">
+    <value>Message:</value>
+  </string>
+  <string id="956" name="user-license">
+    <value>Send</value>
+  </string>
+  <string id="957" name="user-license">
+    <value>Click here to get contact Info and Prizings</value>
+  </string>
+  <string id="958" name="payment-form">
+    <value>Credit Card Details</value>
+  </string>
+  <string id="959" name="payment-form">
+    <value>Firstname</value>
+  </string>
+  <string id="960" name="payment-form">
+    <value>Lastname</value>
+  </string>
+  <string id="961" name="payment-form">
+    <value>Credit Card Type</value>
+  </string>
+  <string id="962" name="payment-form">
+    <value>VISA Card</value>
+  </string>
+  <string id="963" name="payment-form">
+    <value>MasterCard</value>
+  </string>
+  <string id="964" name="payment-form">
+    <value>Discover</value>
+  </string>
+  <string id="965" name="payment-form">
+    <value>American Express</value>
+  </string>
+  <string id="966" name="payment-form">
+    <value>Credit Card Number</value>
+  </string>
+  <string id="967" name="payment-form">
+    <value>Expiration Date</value>
+  </string>
+  <string id="968" name="payment-form">
+    <value>Card Verification Number</value>
+  </string>
+  <string id="969" name="payment-form">
+    <value>Billing Address</value>
+  </string>
+  <string id="970" name="payment-form">
+    <value>Address</value>
+  </string>
+  <string id="971" name="payment-form">
+    <value></value>
+  </string>
+  <string id="972" name="payment-form">
+    <value>City</value>
+  </string>
+  <string id="973" name="payment-form">
+    <value>Country</value>
+  </string>
+  <string id="974" name="payment-form">
+    <value>State (Only US)</value>
+  </string>
+  <string id="975" name="payment-form">
+    <value>ZIP</value>
+  </string>
+  <string id="976" name="payment-form">
+    <value>Amount</value>
+  </string>
+  <string id="977" name="payment-form">
+    <value>Submit</value>
+  </string>
+  <string id="978" name="payment-form">
+    <value>Step 1: OpenMeetings - Payment Form</value>
+  </string>
+  <string id="979" name="payment-form">
+    <value>EMail</value>
+  </string>
+  <string id="980" name="payment-form">
+    <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
+  </string>
+  <string id="981" name="payment-form">
+    <value>Thank you for buying OpenMeetings. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to OpenMeetings.</value>
+  </string>
+  <string id="982" name="payment-form">
+    <value>Submit and Buy!</value>
+  </string>
+  <string id="983" name="payment-from">
+    <value>Click and Buy!</value>
+  </string>
+  <string id="984" name="payment-from">
+    <value>Step 3: OpenMeetings Payment - Check order and buy!</value>
+  </string>
+  <string id="985" name="payment-from">
+    <value>Name</value>
+  </string>
+  <string id="986" name="payment-mail">
+    <value>Payment received!</value>
+  </string>
+  <string id="987" name="payment-mail">
+    <value>Hi,</value>
+  </string>
+  <string id="988" name="payment-mail">
+    <value>We have received your payment. Your user profile is updated now. See attached your Invoice. The Invoice and all past Invoice can also be downloaded in your user profile.</value>
+  </string>
+  <string id="989" name="payment-mail">
+    <value>Thank you for using OpenMeetings!</value>
+  </string>
+  <string id="990" name="payment-mail">
+    <value>Payment Received OpenMeetings -</value>
+  </string>
+  <string id="991" name="user-settings">
+    <value>Payment and Transaction Status</value>
+  </string>
+  <string id="992" name="user-settings">
+    <value>Transcation Hash</value>
+  </string>
+  <string id="993" name="user-settings">
+    <value>Minutes</value>
+  </string>
+  <string id="994" name="user-settings">
+    <value>Months</value>
+  </string>
+  <string id="995" name="user-settings">
+    <value>EUR</value>
+  </string>
+  <string id="996" name="user-settings">
+    <value>Status</value>
+  </string>
+  <string id="997" name="user-settings">
+    <value>Invoice</value>
+  </string>
+  <string id="998" name="user-settings">
+    <value></value>
+  </string>
+  <string id="999" name="error-license-flat">
+    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access OpenMeetings. You cannot allow 3th Parties to access a Meeting.</value>
+  </string>
+  <string id="1000" name="error user">
+    <value>This Email is already used by another User.</value>
+  </string>
 </language>
