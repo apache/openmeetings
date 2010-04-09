@@ -765,7 +765,7 @@ public class Invitationmanagement {
 							//set to true if this is the first time / a normal getInvitation-Query
 							invitation.setInvitationWasUsed(true);
 							this.updateInvitation(invitation);
-							if (hidePass) invitation.setInvitationpass(null);
+							invitation.setInvitationpass(null);
 							return invitation;
 						}
 					} else {
@@ -777,7 +777,7 @@ public class Invitationmanagement {
 					if (invitation.getValidFrom().getTime() <= today.getTime() 
 							&& invitation.getValidTo().getTime() >= today.getTime()) {
 						this.updateInvitation(invitation);
-						if (hidePass) invitation.setInvitationpass(null);
+						invitation.setInvitationpass(null);
 						return invitation;
 					} else {
 						//Invitation is of type *period* and is not valid anymore
@@ -786,7 +786,7 @@ public class Invitationmanagement {
 				} else {
 					//Invitation is not limited, neither time nor single-usage
 					this.updateInvitation(invitation);
-					if (hidePass) invitation.setInvitationpass(null);
+					invitation.setInvitationpass(null);
 					return invitation;
 				}
 			}
