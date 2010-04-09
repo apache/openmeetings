@@ -122,6 +122,7 @@
             <fileset dir="${classes.dir}">
                 <include name="**"/>
                 <exclude name="**/test/**"/>
+            	<exclude name="**/axis/**"/>
                 <exclude name="**/webstart/**"/>
             	<!-- For now we include this into the main JAR
             	<exclude name="**/server/**"/>

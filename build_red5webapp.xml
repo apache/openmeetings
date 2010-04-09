@@ -367,6 +367,7 @@
             <fileset dir="${classes.dir}">
                 <include name="**"/>
                 <exclude name="**/test/**"/>
+            	<exclude name="**/axis/**"/>
                 <exclude name="**/webstart/**"/>
             	<!-- For now we include this into the main JAR
             	<exclude name="**/server/**"/>
@@ -457,6 +458,7 @@
             </fileset>
             <fileset dir="${classes.dir}">
                 <include name="org/openmeetings/axis/services/RoomService.class"/>
+            	<include name="org/openmeetings/axis/services/RoomCountBean.class"/>
             </fileset>
         </jar>  
         <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/UserService.aar">
