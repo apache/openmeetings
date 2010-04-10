@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="restrictedUserListInner" extends="baseRoomInnerList"  
+	   width="$once{ parent.width }" height="${ parent.height }" 
+       bgcolor="$once{ canvas.basebgcolorizer }" >
+	
+	<attribute name="selectedItem" value="null" />
+	
+	<attribute name="listType" value="eventUserListTable" type="string" />
+	
+	<attribute name="sortType" value="alphabetical" type="string" />
+	
+	<handler name="oninit">
+		<![CDATA[
+            
+			this.initList();
+		]]>
+	</handler>
+	
+    <!-- clip="true" -->
+    
+    <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
+        x="1" y="1" bgcolor="white" />
+
+    <method name="addItem" args="object">
+    	<![CDATA[
+            if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
+            
+            //Check for duplicates
+            
+	        if (object.isSuperModerator) {
+	            object.lastname += " *";
+	        }
+            
+	        //Add item to list
+	        if (this._table.renderList == null) {
+	        	this._table.renderList = new Array();
+	        }
+	        
+	        this._table.renderList.push(object);
+	        
+	        this._table.renderContent();
+	        
+        ]]>
+    </method>
+    
+    
+    
+    <!--
+    
+   			for (var i=0;i<this._table.innerList.subviews.length;i++) {
+            	if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+            		//if ($debug) Debug.warn("Already on List, do not add twice");
+            		return;
+            	}
+            }
+    
+			if (this.listType == "eventUserListTable") {
+	            new lz.eventUserListItem(this._table.innerList,{
+	    	            user_id:object.user_id,
+	    	            firstname:object.firstname,
+                        isSuperModerator:object.isSuperModerator,
+	    	            lastname:lastname,
+	    	            refObj:object,
+	    	            connectedSince:object.connectedSince,
+	    	            isMod:object.isMod,
+	    	            streamid:object.streamid,
+	    	            username:object.username,
+	    	            formatedDate:object.formatedDate
+	                });
+            } else if (this.listType == "eventUserListTableWithNames") {
+	            new lz.eventUserListItemWithNames(this._table.innerList,{
+	    	            user_id:object.user_id,
+	    	            firstname:object.firstname,
+                        isSuperModerator:object.isSuperModerator,
+	    	            lastname:lastname,
+	    	            refObj:object,
+	    	            connectedSince:object.connectedSince,
+	    	            isMod:object.isMod,
+	    	            streamid:object.streamid,
+	    	            username:object.username,
+	    	            formatedDate:object.formatedDate
+	                });
+            }
+            
+            this.sortUserList();    
+     -->
+     
+    <method name="sortUserList">
+        <![CDATA[ 
+            
+            if (this.sortType == "alphabetical") {
+            	function sortByName(a,b) {
+                   
+                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+                    else return 0;
+                
+                }
+                
+                this._table.innerList.subviews.sort(sortByName);
+                this._table.innerList._layout.subviews.sort(sortByName);
+                
+            } else {
+                function sortByStreamId(a,b) {
+        	   	   
+            	   	if(Number(a.streamid) == Number(b.streamid)) return 0;
+                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                    else return -1;
+        	   	
+                }
+        	
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            }
+            
+            this._table.innerList._layout.update(); 
+    	]]>
+    </method>
+    
+    <method name="initList">
+    	if ($debug) Debug.write("initList :: restrictedUserListInner");
+    	//new lz[this.listType](this,{name:'_table'});
+    	//this.moderationPanel.bringToFront();
+    </method>
+    
+    <method name="clearList">
+    	if ($debug) Debug.write("clearList :: restrictedUserListInner");
+        //this._table.destroy();
+        //this.initList();
+    </method>
+    
+    <!--- get a Objects List Item
+        @param string publicSID publicSID
+     -->
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+        <![CDATA[
+            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+            
+            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+            //}
+            
+            for (var i=0;i<this._table.innerList.subviews.length;i++){
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+                    return this._table.innerList.subviews[i];
+                }
+            }
+            
+            return null;
+            
+        ]]>
+    </method>
+    
+    <method name="selectItem" args="itemObj">
+    	if ($debug) Debug.write("selectItem ",itemObj);
+    	
+    	if (canvas.ismoderator) {
+    		
+            if (this.selectedItem != null) {
+                this.selectedItem.deselect();
+            }
+            
+            if (this.selectedItem != itemObj) {
+                this.selectedItem = itemObj;
+                this.selectedItem.select();
+            }
+        	
+    	}
+    	
+    </method>
+    
+    <view name="userStatus" layout="axis:y">
+    	<view>
+    		 <view resource="userstatus_multiframe_rsc" frame="1" />
+    		 <labelText x="16" labelid="677" />
+        </view>
+    	<view>
+             <view resource="userstatus_multiframe_rsc" frame="2" />
+             <labelText x="16" labelid="678" />
+        </view>
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="3" />
+             <labelText x="16" labelid="679" />
+        </view>
+    </view>
+    
+    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
+						  x="$once{ parent.width-this.width-4 }" y="2" />
+    
+    
+    <turnOverListOrderedPaged name="_table" showTopBar="false" x="1"
+             height="500" y="40" itemHeight="40"
+             listItemName="restrictedUserListItem"  
+             multiselect="false" width="270">
+    	
+	    <handler name="oninit">
+	        this.addHeaderItem(1001,260);
+	    </handler>
+	    
+		<method name="renderContent">
+	        <![CDATA[
+	            this.isLoaded = true;
+	            var list = this._innerlist._inn._inn;
+	            //this.renderList = records;
+	            var records = this.renderList;
+	            this._innerlist._inn.setAttribute("y",0);
+	            this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+	            this._innerlist._inn.resetItems();
+	            
+	            if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+	            
+	            this._records.setAttribute("text",records.length);
+	            
+	            for (var i=0;i<list.subviews.length;i++){
+	                
+                    //if (i % 2 == 0) {
+                    //    list.subviews[i].setIsSecond(true);
+                    //} else {
+                    //    list.subviews[i].setIsSecond(false);
+                    //}
+                    
+	                if (records.length > i) {
+	                    
+	                    list.subviews[i].setAttribute("clickable",true);
+	                    list.subviews[i].refObj = records[i];
+                        
+	                    list.subviews[i].setAttribute("user_id",records[i].user_id);
+	    	            list.subviews[i].setAttribute("firstname",records[i].firstname);
+                        list.subviews[i].setAttribute("isSuperModerator",records[i].isSuperModerator);
+	    	            list.subviews[i].setAttribute("lastname",records[i].lastname);
+	    	            list.subviews[i].setAttribute("connectedSince",records[i].connectedSince);
+	    	            list.subviews[i].setAttribute("isMod",records[i].isMod);
+	    	            list.subviews[i].streamid = records[i].streamid;
+	    	            list.subviews[i].setAttribute("username",records[i].username);
+	    	            list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
+	                    
+	                    list.subviews[i].setAttribute("itemIdNo",i);
+	                    
+	                } else {
+	                    
+	                    list.subviews[i].refObj = null;
+	                    
+	                    list.subviews[i].setAttribute("user_id","");
+	    	            list.subviews[i].setAttribute("firstname","");
+                        list.subviews[i].setAttribute("isSuperModerator","");
+	    	            list.subviews[i].setAttribute("lastname","");
+	    	            list.subviews[i].setAttribute("connectedSince","");
+	    	            list.subviews[i].setAttribute("isMod","");
+	    	            list.subviews[i].streamid = "";
+	    	            list.subviews[i].setAttribute("username","");
+	    	            list.subviews[i].setAttribute("formatedDate","");
+                        
+	                    list.subviews[i].setAttribute("clickable",false);
+	                    
+	                }
+	                
+	            }
+                
+                //  var x = Math.round(value.childList[i].coordX);
+                //  var y = Math.round(value.childList[i].coordY);
+                //  var name = value.childList[i].description;
+                
+                //var x = value.resultAddress[i].x;
+                //var y = value.resultAddress[i].y;
+                //var name = value.resultAddress[i].street+" "+value.resultAddress[i].houseNumber+","+value.resultAddress[i].postCode+" "+value.resultAddress[i].city+" ("+value.resultAddress[i].cityDistrict+" "+value.resultAddress[i].country+" )";
+                //////if ($debug)  //Debug.write("name,x,y ",name,x,y);
+                //this.parent._ausgabelisteMapAdress.addtableItem(x,y,name);
+	            
+	            //this.sendInitialWidthUpdate();
+	            
+	        ]]>
+	    </method>	
+	    
+	    <handler name="onScrollItem" args="item">
+	        <![CDATA[
+	            if (this.renderList.length > item.itemId) {
+	                item.setAttribute("clickable",true);
+	                item.refObj = this.renderList[item.itemId];
+	                
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+	                if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+	                    
+	                    if ($debug) Debug.write("Selected");
+	                    
+	                    item.isselected = true;
+	                    item.onmouseout.sendEvent();
+	                    
+	                } else if (item.isselected) {
+	                    item.isselected = false;
+	                    item.onmouseout.sendEvent();
+	                }
+	                
+	                item.setAttribute("user_id",this.renderList[item.itemId].user_id);
+    	            item.setAttribute("firstname",this.renderList[item.itemId].firstname);
+                    item.setAttribute("isSuperModerator",this.renderList[item.itemId].isSuperModerator);
+    	            item.setAttribute("lastname",this.renderList[item.itemId].lastname);
+    	            item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
+    	            item.setAttribute("isMod",this.renderList[item.itemId].isMod);
+    	            item.streamid = this.renderList[item.itemId].streamid;
+    	            item.setAttribute("username",this.renderList[item.itemId].username);
+    	            item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
+	                
+	                item.setAttribute("itemIdNo",item.itemId);
+	                    
+	            } else {
+                    
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+	                item.refObj = null;
+	                
+                    item.setAttribute("user_id","");
+    	            item.setAttribute("firstname","");
+                    item.setAttribute("isSuperModerator","");
+    	            item.setAttribute("lastname","");
+    	            item.setAttribute("connectedSince","");
+    	            item.setAttribute("isMod","");
+    	            item.streamid = ""
+    	            item.setAttribute("username","");
+    	            item.setAttribute("formatedDate","");
+    	            
+	                item.setAttribute("itemIdNo","");
+	                
+	                item.setAttribute("clickable",false);
+	            }
+                
+	        ]]>
+	    </handler>
+    	
+    </turnOverListOrderedPaged> 
+       
+    <!--
+    <eventUserListTable name="_table" /> 
+     -->
+     
+    <view name="moderationPanel" height="0" clip="true" y="${ parent.height - this.height - 2 }">
+    	
+    	<handler name="onismoderator" reference="canvas" args="m">
+            if ($debug) Debug.write("###### ismoderator ",m);
+            <![CDATA[
+                //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+                this.updateIcons();
+            ]]>
+        </handler>
+        
+        <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+            <![CDATA[
+                //search for the user and update its drawStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == drawObject.publicSID) {
+                    	vList[i].refObj.canDraw = drawObject.canDraw;
+                    	vList[i].updateIconByMod();
+                    	break;
+                    }
+                }
+            ]]>
+        </handler>
+        
+        <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
+        	<![CDATA[
+            	
+            	if (!userObject.isBroadcasting) {
+            		//Stop Broadcasting and close Dialog
+            		//Search, stop and remove video
+            		parent.parent.removeVideoByUser(userObject);
+            	}
+            	
+            	//search for the user and update its drawStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == userObject.publicSID) {
+                        vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
+                        vList[i].updateIconByMod();
+                        break;
+                    }
+                }
+                
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
+        </handler>
+        
+        <method name="updateIcons">
+        	<![CDATA[
+            	if (canvas.ismoderator) {
+            		this.showItem.doStart();
+            	} else {
+            		this.setAttribute("height",0);
+            	}
+            	var vList = parent._table.innerList.subviews;
+            	
+            	for (var i=0;i<vList.length;i++) {
+            		vList[i].updateIconByMod();
+            	}
+            	parent._applyAndStatusIcons.updateIcons();
+        	]]>
+        </method>
+        
+        <labelText labelid="680" width="270" x="0" multiline="true" y="0" />
+    	
+    	<animator name="showItem" attribute="height" 
+    			  to="40" duration="1000" start="false" />
+    </view>
+
+</class>
+
+
+</library>

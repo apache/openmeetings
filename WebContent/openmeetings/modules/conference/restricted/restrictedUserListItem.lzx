@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="restrictedUserListItem" extends="basePagingListItem" 
+	   showhandcursor="false" width="252" height="42">
+	
+	<attribute name="connectedSince" value="" type="string" />
+    <attribute name="isMod" value="" type="string" />
+    <attribute name="streamid" value="" type="string" />
+    <attribute name="username" value="" type="string" />
+    <attribute name="userroom" value="" type="string" />
+    <attribute name="formatedDate" value="" type="string" />
+    <attribute name="firstname" value="" type="string" />
+    <attribute name="lastname" value="" type="string" />
+    <attribute name="user_id" value="0" type="number" />
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="isSuperModerator" value="false" type="boolean"/>
+    
+    <attribute name="userpicURL" value="" type="string" />
+    <attribute name="userpicView" value="null" />
+    
+	<view>
+		
+    	<labelText name="_userName" x="2" y="2"
+    		   text="${ parent.parent.firstname+' '+parent.parent.lastname }" />
+    		   
+	    <view name="userStatus" align="right" frame="1" 
+	    	  resource="userstatus_multiframe_rsc" />
+	</view>
+                 
+</class>
+
+</library>

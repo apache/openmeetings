@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+
+
+<!--- common TurnOverList view class. -->
+<class name="turnOverListOrderedPaged" extends="turnOverListPaged">
+    
+    <attribute name="currentSelectedOrder" value="null" />
+    
+    <event name="onUpdateOrder" />
+    
+    <method name="updateOrder" args="itemRef">
+        <![CDATA[
+	        //only do that if the previous orderBy != new orderby
+	        //if (this.currentSelectedOrder == null || 
+            //        this.currentSelectedOrder.orderBy != itemRef.orderBy){
+	        if (itemRef.isSelected) {
+	            itemRef.asc = !itemRef.asc;
+	        } else {
+	            itemRef.isSelected = true;
+	        }
+	        if (itemRef.asc) {
+	            itemRef._sortUp.setAttribute('visibility','hidden');
+	            itemRef._sortDown.setAttribute('visibility','visible');
+	        } else {
+	            itemRef._sortUp.setAttribute('visibility','visible');
+	            itemRef._sortDown.setAttribute('visibility','hidden'); 
+	        }
+	        
+	        //do not perform search on initial Selection
+	        var isInitSelect = false;
+	        if (this.currentSelectedOrder != null) {
+                if (this.currentSelectedOrder.orderBy != itemRef.orderBy) {
+		            this.currentSelectedOrder.isSelected = false;
+		            this.currentSelectedOrder._sortUp.setAttribute('visibility','hidden');
+		            this.currentSelectedOrder._sortDown.setAttribute('visibility','hidden'); 
+                }
+	        } else {
+	            isInitSelect = true;
+	        }
+	        this.currentSelectedOrder = itemRef;
+	        
+	        if ($debug) Debug.write("updateOrder: ",itemRef,itemRef.orderBy,itemRef.asc,isInitSelect);
+	        this.setAttribute('orderby',itemRef.orderBy);
+	        this.setAttribute('asc',itemRef.asc);
+	        
+	        if (!isInitSelect){
+            	this.onUpdateOrder.sendEvent(itemRef);
+            }
+	        //}
+        ]]>
+    </method>
+
+</class>
+
+</library>

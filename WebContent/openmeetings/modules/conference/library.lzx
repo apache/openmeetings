@@ -16,6 +16,7 @@
     <include href="participents/" /> 
     <include href="interviewuserlist/" /> 
     <include href="eventuserlist/" />
+    <include href="restricted/" />
     <include href="browser/" />
     <include href="testsetup/" />
     

@@ -16,6 +16,7 @@
     <include href="panel/" />  
     <include href="list/" />
     <include href="turnoverlist/" />
+    <include href="turnoverlistpaged/" />
     <include href="calendar/" />
     <include href="simplevaluelist/" />
     <include href="upload/" /> 

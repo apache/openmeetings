@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <resource name="transaction_refresh_rsc" src="resources/refresh.png" />
+    <resource name="icon_turnoverlist_left_rsc" src="resources/navigate_left.png" />
+    <resource name="icon_turnoverlist_first_rsc" src="resources/navigate_left2.png" />
+    <resource name="icon_turnoverlist_right_rsc" src="resources/navigate_right.png" />
+    <resource name="icon_turnoverlist_last_rsc" src="resources/navigate_right2.png" />
+    
+    <include href="basePagingListItem.lzx" />
+    <include href="listPagedContent.lzx" />
+	<include href="turnOverListPaged.lzx" />
+    <include href="turnOverListOrderedPaged.lzx" />
+
+</library>
