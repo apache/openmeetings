@@ -20,26 +20,57 @@
     <attribute name="userpicURL" value="" type="string" />
     <attribute name="userpicView" value="null" />
     
-    <!--
+    <attribute name="moderatorViewIsInited" value="false" type="boolean" />
+    
 	<method name="updateIconByMod">
-    	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
-    	if (this.isMod) {
-            this._content.userStatus.setAttribute("frame",3);
-        } else if (this.refObj.canDraw) {
-        	this._content.userStatus.setAttribute("frame",2);
-        } else {
-        	this._content.userStatus.setAttribute("frame",1);
-        }
-        
-    </method>    
-     -->
+		if (this.clickable) {
+        	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+        	if ($debug) Debug.write(" :: updateIconByMod :: ",this.isMod)
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj.canDraw) {
+            	this._content.userStatus.setAttribute("frame",2);
+            } else {
+            	this._content.userStatus.setAttribute("frame",1);
+            }
+		}
+    </method>  
+    
+    <method name="updateIconByModScroll">
+    	if (this.clickable) {
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj.canDraw) {
+            	this._content.userStatus.setAttribute("frame",2);
+            } else {
+            	this._content.userStatus.setAttribute("frame",1);
+            }
+    	}
+    	this.initModeratorIcons();
+    </method>   
+    
+    <method name="initModeratorIcons">
+    	if (canvas.ismoderator) {
+    		if (!this.moderatorViewIsInited) {
+    			this.moderatorViewIsInited = true;
+    			new lz.moderationMiniIconRestricted(this,{name:'_iconsModerator'});
+    		} else {
+    			this._iconsModerator.setAttribute("visibility","visible");
+    			this._iconsModerator.oninit.sendEvent();
+    		}
+    	} else {
+    		if (this.moderatorViewIsInited) {
+    			this._iconsModerator.setAttribute("visibility","hidden");
+    		}
+    	}
+    </method>
     
 	<view name="_content" width="254">
 		
 		<!--
 		+ ' ' + parent.parent.itemId
 		 -->
-		
+		 
     	<labelText name="_userName" x="2" y="2"
     		   text="${ parent.parent.firstname+' '+parent.parent.lastname  }" />
     		   
@@ -47,7 +78,7 @@
 	    	  x="238" frame="1" resource="userstatus_multiframe_rsc" />
 	    	  
 	</view>
-                 
+	
 </class>
 
 </library>

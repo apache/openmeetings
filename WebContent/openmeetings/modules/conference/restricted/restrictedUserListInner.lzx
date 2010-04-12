@@ -64,6 +64,8 @@
 	        
 	        this._table.renderContent();
 	        
+	        this.moderationPanel.updateIcons();
+	        
         ]]>
     </method>
     
@@ -153,9 +155,35 @@
         //this.initList();
     </method>
     
+    <method name="disconnectclient" args="publicSID">
+    	<![CDATA[
+    	
+    	   for (var i=0;i<this._table.renderList.length;i++) {
+    	   	
+    	   	   if (this._table.renderList[i].publicSID == publicSID) {
+    	   	   	   
+    	   	   	   this._table.renderList.splice(i,1);
+    	   	   	
+    	   	   	   break;
+    	   	   }
+    	   	
+    	   }
+    	
+    	   this._table.renderContent();
+            
+           this.moderationPanel.updateIcons();
+    	]]>
+    </method>
+    
+    
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+    	
+    	if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
+    	
+    </method>
     <!--- get a Objects List Item
         @param string publicSID publicSID
-     -->
+    
     <method name="getVideoObjectByPublicSID" args="publicSID">
         <![CDATA[
             //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
@@ -179,6 +207,7 @@
             
         ]]>
     </method>
+     -->
     
     <method name="selectItem" args="itemObj">
     	if ($debug) Debug.write("selectItem ",itemObj);
@@ -337,6 +366,8 @@
     	            item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
 	                
 	                item.setAttribute("itemId",item.itemId);
+	                
+	                item.updateIconByModScroll();
 	                    
 	            } else {
                     
@@ -384,8 +415,11 @@
         
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
             <![CDATA[
+            
+                if ($debug) Debug.write(" :: ondrawAllowStatus :: ");
+            
                 //search for the user and update its drawStatusIcon
-                var vList = parent._table.innerList.subviews;
+                var vList = parent._table._innerlist._inn._inn.subviews;
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
@@ -394,11 +428,22 @@
                     	break;
                     }
                 }
+                
+                var vList = parent._table.renderList;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].publicSID == drawObject.publicSID) {
+                        parent._table.renderList[i].canDraw = drawObject.canDraw;
+                        break;
+                    }
+                }
             ]]>
         </handler>
         
         <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
         	<![CDATA[
+        	
+        	   if ($debug) Debug.write(" :: onlastBroadCastingUser :: ");
             	
             	if (!userObject.isBroadcasting) {
             		//Stop Broadcasting and close Dialog
@@ -407,12 +452,21 @@
             	}
             	
             	//search for the user and update its drawStatusIcon
-                var vList = parent._table.innerList.subviews;
+                var vList = parent._table._innerlist._inn._inn.subviews;
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == userObject.publicSID) {
                         vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
                         vList[i].updateIconByMod();
+                        break;
+                    }
+                }
+                
+                var vList = parent._table.renderList;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].publicSID == userObject.publicSID) {
+                        parent._table.renderList[i].isBroadcasting = userObject.isBroadcasting;
                         break;
                     }
                 }
@@ -437,7 +491,32 @@
     	 
         <method name="updateIcons">
         	<![CDATA[
+        	
+        	    if ($debug) Debug.write(" :: updateIcons :: ");
             	
+        		var vList = parent._table._innerlist._inn._inn.subviews;
+            	
+	        	for (var i=0;i<vList.length;i++) {
+	        		vList[i].updateIconByMod();
+	        		vList[i].initModeratorIcons();
+	        	}
+	        	
+                for (var k=0;k<canvas.currentModeratorList.length;k++) {
+            
+                    var item = canvas.currentModeratorList[k];
+                    
+                    var vList = parent._table.renderList;
+                    for (var i=0;i<vList.length;i++) {
+                       
+                        if (vList[i].publicSID == item.publicSID) {
+                            parent._table.renderList[i].isMod = true;
+                        } else {
+                        	parent._table.renderList[i].isMod = false;
+                        }
+                    }
+                    
+                }
+        	
             	parent._applyAndStatusIcons.updateIcons();
         	]]>
         </method>

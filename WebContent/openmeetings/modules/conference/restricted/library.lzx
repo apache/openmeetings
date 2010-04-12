@@ -4,5 +4,6 @@
     <include href="restrictedUserList.lzx" />
     <include href="restrictedUserListItem.lzx" />
     <include href="restrictedUserListInner.lzx" />
+    <include href="moderationMiniIconRestricted.lzx" />
     
 </library>

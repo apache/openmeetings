@@ -462,7 +462,7 @@
 			//if ($debug) Debug.write("disconnectclient: ",publicSID);
 			
 			var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participents.disconnectclient(publicSID);
 			
 			//if ($debug) Debug.write("disconnectclient obj: ",obj);
 			
@@ -470,10 +470,7 @@
 				obj.resetValues();
 				obj.destroy();
 			}
-            if (objList != null){
-                objList.resetValues();
-                objList.destroy();
-            }
+            
 			return null;
 		]]>
 	</method>	
