@@ -2,10 +2,10 @@
 <library>
 
 <class name="restrictedUserListItem" extends="basePagingListItem" 
-	   showhandcursor="false" width="252" height="42">
+	   showhandcursor="false" width="254" height="42">
 	
 	<attribute name="connectedSince" value="" type="string" />
-    <attribute name="isMod" value="" type="string" />
+    <attribute name="isMod" value="false" type="boolean" />
     <attribute name="streamid" value="" type="string" />
     <attribute name="username" value="" type="string" />
     <attribute name="userroom" value="" type="string" />
@@ -20,13 +20,32 @@
     <attribute name="userpicURL" value="" type="string" />
     <attribute name="userpicView" value="null" />
     
-	<view>
+    <!--
+	<method name="updateIconByMod">
+    	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
+    	if (this.isMod) {
+            this._content.userStatus.setAttribute("frame",3);
+        } else if (this.refObj.canDraw) {
+        	this._content.userStatus.setAttribute("frame",2);
+        } else {
+        	this._content.userStatus.setAttribute("frame",1);
+        }
+        
+    </method>    
+     -->
+    
+	<view name="_content" width="254">
+		
+		<!--
+		+ ' ' + parent.parent.itemId
+		 -->
 		
     	<labelText name="_userName" x="2" y="2"
-    		   text="${ parent.parent.firstname+' '+parent.parent.lastname }" />
+    		   text="${ parent.parent.firstname+' '+parent.parent.lastname  }" />
     		   
-	    <view name="userStatus" align="right" frame="1" 
-	    	  resource="userstatus_multiframe_rsc" />
+	    <view name="userStatus" visible="${ parent.parent.clickable }" 
+	    	  x="238" frame="1" resource="userstatus_multiframe_rsc" />
+	    	  
 	</view>
                  
 </class>

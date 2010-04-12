@@ -22,8 +22,28 @@
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
-
-    <method name="addItem" args="object">
+        
+    <method name="initialAddItem" args="object">
+    	<![CDATA[
+            //if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
+            
+            //Check for duplicates
+            
+	        if (object.isSuperModerator) {
+	            object.lastname += " *";
+	        }
+            
+	        //Add item to list
+	        if (this._table.renderList == null) {
+	        	this._table.renderList = new Array();
+	        }
+	        
+	        this._table.renderList.push(object);
+	        
+        ]]>
+    </method>
+    
+     <method name="addItem" args="object">
     	<![CDATA[
             if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
             
@@ -40,12 +60,17 @@
 	        
 	        this._table.renderList.push(object);
 	        
+	        this.sortUserList();
+	        
 	        this._table.renderContent();
 	        
         ]]>
     </method>
     
-    
+    <method name="sortAndRenderList">
+    	this.sortUserList();
+        this._table.renderContent();
+    </method>
     
     <!--
     
@@ -99,8 +124,7 @@
                 
                 }
                 
-                this._table.innerList.subviews.sort(sortByName);
-                this._table.innerList._layout.subviews.sort(sortByName);
+                this._table.renderList.sort(sortByName);
                 
             } else {
                 function sortByStreamId(a,b) {
@@ -111,11 +135,9 @@
         	   	
                 }
         	
-                this._table.innerList.subviews.sort(sortByStreamId);
-                this._table.innerList._layout.subviews.sort(sortByStreamId);
+                this._table.renderList.sort(sortByStreamId);
             }
             
-            this._table.innerList._layout.update(); 
     	]]>
     </method>
     
@@ -196,9 +218,10 @@
     
     
     <turnOverListOrderedPaged name="_table" showTopBar="false" x="1"
-             height="500" y="40" itemHeight="40"
-             listItemName="restrictedUserListItem"  
-             multiselect="false" width="270">
+             height="${ parent.height-30-parent.moderationPanel.height }" 
+             y="30" itemHeight="40" listLabelId="1001" headerHeight="0"
+             listItemName="restrictedUserListItem" showHScrollbar="hidden"
+             multiselect="false" width="268">
     	
 	    <handler name="oninit">
 	        this.addHeaderItem(1001,260);
@@ -241,7 +264,7 @@
 	    	            list.subviews[i].setAttribute("username",records[i].username);
 	    	            list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
 	                    
-	                    list.subviews[i].setAttribute("itemIdNo",i);
+	                    list.subviews[i].setAttribute("itemId",i);
 	                    
 	                } else {
 	                    
@@ -256,6 +279,7 @@
 	    	            list.subviews[i].streamid = "";
 	    	            list.subviews[i].setAttribute("username","");
 	    	            list.subviews[i].setAttribute("formatedDate","");
+                        list.subviews[i].setAttribute("itemId","");
                         
 	                    list.subviews[i].setAttribute("clickable",false);
 	                    
@@ -292,7 +316,7 @@
                     
 	                if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
 	                    
-	                    if ($debug) Debug.write("Selected");
+	                    //if ($debug) Debug.write("Selected");
 	                    
 	                    item.isselected = true;
 	                    item.onmouseout.sendEvent();
@@ -312,7 +336,7 @@
     	            item.setAttribute("username",this.renderList[item.itemId].username);
     	            item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
 	                
-	                item.setAttribute("itemIdNo",item.itemId);
+	                item.setAttribute("itemId",item.itemId);
 	                    
 	            } else {
                     
@@ -334,7 +358,7 @@
     	            item.setAttribute("username","");
     	            item.setAttribute("formatedDate","");
     	            
-	                item.setAttribute("itemIdNo","");
+	                item.setAttribute("itemId","");
 	                
 	                item.setAttribute("clickable",false);
 	            }
@@ -348,7 +372,7 @@
     <eventUserListTable name="_table" /> 
      -->
      
-    <view name="moderationPanel" height="0" clip="true" y="${ parent.height - this.height - 2 }">
+    <view name="moderationPanel" height="40" clip="true" y="${ parent.height - this.height - 2 }">
     	
     	<handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
@@ -397,26 +421,33 @@
             ]]>
         </handler>
         
+        <!--
+    		if (canvas.ismoderator) {
+        		this.showItem.doStart();
+        	} else {
+        		this.setAttribute("height",0);
+        	}
+        	
+        	var vList = parent._table.innerList.subviews;
+            	
+        	for (var i=0;i<vList.length;i++) {
+        		vList[i].updateIconByMod();
+        	}
+    	 -->
+    	 
         <method name="updateIcons">
         	<![CDATA[
-            	if (canvas.ismoderator) {
-            		this.showItem.doStart();
-            	} else {
-            		this.setAttribute("height",0);
-            	}
-            	var vList = parent._table.innerList.subviews;
             	
-            	for (var i=0;i<vList.length;i++) {
-            		vList[i].updateIconByMod();
-            	}
             	parent._applyAndStatusIcons.updateIcons();
         	]]>
         </method>
         
         <labelText labelid="680" width="270" x="0" multiline="true" y="0" />
     	
+    	<!--
     	<animator name="showItem" attribute="height" 
     			  to="40" duration="1000" start="false" />
+	     -->
     </view>
 
 </class>

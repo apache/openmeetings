@@ -109,25 +109,35 @@
         <netparam><method name="getValue">return parent.organisation_id;</method></netparam>
         <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
 		<handler name="ondata" args="value">
+			<![CDATA[
 			//The onResult-Handler will be called be the rtmpconnection
 			//if ($debug) Debug.write("setRoomValues1: ",value);
 			//if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
 			
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            
             for (var i in value){
             	if ( value[i].streamid == canvas.streamid ) {
                     canvas.isAllowedToDraw = value[i].canDraw;
                 }
 
+                //value[i].lastname = value[i].lastname + "T: " + t;
+                
             	//if ($debug) Debug.write("getClientListScope value: ",value[i]);
-        		this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
+        		this.parent.addItemInitial(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
         		              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
             }
+            
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
             //FIXME Issue-1076
             canvas.thishib.checkLzRecording.doCall();
-            canvas._chatcontent.doInit();				
+            
+            //Render and Show User-List
+            parent._participents.sortAndRenderList();
+            
+            canvas._chatcontent.doInit();	
+            ]]>
 		</handler>	
   	</netRemoteCallHib>
 
@@ -189,7 +199,56 @@
             return null;
     		
     	]]>
-    </method>       	
+    </method>   
+    
+    <method name="addItemInitial" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+		<![CDATA[
+			//if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+            
+            //Do init only in case this stream is NOT the same as we are
+			if (streamid!=canvas.streamid){
+				
+				//do add others
+                this._participents.initialAddItem(object);
+                
+                //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
+                
+				if (object.isBroadcasting) {
+					
+    	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+    		  		myvideocontainer.clientVars = object;
+    		  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+    		  		if ($debug) Debug.write("object.isBroadcasting object.avsettings: ",object.avsettings);
+    		  		if (object.avsettings=="n"){
+    	    			myvideocontainer.setVideouserProfilePic(object);
+                        //myvideocontainer.setAttribute("visibility","hidden");
+    	    		} else if (object.avsettings=="a"){
+    	    			myvideocontainer.setVideouserProfilePic(object);
+    	    			if ($debug) Debug.warn("start play");
+    	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
+                        myvideocontainer.setAttribute("visibility","visible");
+    	    		} else {
+    	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
+                        myvideocontainer.setAttribute("visibility","visible");
+    	    			if ($debug) Debug.warn("start play");
+    	    		}
+    	    		myvideocontainer.updateAVSettingsSymbol(object);
+                    return myvideocontainer;
+                    
+				} else {
+					return null;
+				}
+		  		
+			} else {
+                
+                //do add self too
+                this._participents.initialAddItem(object);
+                
+                return null;
+            }
+           
+		]]>
+	</method>    	
 
 	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
 		<![CDATA[

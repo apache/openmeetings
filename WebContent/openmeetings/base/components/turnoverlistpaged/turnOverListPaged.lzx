@@ -40,6 +40,10 @@
     
     <attribute name="headerHeight" value="20" type="number" />
     
+    <attribute name="listLabelId" value="0" type="number" />
+    
+    <attribute name="showHScrollbar" value="visible" type="string"/>
+     
     <handler name="oninit">
         //this inits the items
         this._innerlist._inn.initItems(this.listItemName);
@@ -402,11 +406,11 @@
         this._innerlist.initItemsBySubItemNo(itemName,noSubItems,subItemClassName);
     </method>
 
-    <labelText labelid="1381" visibility="$once{ (!parent.showTopBar) ? 'visible' : 'hidden' }"
+    <labelText labelid="${ parent.listLabelId }" visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }"
                        y="4" fontsize="10" x="$once{ parent.menuBarXIndent }" />
                        
     <text fontsize="10" y="4" x="$once{ (!parent.showTopBar) ? 64+parent.menuBarXIndent : 2+parent.menuBarXIndent }"
-          name="_records" resize="true" />
+          name="_records" resize="true" visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }" />
     
     <!-- =========  List Header area  =========-->
     <view name="_innerlisthead" height="${ parent.headerHeight }" width="${ parent.width }" y="22" clip="true">
@@ -415,7 +419,8 @@
     
     <!-- =========  List Contents area  =========-->   
     <listPagedContent name="_innerlist" height="${ parent.height-22-parent.headerHeight }" bgcolor="0xFFFFFF"
-          width="${ parent.width }" y="$once{ parent.headerHeight + 22 }" itemHeight="$once{ parent.itemHeight }" />
+          width="${ parent.width }" y="$once{ parent.headerHeight + 22 }" showHScrollbar="$once{ parent.showHScrollbar }"
+          itemHeight="$once{ parent.itemHeight }" />
 </class>
 	
 <!--- common TurnOverList view class. -->
