@@ -38,6 +38,8 @@
 	        	this._table.renderList = new Array();
 	        }
 	        
+	        object.isSelected = false;
+	        
 	        this._table.renderList.push(object);
 	        
         ]]>
@@ -57,6 +59,8 @@
 	        if (this._table.renderList == null) {
 	        	this._table.renderList = new Array();
 	        }
+	        
+	        object.isSelected = false;
 	        
 	        this._table.renderList.push(object);
 	        
@@ -252,8 +256,37 @@
              listItemName="restrictedUserListItem" showHScrollbar="hidden"
              multiselect="false" width="268">
     	
+    	<attribute name="currentSelectedIndex" value="null" />
+    	
 	    <handler name="oninit">
 	        this.addHeaderItem(1001,260);
+	    </handler>
+	    
+	    <handler name="onclickedItem" args="refObj">
+	    	<![CDATA[
+	    	
+                if ($debug) Debug.write("onclickedItem ",refObj);
+                
+                if (this.currentSelectedIndex != null) {
+                	this.renderList[this.currentSelectedIndex]["isselected"] = false;
+                }
+                
+                this.currentSelectedIndex = refObj.itemId;
+                
+                this.renderList[refObj.itemId]["isselected"] = true;
+                
+                var list = this._innerlist._inn._inn;
+                for (var i=0;i<list.subviews.length;i++){
+                	
+                	list.subviews[i].deselect();
+                	list.subviews[i].hideModeratorIcons();
+                	
+                }
+                
+                refObj.select();
+                refObj.initModeratorIcons();
+	    	
+	    	]]>
 	    </handler>
 	    
 		<method name="renderContent">
@@ -282,6 +315,16 @@
 	                    
 	                    list.subviews[i].setAttribute("clickable",true);
 	                    list.subviews[i].refObj = records[i];
+	                    
+	                    if (records[i]["isselected"] && records[i].isselected) {
+                            list.subviews[i].isselected = true;
+                            list.subviews[i].onmouseout.sendEvent();
+                            list.subviews[i].initModeratorIcons();
+                        } else {
+                            list.subviews[i].isselected = false;
+                            list.subviews[i].onmouseout.sendEvent();
+                            list.subviews[i].hideModeratorIcons();
+                        }
                         
 	                    list.subviews[i].setAttribute("user_id",records[i].user_id);
 	    	            list.subviews[i].setAttribute("firstname",records[i].firstname);
@@ -298,6 +341,10 @@
 	                } else {
 	                    
 	                    list.subviews[i].refObj = null;
+	                    
+	                    list.subviews[i].isselected = false;
+                        list.subviews[i].onmouseout.sendEvent();
+                        list.subviews[i].hideModeratorIcons();
 	                    
 	                    list.subviews[i].setAttribute("user_id","");
 	    	            list.subviews[i].setAttribute("firstname","");
@@ -344,15 +391,13 @@
                     //}
                     
 	                if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
-	                    
-	                    //if ($debug) Debug.write("Selected");
-	                    
 	                    item.isselected = true;
 	                    item.onmouseout.sendEvent();
-	                    
-	                } else if (item.isselected) {
+	                    item.initModeratorIcons();
+	                } else {
 	                    item.isselected = false;
 	                    item.onmouseout.sendEvent();
+	                    item.hideModeratorIcons();
 	                }
 	                
 	                item.setAttribute("user_id",this.renderList[item.itemId].user_id);
@@ -376,6 +421,10 @@
                     //} else {
                     //    item.setIsSecond(false);
                     //}
+                    
+	            	item.isselected = false;
+                    item.onmouseout.sendEvent();
+                    item.hideModeratorIcons();
                     
 	                item.refObj = null;
 	                
@@ -498,7 +547,7 @@
             	
 	        	for (var i=0;i<vList.length;i++) {
 	        		vList[i].updateIconByMod();
-	        		vList[i].initModeratorIcons();
+	        		vList[i].updateModeratorIcons();
 	        	}
 	        	
                 for (var k=0;k<canvas.currentModeratorList.length;k++) {

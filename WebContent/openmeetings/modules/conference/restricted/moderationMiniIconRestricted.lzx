@@ -1,53 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="moderationMiniIconRestricted" extends="view" valign="bottom" height="18">
+<class name="moderationMiniIconRestricted" extends="view" y="20" x="0" height="18">
 	
 	<attribute name="isMod" value="false" type="boolean"/>
     <attribute name="isSuperModerator" value="false" type="boolean"/>
 	
 	<handler name="oninit">
-		this.isMod = parent.isMod;
+		this.isMod = parent.parent.isMod;
 		
-		if (parent.clickable) {
-    		if ($debug) Debug.write(" :: moderationMiniIconRestricted :. ",this.isMod);
-    		
-    		if (this.isMod) {
-    			this._isMod.setAttribute("visibility","visible");
-    			this._isModAddbutton.setAttribute("visibility","hidden");
-    		} else {
-    			this._isMod.setAttribute("visibility","hidden");
-                this._isModAddbutton.setAttribute("visibility","visible");
-    		}
-    		
-    		if (this.isMod) {
-    			this._canDraw.setAttribute("visibility","visible");
-                this._canDraw.isActive = false;
-                this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
-                this._canDrawModerator.setAttribute("visibility","hidden");
-    		} else {
-    			if (parent.refObj.canDraw) {
-                    this._canDraw.setAttribute("visibility","visible");
-                    this._canDraw.isActive = true;
-                    this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
-                    this._canDrawModerator.setAttribute("visibility","hidden");
-                } else {
-                    this._canDraw.setAttribute("visibility","hidden");
-                    this._canDrawModerator.setAttribute("visibility","visible");
-                }
-    		}
-    		
-    		if (parent.refObj.isBroadcasting) {
-    			this._allowDevice.setAttribute("visibility","hidden");
-    			this._denyDevice.setAttribute("visibility","visible");
-    		} else {
-    			this._allowDevice.setAttribute("visibility","visible");
-                this._denyDevice.setAttribute("visibility","hidden");
-    		}
+		if ($debug) Debug.write(" :: moderationMiniIconRestricted :. ",this.isMod);
+		
+		if (this.isMod) {
+			this._isMod.setAttribute("visibility","visible");
+			this._isModAddbutton.setAttribute("visibility","hidden");
 		} else {
-			
-			this.setAttribute("visibility","hidden");
-			
+			this._isMod.setAttribute("visibility","hidden");
+            this._isModAddbutton.setAttribute("visibility","visible");
+		}
+		
+		if (this.isMod) {
+			this._canDraw.setAttribute("visibility","visible");
+            this._canDraw.isActive = false;
+            this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
+            this._canDrawModerator.setAttribute("visibility","hidden");
+		} else {
+			if (parent.parent.refObj.canDraw) {
+                this._canDraw.setAttribute("visibility","visible");
+                this._canDraw.isActive = true;
+                this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                this._canDrawModerator.setAttribute("visibility","hidden");
+            } else {
+                this._canDraw.setAttribute("visibility","hidden");
+                this._canDrawModerator.setAttribute("visibility","visible");
+            }
+		}
+		
+		if (parent.parent.refObj.isBroadcasting) {
+			this._allowDevice.setAttribute("visibility","hidden");
+			this._denyDevice.setAttribute("visibility","visible");
+		} else {
+			this._allowDevice.setAttribute("visibility","visible");
+            this._denyDevice.setAttribute("visibility","hidden");
 		}
 	</handler>
         
@@ -66,8 +60,8 @@
                 if (canvas.ismoderator) {
                     //Do it 
                     if ($debug) Debug.write("Do Remove It");
-                    if (parent.parent.refObj.publicSID != canvas.publicSID) {
-                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                    if (parent.parent.parent.refObj.publicSID != canvas.publicSID) {
+                        hib.removeModerator.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
                         hib.removeModerator.doCall();
                     } else {
                     	new lz.labelerrorPopup(canvas,{errorlabelid:682});
@@ -88,7 +82,7 @@
                 if (canvas.ismoderator) {
                     //Do it 
                     if ($debug) Debug.write("Do Add It");
-                    hib.addModerator.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+                    hib.addModerator.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
                     hib.addModerator.doCall();
                     //parent.parent.setCanDraw.doCall();
                 }
@@ -108,7 +102,7 @@
                 if (canvas.ismoderator && this.isActive) {
                     //Do it 
                     if ($debug) Debug.write("Do add draw to it");
-                    canvas.thishib.setCanDraw.publicSID = parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
                     canvas.thishib.setCanDraw.canDraw = false;
                     canvas.thishib.setCanDraw.doCall();
                     //parent.parent.setCanDraw.doCall();
@@ -124,7 +118,7 @@
             //Do it 
             if (canvas.ismoderator) {
                 if ($debug) Debug.write("Do it");
-                canvas.thishib.setCanDraw.publicSID = parent.parent.refObj.publicSID;
+                canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
                 canvas.thishib.setCanDraw.canDraw = true;
                 canvas.thishib.setCanDraw.doCall();
                 //parent.parent.setCanDraw.doCall();
@@ -136,12 +130,12 @@
     <miniIcons name="_allowDevice" x="40" width="16" height="16" opacity="0.5" 
     		   resource="play_webcam_show_dialog_rsc" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("ALLOW: ",parent.parent.refObj.publicSID);
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
             //myvideocontainer.resetValues();
             //new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
             
-            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
@@ -151,11 +145,11 @@
     <miniIcons name="_denyDevice" x="40" width="16" height="16" 
                resource="play_webcam_show_dialog_rsc" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("ALLOW: ",parent.parent.refObj.publicSID);
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
             //myvideocontainer.resetValues();
             //new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
-            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>

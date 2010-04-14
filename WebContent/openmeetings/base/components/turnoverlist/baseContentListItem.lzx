@@ -5,26 +5,26 @@
 <class name="baseContentListItem" extends="view" 
 	   layout="axis:x;spacing:0" bgcolor="0xFFFFFF" >
 	
-	<attribute name="selected" value="false" type="boolean"/>
+	<attribute name="isselected" value="false" type="boolean"/>
 	
 	<method name="select">
-		this.selected = true;
+		this.isselected = true;
 		this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
 	</method>
 	
 	<method name="deselect">
-		this.selected = false;
+		this.isselected = false;
 		this.setAttribute('bgcolor',0xFFFFFF);
 	</method>
 	
 	<handler name="onmouseover">
-		if (!this.selected) {
+		if (!this.isselected) {
 			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
 		}
 	</handler>
 	
 	<handler name="onmouseout">
-		if (!this.selected) {
+		if (!this.isselected) {
 			this.setAttribute('bgcolor',0xFFFFFF);
 		}
 	</handler>

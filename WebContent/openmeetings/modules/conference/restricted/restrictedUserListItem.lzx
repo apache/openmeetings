@@ -20,8 +20,6 @@
     <attribute name="userpicURL" value="" type="string" />
     <attribute name="userpicView" value="null" />
     
-    <attribute name="moderatorViewIsInited" value="false" type="boolean" />
-    
 	<method name="updateIconByMod">
 		if (this.clickable) {
         	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
@@ -46,22 +44,26 @@
             	this._content.userStatus.setAttribute("frame",1);
             }
     	}
-    	this.initModeratorIcons();
     </method>   
     
     <method name="initModeratorIcons">
+    	//if ($debug) Debug.write(" :1: initModeratorIcons :: ");
     	if (canvas.ismoderator) {
-    		if (!this.moderatorViewIsInited) {
-    			this.moderatorViewIsInited = true;
-    			new lz.moderationMiniIconRestricted(this,{name:'_iconsModerator'});
-    		} else {
-    			this._iconsModerator.setAttribute("visibility","visible");
-    			this._iconsModerator.oninit.sendEvent();
-    		}
-    	} else {
-    		if (this.moderatorViewIsInited) {
-    			this._iconsModerator.setAttribute("visibility","hidden");
-    		}
+    		//if ($debug) Debug.write(" :2: initModeratorIcons :: ");
+			this._content._iconsModerator.setAttribute("visibility","visible");
+			this._content._iconsModerator.oninit.sendEvent();
+    	}
+    </method>
+    
+    <method name="updateModeratorIcons">
+		if (this._content._iconsModerator.visibility == "visible") {
+            this._content._iconsModerator.oninit.sendEvent();
+		}
+    </method>
+    
+    <method name="hideModeratorIcons">
+    	if (this._content._iconsModerator.visibility == "visible") {
+            this._content._iconsModerator.setAttribute("visibility","hidden");
     	}
     </method>
     
@@ -76,7 +78,9 @@
     		   
 	    <view name="userStatus" visible="${ parent.parent.clickable }" 
 	    	  x="238" frame="1" resource="userstatus_multiframe_rsc" />
-	    	  
+	    	
+	    	
+	    <moderationMiniIconRestricted name="_content" visibility="hidden"/>
 	</view>
 	
 </class>
