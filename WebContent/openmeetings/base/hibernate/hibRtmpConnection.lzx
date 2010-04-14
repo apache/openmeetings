@@ -741,6 +741,9 @@
             <handler name="ondata" args="value">
             	<![CDATA[
                 	if ($debug) Debug.write("############ getCurrentModeratorList: ",value);
+                	
+                	canvas.analyzeModerationList(value);
+                	
                 	canvas.currentModeratorList = value;
                 	//Update Moderation Flag
                 	canvas.updateModerationFlag();
@@ -1200,6 +1203,9 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     if ($debug) Debug.write("setNewModeratorByList ",value);
+                    
+                    canvas.analyzeModerationList(value);
+                    
                     //The onResult-Handler will be called be the rtmpconnection
                     canvas.currentModeratorList = value;
                     //Update Moderation Flag

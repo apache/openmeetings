@@ -529,6 +529,70 @@
 </method>
   
 
+<method name="analyzeModerationList" args="newList">
+	<![CDATA[
+	
+	   canvas.newModeratorList = new Array();
+	   canvas.removeModeratorList = new Array();
+	   
+	   for (var i=0;i<canvas.currentModeratorList.length;i++) {
+            canvas.currentModeratorList[i].found = false;
+	   }
+	   
+	   for (var i=0;i<canvas.currentModeratorList.length;i++) {
+            
+            for (var k=0;k<newList.length;k++) {
+                if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+                    
+                    canvas.currentModeratorList[i].found = true;
+                	
+                }
+            }
+            
+        }
+        
+        for (var k=0;k<newList.length;k++) {
+            newList[k].found = false;
+        }
+       
+        for (var k=0;k<newList.length;k++) {
+        	
+        	for (var i=0;i<canvas.currentModeratorList.length;i++) {
+        		
+                if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+                    
+                    newList[k].found = true;
+                    
+                }
+        		
+        	}
+        	
+        }
+        
+        for (var k=0;k<newList.length;k++) {
+        	
+        	if (!newList[k].found) {
+        		
+        		canvas.newModeratorList.push(newList[k]);
+        		
+        	}
+        	
+        }
+        
+        for (var i=0;i<canvas.currentModeratorList.length;i++) {
+        	
+        	if (!canvas.currentModeratorList[i].found) {
+        		canvas.removeModeratorList.push(canvas.currentModeratorList[i])
+        	}
+        	
+        }
+        
+        if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);
+        if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);
+	
+	]]>
+</method>
+
 <!--
 <method name="setModeratorName" args="mod">
     <![CDATA[

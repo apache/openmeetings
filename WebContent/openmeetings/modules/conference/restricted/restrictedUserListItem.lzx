@@ -5,7 +5,11 @@
 	   showhandcursor="false" width="254" height="42">
 	
 	<attribute name="connectedSince" value="" type="string" />
+	
     <attribute name="isMod" value="false" type="boolean" />
+    <attribute name="canDraw" value="false" type="boolean" />
+    <attribute name="isBroadcasting" value="false" type="boolean" />
+    
     <attribute name="streamid" value="" type="string" />
     <attribute name="username" value="" type="string" />
     <attribute name="userroom" value="" type="string" />
@@ -20,10 +24,23 @@
     <attribute name="userpicURL" value="" type="string" />
     <attribute name="userpicView" value="null" />
     
+    <attribute name="selfItem" value="false" type="boolean"/>
+    
+    <handler name="onisMod">
+    	if (this.isMod) {
+            this._content.userStatus.setAttribute("frame",3);
+        } else if (this.refObj.canDraw) {
+            this._content.userStatus.setAttribute("frame",2);
+        } else {
+            this._content.userStatus.setAttribute("frame",1);
+        }
+    </handler>
+    
+    
 	<method name="updateIconByMod">
 		if (this.clickable) {
         	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
-        	if ($debug) Debug.write(" :: updateIconByMod :: ",this.isMod)
+        	//if ($debug) Debug.write(" :: updateIconByMod :: ",this.isMod)
         	if (this.isMod) {
                 this._content.userStatus.setAttribute("frame",3);
             } else if (this.refObj.canDraw) {
@@ -44,7 +61,7 @@
             	this._content.userStatus.setAttribute("frame",1);
             }
     	}
-    </method>   
+    </method>  
     
     <method name="initModeratorIcons">
     	//if ($debug) Debug.write(" :1: initModeratorIcons :: ");
@@ -69,6 +86,9 @@
     
 	<view name="_content" width="254">
 		
+		<view name="_contentIsCurrent" visible="${ parent.parent.selfItem }"
+                        width="254" height="40" bgcolor="0x7CFC00"/>
+          
 		<!--
 		+ ' ' + parent.parent.itemId
 		 -->
@@ -80,8 +100,10 @@
 	    	  x="238" frame="1" resource="userstatus_multiframe_rsc" />
 	    	
 	    	
-	    <moderationMiniIconRestricted name="_content" visibility="hidden"/>
+	    <moderationMiniIconRestricted name="_iconsModerator" visibility="hidden"/>
 	</view>
+	
+	
 	
 </class>
 

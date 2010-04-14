@@ -131,6 +131,9 @@ these properties will be overwritten by config.xml -->
  -->
 <attribute name="currentModeratorList" value="null" />
 
+<attribute name="newModeratorList" value="null" />
+<attribute name="removeModeratorList" value="null" />
+
 <attribute name="ismoderator" value="false" type="boolean" />
 
 <attribute name="loadingmessage" value="" type="string" />

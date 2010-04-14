@@ -118,7 +118,10 @@
             
             for (var i in value){
             	if ( value[i].streamid == canvas.streamid ) {
+            		value[i].selfItem = true;
                     canvas.isAllowedToDraw = value[i].canDraw;
+                } else {
+                	value[i].selfItem = false;
                 }
 
                 //value[i].lastname = value[i].lastname + "T: " + t;

@@ -32,7 +32,10 @@
 	        if (object.isSuperModerator) {
 	            object.lastname += " *";
 	        }
-            
+	        
+	        //See setRoomValues
+            //object.selfItem = false;
+	        
 	        //Add item to list
 	        if (this._table.renderList == null) {
 	        	this._table.renderList = new Array();
@@ -54,6 +57,8 @@
 	        if (object.isSuperModerator) {
 	            object.lastname += " *";
 	        }
+	        
+	        object.selfItem = false;
             
 	        //Add item to list
 	        if (this._table.renderList == null) {
@@ -331,7 +336,10 @@
                         list.subviews[i].setAttribute("isSuperModerator",records[i].isSuperModerator);
 	    	            list.subviews[i].setAttribute("lastname",records[i].lastname);
 	    	            list.subviews[i].setAttribute("connectedSince",records[i].connectedSince);
+	    	            list.subviews[i].setAttribute("canDraw",records[i].canDraw);
 	    	            list.subviews[i].setAttribute("isMod",records[i].isMod);
+	    	            list.subviews[i].isBroadcasting = records[i].isBroadcasting;
+	    	            list.subviews[i].setAttribute("selfItem",records[i].selfItem);
 	    	            list.subviews[i].streamid = records[i].streamid;
 	    	            list.subviews[i].setAttribute("username",records[i].username);
 	    	            list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
@@ -351,7 +359,10 @@
                         list.subviews[i].setAttribute("isSuperModerator","");
 	    	            list.subviews[i].setAttribute("lastname","");
 	    	            list.subviews[i].setAttribute("connectedSince","");
-	    	            list.subviews[i].setAttribute("isMod","");
+	    	            list.subviews[i].setAttribute("canDraw",false);
+	    	            list.subviews[i].setAttribute("isMod",false);
+	    	            list.subviews[i].isBroadcasting = false;
+	    	            list.subviews[i].setAttribute("selfItem",false);
 	    	            list.subviews[i].streamid = "";
 	    	            list.subviews[i].setAttribute("username","");
 	    	            list.subviews[i].setAttribute("formatedDate","");
@@ -400,12 +411,17 @@
 	                    item.hideModeratorIcons();
 	                }
 	                
+	                if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
+	                
 	                item.setAttribute("user_id",this.renderList[item.itemId].user_id);
     	            item.setAttribute("firstname",this.renderList[item.itemId].firstname);
                     item.setAttribute("isSuperModerator",this.renderList[item.itemId].isSuperModerator);
     	            item.setAttribute("lastname",this.renderList[item.itemId].lastname);
     	            item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
+    	            item.setAttribute("canDraw",this.renderList[item.itemId].canDraw);
+    	            item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
     	            item.setAttribute("isMod",this.renderList[item.itemId].isMod);
+    	            item.setAttribute("selfItem",this.renderList[item.itemId].selfItem);
     	            item.streamid = this.renderList[item.itemId].streamid;
     	            item.setAttribute("username",this.renderList[item.itemId].username);
     	            item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
@@ -433,7 +449,10 @@
                     item.setAttribute("isSuperModerator","");
     	            item.setAttribute("lastname","");
     	            item.setAttribute("connectedSince","");
-    	            item.setAttribute("isMod","");
+    	            item.setAttribute("canDraw",false);
+    	            item.setAttribute("isMod",false);
+    	            item.isBroadcasting = false;
+    	            item.setAttribute("selfItem",false);
     	            item.streamid = ""
     	            item.setAttribute("username","");
     	            item.setAttribute("formatedDate","");
@@ -465,7 +484,7 @@
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
             <![CDATA[
             
-                if ($debug) Debug.write(" :: ondrawAllowStatus :: ");
+                if ($debug) Debug.write(" :: ondrawAllowStatus :: ",drawObject.canDraw);
             
                 //search for the user and update its drawStatusIcon
                 var vList = parent._table._innerlist._inn._inn.subviews;
@@ -473,7 +492,9 @@
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
                     	vList[i].refObj.canDraw = drawObject.canDraw;
-                    	vList[i].updateIconByMod();
+                    	vList[i].canDraw = drawObject.canDraw;
+                    	vList[i].updateIconByModScroll();
+                    	vList[i].updateModeratorIcons();
                     	break;
                     }
                 }
@@ -505,8 +526,9 @@
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == userObject.publicSID) {
-                        vList[i].refObj.isBroadcasting = userObject.isBroadcasting;
-                        vList[i].updateIconByMod();
+                        vList[i].isBroadcasting = userObject.isBroadcasting;
+                        //vList[i].updateIconByMod();
+                        vList[i].updateModeratorIcons();
                         break;
                     }
                 }
@@ -542,31 +564,118 @@
         	<![CDATA[
         	
         	    if ($debug) Debug.write(" :: updateIcons :: ");
-            	
-        		var vList = parent._table._innerlist._inn._inn.subviews;
-            	
-	        	for (var i=0;i<vList.length;i++) {
-	        		vList[i].updateIconByMod();
-	        		vList[i].updateModeratorIcons();
-	        	}
-	        	
-                for (var k=0;k<canvas.currentModeratorList.length;k++) {
+        	    
+        	    //var vList = parent._table.renderList;
+                for (var i=0;i<parent._table.renderList.length;i++) {
+                
+                    for (var k=0;k<canvas.newModeratorList.length;k++) {
+                    	
+                    	var item = canvas.newModeratorList[k];
+                    	
+                        if (parent._table.renderList[i].publicSID == item.publicSID) {
+                            
+                            if (parent._table.renderList[i].isMod == false) {
+                                if ($debug) Debug.info("updateIcons Found RR ",i,item.publicSID);
+                                parent._table.renderList[i].isMod = true;
+                                
+                                var itemView = this.getItemByPublicSID(item.publicSID);
+                                if (itemView != null) {
+                                    itemView.setAttribute("isMod",true);
+                                    itemView.updateModeratorIcons();
+                                }
+                            }
+                            
+                        }
+                    	
+                    }
+                    
+                    for (var k=0;k<canvas.removeModeratorList.length;k++) {
+                        
+                    	var item = canvas.removeModeratorList[k];
+                    	
+                        if (parent._table.renderList[i].publicSID == item.publicSID) {
+                            
+                            if (parent._table.renderList[i].isMod == true) {
+                               if ($debug) Debug.info("RE updateIcons Found RR ",i,item.publicSID);
+                               parent._table.renderList[i].isMod = false;
+                            
+                               var itemView = this.getItemByPublicSID(item.publicSID);
+                               if (itemView != null) {
+                                   itemView.setAttribute("isMod",false);
+                                   itemView.updateModeratorIcons();
+                               }
+                            }
+                            
+                        }
+                        
+                    }
+                
+                }
+                
+                //var vList = parent._table._innerlist._inn._inn.subviews;
+                
+                //for (var i=0;i<vList.length;i++) {
+                //    vList[i].updateIconByMod();
+                //    vList[i].updateModeratorIcons();
+                //}
+        	
+            	parent._applyAndStatusIcons.updateIcons();
+        	]]>
+        </method>
+        
+        <!--
+                for (var i=0;i<parent._table.renderList.length;i++) {
+                    
+                    for (var k=0;k<canvas.currentModeratorList.length;k++) {
             
                     var item = canvas.currentModeratorList[k];
                     
-                    var vList = parent._table.renderList;
-                    for (var i=0;i<vList.length;i++) {
+                        if ($debug) Debug.info("updateIcons ",item.publicSID);
                        
-                        if (vList[i].publicSID == item.publicSID) {
-                            parent._table.renderList[i].isMod = true;
+                        if (parent._table.renderList[i].publicSID == item.publicSID) {
+                            
+                            if (parent._table.renderList[i].isMod == false) {
+                                if ($debug) Debug.info("updateIcons Found RR ",i,item.publicSID);
+                                parent._table.renderList[i].isMod = true;
+                                
+                                var itemView = this.getItemByPublicSID(item.publicSID);
+                                if (itemView != null) {
+                                    itemView.setAttribute("isMod",true);
+                                    itemView.updateModeratorIcons();
+                                }
+                            }
+                            
+                            
                         } else {
-                        	parent._table.renderList[i].isMod = false;
+                            
+                            if (parent._table.renderList[i].isMod == true) {
+                               if ($debug) Debug.info("RE updateIcons Found RR ",i,item.publicSID);
+                               parent._table.renderList[i].isMod = false;
+                            
+                               var itemView = this.getItemByPublicSID(item.publicSID);
+                               if (itemView != null) {
+                                   itemView.setAttribute("isMod",false);
+                                   itemView.updateModeratorIcons();
+                               }
+                            }
                         }
+                        
                     }
                     
+                }      
+         -->                  
+        
+        <method name="getItemByPublicSID" args="publicSID">
+        	<![CDATA[
+                var vList = parent._table._innerlist._inn._inn.subviews;
+                
+                for (var i=0;i<vList.length;i++) {
+                    if (vList[i].refObj.publicSID == publicSID) {
+                    	return vList[i];
+                    }
                 }
-        	
-            	parent._applyAndStatusIcons.updateIcons();
+                
+                return null;
         	]]>
         </method>
         
