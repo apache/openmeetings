@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Fel lösenord</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>2 identiska lösenord med minst 4 tecken, tack!</value>
+    <value>2 identiska lösenord med minst 6 tecken, tack!</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Fel e-postadress</value>

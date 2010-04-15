@@ -699,7 +699,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Грешна парола</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Моля въведете две еднакви пароли от поне 4 знака</value>
+    <value>Моля въведете две еднакви пароли от поне 6 знака</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Грешен e-mail</value>

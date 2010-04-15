@@ -701,7 +701,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Senha Incorreta</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Por favor digite duas senhas iguais com pelo menos 4 caracteres</value>
+    <value>Por favor digite duas senhas iguais com pelo menos 6 caracteres</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Email Incorreto</value>

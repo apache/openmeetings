@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Contrasenya errònia</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Per favor introdueixi dues vegades les mateixa contrasenya amb un mínim de 4 caràcters</value>
+    <value>Per favor introdueixi dues vegades les mateixa contrasenya amb un mínim de 6 caràcters</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Correu invàlid</value>

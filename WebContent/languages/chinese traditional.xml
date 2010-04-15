@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>密碼錯誤</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>請輸入兩個相同的密碼最少4個字符</value>
+    <value>請輸入兩個相同的密碼最少6個字符</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>錯的郵件</value>

@@ -699,7 +699,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Verkeerde wachtwoord</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Please enter two identical passwords with at least 4 characters</value>
+    <value>Please enter two identical passwords with at least 6 characters</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Foutmelding</value>

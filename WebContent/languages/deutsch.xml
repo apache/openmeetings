@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Falsches Passwort</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Bitte geben Sie Passwort zweimal ein. Länge: mindestens 4 Buchstaben.</value>
+    <value>Bitte geben Sie Passwort zweimal ein. Länge: mindestens 6 Buchstaben.</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Ungültige E-Mail</value>

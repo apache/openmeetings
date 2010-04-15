@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Неверный пароль</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Пожалуйста, введите два раза один и тот же пароль длиной не менее 4 символов</value>
+    <value>Пожалуйста, введите два раза один и тот же пароль длиной не менее 6 символов</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Неверный E-Mail</value>

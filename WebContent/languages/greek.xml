@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Λάθος Κωδικός</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Παρακαλούμε εισάγετε δύο πανομοιότυπους Κωδικούς τουλάχιστον 4 Χαρακτήρων!</value>
+    <value>Παρακαλούμε εισάγετε δύο πανομοιότυπους Κωδικούς τουλάχιστον 6 Χαρακτήρων!</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Λάθος Email</value>

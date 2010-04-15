@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Mot de passe erroné</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Merci de mettre deux mots de passes identiques avec 4 caractères minimum</value>
+    <value>Merci de mettre deux mots de passes identiques avec 6 caractères minimum</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Adresse e-mail erronée</value>

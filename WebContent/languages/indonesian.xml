@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Password salah</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Silahkan masukan dua password yang sama, minimal 4 karakter</value>
+    <value>Silahkan masukan dua password yang sama, minimal 6 karakter</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Email salah</value>

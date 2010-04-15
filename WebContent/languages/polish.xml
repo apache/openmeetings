@@ -706,7 +706,7 @@ tablicy</value>
 	</string>
 	<string id="232" name="user_registerFalsePWDHeader">
 		<value>Proszę wprowadzić dwa identyczne hasła o długości
-przynajmniej 4 znaków.</value>
+przynajmniej 6 znaków.</value>
 	</string>
 	<string id="233" name="user_registerMailError">
 		<value>Niepoprawny e-mail</value>

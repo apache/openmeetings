@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Špatné heslo</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Zadejte prosím stejné heslo minimálně se 4 znaky</value>
+    <value>Zadejte prosím stejné heslo minimálně se 6 znaky</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Špatný mail</value>

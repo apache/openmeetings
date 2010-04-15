@@ -507,7 +507,7 @@ public class Usermanagement {
 					if (level_id != 0)
 						us.setLevel_id(new Long(level_id));
 					if (password.length() != 0) {
-						if (password.length()>=4){
+						if (password.length()>=6){
 							us.setPassword(ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(password));
 						} else {
 							return new Long(-7);
@@ -941,7 +941,7 @@ public class Usermanagement {
 		// their Group
 		if (AuthLevelmanagement.getInstance().checkModLevel(user_level)) {
 			// Check for required data
-			if (login.length()>=4 && Userpass.length()>=4) {
+			if (login.length()>=6 && Userpass.length()>=6) {
 				// Check for duplicates
 				boolean checkName = UsersDaoImpl.getInstance().checkUserLogin(login);
 				boolean checkEmail = Emailmanagement.getInstance().checkUserEMail(email);

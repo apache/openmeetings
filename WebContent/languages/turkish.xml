@@ -699,7 +699,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
 		<value>Hatalı Şifre</value>
 	</string>
 	<string id="232" name="user_registerFalsePWDHeader">
-		<value>Lütfen en az 4 karakter içeren birbiri ile aynı iki şifre giriniz</value>
+		<value>Lütfen en az 6 karakter içeren birbiri ile aynı iki şifre giriniz</value>
 	</string>
 	<string id="233" name="user_registerMailError">
 		<value>Hatalı E-posta</value>

@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Contrasinal incorrecto</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Por favor introduza dúas veces o mesmo contrasinal con un mínimo de 4 caracteres</value>
+    <value>Por favor introduza dúas veces o mesmo contrasinal con un mínimo de 6 caracteres</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Correo incorrecto</value>

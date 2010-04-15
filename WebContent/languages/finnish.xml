@@ -699,7 +699,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Väärä salasana</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Anna kaksi samaa salasanaa joissa vähintään 4 merkkiä</value>
+    <value>Anna kaksi samaa salasanaa joissa vähintään 6 merkkiä</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Epäkelpo sähköposti</value>
