@@ -21,5 +21,7 @@
     <property name="externalRoomId" type="long" column="externalRoomId"/>
     <property name="externalRoomType" type="string" column="externalRoomType"/>
     <property name="allowUserQuestions" type="boolean" column="allow_user_questions"/>
+    <property name="sipNumber" type="string" column="sip_number"/>
+    <property name="conferencePin" type="string" column="conference_pin"/>
   </class>
 </hibernate-mapping>

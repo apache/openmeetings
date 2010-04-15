@@ -70,6 +70,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/RoomTypes.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/rooms/Rooms_Organisation.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/sip/OpenXGReturnObject.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Salutations.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/UserSipData.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userdata.hbm.xml"/>

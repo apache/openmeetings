@@ -16,9 +16,10 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.sip.OpenXGReturnObject;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.sip.xmlrpc.custom.OpenXGCustomXMLMarshall;
-import org.openmeetings.app.sip.xmlrpc.custom.OpenXGReturnObject;
+import org.openmeetings.app.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -145,9 +146,9 @@ public class OpenXGHttpClient {
 		    	throw new Exception("sip.phonerange.start, sip.phonerange or sip.phonerange.currentindex missing in Configuration table");
 		    }
 		    
-		    Long sipPhoneRangeStart = Long.parseLong(sip_phonerange_start.getConf_value());
+//		    Long sipPhoneRangeStart = Long.parseLong(sip_phonerange_start.getConf_value());
 //		    Long sipPhoneRange = Long.parseLong(sip_phonerange.getConf_value());
-		    Long sipPhoneRangeCurrentIndex = Long.parseLong(sip_phonerange_currentindex.getConf_value());
+//		    Long sipPhoneRangeCurrentIndex = Long.parseLong(sip_phonerange_currentindex.getConf_value());
 		    
 		    //Not sure anymore if this is really needed, we don't need a number in national format
 //		    if (sipPhoneRangeCurrentIndex >= sipPhoneRange) {
@@ -181,6 +182,10 @@ public class OpenXGHttpClient {
 	        
 		    
 		    OpenXGReturnObject openXGReturnObject = this.openSIPgPost(stringToPost);
+		    
+		    openXGReturnObject.setMethodName("OpenSIPg.UserCreate");
+		    
+		    OpenXGReturnObjectDaoImpl.getInstance().addOpenXGReturnObject(openXGReturnObject);
 			
 			log.debug(" Status_code "+openXGReturnObject.getStatus_code());
         	log.debug(" Status_string "+openXGReturnObject.getStatus_string());
@@ -197,6 +202,10 @@ public class OpenXGHttpClient {
     		        														domain, adminid);
         		
     	        OpenXGReturnObject openXGReturnObjectURI = this.openSIPgPost(stringToPostURI);
+    	        
+    	        openXGReturnObjectURI.setMethodName("OpenSIPg.URIUserIDAdd");
+    	        
+    	        OpenXGReturnObjectDaoImpl.getInstance().addOpenXGReturnObject(openXGReturnObjectURI);
     	        
     	        log.debug(" openXGReturnObjectURI Status Code "+openXGReturnObjectURI.getStatus_code());
             	log.debug(" openXGReturnObjectURI Status String "+openXGReturnObjectURI.getStatus_string());
@@ -227,29 +236,6 @@ public class OpenXGHttpClient {
 		
 		return null;
 	}
-	
-	
-	public OpenXGReturnObject openSIPgURIUserIDAdd(String client_id, String digest, String userid, String domain, 
-			String first_name, String middle_i, String last_name, String password, String community_code, 
-			String language_code, String email, String adminid) {
-		try {
-			
-			//Get the XML-String representative
-	        String stringToPost = OpenXGCustomXMLMarshall.getInstance().
-	        							openSIPgURIUserIDAdd(client_id, digest, userid, 
-		        														domain, adminid);
-			
-	        return this.openSIPgPost(stringToPost);
-            
-		} catch (Exception err) {
-			
-			log.error("[openSIPgUserCreate]",err);
-			
-		}
-		
-		return null;
-	}
-	
 	
 	
 	public OpenXGReturnObject openSIPgCreateConference() {
@@ -298,6 +284,8 @@ public class OpenXGHttpClient {
 		    
 		    long endTime = (d.getTime()/1000) + (60 * 60);
 		    
+		    //"0", "2147483647",
+		    
 		    String digest = this.digest_calculate(new Object[]{client_id, "067201101", domain, ""+starttime,
 										     ""+endTime, language_code, adminid,
 										     client_secret});
@@ -319,8 +307,14 @@ public class OpenXGHttpClient {
 	        						openSIPgCreateConference(client_id, digest, "067201101", domain, 
 	        													""+starttime, ""+endTime, 
 						        								language_code, adminid);
-		        							
-	        return this.openSIPgPost(stringToPost);
+		      
+	        OpenXGReturnObject openXGReturnObject = this.openSIPgPost(stringToPost);
+	        
+	        openXGReturnObject.setMethodName("OpenSIPg.UserConferenceAdd");
+		    
+		    OpenXGReturnObjectDaoImpl.getInstance().addOpenXGReturnObject(openXGReturnObject);
+	        
+	        return openXGReturnObject;
             
 		} catch (Exception err) {
 			
@@ -378,8 +372,13 @@ public class OpenXGHttpClient {
             	
             	log.debug("parseReturnBody "+post.getResponseBodyAsString());
             
-            	return this.parseOpenXGReturnBody(post.getResponseBodyAsStream());
+            	OpenXGReturnObject oIG = this.parseOpenXGReturnBody(post.getResponseBodyAsStream());
             
+            	log.debug("oIG 1 "+oIG.getStatus_code());
+            	log.debug("oIG 2 "+oIG.getStatus_string());
+            	
+            	return oIG;
+            	
             } else {
             	
             	throw new Exception("Could not connect to OpenXG, check the URL for the Configuration");
@@ -430,7 +429,7 @@ public class OpenXGHttpClient {
             	
             	Node nameTextNode = name.item(0).getFirstChild();
             	
-            	//log.debug("getNodeValue "+nameTextNode.getNodeValue());
+            	log.debug("getNodeValue "+nameTextNode.getNodeValue());
             	
             	if (nameTextNode.getNodeValue().equals("status_code")) {
             	
@@ -455,6 +454,30 @@ public class OpenXGHttpClient {
 	            	//log.debug("Value "+valueTextNode.getNodeValue());
 	            	
 	            	openXGReturnObject.setStatus_string(valueTextNode.getNodeValue());
+            	
+            	} else if (nameTextNode.getNodeValue().equals("conference_number")) {
+                	
+            		NodeList string = member.getElementsByTagName("string");
+	            	
+	            	//log.debug("Value "+string.item(0).getNodeName());
+	            	
+	            	Node valueTextNode = string.item(0).getFirstChild();
+	            	
+	            	//log.debug("Value "+valueTextNode.getNodeValue());
+	            	
+	            	openXGReturnObject.setConferenceNumber(valueTextNode.getNodeValue());
+            	
+            	} else if (nameTextNode.getNodeValue().equals("conference_pin")) {
+                	
+            		NodeList string = member.getElementsByTagName("string");
+	            	
+	            	//log.debug("Value "+string.item(0).getNodeName());
+	            	
+	            	Node valueTextNode = string.item(0).getFirstChild();
+	            	
+	            	//log.debug("Value "+valueTextNode.getNodeValue());
+	            	
+	            	openXGReturnObject.setConferencePin(valueTextNode.getNodeValue());
             	
             	}
             	

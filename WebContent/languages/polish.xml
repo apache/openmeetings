@@ -3080,4 +3080,16 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1000" name="error user">
     <value>This Email is already used by another User.</value>
   </string>
+  <string id="1001" name="room-admin">
+    <value>SIP-Settings</value>
+  </string>
+  <string id="1002" name="room-admin">
+    <value>The Conference Number and PIN is automatically created via the OpenXG RPC-Gateway</value>
+  </string>
+  <string id="1003" name="room-admin">
+    <value>SIP Number</value>
+  </string>
+  <string id="1004" name="room-admin">
+    <value>PIN</value>
+  </string>
 </language>

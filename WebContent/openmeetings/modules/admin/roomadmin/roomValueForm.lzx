@@ -31,6 +31,8 @@
 		this._organisationslist.clearList();
         this._turnoverlist.clearList();
         this.allowUserQuestions.setValue(true);
+        this.sipNumber.setAttribute("text","");
+        this.conferencePin.setAttribute("text","");
         this._listRoomModerators.clearList();
 	</handler>
 	
@@ -93,6 +95,19 @@
                 
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
+			
+			if (obj.sipNumber != null) {
+		        this.sipNumber.setAttribute("text",obj.sipNumber);
+			} else {
+				this.sipNumber.setAttribute("text","");
+			}
+			
+			if (obj.conferencePin != null) {
+                this.conferencePin.setAttribute("text",obj.conferencePin);
+			} else {
+				this.conferencePin.setAttribute("text",obj.conferencePin);
+			}
+			
             this._turnoverlist.clearList();
             this._turnoverlist.getRoomClientsMapByRoomId.doCall();
             
@@ -348,7 +363,7 @@
                multiline="true" width="370" /> 
                                
     <!-- RoomClient List Right Side -->
-    <labelText labelid="587" width="200" y="40" resize="false" 
+    <labelText labelid="587" width="300" y="40" resize="false" 
                x="398" fontstyle="bold" />   
     
     <simpleTurnOverList name="_turnoverlist" width="300" mainBgColor="0xFFFFFF"
@@ -402,7 +417,7 @@
                multiline="true" width="270" />
         
     
-    <labelText labelid="816" width="200" y="380" resize="false" x="400"/>  
+    <labelText labelid="816" width="300" y="380" resize="false" x="400"/>  
     
     <!-- 172:add default moderator -->
     <baseChooseIcon resourceN="edit_add_rsc" labelid="821" y="380" x="680"
@@ -494,7 +509,28 @@
         </method>
 
     </simpleTurnOverList>    
-        
+    
+    <!--SIP Settings -->
+    <labelText labelid="1001" width="200" y="600" resize="false" 
+               x="400" fontstyle="bold" />   
+    
+    <view resource="messagebox_info_rsc" x="400" y="620" />
+    
+    <labelText labelid="1002" x="424" y="620" fontstyle="italic"
+               multiline="true" width="270" />   
+     
+    <labelText labelid="1003" x="400" y="670" width="270" /> 
+                         
+    <labelText name="sipNumber" x="520" y="670" fgcolor="0x999999" bgcolor="0xFFFFFF" 
+    		   height="20" width="180" resize="false"/>  
+               
+    <labelText labelid="1004" x="400" y="692" width="270" />                 
+               
+    <labelText name="conferencePin" x="520" y="692" fgcolor="0x999999" bgcolor="0xFFFFFF" 
+    		   height="20" width="180" resize="false"/>                         
+                
+    <view x="400" y="900" />    
+    
 </class>
 
 <!--- list of conference/audience rooms -->

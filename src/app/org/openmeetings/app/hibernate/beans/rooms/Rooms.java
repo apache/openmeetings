@@ -60,6 +60,9 @@ public class Rooms {
 	private Boolean isModeratedRoom;
 	
 	private Boolean allowUserQuestions;
+	
+	private String sipNumber;
+	private String conferencePin;
     
     /**
      * @hibernate.property
@@ -444,6 +447,30 @@ public class Rooms {
 	}
 	public void setAllowUserQuestions(Boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="sip_number"
+     *  type="string"
+     */ 	
+	public String getSipNumber() {
+		return sipNumber;
+	}
+	public void setSipNumber(String sipNumber) {
+		this.sipNumber = sipNumber;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="conference_pin"
+     *  type="string"
+     */ 	
+	public String getConferencePin() {
+		return conferencePin;
+	}
+	public void setConferencePin(String conferencePin) {
+		this.conferencePin = conferencePin;
 	}
     
 }

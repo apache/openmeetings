@@ -20,6 +20,7 @@ import org.hibernate.criterion.Order;
 
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.*;
+import org.openmeetings.app.hibernate.beans.sip.OpenXGReturnObject;
 import org.openmeetings.app.hibernate.beans.user.*;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
@@ -638,6 +639,15 @@ public class Roommanagement {
 				r.setIsModeratedRoom(isModeratedRoom);
 				
 				r.setDeleted("false");
+				
+				//handle SIP Issues
+				OpenXGReturnObject openXGReturnObject = OpenXGHttpClient.getInstance().openSIPgCreateConference();
+				
+				if (openXGReturnObject != null) {
+					r.setSipNumber(openXGReturnObject.getConferenceNumber());
+					r.setConferencePin(openXGReturnObject.getConferencePin());
+				}
+				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
@@ -655,8 +665,6 @@ public class Roommanagement {
 				if (roomModerators!=null) {
 					RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
 				}
-				
-				OpenXGHttpClient.getInstance().openSIPgCreateConference();
 				
 				return returnId;
 			}

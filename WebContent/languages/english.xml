@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Wrong password</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Please enter two identical passwords with minimum 6 chars</value>
+    <value>Please enter two identical passwords</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Wrong email</value>
@@ -3005,5 +3005,17 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1000" name="error user">
     <value>This Email is already used by another User.</value>
+  </string>
+  <string id="1001" name="room-admin">
+    <value>SIP-Settings</value>
+  </string>
+  <string id="1002" name="room-admin">
+    <value>The Conference Number and PIN is automatically created via the OpenXG RPC-Gateway</value>
+  </string>
+  <string id="1003" name="room-admin">
+    <value>SIP Number</value>
+  </string>
+  <string id="1004" name="room-admin">
+    <value>PIN</value>
   </string>
 </language>
