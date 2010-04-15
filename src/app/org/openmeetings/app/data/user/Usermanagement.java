@@ -525,7 +525,7 @@ public class Usermanagement {
 					
 					if (generateSipUserData) {
 						
-						UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, us.getAdresses().getEmail(), password);
+						UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, us.getAdresses().getEmail(), password, login);
 					
 						if (us.getUserSipData() == null) {
 							Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
@@ -1042,7 +1042,7 @@ public class Usermanagement {
 			
 			if (generateSipUserData) {
 				
-				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass);
+				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass, login);
 				
 				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
 				
@@ -1153,7 +1153,7 @@ public class Usermanagement {
 			
 			if (generateSipUserData) {
 				
-				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass);
+				UserSipData userSipData = OpenXGHttpClient.getInstance().openSIPgUserCreateUser(firstname, "", lastname, users.getAdresses().getEmail(), userpass, login);
 				
 				Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(userSipData);
 				

@@ -124,7 +124,7 @@ public class OpenXGCustomXMLMarshall {
 		
 		String stringToPost = "<?xml version=\"1.0\" ?>"+ 
 								"<methodCall>"+ 
-								"	<methodName>OpenSIPg.UserConferenceAdd</methodName>"+ 
+								"	<methodName>OpenSIPg.URIUserIDAdd</methodName>"+ 
 								"	<params>"+ 
 								"		<param>"+ 
 								"			<value>"+ 

@@ -60,7 +60,7 @@ public class OpenXGHttpClient {
 		    String email = "test@test.de";
 		    String password = "password";
 			
-		    UserSipData sipData = this.openSIPgUserCreateUser(first_name, middle_i, last_name, email, password);
+		    UserSipData sipData = this.openSIPgUserCreateUser(first_name, middle_i, last_name, email, password, "test");
 		
 		} catch (Exception err) {
 
@@ -81,7 +81,7 @@ public class OpenXGHttpClient {
 	 * @return
 	 */
 	public UserSipData openSIPgUserCreateUser(String first_name, String middle_i, 
-			String last_name, String email, String password) {
+			String last_name, String email, String login, String password) {
 		try {
 			
 			//Check if the OpenXG Gateway is enabled in general
@@ -154,18 +154,20 @@ public class OpenXGHttpClient {
 //		    	throw new Exception("You have no more numbers, you need to allocate more numbers and alter the Configuration value sip.phonerange");
 //		    }
 		    
-		    Long useridAsNumber = sipPhoneRangeStart + sipPhoneRangeCurrentIndex;
+//		    Long useridAsNumber = sipPhoneRangeStart + sipPhoneRangeCurrentIndex;
+//		    
+//		    log.debug("(sip_phonerange_start.getConf_value().length()) "+(sip_phonerange_start.getConf_value().length()+1));
+//		    
+//			//The userid == the Number allocated in National Format!
+//			//The userid is calculated on the number of available numbers in the range
+//		    String userid = String.format("%0"+(sip_phonerange_start.getConf_value().length())+"d", useridAsNumber);
 		    
-		    log.debug("(sip_phonerange_start.getConf_value().length()) "+(sip_phonerange_start.getConf_value().length()+1));
+		    String userid = login;
 		    
-			//The userid == the Number allocated in National Format!
-			//The userid is calculated on the number of available numbers in the range
-		    String userid = String.format("%0"+(sip_phonerange_start.getConf_value().length())+"d", useridAsNumber);
+//		    sipPhoneRangeCurrentIndex++;
+//		    sip_phonerange_currentindex.setConf_value(""+sipPhoneRangeCurrentIndex);
 		    
-		    sipPhoneRangeCurrentIndex++;
-		    sip_phonerange_currentindex.setConf_value(""+sipPhoneRangeCurrentIndex);
-		    
-		    Configurationmanagement.getInstance().updateConfig(sip_phonerange_currentindex);
+//		    Configurationmanagement.getInstance().updateConfig(sip_phonerange_currentindex);
 		    
 		    String digest = this.digest_calculate(new Object[]{client_id, userid, domain,
 						 first_name, middle_i, last_name, password, community_code,
@@ -201,7 +203,8 @@ public class OpenXGHttpClient {
     	        
         		UserSipData userSipData = new UserSipData();
         		
-        		userSipData.setUsername(sip_language_phonecode.getConf_value() + useridAsNumber);
+        		//userSipData.setUsername(sip_language_phonecode.getConf_value() + useridAsNumber);
+        		userSipData.setUsername(userid);
         		userSipData.setUserpass(password);
         		userSipData.setAuthId(userid);
         		
