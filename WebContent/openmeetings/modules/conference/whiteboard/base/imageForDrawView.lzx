@@ -102,11 +102,11 @@
 			//send notification to wml-loader
 			//this is send later then in normal objects cause it needs to be send after the image
 			//has been loaded completely
-			if (this.refObj.isWmlLoaderImage){
-				this.refObj.isWmlLoaderImage=false;
-                //Debug.write("1 onwmlLoaderSend.sendEvent( image )");
-				if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
-			}
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+            //    //Debug.write("1 onwmlLoaderSend.sendEvent( image )");
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
 		]]>
 	</handler>
 	<handler name="onerror" args="error">
@@ -133,10 +133,10 @@
 			//send notification to wml-loader
 			//this is send later then in normal objects cause it needs to be send after the image
 			//has been loaded completely
-			if (this.refObj.isWmlLoaderImage){
-				this.refObj.isWmlLoaderImage=false;
-				if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
-			}
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
 		]]>
 	</handler>
 	<handler name="ontimeout" args="error">
@@ -163,10 +163,10 @@
 			//send notification to wml-loader
 			//this is send later then in normal objects cause it needs to be send after the image
 			//has been loaded completely
-			if (this.refObj.isWmlLoaderImage){
-				this.refObj.isWmlLoaderImage=false;
-				if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
-			}
+			//if (this.refObj.isWmlLoaderImage){
+			//	this.refObj.isWmlLoaderImage=false;
+			//	if (this.refObj.onwmlLoaderSend) this.refObj.onwmlLoaderSend.sendEvent('image');
+			//}
 		]]>
 	</handler>	
 </class>

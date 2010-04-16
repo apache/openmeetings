@@ -69,6 +69,9 @@
 	
 	<method name="myinit">
 		<![CDATA[
+		canvas.mediaerrortimeout = 30000;
+		canvas.medialoadtimeout = 30000;
+		
 		if($debug) Debug.write("main.lzx/config.xml ondata",this);
 		
 		//Set Config-values by config.xml, see comments on config.xml
