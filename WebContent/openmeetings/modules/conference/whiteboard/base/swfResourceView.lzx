@@ -264,10 +264,10 @@
                 //send notification to wml-loader
                 //this is send later then in normal objects cause it needs to be send after the image
                 //has been loaded completely
-                if (this.parent.refObj.isWmlLoaderImage){
-                    this.parent.refObj.isWmlLoaderImage=false;
-                    if (this.parent.refObj.onwmlLoaderSend) this.parent.refObj.onwmlLoaderSend.sendEvent('swf');
-                }
+                //if (this.parent.refObj.isWmlLoaderImage){
+                //    this.parent.refObj.isWmlLoaderImage=false;
+                //    if (this.parent.refObj.onwmlLoaderSend) this.parent.refObj.onwmlLoaderSend.sendEvent('swf');
+                //}
             ]]>
         </handler>
         <handler name="ontimeout" args="error">
@@ -296,10 +296,10 @@
                 //send notification to wml-loader
                 //this is send later then in normal objects cause it needs to be send after the image
                 //has been loaded completely
-                if (this.parent.refObj.isWmlLoaderImage){
-                    this.parent.refObj.isWmlLoaderImage=false;
-                    if (this.parent.refObj.onwmlLoaderSend) this.parent.refObj.onwmlLoaderSend.sendEvent('swf');
-                }
+                //if (this.parent.refObj.isWmlLoaderImage){
+                //    this.parent.refObj.isWmlLoaderImage=false;
+                //    if (this.parent.refObj.onwmlLoaderSend) this.parent.refObj.onwmlLoaderSend.sendEvent('swf');
+                //}
             ]]>
         </handler> 
         
