@@ -103,8 +103,10 @@
 	<!-- methods for syncing events -->
     <netRemoteCallHib name="startNewObjectSyncProcess" funcname="whiteboardservice.startNewObjectSyncProcess"
         remotecontext="$once{ canvas.thishib }" >
+    	<attribute name="isStarting" value="false" type="boolean" />
     	<attribute name="uniqueObjectSyncName" value="" type="string" />
     	<netparam><method name="getValue">return parent.uniqueObjectSyncName;</method></netparam>
+        <netparam><method name="getValue">return parent.isStarting;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
             	//The onResult-Handler will be called be the rtmpconnection

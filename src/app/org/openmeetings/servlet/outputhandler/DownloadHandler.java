@@ -351,8 +351,8 @@ public class DownloadHandler extends HttpServlet {
 			}
 
 		} catch (Exception er) {
-			System.out.println("Error downloading: " + er);
-			er.printStackTrace();
+			log.error("Error downloading: " , er);
+			//er.printStackTrace();
 		}
 	}
 	

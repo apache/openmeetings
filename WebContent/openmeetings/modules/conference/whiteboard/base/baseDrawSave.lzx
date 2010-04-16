@@ -395,6 +395,8 @@
 	<!-- remoteClient will send a notification to moderator 
 		that he has completed loading -->
 	<method name="wmlloadingComplete">
+		if ($debug) Debug.warn("?? wmlloadingComplete ??");
+		//new lz.errorPopup(canvas,{error:"?? wmlloadingComplete ??"});
 		this.wmlLoadingCompleteMessage = new Array();
 		this.wmlLoadingCompleteMessage[0] = "whiteboard";
 		this.wmlLoadingCompleteMessage[1] = "wmlloadcomplete";

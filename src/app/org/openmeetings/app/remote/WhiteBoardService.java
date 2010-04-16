@@ -269,7 +269,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * 
 	 */
 	
-	public WhiteboardSyncLockObject startNewObjectSyncProcess(String object_id){
+	public void startNewObjectSyncProcess(String object_id, boolean isStarting){
 		try {
 			
 			log.debug("startNewObjectSyncprocess: "+object_id);
@@ -288,33 +288,32 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			syncListImage.put(currentClient.getPublicSID(), wSyncLockObject);
 			this.whiteBoardObjectListManager.setWhiteBoardImagesSyncListByRoomAndObjectId(room_id, object_id, syncListImage);
 			
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						//continue;
-	    					} else {
-								log.debug("sending :"+rcl);
-								if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
-									log.debug("sendObjectSyncFlag :"+rcl);
-									((IServiceCapableConnection) conn).invoke("sendObjectSyncFlag", new Object[] { wSyncLockObject },this);
+			//Do only send the Token to show the Loading Splash for the initial-Request that starts the loading
+			if (isStarting) {
+				Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+				for (Set<IConnection> conset : conCollection) {
+					for (IConnection conn : conset) {
+						if (conn != null) {
+							if (conn instanceof IServiceCapableConnection) {
+								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    						//continue;
+		    					} else {
+									log.debug("sending :"+rcl);
+									if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
+										log.debug("sendObjectSyncFlag :"+rcl);
+										((IServiceCapableConnection) conn).invoke("sendObjectSyncFlag", new Object[] { wSyncLockObject },this);
+									}
 								}
 							}
-						}
-					}		
-				}
-			}	
-			
-			return wSyncLockObject;
-			
+						}		
+					}
+				}	
+			}
 			
 		} catch (Exception err) {
 			log.error("[startNewObjectSyncProcess]",err);
 		}
-		return null;
 	}
 	
 	public int sendCompletedObjectSyncEvent(String object_id) {

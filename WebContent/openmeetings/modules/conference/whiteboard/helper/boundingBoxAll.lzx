@@ -293,7 +293,9 @@
 				this.parent.whiteboardRef.editTextByValues(this.parent.objRef,this.parent.objRef.name,this.parent.objRef.text,x,y,this.parent.objRef.width,this.parent.objRef.height);
 			}
 		</handler>		
+		<!--
 		<labelTooltip labelid="252" />
+		 -->
 	</view>
 	
     <!--

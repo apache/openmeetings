@@ -15,6 +15,7 @@
     <method name="loadSWFPresentationSynced" args="url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName">
   		var now = new Date();
   		//This invokes a Method which is in the remoteWhiteboard.lzx
+  		this.startNewObjectSyncProcess.isStarting = true;
   		this.startNewObjectSyncProcess.uniqueObjectSyncName = fileName + now.getTime();
   		this.startNewObjectSyncProcess.doCall();
         //if ($debug) Debug.write("loadSWFPresentationSynced",url,fileName,moduleName,parentPath,room,domain,slideNumber,standardFileName);
@@ -146,6 +147,7 @@
      -->
     <method name="addSWFToLayerHistorySynced" args="actionObject,refObj">
         this.baseactionobjectList.push(actionObject);	
+  		this.startNewObjectSyncProcess.isStarting = false;
   		this.startNewObjectSyncProcess.uniqueObjectSyncName = actionObject[17];
   		this.startNewObjectSyncProcess.doCall();        
    		this.addPresentationToLayer(refObj,actionObject[1],actionObject[actionObject.length-1],

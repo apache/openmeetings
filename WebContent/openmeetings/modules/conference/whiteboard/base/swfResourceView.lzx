@@ -240,6 +240,9 @@
         <handler name="onerror" args="error">
             <![CDATA[
             ////Debug.write("onerror "+error);
+            
+            
+                new lz.errorPopup(canvas,{error:"onerror SWF!! "+error});
                 
                 this.parent.initwidth = this.width;
                 this.parent.initheight = this.height;
@@ -270,6 +273,8 @@
         <handler name="ontimeout" args="error">
             <![CDATA[
             ////Debug.write("ontimeout "+error);
+            
+                new lz.errorPopup(canvas,{error:"ontimeout SWF!! "+error});
                 
                 this.parent.initwidth = this.width;
                 this.parent.initheight = this.height;

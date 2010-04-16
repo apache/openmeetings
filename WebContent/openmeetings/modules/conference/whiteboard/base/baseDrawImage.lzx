@@ -57,6 +57,7 @@
   		if ($debug) Debug.write("urlname: ",urlname);
   		var now = new Date();
   		//This invokes a Method which is in the remoteWhiteboard.lzx
+  		this.startNewObjectSyncProcess.isStarting = true;
   		this.startNewObjectSyncProcess.uniqueObjectSyncName = fileName + now.getTime();
   		this.startNewObjectSyncProcess.doCall();
   		this.addNewImage(urlname,posx,posy,baseurl,fileName,
@@ -199,6 +200,7 @@
   		if ($debug) Debug.write("addImageToLayerHistory: ",actionObject,refObj);
   		//start sync process using the remote uniqueObjectSyncName as identifier
   		//This invokes a Method which is in the remoteWhiteboard.lzx
+  		this.startNewObjectSyncProcess.isStarting = false;
   		this.startNewObjectSyncProcess.uniqueObjectSyncName = actionObject[8];
   		this.startNewObjectSyncProcess.doCall();
   		this.addImageToLayer(refObj,actionObject[actionObject.length-1],actionObject[1],
