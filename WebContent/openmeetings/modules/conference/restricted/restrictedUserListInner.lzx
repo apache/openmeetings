@@ -71,7 +71,7 @@
             
             this.sortUserList();
             
-            this._table.renderContent();
+            this._table.scheduleRenderContent();
             
             this.moderationPanel.updateIcons();
             
@@ -268,6 +268,9 @@
         
         <attribute name="isLoaded" value="false" type="boolean"/>
         
+        <attribute name="renderDelegate" value="null"/>
+        <attribute name="renderDelegateStarted" value="false" type="boolean"/>
+        
         <handler name="onheight" args="h">
         	if (this.isLoaded) {
         		if ($debug) Debug.write("isLoaded True onheight ",h);
@@ -282,8 +285,25 @@
         
         <handler name="oninit">
         	this.resizeDelegate = new LzDelegate( this, "renderByHeightChange" );
+        	this.renderDelegate = new LzDelegate( this, "renderByNewUser" );
             this.addHeaderItem(1001,260);
         </handler>
+        
+        <method name="scheduleRenderContent">
+        	if ($debug) Debug.warn("scheduleRenderContent ");
+        	if (!this.renderDelegateStarted) {
+                this.renderDelegateStarted = true;
+                lz.Timer.addTimer( this.renderDelegate, 1000 );
+            } else {
+            	if ($debug) Debug.warn("More then one user was arriving within 1 Second - Postpone the Rendering to prevent too much reloading");
+                lz.Timer.resetTimer( this.renderDelegate, 1000 );
+            }
+        </method>
+        
+        <method name="renderByNewUser" args="refObj">
+        	this.renderDelegateStarted = false;
+        	this.renderContent();
+        </method>
         
         <method name="renderByHeightChange" args="refObj">
         	
