@@ -2,122 +2,122 @@
 <library>
 
 <class name="restrictedUserListInner" extends="baseRoomInnerList"  
-	   width="$once{ parent.width }" height="${ parent.height }" 
+       width="$once{ parent.width }" height="${ parent.height }" 
        bgcolor="$once{ canvas.basebgcolorizer }" >
-	
-	<attribute name="selectedItem" value="null" />
-	
-	<attribute name="listType" value="eventUserListTable" type="string" />
-	
-	<attribute name="sortType" value="alphabetical" type="string" />
-	
-	<handler name="oninit">
-		<![CDATA[
+    
+    <attribute name="selectedItem" value="null" />
+    
+    <attribute name="listType" value="eventUserListTable" type="string" />
+    
+    <attribute name="sortType" value="alphabetical" type="string" />
+    
+    <handler name="oninit">
+        <![CDATA[
             
-			this.initList();
-		]]>
-	</handler>
-	
+            this.initList();
+        ]]>
+    </handler>
+    
     <!-- clip="true" -->
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
         
     <method name="initialAddItem" args="object">
-    	<![CDATA[
+        <![CDATA[
             //if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
             
             //Check for duplicates
             
-	        if (object.isSuperModerator) {
-	            object.lastname += " *";
-	        }
-	        
-	        //See setRoomValues
+            if (object.isSuperModerator) {
+                object.lastname += " *";
+            }
+            
+            //See setRoomValues
             //object.selfItem = false;
-	        
-	        //Add item to list
-	        if (this._table.renderList == null) {
-	        	this._table.renderList = new Array();
-	        }
-	        
-	        object.isSelected = false;
-	        
-	        this._table.renderList.push(object);
-	        
+            
+            //Add item to list
+            if (this._table.renderList == null) {
+                this._table.renderList = new Array();
+            }
+            
+            object.isSelected = false;
+            
+            this._table.renderList.push(object);
+            
         ]]>
     </method>
     
      <method name="addItem" args="object">
-    	<![CDATA[
+        <![CDATA[
             if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
             
             //Check for duplicates
             
-	        if (object.isSuperModerator) {
-	            object.lastname += " *";
-	        }
-	        
-	        object.selfItem = false;
+            if (object.isSuperModerator) {
+                object.lastname += " *";
+            }
             
-	        //Add item to list
-	        if (this._table.renderList == null) {
-	        	this._table.renderList = new Array();
-	        }
-	        
-	        object.isSelected = false;
-	        
-	        this._table.renderList.push(object);
-	        
-	        this.sortUserList();
-	        
-	        this._table.renderContent();
-	        
-	        this.moderationPanel.updateIcons();
-	        
+            object.selfItem = false;
+            
+            //Add item to list
+            if (this._table.renderList == null) {
+                this._table.renderList = new Array();
+            }
+            
+            object.isSelected = false;
+            
+            this._table.renderList.push(object);
+            
+            this.sortUserList();
+            
+            this._table.renderContent();
+            
+            this.moderationPanel.updateIcons();
+            
         ]]>
     </method>
     
     <method name="sortAndRenderList">
-    	this.sortUserList();
+        this.sortUserList();
         this._table.renderContent();
     </method>
     
     <!--
     
-   			for (var i=0;i<this._table.innerList.subviews.length;i++) {
-            	if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
-            		//if ($debug) Debug.warn("Already on List, do not add twice");
-            		return;
-            	}
+            for (var i=0;i<this._table.innerList.subviews.length;i++) {
+                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+                    //if ($debug) Debug.warn("Already on List, do not add twice");
+                    return;
+                }
             }
     
-			if (this.listType == "eventUserListTable") {
-	            new lz.eventUserListItem(this._table.innerList,{
-	    	            user_id:object.user_id,
-	    	            firstname:object.firstname,
+            if (this.listType == "eventUserListTable") {
+                new lz.eventUserListItem(this._table.innerList,{
+                        user_id:object.user_id,
+                        firstname:object.firstname,
                         isSuperModerator:object.isSuperModerator,
-	    	            lastname:lastname,
-	    	            refObj:object,
-	    	            connectedSince:object.connectedSince,
-	    	            isMod:object.isMod,
-	    	            streamid:object.streamid,
-	    	            username:object.username,
-	    	            formatedDate:object.formatedDate
-	                });
+                        lastname:lastname,
+                        refObj:object,
+                        connectedSince:object.connectedSince,
+                        isMod:object.isMod,
+                        streamid:object.streamid,
+                        username:object.username,
+                        formatedDate:object.formatedDate
+                    });
             } else if (this.listType == "eventUserListTableWithNames") {
-	            new lz.eventUserListItemWithNames(this._table.innerList,{
-	    	            user_id:object.user_id,
-	    	            firstname:object.firstname,
+                new lz.eventUserListItemWithNames(this._table.innerList,{
+                        user_id:object.user_id,
+                        firstname:object.firstname,
                         isSuperModerator:object.isSuperModerator,
-	    	            lastname:lastname,
-	    	            refObj:object,
-	    	            connectedSince:object.connectedSince,
-	    	            isMod:object.isMod,
-	    	            streamid:object.streamid,
-	    	            username:object.username,
-	    	            formatedDate:object.formatedDate
-	                });
+                        lastname:lastname,
+                        refObj:object,
+                        connectedSince:object.connectedSince,
+                        isMod:object.isMod,
+                        streamid:object.streamid,
+                        username:object.username,
+                        formatedDate:object.formatedDate
+                    });
             }
             
             this.sortUserList();    
@@ -127,7 +127,7 @@
         <![CDATA[ 
             
             if (this.sortType == "alphabetical") {
-            	function sortByName(a,b) {
+                function sortByName(a,b) {
                    
                     if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
                     else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
@@ -139,56 +139,56 @@
                 
             } else {
                 function sortByStreamId(a,b) {
-        	   	   
-            	   	if(Number(a.streamid) == Number(b.streamid)) return 0;
+                   
+                    if(Number(a.streamid) == Number(b.streamid)) return 0;
                     else if(Number(a.streamid) > Number(b.streamid)) return 1;
                     else return -1;
-        	   	
+                
                 }
-        	
+            
                 this._table.renderList.sort(sortByStreamId);
             }
             
-    	]]>
+        ]]>
     </method>
     
     <method name="initList">
-    	if ($debug) Debug.write("initList :: restrictedUserListInner");
-    	//new lz[this.listType](this,{name:'_table'});
-    	//this.moderationPanel.bringToFront();
+        if ($debug) Debug.write("initList :: restrictedUserListInner");
+        //new lz[this.listType](this,{name:'_table'});
+        //this.moderationPanel.bringToFront();
     </method>
     
     <method name="clearList">
-    	if ($debug) Debug.write("clearList :: restrictedUserListInner");
+        if ($debug) Debug.write("clearList :: restrictedUserListInner");
         //this._table.destroy();
         //this.initList();
     </method>
     
     <method name="disconnectclient" args="publicSID">
-    	<![CDATA[
-    	
-    	   for (var i=0;i<this._table.renderList.length;i++) {
-    	   	
-    	   	   if (this._table.renderList[i].publicSID == publicSID) {
-    	   	   	   
-    	   	   	   this._table.renderList.splice(i,1);
-    	   	   	
-    	   	   	   break;
-    	   	   }
-    	   	
-    	   }
-    	
-    	   this._table.renderContent();
+        <![CDATA[
+        
+           for (var i=0;i<this._table.renderList.length;i++) {
+            
+               if (this._table.renderList[i].publicSID == publicSID) {
+                   
+                   this._table.renderList.splice(i,1);
+                
+                   break;
+               }
+            
+           }
+        
+           this._table.renderContent();
             
            this.moderationPanel.updateIcons();
-    	]]>
+        ]]>
     </method>
     
     
     <method name="getVideoObjectByPublicSID" args="publicSID">
-    	
-    	if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
-    	
+        
+        if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
+        
     </method>
     <!--- get a Objects List Item
         @param string publicSID publicSID
@@ -219,10 +219,10 @@
      -->
     
     <method name="selectItem" args="itemObj">
-    	if ($debug) Debug.write("selectItem ",itemObj);
-    	
-    	if (canvas.ismoderator) {
-    		
+        if ($debug) Debug.write("selectItem ",itemObj);
+        
+        if (canvas.ismoderator) {
+            
             if (this.selectedItem != null) {
                 this.selectedItem.deselect();
             }
@@ -231,17 +231,17 @@
                 this.selectedItem = itemObj;
                 this.selectedItem.select();
             }
-        	
-    	}
-    	
+            
+        }
+        
     </method>
     
     <view name="userStatus" layout="axis:y">
-    	<view>
-    		 <view resource="userstatus_multiframe_rsc" frame="1" />
-    		 <labelText x="16" labelid="677" />
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="1" />
+             <labelText x="16" labelid="677" />
         </view>
-    	<view>
+        <view>
              <view resource="userstatus_multiframe_rsc" frame="2" />
              <labelText x="16" labelid="678" />
         </view>
@@ -252,7 +252,7 @@
     </view>
     
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
-						  x="$once{ parent.width-this.width-4 }" y="2" />
+                          x="$once{ parent.width-this.width-4 }" y="2" />
     
     
     <turnOverListOrderedPaged name="_table" showTopBar="false" x="1"
@@ -260,20 +260,51 @@
              y="30" itemHeight="40" listLabelId="1001" headerHeight="0"
              listItemName="restrictedUserListItem" showHScrollbar="hidden"
              multiselect="false" width="268">
-    	
-    	<attribute name="currentSelectedIndex" value="null" />
-    	
-	    <handler name="oninit">
-	        this.addHeaderItem(1001,260);
-	    </handler>
-	    
-	    <handler name="onclickedItem" args="refObj">
-	    	<![CDATA[
-	    	
+        
+        <attribute name="currentSelectedIndex" value="null" />
+        
+        <attribute name="resizeDelegate" value="null"/>
+        <attribute name="resizeDelegateStarted" value="false" type="boolean"/>
+        
+        <attribute name="isLoaded" value="false" type="boolean"/>
+        
+        <handler name="onheight" args="h">
+        	if (this.isLoaded) {
+        		if ($debug) Debug.write("isLoaded True onheight ",h);
+            	if (!this.resizeDelegateStarted) {
+            		this.resizeDelegateStarted = true;
+            		lz.Timer.addTimer( this.resizeDelegate, 1000 );
+            	} else {
+            		lz.Timer.resetTimer( this.resizeDelegate, 1000 );
+            	}
+        	}
+        </handler>
+        
+        <handler name="oninit">
+        	this.resizeDelegate = new LzDelegate( this, "renderByHeightChange" );
+            this.addHeaderItem(1001,260);
+        </handler>
+        
+        <method name="renderByHeightChange" args="refObj">
+        	
+        	if ($debug) Debug.write("..:: renderByHeightChange ::..",refObj);
+        	
+        	lz.Timer.removeTimer( this.resizeDelegate );
+        	this.resizeDelegateStarted = false;
+        	
+        	this.clearList();
+        	this._innerlist._inn.initItems(this.listItemName);
+        	
+        	this.renderContent();
+        </method>
+        
+        <handler name="onclickedItem" args="refObj">
+            <![CDATA[
+            
                 if ($debug) Debug.write("onclickedItem ",refObj);
                 
                 if (this.currentSelectedIndex != null) {
-                	this.renderList[this.currentSelectedIndex]["isselected"] = false;
+                    this.renderList[this.currentSelectedIndex]["isselected"] = false;
                 }
                 
                 this.currentSelectedIndex = refObj.itemId;
@@ -282,46 +313,50 @@
                 
                 var list = this._innerlist._inn._inn;
                 for (var i=0;i<list.subviews.length;i++){
-                	
-                	list.subviews[i].deselect();
-                	list.subviews[i].hideModeratorIcons();
-                	
+                    
+                    list.subviews[i].deselect();
+                    list.subviews[i].hideModeratorIcons();
+                    
                 }
                 
                 refObj.select();
                 refObj.initModeratorIcons();
-	    	
-	    	]]>
-	    </handler>
-	    
-		<method name="renderContent">
-	        <![CDATA[
-	            this.isLoaded = true;
-	            var list = this._innerlist._inn._inn;
-	            //this.renderList = records;
-	            var records = this.renderList;
-	            this._innerlist._inn.setAttribute("y",0);
-	            this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
-	            this._innerlist._inn.resetItems();
-	            
-	            if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
-	            
-	            this._records.setAttribute("text",records.length);
-	            
-	            for (var i=0;i<list.subviews.length;i++){
-	                
+            
+            ]]>
+        </handler>
+        
+        <method name="renderContent">
+            <![CDATA[
+                this.isLoaded = true;
+                var list = this._innerlist._inn._inn;
+                
+                if (this.renderList == null) {
+                	this.renderList = new Array();
+                }
+                //this.renderList = records;
+                var records = this.renderList;
+                this._innerlist._inn.setAttribute("y",0);
+                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+                this._innerlist._inn.resetItems();
+                
+                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+                
+                this._records.setAttribute("text",records.length);
+                
+                for (var i=0;i<list.subviews.length;i++){
+                    
                     //if (i % 2 == 0) {
                     //    list.subviews[i].setIsSecond(true);
                     //} else {
                     //    list.subviews[i].setIsSecond(false);
                     //}
                     
-	                if (records.length > i) {
-	                    
-	                    list.subviews[i].setAttribute("clickable",true);
-	                    list.subviews[i].refObj = records[i];
-	                    
-	                    if (records[i]["isselected"] && records[i].isselected) {
+                    if (records.length > i) {
+                        
+                        list.subviews[i].setAttribute("clickable",true);
+                        list.subviews[i].refObj = records[i];
+                        
+                        if (records[i]["isselected"] && records[i].isselected) {
                             list.subviews[i].isselected = true;
                             list.subviews[i].onmouseout.sendEvent();
                             list.subviews[i].initModeratorIcons();
@@ -331,48 +366,48 @@
                             list.subviews[i].hideModeratorIcons();
                         }
                         
-	                    list.subviews[i].setAttribute("user_id",records[i].user_id);
-	    	            list.subviews[i].setAttribute("firstname",records[i].firstname);
+                        list.subviews[i].setAttribute("user_id",records[i].user_id);
+                        list.subviews[i].setAttribute("firstname",records[i].firstname);
                         list.subviews[i].setAttribute("isSuperModerator",records[i].isSuperModerator);
-	    	            list.subviews[i].setAttribute("lastname",records[i].lastname);
-	    	            list.subviews[i].setAttribute("connectedSince",records[i].connectedSince);
-	    	            list.subviews[i].setAttribute("canDraw",records[i].canDraw);
-	    	            list.subviews[i].setAttribute("isMod",records[i].isMod);
-	    	            list.subviews[i].isBroadcasting = records[i].isBroadcasting;
-	    	            list.subviews[i].setAttribute("selfItem",records[i].selfItem);
-	    	            list.subviews[i].streamid = records[i].streamid;
-	    	            list.subviews[i].setAttribute("username",records[i].username);
-	    	            list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
-	                    
-	                    list.subviews[i].setAttribute("itemId",i);
-	                    
-	                } else {
-	                    
-	                    list.subviews[i].refObj = null;
-	                    
-	                    list.subviews[i].isselected = false;
+                        list.subviews[i].setAttribute("lastname",records[i].lastname);
+                        list.subviews[i].setAttribute("connectedSince",records[i].connectedSince);
+                        list.subviews[i].setAttribute("canDraw",records[i].canDraw);
+                        list.subviews[i].setAttribute("isMod",records[i].isMod);
+                        list.subviews[i].isBroadcasting = records[i].isBroadcasting;
+                        list.subviews[i].setAttribute("selfItem",records[i].selfItem);
+                        list.subviews[i].streamid = records[i].streamid;
+                        list.subviews[i].setAttribute("username",records[i].username);
+                        list.subviews[i].setAttribute("formatedDate",records[i].formatedDate);
+                        
+                        list.subviews[i].setAttribute("itemId",i);
+                        
+                    } else {
+                        
+                        list.subviews[i].refObj = null;
+                        
+                        list.subviews[i].isselected = false;
                         list.subviews[i].onmouseout.sendEvent();
                         list.subviews[i].hideModeratorIcons();
-	                    
-	                    list.subviews[i].setAttribute("user_id","");
-	    	            list.subviews[i].setAttribute("firstname","");
+                        
+                        list.subviews[i].setAttribute("user_id","");
+                        list.subviews[i].setAttribute("firstname","");
                         list.subviews[i].setAttribute("isSuperModerator","");
-	    	            list.subviews[i].setAttribute("lastname","");
-	    	            list.subviews[i].setAttribute("connectedSince","");
-	    	            list.subviews[i].setAttribute("canDraw",false);
-	    	            list.subviews[i].setAttribute("isMod",false);
-	    	            list.subviews[i].isBroadcasting = false;
-	    	            list.subviews[i].setAttribute("selfItem",false);
-	    	            list.subviews[i].streamid = "";
-	    	            list.subviews[i].setAttribute("username","");
-	    	            list.subviews[i].setAttribute("formatedDate","");
+                        list.subviews[i].setAttribute("lastname","");
+                        list.subviews[i].setAttribute("connectedSince","");
+                        list.subviews[i].setAttribute("canDraw",false);
+                        list.subviews[i].setAttribute("isMod",false);
+                        list.subviews[i].isBroadcasting = false;
+                        list.subviews[i].setAttribute("selfItem",false);
+                        list.subviews[i].streamid = "";
+                        list.subviews[i].setAttribute("username","");
+                        list.subviews[i].setAttribute("formatedDate","");
                         list.subviews[i].setAttribute("itemId","");
                         
-	                    list.subviews[i].setAttribute("clickable",false);
-	                    
-	                }
-	                
-	            }
+                        list.subviews[i].setAttribute("clickable",false);
+                        
+                    }
+                    
+                }
                 
                 //  var x = Math.round(value.childList[i].coordX);
                 //  var y = Math.round(value.childList[i].coordY);
@@ -383,54 +418,54 @@
                 //var name = value.resultAddress[i].street+" "+value.resultAddress[i].houseNumber+","+value.resultAddress[i].postCode+" "+value.resultAddress[i].city+" ("+value.resultAddress[i].cityDistrict+" "+value.resultAddress[i].country+" )";
                 //////if ($debug)  //Debug.write("name,x,y ",name,x,y);
                 //this.parent._ausgabelisteMapAdress.addtableItem(x,y,name);
-	            
-	            //this.sendInitialWidthUpdate();
-	            
-	        ]]>
-	    </method>	
-	    
-	    <handler name="onScrollItem" args="item">
-	        <![CDATA[
-	            if (this.renderList.length > item.itemId) {
-	                item.setAttribute("clickable",true);
-	                item.refObj = this.renderList[item.itemId];
-	                
+                
+                //this.sendInitialWidthUpdate();
+                
+            ]]>
+        </method>   
+        
+        <handler name="onScrollItem" args="item">
+            <![CDATA[
+                if (this.renderList.length > item.itemId) {
+                    item.setAttribute("clickable",true);
+                    item.refObj = this.renderList[item.itemId];
+                    
                     //if (item.itemId % 2 == 0) {
                     //    item.setIsSecond(true);
                     //} else {
                     //    item.setIsSecond(false);
                     //}
                     
-	                if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
-	                    item.isselected = true;
-	                    item.onmouseout.sendEvent();
-	                    item.initModeratorIcons();
-	                } else {
-	                    item.isselected = false;
-	                    item.onmouseout.sendEvent();
-	                    item.hideModeratorIcons();
-	                }
-	                
-	                if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
-	                
-	                item.setAttribute("user_id",this.renderList[item.itemId].user_id);
-    	            item.setAttribute("firstname",this.renderList[item.itemId].firstname);
+                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+                        item.isselected = true;
+                        item.onmouseout.sendEvent();
+                        item.initModeratorIcons();
+                    } else {
+                        item.isselected = false;
+                        item.onmouseout.sendEvent();
+                        item.hideModeratorIcons();
+                    }
+                    
+                    if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
+                    
+                    item.setAttribute("user_id",this.renderList[item.itemId].user_id);
+                    item.setAttribute("firstname",this.renderList[item.itemId].firstname);
                     item.setAttribute("isSuperModerator",this.renderList[item.itemId].isSuperModerator);
-    	            item.setAttribute("lastname",this.renderList[item.itemId].lastname);
-    	            item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
-    	            item.setAttribute("canDraw",this.renderList[item.itemId].canDraw);
-    	            item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
-    	            item.setAttribute("isMod",this.renderList[item.itemId].isMod);
-    	            item.setAttribute("selfItem",this.renderList[item.itemId].selfItem);
-    	            item.streamid = this.renderList[item.itemId].streamid;
-    	            item.setAttribute("username",this.renderList[item.itemId].username);
-    	            item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
-	                
-	                item.setAttribute("itemId",item.itemId);
-	                
-	                item.updateIconByModScroll();
-	                    
-	            } else {
+                    item.setAttribute("lastname",this.renderList[item.itemId].lastname);
+                    item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
+                    item.setAttribute("canDraw",this.renderList[item.itemId].canDraw);
+                    item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
+                    item.setAttribute("isMod",this.renderList[item.itemId].isMod);
+                    item.setAttribute("selfItem",this.renderList[item.itemId].selfItem);
+                    item.streamid = this.renderList[item.itemId].streamid;
+                    item.setAttribute("username",this.renderList[item.itemId].username);
+                    item.setAttribute("formatedDate",this.renderList[item.itemId].formatedDate);
+                    
+                    item.setAttribute("itemId",item.itemId);
+                    
+                    item.updateIconByModScroll();
+                        
+                } else {
                     
                     //if (item.itemId % 2 == 0) {
                     //    item.setIsSecond(true);
@@ -438,42 +473,44 @@
                     //    item.setIsSecond(false);
                     //}
                     
-	            	item.isselected = false;
+                    item.isselected = false;
                     item.onmouseout.sendEvent();
                     item.hideModeratorIcons();
                     
-	                item.refObj = null;
-	                
+                    item.refObj = null;
+                    
                     item.setAttribute("user_id","");
-    	            item.setAttribute("firstname","");
+                    item.setAttribute("firstname","");
                     item.setAttribute("isSuperModerator","");
-    	            item.setAttribute("lastname","");
-    	            item.setAttribute("connectedSince","");
-    	            item.setAttribute("canDraw",false);
-    	            item.setAttribute("isMod",false);
-    	            item.isBroadcasting = false;
-    	            item.setAttribute("selfItem",false);
-    	            item.streamid = ""
-    	            item.setAttribute("username","");
-    	            item.setAttribute("formatedDate","");
-    	            
-	                item.setAttribute("itemId","");
-	                
-	                item.setAttribute("clickable",false);
-	            }
+                    item.setAttribute("lastname","");
+                    item.setAttribute("connectedSince","");
+                    item.setAttribute("canDraw",false);
+                    item.setAttribute("isMod",false);
+                    item.isBroadcasting = false;
+                    item.setAttribute("selfItem",false);
+                    item.streamid = ""
+                    item.setAttribute("username","");
+                    item.setAttribute("formatedDate","");
+                    
+                    item.setAttribute("itemId","");
+                    
+                    item.setAttribute("clickable",false);
+                }
                 
-	        ]]>
-	    </handler>
-    	
+            ]]>
+        </handler>
+        
     </turnOverListOrderedPaged> 
        
     <!--
     <eventUserListTable name="_table" /> 
      -->
      
-    <view name="moderationPanel" height="40" clip="true" y="${ parent.height - this.height - 2 }">
-    	
-    	<handler name="onismoderator" reference="canvas" args="m">
+    <view name="moderationPanel" clip="true" 
+          height="${ (canvas.ismoderator) ? 40 : 0 }"
+          y="${ parent.height - this.height - 2 }">
+        
+        <handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
             <![CDATA[
                 //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
@@ -491,11 +528,11 @@
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
-                    	vList[i].refObj.canDraw = drawObject.canDraw;
-                    	vList[i].canDraw = drawObject.canDraw;
-                    	vList[i].updateIconByModScroll();
-                    	vList[i].updateModeratorIcons();
-                    	break;
+                        vList[i].refObj.canDraw = drawObject.canDraw;
+                        vList[i].canDraw = drawObject.canDraw;
+                        vList[i].updateIconByModScroll();
+                        vList[i].updateModeratorIcons();
+                        break;
                     }
                 }
                 
@@ -511,17 +548,17 @@
         </handler>
         
         <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
-        	<![CDATA[
-        	
-        	   if ($debug) Debug.write(" :: onlastBroadCastingUser :: ");
-            	
-            	if (!userObject.isBroadcasting) {
-            		//Stop Broadcasting and close Dialog
-            		//Search, stop and remove video
-            		parent.parent.removeVideoByUser(userObject);
-            	}
-            	
-            	//search for the user and update its drawStatusIcon
+            <![CDATA[
+            
+               if ($debug) Debug.write(" :: onlastBroadCastingUser :: ");
+                
+                if (!userObject.isBroadcasting) {
+                    //Stop Broadcasting and close Dialog
+                    //Search, stop and remove video
+                    parent.parent.removeVideoByUser(userObject);
+                }
+                
+                //search for the user and update its drawStatusIcon
                 var vList = parent._table._innerlist._inn._inn.subviews;
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
@@ -547,31 +584,31 @@
         </handler>
         
         <!--
-    		if (canvas.ismoderator) {
-        		this.showItem.doStart();
-        	} else {
-        		this.setAttribute("height",0);
-        	}
-        	
-        	var vList = parent._table.innerList.subviews;
-            	
-        	for (var i=0;i<vList.length;i++) {
-        		vList[i].updateIconByMod();
-        	}
-    	 -->
-    	 
+            if (canvas.ismoderator) {
+                this.showItem.doStart();
+            } else {
+                this.setAttribute("height",0);
+            }
+            
+            var vList = parent._table.innerList.subviews;
+                
+            for (var i=0;i<vList.length;i++) {
+                vList[i].updateIconByMod();
+            }
+         -->
+         
         <method name="updateIcons">
-        	<![CDATA[
-        	
-        	    if ($debug) Debug.write(" :: updateIcons :: ");
-        	    
-        	    //var vList = parent._table.renderList;
+            <![CDATA[
+            
+                if ($debug) Debug.write(" :: updateIcons :: ");
+                
+                //var vList = parent._table.renderList;
                 for (var i=0;i<parent._table.renderList.length;i++) {
                 
                     for (var k=0;k<canvas.newModeratorList.length;k++) {
-                    	
-                    	var item = canvas.newModeratorList[k];
-                    	
+                        
+                        var item = canvas.newModeratorList[k];
+                        
                         if (parent._table.renderList[i].publicSID == item.publicSID) {
                             
                             if (parent._table.renderList[i].isMod == false) {
@@ -586,13 +623,13 @@
                             }
                             
                         }
-                    	
+                        
                     }
                     
                     for (var k=0;k<canvas.removeModeratorList.length;k++) {
                         
-                    	var item = canvas.removeModeratorList[k];
-                    	
+                        var item = canvas.removeModeratorList[k];
+                        
                         if (parent._table.renderList[i].publicSID == item.publicSID) {
                             
                             if (parent._table.renderList[i].isMod == true) {
@@ -618,9 +655,9 @@
                 //    vList[i].updateIconByMod();
                 //    vList[i].updateModeratorIcons();
                 //}
-        	
-            	parent._applyAndStatusIcons.updateIcons();
-        	]]>
+            
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
         </method>
         
         <!--
@@ -666,25 +703,25 @@
          -->                  
         
         <method name="getItemByPublicSID" args="publicSID">
-        	<![CDATA[
+            <![CDATA[
                 var vList = parent._table._innerlist._inn._inn.subviews;
                 
                 for (var i=0;i<vList.length;i++) {
                     if (vList[i].refObj.publicSID == publicSID) {
-                    	return vList[i];
+                        return vList[i];
                     }
                 }
                 
                 return null;
-        	]]>
+            ]]>
         </method>
         
         <labelText labelid="680" width="270" x="0" multiline="true" y="0" />
-    	
-    	<!--
-    	<animator name="showItem" attribute="height" 
-    			  to="40" duration="1000" start="false" />
-	     -->
+        
+        <!--
+        <animator name="showItem" attribute="height" 
+                  to="40" duration="1000" start="false" />
+         -->
     </view>
 
 </class>
