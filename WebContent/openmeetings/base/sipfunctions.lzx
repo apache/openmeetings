@@ -7,6 +7,8 @@
 var appletIsLoaded = false;
 var returnObject = null
 
+var returnObjectDialer = null
+
 flash.external.ExternalInterface.addCallback("sipStatusMessage", null, sipStatusMessage);
 flash.external.ExternalInterface.addCallback("sipLoginSuccess", null, sipLoginSuccess);
 flash.external.ExternalInterface.addCallback("sipLoginFail", null, sipLoginFail);
@@ -101,6 +103,57 @@ function registerSIPUser(userSipData) {
     if ($debug) Debug.write("loginSipUser :: ");
     
     lz.Browser.callJS("register",callbackregister);
+    
+}
+
+
+function callDTMFButton(returnObjectDialerRef,number) {
+    
+    returnObjectDialer = returnObjectDialerRef;
+    
+    if ($debug) Debug.write("callDTMFButton :1: ",number);
+    
+    lz.Browser.callJS("DTMFButton",callbackDTMFButton,number);
+    
+}
+
+function callbackDTMFButton(returnValue) {
+                    
+    if ($debug) Debug.write("callbackDTMFButton ",returnValue);
+    
+    returnObjectDialer.doNextSipNumber();
+    
+}
+
+
+function preCustomStartCall() {
+    
+    //preCustomStartCall(); startCall();
+    lz.Browser.callJS("preCustomStartCall",preCustomStartCallBack);
+    
+}
+
+function preCustomStartCallBack(returnValue) {
+    
+	if ($debug) Debug.write("preCustomStartCallBack ",returnValue);
+	
+    //preCustomStartCall(); startCall();
+    startCall();
+    
+}
+
+function startCall() {
+    
+    //preCustomStartCall(); startCall();
+    lz.Browser.callJS("startCall",startCallCallBack);
+    
+}
+
+function startCallCallBack(returnValue) {
+    
+    if ($debug) Debug.write("startCallCallBack ",returnValue);
+    
+    returnObjectDialer.ringring();
     
 }
 

@@ -286,6 +286,10 @@ public class OpenXGHttpClient {
 		    
 		    //"0", "2147483647",
 		    
+		    //permanent conferences
+		    starttime = 0;
+		    endTime = 2147483647;
+		    
 		    String digest = this.digest_calculate(new Object[]{client_id, "067201101", domain, ""+starttime,
 										     ""+endTime, language_code, adminid,
 										     client_secret});
