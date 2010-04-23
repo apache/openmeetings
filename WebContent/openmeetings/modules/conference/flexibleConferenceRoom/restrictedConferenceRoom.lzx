@@ -90,22 +90,27 @@
     <retrictedRoomSidebar name="_sidePanel" restricted="true" 
                       listType="eventUserListTableWithNames" />
     
-    <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
+    <basePropertyPanel name="_chatPanelStrict" labelid="616"
        height="200" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height+22) }" 
+       y="${ canvas.height - (this.height) - 28 }" 
        width="${ canvas.width - parent._sidePanel.width }">
-        <!--
-        <handler name="onwidth" args="w">
-            if ($debug) Debug.write("ON WIDTH",w);
+        <handler name="onisopen" args="o">
+            if ($debug) Debug.write("onisopen",o);
+            if (o) {
+            	canvas._chatcontent.doInitByOpen();  
+                this.content.setAttribute("visibility","visible");
+            } else {
+                this.content.setAttribute("visibility","hidden");
+            }
         </handler>
-         -->
-        <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
-    </conferenceBox>
+        <chatTab name="content" y="22" height="${ parent.height-22 }" visibility="hidden"
+                 width="${ parent.width }" />
+    </basePropertyPanel>    
        
     <fixedWhiteboardPanel name="_whiteboard" labelid="615"
         y="0" x="${ parent._sidePanel.width }" restricted="true" 
         width="${ canvas.width - parent._sidePanel.width }"
-        height="${ canvas.height - (parent._chatPanelStrict.height+22) }" />
+        height="${ canvas.height - (parent._chatPanelStrict.height) - 28 }" />
     
     <!--
         ###############################

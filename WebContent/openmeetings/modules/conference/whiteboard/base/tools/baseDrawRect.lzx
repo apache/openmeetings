@@ -64,7 +64,7 @@
             this.drawrectregisterFinal(this.currentlayer.name,this.currentrectanglestroke,
                 this.currentrectangleineWidth,this.currentrectanglestrokeFill,
                 this.currentrectanglestrokeDis,this.currentrectanglestrokeFillDis,
-                x,y,width,height);
+                x,y,width,height,this.getSWFDocumentStatus());
             this.layers.push(this.currentlayer);
             this.checkStepLayers();
         ]]>
@@ -151,7 +151,7 @@
         ]]>   
     </method>  
     
-    <method name="drawrectregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height" >
+    <method name="drawrectregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height,swfObj" >
         Debug.write("drawrectregisterFinal",newName,stroke,line,fill,strokeDis,fillDis,x,y,width,height);
         var actionObject = new Array();
         actionObject[0] = 'rectangle';
@@ -161,12 +161,13 @@
         actionObject[4] = strokeDis;
         actionObject[5] = fillDis;
         actionObject[6] = this.currentrectangleOpacity;
-        actionObject[7] = this.counter;
-        actionObject[8] = x;
-        actionObject[9] = y;
-        actionObject[10] = width;
-        actionObject[11] = height;      
-        actionObject[12] = newName;
+        actionObject[7] = swfObj;//-7
+        actionObject[8] = this.counter;//-6
+        actionObject[9] = x;//-5
+        actionObject[10] = y;//-4
+        actionObject[11] = width;//-3
+        actionObject[12] = height;//-2  
+        actionObject[13] = newName;//-1
         this.baseactionobjectList.push(actionObject);
         this.onsharedMessage('draw',actionObject);
     </method>

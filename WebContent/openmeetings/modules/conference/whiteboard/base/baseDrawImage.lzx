@@ -244,7 +244,7 @@
 			this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
-			false,this.syncImageRefObj.uniqueObjectSyncName);
+			false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus());
   	</handler>
   	
   	<!--- @keywords deprecated
@@ -261,8 +261,9 @@
   			actionObject[6],actionObject[7]);
   	</method>
   	
-  	<method name="registerNewImage" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,doCallUpdate,uniqueObjectSyncName">
+  	<method name="registerNewImage" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,doCallUpdate,uniqueObjectSyncName,swfObj">
 		if ($debug) Debug.write("registerNewImage doCallUpdate: ",doCallUpdate);
+		if ($debug) Debug.write("registerNewImage swfObj: ",swfObj);
 		var actionObject = new Array();
 	    actionObject.push('image');
 	    actionObject.push(urlname);
@@ -273,12 +274,13 @@
 		actionObject.push(room);
 		actionObject.push(domain);
 		actionObject.push(uniqueObjectSyncName);
-		actionObject.push(this.counter);
-	    actionObject.push(posx);
-	    actionObject.push(posy);
-	    actionObject.push(width);
-	    actionObject.push(height);
-	    actionObject.push(this.currentlayer.name);
+		actionObject.push(swfObj);//-7
+		actionObject.push(this.counter);//-6
+	    actionObject.push(posx);//-5
+	    actionObject.push(posy);//-4
+	    actionObject.push(width);//-3
+	    actionObject.push(height);//-2
+	    actionObject.push(this.currentlayer.name);//-1
 	    this.baseactionobjectList.push(actionObject);	
 	    this.checkStepLayers();
 	    if (doCallUpdate) this.onsharedMessage('draw',actionObject);	
@@ -303,7 +305,7 @@
 			this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
-			true,this.syncImageRefObj.uniqueObjectSyncName);		
+			true,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus());		
 	
 	</method>
 	
@@ -326,7 +328,7 @@
 			this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
-			false,this.syncImageRefObj.uniqueObjectSyncName);	
+			false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus());	
 		//This invokes a Method which is in the remoteWhiteboard.lzx
 		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
 		this.sendCompletedObjectSyncEvent.doCall();
@@ -383,7 +385,13 @@
 		this.imageSyncMessageText = canvas.getLabelName(this.imageSyncMessageId);
 		//now send notifications to connected clients
 		this.setAttribute('drawmodus','image');
-		this.registerNewImage(this.syncImageRefObj.src,this.syncImageRefObj.x,this.syncImageRefObj.y,this.syncImageRefObj.width,this.syncImageRefObj.height,this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,this.syncImageRefObj.room,this.syncImageRefObj.domain);		
+		this.registerNewImage(this.syncImageRefObj.src,
+		              this.syncImageRefObj.x,this.syncImageRefObj.y,
+		              this.syncImageRefObj.width,this.syncImageRefObj.height,
+		              this.syncImageRefObj.baseurl,this.syncImageRefObj.fileName,
+		              this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
+		              this.syncImageRefObj.room,this.syncImageRefObj.domain,
+		              this.getSWFDocumentStatus());		
     </method>
 	
 	<!-- after loading the objects check if all connected clients of that conference

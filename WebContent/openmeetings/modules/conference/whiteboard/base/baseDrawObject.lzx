@@ -208,13 +208,14 @@
         actionObject.push(uniquObjectSyncName);//17
         actionObject.push(standardFileName);//18
         actionObject.push(fullFit);//19
-		actionObject.push(this.counter);
-	    actionObject.push(posx);
-	    actionObject.push(posy);
-	    actionObject.push(width);
-	    actionObject.push(height);
-	    actionObject.push(this.currentlayer.name);
-	    this.baseactionobjectList.push(actionObject);	
+        actionObject.push(null);//-8
+		actionObject.push(this.counter);//-7
+	    actionObject.push(posx);//-6
+	    actionObject.push(posy);//-5
+	    actionObject.push(width);//-4
+	    actionObject.push(height);//-3
+	    actionObject.push(this.currentlayer.name);//-2
+	    this.baseactionobjectList.push(actionObject);//-1
 	    this.checkStepLayers();
 	    if (doUpdateMessage) this.onsharedMessage('draw',actionObject);	
   	</method>    
@@ -425,6 +426,7 @@
                 if ($debug) Debug.info("doDocumentAction :: sendCurrentSWFObject");
                 
                 this.sendCurrentSWFObject(this.ObjectByName);
+                
             }
         ]]>
     </method>
@@ -534,6 +536,10 @@
             for (var eg=0;eg<this.baseactionobjectList.length;eg++){
                 if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
                     ////Debug.write("Found Object: ",this.baseactionobjectList[eg]);
+                    var sendSlideObjectUpdate = false;
+                    if (this.baseactionobjectList[eg][8] != objRef.slideNumber) {
+                    	sendSlideObjectUpdate = true;
+                    }
                     this.baseactionobjectList[eg][8] = objRef.slideNumber;
                     this.baseactionobjectList[eg][9] = objRef._swfView.x;
                     this.baseactionobjectList[eg][10] = objRef._swfView.y;
@@ -545,6 +551,9 @@
                     var newA = this.baseactionobjectList[eg];
                     if (newA[0]=='paint') newA[1] = new Array();				
                     this.onsharedMessage('swf',newA);	
+                    if (sendSlideObjectUpdate) {
+                        this.updateObjectsToSlideNumber(this.baseactionobjectList[eg]);
+                    }
                     break;
                 }
             }	

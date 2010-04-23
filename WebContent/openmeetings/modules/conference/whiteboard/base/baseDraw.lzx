@@ -203,6 +203,20 @@
 		return this[objName];
 	</method>
 	
+	<method name="getBaseObjectByName" args="bName">
+        <![CDATA[
+            //Debug.write("getModusItems: ",modi,this.baseactionobjectList);
+            //Debug.write("this.baseactionobjectList: ",modi);
+            for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+                //Debug.write("this.baseactionobjectList[eg][0]==modi",this.baseactionobjectList[eg][0],modi);
+                if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==bName) {
+                    return this.baseactionobjectList[eg];
+                }
+            }       
+            return null;
+        ]]>
+    </method>
+	
 	<method name="deleteItemByName" args="objName">
 	<![CDATA[
 		this[objName].destroy();
@@ -832,9 +846,129 @@
 		]]>
 	</method>
 	
-  	  
+  	<method name="getSWFDocumentStatus">
+  		<![CDATA[
+  		
+  		    for (var i=0;i<this.baseactionobjectList.length;i++) {
+  		    	
+  		    	if (this.baseactionobjectList[i][0] == "swf") {
+  		    		
+  		    		var tSWF = new Object();
+  		    		
+  		    		tSWF.name = this.baseactionobjectList[i][this.baseactionobjectList[i].length-1];
+  		    		tSWF.slide = this.baseactionobjectList[i][8];
+  		    		tSWF.isVisible = true;
+  		    		
+  		    		return tSWF;
+  		    	}
+  		    	
+  		    }
+  		    
+  		    return null;
+  		]]>
+  	</method>
 
+    <method name="checkSWFDocumentStatus" args="swfObj">
+        <![CDATA[
+        
+            if (swfObj != null) {
+        
+                var swfBaseObj = this.getBaseObjectByName(swfObj.name);
+                
+                if (swfBaseObj != null) {
+            
+                    if (swfObj.slide == swfBaseObj[8]) {
+                    	return true;
+                    } else {
+                    	return false;
+                    }
+                    
+                }
+            
+            }
+            
+            return true;
+        ]]>
+    </method>
+
+    <method name="doSWFDocumentStatus" args="refObj,swfObj">
+        <![CDATA[
+        
+            if (swfObj != null) {
+        
+                if (swfObj.isVisible) {
+                	
+                	refObj.setAttribute("visibility","visible");
+                	
+                } else {
+                	
+                	refObj.setAttribute("visibility","hidden");
+                	
+                }
+            
+            } else {
+            	
+            	refObj.setAttribute("visibility","visible");
+            	
+            }
+            
+        ]]>
+    </method>
     
+    <method name="updateObjectsToSlideNumber" args="baseObject">
+    	<![CDATA[
+    	
+            var baseObjectName = baseObject[baseObject.length-1];
+            var slidesNumber = baseObject[8];
+    	   
+            if ($debug) Debug.write("updateObjectsToSlideNumber :: ",baseObjectName,slidesNumber)
+    	
+            for (var i=0;i<this.baseactionobjectList.length;i++) {
+    	   	
+                if (this.baseactionobjectList[i][0] == "ellipse" 
+                        || this.baseactionobjectList[i][0] == "drawarrow"
+                        || this.baseactionobjectList[i][0] == "line"
+                        || this.baseactionobjectList[i][0] == "paint"
+                        || this.baseactionobjectList[i][0] == "rectangle"
+                        || this.baseactionobjectList[i][0] == "uline"
+                        || this.baseactionobjectList[i][0] == "image") {
+                	
+                	var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
+                	if ($debug) Debug.write("swfObj :: ",swfObj);
+                	
+                	if (swfObj != null) {
+                		
+                		if (swfObj.name == baseObjectName) {
+                			
+                			if (swfObj.slide == slidesNumber) {
+                				
+                				swfObj.isVisible = true;
+                				
+                				this.baseactionobjectList[i][this.baseactionobjectList[i].length-7] = swfObj; 
+                				
+                				this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","visible");
+                				
+                			} else {
+                				
+                				swfObj.isVisible = false;
+                				
+                				this.baseactionobjectList[i][this.baseactionobjectList[i].length-7] = swfObj; 
+                				
+                				this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","hidden");
+                				
+                			}
+                			
+                		}
+                		
+                	}
+                	
+                }
+    	   	
+            }
+    	
+    	]]>
+    </method>
+
     
     
 </class>

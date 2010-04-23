@@ -6,14 +6,26 @@
 <class name="chatOutput" extends="view" height="${ parent.height-2 }" 
             clip="true" bgcolor="0xFFFFFF" width="${ parent.width-2 }" >
 
+    <attribute name="isAlreadyLoaded" value="false" type="boolean"/>
 <!---
  Invoked from VideoContainer cause domain/room must be set first
  -->
     <method name="doInit">
         //Debug.write("oninit");
         <![CDATA[
-        	this._cbtext.clearChatOutput();
-            this.getRoomChatHistory.doCall();
+        	//this._cbtext.clearChatOutput();
+            //this.getRoomChatHistory.doCall();
+        ]]>
+    </method>
+    
+    <method name="doInitByOpen">
+        //Debug.write("oninit");
+        <![CDATA[
+            if (!this.isAlreadyLoaded) {
+            	this.isAlreadyLoaded = true;
+            	this._cbtext.clearChatOutput();
+                this.getRoomChatHistory.doCall();
+            }
         ]]>
     </method>
     
