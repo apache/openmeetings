@@ -74,7 +74,7 @@
         this.hasshadow = bool;
         <![CDATA[
         if (this.isinited){
-            this.normalMC = this.getMCRef();
+            this.normalMC = this.getDisplayObject();
             //Debug.write(this.normalMC);
             ////Debug.write("this.normalMC: ",this.normalMC);
             ////Debug.write("this: ",this);

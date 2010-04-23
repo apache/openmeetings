@@ -209,6 +209,8 @@
 		  		false,
 		  		actionObject[2],actionObject[3],actionObject[4],actionObject[5],
 		  		actionObject[6],actionObject[7],actionObject[8],false);
+		  		
+  		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
   	</method>
   			
   	<!--- 

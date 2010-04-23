@@ -14,7 +14,7 @@
         
         <handler name="onclick">
             //Debug.write("onclick: ",this.sprite);
-            //Debug.write("onclick: ",this.sprite.getMCRef());
+            //Debug.write("onclick: ",this.sprite.getDisplayObject());
         </handler>        
         
         <handler name="onframe" args="i">

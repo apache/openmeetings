@@ -97,7 +97,7 @@
             lastActionObject[3],lastActionObject[4],
             lastActionObject[5]);
 
-        this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-8]);
+        this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
     </method>
     
     <method name="redrawEllipseItemByScaling" args="objRef">

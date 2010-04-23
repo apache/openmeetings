@@ -154,6 +154,12 @@
 		}
 	</method>
 	
+	<method name="setModusWithUpdate" args="modi">
+		var paintToolBar = this.getPaintToolBar();
+		paintToolBar.updateToolSelection(modi);
+		this.setModus(modi);
+	</method>
+	
 	<method name="setModus" args="modi">
 		//check if previous modi has been txt, which might not be saved to the board yet
         var previousModus = this.drawmodus;
@@ -218,36 +224,52 @@
     </method>
 	
 	<method name="deleteItemByName" args="objName">
-	<![CDATA[
-		this[objName].destroy();
-		if (this.boundingref!=null) this.boundingref.removeIt();
-		var pos = -1;
-		for (var eg=0;eg<this.layers.length;eg++){
-			if (this.layers[eg]['name']==objName) {
-				pos = eg;
-				//Debug.write("Found Object in Layer: ",eg);
-				this.layers[eg].destroy();
-			}
-		}	
-		if (pos!=-1) this.layers.splice(pos, 1);
-		//get Item Position
-		pos = -1;
-		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
-			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
-				pos = eg;
-				//Debug.write("Found Object: ",eg);
-			}
-		}
-		var newA = this.baseactionobjectList[pos];
-		if (newA[0]=='paint') newA[1] = new Array();
-		this.onsharedMessage('delete',newA);	
-		if (pos!=-1) this.baseactionobjectList.splice(pos, 1);
-		//Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
-		//Debug.write("this.layers.length: ",this.layers.length);
-		this.checkStepLayers();
-		
-		this.doDeleteFromDocumentsBar(objName);
-	]]>
+        <![CDATA[
+            var newA = this.deleteItemByNameSync(objName);
+            if (newA[0]=='paint') newA[1] = new Array();
+            this.onsharedMessage('delete',newA);    
+        ]]>
+    </method>
+    
+	<method name="deleteItemByNameSync" args="objName">
+    	<![CDATA[
+    		this[objName].destroy();
+    		if (this.boundingref!=null) this.boundingref.removeIt();
+    		var pos = -1;
+    		for (var eg=0;eg<this.layers.length;eg++){
+    			if (this.layers[eg]['name']==objName) {
+    				pos = eg;
+    				//Debug.write("Found Object in Layer: ",eg);
+    				this.layers[eg].destroy();
+    			}
+    		}	
+    		if (pos!=-1) this.layers.splice(pos, 1);
+    		//get Item Position
+    		pos = -1;
+    		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+    			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
+    				pos = eg;
+    				//Debug.write("Found Object: ",eg);
+    				break;
+    			}
+    		}
+    		
+    		var newA = this.baseactionobjectList[pos];
+    		
+    		if (pos!=-1) this.baseactionobjectList.splice(pos, 1);
+    		//Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
+    		//Debug.write("this.layers.length: ",this.layers.length);
+    		
+    		if ($debug) Debug.warn("deleteItemByName :: ",objName);
+    		
+    		this.checkStepLayers();
+    		
+    		if (newA[0] == "swf") {
+                this.doDeleteFromDocumentsBar(objName);
+    		}
+    		
+    		return newA;
+    	]]>
 	</method>
 	
 	<method name="UpdateByObject" args="objRef">
@@ -377,6 +399,7 @@
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
 			if (this.letterObjectIsActive){
 				this.currentletterObj.drawtoArray();
+				this.setModusWithUpdate("hand");
 				//bool = true;
 			}	
 			
@@ -694,11 +717,14 @@
 			}
             
 		} else if(action=='clear'){
+			
 			this.clearRemote();
+			
 		} else if(action=='delete' || action=='undo'){
+			
 			var lastactionObject = actionObject;	
-			var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
-			obj.destroy();
+			this.deleteItemByNameSync(lastactionObject[lastactionObject.length-1]);
+			
 		} else if(action=='size'){
 			
 			var lastactionObject = actionObject;	
@@ -931,7 +957,8 @@
                         || this.baseactionobjectList[i][0] == "paint"
                         || this.baseactionobjectList[i][0] == "rectangle"
                         || this.baseactionobjectList[i][0] == "uline"
-                        || this.baseactionobjectList[i][0] == "image") {
+                        || this.baseactionobjectList[i][0] == "image"
+                        || this.baseactionobjectList[i][0] == "letter") {
                 	
                 	var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
                 	if ($debug) Debug.write("swfObj :: ",swfObj);

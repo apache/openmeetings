@@ -48,6 +48,7 @@
 	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resoureceItem="ellipse" />
 	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resoureceItem="drawarrowicon_rsc" />
 </class>
+
 	
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
 	   width="365" height="33" title="" docking="true"
@@ -60,7 +61,24 @@
 	   verticalClassActive="true"
 	   hWidth="33" hHeight="365">
 	
-	<horizontalMenuIconBar x="20" y="4" />
+    <method name="updateToolSelection" args="modi">
+    	<![CDATA[
+            if ($debug) Debug.write("-updateToolSelection-  ",modi);
+            
+            for (var i=0;i<this._tools.subviews.length;i++){
+                
+            	if (this._tools.subviews[i].modi == modi) {
+            		
+            		this._tools.subviews[i].setSelectionWithoutEvent();
+            		return;
+            	}
+            	
+            }
+            
+        ]]>
+    </method>
+    
+	<horizontalMenuIconBar name="_tools" x="20" y="4" />
 </class>	
 	
 <class name="mainToolsLeftPanel" extends="baseLeftPanel" 
@@ -74,7 +92,24 @@
 	   verticalClassActive="false"
 	   vWidth="365" vHeight="33">
 	
-	<verticalMenuIconBar x="3" y="20" />
+    <method name="updateToolSelection" args="modi">
+        <![CDATA[
+            if ($debug) Debug.write("-updateToolSelection-  ",modi);
+            
+            for (var i=0;i<this._tools.subviews.length;i++){
+                
+                if (this._tools.subviews[i].modi == modi) {
+                    
+                    this._tools.subviews[i].setSelectionWithoutEvent();
+                    return;
+                }
+                
+            }
+            
+        ]]>
+    </method>	
+	
+	<verticalMenuIconBar name="_tools" x="3" y="20" />
 </class>
 
 <!-- ################
@@ -120,7 +155,8 @@
     
     <verticalMenuIconBarPointer x="2" y="20" />
 </class>	
-    
+
+
 <class name="mainToolsVPanel" extends="basePanel" 
 	   width="348" height="50" title="" docking="true"
 	   activationClassBounding="mainToolsPanel"
@@ -132,7 +168,7 @@
 	   verticalClassActive="true"
 	   hWidth="32" hHeight="340">
 	
-	<horizontalMenuIconBar />
+	<horizontalMenuIconBar name="_tools" />
 </class>
     
 <class name="mainToolsPanel" extends="basePanel" 
@@ -146,7 +182,7 @@
 	   verticalClassActive="false"
 	   vWidth="340" vHeight="32">
 	
-	<verticalMenuIconBar />
+	<verticalMenuIconBar name="_tools" />
 </class>  
 
 	<!--

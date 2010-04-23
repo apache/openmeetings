@@ -154,7 +154,7 @@
                     this.getChildIds();
                     //this.setAAActive();
 
-                    var mc = this.getMCRef();
+                    var mc = this.getDisplayObject();
                     mc._accImpl = {};
                     mc._accImpl.stub = false;
                     mc._accImpl.master = this;
@@ -879,7 +879,7 @@
                     r.sendAAEvent(childId, EVENT_OBJECT_FOCUS);
                     r.sendAAEvent(childId, EVENT_OBJECT_SELECTION);
                     if ($as2) {
-                        Selection.setFocus(this.getMCRef());
+                        Selection.setFocus(this.getDisplayObject());
                     }
                 }
                 ]]>

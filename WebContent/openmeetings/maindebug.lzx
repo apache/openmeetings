@@ -104,7 +104,7 @@
         <method name="setShadow" >
             <![CDATA[
             if (this.isinited){
-                this.normalMC = this.getMCRef();
+                this.normalMC = this.getDisplayObject();
                 this.displacementMap = new flash.filters.DropShadowFilter();
                 this.normalMC.filters = [this.displacementMap];
             }

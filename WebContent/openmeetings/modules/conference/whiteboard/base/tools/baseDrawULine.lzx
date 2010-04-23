@@ -133,6 +133,8 @@
             
             //Add Layer to global Layer     
             this.layers.push(this.currentlayer);  
+            
+            this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
 
         ]]>
     </method>

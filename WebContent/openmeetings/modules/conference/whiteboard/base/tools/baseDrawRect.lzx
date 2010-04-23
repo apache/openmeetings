@@ -126,6 +126,8 @@
         this.drawrectangleHistory(this.currentlayer,0,0,
             lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
             lastActionObject[1],lastActionObject[2],lastActionObject[3],lastActionObject[4],lastActionObject[5]);
+            
+        this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
     </method>
     
     <method name="drawrectangleHistory" args="parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis">
@@ -148,6 +150,7 @@
                 parentObj._innerRect.fillStyle = fill;
                 parentObj._innerRect.fill();
             }
+            
         ]]>   
     </method>  
     

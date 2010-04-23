@@ -259,6 +259,10 @@
     	    	return parent.parent.panelArea.getDocumentsToolbar();
     	    </method>
     	    
+    	    <method name="getPaintToolBar">
+                return parent.parent.panelArea._mainToolsPanel;
+            </method>
+    	    
         </remoteWhiteboard>  
         
         <!--
@@ -313,6 +317,7 @@
 		</method>
 		
 		<method name="setSelection" args="obj">
+			if ($debug) Debug.write("setSelection ",obj);
 			parent._drawareaMask._drawarea.removeObjectBounds();
 			if (obj.setSelectionToItem){			
 				if (this.objectRef!=null){
@@ -328,6 +333,18 @@
 			} else {
 				parent._drawareaMask._drawarea.setModus(obj.modi);
 			}
+		</method>
+		
+		<method name="setSelectionWithoutEvent" args="obj">
+			if (obj.setSelectionToItem){         
+                if (this.objectRef!=null){
+                    this.objectRef._isselected = false;
+                    this.objectRef.setAttribute('enabled',true);
+                }
+                this.objectRef = obj;
+                this.objectRef._isselected = true;
+                this.objectRef.setAttribute('enabled',false);
+            }
 		</method>
 		
 		<!--

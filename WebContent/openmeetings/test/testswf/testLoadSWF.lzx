@@ -8,7 +8,7 @@
 	<button name="_btn">
 		<handler name="onclick">
 			canvas._swfview.setAttribute('frame',canvas._swfview.frame+1);
-			//var mc = canvas._swfview.getMCRef();
+			//var mc = canvas._swfview.getDisplayObject();
 			//Debug.write(canvas._swfview);
 			//Debug.write(mc);
 			//mc._frame = 4;

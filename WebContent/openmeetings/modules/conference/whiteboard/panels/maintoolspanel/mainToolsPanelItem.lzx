@@ -15,6 +15,10 @@
 		if (this._isselected) parent.parent.parent.setSelection(this);
 	</handler>
 	
+	<method name="setSelectionWithoutEvent">
+        parent.parent.parent.setSelectionWithoutEvent(this);
+    </method>
+	
 	<!--
 	<view x="1" y="1" width="24" name="_area" 
 		  height="24" bgcolor="0xFFFFFF" />

@@ -567,6 +567,10 @@
             
             if ($debug) Debug.write("remoteObjectUpdate :: ",obj.fullFit);
             obj._swfView.doSendChangeValue = false;
+            var sendSlideObjectUpdate = false;
+            if (obj.slideNumber != lastactionObject[8]) {
+            	sendSlideObjectUpdate = true;
+            }
 			obj.slideNumber = lastactionObject[8];
 			obj._swfView.setAttribute('x',lastactionObject[9]);
 			obj._swfView.setAttribute('y',lastactionObject[10]);
@@ -589,6 +593,10 @@
             this.doUpdateDocumentToolBarByParticipant(obj.name);
             
             this.remoteUpdateBaseObjectList(lastactionObject);
+            
+            if (sendSlideObjectUpdate) {
+                this.updateObjectsToSlideNumber(lastactionObject);
+            }
         ]]>
     </method>
     

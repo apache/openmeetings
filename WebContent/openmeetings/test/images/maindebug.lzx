@@ -55,7 +55,7 @@
     <attribute name="srcImage" value="" type="string" setter="this.setImageSource(srcImage)" />
     <method name="setImageSource" args="srcImage">
         if ($debug) Debug.write("setImageSource",srcImage);
-        //var mcRef = this.getMCRef();
+        //var mcRef = this.getDisplayObject();
         //mcRef.loadMovie(srcImage);
         this.setSource(srcImage);
     </method>

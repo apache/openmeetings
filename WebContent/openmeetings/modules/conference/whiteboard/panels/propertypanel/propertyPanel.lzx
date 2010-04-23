@@ -278,6 +278,9 @@
             </method>
             
             <method name="removeDocument" args="refItemName">
+            	
+            	if ($debug) Debug.warn("removeDocument ",refItemName);
+            	
                 parent.currentDocument.removeItem(refItemName);
                 if (parent.currentDocument.getNumItems() != 0) {
                     parent.currentDocument.selectItemAt(0);

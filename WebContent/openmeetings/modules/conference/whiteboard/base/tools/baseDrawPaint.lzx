@@ -155,6 +155,7 @@
             this.drawline(lastActionObject[1][eg][1]-this.currentlayer.x,lastActionObject[1][eg][2]-this.currentlayer.y,lastActionObject[1][eg][3]-this.currentlayer.x,lastActionObject[1][eg][4]-this.currentlayer.y);
         
         //this.currentlayer.setAttribute('stretches','both');
+        this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
         ]]>
     </method>
     

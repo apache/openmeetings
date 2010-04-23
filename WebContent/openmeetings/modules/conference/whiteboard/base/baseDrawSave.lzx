@@ -73,7 +73,7 @@
     
     <method name="catchSnapshot">
         <![CDATA[
-        this.MCRef = this.getMCRef();
+        this.MCRef = this.getDisplayObject();
         //Debug.write("this.MCRef: ",this.MCRef);
         this.snap = new flash.display.BitmapData(this.width, this.height, false, 0 );
         

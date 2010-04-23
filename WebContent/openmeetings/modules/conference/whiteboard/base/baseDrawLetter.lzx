@@ -100,7 +100,10 @@
 		//Debug.write("drawTextField: ",textforfield,width,x,y);
 		var tempO = this.newTextField(this,'letter'+this.getCounter(),textforfield,width,height,x,y,this.currentlayersize,this.currentlayerletter,this.currentlayerstyle);
 		this.layers.push(tempO);
-	    this.drawTextFieldregister(textforfield,width,x,y,this.currentlayersize,this.currentlayerletter,this.currentlayerstyle,tempO.height);
+	    this.drawTextFieldregister(textforfield,width,x,y,
+	               this.currentlayersize,this.currentlayerletter,
+	               this.currentlayerstyle,tempO.height,
+	               this.getSWFDocumentStatus());
 	</method>
 	
 	<!-- editModus -->
@@ -222,7 +225,12 @@
 	</method>	
 	
 	<method name="drawactionHistory" args="actionObject,obj">
-		this.newTextField(obj,actionObject[actionObject.length-1],actionObject[1],actionObject[actionObject.length-3],actionObject[actionObject.length-2],actionObject[actionObject.length-5],actionObject[actionObject.length-4],actionObject[3],actionObject[2],actionObject[4]);
+		this.newTextField(obj,actionObject[actionObject.length-1],actionObject[1],
+		              actionObject[actionObject.length-3],actionObject[actionObject.length-2],
+		              actionObject[actionObject.length-5],actionObject[actionObject.length-4],
+		              actionObject[3],actionObject[2],actionObject[4]);
+		              
+		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
 	</method>
 	
 	<method name="newTextField" args="obj,naming,textforfield,width,height,x,y,fontsize,fgcolor,fontstyle">
@@ -231,19 +239,20 @@
 	    return this.currentlayer;
 	</method>
 	
-	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height">
+	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height,swfObj">
 		var actionObject = new Array();
 	    actionObject[0] = "letter";
 	    actionObject[1] = textforfield;
 	    actionObject[2] = fgcolor;
 	    actionObject[3] = fontsize;
 	    actionObject[4] = fontstyle;
-		actionObject[5] = this.counter;
-	    actionObject[6] = x;
-	    actionObject[7] = y;
-	    actionObject[8] = width;
-	    actionObject[9] = height;
-	    actionObject[10] = this.currentlayer.name;	    	    
+	    actionObject[5] = swfObj;//-7
+		actionObject[6] = this.counter;//-6
+	    actionObject[7] = x;//-5
+	    actionObject[8] = y;//-4
+	    actionObject[9] = width;//-3
+	    actionObject[10] = height;//-2
+	    actionObject[11] = this.currentlayer.name;//-1	    	    
 	    this.baseactionobjectList.push(actionObject);	
 	    this.checkStepLayers();
 	    this.onsharedMessage('draw',actionObject);	

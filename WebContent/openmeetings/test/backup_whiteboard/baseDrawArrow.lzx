@@ -112,8 +112,8 @@
         
         //Scaling
         var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
-        t.getMCRef()._xscale = (hypothenuse/basicLength)*100;
-        t.getMCRef()._yscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
         
 
         //Set previous to null
@@ -373,8 +373,8 @@
             
             //Scaling
             var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
-            t.getMCRef()._xscale = (hypothenuse/basicLength)*100;
-            t.getMCRef()._yscale = (hypothenuse/basicLength)*100;
+            t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+            t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
             
             this.currentlayer.fillstyle = lastActionObject[1];
             this.currentlayer.lineWidth = lastActionObject[2];
@@ -433,8 +433,8 @@
         
         //Scaling
         var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
-        t.getMCRef()._xscale = (hypothenuse/basicLength)*100;
-        t.getMCRef()._yscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
         
 
         //Set previous to null
@@ -571,8 +571,8 @@
         
         //Scaling
         var basicLength = Math.sqrt((t.width*t.width)+(t.width*t.width));
-        t.getMCRef()._xscale = (hypothenuse/basicLength)*100;
-        t.getMCRef()._yscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._xscale = (hypothenuse/basicLength)*100;
+        t.getDisplayObject()._yscale = (hypothenuse/basicLength)*100;
         
 
         //Set previous to null
