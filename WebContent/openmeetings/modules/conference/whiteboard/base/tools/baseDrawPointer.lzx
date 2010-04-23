@@ -25,12 +25,12 @@
         var actionObject = new Array();
         actionObject[0] = 'pointerWhiteBoard';
         actionObject[1] = canvas.currentuser;
-        actionObject[2] = this.counter;
-        actionObject[3] = x;
-        actionObject[4] = y;
-        actionObject[5] = width;
-        actionObject[6] = height;
-        actionObject[7] = newName;
+        actionObject[2] = this.counter;//-6
+        actionObject[3] = x;//-5
+        actionObject[4] = y;//-4
+        actionObject[5] = width;//-3
+        actionObject[6] = height;//-2
+        actionObject[7] = newName;//-1
         this.baseactionobjectList.push(actionObject);
         this.onsharedMessage('draw',actionObject);
         this.drawPointerToHistory(actionObject,this);

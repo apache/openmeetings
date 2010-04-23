@@ -102,12 +102,13 @@
                 this.currentdrawarrowlinestrokeFill,this.currentdrawarrowlinestrokeDis,
                 this.currentdrawarrowlinestrokeFillDis,this.currentdrawarrowOpacity,
                 minx,miny,width,height,
-                x1,y1,x2,y2,true,this.getSWFDocumentStatus());
+                x1,y1,x2,y2,true,this.getSWFDocumentStatus(),
+                this.subviews.length-1);
 	        //Debug.write("t: ",t);
         ]]>
     </method> 
        
-    <method name="drawarrowlineregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,opacity,x,y,width,height,x1,y1,x2,y2,doCall,swfObj">
+    <method name="drawarrowlineregisterFinal" args="newName,stroke,line,fill,strokeDis,fillDis,opacity,x,y,width,height,x1,y1,x2,y2,doCall,swfObj,zIndex">
         var actionObject = new Array();
         actionObject[0] = 'drawarrow';
         actionObject[1] = stroke;
@@ -120,13 +121,14 @@
         actionObject[8] = y1;  
         actionObject[9] = x2;    
         actionObject[10] = y2;
-        actionObject[11] = swfObj;//-7
-        actionObject[12] = this.counter;//-6 
-        actionObject[13] = x;//-5
-        actionObject[14] = y;//-4
-        actionObject[15] = width;//-3
-        actionObject[16] = height;//-2
-        actionObject[17] = newName;//-1
+        actionObject[11] = zIndex;//-8
+        actionObject[12] = swfObj;//-7
+        actionObject[13] = this.counter;//-6 
+        actionObject[14] = x;//-5
+        actionObject[15] = y;//-4
+        actionObject[16] = width;//-3
+        actionObject[17] = height;//-2
+        actionObject[18] = newName;//-1
         this.baseactionobjectList.push(actionObject);       
         if (doCall) this.onsharedMessage('draw',actionObject);
     </method>  
