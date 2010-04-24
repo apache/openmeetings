@@ -112,10 +112,11 @@
 
         ]]>
         
-        this.registerFinal(this.getSWFDocumentStatus());
+        this.registerFinal(this.getSWFDocumentStatus(),
+                this.subviews.length-1);
     </method>    
 
-    <method name="registerFinal" args="swfObj">
+    <method name="registerFinal" args="swfObj,zIndex">
         var actionObject = new Array();
         actionObject[0] = 'paint';
         actionObject[1] = this.basetempactionobjectList;
@@ -123,13 +124,14 @@
         actionObject[3] = currentlayer.lineWidth;
         actionObject[4] = currentlayer.strokeStyle;
         actionObject[5] = this.currentlayerOpacity;
-        actionObject[6] = swfObj;//-7
-        actionObject[7] = this.counter;//-6
-        actionObject[8] = currentlayer.x;//-5
-        actionObject[9] = currentlayer.y;//-4
-        actionObject[10] = currentlayer.width;//-3
-        actionObject[11] = currentlayer.height;//-2
-        actionObject[12] = this.currentlayer.name;//-1
+        actionObject[6] = zIndex;//-8
+        actionObject[7] = swfObj;//-7
+        actionObject[8] = this.counter;//-6
+        actionObject[9] = currentlayer.x;//-5
+        actionObject[10] = currentlayer.y;//-4
+        actionObject[11] = currentlayer.width;//-3
+        actionObject[12] = currentlayer.height;//-2
+        actionObject[13] = this.currentlayer.name;//-1
         this.baseactionobjectList.push(actionObject);       
         this.onsharedMessage('draw',actionObject);
     </method>      

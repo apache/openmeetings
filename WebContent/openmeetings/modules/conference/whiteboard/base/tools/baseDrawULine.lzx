@@ -86,12 +86,13 @@
                 this.currentulinelineWidth,this.currentulineOpacity,
                 this.currentlayer.x,this.currentlayer.y,
                 this.currentlayer.width,this.currentlayer.height,
-                x1,y1,x2,y2,true,this.getSWFDocumentStatus());
+                x1,y1,x2,y2,true,this.getSWFDocumentStatus(),
+                this.subviews.length-1);
         ]]>
     </method> 
     
     
-    <method name="ulineregisterFinal" args="newName,stroke,line,opacity,x,y,width,height,x1,y1,x2,y2,doCall,swfObj">
+    <method name="ulineregisterFinal" args="newName,stroke,line,opacity,x,y,width,height,x1,y1,x2,y2,doCall,swfObj,zIndex">
         var actionObject = new Array();
         actionObject[0] = 'uline';
         actionObject[1] = stroke;
@@ -100,14 +101,15 @@
         actionObject[4] = x1  
         actionObject[5] = y1;  
         actionObject[6] = x2;    
-        actionObject[7] = y2;   
-        actionObject[8] = swfObj;//-7
-        actionObject[9] = this.counter;//-6 
-        actionObject[10] = x;//-5
-        actionObject[11] = y;//-4
-        actionObject[12] = width;//-3
-        actionObject[13] = height;//-2
-        actionObject[14] = newName;//-1
+        actionObject[7] = y2;  
+        actionObject[8] = zIndex;//-8
+        actionObject[9] = swfObj;//-7
+        actionObject[10] = this.counter;//-6 
+        actionObject[11] = x;//-5
+        actionObject[12] = y;//-4
+        actionObject[13] = width;//-3
+        actionObject[14] = height;//-2
+        actionObject[15] = newName;//-1
         this.baseactionobjectList.push(actionObject);       
         if (doCall) this.onsharedMessage('draw',actionObject);
     </method>       

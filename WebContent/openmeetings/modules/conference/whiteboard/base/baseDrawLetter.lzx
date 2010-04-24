@@ -103,7 +103,8 @@
 	    this.drawTextFieldregister(textforfield,width,x,y,
 	               this.currentlayersize,this.currentlayerletter,
 	               this.currentlayerstyle,tempO.height,
-	               this.getSWFDocumentStatus());
+	               this.getSWFDocumentStatus(),
+                   this.subviews.length-1);
 	</method>
 	
 	<!-- editModus -->
@@ -239,20 +240,21 @@
 	    return this.currentlayer;
 	</method>
 	
-	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height,swfObj">
+	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height,swfObj,zIndex">
 		var actionObject = new Array();
 	    actionObject[0] = "letter";
 	    actionObject[1] = textforfield;
 	    actionObject[2] = fgcolor;
 	    actionObject[3] = fontsize;
 	    actionObject[4] = fontstyle;
-	    actionObject[5] = swfObj;//-7
-		actionObject[6] = this.counter;//-6
-	    actionObject[7] = x;//-5
-	    actionObject[8] = y;//-4
-	    actionObject[9] = width;//-3
-	    actionObject[10] = height;//-2
-	    actionObject[11] = this.currentlayer.name;//-1	    	    
+	    actionObject[5] = zIndex;//-8
+	    actionObject[6] = swfObj;//-7
+		actionObject[7] = this.counter;//-6
+	    actionObject[8] = x;//-5
+	    actionObject[9] = y;//-4
+	    actionObject[10] = width;//-3
+	    actionObject[11] = height;//-2
+	    actionObject[12] = this.currentlayer.name;//-1	    	    
 	    this.baseactionobjectList.push(actionObject);	
 	    this.checkStepLayers();
 	    this.onsharedMessage('draw',actionObject);	
