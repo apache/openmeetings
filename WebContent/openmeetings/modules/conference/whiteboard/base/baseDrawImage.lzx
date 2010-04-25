@@ -247,7 +247,7 @@
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
 			false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-                this.subviews.length-1);
+                this.getZIndex());
   	</handler>
   	
   	<!--- @keywords deprecated
@@ -310,7 +310,7 @@
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
 			true,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-                this.subviews.length-1);		
+                this.getZIndex());		
 	
 	</method>
 	
@@ -334,7 +334,7 @@
 			this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 			this.syncImageRefObj.room,this.syncImageRefObj.domain,
 			false,this.syncImageRefObj.uniqueObjectSyncName,this.getSWFDocumentStatus(),
-                this.subviews.length-1);	
+                this.getZIndex());	
 		//This invokes a Method which is in the remoteWhiteboard.lzx
 		this.sendCompletedObjectSyncEvent.uniqueObjectSyncName = this.syncImageRefObj.uniqueObjectSyncName;
 		this.sendCompletedObjectSyncEvent.doCall();
@@ -398,7 +398,7 @@
 		              this.syncImageRefObj.moduleName,this.syncImageRefObj.parentPath,
 		              this.syncImageRefObj.room,this.syncImageRefObj.domain,
 		              this.getSWFDocumentStatus(),
-                      this.subviews.length-1);		
+                      this.getZIndex());		
     </method>
 	
 	<!-- after loading the objects check if all connected clients of that conference

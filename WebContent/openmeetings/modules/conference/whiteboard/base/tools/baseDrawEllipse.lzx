@@ -69,7 +69,7 @@
                 this.currentellipsestroke,this.currentellipselineWidth,
                 this.currentellipsestrokeFill,this.currentellipsestrokeDis,
                 this.currentellipsestrokeFillDis,
-                x,y,width,height,this.getSWFDocumentStatus(),this.subviews.length-1);
+                x,y,width,height,this.getSWFDocumentStatus(),this.getZIndex());
             this.layers.push(this.currentlayer);
             this.checkStepLayers();
         ]]>

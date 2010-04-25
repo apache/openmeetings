@@ -2,6 +2,7 @@ package org.openmeetings.app.conference.whiteboard;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,60 @@ public class WhiteboardManagement {
 			} else if (action.equals("delete") || action.equals("undo")) {
 				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
 				String objectOID = actionObject.get(actionObject.size()-1).toString();
+				String objectType = actionObject.get(0).toString();
 				log.debug("removal of objectOID: "+objectOID);
+				
+//				"ellipse" 
+//                || this.baseactionobjectList[i][0] == "drawarrow"
+//                || this.baseactionobjectList[i][0] == "line"
+//                || this.baseactionobjectList[i][0] == "paint"
+//                || this.baseactionobjectList[i][0] == "rectangle"
+//                || this.baseactionobjectList[i][0] == "uline"
+//                || this.baseactionobjectList[i][0] == "image"
+//                || this.baseactionobjectList[i][0] == "letter"				
+				
+				//Re-Index all items in its zIndex
+				if (objectType.equals("ellipse") 
+						|| objectType.equals("drawarrow")
+						|| objectType.equals("line")
+						|| objectType.equals("paint")
+						|| objectType.equals("rectangle")
+						|| objectType.equals("uline")
+						|| objectType.equals("image")
+						|| objectType.equals("letter")
+						|| objectType.equals("swf")) {
+					
+					Integer zIndex = Integer.valueOf(actionObject.get(actionObject.size()-8).toString()).intValue();
+					
+					log.debug("1|zIndex "+zIndex);
+					log.debug("2|zIndex "+actionObject.get(actionObject.size()-8).toString());
+					log.debug("3|zIndex "+actionObject.get(actionObject.size()-8));
+					
+					int l = 0;
+					for (Iterator debugIter = actionObject.iterator();debugIter.hasNext();) {
+						log.debug("4|zIndex "+l+" -- "+debugIter.next());
+						l++;
+					}
+					
+					for (Iterator<String> iter=roomList.keySet().iterator();iter.hasNext();) {
+						String whiteboardObjKey = iter.next();
+						List actionObjectStored = roomList.get(whiteboardObjKey);
+						
+						Integer zIndexStored = Integer.valueOf(actionObjectStored.get(actionObjectStored.size()-8).toString()).intValue();
+						
+						log.debug("zIndexStored|zIndex "+zIndexStored+"|"+zIndex);
+						
+						if (zIndexStored >= zIndex) {
+							zIndexStored-=1;
+							log.debug("new-zIndex "+zIndexStored);
+						}
+						actionObjectStored.set(actionObjectStored.size()-8, zIndexStored);
+						
+						roomList.put(whiteboardObjKey, actionObjectStored);
+					}
+					
+				}
+				
 				roomList.remove(objectOID);
 				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
 			} else if (action.equals("size") || action.equals("editProp") 
@@ -69,7 +123,69 @@ public class WhiteboardManagement {
 				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
 				String objectOID = actionObject.get(actionObject.size()-1).toString();
 				//List roomItem = roomList.get(objectOID);
+				List currentObject = roomList.get(objectOID);
 				roomList.put(objectOID, actionObject);
+				
+				if (action.equals("swf")) {
+					if (actionObject.get(0).equals("swf")) {
+						
+	                    if (actionObject.get(8) != currentObject.get(8)) {
+	                    	
+	                    	
+	                    	String baseObjectName = actionObject.get(actionObject.size()-1).toString();
+	                        Integer slidesNumber = Integer.valueOf(actionObject.get(8).toString()).intValue();
+	                	   
+	                        log.debug("updateObjectsToSlideNumber :: "+baseObjectName+","+slidesNumber);
+	                    	
+	                    	for (Iterator<String> iter=roomList.keySet().iterator();iter.hasNext();) {
+	    						String whiteboardObjKey = iter.next();
+	    						List actionObjectStored = roomList.get(whiteboardObjKey);
+	                    	   	
+	                            if (actionObjectStored.get(0).equals("ellipse") 
+	                                    || actionObjectStored.get(0).equals("drawarrow")
+	                                    || actionObjectStored.get(0).equals("line")
+	                                    || actionObjectStored.get(0).equals("paint")
+	                                    || actionObjectStored.get(0).equals("rectangle")
+	                                    || actionObjectStored.get(0).equals("uline")
+	                                    || actionObjectStored.get(0).equals("image")
+	                                    || actionObjectStored.get(0).equals("letter")) {
+	                            	
+	                            	Map swfObj = (Map) actionObjectStored.get(actionObjectStored.size()-7);
+	                            	log.debug("swfObj :1: "+swfObj);
+	                            	
+	                            	if (swfObj != null) {
+	                            		
+	                            		if (swfObj.get("name").equals(baseObjectName)) {
+	                            			
+	                            			if (Integer.valueOf(swfObj.get("slide").toString()).intValue() == slidesNumber) {
+	                            				
+	                            				swfObj.put("isVisible",true);
+	                            				
+	                            				actionObjectStored.set(actionObjectStored.size()-7,swfObj);
+	                            				
+	                            			} else {
+	                            				
+                        						swfObj.put("isVisible",false);
+	                            				
+	                            				actionObjectStored.set(actionObjectStored.size()-7,swfObj);
+	                            				
+	                            			}
+	                            			
+	                            		}
+	                            		
+	                            	}
+	                            	
+	                            	log.debug("swfObj :1: "+swfObj);
+	                            	
+	                            }
+	                	   	
+	                        }
+	                    	
+	                    }
+	                    
+					}
+				}
+				
 				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
 			} else {
 				log.warn("Unkown Type: "+action+" actionObject: "+actionObject);

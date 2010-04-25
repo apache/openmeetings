@@ -113,7 +113,7 @@
         ]]>
         
         this.registerFinal(this.getSWFDocumentStatus(),
-                this.subviews.length-1);
+                this.getZIndex());
     </method>    
 
     <method name="registerFinal" args="swfObj,zIndex">

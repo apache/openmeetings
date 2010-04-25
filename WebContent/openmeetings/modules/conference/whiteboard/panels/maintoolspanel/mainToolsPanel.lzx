@@ -5,12 +5,16 @@
 	<simplelayout axis="y" spacing="2" />
 	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
-	<mainToolsHPanelSeperator />
+	<mainToolsHPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsHPanelSeperator>
 	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
     <!--
 	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
      -->
-	<mainToolsHPanelSeperator />
+	<mainToolsHPanelSeperator>
+		<attribute name="modi" value="" type="string"/>
+	</mainToolsHPanelSeperator>
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
 						resoureceItem="menupointer_rsc" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
@@ -29,12 +33,16 @@
 	<simplelayout axis="x" spacing="2" />
 	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
-	<mainToolsVPanelSeperator />
+	<mainToolsVPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsVPanelSeperator>
 	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
     <!--
 	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
      -->
-	<mainToolsVPanelSeperator />	
+	<mainToolsVPanelSeperator>
+        <attribute name="modi" value="" type="string"/>
+    </mainToolsVPanelSeperator>	
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
 						resoureceItem="menupointer_rsc" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 

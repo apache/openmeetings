@@ -103,7 +103,7 @@
                 this.currentdrawarrowlinestrokeFillDis,this.currentdrawarrowOpacity,
                 minx,miny,width,height,
                 x1,y1,x2,y2,true,this.getSWFDocumentStatus(),
-                this.subviews.length-1);
+                this.getZIndex());
 	        //Debug.write("t: ",t);
         ]]>
     </method> 

@@ -65,7 +65,7 @@
                 this.currentrectangleineWidth,this.currentrectanglestrokeFill,
                 this.currentrectanglestrokeDis,this.currentrectanglestrokeFillDis,
                 x,y,width,height,this.getSWFDocumentStatus(),
-                this.subviews.length-1);
+                this.getZIndex());
             this.layers.push(this.currentlayer);
             this.checkStepLayers();
         ]]>

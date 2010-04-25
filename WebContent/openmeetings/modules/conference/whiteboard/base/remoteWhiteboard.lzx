@@ -94,12 +94,14 @@
 				lz.Timer.addTimer( this.loadObjectDelegate, 250 );
 			} else {
 				this.sendCompletedSyncEvent.doCall();
+				this.updateAllObjectsToSlideNumber();
+				this.setModusWithUpdate("hand");
 			}
 		]]>
 	</method>
 	
 	<method name="sendRemoteWatchObject" args="actionObject">
-		if ($debug) Debug.write("sendRemoteWatchObject: ",actionObject);
+		if ($debug) Debug.write("[sendRemoteWatchObject]: ",actionObject);
 		<![CDATA[
 			
 			//Redraw the View on the paintarea
@@ -122,8 +124,11 @@
 			} else if(actionObject[0]=='ellipse'){
 				this.drawellipseToHistory(actionObject,this);
 			}
+			
+			if ($debug) Debug.write("[store actionObject] ",actionObject);
+			
 			this.baseactionobjectList.push(actionObject);
-
+				
 		]]>
 	</method>	
 	

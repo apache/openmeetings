@@ -186,7 +186,7 @@
   	</method>
     -->
   	
-  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName,fullFit">
+  	<method name="registerNewSWF" args="urlname,posx,posy,width,height,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,innerx,innery,innerwidth,innerheight,zoomlevel,currentzoom,initwidth,initheight,uniquObjectSyncName,doUpdateMessage,standardFileName,fullFit,zIndex">
 		var actionObject = new Array();
 	    actionObject.push('swf');//0
 	    actionObject.push(urlname);//1
@@ -208,14 +208,15 @@
         actionObject.push(uniquObjectSyncName);//17
         actionObject.push(standardFileName);//18
         actionObject.push(fullFit);//19
-        actionObject.push(null);//-8
-		actionObject.push(this.counter);//-7
-	    actionObject.push(posx);//-6
-	    actionObject.push(posy);//-5
-	    actionObject.push(width);//-4
-	    actionObject.push(height);//-3
-	    actionObject.push(this.currentlayer.name);//-2
-	    this.baseactionobjectList.push(actionObject);//-1
+        actionObject.push(zIndex);//-8
+        actionObject.push(null);//-7
+		actionObject.push(this.counter);//-6
+	    actionObject.push(posx);//-5
+	    actionObject.push(posy);//-4
+	    actionObject.push(width);//-3
+	    actionObject.push(height);//-2
+	    actionObject.push(this.currentlayer.name);//-1
+	    this.baseactionobjectList.push(actionObject);
 	    this.checkStepLayers();
 	    if (doUpdateMessage) this.onsharedMessage('draw',actionObject);	
   	</method>    
@@ -309,7 +310,8 @@
                 this.syncImageRefObj.initwidth,this.syncImageRefObj.initheight,
                 this.syncImageRefObj.uniqueObjectSyncName,doUpdateMessage,
                 this.syncImageRefObj.standardFileName,
-                this.syncImageRefObj.fullFit);
+                this.syncImageRefObj.fullFit,
+                this.getZIndex());
         
 		//set modus to hand so users can directly select that image
 		this.setModus('swf');
@@ -383,6 +385,7 @@
      -->
     <method name="doDocumentAction" args="action">
         <![CDATA[
+            if ($debug) Debug.info("doDocumentAction :1: sendCurrentSWFObject ",action);
             if (this.ObjectByName.typeOfObject=="swf") {
                 if (action=="doc_first"){
                     this.ObjectByName._swfView.setAttribute('frame',1);
@@ -415,6 +418,7 @@
                     this.boundingref.doSetInnerObjectsBounds(newwidth,newheight);
                 } else if (action=="setSlideNumber"){
                     if (this.newSlideNumber>0 && this.newSlideNumber<=this.ObjectByName._swfView.totalframes){
+                    	if ($debug) Debug.warn("Slide New Number ",this.newSlideNumber);
                         this.ObjectByName._swfView.setAttribute('frame',this.newSlideNumber);
                     } else {
                         if ($debug) Debug.warn("Slide Number out of range of that document TotalFrames: ",this.ObjectByName._swfView.totalframes);
@@ -423,7 +427,7 @@
                 this.ObjectByName.slideNumber =  this.ObjectByName._swfView.frame;
                 this.doUpdateDocumentToolBar();
                 
-                if ($debug) Debug.info("doDocumentAction :: sendCurrentSWFObject");
+                if ($debug) Debug.info("doDocumentAction :2: sendCurrentSWFObject");
                 
                 this.sendCurrentSWFObject(this.ObjectByName);
                 
@@ -436,15 +440,28 @@
     	docToolbar.addCurrentObject(this.currentlayer);
     </method>
     
+    <method name="setCurrentDocumentByToolBar" args="itemRefName">
+        if (this.boundingIsActive){
+        	if (this.boundingref.objRef.name != itemRefName) {
+        		this.boundingref._innerDrag.onmouseup.sendEvent();
+        	}
+        }
+        this.setCurrentDocument();
+    </method>
+    
     <method name="setCurrentDocument" args="itemRefName">
-        this.ObjectByName = this.getObjectByName(itemRefName);
+    	var t = this.getObjectByName(itemRefName);
+    	if (t==null) {
+    		return;
+    	}
+        this.ObjectByName = t;
         this.doUpdateDocumentToolBar();
         
         if ($debug) Debug.write("setCurrentDocument ",itemRefName,this.ObjectByName);
         
-        //FIXME: This should also bringt to front the object for all participants
-        this.sendItemToFront(itemRefName);
-        this.bringItemToFrontByName(itemRefName);
+        //not needed anymore
+        //this.sendItemToFront(itemRefName);
+        //this.bringItemToFrontByName(itemRefName);
     </method>
     
     <method name="sendItemToFront" args="itemRefName">
@@ -481,7 +498,7 @@
                 if ($debug) Debug.write("doUpdateDocumentToolBar ",docToolbar.parent.parent.ignoreUpdates);
                 docToolbar.parent.parent.ignoreUpdates = true;
                 
-        		if (this.ObjectByName && this.ObjectByName._swfView) {
+        		if (this["ObjectByName"] && this.ObjectByName != null && this.ObjectByName._swfView) {
                     
                     if ($debug) Debug.warn("doUpdateDocumentToolBar ",this.ObjectByName.fullFit);
                     

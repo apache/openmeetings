@@ -104,7 +104,7 @@
 	               this.currentlayersize,this.currentlayerletter,
 	               this.currentlayerstyle,tempO.height,
 	               this.getSWFDocumentStatus(),
-                   this.subviews.length-1);
+                   this.getZIndex());
 	</method>
 	
 	<!-- editModus -->

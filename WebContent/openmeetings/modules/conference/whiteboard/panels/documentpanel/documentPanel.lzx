@@ -12,7 +12,7 @@
 		if (parent.parent.parent.ignoreUpdates) {
             return;
         }
-        
+        parent.parent.parent.parent._drawareaMask._drawarea.setCurrentDocumentByToolBar(parent.parent.currentDocument.getValue());
         parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction(this.modi);
 	</handler>
 	

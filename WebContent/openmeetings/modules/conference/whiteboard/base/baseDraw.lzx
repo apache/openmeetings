@@ -130,6 +130,7 @@
 	
 	<method name="clearRemote">
 		<![CDATA[
+		
 			if (this.boundingref!=null) this.boundingref.removeIt();
 			while (this.subviews.length > 0) {
 				this.subviews[0].destroy();
@@ -206,7 +207,10 @@
 	</method>
 	
 	<method name="getObjectByName" args="objName">
-		return this[objName];
+		if (this[objName]) {
+			return this[objName];
+		}
+		return null;
 	</method>
 	
 	<method name="getBaseObjectByName" args="bName">
@@ -255,6 +259,14 @@
     		}
     		
     		var newA = this.baseactionobjectList[pos];
+    		
+    		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+    			if (this.baseactionobjectList[eg][0]!="pointerWhiteBoard") {
+		    		if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-8]>newA[newA.length-8]) {
+		    				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-8]-=1;
+					}
+    			}
+    		}
     		
     		if (pos!=-1) this.baseactionobjectList.splice(pos, 1);
     		//Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
@@ -651,7 +663,18 @@
 				&& ( (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]) >=x ) ) 
 				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<y 
 				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] )>y  ) ) {
-				tempList.push(this.baseactionobjectList[eg]);
+				
+				if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7] == null) {
+    				tempList.push(this.baseactionobjectList[eg]);
+		        } else {
+		        	var swfObject = this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7];
+		        	
+		        	if ($debug) Debug.write("getObjectInBounds :: swfObject ",swfObject.isVisible);
+		        	
+		        	if(swfObject.isVisible) {
+	        	        tempList.push(this.baseactionobjectList[eg]);
+		        	}
+		        }
 				////Debug.write("found obj: ",this.baseactionobjectList[eg]);
 			}
 		}		
@@ -660,7 +683,12 @@
 	</method>
 	
 	
-	
+	<method name="getZIndex">
+		<![CDATA[
+			if ($debug) Debug.write("getZIndex ",this.subviews.length-1);
+			return this.subviews.length-1;
+		]]>
+	</method>
 	
 	<!-- ##################
 		SharedModus
@@ -994,6 +1022,48 @@
             }
     	
     	]]>
+    </method>
+    
+    <method name="updateAllObjectsToSlideNumber">
+        <![CDATA[
+        
+            if ($debug) Debug.write(" :: updateAllObjectsToSlideNumber :: ")
+        
+            for (var i=0;i<this.baseactionobjectList.length;i++) {
+            
+                if (this.baseactionobjectList[i][0] == "ellipse" 
+                        || this.baseactionobjectList[i][0] == "drawarrow"
+                        || this.baseactionobjectList[i][0] == "line"
+                        || this.baseactionobjectList[i][0] == "paint"
+                        || this.baseactionobjectList[i][0] == "rectangle"
+                        || this.baseactionobjectList[i][0] == "uline"
+                        || this.baseactionobjectList[i][0] == "image"
+                        || this.baseactionobjectList[i][0] == "letter") {
+                    
+                    var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
+                    if ($debug) Debug.write("swfObj :: ",swfObj);
+                    
+                    if (swfObj != null) {
+                        
+                            
+                        if (swfObj.isVisible) {
+                            
+                            this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","visible");
+                            
+                        } else {
+                            
+                            this[this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]].setAttribute("visibility","hidden");
+                            
+                        }
+                            
+                        
+                    }
+                    
+                }
+            
+            }
+        
+        ]]>
     </method>
 
     

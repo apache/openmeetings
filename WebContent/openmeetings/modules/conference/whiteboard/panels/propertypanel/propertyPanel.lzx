@@ -307,8 +307,10 @@
             <customEdittext name="_currentSlideNo" width="40" height="24" regexpType="number" >
                 <handler name="onblur">
                     if (parent.parent.parent.ignoreUpdates) {
+                    	if ($debug) Debug.write("ignoreUpdates -- ");
                         return;
                     }
+                    parent.parent.parent.parent._drawareaMask._drawarea.setCurrentDocumentByToolBar(parent.parent.currentDocument.getValue());
                     parent.parent.parent.parent._drawareaMask._drawarea.newSlideNumber = Number(this.getText());
                     parent.parent.parent.parent._drawareaMask._drawarea.doDocumentAction("setSlideNumber");         
                 </handler>
