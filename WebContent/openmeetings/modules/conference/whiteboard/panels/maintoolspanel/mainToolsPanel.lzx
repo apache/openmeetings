@@ -4,6 +4,7 @@
 <class name="verticalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="y" spacing="2" />
 	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resoureceItem="plainSlides" setSelectionToItem="false" />
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
 	<mainToolsHPanelSeperator>
         <attribute name="modi" value="" type="string"/>
@@ -32,6 +33,7 @@
 <class name="horizontalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="x" spacing="2" />
 	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resoureceItem="plainSlides" setSelectionToItem="false" />
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
 	<mainToolsVPanelSeperator>
         <attribute name="modi" value="" type="string"/>
@@ -59,7 +61,7 @@
 
 	
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
-	   width="365" height="33" title="" docking="true"
+	   width="392" height="33" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   leftClassPanel="mainToolsLeftPanel"
@@ -67,7 +69,7 @@
 	   bottomClassPanel="mainToolsTopPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="true"
-	   hWidth="33" hHeight="365">
+	   hWidth="33" hHeight="392">
 	
     <method name="updateToolSelection" args="modi">
     	<![CDATA[
@@ -90,7 +92,7 @@
 </class>	
 	
 <class name="mainToolsLeftPanel" extends="baseLeftPanel" 
-	   width="33" height="365" title="" docking="true"
+	   width="33" height="392" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   topClassPanel="mainToolsTopPanel"
@@ -98,7 +100,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="false"
-	   vWidth="365" vHeight="33">
+	   vWidth="392" vHeight="33">
 	
     <method name="updateToolSelection" args="modi">
         <![CDATA[

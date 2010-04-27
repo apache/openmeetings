@@ -187,6 +187,18 @@ public class WhiteboardManagement {
 				}
 				
 				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
+			} else if (action.equals("clearSlide")) {
+				
+				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
+				
+				for (String objectName : (List<String>) actionObject) {
+					
+					roomList.remove(objectName);
+					
+				}
+				
+				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
+			
 			} else {
 				log.warn("Unkown Type: "+action+" actionObject: "+actionObject);
 			}

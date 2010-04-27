@@ -3019,4 +3019,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1004" name="room-admin">
     <value>PIN</value>
   </string>
+  <string id="1005" name="whiteboard">
+    <value>Clear objects on current slide only!</value>
+  </string>
 </language>

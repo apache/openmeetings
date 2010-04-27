@@ -120,6 +120,17 @@
         this.baseredoactionobjectList = new Array();    
         this.checkStepLayers(); 
      -->
+      
+    <method name="clearSlideOnly">
+    	<![CDATA[
+            
+            var itemsToDelete = this.getCurrentSlideAnnotations();
+            
+            this.onsharedMessage('clearSlide',itemsToDelete); 
+            
+            this.clearSlideRemote(itemsToDelete);
+        ]]>
+    </method>  
             
 	<method name="clearAll">
 		<![CDATA[
@@ -127,6 +138,81 @@
 			this.clearRemote();
 		]]>
 	</method>
+	
+	<method name="getCurrentSlideAnnotations">
+		<![CDATA[
+		
+		    var currentSlideNumber = -1;
+		
+            for (var i=0;i<this.baseactionobjectList.length;i++) {
+            	
+            	if (this.baseactionobjectList[i][0] == "swf") {
+            		currentSlideNumber = this.baseactionobjectList[i][8];
+            		break;
+            	}
+            	
+            }
+            
+            var itemsToDelete = new Array();
+            
+            for (var i=0;i<this.baseactionobjectList.length;i++) {
+            	
+            	if (this.baseactionobjectList[i][0] == "ellipse" 
+                        || this.baseactionobjectList[i][0] == "drawarrow"
+                        || this.baseactionobjectList[i][0] == "line"
+                        || this.baseactionobjectList[i][0] == "paint"
+                        || this.baseactionobjectList[i][0] == "rectangle"
+                        || this.baseactionobjectList[i][0] == "uline"
+                        || this.baseactionobjectList[i][0] == "image"
+                        || this.baseactionobjectList[i][0] == "letter") {
+                        	
+                	var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
+                	
+                	if (swfObj.slide == currentSlideNumber) {
+                		itemsToDelete.push(this.baseactionobjectList[i][this.baseactionobjectList[i].length-1]);
+                	}
+                	
+                }
+            	
+            }
+            
+            return itemsToDelete;
+		]]>
+	</method>
+	
+	<method name="clearSlideRemote" args="itemsToDelete">
+        <![CDATA[
+        
+            var indexOfItemsToDelete = new Array();
+        
+            for (var i=0;i<this.baseactionobjectList.length;i++) {
+                
+            	
+            	for (var k=0;k<itemsToDelete.length;k++) {
+            	
+                    if (this.baseactionobjectList[i][this.baseactionobjectList[i].length-1] == itemsToDelete[k]) {
+                                
+                        indexOfItemsToDelete.push(i);
+                        
+                    }
+                
+            	}
+                
+            }
+            
+            for (var i=indexOfItemsToDelete.length-1;i>=0;i--) {
+                
+                var itemToDelete = this.baseactionobjectList[indexOfItemsToDelete[i]];
+                
+                var refObj = this.getObjectByName(itemToDelete[itemToDelete.length-1]);
+                
+                refObj.destroy();
+                
+                this.baseactionobjectList.splice(indexOfItemsToDelete[i],1);
+                
+            }   
+        ]]>
+    </method>        
 	
 	<method name="clearRemote">
 		<![CDATA[
@@ -172,9 +258,12 @@
 			}
 		}
 		this.setAttribute('drawmodus',modi);
-		if (modi=='plain'){
+		if (modi=='plainSlide'){
+			this.clearSlideOnly();
+			this.setAttribute('drawmodus',previousModus);
+		} else if (modi=='plain'){
 			this.clearAll();
-            if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
+            //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
             this.setAttribute('drawmodus',previousModus);
 		} else if (modi=='hand' || modi=='letter' 
 			|| modi=='paint' || modi=='line' || modi=='uline' 
@@ -743,7 +832,11 @@
 			if (isWmlLoader && actionObject[0]!='image' && isWmlLoader && actionObject[0]!='swf') {
 				if (this.onwmlLoaderSend) this.onwmlLoaderSend.sendEvent(actionObject[0]);
 			}
-            
+         
+        } else if(action=='clearSlide'){
+        	
+        	this.clearSlideRemote(actionObject);
+			
 		} else if(action=='clear'){
 			
 			this.clearRemote();
