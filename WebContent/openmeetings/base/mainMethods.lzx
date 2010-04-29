@@ -335,12 +335,15 @@
                     if ($debug) Debug.write( "is browser[browserPanelHeight] ? ", browserPanelHeight );
 
                 //ブラウザのインスタンスを確認して、あれば開く。なければ作成する
-                    if( canvas.main_content._content.inner.conferenceBrowser == undefined ){
+                    if( !canvas.conferenceBrowserIsinited ){
                         if ($debug) Debug.write( "if this" );
-                        new lz.conferenceBrowser( canvas.main_content._content.inner,
-                                                {name:'conferenceBrowser',y:50,
-                                                 width:browserPanelWidth, 
-                                                 height:browserPanelHeight} );
+                        new lz.conferenceBrowser( canvas.main_content._content.inner,{
+                                                         name:'conferenceBrowser',y:30,
+                                                         width:canvas.width-220, 
+                                                         height:canvas.height-100,
+                                                         width:browserPanelWidth, 
+                                                         height:browserPanelHeight
+                                                     });
                     } else{Debug.write( "else this" );
                     with( canvas.main_content._content.inner ){
                             conferenceBrowser.htmlviewer.setVisible( true );
@@ -359,7 +362,28 @@
 		    }
 	      }
 	    ]]>
-	</method>    
+	</method> 
+	
+	<method name="startBrowser" args="objMessage">
+		<![CDATA[
+			if( !canvas.conferenceBrowserIsinited ){
+                        if ($debug) Debug.write( "if this" );
+           		new lz.conferenceBrowser(canvas.main_content._content.inner,{
+		                                     name:'conferenceBrowser',y:30,
+		                                     width:canvas.width-220, 
+                                             height:canvas.height-100,
+		                                     initedByUser:false,
+		                                     initURL:objMessage[1]
+                                     	});
+            } else{Debug.write( "else this" );
+	            with( canvas.main_content._content.inner ){
+	                    conferenceBrowser.htmlviewer.setVisible( true );
+	                    conferenceBrowser.setVisible( true );
+	                    conferenceBrowser.newBrowserURL(objMessage[1]);
+	            }
+            }
+		]]>
+	</method>   
 	
 	<netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">

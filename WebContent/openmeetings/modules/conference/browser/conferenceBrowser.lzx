@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
-	<!---
-		This library contains browser components for conference and auditorium.
-		This class will be called in modules/conference/conference/conferenceMenubar.lzx, and
-		the command decreared in base/mainMethods.lzx.
-		You can change this size with browserPanelWidth/browserPanelHeight attributes in base/mainAttributes.lzx
-		at deriving it.
-				2008 Apr 9 commented by onokeiji@gmail.com 
-	-->
+
 	<!--- TODO:
 		inprement of history feature
 		add resize feature to labelExplorerBox component
@@ -23,7 +16,7 @@
     </class> 
      
 	<class name="conferenceBrowser" extends="labelExplorerBox" labelid="749" 
-		   x="$once{ parent.width/2 - this.width/2 }" closable="true" resizeable="true">
+		   x="200" closable="true" resizeable="true">
 		 
 		<!--
 		      this attribute is true if the user has opened the browser on its own
@@ -31,9 +24,13 @@
 		      notifications from the Moderator(s)
 		 -->
 		<attribute name="initedByUser" value="true" type="boolean" /> 
+		
+		<attribute name="initURL" value="" type="string" /> 
 		 
 		<handler name="oninit">
 			<![CDATA[
+				canvas.conferenceBrowserIsinited = true;
+			
                 var os = lz.Browser.getOS();
                 
                 //We have to detect Firefox, unfortunately it does not work for
@@ -43,7 +40,7 @@
                 
                 //To test this you have to run the application with the index.jsp wrapper that
                 //contains the browser-detection code
-                if (os.indexOf("Win") >= 0) {
+                if (false && os.indexOf("Win") >= 0) {
                 
                     if ($debug) Debug.write("os :: version isWindows check for Firefox Bug ",os,version);
                     var t = this;
@@ -73,15 +70,40 @@
                 
                 //see attribute definition for docs
                 if (this.initedByUser) {
+                	this._navigation._inner.browser.navigation.url.setAttribute("text","http://openmeetings.googlecode.com");
+                	this._navigation._inner.browser.navigation.readStart.setURL();
+                	
+                	this.sendMessageToMembers.objMessage = new Object();
+                	this.sendMessageToMembers.objMessage[0] = "initBrowser";
+                	this.sendMessageToMembers.objMessage[1] = this._navigation._inner.browser.navigation.url.text;
+                	this.sendMessageToMembers.doCall();
+                } else {
+                	
+                	this._navigation._inner.browser.navigation.url.setAttribute("text",this.initURL);
+                	this._navigation._inner.browser.navigation.readStart.setURL();
                 	
                 }
                 
             ]]>
         </handler>
         
-        <handler name="onclose">
-        	if ($debug) Debug.write("Broadcast to all members");
-        </handler>
+        <method name="newBrowserURL" args="newURL">
+        	this._navigation._inner.browser.navigation.url.setAttribute("text",newURL);
+        	this._navigation._inner.browser.navigation.readStart.setURL();
+        </method>
+        
+        <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
+        				   remotecontext="$once{ canvas.thishib }" >
+        	<attribute name="objMessage" value="null" />
+            <netparam name="vars"><method name="getValue">return parent.objMessage;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                	if ($debug) Debug.write("getValue : ",value);
+                
+                ]]>
+            </handler>   
+        </netRemoteCallHib> 
         
         <handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
@@ -152,19 +174,31 @@
         				<browserButton name="readStart" resource="./resources/run.png" 
         							    y="2">
         					<handler name="onclick">
-            					<![CDATA[
+            					this.sendURL();
+        					</handler>
+        					<method name="sendURL">
+        						this.setURL();
+        						
+        						parent.parent.parent.parent.parent.sendMessageToMembers.objMessage = new Object();
+			                	parent.parent.parent.parent.parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
+			                	parent.parent.parent.parent.parent.sendMessageToMembers.objMessage[1] = parent.url.text;
+			                	parent.parent.parent.parent.parent.sendMessageToMembers.doCall();
+        					</method>
+        					<method name="setURL">
+        						<![CDATA[
             						var url = parent.url.getText();
             						if ((url.indexOf("http://") < 0)
             								&& (url.indexOf("https://") < 0)) {
             							url = "http://" + url;
             						}
             
+            						parent.parent.parent.parent.parent.htmlviewer.ignoreNextEvent = true;
             						parent.parent.parent.parent.parent.htmlviewer.setAttribute("src",url);
             						parent.parent.parent.parent.parent.htmlviewer.setAttribute("visible",true);
             
             						parent.url.setAttribute('text', url);
             					]]>
-        					</handler>
+        					</method>
         				</browserButton> 
         				
         			</view>
@@ -182,13 +216,31 @@
 		</handler>		
 		
 		<html name="htmlviewer" x="4" y="${ (canvas.ismoderator) ? 60 : 22 }" width="${ parent.width-8 }" height="${ (canvas.ismoderator) ? (parent.height - 90) : (parent.height-52) }" >
+			
+			<attribute name="ignoreNextEvent" value="false" type="boolean" />
+			
 			<handler name="onloading" args="loading">
-				this.loading = loading;
-				if ($debug) Debug.write("LOADING ",loading);
+				<![CDATA[
+					this.loading = loading;
+					if ($debug) Debug.write("LOADING 1 ",loading,this.src);
+					if ($debug) Debug.write("LOADING 2 ",loading,this);
+					if (canvas.ismoderator) {
+						if (!loading && !this.ignoreNextEvent) {
+							parent.sendMessageToMembers.objMessage = new Object();
+		                	parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
+		                	parent.sendMessageToMembers.objMessage[1] = this.src;
+		                	parent.sendMessageToMembers.doCall();
+						}
+					}
+					
+					if (!loading) {
+						this.ignoreNextEvent = false;
+					}
+				]]>
 			</handler>
 			<handler name="onsrc" args="src">
 				this.src = src;
-				if ($debug) Debug.write("SRC ",loading);
+				//if ($debug) Debug.write("SRC ",src);
 			</handler>
 		</html>
 		

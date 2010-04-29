@@ -104,6 +104,8 @@
 	            	</handler>
 	            </_labelMenuItem>
 	            <menuseparator/>
+	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+                <menuseparator/>
 	            <_labelMenuItem id="lblCamMic" labelid="306" command="cmd_editCamMicSettings" />
 	            <_labelMenuItem id="lblBoard" labelid="307" command="cmd_editBoardSettings" />
 	            <menuseparator/>  
@@ -134,10 +136,6 @@
 	            	</handler>
 	            </_labelMenuItem>
 	            <menuseparator/>  
-	            <!--
-	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
-	            <menuseparator/>
-	             -->
 	            <_labelMenuItem width="250" id="lblPoll" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" id="lblPollResult" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" id="lblPollVote" labelid="42" command="cmd_checkPollVoted" />
@@ -218,6 +216,8 @@
 	                </handler>
 	            </_labelMenuItem>
 	            <menuseparator/> 
+	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+	            <menuseparator/>
 	            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
 	            <menuseparator/>  
@@ -243,10 +243,6 @@
 	            	</handler>
 	            </_labelMenuItem>
 	            <menuseparator/>
-	            <!--
-	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
-	            <menuseparator/>
-	             -->
 	            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
@@ -293,6 +289,8 @@
                     </handler>
                 </_labelMenuItem>
                 <menuseparator/> 
+                <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
+                <menuseparator/>
                 <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
                 <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
                 <menuseparator/>  
