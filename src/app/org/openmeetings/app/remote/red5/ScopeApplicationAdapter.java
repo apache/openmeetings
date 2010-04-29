@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openmeetings.app.conference.whiteboard.BrowserStatus;
+import org.openmeetings.app.conference.whiteboard.RoomStatus;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -1315,7 +1317,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @param colorObj 
 	 * @return
 	 */
-	public synchronized HashMap<String,RoomClient> setRoomValues(Long room_id, 
+	public synchronized RoomStatus setRoomValues(Long room_id, 
 			Boolean becomeModerator, Boolean isSuperModerator, Long organization_id, 
 			String colorObj){
 		try {
@@ -1632,8 +1634,19 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				}
 			}
 			
+			BrowserStatus browserStatus = (BrowserStatus) current.getScope().getAttribute("browserStatus");
 			
-			return clientListRoom;
+			if (browserStatus == null) {
+				browserStatus = new BrowserStatus();
+			}
+			
+			RoomStatus roomStatus = new RoomStatus();
+			
+			//FIXME: Rework Client Object to DTOs
+			roomStatus.setClientMap(clientListRoom);
+			roomStatus.setBrowserStatus(browserStatus);
+			
+			return roomStatus;
 		} catch (Exception err){
 			log.error("[setRoomValues]",err);
 		}
@@ -2101,7 +2114,94 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 1;
 	}
 
-
+	public synchronized int sendBrowserMessageToMembers(Object newMessage) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+				
+			List newMessageList = (List) newMessage;
+			
+			String action = newMessageList.get(0).toString();
+			
+			//"closeBrowserURL"
+			//"initBrowser"
+			//newBrowserURL
+			
+			BrowserStatus browserStatus = (BrowserStatus) current.getScope().getAttribute("browserStatus");
+			
+			if (browserStatus == null) {
+				browserStatus = new BrowserStatus();
+			}
+			
+			if (action.equals("initBrowser") || action.equals("newBrowserURL")) {
+				browserStatus.setBrowserInited(true);
+				browserStatus.setCurrentURL(newMessageList.get(1).toString());
+			} else if (action.equals("closeBrowserURL")) {
+				browserStatus.setBrowserInited(false);
+			}
+			
+			current.getScope().setAttribute("browserStatus", browserStatus);
+			
+			
+			//Send to all Clients of that Scope(Room)
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+							if (rcl == null || (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())) {
+	    						//continue;
+	    					} else {
+	    						if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+									//log.debug("*..*idremote: " + rcl.getStreamid());
+									//log.debug("*..*my idstreamid: " + currentClient.getStreamid());
+									((IServiceCapableConnection) conn).invoke("sendVarsToMessage",new Object[] { newMessage }, this);
+									//log.debug("sending sendVarsToMessage to " + conn);
+	    						}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception err) {
+			log.error("[sendMessage]",err);
+		}
+		return 1;
+	}
+	
+	public synchronized int sendMessageToMembers(Object newMessage) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+				
+			//Send to all Clients of that Scope(Room)
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+							if (rcl == null || (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())) {
+	    						//continue;
+	    					} else {
+	    						if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+									//log.debug("*..*idremote: " + rcl.getStreamid());
+									//log.debug("*..*my idstreamid: " + currentClient.getStreamid());
+									((IServiceCapableConnection) conn).invoke("sendVarsToMessage",new Object[] { newMessage }, this);
+									//log.debug("sending sendVarsToMessage to " + conn);
+	    						}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception err) {
+			log.error("[sendMessage]",err);
+		}
+		return 1;
+	}
+	
 	public synchronized int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();

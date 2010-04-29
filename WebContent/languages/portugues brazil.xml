@@ -3027,5 +3027,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1005" name="whiteboard">
     <value>Clear objects on current slide only!</value>
   </string>
+  <string id="1006" name="co-browser">
+    <value>Only the URL entered in the Status bar is send to participants!</value>
+  </string>
 </language>
 

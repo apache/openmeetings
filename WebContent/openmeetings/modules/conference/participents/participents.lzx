@@ -568,12 +568,22 @@
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
         <netparam><method name="getValue">return parent.organisation_id;</method></netparam>
         <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>
-        <handler name="ondata" args="value">
+        <handler name="ondata" args="roomStatus">
+            <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
             //if ($debug) Debug.write("setRoomValues1: ",value);
             //if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
             
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+            
+            if (roomStatus.browserStatus.browserInited) {
+                var tObj = new Object();
+                tObj[0] = "newBrowserURL";
+                tObj[1] = roomStatus.browserStatus.currentURL;
+                canvas.startBrowser(tObj);
+            }
+            
+            var value = roomStatus.clientMap;
             
             for (var i in value){
                 if ( value[i].streamid == canvas.streamid ) {
@@ -586,7 +596,8 @@
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
             canvas.thishib.checkLzRecording.doCall();
-            canvas._chatcontent.doInit();               
+            canvas._chatcontent.doInit();   
+            ]]>
         </handler>  
     </netRemoteCallHib>
 

@@ -94,10 +94,10 @@
                 	this._navigation._inner.browser.navigation.url.setAttribute("text","http://www.google.com");
                 	this._navigation._inner.browser.navigation.readStart.setURL();
                 	
-                	this.sendMessageToMembers.objMessage = new Object();
-                	this.sendMessageToMembers.objMessage[0] = "initBrowser";
-                	this.sendMessageToMembers.objMessage[1] = this._navigation._inner.browser.navigation.url.text;
-                	this.sendMessageToMembers.doCall();
+                	this.sendBrowserMessageToMembers.objMessage = new Array();
+                	this.sendBrowserMessageToMembers.objMessage[0] = "initBrowser";
+                	this.sendBrowserMessageToMembers.objMessage[1] = this._navigation._inner.browser.navigation.url.text;
+                	this.sendBrowserMessageToMembers.doCall();
                 } else {
                 	
                 	this._navigation._inner.browser.navigation.url.setAttribute("text",this.initURL);
@@ -137,7 +137,7 @@
         	]]>
         </method>
         
-        <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
+        <netRemoteCallHib name="sendBrowserMessageToMembers" funcname="sendBrowserMessageToMembers" 
         				   remotecontext="$once{ canvas.thishib }" >
         	<attribute name="objMessage" value="null" />
             <netparam name="vars"><method name="getValue">return parent.objMessage;</method></netparam>
@@ -242,9 +242,9 @@
         <method name="doClose">
             if (canvas.ismoderator) {
             
-                this.sendMessageToMembers.objMessage = new Object();
-                this.sendMessageToMembers.objMessage[0] = "closeBrowserURL";
-                this.sendMessageToMembers.doCall();
+                this.sendBrowserMessageToMembers.objMessage = new Array();
+                this.sendBrowserMessageToMembers.objMessage[0] = "closeBrowserURL";
+                this.sendBrowserMessageToMembers.doCall();
             
             }
         </method>
@@ -319,10 +319,10 @@
         					<method name="sendURL">
         						this.setURL();
         						
-        						parent.parent.parent.parent.parent.sendMessageToMembers.objMessage = new Object();
-			                	parent.parent.parent.parent.parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
-			                	parent.parent.parent.parent.parent.sendMessageToMembers.objMessage[1] = parent.url.text;
-			                	parent.parent.parent.parent.parent.sendMessageToMembers.doCall();
+        						parent.parent.parent.parent.parent.sendBrowserMessageToMembers.objMessage = new Array();
+			                	parent.parent.parent.parent.parent.sendBrowserMessageToMembers.objMessage[0] = "newBrowserURL";
+			                	parent.parent.parent.parent.parent.sendBrowserMessageToMembers.objMessage[1] = parent.url.text;
+			                	parent.parent.parent.parent.parent.sendBrowserMessageToMembers.doCall();
         					</method>
         					<method name="setURL">
         						<![CDATA[
@@ -370,7 +370,8 @@
             </view>
         </view>
         
-		<html name="htmlviewer" x="4" y="${ (canvas.ismoderator) ? 60 : 22 }" width="${ parent.width-8 }" height="${ (canvas.ismoderator) ? (parent.height - 90) : (parent.height-52) }" >
+		<html name="htmlviewer" x="4" y="${ (canvas.ismoderator) ? 60 : 22 }" width="${ parent.width-8 }" 
+			  height="${ (canvas.ismoderator) ? (parent.height - 90) : (parent.height-52) }" >
 			
 			<attribute name="ignoreNextEvent" value="false" type="boolean" />
 			
@@ -383,10 +384,10 @@
 						if (!loading && !this.ignoreNextEvent) {
 							parent.getIFrameLocation();
 							
-							//parent.sendMessageToMembers.objMessage = new Object();
-		                	//parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
-		                	//parent.sendMessageToMembers.objMessage[1] = this.src;
-		                	//parent.sendMessageToMembers.doCall();
+							//parent.sendBrowserMessageToMembers.objMessage = new Object();
+		                	//parent.sendBrowserMessageToMembers.objMessage[0] = "newBrowserURL";
+		                	//parent.sendBrowserMessageToMembers.objMessage[1] = this.src;
+		                	//parent.sendBrowserMessageToMembers.doCall();
 						}
 					}
 					
@@ -400,6 +401,9 @@
 				//if ($debug) Debug.write("SRC ",src);
 			</handler>
 		</html>
+		
+		<labelText labelid="1006" y="${ parent.height-22 }" x="2"
+				   visibility="${ (canvas.ismoderator) ? 'visible' : 'hidden' }" />
 		
         <simpleLabelButton labelid="61" width="100" 
 			   visibility="${ (canvas.ismoderator) ? 'visible' : 'hidden' }" 
