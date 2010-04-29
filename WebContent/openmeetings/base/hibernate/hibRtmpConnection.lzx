@@ -1239,6 +1239,14 @@
                         canvas.addChatHistory(value);
                     } else if(value[0]=='fileslist'){
                         canvas.currentImagesListdraw.parent.onvisible.sendEvent(true);
+                    } else if(value[0]=='fileslist'){
+                        canvas.currentImagesListdraw.parent.onvisible.sendEvent(true);
+                    } else if(value[0]=='initBrowser'){
+                        canvas.startBrowser(value);
+                    } else if(value[0]=='newBrowserURL'){
+                        canvas.startBrowser(value);
+                    } else if(value[0]=='closeBrowserURL'){
+                        canvas.closeBrowser(value);
                     }
                 ]]>
             </handler>   

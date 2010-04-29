@@ -385,6 +385,16 @@
 		]]>
 	</method>   
 	
+	<method name="closeBrowser" args="objMessage">
+		<![CDATA[
+            if( canvas.conferenceBrowserIsinited ){
+                with( canvas.main_content._content.inner ){
+                        conferenceBrowser.close();
+                }
+            }
+        ]]>
+	</method>
+	
 	<netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
 		<handler name="ondata" args="value">
 	            <![CDATA[

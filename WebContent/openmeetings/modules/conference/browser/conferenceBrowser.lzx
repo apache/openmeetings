@@ -11,12 +11,21 @@
      
     <class name="browserButton" extends="view" width="22" height="22">
     	
+    	<attribute name="enabled" value="true" type="boolean" />
     	
+    	<handler name="onenabled" args="o">
+    		this.enabled = o;
+    		if (o) {
+    			this.setAttribute("opacity",1);
+    		} else {
+    			this.setAttribute("opacity",0.5);
+    		}
+    	</handler>
     	
     </class> 
      
 	<class name="conferenceBrowser" extends="labelExplorerBox" labelid="749" 
-		   x="200" closable="true" resizeable="true">
+		   x="200" closable="false" resizeable="true">
 		 
 		<!--
 		      this attribute is true if the user has opened the browser on its own
@@ -26,10 +35,22 @@
 		<attribute name="initedByUser" value="true" type="boolean" /> 
 		
 		<attribute name="initURL" value="" type="string" /> 
+		
+		<attribute name="callBackJSDelegate" value="null" /> 
+		
+		<attribute name="browserhistoryPre" value="null" />
+		<attribute name="browserhistoryPost" value="null" /> 
 		 
 		<handler name="oninit">
 			<![CDATA[
+			
+			    this.browserhistoryPre = new Array();
+			    this.browserhistoryPost = new Array();
+			    
+			    this.updateIcons();
+			
 				canvas.conferenceBrowserIsinited = true;
+				this.callBackJSDelegate = new LzDelegate(this, "updatedURLValues");
 			
                 var os = lz.Browser.getOS();
                 
@@ -70,7 +91,7 @@
                 
                 //see attribute definition for docs
                 if (this.initedByUser) {
-                	this._navigation._inner.browser.navigation.url.setAttribute("text","http://openmeetings.googlecode.com");
+                	this._navigation._inner.browser.navigation.url.setAttribute("text","http://www.google.com");
                 	this._navigation._inner.browser.navigation.readStart.setURL();
                 	
                 	this.sendMessageToMembers.objMessage = new Object();
@@ -92,6 +113,30 @@
         	this._navigation._inner.browser.navigation.readStart.setURL();
         </method>
         
+        <method name="updatedURLValues" args="returnValue">
+        	
+        	if ($debug) Debug.write("updatedURLValues ",returnValue);
+        	
+        </method>
+        
+        <method name="getIFrameLocation">
+        	<![CDATA[
+
+                //function callbackIFrameLocation(returnValue) {
+                    
+                //    if ($debug) Debug.write("callbackIFrameLocation ",returnValue);
+                    
+                //}
+                
+                //lz.Browser.callJS("getiFrameOMSource",callbackIFrameLocation, "__lz0");   
+                
+                this.htmlviewer.callJavascript("window.location.href",this.callBackJSDelegate);
+                
+                
+                
+        	]]>
+        </method>
+        
         <netRemoteCallHib name="sendMessageToMembers" funcname="sendMessageToMembers" 
         				   remotecontext="$once{ canvas.thishib }" >
         	<attribute name="objMessage" value="null" />
@@ -100,7 +145,9 @@
                 <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 	if ($debug) Debug.write("getValue : ",value);
-                
+                	if (this.objMessage[0] == "closeBrowserURL") {
+                		parent.close();
+                	}
                 ]]>
             </handler>   
         </netRemoteCallHib> 
@@ -119,6 +166,94 @@
             ]]>
         </handler>
         
+        <method name="addLocalHistoryPre" args="url">
+        	this.browserhistoryPre.push(url);
+        	this.updateIcons();
+        </method>
+        
+        <method name="addLocalHistoryPost" args="url">
+            this.browserhistoryPost.push(url);
+            this.updateIcons();
+        </method>
+        
+        <method name="updateIcons">
+        	<![CDATA[
+            	if (this.browserhistoryPre.length > 1) {
+            		this._navigation._inner.browser.navigation._pre.setAttribute("enabled",true);
+            	} else {
+            		this._navigation._inner.browser.navigation._pre.setAttribute("enabled",false);
+            	}
+            	
+            	if (this.browserhistoryPost.length > 0) {
+                    this._navigation._inner.browser.navigation._post.setAttribute("enabled",true);
+                } else {
+                    this._navigation._inner.browser.navigation._post.setAttribute("enabled",false);
+                }
+        	]]>
+        </method>
+        
+        <method name="doPreItem">
+        	<![CDATA[
+                if (this.browserhistoryPre.length > 1) {
+                	
+                	if ($debug) Debug.write("doPreItem 1 ",this.browserhistoryPre.length);
+                	
+                	var lastItem = this.browserhistoryPre[this.browserhistoryPre.length-2];
+                	var nextItem = this.browserhistoryPre[this.browserhistoryPre.length-1];
+                	
+                	if ($debug) Debug.write("doPreItem 2 ",lastItem);
+                	
+                	this.browserhistoryPost.push(nextItem);
+                	
+                	this.browserhistoryPre.splice(this.browserhistoryPre.length-2,1);
+                	
+                	if ($debug) Debug.write("doPreItem 3 ",this.browserhistoryPre.length);
+                	
+                	this._navigation._inner.browser.navigation.url.setAttribute("text",lastItem);
+                    this._navigation._inner.browser.navigation.readStart.setURLWithoutEvent();
+                	
+                	this.updateIcons();
+                	
+                	return lastItem;
+                }
+            ]]>
+        </method>
+        
+        <method name="doPostItem">
+            <![CDATA[
+                if (this.browserhistoryPost.length > 0) {
+                    
+                    var lastItem = this.browserhistoryPost[this.browserhistoryPost.length-1];
+                    
+                    this.browserhistoryPost.splice(this.browserhistoryPost.length-1,1);
+                    
+                    this.browserhistoryPre.push(lastItem);
+                    
+                    this._navigation._inner.browser.navigation.url.setAttribute("text",lastItem);
+                    this._navigation._inner.browser.navigation.readStart.setURLWithoutEvent();
+                    
+                    this.updateIcons();
+                    
+                    return lastItem;
+                }
+            ]]>
+        </method>
+        
+        <method name="doClose">
+            if (canvas.ismoderator) {
+            
+                this.sendMessageToMembers.objMessage = new Object();
+                this.sendMessageToMembers.objMessage[0] = "closeBrowserURL";
+                this.sendMessageToMembers.doCall();
+            
+            }
+        </method>
+        
+        <handler name="onclose">
+        	canvas.conferenceBrowserIsinited = false;
+            this.htmlviewer.setVisible(false);
+        </handler>              
+        
         <!--
             Broadcast Message to all user
          -->
@@ -131,20 +266,22 @@
     				</handler>
     			</animator>
     			
-        		<view name="browser" height="28" bgcolor="0xEEEEEE" x="1">
+        		<view name="browser" height="28" bgcolor="0xEEEEEE" x="1" enabled="false">
         			
         			<view name="navigation" layout="axis:x;spacing:1;inset:1">
         				
-        				<browserButton resource="./resources/pre.png" y="2">
+        				<browserButton name="_pre" resource="./resources/pre.png" y="2">
         					<handler name="onclick">
         						if ($debug) Debug.write("PRE");
+        						parent.parent.parent.parent.parent.doPreItem();
         					</handler>
         					<labelTooltip labelid="751" />
         				</browserButton>
         				
-        				<browserButton resource="./resources/next.png" y="2">
+        				<browserButton name="_post" resource="./resources/next.png" y="2" enabled="false">
                             <handler name="onclick">
                                 if ($debug) Debug.write("NEXT");
+                                parent.parent.parent.parent.parent.doPostItem();
                             </handler>
                             <labelTooltip labelid="752" />
                         </browserButton>
@@ -152,6 +289,7 @@
                         <browserButton resource="./resources/refresh.png" y="2">
                             <handler name="onclick">
                                 if ($debug) Debug.write("RELOAD");
+                                parent.readStart.sendURL();
                             </handler>
                             <labelTooltip labelid="753" />
                         </browserButton>
@@ -159,6 +297,8 @@
                         <browserButton resource="./resources/home.png" y="2">
                             <handler name="onclick">
                                 if ($debug) Debug.write("HOME");
+                                parent.url.setAttribute("text","http://www.google.com");
+                                parent.readStart.sendURL();
                             </handler>
                             <labelTooltip labelid="754" />
                         </browserButton>
@@ -195,10 +335,29 @@
             						parent.parent.parent.parent.parent.htmlviewer.ignoreNextEvent = true;
             						parent.parent.parent.parent.parent.htmlviewer.setAttribute("src",url);
             						parent.parent.parent.parent.parent.htmlviewer.setAttribute("visible",true);
-            
+            						
+            						parent.parent.parent.parent.parent.addLocalHistoryPre(url);
+            						
             						parent.url.setAttribute('text', url);
             					]]>
         					</method>
+        					
+        					<method name="setURLWithoutEvent">
+                                <![CDATA[
+                                    var url = parent.url.getText();
+                                    if ((url.indexOf("http://") < 0)
+                                            && (url.indexOf("https://") < 0)) {
+                                        url = "http://" + url;
+                                    }
+            
+                                    parent.parent.parent.parent.parent.htmlviewer.ignoreNextEvent = true;
+                                    parent.parent.parent.parent.parent.htmlviewer.setAttribute("src",url);
+                                    parent.parent.parent.parent.parent.htmlviewer.setAttribute("visible",true);
+                                    
+                                    parent.url.setAttribute('text', url);
+                                ]]>
+                            </method>
+        					
         				</browserButton> 
         				
         			</view>
@@ -211,10 +370,6 @@
             </view>
         </view>
         
-		<handler name="onclose">
-			this.htmlviewer.setVisible(false);
-		</handler>		
-		
 		<html name="htmlviewer" x="4" y="${ (canvas.ismoderator) ? 60 : 22 }" width="${ parent.width-8 }" height="${ (canvas.ismoderator) ? (parent.height - 90) : (parent.height-52) }" >
 			
 			<attribute name="ignoreNextEvent" value="false" type="boolean" />
@@ -226,10 +381,12 @@
 					if ($debug) Debug.write("LOADING 2 ",loading,this);
 					if (canvas.ismoderator) {
 						if (!loading && !this.ignoreNextEvent) {
-							parent.sendMessageToMembers.objMessage = new Object();
-		                	parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
-		                	parent.sendMessageToMembers.objMessage[1] = this.src;
-		                	parent.sendMessageToMembers.doCall();
+							parent.getIFrameLocation();
+							
+							//parent.sendMessageToMembers.objMessage = new Object();
+		                	//parent.sendMessageToMembers.objMessage[0] = "newBrowserURL";
+		                	//parent.sendMessageToMembers.objMessage[1] = this.src;
+		                	//parent.sendMessageToMembers.doCall();
 						}
 					}
 					
@@ -244,8 +401,10 @@
 			</handler>
 		</html>
 		
-        <simpleLabelButton labelid="61" width="100" x="${ parent.width-105 }" y="${ parent.height-24 }" 
-               onclick="this.parent.close();" />
+        <simpleLabelButton labelid="61" width="100" 
+			   visibility="${ (canvas.ismoderator) ? 'visible' : 'hidden' }" 
+			   x="${ parent.width-105 }" y="${ parent.height-24 }" 
+               onclick="this.parent.doClose();" />
     		  
 	</class>
  	
