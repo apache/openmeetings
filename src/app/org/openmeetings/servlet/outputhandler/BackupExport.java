@@ -1,0 +1,443 @@
+package org.openmeetings.servlet.outputhandler;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.user.Organisationmanagement;
+import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
+import org.openmeetings.app.hibernate.beans.domain.Organisation;
+import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.math.CalendarPatterns;
+import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
+
+/**
+ * 
+ * @author sebastianwagner
+ *
+ */
+public class BackupExport extends HttpServlet {
+
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, "openmeetings");
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+	 *      javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void service(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws ServletException,
+			IOException {
+
+		try {
+			String sid = httpServletRequest.getParameter("sid");
+			if (sid == null) {
+				sid = "default";
+			}
+			log.debug("sid: " + sid);
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(sid);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+
+			log.debug("users_id: " + users_id);
+			log.debug("user_level: " + user_level);
+
+			// if (user_level!=null && user_level > 0) {
+			if (true) {
+				
+				String moduleName = httpServletRequest.getParameter("moduleName");
+				if (moduleName == null) {
+					moduleName = "moduleName";
+				}
+				log.debug("moduleName: " + moduleName);
+				
+				if (moduleName.equals("backup")) {
+					
+					/* #####################
+					 * Create Base Folder structure
+					 */
+					
+					String current_dir = getServletContext().getRealPath("/");
+					String working_dir = current_dir + "upload"
+							+ File.separatorChar + "backup"
+							+ File.separatorChar;
+					File working_dirFile = new File(working_dir);
+					
+					if (!working_dirFile.exists()) {
+						working_dirFile.mkdir();
+					}
+					
+					String dateString = CalendarPatterns.getTimeForStreamId(new Date());
+					
+					String backup_dir = working_dir + File.separatorChar + dateString
+											+ File.separatorChar;
+					File backup_dirFile = new File(working_dir);
+					
+					if (!backup_dirFile.exists()) {
+						backup_dirFile.mkdir();
+					}
+					
+					
+					/* #####################
+					 * Backup Organizations
+					 */
+					List<Organisation> orgList = Organisationmanagement.getInstance().getOrganisations(3L);
+					
+					if (orgList != null) {
+						Document doc = this.createOrgDocument(orgList);
+						
+						String orgListXML = backup_dir + "organizations.xml";
+
+						FileOutputStream fos = new FileOutputStream(orgListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					
+					/* #####################
+					 * Backup Users
+					 */
+					
+					List<Users> uList = UsersDaoImpl.getInstance().getAllUsers();
+					
+					if (uList != null) {
+						Document doc = this.createDocument(uList);
+						
+						String userListXML = backup_dir + "users.xml";
+
+						FileOutputStream fos = new FileOutputStream(userListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					
+					/* #####################
+					 * Backup Room
+					 */
+					List<Rooms> roomList = Roommanagement.getInstance().getAllRooms();
+					
+					if (roomList != null) {
+						Document doc = this.createRoomsDocument(roomList);
+						
+						String roomListXML = backup_dir + "rooms.xml";
+
+						FileOutputStream fos = new FileOutputStream(roomListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					/* #####################
+					 * Backup Appointements
+					 */
+					List<Appointment> aList = AppointmentDaoImpl.getInstance().getAppointments();
+					
+					if (aList != null) {
+						Document doc = this.createAppointementDocument(aList);
+						
+						String aListXML = backup_dir + "appointements.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					
+					String full_path = backup_dir + "";
+					
+					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
+					
+					String requestedFile = "backup_"+dateString+".zip";
+
+					httpServletResponse.reset();
+					httpServletResponse.resetBuffer();
+					httpServletResponse.setContentType("APPLICATION/OCTET-STREAM");
+					httpServletResponse.setHeader("Content-Disposition",
+							"attachment; filename=\"" + requestedFile + "\"");
+					httpServletResponse.setHeader("Content-Length", ""+ rf.length());
+					
+
+					OutputStream out = httpServletResponse.getOutputStream();
+					
+					byte[] buffer = new byte[1024];
+					int readed = -1;
+
+					while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
+						out.write(buffer, 0, readed);
+					}
+
+					rf.close();
+
+					out.flush();
+					out.close();
+
+				}
+			} else {
+				log.debug("ERROR LangExport: not authorized FileDownload "+ (new Date()));
+			}	
+		} catch (Exception er) {
+			log.error("ERROR ", er);
+			log.debug("Error exporting: " + er);
+			er.printStackTrace();
+		}
+	}
+
+	public Document createAppointementDocument(List<Appointment> aList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element appointments = root.addElement("appointments");
+		
+		for (Iterator<Appointment> it = aList.iterator();it.hasNext();) {
+			Appointment a = it.next();
+			
+			Element appointment = appointments.addElement("appointment");
+			
+			appointment.addElement("appointmentId").setText(""+a.getAppointmentId());
+			appointment.addElement("appointmentName").setText(a.getAppointmentName());
+			appointment.addElement("appointmentLocation").setText(a.getAppointmentLocation());
+			appointment.addElement("appointmentDescription").setText(a.getAppointmentDescription());
+			appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
+			appointment.addElement("appointmentStarttime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentStarttime()));
+			appointment.addElement("appointmentEndtime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentEndtime()));
+			if (a.getAppointmentCategory() != null) {
+				appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
+			} else {
+				appointment.addElement("categoryId").setText(""+0);
+			}
+			appointment.addElement("deleted").setText(""+a.getDeleted());
+			appointment.addElement("comment").setText(a.getComment());
+			if (a.getRemind() != null) {
+				appointment.addElement("typId").setText(""+a.getRemind().getTypId());
+			} else {
+				appointment.addElement("typId").setText(""+0);
+			}
+			appointment.addElement("isDaily").setText(""+a.getIsDaily());
+			appointment.addElement("isWeekly").setText(""+a.getIsWeekly());
+			appointment.addElement("isMonthly").setText(""+a.getIsMonthly());
+			appointment.addElement("isYearly").setText(""+a.getIsYearly());
+			if (a.getRoom() != null) {
+				appointment.addElement("room_id").setText(""+a.getRoom().getRooms_id());
+			} else {
+				appointment.addElement("room_id").setText(""+0);
+			}
+			appointment.addElement("icalId").setText(a.getIcalId());
+			appointment.addElement("language_id").setText(""+a.getLanguage_id());
+			appointment.addElement("isPasswordProtected").setText(""+a.getIsPasswordProtected());
+			appointment.addElement("password").setText(a.getPassword());
+			
+			Element meetingMembers = appointment.addElement("meetingMembers");
+			//List<String> organisations = new LinkedList();
+			for (Iterator<MeetingMember> iterObj = a.getMeetingMember().iterator();iterObj.hasNext(); ) {
+				MeetingMember m = iterObj.next();
+				Element meetingMember = meetingMembers.addElement("meetingMember");
+				meetingMember.addElement("meetingMemberId").setText(""+m.getMeetingMemberId());
+				meetingMember.addElement("userid").setText(""+m.getUserid().getUser_id());
+				meetingMember.addElement("firstname").setText(m.getFirstname());
+				meetingMember.addElement("lastname").setText(m.getLastname());
+				meetingMember.addElement("memberStatus").setText(m.getMemberStatus());
+				meetingMember.addElement("appointmentStatus").setText(m.getAppointmentStatus());
+				meetingMember.addElement("email").setText(m.getEmail());
+				meetingMember.addElement("deleted").setText(""+m.getDeleted());
+				meetingMember.addElement("comment").setText(m.getComment());
+				meetingMember.addElement("invitor").setText(""+m.getInvitor());
+			}
+			
+		}
+	
+		return document;
+	}
+	
+	public Document createRoomsDocument(List<Rooms> roomList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element rooms = root.addElement("rooms");
+		
+		for (Iterator<Rooms> it = roomList.iterator();it.hasNext();) {
+			Rooms r = it.next();
+			
+			Element room = rooms.addElement("room");
+			
+			room.addElement("name").setText(r.getName());
+			room.addElement("rooms_id").setText(""+r.getRooms_id());
+			room.addElement("deleted").setText(r.getDeleted());
+			room.addElement("comment").setText(r.getComment());
+			room.addElement("numberOfPartizipants").setText(""+r.getNumberOfPartizipants());
+			room.addElement("appointment").setText(""+r.getAppointment());
+			room.addElement("externalRoomId").setText(""+r.getExternalRoomId());
+			room.addElement("externalRoomType").setText(r.getExternalRoomType());
+			if (r.getRoomtype() != null) {
+				room.addElement("roomtypeId").setText(""+r.getRoomtype().getRoomtypes_id());
+			} else {
+				room.addElement("roomtypeId").setText(""+0);
+			}
+			room.addElement("isDemoRoom").setText(""+r.getIsDemoRoom());
+			room.addElement("demoTime").setText(""+r.getDemoTime());
+			room.addElement("isModeratedRoom").setText(""+r.getIsModeratedRoom());
+			room.addElement("allowUserQuestions").setText(""+r.getAllowUserQuestions());
+			room.addElement("sipNumber").setText(r.getSipNumber());
+			room.addElement("conferencePin").setText(r.getConferencePin());
+			
+		}
+	
+		return document;
+	}
+	
+	public Document createOrgDocument(List<Organisation> orgList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element organisations = root.addElement("organisations");
+		
+		for (Iterator<Organisation> it = orgList.iterator();it.hasNext();) {
+			Organisation org = it.next();
+			
+			Element organisation = organisations.addElement("organisation");
+			
+			organisation.addElement("name").setText(org.getName());
+			organisation.addElement("organisation_id").setText(""+org.getOrganisation_id());
+			organisation.addElement("deleted").setText(org.getDeleted());
+			
+		}
+	
+		return document;
+	}	
+
+	public Document createDocument(List<Users> uList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element users = root.addElement("users");
+
+		for (Iterator<Users> it = uList.iterator();it.hasNext();) {
+			Users u = it.next();
+
+			Element user = users.addElement("user");
+
+			user.addElement("user_id").setText(""+u.getUser_id());
+			user.addElement("age").setText(CalendarPatterns.getDateByMiliSeconds(u.getAge()));
+			user.addElement("availible").setText(u.getAvailible().toString());
+			user.addElement("deleted").setText(u.getDeleted());
+			user.addElement("firstname").setText(u.getFirstname());
+			user.addElement("lastname").setText(u.getLastname());
+			user.addElement("login").setText(u.getLogin());
+			user.addElement("pass").setText(u.getPassword());
+			
+			String pictureuri = u.getPictureuri();
+			if (pictureuri != null) user.addElement("pictureuri").setText(pictureuri);
+			else user.addElement("pictureuri").setText("");
+			
+			if ( u.getLanguage_id() != null ) user.addElement("language_id").setText(u.getLanguage_id().toString());
+			else user.addElement("language_id").setText("");
+				
+			user.addElement("status").setText(u.getStatus().toString());
+			user.addElement("regdate").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate()));
+			user.addElement("title_id").setText(u.getTitle_id().toString());
+			user.addElement("level_id").setText(u.getLevel_id().toString());
+			
+			user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
+			user.addElement("comment").setText(u.getAdresses().getComment());
+			//A User can not have a deleted Adress, you cannot delete the Adress of an User
+			//String deleted = u.getAdresses().getDeleted()
+			//Phone Number not done yet
+			user.addElement("fax").setText(u.getAdresses().getFax());
+			user.addElement("state_id").setText(u.getAdresses().getStates().getState_id().toString());
+			user.addElement("street").setText(u.getAdresses().getStreet());
+			user.addElement("town").setText(u.getAdresses().getTown());
+			user.addElement("zip").setText(u.getAdresses().getZip());
+			
+			// Email and Phone
+			user.addElement("mail").setText(u.getAdresses().getEmail());
+			user.addElement("phone").setText(u.getAdresses().getPhone());
+			
+			
+			Element user_organisations = user.addElement("organisations");
+			//List<String> organisations = new LinkedList();
+			for (Iterator<Organisation_Users> iterObj = u.getOrganisation_users().iterator();iterObj.hasNext(); ) {
+				Organisation_Users orgUsers = iterObj.next();
+				user_organisations.addElement("organisation_id").addText(orgUsers.getOrganisation().getOrganisation_id().toString());
+			}
+			
+			//Not need at the moment
+			//Element user_groups = user.addElement("groups");
+
+		}
+
+		return document;
+	}	
+	public void serializetoXML(OutputStream out, String aEncodingScheme, Document doc)
+			throws Exception {
+		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setEncoding(aEncodingScheme);
+		XMLWriter writer = new XMLWriter(out, outformat);
+		writer.write(doc);
+		writer.flush();
+	}
+
+
+}

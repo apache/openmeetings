@@ -360,6 +360,25 @@ public class Roommanagement {
 		return null;
 	}
 	
+	public List<Rooms> getAllRooms(){
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Rooms.class);
+			crit.add(Restrictions.ne("deleted", "true"));
+			List<Rooms> ll = crit.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return ll;
+		} catch (HibernateException ex) {
+			log.error("[getRooms]", ex);
+		} catch (Exception ex2) {
+			log.error("[getRooms]", ex2);
+		}
+		return null;
+	}
+	
 	public List<Rooms_Organisation> getOrganisationsByRoom(long user_level, long rooms_id){
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){

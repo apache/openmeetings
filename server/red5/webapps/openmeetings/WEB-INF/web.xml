@@ -184,7 +184,13 @@
         <display-name>DefaultIndex</display-name>
         <servlet-name>DefaultIndex</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
-    </servlet>    
+    </servlet> 
+    <servlet>
+        <description>BackupExport</description>
+        <display-name>BackupExport</display-name>
+        <servlet-name>BackupExport</servlet-name>
+        <servlet-class>org.openmeetings.servlet.outputhandler.BackupExport</servlet-class>
+    </servlet> 
     <servlet-mapping>
         <servlet-name>DownloadHandler</servlet-name>
         <url-pattern>/DownloadHandler</url-pattern>
@@ -277,6 +283,10 @@
     <servlet-mapping>
         <servlet-name>DefaultIndex</servlet-name>
         <url-pattern>/sipindex.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BackupExport</servlet-name>
+        <url-pattern>/BackupExport</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

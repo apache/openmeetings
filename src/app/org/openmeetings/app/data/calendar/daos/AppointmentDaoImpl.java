@@ -101,9 +101,41 @@ public class AppointmentDaoImpl {
 			
 			return appoint;
 		} catch (HibernateException ex) {
-			log.error("[getAppointmentById]: " + ex);
+			log.error("[getAppointmentById]: " , ex);
 		} catch (Exception ex2) {
-			log.error("[getAppointmentById]: " + ex2);
+			log.error("[getAppointmentById]: " , ex2);
+		}
+		return null;
+	}
+	
+	public List<Appointment> getAppointments() {
+		try {
+			
+			String hql = "select a from Appointment a " +
+					"WHERE a.deleted != :deleted ";
+					
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("deleted", "true");
+			
+			List<Appointment> appointList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			for (Appointment appointment : appointList) {
+			
+				appointment.setMeetingMember(MeetingMemberDaoImpl.getInstance().getMeetingMemberByAppointmentId(appointment.getAppointmentId()));
+			
+			}
+			
+			return appointList;
+			
+		} catch (HibernateException ex) {
+			log.error("[getAppointmentById]: " , ex);
+		} catch (Exception ex2) {
+			log.error("[getAppointmentById]: " , ex2);
 		}
 		return null;
 	}
