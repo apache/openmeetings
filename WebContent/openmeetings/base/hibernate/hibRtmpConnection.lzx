@@ -1287,7 +1287,7 @@
                 <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("sendVarsToMessageWithClient : ",value,value.message,value.message[0]);
-                if (value.message[0]=='kick'){
+                if (value[0]=='kick'){
                     //canvas.currentModApply
                     parent.showKickMessage = true;
                     parent.disconnect();
