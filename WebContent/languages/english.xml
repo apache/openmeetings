@@ -3024,4 +3024,178 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1006" name="co-browser">
     <value>Only the URL entered in the Status bar is send to participants!</value>
   </string>
+  <string id="1007" name="team-split">
+    <value>Make Team-Rooms [Breakout session]</value>
+  </string>
+  <string id="1008" name="team-split">
+    <value>Choose users for a new Team-Room!</value>
+  </string>
+  <string id="1009" name="team-split">
+    <value>You can choose users here and create a new Conference Room ("Team Room") for them. The chosen users will automatically switch to the new Team-Room or get a notification. Team-Room Moderators will get additionally a list of current rooms so that they can switch to each room if there are is need for a Moderator.</value>
+  </string>
+  <string id="1010" name="team-split">
+    <value>Username</value>
+  </string>
+  <string id="1011" name="team-split">
+    <value>Login</value>
+  </string>
+  <string id="1012" name="team-split">
+    <value></value>
+  </string>
+  <string id="1013" name="team-split">
+    <value>Users for the new Team-Room:</value>
+  </string>
+  <string id="1014" name="team-split">
+    <value>Create Team-Room</value>
+  </string>
+  <string id="1015" name="team-split">
+    <value>Cancel</value>
+  </string>
+  <string id="1016" name="team-split">
+    <value>Choose at least one user for the Team-Room!</value>
+  </string>
+  <string id="1017" name="team-split">
+    <value>Add user to team</value>
+  </string>
+  <string id="1018" name="team-split">
+    <value>Remove user from Team-Room</value>
+  </string>
+  <string id="1019" name="team-split">
+    <value>User is Team-Room Moderator (He is able to manage Team-Rooms and users of the Team-Room can ask him to come inside)</value>
+  </string>
+  <string id="1020" name="team-split">
+    <value>Roomtype</value>
+  </string>
+  <string id="1021" name="team-split">
+    <value>If you check "Force user to switch to new Team-Room" all chosen users will automatically switch to the newly created Team-Room. Otherwise they get a notification with a button that they &lt;i&gt;can&lt;/i&gt; switch to the new room. Team-Moderators always have the free choice to manage the Team-Rooms and switch between them.</value>
+  </string>
+  <string id="1022" name="team-split">
+    <value>Manage Team-Rooms</value>
+  </string>
+  <string id="1023" name="team-split">
+    <value>You can switch here between all Team-Rooms that you are assigned as Team-Room Moderator. Users inside the Team-Room can send you a message, for example to ask you to come to their room and help them. You can also terminate the Team-Room and all Users will be logged out.</value>
+  </string>
+  <string id="1024" name="team-split">
+    <value>Force user to switch to new Team-Room</value>
+  </string>
+  <string id="1025" name="team-split">
+    <value>Name</value>
+  </string>
+  <string id="1026" name="team-split">
+    <value>Created</value>
+  </string>
+  <string id="1027" name="team-split">
+    <value></value>
+  </string>
+  <string id="1028" name="team-split">
+    <value></value>
+  </string>
+  <string id="1029" name="team-split">
+    <value>Users available</value>
+  </string>
+  <string id="1030" name="team-split">
+    <value>Add a user with the plus from the left or remove it with the cross from the right!</value>
+  </string>
+  <string id="1031" name="team-split">
+    <value>1) Team-Room settings</value>
+  </string>
+  <string id="1032" name="team-split">
+    <value>2) Add users to the Team-Room</value>
+  </string>
+  <string id="1033" name="team-split">
+    <value>Team-Room Name</value>
+  </string>
+  <string id="1034" name="team-split">
+    <value>Team-Room</value>
+  </string>
+  <string id="1035" name="team-split">
+    <value>Change to the Room</value>
+  </string>
+  <string id="1036" name="team-split">
+    <value>Switch to this Team-Room</value>
+  </string>
+  <string id="1037" name="team-split">
+    <value>Terminate Team-Room and logout all Users</value>
+  </string>
+  <string id="1038" name="team-split">
+    <value>New Team-Room</value>
+  </string>
+  <string id="1039" name="team-split">
+    <value>There is a new Team-Room available for you.</value>
+  </string>
+  <string id="1040" name="team-split">
+    <value>Switch to Team-Room</value>
+  </string>
+  <string id="1041" name="team-split">
+    <value>Team-Room Actions</value>
+  </string>
+  <string id="1042" name="team-split">
+    <value>This is a Team-Room, you can send the Team-Moderator a message if you need help. You can re-open this window via the main menu in the "Actions" section!</value>
+  </string>
+  <string id="1043" name="team-split">
+    <value>1) Send message to Team-Room Moderator</value>
+  </string>
+  <string id="1044" name="team-split">
+    <value>New Team-Room</value>
+  </string>
+  <string id="1045" name="team-split">
+    <value>There is a new Team-Room available. You can switch to that Room. Team-Rooms are like "Workgroups" with additionally possibilities to ask the Team-Room Moderator for help. Your Team-Rooms are also available in the "My Meetings" section.</value>
+  </string>
+  <string id="1046" name="team-split">
+    <value>Switch to Team-Room</value>
+  </string>
+  <string id="1047" name="team-split">
+    <value>Created by:</value>
+  </string>
+  <string id="1048" name="team-split">
+    <value>Team-Room name:</value>
+  </string>
+  <string id="1049" name="team-split">
+    <value>This Window will stay open even if you leave the room!</value>
+  </string>
+  <string id="1050" name="team-split">
+    <value>Users for this Team-Room</value>
+  </string>
+  <string id="1051" name="team-split">
+    <value>3) Other Team-Rooms that you could switch to</value>
+  </string>
+  <string id="1052" name="team-split">
+    <value>Send a message to the Team-Room Moderators. For example if you need help in Moderating the Room or if you have a question about the topic.</value>
+  </string>
+  <string id="1053" name="team-split">
+    <value>Send</value>
+  </string>
+  <string id="1054" name="team-split">
+    <value>2) Users that are invited to this Team-Room</value>
+  </string>
+  <string id="1055" name="team-split">
+    <value>Is Team-Room Moderator</value>
+  </string>
+  <string id="1056" name="team-split">
+    <value>These are all users that the moderator has invited to this Team-Room.</value>
+  </string>
+  <string id="1057" name="team-split">
+    <value>There is no Team-Moderator logged in at the moment!</value>
+  </string>
+  <string id="1058" name="team-split">
+    <value>Please enter a message</value>
+  </string>
+  <string id="1059" name="team-split">
+    <value>Please help us, we have a problem in our Team-Room!</value>
+  </string>
+  <string id="1060" name="team-split">
+    <value>A user from a Team-Room requests your help.</value>
+  </string>
+  <string id="1061" name="team-split">
+    <value>Team-Room request for help</value>
+  </string>
+  <string id="1062" name="team-split">
+    <value>Message:</value>
+  </string>
+  <string id="1063" name="team-split">
+    <value>From:</value>
+  </string>
+  <string id="1064" name="team-split">
+    <value>You are currently not in any Team-Room. But you can switch here to all Team-Rooms that you have access to.</value>
+  </string>
 </language>
