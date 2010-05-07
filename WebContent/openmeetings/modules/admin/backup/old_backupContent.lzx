@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!--- Backup module for admin. It can export or import user account data as xml-file. -->
+<class name="backupContent" extends="baseContentView">
+	
+	<!-- 380:Userdata - Export -->
+	<labelText labelid="380" y="2" x="2" fontstyle="bold" width="160" />  
+	
+	<!-- 382:start export -->
+    <simpleLabelButton labelid="382" width="160" x="2" y="32">
+    	<handler name="onclick">
+    		<![CDATA[
+	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	    				+canvas.httpRootKey+'Export?organisation='+0
+	    				+'&moduleName=users'
+	    				+'&sid='+canvas.sessionId;
+	    		if($debug) Debug.write("BACKUP/exporturl "+exporturl);
+	            lz.Browser.loadURL(exporturl,"_parent");
+            ]]>
+    	</handler>
+    </simpleLabelButton>   
+    
+    <!-- 381:All organisations must be already existing! -->
+    <labelText labelid="381" y="32" x="200" width="300" />  
+	
+	<!-- 383:By organisation -->
+	<labelText labelid="383" y="62" x="2" width="160" />  
+	
+    <resetCombobox name="organistations" width="170" y="62" x="230" editable="false" >
+    	<handler name="oninit">
+    		this.getAllOrganisations.doCall();
+    	</handler>
+		<netRemoteCallHib name="getAllOrganisations" funcname="organisationservice.getAllOrganisations" 
+						  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if($debug) Debug.write("BACKUP/getAllOrganisations ",value);
+		    		for (var i=0;i<value.length;i++) {
+		    			this.parent.addItem(value[i].name,value[i].organisation_id);
+		    		}
+		    		this.parent.selectItem(String(value[0].organisation_id));
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	                
+    </resetCombobox>
+    
+	<!-- 384:start export -->
+    <simpleLabelButton labelid="384" x="410" y="62">
+    	<handler name="onclick">
+    		<![CDATA[
+	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	    				+canvas.httpRootKey+'Export?organisation='+parent.organistations.getValue()
+	    				+'&moduleName=userorganisations'
+	    				+'&sid='+canvas.sessionId;
+	    		if($debug) Debug.write("BACKUP/exporturl "+exporturl);
+	            lz.Browser.loadURL(exporturl,"_parent");
+            ]]>
+    	</handler>
+    </simpleLabelButton>   
+	
+	<!-- 385:Userdata - Import -->
+	<labelText labelid="385" y="112" x="2" fontstyle="bold" width="160" />  
+	
+	<!-- 386:choose users.xml -->
+    <simpleLabelButton labelid="386" x="2" y="142">
+	    <handler name="onclick">
+	        new lz.importWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
+	    </handler>
+    </simpleLabelButton> 
+    
+    <!-- 386:choose users.xml -->
+    <simpleLabelButton text="System Import" x="2" y="180" width="200">
+	    <handler name="onclick">
+	        new lz.backupImportWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
+	    </handler>
+    </simpleLabelButton> 
+    
+    <!-- backup export -->
+    <simpleLabelButton text="System Backup" x="210" y="180" width="200">
+        <handler name="onclick">
+            <![CDATA[
+                var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                        +canvas.httpRootKey+'BackupExport?moduleName=backup'
+                        +'&sid='+canvas.sessionId;
+                if($debug) Debug.write("BACKUP/exporturl "+exporturl);
+                lz.Browser.loadURL(exporturl,"_parent");
+            ]]>
+        </handler>
+    </simpleLabelButton>       
+    
+</class>
+
+</library>

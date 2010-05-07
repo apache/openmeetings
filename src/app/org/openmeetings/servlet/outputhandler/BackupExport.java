@@ -1,6 +1,7 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,6 +9,8 @@ import java.io.RandomAccessFile;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -96,11 +99,13 @@ public class BackupExport extends HttpServlet {
 						working_dirFile.mkdir();
 					}
 					
-					String dateString = CalendarPatterns.getTimeForStreamId(new Date());
+					String dateString = "backup_"+CalendarPatterns.getTimeForStreamId(new Date());
 					
-					String backup_dir = working_dir + File.separatorChar + dateString
-											+ File.separatorChar;
-					File backup_dirFile = new File(working_dir);
+					String backup_file = working_dir + File.separatorChar + dateString;
+					
+					String backup_dir = backup_file + File.separatorChar;
+											
+					File backup_dirFile = new File(backup_dir);
 					
 					if (!backup_dirFile.exists()) {
 						backup_dirFile.mkdir();
@@ -128,7 +133,7 @@ public class BackupExport extends HttpServlet {
 					 * Backup Users
 					 */
 					
-					List<Users> uList = UsersDaoImpl.getInstance().getAllUsers();
+					List<Users> uList = UsersDaoImpl.getInstance().getAllUsersDeleted();
 					
 					if (uList != null) {
 						Document doc = this.createDocument(uList);
@@ -174,12 +179,17 @@ public class BackupExport extends HttpServlet {
 						
 					}
 					
+					String full_path = backup_file + ".zip";
 					
-					String full_path = backup_dir + "";
+					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(full_path));
+					
+					zipToDir(backup_dir, zos);
+					
+					zos.close();
 					
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 					
-					String requestedFile = "backup_"+dateString+".zip";
+					String requestedFile = dateString+".zip";
 
 					httpServletResponse.reset();
 					httpServletResponse.resetBuffer();
@@ -214,6 +224,42 @@ public class BackupExport extends HttpServlet {
 		}
 	}
 
+	private void zipToDir(String backupDir, ZipOutputStream zos) throws Exception {
+		
+		File zipDir = new File(backupDir);
+		
+		String[] dirList = zipDir.list();
+		
+		byte[] readBuffer = new byte[1024];
+		
+		int bytesIn = 0;
+		
+		for (int i=0;i<dirList.length;i++) {
+			
+			File f = new File(zipDir, dirList[i]);
+			
+			if (f.isDirectory()) {
+				String filePath = f.getPath();
+				zipToDir(filePath, zos);
+			} else {
+				FileInputStream fis = new FileInputStream(f);
+				ZipEntry newEntry = new ZipEntry(f.getName());
+				
+				//log.debug("newEntry :: "+f.getPath());
+				//log.debug("newEntry :: "+f.getName());
+				
+				zos.putNextEntry(newEntry);
+				while((bytesIn = fis.read(readBuffer)) != -1 ) {
+					zos.write(readBuffer, 0, bytesIn);
+				}
+				fis.close();
+			}
+			
+			
+		}
+		
+	}
+
 	public Document createAppointementDocument(List<Appointment> aList) throws Exception {
 		Document document = DocumentHelper.createDocument();
 		document.setXMLEncoding("UTF-8");
@@ -234,9 +280,9 @@ public class BackupExport extends HttpServlet {
 			Element appointment = appointments.addElement("appointment");
 			
 			appointment.addElement("appointmentId").setText(""+a.getAppointmentId());
-			appointment.addElement("appointmentName").setText(a.getAppointmentName());
-			appointment.addElement("appointmentLocation").setText(a.getAppointmentLocation());
-			appointment.addElement("appointmentDescription").setText(a.getAppointmentDescription());
+			appointment.addElement("appointmentName").setText(""+a.getAppointmentName());
+			appointment.addElement("appointmentLocation").setText(""+a.getAppointmentLocation());
+			appointment.addElement("appointmentDescription").setText(""+a.getAppointmentDescription());
 			appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
 			appointment.addElement("appointmentStarttime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentStarttime()));
 			appointment.addElement("appointmentEndtime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentEndtime()));
@@ -246,7 +292,7 @@ public class BackupExport extends HttpServlet {
 				appointment.addElement("categoryId").setText(""+0);
 			}
 			appointment.addElement("deleted").setText(""+a.getDeleted());
-			appointment.addElement("comment").setText(a.getComment());
+			appointment.addElement("comment").setText(""+a.getComment());
 			if (a.getRemind() != null) {
 				appointment.addElement("typId").setText(""+a.getRemind().getTypId());
 			} else {
@@ -261,10 +307,10 @@ public class BackupExport extends HttpServlet {
 			} else {
 				appointment.addElement("room_id").setText(""+0);
 			}
-			appointment.addElement("icalId").setText(a.getIcalId());
+			appointment.addElement("icalId").setText(""+a.getIcalId());
 			appointment.addElement("language_id").setText(""+a.getLanguage_id());
 			appointment.addElement("isPasswordProtected").setText(""+a.getIsPasswordProtected());
-			appointment.addElement("password").setText(a.getPassword());
+			appointment.addElement("password").setText(""+a.getPassword());
 			
 			Element meetingMembers = appointment.addElement("meetingMembers");
 			//List<String> organisations = new LinkedList();
@@ -307,14 +353,14 @@ public class BackupExport extends HttpServlet {
 			
 			Element room = rooms.addElement("room");
 			
-			room.addElement("name").setText(r.getName());
+			room.addElement("name").setText(""+r.getName());
 			room.addElement("rooms_id").setText(""+r.getRooms_id());
-			room.addElement("deleted").setText(r.getDeleted());
-			room.addElement("comment").setText(r.getComment());
+			room.addElement("deleted").setText(""+r.getDeleted());
+			room.addElement("comment").setText(""+r.getComment());
 			room.addElement("numberOfPartizipants").setText(""+r.getNumberOfPartizipants());
 			room.addElement("appointment").setText(""+r.getAppointment());
 			room.addElement("externalRoomId").setText(""+r.getExternalRoomId());
-			room.addElement("externalRoomType").setText(r.getExternalRoomType());
+			room.addElement("externalRoomType").setText(""+r.getExternalRoomType());
 			if (r.getRoomtype() != null) {
 				room.addElement("roomtypeId").setText(""+r.getRoomtype().getRoomtypes_id());
 			} else {
@@ -324,8 +370,8 @@ public class BackupExport extends HttpServlet {
 			room.addElement("demoTime").setText(""+r.getDemoTime());
 			room.addElement("isModeratedRoom").setText(""+r.getIsModeratedRoom());
 			room.addElement("allowUserQuestions").setText(""+r.getAllowUserQuestions());
-			room.addElement("sipNumber").setText(r.getSipNumber());
-			room.addElement("conferencePin").setText(r.getConferencePin());
+			room.addElement("sipNumber").setText(""+r.getSipNumber());
+			room.addElement("conferencePin").setText(""+r.getConferencePin());
 			
 		}
 	
@@ -353,7 +399,7 @@ public class BackupExport extends HttpServlet {
 			
 			organisation.addElement("name").setText(org.getName());
 			organisation.addElement("organisation_id").setText(""+org.getOrganisation_id());
-			organisation.addElement("deleted").setText(org.getDeleted());
+			organisation.addElement("deleted").setText(""+org.getDeleted());
 			
 		}
 	
@@ -380,13 +426,14 @@ public class BackupExport extends HttpServlet {
 			Element user = users.addElement("user");
 
 			user.addElement("user_id").setText(""+u.getUser_id());
-			user.addElement("age").setText(CalendarPatterns.getDateByMiliSeconds(u.getAge()));
-			user.addElement("availible").setText(u.getAvailible().toString());
-			user.addElement("deleted").setText(u.getDeleted());
-			user.addElement("firstname").setText(u.getFirstname());
-			user.addElement("lastname").setText(u.getLastname());
-			user.addElement("login").setText(u.getLogin());
-			user.addElement("pass").setText(u.getPassword());
+			user.addElement("deleted").setText(""+u.getDeleted());
+			user.addElement("age").setText(""+CalendarPatterns.getDateByMiliSeconds(u.getAge()));
+			user.addElement("availible").setText(""+u.getAvailible().toString());
+			user.addElement("deleted").setText(""+u.getDeleted());
+			user.addElement("firstname").setText(""+u.getFirstname());
+			user.addElement("lastname").setText(""+u.getLastname());
+			user.addElement("login").setText(""+u.getLogin());
+			user.addElement("pass").setText(""+u.getPassword());
 			
 			String pictureuri = u.getPictureuri();
 			if (pictureuri != null) user.addElement("pictureuri").setText(pictureuri);
@@ -395,25 +442,25 @@ public class BackupExport extends HttpServlet {
 			if ( u.getLanguage_id() != null ) user.addElement("language_id").setText(u.getLanguage_id().toString());
 			else user.addElement("language_id").setText("");
 				
-			user.addElement("status").setText(u.getStatus().toString());
-			user.addElement("regdate").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate()));
-			user.addElement("title_id").setText(u.getTitle_id().toString());
-			user.addElement("level_id").setText(u.getLevel_id().toString());
+			user.addElement("status").setText(""+u.getStatus().toString());
+			user.addElement("regdate").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate()));
+			user.addElement("title_id").setText(""+u.getTitle_id().toString());
+			user.addElement("level_id").setText(""+u.getLevel_id().toString());
 			
 			user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
 			user.addElement("comment").setText(u.getAdresses().getComment());
 			//A User can not have a deleted Adress, you cannot delete the Adress of an User
 			//String deleted = u.getAdresses().getDeleted()
 			//Phone Number not done yet
-			user.addElement("fax").setText(u.getAdresses().getFax());
-			user.addElement("state_id").setText(u.getAdresses().getStates().getState_id().toString());
-			user.addElement("street").setText(u.getAdresses().getStreet());
-			user.addElement("town").setText(u.getAdresses().getTown());
-			user.addElement("zip").setText(u.getAdresses().getZip());
+			user.addElement("fax").setText(""+u.getAdresses().getFax());
+			user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
+			user.addElement("street").setText(""+u.getAdresses().getStreet());
+			user.addElement("town").setText(""+u.getAdresses().getTown());
+			user.addElement("zip").setText(""+u.getAdresses().getZip());
 			
 			// Email and Phone
-			user.addElement("mail").setText(u.getAdresses().getEmail());
-			user.addElement("phone").setText(u.getAdresses().getPhone());
+			user.addElement("mail").setText(""+u.getAdresses().getEmail());
+			user.addElement("phone").setText(""+u.getAdresses().getPhone());
 			
 			
 			Element user_organisations = user.addElement("organisations");

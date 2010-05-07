@@ -2,6 +2,7 @@
 <library>
 
 	<include href="fileUpload.lzx" />
+	<include href="backupImportWindow.lzx" />
 	<include href="importWindow.lzx" />
 	<include href="uploadWindow.lzx" />
 

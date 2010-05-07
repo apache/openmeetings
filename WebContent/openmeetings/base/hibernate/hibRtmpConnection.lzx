@@ -1400,6 +1400,7 @@
                     	
                     	if (value.action == 'import') {
                     		canvas.currentUploadWindow.myFileUpload.onComplete("byRemote");
+                    		return
                     	}
                     	
                         var error = false;

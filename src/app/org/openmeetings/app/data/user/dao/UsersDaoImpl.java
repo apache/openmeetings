@@ -175,6 +175,29 @@ public class UsersDaoImpl {
 		}
 		return null;
 	}	
+	
+	public List<Users> getAllUsersDeleted(){
+		try {
+			
+			//get all users
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Users.class, "openmeetings");
+
+			List<Users> ll = crit.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return ll;				
+
+		} catch (HibernateException ex) {
+			log.error("[getAllUsers] "+ex);
+		} catch (Exception ex2) {
+			log.error("[getAllUsers] "+ex2);
+		}
+		return null;
+	}	
 
 	public Long getAllUserMax(String search) {
 		try {

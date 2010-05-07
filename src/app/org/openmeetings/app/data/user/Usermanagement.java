@@ -1412,6 +1412,25 @@ public class Usermanagement {
 		return u;
 		
 	}
+	
+	public Users getUserByIdAndDeleted(Long id) throws Exception{
+		log.debug("Usermanagement.getUserById");
+		
+		Object idf = HibernateUtil.createSession();
+		Session session = HibernateUtil.getSession();
+		Transaction tx = session.beginTransaction();
+		
+		Criteria crit = session.createCriteria(Users.class, "openmeetings");
+		crit.add(Restrictions.eq("user_id", id));
+		//crit.add(Restrictions.eq("status", 1));
+		Users u = (Users)crit.uniqueResult();
+		
+		tx.commit();
+		HibernateUtil.closeSession(idf);
+		
+		return u;
+		
+	}
 	//-----------------------------------------------------------------------------------------------------
 	
 	/**

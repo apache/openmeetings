@@ -93,6 +93,24 @@ public class Organisationmanagement {
 		return null;
 	}
 	
+	public Long addOrganisationObj(Organisation org) {
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			org.setStarttime(new Date());
+			long id = (Long) session.save(org);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return id;
+		} catch (HibernateException ex) {
+			log.error("[addOrganisationObj]" ,ex);
+		} catch (Exception ex2) {
+			log.error("[addOrganisationObj]" ,ex2);
+		}
+		return null;
+	}
+	
 	/**
 	 * 
 	 * @param user_level
@@ -353,6 +371,25 @@ public class Organisationmanagement {
 			log.error("[getOrganisationById]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
+		}
+		return null;
+	}
+	
+	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
+			query.setLong("organisation_id", organisation_id);
+			Organisation o = (Organisation) query.uniqueResult();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return o;
+		} catch (HibernateException ex) {
+			log.error("[getOrganisationByIdAndDeleted]",ex);
+		} catch (Exception ex2) {
+			log.error("[getOrganisationByIdAndDeleted]",ex2);
 		}
 		return null;
 	}

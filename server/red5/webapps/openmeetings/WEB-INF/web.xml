@@ -191,6 +191,12 @@
         <servlet-name>BackupExport</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.BackupExport</servlet-class>
     </servlet> 
+    <servlet>
+		<description>BackupImport</description>
+      	<display-name>BackupImport</display-name>
+	    <servlet-name>BackupImport</servlet-name>
+	    <servlet-class>org.openmeetings.servlet.outputhandler.BackupImport</servlet-class>
+	</servlet>
     <servlet-mapping>
         <servlet-name>DownloadHandler</servlet-name>
         <url-pattern>/DownloadHandler</url-pattern>
@@ -287,6 +293,10 @@
     <servlet-mapping>
         <servlet-name>BackupExport</servlet-name>
         <url-pattern>/BackupExport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	    <servlet-name>BackupImport</servlet-name>
+	    <url-pattern>/BackupImport</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

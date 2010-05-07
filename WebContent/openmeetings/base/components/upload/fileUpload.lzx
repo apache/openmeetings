@@ -12,6 +12,9 @@
  		<!-- Show only XML Files in FileBrowser -->
  		<attribute name="isOnlyXml" value="false" type="boolean" />
  		
+ 		<!-- Show only ZIP Files in FileBrowser -->
+ 		<attribute name="isOnlyZip" value="false" type="boolean" />
+ 		
  		<!-- Show only Images Files in FileBrowser -->
  		<attribute name="isOnlyProfile" value="false" type="boolean" />
         
@@ -46,7 +49,17 @@
 
 		<method name="browse">
 		<![CDATA[	
-			if (this.isOnlyImage){
+		
+			if (this.isOnlyZip) {
+				
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Powerpoint (*.zip)";
+				imageTypes.extension = "*.zip";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+				
+			} else if (this.isOnlyImage){
 				var allTypes = new Array();
 
 				var imageTypes = new Object();
