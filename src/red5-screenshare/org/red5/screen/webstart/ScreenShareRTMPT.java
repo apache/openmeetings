@@ -14,8 +14,8 @@ import org.red5.io.flv.impl.FLVReader;
 import org.red5.io.flv.impl.Tag;
 import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
-import org.red5.screen.webstart.gui.VirtualScreen;
-import org.red5.screen.webstart.gui.VirtualScreenBean;
+import org.red5.screen.webstart.tgui.VirtualScreen;
+import org.red5.screen.webstart.tgui.VirtualScreenBean;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.event.IEvent;
@@ -66,6 +66,12 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
+import javax.swing.JComboBox;
 
 public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
 
@@ -108,6 +114,15 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	public JSpinner jVScreenWidthSpin;
 	public JSpinner jVScreenHeightSpin;
 	
+	 //---
+    
+    public JComboBox jVScreenResizeMode;
+    public JLabel vscreenResizeLabel;
+    //public JLabel vscreenResizeHeightLabel;
+    //public JSpinner jVScreenResizeWidthSpin;
+    //public JSpinner jVScreenResizeHeightSpin;
+    //---
+    
 	public JLabel textAreaHeaderRecording;
 	public JLabel textAreaHeaderRecordingDescr;
 	public JButton startButtonRecording;
@@ -156,6 +171,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	public Float imgQuality = new Float(0.40);
 	
 	public Float scaleFactor = 1F;
+	public float Ampl_factor = 1.3f;
 	
 	public boolean isConnected = false;
 
@@ -662,10 +678,13 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	
 				logger.debug( "setup capture thread");
 	
-				capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
-											VirtualScreenBean.vScreenSpinnerY,
-											VirtualScreenBean.vScreenSpinnerWidth,
-											VirtualScreenBean.vScreenSpinnerHeight);
+                capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
+				                        VirtualScreenBean.vScreenSpinnerY,
+				                        VirtualScreenBean.vScreenSpinnerWidth,
+				                        VirtualScreenBean.vScreenSpinnerHeight,
+				                        VirtualScreenBean.vScreenResizeX,
+				                        VirtualScreenBean.vScreenResizeY
+									);
 	
 				if (thread == null)
 				{
@@ -754,15 +773,21 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
 	private final class CaptureScreen extends Object implements Runnable
 	{
-		private volatile int x = 0;
-		private volatile int y = 0;
-		private volatile int width = 320;
-		private volatile int height = 240;
-		private volatile long timestamp = 0;
+        private volatile int x = 0;
+        private volatile int y = 0;
+        private volatile int resizeX;
+        private volatile int resizeY;
+        
+        private volatile int width = resizeX; 	//320
+        private volatile int height = resizeY; 	//240
+        
+       
+        
+        private volatile long timestamp = 0;
 
-		private volatile boolean active = true;
-		private volatile boolean stopped = false;
-		private byte[] previousItems = null;
+        private volatile boolean active = true;
+        private volatile boolean stopped = false;
+        private byte[] previousItems = null;
 
 		// ------------------------------------------------------------------------
 		//
@@ -771,12 +796,15 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 		// ------------------------------------------------------------------------
 
 
-		public CaptureScreen(final int x, final int y, final int width, final int height)
-		{
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+		public CaptureScreen(final int x, final int y, final int width, final int height,int resizeX,int resizeY)
+        {
+			
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.resizeX = resizeX;
+            this.resizeY = resizeY;			
 
         	logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height );
 
@@ -823,76 +851,100 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 		// ------------------------------------------------------------------------
 
 		public void run()
-		{
-			final int blockWidth = 32;
-			final int blockHeight = 32;
+        {
+                final int blockWidth = 32;
+                final int blockHeight = 32;
 
-			final int timeBetweenFrames = 1000; //frameRate
+                final int timeBetweenFrames = 1000; //frameRate
 
-			int frameCounter = 0;
+                int frameCounter = 0;
 
-			try
-			{
-				Robot robot = new Robot();
+                int orig_width = width;
+                int orig_height = height;
+               
+               
+                try
+                {
+                        Robot robot = new Robot();
 
-				this.previousItems = null;
-				
-				while (active)
-				{
-					final long ctime = System.currentTimeMillis();
+                        this.previousItems = null;
+                        
+                        while (active)
+                        {
+                                final long ctime = System.currentTimeMillis();
+                                
+                                
+                                width = orig_width;
+                                height = orig_height;
+                                
+                                BufferedImage image = robot.createScreenCapture(new Rectangle(x, y, width, height));
+                                
+                                int width_new = resizeX;
+                            	int height_new = resizeY;
+                                width = resizeX;
+                                height = resizeY; 
+                            	//Resize to 640*480
+                            	// Create new (blank) image of required (scaled) size
+                            	BufferedImage image_raw = new BufferedImage(width_new, height_new, BufferedImage.TYPE_INT_RGB);    
+                            	
+                            	
+                            	Graphics2D graphics2D = image_raw.createGraphics();
+                            	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                            	graphics2D.drawImage(image, 0, 0, width_new, height_new, null);
+                            	graphics2D.dispose();
+                            		
+                            	//End resize
+                                
+                                int scaledWidth = width;
+                                int scaledHeight = height;
+                                
+                                byte[] current = null;
+                                if (scaleFactor != 1F) {
+                                        
+                                        logger.debug("Calc new Scaled Instance ",scaleFactor);
+                                        
+                                        scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
+                                        scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
+                                        
+                                        Image img = image_raw.getScaledInstance(scaledWidth,
+                                                                                        scaledHeight,Image.SCALE_SMOOTH);
+                                        
+                                        BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
+                                        
+                                        Graphics2D biContext = image_scaled.createGraphics();
+                                        biContext.drawImage(img, 0, 0, null);
+                                        current = toBGR(image_scaled);
+                                } else {
+                                        current = toBGR(image_raw);
+                                }
+                                
+                                try
+                                {
+                                        timestamp += (1000000 / timeBetweenFrames);
 
-					BufferedImage image_raw = robot.createScreenCapture(new Rectangle(x, y, width, height));
+                                        final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
+                                        pushVideo( screenBytes.length, screenBytes, timestamp);
+                                        this.previousItems = current;
 
-					int scaledWidth = width;
-					int scaledHeight = height;
-					
-					byte[] current = null;
-					if (scaleFactor != 1F) {
-						
-						logger.debug("Calc new Scaled Instance ",scaleFactor);
-						
-						scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
-						scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
-						
-						Image img = image_raw.getScaledInstance(scaledWidth,
-												scaledHeight,Image.SCALE_SMOOTH);
-						
-						BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
-						
-						Graphics2D biContext = image_scaled.createGraphics();
-						biContext.drawImage(img, 0, 0, null);
-						current = toBGR(image_scaled);
-					} else {
-						current = toBGR(image_raw);
-					}
-					
-					try
-					{
-						timestamp += (1000000 / timeBetweenFrames);
+                                        if (++frameCounter % 100 == 0) this.previousItems = null;
+                                }
+                                catch (Exception e)
+                                {
+                                        e.printStackTrace();
+                                }
 
-						final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
-						pushVideo( screenBytes.length, screenBytes, timestamp);
-						this.previousItems = current;
+                                final int spent = (int) (System.currentTimeMillis() - ctime);
 
-						if (++frameCounter % 100 == 0) this.previousItems = null;
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-
-					final int spent = (int) (System.currentTimeMillis() - ctime);
-
-					sendCursorStatus();
-					
-					Thread.sleep(Math.max(0, timeBetweenFrames - spent));
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+                                sendCursorStatus();
+                                
+                                Thread.sleep(Math.max(0, timeBetweenFrames - spent));
+                        }
+                }
+                catch (Exception e)
+                {
+                        e.printStackTrace();
+                }
+        }
 
 
 		// ------------------------------------------------------------------------

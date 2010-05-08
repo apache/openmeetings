@@ -66,6 +66,12 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
+import javax.swing.JComboBox;
 
 public class ScreenShare extends RTMPClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
 
@@ -84,80 +90,90 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     public int kt = 0;
     public int kt2 = 0;
     public ByteBuffer buffer;
-	public CaptureScreen capture = null;
-	public Thread thread = null;
+        public CaptureScreen capture = null;
+        public Thread thread = null;
 
-	public java.awt.Container contentPane;
-	public JFrame t;
-	public JLabel textArea;
-	public JLabel textWarningArea;
-	public JLabel textAreaQualy;
-	public JButton startButton;
-	public JButton stopButton;
-	public JButton exitButton;
-	public JSpinner jSpin;
-	public JLabel tFieldScreenZoom;
-	public JLabel blankArea;
-	public BlankArea virtualScreen;
-	public JLabel vscreenXLabel;
-	public JLabel vscreenYLabel;
-	public JSpinner jVScreenXSpin;
-	public JSpinner jVScreenYSpin;
-	public JLabel vscreenWidthLabel;
-	public JLabel vscreenHeightLabel;
-	public JSpinner jVScreenWidthSpin;
-	public JSpinner jVScreenHeightSpin;
-	
-	public JLabel textAreaHeaderRecording;
-	public JLabel textAreaHeaderRecordingDescr;
-	public JButton startButtonRecording;
-	public JButton stopButtonRecording;
+        public java.awt.Container contentPane;
+        public JFrame t;
+        public JLabel textArea;
+        public JLabel textWarningArea;
+        public JLabel textAreaQualy;
+        public JButton startButton;
+        public JButton stopButton;
+        public JButton exitButton;
+        public JSpinner jSpin;
+        public JLabel tFieldScreenZoom;
+        public JLabel blankArea;
+        public BlankArea virtualScreen;
+        public JLabel vscreenXLabel;
+        public JLabel vscreenYLabel;
+        public JSpinner jVScreenXSpin;
+        public JSpinner jVScreenYSpin;
+        public JLabel vscreenWidthLabel;
+        public JLabel vscreenHeightLabel;       
+        public JSpinner jVScreenWidthSpin;
+        public JSpinner jVScreenHeightSpin;
+        
+        //---
+        
+        public JComboBox jVScreenResizeMode;
+        public JLabel vscreenResizeLabel;
+        //public JLabel vscreenResizeHeightLabel;
+        //public JSpinner jVScreenResizeWidthSpin;
+        //public JSpinner jVScreenResizeHeightSpin;
+        //---
+        
+        public JLabel textAreaHeaderRecording;
+        public JLabel textAreaHeaderRecordingDescr;
+        public JButton startButtonRecording;
+        public JButton stopButtonRecording;
 
-	public JLabel vScreenIconLeft;
-	public JLabel vScreenIconRight;
-	public JLabel vScreenIconUp;
-	public JLabel vScreenIconDown;
-	public JLabel myBandWidhtTestLabel;
+        public JLabel vScreenIconLeft;
+        public JLabel vScreenIconRight;
+        public JLabel vScreenIconUp;
+        public JLabel vScreenIconDown;
+        public JLabel myBandWidhtTestLabel;
 
-	public String host = "btg199251";
-	public String app = "oflaDemo";
-	public int port = 1935;
-	
-	public Long organization_id = 0L;
-	
-	public boolean startRecording = false;
-	public boolean stopRecording = false;
-	
-	public boolean startStreaming = false;
-	public boolean stopStreaming = false;
-	
-	public String label730 = "Desktop Publisher";
-	public String label731 = "This application will publish your screen";
-	public String label732 = "Start Sharing";
-	public String label733 = "Stop Sharing";
-	public String label734 = "Select your screen Area:";
-	public String label735 = "Change width";
-	public String label737 = "Change height";
-	public String label738 = "SharingScreen X:";
-	public String label739 = "SharingScreen Y:";
-	public String label740 = "SharingScreen Width:";
-	public String label741 = "SharingScreen Height:";
-	public String label742 = "Connection was closed by Server";
-	public String label844 = "Show Mouse Position at viewers";
-	
-	public String label869 = "Recording";
-	public String label870 = "<HTML>You may record and share your screen at the same time." +
-			"To enable others to see your screen just hit the start button on the top." +
-			"To only record the Session it is sufficient to click start recording.</HTML>";
-	public String label871 = "Start Recording";
-	public String label872 = "Stop Recording";
-	public String label878 = "Stop Sharing";
+        public String host = "btg199251";
+        public String app = "oflaDemo";
+        public int port = 1935;
+        
+        public Long organization_id = 0L;
+        
+        public boolean startRecording = false;
+        public boolean stopRecording = false;
+        
+        public boolean startStreaming = false;
+        public boolean stopStreaming = false;
+        
+        public String label730 = "Desktop Publisher";
+        public String label731 = "This application will publish your screen";
+        public String label732 = "Start Sharing";
+        public String label733 = "Stop Sharing";
+        public String label734 = "Select your screen Area:";
+        public String label735 = "Change width";
+        public String label737 = "Change height";
+        public String label738 = "SharingScreen X:";
+        public String label739 = "SharingScreen Y:";
+        public String label740 = "SharingScreen Width:";
+        public String label741 = "SharingScreen Height:";
+        public String label742 = "Connection was closed by Server";
+        public String label844 = "Show Mouse Position at viewers";
+        
+        public String label869 = "Recording";
+        public String label870 = "<HTML>You may record and share your screen at the same time." +
+                        "To enable others to see your screen just hit the start button on the top." +
+                        "To only record the Session it is sufficient to click start recording.</HTML>";
+        public String label871 = "Start Recording";
+        public String label872 = "Stop Recording";
+        public String label878 = "Stop Sharing";
 
-	public Float imgQuality = new Float(0.40);
-	
-	public Float scaleFactor = 1F;
-	
-	public boolean isConnected = false;
+        public Float imgQuality = new Float(0.40);
+        
+        public Float scaleFactor = 1F;
+        public float Ampl_factor = 1.3f;
+        
+        public boolean isConnected = false;
 
     // ------------------------------------------------------------------------
     //
@@ -165,93 +181,93 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     //
     // ------------------------------------------------------------------------
 
-	private ScreenShare() {};
-	
-	public static void main(String[] args)
-	{
-		try {
-			instance = new ScreenShare();
-	
-			if (args.length == 6) {
-				
-				
-				instance.host = args[0];
-				instance.app = args[1];
-				instance.port = Integer.parseInt(args[2]);
-				instance.publishName = args[3];
-				
-				String labelTexts = args[4];
-				
-				instance.organization_id = Long.parseLong(args[5]);
-				
-				if (labelTexts.length() > 0) {
-					String[] textArray = labelTexts.split(";");
-					
-					logger.debug("labelTexts :: "+labelTexts);
-					
-					logger.debug("textArray Length "+textArray.length);
-					
-					for (int i=0;i<textArray.length;i++) {
-						logger.debug(i + " :: " + textArray[i]);
-					}
-					
-					instance.label730 = textArray[0];
-					instance.label731 = textArray[1];
-					instance.label732 = textArray[2];
-					instance.label733 = textArray[3];
-					instance.label734 = textArray[4];
-					instance.label735 = textArray[5];
-					instance.label737 = textArray[6];
-					instance.label738 = textArray[7];
-					instance.label739 = textArray[8];
-					instance.label740 = textArray[9];
-					instance.label741 = textArray[10];
-					instance.label742 = textArray[11];
-					instance.label844 = textArray[12];
-					
-					instance.label869 = textArray[13];
-					instance.label870 = "<html>"+textArray[14]+"</html>";
-					instance.label871 = textArray[15];
-					instance.label872 = textArray[16];
-					instance.label878 = textArray[17];
-					
-				}
-	
-			} else {
-				instance = null;
-				System.out.println("\nRed5 SceenShare: use as java ScreenShare <host> <app name> <port> <stream name>\n Example: SceenShare localhost oflaDemo 1935 screen_stream");
-				System.exit(0);
-			}
-	
-			logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
-	
-			instance.createWindow();
-			
-		} catch (Exception err) {
-			logger.error("",err);
-		}
-	}
-	
+        private ScreenShare() {};
+        
+        public static void main(String[] args)
+        {
+                try {
+                        instance = new ScreenShare();
+        
+                        if (args.length == 6) {
+                                
+                                
+                                instance.host = args[0];
+                                instance.app = args[1];
+                                instance.port = Integer.parseInt(args[2]);
+                                instance.publishName = args[3];
+                                
+                                String labelTexts = args[4];
+                                
+                                instance.organization_id = Long.parseLong(args[5]);
+                                
+                                if (labelTexts.length() > 0) {
+                                        String[] textArray = labelTexts.split(";");
+                                        
+                                        logger.debug("labelTexts :: "+labelTexts);
+                                        
+                                        logger.debug("textArray Length "+textArray.length);
+                                        
+                                        for (int i=0;i<textArray.length;i++) {
+                                                logger.debug(i + " :: " + textArray[i]);
+                                        }
+                                        
+                                        instance.label730 = textArray[0];
+                                        instance.label731 = textArray[1];
+                                        instance.label732 = textArray[2];
+                                        instance.label733 = textArray[3];
+                                        instance.label734 = textArray[4];
+                                        instance.label735 = textArray[5];
+                                        instance.label737 = textArray[6];
+                                        instance.label738 = textArray[7];
+                                        instance.label739 = textArray[8];
+                                        instance.label740 = textArray[9];
+                                        instance.label741 = textArray[10];
+                                        instance.label742 = textArray[11];
+                                        instance.label844 = textArray[12];
+                                        
+                                        instance.label869 = textArray[13];
+                                        instance.label870 = "<html>"+textArray[14]+"</html>";
+                                        instance.label871 = textArray[15];
+                                        instance.label872 = textArray[16];
+                                        instance.label878 = textArray[17];
+                                        
+                                }
+        
+                        } else {
+                                instance = null;
+                                System.out.println("\nRed5 SceenShare: use as java ScreenShare <host> <app name> <port> <stream name>\n Example: SceenShare localhost oflaDemo 1935 screen_stream");
+                                System.exit(0);
+                        }
+        
+                        logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
+        
+                        instance.createWindow();
+                        
+                } catch (Exception err) {
+                        logger.error("",err);
+                }
+        }
+        
     // ------------------------------------------------------------------------
     //
     // Wrapper - Constructor for testing
     //
     // ------------------------------------------------------------------------
-	public ScreenShare(String host, String app, Integer port, String publishName, Long organization_id)
-	{
-		instance = new ScreenShare();
+        public ScreenShare(String host, String app, Integer port, String publishName, Long organization_id)
+        {
+                instance = new ScreenShare();
 
-		instance.host = host;
-		instance.app = app;
-		instance.port = port;
-		instance.publishName = publishName;
-		instance.organization_id = organization_id;
+                instance.host = host;
+                instance.app = app;
+                instance.port = port;
+                instance.publishName = publishName;
+                instance.organization_id = organization_id;
 
-		logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
+                logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
 
-		instance.createWindow();
-	}
-	
+                instance.createWindow();
+        }
+        
 
     // ------------------------------------------------------------------------
     //
@@ -259,267 +275,282 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     //
     // ------------------------------------------------------------------------
 
-	public void createWindow()
-	{
-		try {
-			
-			ImageIcon start_btn = createImageIcon("/webstart_play.png");
-			ImageIcon stop_btn = createImageIcon("/webstart_stop.png");
+        public void createWindow()
+        {
+                try {
+                        
+                        ImageIcon start_btn = createImageIcon("/webstart_play.png");
+                        ImageIcon stop_btn = createImageIcon("/webstart_stop.png");
 
-			UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
-			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
+                        UIManager.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
+                        UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
 
-			t = new JFrame(this.label730);
-			contentPane = t.getContentPane();
-			contentPane.setBackground(Color.WHITE);
-			textArea = new JLabel();
-			textArea.setBackground(Color.WHITE);
-			contentPane.setLayout(null);
-			contentPane.add(textArea);
-			
-			//*****
-			//Header Overall
-			textArea.setText(this.label731);
-			textArea.setBounds(10, 0, 400,24);
+                        t = new JFrame(this.label730);
+                        contentPane = t.getContentPane();
+                        contentPane.setBackground(Color.WHITE);
+                        textArea = new JLabel();
+                        textArea.setBackground(Color.WHITE);
+                        contentPane.setLayout(null);
+                        contentPane.add(textArea);
+                        
+                        //*****
+                        //Header Overall
+                        textArea.setText(this.label731);
+                        textArea.setBounds(10, 0, 400,24);
 
-			//*****
-			//Start Button Screen Sharing
-			startButton = new JButton( this.label732, start_btn );
-			startButton.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					startRecording = false;
-					startStreaming = true;
-					captureScreenStart();
-				}
-			});
-			startButton.setBounds(30, 34, 200, 32);
-			t.add(startButton);
+                        //*****
+                        //Start Button Screen Sharing
+                        startButton = new JButton( this.label732, start_btn );
+                        startButton.addActionListener( new ActionListener(){
+                                public void actionPerformed(ActionEvent arg0) {
+                                        // TODO Auto-generated method stub
+                                        startRecording = false;
+                                        startStreaming = true;
+                                        captureScreenStart();
+                                }
+                        });
+                        startButton.setBounds(30, 34, 200, 32);
+                        t.add(startButton);
 
-			//*****
-			//Stop Button Screen Sharing
-			stopButton = new JButton( this.label733, stop_btn );
-			stopButton.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					stopRecording = false;
-					stopStreaming = true;
-					captureScreenStop();
-				}
-			});
-			stopButton.setBounds(290, 34, 200, 32);
-			stopButton.setEnabled(false);
-			t.add(stopButton);
+                        //*****
+                        //Stop Button Screen Sharing
+                        stopButton = new JButton( this.label733, stop_btn );
+                        stopButton.addActionListener( new ActionListener(){
+                                public void actionPerformed(ActionEvent arg0) {
+                                        // TODO Auto-generated method stub
+                                        stopRecording = false;
+                                        stopStreaming = true;
+                                        captureScreenStop();
+                                }
+                        });
+                        stopButton.setBounds(290, 34, 200, 32);
+                        stopButton.setEnabled(false);
+                        t.add(stopButton);
 
-			//add the small screen thumb to the JFrame
-			new VirtualScreen();
-			
-			//*****
-			//Text Recording
-			textAreaHeaderRecording = new JLabel(); 
-			
-			//FIXME: Set Font to bold
-			//textAreaHeaderRecording.setB
-			//Font f = textAreaHeaderRecording.getFont();
-			//textAreaHeaderRecording.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+                        //add the small screen thumb to the JFrame
+                        new VirtualScreen();
+                        
+                        //*****
+                        //Text Recording
+                        textAreaHeaderRecording = new JLabel(); 
+                        
+                        //FIXME: Set Font to bold
+                        //textAreaHeaderRecording.setB
+                        //Font f = textAreaHeaderRecording.getFont();
+                        //textAreaHeaderRecording.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
 
-			textAreaHeaderRecording.setText(this.label869);
-			contentPane.add(textAreaHeaderRecording);
-			textAreaHeaderRecording.setBounds(10, 340, 480, 24);
-			
-			textAreaHeaderRecordingDescr = new JLabel(); 
-			textAreaHeaderRecordingDescr.setText(this.label870);
-			contentPane.add(textAreaHeaderRecordingDescr);
-			textAreaHeaderRecordingDescr.setBounds(10, 360, 480, 54);
-			
-			//*****
-			//Start Button Recording
-			startButtonRecording = new JButton( this.label871, start_btn );
-			startButtonRecording.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					startRecording = true;
-					startStreaming = false;
-					captureScreenStart();
-				}
-			});
-			startButtonRecording.setBounds(30, 420, 200, 32);
-			t.add(startButtonRecording);
-			
-			//*****
-			//Stop Button Recording
-			stopButtonRecording = new JButton( this.label872, stop_btn );
-			stopButtonRecording.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					stopRecording = true;
-					stopStreaming = false;
-					captureScreenStop();
-				}
-			});
-			stopButtonRecording.setBounds(290, 420, 200, 32);
-			stopButtonRecording.setEnabled(false);
-			t.add(stopButtonRecording);
-			
-			//*****
-			//Text Warning
-			textWarningArea = new JLabel();
-			contentPane.add(textWarningArea);
-			textWarningArea.setBounds(10, 450, 420,54);
-			//textWarningArea.setBackground(Color.WHITE);
-			
-			
-			//*****
-			//Exit Button
-			exitButton = new JButton( this.label878 );
-			exitButton.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					t.setVisible(false);
-					System.exit(0);
-				}
-			});
-			exitButton.setBounds(290, 460, 200, 32);
-			t.add(exitButton);
+                        textAreaHeaderRecording.setText(this.label869);
+                        contentPane.add(textAreaHeaderRecording);
+                        textAreaHeaderRecording.setBounds(10, 340, 480, 24);
+                        
+                        textAreaHeaderRecordingDescr = new JLabel(); 
+                        textAreaHeaderRecordingDescr.setText(this.label870);
+                        contentPane.add(textAreaHeaderRecordingDescr);
+                        textAreaHeaderRecordingDescr.setBounds(10, 360, 480, 54);
+                        
+                        //*****
+                        //Start Button Recording
+                        startButtonRecording = new JButton( this.label871, start_btn );
+                        startButtonRecording.addActionListener( new ActionListener(){
+                                public void actionPerformed(ActionEvent arg0) {
+                                        // TODO Auto-generated method stub
+                                        startRecording = true;
+                                        startStreaming = false;
+                                        captureScreenStart();
+                                }
+                        });
+                        startButtonRecording.setBounds(30, 420, 200, 32);
+                        t.add(startButtonRecording);
+                        
+                        //*****
+                        //Stop Button Recording
+                        stopButtonRecording = new JButton( this.label872, stop_btn );
+                        stopButtonRecording.addActionListener( new ActionListener(){
+                                public void actionPerformed(ActionEvent arg0) {
+                                        // TODO Auto-generated method stub
+                                        stopRecording = true;
+                                        stopStreaming = false;
+                                        captureScreenStop();
+                                }
+                        });
+                        stopButtonRecording.setBounds(290, 420, 200, 32);
+                        stopButtonRecording.setEnabled(false);
+                        t.add(stopButtonRecording);
+                        
+                        //*****
+                        //Text Warning
+                        textWarningArea = new JLabel();
+                        contentPane.add(textWarningArea);
+                        textWarningArea.setBounds(10, 450, 420,54);
+                        //textWarningArea.setBackground(Color.WHITE);
+                        
+                        
+                        //*****
+                        //Exit Button
+                        exitButton = new JButton( this.label878 );
+                        exitButton.addActionListener( new ActionListener(){
+                                public void actionPerformed(ActionEvent arg0) {
+                                        // TODO Auto-generated method stub
+                                        t.setVisible(false);
+                                        System.exit(0);
+                                }
+                        });
+                        exitButton.setBounds(290, 460, 200, 32);
+                        t.add(exitButton);
 
-			//*****
-			//Background Image
-			Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
-			ImageIcon iIconBack = new ImageIcon(im_left);
+                        //*****
+                        //Background Image
+                        Image im_left = ImageIO.read(ScreenShare.class.getResource("/background.png"));
+                        ImageIcon iIconBack = new ImageIcon(im_left);
 
-			JLabel jLab = new JLabel(iIconBack);
-			jLab.setBounds(0, 0, 500, 440);
-			t.add(jLab);
+                        JLabel jLab = new JLabel(iIconBack);
+                        jLab.setBounds(0, 0, 500, 440);
+                        t.add(jLab);
 
-			t.addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					t.setVisible(false);
-					System.exit(0);
-				}
+                        t.addWindowListener(new WindowAdapter() {
+                                public void windowClosing(WindowEvent e) {
+                                        t.setVisible(false);
+                                        System.exit(0);
+                                }
 
-			});
-			t.pack();
-			t.setLocation(30, 30);
-			t.setSize(500, 530);
-			t.setVisible(true);
-			t.setResizable(false);
+                        });
+                        t.pack();
+                        t.setLocation(30, 30);
+                        t.setSize(500, 530);
+                        t.setVisible(true);
+                        t.setResizable(false);
 
 
-			logger.debug("initialized");
+                        logger.debug("initialized");
 
-		} catch (Exception err)
-		{
-			logger.error("createWindow Exception: ",err);
-			err.printStackTrace();
-		}
-	}
-	
-	protected static ImageIcon createImageIcon(String path) throws Exception {
-	    java.net.URL imgURL = ScreenShare.class.getResource(path);
-	    return new ImageIcon(imgURL);
-	}
+                } catch (Exception err)
+                {
+                        logger.error("createWindow Exception: ",err);
+                        err.printStackTrace();
+                }
+        }
+        
+        protected static ImageIcon createImageIcon(String path) throws Exception {
+            java.net.URL imgURL = ScreenShare.class.getResource(path);
+            return new ImageIcon(imgURL);
+        }
 
-	public void showBandwidthWarning(String warning)
-	{
-		textWarningArea.setText(warning);
-	}
-	
-	synchronized public void sendCursorStatus() {
-		try {
-			
-			PointerInfo a = MouseInfo.getPointerInfo();
-			Point mouseP = a.getLocation();
-			
-			Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
-			Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
-	
-			HashMap cursorPosition = new HashMap();
-			cursorPosition.put("publicSID",this.publishName);
-			cursorPosition.put("cursor_x",x);
-			cursorPosition.put("cursor_y",y);
-						
-			invoke("setNewCursorPosition",new Object[] { cursorPosition }, this);
-			
-		} catch (Exception err) {
-			System.out.println("captureScreenStart Exception: ");
-			System.err.println(err);
-			textArea.setText("Exception: "+err);
-			logger.error("[sendCursorStatus]",err);
-		}
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	synchronized public void setConnectionAsSharingClient() {
-		try {
-			
-			logger.debug("setConnectionAsSharingClient" );
-			
-			HashMap map = new HashMap();
-			map.put("screenX",VirtualScreenBean.vScreenSpinnerX);
-			map.put("screenY",VirtualScreenBean.vScreenSpinnerY);
-			
-			int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerWidth*scaleFactor)).intValue();
-			int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerHeight*scaleFactor)).intValue();
-			
-			map.put("screenWidth",scaledWidth);
-			map.put("screenHeight",scaledHeight);
-			
-			map.put("publishName", this.publishName);
-			map.put("startRecording", this.startRecording);
-			map.put("startStreaming", this.startStreaming);
-			
-			map.put("organization_id", this.organization_id);
-			
-			invoke("setConnectionAsSharingClient",new Object[] { map }, this);
-			
-		} catch (Exception err) {
-			logger.error("setConnectionAsSharingClient Exception: ",err);
-			textArea.setText("Error: "+err.getLocalizedMessage());
-			logger.error("[setConnectionAsSharingClient]",err);
-		}
-	}
+        public void showBandwidthWarning(String warning)
+        {
+                textWarningArea.setText(warning);
+        }
+        
+        synchronized public void sendCursorStatus() {
+                try {
+                        
+                        PointerInfo a = MouseInfo.getPointerInfo();
+                        Point mouseP = a.getLocation();
+                        
+                        //Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
+                        //Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
+                        
+                        //Real size: Real mouse position = Resize : X
+                        Integer x = Long.valueOf (Math.round( ( (mouseP.getX()*VirtualScreenBean.vScreenResizeX )/VirtualScreenBean.vScreenSpinnerWidth) *Ampl_factor)).intValue();
+                        Integer y = Long.valueOf (Math.round( ( (mouseP.getY()*VirtualScreenBean.vScreenResizeY )/VirtualScreenBean.vScreenSpinnerHeight) *Ampl_factor)).intValue();
+                        
+                     
+                        HashMap cursorPosition = new HashMap();
+                        cursorPosition.put("publicSID",this.publishName);
+                        cursorPosition.put("cursor_x",x);
+                        cursorPosition.put("cursor_y",y);
+                                                
+                        invoke("setNewCursorPosition",new Object[] { cursorPosition }, this);
+                        
+                } catch (Exception err) {
+                        System.out.println("captureScreenStart Exception: ");
+                        System.err.println(err);
+                        textArea.setText("Exception: "+err);
+                        logger.error("[sendCursorStatus]",err);
+                }
+        }
+        
+        
+        @SuppressWarnings("unchecked")
+        synchronized public void setConnectionAsSharingClient() 
+        {
+        	
+            try {
+                        
+                        logger.debug("setConnectionAsSharingClient" );
+                        
+                        HashMap map = new HashMap();
+                        //map.put("screenX",VirtualScreenBean.vScreenSpinnerX);
+                        //map.put("screenY",VirtualScreenBean.vScreenSpinnerY);
+                        map.put("screenX",VirtualScreenBean.vScreenResizeX);
+                        map.put("screenY",VirtualScreenBean.vScreenResizeY);
+                        
+                        //int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerWidth*scaleFactor)).intValue();
+                        //int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerHeight*scaleFactor)).intValue();
+                        
+                        int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenResizeX*Ampl_factor)).intValue();
+                        int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenResizeY*Ampl_factor)).intValue();
+                        
+                        map.put("screenWidth",scaledWidth);
+                        map.put("screenHeight",scaledHeight);
+                        
+                        //map.put("screenWidth",VirtualScreenBean.vScreenResizeX);
+                        //map.put("screenHeight",VirtualScreenBean.vScreenResizeY);
+                      
+                        map.put("publishName", this.publishName);
+                        map.put("startRecording", this.startRecording);
+                        map.put("startStreaming", this.startStreaming);
+                        
+                        map.put("organization_id", this.organization_id);
+                        
+                        invoke("setConnectionAsSharingClient",new Object[] { map }, this);
+                        
+                } catch (Exception err) {
+                        logger.error("setConnectionAsSharingClient Exception: ",err);
+                        textArea.setText("Error: "+err.getLocalizedMessage());
+                        logger.error("[setConnectionAsSharingClient]",err);
+                }
+        }
 
-	private void captureScreenStart()
-	{
-		try {
+        private void captureScreenStart()
+        {
+                try {
 
-			logger.debug("captureScreenStart");
+                        logger.debug("captureScreenStart");
 
-			startStream(host, app, port, publishName);
+                        startStream(host, app, port, publishName);
 
-		} catch (Exception err) {
-			logger.error("captureScreenStart Exception: ",err);
-			textArea.setText("Exception: "+err);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void captureScreenStop()
-	{
-		try {
-			
-			logger.debug("INVOKE screenSharerAction" );
-			
-			HashMap map = new HashMap();
-			map.put("stopStreaming", this.stopStreaming);
-			map.put("stopRecording", this.stopRecording);
-			
-			invoke("screenSharerAction",new Object[] { map }, this);
-			
-			if (this.stopStreaming) {
-				startButton.setEnabled(true);
-				stopButton.setEnabled(false);
-			} else {
-				startButtonRecording.setEnabled(true);
-				stopButtonRecording.setEnabled(false);
-			}
-			
-		} catch (Exception err) {
-			logger.error("captureScreenStop Exception: ",err);
-			textArea.setText("Exception: "+err);
-		}
-	}
+                } catch (Exception err) {
+                        logger.error("captureScreenStart Exception: ",err);
+                        textArea.setText("Exception: "+err);
+                }
+        }
+        
+        @SuppressWarnings("unchecked")
+        private void captureScreenStop()
+        {
+                try {
+                        
+                        logger.debug("INVOKE screenSharerAction" );
+                        
+                        HashMap map = new HashMap();
+                        map.put("stopStreaming", this.stopStreaming);
+                        map.put("stopRecording", this.stopRecording);
+                        
+                        invoke("screenSharerAction",new Object[] { map }, this);
+                        
+                        if (this.stopStreaming) {
+                                startButton.setEnabled(true);
+                                stopButton.setEnabled(false);
+                        } else {
+                                startButtonRecording.setEnabled(true);
+                                stopButtonRecording.setEnabled(false);
+                        }
+                        
+                } catch (Exception err) {
+                        logger.error("captureScreenStop Exception: ",err);
+                        textArea.setText("Exception: "+err);
+                }
+        }
 
     // ------------------------------------------------------------------------
     //
@@ -529,8 +560,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void startStream( String host, String app, int port, String publishName) {
-    	
-    	logger.debug( "ScreenShare startStream" );
+        
+        logger.debug( "ScreenShare startStream" );
         this.publishName = publishName;
 
         videoTs = 0;
@@ -539,13 +570,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         kt2 = 0;
 
         try {
-        	
-        	if (!isConnected) {
-        		connect( host, port, app, this );
-        	} else {
-        		setConnectionAsSharingClient();
-        	}
-        	
+                
+                if (!isConnected) {
+                        connect( host, port, app, this );
+                } else {
+                        setConnectionAsSharingClient();
+                }
+                
         } catch ( Exception e ) {
             logger.error( "ScreenShare startStream exception " + e );
         }
@@ -554,12 +585,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void stopStream() {
-    	try {
-    		
-    		logger.debug( "ScreenShare stopStream" );
-        	
-        	isConnected = false;
-        	
+        try {
+                
+                logger.debug( "ScreenShare stopStream" );
+                
+                isConnected = false;
+                
             disconnect();
             capture.stop();
             capture.release();
@@ -579,11 +610,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     //
     // ------------------------------------------------------------------------
 
-	public void handleException(Throwable throwable)
-	{
-			logger.error("{}",new Object[]{throwable.getCause()});
-			System.out.println( throwable.getCause() );
-	}
+        public void handleException(Throwable throwable)
+        {
+                        logger.error("{}",new Object[]{throwable.getCause()});
+                        System.out.println( throwable.getCause() );
+        }
 
 
     public void onStreamEvent( Notify notify ) {
@@ -601,125 +632,128 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
 
     public void resultReceived( IPendingServiceCall call ) {
-    	try {
-    		
-    		//logger.debug( "service call result: " + call );
+        try {
+                
+                //logger.debug( "service call result: " + call );
 
-	        if ( call.getServiceMethodName().equals("connect") ) {
-	        	
-	        	isConnected = true;
-	        	setConnectionAsSharingClient();
-	
-	        } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
-				
-				logger.debug("call get Method Name "+call.getServiceMethodName());
-				
-				Object o = call.getResult();
-				
-				logger.debug("Result Map Type "+o.getClass().getName());
-				
-				Map returnMap = (Map) o;
-				
-				logger.debug("result "+returnMap.get("result"));
-				
-				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-					logger.debug("key "+iter.next());
-				}
-				
-				if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
-					
-					logger.debug("Stream not yet started - do it ");
-					
-					createStream( this );
-					
-				} else {
-					
-					if (this.capture != null) {
-						this.capture.resetBuffer();
-					}
-					
-					logger.debug("The Stream was already started ");
-				}
-				
-				if (returnMap.get("modus") != null) {
-					if (returnMap.get("modus").toString().equals("startStreaming")) {
-						this.startButton.setEnabled(false);
-						this.stopButton.setEnabled(true);
-					} else if (returnMap.get("modus").toString().equals("startRecording")) {
-						this.startButtonRecording.setEnabled(false);
-						this.stopButtonRecording.setEnabled(true);
-					}
-				} else {
-					throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
-				}
-				
-			} else if (call.getServiceMethodName().equals("createStream")) {
-					
-				publishStreamId = (Integer) call.getResult();
-				logger.debug( "createPublishStream result stream id: " + publishStreamId );
-				logger.debug( "publishing video by name: " + publishName );
-				publish( publishStreamId, publishName, "live", this );
-	
-				logger.debug( "setup capture thread");
-	
-				capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
-											VirtualScreenBean.vScreenSpinnerY,
-											VirtualScreenBean.vScreenSpinnerWidth,
-											VirtualScreenBean.vScreenSpinnerHeight);
-	
-				if (thread == null)
-				{
-					thread = new Thread(capture);
-					thread.start();
-				}
-				capture.start();
-	
-			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
-				
-				logger.debug("call ### get Method Name "+call.getServiceMethodName());
-				
-				Object o = call.getResult();
-				
-				logger.debug("Result Map Type "+o.getClass().getName());
-				
-				Map returnMap = (Map) o;
-				
-				logger.debug("result "+returnMap.get("result"));
-				
-				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-					logger.debug("key "+iter.next());
-				}
-				
-				if (returnMap.get("result").equals("stopAll")) {
-				
-					logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
-					
-					stopStream();
-				
-				}
-				
-				//logger.debug("Stop No Doubt!");
-				//stopStream();
-				
-			} else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
-				
-				//Do not do anything
-				
-			} else {
-				
-				logger.debug("Unkown method "+call.getServiceMethodName());
-				
-			}
-	        
-    	} catch (Exception err) {
-    		logger.error("[resultReceived]",err);
-    	}
+                if ( call.getServiceMethodName().equals("connect") ) {
+                        
+                        isConnected = true;
+                        setConnectionAsSharingClient();
+        
+                } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
+                                
+                                logger.debug("call get Method Name "+call.getServiceMethodName());
+                                
+                                Object o = call.getResult();
+                                
+                                logger.debug("Result Map Type "+o.getClass().getName());
+                                
+                                Map returnMap = (Map) o;
+                                
+                                logger.debug("result "+returnMap.get("result"));
+                                
+                                for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                                        logger.debug("key "+iter.next());
+                                }
+                                
+                                if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
+                                        
+                                        logger.debug("Stream not yet started - do it ");
+                                        
+                                        createStream( this );
+                                        
+                                } else {
+                                        
+                                        if (this.capture != null) {
+                                                this.capture.resetBuffer();
+                                        }
+                                        
+                                        logger.debug("The Stream was already started ");
+                                }
+                                
+                                if (returnMap.get("modus") != null) {
+                                        if (returnMap.get("modus").toString().equals("startStreaming")) {
+                                                this.startButton.setEnabled(false);
+                                                this.stopButton.setEnabled(true);
+                                        } else if (returnMap.get("modus").toString().equals("startRecording")) {
+                                                this.startButtonRecording.setEnabled(false);
+                                                this.stopButtonRecording.setEnabled(true);
+                                        }
+                                } else {
+                                        throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
+                                }
+                                
+                        } else if (call.getServiceMethodName().equals("createStream")) {
+                                        
+                                publishStreamId = (Integer) call.getResult();
+                                logger.debug( "createPublishStream result stream id: " + publishStreamId );
+                                logger.debug( "publishing video by name: " + publishName );
+                                publish( publishStreamId, publishName, "live", this );
+        
+                                logger.debug( "setup capture thread");
+        
+                                capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
+                                                                                        VirtualScreenBean.vScreenSpinnerY,
+                                                                                        VirtualScreenBean.vScreenSpinnerWidth,
+                                                                                        VirtualScreenBean.vScreenSpinnerHeight,
+                                                                                        VirtualScreenBean.vScreenResizeX,
+                                                                                        VirtualScreenBean.vScreenResizeY
+                                														);
+        
+                                if (thread == null)
+                                {
+                                        thread = new Thread(capture);
+                                        thread.start();
+                                }
+                                capture.start();
+        
+                        } else if (call.getServiceMethodName().equals("screenSharerAction")) {
+                                
+                                logger.debug("call ### get Method Name "+call.getServiceMethodName());
+                                
+                                Object o = call.getResult();
+                                
+                                logger.debug("Result Map Type "+o.getClass().getName());
+                                
+                                Map returnMap = (Map) o;
+                                
+                                logger.debug("result "+returnMap.get("result"));
+                                
+                                for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                                        logger.debug("key "+iter.next());
+                                }
+                                
+                                if (returnMap.get("result").equals("stopAll")) {
+                                
+                                        logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
+                                        
+                                        stopStream();
+                                
+                                }
+                                
+                                //logger.debug("Stop No Doubt!");
+                                //stopStream();
+                                
+                        } else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
+                                
+                                //Do not do anything
+                                
+                        } else {
+                                
+                                logger.debug("Unkown method "+call.getServiceMethodName());
+                                
+                        }
+                
+        } catch (Exception err) {
+                logger.error("[resultReceived]",err);
+        }
     }
 
 
     public void pushVideo( int len, byte[] video, long ts) throws IOException {
 
-		if (!startPublish) return;
+                if (!startPublish) return;
 
         if ( buffer == null ) {
             buffer = ByteBuffer.allocate( 1024 );
@@ -745,293 +779,324 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         publishStreamData( publishStreamId, rtmpMsg );
     }
 
-	// ------------------------------------------------------------------------
-	//
-	// CaptureScreen
-	//
-	// ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
+        //
+        // CaptureScreen
+        //
+        // ------------------------------------------------------------------------
 
 
-	private final class CaptureScreen extends Object implements Runnable
-	{
-		private volatile int x = 0;
-		private volatile int y = 0;
-		private volatile int width = 320;
-		private volatile int height = 240;
-		private volatile long timestamp = 0;
+        private final class CaptureScreen extends Object implements Runnable
+        {
+                private volatile int x = 0;
+                private volatile int y = 0;
+                private volatile int resizeX;
+                private volatile int resizeY;
+                
+                private volatile int width = resizeX; 	//320
+                private volatile int height = resizeY; 	//240
+                
+               
+                
+                private volatile long timestamp = 0;
 
-		private volatile boolean active = true;
-		private volatile boolean stopped = false;
-		private byte[] previousItems = null;
+                private volatile boolean active = true;
+                private volatile boolean stopped = false;
+                private byte[] previousItems = null;
 
-		// ------------------------------------------------------------------------
-		//
-		// Constructor
-		//
-		// ------------------------------------------------------------------------
-
-
-		public CaptureScreen(final int x, final int y, final int width, final int height)
-		{
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-
-        	logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height );
-
-		}
+                // ------------------------------------------------------------------------
+                //
+                // Constructor
+                //
+                // ------------------------------------------------------------------------
 
 
-		// ------------------------------------------------------------------------
-		//
-		// Public
-		//
-		// ------------------------------------------------------------------------
+                public CaptureScreen(final int x, final int y, final int width, final int height,int resizeX,int resizeY)
+                {
+                        this.x = x;
+                        this.y = y;
+                        this.width = width;
+                        this.height = height;
+                        this.resizeX = resizeX;
+                        this.resizeY = resizeY;
+                        
 
-		public void setOrigin(final int x, final int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
+                logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
 
-
-		public void start()
-		{
-			stopped = false;
-		}
+                }
 
 
-		public void stop()
-		{
-			stopped = true;
-		}
+                // ------------------------------------------------------------------------
+                //
+                // Public
+                //
+                // ------------------------------------------------------------------------
 
-		public void release()
-		{
-			active = false;
-		}
-		
-		public void resetBuffer() {
-			this.previousItems = null;
-		}
+                public void setOrigin(final int x, final int y)
+                {
+                        this.x = x;
+                        this.y = y;
+                }
 
 
-		// ------------------------------------------------------------------------
-		//
-		// Thread loop
-		//
-		// ------------------------------------------------------------------------
-
-		public void run()
-		{
-			final int blockWidth = 32;
-			final int blockHeight = 32;
-
-			final int timeBetweenFrames = 1000; //frameRate
-
-			int frameCounter = 0;
-
-			try
-			{
-				Robot robot = new Robot();
-
-				this.previousItems = null;
-				
-				while (active)
-				{
-					final long ctime = System.currentTimeMillis();
-
-					BufferedImage image_raw = robot.createScreenCapture(new Rectangle(x, y, width, height));
-
-					int scaledWidth = width;
-					int scaledHeight = height;
-					
-					byte[] current = null;
-					if (scaleFactor != 1F) {
-						
-						logger.debug("Calc new Scaled Instance ",scaleFactor);
-						
-						scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
-						scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
-						
-						Image img = image_raw.getScaledInstance(scaledWidth,
-												scaledHeight,Image.SCALE_SMOOTH);
-						
-						BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
-						
-						Graphics2D biContext = image_scaled.createGraphics();
-						biContext.drawImage(img, 0, 0, null);
-						current = toBGR(image_scaled);
-					} else {
-						current = toBGR(image_raw);
-					}
-					
-					try
-					{
-						timestamp += (1000000 / timeBetweenFrames);
-
-						final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
-						pushVideo( screenBytes.length, screenBytes, timestamp);
-						this.previousItems = current;
-
-						if (++frameCounter % 100 == 0) this.previousItems = null;
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-
-					final int spent = (int) (System.currentTimeMillis() - ctime);
-
-					sendCursorStatus();
-					
-					Thread.sleep(Math.max(0, timeBetweenFrames - spent));
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+                public void start()
+                {
+                        stopped = false;
+                }
 
 
-		// ------------------------------------------------------------------------
-		//
-		// Private
-		//
-		// ------------------------------------------------------------------------
+                public void stop()
+                {
+                        stopped = true;
+                }
 
-		private byte[] toBGR(BufferedImage image)
-		{
-			final int width = image.getWidth();
-			final int height = image.getHeight();
-
-			byte[] buf = new byte[3 * width * height];
-
-			final DataBuffer buffer = image.getData().getDataBuffer();
-
-			for (int y = 0; y < height; y++)
-			{
-				for (int x = 0; x < width; x++)
-				{
-					final int rgb = buffer.getElem(y * width + x);
-					final int offset = 3 * (y * width + x);
-
-					buf[offset + 0] = (byte) (rgb & 0xFF);
-					buf[offset + 1] = (byte) ((rgb >> 8) & 0xFF);
-					buf[offset + 2] = (byte) ((rgb >> 16) & 0xFF);
-				}
-			}
-
-			return buf;
-		}
+                public void release()
+                {
+                        active = false;
+                }
+                
+                public void resetBuffer() {
+                        this.previousItems = null;
+                }
 
 
-		private byte[] encode(final byte[] current, final byte[] previous, final int blockWidth, final int blockHeight, final int width, final int height) throws Exception
-		{
-			ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
+                // ------------------------------------------------------------------------
+                //
+                // Thread loop
+                //
+                // ------------------------------------------------------------------------
 
-			if (previous == null)
-			{
-				baos.write(getTag(0x01, 0x03));		// keyframe (all cells)
-			}
-			else
-			{
-				baos.write(getTag(0x02, 0x03));		// frame (changed cells)
-			}
+                public void run()
+                {
+                        final int blockWidth = 32;
+                        final int blockHeight = 32;
 
-			// write header
-			final int wh = width + ((blockWidth / 16 - 1) << 12);
-			final int hh = height + ((blockHeight / 16 - 1) << 12);
+                        final int timeBetweenFrames = 1000; //frameRate
 
-			writeShort(baos, wh);
-			writeShort(baos, hh);
+                        int frameCounter = 0;
 
-			// write content
-			int y0 = height;
-			int x0 = 0;
-			int bwidth = blockWidth;
-			int bheight = blockHeight;
+                        int orig_width = width;
+                        int orig_height = height;
+                       
+                       
+                        try
+                        {
+                                Robot robot = new Robot();
 
-			while (y0 > 0)
-			{
-				bheight = Math.min(y0, blockHeight);
-				y0 -= bheight;
+                                this.previousItems = null;
+                                
+                                while (active)
+                                {
+                                        final long ctime = System.currentTimeMillis();
+                                        
+                                        
+                                        width = orig_width;
+                                        height = orig_height;
+                                        
+                                        BufferedImage image = robot.createScreenCapture(new Rectangle(x, y, width, height));
+                                        
+                                        int width_new = resizeX;
+                                    	int height_new = resizeY;
+                                        width = resizeX;
+                                        height = resizeY; 
+                                    	//Resize to 640*480
+                                    	// Create new (blank) image of required (scaled) size
+                                    	BufferedImage image_raw = new BufferedImage(width_new, height_new, BufferedImage.TYPE_INT_RGB);    
+                                    	
+                                    	
+                                    	Graphics2D graphics2D = image_raw.createGraphics();
+                                    	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                                    	graphics2D.drawImage(image, 0, 0, width_new, height_new, null);
+                                    	graphics2D.dispose();
+                                    		
+                                    	//End resize
+                                        
+                                        int scaledWidth = width;
+                                        int scaledHeight = height;
+                                        
+                                        byte[] current = null;
+                                        if (scaleFactor != 1F) {
+                                                
+                                                logger.debug("Calc new Scaled Instance ",scaleFactor);
+                                                
+                                                scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
+                                                scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
+                                                
+                                                Image img = image_raw.getScaledInstance(scaledWidth,
+                                                                                                scaledHeight,Image.SCALE_SMOOTH);
+                                                
+                                                BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
+                                                
+                                                Graphics2D biContext = image_scaled.createGraphics();
+                                                biContext.drawImage(img, 0, 0, null);
+                                                current = toBGR(image_scaled);
+                                        } else {
+                                                current = toBGR(image_raw);
+                                        }
+                                        
+                                        try
+                                        {
+                                                timestamp += (1000000 / timeBetweenFrames);
 
-				bwidth = blockWidth;
-				x0 = 0;
+                                                final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
+                                                pushVideo( screenBytes.length, screenBytes, timestamp);
+                                                this.previousItems = current;
 
-				while (x0 < width)
-				{
-					bwidth = (x0 + blockWidth > width) ? width - x0 : blockWidth;
+                                                if (++frameCounter % 100 == 0) this.previousItems = null;
+                                        }
+                                        catch (Exception e)
+                                        {
+                                                e.printStackTrace();
+                                        }
 
-					final boolean changed = isChanged(current, previous, x0, y0, bwidth, bheight, width, height);
+                                        final int spent = (int) (System.currentTimeMillis() - ctime);
 
-					if (changed)
-					{
-						ByteArrayOutputStream blaos = new ByteArrayOutputStream(4 * 1024);
-
-						DeflaterOutputStream dos = new DeflaterOutputStream(blaos);
-
-						for (int y = 0; y < bheight; y++)
-						{
-							dos.write(current, 3 * ((y0 + bheight - y - 1) * width + x0), 3 * bwidth);
-						}
-
-						dos.finish();
-
-						final byte[] bbuf = blaos.toByteArray();
-						final int written = bbuf.length;
-
-						// write DataSize
-						writeShort(baos, written);
-						// write Data
-						baos.write(bbuf, 0, written);
-					}
-					else
-					{
-						// write DataSize
-						writeShort(baos, 0);
-					}
-
-					x0 += bwidth;
-				}
-			}
-
-			return baos.toByteArray();
-		}
-
-		private void writeShort(OutputStream os, final int n) throws Exception
-		{
-			os.write((n >> 8) & 0xFF);
-			os.write((n >> 0) & 0xFF);
-		}
-
-		public boolean isChanged(final byte[] current, final byte[] previous, final int x0, final int y0, final int blockWidth, final int blockHeight, final int width, final int height)
-		{
-			if (previous == null) return true;
-
-			for (int y = y0, ny = y0 + blockHeight; y < ny; y++)
-			{
-				final int foff = 3 * (x0 + width * y);
-				final int poff = 3 * (x0 + width * y);
-
-				for (int i = 0, ni = 3 * blockWidth; i < ni; i++)
-				{
-					if (current[foff + i] != previous[poff + i]) return true;
-				}
-			}
-
-			return false;
-		}
+                                        sendCursorStatus();
+                                        
+                                        Thread.sleep(Math.max(0, timeBetweenFrames - spent));
+                                }
+                        }
+                        catch (Exception e)
+                        {
+                                e.printStackTrace();
+                        }
+                }
 
 
-		public int getTag(final int frame, final int codec)
-		{
-			return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
-		}
-	}
+                // ------------------------------------------------------------------------
+                //
+                // Private
+                //
+                // ------------------------------------------------------------------------
 
+                private byte[] toBGR(BufferedImage image)
+                {
+                        final int width = image.getWidth();
+                        final int height = image.getHeight();
+
+                        byte[] buf = new byte[3 * width * height];
+
+                        final DataBuffer buffer = image.getData().getDataBuffer();
+
+                        for (int y = 0; y < height; y++)
+                        {
+                                for (int x = 0; x < width; x++)
+                                {
+                                        final int rgb = buffer.getElem(y * width + x);
+                                        final int offset = 3 * (y * width + x);
+
+                                        buf[offset + 0] = (byte) (rgb & 0xFF);
+                                        buf[offset + 1] = (byte) ((rgb >> 8) & 0xFF);
+                                        buf[offset + 2] = (byte) ((rgb >> 16) & 0xFF);
+                                }
+                        }
+
+                        return buf;
+                }
+
+
+                private byte[] encode(final byte[] current, final byte[] previous, final int blockWidth, final int blockHeight, final int width, final int height) throws Exception
+                {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
+
+                        if (previous == null)
+                        {
+                                baos.write(getTag(0x01, 0x03));         // keyframe (all cells)
+                        }
+                        else
+                        {
+                                baos.write(getTag(0x02, 0x03));         // frame (changed cells)
+                        }
+
+                        // write header
+                        final int wh = width + ((blockWidth / 16 - 1) << 12);
+                        final int hh = height + ((blockHeight / 16 - 1) << 12);
+
+                        writeShort(baos, wh);
+                        writeShort(baos, hh);
+
+                        // write content
+                        int y0 = height;
+                        int x0 = 0;
+                        int bwidth = blockWidth;
+                        int bheight = blockHeight;
+
+                        while (y0 > 0)
+                        {
+                                bheight = Math.min(y0, blockHeight);
+                                y0 -= bheight;
+
+                                bwidth = blockWidth;
+                                x0 = 0;
+
+                                while (x0 < width)
+                                {
+                                        bwidth = (x0 + blockWidth > width) ? width - x0 : blockWidth;
+
+                                        final boolean changed = isChanged(current, previous, x0, y0, bwidth, bheight, width, height);
+
+                                        if (changed)
+                                        {
+                                                ByteArrayOutputStream blaos = new ByteArrayOutputStream(4 * 1024);
+
+                                                DeflaterOutputStream dos = new DeflaterOutputStream(blaos);
+
+                                                for (int y = 0; y < bheight; y++)
+                                                {
+                                                        dos.write(current, 3 * ((y0 + bheight - y - 1) * width + x0), 3 * bwidth);
+                                                }
+
+                                                dos.finish();
+
+                                                final byte[] bbuf = blaos.toByteArray();
+                                                final int written = bbuf.length;
+
+                                                // write DataSize
+                                                writeShort(baos, written);
+                                                // write Data
+                                                baos.write(bbuf, 0, written);
+                                        }
+                                        else
+                                        {
+                                                // write DataSize
+                                                writeShort(baos, 0);
+                                        }
+                                        x0 += bwidth;
+                                }
+                        }
+
+                        return baos.toByteArray();
+                }
+
+                private void writeShort(OutputStream os, final int n) throws Exception
+                {
+                        os.write((n >> 8) & 0xFF);
+                        os.write((n >> 0) & 0xFF);
+                }
+
+                public boolean isChanged(final byte[] current, final byte[] previous, final int x0, final int y0, final int blockWidth, final int blockHeight, final int width, final int height)
+                {
+                        if (previous == null) return true;
+
+                        for (int y = y0, ny = y0 + blockHeight; y < ny; y++)
+                        {
+                                final int foff = 3 * (x0 + width * y);
+                                final int poff = 3 * (x0 + width * y);
+
+                                for (int i = 0, ni = 3 * blockWidth; i < ni; i++)
+                                {
+                                        if (current[foff + i] != previous[poff + i]) return true;
+                                }
+                        }
+
+                        return false;
+                }
+
+
+                public int getTag(final int frame, final int codec)
+                {
+                        return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
+                }
+        }
 }
 

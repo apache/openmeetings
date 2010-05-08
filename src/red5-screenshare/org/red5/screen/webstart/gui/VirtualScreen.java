@@ -11,17 +11,22 @@ import java.awt.image.BufferedImage;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.*;
 
+import org.red5.screen.webstart.gui.VirtualScreenBean;
 import org.red5.screen.webstart.BlankArea;
 import org.red5.screen.webstart.ScreenShare;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VirtualScreen {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger( VirtualScreen.class );
 	public static VirtualScreen instance = null;
 
 	public boolean showWarning = true;
@@ -215,11 +220,62 @@ public class VirtualScreen {
 			}
 		});
 		ScreenShare.instance.t.add(ScreenShare.instance.jVScreenHeightSpin);
-
+		
+		
+		String[] selectResize = { "High Quality", "Medium Quality", "Low Quality" };
+		VirtualScreenBean.vScreenResizeX = 640;
+		VirtualScreenBean.vScreenResizeY = 400;
+		
+		ScreenShare.instance.vscreenResizeLabel = new JLabel();
+		ScreenShare.instance.vscreenResizeLabel.setText("Quality of the ScreenShare:");
+		ScreenShare.instance.vscreenResizeLabel.setBounds(250, 300, 200,24 );
+		ScreenShare.instance.t.add(ScreenShare.instance.vscreenResizeLabel);
+		
+		JComboBox comboResize  = new JComboBox(selectResize);	
+		comboResize.setBounds(250, 330, 200, 24);
+		comboResize.setSelectedIndex(1);
+		comboResize.addActionListener(new GetResizeChoice()); 
+		
+		ScreenShare.instance.jVScreenResizeMode = comboResize;
+		ScreenShare.instance.t.add(ScreenShare.instance.jVScreenResizeMode);
+		
 	}
-
-
-
+	class GetResizeChoice implements ActionListener
+	{
+		public void actionPerformed (ActionEvent e)
+		{
+			
+			JComboBox cb = (JComboBox)e.getSource();
+	        String petName = (String)cb.getSelectedItem();
+	        if(petName == "High Quality")
+	        {
+	        	logger.debug("resize: X:"+Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
+	        						" Y:"+Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue());
+	        	
+	        	VirtualScreenBean.vScreenResizeX = Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue();
+	        	VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue();
+	        	updateVScreenBounds();
+	        }
+	        else if(petName == "Medium Quality")
+	        {
+	        	logger.debug("resize: X:"+Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()/2+
+	        						" Y:"+Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue()/2);
+	        	
+	        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue())/2;
+	        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue())/2;
+	        	updateVScreenBounds();
+	        }
+	        else if(petName == "Low Quality")
+	        {
+	        	logger.debug("resize: X:"+(Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3+
+	        						" Y:"+(Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3);
+	        	
+	        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3;
+	        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3;
+	        	updateVScreenBounds();
+	        }
+		}
+	}
 
 	void calcNewValueXSpin(){
 		if (this.doUpdateBounds){
@@ -289,6 +345,7 @@ public class VirtualScreen {
 		//System.out.println("calcNewValueHeightSpin "+VirtualScreenBean.vScreenSpinnerHeight);
 	}
 
+	
 	/**
 	 * update the bounds of the vScreen
 	 * by useing the vars from the Spinners

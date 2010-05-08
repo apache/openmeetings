@@ -11,17 +11,21 @@ import java.awt.image.BufferedImage;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.*;
 
 import org.red5.screen.webstart.BlankArea;
 import org.red5.screen.webstart.ScreenShareRTMPT;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VirtualScreen {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger( VirtualScreen.class );
 	public static VirtualScreen instance = null;
 
 	public boolean showWarning = true;
@@ -215,11 +219,62 @@ public class VirtualScreen {
 			}
 		});
 		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.jVScreenHeightSpin);
-
+		
+		
+		String[] selectResize = { "High Quality", "Medium Quality", "Low Quality" };
+		VirtualScreenBean.vScreenResizeX = 640;
+		VirtualScreenBean.vScreenResizeY = 400;
+		
+		ScreenShareRTMPT.instance.vscreenResizeLabel = new JLabel();
+		ScreenShareRTMPT.instance.vscreenResizeLabel.setText("Quality of the ScreenShareRTMPT:");
+		ScreenShareRTMPT.instance.vscreenResizeLabel.setBounds(250, 300, 200,24 );
+		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.vscreenResizeLabel);
+		
+		JComboBox comboResize  = new JComboBox(selectResize);	
+		comboResize.setBounds(250, 330, 200, 24);
+		comboResize.setSelectedIndex(1);
+		comboResize.addActionListener(new GetResizeChoice()); 
+		
+		ScreenShareRTMPT.instance.jVScreenResizeMode = comboResize;
+		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.jVScreenResizeMode);
+		
 	}
-
-
-
+	class GetResizeChoice implements ActionListener
+	{
+		public void actionPerformed (ActionEvent e)
+		{
+			
+			JComboBox cb = (JComboBox)e.getSource();
+	        String petName = (String)cb.getSelectedItem();
+	        if(petName == "High Quality")
+	        {
+	        	logger.debug("resize: X:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
+	        						" Y:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue());
+	        	
+	        	VirtualScreenBean.vScreenResizeX = Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue();
+	        	VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue();
+	        	updateVScreenBounds();
+	        }
+	        else if(petName == "Medium Quality")
+	        {
+	        	logger.debug("resize: X:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()/2+
+	        						" Y:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue()/2);
+	        	
+	        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue())/2;
+	        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue())/2;
+	        	updateVScreenBounds();
+	        }
+	        else if(petName == "Low Quality")
+	        {
+	        	logger.debug("resize: X:"+(Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3+
+	        						" Y:"+(Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3);
+	        	
+	        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3;
+	        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3;
+	        	updateVScreenBounds();
+	        }
+		}
+	}
 
 	void calcNewValueXSpin(){
 		if (this.doUpdateBounds){
@@ -289,6 +344,7 @@ public class VirtualScreen {
 		//System.out.println("calcNewValueHeightSpin "+VirtualScreenBean.vScreenSpinnerHeight);
 	}
 
+	
 	/**
 	 * update the bounds of the vScreen
 	 * by useing the vars from the Spinners
@@ -307,6 +363,7 @@ public class VirtualScreen {
 			ScreenShareRTMPT.instance.vScreenIconLeft.setLocation(
 					Long.valueOf(Math.round(newvScreenX)).intValue()+30-16,
 					Long.valueOf(Math.round(newvScreenY)).intValue()+162+(Long.valueOf(Math.round(newvScreenHeight)).intValue()/2));
+			
 			ScreenShareRTMPT.instance.vScreenIconRight.setLocation(
 					Long.valueOf(Math.round(newvScreenX)).intValue()+30+Long.valueOf(Math.round(newvScreenWidth)).intValue()-16,
 					Long.valueOf(Math.round(newvScreenY)).intValue()+162+((Long.valueOf(Math.round(newvScreenHeight)).intValue())/2));
