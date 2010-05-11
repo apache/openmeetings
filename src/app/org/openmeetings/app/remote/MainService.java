@@ -53,7 +53,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
  */ 
 public class MainService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, ScopeApplicationAdapter.webAppRootKey);
 	private static MainService instance;
 	
 	private ClientListManager clientListManager = null;

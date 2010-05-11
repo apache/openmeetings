@@ -18,13 +18,14 @@ import org.openmeetings.app.hibernate.beans.basic.RemoteSessionObject;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.methodgateway.MethodGatewayResponse;
 import org.openmeetings.app.remote.MainService;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class MethodGateway  extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(MethodGateway.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MethodGateway.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

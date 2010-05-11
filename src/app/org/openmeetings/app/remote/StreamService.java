@@ -60,7 +60,7 @@ public class StreamService implements IPendingServiceCallback {
 	//Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LinkedHashMap<String,RoomRecording> roomRecordingList = new LinkedHashMap<String,RoomRecording>();
 	

@@ -32,7 +32,7 @@ import org.openmeetings.utils.math.CalendarPatterns;
 
 public class Import extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Import.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Import.class, ScopeApplicationAdapter.webAppRootKey);
 	/*
 	 * (non-Javadoc)
 	 * 

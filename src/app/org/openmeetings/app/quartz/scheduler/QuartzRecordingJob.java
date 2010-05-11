@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import org.red5.server.api.scheduling.IScheduledJob;
 import org.red5.server.api.scheduling.ISchedulingService;
 import org.openmeetings.app.data.record.WhiteboardConvertionJobManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
  
 public class QuartzRecordingJob implements IScheduledJob {
 
-	private static Logger log = Red5LoggerFactory.getLogger(QuartzRecordingJob.class, "openmeetings");
+	private static Logger log = Red5LoggerFactory.getLogger(QuartzRecordingJob.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public void execute(ISchedulingService service) {
 		try {

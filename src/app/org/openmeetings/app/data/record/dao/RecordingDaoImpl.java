@@ -14,10 +14,11 @@ import org.openmeetings.app.hibernate.beans.recording.RoomRecording;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RecordingDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static RecordingDaoImpl instance;
 

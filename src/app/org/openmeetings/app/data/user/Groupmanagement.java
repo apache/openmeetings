@@ -13,6 +13,7 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.user.Users_Usergroups;
 import org.openmeetings.app.hibernate.beans.user.Usergroups;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 /**
@@ -22,7 +23,7 @@ import org.openmeetings.utils.math.CalendarPatterns;
  */
 public class Groupmanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Groupmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Groupmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Groupmanagement instance;
 

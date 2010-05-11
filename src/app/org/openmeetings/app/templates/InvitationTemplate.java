@@ -11,12 +11,13 @@ import org.apache.velocity.app.Velocity;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class InvitationTemplate extends VelocityLoader{
 	
 	private static final String tamplateName = "invitation.vm";
 
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationTemplate.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationTemplate.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private InvitationTemplate() {
 		super();

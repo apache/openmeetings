@@ -53,7 +53,7 @@ import com.sun.jmx.snmp.Timestamp;
 
 public class ScreenServlet extends HttpServlet {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ScreenServlet.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ScreenServlet.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/**
 	 * 

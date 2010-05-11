@@ -7,7 +7,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ManageCryptStyle {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ManageCryptStyle.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ManageCryptStyle.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private ManageCryptStyle() {}
 

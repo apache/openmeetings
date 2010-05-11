@@ -25,6 +25,7 @@ import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -33,7 +34,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
  */
 public class ConferenceService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, ScopeApplicationAdapter.webAppRootKey);
 	private static ConferenceService instance;
 	
 	//beans, see chaservice.service.xml

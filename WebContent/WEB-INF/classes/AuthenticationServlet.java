@@ -90,7 +90,7 @@ public class AuthenticationServlet extends HttpServlet
     private boolean mAllowLoginGuest = true;
 
     /** Logger */
-    private static Logger mLogger  = Red5LoggerFactory.getLogger(AuthenticationServlet.class, "openmeetings");
+    private static Logger mLogger  = Red5LoggerFactory.getLogger(AuthenticationServlet.class, ScopeApplicationAdapter.webAppRootKey);
 
 
     /** 

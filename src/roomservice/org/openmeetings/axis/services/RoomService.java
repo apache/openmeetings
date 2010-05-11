@@ -27,11 +27,12 @@ import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.remote.ConferenceService;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 public class RoomService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	//TODO: Not implemented yet
 //	public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID, long organisation_id, long roomtypes_id) {

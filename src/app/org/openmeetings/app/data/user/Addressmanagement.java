@@ -12,10 +12,11 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Addressmanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Addressmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Addressmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Addressmanagement instance = null;
 

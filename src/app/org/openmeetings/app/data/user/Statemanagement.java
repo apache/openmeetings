@@ -12,6 +12,7 @@ import org.hibernate.Transaction;
 
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -19,7 +20,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  *
  */
 public class Statemanagement {
-	private static final Logger log = Red5LoggerFactory.getLogger(Statemanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Statemanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Statemanagement instance = null;
 

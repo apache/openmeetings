@@ -13,10 +13,11 @@ import org.dom4j.Attribute;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class LoadAtomRssFeed {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LoadAtomRssFeed instance;
 

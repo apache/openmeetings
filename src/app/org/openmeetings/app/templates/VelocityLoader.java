@@ -17,7 +17,7 @@ import org.red5.server.api.Red5;
 
 public class VelocityLoader {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(VelocityLoader.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(VelocityLoader.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * Loads the Path from the Red5-Scope

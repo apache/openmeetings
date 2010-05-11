@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -20,7 +21,7 @@ import org.openmeetings.app.hibernate.beans.basic.Configuration;
  */
 public class MailHandler {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public MailHandler() {
 	}

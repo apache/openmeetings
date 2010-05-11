@@ -25,6 +25,7 @@ import org.apache.mina.transport.socket.DatagramSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
@@ -43,7 +44,7 @@ import org.slf4j.Logger;
  */
 public class ServerSocketMinaProcess {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerSocketMinaProcess.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSocketMinaProcess.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static NioSocketAcceptor acceptor = null;
 	

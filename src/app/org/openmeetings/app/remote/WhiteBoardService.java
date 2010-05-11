@@ -33,7 +33,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class WhiteBoardService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private WhiteBoardService() {}
 	

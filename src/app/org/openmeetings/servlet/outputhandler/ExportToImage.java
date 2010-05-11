@@ -31,6 +31,7 @@ import org.openmeetings.app.data.record.WhiteboardMapToSVG;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.remote.PrintService;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.geom.GeomPoint;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ import org.w3c.dom.Element;
 
 public class ExportToImage extends HttpServlet {
 	 
-	private static final Logger log = Red5LoggerFactory.getLogger(ExportToImage.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ExportToImage.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

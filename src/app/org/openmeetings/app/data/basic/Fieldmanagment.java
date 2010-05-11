@@ -21,6 +21,7 @@ import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -29,7 +30,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  */
 public class Fieldmanagment {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Fieldmanagment.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Fieldmanagment.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Fieldmanagment instance = null;
 
@@ -554,7 +555,7 @@ public class Fieldmanagment {
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class, "openmeetings");
+		Criteria crit = session.createCriteria(Fieldvalues.class, ScopeApplicationAdapter.webAppRootKey);
 		crit.add(Restrictions.eq("deleted", "false"));
 		List<Fieldvalues> ll = crit.list();
 		tx.commit();
@@ -566,7 +567,7 @@ public class Fieldmanagment {
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class, "openmeetings");
+		Criteria crit = session.createCriteria(Fieldvalues.class, ScopeApplicationAdapter.webAppRootKey);
 		crit.add(Restrictions.eq("deleted", "false"));
 		crit.setFirstResult(start);
 		crit.setMaxResults(max);

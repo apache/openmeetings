@@ -11,6 +11,7 @@ import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -19,7 +20,7 @@ import org.openmeetings.app.hibernate.beans.domain.Organisation;
  */
 public class OrganisationService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OrganisationService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OrganisationService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * Loads a List of all availible Organisations (ADmin-role only)

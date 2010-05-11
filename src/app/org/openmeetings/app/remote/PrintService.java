@@ -9,6 +9,7 @@ import org.openmeetings.app.batik.beans.PrintBean;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.MD5;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -16,7 +17,7 @@ import org.red5.logging.Red5LoggerFactory;
 public class PrintService {
 
 
-	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, "openmeetings");	
+	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, ScopeApplicationAdapter.webAppRootKey);	
 	
 	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	

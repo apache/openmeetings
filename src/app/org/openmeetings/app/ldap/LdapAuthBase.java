@@ -16,6 +16,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -49,7 +50,7 @@ public class LdapAuthBase {
 	public static final String LDAP_AUTH_TYPE_SIMPLE = "simple";
 	public static final String LDAP_AUTH_TYPE_NONE = "none";
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapAuthBase.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapAuthBase.class, ScopeApplicationAdapter.webAppRootKey);
 
 	
 	/**

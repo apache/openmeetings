@@ -12,9 +12,10 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.basic.ErrorType;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ErrorManagement {
-	private static final Logger log = Red5LoggerFactory.getLogger(ErrorManagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorManagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private ErrorManagement() {
 	}

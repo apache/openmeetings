@@ -23,12 +23,13 @@ import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class CalendarServlet extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Calendar.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Calendar.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	@Override
 	protected void service(HttpServletRequest httpServletRequest,

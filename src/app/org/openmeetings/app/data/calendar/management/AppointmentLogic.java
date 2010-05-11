@@ -18,11 +18,12 @@ import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 
 public class AppointmentLogic {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, ScopeApplicationAdapter.webAppRootKey);
 	private static AppointmentLogic instance = null;
 
 	public static synchronized AppointmentLogic getInstance() {

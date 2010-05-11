@@ -11,7 +11,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class HibernateUtil {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(HibernateUtil.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(HibernateUtil.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/** Read the configuration, will share across threads**/
 	  private static SessionFactory sessionFactory;

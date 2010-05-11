@@ -13,6 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.InvitationTemplate;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
@@ -38,7 +39,7 @@ import org.openmeetings.utils.mail.MailHandler;
  */
 public class Invitationmanagement {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(Invitationmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Invitationmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Invitationmanagement instance;
 

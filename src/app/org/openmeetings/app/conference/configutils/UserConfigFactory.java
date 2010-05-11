@@ -13,10 +13,11 @@ import org.w3c.dom.NodeList;
 
 import org.openmeetings.app.conference.videobeans.UserSecurity;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class UserConfigFactory {
 
-	protected static Logger log = Red5LoggerFactory.getLogger(UserConfigFactory.class, "openmeetings");
+	protected static Logger log = Red5LoggerFactory.getLogger(UserConfigFactory.class, ScopeApplicationAdapter.webAppRootKey);
 
 	protected static String userconfigFileName = "WEB-INF/configbandwidth.xml";
 	 

@@ -10,12 +10,13 @@ import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
 public class AppointmentCategoryLogic {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryLogic.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryLogic.class, ScopeApplicationAdapter.webAppRootKey);
 	private static AppointmentCategoryLogic instance = null;
 
 	public static synchronized AppointmentCategoryLogic getInstance() {

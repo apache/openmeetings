@@ -12,10 +12,11 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class MeetingMemberDaoImpl {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private MeetingMemberDaoImpl() {
 	}

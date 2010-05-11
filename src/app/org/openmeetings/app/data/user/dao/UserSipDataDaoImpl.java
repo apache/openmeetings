@@ -8,12 +8,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class UserSipDataDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UserSipDataDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(UserSipDataDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static UserSipDataDaoImpl instance = null;
 

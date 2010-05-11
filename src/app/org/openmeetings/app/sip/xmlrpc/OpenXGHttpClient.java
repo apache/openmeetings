@@ -18,6 +18,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.sip.OpenXGReturnObject;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.xmlrpc.custom.OpenXGCustomXMLMarshall;
 import org.openmeetings.app.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl;
 import org.openmeetings.utils.crypt.MD5;
@@ -30,7 +31,7 @@ import org.w3c.dom.NodeList;
 
 public class OpenXGHttpClient {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGHttpClient.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGHttpClient.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static OpenXGHttpClient instance = null;
 

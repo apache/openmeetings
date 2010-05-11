@@ -47,7 +47,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class BackupExport extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

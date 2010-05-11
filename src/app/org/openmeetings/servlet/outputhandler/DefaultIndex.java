@@ -14,12 +14,13 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.servlet.VelocityViewServlet;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class DefaultIndex extends VelocityViewServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(DefaultIndex.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(DefaultIndex.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,

@@ -16,6 +16,7 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -24,7 +25,7 @@ import org.slf4j.Logger;
 
 public class OpenXGClient {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGHttpClient.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGHttpClient.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static OpenXGClient instance = null;
 

@@ -17,6 +17,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -26,7 +27,7 @@ public class ActivateUser extends VelocityViewServlet {
          * 
          */
         private static final long serialVersionUID = -8892729047921796170L;
-        private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class, "openmeetings");
+        private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class, ScopeApplicationAdapter.webAppRootKey);
 
         @Override
         public Template handleRequest(HttpServletRequest httpServletRequest,

@@ -18,6 +18,7 @@ import javax.media.rtp.event.RemotePayloadChangeEvent;
 import javax.media.rtp.event.SessionEvent;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -35,7 +36,7 @@ import org.slf4j.Logger;
  */
 public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener{
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamReceiver.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamReceiver.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/** contains sessionData */
 	RTPScreenSharingSession sessionData = null;

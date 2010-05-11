@@ -15,7 +15,7 @@ public class WhiteBoardObjectListManager {
 	
 	private static HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManager.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManager.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static WhiteBoardObjectListManager instance = null;
 

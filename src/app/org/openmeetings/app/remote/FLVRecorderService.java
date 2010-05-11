@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 
 public class FLVRecorderService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(FLVRecorderService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(FLVRecorderService.class, ScopeApplicationAdapter.webAppRootKey);
 
 	//Spring Beans
 	private ClientListManager clientListManager = null;

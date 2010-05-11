@@ -15,6 +15,7 @@ import org.red5.server.api.Red5;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 
 public class RegisterUserTemplate extends VelocityLoader{
@@ -23,7 +24,7 @@ public class RegisterUserTemplate extends VelocityLoader{
 	
 	private static final String templateNameVerification = "register_verification_mail.vm";
 
-	private static final Logger log = Red5LoggerFactory.getLogger(RegisterUserTemplate.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(RegisterUserTemplate.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private RegisterUserTemplate() {
 		super();

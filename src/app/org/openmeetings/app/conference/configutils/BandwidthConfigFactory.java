@@ -7,11 +7,12 @@ import org.w3c.dom.*;
 import org.apache.xerces.parsers.DOMParser;
 
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 public class BandwidthConfigFactory {
  
-	protected static Logger log = Red5LoggerFactory.getLogger(BandwidthConfigFactory.class, "openmeetings");
+	protected static Logger log = Red5LoggerFactory.getLogger(BandwidthConfigFactory.class, ScopeApplicationAdapter.webAppRootKey);
 
 	protected static String bandwidthonfigFileName = "WEB-INF/configbandwidth.xml";
 	

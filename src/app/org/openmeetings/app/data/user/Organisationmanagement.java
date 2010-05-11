@@ -28,6 +28,7 @@ import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -36,7 +37,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  */
 public class Organisationmanagement {
 	
-	private static Logger log = Red5LoggerFactory.getLogger(Organisationmanagement.class, "openmeetings");
+	private static Logger log = Red5LoggerFactory.getLogger(Organisationmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Organisationmanagement instance = null;
 
@@ -148,7 +149,7 @@ public class Organisationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation.class, "openmeetings");
+			Criteria crit = session.createCriteria(Organisation.class, ScopeApplicationAdapter.webAppRootKey);
 			crit.add(Restrictions.eq("deleted", "false"));
 			crit.setFirstResult(start);
 			crit.setMaxResults(max);
@@ -172,7 +173,7 @@ public class Organisationmanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Organisation.class, "openmeetings");
+				Criteria crit = session.createCriteria(Organisation.class, ScopeApplicationAdapter.webAppRootKey);
 				List<Organisation> ll = crit.list();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
@@ -487,7 +488,7 @@ public class Organisationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation_Users.class, "openmeetings");
+			Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
 			crit.add(Restrictions.eq("deleted", "false"));
 			crit.add(Restrictions.eq("user_id", user_id));
 			Criteria subCrit = crit.createCriteria("organisation");
@@ -610,7 +611,7 @@ public class Organisationmanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Organisation_Users.class, "openmeetings");
+				Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
 				Criteria subcrit = crit.createCriteria("organisation");
 				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 				crit.add(Restrictions.ne("deleted", "true"));
@@ -654,7 +655,7 @@ public class Organisationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation_Users.class, "openmeetings");
+			Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
 			Criteria subcrit = crit.createCriteria("organisation");
 			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
 			crit.add(Restrictions.ne("deleted", "true"));
@@ -703,7 +704,7 @@ public class Organisationmanagement {
 					Object idf = HibernateUtil.createSession();
 					Session session = HibernateUtil.getSession();
 					Transaction tx = session.beginTransaction();
-					Criteria crit = session.createCriteria(Organisation_Users.class, "openmeetings");
+					Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
 					
 			        ProjectionList projections = Projections.projectionList();
 			        projections.add(Projections.groupProperty("organisation.organisation_id"));

@@ -18,7 +18,7 @@ import org.openmeetings.utils.geom.GeomPoint;
 
 public class WhiteboardMapToSVG extends BatikMethods {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardMapToSVG.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardMapToSVG.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private WhiteboardMapToSVG() {
 	}

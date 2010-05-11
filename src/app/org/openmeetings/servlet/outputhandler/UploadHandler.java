@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 
 public class UploadHandler extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UploadHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(UploadHandler.class, ScopeApplicationAdapter.webAppRootKey);
 	 
 	private String filesString[] = null;
 

@@ -1,11 +1,12 @@
 package org.openmeetings.app.data.basic;
 
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 public class AuthLevelmanagement {
 	 
-	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private AuthLevelmanagement() {}
 	

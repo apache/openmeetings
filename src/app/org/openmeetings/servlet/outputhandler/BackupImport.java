@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 
 public class BackupImport extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, ScopeApplicationAdapter.webAppRootKey);
 	 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

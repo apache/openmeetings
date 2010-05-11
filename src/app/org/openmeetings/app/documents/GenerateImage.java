@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 public class GenerateImage {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			GenerateImage.class, "openmeetings");
+			GenerateImage.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static GenerateImage instance;
 

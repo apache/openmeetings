@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -37,7 +38,7 @@ import net.fortuna.ical4j.util.UidGenerator;
  */
 public class IcalHandler {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	
 	/** ICal instance */

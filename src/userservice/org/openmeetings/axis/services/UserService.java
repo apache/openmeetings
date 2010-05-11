@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.apache.axis2.AxisFault;
 import org.openmeetings.app.remote.MainService;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -27,7 +28,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class UserService {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * load this session id before doing anything else

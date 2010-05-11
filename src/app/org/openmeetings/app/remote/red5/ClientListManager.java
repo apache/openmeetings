@@ -16,7 +16,7 @@ public class ClientListManager {
 	
 	private static HashMap<String,RoomClient> clientList = new HashMap<String,RoomClient>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ClientListManager.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ClientListManager.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static ClientListManager instance = null;
 

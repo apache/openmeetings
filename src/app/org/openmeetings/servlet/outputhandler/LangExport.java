@@ -26,6 +26,7 @@ import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 
 /**
@@ -35,7 +36,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
  */
 public class LangExport extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(LangExport.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LangExport.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

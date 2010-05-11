@@ -23,7 +23,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Install extends VelocityViewServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(DownloadHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(DownloadHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

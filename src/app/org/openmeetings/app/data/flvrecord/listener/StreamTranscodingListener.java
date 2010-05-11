@@ -64,7 +64,7 @@ public class StreamTranscodingListener implements IStreamListener {
 
 	private int duration;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, ScopeApplicationAdapter.webAppRootKey);
 
 	
 	public StreamTranscodingListener(String streamName, IScope scope, 

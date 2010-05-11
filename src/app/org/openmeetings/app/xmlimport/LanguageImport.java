@@ -14,10 +14,11 @@ import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 
 public class LanguageImport {
-	private static final Logger log = Red5LoggerFactory.getLogger(LanguageImport.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LanguageImport.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	public LanguageImport() {	}
 

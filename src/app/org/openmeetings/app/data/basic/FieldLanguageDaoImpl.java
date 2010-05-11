@@ -12,6 +12,7 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -20,7 +21,7 @@ import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
  */
 public class FieldLanguageDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private FieldLanguageDaoImpl() {
 	}

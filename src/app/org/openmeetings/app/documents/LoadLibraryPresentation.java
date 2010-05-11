@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.io.FileInputStream;
 
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -12,7 +13,7 @@ import org.dom4j.io.SAXReader;
 
 public class LoadLibraryPresentation {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LoadLibraryPresentation instance;
 

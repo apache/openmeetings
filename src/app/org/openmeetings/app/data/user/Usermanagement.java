@@ -51,7 +51,7 @@ import org.red5.server.api.IScope;
  */
 public class Usermanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Usermanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Usermanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Usermanagement instance = null;
 
@@ -85,7 +85,7 @@ public class Usermanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Users.class, "openmeetings");
+				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 				crit.add(Restrictions.eq("deleted", "false"));
 				if (asc) crit.addOrder(Order.asc(orderby));
 				else crit.addOrder(Order.desc(orderby));
@@ -363,7 +363,7 @@ public class Usermanagement {
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
 				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Users.class, "openmeetings");
+				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 				crit.add(Restrictions.ilike(searchcriteria, "%" + searchstring + "%"));
 				if (asc) crit.addOrder(Order.asc(orderby));
 				else crit.addOrder(Order.desc(orderby));
@@ -1400,7 +1400,7 @@ public class Usermanagement {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		
-		Criteria crit = session.createCriteria(Users.class, "openmeetings");
+		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 		crit.add(Restrictions.eq("user_id", id));
 		crit.add(Restrictions.eq("deleted", "false"));
 		//crit.add(Restrictions.eq("status", 1));
@@ -1420,7 +1420,7 @@ public class Usermanagement {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		
-		Criteria crit = session.createCriteria(Users.class, "openmeetings");
+		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 		crit.add(Restrictions.eq("user_id", id));
 		//crit.add(Restrictions.eq("status", 1));
 		Users u = (Users)crit.uniqueResult();
@@ -1445,7 +1445,7 @@ public class Usermanagement {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 		
-		Criteria crit = session.createCriteria(Users.class, "openmeetings");
+		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 		crit.add(Restrictions.eq("login", login));
 		crit.add(Restrictions.eq("deleted", "false"));
 		//crit.add(Restrictions.eq("status", 1));
@@ -1662,7 +1662,7 @@ public class Usermanagement {
 				query.setMaxResults(max);
 				query.setFirstResult(start);
 				
-//				Criteria crit = session.createCriteria(Users.class, "openmeetings");
+//				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 //				crit.add(Restrictions.eq("deleted", "false"));
 //				if (asc) crit.addOrder(Order.asc(orderby));
 //				else crit.addOrder(Order.desc(orderby));

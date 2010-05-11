@@ -27,10 +27,11 @@ import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private AppointmentDaoImpl() {
 	}
@@ -534,7 +535,7 @@ public class AppointmentDaoImpl {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Appointment.class, "openmeetings");
+			Criteria crit = session.createCriteria(Appointment.class, ScopeApplicationAdapter.webAppRootKey);
 			crit.add(Restrictions.eq("deleted", "false"));
 			Criteria subcrit = crit.createCriteria("appointmentCategory");
 			subcrit.add(Restrictions.eq("categoryId", cat_id));

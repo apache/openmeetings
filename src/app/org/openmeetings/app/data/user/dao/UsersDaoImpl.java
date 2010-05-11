@@ -11,13 +11,14 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 
 public class UsersDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static UsersDaoImpl instance = null;
 
@@ -159,7 +160,7 @@ public class UsersDaoImpl {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Users.class, "openmeetings");
+			Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 			crit.add(Restrictions.eq("deleted", "false"));
 
 			List<Users> ll = crit.list();
@@ -183,7 +184,7 @@ public class UsersDaoImpl {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Users.class, "openmeetings");
+			Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
 
 			List<Users> ll = crit.list();
 			tx.commit();

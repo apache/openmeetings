@@ -15,6 +15,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -23,7 +24,7 @@ import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
  */
 public class LanguageService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LanguageService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LanguageService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * get a List of all availible Languages

@@ -8,6 +8,7 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
@@ -21,7 +22,7 @@ import java.util.zip.*;
  */
 public class ServerDesktopRequestEncoder implements ProtocolEncoder {
 
-	private static Logger log = Red5LoggerFactory.getLogger(ServerDesktopRequestEncoder.class, "openmeetings");
+	private static Logger log = Red5LoggerFactory.getLogger(ServerDesktopRequestEncoder.class, ScopeApplicationAdapter.webAppRootKey);
 
     public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
 

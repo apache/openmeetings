@@ -14,6 +14,7 @@ import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
  * 
@@ -22,7 +23,7 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
  */
 public class ErrorService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * Gets an Error-Object by its id

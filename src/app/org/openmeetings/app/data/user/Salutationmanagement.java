@@ -12,6 +12,7 @@ import org.hibernate.Transaction;
 import org.hibernate.Criteria;
 import org.openmeetings.app.hibernate.beans.user.Salutations;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -23,7 +24,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
  */
 public class Salutationmanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Salutationmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Salutationmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Salutationmanagement instance = null;
 
@@ -73,7 +74,7 @@ public class Salutationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Salutations.class, "openmeetings");
+			Criteria crit = session.createCriteria(Salutations.class, ScopeApplicationAdapter.webAppRootKey);
 			List ll = crit.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);

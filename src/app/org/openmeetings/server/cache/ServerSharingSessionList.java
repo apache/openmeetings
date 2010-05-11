@@ -30,8 +30,8 @@ import org.openmeetings.server.socket.ServerSocketMinaProcess;
  */
 public class ServerSharingSessionList {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
-	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
+	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Map<String,ServerSharingSessionBean> sharingSessions = new HashMap<String,ServerSharingSessionBean>();
 	

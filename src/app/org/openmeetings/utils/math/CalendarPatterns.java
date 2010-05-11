@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.text.SimpleDateFormat;
 
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 /**
@@ -14,7 +15,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class CalendarPatterns {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	public static SimpleDateFormat dateFormat__ddMMyyyyHHmmss = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	public static SimpleDateFormat dateFormat__ddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");

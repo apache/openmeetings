@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class EmoticonsManager {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();
 

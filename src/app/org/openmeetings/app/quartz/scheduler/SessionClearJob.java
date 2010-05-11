@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import org.red5.server.api.scheduling.IScheduledJob;
 import org.red5.server.api.scheduling.ISchedulingService;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
  
 public class SessionClearJob {
 
-	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, "openmeetings");
+	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	//Spring loaded Beans
 	private Sessionmanagement sessionmanagement;

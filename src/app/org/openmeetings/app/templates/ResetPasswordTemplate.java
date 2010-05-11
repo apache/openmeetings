@@ -9,12 +9,13 @@ import org.apache.velocity.app.Velocity;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ResetPasswordTemplate extends VelocityLoader{
 	
 	private static final String tamplateName = "resetPass.vm";
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FeedbackTemplate.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(FeedbackTemplate.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private ResetPasswordTemplate() {
 		super();

@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import org.red5.server.api.scheduling.IScheduledJob;
 import org.red5.server.api.scheduling.ISchedulingService;
 import org.openmeetings.app.data.record.WhiteboardConvertionJobManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
  
 public class RecordingJob {
 
-	private static Logger log = Red5LoggerFactory.getLogger(RecordingJob.class, "openmeetings");
+	private static Logger log = Red5LoggerFactory.getLogger(RecordingJob.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	//Spring loaded beans
 	private WhiteboardConvertionJobManager whiteboardConvertionJobManager;

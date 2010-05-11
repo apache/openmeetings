@@ -22,7 +22,7 @@ import org.slf4j.Logger;
  */
 public class RTPStreamingHandler {
 	
-		private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamingHandler.class, "openmeetings");
+		private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamingHandler.class, ScopeApplicationAdapter.webAppRootKey);
 	
 		/** Contains all RTPSessions*/
 		private static HashMap<Rooms, RTPScreenSharingSession> rtpSessions = new HashMap<Rooms, RTPScreenSharingSession>();

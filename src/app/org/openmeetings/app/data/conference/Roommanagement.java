@@ -505,7 +505,7 @@ public class Roommanagement {
 				session.flush();
 				session.clear();
 				
-//				Criteria crit = session.createCriteria(Rooms.class, "openmeetings");
+//				Criteria crit = session.createCriteria(Rooms.class, ScopeApplicationAdapter.webAppRootKey);
 //				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
 //				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
 //				crit.add(Restrictions.eq("ispublic", true));

@@ -12,11 +12,12 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.RegisterUserTemplate;
 
 public class Emailmanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Emailmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Emailmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public Emailmanagement() {
 	}

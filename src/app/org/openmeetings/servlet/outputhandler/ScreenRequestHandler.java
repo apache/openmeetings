@@ -31,7 +31,7 @@ import org.openmeetings.server.socket.ServerSocketMinaProcess;
 
 public class ScreenRequestHandler extends VelocityViewServlet {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ScreenRequestHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ScreenRequestHandler.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,

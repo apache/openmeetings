@@ -23,10 +23,11 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ImportInitvalues {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public static final String languageFolderName = "languages/";
  

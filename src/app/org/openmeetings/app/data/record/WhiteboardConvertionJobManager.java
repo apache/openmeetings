@@ -66,7 +66,7 @@ public class WhiteboardConvertionJobManager {
 	//see also Methods on bottom to change the Default Out dir in JUnit
 	private static boolean isDebug = false;
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardConvertionJobManager.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardConvertionJobManager.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private WhiteboardConvertionJobManager() {
 	}

@@ -22,12 +22,13 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.mappings.CastMapToObject;
 
 public class Configurationmanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Configurationmanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Configurationmanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private Configurationmanagement() {
 	}
@@ -128,7 +129,7 @@ public class Configurationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Configuration.class, "openmeetings");
+			Criteria crit = session.createCriteria(Configuration.class, ScopeApplicationAdapter.webAppRootKey);
 			crit.add(Restrictions.eq("deleted", "false"));
 			crit.setFirstResult(start);
 			crit.setMaxResults(max);

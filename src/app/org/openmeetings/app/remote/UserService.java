@@ -31,7 +31,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class UserService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, "openmeetings");	
+	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, ScopeApplicationAdapter.webAppRootKey);	
 	
 	//Spring Beans
 	private ClientListManager clientListManager = null;

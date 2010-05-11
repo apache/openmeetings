@@ -16,10 +16,11 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentReminderTypDaoImpl {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private AppointmentReminderTypDaoImpl() {
 	}

@@ -23,7 +23,7 @@ import javax.xml.XMLConstants;
 
 public class OpenXgXmlWriter implements XMLWriter {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXgXmlWriter.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXgXmlWriter.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static final int STATE_OUTSIDE = 0;
 	private static final int STATE_IN_START_ELEMENT = 1;

@@ -7,12 +7,13 @@ import org.red5.logging.Red5LoggerFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ScreenCastTemplate extends VelocityLoader{
 	
 	private static final String tamplateName = "screencast_template.vm";
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ScreenCastTemplate.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ScreenCastTemplate.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private ScreenCastTemplate() {
 		super();

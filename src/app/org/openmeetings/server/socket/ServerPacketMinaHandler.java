@@ -7,6 +7,7 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.SocketSessionConfig;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
@@ -20,7 +21,7 @@ import org.slf4j.Logger;
  */
 public class ServerPacketMinaHandler extends IoHandlerAdapter {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketMinaHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketMinaHandler.class, ScopeApplicationAdapter.webAppRootKey);
 	
     private ServerSocketMinaProcess server;
 

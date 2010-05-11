@@ -16,11 +16,12 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class CalendarService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			CalendarService.class, "openmeetings");
+			CalendarService.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static CalendarService instance = null;
 

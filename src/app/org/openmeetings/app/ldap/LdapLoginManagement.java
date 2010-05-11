@@ -17,6 +17,7 @@ import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.ldap.config.ConfigReader;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ import org.slf4j.Logger;
  */
 public class LdapLoginManagement {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static LdapLoginManagement instance = null;
 	

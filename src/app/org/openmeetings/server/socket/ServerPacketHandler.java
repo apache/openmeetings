@@ -2,6 +2,7 @@ package org.openmeetings.server.socket;
 
 //import org.slf4j.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
@@ -15,8 +16,8 @@ import org.slf4j.Logger;
  */
 public class ServerPacketHandler {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, "openmeetings");
-	//private static Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, ScopeApplicationAdapter.webAppRootKey);
+	//private static Logger log = Red5LoggerFactory.getLogger(ServerPacketHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/**
 	 * @param data

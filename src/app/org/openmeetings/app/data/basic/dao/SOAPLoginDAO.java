@@ -18,7 +18,7 @@ import org.red5.logging.Red5LoggerFactory;
 
 public class SOAPLoginDAO {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDAO.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDAO.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private SOAPLoginDAO() {
 	}

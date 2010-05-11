@@ -10,10 +10,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.openmeetings.app.hibernate.beans.recording.ChatvaluesEvent;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ChatvaluesEventDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatvaluesEventDaoImpl.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatvaluesEventDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private ChatvaluesEventDaoImpl() {
 	}

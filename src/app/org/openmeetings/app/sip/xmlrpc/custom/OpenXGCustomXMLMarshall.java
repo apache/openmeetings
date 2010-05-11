@@ -1,5 +1,6 @@
 package org.openmeetings.app.sip.xmlrpc.custom;
 
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -12,7 +13,7 @@ import org.slf4j.Logger;
  */
 public class OpenXGCustomXMLMarshall {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGCustomXMLMarshall.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGCustomXMLMarshall.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static OpenXGCustomXMLMarshall instance = null;
 

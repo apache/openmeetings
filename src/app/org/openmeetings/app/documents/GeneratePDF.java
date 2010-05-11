@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class GeneratePDF {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static GeneratePDF instance;
 

@@ -9,10 +9,11 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentCategoryService {
 	 
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static AppointmentCategoryService instance = null;
 

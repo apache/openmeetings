@@ -16,10 +16,11 @@ import org.openmeetings.app.hibernate.beans.basic.Naviglobal;
 import org.openmeetings.app.hibernate.beans.basic.Navimain;
 import org.openmeetings.app.hibernate.beans.basic.Navisub;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Navimanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Navimanagement.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Navimanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Navimanagement instance;
 

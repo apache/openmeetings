@@ -3,6 +3,7 @@ package org.openmeetings.app.remote;
 import java.util.List;
 
 import org.slf4j.Logger;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 /**
@@ -12,7 +13,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class DocumentService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(DocumentService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(DocumentService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	public List getUserFiles(String SID, String parentFolder){
 		

@@ -32,7 +32,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class ConferenceLibrary {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static ConferenceLibrary instance;
 

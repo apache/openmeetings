@@ -35,7 +35,7 @@ import org.slf4j.Logger;
  */
 public class RTPSharerServlet extends VelocityViewServlet{
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(RTPSharerServlet.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(RTPSharerServlet.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,

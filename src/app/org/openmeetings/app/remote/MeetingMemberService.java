@@ -6,10 +6,11 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class MeetingMemberService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static MeetingMemberService instance = null;
 

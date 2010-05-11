@@ -10,11 +10,13 @@ import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.files.*;
 import org.openmeetings.app.remote.ConferenceLibrary;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+
 import javax.xml.stream.XMLStreamException;
 
 public class FileService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(FileService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(FileService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/**
 	 * this Method does not work yet,

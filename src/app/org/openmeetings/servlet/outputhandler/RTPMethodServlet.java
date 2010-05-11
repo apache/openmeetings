@@ -26,7 +26,7 @@ import org.slf4j.Logger;
  */
 public class RTPMethodServlet extends HttpServlet{
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ScreenRequestHandler.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ScreenRequestHandler.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	public static final String METHOD_START = "streamer_start";
 	

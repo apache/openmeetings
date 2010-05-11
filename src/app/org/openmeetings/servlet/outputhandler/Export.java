@@ -24,6 +24,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -35,7 +36,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class Export extends HttpServlet {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Export.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(Export.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/*
 	 * (non-Javadoc)

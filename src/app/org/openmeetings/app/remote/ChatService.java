@@ -21,6 +21,7 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.EmoticonsManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.stringhandlers.ChatString;
 
 /**
@@ -36,7 +37,7 @@ public class ChatService implements IPendingServiceCallback {
 	//number of items in the Chatroom history
 	private static final int chatRoomHistory = 50;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LinkedHashMap<Long,List<HashMap<String,Object>>> myChats = new LinkedHashMap<Long,List<HashMap<String,Object>>>();
 	

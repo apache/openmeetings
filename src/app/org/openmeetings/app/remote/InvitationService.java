@@ -11,11 +11,12 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 public class InvitationService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub

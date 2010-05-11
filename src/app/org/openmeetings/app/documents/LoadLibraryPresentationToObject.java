@@ -10,10 +10,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import org.openmeetings.app.data.basic.files.*;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class LoadLibraryPresentationToObject {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentationToObject.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentationToObject.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static LoadLibraryPresentationToObject instance;
 

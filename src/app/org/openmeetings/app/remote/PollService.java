@@ -28,7 +28,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
  */
 public class PollService {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(PollService.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(PollService.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	private static HashMap<Long,RoomPoll> pollList = new HashMap<Long,RoomPoll>();
 	

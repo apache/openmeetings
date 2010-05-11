@@ -71,7 +71,7 @@ import org.slf4j.Logger;
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	IPendingServiceCallback, IStreamAwareScopeHandler {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	//Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;

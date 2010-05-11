@@ -14,11 +14,12 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 public class UserImport {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(UserImport.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(UserImport.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	public UserImport() {	}
 

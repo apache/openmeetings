@@ -37,7 +37,7 @@ public class StreamAudioListener extends ListenerAdapter {
 	
 	private int purePacketLastTimeStamp = 0;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioListener.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioListener.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public StreamAudioListener(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData, boolean isInterview) {
