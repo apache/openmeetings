@@ -2,10 +2,13 @@ package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -179,13 +182,50 @@ public class BackupExport extends HttpServlet {
 						
 					}
 					
+					/* #####################
+					 * Backup Room Files
+					 */
+					File targetDir = new File(backup_dir + File.separatorChar + "roomFiles");
+					
+					if (!targetDir.exists()) {
+						targetDir.mkdir();
+					}
+					
+					File sourceDir = new File(current_dir + "upload" + File.separatorChar);
+					
+					File[] files = sourceDir.listFiles();
+					for (File file : files) {
+						if (file.isDirectory()) {
+							
+							if (!file.getName().equals("backup")) {
+								
+								targetDir = new File(backup_dir + File.separatorChar 
+														+ "roomFiles" + File.separatorChar + file.getName());
+								
+								log.debug("### "+file.getName());
+								
+								copyDirectory(file,targetDir);
+								
+							}
+							
+						}
+					}
+					
+					
 					String full_path = backup_file + ".zip";
 					
-					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(full_path));
+//					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(full_path));
+//					
+//					zipToDir(backup_dir, zos);
+//					
+//					zos.close();
 					
-					zipToDir(backup_dir, zos);
-					
-					zos.close();
+					List<File> fileList = new ArrayList<File>();
+					log.debug("---Getting references to all files in: " + backup_dirFile.getCanonicalPath());
+					getAllFiles(backup_dirFile, fileList);
+					log.debug("---Creating zip file");
+					writeZipFile(backup_dirFile, fileList, new FileOutputStream(full_path));
+					log.debug("---Done");
 					
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 					
@@ -224,41 +264,139 @@ public class BackupExport extends HttpServlet {
 		}
 	}
 
-	private void zipToDir(String backupDir, ZipOutputStream zos) throws Exception {
-		
-		File zipDir = new File(backupDir);
-		
-		String[] dirList = zipDir.list();
-		
-		byte[] readBuffer = new byte[1024];
-		
-		int bytesIn = 0;
-		
-		for (int i=0;i<dirList.length;i++) {
-			
-			File f = new File(zipDir, dirList[i]);
-			
-			if (f.isDirectory()) {
-				String filePath = f.getPath();
-				zipToDir(filePath, zos);
-			} else {
-				FileInputStream fis = new FileInputStream(f);
-				ZipEntry newEntry = new ZipEntry(f.getName());
-				
-				//log.debug("newEntry :: "+f.getPath());
-				//log.debug("newEntry :: "+f.getName());
-				
-				zos.putNextEntry(newEntry);
-				while((bytesIn = fis.read(readBuffer)) != -1 ) {
-					zos.write(readBuffer, 0, bytesIn);
+//	private void zipToDir(String backupDir, ZipOutputStream zos) throws Exception {
+//		
+//		File zipDir = new File(backupDir);
+//		
+//		String[] dirList = zipDir.list();
+//		
+//		byte[] readBuffer = new byte[1024];
+//		
+//		int bytesIn = 0;
+//		
+//		for (int i=0;i<dirList.length;i++) {
+//			
+//			File f = new File(zipDir, dirList[i]);
+//			
+//			if (f.isDirectory()) {
+//				String filePath = f.getPath();
+//				zipToDir(filePath, zos);
+//			} else {
+//				FileInputStream fis = new FileInputStream(f);
+//				ZipEntry newEntry = new ZipEntry(f.getName());
+//				
+//				//log.debug("newEntry :: "+f.getPath());
+//				//log.debug("newEntry :: "+f.getName());
+//				
+//				zos.putNextEntry(newEntry);
+//				while((bytesIn = fis.read(readBuffer)) != -1 ) {
+//					zos.write(readBuffer, 0, bytesIn);
+//				}
+//				fis.close();
+//			}
+//			
+//			
+//		}
+//		
+//	}
+	
+	public void getAllFiles(File dir, List<File> fileList) throws IOException {
+		try {
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				fileList.add(file);
+				if (file.isDirectory()) {
+					//log.debug("directory:" + file.getCanonicalPath());
+					getAllFiles(file, fileList);
+				} else {
+					//log.debug("     file:" + file.getCanonicalPath());
 				}
-				fis.close();
 			}
-			
-			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
 	}
+
+	public void writeZipFile(File directoryToZip, List<File> fileList, FileOutputStream fos) {
+
+		try {
+			//FileOutputStream fos = new FileOutputStream(directoryToZip.getName() + ".zip");
+			ZipOutputStream zos = new ZipOutputStream(fos);
+
+			for (File file : fileList) {
+				if (!file.isDirectory()) { // we only zip files, not directories
+					addToZip(directoryToZip, file, zos);
+				} else {
+					String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
+							file.getCanonicalPath().length());
+					//log.debug("Writing '" + zipFilePath + "' to zip file");
+					new ZipEntry(zipFilePath);
+				}
+			}
+
+			zos.close();
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	 public void copyDirectory(File sourceLocation , File targetLocation)
+	    throws IOException {
+	        
+		 log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
+		 
+	        if (sourceLocation.isDirectory()) {
+	            if (!targetLocation.exists()) {
+	                targetLocation.mkdir();
+	            }
+	            
+	            String[] children = sourceLocation.list();
+	            for (int i=0; i<children.length; i++) {
+	                copyDirectory(new File(sourceLocation, children[i]),
+	                        new File(targetLocation, children[i]));
+	            }
+	        } else {
+	            
+	            InputStream in = new FileInputStream(sourceLocation);
+	            OutputStream out = new FileOutputStream(targetLocation);
+	            
+	            // Copy the bits from instream to outstream
+	            byte[] buf = new byte[1024];
+	            int len;
+	            while ((len = in.read(buf)) > 0) {
+	                out.write(buf, 0, len);
+	            }
+	            in.close();
+	            out.close();
+	        }
+	    }
+
+	public void addToZip(File directoryToZip, File file, ZipOutputStream zos) throws FileNotFoundException,
+			IOException {
+
+		FileInputStream fis = new FileInputStream(file);
+
+		// we want the zipEntry's path to be a relative path that is relative
+		// to the directory being zipped, so chop off the rest of the path
+		String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
+				file.getCanonicalPath().length());
+		log.debug("Writing '" + zipFilePath + "' to zip file");
+		ZipEntry zipEntry = new ZipEntry(zipFilePath);
+		zos.putNextEntry(zipEntry);
+
+		byte[] bytes = new byte[1024];
+		int length;
+		while ((length = fis.read(bytes)) >= 0) {
+			zos.write(bytes, 0, length);
+		}
+
+		zos.closeEntry();
+		fis.close();
+	}
+
 
 	public Document createAppointementDocument(List<Appointment> aList) throws Exception {
 		Document document = DocumentHelper.createDocument();
