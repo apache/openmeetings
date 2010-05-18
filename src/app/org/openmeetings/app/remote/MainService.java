@@ -58,6 +58,9 @@ public class MainService implements IPendingServiceCallback {
 	
 	private ClientListManager clientListManager = null;
 
+	// External User Types
+	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
+	
 	public static synchronized MainService getInstance() {
 		if (instance == null) {
 			instance = new MainService();
@@ -257,9 +260,18 @@ public class MainService implements IPendingServiceCallback {
     		Users user = Usermanagement.getInstance().getUserByLoginOrEmail(usernameOrEmail);
     		
     		// AdminUser werden auf jeden Fall lokal authentifiziert
-    		if(user != null && user.getLevel_id() >=3){
-    			log.debug("User " + usernameOrEmail + " is admin -> local login");
-    			withLdap = false;
+    		if(user != null){ // User exists in local DB
+    			if (user.getExternalUserType() ==null || ! user.getExternalUserType().equals(EXTERNAL_USER_TYPE_LDAP)){ // User is not of External Type LDAP
+    				log.debug("User " + usernameOrEmail + " is local user -> Use Internal DB");
+    				withLdap = false;
+    			}
+    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus() == true){ // User is admin with pwd synch
+    				log.debug("User " + usernameOrEmail + " : Ldap-user has admin rights -> Use Internal DB");
+        			withLdap = false;	
+    			}
+    			else{
+    				log.debug("User " + usernameOrEmail + " : Ldap user authenticated using Ldap");
+    			}
     		}
     		
     		RoomClient currentClient;

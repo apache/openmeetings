@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.Scanner;
+import java.util.Random;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -34,6 +35,9 @@ public class LdapLoginManagement {
 
 	private static LdapLoginManagement instance = null;
 	
+	// External User Types
+	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
+	
 	// ConfigConstants
 	public static final String CONFIGKEY_LDAP_URL = "ldap_conn_url";
 	public static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
@@ -43,9 +47,20 @@ public class LdapLoginManagement {
 	public static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
 	
 	public static final String CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL = "field_user_principal";
+	public static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'yes' or 'no'
+	
+	/*** for future use (lemeur)
+	public static final String CONFIGKEY_LDAP_USER_EXTRAFILTER = "ldap_user_extrafilter";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NUM = "ldap_group_filter_num";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX = "ldap_group_filter_name_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_BASE_PREFIX = "ldap_group_filter_base_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX = "ldap_group_filter_type_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX = "ldap_group_filter_text_";
+	***/
+
 	
 	
-	// LDAP KEYS
+	// LDAP default attributes mapping
 	public static final String LDAP_KEY_LASTNAME = "sn";
 	public static final String LDAP_KEY_FIRSTNAME = "givenName";
 	public static final String LDAP_KEY_MAIL = "mail";
@@ -56,6 +71,18 @@ public class LdapLoginManagement {
 	public static final String LDAP_KEY_COUNTRY = "co"; 
 	public static final String LDAP_KEY_TOWN = "l";
 	public static final String LDAP_KEY_PHONE = "telephoneNumber";
+	
+	// LDAP custom attribute mapping keys
+	public static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
+	public static final String CONFIGKEY_LDAP_KEY_FIRSTNAME = "ldap_user_attr_firstname";
+	public static final String CONFIGKEY_LDAP_KEY_MAIL = "ldap_user_attr_mail";
+	public static final String CONFIGKEY_LDAP_KEY_STREET = "ldap_user_attr_street";
+	public static final String CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME = "ldap_user_attr_additionalname";
+	public static final String CONFIGKEY_LDAP_KEY_FAX = "ldap_user_attr_fax"; 
+	public static final String CONFIGKEY_LDAP_KEY_ZIP = "ldap_user_attr_zip"; 
+	public static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country"; 
+	public static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
+	public static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
 	
 
 	private LdapLoginManagement() {
@@ -92,6 +119,37 @@ public class LdapLoginManagement {
 	 }
 	 //-------------------------------------------------------------------------------------------------------
 	 	
+	/**
+	 * Ldap Password Synch to OM DB set active ?
+	 * defaults to true in case of error so as to keep old behaviour
+	 */
+	 public boolean getLdapPwdSynchStatus(){ //TIBO
+			// Retrieve Configuration Data
+			HashMap<String, String> configData;
+			
+			try{
+				configData= getLdapConfigData();
+			}catch(Exception e){
+				log.error("Error on getLdapPwdSynchStatus : " + e.getMessage());
+				return true;
+			}
+			
+			if(configData == null || configData.size() < 1){
+				log.error("Error on getLdapPwdSynchStatus : Configurationdata couldnt be retrieved!");
+				return true;
+			}
+			
+			// Connection URL
+			String ldap_synch_passwd_to_om = configData.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM);
+			if (ldap_synch_passwd_to_om.equals("no") ){
+				log.debug("getLdapPwdSynchStatus: returns FALSE (val="+ ldap_synch_passwd_to_om + ")" );
+				return false;
+			}
+			else{
+				log.debug("getLdapPwdSynchStatus: returns TRUE (val="+ ldap_synch_passwd_to_om + ")");
+				return true;
+			}
+	}
 	
 	/**
 	 * Ldap Login configured?
@@ -204,9 +262,76 @@ public class LdapLoginManagement {
 		// SearchScope for retrievment of userdata
 		String ldap_search_scope = configData.get(CONFIGKEY_LDAP_SEARCH_SCOPE);
 
-		// FieldName for Users's Prinicipal Name
+		// FieldName for Users's Principal Name
 		String ldap_fieldname_user_principal = configData.get(CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL);
+	
+		// Wether or not we'll store Ldap passwd into OM db
+		String ldap_sync_passwd_to_om = configData.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM);
 		
+		/*** for future use (lemeur)
+		// Ldap user filter to refine the search 
+		String ldap_user_extrafilter = configData.get(CONFIGKEY_LDAP_USER_EXTRAFILTER);
+		
+		// Count of Ldap group filters 
+		String ldap_group_filter_num = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NUM);
+		
+		// Prefix name of Ldap group filter name 
+		String ldap_group_filter_name_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
+		
+		// Prefix name of Ldap group filter base 
+		String ldap_group_filter_base_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
+		
+		// Prefix name of Ldap group filter type 
+		String ldap_group_filter_type_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX);
+		
+		// Prefix name of Ldap group filter text
+		String ldap_group_filter_text_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX);
+		***/
+		
+		// Get custom Ldap attributes mapping
+		String ldap_user_attr_lastname = configData.get(CONFIGKEY_LDAP_KEY_LASTNAME);
+		String ldap_user_attr_firstname = configData.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
+		String ldap_user_attr_mail = configData.get(CONFIGKEY_LDAP_KEY_MAIL);
+		String ldap_user_attr_street = configData.get(CONFIGKEY_LDAP_KEY_STREET);
+		String ldap_user_attr_additional_name = configData.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
+		String ldap_user_attr_fax = configData.get(CONFIGKEY_LDAP_KEY_FAX);
+		String ldap_user_attr_zip = configData.get(CONFIGKEY_LDAP_KEY_ZIP);
+		String ldap_user_attr_country = configData.get(CONFIGKEY_LDAP_KEY_COUNTRY);
+		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
+		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
+		
+		if (ldap_user_attr_lastname == null) {
+			ldap_user_attr_lastname = LDAP_KEY_LASTNAME;
+		}
+		if (ldap_user_attr_firstname == null) {
+			ldap_user_attr_firstname = LDAP_KEY_LASTNAME;
+		}
+		if (ldap_user_attr_mail == null) {
+			ldap_user_attr_mail = LDAP_KEY_MAIL;
+		}
+		if (ldap_user_attr_street == null) {
+			ldap_user_attr_street = LDAP_KEY_STREET;
+		}
+		if (ldap_user_attr_additional_name == null) {
+			ldap_user_attr_additional_name = LDAP_KEY_ADDITIONAL_NAME;
+		}
+		if (ldap_user_attr_fax == null) {
+			ldap_user_attr_fax = LDAP_KEY_FAX;
+		}
+		if (ldap_user_attr_zip == null) {
+			ldap_user_attr_zip = LDAP_KEY_ZIP;
+		}
+		if (ldap_user_attr_country == null) {
+			ldap_user_attr_country = LDAP_KEY_COUNTRY;
+		}
+		if (ldap_user_attr_town == null) {
+			ldap_user_attr_town = LDAP_KEY_TOWN;
+		}
+		if (ldap_user_attr_phone == null) {
+			ldap_user_attr_phone = LDAP_KEY_PHONE;
+		}
+		
+			
 		// Auth Type
 		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
 		
@@ -239,8 +364,8 @@ public class LdapLoginManagement {
 		if (ldap_server_type.equalsIgnoreCase("OpenLDAP")) {
 			String ldapUserDN = user;
 			log.debug("LDAP server is OpenLDAP");
-			log.debug("LDAP search base" + ldap_search_scope);
-			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(ldap_search_scope);
+			log.debug("LDAP search base: " + ldap_search_scope);
+			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(ldap_search_scope, ldap_search_filter);
 			if (uidCnDictionary.get(user) != null){
 				ldapUserDN = uidCnDictionary.get(user) + "," + ldap_search_scope;
 				log.debug("Authentication with DN: "+ldapUserDN);
@@ -264,7 +389,7 @@ public class LdapLoginManagement {
 			}
 		}
 		
-		// Prüfen, ob user bereits vorhanden ist
+		// Prï¿½fen, ob user bereits vorhanden ist
 		
 		Users u = null;
 		
@@ -277,20 +402,32 @@ public class LdapLoginManagement {
 		
 		// User not existant in local database -> take over data for referential integrity
 		if(u == null){
-			log.debug("user doenst exist local -> create new");
+			log.debug("user doesnt exist local -> create new");
 			
 			// Attributes to retrieve from ldap
 			List<String> attributes = new ArrayList<String>();
-			attributes.add(LDAP_KEY_LASTNAME); // Lastname
-			attributes.add(LDAP_KEY_FIRSTNAME); //Firstname
-			attributes.add(LDAP_KEY_MAIL);// mail
-			attributes.add(LDAP_KEY_STREET); //Strasse
-			attributes.add(LDAP_KEY_ADDITIONAL_NAME); // Additional name
-			attributes.add(LDAP_KEY_FAX); //Fax
-			attributes.add(LDAP_KEY_ZIP); // ZIP
-			attributes.add(LDAP_KEY_COUNTRY); // Country
-			attributes.add(LDAP_KEY_TOWN); // Town
-			attributes.add(LDAP_KEY_PHONE); // Phone
+			attributes.add(ldap_user_attr_lastname); // Lastname
+			attributes.add(ldap_user_attr_firstname); //Firstname
+			attributes.add(ldap_user_attr_mail);// mail
+			attributes.add(ldap_user_attr_street); //Street
+			attributes.add(ldap_user_attr_additional_name); // Additional name
+			attributes.add(ldap_user_attr_fax); //Fax
+			attributes.add(ldap_user_attr_zip); // ZIP
+			attributes.add(ldap_user_attr_country); // Country
+			attributes.add(ldap_user_attr_town); // Town
+			attributes.add(ldap_user_attr_phone); // Phone
+			
+			HashMap <String, String> ldapAttrs= new HashMap<String, String>();
+			ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
+			ldapAttrs.put("firstnameAttr", ldap_user_attr_firstname);
+			ldapAttrs.put("mailAttr", ldap_user_attr_mail);
+			ldapAttrs.put("streetAttr", ldap_user_attr_street);
+			ldapAttrs.put("additionalNameAttr", ldap_user_attr_additional_name);
+			ldapAttrs.put("faxAttr", ldap_user_attr_fax);
+			ldapAttrs.put("zipAttr", ldap_user_attr_zip);
+			ldapAttrs.put("countryAttr", ldap_user_attr_country);
+			ldapAttrs.put("townAttr", ldap_user_attr_town);
+			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
 			
 			Vector<HashMap<String, String>> result = lAuth.getData(ldap_search_scope, ldap_search_filter, attributes);
 
@@ -308,7 +445,17 @@ public class LdapLoginManagement {
 			
 			try{
 				//Create User with LdapData
-				Long userid = createUserFromLdapData(userData, passwd, user);
+				Long userid;
+				if (ldap_sync_passwd_to_om != null && ldap_sync_passwd_to_om.equals("no")){
+					Random r = new Random();
+					String token = Long.toString(Math.abs(r.nextLong()), 36);
+					log.debug("Synching Ldap user to OM DB with RANDOM password: " + token);
+					userid = createUserFromLdapData(userData, token, user, ldapAttrs);					
+				}
+				else{
+					log.debug("Synching Ldap user to OM DB with password");
+					userid = createUserFromLdapData(userData, passwd, user, ldapAttrs);
+				}
 				log.debug("New User ID : " + userid);
 				
 				
@@ -332,6 +479,7 @@ public class LdapLoginManagement {
 				
 				// Return UserObject
 				Users u2 =  Usermanagement.getInstance().getUserById(userid);
+				u2.setExternalUserType(EXTERNAL_USER_TYPE_LDAP); //TIBO
 				
 				//initialize lazy collection
 				Usermanagement.getInstance().refreshUserObject(u2);
@@ -371,8 +519,9 @@ public class LdapLoginManagement {
 			}
 			
 			// Update password (could have changed in LDAP)
-			
-			u.setPassword(passwd);
+			if (ldap_sync_passwd_to_om == null || ! ldap_sync_passwd_to_om.equals("no")){
+				u.setPassword(passwd);
+			}
 			try{
 				Usermanagement.getInstance().updateUserObject(u,true );
 			}catch(Exception e){
@@ -393,46 +542,46 @@ public class LdapLoginManagement {
 	 * Added to Default Organisation
 	 */
 	//----------------------------------------------------------------------------------------
-	private Long createUserFromLdapData(HashMap<String, String> userdata, String passwd, String login) throws Exception{
+	private Long createUserFromLdapData(HashMap<String, String> userdata, String passwd, String login, HashMap <String, String> ldapAttrs) throws Exception{
 		log.debug("LdapLoginmanagement.createUserFromLdapData");
 		
 		// Retrieve Data from LDAP - Data
 		
 		String lastname = "lastname";
-		if(userdata.containsKey(LDAP_KEY_LASTNAME) && userdata.get(LDAP_KEY_LASTNAME) != null)
-			lastname = userdata.get(LDAP_KEY_LASTNAME);
+		if(userdata.containsKey(ldapAttrs.get("lastnameAttr")) && userdata.get(ldapAttrs.get("lastnameAttr")) != null)
+			lastname = userdata.get(ldapAttrs.get("lastnameAttr"));
 		
 		String firstname = "firstname";
-		if(userdata.containsKey(LDAP_KEY_FIRSTNAME) && userdata.get(LDAP_KEY_FIRSTNAME) != null)
-			firstname = userdata.get(LDAP_KEY_FIRSTNAME);
+		if(userdata.containsKey(ldapAttrs.get("firstnameAttr")) && userdata.get(ldapAttrs.get("firstnameAttr")) != null)
+			firstname = userdata.get(ldapAttrs.get("firstnameAttr"));
 		
 		String email = "email";
-		if(userdata.containsKey(LDAP_KEY_MAIL) && userdata.get(LDAP_KEY_MAIL) != null)
-			email = userdata.get(LDAP_KEY_MAIL);
+		if(userdata.containsKey(ldapAttrs.get("mailAttr")) && userdata.get(ldapAttrs.get("mailAttr")) != null)
+			email = userdata.get(ldapAttrs.get("mailAttr"));
 		
 		String street = "street";
-		if(userdata.containsKey(LDAP_KEY_STREET) && userdata.get(LDAP_KEY_STREET) != null)
-			street = userdata.get(LDAP_KEY_STREET);
+		if(userdata.containsKey(ldapAttrs.get("streetAttr")) && userdata.get(ldapAttrs.get("streetAttr")) != null)
+			street = userdata.get(ldapAttrs.get("streetAttr"));
 		
 		String additionalname = "additionalname";
-		if(userdata.containsKey(LDAP_KEY_ADDITIONAL_NAME) && userdata.get(LDAP_KEY_ADDITIONAL_NAME) != null)
-			additionalname = userdata.get(LDAP_KEY_ADDITIONAL_NAME);
+		if(userdata.containsKey(ldapAttrs.get("additionalNameAttr")) && userdata.get(ldapAttrs.get("additionalNameAttr")) != null)
+			additionalname = userdata.get(ldapAttrs.get("additionalNameAttr"));
 		
 		String fax = "fax";
-		if(userdata.containsKey(LDAP_KEY_FAX) && userdata.get(LDAP_KEY_FAX) != null)
-			fax = userdata.get(LDAP_KEY_FAX);
+		if(userdata.containsKey(ldapAttrs.get("faxAttr")) && userdata.get(ldapAttrs.get("faxAttr")) != null)
+			fax = userdata.get(ldapAttrs.get("faxAttr"));
 		
 		String zip = "zip";
-		if(userdata.containsKey(LDAP_KEY_ZIP) && userdata.get(LDAP_KEY_ZIP) != null)
-			zip = userdata.get(LDAP_KEY_ZIP);
+		if(userdata.containsKey(ldapAttrs.get("zipAttr")) && userdata.get(ldapAttrs.get("zipAttr")) != null)
+			zip = userdata.get(ldapAttrs.get("zipAttr"));
 		
 		String state = null;
-		if(userdata.containsKey(LDAP_KEY_COUNTRY) && userdata.get(LDAP_KEY_COUNTRY) != null)
-			state = userdata.get(LDAP_KEY_COUNTRY);
+		if(userdata.containsKey(ldapAttrs.get("countryAttr")) && userdata.get(ldapAttrs.get("countryAttr")) != null)
+			state = userdata.get(ldapAttrs.get("countryAttr"));
 		
 		String phone = "phone";
-		if(userdata.containsKey(LDAP_KEY_PHONE) && userdata.get(LDAP_KEY_PHONE) != null)
-			phone = userdata.get(LDAP_KEY_PHONE);
+		if(userdata.containsKey(ldapAttrs.get("phoneAttr")) && userdata.get(ldapAttrs.get("phoneAttr")) != null)
+			phone = userdata.get(ldapAttrs.get("phoneAttr"));
 		
 		long state_id = -1;
 		
@@ -461,8 +610,8 @@ public class LdapLoginManagement {
 		}
 		
 		String town = "town";
-		if(userdata.containsKey(LDAP_KEY_TOWN) && userdata.get(LDAP_KEY_TOWN) != null)
-			town = userdata.get(LDAP_KEY_TOWN);
+		if(userdata.containsKey(ldapAttrs.get("townAttr")) && userdata.get(ldapAttrs.get("townAttr")) != null)
+			town = userdata.get(ldapAttrs.get("townAttr"));
 		
 		
 		Long newUserId = null;
@@ -519,6 +668,7 @@ public class LdapLoginManagement {
 			
 			// Set him to Default Organisation
 			long organisation_id = Long.valueOf(Configurationmanagement.getInstance().getConfKey(3,"default_domain_id").getConf_value()).longValue();
+			log.debug("Adding user '" + newUserId + "' to organization '" + organisation_id + "'");
 			Organisationmanagement.getInstance().addUserToOrganisation(newUserId,organisation_id, newUserId, "");
 		}
 		

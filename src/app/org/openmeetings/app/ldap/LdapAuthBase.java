@@ -216,17 +216,18 @@ public class LdapAuthBase {
 	//-------------------------------------------------------------------------------------------------------
 
 	/**
-	 * @param searchBase
+	 * @param searchBase Ldap base to begin de SUB scope search for the userDN
+	 * @param searchFilter Ldap filter to search only for the specified loginame while looking for the userDN
 	 * @return
 	 */
-	public HashMap<String, String> getUidCnHashMap(String searchBase) {
+	public HashMap<String, String> getUidCnHashMap(String searchBase, String searchFilter) {
 		HashMap<String, String> uidCnDictionary = new HashMap<String, String>();
 
 		SearchControls searchCtls = new SearchControls();
 		searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 		NamingEnumeration<SearchResult> results = null;
 		try {
-			results = authContext.search(searchBase, "objectclass=person",  searchCtls);
+			results = authContext.search(searchBase, searchFilter,  searchCtls);
 			while (results.hasMore()) {
 				SearchResult searchResult = (SearchResult) results.next();
 				String cn = searchResult.getName();
@@ -243,4 +244,5 @@ public class LdapAuthBase {
 		}
 		return uidCnDictionary;
 	}
+	
 }
