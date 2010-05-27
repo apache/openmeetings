@@ -457,6 +457,8 @@
                 <include name="META-INF/**"/>
             </fileset>
             <fileset dir="${classes.dir}">
+            	<include name="org/openmeetings/axis/services/RoomUser.class"/>
+            	<include name="org/openmeetings/axis/services/RoomReturn.class"/>
                 <include name="org/openmeetings/axis/services/RoomService.class"/>
             	<include name="org/openmeetings/axis/services/RoomCountBean.class"/>
             </fileset>

@@ -276,8 +276,67 @@ public class RoomService {
 		return ConferenceService.getInstance().getRoomById(SID, rooms_id);
 	}
 	
+	/**
+	 * @deprecated this function is intend to be deleted
+	 * @param SID
+	 * @param rooms_id
+	 * @return
+	 */
 	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id){
 		return ConferenceService.getInstance().getRoomWithCurrentUsersById(SID, rooms_id);
+	}
+	
+	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id) throws AxisFault {
+		try {
+    		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Rooms room = Roommanagement.getInstance().getRoomById(user_level,rooms_id);
+				
+				RoomReturn roomReturn = new RoomReturn();
+				
+				roomReturn.setCreated(room.getStarttime());
+				roomReturn.setCreator(null);
+				roomReturn.setName(room.getName());
+				roomReturn.setRoom_id(room.getRooms_id());
+				
+				HashMap<String,RoomClient> map = ClientListManager.getInstance().getClientListByRoom(room.getRooms_id());
+				
+				RoomUser[] roomUsers = new RoomUser[map.size()];
+				
+				int i = 0;
+				for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext(); ) {
+					RoomClient rcl = map.get(iter.next());
+					
+					RoomUser roomUser = new RoomUser();
+					roomUser.setFirstname(rcl.getFirstname());
+					roomUser.setLastname(rcl.getLastname());
+					roomUser.setBroadcastId(rcl.getBroadCastID());
+					roomUser.setPublicSID(rcl.getPublicSID());
+					roomUser.setIsBroadCasting(rcl.getIsBroadcasting());
+					roomUser.setAvsettings(rcl.getAvsettings());
+					
+					roomUsers[i] = roomUser;
+					
+					i++;
+					
+				}
+				
+				roomReturn.setRoomUser(roomUsers);
+
+				return roomReturn;
+			}
+			
+			
+			return null;
+			
+		} catch (Exception err) {
+			log.error("[getRoomWithClientObjectsById]",err);
+			throw new AxisFault(err.getMessage());
+		}
+		
 	}
 	
 	public SearchResult getRooms(String SID, int start, int max, String orderby, boolean asc){
