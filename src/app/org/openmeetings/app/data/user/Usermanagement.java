@@ -941,7 +941,7 @@ public class Usermanagement {
 		// their Group
 		if (AuthLevelmanagement.getInstance().checkModLevel(user_level)) {
 			// Check for required data
-			if (login.length()>=6 && Userpass.length()>=6) {
+			if (login.length()>=4 && Userpass.length()>=4) {
 				// Check for duplicates
 				boolean checkName = UsersDaoImpl.getInstance().checkUserLogin(login);
 				boolean checkEmail = Emailmanagement.getInstance().checkUserEMail(email);

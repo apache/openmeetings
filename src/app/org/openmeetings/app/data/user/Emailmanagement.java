@@ -406,7 +406,7 @@ public class Emailmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Adresses as c where c.email = :email AND c.deleted != :deleted");
+			Query query = session.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted != :deleted");
 			query.setString("email", email);
 			query.setString("deleted", "true");
 			int count = query.list().size();
