@@ -197,7 +197,7 @@ public class BackupExport extends HttpServlet {
 					for (File file : files) {
 						if (file.isDirectory()) {
 							
-							if (!file.getName().equals("backup")) {
+							if (!file.getName().equals("backup") && !file.getName().equals("import")) {
 								
 								targetDir = new File(backup_dir + File.separatorChar 
 														+ "roomFiles" + File.separatorChar + file.getName());
@@ -327,10 +327,11 @@ public class BackupExport extends HttpServlet {
 				if (!file.isDirectory()) { // we only zip files, not directories
 					addToZip(directoryToZip, file, zos);
 				} else {
-					String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
-							file.getCanonicalPath().length());
-					//log.debug("Writing '" + zipFilePath + "' to zip file");
-					new ZipEntry(zipFilePath);
+//					String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
+//							file.getCanonicalPath().length());
+//					//log.debug("Writing '" + zipFilePath + "' to zip file");
+//					ZipEntry zipEntry = new ZipEntry(zipFilePath);
+//					zos.putNextEntry(zipEntry);
 				}
 			}
 
@@ -346,7 +347,7 @@ public class BackupExport extends HttpServlet {
 	 public void copyDirectory(File sourceLocation , File targetLocation)
 	    throws IOException {
 	        
-		 log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
+		 //log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
 		 
 	        if (sourceLocation.isDirectory()) {
 	            if (!targetLocation.exists()) {

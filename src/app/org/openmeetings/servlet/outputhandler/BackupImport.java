@@ -124,33 +124,74 @@ public class BackupImport extends HttpServlet {
 					
 					log.debug("##### WRITE FILE TO: " + completeName);
 					
-					ZipInputStream zis = new ZipInputStream(is);
+//					ZipInputStream zis = new ZipInputStream(is);
+//					
+//					ZipEntry zipEntry = zis.getNextEntry();
+//					while (zipEntry != null) {
+//						
+//						String fileName = completeName + File.separatorChar + zipEntry.getName();
+//						
+//						FileOutputStream fos = new FileOutputStream(fileName);
+//						byte[] buffer = new byte[1024];
+//						int len = 0;
+//	
+//						while (len != (-1)) {
+//							len = zis.read(buffer, 0, 1024);
+//							if (len != (-1))
+//								fos.write(buffer, 0, len);
+//						}
+//	
+//						fos.close();
+//						
+//						zis.closeEntry();
+//						
+//						zipEntry = zis.getNextEntry();
+//						
+//					}
+//					
+//					is.close();
+//					zis.close();
 					
-					ZipEntry zipEntry = zis.getNextEntry();
-					while (zipEntry != null) {
-						
-						String fileName = completeName + File.separatorChar + zipEntry.getName();
-						
-						FileOutputStream fos = new FileOutputStream(fileName);
-						byte[] buffer = new byte[1024];
-						int len = 0;
-	
-						while (len != (-1)) {
-							len = zis.read(buffer, 0, 1024);
-							if (len != (-1))
-								fos.write(buffer, 0, len);
-						}
-	
-						fos.close();
-						
-						zis.closeEntry();
-						
-						zipEntry = zis.getNextEntry();
-						
-					}
+					ZipInputStream zipinputstream = new ZipInputStream(is);
+					byte[] buf = new byte[1024];
 					
-					is.close();
-					zis.close();
+					ZipEntry zipentry = zipinputstream.getNextEntry();
+					
+					while (zipentry != null) {
+			            //for each entry to be extracted
+			            String entryName = completeName + File.separatorChar + zipentry.getName();
+			            entryName = entryName.replace('/', File.separatorChar);
+			            entryName = entryName.replace('\\', File.separatorChar);
+			            log.debug("entryname " + entryName);
+			            
+			            zipentry.get
+			            
+			            int n;
+			            FileOutputStream fileoutputstream;
+			            File newFile = new File(entryName);
+			            
+			            
+			            if (zipentry.isDirectory()) {
+			                if (!newFile.mkdir()) {
+			                    break;
+			                }
+			                zipentry = zipinputstream.getNextEntry();
+			                continue;
+			            }
+
+			            fileoutputstream = new FileOutputStream(entryName);
+
+			            while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+			                fileoutputstream.write(buf, 0, n);
+			            }
+
+			            fileoutputstream.close();
+			            zipinputstream.closeEntry();
+			            zipentry = zipinputstream.getNextEntry();
+
+			        }//while
+
+		            zipinputstream.close();
 					
 					/* #####################
 					 * Import Organizations
