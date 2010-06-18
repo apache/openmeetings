@@ -18,12 +18,11 @@ import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 
 public class AppointmentLogic {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, "openmeetings");
 	private static AppointmentLogic instance = null;
 
 	public static synchronized AppointmentLogic getInstance() {
@@ -277,7 +276,8 @@ public class AppointmentLogic {
 			Appointment ment = points.get(i);
 			
 			// Checking ReminderType - only ReminderType simple mail is concerned!
-			if(ment.getRemind().getTypId() == 2){
+			if(ment.getRemind().getTypId() == 2 || ment.getRemind().getTypId() == 3){
+				
 				log.debug("doScheduledMeetingReminder : Found appointment " +  ment.getAppointmentName());
 				
 				// Check right time
@@ -286,7 +286,9 @@ public class AppointmentLogic {
 				Date appStart = ment.getAppointmentStarttime();
 				Date oneHourBeforeAppStart = new Date(System.currentTimeMillis());
 				oneHourBeforeAppStart.setTime(appStart.getTime());
-				oneHourBeforeAppStart.setHours(appStart.getHours() -1);
+				//oneHourBeforeAppStart.setHours(appStart.getHours() -1);
+				
+				oneHourBeforeAppStart.setMinutes(appStart.getMinutes() - 15);
 				
 				if(now.before(appStart) && now.after(oneHourBeforeAppStart)){
 					log.debug("Meeting " +  ment.getAppointmentName() + " is in reminder range...");
@@ -314,26 +316,29 @@ public class AppointmentLogic {
 						
 						Invitations inv = mm.getInvitation();
 						
-						// Check if Invitation was updated last time
-						Date updateTime = inv.getUpdatetime();
-						
-						if(updateTime !=null && updateTime.after(oneHourBeforeAppStart)){
-							log.debug("Member has been informed within one hour before Meeting start");
-							continue;
-						}
-						
-						if(inv==null)
+						if(inv==null) {
 							log.error("Error retrieving Invitation for member " + mm.getEmail() + " in Appointment " + ment.getAppointmentName());
-						
-						if(inv.getBaseUrl() == null  || inv.getBaseUrl().length() < 1){
-							log.error("Error retrieving baseUrl from Invitation ID : " + inv.getInvitations_id());
-							continue;
+						} else {
+							// Check if Invitation was updated last time
+							Date updateTime = inv.getUpdatetime();
+							
+							if(updateTime !=null && updateTime.after(oneHourBeforeAppStart)){
+								log.debug("Member has been informed within one hour before Meeting start");
+								continue;
+							}
+							
+							
+							if(inv.getBaseUrl() == null  || inv.getBaseUrl().length() < 1){
+								log.error("Error retrieving baseUrl from Invitation ID : " + inv.getInvitations_id());
+								continue;
+							}
+							
+							Invitationmanagement.getInstance().sendInvitationReminderLink("OpenMeetings", message, inv.getBaseUrl(), mm.getEmail(), subject, inv.getHash());
+							
+							inv.setUpdatetime(now);
+							Invitationmanagement.getInstance().updateInvitation(inv);
 						}
 						
-						Invitationmanagement.getInstance().sendInvitationReminderLink("OpenMeetings", message, inv.getBaseUrl(), mm.getEmail(), subject, inv.getHash());
-						
-						inv.setUpdatetime(now);
-						Invitationmanagement.getInstance().updateInvitation(inv);
 					}
 				}
 				else

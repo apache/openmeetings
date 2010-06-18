@@ -3,12 +3,14 @@ package org.openmeetings.servlet.outputhandler;
 import http.utils.multipartrequest.ServletMultipartRequest;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -28,6 +30,10 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -37,7 +43,12 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.adresses.States;
+import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
+import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -124,34 +135,6 @@ public class BackupImport extends HttpServlet {
 					
 					log.debug("##### WRITE FILE TO: " + completeName);
 					
-//					ZipInputStream zis = new ZipInputStream(is);
-//					
-//					ZipEntry zipEntry = zis.getNextEntry();
-//					while (zipEntry != null) {
-//						
-//						String fileName = completeName + File.separatorChar + zipEntry.getName();
-//						
-//						FileOutputStream fos = new FileOutputStream(fileName);
-//						byte[] buffer = new byte[1024];
-//						int len = 0;
-//	
-//						while (len != (-1)) {
-//							len = zis.read(buffer, 0, 1024);
-//							if (len != (-1))
-//								fos.write(buffer, 0, len);
-//						}
-//	
-//						fos.close();
-//						
-//						zis.closeEntry();
-//						
-//						zipEntry = zis.getNextEntry();
-//						
-//					}
-//					
-//					is.close();
-//					zis.close();
-					
 					ZipInputStream zipinputstream = new ZipInputStream(is);
 					byte[] buf = new byte[1024];
 					
@@ -162,7 +145,8 @@ public class BackupImport extends HttpServlet {
 			            String entryName = completeName + File.separatorChar + zipentry.getName();
 			            entryName = entryName.replace('/', File.separatorChar);
 			            entryName = entryName.replace('\\', File.separatorChar);
-			            log.debug("entryname " + entryName);
+			            
+			            //log.debug("entryname " + entryName);
 			            
 			            //zipentry.get
 			            
@@ -178,6 +162,40 @@ public class BackupImport extends HttpServlet {
 			                zipentry = zipinputstream.getNextEntry();
 			                continue;
 			            }
+			            
+			            File fentryName = new File(entryName);
+			            
+			            File fparent = new File(fentryName.getParent());
+			            
+			            if (!fparent.exists()) {
+			            	
+			            	File fparentparent = new File(fparent.getParent());
+			            	
+			            	if (!fparentparent.exists()) {
+			            		
+			            		File fparentparentparent = new File(fparentparent.getParent());
+			            		
+			            		if (!fparentparentparent.exists()) {
+			            			
+			            			fparentparentparent.mkdir();
+			            			fparentparent.mkdir();
+			            			fparent.mkdir();
+			            			
+			            		} else {
+			            			
+			            			fparentparent.mkdir();
+			            			fparent.mkdir();
+			            			
+			            		}
+			            		
+			            	} else {
+			            		
+			            		fparent.mkdir();
+			            		
+			            	}
+			            	
+			            }
+			            
 
 			            fileoutputstream = new FileOutputStream(entryName);
 
@@ -192,6 +210,98 @@ public class BackupImport extends HttpServlet {
 			        }//while
 
 		            zipinputstream.close();
+		            
+		            //Now check the room files and import them
+		            
+		            File roomFilesFolder = new File(completeName + File.separatorChar + "roomFiles");
+		            
+		            
+		            String library_dir = current_dir + "upload"
+												+ File.separatorChar;
+		            
+		            log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
+		            
+		            if (roomFilesFolder.exists()) {
+		            	
+		            	File[] files = roomFilesFolder.listFiles();
+		            	for (File file : files) {
+		            		if (file.isDirectory()) {
+		            			
+								String parentFolderName = file.getName();
+		            				
+	            				//Is a room folder or the profiles folder
+	            				String parentPath = library_dir + parentFolderName + File.separatorChar;
+		            			
+	            				File parentPathFile = new File(parentPath);
+	            				
+	            				if (!parentPathFile.exists()) {
+	            					parentPathFile.mkdir();
+	            				}
+	            				
+	            				File[] roomOrProfileFiles = file.listFiles();
+	            				for (File roomOrProfileFileOrFolder : roomOrProfileFiles) {
+	            					
+	            					
+	            					if (roomOrProfileFileOrFolder.isDirectory()) {
+	            						
+	            						String roomDocumentFolderName = parentPath + roomOrProfileFileOrFolder.getName() + File.separatorChar;
+	            						
+	            						File roomDocumentFolder = new File(roomDocumentFolderName);
+	    	            				
+	    	            				if (!roomDocumentFolder.exists()) {
+	    	            					roomDocumentFolder.mkdir();
+	    	            					
+	    	            					File[] roomDocumentFiles = roomOrProfileFileOrFolder.listFiles();
+		    	            				
+		    	            				for (File roomDocumentFile : roomDocumentFiles) {
+		    	            					
+		    	            					if (roomDocumentFile.isDirectory()) {
+		    	            						log.error("Folder detected in Documents space! Folder "+roomDocumentFolderName);
+		    	            					} else {
+		    	            						
+		    	            						String roomDocumentFileName = roomDocumentFolderName + roomDocumentFile.getName();
+		    	            						
+		    	            						this.copyFile(roomDocumentFile, new File(roomDocumentFileName));
+		    	            						
+		    	            					}
+		    	            					
+		    	            				}
+	    	            					
+	    	            				} else {
+	    	            					
+	    	            					log.debug("Document already exists :: ",roomDocumentFolderName);
+	    	            					
+	    	            				}
+	    	            				
+	    	            				
+	            						
+	            					} else {
+	            						
+	            						String roomFileOrProfileName = parentPath + roomOrProfileFileOrFolder.getName();
+	            						
+	            						File roomFileOrProfileFile = new File(roomFileOrProfileName);
+	            						
+	            						if (!roomFileOrProfileFile.exists()) {
+	            							
+	            							this.copyFile(roomOrProfileFileOrFolder, roomFileOrProfileFile);
+	            							
+	            						} else {
+	            							
+	            							log.debug("File does already exist :: ",roomFileOrProfileName);
+	            							
+	            						}
+	            						
+	            						
+	            					}
+	            					
+	            					
+	            					
+	            				}
+		            			
+		            		}
+		            	}
+		            	
+		            }
 					
 					/* #####################
 					 * Import Organizations
@@ -212,6 +322,49 @@ public class BackupImport extends HttpServlet {
 						throw new Exception ("users.xml missing");
 					}
 					this.importUsers(userFile);
+					
+					/* #####################
+					 * Import Rooms
+					 */
+					String roomListXML = completeName + File.separatorChar + "rooms.xml";
+					File roomFile = new File(roomListXML);
+					if (!roomFile.exists()) {
+						throw new Exception ("rooms.xml missing");
+					}
+					this.importRooms(roomFile);
+					
+					/* #####################
+					 * Import Room Organisations
+					 */
+					String orgRoomListXML = completeName + File.separatorChar + "rooms_organisation.xml";
+					File orgRoomListFile = new File(orgRoomListXML);
+					if (!orgRoomListFile.exists()) {
+						throw new Exception ("rooms_organisation.xml missing");
+					}
+					this.importOrgRooms(orgRoomListFile);
+					
+					/* #####################
+					 * Import Appointements
+					 */
+					String appointementListXML = completeName + File.separatorChar + "appointements.xml";
+					File appointementListFile = new File(appointementListXML);
+					if (!appointementListFile.exists()) {
+						throw new Exception ("appointements.xml missing");
+					}
+					this.importAppointements(appointementListFile);
+
+					/* #####################
+					 * Import MeetingMembers
+					 * 
+					 * Reminder Invitations will be NOT send!
+					 * 
+					 */
+					String meetingmembersListXML = completeName + File.separatorChar + "meetingmembers.xml";
+					File meetingmembersListFile = new File(meetingmembersListXML);
+					if (!meetingmembersListFile.exists()) {
+						throw new Exception ("meetingmembersListFile missing");
+					}
+					this.importMeetingmembers(meetingmembersListFile);
 					
 					LinkedHashMap<String,Object> hs = new LinkedHashMap<String,Object>();
 					hs.put("user", UsersDaoImpl.getInstance().getUser(users_id));
@@ -236,6 +389,21 @@ public class BackupImport extends HttpServlet {
 		
 		return;
 	}
+
+	public void copyFile(File sourceLocation , File targetLocation) throws IOException {
+            
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+    }
 	
 	private void importUsers(File userFile) throws Exception {
 		
@@ -244,6 +412,13 @@ public class BackupImport extends HttpServlet {
 		for (Users us : userList) {
 			
 			Users storedUser = Usermanagement.getInstance().getUserById(us.getUser_id());
+			
+			if (storedUser == null) {
+				
+				us.setStarttime(new Date());
+				Usermanagement.getInstance().addUserBackup(us);
+				
+			}
 			
 		}
 		
@@ -269,9 +444,9 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Users us = new Users();
 
-	        			us.setUser_id(Long.valueOf(itemUsers.element("user_id").getText()).longValue());
+	        			us.setUser_id(Long.valueOf(itemUsers.element("user_id").getText()));
 	                    us.setAge(CalendarPatterns.parseDate(itemUsers.element("age").getText()));
-	                    us.setAvailible(Integer.valueOf(itemUsers.element("availible").getText()).intValue());
+	                    us.setAvailible(importIntegerType(itemUsers.element("availible").getText()));
 	        			us.setDeleted(itemUsers.element("deleted").getText());
 	        			us.setFirstname(itemUsers.element("firstname").getText());
 	        			us.setLastname(itemUsers.element("lastname").getText());
@@ -281,12 +456,12 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			us.setPictureuri(itemUsers.element("pictureuri").getText());
 	        			if (itemUsers.element("language_id").getText().length()>0)
-	        				us.setLanguage_id(Long.valueOf(itemUsers.element("language_id").getText()).longValue());
+	        				us.setLanguage_id(Long.valueOf(itemUsers.element("language_id").getText()));
 	        				
-	        			us.setStatus(Integer.valueOf(itemUsers.element("status").getText()).intValue());
+	        			us.setStatus(importIntegerType(itemUsers.element("status").getText()));
 	        			us.setRegdate(CalendarPatterns.parseDate(itemUsers.element("regdate").getText()));
-	        			us.setTitle_id(Integer.valueOf(itemUsers.element("title_id").getText()).intValue());
-	        			us.setLevel_id(Long.valueOf(itemUsers.element("level_id").getText()).longValue());
+	        			us.setTitle_id(importIntegerType(itemUsers.element("title_id").getText()));
+	        			us.setLevel_id(importLongType(itemUsers.element("level_id").getText()));
 	        			
 	        			
 	        			String additionalname = itemUsers.element("additionalname").getText();
@@ -296,7 +471,7 @@ public class BackupImport extends HttpServlet {
 	        			// String deleted = u.getAdresses().getDeleted()
 	        			// Phone Number not done yet
 	        			String fax = itemUsers.element("fax").getText();
-	        			Long state_id = Long.valueOf(itemUsers.element("state_id").getText()).longValue();
+	        			Long state_id = importLongType(itemUsers.element("state_id").getText());
 	        			String street = itemUsers.element("street").getText();
 	        			String town = itemUsers.element("town").getText();
 	        			String zip = itemUsers.element("zip").getText();
@@ -326,6 +501,30 @@ public class BackupImport extends HttpServlet {
 	        			adr.setEmail(email);
 	        			
 	        			us.setAdresses(adr);
+	        			
+	        			us.setOrganisation_users(new HashSet<Organisation_Users>());
+	        			
+	        			for (Iterator<Element> organisationIterator = itemUsers.elementIterator( "organisations" ); organisationIterator.hasNext(); ) {
+	        				
+	        				Element organisationObject = organisationIterator.next();
+	        				
+	        				Long organisation_id = importLongType(organisationObject.element("organisation_id").getText());
+	        				Long user_id = importLongType(organisationObject.element("user_id").getText());
+	        				Boolean isModerator = importBooleanType(organisationObject.element("isModerator").getText());
+	        				String commentOrg = organisationObject.element("comment").getText();
+	        				String deleted = organisationObject.element("deleted").getText();
+	        				
+	        				Organisation_Users orgUser = new Organisation_Users();
+	        				orgUser.setOrganisation(Organisationmanagement.getInstance().getOrganisationByIdBackup(organisation_id));
+	        				orgUser.setUser_id(user_id);
+	        				orgUser.setIsModerator(isModerator);
+	        				orgUser.setComment(commentOrg);
+	        				orgUser.setStarttime(new Date());
+	        				orgUser.setDeleted(deleted);
+	        				
+	        				us.getOrganisation_users().add(orgUser);
+	        				
+	        			}
 	        			
 	        			userList.add(us);
 	        			
@@ -375,7 +574,7 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element orgObject = innerIter.next();
 	        			
-	        			Long organisation_id = Long.valueOf(orgObject.element("organisation_id").getText()).longValue();
+	        			Long organisation_id = importLongType(orgObject.element("organisation_id").getText());
 	        			String name = orgObject.element("name").getText();
 	        			String deleted = orgObject.element("deleted").getText();
 	        			
@@ -397,6 +596,345 @@ public class BackupImport extends HttpServlet {
 			log.error("[getOrganisationsByXML]",err);
 		}
 		return null;
+	}
+	
+
+	private void importMeetingmembers(File meetingmembersListFile) throws Exception {
+		
+		List<MeetingMember> meetingmembersList = this.getMeetingmembersListByXML(meetingmembersListFile);
+		
+	}
+
+	
+	
+	private List<MeetingMember> getMeetingmembersListByXML(File meetingmembersListFile) {
+		try {
+			
+			List<MeetingMember> meetingmembersList = new LinkedList<MeetingMember>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(meetingmembersListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("meetingmembers")) {
+	        		
+        			for (Iterator<Element> innerIter = itemObject.elementIterator( "meetingmember" ); innerIter.hasNext(); ) {
+	        			
+	        			Element appointmentsObject = innerIter.next();
+	        			
+	        			Long meetingMemberId = importLongType(appointmentsObject.element("meetingMemberId").getText());
+	        			Long userid = importLongType(appointmentsObject.element("userid").getText());
+	        			Long appointment = importLongType(appointmentsObject.element("appointment").getText());
+	        			String firstname = appointmentsObject.element("firstname").getText();
+	        			String lastname = appointmentsObject.element("lastname").getText();
+	        			String memberStatus = appointmentsObject.element("memberStatus").getText();
+	        			String appointmentStatus = appointmentsObject.element("appointmentStatus").getText();
+	        			String email = appointmentsObject.element("email").getText();
+	        			Boolean deleted = importBooleanType(appointmentsObject.element("deleted").getText());
+	        			String comment = appointmentsObject.element("comment").getText();
+	        			Boolean invitor = importBooleanType(appointmentsObject.element("invitor").getText());
+	        			
+	        			
+	        			MeetingMember meetingMember = new MeetingMember();
+	        			meetingMember.setMeetingMemberId(meetingMemberId);
+	        			meetingMember.setUserid(UsersDaoImpl.getInstance().getUser(userid));
+	        			meetingMember.setAppointment(AppointmentDaoImpl.getInstance().getAppointmentByIdBackup(appointment));
+	        			meetingMember.setFirstname(firstname);
+	        			meetingMember.setLastname(lastname);
+	        			meetingMember.setMemberStatus(memberStatus);
+	        			meetingMember.setAppointmentStatus(appointmentStatus);
+	        			meetingMember.setEmail(email);
+	        			meetingMember.setDeleted(deleted);
+	        			meetingMember.setComment(comment);
+	        			meetingMember.setInvitor(invitor);
+	        			
+	        			meetingmembersList.add(meetingMember);
+	        			
+	        		}
+	        		
+	        	}
+			}
+			
+			return meetingmembersList;
+			
+		} catch (Exception err) {
+			log.error("[meetingmembersList]",err);
+		}
+		return null;
+	}
+		
+	private void importAppointements(File appointementListFile) throws Exception {
+		
+		List<Appointment> appointmentList = this.getAppointmentListByXML(appointementListFile);
+		
+		for (Appointment appointment : appointmentList) {
+			
+			Appointment appointmentStored = AppointmentDaoImpl.getInstance().getAppointmentById(appointment.getAppointmentId());
+			
+			if (appointmentStored == null) {
+				
+				AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
+				
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	private List<Appointment> getAppointmentListByXML(File appointementListFile) {
+		try {
+			
+			List<Appointment> appointmentList = new LinkedList<Appointment>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(appointementListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("appointments")) {
+	        		
+        			for (Iterator<Element> innerIter = itemObject.elementIterator( "appointment" ); innerIter.hasNext(); ) {
+	        			
+	        			Element appointmentsObject = innerIter.next();
+	        			
+	        			Long appointmentId = importLongType(appointmentsObject.element("appointmentId").getText());
+	        			String appointmentName = appointmentsObject.element("appointmentName").getText();
+	        			String appointmentLocation = appointmentsObject.element("appointmentLocation").getText();
+	        			String appointmentDescription = appointmentsObject.element("appointmentDescription").getText();
+	        			Long categoryId = importLongType(appointmentsObject.element("categoryId").getText());
+	        			Date appointmentStarttime = CalendarPatterns.parseDateWithHour(appointmentsObject.element("appointmentStarttime").getText());
+	        			Date appointmentEndtime = CalendarPatterns.parseDateWithHour(appointmentsObject.element("appointmentEndtime").getText());
+	        			String deleted = appointmentsObject.element("deleted").getText();
+	        			String comment = appointmentsObject.element("comment").getText();
+	        			Long typId = importLongType(appointmentsObject.element("typId").getText());
+	        			Boolean isDaily = importBooleanType(appointmentsObject.element("isDaily").getText());
+	        			Boolean isWeekly = importBooleanType(appointmentsObject.element("isWeekly").getText());
+	        			Boolean isMonthly = importBooleanType(appointmentsObject.element("isMonthly").getText());
+	        			Boolean isYearly = importBooleanType(appointmentsObject.element("isYearly").getText());
+	        			Long room_id = importLongType(appointmentsObject.element("room_id").getText());
+	        			String icalId = appointmentsObject.element("icalId").getText();
+	        			Long language_id = importLongType(appointmentsObject.element("language_id").getText());
+	        			Boolean isPasswordProtected = importBooleanType(appointmentsObject.element("isPasswordProtected").getText());
+	        			String password = appointmentsObject.element("password").getText();
+	        			
+	        			
+	        			Appointment app = new Appointment();
+	        			app.setAppointmentId(appointmentId);
+	        			app.setAppointmentLocation(appointmentLocation);
+	        			app.setAppointmentName(appointmentName);
+	        			app.setAppointmentDescription(appointmentDescription);
+	        			app.setAppointmentCategory(AppointmentCategoryDaoImpl.getInstance().getAppointmentCategoryById(categoryId));
+	        			app.setAppointmentStarttime(appointmentStarttime);
+	        			app.setAppointmentEndtime(appointmentEndtime);
+	        			app.setDeleted(deleted);
+	        			app.setComment(comment);
+	        			app.setRemind(AppointmentReminderTypDaoImpl.getInstance().getAppointmentReminderTypById(typId));
+	        			app.setIsDaily(isDaily);
+	        			app.setIsWeekly(isWeekly);
+	        			app.setIsMonthly(isMonthly);
+	        			app.setIsYearly(isYearly);
+	        			app.setRoom(Roommanagement.getInstance().getRoomById(room_id));
+	        			app.setIcalId(icalId);
+	        			app.setLanguage_id(language_id);
+	        			app.setIsPasswordProtected(isPasswordProtected);
+	        			app.setPassword(password);
+	        			
+	        			appointmentList.add(app);
+	        			
+	        		}
+	        		
+	        	}
+			}
+			
+			return appointmentList;
+			
+		} catch (Exception err) {
+			log.error("[getRoomListByXML]",err);
+		}
+		return null;
+	}
+
+	private void importOrgRooms(File orgRoomListFile) throws Exception {
+		
+		List<Rooms_Organisation> roomOrgList = this.getOrgRoomListByXML(orgRoomListFile);
+			
+		for (Rooms_Organisation rooms_Organisation :roomOrgList) {
+			
+			Rooms_Organisation roomsOrganisationStored = Roommanagement.getInstance().getRoomsOrganisationById(rooms_Organisation.getRooms_organisation_id());
+			
+			if (roomsOrganisationStored == null) {
+				
+				Roommanagement.getInstance().addRoomOrganisation(rooms_Organisation);
+				
+			}
+			
+		}
+		
+	}
+
+	private List<Rooms_Organisation> getOrgRoomListByXML(File orgRoomListFile) {
+		try {
+			
+			List<Rooms_Organisation> orgRoomList = new LinkedList<Rooms_Organisation>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(orgRoomListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("room_organisations")) {
+	        		
+        			for (Iterator<Element> innerIter = itemObject.elementIterator( "room_organisation" ); innerIter.hasNext(); ) {
+	        			
+	        			Element orgRoomObject = innerIter.next();
+	        			
+	        			Long rooms_organisation_id = importLongType(orgRoomObject.element("rooms_organisation_id").getText());
+	        			Long organisation_id = importLongType(orgRoomObject.element("organisation_id").getText());
+	        			Long rooms_id = importLongType(orgRoomObject.element("rooms_id").getText());
+	        			String deleted = orgRoomObject.element("deleted").getText();
+	        			
+	        			Rooms_Organisation rooms_Organisation = new Rooms_Organisation();
+	        			rooms_Organisation.setRooms_organisation_id(rooms_organisation_id);
+	        			rooms_Organisation.setOrganisation(Organisationmanagement.getInstance().getOrganisationById(organisation_id));
+	        			rooms_Organisation.setRoom(Roommanagement.getInstance().getRoomById(rooms_id));
+	        			rooms_Organisation.setDeleted(deleted);
+	        			
+	        			orgRoomList.add(rooms_Organisation);
+	        			
+	        		}
+	        		
+	        	}
+			}
+			
+			return orgRoomList;
+			
+		} catch (Exception err) {
+			log.error("[getRoomListByXML]",err);
+		}
+		return null;
+	}
+
+	private void importRooms(File roomFile) throws Exception {
+		
+		List<Rooms> roomList = this.getRoomListByXML(roomFile);
+		
+		for (Rooms rooms : roomList) {
+			
+			Rooms roomStored = Roommanagement.getInstance().getRoomById(rooms.getRooms_id());
+			
+			if (roomStored == null) {
+				Roommanagement.getInstance().addRoom(rooms);
+			}
+			
+		}
+		
+	}
+	
+	private List<Rooms> getRoomListByXML(File roomFile) {
+		try {
+			
+			List<Rooms> roomList = new LinkedList<Rooms>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(roomFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("rooms")) {
+	        		
+        			for (Iterator<Element> innerIter = itemObject.elementIterator( "room" ); innerIter.hasNext(); ) {
+	        			
+	        			Element roomObject = innerIter.next();
+	        			
+	        			Long rooms_id = importLongType(roomObject.element("rooms_id").getText());
+	        			String name = roomObject.element("name").getText();
+	        			String deleted = roomObject.element("deleted").getText();
+	        			String comment = roomObject.element("comment").getText();
+	        			Long numberOfPartizipants = importLongType(roomObject.element("numberOfPartizipants").getText());
+	        			Boolean appointment = importBooleanType(roomObject.element("appointment").getText());
+	        			Long externalRoomId = importLongType(roomObject.element("externalRoomId").getText());
+	        			String externalRoomType = roomObject.element("externalRoomType").getText();
+	        			Long roomtypes_id = importLongType(roomObject.element("roomtypeId").getText());
+	        			Boolean isDemoRoom = importBooleanType(roomObject.element("isDemoRoom").getText());
+	        			Integer demoTime = importIntegerType(roomObject.element("demoTime").getText());
+	        			Boolean isModeratedRoom = importBooleanType(roomObject.element("isModeratedRoom").getText());
+	        			Boolean allowUserQuestions = importBooleanType(roomObject.element("allowUserQuestions").getText());
+	        			String sipNumber = roomObject.element("sipNumber").getText();
+	        			String conferencePin = roomObject.element("conferencePin").getText();
+	        			
+	        			
+	        			Rooms room = new Rooms();
+	        			room.setRooms_id(rooms_id);
+	        			room.setName(name);
+	        			room.setDeleted(deleted);
+	        			room.setComment(comment);
+	        			room.setNumberOfPartizipants(numberOfPartizipants);
+	        			room.setAppointment(appointment);
+	        			room.setExternalRoomId(externalRoomId);
+	        			room.setExternalRoomType(externalRoomType);
+	        			room.setRoomtype(Roommanagement.getInstance().getRoomTypesById(roomtypes_id));
+	        			room.setIsDemoRoom(isDemoRoom);
+	        			room.setDemoTime(demoTime);
+	        			room.setIsModeratedRoom(isModeratedRoom);
+	        			room.setAllowUserQuestions(allowUserQuestions);
+	        			room.setSipNumber(sipNumber);
+	        			room.setConferencePin(conferencePin);
+	        			
+	        			
+	        			roomList.add(room);
+	        			
+	        		}
+	        		
+	        	}
+			}
+			
+			return roomList;
+			
+		} catch (Exception err) {
+			log.error("[getRoomListByXML]",err);
+		}
+		return null;
+	}
+	
+	private Integer importIntegerType(String value) {
+		
+		if (value.equals("null") || value.equals("")) {
+			return null;
+		}
+		
+		return Integer.valueOf(value).intValue();
+		
+	}
+	
+	private Long importLongType(String value) {
+		
+		if (value.equals("null") || value.equals("")) {
+			return null;
+		}
+		
+		return Long.valueOf(value).longValue();
+		
+	}
+	
+	private Boolean importBooleanType(String value) {
+		
+		if (value.equals("null") || value.equals("")) {
+			return null;
+		}
+		
+		return Boolean.valueOf(value).booleanValue();
+		
 	}
 	
 	

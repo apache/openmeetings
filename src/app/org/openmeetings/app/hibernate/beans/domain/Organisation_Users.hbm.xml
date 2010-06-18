@@ -12,5 +12,6 @@
     <property name="updatetime" type="java.util.Date" column="updatetime"/>
     <property name="deleted" type="string" column="deleted"/>
     <property name="comment" type="string" column="comment_field"/>
+    <property name="isModerator" type="string" column="is_moderator"/>
   </class>
 </hibernate-mapping>

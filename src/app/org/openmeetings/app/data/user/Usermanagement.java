@@ -1212,9 +1212,43 @@ public class Usermanagement {
 			HibernateUtil.closeSession(idf);
 			return user_id;
 		} catch (HibernateException ex) {
-			log.error("[registerUser]" ,ex);
+			log.error("[addUser]" ,ex);
 		} catch (Exception ex2) {
-			log.error("[registerUser]" ,ex2);
+			log.error("[addUser]" ,ex2);
+		}
+		return null;
+	}
+	
+	public Long addUserBackup(Users usr) {
+		try {
+			
+			Long adresses_id = Addressmanagement.getInstance().saveAddressObj(usr.getAdresses());
+			
+			usr.setAdresses(Addressmanagement.getInstance().getAdressbyId(adresses_id));
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Long user_id = (Long) session.save(usr);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			
+			for (Iterator<Organisation_Users> orgUserIterator = usr.getOrganisation_users().iterator();orgUserIterator.hasNext();) {
+				
+				Organisation_Users organisationUsers = orgUserIterator.next();
+				
+				Organisationmanagement.getInstance().addOrganisationUserObj(organisationUsers);
+				
+			}
+			
+			return user_id;
+			
+			
+		} catch (HibernateException ex) {
+			log.error("[addUserBackup]" ,ex);
+		} catch (Exception ex2) {
+			log.error("[addUserBackup]" ,ex2);
 		}
 		return null;
 	}

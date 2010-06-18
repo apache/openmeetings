@@ -59,6 +59,28 @@ public class MeetingMemberDaoImpl {
 		return null;
 	}
 	
+	public List<MeetingMember> getMeetingMembers() {
+		try {
+			String hql = "select app from MeetingMember app";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			
+			List<MeetingMember> meetingMembers = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return meetingMembers;
+		} catch (HibernateException ex) {
+			log.error("[getMeetingMembers]: " , ex);
+		} catch (Exception ex2) {
+			log.error("[getMeetingMembers]: " , ex2);
+		}
+		return null;
+	}
+	
 	public List<MeetingMember> getMeetingMemberByAppointmentId(Long appointmentId) {
 		try {
 			log.debug("getMeetingMemberByAppointmentId: "+ appointmentId);

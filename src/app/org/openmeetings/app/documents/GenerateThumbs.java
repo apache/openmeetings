@@ -48,7 +48,7 @@ public class GenerateThumbs {
 		String[] argv = new String[] {
 				GenerateImage.getPathToImageMagic(), 
 				"-thumbnail",
-				Integer.toString(thumbSize), 
+				Integer.toString(thumbSize) + "x" + Integer.toString(thumbSize), 
 				filepath + ".jpg",
 				folder + pre + name + ".jpg" };
 

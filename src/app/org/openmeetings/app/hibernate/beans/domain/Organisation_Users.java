@@ -104,7 +104,7 @@ public class Organisation_Users {
 
     /**
      * @hibernate.property
-*  column="comment_field"
+     *  column="comment_field"
      *  type="string"
      */ 	
     public String getComment() {
@@ -114,6 +114,11 @@ public class Organisation_Users {
 		this.comment = comment;
 	}
 	
+    /**
+     * @hibernate.property
+     *  column="is_moderator"
+     *  type="string"
+     */	
 	public Boolean getIsModerator() {
 		return isModerator;
 	}

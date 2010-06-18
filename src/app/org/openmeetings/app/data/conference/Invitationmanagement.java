@@ -321,6 +321,7 @@ public class Invitationmanagement {
 				invitation.setHash(MD5.do_checksum(hashRaw));
 				
 				invitation.setInvitedBy(us);
+				invitation.setBaseUrl(baseurl);
 				invitation.setInvitedname(username);
 				invitation.setInvitedEMail(email);
 				invitation.setRoom(Roommanagement.getInstance().getRoomById(rooms_id));
@@ -715,7 +716,7 @@ public class Invitationmanagement {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql);
-			query.setBoolean("deleted", true);
+			query.setString("deleted", "true");
 			query.setLong("invid",invId);
 	
 			Invitations inv = (Invitations) query.uniqueResult();

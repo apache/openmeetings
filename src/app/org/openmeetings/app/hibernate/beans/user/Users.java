@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
+import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class Users {
 	private Userdata lieferadressen;
     private Usergroups[] usergroups; 
     
-    private Set organisation_users;
+    private Set<Organisation_Users> organisation_users;
     
     private UserSipData userSipData;
     
@@ -335,10 +336,10 @@ public class Users {
      * @hibernate.key 
      * column = "user_id"
      */	
-	public Set getOrganisation_users() {
+	public Set<Organisation_Users> getOrganisation_users() {
 		return organisation_users;
 	}
-	public void setOrganisation_users(Set organisation_users) {
+	public void setOrganisation_users(Set<Organisation_Users> organisation_users) {
 		this.organisation_users = organisation_users;
 	}
 

@@ -29,6 +29,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -37,6 +38,7 @@ import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -167,6 +169,22 @@ public class BackupExport extends HttpServlet {
 					}
 					
 					/* #####################
+					 * Backup Room Organizations
+					 */
+					List<Rooms_Organisation> roomOrgList = Roommanagement.getInstance().getRoomsOrganisations();
+					
+					if (roomOrgList != null) {
+						Document doc = this.createOrgRoomsDocument(roomOrgList);
+						
+						String roomListXML = backup_dir + "rooms_organisation.xml";
+
+						FileOutputStream fos = new FileOutputStream(roomListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					/* #####################
 					 * Backup Appointements
 					 */
 					List<Appointment> aList = AppointmentDaoImpl.getInstance().getAppointments();
@@ -175,6 +193,22 @@ public class BackupExport extends HttpServlet {
 						Document doc = this.createAppointementDocument(aList);
 						
 						String aListXML = backup_dir + "appointements.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+						
+					}
+					
+					/* #####################
+					 * Backup Meeting Members
+					 */
+					List<MeetingMember> membersList = MeetingMemberDaoImpl.getInstance().getMeetingMembers();
+					
+					if (membersList != null) {
+						Document doc = this.createMeetingMemberDocument(membersList);
+						
+						String aListXML = backup_dir + "meetingmembers.xml";
 
 						FileOutputStream fos = new FileOutputStream(aListXML);
 						
@@ -422,13 +456,17 @@ public class BackupExport extends HttpServlet {
 			appointment.addElement("appointmentName").setText(""+a.getAppointmentName());
 			appointment.addElement("appointmentLocation").setText(""+a.getAppointmentLocation());
 			appointment.addElement("appointmentDescription").setText(""+a.getAppointmentDescription());
-			appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
-			appointment.addElement("appointmentStarttime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentStarttime()));
-			appointment.addElement("appointmentEndtime").setText(CalendarPatterns.getDateByMiliSeconds(a.getAppointmentEndtime()));
+			appointment.addElement("appointmentStarttime").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentStarttime()));
+			appointment.addElement("appointmentEndtime").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentEndtime()));
 			if (a.getAppointmentCategory() != null) {
 				appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
 			} else {
 				appointment.addElement("categoryId").setText(""+0);
+			}
+			if (a.getUserId() != null) {
+				appointment.addElement("users_id").setText(""+a.getUserId().getUser_id());
+			} else {
+				appointment.addElement("users_id").setText(""+0);
 			}
 			appointment.addElement("deleted").setText(""+a.getDeleted());
 			appointment.addElement("comment").setText(""+a.getComment());
@@ -451,22 +489,28 @@ public class BackupExport extends HttpServlet {
 			appointment.addElement("isPasswordProtected").setText(""+a.getIsPasswordProtected());
 			appointment.addElement("password").setText(""+a.getPassword());
 			
-			Element meetingMembers = appointment.addElement("meetingMembers");
-			//List<String> organisations = new LinkedList();
-			for (Iterator<MeetingMember> iterObj = a.getMeetingMember().iterator();iterObj.hasNext(); ) {
-				MeetingMember m = iterObj.next();
-				Element meetingMember = meetingMembers.addElement("meetingMember");
-				meetingMember.addElement("meetingMemberId").setText(""+m.getMeetingMemberId());
-				meetingMember.addElement("userid").setText(""+m.getUserid().getUser_id());
-				meetingMember.addElement("firstname").setText(m.getFirstname());
-				meetingMember.addElement("lastname").setText(m.getLastname());
-				meetingMember.addElement("memberStatus").setText(m.getMemberStatus());
-				meetingMember.addElement("appointmentStatus").setText(m.getAppointmentStatus());
-				meetingMember.addElement("email").setText(m.getEmail());
-				meetingMember.addElement("deleted").setText(""+m.getDeleted());
-				meetingMember.addElement("comment").setText(m.getComment());
-				meetingMember.addElement("invitor").setText(""+m.getInvitor());
-			}
+			//Separated XML File
+			
+//			Element meetingMembers = appointment.addElement("meetingMembers");
+//			//List<String> organisations = new LinkedList();
+//			for (Iterator<MeetingMember> iterObj = a.getMeetingMember().iterator();iterObj.hasNext(); ) {
+//				MeetingMember m = iterObj.next();
+//				Element meetingMember = meetingMembers.addElement("meetingMember");
+//				meetingMember.addElement("meetingMemberId").setText(""+m.getMeetingMemberId());
+//				if (m.getUserid() != null) {
+//					meetingMember.addElement("userid").setText(""+m.getUserid().getUser_id());
+//				} else {
+//					meetingMember.addElement("userid").setText("null");
+//				}
+//				meetingMember.addElement("firstname").setText(""+m.getFirstname());
+//				meetingMember.addElement("lastname").setText(""+m.getLastname());
+//				meetingMember.addElement("memberStatus").setText(""+m.getMemberStatus());
+//				meetingMember.addElement("appointmentStatus").setText(""+m.getAppointmentStatus());
+//				meetingMember.addElement("email").setText(""+m.getEmail());
+//				meetingMember.addElement("deleted").setText(""+m.getDeleted());
+//				meetingMember.addElement("comment").setText(""+m.getComment());
+//				meetingMember.addElement("invitor").setText(""+m.getInvitor());
+//			}
 			
 		}
 	
@@ -536,7 +580,7 @@ public class BackupExport extends HttpServlet {
 			
 			Element organisation = organisations.addElement("organisation");
 			
-			organisation.addElement("name").setText(org.getName());
+			organisation.addElement("name").setText(""+org.getName());
 			organisation.addElement("organisation_id").setText(""+org.getOrganisation_id());
 			organisation.addElement("deleted").setText(""+org.getDeleted());
 			
@@ -544,6 +588,80 @@ public class BackupExport extends HttpServlet {
 	
 		return document;
 	}	
+	
+	private Document createOrgRoomsDocument(List<Rooms_Organisation> roomOrgList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element organisations = root.addElement("room_organisations");
+		
+		for (Iterator<Rooms_Organisation> it = roomOrgList.iterator();it.hasNext();) {
+			Rooms_Organisation roomOrg = it.next();
+			
+			Element room_organisation = organisations.addElement("room_organisation");
+			
+			room_organisation.addElement("rooms_organisation_id").setText(""+roomOrg.getRooms_organisation_id());
+			room_organisation.addElement("organisation_id").setText(""+roomOrg.getOrganisation().getOrganisation_id());
+			room_organisation.addElement("rooms_id").setText(""+roomOrg.getRoom().getRooms_id());
+			room_organisation.addElement("deleted").setText(""+roomOrg.getDeleted());
+			
+		}
+	
+		return document;
+	}
+	
+	private Document createMeetingMemberDocument(List<MeetingMember> memberList) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element meetingmembers = root.addElement("meetingmembers");
+		
+		for (Iterator<MeetingMember> it = memberList.iterator();it.hasNext();) {
+			MeetingMember meetMember = it.next();
+			
+			Element meetingmember = meetingmembers.addElement("meetingmember");
+			
+			meetingmember.addElement("meetingMemberId").setText(""+meetMember.getMeetingMemberId());
+			if (meetMember.getUserid() != null) {
+				meetingmember.addElement("userid").setText(""+meetMember.getUserid().getUser_id());
+			} else {
+				meetingmember.addElement("userid").setText("0");
+			}
+			if (meetMember.getAppointment() != null) {
+				meetingmember.addElement("appointment").setText(""+meetMember.getAppointment().getAppointmentId());
+			} else {
+				meetingmember.addElement("appointment").setText("0");
+			}
+			meetingmember.addElement("firstname").setText(""+meetMember.getFirstname());
+			meetingmember.addElement("lastname").setText(""+meetMember.getLastname());
+			meetingmember.addElement("memberStatus").setText(""+meetMember.getMemberStatus());
+			meetingmember.addElement("appointmentStatus").setText(""+meetMember.getAppointmentStatus());
+			meetingmember.addElement("email").setText(""+meetMember.getEmail());
+			meetingmember.addElement("deleted").setText(""+meetMember.getDeleted());
+			meetingmember.addElement("comment").setText(""+meetMember.getComment());
+			meetingmember.addElement("invitor").setText(""+meetMember.getInvitor());
+			
+		}
+	
+		return document;
+	}
+
 
 	public Document createDocument(List<Users> uList) throws Exception {
 		Document document = DocumentHelper.createDocument();
@@ -606,7 +724,17 @@ public class BackupExport extends HttpServlet {
 			//List<String> organisations = new LinkedList();
 			for (Iterator<Organisation_Users> iterObj = u.getOrganisation_users().iterator();iterObj.hasNext(); ) {
 				Organisation_Users orgUsers = iterObj.next();
-				user_organisations.addElement("organisation_id").addText(orgUsers.getOrganisation().getOrganisation_id().toString());
+				if (orgUsers.getOrganisation() != null) {
+					user_organisations.addElement("organisation_id").addText(""+orgUsers.getOrganisation().getOrganisation_id().toString());
+				} else {
+					user_organisations.addElement("organisation_id").addText("0");
+				}
+				
+				user_organisations.addElement("deleted").addText(""+orgUsers.getDeleted());
+				user_organisations.addElement("user_id").addText(""+orgUsers.getUser_id());
+				user_organisations.addElement("isModerator").addText(""+orgUsers.getIsModerator());
+				user_organisations.addElement("comment").addText(""+orgUsers.getComment());
+				
 			}
 			
 			//Not need at the moment

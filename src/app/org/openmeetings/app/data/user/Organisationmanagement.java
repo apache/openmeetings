@@ -376,6 +376,25 @@ public class Organisationmanagement {
 		return null;
 	}
 	
+	public Organisation getOrganisationByIdBackup(long organisation_id) {
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
+			query.setLong("organisation_id", organisation_id);
+			Organisation o = (Organisation) query.uniqueResult();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return o;
+		} catch (HibernateException ex) {
+			log.error("[getOrganisationById]",ex);
+		} catch (Exception ex2) {
+			log.error("[getOrganisationById]",ex2);
+		}
+		return null;
+	}
+	
 	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
@@ -472,6 +491,28 @@ public class Organisationmanagement {
 			} else {
 				return -35L;
 			}
+		} catch (HibernateException ex) {
+			log.error("[addUserToOrganisation]",ex);
+		} catch (Exception ex2) {
+			log.error("[addUserToOrganisation]",ex2);
+		}
+		return null;
+	}
+	
+	public Long addOrganisationUserObj(Organisation_Users orgUser) {
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			orgUser.setStarttime(new Date());
+			long id = (Long) session.save(orgUser);
+			
+			//We need this flush
+			session.flush();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return id;
 		} catch (HibernateException ex) {
 			log.error("[addUserToOrganisation]",ex);
 		} catch (Exception ex2) {

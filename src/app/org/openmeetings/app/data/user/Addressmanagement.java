@@ -76,6 +76,29 @@ public class Addressmanagement {
 		}
 		return null;
 	}
+	
+	public Long saveAddressObj(Adresses adr) {
+		try {
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+
+			Long id = (Long) session.save(adr);
+
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+
+			log.debug("added id " + id);
+
+			return id;
+		} catch (HibernateException ex) {
+			log.error("saveAddress",ex);
+		} catch (Exception ex2) {
+			log.error("saveAddress",ex2);
+		}
+		return null;
+	}
 
 	/**
 	 * gets an adress by its id

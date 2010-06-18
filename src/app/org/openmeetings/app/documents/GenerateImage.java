@@ -151,7 +151,15 @@ public class GenerateImage {
 			String outputfile) {
 		String[] argv = new String[] { getPathToImageMagic(),
 				inputFile, outputfile + ".jpg" };
-		return GenerateSWF.executeScript("convertSingleJpg", argv);
+		
+		//return GenerateSWF.executeScript("convertSingleJpg", argv);
+		
+		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
+			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+		} else {
+			return GenerateThumbs.getInstance().processImageWindows(argv);
+		}
+		
 	}
 
 	public HashMap<String, Object> convertImageByTypeAndSize(String inputFile,

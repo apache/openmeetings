@@ -79,6 +79,24 @@ public class Roommanagement {
 		return null;
 	}
 	
+	public Long addRoom(Rooms room){
+		try {
+			room.setStarttime(new Date());
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			long returnId = (Long) session.save(room);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return returnId;
+		} catch (HibernateException ex) {
+			log.error("[addRoomType] ",ex);
+		} catch (Exception ex2) {
+			log.error("[addRoomType] ",ex2);
+		}
+		return null;
+	}
+	
 	/**
 	 * get all availible RoomTypes
 	 * @return List of RoomTypes
@@ -851,6 +869,27 @@ public class Roommanagement {
 		return null;
 	}
 	
+	public Long addRoomOrganisation(Rooms_Organisation rOrganisation){
+		try {
+			
+			rOrganisation.setStarttime(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			long returnId = (Long) session.save(rOrganisation);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return returnId;
+				
+		} catch (HibernateException ex) {
+			log.error("[addRoomOrganisation] ", ex);
+		} catch (Exception ex2) {
+			log.error("[addRoomOrganisation] ", ex2);
+		}
+		return null;
+	}
+	
 	/**
 	 * 
 	 * @param rooms_organisation_id
@@ -1088,6 +1127,24 @@ public class Roommanagement {
 			subcrit.add(Restrictions.eq("rooms_id", rooms_id));
 			crit.add(Restrictions.ne("deleted", "true"));
 			List ll = crit.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return ll;
+		} catch (HibernateException ex) {
+			log.error("[getRoomsByOrganisation] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRoomsByOrganisation] ", ex2);
+		}
+		return null;
+	}
+	
+	public List<Rooms_Organisation> getRoomsOrganisations(){
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Rooms_Organisation.class);
+			List<Rooms_Organisation> ll = crit.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;

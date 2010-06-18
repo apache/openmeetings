@@ -109,6 +109,32 @@ public class AppointmentDaoImpl {
 		return null;
 	}
 	
+	public Appointment getAppointmentByIdBackup(Long appointmentId) {
+		try {
+			
+			String hql = "select a from Appointment a " +
+					"WHERE a.appointmentId = :appointmentId ";
+					
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("appointmentId",appointmentId);
+			
+			
+			Appointment appoint = (Appointment) query.uniqueResult();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return appoint;
+		} catch (HibernateException ex) {
+			log.error("[getAppointmentById]: " , ex);
+		} catch (Exception ex2) {
+			log.error("[getAppointmentById]: " , ex2);
+		}
+		return null;
+	}
+	
 	public List<Appointment> getAppointments() {
 		try {
 			
@@ -205,6 +231,30 @@ public class AppointmentDaoImpl {
 		}
 		return null;
 	}
+	
+	public Long addAppointmentObj(Appointment ap) {
+		try {
+			
+			ap.setStarttime(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long appointment_id = (Long)session.save(ap);
+
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return appointment_id;
+		} catch (HibernateException ex) {
+			log.error("[addAppointmentObj]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[addAppointmentObj]: ",ex2);
+		}
+		return null;
+	}
+	
 	//----------------------------------------------------------------------------------------------------------------------------
 	
 	public Long updateAppointment(Appointment appointment) {
