@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,6 +35,7 @@ import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -47,6 +49,7 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.hibernate.beans.user.Users;
@@ -366,6 +369,9 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importMeetingmembers(meetingmembersListFile);
 					
+					
+					this.deleteDirectory(f);
+					
 					LinkedHashMap<String,Object> hs = new LinkedHashMap<String,Object>();
 					hs.put("user", UsersDaoImpl.getInstance().getUser(users_id));
 					hs.put("message", "library");
@@ -404,6 +410,20 @@ public class BackupImport extends HttpServlet {
             in.close();
             out.close();
     }
+
+	public boolean deleteDirectory(File path) throws IOException {
+		if (path.exists()) {
+			File[] files = path.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					deleteDirectory(files[i]);
+				} else {
+					files[i].delete();
+				}
+			}
+		}
+		return (path.delete());
+	}
 	
 	private void importUsers(File userFile) throws Exception {
 		
@@ -504,25 +524,31 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			us.setOrganisation_users(new HashSet<Organisation_Users>());
 	        			
-	        			for (Iterator<Element> organisationIterator = itemUsers.elementIterator( "organisations" ); organisationIterator.hasNext(); ) {
+	        			for (Iterator<Element> organisationsIterator = itemUsers.elementIterator( "organisations" ); organisationsIterator.hasNext(); ) {
 	        				
-	        				Element organisationObject = organisationIterator.next();
+	        				Element organisations = organisationsIterator.next();
 	        				
-	        				Long organisation_id = importLongType(organisationObject.element("organisation_id").getText());
-	        				Long user_id = importLongType(organisationObject.element("user_id").getText());
-	        				Boolean isModerator = importBooleanType(organisationObject.element("isModerator").getText());
-	        				String commentOrg = organisationObject.element("comment").getText();
-	        				String deleted = organisationObject.element("deleted").getText();
-	        				
-	        				Organisation_Users orgUser = new Organisation_Users();
-	        				orgUser.setOrganisation(Organisationmanagement.getInstance().getOrganisationByIdBackup(organisation_id));
-	        				orgUser.setUser_id(user_id);
-	        				orgUser.setIsModerator(isModerator);
-	        				orgUser.setComment(commentOrg);
-	        				orgUser.setStarttime(new Date());
-	        				orgUser.setDeleted(deleted);
-	        				
-	        				us.getOrganisation_users().add(orgUser);
+	        				for (Iterator<Element> organisationIterator = organisations.elementIterator( "user_organisation" ); organisationIterator.hasNext(); ) {
+	    	        			
+		        				Element organisationObject = organisationIterator.next();
+		        				
+		        				Long organisation_id = importLongType(organisationObject.element("organisation_id").getText());
+		        				Long user_id = importLongType(organisationObject.element("user_id").getText());
+		        				Boolean isModerator = importBooleanType(organisationObject.element("isModerator").getText());
+		        				String commentOrg = organisationObject.element("comment").getText();
+		        				String deleted = organisationObject.element("deleted").getText();
+		        				
+		        				Organisation_Users orgUser = new Organisation_Users();
+		        				orgUser.setOrganisation(Organisationmanagement.getInstance().getOrganisationByIdBackup(organisation_id));
+		        				orgUser.setUser_id(user_id);
+		        				orgUser.setIsModerator(isModerator);
+		        				orgUser.setComment(commentOrg);
+		        				orgUser.setStarttime(new Date());
+		        				orgUser.setDeleted(deleted);
+		        				
+		        				us.getOrganisation_users().add(orgUser);
+		        				
+	        				}
 	        				
 	        			}
 	        			
@@ -825,7 +851,10 @@ public class BackupImport extends HttpServlet {
 
 	private void importRooms(File roomFile) throws Exception {
 		
-		List<Rooms> roomList = this.getRoomListByXML(roomFile);
+		Map<String,List> returnObject = this.getRoomListByXML(roomFile);
+		
+		List<Rooms> roomList = returnObject.get("roomList");
+		List<RoomModerators> roomModeratorList = returnObject.get("roomModeratorList");
 		
 		for (Rooms rooms : roomList) {
 			
@@ -837,12 +866,28 @@ public class BackupImport extends HttpServlet {
 			
 		}
 		
+		for (RoomModerators roomModerators : roomModeratorList) {
+			
+			List<RoomModerators> roomModeratorsStored = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByUserAndRoomId(roomModerators.getRoomId(), roomModerators.getUser().getUser_id());
+			
+			if (roomModeratorsStored == null || roomModeratorsStored.size() == 0) {
+				
+				RoomModeratorsDaoImpl.getInstance().addRoomModeratorByObj(roomModerators);
+				
+			}
+			
+		}
+		
+		
+		
 	}
 	
-	private List<Rooms> getRoomListByXML(File roomFile) {
+	private Map<String,List> getRoomListByXML(File roomFile) {
 		try {
 			
 			List<Rooms> roomList = new LinkedList<Rooms>();
+			
+			List<RoomModerators> roomModeratorList = new LinkedList<RoomModerators>();
 			
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(roomFile);
@@ -894,12 +939,41 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			roomList.add(room);
 	        			
+	        			for (Iterator<Element> iterMods = roomObject.elementIterator( "room_moderators" ); iterMods.hasNext(); ) {
+	        				
+	        				Element room_moderators = iterMods.next();
+	        				
+	        				for (Iterator<Element> iterMod = room_moderators.elementIterator( "room_moderator" ); iterMod.hasNext(); ) {
+	    	        			
+	        					Element room_moderator = iterMod.next();
+	        					
+	        					RoomModerators roomModerators = new RoomModerators();
+	        					
+	        					Long user_id = importLongType(room_moderator.element("user_id").getText());
+	        					Boolean is_supermoderator = importBooleanType(room_moderator.element("is_supermoderator").getText());
+	        					
+	        					roomModerators.setDeleted("false");
+	        					roomModerators.setRoomId(rooms_id);
+	        					roomModerators.setUser(Usermanagement.getInstance().getUserById(user_id));
+	        					roomModerators.setIsSuperModerator(is_supermoderator);
+	        					
+	        					roomModeratorList.add(roomModerators);
+	        					
+	        				}
+	        				
+	        			}
+	        			
 	        		}
 	        		
 	        	}
 			}
 			
-			return roomList;
+			Map<String,List> returnObject = new HashMap<String,List>();
+			
+			returnObject.put("roomList",roomList);
+			returnObject.put("roomModeratorList", roomModeratorList);
+			
+			return returnObject;
 			
 		} catch (Exception err) {
 			log.error("[getRoomListByXML]",err);

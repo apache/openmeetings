@@ -31,12 +31,14 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.hibernate.beans.user.Users;
@@ -286,6 +288,8 @@ public class BackupExport extends HttpServlet {
 
 					out.flush();
 					out.close();
+					
+					this.deleteDirectory(backup_dirFile);
 
 				}
 			} else {
@@ -296,6 +300,20 @@ public class BackupExport extends HttpServlet {
 			log.debug("Error exporting: " + er);
 			er.printStackTrace();
 		}
+	}
+
+	public boolean deleteDirectory(File path) throws IOException {
+		if (path.exists()) {
+			File[] files = path.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					deleteDirectory(files[i]);
+				} else {
+					files[i].delete();
+				}
+			}
+		}
+		return (path.delete());
 	}
 
 //	private void zipToDir(String backupDir, ZipOutputStream zos) throws Exception {
@@ -556,6 +574,24 @@ public class BackupExport extends HttpServlet {
 			room.addElement("sipNumber").setText(""+r.getSipNumber());
 			room.addElement("conferencePin").setText(""+r.getConferencePin());
 			
+			
+			List<RoomModerators> roomModeratorsList = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByRoomId(r.getRooms_id());
+			
+			Element room_moderators = room.addElement("room_moderators");
+			
+			for (RoomModerators roomModerator : roomModeratorsList) {
+				
+				Element room_moderator = room_moderators.addElement("room_moderator");
+				
+				if (roomModerator.getUser() != null) {
+					room_moderator.addElement("user_id").setText(""+roomModerator.getUser().getUser_id());
+				} else {
+					room_moderator.addElement("user_id").setText("0");
+				}
+				
+				room_moderator.addElement("is_supermoderator").setText(""+roomModerator.getIsSuperModerator());
+			}
+			
 		}
 	
 		return document;
@@ -723,17 +759,20 @@ public class BackupExport extends HttpServlet {
 			Element user_organisations = user.addElement("organisations");
 			//List<String> organisations = new LinkedList();
 			for (Iterator<Organisation_Users> iterObj = u.getOrganisation_users().iterator();iterObj.hasNext(); ) {
+				
+				Element user_organisation = user_organisations.addElement("user_organisation");
+				
 				Organisation_Users orgUsers = iterObj.next();
 				if (orgUsers.getOrganisation() != null) {
-					user_organisations.addElement("organisation_id").addText(""+orgUsers.getOrganisation().getOrganisation_id().toString());
+					user_organisation.addElement("organisation_id").addText(""+orgUsers.getOrganisation().getOrganisation_id().toString());
 				} else {
-					user_organisations.addElement("organisation_id").addText("0");
+					user_organisation.addElement("organisation_id").addText("0");
 				}
 				
-				user_organisations.addElement("deleted").addText(""+orgUsers.getDeleted());
-				user_organisations.addElement("user_id").addText(""+orgUsers.getUser_id());
-				user_organisations.addElement("isModerator").addText(""+orgUsers.getIsModerator());
-				user_organisations.addElement("comment").addText(""+orgUsers.getComment());
+				user_organisation.addElement("deleted").addText(""+orgUsers.getDeleted());
+				user_organisation.addElement("user_id").addText(""+orgUsers.getUser_id());
+				user_organisation.addElement("isModerator").addText(""+orgUsers.getIsModerator());
+				user_organisation.addElement("comment").addText(""+orgUsers.getComment());
 				
 			}
 			

@@ -63,6 +63,24 @@ public class RoomModeratorsDaoImpl {
 		return null;
 	}
 	
+	public Long addRoomModeratorByObj(RoomModerators rModerator){
+		try {
+			rModerator.setStarttime(new Date());
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			long rModeratorId = (Long) session.save(rModerator);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return rModeratorId;
+		} catch (HibernateException ex) {
+			log.error("[addRoomModeratorByUserId] ",ex);
+		} catch (Exception ex2) {
+			log.error("[addRoomModeratorByUserId] ",ex2);
+		}
+		return null;
+	}
+	
 	/**
 	 * get all available RoomTypes
 	 * @return List of RoomTypes
@@ -119,6 +137,40 @@ public class RoomModeratorsDaoImpl {
 			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByRoomId] ", ex2);
+			ex2.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<RoomModerators> getRoomModeratorByUserAndRoomId(Long roomId, Long user_id){
+		try {
+			
+			String hql = "select c from RoomModerators as c " +
+					"where c.roomId = :roomId " +
+					"AND c.deleted != :deleted " +
+					"AND c.user.user_id = :user_id";
+		
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			
+			query.setString("deleted", "true");
+			query.setLong("roomId", roomId);
+			query.setLong("user_id", user_id);
+			
+			List<RoomModerators> roomModerators = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return roomModerators;
+			
+		} catch (HibernateException ex) {
+			log.error("[getRoomModeratorByUserAndRoomId] ", ex);
+			ex.printStackTrace();
+		} catch (Exception ex2) {
+			log.error("[getRoomModeratorByUserAndRoomId] ", ex2);
 			ex2.printStackTrace();
 		}
 		return null;
