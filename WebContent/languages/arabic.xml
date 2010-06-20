@@ -3199,4 +3199,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1064" name="team-split">
     <value>You are currently not in any Team-Room. But you can switch here to all Team-Rooms that you have access to.</value>
   </string>
+  <string id="1065" name="backupContent">
+    <value>Backup the System. The Backup includes all User generated data. The configuration is not included as well as the language labels. Because those values are imported with the System Installer. To update your System, export your old system (1) re-install into a new database the new package (2) and import the Backup file again (3). The Backup should be imported before generating data in the newly installed system.</value>
+  </string>
+  <string id="1066" name="backupContent">
+    <value>System Backup</value>
+  </string>
 </language>

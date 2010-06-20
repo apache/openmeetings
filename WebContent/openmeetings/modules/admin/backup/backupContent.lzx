@@ -4,15 +4,22 @@
 <!--- Backup module for admin. It can export or import user account data as xml-file. -->
 <class name="backupContent" extends="baseContentView">
 	
+	<labelText fontsize="10" fontstyle="bold" y="2" x="2" labelid="1066" />
+	
+    <view x="4" resource="warning_icon_rsc" y="26" />
+
+    <labelText fontsize="10" y="24"
+	     x="30" width="500" labelid="1065" multiline="true" />
+	
 	<!-- System Import -->
-    <simpleLabelButton text="System Import" x="2" y="80" width="200">
+    <simpleLabelButton text="System Import" x="30" y="100" width="200">
 	    <handler name="onclick">
 	        new lz.backupImportWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
 	    </handler>
     </simpleLabelButton> 
     
     <!-- System Backup -->
-    <simpleLabelButton text="System Backup" x="210" y="80" width="200">
+    <simpleLabelButton text="System Backup" x="232" y="100" width="200">
         <handler name="onclick">
             <![CDATA[
                 var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
