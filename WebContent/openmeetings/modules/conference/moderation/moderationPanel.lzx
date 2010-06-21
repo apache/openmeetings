@@ -168,7 +168,7 @@
      -->   
    
     <simpleLabelButton name="_doShare" labelid="239" height="24" 
-               visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+               visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }"
                style="itemStyle" width="210" y="2">
         <handler name="onclick">
             //canvas._drawarea.setModus('plain');          

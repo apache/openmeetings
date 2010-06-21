@@ -384,7 +384,7 @@
                 }
                 
 				this.broadCastViewRef = new lz.videoObjectBroadcast(videoContainer,{
-	                    publicSID:publicSID,width:396,height:360,
+	                    publicSID:publicSID,
 	                    x:newx,y:newy
                     });
 				
@@ -421,7 +421,7 @@
             }
             
 			return new lz.videoObjectPlayBroadcast(videoContainer,{
-                    publicSID:publicSID,width:396,height:360,
+                    publicSID:publicSID,
                     x:newx,y:newy
                 });
 		]]>

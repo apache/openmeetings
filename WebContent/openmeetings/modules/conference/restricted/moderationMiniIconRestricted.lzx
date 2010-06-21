@@ -127,8 +127,24 @@
         <labelTooltip labelid="611" />
     </miniIcons>
     
-    <miniIcons name="_allowDevice" x="40" width="16" height="16" opacity="0.5" 
-    		   resource="play_webcam_show_dialog_rsc" showhandcursor="true">
+    <miniIcons name="_allowScreen" x="40" width="16" height="16" 
+               resource="screen_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("ALLOW Screen: ",parent.parent.parent.refObj.publicSID);
+        </handler>
+        <labelTooltip labelid="683" />
+    </miniIcons>
+    
+    <miniIcons name="_denyScreen" x="40" width="16" height="16" 
+               resource="screen_deny_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("DENY Screen: ",parent.parent.parent.refObj.publicSID);
+        </handler>
+        <labelTooltip labelid="684" />
+    </miniIcons>    
+    
+    <miniIcons name="_allowDevice" x="60" width="40" height="16" 
+    		   resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
@@ -142,8 +158,8 @@
         <labelTooltip labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="40" width="16" height="16" 
-               resource="play_webcam_show_dialog_rsc" showhandcursor="true">
+    <miniIcons name="_denyDevice" x="60" width="40" height="16" 
+               resource="av_deny_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);

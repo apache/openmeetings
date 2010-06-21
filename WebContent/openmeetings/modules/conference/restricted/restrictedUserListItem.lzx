@@ -8,6 +8,7 @@
 	
     <attribute name="isMod" value="false" type="boolean" />
     <attribute name="canDraw" value="false" type="boolean" />
+    <attribute name="canShare" value="false" type="boolean" />
     <attribute name="isBroadcasting" value="false" type="boolean" />
     
     <attribute name="streamid" value="" type="string" />

@@ -314,4 +314,6 @@ and some more references to temp-objects
 
 <attribute name="conferenceBrowserIsinited" value="false" type="boolean" />
 
+<attribute name="isAllowedToScreenShare" value="false" type="boolean" />
+
 </library>

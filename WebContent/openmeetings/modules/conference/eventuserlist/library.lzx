@@ -6,6 +6,12 @@
 		<frame src="resources/bullet_ball_glass_yellow.png"/> <!-- mod -->
 		<frame src="resources/bullet_ball_glass_red.png"/> <!-- whiteboard allow -->
 	</resource>
+	
+	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
+	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
+	
+	<resource name="screen_allow_rsc" src="resources/background_small.png" />
+    <resource name="screen_deny_rsc" src="resources/background_small_no.png" />
     
     <include href="moderationMiniIconsEventUserList.lzx" />
     <include href="moderationMiniIcons.lzx" />

@@ -54,6 +54,7 @@ public class RoomClient {
 	private Boolean isMod = false;
 	private Boolean isSuperModerator = false;
 	private Boolean canDraw = false;
+	private Boolean canShare = false;
 	private Date connectedSince;
 	private String formatedDate;
 	
@@ -554,6 +555,14 @@ public class RoomClient {
 	}
 	public void setIsBroadcasting(Boolean isBroadcasting) {
 		this.isBroadcasting = isBroadcasting;
+	}
+	
+	public Boolean getCanShare() {
+		return canShare;
+	}
+
+	public void setCanShare(Boolean canShare) {
+		this.canShare = canShare;
 	}
 
 	public Long getExternalUserId() {
