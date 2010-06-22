@@ -220,10 +220,13 @@
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
                     	vList[i].refObj.canDraw = drawObject.canDraw;
+                    	vList[i].refObj.canShare = drawObject.canShare;
                     	vList[i].updateIconByMod();
                     	break;
                     }
                 }
+                
+                parent._applyAndStatusIcons.updateIcons();
             ]]>
         </handler>
         
