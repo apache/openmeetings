@@ -22,18 +22,39 @@
 		if (this.isMod) {
 			this._canDraw.setAttribute("visibility","visible");
             this._canDraw.isActive = false;
+            this._canDraw.setAttribute("showhandcursor",false);
             this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._canDrawModerator.setAttribute("visibility","hidden");
 		} else {
 			if (parent.parent.canDraw) {
                 this._canDraw.setAttribute("visibility","visible");
                 this._canDraw.isActive = true;
+                this._canDraw.setAttribute("showhandcursor",true);
                 this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
                 this._canDrawModerator.setAttribute("visibility","hidden");
             } else {
                 this._canDraw.setAttribute("visibility","hidden");
                 this._canDrawModerator.setAttribute("visibility","visible");
             }
+		}
+		
+		if (this.isMod) {
+			this._allowScreen.setAttribute("visibility","visible");
+            this._allowScreen.isActive = false;
+            this._allowScreen.setAttribute("showhandcursor",false);
+            this._allowScreen._text.setAttribute("text",canvas.getLabelName(1069));
+            this._denyScreen.setAttribute("visibility","hidden");
+		} else {
+			if (parent.parent.canShare) {
+    			this._allowScreen.setAttribute("visibility","visible");
+                this._allowScreen.isActive = true;
+                this._allowScreen.setAttribute("showhandcursor",true);
+                this._allowScreen._text.setAttribute("text",canvas.getLabelName(1068));
+                this._denyScreen.setAttribute("visibility","hidden");
+			} else {
+				this._allowScreen.setAttribute("visibility","hidden");
+				this._denyScreen.setAttribute("visibility","visible");
+			}
 		}
 		
 		if (parent.parent.isBroadcasting) {
@@ -129,21 +150,34 @@
     
     <miniIcons name="_allowScreen" x="40" width="16" height="16" 
                resource="screen_allow_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
-            if ($debug) Debug.write("ALLOW Screen: ",parent.parent.parent.refObj.publicSID);
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Screen: ",parent.parent.parent.refObj.publicSID);
+                if (canvas.ismoderator && this.isActive) {
+                	canvas.thishib.setCanShare.publicSID = parent.parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanShare.canShare = false;
+                    canvas.thishib.setCanShare.doCall();
+                }
+            ]]>
         </handler>
-        <labelTooltip labelid="683" />
+        <labelTooltip name="_text" labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyScreen" x="40" width="16" height="16" 
-               resource="screen_deny_rsc" showhandcursor="true">
+    <miniIcons name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
+               resource="screen_allow_rsc" showhandcursor="true">
         <handler name="onclick">
-            if ($debug) Debug.write("DENY Screen: ",parent.parent.parent.refObj.publicSID);
+            if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
+            if (canvas.ismoderator) {
+                canvas.thishib.setCanShare.publicSID = parent.parent.parent.refObj.publicSID;
+                canvas.thishib.setCanShare.canShare = true;
+                canvas.thishib.setCanShare.doCall();
+            }
         </handler>
-        <labelTooltip labelid="684" />
+        <labelTooltip labelid="1067" />
     </miniIcons>    
     
-    <miniIcons name="_allowDevice" x="60" width="40" height="16" 
+    <miniIcons name="_allowDevice" x="60" width="40" height="16" opacity="0.5" 
     		   resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
@@ -159,7 +193,7 @@
     </miniIcons>
     
     <miniIcons name="_denyDevice" x="60" width="40" height="16" 
-               resource="av_deny_rsc" showhandcursor="true">
+               resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);

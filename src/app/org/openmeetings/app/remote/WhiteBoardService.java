@@ -147,6 +147,44 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 	
+	public Boolean setCanShare(String SID, String publicSID, boolean canShare) {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	        
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+	        	
+	        	if (currentClient.getIsMod()) {
+	        		RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
+	        		
+	        		if (rcl != null) {
+	        			rcl.setCanShare(canShare);
+	        			this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
+	        			
+	        			HashMap<Integer,Object> newMessage = new HashMap<Integer,Object>();
+	        			newMessage.put(0,"updateDrawStatus");
+	        			newMessage.put(1,rcl);
+	        			this.scopeApplicationAdapter.sendMessageWithClient(newMessage);
+	        			
+	        		} else {
+	        			return false;
+	        		}
+	        	} else {
+	        		return false;
+	        	}
+	        }
+			
+		} catch (Exception err) {
+			log.error("[setCanDraw]",err);
+		}
+		return null;
+	}
+	
 	public WhiteboardSyncLockObject startNewSyncprocess(){
 		try {
 			

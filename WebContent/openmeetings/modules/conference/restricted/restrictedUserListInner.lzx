@@ -554,6 +554,7 @@
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
                         vList[i].refObj.canDraw = drawObject.canDraw;
                         vList[i].canDraw = drawObject.canDraw;
+                        vList[i].canShare = drawObject.canShare;
                         vList[i].updateIconByModScroll();
                         vList[i].updateModeratorIcons();
                         break;
@@ -565,6 +566,7 @@
                     //vList[i].updateIconByMod();
                     if (vList[i].publicSID == drawObject.publicSID) {
                         parent._table.renderList[i].canDraw = drawObject.canDraw;
+                        parent._table.renderList[i].canShare = drawObject.canShare;
                         break;
                     }
                 }

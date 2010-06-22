@@ -712,6 +712,7 @@ if (cItem == null) {
 	    if ($debug) Debug.write("drawAllowStatus changes ###### ");
 	    if (drawObj.publicSID==canvas.publicSID) {
             canvas.setAttribute("isAllowedToDraw",drawObj.canDraw);
+            canvas.setAttribute("isAllowedToScreenShare",drawObj.canShare);
         }
     ]]>
 </handler>

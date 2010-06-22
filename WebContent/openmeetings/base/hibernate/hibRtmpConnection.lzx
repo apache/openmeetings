@@ -1152,7 +1152,22 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("sendVarsModeratorGeneral : ",value);
+                    if ($debug) Debug.write("setCanDraw : ",value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
+        <netRemoteCallHib name="setCanShare" funcname="whiteboardservice.setCanShare"
+                       remotecontext="$once{ canvas.thishib }">
+            <attribute name="publicSID" value="" type="string" />
+            <attribute name="canShare" value="true" type="boolean" />
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
+            <netparam><method name="getValue">return parent.canShare;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("setCanShare : ",value);
                 ]]>
             </handler>   
         </netRemoteCallHib>
