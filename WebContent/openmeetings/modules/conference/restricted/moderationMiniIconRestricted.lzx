@@ -66,7 +66,8 @@
 		}
 	</handler>
         
-    <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" height="16">
+    <miniIcons name="_isMod" x="0" width="16" showhandcursor="true"
+    		   resource="participents_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
             
@@ -94,7 +95,8 @@
         <labelTooltip name="_text" labelid="675" />
     </miniIcons>
     
-    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isMod_rsc" height="16">
+    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" showhandcursor="true"
+    		   width="16" resource="participents_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
                 //if the label is set and this is a Moderator then this user should

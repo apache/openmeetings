@@ -102,7 +102,7 @@
     </miniIcons>
     
     <miniIcons name="_allowScreen" x="40" width="16" height="16" 
-               resource="screen_allow_rsc" showhandcursor="true">
+               resource="screen_allow_rsc" showhandcursor="false">
         <attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
             <![CDATA[

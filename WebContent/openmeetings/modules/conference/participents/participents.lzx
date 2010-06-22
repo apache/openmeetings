@@ -112,7 +112,7 @@
     
     <participentsTable name="_table" y="20" /> 
 
-    <view name="_miniIcons" x="172" y="0" height="18">
+    <view name="_miniIcons" x="152" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
             bgcolor="$once{ canvas.basebgcolorizer }" />
@@ -134,11 +134,11 @@
         
         <view width="1" height="${ parent.parent.height }" x="60"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_sync" x="62" y="3" resource="resyncuser_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_sync" x="62" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         
-        <view width="1" height="${ parent.parent.height }" x="80"
+        <view width="1" height="${ parent.parent.height }" x="102"
             bgcolor="$once{ canvas.basebgcolorizer }" />
     </view>
     <view name="headerDivisionLine" width="${ parent.width }" 
@@ -157,11 +157,23 @@
     <vscrollbar />
 </class>
 
-<class name="miniIcons" extends="view" >
+<class name="miniIcons" extends="view" stretches="both">
     <handler name="onmouseover">
+    	if (this.showhandcursor) {
+        	this.setAttribute("x",this.x-1);
+        	this.setAttribute("y",this.y-1);
+        	this.setAttribute("height",this.height+2);
+        	this.setAttribute("width",this.width+2);
+    	}
         parent.parent.onmouseover.sendEvent();
     </handler>
     <handler name="onmouseout">
+    	if (this.showhandcursor) {
+        	this.setAttribute("x",this.x+1);
+            this.setAttribute("y",this.y+1);
+            this.setAttribute("height",this.height-2);
+            this.setAttribute("width",this.width-2);
+    	}
         parent.parent.onmouseout.sendEvent();
     </handler>
 </class>
@@ -199,7 +211,11 @@
             lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
                     
             if (canvas.publicSID == this.refObj.publicSID) {
-                this._userName.setAttribute("fontstyle","bold");
+                this._firstName.setAttribute("fontstyle","bold");
+                this._lastName.setAttribute("fontstyle","bold");
+                
+                this._miniIcons._mute.setAttribute("visibility","hidden");
+                
             }
             
             this.updateIcons();
@@ -425,9 +441,10 @@
         </handler>
     </image>
     
-    <labelText name="_userName" fontsize="11" x="40" text="$once{ parent.firstname+' '+parent.lastname }" />
+    <labelText name="_firstName" fontsize="10" x="40" text="$once{ parent.firstname }" />
+    <labelText name="_lastName" fontsize="10" x="40" y="20" text="$once{ parent.lastname }" />
     
-    <view name="_miniIcons" x="173" valign="bottom" height="18">
+    <view name="_miniIcons" x="153" valign="bottom" height="18">
         
         <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
                    height="16" showhandcursor="false">
@@ -536,6 +553,25 @@
             </handler>
             <labelTooltip labelid="610" />
         </miniIcons>
+        
+        <view name="_loudness" x="80" >
+            <view x="0" y="0" name="loudness" resource="speaking" opacity="0.2"
+                  onmouseover="" onmouseout="" >        
+                <labelTooltip inittwice="true" labelid="372" />
+            </view>
+        </view>    
+        
+        <miniIcons name="_mute" x="60" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true" >
+            <handler name="onclick">
+                var obj = canvas._videocontainer.getVideoObjectByPublicSID(parent.parent.refObj.publicSID);
+                if (obj != null) {
+                	obj._toolbar._mute.onclick.sendEvent();
+                	this.setAttribute("frame",obj._toolbar._mute.frame);
+                }
+            </handler>
+            <labelTooltip labelid="373" />
+        </miniIcons>  
+        
     </view>
     
     <view name="divisionLine" width="$once{ parent.width }" 
@@ -891,10 +927,13 @@
     <method name="setSpeakingByPos" args="publicSID,bool">
         <![CDATA[
             var obj = this.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
             if (bool){
                 obj._loudness.loudness.setAttribute('opacity',1);
+                objList._miniIcons._loudness.loudness.setAttribute('opacity',1);
             } else {
                 obj._loudness.loudness.setAttribute('opacity',0.2);
+                objList._miniIcons._loudness.loudness.setAttribute('opacity',0.2);
             }
         ]]>
     </method>   

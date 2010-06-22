@@ -68,6 +68,10 @@
             this.applyConstraintMethod("setItemContraints", prop1);
             this.applyConstraintMethod("setItemContraints", prop2);
             this.setShadow();   
+            
+            if (this.publicSID == canvas.publicSID) {
+            	this._toolbar._resync._tip.setAttribute("labelid",610);
+            }
         ]]>
     
     </handler>
@@ -350,6 +354,8 @@
     
     <view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
         
+        <attribute name="isload" value="true" type="boolean"/>        
+        
         <miniIconsPresenter name="_minimize"
             iconRessourceName="btn_presenter_minimize">
             <handler name="onclick">
@@ -401,7 +407,7 @@
                 	}
                 }
             </handler>
-            <labelTooltip labelid="540" />
+            <labelTooltip name="_tip" labelid="540" />
         </miniIconsPresenter>  
         
         <miniIconsPresenter name="_showusercontext"
