@@ -33,6 +33,25 @@
             }
         }
         
+        if ($debug) Debug.write("canvas.isAllowedToScreenShare :: ",canvas.isAllowedToScreenShare);
+        
+        if (canvas.ismoderator) {
+            this._allowScreen.setAttribute("visibility","visible");
+            this._allowScreen.isActive = false;
+            //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
+            this._denyScreen.setAttribute("visibility","hidden");
+        } else {
+            if (canvas.isAllowedToScreenShare) {
+                this._allowScreen.setAttribute("visibility","visible");
+                this._allowScreen.isActive = true;
+                //this._canDraw._text.setAttribute("text",canvas.getLabelName(612));
+                this._denyScreen.setAttribute("visibility","hidden");
+            } else {
+                this._allowScreen.setAttribute("visibility","hidden");
+                this._denyScreen.setAttribute("visibility","visible");
+            }
+        }
+        
         if (canvas.isBroadCasting) {
             this._allowDevice.setAttribute("visibility","hidden");
             this._denyDevice.setAttribute("visibility","visible");
@@ -82,8 +101,28 @@
         <labelTooltip labelid="686" />
     </miniIcons>
     
-    <miniIcons name="_allowDevice" x="40" width="16" height="16" opacity="0.5" 
-               resource="play_webcam_show_dialog_rsc" showhandcursor="true">
+    <miniIcons name="_allowScreen" x="40" width="16" height="16" 
+               resource="screen_allow_rsc" showhandcursor="true">
+        <attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+            <![CDATA[
+                if ($debug) Debug.write("Deny Screen: ",canvas.publicSID);
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1071" />
+    </miniIcons>
+    
+    <miniIcons name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
+               resource="screen_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Screen: ",canvas.refObj.publicSID);
+        	canvas.thishib.sendMessageWithClient.sendMessage("applyForScreen",null);
+        </handler>
+        <labelTooltip labelid="1072" />
+    </miniIcons>    
+    
+    <miniIcons name="_allowDevice" x="60" width="40" height="16" opacity="0.5" 
+               resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
             if (canvas.ismoderator) {
@@ -100,11 +139,14 @@
         <labelTooltip labelid="687" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="40" width="16" height="16" 
-               resource="play_webcam_show_dialog_rsc" showhandcursor="false">
+    <miniIcons name="_denyDevice" x="60" width="40" height="16" 
+               resource="av_allow_rsc" showhandcursor="false">
         <handler name="onclick">
-            if ($debug) Debug.write("APPLY: ",parent.parent.refObj.publicSID);
+            if ($debug) Debug.write("DENY: ",canvas.publicSID);
             //Nothing happens here
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip name="_text" labelid="690" />
     </miniIcons>

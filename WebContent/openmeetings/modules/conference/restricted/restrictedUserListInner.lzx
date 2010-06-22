@@ -570,6 +570,8 @@
                         break;
                     }
                 }
+
+                parent._applyAndStatusIcons.updateIcons();
             ]]>
         </handler>
         

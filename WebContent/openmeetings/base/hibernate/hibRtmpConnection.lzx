@@ -1373,6 +1373,18 @@
                             	   labelid:691,error:txt
                             	});
                     }
+                } else if (value.message[0]=='applyForScreen'){
+                    if (canvas.ismoderator) {
+                        if ($debug) Debug.write("Somebody wants to share/record Screen ",value.client);
+                        var txt = canvas.getLabelName(692) + " " + 
+                                   value.client.firstname + " " + value.client.lastname + " " +
+                                   "[" + value.client.username + "] " +
+                                   canvas.getLabelName(1070);
+                        
+                        new lz.errorPopup(canvas,{
+                                   labelid:691,error:txt
+                                });
+                    }
                 } else if (value.message[0]=='applyForWhiteboard'){
                     if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants to draw on Whiteboard ",value.client);
