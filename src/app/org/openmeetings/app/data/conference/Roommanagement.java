@@ -652,7 +652,8 @@ public class Roommanagement {
 			Integer demoTime,
 			Boolean isModeratedRoom, 
 			List roomModerators,
-			Boolean allowUserQuestions){
+			Boolean allowUserQuestions,
+			Boolean isAudioOnly){
 		
 		log.debug("addRoom");
 		
@@ -667,6 +668,7 @@ public class Roommanagement {
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setIspublic(ispublic);
 				r.setAllowUserQuestions(allowUserQuestions);
+				r.setIsAudioOnly(isAudioOnly);
 				
 				r.setAppointment(appointment);
 				
@@ -782,7 +784,9 @@ public class Roommanagement {
                         Boolean isModeratedRoom,
                         List roomModerators,
                     	Long externalRoomId,
-                        String externalRoomType){
+                        String externalRoomType,
+                        Boolean allowUserQuestions,
+                        Boolean isAudioOnly){
 
                 log.debug("addExternalRoom");
 
@@ -795,6 +799,9 @@ public class Roommanagement {
                                 r.setNumberOfPartizipants(numberOfPartizipants);
                                 r.setRoomtype(this.getRoomTypesById(roomtypes_id));
                                 r.setIspublic(ispublic);
+                                
+                                r.setAllowUserQuestions(allowUserQuestions);
+                                r.setIsAudioOnly(isAudioOnly);
 
                                 r.setAppointment(appointment);
 
@@ -1244,7 +1251,8 @@ public class Roommanagement {
 			Integer demoTime,
 			Boolean isModeratedRoom,
 			List roomModerators,
-			Boolean allowUserQuestions){
+			Boolean allowUserQuestions,
+			Boolean isAudioOnly){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1257,6 +1265,7 @@ public class Roommanagement {
 				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 				r.setUpdatetime(new Date());
 				r.setAllowUserQuestions(allowUserQuestions);
+				r.setIsAudioOnly(isAudioOnly);
 
 				r.setIsDemoRoom(isDemoRoom);
 				r.setDemoTime(demoTime);

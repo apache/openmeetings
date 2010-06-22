@@ -467,7 +467,8 @@ public class ConferenceService {
 	        			demoTime,
 	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
 	        			roomModerators,
-	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()));
+	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()),
+	        			Boolean.valueOf(argObjectMap.get("isAudioOnly").toString()));
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -479,7 +480,8 @@ public class ConferenceService {
 	        			demoTime,
 	        			Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString()),
 	        			roomModerators,
-	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()));
+	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()),
+	        			Boolean.valueOf(argObjectMap.get("isAudioOnly").toString()));
 	        }
 	        
 		} catch (Exception e){

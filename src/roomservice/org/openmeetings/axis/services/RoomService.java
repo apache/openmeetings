@@ -410,7 +410,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							false, false, null
-							, false, null, true);
+							, false, null, true, false);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -431,7 +431,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							true);
+							true, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ",err);
 		}
@@ -471,11 +471,34 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							allowUserQuestions);
+							allowUserQuestions, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ",err);
 		}
 		return new Long (-1);
+	}	
+	
+	public Long addRoomWithModerationQuestionsAndAudioType(String SID, String name,
+			Long roomtypes_id ,
+			String comment, Long numberOfPartizipants,
+			Boolean ispublic,
+			Boolean appointment,
+			Boolean isDemoRoom,
+			Integer demoTime,
+			Boolean isModeratedRoom,
+			Boolean allowUserQuestions,
+			Boolean isAudioOnly) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
+							numberOfPartizipants, ispublic, null, 
+							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
+							allowUserQuestions, isAudioOnly);
+		} catch (Exception err) {
+			log.error("[addRoomWithModerationQuestionsAndAudioType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
 	}	
 
 	/**
@@ -503,25 +526,26 @@ public class RoomService {
                         Integer demoTime,
                         Boolean isModeratedRoom,
 						Long externalRoomId, 
-						String externalRoomType ) {
-                try {
-			Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
-			Long roomId = null;
-			if (room == null) {
-				Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-                		Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
-                                                        numberOfPartizipants, ispublic, null,
-                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							externalRoomId, externalRoomType);
-			} else {
-				roomId = room.getRooms_id();
-			}
-			return roomId;
-                } catch (Exception err) {
-                        log.error("[addRoomWithModeration] ",err);
-                }
-                return new Long (-1);
+						String externalRoomType ) throws AxisFault {
+            try {
+				Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
+				Long roomId = null;
+				if (room == null) {
+					Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	                		Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
+	                                                        numberOfPartizipants, ispublic, null,
+	                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
+	                                                    	externalRoomId, externalRoomType, true, false);
+				} else {
+					roomId = room.getRooms_id();
+				}
+				return roomId;
+            } catch (Exception err) {
+                log.error("[addRoomWithModeration] ",err);
+                throw new AxisFault(err.getMessage());
+            }
+                //return new Long (-1);
         }
 
 	/**
@@ -576,7 +600,7 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, rooms_id, roomtypes_id, name, ispublic, 
-					comment, numberOfPartizipants, null, appointment, false, null, false,null,true);
+					comment, numberOfPartizipants, null, appointment, false, null, false,null,true,false);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -598,7 +622,7 @@ public class RoomService {
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
-					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true);
+					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false);
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ",err);
 		}
@@ -622,7 +646,7 @@ public class RoomService {
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
 					appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null,allowUserQuestions);
+					null,allowUserQuestions,false);
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ",err);
 		}
@@ -662,7 +686,26 @@ public class RoomService {
 			return Roommanagement.getInstance().addExternalRoom(user_level, name,
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType);
+					null, null, externalRoomType, true, false);
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+		}
+		return new Long(-1);
+	}
+	
+	public Long addRoomWithModerationExternalTypeAndAudioType(String SID, String name,
+			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
+			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
+			Boolean allowUserQuestions, Boolean isAudioOnly) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			return Roommanagement.getInstance().addExternalRoom(user_level, name,
+					roomtypes_id, comment, numberOfPartizipants, ispublic,
+					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+					null, null, externalRoomType, allowUserQuestions, isAudioOnly);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}

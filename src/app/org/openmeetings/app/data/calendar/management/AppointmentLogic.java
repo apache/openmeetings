@@ -147,7 +147,8 @@ public class AppointmentLogic {
 				null,               // Meeting Timer time in seconds
 				false, 				// Is Moderated Room
 				null, 				// Moderation List Room
-				true);				// Allow User Questions
+				true,				// Allow User Questions
+				false);				// Allow User Questions
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);

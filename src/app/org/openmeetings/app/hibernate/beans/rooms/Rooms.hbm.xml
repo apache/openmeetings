@@ -23,5 +23,6 @@
     <property name="allowUserQuestions" type="boolean" column="allow_user_questions"/>
     <property name="sipNumber" type="string" column="sip_number"/>
     <property name="conferencePin" type="string" column="conference_pin"/>
+    <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
   </class>
 </hibernate-mapping>

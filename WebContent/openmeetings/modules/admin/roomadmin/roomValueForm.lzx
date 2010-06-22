@@ -31,6 +31,7 @@
 		this._organisationslist.clearList();
         this._turnoverlist.clearList();
         this.allowUserQuestions.setValue(true);
+        this.isAudioOnly.setValue(false);
         this.sipNumber.setAttribute("text","");
         this.conferencePin.setAttribute("text","");
         this._listRoomModerators.clearList();
@@ -91,6 +92,12 @@
                 this.allowUserQuestions.setValue(true);
             } else {
                 this.allowUserQuestions.setValue(false);
+            }
+            
+            if (obj.isAudioOnly != null && obj.isAudioOnly){
+                this.isAudioOnly.setValue(true);
+            } else {
+                this.isAudioOnly.setValue(false);
             }
                 
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
@@ -183,6 +190,8 @@
             this.sendObject["roomModerators"] = parent._listRoomModerators.getValues();
 
             this.sendObject["allowUserQuestions"] = parent.allowUserQuestions.getValue();
+            
+            this.sendObject["isAudioOnly"] = parent.isAudioOnly.getValue();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -226,6 +235,7 @@
 	            	this.addItem(16,16);
                     this.addItem(25,25);
                     this.addItem(50,50);
+                    this.addItem(100,100);
                     this.addItem(200,200);
                     this.addItem(1000,1000);
 	            	this.selectItemAt(1);
@@ -361,6 +371,15 @@
     
     <labelText labelid="880" x="24" y="630"  fontstyle="italic"
                multiline="true" width="370" /> 
+               
+    <labelText labelid="1076" width="200" y="660" resize="false" x="2"/>  
+        <labelCheckbox name="isAudioOnly" width="270" y="660" x="130" fontsize="11" />  
+        
+    <!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="680" />
+    
+    <labelText labelid="1077" x="24" y="680"  fontstyle="italic"
+               multiline="true" width="370" />                      
                                
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

@@ -63,10 +63,12 @@ public class Rooms {
 	
 	private String sipNumber;
 	private String conferencePin;
+	
+	private Boolean isAudioOnly;
     
     /**
      * @hibernate.property
-*  column="comment_field"
+     *  column="comment_field"
      *  type="text"
      */ 
 	public String getComment() {
@@ -472,5 +474,19 @@ public class Rooms {
 	public void setConferencePin(String conferencePin) {
 		this.conferencePin = conferencePin;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_audio_only"
+     *  type="boolean"
+     */
+	public Boolean getIsAudioOnly() {
+		return isAudioOnly;
+	}
+	public void setIsAudioOnly(Boolean isAudioOnly) {
+		this.isAudioOnly = isAudioOnly;
+	}
+	
+	
     
 }

@@ -35,6 +35,10 @@
     
     <attribute name="respectRatio" value="true" type="boolean" />
     
+    <attribute name="minimized" value="false" type="boolean" />
+    
+    <attribute name="hidebyAudioOnly" value="false" type="boolean" />
+    
     <attribute name="initH" value="40" type="number" />
     <attribute name="initW" value="40" type="number" />
 	
@@ -378,13 +382,15 @@
 	                parent.parent._chatvideoinner._videostream.setVolume(0);
 	                this.setAttribute('frame',2);
 	                this.parent.isload = false;
+	                this._tip.setAttribute("labelid","1075");
 	            } else {
 	                parent.parent._chatvideoinner._videostream.setVolume(100);
 	                this.setAttribute('frame',1);
 	                this.parent.isload = true;
+	                this._tip.setAttribute("labelid","1074");
 	            }
             </handler>
-            <labelTooltip labelid="373" />
+            <labelTooltip name="_tip" labelid="1074" />
         </miniIcons>  
         
         <miniIconsPresenter name="_resync"

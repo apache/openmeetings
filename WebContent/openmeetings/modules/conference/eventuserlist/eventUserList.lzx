@@ -162,6 +162,9 @@
 			obj.setVideouserProfilePic(rcl);
 		} else if (rcl.avsettings=="a"){
 			obj.setVideouserProfilePic(rcl);
+			if (!obj.minimized) {
+                obj.minimize();
+            }
             obj.setAttribute("visibility","visible");
 		} else {
 			obj.deleteVideoConfProfilePic();
@@ -320,7 +323,7 @@
                 }
                 
                 //Get a Free VideoView Slot
-                var newx = videoContainer.subviews.length*20;
+                var newx = videoContainer.subviews.length*140;
                 var newy = 0;
                 if ((newx+100)>=canvas.width) {
                     newx = 20;
@@ -357,7 +360,7 @@
             }
             
             //Get a Free VideoView Slot
-            var newx = videoContainer.subviews.length*20;
+            var newx = videoContainer.subviews.length*140;
             var newy = 0;
             if ((newx+300)>=canvas.width) {
                 newx = 20;

@@ -41,21 +41,28 @@
 	        var save = g["savecamdata"];
 	        //Debug.write("save: ",save,g["cam"],g["mic"]);
             
-            //In case the user presses the Sync Button this box should 
-            //not close automatically and do the user-prefered values
-	        if(save && !this.isSyncUpdate) {
-	        	this.chosenCam = g["cam"];
-	        	this.chosenMic = g["mic"];
-	        	this.chosenSetting = g["avstored"];
-				this.remoteMessage = new Array();
-				this.remoteMessage[0] = 'avsettings';
-				this.remoteMessage[2] = this.chosenSetting;        	
-	        	this.getBroadCastId.doCall();		
+	        //In case its an Audio-Only Room this box should not close automatically
+	        if (canvas.currentRoomObject.isAudioOnly) {
+	        	this._chooseDeviceAnimation.doStart();
 	        } else {
-	        	if (this.doDefaultAnimation) {
-	        		this._chooseDeviceAnimation.doStart();
-	        	}
+	        	//In case the user presses the Sync Button this box should 
+                //not close automatically and do the user-prefered values
+                if(save && !this.isSyncUpdate) {
+                    this.chosenCam = g["cam"];
+                    this.chosenMic = g["mic"];
+                    this.chosenSetting = g["avstored"];
+                    this.remoteMessage = new Array();
+                    this.remoteMessage[0] = 'avsettings';
+                    this.remoteMessage[2] = this.chosenSetting;         
+                    this.getBroadCastId.doCall();       
+                } else {
+                    if (this.doDefaultAnimation) {
+                        this._chooseDeviceAnimation.doStart();
+                    }
+                }
 	        }
+	        
+            
             
         ]]>
 	</handler>
@@ -174,7 +181,16 @@
 	    			break;
 	    		case "a":
 	    			videoview.broadcast(this.currentClient.broadCastID,null,_micro);
-                    this.myvideocontainer.setAttribute("visibility","visible");
+	    			
+	    			if (this.myvideocontainer.hidebyAudioOnly) {
+	    				this.myvideocontainer.setAttribute("visibility","hidden");
+	    			} else {
+	    				this.myvideocontainer.setAttribute("visibility","visible");
+	    				if (!this.myvideocontainer.minimized) {
+                            this.myvideocontainer.minimize();
+                        }
+	    			}
+                    
 	    			break;	 
 	    		case "v":
 	    			videoview.broadcast(this.currentClient.broadCastID,_camera,null);
@@ -206,25 +222,37 @@
         
         <handler name="oninit">
             <![CDATA[
-				this.addItem(canvas.getLabelName(448),"av");
-				this.addItem(canvas.getLabelName(449),"a");
-				this.addItem(canvas.getLabelName(450),"v");
-                //this.addItem(canvas.getLabelName(845),"s");
-                //this.addItem(canvas.getLabelName(846),"sv");
-				this.addItem(canvas.getLabelName(451),"n");
             
-				var r = "av";
+                if (canvas.currentRoomObject.isAudioOnly) {
+                    this.addItem(canvas.getLabelName(449),"a");
+                    //this.addItem(canvas.getLabelName(845),"s");
+                    //this.addItem(canvas.getLabelName(846),"sv");
+                    this.addItem(canvas.getLabelName(451),"n");
+                } else {
+                	this.addItem(canvas.getLabelName(448),"av");
+                    this.addItem(canvas.getLabelName(449),"a");
+                    this.addItem(canvas.getLabelName(450),"v");
+                    //this.addItem(canvas.getLabelName(845),"s");
+                    //this.addItem(canvas.getLabelName(846),"sv");
+                    this.addItem(canvas.getLabelName(451),"n");
+                }
+            
+				//var r = "av";
 
 				var t = new lz.sharedObject();
 				t.getLocal('userdata');
 				var g = t.getData('userdata');
+				var cam = null;
 				if (g!=null){
 					var cam = g["avstored"];
-				} else {
-					var cam = r;
 				}
-				if (cam=='undefined' || cam =='' || cam == null) cam=r;
-				this.selectItem(String(cam));    
+				
+				var tItem = this.getItem(String(cam));  
+				if (tItem != null) {
+				    this.selectItem(String(cam));
+				} else {
+					this.selectItemAt(0);
+				}
 
             ]]>
         </handler>

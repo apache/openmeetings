@@ -169,6 +169,9 @@
 			obj.setVideouserProfilePic(rcl);
 		} else if (rcl.avsettings=="a"){
 			obj.setVideouserProfilePic(rcl);
+			if (!obj.minimized) {
+				obj.minimize();
+			}
             obj.setAttribute("visibility","visible");
 		} else {
 			obj.deleteVideoConfProfilePic();
@@ -239,6 +242,9 @@
     	    			if ($debug) Debug.warn("start play");
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
                         myvideocontainer.setAttribute("visibility","visible");
+                        if (!myvideocontainer.minimized) {
+                            myvideocontainer.minimize();
+                        }
     	    		} else {
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
                         myvideocontainer.setAttribute("visibility","visible");
@@ -288,6 +294,9 @@
     	    			if ($debug) Debug.warn("start play");
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
                         myvideocontainer.setAttribute("visibility","visible");
+                        if (!myvideocontainer.minimized) {
+                            myvideocontainer.minimize();
+                        }
     	    		} else {
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
                         myvideocontainer.setAttribute("visibility","visible");
@@ -376,7 +385,7 @@
                 }
                 
                 //Get a Free VideoView Slot
-                var newx = videoContainer.subviews.length*20;
+                var newx = videoContainer.subviews.length*140;
                 var newy = 0;
                 if ((newx+100)>=canvas.width) {
                     newx = 20;
@@ -413,7 +422,7 @@
             }
             
             //Get a Free VideoView Slot
-            var newx = videoContainer.subviews.length*20;
+            var newx = videoContainer.subviews.length*140;
             var newy = 0;
             if ((newx+300)>=canvas.width) {
                 newx = 20;
