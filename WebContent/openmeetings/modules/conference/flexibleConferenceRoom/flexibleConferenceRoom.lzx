@@ -13,12 +13,12 @@
         
         //,{x:this.roomobj.moderationPanelXPosition}
         canvas._conferencemenu.setAttribute('visibility','visible');
-		
+        
         if(roomobj.appointment){
-        	new lz.winni(canvas.conferenceView,{ name:'appDetail',
-                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });	
+            new lz.winni(canvas.conferenceView,{ name:'appDetail',
+                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });    
         } else{
-        	if ($debug) Debug.write("no appointed meeting");
+            if ($debug) Debug.write("no appointed meeting");
         }
         
         if (this.roomobj.isDemoRoom) {
@@ -42,14 +42,14 @@
         _mainScrollBar.setAttribute("visibility","visible");
         
         if (canvas._videocontainer!=null){
-	        canvas._videocontainer.resetAllValues();
-	        canvas._videocontainer = null;
+            canvas._videocontainer.resetAllValues();
+            canvas._videocontainer = null;
         }
         if (canvas._chatcontent!=null){
-        	canvas._chatcontent = null;
+            canvas._chatcontent = null;
         }
         if (canvas._mymod!=null){
-        	canvas._mymod = null;
+            canvas._mymod = null;
         }
         
         if (this.meetingTimer != null) {
@@ -67,15 +67,15 @@
 
     <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
         <handler name="ondata" args="value">
-	        if ($debug) Debug.write("############# logicalRoomLeave: ",value);
-	        //this.parent.destroy();
+            if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+            //this.parent.destroy();
             canvas.thishib.reconnectAfterRoomleft = true;
             canvas.thishib.reconnectedRoomInstance = this.parent;
             
             // Reconnect User to default Scope
-	        canvas.thishib.userScope = "hibernate";
-	        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
-	        canvas.thishib.setAttribute('src',src);
+            canvas.thishib.userScope = "hibernate";
+            var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+            canvas.thishib.setAttribute('src',src);
             canvas.thishib.disconnect();
             canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
             canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
@@ -93,7 +93,7 @@
         <handler name="onisopen" args="o">
             if ($debug) Debug.write("onisopen",o);
             if (o) {
-            	canvas._chatcontent.doInitByOpen();  
+                canvas._chatcontent.doInitByOpen();  
                 this.content.setAttribute("visibility","visible");
             } else {
                 this.content.setAttribute("visibility","hidden");
