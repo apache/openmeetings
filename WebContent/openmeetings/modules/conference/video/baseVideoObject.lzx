@@ -372,21 +372,20 @@
             <labelTooltip labelid="857" />
         </miniIconsPresenter>
         
-        <miniIconsPresenter name="_mute"
-            iconRessourceName="mute_btn_rsc">
+        <miniIcons name="_mute" width="16" height="16" resource="mute_btn_rsc">
             <handler name="onclick">
                 if (parent.isload){
 	                parent.parent._chatvideoinner._videostream.setVolume(0);
-	                this.parent.setAttribute('frame',2);
+	                this.setAttribute('frame',2);
 	                this.parent.isload = false;
 	            } else {
 	                parent.parent._chatvideoinner._videostream.setVolume(100);
-	                this.parent.setAttribute('frame',1);
+	                this.setAttribute('frame',1);
 	                this.parent.isload = true;
 	            }
             </handler>
             <labelTooltip labelid="373" />
-        </miniIconsPresenter>  
+        </miniIcons>  
         
         <miniIconsPresenter name="_resync"
             iconRessourceName="resyncuser_rsc">
