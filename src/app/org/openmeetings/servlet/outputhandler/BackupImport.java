@@ -915,6 +915,7 @@ public class BackupImport extends HttpServlet {
 	        			Integer demoTime = importIntegerType(roomObject.element("demoTime").getText());
 	        			Boolean isModeratedRoom = importBooleanType(roomObject.element("isModeratedRoom").getText());
 	        			Boolean allowUserQuestions = importBooleanType(roomObject.element("allowUserQuestions").getText());
+	        			Boolean isAudioOnly = importBooleanType(roomObject.element("isAudioOnly").getText());
 	        			String sipNumber = roomObject.element("sipNumber").getText();
 	        			String conferencePin = roomObject.element("conferencePin").getText();
 	        			
@@ -933,6 +934,7 @@ public class BackupImport extends HttpServlet {
 	        			room.setDemoTime(demoTime);
 	        			room.setIsModeratedRoom(isModeratedRoom);
 	        			room.setAllowUserQuestions(allowUserQuestions);
+	        			room.setIsAudioOnly(isAudioOnly);
 	        			room.setSipNumber(sipNumber);
 	        			room.setConferencePin(conferencePin);
 	        			

@@ -571,6 +571,7 @@ public class BackupExport extends HttpServlet {
 			room.addElement("demoTime").setText(""+r.getDemoTime());
 			room.addElement("isModeratedRoom").setText(""+r.getIsModeratedRoom());
 			room.addElement("allowUserQuestions").setText(""+r.getAllowUserQuestions());
+			room.addElement("isAudioOnly").setText(""+r.getIsAudioOnly());
 			room.addElement("sipNumber").setText(""+r.getSipNumber());
 			room.addElement("conferencePin").setText(""+r.getConferencePin());
 			
