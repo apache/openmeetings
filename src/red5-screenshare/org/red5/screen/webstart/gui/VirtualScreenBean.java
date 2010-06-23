@@ -28,6 +28,9 @@ public class VirtualScreenBean {
 	public static int vScreenSpinnerHeight = 0;
 	public static int vScreenSpinnerX = 0;
 	public static int vScreenSpinnerY = 0;
+	
+	public static String vScreenScaleFactor = "Medium Quality";
+	
 	public static int vScreenResizeX = 480;
 	public static int vScreenResizeY = 360;
 	

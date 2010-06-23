@@ -170,7 +170,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
 	public Float imgQuality = new Float(0.40);
 	
-	public Float scaleFactor = 1F;
+	//public Float scaleFactor = 1F;
 	public float Ampl_factor = 1.3f;
 	
 	public boolean isConnected = false;
@@ -239,7 +239,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 				System.exit(0);
 			}
 	
-			logger.debug("host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
+			logger.debug("RTMPT host: " + instance.host + ", app: " + instance.app + ", port: " + instance.port + ", publish: " + instance.publishName);
 	
 			instance.createWindow();
 			
@@ -395,7 +395,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 					System.exit(0);
 				}
 			});
-			exitButton.setBounds(290, 460, 200, 24);
+			exitButton.setBounds(290, 460, 200, 32);
 			t.add(exitButton);
 
 			//*****
@@ -446,8 +446,13 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point mouseP = a.getLocation();
 			
-			Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
-			Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
+			//Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
+			//Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
+			
+			//Real size: Real mouse position = Resize : X
+            Integer x = Long.valueOf (Math.round( ( ((mouseP.getX()*VirtualScreenBean.vScreenResizeX )/VirtualScreenBean.vScreenSpinnerWidth)-VirtualScreenBean.vScreenSpinnerX) *Ampl_factor)).intValue();
+            Integer y = Long.valueOf (Math.round( ( ((mouseP.getY()*VirtualScreenBean.vScreenResizeY )/VirtualScreenBean.vScreenSpinnerHeight)-VirtualScreenBean.vScreenSpinnerY) *Ampl_factor)).intValue();
+            
 	
 			HashMap cursorPosition = new HashMap();
 			cursorPosition.put("publicSID",this.publishName);
@@ -475,11 +480,14 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			map.put("screenX",VirtualScreenBean.vScreenSpinnerX);
 			map.put("screenY",VirtualScreenBean.vScreenSpinnerY);
 			
-			int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerWidth*scaleFactor)).intValue();
-			int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerHeight*scaleFactor)).intValue();
+//			int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerWidth*scaleFactor)).intValue();
+//			int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerHeight*scaleFactor)).intValue();
 			
-			map.put("screenWidth",scaledWidth);
-			map.put("screenHeight",scaledHeight);
+			int scaledWidth = Float.valueOf(Math.round(VirtualScreenBean.vScreenResizeX*Ampl_factor)).intValue();
+            int scaledHeight = Float.valueOf(Math.round(VirtualScreenBean.vScreenResizeY*Ampl_factor)).intValue();
+            
+            map.put("screenWidth",scaledWidth);
+            map.put("screenHeight",scaledHeight);
 			
 			map.put("publishName", this.publishName);
 			map.put("startRecording", this.startRecording);
@@ -677,6 +685,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 				publish( publishStreamId, publishName, "live", this );
 	
 				logger.debug( "setup capture thread");
+				
+				logger.debug( "setup capture thread getCanonicalName "+VirtualScreenBean.class.getCanonicalName());
+				logger.debug( "setup capture thread getName "+VirtualScreenBean.class.getName());
+				logger.debug( "setup capture thread vScreenSpinnerWidth "+VirtualScreenBean.vScreenSpinnerWidth);
+				logger.debug( "setup capture thread vScreenSpinnerHeight "+VirtualScreenBean.vScreenSpinnerHeight);
 	
                 capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
 				                        VirtualScreenBean.vScreenSpinnerY,
@@ -806,7 +819,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             this.resizeX = resizeX;
             this.resizeY = resizeY;			
 
-        	logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height );
+            logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
 
 		}
 
@@ -898,25 +911,25 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
                                 int scaledWidth = width;
                                 int scaledHeight = height;
                                 
-                                byte[] current = null;
-                                if (scaleFactor != 1F) {
-                                        
-                                        logger.debug("Calc new Scaled Instance ",scaleFactor);
-                                        
-                                        scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
-                                        scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
-                                        
-                                        Image img = image_raw.getScaledInstance(scaledWidth,
-                                                                                        scaledHeight,Image.SCALE_SMOOTH);
-                                        
-                                        BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
-                                        
-                                        Graphics2D biContext = image_scaled.createGraphics();
-                                        biContext.drawImage(img, 0, 0, null);
-                                        current = toBGR(image_scaled);
-                                } else {
-                                        current = toBGR(image_raw);
-                                }
+                                byte[] current = toBGR(image_raw);
+//                                if (scaleFactor != 1F) {
+//                                        
+//                                        logger.debug("Calc new Scaled Instance ",scaleFactor);
+//                                        
+//                                        scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
+//                                        scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
+//                                        
+//                                        Image img = image_raw.getScaledInstance(scaledWidth,
+//                                                                                        scaledHeight,Image.SCALE_SMOOTH);
+//                                        
+//                                        BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
+//                                        
+//                                        Graphics2D biContext = image_scaled.createGraphics();
+//                                        biContext.drawImage(img, 0, 0, null);
+//                                        current = toBGR(image_scaled);
+//                                } else {
+//                                        current = toBGR(image_raw);
+//                                }
                                 
                                 try
                                 {

@@ -2,9 +2,19 @@ package org.red5.screen.webstart.tgui;
 
 import java.awt.Robot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class VirtualScreenBean {
 
-
+	private static final Logger logger = LoggerFactory.getLogger( VirtualScreenBean.class );
+	
+	public VirtualScreenBean() {
+		
+		logger.debug("Modify 444 "+VirtualScreenBean.vScreenSpinnerWidth);
+		
+	}
+	
 	/**
 	 * image recalcing value's from the virtual Screen drawer
 	 */
@@ -28,6 +38,9 @@ public class VirtualScreenBean {
 	public static int vScreenSpinnerHeight = 0;
 	public static int vScreenSpinnerX = 0;
 	public static int vScreenSpinnerY = 0;
+	
+	public static String vScreenScaleFactor = "Medium Quality";
+	
 	public static int vScreenResizeX = 480;
 	public static int vScreenResizeY = 360;
 	

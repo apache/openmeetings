@@ -49,6 +49,8 @@ public class VirtualScreenMouseListener extends MouseInputAdapter  {
 		if (newYPosition>=0) {
 			ScreenShare.instance.jVScreenYSpin.setValue(newYPosition);
 		}
+		
+		VirtualScreen.instance.calcRescaleFactors();
 	}
 
 }

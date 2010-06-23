@@ -45,7 +45,7 @@ public class VirtualScreenWidthMouseListener extends MouseInputAdapter  {
 			ScreenShare.instance.jVScreenWidthSpin.setValue(newWidth);
 			VirtualScreen.instance.doUpdateBounds=true;
 			VirtualScreen.instance.updateVScreenBounds();
-
+			VirtualScreen.instance.calcRescaleFactors();
 		}
 
 	}
