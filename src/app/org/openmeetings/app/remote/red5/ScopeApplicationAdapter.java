@@ -2856,6 +2856,40 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 	
+	public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj) {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			
+			boolean found = false;
+			Long flvRecordingId = null;
+			
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+							
+							if (rcl.getStreamid() != null && rcl.getStreamid().equals(streamid)) {
+								//log.debug("IS EQUAL ");
+								((IServiceCapableConnection) conn).invoke("sendRemoteCursorEvent",new Object[] { messageObj }, this);
+								log.debug("sendRemoteCursorEvent messageObj"+messageObj);
+							}
+							
+						}
+						
+					}
+				}
+			}
+		} catch (Exception err) {
+			log.debug("[sendRemoteCursorEvent]",err);
+		}
+		return null;
+	}
+	
 	public synchronized Boolean stopInterviewRecording() {
 		try {
 			

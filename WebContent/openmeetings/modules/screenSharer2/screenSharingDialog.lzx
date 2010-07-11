@@ -143,7 +143,156 @@
         
         <view name="_content">
             
-            <videoObjectPlayScreenShare name="_video" />
+            <videoObjectPlayScreenShare name="_video">
+            	
+            	<attribute name="doSendEvents" type="boolean" value="true" />
+            	
+            	<attribute name="idleDelegate" value="null" type="expression" />
+            	
+            	<attribute name="isMouseOverActive" value="false" type="boolean"/>
+            	
+            	<attribute name="lastMouseX" value="-1" type="number"/>
+            	<attribute name="lastMouseY" value="-1" type="number"/>
+            	
+            	<handler name="oninit">
+            		this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
+            	</handler>
+            	
+            	<handler name="onkeydown" reference="lz.Keys" args="k">
+            		if (this.isMouseOverActive) {
+            		    if ($debug) Debug.write("onkeydown ",k);
+            		    
+            		    var tObject = new Object();
+                        tObject["action"] = "onkeydown";
+                        tObject["k"] = k;
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (this.doSendEvents) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+            		    
+            		}
+            	</handler>
+            	
+            	<handler name="onkeyup" reference="lz.Keys" args="k">
+            		if (this.isMouseOverActive) {
+                        if ($debug) Debug.write("onkeyup ",k);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "onkeyup";
+                        tObject["k"] = k;
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (this.doSendEvents) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+            		}
+                </handler>
+            	
+            	<handler name="onmouseover">
+            		if ($debug) Debug.write("onmouseout ");
+            		this.isMouseOverActive = true;
+            		lz.Timer.addTimer( this.idleDelegate, 500 );
+            	</handler>
+            	
+            	<handler name="onmouseout">
+            		if ($debug) Debug.write("onmouseout ");
+            		this.isMouseOverActive = false;
+                    lz.Timer.removeTimer( this.idleDelegate);
+                </handler>
+                
+                <method name="sendMousePosition" args="refObj">
+                	<![CDATA[
+                	    var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "mousePos";
+                        
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (this.doSendEvents) {
+                        	
+                        	if ($debug) Debug.write("sendMousePosition ",x,y);
+                        	
+                        	if (tObject["x"] != this.lastMouseX && tObject["y"] != this.lastMouseY) {
+                        		
+                        		this.lastMouseX = tObject["x"];
+                        		this.lastMouseY = tObject["y"];
+                            
+                                this.sendRemoteCursorEvent.doCall();
+                        	}
+                        	
+                        }
+                	    
+                	    if (this.isMouseOverActive) {
+                            lz.Timer.addTimer( this.idleDelegate, 500 );
+                	    }
+                	]]>
+                </method>
+                
+                <handler name="onmousedown" args="refObj">
+                    <![CDATA[
+                        var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        if ($debug) Debug.write("1 x,y :: ",x,y);
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        if ($debug) Debug.write("2 x,y :: ",x,y);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "onmousedown";
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (this.doSendEvents) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+                    ]]>
+                </handler>
+            	
+            	<handler name="onmouseup" args="refObj">
+            		<![CDATA[
+                		var x = this.getMouse("x");
+                		var y = this.getMouse("y");
+                		if ($debug) Debug.write("1 x,y :: ",x,y);
+                		x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                		y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                		if ($debug) Debug.write("2 x,y :: ",x,y);
+                		
+                		var tObject = new Object();
+                		tObject["action"] = "onmouseup";
+                		tObject["x"] = Math.round(x);
+                		tObject["y"] = Math.round(y);
+                		
+                		this.sendRemoteCursorEvent.tObject = tObject;
+                		if (this.doSendEvents) {
+                		    this.sendRemoteCursorEvent.doCall();
+                		}
+            		]]>
+            	</handler>
+            	
+            	<!--
+            	public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj)
+            	 -->
+    	        <netRemoteCallHib name="sendRemoteCursorEvent"  showLoading="false"
+    	        				  remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
+                        <attribute name="tObject" value="null" />
+                        <netparam><method name="getValue">return parent.parent.parent.parent.parent.initObject.streamid;</method></netparam>
+                        <netparam><method name="getValue">return parent.tObject;</method></netparam>
+                        <handler name="ondata" args="value">
+                        //The onResult-Handler will be called be the rtmpconnection
+                        if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);    
+                        parent.close();
+                    </handler>  
+                </netRemoteCallHib> 
+                 
+            </videoObjectPlayScreenShare>
             
         </view>
         

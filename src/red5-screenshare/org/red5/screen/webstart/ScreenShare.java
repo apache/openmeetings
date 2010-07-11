@@ -23,6 +23,7 @@ import org.red5.server.api.event.IEventDispatcher;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
+import org.red5.server.net.protocol.ProtocolState;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPClient;
 import org.red5.server.net.rtmp.INetStreamEventHandler;
@@ -186,6 +187,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         public static void main(String[] args)
         {
                 try {
+                	
                         instance = new ScreenShare();
         
                         if (args.length == 6) {
@@ -292,6 +294,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                         textArea.setBackground(Color.WHITE);
                         contentPane.setLayout(null);
                         contentPane.add(textArea);
+                        
+                        //logger.debug("addKey Listener");
+                        //t.addKeyListener(new ScreenKeyListener());
                         
                         //*****
                         //Header Overall
@@ -449,9 +454,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                         //Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
                         //Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
                         
+                        Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenResizeX)/Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth);
+                        
                         //Real size: Real mouse position = Resize : X
-                        Integer x = Long.valueOf (Math.round( ( ((mouseP.getX()*VirtualScreenBean.vScreenResizeX )/VirtualScreenBean.vScreenSpinnerWidth)-VirtualScreenBean.vScreenSpinnerX) *Ampl_factor)).intValue();
-                        Integer y = Long.valueOf (Math.round( ( ((mouseP.getY()*VirtualScreenBean.vScreenResizeY )/VirtualScreenBean.vScreenSpinnerHeight)-VirtualScreenBean.vScreenSpinnerY) *Ampl_factor)).intValue();
+                        Integer x = Long.valueOf (Math.round( ( (mouseP.getX() - VirtualScreenBean.vScreenSpinnerX) * scaleFactor )  * Ampl_factor)).intValue();
+                        Integer y = Long.valueOf (Math.round( ( (mouseP.getY() - VirtualScreenBean.vScreenSpinnerY) * scaleFactor )  * Ampl_factor)).intValue();
                         
                      
                         HashMap cursorPosition = new HashMap();
@@ -588,8 +595,33 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
     }
 
+	@Override
+	protected void onInvoke(RTMPConnection conn, Channel channel, Header source,
+			Notify invoke, RTMP rtmp) {
+		// TODO Auto-generated method stub
+		super.onInvoke(conn, channel, source, invoke, rtmp);
 
-    public void stopStream() {
+		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
+			logger.debug("Ignoring stream data notify with header: {}", source);
+			return;
+		}
+		logger.debug("onInvoke: {}, invokeId: {}", invoke, invoke
+						.getInvokeId());
+
+		logger.debug("ServiceMethodName :: "+ invoke.getCall().getServiceMethodName());
+		logger.debug("Arguments :: "+ invoke.getCall().getArguments());
+		
+		if (invoke.getCall().getServiceMethodName().equals("sendRemoteCursorEvent")) {
+			
+			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
+			
+		}
+		
+		
+		
+	}
+
+	public void stopStream() {
         try {
                 
                 logger.debug( "ScreenShare stopStream" );
@@ -635,7 +667,136 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         }
     }
 
+    public void sendRemoteCursorEvent(Object obj) {
+    	try {
+    		
+    		//logger.debug("#### sendRemoteCursorEvent ");
 
+            //logger.debug("Result Map Type "+obj.getClass().getName());
+            
+            Map returnMap = (Map) obj;
+            
+            //logger.debug("result "+returnMap.get("result"));
+            
+            String action = returnMap.get("action").toString();
+            
+            if (action.equals("onmouseup")) {
+           	 
+	           	Robot robot = new Robot();
+	           	 
+	           	//VirtualScreenBean
+	           	 
+	//          Integer x = Math.round ( ( ( Float.valueOf(returnMap.get("x").toString()).floatValue() *VirtualScreenBean.vScreenResizeX )/VirtualScreenBean.vScreenSpinnerWidth) / Ampl_factor) ;
+	//          Integer y = Math.round ( ( ( Float.valueOf(returnMap.get("y").toString()).floatValue() *VirtualScreenBean.vScreenResizeY )/VirtualScreenBean.vScreenSpinnerHeight)/ Ampl_factor) ;
+	//            
+	           	
+	           	//logger.debug("x 1 "+returnMap.get("x"));
+	           	
+	           	Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth) / Float.valueOf(VirtualScreenBean.vScreenResizeX);
+	           	
+	           	//logger.debug("x 1 scaleFactor "+scaleFactor);
+	           	
+	           	Float part_x1 = ( ( Float.valueOf(returnMap.get("x").toString()).floatValue() * scaleFactor  ) / Float.valueOf(Ampl_factor) );
+	           	
+	           	//logger.debug("x 1 part_x1 "+part_x1);
+	           	
+	           	Integer x = Math.round ( part_x1 + VirtualScreenBean.vScreenSpinnerX  );
+
+	           	
+	           	Integer y = Math.round ( ( ( Float.valueOf(returnMap.get("y").toString()).floatValue() * VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor) + VirtualScreenBean.vScreenSpinnerY)  ;
+            
+           	
+	           	//logger.debug("x|y "+x+" || "+y);
+           	 
+                robot.mouseMove(x, y);
+                robot.mouseRelease(InputEvent.BUTTON1_MASK);
+           	 
+            } else if (action.equals("onmousedown")) {
+           	 
+	           	Robot robot = new Robot();
+	           	
+	           	Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth) / Float.valueOf(VirtualScreenBean.vScreenResizeX);
+	           	Float part_x1 = ( ( Float.valueOf(returnMap.get("x").toString()).floatValue() * scaleFactor  ) / Float.valueOf(Ampl_factor) );
+	           	Integer x = Math.round ( part_x1 + VirtualScreenBean.vScreenSpinnerX  );
+	           	Integer y = Math.round ( ( ( Float.valueOf(returnMap.get("y").toString()).floatValue() * VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor) + VirtualScreenBean.vScreenSpinnerY)  ;
+           	 
+                robot.mouseMove(x, y);
+                robot.mousePress(InputEvent.BUTTON1_MASK);
+           	 
+            } else if (action.equals("mousePos")) {
+            	
+            	Robot robot = new Robot();
+	           	 
+	           	Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth) / Float.valueOf(VirtualScreenBean.vScreenResizeX);
+	           	
+	           	Float part_x1 = ( ( Float.valueOf(returnMap.get("x").toString()).floatValue() * scaleFactor  ) / Float.valueOf(Ampl_factor) );
+	           	
+	           	Integer x = Math.round ( part_x1 + VirtualScreenBean.vScreenSpinnerX  );
+	           	
+	           	Integer y = Math.round ( ( ( Float.valueOf(returnMap.get("y").toString()).floatValue() * VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor) + VirtualScreenBean.vScreenSpinnerY)  ;
+            
+                robot.mouseMove(x, y);
+            	
+            } else if (action.equals("onkeydown")) {
+            	
+            	Robot robot = new Robot();
+            	
+            	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
+            
+            	logger.debug("key onkeydown ",key);
+            	
+            	if (key == 221) {
+            		key = 61;
+            	} else if (key == 187) {
+            		key = 521;
+            	} else if (key == 188) {
+            		key = 44;
+            	} else if (key == 189) {
+            		key = 109;
+            	} else if (key == 190) {
+            		key = 46;
+            	} else if (key == 191) {
+            		key = 47;
+            	}
+            	
+                robot.keyPress(key);
+            	
+            } else if (action.equals("onkeyup")) {
+            	
+            	Robot robot = new Robot();
+            	
+            	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
+            
+            	logger.debug("key onkeydown 1- ",key);
+            	
+            	if (key == 221) {
+            		key = 61;
+            	} else if (key == 187) {
+            		key = 521;
+            	} else if (key == 188) {
+            		key = 44;
+            	} else if (key == 189) {
+            		key = 109;
+            	} else if (key == 190) {
+            		key = 46;
+            	} else if (key == 191) {
+            		key = 47;
+            	}
+            	
+            	logger.debug("key onkeydown 2- ",key);
+            	
+                robot.keyRelease(key);
+            	
+            }
+            
+            //KeyEvent.VK
+            //KeyEvent.
+    		
+    	} catch (Exception err) {
+    		logger.error( "[sendRemoteCursorEvent]", err );
+    	}
+    }
+    
     public void resultReceived( IPendingServiceCall call ) {
         try {
                 
@@ -739,7 +900,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                 
                                 //logger.debug("Stop No Doubt!");
                                 //stopStream();
-                                
+                        
                         } else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
                                 
                                 //Do not do anything
@@ -754,6 +915,37 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                 logger.error("[resultReceived]",err);
         }
     }
+    
+//    else if (call.getServiceMethodName().equals("sendRemoteCursorEvent")) {
+//    	
+//   	 logger.debug("#### sendRemoteCursorEvent "+call.getServiceMethodName());
+//
+//   	 Object o = call.getResult();
+//        
+//        logger.debug("Result Map Type "+o.getClass().getName());
+//        
+//        Map returnMap = (Map) o;
+//        
+//        logger.debug("result "+returnMap.get("result"));
+//        
+//        String action = returnMap.get("action").toString();
+//        
+//        if (action.equals("onmouseup")) {
+//       	 
+//       	 Robot robot = new Robot();
+//       	 
+//       	 Integer x = Math.round (Float.valueOf(returnMap.get("x").toString()).floatValue() / Ampl_factor) ;
+//       	 Integer y = Math.round (Float.valueOf(returnMap.get("y").toString()).floatValue() / Ampl_factor) ;
+//            
+//       	 logger.debug("x|y "+x+" || "+y);
+//       	 
+//            robot.mouseMove(x, y);
+//       	 
+//        }
+//        
+//        
+//           
+//   } 
 
 
     public void pushVideo( int len, byte[] video, long ts) throws IOException {
