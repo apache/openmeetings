@@ -74,7 +74,6 @@ public class TestKeyCodes extends Frame implements KeyListener {
 		System.out.println("keyPressed isShiftDown "+event.isShiftDown());
 
 		System.out.println("keyPressed paramString "+event.paramString());
-		event.
 		
 		if (event.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
 			int key = event.getKeyCode();
