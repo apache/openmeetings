@@ -65,6 +65,17 @@ public class TestKeyCodes extends Frame implements KeyListener {
 		
 		System.out.println("keyPressed CHAR5 "+event.getKeyText(myCode));
 		
+		System.out.println("keyPressed isActionKey "+event.isActionKey());
+		System.out.println("keyPressed isAltDown "+event.isAltDown());
+		System.out.println("keyPressed isAltGraphDown "+event.isAltGraphDown());
+		System.out.println("keyPressed isConsumed "+event.isConsumed());
+		System.out.println("keyPressed isControlDown "+event.isControlDown());
+		System.out.println("keyPressed isMetaDown "+event.isMetaDown());
+		System.out.println("keyPressed isShiftDown "+event.isShiftDown());
+
+		System.out.println("keyPressed paramString "+event.paramString());
+		event.
+		
 		if (event.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
 			int key = event.getKeyCode();
 			// Funktionstaste abfragen
@@ -98,6 +109,19 @@ public class TestKeyCodes extends Frame implements KeyListener {
 
 	public void keyTyped(KeyEvent event) {
 		char key = event.getKeyChar();
+		
+//		System.out.println("keyTyped CODE1 "+event.getKeyCode());
+//		
+//		Integer myCode = event.getKeyCode();
+//		
+//		System.out.println("keyTyped CODE2 "+myCode);
+//		
+//		System.out.println("keyTyped CHAR3 "+event.getKeyChar());
+//		
+//		System.out.println("keyTyped CHAR4 "+event.getKeyText(event.getKeyCode()));
+//		
+//		System.out.println("keyTyped CHAR5 "+event.getKeyText(myCode));
+		
 		if (key == KeyEvent.VK_BACK_SPACE) {
 			if (msg2.length() > 0) {
 				msg2 = msg2.substring(0, msg2.length() - 1);
