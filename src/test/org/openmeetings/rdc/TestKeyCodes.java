@@ -53,7 +53,18 @@ public class TestKeyCodes extends Frame implements KeyListener {
 
 	public void keyPressed(KeyEvent event) {
 		msg1 = "";
-		System.out.println("keyPressed "+event.getKeyCode());
+		System.out.println("keyPressed CODE1 "+event.getKeyCode());
+		
+		Integer myCode = event.getKeyCode();
+		
+		System.out.println("keyPressed CODE2 "+myCode);
+		
+		System.out.println("keyPressed CHAR3 "+event.getKeyChar());
+		
+		System.out.println("keyPressed CHAR4 "+event.getKeyText(event.getKeyCode()));
+		
+		System.out.println("keyPressed CHAR5 "+event.getKeyText(myCode));
+		
 		if (event.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
 			int key = event.getKeyCode();
 			// Funktionstaste abfragen
