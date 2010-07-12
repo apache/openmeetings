@@ -144,66 +144,262 @@
         <view name="_content">
             
             <videoObjectPlayScreenShare name="_video">
-            	
-            	<attribute name="doSendEvents" type="boolean" value="true" />
-            	
-            	<attribute name="idleDelegate" value="null" type="expression" />
-            	
-            	<attribute name="isMouseOverActive" value="false" type="boolean"/>
-            	
-            	<attribute name="lastMouseX" value="-1" type="number"/>
-            	<attribute name="lastMouseY" value="-1" type="number"/>
-            	
-            	<handler name="oninit">
-            		this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
-            	</handler>
-            	
-            	<handler name="onkeydown" reference="lz.Keys" args="k">
-            		if (this.isMouseOverActive) {
-            		    if ($debug) Debug.write("onkeydown ",k);
-            		    
-            		    var tObject = new Object();
-                        tObject["action"] = "onkeydown";
-                        tObject["k"] = k;
-                        
-                        this.sendRemoteCursorEvent.tObject = tObject;
-                        if (this.doSendEvents) {
-                            this.sendRemoteCursorEvent.doCall();
-                        }
-            		    
-            		}
-            	</handler>
-            	
-            	<handler name="onkeyup" reference="lz.Keys" args="k">
-            		if (this.isMouseOverActive) {
+                
+                <attribute name="doSendEvents" type="boolean" value="true" />
+                
+                <attribute name="idleDelegate" value="null" type="expression" />
+                
+                <attribute name="isMouseOverActive" value="false" type="boolean"/>
+                
+                <attribute name="lastMouseX" value="-1" type="number"/>
+                <attribute name="lastMouseY" value="-1" type="number"/>
+                
+                <handler name="oninit">
+                    this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
+                </handler>
+                
+                <handler name="onkeydown" reference="lz.Keys" args="k">
+                	<![CDATA[
+	                    if (this.isMouseOverActive) {
+	                        if ($debug) Debug.write("onkeydown ",k);
+	                        
+	                        var tObject = new Object();
+	                        tObject["action"] = "onkeydown";
+	                        tObject["k"] = k;
+	                        
+	                        var downkeys = lz.Keys.downKeysArray;
+	                        
+	                        if ($debug) Debug.write("downkeys ",downkeys,downkeys.length);
+				
+							if (downkeys.length==2 && downkeys[0]==16) {
+								if (k == 187) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "*";
+		                        } else if (k == 191) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "'";
+		                        } else if (k == 189) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "_";
+		                        } else if (k == 221) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "`";
+		                        } else if (k == 219) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "?";
+		                        } else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = ">";
+		                        } else if (k == 220) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "°";
+		                        } else if (k == 186) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ü";
+		                        } else if (k == 222) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ä";
+		                        } else if (k == 192) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ö";
+		                        }
+		                        
+		                        
+							} else if (downkeys.length==2 && downkeys[0]==18) {
+								
+								if (k == 81) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "@";
+								} else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "|";
+								}
+								
+							} else {
+								
+		                        if (k == 187) {
+		                        	tObject["k"] = -1;
+		                        	tObject["c"] = "+";
+		                        } else if (k == 191) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "#";
+		                        } else if (k == 189) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "-";
+		                        } else if (k == 221) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "`";
+		                        } else if (k == 219) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ß";
+		                        } else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "<";
+		                        } else if (k == 220) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "^";
+		                        } else if (k == 186) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ü";
+		                        } else if (k == 222) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ä";
+		                        } else if (k == 192) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ö";
+		                        }
+		                        
+							}
+							
+							if (lz.Keys.downKeysArray.length > 1) {
+								for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
+									if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
+										lz.Keys.downKeysArray = new Array();
+										break;
+									}
+								}
+							}
+							
+							if (k == 18 || k == 17) {
+								return;
+							}
+	                        
+	                        this.sendRemoteCursorEvent.tObject = tObject;
+	                        if (this.doSendEvents) {
+	                            this.sendRemoteCursorEvent.doCall();
+	                        }
+	                        
+	                    }
+                    ]]>
+                </handler>
+                
+                <handler name="onkeyup" reference="lz.Keys" args="k">
+                	<![CDATA[
+                    if (this.isMouseOverActive) {
                         if ($debug) Debug.write("onkeyup ",k);
                         
                         var tObject = new Object();
                         tObject["action"] = "onkeyup";
                         tObject["k"] = k;
                         
+                        var downkeys = lz.Keys.downKeysArray;
+				
+						if (downkeys.length==2 && downkeys[0]==16) {
+								if (k == 187) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "*";
+		                        } else if (k == 191) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "'";
+		                        } else if (k == 189) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "_";
+		                        } else if (k == 221) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "`";
+		                        } else if (k == 219) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "?";
+		                        } else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = ">";
+		                        } else if (k == 220) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "°";
+		                        } else if (k == 186) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ü";
+		                        } else if (k == 222) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ä";
+		                        } else if (k == 192) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ö";
+		                        }
+		                        
+		                        
+							} else if (downkeys.length==2 && downkeys[0]==18) {
+								
+								if (k == 81) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "@";
+								} else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "|";
+								}
+								
+							} else {
+								
+		                        if (k == 187) {
+		                        	tObject["k"] = -1;
+		                        	tObject["c"] = "+";
+		                        } else if (k == 191) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "#";
+		                        } else if (k == 189) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "-";
+		                        } else if (k == 221) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "`";
+		                        } else if (k == 219) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "ß";
+		                        } else if (k == 226) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "<";
+		                        } else if (k == 220) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "^";
+		                        } else if (k == 186) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ü";
+		                        } else if (k == 222) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ä";
+		                        } else if (k == 192) {
+									tObject["k"] = -1;
+		                        	tObject["c"] = "Ö";
+		                        }
+		                        
+							}
+							
+						if (k == 18 || k == 17) {
+							return;
+						}
+						
+						if (lz.Keys.downKeysArray.length > 1) {
+							for (var i=0;i<lz.Keys.downKeysArray.length;i++) {
+								if (lz.Keys.downKeysArray[i] == 17 || lz.Keys.downKeysArray[i] == '17') {
+									lz.Keys.downKeysArray = new Array();
+									break;
+								}
+							}
+						}
+                    
                         this.sendRemoteCursorEvent.tObject = tObject;
                         if (this.doSendEvents) {
                             this.sendRemoteCursorEvent.doCall();
                         }
-            		}
+                    }
+                    ]]>
                 </handler>
-            	
-            	<handler name="onmouseover">
-            		if ($debug) Debug.write("onmouseout ");
-            		this.isMouseOverActive = true;
-            		lz.Timer.addTimer( this.idleDelegate, 500 );
-            	</handler>
-            	
-            	<handler name="onmouseout">
-            		if ($debug) Debug.write("onmouseout ");
-            		this.isMouseOverActive = false;
+                
+                <handler name="onmouseover">
+                    if ($debug) Debug.write("onmouseout ");
+                    this.isMouseOverActive = true;
+                    lz.Timer.addTimer( this.idleDelegate, 500 );
+                </handler>
+                
+                <handler name="onmouseout">
+                    if ($debug) Debug.write("onmouseout ");
+                    this.isMouseOverActive = false;
                     lz.Timer.removeTimer( this.idleDelegate);
                 </handler>
                 
                 <method name="sendMousePosition" args="refObj">
-                	<![CDATA[
-                	    var x = this.getMouse("x");
+                    <![CDATA[
+                        var x = this.getMouse("x");
                         var y = this.getMouse("y");
                         x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
                         y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
@@ -216,23 +412,23 @@
                         
                         this.sendRemoteCursorEvent.tObject = tObject;
                         if (this.doSendEvents) {
-                        	
-                        	if ($debug) Debug.write("sendMousePosition ",x,y);
-                        	
-                        	if (tObject["x"] != this.lastMouseX && tObject["y"] != this.lastMouseY) {
-                        		
-                        		this.lastMouseX = tObject["x"];
-                        		this.lastMouseY = tObject["y"];
+                            
+                            if ($debug) Debug.write("sendMousePosition ",x,y);
+                            
+                            if (tObject["x"] != this.lastMouseX && tObject["y"] != this.lastMouseY) {
+                                
+                                this.lastMouseX = tObject["x"];
+                                this.lastMouseY = tObject["y"];
                             
                                 this.sendRemoteCursorEvent.doCall();
-                        	}
-                        	
+                            }
+                            
                         }
-                	    
-                	    if (this.isMouseOverActive) {
+                        
+                        if (this.isMouseOverActive) {
                             lz.Timer.addTimer( this.idleDelegate, 500 );
-                	    }
-                	]]>
+                        }
+                    ]]>
                 </method>
                 
                 <handler name="onmousedown" args="refObj">
@@ -255,33 +451,33 @@
                         }
                     ]]>
                 </handler>
-            	
-            	<handler name="onmouseup" args="refObj">
-            		<![CDATA[
-                		var x = this.getMouse("x");
-                		var y = this.getMouse("y");
-                		if ($debug) Debug.write("1 x,y :: ",x,y);
-                		x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
-                		y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
-                		if ($debug) Debug.write("2 x,y :: ",x,y);
-                		
-                		var tObject = new Object();
-                		tObject["action"] = "onmouseup";
-                		tObject["x"] = Math.round(x);
-                		tObject["y"] = Math.round(y);
-                		
-                		this.sendRemoteCursorEvent.tObject = tObject;
-                		if (this.doSendEvents) {
-                		    this.sendRemoteCursorEvent.doCall();
-                		}
-            		]]>
-            	</handler>
-            	
-            	<!--
-            	public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj)
-            	 -->
-    	        <netRemoteCallHib name="sendRemoteCursorEvent"  showLoading="false"
-    	        				  remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
+                
+                <handler name="onmouseup" args="refObj">
+                    <![CDATA[
+                        var x = this.getMouse("x");
+                        var y = this.getMouse("y");
+                        if ($debug) Debug.write("1 x,y :: ",x,y);
+                        x /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        y /= (parent.parent.parent._zoombar._zoom.initialNumber/100);
+                        if ($debug) Debug.write("2 x,y :: ",x,y);
+                        
+                        var tObject = new Object();
+                        tObject["action"] = "onmouseup";
+                        tObject["x"] = Math.round(x);
+                        tObject["y"] = Math.round(y);
+                        
+                        this.sendRemoteCursorEvent.tObject = tObject;
+                        if (this.doSendEvents) {
+                            this.sendRemoteCursorEvent.doCall();
+                        }
+                    ]]>
+                </handler>
+                
+                <!--
+                public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj)
+                 -->
+                <netRemoteCallHib name="sendRemoteCursorEvent"  showLoading="false"
+                                  remotecontext="$once{ canvas.thishib }" funcname="sendRemoteCursorEvent"  >
                         <attribute name="tObject" value="null" />
                         <netparam><method name="getValue">return parent.parent.parent.parent.parent.initObject.streamid;</method></netparam>
                         <netparam><method name="getValue">return parent.tObject;</method></netparam>
@@ -319,7 +515,7 @@
         
         <labelText labelid="852" resize="true" y="4" />
         
-	    <changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
+        <changeWidthSlider name="_zoom" initialNumberInit="100" x="10"
               boxPosition="up" initialNumber="100" maximum="200">
             <handler name="oninitialNumber" args="i">
                 if (parent.parent.isStarted) {
@@ -334,8 +530,8 @@
             </handler>
         </changeWidthSlider>
         
-	    <labelText x="64" y="6" labelid="253" />    
-	</view>
+        <labelText x="64" y="6" labelid="253" />    
+    </view>
     
     <simpleLabelButton name="_pause" visibility="hidden"
         labelid="854" width="100" x="${ parent.width-204 }" 

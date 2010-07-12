@@ -53,6 +53,9 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -175,6 +178,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         public float Ampl_factor = 1.3f;
         
         public boolean isConnected = false;
+        
+        public Map<Integer,Boolean> currentPressedKeys = new HashMap<Integer,Boolean>();
 
     // ------------------------------------------------------------------------
     //
@@ -602,14 +607,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 		super.onInvoke(conn, channel, source, invoke, rtmp);
 
 		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
-			logger.debug("Ignoring stream data notify with header: {}", source);
+			//logger.debug("Ignoring stream data notify with header: {}", source);
 			return;
 		}
-		logger.debug("onInvoke: {}, invokeId: {}", invoke, invoke
-						.getInvokeId());
+		//logger.debug("onInvoke: {}, invokeId: {}", invoke, invoke
+		//				.getInvokeId());
 
-		logger.debug("ServiceMethodName :: "+ invoke.getCall().getServiceMethodName());
-		logger.debug("Arguments :: "+ invoke.getCall().getArguments());
+		//logger.debug("ServiceMethodName :: "+ invoke.getCall().getServiceMethodName());
+		//logger.debug("Arguments :: "+ invoke.getCall().getArguments());
 		
 		if (invoke.getCall().getServiceMethodName().equals("sendRemoteCursorEvent")) {
 			
@@ -670,7 +675,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     public void sendRemoteCursorEvent(Object obj) {
     	try {
     		
-    		//logger.debug("#### sendRemoteCursorEvent ");
+    		logger.debug("#### sendRemoteCursorEvent ");
 
             //logger.debug("Result Map Type "+obj.getClass().getName());
             
@@ -743,12 +748,28 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeydown ",key);
+            	logger.debug("key onkeydown -1 "+key);
+            	boolean doAction = true;
             	
             	if (key == 221) {
             		key = 61;
-            	} else if (key == 187) {
-            		key = 521;
+            	} else if (key == -1) {
+            		
+            		String charValue = returnMap.get("c").toString();
+            		
+            		//key = KeyEvent.VK_ADD;
+            		doAction = false;
+            		
+            		for (Iterator<Integer> iter = this.currentPressedKeys.keySet().iterator();iter.hasNext();) {
+            			Integer storedKey = iter.next();
+            			
+            			robot.keyRelease(storedKey);
+            			
+            		}
+            		
+            		this.currentPressedKeys = new HashMap<Integer,Boolean>();
+            		
+            		this.pressSpecialSign(charValue, robot);
             	} else if (key == 188) {
             		key = 44;
             	} else if (key == 189) {
@@ -759,7 +780,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             		key = 47;
             	}
             	
-                robot.keyPress(key);
+            	logger.debug("key onkeydown -2 "+key);
+            	
+            	if (doAction) {
+            		
+            		this.currentPressedKeys.put(key, true);
+            		
+            		robot.keyPress(key);
+            	}
             	
             } else if (action.equals("onkeyup")) {
             	
@@ -767,12 +795,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeydown 1- ",key);
+            	logger.debug("key onkeyup 1- "+key);
+            	
+            	boolean doAction = true;
             	
             	if (key == 221) {
             		key = 61;
-            	} else if (key == 187) {
-            		key = 521;
+            	} else if (key == -1) {
+            		doAction = false;
             	} else if (key == 188) {
             		key = 44;
             	} else if (key == 189) {
@@ -783,9 +813,18 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             		key = 47;
             	}
             	
-            	logger.debug("key onkeydown 2- ",key);
+            	logger.debug("key onkeyup 2- "+key);
             	
-                robot.keyRelease(key);
+            	if (doAction) {
+            		
+            		if (this.currentPressedKeys.containsKey(key)) {
+            			this.currentPressedKeys.remove(key);
+            			
+            			robot.keyRelease(key);
+            			
+            		}
+            		
+            	}
             	
             }
             
@@ -795,6 +834,39 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     	} catch (Exception err) {
     		logger.error( "[sendRemoteCursorEvent]", err );
     	}
+    }
+    
+    private void pressSpecialSign(String charValue, Robot instance)
+    {
+      Clipboard clippy = Toolkit.getDefaultToolkit().getSystemClipboard();
+      //Transferable clippysContent = clippy.getContents( null );
+      try{
+
+		 StringSelection selection = new StringSelection(charValue);
+	        
+         clippy.setContents( selection,selection  );
+        
+    	 //Macintosh simulate Insert
+    	 instance.keyPress( 157 );
+         instance.keyPress( 86 );
+         instance.keyRelease( 86 );    
+         instance.keyRelease( 157 );
+        //drückt STRG+V == einfügen
+    	 /*
+    	instance.keyPress( KeyEvent.VK_CONTROL );
+        instance.keyPress(KeyEvent.VK_V);
+        instance.keyRelease(KeyEvent.VK_V);    
+        instance.keyRelease( KeyEvent.VK_CONTROL );
+        */
+          //oder wenn das keine Exception wirft
+    	 /*instance.keyPress( KeyEvent.VK_PASTE );
+    	 instance.keyRelease( KeyEvent.VK_PASTE );*/
+      }
+      catch(Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
     }
     
     public void resultReceived( IPendingServiceCall call ) {
