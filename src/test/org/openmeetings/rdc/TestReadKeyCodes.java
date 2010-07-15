@@ -3,14 +3,6 @@ package org.openmeetings.rdc;
 import java.awt.*;
 import java.awt.event.*;
 
-class WindowClosingAdapter extends WindowAdapter {
-	public void windowClosing(WindowEvent event) {
-		event.getWindow().setVisible(false);
-		event.getWindow().dispose();
-		System.exit(0);
-	}
-}
-
 public class TestReadKeyCodes extends Frame implements KeyListener {
 	String msg1 = "";
 	String msg2 = "";
