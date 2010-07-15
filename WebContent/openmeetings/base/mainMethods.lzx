@@ -707,7 +707,7 @@ if (cItem == null) {
     }
 </method>
 
-<handler name="ondrawAllowStatus" args="drawObj">
+<method name="setDrawAllowStatus" args="drawObj">
     <![CDATA[
 	    if ($debug) Debug.write("drawAllowStatus changes ###### ");
 	    if (drawObj.publicSID==canvas.publicSID) {
@@ -716,7 +716,7 @@ if (cItem == null) {
             canvas.setAttribute("isAllowedToRemoteControl",drawObj.canRemote);
         }
     ]]>
-</handler>
+</method>
 
 <method name="addFolderSequence" args="foldername">
     <![CDATA[

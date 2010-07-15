@@ -206,7 +206,7 @@
                 if ($debug) Debug.write("Deny Screen: ",parent.parent.parent.refObj.publicSID);
                 if (canvas.ismoderator && this.isActive) {
                 	canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
-                    canvas.thishib.setCanRemote.canShare = false;
+                    canvas.thishib.setCanRemote.canRemote = false;
                     canvas.thishib.setCanRemote.doCall();
                 }
             ]]>
@@ -220,7 +220,7 @@
             if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
             if (canvas.ismoderator) {
                 canvas.thishib.setCanRemote.publicSID = parent.parent.parent.refObj.publicSID;
-                canvas.thishib.setCanRemote.canShare = true;
+                canvas.thishib.setCanRemote.canRemote = true;
                 canvas.thishib.setCanRemote.doCall();
             }
         </handler>

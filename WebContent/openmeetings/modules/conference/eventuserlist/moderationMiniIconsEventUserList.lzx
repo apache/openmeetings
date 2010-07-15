@@ -140,7 +140,7 @@
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
-                if ($debug) Debug.write("Deny Remote: ",parent.parent.parent.refObj.publicSID);
+                if ($debug) Debug.write("Deny Remote: ",canvas.publicSID);
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="1081" />

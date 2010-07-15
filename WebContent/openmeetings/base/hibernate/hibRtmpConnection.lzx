@@ -1374,6 +1374,7 @@
 						if (value.client.streamid!=canvas.streamid) canvas._drawarea.remoteSyncLoader();
 					}
                 } else if (value.message[0]=='updateDrawStatus'){
+                	canvas.setDrawAllowStatus(value.message[1]);
                     canvas.setAttribute("drawAllowStatus",value.message[1]);
                 } else if (value.message[0]=='applyForModeration'){
                     if (canvas.ismoderator) {

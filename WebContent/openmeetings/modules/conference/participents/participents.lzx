@@ -112,7 +112,7 @@
     
     <participentsTable name="_table" y="20" /> 
 
-    <view name="_miniIcons" x="152" y="0" height="18">
+    <view name="_miniIcons" x="132" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
             bgcolor="$once{ canvas.basebgcolorizer }" />
@@ -134,11 +134,17 @@
         
         <view width="1" height="${ parent.parent.height }" x="60"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_sync" x="62" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="1084" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="80"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_sync" x="82" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         
-        <view width="1" height="${ parent.parent.height }" x="102"
+        <view width="1" height="${ parent.parent.height }" x="122"
             bgcolor="$once{ canvas.basebgcolorizer }" />
     </view>
     <view name="headerDivisionLine" width="${ parent.width }" 
@@ -274,6 +280,7 @@
             if (this.refObj.publicSID == drawObject.publicSID) {
                 this.refObj.canDraw = drawObject.canDraw;
                 this.refObj.canShare = drawObject.canShare;
+                this.refObj.canRemote = drawObject.canRemote;
                 this.updateIcons();
             }
         ]]>
@@ -302,6 +309,10 @@
                 this._miniIcons._allowShare.setAttribute("showhandcursor",false);
                 this._miniIcons._allowShare._text.setAttribute("text","");
                 this._miniIcons._denyShare.setAttribute("visibility","hidden");
+                
+                this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
+                this._miniIcons._allowRemote._text.setAttribute("text","");
+                this._miniIcons._denyRemote.setAttribute("visibility","hidden");
                 
                 if (canvas.ismoderator) {
                     if (canvas.ismoderator && canvas.publicSID != this.refObj.publicSID) {
@@ -352,6 +363,18 @@
                         this._miniIcons._denyShare.setAttribute("visibility","visible");
                     }
                     
+                    if (this.refObj.canRemote) {
+                    	this._miniIcons._allowRemote.setAttribute("visibility","visible");
+                        this._miniIcons._allowRemote.setAttribute("showhandcursor",true);
+                        this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1083));
+                        this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+                    } else {
+                    	this._miniIcons._allowRemote.setAttribute("visibility","hidden");
+                        this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
+                        this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
+                        this._miniIcons._denyRemote.setAttribute("visibility","visible");
+                    }
+                    
                 } else {
                     
                     this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
@@ -368,11 +391,20 @@
                         this._miniIcons._allowShare.setAttribute("visibility","hidden");
                     }
                     
+                    if (this.refObj.canRemote) {
+                        this._miniIcons._allowRemote.setAttribute("visibility","visible");
+                    } else {
+                        this._miniIcons._allowRemote.setAttribute("visibility","hidden");
+                    }
+                    
                     //No Update action available
                     this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
                     this._miniIcons._denyShare.setAttribute("visibility","hidden");
+                    this._miniIcons._denyRemote.setAttribute("visibility","hidden");
                     this._miniIcons._canDraw.setAttribute("showhandcursor",false);
                     this._miniIcons._canDraw._text.setAttribute("text","");
+                    this._miniIcons._allowRemote._text.setAttribute("text","");
+                    this._miniIcons._allowShare._text.setAttribute("text","");
                     
                 }
                     
@@ -418,7 +450,22 @@
             
             ]]>
         </handler>   
-    </netRemoteCallHib>  
+    </netRemoteCallHib> 
+    
+    <netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
+                   remotecontext="$once{ canvas.thishib }">
+        <attribute name="publicSID" value="" type="string" />
+        <attribute name="canRemote" value="true" type="boolean" />
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canRemote;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("setCanRemote : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>     
             
     <handler name="onmouseover">
         this.setAttribute('bgcolor',canvas.baseMousecolorizer);
@@ -444,7 +491,7 @@
     <labelText name="_firstName" fontsize="10" x="40" text="$once{ parent.firstname }" />
     <labelText name="_lastName" fontsize="10" x="40" y="20" text="$once{ parent.lastname }" />
     
-    <view name="_miniIcons" x="153" valign="bottom" height="18">
+    <view name="_miniIcons" x="133" valign="bottom" height="18">
         
         <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
                    height="16" showhandcursor="false">
@@ -531,7 +578,7 @@
                     }
                 ]]>
             </handler>
-            <labelTooltip name="_text" text="" />
+            <labelTooltip name="_text" text="" labelid="1068" />
         </miniIcons>
         
         <miniIcons name="_denyShare" x="40" width="16" opacity="0.5"
@@ -544,7 +591,36 @@
             <labelTooltip labelid="1067" />
         </miniIcons>
         
-        <miniIcons name="_restartDevice" x="60" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
+        
+        <miniIcons name="_allowRemote" x="60" width="16" resource="participents_isactive" 
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to draw on the whiteboard
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        //Do it 
+                        if ($debug) Debug.write("Do add draw to it");
+                        parent.parent.setCanRemote.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1079" />
+        </miniIcons>
+        
+        <miniIcons name="_denyRemote" x="60" width="16" opacity="0.5"
+                   resource="participents_isactive" height="16" showhandcursor="true">
+            <handler name="onclick">
+                //Do it 
+                if ($debug) Debug.write("Do it");
+                parent.parent.setCanRemote.doCall();
+            </handler>
+            <labelTooltip labelid="1078" />
+        </miniIcons>
+        
+        
+        <miniIcons name="_restartDevice" x="80" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
             <handler name="onclick">
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
                 var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
@@ -554,14 +630,14 @@
             <labelTooltip labelid="610" />
         </miniIcons>
         
-        <view name="_loudness" x="80" >
+        <view name="_loudness" x="100" >
             <view x="0" y="0" name="loudness" resource="speaking" opacity="0.2"
                   onmouseover="" onmouseout="" >        
                 <labelTooltip inittwice="true" labelid="372" />
             </view>
         </view>    
         
-        <miniIcons name="_mute" x="60" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true" >
+        <miniIcons name="_mute" x="80" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true" >
             <handler name="onclick">
                 var obj = canvas._videocontainer.getVideoObjectByPublicSID(parent.parent.refObj.publicSID);
                 if (obj != null) {

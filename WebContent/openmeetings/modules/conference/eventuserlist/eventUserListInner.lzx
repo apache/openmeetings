@@ -221,6 +221,7 @@
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
                     	vList[i].refObj.canDraw = drawObject.canDraw;
                     	vList[i].refObj.canShare = drawObject.canShare;
+                    	vList[i].refObj.canRemote = drawObject.canRemote;
                     	vList[i].updateIconByMod();
                     	break;
                     }
