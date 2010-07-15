@@ -91,6 +91,7 @@
            
            this._showScreenSharing.doStart();
            
+           this._infoBox.setAttribute("visibility","hidden");
            this._zoombar.setAttribute("visibility","hidden");
            this._pause.setAttribute("visibility","hidden");
            this._close.setAttribute("visibility","hidden");
@@ -140,14 +141,14 @@
     
     <view name="_subcontent" width="${ parent.width }" visibility="hidden"
           y="20" height="${ parent.height - 48 }" clip="true">
-        
+    	
         <view name="_content">
             
             <videoObjectPlayScreenShare name="_video">
             	
             	<contextmenu>
 			
-					<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
+					<contextmenuitem caption="$once{ canvas.getLabelName(1087) }" 
 									 onselect="parent.parent.parent.pasteContent()" />
 		        
 		        </contextmenu>
@@ -466,7 +467,7 @@
 							}
 	                        
 	                        this.sendRemoteCursorEvent.tObject = tObject;
-	                        if (canvas.isAllowedToRemoteControl) {
+	                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
 	                            this.sendRemoteCursorEvent.doCall();
 	                        }
 	                        
@@ -749,7 +750,7 @@
     						if ($debug) Debug.write("tObject :: ",tObject,this.isWindows,this.isMac);
     						
                             this.sendRemoteCursorEvent.tObject = tObject;
-                            if (canvas.isAllowedToRemoteControl) {
+                            if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
                                 this.sendRemoteCursorEvent.doCall();
                             }
                         }
@@ -782,7 +783,7 @@
                         tObject["y"] = Math.round(y);
                         
                         this.sendRemoteCursorEvent.tObject = tObject;
-                        if (canvas.isAllowedToRemoteControl) {
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
                             
                             if ($debug) Debug.write("sendMousePosition ",x,y);
                             
@@ -817,7 +818,7 @@
                         tObject["y"] = Math.round(y);
                         
                         this.sendRemoteCursorEvent.tObject = tObject;
-                        if (canvas.isAllowedToRemoteControl) {
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
                             this.sendRemoteCursorEvent.doCall();
                         }
                     ]]>
@@ -838,7 +839,7 @@
                         tObject["y"] = Math.round(y);
                         
                         this.sendRemoteCursorEvent.tObject = tObject;
-                        if (canvas.isAllowedToRemoteControl) {
+                        if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
                             this.sendRemoteCursorEvent.doCall();
                         }
                     ]]>
@@ -868,11 +869,55 @@
         
     </view>    
     
+    <view name="_infoBox" x="0" visibility="hidden" >
+    	
+    	<view name="innerBox" height="${ parent.parent.height }" 
+    		  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToRemoteControl) ? true : false )) }">
+    		
+            <labelExplorerBox name="_infoBox" labelid="1088" 
+                  docking="true" resizeable="false" closable="true" valign="middle"
+                    x="0" height="380" width="170">
+                
+                <view x="4" resource="warning_icon_rsc" y="26" />
+            
+                <view y="22" width="$once{ parent.width - 35 }" height="130" x="30" >
+                    <labelText fontsize="10" fontstyle="bold" labelid="1086"
+                        multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+                </view>
+                
+                <view y="76" width="$once{ parent.width - 7 }" height="130" x="4" >
+                    <labelText fontsize="10" labelid="1085"
+                        multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+                </view>
+                
+                <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
+                       y="$once{ parent.height-24 }" onclick="this.parent.close();" />
+                       
+            </labelExplorerBox>  
+            
+        </view>
+        
+    </view>  
+
     <view name="_zoombar" x="20" visibility="hidden" y="${ parent.height-26 }">
         
         <method name="setDefaultZoom">
-            if (parent.initObject.VWidth > parent._subcontent.width) {
-                var newZoom = Math.round((parent._subcontent.width/parent.initObject.VWidth)*100);
+            if (parent.initObject.VWidth > (parent._subcontent.width-16) ) {
+                var newZoom = Math.round(( (parent._subcontent.width-16) /parent.initObject.VWidth)*100);
+                
+                if ($debug) Debug.write("newZoom ",newZoom);
+                
+                this._zoom.setSliderValue(newZoom);
+                
+                this._zoom.oninitialNumber.sendEvent(newZoom);
+            }
+            
+            this.setDefaultHeight();
+        </method>
+        
+        <method name="setDefaultHeight">
+            if (parent.initObject.VHeight > (parent._subcontent.height-16)) {
+                var newZoom = Math.round(( (parent._subcontent.height-16) /parent.initObject.VHeight)*100);
                 
                 if ($debug) Debug.write("newZoom ",newZoom);
                 
@@ -919,6 +964,7 @@
             if (!parent.isStarted) {
                 parent._initText.setAttribute("visibility","visible");
             } else {
+            	parent._infoBox.setAttribute("visibility","visible");
                 parent._zoombar.setAttribute("visibility","visible");
                 parent._zoombar.setDefaultZoom();
                 parent._close.setAttribute("visibility","visible");
