@@ -67,16 +67,19 @@
 	            canvas.becomeSuperModerator = false;
                 
                 parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
+                canvas.becomeSuperModerator = canvas.becomemoderator;
                 
-	            for (var i=0;i<value.length;i++) {
-                    
-                    if (value[i].user.user_id == canvas.user_id) {
-                        parent.setRoomValues.applyDefaultModeration = true;
-                        canvas.becomeSuperModerator = value[i].isSuperModerator;
-                        if ($debug) Debug.info("Make this User to an Moderator");
-                        break;
+                if (!canvas.becomeSuperModerator) {
+    	            for (var i=0;i<value.length;i++) {
+                        
+                        if (value[i].user.user_id == canvas.user_id) {
+                            parent.setRoomValues.applyDefaultModeration = true;
+                            canvas.becomeSuperModerator = value[i].isSuperModerator;
+                            if ($debug) Debug.info("Make this User to an Moderator");
+                            break;
+                        }
+                        
                     }
-                    
                 }
 	            
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);

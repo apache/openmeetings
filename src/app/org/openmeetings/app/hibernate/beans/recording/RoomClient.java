@@ -55,6 +55,7 @@ public class RoomClient {
 	private Boolean isSuperModerator = false;
 	private Boolean canDraw = false;
 	private Boolean canShare = false;
+	private Boolean canRemote = false;
 	private Date connectedSince;
 	private String formatedDate;
 	
@@ -685,6 +686,12 @@ public class RoomClient {
 	public void setInterviewPodId(Integer interviewPodId) {
 		this.interviewPodId = interviewPodId;
 	}
-	
+
+	public Boolean getCanRemote() {
+		return canRemote;
+	}
+	public void setCanRemote(Boolean canRemote) {
+		this.canRemote = canRemote;
+	}
 	
 }

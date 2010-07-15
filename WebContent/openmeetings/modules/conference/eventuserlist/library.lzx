@@ -13,6 +13,9 @@
 	<resource name="screen_allow_rsc" src="resources/background_small.png" />
     <resource name="screen_deny_rsc" src="resources/background_small_no.png" />
     
+    <resource name="remote_allow_rsc" src="resources/mouse_remote_control.png" />
+    <resource name="remote_deny_rsc" src="resources/mouse_remote_control_no.png" />
+    
     <include href="moderationMiniIconsEventUserList.lzx" />
     <include href="moderationMiniIcons.lzx" />
     <include href="eventUserListInner.lzx" />

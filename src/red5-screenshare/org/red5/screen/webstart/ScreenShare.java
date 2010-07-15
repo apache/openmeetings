@@ -826,6 +826,14 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             		
             	}
             	
+            } else if (action.equals("paste")) {
+            	
+            	Robot robot = new Robot();
+            	
+            	String paste = returnMap.get("paste").toString();
+            
+            	this.pressSpecialSign(paste, robot);
+            	
             }
             
             //KeyEvent.VK
@@ -839,7 +847,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     private void pressSpecialSign(String charValue, Robot instance)
     {
       Clipboard clippy = Toolkit.getDefaultToolkit().getSystemClipboard();
-      //Transferable clippysContent = clippy.getContents( null );
+      Transferable clippysContent = clippy.getContents( null );
       try{
 
 		 StringSelection selection = new StringSelection(charValue);
@@ -848,7 +856,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         
          logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
-         if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") > 0) {
+         if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 	    	 
         	 logger.debug("IS WINDOWS");
         	 
@@ -878,7 +886,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
       {
         ex.printStackTrace();
       }
-      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
+      clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
     }
     
     public void resultReceived( IPendingServiceCall call ) {

@@ -713,6 +713,7 @@ if (cItem == null) {
 	    if (drawObj.publicSID==canvas.publicSID) {
             canvas.setAttribute("isAllowedToDraw",drawObj.canDraw);
             canvas.setAttribute("isAllowedToScreenShare",drawObj.canShare);
+            canvas.setAttribute("isAllowedToRemoteControl",drawObj.canRemote);
         }
     ]]>
 </handler>

@@ -1172,6 +1172,21 @@
             </handler>   
         </netRemoteCallHib>
         
+        <netRemoteCallHib name="setCanRemote" funcname="whiteboardservice.setCanRemote"
+                       remotecontext="$once{ canvas.thishib }">
+            <attribute name="publicSID" value="" type="string" />
+            <attribute name="canRemote" value="true" type="boolean" />
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
+            <netparam><method name="getValue">return parent.canRemote;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("setCanRemote : ",value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
         <!--
             @deprecated It is not used anymore
         
@@ -1380,6 +1395,18 @@
                                    value.client.firstname + " " + value.client.lastname + " " +
                                    "[" + value.client.username + "] " +
                                    canvas.getLabelName(1070);
+                        
+                        new lz.errorPopup(canvas,{
+                                   labelid:691,error:txt
+                                });
+                    }
+                } else if (value.message[0]=='applyForRemote'){
+                    if (canvas.ismoderator) {
+                        if ($debug) Debug.write("Somebody wants to remote control screen ",value.client);
+                        var txt = canvas.getLabelName(692) + " " + 
+                                   value.client.firstname + " " + value.client.lastname + " " +
+                                   "[" + value.client.username + "] " +
+                                   canvas.getLabelName(1082);
                         
                         new lz.errorPopup(canvas,{
                                    labelid:691,error:txt

@@ -38,8 +38,13 @@
         if (canvas.ismoderator) {
             this._allowScreen.setAttribute("visibility","visible");
             this._allowScreen.isActive = false;
+            
+            this._allowRemote.setAttribute("visibility","visible");
+            this._allowRemote.isActive = false;
+            
             //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._denyScreen.setAttribute("visibility","hidden");
+            this._denyRemote.setAttribute("visibility","hidden");
         } else {
             if (canvas.isAllowedToScreenShare) {
                 this._allowScreen.setAttribute("visibility","visible");
@@ -49,6 +54,15 @@
             } else {
                 this._allowScreen.setAttribute("visibility","hidden");
                 this._denyScreen.setAttribute("visibility","visible");
+            }
+            
+            if (canvas.isAllowedToRemoteControl) {
+            	this._allowRemote.setAttribute("visibility","visible");
+            	this._allowRemote.isActive = true;
+            	this._denyRemote.setAttribute("visibility","hidden");
+            } else {
+            	this._allowRemote.setAttribute("visibility","hidden");
+            	this._denyRemote.setAttribute("visibility","visible");
             }
         }
         
@@ -121,7 +135,28 @@
         <labelTooltip labelid="1072" />
     </miniIcons>    
     
-    <miniIcons name="_allowDevice" x="60" width="40" height="16" opacity="0.5" 
+ 	<miniIcons name="_allowRemote" x="60" width="16" height="16" 
+               resource="remote_allow_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Remote: ",parent.parent.parent.refObj.publicSID);
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1081" />
+    </miniIcons>
+    
+    <miniIcons name="_denyRemote" x="60" width="16" height="16" opacity="0.5"
+               resource="remote_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Remote: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForRemote",null);
+        </handler>
+        <labelTooltip labelid="1080" />
+    </miniIcons>      
+          
+    
+    <miniIcons name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
                resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
@@ -139,7 +174,7 @@
         <labelTooltip labelid="687" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="60" width="40" height="16" 
+    <miniIcons name="_denyDevice" x="80" width="40" height="16" 
                resource="av_allow_rsc" showhandcursor="false">
         <handler name="onclick">
             if ($debug) Debug.write("DENY: ",canvas.publicSID);

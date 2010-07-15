@@ -393,6 +393,7 @@
                         list.subviews[i].setAttribute("connectedSince",records[i].connectedSince);
                         list.subviews[i].setAttribute("canDraw",records[i].canDraw);
                         list.subviews[i].setAttribute("canShare",records[i].canShare);
+                        list.subviews[i].setAttribute("canRemote",records[i].canRemote);
                         list.subviews[i].setAttribute("isMod",records[i].isMod);
                         list.subviews[i].isBroadcasting = records[i].isBroadcasting;
                         list.subviews[i].setAttribute("selfItem",records[i].selfItem);
@@ -417,6 +418,7 @@
                         list.subviews[i].setAttribute("connectedSince","");
                         list.subviews[i].setAttribute("canDraw",false);
                         list.subviews[i].setAttribute("canShare",false);
+                        list.subviews[i].setAttribute("canRemote",false);
                         list.subviews[i].setAttribute("isMod",false);
                         list.subviews[i].isBroadcasting = false;
                         list.subviews[i].setAttribute("selfItem",false);
@@ -477,6 +479,7 @@
                     item.setAttribute("connectedSince",this.renderList[item.itemId].connectedSince);
                     item.setAttribute("canDraw",this.renderList[item.itemId].canDraw);
                     item.setAttribute("canShare",this.renderList[item.itemId].canShare);
+                    item.setAttribute("canRemote",this.renderList[item.itemId].canRemote);
                     item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
                     item.setAttribute("isMod",this.renderList[item.itemId].isMod);
                     item.setAttribute("selfItem",this.renderList[item.itemId].selfItem);
@@ -509,6 +512,7 @@
                     item.setAttribute("connectedSince","");
                     item.setAttribute("canDraw",false);
                     item.setAttribute("canShare",false);
+                    item.setAttribute("canRemote",false);
                     item.setAttribute("isMod",false);
                     item.isBroadcasting = false;
                     item.setAttribute("selfItem",false);
@@ -555,6 +559,7 @@
                         vList[i].refObj.canDraw = drawObject.canDraw;
                         vList[i].canDraw = drawObject.canDraw;
                         vList[i].canShare = drawObject.canShare;
+                        vList[i].canRemote = drawObject.canRemote;
                         vList[i].updateIconByModScroll();
                         vList[i].updateModeratorIcons();
                         break;
@@ -567,6 +572,7 @@
                     if (vList[i].publicSID == drawObject.publicSID) {
                         parent._table.renderList[i].canDraw = drawObject.canDraw;
                         parent._table.renderList[i].canShare = drawObject.canShare;
+                        parent._table.renderList[i].canRemote = drawObject.canRemote;
                         break;
                     }
                 }

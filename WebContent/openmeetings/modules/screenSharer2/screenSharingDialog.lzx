@@ -144,7 +144,14 @@
         <view name="_content">
             
             <videoObjectPlayScreenShare name="_video">
-                
+            	
+            	<contextmenu>
+			
+					<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
+									 onselect="parent.parent.parent.pasteContent()" />
+		        
+		        </contextmenu>
+		                
                 <attribute name="doSendEvents" type="boolean" value="true" />
                 
                 <attribute name="idleDelegate" value="null" type="expression" />
@@ -156,6 +163,7 @@
                 
                 <attribute name="isMac" value="false" type="boolean"/>
                 <attribute name="isWindows" value="false" type="boolean"/>
+                <attribute name="isLinux" value="false" type="boolean"/>
                 
                 <handler name="oninit">
                 	
@@ -163,10 +171,12 @@
                 	
                 	if ($debug) Debug.write("osInfo :: ",osInfo);
                 	
-                	if (osInfo.toUpperCase().indexOf("MAC") > 0) {
+                	if (osInfo.indexOf("Mac") >= 0) {
                 		this.isMac = true;
-                	} else if (osInfo.toUpperCase().indexOf("WINDOWS") > 0) {
+                	} else if (osInfo.indexOf("Win") >= 0) {
                         this.isWindows = true;
+                    } else if (osInfo.indexOf("Linux") >= 0) {
+                        this.isLinux = true;
                     }
                     
                     if ($debug) Debug.write("this.isMac :: ",this.isMac);
@@ -174,6 +184,10 @@
                 	
                     this.idleDelegate = new LzDelegate( this, "sendMousePosition" );
                 </handler>
+                
+                <method name="pasteContent">
+                	if ($debug) Debug.write("pasteContent :: ");
+                </method>
                 
                 <handler name="onkeydown" reference="lz.Keys" args="k">
                 	<![CDATA[
@@ -346,6 +360,88 @@
                                         tObject["k"] = -1;
                                         tObject["c"] = "ä";
                                     } else if (k == 186) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+	                        	
+	                        } else if (this.isLinux) {
+	                        	
+	                        	if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 252) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 246) {
                                         tObject["k"] = -1;
                                         tObject["c"] = "ö";
                                     }
@@ -553,7 +649,89 @@
                                     
                                 }
                                 
-                            }
+                            } else if (this.isLinux) {
+	                        	
+	                        	if (downkeys.length==2 && downkeys[0]==16) {
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "*";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "'";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "_";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "?";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = ">";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "°";
+                                    } else if (k == 252) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "Ö";
+                                    }
+                                    
+                                    
+                                } else if (downkeys.length==2 && downkeys[0]==18) {
+                                    
+                                    if (k == 50) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "@";
+                                    } else if (k == 55) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "|";
+                                    }
+                                    
+                                } else {
+                                    
+                                    if (k == 187) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "+";
+                                    } else if (k == 51) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "#";
+                                    } else if (k == 189) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "-";
+                                    } else if (k == 222) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "`";
+                                    } else if (k == 223) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ß";
+                                    } else if (k == 188) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "<";
+                                    } else if (k == 176) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "^";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ü";
+                                    } else if (k == 228) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ä";
+                                    } else if (k == 246) {
+                                        tObject["k"] = -1;
+                                        tObject["c"] = "ö";
+                                    }
+                                    
+                                }
+	                        	
+	                        }
     							
     						if (k == 18 || k == 17) {
     							return;
