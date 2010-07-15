@@ -103,7 +103,7 @@
                     } else {
                     	new lz.labelerrorPopup(canvas,{errorlabelid:682});
                     }
-                    //parent.parent.setCanDraw.doCall();
+                    //parent.parent.etCanDraw.doCall();
                 }
             ]]>
         </handler>

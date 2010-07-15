@@ -3243,4 +3243,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1077" name="room administration">
     <value>Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.</value>
   </string>
+  <string id="1078" name="user list">
+    <value>Allow Remote Control (During Screen Sharing)</value>
+  </string>
+  <string id="1079" name="user list">
+    <value>Deny Remote Control (During Screen Sharing)</value>
+  </string>
+  <string id="1080" name="user list">
+    <value>Apply for right to Remote Control Screen (During Screen Sharing)</value>
+  </string>
+  <string id="1081" name="user list">
+    <value>You are allowed to Remote Control Screen (During Screen Sharing)</value>
+  </string>
+  <string id="1082" name="apply for remote control">
+    <value>would like to remote control screen.</value>
+  </string>
+  <string id="1083" name="user list">
+    <value>User is Moderator, he can do anything! [Remote Desktop Control]</value>
+  </string>
+  <string id="1084" name="user list">
+    <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
+  </string>
 </language>
