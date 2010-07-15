@@ -846,18 +846,30 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	        
          clippy.setContents( selection,selection  );
         
-    	 //Macintosh simulate Insert
-    	 instance.keyPress( 157 );
-         instance.keyPress( 86 );
-         instance.keyRelease( 86 );    
-         instance.keyRelease( 157 );
-        //drückt STRG+V == einfügen
-    	 /*
-    	instance.keyPress( KeyEvent.VK_CONTROL );
-        instance.keyPress(KeyEvent.VK_V);
-        instance.keyRelease(KeyEvent.VK_V);    
-        instance.keyRelease( KeyEvent.VK_CONTROL );
-        */
+         logger.debug("os.name :: "+System.getProperty("os.name"));
+    	 
+         if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") > 0) {
+	    	 
+        	 logger.debug("IS WINDOWS");
+        	 
+        	 //drückt STRG+V == einfügen
+        	 instance.keyPress( KeyEvent.VK_CONTROL );
+             instance.keyPress(KeyEvent.VK_V);
+             instance.keyRelease(KeyEvent.VK_V);    
+             instance.keyRelease( KeyEvent.VK_CONTROL );
+        	 
+         } else {
+        	 
+        	 logger.debug("IS MAC");
+        	 
+        	 //Macintosh simulate Insert
+        	 instance.keyPress( 157 );
+	         instance.keyPress( 86 );
+	         instance.keyRelease( 86 );    
+	         instance.keyRelease( 157 );
+	         
+         }
+        
           //oder wenn das keine Exception wirft
     	 /*instance.keyPress( KeyEvent.VK_PASTE );
     	 instance.keyRelease( KeyEvent.VK_PASTE );*/
