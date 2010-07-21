@@ -171,6 +171,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         public String label871 = "Start Recording";
         public String label872 = "Stop Recording";
         public String label878 = "Stop Sharing";
+        
+        public String label1089 = "Quality of the ScreenShare: -";
+        public String label1090 = "Very high Quality -";
+        public String label1091 = "High Quality -";
+        public String label1092 = "Medium Quality -";
+        public String label1093 = "Low Quality -";
 
         public Float imgQuality = new Float(0.40);
         
@@ -238,6 +244,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                         instance.label872 = textArray[16];
                                         instance.label878 = textArray[17];
                                         
+                                        instance.label1089 = textArray[18];
+                                        instance.label1090 = textArray[19];
+                                        instance.label1091 = textArray[20];
+                                        instance.label1092 = textArray[21];
+                                        instance.label1093 = textArray[22];
+                                        
                                 }
         
                         } else {
@@ -260,7 +272,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     // Wrapper - Constructor for testing
     //
     // ------------------------------------------------------------------------
-        public ScreenShare(String host, String app, Integer port, String publishName, Long organization_id)
+    public ScreenShare(String host, String app, Integer port, String publishName, Long organization_id)
         {
                 instance = new ScreenShare();
 
@@ -621,8 +633,6 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
 			
 		}
-		
-		
 		
 	}
 
@@ -1042,7 +1052,9 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
     public void pushVideo( int len, byte[] video, long ts) throws IOException {
 
-                if (!startPublish) return;
+    	//logger.debug("PUSH VIDEO "+ts);
+    	
+        if (!startPublish) return;
 
         if ( buffer == null ) {
             buffer = ByteBuffer.allocate( 1024 );
@@ -1077,315 +1089,295 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
         private final class CaptureScreen extends Object implements Runnable
         {
-                private volatile int x = 0;
-                private volatile int y = 0;
-                private volatile int resizeX;
-                private volatile int resizeY;
+            private volatile int x = 0;
+            private volatile int y = 0;
+            private volatile int resizeX;
+            private volatile int resizeY;
+            
+            private volatile int width = resizeX; 	//320
+            private volatile int height = resizeY; 	//240
+            
+            private int timeBetweenFrames = 1000; //frameRate
+            
+            private volatile long timestamp = 0;
+
+            private volatile boolean active = true;
+            private volatile boolean stopped = false;
+            private byte[] previousItems = null;
+
+            // ------------------------------------------------------------------------
+            //
+            // Constructor
+            //
+            // ------------------------------------------------------------------------
+
+
+            public CaptureScreen(final int x, final int y, final int width, final int height,int resizeX,int resizeY)
+            {
+            	
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.resizeX = resizeX;
+                this.resizeY = resizeY;
                 
-                private volatile int width = resizeX; 	//320
-                private volatile int height = resizeY; 	//240
-                
-               
-                
-                private volatile long timestamp = 0;
-
-                private volatile boolean active = true;
-                private volatile boolean stopped = false;
-                private byte[] previousItems = null;
-
-                // ------------------------------------------------------------------------
-                //
-                // Constructor
-                //
-                // ------------------------------------------------------------------------
-
-
-                public CaptureScreen(final int x, final int y, final int width, final int height,int resizeX,int resizeY)
-                {
-                        this.x = x;
-                        this.y = y;
-                        this.width = width;
-                        this.height = height;
-                        this.resizeX = resizeX;
-                        this.resizeY = resizeY;
-                        
+                if (VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1090)) {
+                	timeBetweenFrames = 600;
+                } else {
+                	timeBetweenFrames = 1000;
+                }
+                    
 
                 logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
 
-                }
+            }
 
 
-                // ------------------------------------------------------------------------
-                //
-                // Public
-                //
-                // ------------------------------------------------------------------------
+            // ------------------------------------------------------------------------
+            //
+            // Public
+            //
+            // ------------------------------------------------------------------------
 
-                public void setOrigin(final int x, final int y)
-                {
-                        this.x = x;
-                        this.y = y;
-                }
+            public void setOrigin(final int x, final int y) {
+                this.x = x;
+                this.y = y;
+            }
 
+            public void start() {
+                stopped = false;
+            }
 
-                public void start()
-                {
-                        stopped = false;
-                }
+            public void stop() {
+                stopped = true;
+            }
 
+            public void release() {
+                active = false;
+            }
+            
+            public void resetBuffer() {
+                this.previousItems = null;
+            }
 
-                public void stop()
-                {
-                        stopped = true;
-                }
+            // ------------------------------------------------------------------------
+            //
+            // Thread loop
+            //
+            // ------------------------------------------------------------------------
 
-                public void release()
-                {
-                        active = false;
-                }
-                
-                public void resetBuffer() {
-                        this.previousItems = null;
-                }
+            public void run()
+            {
+                final int blockWidth = 32;
+                final int blockHeight = 32;
 
+                int frameCounter = 0;
 
-                // ------------------------------------------------------------------------
-                //
-                // Thread loop
-                //
-                // ------------------------------------------------------------------------
+                int orig_width = width;
+                int orig_height = height;
+               
+                try {
+                    Robot robot = new Robot();
 
-                public void run()
-                {
-                        final int blockWidth = 32;
-                        final int blockHeight = 32;
+                    this.previousItems = null;
+                    
+                    while (active) {
+                    	
+                        final long ctime = System.currentTimeMillis();
+                        
+                        width = orig_width;
+                        height = orig_height;
+                        
+                        BufferedImage image = robot.createScreenCapture(new Rectangle(x, y, width, height));
+                        
+                        int width_new = resizeX;
+                    	int height_new = resizeY;
+                        width = resizeX;
+                        height = resizeY; 
+                    	//Resize to 640*480
+                    	// Create new (blank) image of required (scaled) size
+                    	BufferedImage image_raw = new BufferedImage(width_new, height_new, BufferedImage.TYPE_INT_RGB);    
+                    	
+                    	
+                    	Graphics2D graphics2D = image_raw.createGraphics();
+                    	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                    	graphics2D.drawImage(image, 0, 0, width_new, height_new, null);
+                    	graphics2D.dispose();
+                    		
+                    	//End resize
+                        
+                        int scaledWidth = width;
+                        int scaledHeight = height;
+                        
+                        byte[] current = toBGR(image_raw);
+                        /* *
+                            if (scaleFactor != 1F) {
+                                    
+                                    logger.debug("Calc new Scaled Instance ",scaleFactor);
+                                    
+                                    scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
+                                    scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
+                                    
+                                    Image img = image_raw.getScaledInstance(scaledWidth,
+                                                                                    scaledHeight,Image.SCALE_SMOOTH);
+                                    
+                                    BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
+                                    
+                                    Graphics2D biContext = image_scaled.createGraphics();
+                                    biContext.drawImage(img, 0, 0, null);
+                                    current = toBGR(image_scaled);
+                            } else {
+                                    current = toBGR(image_raw);
+                            }
+                     	* */
+                        
+                        try {
+                    		//timestamp += (1000000 / timeBetweenFrames);
+                        	timestamp += timeBetweenFrames;
 
-                        final int timeBetweenFrames = 1000; //frameRate
+                            //logger.debug("timestamp :: "+timestamp);
+                            
+                            final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
+                            pushVideo( screenBytes.length, screenBytes, timestamp);
+                            this.previousItems = current;
 
-                        int frameCounter = 0;
-
-                        int orig_width = width;
-                        int orig_height = height;
-                       
-                       
-                        try
-                        {
-                                Robot robot = new Robot();
-
-                                this.previousItems = null;
-                                
-                                while (active)
-                                {
-                                        final long ctime = System.currentTimeMillis();
-                                        
-                                        
-                                        width = orig_width;
-                                        height = orig_height;
-                                        
-                                        BufferedImage image = robot.createScreenCapture(new Rectangle(x, y, width, height));
-                                        
-                                        int width_new = resizeX;
-                                    	int height_new = resizeY;
-                                        width = resizeX;
-                                        height = resizeY; 
-                                    	//Resize to 640*480
-                                    	// Create new (blank) image of required (scaled) size
-                                    	BufferedImage image_raw = new BufferedImage(width_new, height_new, BufferedImage.TYPE_INT_RGB);    
-                                    	
-                                    	
-                                    	Graphics2D graphics2D = image_raw.createGraphics();
-                                    	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                                    	graphics2D.drawImage(image, 0, 0, width_new, height_new, null);
-                                    	graphics2D.dispose();
-                                    		
-                                    	//End resize
-                                        
-                                        int scaledWidth = width;
-                                        int scaledHeight = height;
-                                        
-                                        byte[] current = toBGR(image_raw);
-//                                        if (scaleFactor != 1F) {
-//                                                
-//                                                logger.debug("Calc new Scaled Instance ",scaleFactor);
-//                                                
-//                                                scaledWidth = Float.valueOf(Math.round(width*scaleFactor)).intValue();
-//                                                scaledHeight = Float.valueOf(Math.round(height*scaleFactor)).intValue();
-//                                                
-//                                                Image img = image_raw.getScaledInstance(scaledWidth,
-//                                                                                                scaledHeight,Image.SCALE_SMOOTH);
-//                                                
-//                                                BufferedImage image_scaled = new BufferedImage(scaledWidth, scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
-//                                                
-//                                                Graphics2D biContext = image_scaled.createGraphics();
-//                                                biContext.drawImage(img, 0, 0, null);
-//                                                current = toBGR(image_scaled);
-//                                        } else {
-//                                                current = toBGR(image_raw);
-//                                        }
-                                        
-                                        try
-                                        {
-                                                timestamp += (1000000 / timeBetweenFrames);
-
-                                                final byte[] screenBytes = encode(current, this.previousItems, blockWidth, blockHeight, scaledWidth, scaledHeight);
-                                                pushVideo( screenBytes.length, screenBytes, timestamp);
-                                                this.previousItems = current;
-
-                                                if (++frameCounter % 100 == 0) this.previousItems = null;
-                                        }
-                                        catch (Exception e)
-                                        {
-                                                e.printStackTrace();
-                                        }
-
-                                        final int spent = (int) (System.currentTimeMillis() - ctime);
-
-                                        sendCursorStatus();
-                                        
-                                        Thread.sleep(Math.max(0, timeBetweenFrames - spent));
-                                }
-                        }
-                        catch (Exception e)
-                        {
-                                e.printStackTrace();
-                        }
-                }
-
-
-                // ------------------------------------------------------------------------
-                //
-                // Private
-                //
-                // ------------------------------------------------------------------------
-
-                private byte[] toBGR(BufferedImage image)
-                {
-                        final int width = image.getWidth();
-                        final int height = image.getHeight();
-
-                        byte[] buf = new byte[3 * width * height];
-
-                        final DataBuffer buffer = image.getData().getDataBuffer();
-
-                        for (int y = 0; y < height; y++)
-                        {
-                                for (int x = 0; x < width; x++)
-                                {
-                                        final int rgb = buffer.getElem(y * width + x);
-                                        final int offset = 3 * (y * width + x);
-
-                                        buf[offset + 0] = (byte) (rgb & 0xFF);
-                                        buf[offset + 1] = (byte) ((rgb >> 8) & 0xFF);
-                                        buf[offset + 2] = (byte) ((rgb >> 16) & 0xFF);
-                                }
+                            if (++frameCounter % 100 == 0) this.previousItems = null;
+                            
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
-                        return buf;
+                        final int spent = (int) (System.currentTimeMillis() - ctime);
+
+                        sendCursorStatus();
+                        
+                        //logger.debug("Sleep :: "+(Math.max(0, timeBetweenFrames - spent)));
+                        
+                        Thread.sleep(Math.max(0, timeBetweenFrames - spent));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            // ------------------------------------------------------------------------
+            //
+            // Private
+            //
+            // ------------------------------------------------------------------------
+
+            private byte[] toBGR(BufferedImage image) {
+                final int width = image.getWidth();
+                final int height = image.getHeight();
+
+                byte[] buf = new byte[3 * width * height];
+
+                final DataBuffer buffer = image.getData().getDataBuffer();
+
+                for (int y = 0; y < height; y++){
+                	
+                    for (int x = 0; x < width; x++) {
+                        final int rgb = buffer.getElem(y * width + x);
+                        final int offset = 3 * (y * width + x);
+
+                        buf[offset + 0] = (byte) (rgb & 0xFF);
+                        buf[offset + 1] = (byte) ((rgb >> 8) & 0xFF);
+                        buf[offset + 2] = (byte) ((rgb >> 16) & 0xFF);
+                    }
+                    
                 }
 
+                return buf;
+            }
 
-                private byte[] encode(final byte[] current, final byte[] previous, final int blockWidth, final int blockHeight, final int width, final int height) throws Exception
-                {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
+            private byte[] encode(final byte[] current, final byte[] previous, final int blockWidth, final int blockHeight, final int width, final int height) throws Exception {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
 
-                        if (previous == null)
-                        {
-                                baos.write(getTag(0x01, 0x03));         // keyframe (all cells)
+                if (previous == null) {
+                    baos.write(getTag(0x01, 0x03));         // keyframe (all cells)
+                } else {
+                    baos.write(getTag(0x02, 0x03));         // frame (changed cells)
+                }
+
+                // write header
+                final int wh = width + ((blockWidth / 16 - 1) << 12);
+                final int hh = height + ((blockHeight / 16 - 1) << 12);
+
+                writeShort(baos, wh);
+                writeShort(baos, hh);
+
+                // write content
+                int y0 = height;
+                int x0 = 0;
+                int bwidth = blockWidth;
+                int bheight = blockHeight;
+
+                while (y0 > 0) {
+                    bheight = Math.min(y0, blockHeight);
+                    y0 -= bheight;
+
+                    bwidth = blockWidth;
+                    x0 = 0;
+
+                    while (x0 < width) {
+                        bwidth = (x0 + blockWidth > width) ? width - x0 : blockWidth;
+
+                        final boolean changed = isChanged(current, previous, x0, y0, bwidth, bheight, width, height);
+
+                        if (changed) {
+                            ByteArrayOutputStream blaos = new ByteArrayOutputStream(4 * 1024);
+
+                            DeflaterOutputStream dos = new DeflaterOutputStream(blaos);
+
+                            for (int y = 0; y < bheight; y++) {
+                                dos.write(current, 3 * ((y0 + bheight - y - 1) * width + x0), 3 * bwidth);
+                            }
+
+                            dos.finish();
+
+                            final byte[] bbuf = blaos.toByteArray();
+                            final int written = bbuf.length;
+
+                            // write DataSize
+                            writeShort(baos, written);
+                            // write Data
+                            baos.write(bbuf, 0, written);
+                        } else {
+                            // write DataSize
+                            writeShort(baos, 0);
                         }
-                        else
-                        {
-                                baos.write(getTag(0x02, 0x03));         // frame (changed cells)
-                        }
-
-                        // write header
-                        final int wh = width + ((blockWidth / 16 - 1) << 12);
-                        final int hh = height + ((blockHeight / 16 - 1) << 12);
-
-                        writeShort(baos, wh);
-                        writeShort(baos, hh);
-
-                        // write content
-                        int y0 = height;
-                        int x0 = 0;
-                        int bwidth = blockWidth;
-                        int bheight = blockHeight;
-
-                        while (y0 > 0)
-                        {
-                                bheight = Math.min(y0, blockHeight);
-                                y0 -= bheight;
-
-                                bwidth = blockWidth;
-                                x0 = 0;
-
-                                while (x0 < width)
-                                {
-                                        bwidth = (x0 + blockWidth > width) ? width - x0 : blockWidth;
-
-                                        final boolean changed = isChanged(current, previous, x0, y0, bwidth, bheight, width, height);
-
-                                        if (changed)
-                                        {
-                                                ByteArrayOutputStream blaos = new ByteArrayOutputStream(4 * 1024);
-
-                                                DeflaterOutputStream dos = new DeflaterOutputStream(blaos);
-
-                                                for (int y = 0; y < bheight; y++)
-                                                {
-                                                        dos.write(current, 3 * ((y0 + bheight - y - 1) * width + x0), 3 * bwidth);
-                                                }
-
-                                                dos.finish();
-
-                                                final byte[] bbuf = blaos.toByteArray();
-                                                final int written = bbuf.length;
-
-                                                // write DataSize
-                                                writeShort(baos, written);
-                                                // write Data
-                                                baos.write(bbuf, 0, written);
-                                        }
-                                        else
-                                        {
-                                                // write DataSize
-                                                writeShort(baos, 0);
-                                        }
-                                        x0 += bwidth;
-                                }
-                        }
-
-                        return baos.toByteArray();
+                        x0 += bwidth;
+                    }
                 }
 
-                private void writeShort(OutputStream os, final int n) throws Exception
-                {
-                        os.write((n >> 8) & 0xFF);
-                        os.write((n >> 0) & 0xFF);
+                return baos.toByteArray();
+            }
+
+            private void writeShort(OutputStream os, final int n) throws Exception {
+                os.write((n >> 8) & 0xFF);
+                os.write((n >> 0) & 0xFF);
+            }
+
+            public boolean isChanged(final byte[] current, final byte[] previous, final int x0, final int y0, final int blockWidth, final int blockHeight, final int width, final int height) {
+                if (previous == null) return true;
+
+                for (int y = y0, ny = y0 + blockHeight; y < ny; y++) {
+                    final int foff = 3 * (x0 + width * y);
+                    final int poff = 3 * (x0 + width * y);
+
+                    for (int i = 0, ni = 3 * blockWidth; i < ni; i++) {
+                            if (current[foff + i] != previous[poff + i]) return true;
+                    }
                 }
 
-                public boolean isChanged(final byte[] current, final byte[] previous, final int x0, final int y0, final int blockWidth, final int blockHeight, final int width, final int height)
-                {
-                        if (previous == null) return true;
+                return false;
+            }
 
-                        for (int y = y0, ny = y0 + blockHeight; y < ny; y++)
-                        {
-                                final int foff = 3 * (x0 + width * y);
-                                final int poff = 3 * (x0 + width * y);
-
-                                for (int i = 0, ni = 3 * blockWidth; i < ni; i++)
-                                {
-                                        if (current[foff + i] != previous[poff + i]) return true;
-                                }
-                        }
-
-                        return false;
-                }
-
-
-                public int getTag(final int frame, final int codec)
-                {
-                        return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
-                }
+            public int getTag(final int frame, final int codec) {
+                return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
+            }
         }
 }
 

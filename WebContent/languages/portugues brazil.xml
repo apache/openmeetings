@@ -3264,5 +3264,32 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1084" name="user list">
     <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
   </string>
+  <string id="1085" name="screen-sharer">
+    <value></value>
+  </string>
+  <string id="1086" name="screen-sharer">
+    <value></value>
+  </string>
+  <string id="1087" name="screen-sharer">
+    <value></value>
+  </string>
+  <string id="1088" name="screen-sharer">
+    <value></value>
+  </string>
+  <string id="1089" name="screen-sharer-quality">
+    <value>Quality of the ScreenShare:</value>
+  </string>
+  <string id="1090" name="screen-sharer-quality">
+    <value>Very high Quality</value>
+  </string>
+  <string id="1091" name="screen-sharer-quality">
+    <value>High Quality</value>
+  </string>
+  <string id="1092" name="screen-sharer-quality">
+    <value>Medium Quality</value>
+  </string>
+  <string id="1093" name="screen-sharer-quality">
+    <value>Low Quality</value>
+  </string>
 </language>
 

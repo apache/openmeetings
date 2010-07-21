@@ -871,6 +871,7 @@
     
     <view name="_infoBox" x="0" visibility="hidden" >
     	
+    	<!--
     	<view name="innerBox" height="${ parent.parent.height }" 
     		  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToRemoteControl) ? true : false )) }">
     		
@@ -896,6 +897,7 @@
             </labelExplorerBox>  
             
         </view>
+         -->
         
     </view>  
 

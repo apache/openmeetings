@@ -222,18 +222,18 @@ public class VirtualScreen {
 		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.jVScreenHeightSpin);
 		
 		
-		String[] selectResize = { "High Quality", "Medium Quality", "Low Quality" };
+		String[] selectResize = { ScreenShareRTMPT.instance.label1090,ScreenShareRTMPT.instance.label1091,ScreenShareRTMPT.instance.label1092,ScreenShareRTMPT.instance.label1093 };
 		VirtualScreenBean.vScreenResizeX = 640;
 		VirtualScreenBean.vScreenResizeY = 400;
 		
 		ScreenShareRTMPT.instance.vscreenResizeLabel = new JLabel();
-		ScreenShareRTMPT.instance.vscreenResizeLabel.setText("Quality of the ScreenShareRTMPT:");
+		ScreenShareRTMPT.instance.vscreenResizeLabel.setText(ScreenShareRTMPT.instance.label1089);
 		ScreenShareRTMPT.instance.vscreenResizeLabel.setBounds(250, 300, 200,24 );
 		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.vscreenResizeLabel);
 		
 		JComboBox comboResize  = new JComboBox(selectResize);	
 		comboResize.setBounds(250, 330, 200, 24);
-		comboResize.setSelectedIndex(1);
+		comboResize.setSelectedIndex(2);
 		comboResize.addActionListener(new GetResizeChoice()); 
 		
 		ScreenShareRTMPT.instance.jVScreenResizeMode = comboResize;
@@ -296,7 +296,7 @@ public class VirtualScreen {
 		
 		logger.debug("calcRescaleFactors -- ");
 		
-		if(VirtualScreenBean.vScreenScaleFactor == "High Quality")
+		if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShareRTMPT.instance.label1090))
         {
         	logger.debug("resize: X:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
         						" Y:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue());
@@ -305,7 +305,16 @@ public class VirtualScreen {
         	VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue();
         	updateVScreenBounds();
         }
-        else if(VirtualScreenBean.vScreenScaleFactor == "Medium Quality")
+        else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShareRTMPT.instance.label1091))
+        {
+        	logger.debug("resize: X:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
+        						" Y:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue());
+        	
+        	VirtualScreenBean.vScreenResizeX = Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue();
+        	VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue();
+        	updateVScreenBounds();
+        }
+        else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShareRTMPT.instance.label1092))
         {
         	logger.debug("resize: X:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()/2+
         						" Y:"+Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue()/2);
@@ -314,7 +323,7 @@ public class VirtualScreen {
         	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue())/2;
         	updateVScreenBounds();
         }
-        else if(VirtualScreenBean.vScreenScaleFactor == "Low Quality")
+        else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShareRTMPT.instance.label1093))
         {
         	logger.debug("resize: X:"+(Integer.valueOf(ScreenShareRTMPT.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3+
         						" Y:"+(Integer.valueOf(ScreenShareRTMPT.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3);

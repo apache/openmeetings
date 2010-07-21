@@ -168,6 +168,12 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				Fieldlanguagesvalues fValue872 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(872L, language_id);
 				Fieldlanguagesvalues fValue878 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(878L, language_id);
 				
+				Fieldlanguagesvalues fValue1089 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1089L, language_id);
+				Fieldlanguagesvalues fValue1090 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1090L, language_id);
+				Fieldlanguagesvalues fValue1091 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1091L, language_id);
+				Fieldlanguagesvalues fValue1092 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1092L, language_id);
+				Fieldlanguagesvalues fValue1093 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1093L, language_id);
+				
 				String label_viewer = "Viewer";
 				String label_sharer = "Sharer";
 				
@@ -194,7 +200,12 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 										fValue870.getValue()+";"+ //14
 										fValue871.getValue()+";"+ //15
 										fValue872.getValue()+";"+  //16
-										fValue878.getValue()+";"  //16
+										fValue878.getValue()+";"+  //17
+										fValue1089.getValue()+";"+  //18
+										fValue1090.getValue()+";"+  //19
+										fValue1091.getValue()+";"+  //20
+										fValue1092.getValue()+";"+  //21
+										fValue1093.getValue()+";"  //22
 										;
 				
 				}catch(Exception e){

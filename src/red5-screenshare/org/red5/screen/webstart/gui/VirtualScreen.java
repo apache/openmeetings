@@ -222,18 +222,18 @@ public class VirtualScreen {
 		ScreenShare.instance.t.add(ScreenShare.instance.jVScreenHeightSpin);
 		
 		
-		String[] selectResize = { "High Quality", "Medium Quality", "Low Quality" };
+		String[] selectResize = { ScreenShare.instance.label1090, ScreenShare.instance.label1091, ScreenShare.instance.label1092, ScreenShare.instance.label1093 };
 		VirtualScreenBean.vScreenResizeX = 640;
 		VirtualScreenBean.vScreenResizeY = 400;
 		
 		ScreenShare.instance.vscreenResizeLabel = new JLabel();
-		ScreenShare.instance.vscreenResizeLabel.setText("Quality of the ScreenShare:");
+		ScreenShare.instance.vscreenResizeLabel.setText(ScreenShare.instance.label1089);
 		ScreenShare.instance.vscreenResizeLabel.setBounds(250, 300, 200,24 );
 		ScreenShare.instance.t.add(ScreenShare.instance.vscreenResizeLabel);
 		
 		JComboBox comboResize  = new JComboBox(selectResize);	
 		comboResize.setBounds(250, 330, 200, 24);
-		comboResize.setSelectedIndex(1);
+		comboResize.setSelectedIndex(2);
 		comboResize.addActionListener(new GetResizeChoice()); 
 		
 		ScreenShare.instance.jVScreenResizeMode = comboResize;
@@ -261,8 +261,16 @@ public class VirtualScreen {
 	void calcRescaleFactors() {
 		
 		logger.debug("calcRescaleFactors -- ");
-		
-		if(VirtualScreenBean.vScreenScaleFactor == "High Quality")
+		if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1090))
+        {
+			logger.debug("resize: X:"+Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
+					" Y:"+Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue());
+
+			VirtualScreenBean.vScreenResizeX = Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue();
+			VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue();
+			updateVScreenBounds();
+        }
+		else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1091))
         {
         	logger.debug("resize: X:"+Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()+
         						" Y:"+Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue());
@@ -271,7 +279,7 @@ public class VirtualScreen {
         	VirtualScreenBean.vScreenResizeY = Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue();
         	updateVScreenBounds();
         }
-        else if(VirtualScreenBean.vScreenScaleFactor == "Medium Quality")
+        else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1092))
         {
         	logger.debug("resize: X:"+Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()/2+
         						" Y:"+Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue()/2);
@@ -280,7 +288,7 @@ public class VirtualScreen {
         	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue())/2;
         	updateVScreenBounds();
         }
-        else if(VirtualScreenBean.vScreenScaleFactor == "Low Quality")
+        else if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1093))
         {
         	logger.debug("resize: X:"+(Integer.valueOf(ScreenShare.instance.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3+
         						" Y:"+(Integer.valueOf(ScreenShare.instance.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3);
