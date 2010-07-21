@@ -56,6 +56,9 @@ public class UploadHandler extends HttpServlet {
 		fileExtensions.put("ext11", ".xls");
 		fileExtensions.put("ext12", ".sxi");
 		fileExtensions.put("ext13", ".pptx");
+		fileExtensions.put("ext14", ".docx");
+		fileExtensions.put("ext15", ".xlsx");
+		
 
 		pdfExtensions.put("ext1", ".pdf");
 		pdfExtensions.put("ext2", ".ps"); //PostScript
