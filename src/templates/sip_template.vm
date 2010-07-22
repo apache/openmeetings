@@ -51,6 +51,11 @@ function getBrowserInfo() {
 	return navigator.userAgent;
 }
 
+function getBrowserLang() {
+	//alert(navigator.userAgent);
+	return navigator.language;
+}
+
 </script>
 	
 <style type="text/css">

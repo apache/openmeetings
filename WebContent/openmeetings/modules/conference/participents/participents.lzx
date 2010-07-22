@@ -306,10 +306,12 @@
                 this._miniIcons._canDraw._text.setAttribute("text","");
                 this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
                 
+                this._miniIcons._allowShare.setAttribute("visibility","visible");
                 this._miniIcons._allowShare.setAttribute("showhandcursor",false);
                 this._miniIcons._allowShare._text.setAttribute("text","");
                 this._miniIcons._denyShare.setAttribute("visibility","hidden");
                 
+                this._miniIcons._allowRemote.setAttribute("visibility","visible");
                 this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
                 this._miniIcons._allowRemote._text.setAttribute("text","");
                 this._miniIcons._denyRemote.setAttribute("visibility","hidden");

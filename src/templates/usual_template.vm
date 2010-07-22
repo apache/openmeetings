@@ -46,6 +46,11 @@ function getBrowserInfo() {
 	return navigator.userAgent;
 }
 
+function getBrowserLang() {
+	//alert(navigator.userAgent);
+	return navigator.language;
+}
+
 function getAppletStatus(){
     return false;
 }

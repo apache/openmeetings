@@ -3359,4 +3359,13 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1093" name="screen-sharer-quality">
     <value>Low Quality</value>
   </string>
+  <string id="1094" name="keyboard-input">
+    <value>en_US</value>
+  </string>
+  <string id="1095" name="keyboard-input">
+    <value>de_DE</value>
+  </string>
+  <string id="1096" name="keyboard-input">
+    <value>Keyboard:</value>
+  </string>
 </language>
