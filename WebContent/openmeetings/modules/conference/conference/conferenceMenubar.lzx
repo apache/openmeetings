@@ -94,7 +94,14 @@
 	                    }
 	                ]]>
 	            </handler> 
-	            
+	            <_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }">
+	                <handler name="onselect" args="sel">
+	                	canvas.thishib.closeRoom.room_id = hib.currentroomid;
+	                	canvas.thishib.closeRoom.isClosed = true;
+	                    canvas.thishib.closeRoom.doCall();
+	                </handler>
+	            </_labelMenuItem>
+	            <menuseparator/>
 	            <_labelMenuItem labelid="213" command="cmd_invitation" />
 	            <menuseparator/> 
 	            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
@@ -208,6 +215,14 @@
 	        </_labelMenu> 
 	        
 	        <_labelMenu labelid="635" width="250">
+	            <_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }">
+	                <handler name="onselect" args="sel">
+	                	canvas.thishib.closeRoom.room_id = hib.currentroomid;
+	                	canvas.thishib.closeRoom.isClosed = true;
+	                    canvas.thishib.closeRoom.doCall();
+	                </handler>
+	            </_labelMenuItem>
+	            <menuseparator/> 
 	            <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
 	            <menuseparator/> 
 	            <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">
@@ -281,6 +296,14 @@
               visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
             
             <_labelMenu labelid="635" width="250">
+            	<_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }">
+	                <handler name="onselect" args="sel">
+	                	canvas.thishib.closeRoom.room_id = hib.currentroomid;
+	                	canvas.thishib.closeRoom.isClosed = true;
+	                    canvas.thishib.closeRoom.doCall();
+	                </handler>
+	            </_labelMenuItem>
+	            <menuseparator/>
                 <_labelMenuItem labelid="213" command="cmd_invitation" enabled="${ canvas.ismoderator }" />
                 <menuseparator/> 
                 <_labelMenuItem labelid="239" enabled="${ canvas.ismoderator }">

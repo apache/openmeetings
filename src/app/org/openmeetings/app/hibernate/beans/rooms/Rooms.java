@@ -65,6 +65,9 @@ public class Rooms {
 	private String conferencePin;
 	
 	private Boolean isAudioOnly;
+	
+	private Boolean isClosed;
+	private String redirectURL;
     
     /**
      * @hibernate.property
@@ -487,6 +490,29 @@ public class Rooms {
 		this.isAudioOnly = isAudioOnly;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="is_closed"
+     *  type="boolean"
+     */
+	public Boolean getIsClosed() {
+		return isClosed;
+	}
+	public void setIsClosed(Boolean isClosed) {
+		this.isClosed = isClosed;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="redirect_url"
+     *  type="string"
+     */	
+	public String getRedirectURL() {
+		return redirectURL;
+	}
+	public void setRedirectURL(String redirectURL) {
+		this.redirectURL = redirectURL;
+	}
 	
     
 }

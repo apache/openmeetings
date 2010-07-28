@@ -148,7 +148,9 @@ public class AppointmentLogic {
 				false, 				// Is Moderated Room
 				null, 				// Moderation List Room
 				true,				// Allow User Questions
-				false);				// Allow User Questions
+				false,              // isAudioOnly
+				false, 		        // isClosed
+				"");				// redirectURL
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);

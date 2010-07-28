@@ -735,7 +735,9 @@ public class Roommanagement {
 			Boolean isModeratedRoom, 
 			List roomModerators,
 			Boolean allowUserQuestions,
-			Boolean isAudioOnly){
+			Boolean isAudioOnly,
+			Boolean isClosed,
+			String redirectURL){
 		
 		log.debug("addRoom");
 		
@@ -760,6 +762,9 @@ public class Roommanagement {
 				r.setIsModeratedRoom(isModeratedRoom);
 				
 				r.setDeleted("false");
+				
+				r.setIsClosed(isClosed);
+				r.setRedirectURL(redirectURL);
 				
 				//handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = OpenXGHttpClient.getInstance().openSIPgCreateConference();
@@ -868,7 +873,9 @@ public class Roommanagement {
                     	Long externalRoomId,
                         String externalRoomType,
                         Boolean allowUserQuestions,
-                        Boolean isAudioOnly){
+                        Boolean isAudioOnly,
+                        Boolean isClosed,
+                        String redirectURL){
 
                 log.debug("addExternalRoom");
 
@@ -896,6 +903,9 @@ public class Roommanagement {
 
 								r.setExternalRoomId(externalRoomId);
 								r.setExternalRoomType(externalRoomType);
+								
+								r.setIsClosed(isClosed);
+								r.setRedirectURL(redirectURL);
 
                                 Object idf = HibernateUtil.createSession();
                                 Session session = HibernateUtil.getSession();
@@ -1334,7 +1344,9 @@ public class Roommanagement {
 			Boolean isModeratedRoom,
 			List roomModerators,
 			Boolean allowUserQuestions,
-			Boolean isAudioOnly){
+			Boolean isAudioOnly,
+			Boolean isClosed,
+			String redirectURL){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1355,6 +1367,9 @@ public class Roommanagement {
 				r.setAppointment(appointment);
 				
 				r.setIsModeratedRoom(isModeratedRoom);
+				
+				r.setIsClosed(isClosed);
+				r.setRedirectURL(redirectURL);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
@@ -1633,9 +1648,23 @@ public class Roommanagement {
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 		}catch(Exception e){
-			log.error("Error updateRoomObject : " + e.getMessage());
+			log.error("Error updateRoomObject : " , e);
 		}
 	}
 	//--------------------------------------------------------------------------------------------
+	
+	public void closeRoom(Long rooms_id, Boolean status) {
+		try{
+			
+			Rooms room = this.getRoomById(rooms_id);
+			
+			room.setIsClosed(status);
+			
+			this.updateRoomObject(room);
+			
+		}catch(Exception e){
+			log.error("Error updateRoomObject : " , e);
+		}
+	}
 	
 }

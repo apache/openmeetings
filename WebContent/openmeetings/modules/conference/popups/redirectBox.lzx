@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="redirectBox" extends="labelExplorerBox" labelid="18"
+	   valing="middle" align="center"
+	   docking="true" resizeable="false" closable="true" width="260" height="140">
+    
+    <attribute name="timerDel" value="null" />
+    <attribute name="maxTime" value="5000" type="number" />
+    
+    <attribute name="redirectURL" value="" type="string" />
+    
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+		this.timerDel = new LzDelegate( this, "timeLineAction" );
+		this.timeLineAction();
+	</handler>
+
+	<handler name="onclose">
+		lz.ModeManager.release(this);
+	</handler>	
+		
+    <method name="timeLineAction">
+    	<![CDATA[
+    	
+    		var tString = canvas.getLabelName(1098);
+    		tString += " " + Math.round(this.maxTime/1000) + " sek";
+    		
+    	
+	    	this.messageText.setAttribute("text",tString);
+	    	
+	    	this.maxTime -= 1000;
+	    	
+	    	if (this.maxTime >= 0) {
+	    		
+	    		lz.Timer.addTimer( this.timerDel, 1000 );
+	    		
+	    	} else {
+	    		
+	    		function callback(returnValue) {
+	                    	
+	            	if ($debug) Debug.write("callback ",returnValue);
+	            	
+	            }
+	               
+	            if ($debug) Debug.write("this.redirectURL ",this.redirectURL);
+	            lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
+	    	}
+    	]]>
+    </method>
+    
+    <attribute name="refObj" value="null" />
+    
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText name="messageText" text="" y="24" 
+    		   width="$once{ parent.width - 40 }"
+    	multiline="true" resize="false" x="30" />
+    
+</class>
+
+</library>

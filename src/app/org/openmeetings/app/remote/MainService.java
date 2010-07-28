@@ -2,6 +2,7 @@ package org.openmeetings.app.remote;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.openmeetings.app.ldap.LdapLoginManagement;
 
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Feedbackmanagement;
+import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
 import org.openmeetings.app.remote.red5.ClientListManager;
@@ -56,7 +58,9 @@ public class MainService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, ScopeApplicationAdapter.webAppRootKey);
 	private static MainService instance;
 	
+	//Spring Beans
 	private ClientListManager clientListManager = null;
+	private ScopeApplicationAdapter scopeApplicationAdapter = null;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -72,13 +76,19 @@ public class MainService implements IPendingServiceCallback {
 	public ClientListManager getClientListManager() {
 		if(clientListManager == null)
 			clientListManager = ClientListManager.getInstance();
-		
 		return clientListManager;
 	}
 	public void setClientListManager(ClientListManager clientListManager) {
 		this.clientListManager = clientListManager;
 	}
-
+	
+	public ScopeApplicationAdapter getScopeApplicationAdapter() {
+		return scopeApplicationAdapter;
+	}
+	public void setScopeApplicationAdapter(
+			ScopeApplicationAdapter scopeApplicationAdapter) {
+		this.scopeApplicationAdapter = scopeApplicationAdapter;
+	}
 
 
 	/**
@@ -778,6 +788,32 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[getSIPModuleStatus]",err);
 		}
 		return false;
+	}
+	
+	public int closeRoom(String SID, Long room_id, Boolean status) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	    	if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
+	    		
+	    		Roommanagement.getInstance().closeRoom(room_id,status);
+	    		
+	    		if (status) {
+		    		Map<String,String> message = new HashMap<String,String>();
+		    		message.put("message", "roomClosed");
+		    		this.scopeApplicationAdapter.sendMessageByRoomAndDomain(room_id, message);
+	    		}
+	    		
+	    		return 1;
+	    		
+	    	}
+			
+			
+			return 1;
+		} catch (Exception err) {
+			log.error("[closeRoom]",err);
+		}
+		return -1;
 	}
 	
 	public void resultReceived(IPendingServiceCall arg0) {

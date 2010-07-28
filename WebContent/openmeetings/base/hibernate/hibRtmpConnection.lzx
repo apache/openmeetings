@@ -379,7 +379,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="900" type="number" />    
+    	<attribute name="max" value="1000" type="number" />    
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 
@@ -1474,9 +1474,13 @@
                         canvas._drawarea.startStreaming(value);
                     } else if (value.message=='stopStreaming'){
                         canvas._drawarea.stopStreaming(value);
+                    } else if (value.message=='roomClosed'){
+                        canvas.roomClosed();
                     } else {
                         if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
                     }
+                    
+                    
                 ]]>    
             </handler>  
         </netRemoteCallHib>      
@@ -1710,6 +1714,20 @@
             ]]>
         </handler>   
     </netRemoteCallHib>  
+    
+    <netRemoteCallHib name="closeRoom" funcname="xmlcrm.closeRoom">
+    	<attribute name="room_id" value="0" type="number" />
+    	<attribute name="isClosed" value="true" type="boolean" />
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.room_id;</method></netparam>
+        <netparam><method name="getValue">return parent.isClosed;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("closeRoom: ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
     
     
     

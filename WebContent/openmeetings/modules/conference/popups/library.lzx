@@ -19,5 +19,6 @@
     <include href="syncWin.lzx" />
     <include href="meetingTimer.lzx" />
     <include href="incomingScreenSharing.lzx" />
+    <include href="redirectBox.lzx" />
     
 </library>

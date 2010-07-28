@@ -17,6 +17,12 @@
             if ($debug) Debug.write("roomobj: ",this.roomobj);
             
             canvas.currentRoomObject = this.roomobj;
+            
+            if (this.roomobj.isClosed) {
+            	canvas.roomClosed();
+            }
+            
+            canvas.currentRoomObject = this.roomobj;
             canvas._mainbgcontentNavi.setAttribute('height',0);
             canvas.setAttribute('naviHeightDelta',28);
             

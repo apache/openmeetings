@@ -18,7 +18,7 @@ public class AddOrgRoom extends TestCase {
 	public void testAddOrgRoom(){
 		
 		long room = Roommanagement.getInstance().addRoom(3,"roomOrg", 1, "", new Long(4), true,null,
-				false, false, null, false, null, true, false);
+				false, false, null, false, null, true, false, false, "");
 		Roommanagement.getInstance().addRoomToOrganisation(3,room, 1);
 		
 	}

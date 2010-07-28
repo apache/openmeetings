@@ -56,6 +56,11 @@ function getBrowserLang() {
 	return navigator.language;
 }
 
+function redirectToUrl(url) {
+	//alert(navigator.userAgent);
+	 return window.location = url;
+}
+
 </script>
 	
 <style type="text/css">

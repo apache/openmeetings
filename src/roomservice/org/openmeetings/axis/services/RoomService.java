@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
@@ -413,7 +414,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							false, false, null
-							, false, null, true, false);
+							, false, null, true, false, false, "");
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -434,7 +435,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							true, false);
+							true, false, false, "");
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ",err);
 		}
@@ -474,7 +475,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							allowUserQuestions, false);
+							allowUserQuestions, false, false, "");
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ",err);
 		}
@@ -497,7 +498,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							allowUserQuestions, isAudioOnly);
+							allowUserQuestions, isAudioOnly, false, "");
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ",err);
 			throw new AxisFault(err.getMessage());
@@ -539,7 +540,7 @@ public class RoomService {
 	                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
 	                                                        numberOfPartizipants, ispublic, null,
 	                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-	                                                    	externalRoomId, externalRoomType, true, false);
+	                                                    	externalRoomId, externalRoomType, true, false, false, "");
 				} else {
 					roomId = room.getRooms_id();
 				}
@@ -603,7 +604,7 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, rooms_id, roomtypes_id, name, ispublic, 
-					comment, numberOfPartizipants, null, appointment, false, null, false,null,true,false);
+					comment, numberOfPartizipants, null, appointment, false, null, false,null,true,false, false, "");
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -625,7 +626,7 @@ public class RoomService {
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
-					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false);
+					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false, false, "");
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ",err);
 		}
@@ -649,7 +650,7 @@ public class RoomService {
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
 					appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null,allowUserQuestions,false);
+					null,allowUserQuestions,false, false, "");
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ",err);
 		}
@@ -689,7 +690,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addExternalRoom(user_level, name,
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, true, false);
+					null, null, externalRoomType, true, false, false, "");
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -708,7 +709,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addExternalRoom(user_level, name,
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, allowUserQuestions, isAudioOnly);
+					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "");
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -1102,7 +1103,8 @@ public class RoomService {
     		String validToTime,
 		    Boolean isPasswordProtected,
 		    String password,
-		    Long reminderTypeId
+		    Long reminderTypeId,
+		    String redirectURL
 			) throws AxisFault {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -1144,7 +1146,11 @@ public class RoomService {
 		    	Long rooms_id =  Roommanagement.getInstance().addExternalRoom(user_level, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, null, externalRoomType, false, false);
+						null, null, externalRoomType, 
+						false, //allowUserQuestions
+						false, //isAudioOnly
+						false, //isClosed
+						redirectURL);
 		    	
 		    	if (rooms_id <= 0) {
 		    		return rooms_id;
@@ -1205,5 +1211,33 @@ public class RoomService {
 		}
 		
 	}	
+	
+	public int closeRoom(String SID, Long room_id, Boolean status) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Roommanagement.getInstance().closeRoom(room_id,status);
+	    		
+				if (status) {
+		    		Map<String,String> message = new HashMap<String,String>();
+		    		message.put("message", "roomClosed");
+		    		ScopeApplicationAdapter.getInstance().sendMessageByRoomAndDomain(room_id, message);
+	    		}
+				return 1;
+				
+			} else {
+				return -2;
+			}
+		} catch (Exception err) {
+			log.error("[closeRoom] ", err);
+			
+			throw new AxisFault(err.getMessage());
+		}
+		
+	}
 		
 }

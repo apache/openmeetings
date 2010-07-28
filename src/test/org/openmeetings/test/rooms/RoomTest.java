@@ -18,10 +18,10 @@ public class RoomTest extends TestCase {
 	public void testRoomTest(){
 		//Public Rooms
 		long room1 = Roommanagement.getInstance().addRoom(3, "room1", 1, "", new Long(4), true, null,
-				false, false, null, false, null, true, false);
+				false, false, null, false, null, true, false, false, "");
 		log.error("room1: "+room1);
 		long room2 = Roommanagement.getInstance().addRoom(3, "room1", 2, "", new Long(4), true, null,
-				true, false, null, false, null, true, false);
+				true, false, null, false, null, true, false, false, "");
 		log.error("room2: "+room2);
 		
 	}

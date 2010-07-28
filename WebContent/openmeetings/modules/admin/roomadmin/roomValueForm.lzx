@@ -34,6 +34,8 @@
         this.isAudioOnly.setValue(false);
         this.sipNumber.setAttribute("text","");
         this.conferencePin.setAttribute("text","");
+        this.isClosed.setValue(false);
+        this.redirectURL.setAttribute("text","");
         this._listRoomModerators.clearList();
 	</handler>
 	
@@ -99,6 +101,14 @@
             } else {
                 this.isAudioOnly.setValue(false);
             }
+            
+            if (obj.isClosed != null && obj.isClosed){
+                this.isClosed.setValue(true);
+            } else {
+                this.isClosed.setValue(false);
+            }
+            
+            this.redirectURL.setAttribute("text",obj.redirectURL);
                 
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
@@ -192,6 +202,9 @@
             this.sendObject["allowUserQuestions"] = parent.allowUserQuestions.getValue();
             
             this.sendObject["isAudioOnly"] = parent.isAudioOnly.getValue();
+            
+            this.sendObject["isClosed"] = parent.isClosed.getValue();
+            this.sendObject["redirectURL"] = parent.redirectURL.getText();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -379,8 +392,30 @@
     <view resource="messagebox_info_rsc" x="0" y="680" />
     
     <labelText labelid="1077" x="24" y="680"  fontstyle="italic"
-               multiline="true" width="370" />                      
-                               
+               multiline="true" width="370" /> 
+                
+                
+               
+    <!-- Room termination settings -->
+    <labelText labelid="1101" width="200" y="730" fontstyle="bold"
+               resize="false" x="2"/>            
+                                   
+    <!-- isClosed -->          
+    <labelText labelid="1099" width="200" y="760" resize="false" x="2"/>  
+        <labelCheckbox name="isClosed" width="270" y="760" x="130" fontsize="11" />
+        
+    <!-- 1100:Exit URL -->
+    <labelText labelid="193" width="200" y="790" resize="false" x="2"/>
+        <customEdittext name="redirectURL" y="790" x="120" width="270" text="" />    
+      
+    <!-- termination Description -->          
+    <view resource="messagebox_info_rsc" x="0" y="820" />
+    
+    <labelText labelid="1102" x="24" y="820"  fontstyle="italic"
+               multiline="true" width="370" /> 
+                
+ 
+                                  
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 
                x="398" fontstyle="bold" />   
@@ -548,7 +583,7 @@
     <labelText name="conferencePin" x="520" y="692" fgcolor="0x999999" bgcolor="0xFFFFFF" 
     		   height="20" width="180" resize="false"/>                         
                 
-    <view x="400" y="900" />    
+    <view x="400" y="1000" />    
     
 </class>
 

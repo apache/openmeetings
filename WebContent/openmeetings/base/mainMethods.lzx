@@ -468,6 +468,16 @@
             }   
         }
 	</method>
+	
+	<method name="roomClosed">
+		<![CDATA[
+		
+			if ($debug) Debug.write("canvas.currentRoomObject ",canvas.currentRoomObject);
+			
+			new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObject.redirectURL});
+		
+		]]>
+	</method>
 			     
 	    
 

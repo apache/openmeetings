@@ -24,5 +24,7 @@
     <property name="sipNumber" type="string" column="sip_number"/>
     <property name="conferencePin" type="string" column="conference_pin"/>
     <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
+    <property name="isClosed" type="boolean" column="is_closed"/>
+    <property name="redirectURL" type="string" column="redirect_url"/>
   </class>
 </hibernate-mapping>

@@ -51,6 +51,17 @@ function getBrowserLang() {
 	return navigator.language;
 }
 
+function getBrowserInfo() {
+	//alert(navigator.userAgent);
+	return navigator.userAgent;
+}
+
+function redirectToUrl(url) {
+	//alert(navigator.userAgent);
+	 return window.location = url;
+}
+
+
 function getAppletStatus(){
     return false;
 }

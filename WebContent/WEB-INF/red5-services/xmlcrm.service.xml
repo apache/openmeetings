@@ -18,6 +18,7 @@
     <bean id="xmlcrm.service" 
         class="org.openmeetings.app.remote.MainService">
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
+        <property name="scopeApplicationAdapter" ref="web.handler.openmeetings" />
     </bean>
     
 </beans>
