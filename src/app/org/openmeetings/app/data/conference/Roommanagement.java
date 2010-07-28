@@ -323,6 +323,64 @@ public class Roommanagement {
 		return null;
 	}
 	
+	public List<Rooms> getRoomsWithCurrentUsersByList(long user_level, int start, int max, String orderby, boolean asc){
+		try {
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				List<Rooms> rooms = this.getRoomsInternatl(start, max, orderby, asc);
+				
+				for (Rooms room : rooms) {
+					
+					HashMap<String,RoomClient> map = ClientListManager.getInstance().getClientListByRoom(room.getRooms_id());
+					
+					room.setCurrentusers(new LinkedList<RoomClient>());
+					
+					for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext(); ) {
+						room.getCurrentusers().add(map.get(iter.next()));
+					}
+					
+				}
+				
+				return rooms;
+				
+			}
+		} catch (HibernateException ex) {
+			log.error("[getRooms] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRooms] ", ex2);
+		}
+		return null;
+	}
+	
+	public List<Rooms> getRoomsWithCurrentUsersByListAndType(long user_level, int start, int max, String orderby, boolean asc,  String externalRoomType){
+		try {
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				List<Rooms> rooms = this.getRoomsInternatlbyType(start, max, orderby, asc, externalRoomType);
+				
+				for (Rooms room : rooms) {
+					
+					HashMap<String,RoomClient> map = ClientListManager.getInstance().getClientListByRoom(room.getRooms_id());
+					
+					room.setCurrentusers(new LinkedList<RoomClient>());
+					
+					for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext(); ) {
+						room.getCurrentusers().add(map.get(iter.next()));
+					}
+					
+				}
+				
+				return rooms;
+				
+			}
+		} catch (HibernateException ex) {
+			log.error("[getRooms] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRooms] ", ex2);
+		}
+		return null;
+	}
+	
 	public Long selectMaxFromRooms(){
 		try {
 			String hql = "select count(c.rooms_id) from Rooms c " +
@@ -396,6 +454,30 @@ public class Roommanagement {
 		}
 		return null;
 	}
+	
+	public List<Rooms> getRoomsInternatlbyType(int start, int max, String orderby, boolean asc, String externalRoomType){
+		try {
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Rooms.class);
+			crit.setFirstResult(start);
+			crit.setMaxResults(max);
+			crit.add(Restrictions.eq("externalRoomType", externalRoomType));
+			crit.add(Restrictions.ne("deleted", "true"));
+			if (asc) crit.addOrder(Order.asc(orderby));
+			else crit.addOrder(Order.desc(orderby));
+			List<Rooms> ll = crit.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return ll;
+		} catch (HibernateException ex) {
+			log.error("[getRooms ] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRooms ] ", ex2);
+		}
+		return null;
+	}	
 	
 	public List<Rooms_Organisation> getOrganisationsByRoom(long user_level, long rooms_id){
 		try {

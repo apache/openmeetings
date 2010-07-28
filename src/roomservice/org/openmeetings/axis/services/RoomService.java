@@ -15,10 +15,13 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.rooms.RoomsList;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
@@ -1000,5 +1003,207 @@ public class RoomService {
 			throw new AxisFault(err.getMessage());
 		}
 	}
+	
+
+	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID, int start, int max, String orderby, boolean asc) throws AxisFault {
+		try {
+			List<Rooms> rooms = ConferenceService.getInstance().getRoomsWithCurrentUsersByList(SID, start, max, orderby, asc);
+			
+			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
+			
+			for (Rooms room : rooms) {
+				
+				RoomReturn roomReturn = new RoomReturn();
+				
+				roomReturn.setRoom_id(room.getRooms_id());
+				roomReturn.setName(room.getName());
+				
+				roomReturn.setCreator("SOAP");
+				roomReturn.setCreated(room.getStarttime());
+				
+				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
+				
+				int i = 0;
+				for (RoomClient rcl : room.getCurrentusers()) {
+					
+					RoomUser ru = new RoomUser();
+					ru.setFirstname(rcl.getFirstname());
+					ru.setLastname(rcl.getLastname());
+					
+					rUser[i] = ru;
+					
+					i++;
+				}
+				
+				roomReturn.setRoomUser(rUser);
+				
+				returnObjList.add(roomReturn);
+					
+			}
+			
+			return returnObjList;
+		} catch (Exception err){
+			log.error("setUserObjectWithExternalUser",err);
+			throw new AxisFault(err.getMessage());
+		}	
+	}
+
+	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID, int start, int max, String orderby, boolean asc, String externalRoomType) throws AxisFault {
+		try {
+			List<Rooms> rooms = ConferenceService.getInstance().getRoomsWithCurrentUsersByListAndType(SID, start, max, orderby, asc, externalRoomType);
+			
+			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
+			
+			for (Rooms room : rooms) {
+				
+				RoomReturn roomReturn = new RoomReturn();
+				
+				roomReturn.setRoom_id(room.getRooms_id());
+				roomReturn.setName(room.getName());
+				
+				roomReturn.setCreator("SOAP");
+				roomReturn.setCreated(room.getStarttime());
+				
+				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
+				
+				int i = 0;
+				for (RoomClient rcl : room.getCurrentusers()) {
+					
+					RoomUser ru = new RoomUser();
+					ru.setFirstname(rcl.getFirstname());
+					ru.setLastname(rcl.getLastname());
+					
+					rUser[i] = ru;
+					
+					i++;
+				}
+				
+				roomReturn.setRoomUser(rUser);
+				
+				returnObjList.add(roomReturn);
+					
+			}
+			
+			return returnObjList;
+		} catch (Exception err){
+			log.error("setUserObjectWithExternalUser",err);
+			throw new AxisFault(err.getMessage());
+		}	
+	}
+
+	
+	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID, String name,
+			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
+			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
+			String validFromDate, 
+    		String validFromTime, 
+    		String validToDate, 
+    		String validToTime,
+		    Boolean isPasswordProtected,
+		    String password,
+		    Long reminderTypeId
+			) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Date dFrom = null;
+		    	Date dTo = null;
+	    	
+				Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+		    	Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
+		    	
+		    	Integer validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+		    	Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
+		    	
+		    	log.info("validFromHour: "+validFromHour);
+		    	log.info("validFromMinute: "+validFromMinute);
+		    	
+		    	
+		    	Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); //dd.MM.yyyy
+		    	Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); //dd.MM.yyyy
+		    	
+		    	Calendar calFrom = Calendar.getInstance();
+		    	calFrom.setTime(fromDate);
+		    	calFrom.set(calFrom.get(Calendar.YEAR), calFrom.get(Calendar.MONTH), calFrom.get(Calendar.DATE), validFromHour, validFromMinute, 0);
+		    	
+				Calendar calTo= Calendar.getInstance();
+				calTo.setTime(toDate);
+		    	calTo.set(calTo.get(Calendar.YEAR), calTo.get(Calendar.MONTH), calTo.get(Calendar.DATE), validToHour, validToMinute, 0);
+		    	
+		    	dFrom = calFrom.getTime();
+		    	dTo = calTo.getTime();
+		    	
+		    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+		    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+				
+		    	Long rooms_id =  Roommanagement.getInstance().addExternalRoom(user_level, name,
+						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, null, externalRoomType, false, false);
+		    	
+		    	if (rooms_id <= 0) {
+		    		return rooms_id;
+		    	}
+		    	
+		    	AppointmentDaoImpl.getInstance().addAppointment("appointmentName", users_id, "appointmentLocation", "appointmentDescription", 
+		    			dFrom, dTo, //appointmentstart, appointmentend, 
+		    			false, false, false, false, //isDaily, isWeekly, isMonthly, isYearly, 
+		    			1L, //categoryId
+		    			reminderTypeId, //1=none, 2=simple mail, 3=ICAL
+		    			Roommanagement.getInstance().getRoomById(rooms_id), 
+		    			1L, //language_id
+		    			isPasswordProtected, //isPasswordProtected
+		    			password //password
+		    			);
+		    	
+		    	return rooms_id;
+	    	
+			} else {
+				return -2L;
+			}
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+			
+			throw new AxisFault(err.getMessage());
+		}
+		//return new Long(-1);
+		//return numberOfPartizipants;
+	}
+	
+	public Long addMeetingMemberRemindToRoom(String SID, Long room_id, String firstname, String lastname, String email, String baseUrl, Long language_id) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Appointment appointment = AppointmentDaoImpl.getInstance().getAppointmentByRoom(room_id);
+				
+				if (appointment == null) {
+					return -1L;
+				}
+				//Not In Remote List available - extern user
+				Long memberId = MeetingMemberLogic.getInstance().addMeetingMember(firstname, lastname, 
+								"0", "0", appointment.getAppointmentId(), null,  email, baseUrl, 
+								null, new Boolean(false), language_id, false, "");
+				
+				return memberId;
+				
+			} else {
+				return -2L;
+			}
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+			
+			throw new AxisFault(err.getMessage());
+		}
+		
+	}	
 		
 }

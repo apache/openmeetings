@@ -569,4 +569,22 @@ public class ConferenceService {
 		return null;
 	}
 	
+	
+	public List<Rooms> getRoomsWithCurrentUsersByList(String SID, int start, int max, String orderby, boolean asc){
+		log.debug("getRooms");
+		
+		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+        return Roommanagement.getInstance().getRoomsWithCurrentUsersByList(user_level, start, max, orderby, asc);
+	}
+	
+
+	public List<Rooms> getRoomsWithCurrentUsersByListAndType(String SID, int start, int max, String orderby, boolean asc, String externalRoomType){
+		log.debug("getRooms");
+		
+		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+        return Roommanagement.getInstance().getRoomsWithCurrentUsersByListAndType(user_level, start, max, orderby, asc, externalRoomType);
+	}	
+	
 }

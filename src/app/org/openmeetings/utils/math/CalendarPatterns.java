@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.text.SimpleDateFormat;
 
 import org.slf4j.Logger;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 /**
@@ -15,10 +14,11 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class CalendarPatterns {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, "openmeetings");
 	
 	public static SimpleDateFormat dateFormat__ddMMyyyyHHmmss = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	public static SimpleDateFormat dateFormat__ddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
+	public static SimpleDateFormat dateFormat__ddMMyyyyBySeparator = new SimpleDateFormat("dd-MM-yyyy");
     
     public static String getDateByMiliSeconds(Date t){
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -56,6 +56,15 @@ public class CalendarPatterns {
     	return null;
     }
     
+    public static Date parseDateBySeparator(String dateString) {
+    	try {
+    		return dateFormat__ddMMyyyyBySeparator.parse(dateString);
+    	} catch (Exception e) {
+    		log.error("parseDate",e);
+    	}
+    	return null;
+    }
+    
     public static Date parseDateWithHour(String dateString) {
     	try {
     		return dateFormat__ddMMyyyyHHmmss.parse(dateString);
@@ -64,5 +73,14 @@ public class CalendarPatterns {
     	}
     	return null;
     }
+
+	public static String getYear(Date t){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date dateOld = new Date();
+        long timeAdv = t.getTime();
+        dateOld.setTime(timeAdv);
+        String result = sdf.format(dateOld);
+        return result;
+    } 
     
 }
