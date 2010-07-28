@@ -1638,13 +1638,15 @@ public class Roommanagement {
 	 */
 	//--------------------------------------------------------------------------------------------
 	public void updateRoomObject(Rooms room){
-		log.debug("updateRoomObject");
+		log.debug("updateRoomObject "+room.getIsClosed());
 		
 		try{
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			session.update(room);
+			session.flush();
+			session.refresh(room);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 		}catch(Exception e){

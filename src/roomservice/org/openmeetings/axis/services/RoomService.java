@@ -1218,7 +1218,11 @@ public class RoomService {
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
 			
+			log.debug("closeRoom 1 "+room_id);
+			
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				log.debug("closeRoom 2 "+status);
 				
 				Roommanagement.getInstance().closeRoom(room_id,status);
 	    		
