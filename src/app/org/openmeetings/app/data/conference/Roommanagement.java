@@ -200,6 +200,7 @@ public class Roommanagement {
 		log.debug("getRoombyId : " + rooms_id);
 		try {
 			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted != :deleted";
+			Rooms room = null;
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -208,10 +209,17 @@ public class Roommanagement {
 			query.setLong("rooms_id", rooms_id);
 			query.setString("deleted", "true");
 			List ll = query.list();
+			if (ll.size()>0){
+				room = (Rooms) ll.get(0);
+				session.flush();
+				session.refresh(room);
+			}
+			
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-			if (ll.size()>0){
-				return (Rooms) ll.get(0);
+			if (room != null){
+				return room;
 			}
 			else{
 				log.error("Could not find room " + rooms_id);
