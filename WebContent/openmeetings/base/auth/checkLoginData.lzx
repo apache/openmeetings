@@ -252,6 +252,17 @@
                 }
             </handler>
         </resetCombobox>
+        
+	<labelText name="domain_label" text="Domain" width="200" y="174" resize="false" x="2" />     
+        <resetCombobox name="domain" width="230" y="174" x="120" editable="false">
+        	<handler name="oninit">
+        		this.addItem("localhost","localhost");
+        		this.addItem("eu.p-f.biz","SA-MeetingEU");
+        		this.addItem("am.p-f.biz","SA-MeetingAM");
+        		this.addItem("ap.p-f.biz","SA-MeetingAP");
+        		this.selectItemAt(0);
+        	</handler>
+        </resetCombobox>        
 
     <labelText name="organisation_label_info" labelid="617" width="350" 
                multiline="true" y="22" resize="false" x="2" visible="false" />     
@@ -307,6 +318,7 @@
         <netparam><method name="getValue"> return parent.parent.userpass.getText(); </method></netparam>
         <netparam><method name="getValue"> return parent.parent._savelogindata.getValue(); </method></netparam> 
         <netparam><method name="getValue"> return Number(parent.parent.languages.getValue()); </method></netparam> 
+        <netparam><method name="getValue"> return parent.parent.domain.getText(); </method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
@@ -417,6 +429,8 @@
                         parent.b3.setAttribute('visible',true);
                         parent.nlabelquality.setAttribute('visible',false);
                         parent.ncomboquality.setAttribute('visible',false);
+                        parent.domain_label.setAttribute('visible',false);
+                        parent.domain.setAttribute('visible',false);
                 
                         for (var i=0;i<value.organisation_users.length;i++){
                             parent.organisation.addItem(value.organisation_users[i].organisation.name,String(i));
@@ -449,7 +463,7 @@
         </handler>  
     </netRemoteCallHib>    
     
-    <labelCheckbox x="120" y="$once{ parent.height-66 }" fontsize="11"
+    <labelCheckbox x="120" y="$once{ parent.height-62 }" fontsize="11"
         name="_savelogindata" labelid="288" >
         <handler name="oninit">
             var t = new lz.sharedObject();

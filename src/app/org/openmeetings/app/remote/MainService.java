@@ -253,12 +253,16 @@ public class MainService implements IPendingServiceCallback {
      * @param Userpass
      * @return a valid user account or an empty user with an error message and level -1
      */ 
-    public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id){
+    public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id, String domain){
     	
     	// Check, whether LDAP - Login is required(Configuration has key ldap_config_path
     	boolean withLdap = false;
     	
-    	if(LdapLoginManagement.getInstance().isLdapConfigured()){
+//    	if(LdapLoginManagement.getInstance().isLdapConfigured()){
+//    		withLdap = true;
+//    	}
+    	
+    	if (!domain.equals("localhost")) {
     		withLdap = true;
     	}
     	
@@ -275,7 +279,7 @@ public class MainService implements IPendingServiceCallback {
     				log.debug("User " + usernameOrEmail + " is local user -> Use Internal DB");
     				withLdap = false;
     			}
-    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus() == true){ // User is admin with pwd synch
+    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus(domain) == true){ // User is admin with pwd synch
     				log.debug("User " + usernameOrEmail + " : Ldap-user has admin rights -> Use Internal DB");
         			withLdap = false;	
     			}
@@ -296,7 +300,7 @@ public class MainService implements IPendingServiceCallback {
 	           
 	        	//LDAP Loggedin Users cannot use the permanent Login Flag
 	        	
-	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID);
+	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail+"@"+domain, Userpass, currentClient, SID, domain);
 //	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID, 
 //	        								false, language_id);
 	        	

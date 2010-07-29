@@ -123,12 +123,12 @@ public class LdapLoginManagement {
 	 * Ldap Password Synch to OM DB set active ?
 	 * defaults to true in case of error so as to keep old behaviour
 	 */
-	 public boolean getLdapPwdSynchStatus(){ //TIBO
+	 public boolean getLdapPwdSynchStatus(String domain){ //TIBO
 			// Retrieve Configuration Data
 			HashMap<String, String> configData;
 			
 			try{
-				configData= getLdapConfigData();
+				configData= getLdapConfigData(domain);
 			}catch(Exception e){
 				log.error("Error on getLdapPwdSynchStatus : " + e.getMessage());
 				return true;
@@ -181,18 +181,22 @@ public class LdapLoginManagement {
 	 * Retrieving LdapData from Config
 	 */
 	//----------------------------------------------------------------------------------------
-	public HashMap<String, String> getLdapConfigData() throws Exception{
+	public HashMap<String, String> getLdapConfigData(String domain) throws Exception{
 		log.debug("LdapLoginmanagement.getLdapConfigData");
 		
 		// Retrieving Path to Config
-		Configuration configVal = Configurationmanagement.getInstance().getConfKey(3, "ldap_config_path");
+		//Configuration configVal = Configurationmanagement.getInstance().getConfKey(3, "ldap_config_path");
+//		
+//		if(configVal == null){
+//			log.error("Error retrieving ConfigKey ldap_config_path!");
+//			return null;
+//		}
+//		
+//		String path = configVal.getConf_value().trim();
 		
-		if(configVal == null){
-			log.error("Error retrieving ConfigKey ldap_config_path!");
-			return null;
-		}
-		
-		String path = configVal.getConf_value().trim();
+		String path = ScopeApplicationAdapter.webAppPath 
+						+ File.separatorChar + "conf" + File.separatorChar
+						+ domain + ".conf";
 		
 		return readConfig(path);
 		
@@ -228,14 +232,14 @@ public class LdapLoginManagement {
 	 * 
 	 */
 	//----------------------------------------------------------------------------------------
-	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID) {
+	public Object doLdapLogin(String user, String passwd, RoomClient currentClient, String SID, String domain) {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 		
 		// Retrieve Configuration Data
 		HashMap<String, String> configData;
 		
 		try{
-			configData= getLdapConfigData();
+			configData= getLdapConfigData(domain);
 		}catch(Exception e){
 			log.error("Error on LdapAuth : " + e.getMessage());
 			return null;
