@@ -1079,7 +1079,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             this.resizeY = resizeY;			
             
             if(VirtualScreenBean.vScreenScaleFactor.equals(ScreenShareRTMPT.instance.label1090)) {
-            	timeBetweenFrames = 750;
+            	timeBetweenFrames = 100;
             } else {
             	timeBetweenFrames = 1000;
             }
