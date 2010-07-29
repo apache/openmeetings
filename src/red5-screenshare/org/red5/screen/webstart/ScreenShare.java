@@ -1123,12 +1123,12 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                 this.resizeY = resizeY;
                 
                 if (VirtualScreenBean.vScreenScaleFactor.equals(ScreenShare.instance.label1090)) {
-                	timeBetweenFrames = 600;
+                	timeBetweenFrames = 100;
                 } else {
                 	timeBetweenFrames = 1000;
                 }
                     
-
+                logger.debug("############ timeBetweenFrames :: "+timeBetweenFrames);
                 logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
 
             }
