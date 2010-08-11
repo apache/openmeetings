@@ -124,7 +124,7 @@ public class Configurationmanagement {
 		return null;
 	}
 	
-	public List getConfigurations(int start, int max, String orderby, boolean asc) {
+	public List<Configuration> getConfigurations(int start, int max, String orderby, boolean asc) {
 		try {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
