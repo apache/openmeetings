@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="ldapconfig" name="org.openmeetings.app.hibernate.beans.basic.LdapConfig">
+    <id column="ldapconfig_id" name="ldapConfigId">
+      <generator class="increment"/>
+    </id>
+    <property name="name" type="string" column="name"/>
+    <property name="configFileName" type="string" column="config_file_name"/>
+    <property name="addDomainToUserName" type="boolean" column="add_domain_to_user_name"/>
+    <property name="domain" type="string" column="domain"/>
+    <property name="isActive" type="boolean" column="is_active"/>
+    <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="updated" type="java.util.Date" column="updated"/>
+    <many-to-one outer-join="true" insert="false" column="insertedby_id" lazy="false" update="false" name="insertedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <many-to-one outer-join="true" insert="false" column="updatedby_id" lazy="false" update="false" name="updatedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <property name="deleted" type="string" column="deleted"/>
+  </class>
+</hibernate-mapping>

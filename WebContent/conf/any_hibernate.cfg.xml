@@ -48,6 +48,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Configuration.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/ErrorType.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/ErrorValues.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/basic/LdapConfig.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Naviglobal.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Navimain.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Navisub.hbm.xml"/>
