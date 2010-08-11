@@ -11,7 +11,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
-import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
+import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Organisationmanagement;
@@ -285,7 +285,7 @@ public class UserService {
 					showAudioVideoTest = true;
 				}
 				
-				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, 
+				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, room_id, 
 															becomeModerator,showAudioVideoTest,false, null);
 				
 				if (hash != null) {
@@ -343,7 +343,7 @@ public class UserService {
 					showAudioVideoTest = true;
 				}
 				
-				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, room_id, 
+				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, room_id, 
 															becomeModerator,showAudioVideoTest,true, null);
 				
 				if (hash != null) {
@@ -389,7 +389,7 @@ public class UserService {
 				Sessionmanagement.getInstance().updateUserRemoteSession(SID, xmlString);
 				
 				
-				String hash = SOAPLoginDAO.getInstance().addSOAPLogin(SID, null, 
+				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, null, 
 															false,false,true, recording_id);
 				
 				if (hash != null) {

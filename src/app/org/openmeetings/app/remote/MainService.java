@@ -38,7 +38,7 @@ import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Feedbackmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
-import org.openmeetings.app.data.basic.dao.SOAPLoginDAO;
+import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rss.LoadAtomRssFeed;
@@ -407,7 +407,7 @@ public class MainService implements IPendingServiceCallback {
     		
     		log.debug("swfURL "+clientURL);
     		
-    		SOAPLogin soapLogin = SOAPLoginDAO.getInstance().getSOAPLoginByHash(secureHash);
+    		SOAPLogin soapLogin = SOAPLoginDaoImpl.getInstance().getSOAPLoginByHash(secureHash);
     		
     		if (soapLogin.getUsed()) {
     			
@@ -437,7 +437,7 @@ public class MainService implements IPendingServiceCallback {
 				
 				soapLogin.setClientURL(clientURL);
 				
-				SOAPLoginDAO.getInstance().updateSOAPLogin(soapLogin);
+				SOAPLoginDaoImpl.getInstance().updateSOAPLogin(soapLogin);
 				
 				//Create Return Object and hide the validated 
 				//sessionHash that is stored server side

@@ -16,18 +16,18 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 
-public class SOAPLoginDAO {
+public class SOAPLoginDaoImpl {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDAO.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private SOAPLoginDAO() {
+	private SOAPLoginDaoImpl() {
 	}
 
-	private static SOAPLoginDAO instance = null;
+	private static SOAPLoginDaoImpl instance = null;
  
-	public static synchronized SOAPLoginDAO getInstance() {
+	public static synchronized SOAPLoginDaoImpl getInstance() {
 		if (instance == null) {
-			instance = new SOAPLoginDAO();
+			instance = new SOAPLoginDaoImpl();
 		}
 		return instance;
 	}
