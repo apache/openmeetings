@@ -266,7 +266,8 @@
     				</handler>
     			</animator>
     			
-        		<view name="browser" height="28" bgcolor="0xEEEEEE" x="1" enabled="false">
+    			<!-- enabled="false" -->
+        		<view name="browser" height="28" bgcolor="0xEEEEEE" x="1" >
         			
         			<view name="navigation" layout="axis:x;spacing:1;inset:1">
         				

@@ -72,7 +72,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	IPendingServiceCallback, IStreamAwareScopeHandler {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, ScopeApplicationAdapter.webAppRootKey);
-	
+	 
 	//Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;
 	private EmoticonsManager emoticonsManager = null;

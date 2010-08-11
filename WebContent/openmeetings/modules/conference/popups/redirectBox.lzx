@@ -2,7 +2,7 @@
 <library>
 	
 <class name="redirectBox" extends="labelExplorerBox" labelid="18"
-	   valing="middle" align="center"
+	   valign="middle" align="center"
 	   docking="true" resizeable="false" closable="true" width="260" height="140">
     
     <attribute name="timerDel" value="null" />

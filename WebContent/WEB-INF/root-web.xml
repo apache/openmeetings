@@ -83,7 +83,7 @@
     <import resource="red5-services/whiteboardservice.service.xml"/>  
     <import resource="red5-services/printservice.service.xml"/> 
     <import resource="red5-services/flvrecorderservice.service.xml"/> 
-
+    <import resource="red5-services/ldapconfigservice.service.xml"/> 
 
 
 </beans>

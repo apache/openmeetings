@@ -219,6 +219,7 @@ of the red5-servlet
 
 <adminModuleBackup>backupContent</adminModuleBackup>
 
+<adminModuleLDAP>ldapAdmin</adminModuleLDAP>
 
 <!-- #############################################
     Moderator Modules

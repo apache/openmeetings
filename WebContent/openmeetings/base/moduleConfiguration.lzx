@@ -22,6 +22,8 @@ these properties can be overwritten by config.xml -->
 
 <attribute name="adminModuleConfiguration" value="confAdmin" type="string" />
 
+<attribute name="adminModuleLDAP" value="ldapAdmin" type="string" />
+
 <attribute name="adminModuleBackup" value="backupContent" type="string" />
 
 

@@ -159,7 +159,7 @@ public class Configurationmanagement {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select max(c.configuration_id) from Configuration c where c.deleted = 'false'"); 
+			Query query = session.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'"); 
 			List ll = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);

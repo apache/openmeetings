@@ -141,7 +141,10 @@ public class ImportInitvalues {
 		Navimanagement.getInstance().addMainStructure("adminModuleLanguages", 19,
 				348, true, false, 3, "Administration of Languages", 6, "false");
 		
-		Navimanagement.getInstance().addMainStructure("adminModuleBackup", 20, 367,
+		Navimanagement.getInstance().addMainStructure("adminModuleLDAP", 20, 1103,
+				true, false, 3, "Administration of LDAP Configs", 6, "false");
+		
+		Navimanagement.getInstance().addMainStructure("adminModuleBackup", 21, 367,
 				true, false, 3, "Administration of Backups", 6, "false");
 
 		ErrorManagement.getInstance().addErrorType(new Long(1), new Long(322));

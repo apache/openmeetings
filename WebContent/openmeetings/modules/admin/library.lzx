@@ -8,6 +8,7 @@
 	<include href="roomadmin/" />
 	<include href="confadmin/" />
 	<include href="languageseditor/" />
+	<include href="ldap/" />
 	<!-- -->
 	<include href="backup/" />
     <include href="connections/" />

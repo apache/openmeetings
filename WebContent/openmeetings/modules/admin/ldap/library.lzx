@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-	<include href="orgAdmin.lzx" />
-	<include href="orgUsersRecordValueList.lzx" />
-	<include href="orgAdminListItem.lzx" />
-	<include href="orgAdminValueForm.lzx" />
-	<include href="orgAdminChooseUserWindow.lzx" />
+	<include href="ldapAdmin.lzx" />
+	<include href="ldapAdminValueForm.lzx" />
 
 </library>
