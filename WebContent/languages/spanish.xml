@@ -700,7 +700,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Contraseña errónea</value>
   </string>
   <string id="232" name="user_registerFalsePWDHeader">
-    <value>Por favor introduzca dos veces las misma contraseña con un mínimo de 6 caracteres</value>
+    <value>Por favor introduzca dos veces las misma contraseña con un mínimo de 4 caracteres</value>
   </string>
   <string id="233" name="user_registerMailError">
     <value>Correo inválido</value>
@@ -2778,520 +2778,520 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Regenerar datos SIP</value>
   </string>
   <string id="922" name="fileexplorer">
-    <value>You cannot move this file or folder into its own sub folder!</value>
+    <value>¡No puede mover este archivo o carpeta dentro de su propio subdirectorio!</value>
   </string>
   <string id="923" name="file explorer ">
-    <value>Home drive size</value>
+    <value>Tamaño del dispositivo personal</value>
   </string>
   <string id="924" name="file explorer">
-    <value>Public drive size</value>
+    <value>Tamaño del dispositivo público</value>
   </string>
   <string id="925" name="user-admin">
-    <value>License Settings</value>
+    <value>Ajustes de licencia</value>
   </string>
   <string id="926" name="user-admin">
-    <value>You can either bind the user to a expire Date or to a maximum number of minutes when you enable licensing.</value>
+    <value>Al habilitar la licencia puede obligar a los usuarios bien con una fecha de caducidad bien con un número máximo de minutos.</value>
   </string>
   <string id="927" name="user-admin">
-    <value>Check license</value>
+    <value>Comprobar licencia</value>
   </string>
   <string id="928" name="user-admin">
-    <value>Flatrate</value>
+    <value>Tarifa plana</value>
   </string>
   <string id="929" name="user-admin">
-    <value>Expire date</value>
+    <value>Fecha de caducidad</value>
   </string>
   <string id="930" name="user-admin">
-    <value>Seconds left</value>
+    <value>Segundos restantes</value>
   </string>
   <string id="931" name="user-admin">
-    <value>Total time</value>
+    <value>Tiempo total</value>
   </string>
   <string id="932" name="user-license">
-    <value>Your License has expired. You need to buy new minutes (Pay-per-minute) or a volume flatrate.</value>
+    <value>Su licencia ha expirado. Necesita comprar más tiempo (pago por minuto) o bien pasarse a una tarifa plana.</value>
   </string>
   <string id="933" name="user-license">
-    <value>Click and buy</value>
+    <value>Pulsar y comprar</value>
   </string>
   <string id="934" name="user-license">
-    <value>Time Left on your account:</value>
+    <value>Tiempo restante de su cuenta:</value>
   </string>
   <string id="935" name="user-license">
-    <value>User License Info</value>
+    <value>Información de la licencia del usuario</value>
   </string>
   <string id="936" name="user-license">
     <value>Info</value>
   </string>
   <string id="937" name="user-license">
-    <value>Close</value>
+    <value>Cerrar</value>
   </string>
   <string id="938" name="license-info">
-    <value>Your license has expired. You need either to buy a minute package (Pay-per-minute) or a volume flatrate.</value>
+    <value>Su licencia ha expirado. Necesita comprar o un paquete de tiempo (pago-por-minutos) o una tarifa plana.</value>
   </string>
   <string id="939" name="user-license">
-    <value>License settings</value>
+    <value>Configuración de la licencia</value>
   </string>
   <string id="940" name="user-license">
-    <value>You can either buy minutes to make Web-Conferencing (Pay-per-minute).&lt;br/&gt;&lt;br/&gt; Or you buy a volume flatrate about 3-12 months.&lt;br/&gt;&lt;br/&gt;Sending invitations (direct links into Conference Rooms) or creating conference Rooms via the Calendar with external Users is only allowed with a volume flatrate!</value>
+    <value>Puede o bien comprar minutos de uso de la videoconferencia.&lt;br/&gt;&lt;br/&gt; O puede comprar una tarifa plana de 3 a 12 meses.&lt;br/&gt;&lt;br/&gt;Sólo se permite el envío de invitaciones (enlaces directos para entrar en las salas) o la creación de salas de conferencia a través del calendario a usuarios con tarifa plana.</value>
   </string>
   <string id="941" name="user-license">
-    <value>Buy 60 Minutes 9,99 EURO (16 Cent per Minute)</value>
+    <value>Comprar 60 minutos 9,99 € (16 céntimos por minuto)</value>
   </string>
   <string id="942" name="user-license">
-    <value>Buy 5 hours 19,99 EURO (6 Cent per minute)</value>
+    <value>Comprar 5 horas 19,99 € (6 céntimos por minuto)</value>
   </string>
   <string id="943" name="user-license">
-    <value>Buy 3 month for 29,99 EURO (9,99 Euro per Month)</value>
+    <value>Comprar 3 meses por 29,99 € (9,99 € por mes)</value>
   </string>
   <string id="944" name="user-license">
-    <value>Buy 6 month for 39,99 EURO (6,66 Euro per month)</value>
+    <value>Comporar 6 meses por 39,99 € (6,66 € por mes)</value>
   </string>
   <string id="945" name="user-license">
-    <value>Pay-per-minute</value>
+    <value>Pago-por-minuto</value>
   </string>
   <string id="946" name="user-license">
-    <value>Volume flatrate</value>
+    <value>Tarifa plana</value>
   </string>
   <string id="947" name="user-license">
-    <value>You have unlimited License</value>
+    <value>Tiene una licencia ilimitada</value>
   </string>
   <string id="948" name="user-license">
-    <value>Your license will expire at:</value>
+    <value>Su licencia expirará a las:</value>
   </string>
   <string id="949" name="user-license">
-    <value>You bought Pay-per-minute. You still have:</value>
+    <value>Ha comprado Pago-por-minuto. Todavía tiene:</value>
   </string>
   <string id="950" name="user-license">
-    <value>Buy new credit!</value>
+    <value>¡Ampliar el crédito!</value>
   </string>
   <string id="951" name="user-license">
-    <value>Want your own Server?</value>
+    <value>¿Desea tener su propio servidor?</value>
   </string>
   <string id="952" name="user-license">
-    <value>You would like to have OpenMeetings installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
-  </string>
-  <string id="953" name="user-license">
-    <value>Or send us a message</value>
-  </string>
-  <string id="954" name="user-license">
-    <value>Answer to:</value>
-  </string>
-  <string id="955" name="user-license">
-    <value>Message:</value>
-  </string>
-  <string id="956" name="user-license">
-    <value>Send</value>
-  </string>
-  <string id="957" name="user-license">
-    <value>Click here to get contact Info and Prizings</value>
-  </string>
-  <string id="958" name="payment-form">
-    <value>Credit Card Details</value>
-  </string>
-  <string id="959" name="payment-form">
-    <value>Firstname</value>
-  </string>
-  <string id="960" name="payment-form">
-    <value>Lastname</value>
-  </string>
-  <string id="961" name="payment-form">
-    <value>Credit Card Type</value>
-  </string>
-  <string id="962" name="payment-form">
-    <value>VISA Card</value>
-  </string>
-  <string id="963" name="payment-form">
-    <value>MasterCard</value>
-  </string>
-  <string id="964" name="payment-form">
-    <value>Discover</value>
-  </string>
-  <string id="965" name="payment-form">
-    <value>American Express</value>
-  </string>
-  <string id="966" name="payment-form">
-    <value>Credit Card Number</value>
-  </string>
-  <string id="967" name="payment-form">
-    <value>Expiration Date</value>
-  </string>
-  <string id="968" name="payment-form">
-    <value>Card Verification Number</value>
-  </string>
-  <string id="969" name="payment-form">
-    <value>Billing Address</value>
-  </string>
-  <string id="970" name="payment-form">
-    <value>Address</value>
-  </string>
-  <string id="971" name="payment-form">
-    <value></value>
-  </string>
-  <string id="972" name="payment-form">
-    <value>City</value>
-  </string>
-  <string id="973" name="payment-form">
-    <value>Country</value>
-  </string>
-  <string id="974" name="payment-form">
-    <value>State (Only US)</value>
-  </string>
-  <string id="975" name="payment-form">
-    <value>ZIP</value>
-  </string>
-  <string id="976" name="payment-form">
-    <value>Amount</value>
-  </string>
-  <string id="977" name="payment-form">
-    <value>Submit</value>
-  </string>
-  <string id="978" name="payment-form">
-    <value>Step 1: OpenMeetings - Payment Form</value>
-  </string>
-  <string id="979" name="payment-form">
-    <value>EMail</value>
-  </string>
-  <string id="980" name="payment-form">
-    <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
-  </string>
-  <string id="981" name="payment-form">
-    <value>Thank you for buying OpenMeetings. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to OpenMeetings.</value>
-  </string>
-  <string id="982" name="payment-form">
-    <value>Submit and Buy!</value>
-  </string>
-  <string id="983" name="payment-from">
-    <value>Click and Buy!</value>
-  </string>
-  <string id="984" name="payment-from">
-    <value>Step 3: OpenMeetings Payment - Check order and buy!</value>
-  </string>
-  <string id="985" name="payment-from">
-    <value>Name</value>
-  </string>
-  <string id="986" name="payment-mail">
-    <value>Payment received!</value>
-  </string>
-  <string id="987" name="payment-mail">
-    <value>Hi,</value>
-  </string>
-  <string id="988" name="payment-mail">
-    <value>We have received your payment. Your user profile is updated now. See attached your Invoice. The Invoice and all past Invoice can also be downloaded in your user profile.</value>
-  </string>
-  <string id="989" name="payment-mail">
-    <value>Thank you for using OpenMeetings!</value>
-  </string>
-  <string id="990" name="payment-mail">
-    <value>Payment Received OpenMeetings -</value>
-  </string>
-  <string id="991" name="user-settings">
-    <value>Payment and Transaction Status</value>
-  </string>
-  <string id="992" name="user-settings">
-    <value>Transcation Hash</value>
-  </string>
-  <string id="993" name="user-settings">
-    <value>Minutes</value>
-  </string>
-  <string id="994" name="user-settings">
-    <value>Months</value>
-  </string>
-  <string id="995" name="user-settings">
-    <value>EUR</value>
-  </string>
-  <string id="996" name="user-settings">
-    <value>Status</value>
-  </string>
-  <string id="997" name="user-settings">
-    <value>Invoice</value>
-  </string>
-  <string id="998" name="user-settings">
-    <value></value>
-  </string>
-  <string id="999" name="error-license-flat">
-    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access OpenMeetings. You cannot allow 3th Parties to access a Meeting.</value>
-  </string>
-  <string id="1000" name="error user">
-    <value>This Email is already used by another User.</value>
-  </string>
-  <string id="1001" name="room-admin">
-    <value>SIP-Settings</value>
-  </string>
-  <string id="1002" name="room-admin">
-    <value>The Conference Number and PIN is automatically created via the OpenXG RPC-Gateway</value>
-  </string>
-  <string id="1003" name="room-admin">
-    <value>SIP Number</value>
-  </string>
-  <string id="1004" name="room-admin">
-    <value>PIN</value>
-  </string>
-  <string id="1005" name="whiteboard">
-    <value>Clear objects on current slide only!</value>
-  </string>
-  <string id="1006" name="co-browser">
-    <value>Only the URL entered in the Status bar is send to participants!</value>
-  </string>
-  <string id="1007" name="team-split">
-    <value>Make Team-Rooms [Breakout session]</value>
-  </string>
-  <string id="1008" name="team-split">
-    <value>Choose users for a new Team-Room!</value>
-  </string>
-  <string id="1009" name="team-split">
-    <value>You can choose users here and create a new Conference Room ("Team Room") for them. The chosen users will automatically switch to the new Team-Room or get a notification. Team-Room Moderators will get additionally a list of current rooms so that they can switch to each room if there are is need for a Moderator.</value>
-  </string>
-  <string id="1010" name="team-split">
-    <value>Username</value>
-  </string>
-  <string id="1011" name="team-split">
-    <value>Login</value>
-  </string>
-  <string id="1012" name="team-split">
-    <value></value>
-  </string>
-  <string id="1013" name="team-split">
-    <value>Users for the new Team-Room:</value>
-  </string>
-  <string id="1014" name="team-split">
-    <value>Create Team-Room</value>
-  </string>
-  <string id="1015" name="team-split">
-    <value>Cancel</value>
-  </string>
-  <string id="1016" name="team-split">
-    <value>Choose at least one user for the Team-Room!</value>
-  </string>
-  <string id="1017" name="team-split">
-    <value>Add user to team</value>
-  </string>
-  <string id="1018" name="team-split">
-    <value>Remove user from Team-Room</value>
-  </string>
-  <string id="1019" name="team-split">
-    <value>User is Team-Room Moderator (He is able to manage Team-Rooms and users of the Team-Room can ask him to come inside)</value>
-  </string>
-  <string id="1020" name="team-split">
-    <value>Roomtype</value>
-  </string>
-  <string id="1021" name="team-split">
-    <value>If you check "Force user to switch to new Team-Room" all chosen users will automatically switch to the newly created Team-Room. Otherwise they get a notification with a button that they &lt;i&gt;can&lt;/i&gt; switch to the new room. Team-Moderators always have the free choice to manage the Team-Rooms and switch between them.</value>
-  </string>
-  <string id="1022" name="team-split">
-    <value>Manage Team-Rooms</value>
-  </string>
-  <string id="1023" name="team-split">
-    <value>You can switch here between all Team-Rooms that you are assigned as Team-Room Moderator. Users inside the Team-Room can send you a message, for example to ask you to come to their room and help them. You can also terminate the Team-Room and all Users will be logged out.</value>
-  </string>
-  <string id="1024" name="team-split">
-    <value>Force user to switch to new Team-Room</value>
-  </string>
-  <string id="1025" name="team-split">
-    <value>Name</value>
-  </string>
-  <string id="1026" name="team-split">
-    <value>Created</value>
-  </string>
-  <string id="1027" name="team-split">
-    <value></value>
-  </string>
-  <string id="1028" name="team-split">
-    <value></value>
-  </string>
-  <string id="1029" name="team-split">
-    <value>Users available</value>
-  </string>
-  <string id="1030" name="team-split">
-    <value>Add a user with the plus from the left or remove it with the cross from the right!</value>
-  </string>
-  <string id="1031" name="team-split">
-    <value>1) Team-Room settings</value>
-  </string>
-  <string id="1032" name="team-split">
-    <value>2) Add users to the Team-Room</value>
-  </string>
-  <string id="1033" name="team-split">
-    <value>Team-Room Name</value>
-  </string>
-  <string id="1034" name="team-split">
-    <value>Team-Room</value>
-  </string>
-  <string id="1035" name="team-split">
-    <value>Change to the Room</value>
-  </string>
-  <string id="1036" name="team-split">
-    <value>Switch to this Team-Room</value>
-  </string>
-  <string id="1037" name="team-split">
-    <value>Terminate Team-Room and logout all Users</value>
-  </string>
-  <string id="1038" name="team-split">
-    <value>New Team-Room</value>
-  </string>
-  <string id="1039" name="team-split">
-    <value>There is a new Team-Room available for you.</value>
-  </string>
-  <string id="1040" name="team-split">
-    <value>Switch to Team-Room</value>
-  </string>
-  <string id="1041" name="team-split">
-    <value>Team-Room Actions</value>
-  </string>
-  <string id="1042" name="team-split">
-    <value>You can re-open this window via the main menu in the "Actions" section!</value>
-  </string>
-  <string id="1043" name="team-split">
-    <value>Send message to Team-Room Moderator</value>
-  </string>
-  <string id="1044" name="team-split">
-    <value>New Team-Room</value>
-  </string>
-  <string id="1045" name="team-split">
-    <value>There is a new Team-Room available. You can switch to that Room. Team-Rooms are like "Workgroups" with additionally possibilities to ask the Team-Room Moderator for help. Your Team-Rooms are also available in the "My Meetings" section.</value>
-  </string>
-  <string id="1046" name="team-split">
-    <value>Switch to Team-Room</value>
-  </string>
-  <string id="1047" name="team-split">
-    <value>Created by:</value>
-  </string>
-  <string id="1048" name="team-split">
-    <value>Team-Room name:</value>
-  </string>
-  <string id="1049" name="team-split">
-    <value>This Window will stay open even if you leave the room!</value>
-  </string>
-  <string id="1050" name="team-split">
-    <value>Users for this Team-Room</value>
-  </string>
-  <string id="1051" name="team-split">
-    <value>3) Other Team-Rooms that you could switch to</value>
-  </string>
-  <string id="1052" name="team-split">
-    <value>Send a message to the Team-Room Moderators. For example if you need help in Moderating the Room or if you have a question about the topic.</value>
-  </string>
-  <string id="1053" name="team-split">
-    <value>Send</value>
-  </string>
-  <string id="1054" name="team-split">
-    <value>2) Users that are invited to this Team-Room</value>
-  </string>
-  <string id="1055" name="team-split">
-    <value>Is Team-Room Moderator</value>
-  </string>
-  <string id="1056" name="team-split">
-    <value>These are all users that the moderator has invited to this Team-Room.</value>
-  </string>
-  <string id="1057" name="team-split">
-    <value>There is no Team-Moderator logged in at the moment!</value>
-  </string>
-  <string id="1058" name="team-split">
-    <value>Please enter a message</value>
-  </string>
-  <string id="1059" name="team-split">
-    <value>Please help us, we have a problem in our Team-Room!</value>
-  </string>
-  <string id="1060" name="team-split">
-    <value>A user from a Team-Room requests your help.</value>
-  </string>
-  <string id="1061" name="team-split">
-    <value>Team-Room request for help</value>
-  </string>
-  <string id="1062" name="team-split">
-    <value>Message:</value>
-  </string>
-  <string id="1063" name="team-split">
-    <value>From:</value>
-  </string>
-  <string id="1064" name="team-split">
-    <value>You are currently not in any Team-Room. But you can switch here to all Team-Rooms that you have access to.</value>
-  </string>
-  <string id="1065" name="backupContent">
-    <value>Backup the System. The Backup includes all User generated data. The configuration is not included as well as the language labels. Because those values are imported with the System Installer. To update your System, export your old system (1) re-install into a new database the new package (2) and import the Backup file again (3). The Backup should be imported before generating data in the newly installed system.</value>
+    <value>Puede que desee tener OpenMeetings instalado en su servidor o integrado con Moodle, SugarCRM, la página web o la intranet. El precio mínimo es de 500 € por la instalación.</value>
+</string>
+<string id="953" name="user-license">
+<value>O envíenos un mensaje</value>
+</string>
+<string id="954" name="user-license">
+<value>Responder a:</value>
+</string>
+<string id="955" name="user-license">
+<value>Mensaje:</value>
+</string>
+<string id="956" name="user-license">
+<value>Enviar</value>
+</string>
+<string id="957" name="user-license">
+<value>Pulse aquí para conseguir información de contacto y precios</value>
+</string>
+<string id="958" name="payment-form">
+<value>Detalles de la tarjeta de crédito</value>
+</string>
+<string id="959" name="payment-form">
+<value>Nombre</value>
+</string>
+<string id="960" name="payment-form">
+<value>Apellidos</value>
+</string>
+<string id="961" name="payment-form">
+<value>Tipo de tarjeta de crédito</value>
+</string>
+<string id="962" name="payment-form">
+<value>Tarjeta VISA</value>
+</string>
+<string id="963" name="payment-form">
+<value>MasterCard</value>
+</string>
+<string id="964" name="payment-form">
+<value>Discover</value>
+</string>
+<string id="965" name="payment-form">
+<value>American Express</value>
+</string>
+<string id="966" name="payment-form">
+<value>Número de la tarjeta de crédito</value>
+</string>
+<string id="967" name="payment-form">
+<value>Fecha de caducidad</value>
+</string>
+<string id="968" name="payment-form">
+<value>Número de verificación de la tarjeta</value>
+</string>
+<string id="969" name="payment-form">
+<value>Dirección de facturación</value>
+</string>
+<string id="970" name="payment-form">
+<value>Dirección</value>
+</string>
+<string id="971" name="payment-form">
+<value></value>
+</string>
+<string id="972" name="payment-form">
+<value>Ciudad</value>
+</string>
+<string id="973" name="payment-form">
+<value>País</value>
+</string>
+<string id="974" name="payment-form">
+<value>Estado (Sólo US)</value>
+</string>
+<string id="975" name="payment-form">
+<value>Código Postal</value>
+</string>
+<string id="976" name="payment-form">
+<value>Cantidad</value>
+</string>
+<string id="977" name="payment-form">
+<value>Enviar</value>
+</string>
+<string id="978" name="payment-form">
+<value>Paso 1: OpenMeetings - Forma de pago</value>
+</string>
+<string id="979" name="payment-form">
+<value>Correo</value>
+</string>
+<string id="980" name="payment-form">
+<value>Pulse "Verificar con Paypal" para pagar.&lt;br/&gt; Paypal acepta VISA, MasterCard, Discover o American Express. &lt;br/&gt;No es obligatorio registrarse con Paypal. &lt;br/&gt;Los ciudadanos de Alemana pueden pagar también utilizando domiciliación bancaria.</value>
+</string>
+<string id="981" name="payment-form">
+<value>Gracias por comprar OpenMeetings. &lt;br/&gt; &lt;br/&gt; Tan pronto como tengamos confirmación del pago, su cuenta será actualizada.&lt;br/&gt; Recibirá un correo con su factura en pdf.&lt;br/&gt;Puede también comprobar los movimientos pasados y actuales en su perfil.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;Si lo desea, pueda ya cerrar esta ventana en el navegador y volver a OpenMeetings.</value>
+</string>
+<string id="982" name="payment-form">
+<value>Enviar y Comprar</value>
+</string>
+<string id="983" name="payment-from">
+<value>Pulsar y Comprar</value>
+</string>
+<string id="984" name="payment-from">
+<value>Paso 3: Pago por OpenMeetings - Verifique la orden y pague</value>
+</string>
+<string id="985" name="payment-from">
+<value>Nombre</value>
+</string>
+<string id="986" name="payment-mail">
+<value>¡Pago recibido!</value>
+</string>
+<string id="987" name="payment-mail">
+<value>Saludos,</value>
+</string>
+<string id="988" name="payment-mail">
+<value>Hemos recibido su pago. Su perfil de usuario se ha actualizado convenientemente. Vea adjuntada su factura. Esta (así como todas las anteriores) podrá ser descargada desde su perfil.</value>
+</string>
+<string id="989" name="payment-mail">
+<value>Gracias por utilizar OpenMeetings!</value>
+</string>
+<string id="990" name="payment-mail">
+<value>Pago recibido de OpenMeetings -</value>
+</string>
+<string id="991" name="user-settings">
+<value>Estado de pagos y transferencias</value>
+</string>
+<string id="992" name="user-settings">
+<value>Transcation Hash</value>
+</string>
+<string id="993" name="user-settings">
+<value>Minutos</value>
+</string>
+<string id="994" name="user-settings">
+<value>Meses</value>
+</string>
+<string id="995" name="user-settings">
+<value>EUR</value>
+</string>
+<string id="996" name="user-settings">
+<value>Estado</value>
+</string>
+<string id="997" name="user-settings">
+<value>Factura</value>
+</string>
+<string id="998" name="user-settings">
+<value></value>
+</string>
+<string id="999" name="error-license-flat">
+<value>Necesita comprar una tarifa plana para poder enviar invitaciones o crear encuentros utilizando el calendario. Con el sistema pago por minutos sólo es posible acceder a OpenMeetings.</value>
+</string>
+<string id="1000" name="error user">
+<value>Esta dirección de correo está siendo utilizada por otro usuario.</value>
+</string>
+<string id="1001" name="room-admin">
+<value>Ajustes SIP</value>
+</string>
+<string id="1002" name="room-admin">
+<value>El número de la videoconferencia y el PIN son creados automáticamente utilizando la pasarela OpenXG RPC-Gateway</value>
+</string>
+<string id="1003" name="room-admin">
+<value>Número SIP</value>
+</string>
+<string id="1004" name="room-admin">
+<value>PIN</value>
+</string>
+<string id="1005" name="whiteboard">
+<value>¡Limpiar sólo los objetos de la presentación actual!</value>
+</string>
+<string id="1006" name="co-browser">
+<value>Sólo se enviará a los participantes la URL introducida en la barra de estado</value>
+</string>
+<string id="1007" name="team-split">
+<value>Hacer salas de equipos</value>
+</string>
+<string id="1008" name="team-split">
+<value>Seleccione usuarios para una nueva sala de equipo</value>
+</string>
+<string id="1009" name="team-split">
+<value>Puede seleccionar usuarios aquí y crear una nueva sala de (vídeo)conferencia ("sala de equipo") para los mismos. Los usuarios seleccionados automáticamente podrán conectarse a la nueva sala o bien recibir una notificación. Los moderadores conseguirán adicionalmente una lista de las salas actuales de tal modo que puedan conectarse a cada sala si fuera necesario moderarlas.</value>
+</string>
+<string id="1010" name="team-split">
+<value>Usuario</value>
+</string>
+<string id="1011" name="team-split">
+<value>Login</value>
+</string>
+<string id="1012" name="team-split">
+<value/>
+</string>
+<string id="1013" name="team-split">
+<value>Usuarios para la nueva sala de equipo:</value>
+</string>
+<string id="1014" name="team-split">
+<value>Crear sala de equipo</value>
+</string>
+<string id="1015" name="team-split">
+<value>Cancelar</value>
+</string>
+<string id="1016" name="team-split">
+<value>Seleccione al menos un usuario para la sala de equipo</value>
+</string>
+<string id="1017" name="team-split">
+<value>Añadir un usuario al equipo</value>
+</string>
+<string id="1018" name="team-split">
+<value>Quitar usuarios de la sala de equipo</value>
+</string>
+<string id="1019" name="team-split">
+<value>El usuario es moderador de la sala de equipo (puede gestionar salas, y los usuarios del equipo pueden soliciarte entrar)</value>
+</string>
+<string id="1020" name="team-split">
+<value>Tipo de sala</value>
+</string>
+<string id="1021" name="team-split">
+<value>Si activa "Forzar a los usuarios a conectarse a la nueva sala de equipo" todos los usuarios seleccionados serán conectados automáticamente a la última sala creada. Por otro lado, reciben una notificación con un botón que ellos <i>pueden</i> cambiar a la nueva sala. Los moderadores de equipo siempre tienen libertad de elección para gestionar las salas y conectarse a la que deseen.</value>
+</string>
+<string id="1022" name="team-split">
+<value>Gestionar Salas de Equipos</value>
+</string>
+<string id="1023" name="team-split">
+<value>Puede conectarse aquí a la sala que desee de las que es moderador. Los usuarios del equipo pueden enviarle un mensaje, por ejemplo para pedirle que entre en su sala y les ayude. También puede finalizar la sala de equipo con lo que todos los usuarios serán desconectados.</value>
+</string>
+<string id="1024" name="team-split">
+<value>Forzar al usuario a conectarse a la nueva sala de equipo</value>
+</string>
+<string id="1025" name="team-split">
+<value>Nombre</value>
+</string>
+<string id="1026" name="team-split">
+<value>Creado</value>
+</string>
+<string id="1027" name="team-split">
+<value/>
+</string>
+<string id="1028" name="team-split">
+<value/>
+</string>
+<string id="1029" name="team-split">
+<value>Usuarios disponibles</value>
+</string>
+<string id="1030" name="team-split">
+<value>Añada un usuario con el + en la izquierda o bórrelo con la x de la derecha</value>
+</string>
+<string id="1031" name="team-split">
+<value>1) Configuración de la sala</value>
+</string>
+<string id="1032" name="team-split">
+<value>2) Añadir usuarios a la sala de equipo</value>
+</string>
+<string id="1033" name="team-split">
+<value>Nombre de la sala de equipo</value>
+</string>
+<string id="1034" name="team-split">
+<value>Sala de equipo</value>
+</string>
+<string id="1035" name="team-split">
+<value>Cambiar a la sala</value>
+</string>
+<string id="1036" name="team-split">
+<value>Conectar a esta sala de equipo</value>
+</string>
+<string id="1037" name="team-split">
+<value>Finalizar sala y desconectar a todos los usuarios</value>
+</string>
+<string id="1038" name="team-split">
+<value>Nueva sala de equipo</value>
+</string>
+<string id="1039" name="team-split">
+<value>Hay una nueva sala de equipo disponible para usted.</value>
+</string>
+<string id="1040" name="team-split">
+<value>Cambiar a la sala de equipo</value>
+</string>
+<string id="1041" name="team-split">
+<value>Acciones de la sala de equipo</value>
+</string>
+<string id="1042" name="team-split">
+<value>Puede reabrir esta ventana a través del menú principal en la sección "Acciones"</value>
+</string>
+<string id="1043" name="team-split">
+<value>Enviar mensaje al moderador de la sala de equipo</value>
+</string>
+<string id="1044" name="team-split">
+<value>Nueva sala de equipo</value>
+</string>
+<string id="1045" name="team-split">
+<value>Hay una nueva sala de equipo disponible. Puede cambiarse a esa sala. Las salas de equipo son como "grupos de trabajo" con posibilidades adicionales para solicitar ayuda al moderador. Sus salas de equipo son también accesibles desde la sección "Mis Reuniones".</value>
+</string>
+<string id="1046" name="team-split">
+<value>Cambiar a la sala de equipo</value>
+</string>
+<string id="1047" name="team-split">
+<value>Creada por:</value>
+</string>
+<string id="1048" name="team-split">
+<value>Nombre de la sala de equipo:</value>
+</string>
+<string id="1049" name="team-split">
+<value>Esta ventana permanecerá abierta aunque salga de la sala.</value>
+</string>
+<string id="1050" name="team-split">
+<value>Usuarios de esta sala de equipo</value>
+</string>
+<string id="1051" name="team-split">
+<value>3) Otras salas de equipo a las que podría conectarse</value>
+</string>
+<string id="1052" name="team-split">
+<value>Enviar un mensaje a los moderadores de esta sala. Por ejemplo, si necesita ayuda en la moderación de la sala o si tiene alguna pregunta sobre el tema.</value>
+</string>
+<string id="1053" name="team-split">
+<value>Enviar</value>
+</string>
+<string id="1054" name="team-split">
+<value>2) Usuarios que están invitados a esta sala de equipo</value>
+</string>
+<string id="1055" name="team-split">
+<value>Es moderador de la sala de equipo</value>
+</string>
+<string id="1056" name="team-split">
+<value>Estos son todos los usuarios a los que el moderador ha invitado a entrar a esta sala de equipo.</value>
+</string>
+<string id="1057" name="team-split">
+<value>No hay un moderador conectado en este momento</value>
+</string>
+<string id="1058" name="team-split">
+<value>Por favor, introduzca un mensaje</value>
+</string>
+<string id="1059" name="team-split">
+<value>Por favor, ayúdenos. Tenemos un problema en nuestra sala de equipo</value>
+</string>
+<string id="1060" name="team-split">
+<value>Un usuario de una sala de equipo solicita su ayuda.</value>
+</string>
+<string id="1061" name="team-split">
+<value>El Equipo pide ayuda</value>
+</string>
+<string id="1062" name="team-split">
+<value>Mensaje:</value>
+</string>
+<string id="1063" name="team-split">
+<value>De:</value>
+</string>
+<string id="1064" name="team-split">
+<value>Actualmente no está en ninguna sala de equipo. Puede entrar aquí a todas las Salas a las que tiene acceso.</value>
+</string>
+<string id="1065" name="backupContent">
+    <value>Resguarde el sistma. El backup incluye los datos generados por todos los usuarios. La configuración no se incluye, al igual que las etiquetas de idiomas, ya que esos valores se importan con el instalador de sistema. Para actualizar su sistema, exporte los valores antiguos (1), reinstale en una nueva base de datos el nuevo paquete (2) e importe la archivo de backup de nuevo (3). El Backup debiera ser importado antes  de generar los datos en el nuevo sistema.</value>
   </string>
   <string id="1066" name="backupContent">
-    <value>System Backup</value>
+    <value>Sistema de Backup</value>
   </string>
   <string id="1067" name="user-list">
-    <value>Allow user to share Screen/Record</value>
+    <value>Permitir al usuario compartir Pantalla/Grabación</value>
   </string>
   <string id="1068" name="user-list">
-    <value>Deny user to share Screen/Record</value>
+    <value>Denegar al usuario compartir Pantalla/Grabación</value>
   </string>
   <string id="1069" name="user-list">
-    <value>User is Moderator, he can do anything!</value>
+    <value>El usuario es moderador, tiene todos los permisos.</value>
   </string>
   <string id="1070" name="apply for screen/recording">
-    <value>would like to share/record screen.</value>
+    <value>le gustaría compartir/grabar pantalla.</value>
   </string>
   <string id="1071" name="moderation mini icons">
-    <value>You are allowed to share/record screen</value>
+    <value>Puede compartir/grabar pantalla</value>
   </string>
   <string id="1072" name="moderation mini icons">
-    <value>Apply for right to share/record screen.</value>
+    <value>Aplicar para permitir compartir/grabar pantalla.</value>
   </string>
   <string id="1073" name="moderation mini icons conference">
-    <value>Allow/Deny right to share/record screen.</value>
+    <value>Permitir/Denegar permisos para compartir/grabar pantalla.</value>
   </string>
   <string id="1074" name="sound icon">
-    <value>Turn sound off</value>
+    <value>Apagar sonido</value>
   </string>
   <string id="1075" name="sound icon">
-    <value>Turn sound on</value>
+    <value>Activar sonido</value>
   </string>
   <string id="1076" name="room administration">
-    <value>Audio only room</value>
+    <value>Sala de sólo audio</value>
   </string>
   <string id="1077" name="room administration">
-    <value>Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.</value>
+    <value>Active esta bandera y los usuarios tendrán sólo la opción de Audio (sin vídeo) en la sala. Es indicado para ahorrar ancho de banda.</value>
   </string>
   <string id="1078" name="user list">
-    <value>Allow Remote Control (During Screen Sharing)</value>
+    <value>Permitir control remoto (durante la compartición de pantalla)</value>
   </string>
   <string id="1079" name="user list">
-    <value>Deny Remote Control (During Screen Sharing)</value>
+    <value>Denegar control remoto (durante la compartición de pantalla)</value>
   </string>
   <string id="1080" name="user list">
-    <value>Apply for right to Remote Control Screen (During Screen Sharing)</value>
+    <value>Aplicar para permitir el control remoto de la pantalla</value>
   </string>
   <string id="1081" name="user list">
-    <value>You are allowed to Remote Control Screen (During Screen Sharing)</value>
+    <value>Tiene permisos para el control remoto de la pantalla (durante la compartición de pantalla)</value>
   </string>
   <string id="1082" name="apply for remote control">
-    <value>would like to remote control screen.</value>
+    <value>le gustaría tener control remoto de la pantalla.</value>
   </string>
   <string id="1083" name="user list">
-    <value>User is Moderator, he can do anything! [Remote Desktop Control]</value>
+    <value>El usuario es moderador, así que tiene todos los permisos.</value>
   </string>
   <string id="1084" name="user list">
-    <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
+    <value>Permitir/Denegar permisos en la Pantalla de Control Remoto (durante la compartición de pantalla)</value>
   </string>
-  <string id="1085" name="right click screen share">
-    <value>1) Your PC to remote PC: To copy and paste text from your clipboard into the remote controlled screen, click on the screen, then right click in the text field and choose "Insert" from the context (right click) menu.&lt;br/&gt;&lt;br/&gt;2) From remote PC to your PC: To copy text from the remote PC to your PC's clipboard, highlight the text with the mouse on the remote screen, then right-click on the remote screen and choose &lt;i&gt;Copy highlighted text&lt;/i&gt;</value>
+ <string id="1085" name="right click screen share">
+    <value>1) De su PC a un PC remoto: para copiar y pegar texto de su portapapeles a una pantalla remota, pulse sobre la pantalla, luego pulse el botón derecho del ratón y, en el campo de texto, seleccione "Insertar" del menú.&lt;br/&gt;&lt;br/&gt;2) Del PC remoto a su PC: para copiar texto de un PC remoto al portapapeles de su PC, seleccione el texto con el ratón en la pantalla remota, luego pulse el botón derecho del ratón sobre la pantalla remota y seleccione &lt;i&gt;Copiar texto destacado&lt;/i&gt;</value>
   </string>
   <string id="1086" name="right click screen share">
-    <value>Copy and Paste text from your PC to remote PC and vice-versa.</value>
+    <value>Copie y pegue texto de su PC al PC remoto y viceversa.</value>
   </string>
   <string id="1087" name="right click screen share">
-    <value>Copy highlighted text</value>
+    <value>Copie el texto destacado</value>
   </string>
   <string id="1088" name="right click screen share">
-    <value>How to copy n paste</value>
+    <value>Cómo copiar y pegar</value>
   </string>
   <string id="1089" name="screen-sharer-quality">
-    <value>Quality of the ScreenShare:</value>
+    <value>Calidad para compartir pantalla:</value>
   </string>
   <string id="1090" name="screen-sharer-quality">
-    <value>Very high Quality</value>
+    <value>Calidad muy Alta</value>
   </string>
   <string id="1091" name="screen-sharer-quality">
-    <value>High Quality</value>
+    <value>Calidad Alta</value>
   </string>
   <string id="1092" name="screen-sharer-quality">
-    <value>Medium Quality</value>
+    <value>Calidad Media</value>
   </string>
   <string id="1093" name="screen-sharer-quality">
-    <value>Low Quality</value>
+    <value>Calidad baja</value>
   </string>
   <string id="1094" name="keyboard-input">
     <value>en_US</value>
@@ -3300,25 +3300,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>de_DE</value>
   </string>
   <string id="1096" name="keyboard-input">
-    <value>Keyboard:</value>
+    <value>Teclado:</value>
   </string>
   <string id="1097" name="keyboard-input">
-    <value>Close Webinar!</value>
+    <value>¡Cerrar conferencia!</value>
   </string>
   <string id="1098" name="keyboard-input">
-    <value>The Webinar is already closed, you will be redirected to some interesting offerings in</value>
+    <value>La conferencia ya está cerrada, será redirigido a otras ofertas interesantes</value>
   </string>
   <string id="1099" name="room config">
-    <value>Close Room</value>
+    <value>Cerra sala</value>
   </string>
   <string id="1100" name="room config">
-    <value>Exit URL</value>
+    <value>URL de Salida</value>
   </string>
   <string id="1101" name="room config">
-    <value>Room termination settings</value>
+    <value>Configuración de finalización de sala</value>
   </string>
   <string id="1102" name="room config">
-    <value>If the room is closed users will be redirected to the exit URL.</value>
+    <value>Si la sala está cerrada los usuarios serán redirigidos a la URL de salida.</value>
   </string>
   <string id="1103" name="ldap config">
     <value>Ldap</value>
@@ -3327,45 +3327,45 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ID</value>
   </string>
   <string id="1105" name="ldap config">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1106" name="ldap config">
-    <value>Config File</value>
+    <value>Archivo de Configuración</value>
   </string>
   <string id="1107" name="ldap config">
-    <value>Ldap Config</value>
+    <value>Configuración Ldap</value>
   </string>
   <string id="1108" name="ldap config">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1109" name="ldap config">
-    <value>Enabled</value>
+    <value>Activado</value>
   </string>
   <string id="1110" name="ldap config">
-    <value>Inserted</value>
+    <value>Insertado</value>
   </string>
   <string id="1111" name="ldap config">
-    <value>Inserted by</value>
+    <value>Insertado por</value>
   </string>
   <string id="1112" name="ldap config">
-    <value>Updated</value>
+    <value>Actualizado</value>
   </string>
   <string id="1113" name="ldap config">
-    <value>Updated by</value>
+    <value>Actualizado por</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>The config files are in the same folder as the hibernate.cfg.xml. You need to manually upload the files to this folder. Changes to the config file are immediately online.</value>
+    <value>Los archivos de configuración están en la misma carpeta que hibernate.cfg.xml. Necesita subir manualmente los archivos a esta carpeta. Los cambios realizados en el archivo estarán online inmediatamente.</value>
   </string>
   <string id="1115" name="ldap config">
-    <value>Config file name</value>
+    <value>Nombre del archivo de configuración</value>
   </string>
   <string id="1116" name="ldap config">
-    <value>If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com</value>
+    <value>Si activa "Añadir Dominio al nombre de usuario" el valor del campo "dominio" se añade a cada registro que el usuario introduce en la casilla de login. Esto es útil si el Login en el Ldap se almacena incluyendo el nombre de dominio. Ejemplo: supongamos que el usuario introduce "hans" y el dominio está especificado como "localhost.com". El login que se verificará contra el Ldap será: hans@localhost.com</value>
   </string>
   <string id="1117" name="ldap config">
-    <value>Add Domain to username</value>
+    <value>Añadir Dominio al nombre de usuario</value>
   </string>
   <string id="1118" name="ldap config">
-    <value>Domain</value>
+    <value>Dominio</value>
   </string>
 </language>
