@@ -26,7 +26,7 @@ public class UserManagement extends TestCase {
 		UserService uService = new UserService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "test",false,null,"localhost");
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "test",false,null,-1L);
 		
 		SearchResult users = uService.getUserList(sessionData.getSession_id(), 0, 100, "firstname", false);
 		

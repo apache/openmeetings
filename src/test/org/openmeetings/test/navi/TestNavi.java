@@ -22,7 +22,7 @@ public class TestNavi extends TestCase {
 		MainService mService = new MainService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "SebastianWagner", "test",false,null,"localhost");
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "SebastianWagner", "test",false,null,-1L);
 		
 		System.out.println("us: "+us.getFirstname());
 		
