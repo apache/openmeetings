@@ -34,8 +34,11 @@ public class LdapConfigDaoImpl {
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
+				log.debug("addLdapConfig :1: "+UsersDaoImpl.getInstance().getUser(insertedby));
 				ldapConfig.setInsertedby(UsersDaoImpl.getInstance().getUser(insertedby));
 			}
+			
+			log.debug("addLdapConfig :2: "+insertedby);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -78,8 +81,11 @@ public class LdapConfigDaoImpl {
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {
+				log.debug("updateLdapConfig :1: "+UsersDaoImpl.getInstance().getUser(updatedby));
 				ldapConfig.setUpdatedby(UsersDaoImpl.getInstance().getUser(updatedby));
 			}
+			
+			log.debug("updateLdapConfig :2: "+updatedby);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -103,7 +109,7 @@ public class LdapConfigDaoImpl {
 	public LdapConfig getLdapConfigById(Long ldapConfigId) {
 		try {
 			
-			String hql = "Select * From LdapConfig c " +
+			String hql = "select c from LdapConfig c " +
 				       	"WHERE c.ldapConfigId = :ldapConfigId " +
 				       	"AND c.deleted LIKE :deleted";
 			

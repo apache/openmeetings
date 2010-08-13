@@ -20,12 +20,22 @@
 
 	<handler name="onnew">
 		this.ldapConfigId=0;
-        this.orgname.setAttribute('text','');
+        this.tName.setAttribute('text','');
+        this.configFileName.setAttribute('text','');
+        
+        this.addDomainToUserName.setValue(false);
+        this.domain.setAttribute('text','');
+        
+        this.isActive.setValue(false);
+        this.updated.setAttribute('text','');
+        this.updatedby.setAttribute('text','');
+        this.inserted.setAttribute('text','');
+        this.updatedby.setAttribute('text','');
 	</handler>
 	
     <handler name="ondelete" >
 		if (this.ldapConfigId!=0){
-			this.deleteOrganisation.doCall();
+			this.deleteLdapConfigById.doCall();
 		}
     </handler>	
 	
@@ -43,6 +53,7 @@
   		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
     	<netparam><method name="getValue">return parent.parent.ldapConfigId;</method></netparam>
     	<handler name="ondata" args="value">
+    		if ($debug) Debug.write("getLdapConfigById ",value);
     		parent.initFields(value);
     	</handler>
   	</netRemoteCallHib>	
@@ -51,6 +62,9 @@
     
     <method name="initFields" args="obj">
     	<![CDATA[
+    	if (obj == null) {
+    		return;
+    	}
     	this.ldapConfigId = obj.ldapConfigId;
         this.tName.setAttribute('text',obj.name);
         this.configFileName.setAttribute('text',obj.configFileName);
@@ -74,7 +88,7 @@
         	this.updated.setAttribute('text','');
         }
         if(obj.updatedby!=null){
-            this.updatedby.setAttribute('text',obj.updatedby.login);
+            this.updatedby.setAttribute('text',obj.updatedby.firstname+' '+obj.updatedby.lastname+'['+obj.updatedby.login+']');
         } else {
             this.updatedby.setAttribute('text','');
         }
@@ -84,10 +98,10 @@
         } else {
             this.inserted.setAttribute('text','');
         }
-        if(obj.updatedby!=null){
-            this.updatedby.setAttribute('text',obj.updatedby.login);
+        if(obj.insertedby!=null){
+            this.insertedby.setAttribute('text',obj.insertedby.firstname+' '+obj.insertedby.lastname+'['+obj.insertedby.login+']');
         } else {
-            this.updatedby.setAttribute('text','');
+            this.insertedby.setAttribute('text','');
         }
         
         ]]>
@@ -128,7 +142,7 @@
     	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
     	<handler name="ondata" args="val">
 			<![CDATA[
-    		//Debug.write("saveOrUpdateOrganisation: ",val);
+    		if ($debug) Debug.write("saveOrUpdateLdapConfig: ",val);
 			if (val>0){
 				//Debug.write("saveOrUpdateUser val greater 0: ",val);
 				this.parent.parent._turnoverlist.oncallnext.sendEvent();
@@ -163,35 +177,35 @@
         <labelCheckbox name="isActive" width="270" y="100" x="120" fontsize="11" />         
         
     <labelText labelid="1110" width="200" y="130" resize="false" x="2"/>
-        <labelText name="inserted" y="130" x="120" width="270" text="" />
+        <labelText name="inserted" y="130" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
  
     <labelText labelid="1111" width="200" y="150" resize="false" x="2"/>
-        <labelText name="insertedby" y="120" x="150" width="270" text="" />
+        <labelText name="insertedby" y="150" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
         
     <labelText labelid="1112" width="200" y="170" resize="false" x="2"/>
-        <labelText name="updated" y="170" x="120" width="270" text="" />
+        <labelText name="updated" y="170" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
  
     <labelText labelid="1113" width="200" y="190" resize="false" x="2"/>
-        <labelText name="updatedby" y="190" x="120" width="270" text="" />
+        <labelText name="updatedby" y="190" x="120" width="270" text="" bgcolor="0xCCCCCC"/>
         
     <view resource="messagebox_info_rsc" x="0" y="220" />
     
     <labelText labelid="1114" x="24" y="220" fontstyle="italic"
                multiline="true" width="370" />   
                         
-	<labelText labelid="1115" width="200" y="260" resize="false" x="2"/>
-        <customEdittext name="configFileName" y="260" x="120" width="270" text="" />  
+	<labelText labelid="1115" width="200" y="280" resize="false" x="2"/>
+        <customEdittext name="configFileName" y="280" x="120" width="270" text="" />  
         
-    <view resource="messagebox_info_rsc" x="0" y="290" />
+    <view resource="messagebox_info_rsc" x="0" y="310" />
     
-    <labelText labelid="1116" x="24" y="290" fontstyle="italic"
+    <labelText labelid="1116" x="24" y="310" fontstyle="italic"
                multiline="true" width="370" /> 
                
-    <labelText labelid="1117" width="200" y="350" resize="false" x="2"/>  
-        <labelCheckbox name="addDomainToUserName" width="270" y="350" x="120" fontsize="11" />   
+    <labelText labelid="1117" width="200" y="400" resize="false" x="2"/>  
+        <labelCheckbox name="addDomainToUserName" width="270" y="400" x="160" fontsize="11" />   
 
-    <labelText labelid="1118" width="200" y="380" resize="false" x="2"/>
-        <customEdittext name="domain" y="380" x="120" width="270" text="" /> 
+    <labelText labelid="1118" width="200" y="430" resize="false" x="2"/>
+        <customEdittext name="domain" y="430" x="120" width="270" text="" /> 
              
 </class>
 	

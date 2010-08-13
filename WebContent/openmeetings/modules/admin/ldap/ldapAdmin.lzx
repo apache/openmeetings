@@ -47,7 +47,7 @@
 			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
 			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
 	    	<handler name="ondata" args="value">
-	    		//Debug.write("getOrganisations ",value);
+	    		if ($debug) Debug.write("getLdapConfigs ",value);
 	    		//this.parent.destroy();
 	    		this.parent.initValues(value.records);
 	    		this.parent.renderContent(value.result);
@@ -58,10 +58,10 @@
 	    	<![CDATA[
 	    	this.clearList();
 	    	for (var i=0;i<records.length;i++){
-	    		new ldapAdminListItem(this._innerlist._inn._inn,{
+	    		new lz.ldapAdminListItem(this._innerlist._inn._inn,{
     	    		                 obj:records[i],
     	    		                 ldapConfigId:records[i].ldapConfigId,
-    	    		                 tName:records[i].tName,
+    	    		                 tName:records[i].name,
     	    		                 configFileName:records[i].configFileName
 	    		                 });
 	    	}

@@ -13,8 +13,8 @@
     <property name="isActive" type="boolean" column="is_active"/>
     <property name="inserted" type="java.util.Date" column="inserted"/>
     <property name="updated" type="java.util.Date" column="updated"/>
-    <many-to-one outer-join="true" insert="false" column="insertedby_id" lazy="false" update="false" name="insertedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
-    <many-to-one outer-join="true" insert="false" column="updatedby_id" lazy="false" update="false" name="updatedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <many-to-one outer-join="true" insert="true" column="insertedby_id" lazy="false" update="true" name="insertedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <many-to-one outer-join="true" insert="true" column="updatedby_id" lazy="false" update="true" name="updatedby" class="org.openmeetings.app.hibernate.beans.user.Users"/>
     <property name="deleted" type="string" column="deleted"/>
   </class>
 </hibernate-mapping>

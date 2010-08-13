@@ -124,8 +124,8 @@ public class LdapConfig {
 	 * @hibernate.many-to-one
 	 * column = "insertedby_id"
 	 * class = "org.openmeetings.app.hibernate.beans.user.Users"
-	 * insert="false"
-	 * update="false"
+	 * insert="true"
+	 * update="true"
 	 * outer-join="true"
 	 * lazy="false"
      */		
@@ -140,8 +140,8 @@ public class LdapConfig {
 	 * @hibernate.many-to-one
 	 * column = "updatedby_id"
 	 * class = "org.openmeetings.app.hibernate.beans.user.Users"
-	 * insert="false"
-	 * update="false"
+	 * insert="true"
+	 * update="true"
 	 * outer-join="true"
 	 * lazy="false"
      */		
