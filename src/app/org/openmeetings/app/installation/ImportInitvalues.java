@@ -232,8 +232,9 @@ public class ImportInitvalues {
 						null,
 						"This Class is used for Authentification-Crypting. Be carefull what you do here! If you change it while running previous Pass of users will not be workign anymore! for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
 		//"1"
-		Configurationmanagement.getInstance().addConfByKey(3,
-				"ldap_config_path", ldap_auth_path, null, "Absolute Path to a Ldap Configration File(see example config)");
+		//Not needed anymore, see the LDAP Configuration in the Administration section
+//		Configurationmanagement.getInstance().addConfByKey(3,
+//				"ldap_config_path", ldap_auth_path, null, "Absolute Path to a Ldap Configration File(see example config)");
 		
 		Configurationmanagement.getInstance().addConfByKey(3,
 				"screen_viewer", screen_viewer, null, "ScreenViewer Type(0==standard, 1== jrdesktop)");

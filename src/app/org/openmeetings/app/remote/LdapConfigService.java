@@ -1,6 +1,8 @@
 package org.openmeetings.app.remote;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -47,6 +49,31 @@ public class LdapConfigService {
         	return this.ldapConfigDaoImpl.getLdapConfigById(ldapConfigId);
         }
         return null;
+	}
+	
+	public List<LdapConfig> getActiveLdapConfigs() {
+		try {
+			List<LdapConfig> ldapConfigs = this.ldapConfigDaoImpl.getActiveLdapConfigs();
+			
+			//Add localhost Domain
+			LdapConfig ldapConfig = new LdapConfig();
+			
+			ldapConfig.setName("localhost");
+			ldapConfig.setLdapConfigId(-1);
+			
+			List<LdapConfig> returnldapConfigs = new LinkedList<LdapConfig>();
+			returnldapConfigs.add(ldapConfig);
+			
+			for (LdapConfig ldapConfigStored : ldapConfigs) {
+				returnldapConfigs.add(ldapConfigStored);
+			}
+			
+	        return returnldapConfigs;
+	        
+		} catch (Exception err) {
+			log.error("[getActiveLdapConfigs]",err);
+		}
+		return null;
 	}
 	
 	/**

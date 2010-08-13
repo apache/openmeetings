@@ -256,12 +256,51 @@
 	<labelText name="domain_label" text="Domain" width="200" y="174" resize="false" x="2" />     
         <resetCombobox name="domain" width="230" y="174" x="120" editable="false">
         	<handler name="oninit">
-        		this.addItem("localhost","localhost");
-        		this.addItem("eu.p-f.biz","SA-MeetingEU");
-        		this.addItem("am.p-f.biz","SA-MeetingAM");
-        		this.addItem("ap.p-f.biz","SA-MeetingAP");
-        		this.selectItemAt(0);
+        		//this.addItem("localhost","localhost");
+        		//this.addItem("eu.p-f.biz","SA-MeetingEU");
+        		//this.addItem("am.p-f.biz","SA-MeetingAM");
+        		//this.addItem("ap.p-f.biz","SA-MeetingAP");
+        		//this.selectItemAt(0);
+        		this.getActiveLdapConfigs.doCall();
         	</handler>
+        	
+        	<!--
+        	public List<LdapConfig> getActiveLdapConfigs() 
+        	 -->
+            <netRemoteCallHib name="getActiveLdapConfigs" funcname="ldapconfigservice.getActiveLdapConfigs" 
+        				        remotecontext="$once{ canvas.thishib }" >      
+                <handler name="ondata" args="value">
+                    //The onResult-Handler will be called be the rtmpconnection
+                    <![CDATA[
+                        if ($debug) Debug.write("getActiveLdapConfigs: ",value);
+                        for (var i=0;i<value.length;i++) {
+                            parent.addItem(value[i].name,value[i].ldapConfigId);
+                        }
+                        
+                        var t = new lz.sharedObject();
+                        t.getLocal('userdata');
+                        var g = t.getData('userdata');
+                        if(g!=null) {
+                            if (g["userdomain"]!=null) {
+                            	
+                            	var tItem = this.getItem(g["userdomain"]);
+                            	if (tItem != null) {
+                                    parent.selectItem(g["userdomain"]);
+                            	} else {
+                            		parent.selectItemAt(0);
+                            	}
+                            	
+                            } else {
+                                parent.selectItemAt(0);
+                            }
+                        } else {
+                            parent.selectItemAt(0);
+                        }
+                        
+                    ]]>
+                </handler>  
+            </netRemoteCallHib>         	 
+        	
         </resetCombobox>        
 
     <labelText name="organisation_label_info" labelid="617" width="350" 
@@ -318,7 +357,7 @@
         <netparam><method name="getValue"> return parent.parent.userpass.getText(); </method></netparam>
         <netparam><method name="getValue"> return parent.parent._savelogindata.getValue(); </method></netparam> 
         <netparam><method name="getValue"> return Number(parent.parent.languages.getValue()); </method></netparam> 
-        <netparam><method name="getValue"> return parent.parent.domain.getText(); </method></netparam> 
+        <netparam><method name="getValue"> return Number(parent.parent.domain.getValue()); </method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
@@ -336,6 +375,7 @@
                         g["userquality"] = parent.ncomboquality.getValue();
                         g["usercolor"] = parent.colors.getValue();
                         g["userlang"] = parent.languages.getValue();
+                        g["userdomain"] = parent.domain.getValue();
                         g["saveuserdata"]=true;
                         g["storedSession"] = canvas.sessionId;
                         t.setData('userdata',g);
@@ -350,6 +390,7 @@
                         g["userquality"] = null;
                         g["usercolor"] = null;
                         g["userlang"] = null;
+                        g["userdomain"] = null;
                         g["saveuserdata"]=false;
                         g["storedSession"] = "";
                         t.setData('userdata',g);

@@ -19,6 +19,7 @@ import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
 import org.openmeetings.app.hibernate.beans.basic.SOAPLogin;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
@@ -38,6 +39,7 @@ import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Feedbackmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -253,7 +255,7 @@ public class MainService implements IPendingServiceCallback {
      * @param Userpass
      * @return a valid user account or an empty user with an error message and level -1
      */ 
-    public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id, String domain){
+    public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id, Long ldapConfigId){
     	
     	// Check, whether LDAP - Login is required(Configuration has key ldap_config_path
     	boolean withLdap = false;
@@ -262,7 +264,7 @@ public class MainService implements IPendingServiceCallback {
 //    		withLdap = true;
 //    	}
     	
-    	if (!domain.equals("localhost")) {
+    	if (ldapConfigId > 0) {
     		withLdap = true;
     	}
     	
@@ -274,19 +276,19 @@ public class MainService implements IPendingServiceCallback {
     		Users user = Usermanagement.getInstance().getUserByLoginOrEmail(usernameOrEmail);
     		
     		// AdminUser werden auf jeden Fall lokal authentifiziert
-    		if(user != null){ // User exists in local DB
-    			if (user.getExternalUserType() ==null || ! user.getExternalUserType().equals(EXTERNAL_USER_TYPE_LDAP)){ // User is not of External Type LDAP
-    				log.debug("User " + usernameOrEmail + " is local user -> Use Internal DB");
-    				withLdap = false;
-    			}
-    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus(domain) == true){ // User is admin with pwd synch
-    				log.debug("User " + usernameOrEmail + " : Ldap-user has admin rights -> Use Internal DB");
-        			withLdap = false;	
-    			}
-    			else{
-    				log.debug("User " + usernameOrEmail + " : Ldap user authenticated using Ldap");
-    			}
-    		}
+//    		if(user != null){ // User exists in local DB
+//    			if (user.getExternalUserType() ==null || ! user.getExternalUserType().equals(EXTERNAL_USER_TYPE_LDAP)){ // User is not of External Type LDAP
+//    				log.debug("User " + usernameOrEmail + " is local user -> Use Internal DB");
+//    				withLdap = false;
+//    			}
+//    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus(ldapConfigId) == true){ // User is admin with pwd synch
+//    				log.debug("User " + usernameOrEmail + " : Ldap-user has admin rights -> Use Internal DB");
+//        			withLdap = false;	
+//    			}
+//    			else{
+//    				log.debug("User " + usernameOrEmail + " : Ldap user authenticated using Ldap");
+//    			}
+//    		}
     		
     		RoomClient currentClient;
     		IConnection current = Red5.getConnectionLocal();
@@ -300,7 +302,14 @@ public class MainService implements IPendingServiceCallback {
 	           
 	        	//LDAP Loggedin Users cannot use the permanent Login Flag
 	        	
-	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail+"@"+domain, Userpass, currentClient, SID, domain);
+	        	LdapConfig ldapConfig = LdapConfigDaoImpl.getInstance().getLdapConfigById(ldapConfigId);
+	        	
+	        	String ldapLogin = usernameOrEmail;
+	        	if (ldapConfig.getAddDomainToUserName() != null && ldapConfig.getAddDomainToUserName()) {
+	        		ldapLogin = usernameOrEmail+"@"+ldapConfig.getDomain();
+	        	}
+	        	
+	        	o =  LdapLoginManagement.getInstance().doLdapLogin(ldapLogin, Userpass, currentClient, SID, ldapConfig.getConfigFileName());
 //	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID, 
 //	        								false, language_id);
 	        	

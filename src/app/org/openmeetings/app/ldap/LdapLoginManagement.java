@@ -10,11 +10,13 @@ import java.util.Random;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.ldap.config.ConfigReader;
@@ -123,12 +125,14 @@ public class LdapLoginManagement {
 	 * Ldap Password Synch to OM DB set active ?
 	 * defaults to true in case of error so as to keep old behaviour
 	 */
-	 public boolean getLdapPwdSynchStatus(String domain){ //TIBO
+	 public boolean getLdapPwdSynchStatus(Long ldapConfigId){ //TIBO
 			// Retrieve Configuration Data
 			HashMap<String, String> configData;
 			
+			LdapConfig ldapConfig = LdapConfigDaoImpl.getInstance().getLdapConfigById(ldapConfigId);
+			
 			try{
-				configData= getLdapConfigData(domain);
+				configData= getLdapConfigData(ldapConfig.getConfigFileName());
 			}catch(Exception e){
 				log.error("Error on getLdapPwdSynchStatus : " + e.getMessage());
 				return true;
@@ -181,7 +185,7 @@ public class LdapLoginManagement {
 	 * Retrieving LdapData from Config
 	 */
 	//----------------------------------------------------------------------------------------
-	public HashMap<String, String> getLdapConfigData(String domain) throws Exception{
+	public HashMap<String, String> getLdapConfigData(String ldapConfigfileName) throws Exception{
 		log.debug("LdapLoginmanagement.getLdapConfigData");
 		
 		// Retrieving Path to Config
@@ -196,7 +200,7 @@ public class LdapLoginManagement {
 		
 		String path = ScopeApplicationAdapter.webAppPath 
 						+ File.separatorChar + "conf" + File.separatorChar
-						+ domain + ".conf";
+						+ ldapConfigfileName;
 		
 		return readConfig(path);
 		
