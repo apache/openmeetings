@@ -318,7 +318,9 @@ public class Sessionmanagement {
 			sessiondata.setRefresh_time(new Date());
 			//session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
-			sessiondata.setStorePermanent(storePermanent);
+			if (storePermanent) {
+				sessiondata.setStorePermanent(storePermanent);
+			}
 			sessiondata.setLanguage_id(language_id);
 			//session.flush();
 			session.update(sessiondata);
