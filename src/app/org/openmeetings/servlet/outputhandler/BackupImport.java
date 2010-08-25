@@ -31,9 +31,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
@@ -45,6 +47,7 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.adresses.States;
+import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
@@ -369,6 +372,19 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importMeetingmembers(meetingmembersListFile);
 					
+					/* #####################
+					 * Import LDAP Configs
+					 * 
+					 */
+					String ldapConfigListXML = completeName + File.separatorChar + "ldapconfigs.xml";
+					File ldapConfigListFile = new File(ldapConfigListXML);
+					if (!ldapConfigListFile.exists()) {
+						log.debug("meetingmembersListFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importLdapConfig(ldapConfigListFile);
+					}
+					
 					
 					this.deleteDirectory(f);
 					
@@ -395,7 +411,7 @@ public class BackupImport extends HttpServlet {
 		
 		return;
 	}
-
+	
 	public void copyFile(File sourceLocation , File targetLocation) throws IOException {
             
             InputStream in = new FileInputStream(sourceLocation);
@@ -629,10 +645,12 @@ public class BackupImport extends HttpServlet {
 		
 		List<MeetingMember> meetingmembersList = this.getMeetingmembersListByXML(meetingmembersListFile);
 		
+		for (MeetingMember ma : meetingmembersList) {
+			MeetingMemberDaoImpl.getInstance().addMeetingMemberByObject(ma);
+		}
+		
 	}
 
-	
-	
 	private List<MeetingMember> getMeetingmembersListByXML(File meetingmembersListFile) {
 		try {
 			
@@ -691,7 +709,68 @@ public class BackupImport extends HttpServlet {
 		}
 		return null;
 	}
+	
+
+	private void importLdapConfig(File ldapConfigListFile) throws Exception {
 		
+		List<LdapConfig> ldapConfigList = this.getLdapConfigListByXML(ldapConfigListFile);		
+		
+		for (LdapConfig ldapConfig : ldapConfigList) {
+			
+			LdapConfigDaoImpl.getInstance().addLdapConfigByObject(ldapConfig);
+			
+		}
+		
+	}
+	
+		
+	private List<LdapConfig> getLdapConfigListByXML(File ldapConfigListFile) {
+		try {
+			
+			List<LdapConfig> ldapConfigsList = new LinkedList<LdapConfig>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(ldapConfigListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("ldapconfigs")) {
+	        		
+        			for (Iterator<Element> innerIter = itemObject.elementIterator( "ldapconfig" ); innerIter.hasNext(); ) {
+	        			
+	        			Element ldapconfigObject = innerIter.next();
+	        			
+	        			String name = ldapconfigObject.element("name").getText();
+	        			String configFileName = ldapconfigObject.element("configFileName").getText();
+	        			Boolean addDomainToUserName = importBooleanType(ldapconfigObject.element("addDomainToUserName").getText());
+	        			String domain = ldapconfigObject.element("domain").getText();
+	        			Boolean isActive = importBooleanType(ldapconfigObject.element("isActive").getText());
+	        			
+	        			
+	        			LdapConfig ldapConfig = new LdapConfig();
+	        			ldapConfig.setName(name);
+	        			ldapConfig.setConfigFileName(configFileName);
+	        			ldapConfig.setAddDomainToUserName(addDomainToUserName);
+	        			ldapConfig.setDomain(domain);
+	        			ldapConfig.setIsActive(isActive);
+	        			
+	        			ldapConfigsList.add(ldapConfig);
+	        			
+	        		}
+	        		
+	        	}
+			}
+			
+			return ldapConfigsList;
+			
+		} catch (Exception err) {
+			log.error("[getLdapConfigListByXML]",err);
+		}
+		return null;
+	}
+
 	private void importAppointements(File appointementListFile) throws Exception {
 		
 		List<Appointment> appointmentList = this.getAppointmentListByXML(appointementListFile);
@@ -918,6 +997,7 @@ public class BackupImport extends HttpServlet {
 	        			Boolean isAudioOnly = importBooleanType(roomObject.element("isAudioOnly").getText());
 	        			String sipNumber = roomObject.element("sipNumber").getText();
 	        			String conferencePin = roomObject.element("conferencePin").getText();
+	        			Boolean ispublic = importBooleanType(roomObject.element("ispublic").getText());
 	        			
 	        			
 	        			Rooms room = new Rooms();
@@ -937,6 +1017,7 @@ public class BackupImport extends HttpServlet {
 	        			room.setIsAudioOnly(isAudioOnly);
 	        			room.setSipNumber(sipNumber);
 	        			room.setConferencePin(conferencePin);
+	        			room.setIspublic(ispublic);
 	        			
 	        			
 	        			roomList.add(room);

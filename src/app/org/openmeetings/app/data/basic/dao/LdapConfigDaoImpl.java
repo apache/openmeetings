@@ -75,6 +75,36 @@ public class LdapConfigDaoImpl {
 		return null;
 	}
 	
+
+	public Long addLdapConfigByObject(LdapConfig ldapConfig) {
+		try {
+			
+			ldapConfig.setDeleted("false");
+			ldapConfig.setInserted(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+	
+			Long ldapConfigId = (Long) session.save(ldapConfig);
+	
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			if (ldapConfigId > 0) {
+				return ldapConfigId;
+			} else {
+				throw new Exception("Could not store SOAPLogin");
+			}
+			
+		} catch (HibernateException ex) {
+			log.error("[addLdapConfig]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[addLdapConfig]: ",ex2);
+		}
+		return null;
+	}
+	
 	public Long updateLdapConfig(Long ldapConfigId, String name, Boolean addDomainToUserName, 
 			String configFileName, String domain, Long updatedby, Boolean isActive) {
 		try {
@@ -247,5 +277,30 @@ public class LdapConfigDaoImpl {
 		}
 		return null;
 	}
+
+	public List<LdapConfig> getLdapConfigs() {
+		try {
+			log.debug("selectMaxFromConfigurations ");
+			
+			String hql = "select c from LdapConfig c " +
+					"where c.deleted LIKE 'false' ";
+			
+			//get all users
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			List<LdapConfig> ll = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return ll;				
+		} catch (HibernateException ex) {
+			log.error("[getActiveLdapConfigs] ",ex);
+		} catch (Exception ex2) {
+			log.error("[getActiveLdapConfigs] ",ex2);
+		}
+		return null;
+	}	
 	
 }

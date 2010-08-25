@@ -261,6 +261,27 @@ public class MeetingMemberDaoImpl {
 		return null;
 	}
 	
+	public Long addMeetingMemberByObject(MeetingMember gm){
+		try {
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long group_member_id = (Long)session.save(gm);
+
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return group_member_id;
+		} catch (HibernateException ex) {
+			log.error("[addMeetingMember]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[addMeetingMember]: ",ex2);
+		}
+		return null;
+	}
+	
 	public Long deleteMeetingMember(Long meetingMemberId) {
 		log.debug("MeetingMemnerDAoImpl.deleteMeetingMember : " + meetingMemberId);
 		
