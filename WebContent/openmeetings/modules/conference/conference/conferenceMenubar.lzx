@@ -67,13 +67,14 @@
 	                ]]>
 	            </handler>  
 	            <_labelMenuItem id="lblImport" labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }"/>
+	            <!--
 	            <menuseparator/>  
 	            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" />
 	            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" />
 	            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" />
 	            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" />
 	            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" />
-	            <!--
+	            
 	            <menuseparator/>  
 	            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
 	             -->
@@ -202,13 +203,14 @@
 	        <_labelMenu labelid="245" width="250"
 	                >
 	            <_labelMenuItem labelid="15" command="cmd_importFile" enabled="${ canvas.ismoderator }" />
+	            <!--
 	            <menuseparator/>  
 	            <_labelMenuItem labelid="561" command="cmd_exportFilePNG" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="562" command="cmd_exportFileJPG" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="563" command="cmd_exportFilePDF" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="560" command="cmd_exportFileSVG" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="564" command="cmd_exportFileTIF" enabled="${ canvas.ismoderator }" />
-	            <!--
+	            
 	            <menuseparator/>  
 	            <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" value="quit" />
 	             -->

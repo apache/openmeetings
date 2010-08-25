@@ -998,6 +998,8 @@ public class BackupImport extends HttpServlet {
 	        			String sipNumber = roomObject.element("sipNumber").getText();
 	        			String conferencePin = roomObject.element("conferencePin").getText();
 	        			Boolean ispublic = importBooleanType(roomObject.element("ispublic").getText());
+	        			Boolean isClosed = importBooleanType(roomObject.element("isClosed").getText());
+	        			String redirectURL = roomObject.element("redirectURL").getText();
 	        			
 	        			
 	        			Rooms room = new Rooms();
@@ -1018,6 +1020,8 @@ public class BackupImport extends HttpServlet {
 	        			room.setSipNumber(sipNumber);
 	        			room.setConferencePin(conferencePin);
 	        			room.setIspublic(ispublic);
+	        			room.setIsClosed(isClosed);
+	        			room.setRedirectURL(redirectURL);
 	        			
 	        			
 	        			roomList.add(room);

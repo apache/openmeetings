@@ -599,6 +599,9 @@ public class BackupExport extends HttpServlet {
 				room.addElement("ispublic").setText(""+r.getIspublic());
 			}
 			
+			room.addElement("isClosed").setText(""+r.getIsClosed());
+			room.addElement("redirectURL").setText(""+r.getRedirectURL());
+			
 			List<RoomModerators> roomModeratorsList = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByRoomId(r.getRooms_id());
 			
 			Element room_moderators = room.addElement("room_moderators");

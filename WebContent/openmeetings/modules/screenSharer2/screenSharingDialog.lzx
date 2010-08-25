@@ -952,6 +952,7 @@
         
         <labelText x="84" y="4" labelid="1096" />  
         
+        <!--
         <resetCombobox name="languages" width="60" y="6" x="200" >
         	<handler name="oninit">
         		<![CDATA[
@@ -961,7 +962,7 @@
         		
             		function callback(returnValue) {
                             
-                        if ($debug) Debug.write("-- callback ",returnValue);
+                        if ($debug) Debug.write(" callback ",returnValue);
                         
                         if (returnValue.indexOf("de") >= 0) {
                         	thisItem.selectItemAt(1);
@@ -987,6 +988,7 @@
         	<labeldTextListItem labelid="1094" value="en_US" />
             <labeldTextListItem labelid="1095" value="de_DE" />
         </resetCombobox> 
+         -->
     </view>
     
     <simpleLabelButton name="_pause" visibility="hidden"
