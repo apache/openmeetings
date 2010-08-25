@@ -58,7 +58,7 @@ public class LdapConfigService {
 			//Add localhost Domain
 			LdapConfig ldapConfig = new LdapConfig();
 			
-			ldapConfig.setName("localhost");
+			ldapConfig.setName("local DB [internal]");
 			ldapConfig.setLdapConfigId(-1);
 			
 			List<LdapConfig> returnldapConfigs = new LinkedList<LdapConfig>();
