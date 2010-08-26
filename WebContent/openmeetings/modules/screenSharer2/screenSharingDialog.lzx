@@ -758,13 +758,13 @@
                 </handler>
                 
                 <handler name="onmouseover">
-                    if ($debug) Debug.write("onmouseout ");
+                    //if ($debug) Debug.write("onmouseout ");
                     this.isMouseOverActive = true;
                     lz.Timer.addTimer( this.idleDelegate, 500 );
                 </handler>
                 
                 <handler name="onmouseout">
-                    if ($debug) Debug.write("onmouseout ");
+                    //if ($debug) Debug.write("onmouseout ");
                     this.isMouseOverActive = false;
                     lz.Timer.removeTimer( this.idleDelegate);
                 </handler>
@@ -785,7 +785,7 @@
                         this.sendRemoteCursorEvent.tObject = tObject;
                         if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
                             
-                            if ($debug) Debug.write("sendMousePosition ",x,y);
+                            //if ($debug) Debug.write("sendMousePosition ",x,y);
                             
                             if (tObject["x"] != this.lastMouseX && tObject["y"] != this.lastMouseY) {
                                 
@@ -855,7 +855,7 @@
                         <netparam><method name="getValue">return parent.tObject;</method></netparam>
                         <handler name="ondata" args="value">
                         //The onResult-Handler will be called be the rtmpconnection
-                        if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);    
+                        //if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);    
                         parent.close();
                     </handler>  
                 </netRemoteCallHib> 
@@ -871,7 +871,6 @@
     
     <view name="_infoBox" x="0" visibility="hidden" >
     	
-    	<!--
     	<view name="innerBox" height="${ parent.parent.height }" 
     		  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToRemoteControl) ? true : false )) }">
     		
@@ -897,7 +896,6 @@
             </labelExplorerBox>  
             
         </view>
-         -->
         
     </view>  
 

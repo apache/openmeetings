@@ -7,11 +7,107 @@
 	subscribe to a video or live-stream
 
  -->
+	
+<class name="tempTextBox" extends="view" width="20" height="24" bgcolor="0x000000">
+	
+	<attribute name="isStopped" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+        lz.Timer.addTimer( new LzDelegate( this, "removeThis" ), 3000 );
+    </handler>
+    
+    <method name="removeThis" args="refObj">
+        this._out.doStart();
+    </method>
+    
+    <animator name="_out" attribute="opacity" to="0" 
+    		  duration="750" start="false">
+    	<handler name="onstop">
+    		if (parent.isStopped) {
+    			return;
+    		}
+    		parent.isStopped = true;
+    		parent._bg._in.stop();
+    		parent._bg._out.stop();
+    		parent.destroy();
+    	</handler>
+    </animator>
+    
+	<view name="_bg" bgcolor="0x7fff00" width="$once{ parent.width }"
+		  height="$once{ parent.height }">
+		<handler name="oninit">
+			this._in.doStart();
+		</handler>
+		
+		<animator name="_out" attribute="opacity" to="0.3" 
+              duration="250" start="false">
+            <handler name="onstop">
+            	if (parent.parent.isStopped) {
+                    return;
+                }
+                parent._in.doStart();
+            </handler>
+        </animator>
+        
+        <animator name="_in" attribute="opacity" to="1" 
+              duration="250" start="false">
+            <handler name="onstop">
+            	if (parent.parent.isStopped) {
+            		return;
+            	}
+                parent._out.doStart();
+            </handler>
+        </animator>
+		
+	</view>
+	
+	<inputtext name="_text" width="16" height="20" 
+			   bgcolor="0xFFFFFF" x="2" y="2">
+		<handler name="ontext" args="txt">
+			if ($debug) Debug.warn("ontext ",txt);
+		</handler>
+	</inputtext>
+	
+</class>	
 					   
 <class name="videoObjectPlayScreenShare" extends="view">
 	
     <baseVideoStream name="_videostream" bgcolor="black" 
-          width="${parent.width}" height="${parent.height}" />
+          width="${parent.width}" height="${parent.height}" >
+    	
+    	<attribute name="currentX" value="0" type="number" />
+    	<attribute name="currentY" value="0" type="number" />
+    	
+    	<method name="insertText">
+    		new lz.tempTextBox(this,{
+            		   x:this.currentX,
+            		   y:this.currentY
+            		});
+    	</method>
+    	
+    	
+    	
+    	<method name="copyFromRemote">
+    		
+    	</method>
+    	
+    	<contextmenu>
+    		
+    		<handler name="onmenuopen">
+    			parent.currentX = parent.getMouse("x");
+    			parent.currentY = parent.getMouse("y");
+    			if ($debug) Debug.write("onmenuopen x,y ",parent.currentX,parent.currentY);
+    		</handler>
+            
+            <contextmenuitem caption="$once{ canvas.getLabelName(1119) }" 
+                             onselect="parent.parent.insertText()" />
+            
+            <contextmenuitem caption="$once{ canvas.getLabelName(1120) }" 
+                             onselect="parent.parent.copyFromRemote()" />
+                             
+        </contextmenu>
+        
+    </baseVideoStream>
         
 </class>
 
