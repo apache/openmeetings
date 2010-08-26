@@ -54,8 +54,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -844,6 +846,38 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             
             	this.pressSpecialSign(paste, robot);
             	
+            } else if (action.equals("copy")) {
+            	
+            	Robot robot = new Robot();
+            	
+            	String paste = this.getHighlightedText(robot);
+            	
+            	HashMap<Integer,String> map = new HashMap<Integer,String>();
+            	map.put(0,"copiedText");
+            	map.put(1,paste);
+            	
+            	String clientId = returnMap.get("clientId").toString();
+            
+            	//public synchronized int sendMessageWithClientById(Object newMessage, String clientId)
+            	
+            	invoke("sendMessageWithClientById",new Object[] { map, clientId }, this);
+            	
+            } else if (action.equals("show")) {
+            	
+            	Robot robot = new Robot();
+            	
+            	String paste = this.getClipboardText();
+            	
+            	HashMap<Integer,String> map = new HashMap<Integer,String>();
+            	map.put(0,"copiedText");
+            	map.put(1,paste);
+            	
+            	String clientId = returnMap.get("clientId").toString();
+            
+            	//public synchronized int sendMessageWithClientById(Object newMessage, String clientId)
+            	
+            	invoke("sendMessageWithClientById",new Object[] { map, clientId }, this);
+            	
             }
             
             //KeyEvent.VK
@@ -854,15 +888,94 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     	}
     }
     
+    
+	public String getClipboardText() {
+		try {
+			// get the system clipboard
+			Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			
+			// get the contents on the clipboard in a
+			// transferable object
+			Transferable clipboardContents = systemClipboard.getContents(null);
+			
+			// check if clipboard is empty
+			if (clipboardContents == null) {
+				
+				//Clipboard is empty!!!
+				return ("");
+			
+				// see if DataFlavor of
+				// DataFlavor.stringFlavor is supported
+			} else if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+			
+				// return text content
+				String returnText = (String) clipboardContents.getTransferData(DataFlavor.stringFlavor);
+				
+				return returnText;
+			}
+		
+			return "";
+		} catch (UnsupportedFlavorException ufe) {
+			ufe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+    
+    private String getHighlightedText(Robot instance)
+    {
+      
+      try{
+
+         //clippy.setContents( selection,selection  );
+        
+         logger.debug("os.name :: "+System.getProperty("os.name"));
+    	 
+         if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
+	    	 
+        	 logger.debug("IS WINDOWS");
+        	 
+        	 //drückt STRG+C == copy
+        	 instance.keyPress( KeyEvent.VK_CONTROL );
+             instance.keyPress(KeyEvent.VK_C);
+             instance.keyRelease(KeyEvent.VK_C);    
+             instance.keyRelease( KeyEvent.VK_CONTROL );
+        	 
+         } else {
+        	 
+        	 logger.debug("IS MAC");
+        	 
+        	 //Macintosh simulate Copy
+        	 instance.keyPress( 157 );
+	         instance.keyPress( 67 );
+	         instance.keyRelease( 67 );    
+	         instance.keyRelease( 157 );
+	         
+         }
+         
+		 String charValue = this.getClipboardText();
+		 
+		 //JOptionPane.showMessageDialog(ScreenShare.instance.contentPane, charValue);
+		 
+		 return charValue;
+          
+      }
+      catch(Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      return "";
+      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
+    }
+    
     private void pressSpecialSign(String charValue, Robot instance)
     {
       Clipboard clippy = Toolkit.getDefaultToolkit().getSystemClipboard();
-      Transferable clippysContent = clippy.getContents( null );
+      //Transferable clippysContent = clippy.getContents( null );
       try{
 
-		 StringSelection selection = new StringSelection(charValue);
-	        
-         clippy.setContents( selection,selection  );
+		 Transferable transferableText = new StringSelection(charValue);
+         clippy.setContents( transferableText, null  );
         
          logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
@@ -891,12 +1004,15 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
           //oder wenn das keine Exception wirft
     	 /*instance.keyPress( KeyEvent.VK_PASTE );
     	 instance.keyRelease( KeyEvent.VK_PASTE );*/
+         
+         //JOptionPane.showMessageDialog(ScreenShare.instance.contentPane, charValue);
+         
       }
       catch(Exception ex)
       {
         ex.printStackTrace();
       }
-      clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
+      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
     }
     
     public void resultReceived( IPendingServiceCall call ) {

@@ -13,6 +13,7 @@
 	<attribute name="isStopped" value="false" type="boolean"/>
 	
 	<handler name="oninit">
+		parent.sendCursorVisible(false);
         lz.Timer.addTimer( new LzDelegate( this, "removeThis" ), 3000 );
     </handler>
     
@@ -30,6 +31,7 @@
     		parent._bg._in.stop();
     		parent._bg._out.stop();
     		parent.destroy();
+    		parent.parent.sendCursorVisible(true);
     	</handler>
     </animator>
     
@@ -65,10 +67,53 @@
 			   bgcolor="0xFFFFFF" x="2" y="2">
 		<handler name="ontext" args="txt">
 			if ($debug) Debug.warn("ontext ",txt);
+			parent.parent.doBroadcastText(txt);
+			parent._out.doStart();
 		</handler>
 	</inputtext>
 	
 </class>	
+
+<class name="copiedTextPopup" extends="labelExplorerBox" labelid="1121"
+    docking="true" resizeable="true" closable="true" y="100"
+    x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
+
+    <attribute name="error" value="" type="string" />
+    
+    <view y="24" width="$once{ parent.width - 20 }" height="130" x="10" clip="true">
+        <text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+            multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+    </view>
+    
+    <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.close();" />
+
+</class>
+			
+<class name="screenShareCursorObject" extends="view" resource="menupointer_rsc">
+	
+	<attribute name="refObj" value="null" />
+	
+    <contextmenu>
+            
+        <handler name="onmenuopen">
+            parent.refObj.currentX = parent.getMouse("x");
+            parent.refObj.currentY = parent.getMouse("y");
+            if ($debug) Debug.write("onmenuopen x,y ",parent.currentX,parent.currentY);
+        </handler>
+        
+        <contextmenuitem caption="$once{ canvas.getLabelName(1119) }" 
+                         onselect="parent.parent.refObj.insertText()" />
+        
+        <contextmenuitem caption="$once{ canvas.getLabelName(1120) }" 
+                         onselect="parent.parent.refObj.copyFromRemote()" />
+                         
+        <contextmenuitem caption="$once{ canvas.getLabelName(1122) }" 
+                         onselect="parent.parent.refObj.showFromRemote()" />
+                         
+    </contextmenu>
+</class>			
 					   
 <class name="videoObjectPlayScreenShare" extends="view">
 	
@@ -85,11 +130,46 @@
             		});
     	</method>
     	
+    	<method name="sendCursorVisible" args="bool">
+    		if (bool) {
+    			parent.parent.parent.parent.currentCursorObject.setAttribute("visibility","visible");
+    		} else {
+    			parent.parent.parent.parent.currentCursorObject.setAttribute("visibility","hidden");
+    		}
+    	</method>
     	
+    	<method name="doBroadcastText" args="txt">
+    		var tObject = new Object();
+            tObject["action"] = "paste";
+            
+            tObject["paste"] = txt;
+            
+            parent.sendRemoteCursorEvent.tObject = tObject;
+            
+            if ($debug) Debug.warn("doBroadcastText :: ",txt);
+            
+            parent.sendRemoteCursorEvent.doCall();
+    	</method>
     	
     	<method name="copyFromRemote">
-    		
+    		var tObject = new Object();
+            tObject["action"] = "copy";
+            
+            tObject["clientId"] = canvas.streamid;
+            
+    		parent.sendRemoteCursorEvent.tObject = tObject;
+            parent.sendRemoteCursorEvent.doCall();
     	</method>
+    	
+    	<method name="showFromRemote">
+            var tObject = new Object();
+            tObject["action"] = "show";
+            
+            tObject["clientId"] = canvas.streamid;
+            
+            parent.sendRemoteCursorEvent.tObject = tObject;
+            parent.sendRemoteCursorEvent.doCall();
+        </method>
     	
     	<contextmenu>
     		
@@ -104,6 +184,9 @@
             
             <contextmenuitem caption="$once{ canvas.getLabelName(1120) }" 
                              onselect="parent.parent.copyFromRemote()" />
+                             
+            <contextmenuitem caption="$once{ canvas.getLabelName(1122) }" 
+                             onselect="parent.parent.showFromRemote()" />
                              
         </contextmenu>
         

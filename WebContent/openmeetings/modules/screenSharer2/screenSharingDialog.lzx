@@ -110,7 +110,9 @@
     
     <method name="updateCursor" args="x,y">
         if (this.currentCursorObject == null) {
-            this.currentCursorObject = new lz.cursorObject(this._subcontent._content);
+            this.currentCursorObject = new lz.screenShareCursorObject(this._subcontent._content,{
+                        refObj:this._subcontent._content._video._videostream
+                    });
         }
         this.currentCursorObject.setAttribute("x",x * (this._zoombar._zoom.initialNumber/100));
         this.currentCursorObject.setAttribute("y",y * (this._zoombar._zoom.initialNumber/100));
@@ -856,7 +858,7 @@
                         <handler name="ondata" args="value">
                         //The onResult-Handler will be called be the rtmpconnection
                         //if( $debug ) Debug.write("+++++++++++++++++ stopRecordingShow: ",value);    
-                        parent.close();
+                        //parent.close();
                     </handler>  
                 </netRemoteCallHib> 
                  

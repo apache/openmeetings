@@ -3360,4 +3360,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1118" name="ldap config">
     <value>Domain</value>
   </string>
+  <string id="1119" name="remote control">
+    <value>Insert</value>
+  </string>
+  <string id="1120" name="remote control">
+    <value>Copy highlighted text</value>
+  </string>
+  <string id="1121" name="remote control">
+    <value>Remote Clipboard Text</value>
+  </string>
+  <string id="1122" name="remote control">
+    <value>Show remote Clipboard</value>
+  </string>
 </language>

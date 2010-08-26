@@ -1321,6 +1321,21 @@
                     //canvas.currentModApply
                     parent.showKickMessage = true;
                     parent.disconnect();
+                } else if (value.message[0]=='copiedText'){
+                    //canvas.currentModApply
+                    
+                    if ($debug) Debug.info("copiedText :: ",value.message[1]);
+                    //System.setClipboard(value.message[1]);
+                    //lz.Browser.setClipboard(value.message[1]);
+                    //LzBrowserKernel.setClipboard (value.message[1]);
+                    
+                    //import flash.System;
+                    //flash.System.setClipboard(value.message[1]);
+                    
+                    new lz.copiedTextPopup(canvas,{
+                                       error:value.message[1]
+                                    });
+                    
                 } else if (value.message[0]=='applyforMod'){
                     //canvas.currentModApply
                     if (canvas.streamid!=value.client.streamid) {
