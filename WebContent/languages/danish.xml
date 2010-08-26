@@ -3359,49 +3359,4 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1118" name="ldap config">
     <value>Domain</value>
   </string>
-  <string id="1104" name="ldap config">
-    <value>ID</value>
-  </string>
-  <string id="1105" name="ldap config">
-    <value>Name</value>
-  </string>
-  <string id="1106" name="ldap config">
-    <value>Config File</value>
-  </string>
-  <string id="1107" name="ldap config">
-    <value>Ldap Config</value>
-  </string>
-  <string id="1108" name="ldap config">
-    <value>Name</value>
-  </string>
-  <string id="1109" name="ldap config">
-    <value>Enabled</value>
-  </string>
-  <string id="1110" name="ldap config">
-    <value>Inserted</value>
-  </string>
-  <string id="1111" name="ldap config">
-    <value>Inserted by</value>
-  </string>
-  <string id="1112" name="ldap config">
-    <value>Updated</value>
-  </string>
-  <string id="1113" name="ldap config">
-    <value>Updated by</value>
-  </string>
-  <string id="1114" name="ldap config">
-    <value>The config files are in the same folder as the hibernate.cfg.xml. You need to manually upload the files to this folder. Changes to the config file are immediately online.</value>
-  </string>
-  <string id="1115" name="ldap config">
-    <value>Config file name</value>
-  </string>
-  <string id="1116" name="ldap config">
-    <value>If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com</value>
-  </string>
-  <string id="1117" name="ldap config">
-    <value>Add Domain to username</value>
-  </string>
-  <string id="1118" name="ldap config">
-    <value>Domain</value>
-  </string>
   </language>
