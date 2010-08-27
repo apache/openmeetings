@@ -3378,4 +3378,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1122" name="remote control">
     <value>Show remote Clipboard</value>
   </string>
+  <string id="1123" name="right click screen share">
+    <value>Do not show again</value>
+  </string>
+  <string id="1124" name="right click screen share">
+    <value>Copy text here ...</value>
+  </string>
 </language>

@@ -8,7 +8,7 @@
 
  -->
 	
-<class name="tempTextBox" extends="view" width="20" height="24" bgcolor="0x000000">
+<class name="tempTextBox" extends="view" width="120" height="40" bgcolor="0x000000">
 	
 	<attribute name="isStopped" value="false" type="boolean"/>
 	
@@ -63,8 +63,12 @@
 		
 	</view>
 	
-	<inputtext name="_text" width="16" height="20" 
-			   bgcolor="0xFFFFFF" x="2" y="2">
+	<view name="_bg2" bgcolor="0x7fff00" width="$once{ parent.width }" height="18">
+		<labelText x="2" y="1" labelid="1124" />
+	</view>
+	
+	<inputtext name="_text" width="$once{ parent.width - 4 }" height="20" y="18"
+			   bgcolor="0xFFFFFF" x="2" >
 		<handler name="ontext" args="txt">
 			if ($debug) Debug.warn("ontext ",txt);
 			parent.parent.doBroadcastText(txt);
@@ -80,14 +84,14 @@
 
     <attribute name="error" value="" type="string" />
     
-    <view y="24" width="$once{ parent.width - 20 }" height="130" x="10" clip="true">
+    <view name="_box" y="24" width="${ parent.width - 20 }" 
+    	  height="${ parent.height - 50 }" x="10" clip="true">
         <text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
-            multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+            multiline="true" width="${ parent.width - 16 }" selectable="true" />
     </view>
     
-    <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
-           y="$once{ parent.height-24 }" 
-           onclick="this.parent.close();" />
+    <simpleLabelButton labelid="642" width="100" x="${ parent.width-105 }" 
+           y="${ parent.height-24 }" onclick="this.parent.close();" />
 
 </class>
 			
@@ -98,8 +102,8 @@
     <contextmenu>
             
         <handler name="onmenuopen">
-            parent.refObj.currentX = parent.getMouse("x");
-            parent.refObj.currentY = parent.getMouse("y");
+            parent.refObj.currentX = parent.refObj.getMouse("x");
+            parent.refObj.currentY = parent.refObj.getMouse("y");
             if ($debug) Debug.write("onmenuopen x,y ",parent.currentX,parent.currentY);
         </handler>
         

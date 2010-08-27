@@ -30,7 +30,7 @@
 
 <class name="screenSharingDialog" extends="guiPresenter" labelid="855"
     docking="true" resizeable="true" closable="true" 
-    width="270" x="${ canvas.width - this.width - 20 }" height="100">
+    width="270" x="$once{ canvas.width - this.width - 20 }" height="100">
     
     <attribute name="isStarted" value="false" type="boolean" />
     
@@ -63,8 +63,9 @@
             this._initText.setAttribute("visibility","hidden");
         
             this._showScreenSharing._y.setAttribute("to",0);
-            this._showScreenSharing._height.setAttribute("to",canvas.height-32);
+            this._showScreenSharing._height.setAttribute("to",canvas.height);
             this._showScreenSharing._width.setAttribute("to",canvas.width-260);
+            this._showScreenSharing._x.setAttribute("to",260);
         
             this._showScreenSharing.doStart();
             
@@ -86,6 +87,7 @@
            this._subcontent._content._video._videostream.stop();
            
            this._showScreenSharing._y.setAttribute("to",((parent.subviews.length-1)*100)+40);
+           this._showScreenSharing._x.setAttribute("to",canvas.width - 270 - 20);
            this._showScreenSharing._height.setAttribute("to",100);
            this._showScreenSharing._width.setAttribute("to",270);
            
@@ -878,8 +880,21 @@
     		
             <labelExplorerBox name="_infoBox" labelid="1088" 
                   docking="true" resizeable="false" closable="true" valign="middle"
-                    x="0" height="380" width="170">
+                    x="0" height="400" width="170">
                 
+                <handler name="oninit">
+                    var t = new lz.sharedObject();
+                    t.getLocal('userdata');
+                    var g = t.getData('userdata');
+                    if (g!=null) {
+                        if (g["image"]!=null) {
+                            if (g["image"]["donotaskagainrdc"]) {
+                                this.close();
+                            }
+                        }
+                    }
+                </handler>
+            
                 <view x="4" resource="warning_icon_rsc" y="26" />
             
                 <view y="22" width="$once{ parent.width - 35 }" height="130" x="30" >
@@ -891,6 +906,44 @@
                     <labelText fontsize="10" labelid="1085"
                         multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
                 </view>
+                
+                <labelCheckbox x="4" y="$once{ parent.height-42 }" fontsize="11"
+                                    name="_doNotShowAgain" labelid="1123" >
+                	<attribute name="isinited" value="false" type="boolean"/>
+                    <handler name="oninit">
+                        var t = new lz.sharedObject();
+                        t.getLocal('userdata');
+                        var g = t.getData('userdata');
+                        if (g!=null) {
+                            if (g["image"]!=null) {
+                            	if ($debug) Debug.write("g[image]",g["image"]);
+                                if (g["image"]["donotaskagainrdc"]) {
+                                    if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
+                                    this.setValue(true);
+                                }
+                            }
+                        }
+                        this.isinited = true;
+                    </handler>
+                    <handler name="onvalue" args="v">
+                    	if (!this.isinited) {
+                    		return;
+                    	}
+                        if ($debug) Debug.write("onselect ",v);
+                        var t = new lz.sharedObject();
+                        t.getLocal('userdata');
+                        var g = t.getData('userdata');
+                        if (g==null) g = new Array();
+                        if (g["image"]==null) g["image"]=new Array();
+                        g["image"]["donotaskagainrdc"]=v;
+                        
+                        if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
+                        if ($debug) Debug.write("g[image] ",g["image"]);
+                        
+                        t.setData('userdata',g);
+                        t.flush();  
+                    </handler>
+                </labelCheckbox>    
                 
                 <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
                        y="$once{ parent.height-24 }" onclick="this.parent.close();" />
@@ -1014,6 +1067,7 @@
             }
         </handler>
         <animator name="_y" attribute="y" to="0" />
+        <animator name="_x" attribute="x" to="0" />
         <animator name="_height" attribute="height" />
         <animator name="_width" attribute="width" />
     </animatorgroup>        

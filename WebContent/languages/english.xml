@@ -3259,7 +3259,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
   </string>
   <string id="1085" name="right click screen share">
-    <value>1) Your PC to remote PC: To copy and paste text from your clipboard into the remote controlled screen, click on the screen, then right click in the text field and choose &lt;i&gt;Insert&lt;/i&gt; from the context (right click) menu.&lt;br/&gt;&lt;br/&gt;2) From remote PC to your PC: To copy text from the remote PC to your PC's clipboard, highlight the text with the mouse on the remote screen, then right-click on the remote screen and choose &lt;i&gt;Copy highlighted text&lt;/i&gt;</value>
+    <value>1) Your PC to remote PC: To copy and paste text from your clipboard into the remote controlled screen, click on the screen, then right click in the text field and choose &lt;i&gt;Insert&lt;/i&gt; from the context (right click) menu.&lt;br/&gt;&lt;br/&gt;2) From remote PC to your PC: To copy text from the remote PC to your PC's clipboard, highlight the text with the mouse on the remote screen, then right-click on the remote screen and choose &lt;i&gt;Copy highlighted text&lt;/i&gt;&lt;br/&gt;&lt;br/&gt;&lt;u&gt;&lt;FONT color='#0000CC'&gt;&lt;A HREF="http://www.youtube.com/watch?v=Ukqa01O48uI" TARGET="_BLANK"&gt;watch the demo&lt;/A&gt;&lt;/FONT&gt;&lt;/u&gt;</value>
   </string>
   <string id="1086" name="right click screen share">
     <value>Copy and Paste text from your PC to remote PC and vice-versa.</value>
@@ -3371,5 +3371,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1122" name="remote control">
     <value>Show remote Clipboard</value>
+  </string>
+  <string id="1123" name="right click screen share">
+    <value>Do not show again</value>
+  </string>
+  <string id="1124" name="right click screen share">
+    <value>Copy text here ...</value>
   </string>
 </language>

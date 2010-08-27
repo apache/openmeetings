@@ -938,9 +938,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
         	 //drückt STRG+C == copy
         	 instance.keyPress( KeyEvent.VK_CONTROL );
+        	 Thread.sleep(200);
              instance.keyPress(KeyEvent.VK_C);
+             Thread.sleep(200);
              instance.keyRelease(KeyEvent.VK_C);    
+             Thread.sleep(200);
              instance.keyRelease( KeyEvent.VK_CONTROL );
+             Thread.sleep(200);
         	 
          } else {
         	 
@@ -948,9 +952,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
         	 //Macintosh simulate Copy
         	 instance.keyPress( 157 );
+        	 Thread.sleep(200);
 	         instance.keyPress( 67 );
-	         instance.keyRelease( 67 );    
+	         Thread.sleep(200);
+	         instance.keyRelease( 67 );   
+	         Thread.sleep(200);
 	         instance.keyRelease( 157 );
+	         Thread.sleep(200);
 	         
          }
          
@@ -986,9 +994,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
         	 //drückt STRG+V == einfügen
         	 instance.keyPress( KeyEvent.VK_CONTROL );
+        	 Thread.sleep(100);
              instance.keyPress(KeyEvent.VK_V);
-             instance.keyRelease(KeyEvent.VK_V);    
+             Thread.sleep(100);
+             instance.keyRelease(KeyEvent.VK_V);   
+             Thread.sleep(100);
              instance.keyRelease( KeyEvent.VK_CONTROL );
+             Thread.sleep(100);
         	 
          } else {
         	 
@@ -996,9 +1008,13 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
         	 //Macintosh simulate Insert
         	 instance.keyPress( 157 );
+        	 Thread.sleep(100);
 	         instance.keyPress( 86 );
+	         Thread.sleep(100);
 	         instance.keyRelease( 86 );    
+	         Thread.sleep(100);
 	         instance.keyRelease( 157 );
+	         Thread.sleep(100);
 	         
          }
         
