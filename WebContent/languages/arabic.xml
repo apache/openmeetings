@@ -3379,4 +3379,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1124" name="right click screen share">
     <value>Copy text here ...</value>
   </string>
+  <string id="1125" name="right click screen share">
+    <value>You need the right to remote control (or the moderation) to copy and paste text to or from the remote screen.</value>
+  </string>
+  <string id="1126" name="right click screen share">
+    <value>Edit default settings ...</value>
+  </string>
+  <string id="1127" name="right click screen share">
+    <value>Do not show info box in Remote Control about Copy and Paste</value>
+  </string>
 </language>

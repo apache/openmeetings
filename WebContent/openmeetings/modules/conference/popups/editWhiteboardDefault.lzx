@@ -38,6 +38,7 @@
          	g["image"]=new Array();
          	g["image"]["clearField"]=false;
          	g["image"]["askagainclear"]=false;
+         	g["image"]["donotaskagainrdc"]=false;
          }
          var t = new lz.questionCheckbox(this._settings.inner,{name:"clearField",labelid:63,valBool:g["image"]["clearField"]});
          //Debug.write("t: ",t);
@@ -50,6 +51,8 @@
          	g["wmlfile"]["askagainclear"]=false;
          }
          t = new lz.questionCheckbox(this._settings.inner,{name:"askagainclearwml",labelid:212,valBool:g["wmlfile"]["askagainclear"]});
+         
+         t = new lz.questionCheckbox(this._settings.inner,{name:"donotaskagainrdc",labelid:1127,valBool:g["image"]["donotaskagainrdc"]});
 		 //Debug.write("t: ",t);
     </handler>    
     
@@ -62,6 +65,7 @@
          if (g["image"]==null) g["image"]=new Array();
          g["image"]["clearField"]=this._settings.inner.clearField.holddatainSO.getValue();
          g["image"]["askagainclear"]=this._settings.inner.askagainclear.holddatainSO.getValue();
+         g["image"]["donotaskagainrdc"]=this._settings.inner.donotaskagainrdc.holddatainSO.getValue();
 		
          if (g==null) g = new Array();
          if (g["wmlfile"]==null) g["wmlfile"]=new Array();

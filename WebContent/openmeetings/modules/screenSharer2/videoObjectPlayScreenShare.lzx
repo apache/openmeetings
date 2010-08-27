@@ -128,10 +128,16 @@
     	<attribute name="currentY" value="0" type="number" />
     	
     	<method name="insertText">
-    		new lz.tempTextBox(this,{
-            		   x:this.currentX,
-            		   y:this.currentY
-            		});
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		new lz.tempTextBox(this,{
+                		   x:this.currentX,
+                		   y:this.currentY
+                		});
+    		} else {
+    			new lz.labelerrorPopup(canvas,{
+                               errorlabelid:1125
+                            });
+    		}
     	</method>
     	
     	<method name="sendCursorVisible" args="bool">
@@ -143,26 +149,38 @@
     	</method>
     	
     	<method name="doBroadcastText" args="txt">
-    		var tObject = new Object();
-            tObject["action"] = "paste";
-            
-            tObject["paste"] = txt;
-            
-            parent.sendRemoteCursorEvent.tObject = tObject;
-            
-            if ($debug) Debug.warn("doBroadcastText :: ",txt);
-            
-            parent.sendRemoteCursorEvent.doCall();
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		var tObject = new Object();
+                tObject["action"] = "paste";
+                
+                tObject["paste"] = txt;
+                
+                parent.sendRemoteCursorEvent.tObject = tObject;
+                
+                if ($debug) Debug.warn("doBroadcastText :: ",txt);
+                
+                parent.sendRemoteCursorEvent.doCall();
+    		} else {
+    			new lz.labelerrorPopup(canvas,{
+                               errorlabelid:1125
+                            });
+    		}
     	</method>
     	
     	<method name="copyFromRemote">
-    		var tObject = new Object();
-            tObject["action"] = "copy";
-            
-            tObject["clientId"] = canvas.streamid;
-            
-    		parent.sendRemoteCursorEvent.tObject = tObject;
-            parent.sendRemoteCursorEvent.doCall();
+    		if (canvas.isAllowedToRemoteControl || canvas.ismoderator) {
+        		var tObject = new Object();
+                tObject["action"] = "copy";
+                
+                tObject["clientId"] = canvas.streamid;
+                
+        		parent.sendRemoteCursorEvent.tObject = tObject;
+                parent.sendRemoteCursorEvent.doCall();
+    		} else {
+    			new lz.labelerrorPopup(canvas,{
+                			   errorlabelid:1125
+                			});
+    		}
     	</method>
     	
     	<method name="showFromRemote">

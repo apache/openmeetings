@@ -883,16 +883,22 @@
                     x="0" height="400" width="170">
                 
                 <handler name="oninit">
+                	<![CDATA[
+                	this.bringToFront();
                     var t = new lz.sharedObject();
                     t.getLocal('userdata');
                     var g = t.getData('userdata');
                     if (g!=null) {
                         if (g["image"]!=null) {
-                            if (g["image"]["donotaskagainrdc"]) {
+                        	if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
+                            if ($debug) Debug.write("g[image] ",g["image"]);
+                            if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                            	if ($debug) Debug.write("DO CLOSE IT")
                                 this.close();
                             }
                         }
                     }
+                    ]]>
                 </handler>
             
                 <view x="4" resource="warning_icon_rsc" y="26" />
@@ -909,24 +915,26 @@
                 
                 <labelCheckbox x="4" y="$once{ parent.height-42 }" fontsize="11"
                                     name="_doNotShowAgain" labelid="1123" >
-                	<attribute name="isinited" value="false" type="boolean"/>
+                	<attribute name="checkboxIsinited" value="false" type="boolean"/>
                     <handler name="oninit">
-                        var t = new lz.sharedObject();
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
-                        if (g!=null) {
-                            if (g["image"]!=null) {
-                            	if ($debug) Debug.write("g[image]",g["image"]);
-                                if (g["image"]["donotaskagainrdc"]) {
-                                    if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
-                                    this.setValue(true);
+                    	<![CDATA[
+                            var t = new lz.sharedObject();
+                            t.getLocal('userdata');
+                            var g = t.getData('userdata');
+                            if (g!=null) {
+                                if (g["image"]!=null) {
+                                	if ($debug) Debug.write("g[image]",g["image"]);
+                                    if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                                        if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
+                                        this.setValue(true);
+                                    }
                                 }
                             }
-                        }
-                        this.isinited = true;
+                            this.checkboxIsinited = true;
+                        ]]>
                     </handler>
                     <handler name="onvalue" args="v">
-                    	if (!this.isinited) {
+                    	if (!this.checkboxIsinited) {
                     		return;
                     	}
                         if ($debug) Debug.write("onselect ",v);

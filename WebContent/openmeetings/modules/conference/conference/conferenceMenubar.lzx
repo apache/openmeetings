@@ -147,6 +147,8 @@
 	            <_labelMenuItem width="250" id="lblPoll" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" id="lblPollResult" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" id="lblPollVote" labelid="42" command="cmd_checkPollVoted" />
+	            <menuseparator/>
+                <_labelMenuItem width="250" labelid="1126" command="cmd_editWhiteboardDefault" />
 	        </_labelMenu>  
 	        
 		   <!-- exit room
@@ -263,6 +265,8 @@
 	            <_labelMenuItem width="250" labelid="24" command="cmd_createPoll" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" labelid="37" command="cmd_pollResults" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem width="250" labelid="42" command="cmd_checkPollVoted" />
+	            <menuseparator/>
+	            <_labelMenuItem width="250" labelid="1126" command="cmd_editWhiteboardDefault" />
 	        </_labelMenu>  
         
         </menubar>
