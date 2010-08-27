@@ -920,6 +920,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+		return "";
 	}
     
     private String getHighlightedText(Robot instance)
