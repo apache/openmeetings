@@ -65,6 +65,7 @@
     <attribute name="roomtype" value="" type="string" />
         
     <attribute name="showKickMessage" value="false" type="boolean"/>
+    <attribute name="showFullMessage" value="false" type="boolean"/>
          
          
      <!--
@@ -109,7 +110,11 @@
     <handler name="onerror" >
         <![CDATA[
   	 	    if ($debug) Debug.write("error ",this.status,this.src,this.lastCalled,this.showKickMessage);
-            if (this.showKickMessage) {
+            if (this.showFullMessage) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:99});
+                this.showFullMessage = false;
+                return;
+            } else if (this.showKickMessage) {
                 new lz.labelerrorPopup(canvas,{errorlabelid:606});
                 return;
             } else if (this.reconnectionAction){

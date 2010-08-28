@@ -1310,6 +1310,24 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return false;
 	}	
 	
+	/*
+	//Return Object
+	RoomStatus roomStatus = new RoomStatus();
+	
+	//Check for Moderation
+	//LogicalRoom ENTER
+	HashMap<String,RoomClient> clientListRoom = this.getRoomClients(room_id);
+	
+	// appointed meeting or moderated Room?
+	Rooms room = Roommanagement.getInstance().getRoomById(room_id);
+	
+	//Check Max Users first
+	if (room.getNumberOfPartizipants() != null && clientListRoom.size() >= room.getNumberOfPartizipants()) {
+		roomStatus.setRoomFull(true);
+		return roomStatus;
+	}
+	*/
+	
 	/**
 	 * This function is called once a User enters a Room
 	 * 
@@ -1321,6 +1339,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			Boolean becomeModerator, Boolean isSuperModerator, Long organization_id, 
 			String colorObj){
 		try {
+			
+			//Return Object
+			RoomStatus roomStatus = new RoomStatus();
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -1361,6 +1382,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// appointed meeting or moderated Room?
 			Rooms room = Roommanagement.getInstance().getRoomById(room_id);
 			
+			//Check Max Users first
+			if (room.getNumberOfPartizipants() != null && clientListRoom.size() > room.getNumberOfPartizipants()) {
+				roomStatus.setRoomFull(true);
+				return roomStatus;
+			}
 			
 			// not really - default logic
 			if(room.getAppointment() == null || room.getAppointment() == false){
@@ -1640,7 +1666,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				browserStatus = new BrowserStatus();
 			}
 			
-			RoomStatus roomStatus = new RoomStatus();
+			//RoomStatus roomStatus = new RoomStatus();
 			
 			//FIXME: Rework Client Object to DTOs
 			roomStatus.setClientMap(clientListRoom);

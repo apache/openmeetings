@@ -121,6 +121,11 @@
             
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
             
+            if (roomStatus.roomFull) {
+            	canvas.thishib.showFullMessage = true;
+            	canvas.thishib.disconnect();
+            }
+            
             if (roomStatus.browserStatus.browserInited) {
                 var tObj = new Object();
                 tObj[0] = "newBrowserURL";

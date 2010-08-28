@@ -8,6 +8,7 @@ public class RoomStatus {
 	
 	HashMap<String,RoomClient> clientMap;
 	BrowserStatus browserStatus;
+	Boolean roomFull = false;
 	
 	public HashMap<String, RoomClient> getClientMap() {
 		return clientMap;
@@ -20,6 +21,12 @@ public class RoomStatus {
 	}
 	public void setBrowserStatus(BrowserStatus browserStatus) {
 		this.browserStatus = browserStatus;
+	}
+	public Boolean getRoomFull() {
+		return roomFull;
+	}
+	public void setRoomFull(Boolean roomFull) {
+		this.roomFull = roomFull;
 	}
 	
 }

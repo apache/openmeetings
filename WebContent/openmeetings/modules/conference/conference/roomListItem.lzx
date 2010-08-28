@@ -69,9 +69,10 @@
 			if (this.currentusers.length < this.maxUsers) {
 				this.enterRoom();
 			} else {
-				new lz.rpcErrorDialog(canvas.main_content._content.inner, {
-							errorid : 30
-						});
+				new lz.labelerrorPopup(canvas,{errorlabelid:99});
+				//new lz.rpcErrorDialog(canvas.main_content._content.inner, {
+				//			errorid : 30
+				//		});
 			}
 		]]>
 		</method>
