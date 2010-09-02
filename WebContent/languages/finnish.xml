@@ -3386,4 +3386,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1127" name="right click screen share">
     <value>Do not show info box in Remote Control about Copy and Paste</value>
   </string>
+  <string id="1128" name="calendar">
+    <value>Save</value>
+  </string>
+  <string id="1129" name="calendar">
+    <value>Remove</value>
+  </string>
+  <string id="1130" name="calendar">
+    <value>Cancel</value>
+  </string>
 </language>

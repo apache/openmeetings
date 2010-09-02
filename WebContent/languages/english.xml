@@ -2386,7 +2386,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Choose a room for a meeting</value>
   </string>
   <string id="794" name="calendar">
-    <value>There is an unsaved event in the Calendar. Please save it or remove it.</value>
+    <value>There is an unsaved event in the "Event details" on the right. Please save, remove or cancel and edit the details before adding another event.</value>
   </string>
   <string id="795" name="calendar">
     <value>Please add at least one attendee for your meeting</value>
@@ -3386,5 +3386,14 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1127" name="right click screen share">
     <value>Do not show info box in Remote Control about Copy and Paste</value>
+  </string>
+  <string id="1128" name="calendar">
+    <value>Save</value>
+  </string>
+  <string id="1129" name="calendar">
+    <value>Remove</value>
+  </string>
+  <string id="1130" name="calendar">
+    <value>Cancel</value>
   </string>
 </language>
