@@ -141,7 +141,13 @@ public class Usermanagement {
 									
 				}
 	
-				hql += " ) ORDER BY u.lastname ASC, u.firstname ASC";
+				hql += " ) ORDER BY "+orderby;
+				
+				if (asc) {
+					hql += " ASC ";
+				} else {
+					hql += " DESC ";
+				}
 				
 				log.debug("Show HQL: "+hql);
 				

@@ -14,12 +14,13 @@
 	<attribute name="records" value="0" type="number" />
 	
 	<attribute name="_selected" value="null"/>
-    
+    <attribute name="currentSelectedOrder" value="null" />
     <attribute name="mainBgColor" value="0xEEF0EB" />
 	
 	<event name="oncallnext" />
 	<event name="oncallpre" />
 	<event name="ondblclickedItem" />
+    <event name="onUpdateOrder" />
 	
 	<method name="callfirst">
 		this.start = 0;
@@ -83,6 +84,56 @@
 	<method name="addHeaderItem" args="labelid,width" >
 		new lz.turnOverListHeaderItem(this._innerlisthead._inn,{labelid:labelid,width:width,subviewsid:this._innerlisthead._inn.subviews.length});
 	</method>
+	
+	<method name="addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected" >
+        new lz.turnOverListHeaderItemOrdered(this._innerlisthead._inn,{
+                labelid:labelid,width:width,
+                orderBy:orderBy,asc:asc,isSelected:isSelected,
+                subviewsid:this._innerlisthead._inn.subviews.length
+            });
+    </method> 
+    
+    <method name="updateOrder" args="itemRef">
+        <![CDATA[
+            //only do that if the previous orderBy != new orderby
+            //if (this.currentSelectedOrder == null || 
+            //        this.currentSelectedOrder.orderBy != itemRef.orderBy){
+            if (itemRef.isSelected) {
+                itemRef.asc = !itemRef.asc;
+            } else {
+                itemRef.isSelected = true;
+            }
+            if (itemRef.asc) {
+                itemRef._sortUp.setAttribute('visibility','hidden');
+                itemRef._sortDown.setAttribute('visibility','visible');
+            } else {
+                itemRef._sortUp.setAttribute('visibility','visible');
+                itemRef._sortDown.setAttribute('visibility','hidden'); 
+            }
+            
+            //do not perform search on initial Selection
+            var isInitSelect = false;
+            if (this.currentSelectedOrder != null) {
+                if (this.currentSelectedOrder.orderBy != itemRef.orderBy) {
+                    this.currentSelectedOrder.isSelected = false;
+                    this.currentSelectedOrder._sortUp.setAttribute('visibility','hidden');
+                    this.currentSelectedOrder._sortDown.setAttribute('visibility','hidden'); 
+                }
+            } else {
+                isInitSelect = true;
+            }
+            this.currentSelectedOrder = itemRef;
+            
+            if ($debug) Debug.write("updateOrder: ",itemRef,itemRef.orderBy,itemRef.asc,isInitSelect);
+            this.setAttribute('orderby',itemRef.orderBy);
+            this.setAttribute('asc',itemRef.asc);
+            
+            if (!isInitSelect){
+                this.onUpdateOrder.sendEvent(itemRef);
+            }
+            //}
+        ]]>
+    </method>
     
     <method name="sendInitialWidthUpdate">
         for (var eg in this._innerlisthead._inn.subviews) {

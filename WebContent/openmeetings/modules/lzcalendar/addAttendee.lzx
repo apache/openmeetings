@@ -68,13 +68,17 @@
 	
 	<turnOverList name="_turnoverlist" width="${ parent.width - 4 }" 
                   height="$once{ (parent.isSuperModerator) ? parent.height-144 : parent.height-94 }" x="2" y="46" 
-		orderby="datumSend" step="50" asc="true" bgcolor="0xFFFFFF">
+		orderby="u.lastname" step="50" asc="false" bgcolor="0xFFFFFF">
 
 		<handler name="oninit">
-			this.addHeaderItem(146,70);
-			this.addHeaderItem(148,136);
-			this.addHeaderItem(149,136);
-			this.addHeaderItem(137,138);
+			this.addHeaderItemOrdered(146,70,"u.user_id",false,false); //labelid,width,orderBy,asc,isSelected
+			this.addHeaderItemOrdered(148,136,"u.firstname",false,false);
+			this.addHeaderItemOrdered(149,136,"u.lastname",false,true);
+			this.addHeaderItemOrdered(137,138,"u.adresses.email",false,false);
+			this.getAllUserBySearchRange.doCall();
+		</handler>
+		
+		<handler name="onUpdateOrder" args="refObj">
 			this.getAllUserBySearchRange.doCall();
 		</handler>
 		
