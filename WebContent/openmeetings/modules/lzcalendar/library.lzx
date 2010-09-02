@@ -17,5 +17,6 @@
     
 	<include href="lzCalendar.lzx" />
 	<include href="addAttendee.lzx" />
+	<include href="confirmCancelPopup.lzx" />
 
 </library>

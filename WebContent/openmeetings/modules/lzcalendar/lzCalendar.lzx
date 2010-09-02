@@ -165,7 +165,7 @@
             		} else {
             			//Check Warning
             			if ($debug) Debug.warn("Unsaved Item - Show warning");
-            			new lz.labelerrorPopup(canvas,{errorlabelid:794,makeModal:true});
+            			new lz.confirmCancelPopup(canvas,{errorlabelid:794,makeModal:true,refObj:this});
             		}
             	</handler>
             </calButton>

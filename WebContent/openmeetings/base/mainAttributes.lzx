@@ -318,4 +318,6 @@ and some more references to temp-objects
 
 <attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
 
+<attribute name="lzCalendarInfoTab" value="null"/>
+
 </library>

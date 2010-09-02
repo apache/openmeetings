@@ -52,6 +52,62 @@
 
                 <!-- THIS SECTION FOR THE TIME GRID -->
                 <view name="timeview">
+                	
+                	<handler name="onmouseover">
+                        if ($debug) Debug.write("onmouseover DAY");
+                    </handler>
+                    <handler name="onmouseout">
+                        if ($debug) Debug.write("onmouseout DAY");
+                    </handler>
+                    
+                    <handler name="onclick">
+                        <![CDATA[
+                            //if ($debug) Debug.write("onclick DAY");
+                            
+                            var current_y = this.getMouse("y");
+                            
+                            var minutes = (current_y / 22) * 60;
+                            
+                            //if ($debug) Debug.write("onclick minutes :: ",minutes); 
+                            
+                            var hours = Math.floor(minutes / 60);
+                            
+                            //if ($debug) Debug.write("onclick hours :: ",hours); 
+                            
+                            var restminutes = minutes - (hours * 60);
+                            
+                            //if ($debug) Debug.write("onclick restminutes :: ",restminutes); 
+                            
+                            var quarterMinutes = Math.floor(restminutes / 15);
+                            
+                            //if ($debug) Debug.write("onclick quarterMinutes :: ",quarterMinutes);
+                            
+                            var quarterRestMinutes = quarterMinutes * 15;
+                            
+                            //if ($debug) Debug.write("onclick quarterRestMinutes :: ",quarterRestMinutes);
+                            
+                            //if ($debug) Debug.write("onclick eventselector :: ", parent.parent.parent.parent.parent.eventselector);
+                            
+                            //if ($debug) Debug.write("onclick TOP :: ", parent.parent.parent.parent.parent);
+                            
+                            if (parent.parent.parent.parent.parent.eventselector.checkSaved()) {
+                            	var endhours = hours+1;
+                            	if (endhours > 23) {
+                            		endhours = 23;
+                            		quarterRestMinutes = 45;
+                            	}
+                                canvas.eventDataMgr.addEventWithTime(hours,quarterRestMinutes,endhours,quarterRestMinutes); 
+                                parent.parent.parent.parent.parent.cal_interior.infopanel.open(); 
+                                parent.parent.parent.parent.parent.cal_interior.infopanel.setAttribute('dataapply', false);
+                            } else {
+                                //Check Warning
+                                if ($debug) Debug.warn("Unsaved Item - Show warning");
+                                new lz.confirmCancelPopup(canvas,{errorlabelid:794,makeModal:true,refObj:this});
+                            }
+                            
+                        ]]>
+                    </handler>
+                    
                     <state applied="${classroot.opened}"
                        onapply="parent.setTimeOffset(7.5);
                                 parent.parent.scrollview.scrollState.apply()"
@@ -118,6 +174,13 @@
                     <state name="scrollState" applied="false" 
                            onapply="parent.bringToFront()">
                     </state>
+                    
+                    <!--
+                    pixelPerMin
+                    22/60
+                     -->
+                    
+                    
                 </view>
 
             </view>

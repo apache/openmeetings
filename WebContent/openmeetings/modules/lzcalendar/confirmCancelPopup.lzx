@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="confirmCancelPopup" extends="labelExplorerBox" labelid="204"
+	docking="true" resizeable="false" closable="true" y="100"
+    x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
+
+	<attribute name="error" value="" type="string" />
+	<attribute name="refObj" value="null" />
+	<attribute name="makeModal" value="false" type="boolean" />
+	
+	<attribute name="errorlabelid" type="number" setter="setErrorLabelId(errorlabelid)" />
+    <method name="setErrorLabelId" args="errorlabelid" >
+        this.errorlabelid = errorlabelid;
+        this.setAttribute("error",canvas.getLabelName(this.errorlabelid));
+        if ($debug) Debug.write("labelerrorPopup: ",canvas.getLabelName(this.errorlabelid));
+    </method>
+	
+	<handler name="oninit">
+	   if (this.makeModal) {
+	       lz.ModeManager.makeModal(this);
+	   }
+	</handler>
+	
+	<handler name="onclose">
+       if (this.makeModal) {
+           lz.ModeManager.releaseAll();
+       }
+    </handler>
+    
+    <method name="closeAndSave">
+    	lz.ModeManager.releaseAll();
+    	canvas.lzCalendarInfoTab.saveOrUpdateAppointement();
+    	this.close();
+    </method>
+    
+    <method name="closeAndRemove">
+        lz.ModeManager.releaseAll();
+        canvas.lzCalendarInfoTab.close(null);
+        this.close();
+    </method>
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+		<text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+	</view>
+	
+	<simpleLabelButton labelid="1128" width="100" x="$once{ parent.width-315 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.closeAndSave();" />
+	
+	<simpleLabelButton labelid="1129" width="100" x="$once{ parent.width-210 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.closeAndRemove();" />
+
+    
+    <simpleLabelButton labelid="1130" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.close();" />
+
+</class>
+ 
+</library>

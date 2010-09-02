@@ -95,6 +95,7 @@
         
         <handler name="oninit">
         	<![CDATA[
+        	    canvas.lzCalendarInfoTab = this;
 	        	//Point URL to actual File
 	            var urlObject =  lz.Browser.getBaseURL();
 				//If Port is Null or undefinied use port 80

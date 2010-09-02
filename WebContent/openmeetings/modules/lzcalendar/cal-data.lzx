@@ -183,7 +183,11 @@
     		canvas.eventDataMgr = this;
     	</handler>
     	
-        <method name="addEvent">
+    	<method name="addEvent">
+    		this.addEventWithTime(9,0,10,0);
+    	</method>
+    	
+        <method name="addEventWithTime" args="starthour,startminute,endhour,endminute">
             // Add event is called by the "Add Event" button to 
             //create a new event
 
@@ -212,8 +216,8 @@
                 blankeventDP.setNodeAttribute('day',
                              selDay.startdate.getDate()+'');
 
-                blankeventDP.setNodeAttribute('hour', '9' );
-                blankeventDP.setNodeAttribute('minute', '0' );
+                blankeventDP.setNodeAttribute('hour', starthour );
+                blankeventDP.setNodeAttribute('minute', startminute );
 
                 blankeventDP.setXPath('../end[1]');
 
@@ -224,8 +228,8 @@
                 blankeventDP.setNodeAttribute('day',
                              selDay.startdate.getDate()+'');
 
-                blankeventDP.setNodeAttribute('hour', '10' );
-                blankeventDP.setNodeAttribute('minute', '0' );
+                blankeventDP.setNodeAttribute('hour', endhour );
+                blankeventDP.setNodeAttribute('minute', endminute );
 
 
                 blankeventDP.setXPath('../summary[1]');
