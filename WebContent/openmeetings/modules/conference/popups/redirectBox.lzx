@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="redirectBox" extends="labelExplorerBox" labelid="18"
+<class name="redirectBox" extends="labelExplorerBox" labelid="50"
 	   valign="middle" align="center"
 	   docking="true" resizeable="false" closable="true" width="260" height="140">
     
