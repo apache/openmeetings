@@ -797,20 +797,38 @@ public class BackupExport extends HttpServlet {
 			user.addElement("title_id").setText(""+u.getTitle_id().toString());
 			user.addElement("level_id").setText(""+u.getLevel_id().toString());
 			
-			user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
-			user.addElement("comment").setText(u.getAdresses().getComment());
-			//A User can not have a deleted Adress, you cannot delete the Adress of an User
-			//String deleted = u.getAdresses().getDeleted()
-			//Phone Number not done yet
-			user.addElement("fax").setText(""+u.getAdresses().getFax());
-			user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
-			user.addElement("street").setText(""+u.getAdresses().getStreet());
-			user.addElement("town").setText(""+u.getAdresses().getTown());
-			user.addElement("zip").setText(""+u.getAdresses().getZip());
+			if (u.getAdresses() != null) {
+				user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
+				user.addElement("comment").setText(u.getAdresses().getComment());
+				//A User can not have a deleted Adress, you cannot delete the Adress of an User
+				//String deleted = u.getAdresses().getDeleted()
+				//Phone Number not done yet
+				user.addElement("fax").setText(""+u.getAdresses().getFax());
+				user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
+				user.addElement("street").setText(""+u.getAdresses().getStreet());
+				user.addElement("town").setText(""+u.getAdresses().getTown());
+				user.addElement("zip").setText(""+u.getAdresses().getZip());
+				
+				// Email and Phone
+				user.addElement("mail").setText(""+u.getAdresses().getEmail());
+				user.addElement("phone").setText(""+u.getAdresses().getPhone());
+			} else {
+				user.addElement("additionalname").setText("");
+				user.addElement("comment").setText("");
+				//A User can not have a deleted Adress, you cannot delete the Adress of an User
+				//String deleted = u.getAdresses().getDeleted()
+				//Phone Number not done yet
+				user.addElement("fax").setText("");
+				user.addElement("state_id").setText("1");
+				user.addElement("street").setText("");
+				user.addElement("town").setText("");
+				user.addElement("zip").setText("");
+				
+				// Email and Phone
+				user.addElement("mail").setText(""+u.getAdresses().getEmail());
+				user.addElement("phone").setText(""+u.getAdresses().getPhone());
+			}
 			
-			// Email and Phone
-			user.addElement("mail").setText(""+u.getAdresses().getEmail());
-			user.addElement("phone").setText(""+u.getAdresses().getPhone());
 			
 			
 			Element user_organisations = user.addElement("organisations");
