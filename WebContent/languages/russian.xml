@@ -1135,13 +1135,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Привет,</value>
   </string>
   <string id="377" name="dashboard">
-    <value>Редактировать ваш профиль</value>
+    <value>Ваш профиль</value>
   </string>
   <string id="378" name="dashboard">
     <value>Новые сообщения:</value>
   </string>
   <string id="379" name="dashboard">
-    <value>Загрузить новое изображение</value>
+    <value>Изображение</value>
   </string>
   <string id="380" name="backuppanel">
     <value>Экспорт пользовательских данных</value>
@@ -2292,7 +2292,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Отмена</value>
   </string>
   <string id="761" name="test setup">
-    <value>Начать конференцию</value>
+    <value>К конференции</value>
   </string>
   <string id="762" name="edit video settings">
     <value>Больше не спрашивать</value>
@@ -2325,10 +2325,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Выберите комнаты</value>
   </string>
   <string id="772" name="start view">
-    <value>Проверьте аудио и видео</value>
+    <value>Проверьте а/видео</value>
   </string>
   <string id="773" name="start view">
-    <value>Участвуйте в конференции</value>
+    <value>К конференции</value>
   </string>
   <string id="774" name="start view">
     <value>Как участвовать в конференции:</value>
@@ -2425,7 +2425,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>OpenMeetings, платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт", и участвовать в конференции или 2) перейти в календарь и назначить время конференции.</value>
   </string>
   <string id="805" name="dashboard">
-    <value>Запланировать совещание</value>
+    <value>Запланировать</value>
   </string>
   <string id="806" name="lzcalendar">
     <value>Для того чтобы назначить конференцию, добавьте новое событие в календарь. Для каждого события в календаре будет создана отдельная комната. Вы и все участники получите e-mail со ссылкой на комнату.&lt;br/&gt;&lt;br/&gt;Вы можете выбрать различные типы комнат - у каждого типа своя схема общения и модерации. Также можно выбрать различные типы e-mail нотификации.</value>
