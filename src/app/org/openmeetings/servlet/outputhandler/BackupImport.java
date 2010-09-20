@@ -997,10 +997,21 @@ public class BackupImport extends HttpServlet {
 	        			Boolean isAudioOnly = importBooleanType(roomObject.element("isAudioOnly").getText());
 	        			String sipNumber = roomObject.element("sipNumber").getText();
 	        			String conferencePin = roomObject.element("conferencePin").getText();
-	        			Boolean ispublic = importBooleanType(roomObject.element("ispublic").getText());
-	        			Boolean isClosed = importBooleanType(roomObject.element("isClosed").getText());
-	        			String redirectURL = roomObject.element("redirectURL").getText();
 	        			
+	        			Boolean ispublic = false;
+	        			if (roomObject.element("ispublic") != null) {
+	        				ispublic = importBooleanType(roomObject.element("ispublic").getText());
+	        			}
+	        			
+	        			Boolean isClosed = false;
+	        			if (roomObject.element("isClosed") != null) {
+	        				isClosed = importBooleanType(roomObject.element("isClosed").getText());
+	        			}
+	        			
+	        			String redirectURL = "";
+	        			if (roomObject.element("redirectURL") != null) {
+	        				redirectURL = roomObject.element("redirectURL").getText();
+	        			}
 	        			
 	        			Rooms room = new Rooms();
 	        			room.setRooms_id(rooms_id);
