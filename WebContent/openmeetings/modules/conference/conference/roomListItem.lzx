@@ -31,7 +31,7 @@
 			} else {
 				this.maxUsers = obj.room.numberOfPartizipants;
 			}
-			this._users.setAttribute('text', canvas.getLabelName(398)
+			this._users.setAttribute('text', canvas.getLabelName(398) + ' '
 							+ this.currentusers.length + " / " + this.maxUsers);
 			var tString = canvas.getLabelName(401) + "<br/>";
 			for (var i = 0; i < this.currentusers.length; i++) {
