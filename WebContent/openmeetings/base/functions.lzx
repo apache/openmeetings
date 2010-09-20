@@ -102,7 +102,8 @@ function getLabelTagByNo(no,labelid){
 
 function quicklink(action){
     // if($debug) Debug.write("FUNC/quicklink",action);
-	canvas._mainbgcontentNavi.subviews[1].subviews[1].doAction(action);
+	//canvas._mainbgcontentNavi.subviews[1].subviews[1].doAction(action);
+	mainmenuList.doAction(action);
 }   
     
 function quicklinkAct(action){

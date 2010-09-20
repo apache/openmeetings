@@ -152,10 +152,10 @@
 					</netRemoteCallHib>
 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
+					<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
 						<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" 
 							  		bgcolor="0xFFFFFF" clip="true" >
-							<view name="inn" layout="axis:y;spacing:0"/>
+							<view name="inn" layout="axis:y;spacing:1"/>
 							<vscrollbar />
 						</view>
 					</view>
@@ -212,9 +212,9 @@
 					</netRemoteCallHib> 
 	 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
+					<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
 						<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
-							<view name="inn" layout="axis:y;spacing:0"/>
+							<view name="inn" layout="axis:y;spacing:1"/>
 							<vscrollbar />
 						</view>
 					</view>
@@ -281,9 +281,9 @@
 				</netRemoteCallHib> 
 	 
 				<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-				<view name="inn" width="480" height="${ parent.height }" bgcolor="0x333333" >
+				<view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
 					<view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
-						<view name="inn" layout="axis:y;spacing:0"/>
+						<view name="inn" layout="axis:y;spacing:1"/>
 						<vscrollbar />
 					</view>
 				</view>

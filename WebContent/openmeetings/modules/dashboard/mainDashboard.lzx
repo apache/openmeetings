@@ -18,10 +18,12 @@
    
     <handler name="oninit">
         //this.getRssFeeds.doCall();
+        _mainScrollBar.setAttribute("visibility","hidden");
     </handler>
     
     <handler name="ontabcontentleave">
     	canvas._overallchatcontent = null;
+    	_mainScrollBar.setAttribute("visibility","visible");
     </handler>
     
     <netRemoteCallHib name="getRssFeeds" funcname="xmlcrm.getRssFeeds" 

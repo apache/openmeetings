@@ -12,6 +12,7 @@
     </handler>
     
     <handler name="oninit">
+    	_mainScrollBar.setAttribute("visibility","hidden");
         lz.Focus.setFocus(this.username,true);
     </handler>
 

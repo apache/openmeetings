@@ -150,7 +150,7 @@
 	<customEdittext name="ezeit" x="200" y="70" width="50" regexpType="time" visible="false" />
 	
 	<labelText name="user_label" labelid="407" y="110" width="200" />
-	<view name="_users" bgcolor="0x333333" width="300" y="130"
+	<view name="_users" bgcolor="$once{ canvas.basebgcolorizer }" width="300" y="130"
 		              height="${ parent.height - 130 }" >
 		<method name="clearList">
 			for (var eg in this._users._cbtext.subviews) 

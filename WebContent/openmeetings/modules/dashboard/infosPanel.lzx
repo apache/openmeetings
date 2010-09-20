@@ -51,7 +51,7 @@
         <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
                y="$once{ parent.height-80 }" height="38" 
                onclick="this.parent.storeSettings();">
-            <view resource="test_setup_start_conference_rsc" x="16" valign="middle" />
+            <view resource="test_setup_start_conference_rsc" x="160" valign="middle" />
             <handler name="onclick">
                 quicklink('meetings');
             </handler>
@@ -61,7 +61,7 @@
         <simpleLabelButton labelid="805" width="196" x="$once{ parent.width-200 }" 
                y="$once{ parent.height-40 }" height="38" 
                onclick="this.parent.storeSettings();">
-            <view resource="test_setup_start_conference_rsc" x="16" valign="middle" />
+            <view resource="test_setup_start_conference_rsc" x="160" valign="middle" />
             <handler name="onclick">
                 quicklink('dashboardModuleCalendar');
             </handler>

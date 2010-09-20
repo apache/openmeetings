@@ -1496,6 +1496,18 @@
                         canvas._drawarea.stopStreaming(value);
                     } else if (value.message=='roomClosed'){
                         canvas.roomClosed();
+                    } else if (value.message=='inviteToRoom'){
+                        if ($debug) Debug.write("Incoming Room Invitation ",value);
+                        new lz.chatParticipantsInviteNotification(canvas,{
+                                    publicSID:value.publicSID,
+                                    usermessage:value.usermessage,
+                                    roomId:value.roomId
+                                });
+                    } else if (value.message=='inviteToRoomAnswer'){
+                        if ($debug) Debug.write("Incoming Room inviteToRoomAnswer ",value);
+                        new lz.errorPopup(canvas,{
+                                    error:value.usermessage
+                                });
                     } else {
                         if ($debug) Debug.warn("Unknown Event -newMessageByRoomAndDomain- ",value);
                     }
@@ -1586,7 +1598,12 @@
     		if ($debug) Debug.write("roomConnect: ",value);
     		if (canvas._overallchatcontent!=null){
     			var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants._list;
-    			new lz.chatParticipants(parentObj,{user_id:value.user_id,username:value.firstname+", "+value.lastname});				
+    			new lz.chatParticipants(parentObj,{
+        			         user_id:value.user_id,
+        			         publicSID:value.publicSID,
+                             connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSecunds(value.connectedSince),
+        			         username:value.firstname+", "+value.lastname
+    			         });				
     		}
     	</handler>
     </netRemoteCallHib>

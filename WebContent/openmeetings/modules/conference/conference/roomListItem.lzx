@@ -3,8 +3,8 @@
 
 	<resource name="waitcursor" src="resources/lzwaitcursor_rsc.swf"/>
 
-	<class name="roomListItem" extends="view" bgcolor="0xFFFFFF" height="50"
-		onmouseover="" onmouseout="">
+	<class name="roomListItem" extends="view" bgcolor="$once{ canvas.bgColorMenuItems }" 
+		   height="50" onmouseover="" onmouseout="" width="478" >
 
 		<attribute name="ispublic" value="false" type="boolean" />
 		<attribute name="isaudience" value="false" type="boolean" />
@@ -152,15 +152,11 @@
 
 		<simpleLabelButton labelid="131" x="300" width="160" height="30" y="17"
 			onclick="parent.checkConditionsWhenButtonClicked(this)">
-			<view resource="test_setup_start_conference_rsc" x="2" y="4" />
+			<view resource="test_setup_start_conference_rsc" x="130" y="4" />
 			<!--
 			<view resource="go_jump_rsc" x="$once{ parent.width-24 }" y="6" />
 			 -->
 		</simpleLabelButton>
-
-		<view width="478" bgcolor="$once{ canvas.basebgcolorizer }"
-			height="2" y="49" />
-
 
 		<labelTooltip multiline="true" name="_labeltooltip" />
 

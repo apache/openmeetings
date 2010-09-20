@@ -49,6 +49,7 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="bgColorMenu" value="0xEEF0EB" type="string" />
 <attribute name="fontColorHeader" value="0x000000" type="string" />
+<attribute name="bgColorMenuItems" value="0xEAEAEA" type="string" />
 
 <attribute name="webAppRootKey" value="" type="string" />
 

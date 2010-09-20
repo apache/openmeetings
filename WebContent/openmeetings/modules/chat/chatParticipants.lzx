@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
-
+	
 <!--- it shows chat participants. -->
-<class name="chatParticipants" extends="view" width="$once{ parent.width }" >
+<class name="chatParticipants" extends="view" height="40" clickable="true"
+	   width="$once{ parent.width }" bgcolor="$once{ canvas.bgColorMenuItems }">
 	<attribute name="user_id" value="0" type="number" />
-	<attribute name="username" value="" type="string" />	
+	<attribute name="username" value="" type="string" />
+	<attribute name="connectedSince" value="" type="string" />
+	<attribute name="publicSID" value="" type="string" />
 	<handler name="oninit">
 		<![CDATA[
 			if($debug) Debug.write("chatParticipants/WIDTH: "+this.width);
@@ -21,8 +24,20 @@
 	</handler>
 	<image name="_userpic" />
 	<text text="$once{ parent.username }" x="40" resize="false"
-		  width="$once{ parent.width - 40 }" bgcolor="0xCCCCCC"
-		  selectable="true" />	
+		  width="$once{ parent.width - 40 }" />	
+	
+	<view resource="test_setup_start_conference2_rsc" y="20" x="$once{ parent.width - 20 }">
+		<handler name="onclick">
+			if ($debug) Debug.write("Start Conference");
+			new lz.chatParticipantsInviteConference(canvas,{
+            			    publicSID:parent.publicSID
+            			});
+		</handler>
+		<labelTooltip labelid="1131" />
+	</view>	 
+	
+	<labelTooltip text="$once{ parent.connectedSince }" /> 
+	
 </class>
 
 </library>

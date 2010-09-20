@@ -5,6 +5,8 @@
 	<include href="globalAttributes.lzx" />
 	<include href="globalMethods.lzx" />
 	
+	<include href="inviteuser/" />
+	
 	<include href="chatParticipants.lzx" />
 	<include href="emotIconsSelector.lzx" />
 	<include href="overAllChatOutput.lzx" />

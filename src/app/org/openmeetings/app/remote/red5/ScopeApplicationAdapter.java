@@ -2749,7 +2749,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
 			
 			if (currentClient == null) {
-				throw new Exception("Could not Find RoomClient on List");
+				throw new Exception("Could not Find RoomClient on List publicSID: "+publicSID);
 			}
 			//default Scope Name
 			String scopeName = "hibernate";

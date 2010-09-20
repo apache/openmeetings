@@ -3396,4 +3396,40 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1130" name="calendar">
     <value>Cancel</value>
   </string>
+  <string id="1131" name="chat invite user">
+    <value>Invite user to conference room</value>
+  </string>
+  <string id="1132" name="chat invite user">
+    <value>Choose a conference room. The invited user will get a message with your name and a link to the room.</value>
+  </string>
+  <string id="1133" name="chat user">
+    <value>Connected since:</value>
+  </string>
+  <string id="1134" name="chat invite user">
+    <value>Enter room after sending invitation</value>
+  </string>
+  <string id="1135" name="chat invite user">
+    <value>Invite</value>
+  </string>
+  <string id="1136" name="chat invite user">
+    <value>Message</value>
+  </string>
+  <string id="1137" name="chat invite user">
+    <value>would like to invite you to the conference room:</value>
+  </string>
+  <string id="1138" name="chat invite user">
+    <value>Invite message</value>
+  </string>
+  <string id="1139" name="chat invite user">
+    <value>Send Invitation</value>
+  </string>
+  <string id="1140" name="chat invite user">
+    <value>did &lt;b&gt;not&lt;/b&gt; accept your invitation!</value>
+  </string>
+  <string id="1141" name="chat invite user">
+    <value>Accept</value>
+  </string>
+  <string id="1142" name="chat invite user">
+    <value>Deny</value>
+  </string>
 </language>
