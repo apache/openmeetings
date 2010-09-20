@@ -26,6 +26,9 @@
 <silverstyle name="itemStyle" basecolor="${ canvas.basebgcolorizer }" 
              textcolor="0xFFFFFF" />
 
+<style name="menuStyle" basecolor="${ canvas.baseMousecolorizer }" 
+             textcolor="0x000000" />
+             
 <resource name="currentsplash" src="splash_defaultvalues.swf" />
 <resource name="configure_vidrsc" src="resources/configure.png" />
 <resource name="mainbackroundmenu_rsc" src="resources/mainbackroundmenu.png" />
@@ -96,13 +99,13 @@
 </view>  
   
 <!-- View for Navigation-bar and App-name -->
-<view name="_mainbgcontentNavi" x="0" y="0" bgcolor="${ canvas.basebgcolorizer }" clip="true"
+<view name="_mainbgcontentNavi" x="0" y="0" bgcolor="${ canvas.bgColorMenu }" clip="true"
     width="100%" height="${ canvas.naviHeight }" visibility="hidden">
     <text id="mainBaseText" x="10" y="10"
-        fgcolor="white" fontsize="20" fontstyle="bold">
+        fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
         <method name="setShadow" >
             <![CDATA[
-            if (this.isinited){
+            if (this.isinited && false){
                 this.normalMC = this.getDisplayObject();
                 this.displacementMap = new flash.filters.DropShadowFilter();
                 this.normalMC.filters = [this.displacementMap];

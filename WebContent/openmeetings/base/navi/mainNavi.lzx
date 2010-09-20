@@ -5,10 +5,10 @@
     layout="axis:x;spacing:0" />
 
 <class name="textBoxSubBlank" extends="text" text="$once{ parent.text }"
-    fgcolor="0xFFFFFF"
+    fgcolor="0x000000" fontstyle="bold"
         fontsize="14" y="6" x="10" />
 
-<class name="subitemsListItem" extends="view"
+<class name="subitemsListItem" extends="view" height="26"
     width="${ this._ctext.width+20 }" >
 
     <attribute name="action" value="" type="string" />
@@ -35,10 +35,10 @@
         this._bg.setAttribute("visibility","hidden");
     </method>
 
-    <view name="_bg" visibility="hidden" width="${ parent.width }" 
-          bgcolor="0xFFFFFF" opacity="0.2" height="30" />
-    <view width="1" height="10" y="13" bgcolor="0xFFFFFF" x="${ parent.width-1 }" />
-    <textBoxSubBlank name="_ctext" />
+    <view name="_bg" visibility="hidden" width="${ parent.width-1 }" y="3"
+          bgcolor="0xFFFFFF" opacity="0.4" height="23" />
+    <view width="1" height="8" y="11" bgcolor="0x000000" x="${ parent.width-1 }" />
+    <textBoxSubBlank name="_ctext" fontsize="11"/>
 
     <handler name="onclick">
         this._bg.setAttribute("visibility","visible");
@@ -50,7 +50,7 @@
     
 </class>
 
-<class name="mainMenuMeetingsItem" extends="view" height="30"
+<class name="mainMenuMeetingsItem" extends="view" height="34"
     width="${ this._ctext.width+20 }" >
 
     <attribute name="action" value="" type="string" />
@@ -74,10 +74,11 @@
         }
     </handler>
 
-    <view width="${ parent.width }" resource="mainnavi_rsc"
+<!--resource="mainnavi_rsc"-->
+    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="31" y="1"
         stretches="width" visibility="hidden" name="bgc"/>
     <view width="1" height="10" y="13" bgcolor="0x666666" x="${ parent.width-1 }" />
-    <text text="$once{ parent.text }" name="_ctext"
+    <text text="$once{ parent.text }" name="_ctext" fontstyle="bold"
         fontsize="14" y="6" x="10" />
 
 
@@ -97,7 +98,7 @@
         this.selected = true;
         this.parent.parent.sendOpenMenu(this._menuRef,this);
         this.bgc.setAttribute('visibility','visible');
-        Debug.write("onclick",this);
+        if ($debug) Debug.write("onclick",this);
         if (this.isleaf) loadContent(this,null,null);
         else this._menuRef.subviews[0].onclick.sendEvent();
     </handler>
@@ -108,27 +109,34 @@
 </class>
 
 
-<class name="mainNavi" extends="view" height="30" width="${ canvas.width }" y="50" >
+<class name="mainNavi" extends="view" bgcolor="$once{ canvas.baseMousecolorizer }" 
+	   width="${ canvas.width }" y="50" >
 
     <attribute name="naviObject" value="null" />
     <attribute name="currentmenu" value="null" />
     <attribute name="currentMainmenu" value="null" />
     <attribute name="currentSubmenu" value="null" />
 
-    <view width="${ parent.width }" resource="navibar_rsc" stretches="width" >
+<!-- resource="navibar_rsc" stretches="width" -->
+    <menubar width="${ parent.width }" height="34" style="menuStyle">
+    	<!--
         <handler name="oninit">
             this.setShadow();
         </handler>
         <method name="setShadow" >
             <![CDATA[
             if (this.isinited){
-                this.normalMC = this.getDisplayObject();
+                this.normalMC = this.getMCRef();
                    this.displacementMap = new flash.filters.DropShadowFilter();
                 this.normalMC.filters = [this.displacementMap];
             }
             ]]>
         </method>
-    </view>
+         -->
+    </menubar>
+    <menubar width="${ parent.width }" height="26" y="34" style="menuStyle">
+    	
+    </menubar> 	
     <view name="itemlist" layout="axis:x;spacing:0" id="mainmenuList">
         <method name="doAction" args="action">
             <![CDATA[
@@ -159,7 +167,7 @@
             ]]>
         </method>
     </view>
-    <view name="subitemlist" y="30" />
+    <view name="subitemlist" y="32" />
 
     <method name="sendOpenMenu" args="menuref,obj">
         <![CDATA[
@@ -167,7 +175,7 @@
                 this.currentmenu.setAttribute('visibility','hidden');
             }
             if (this.currentMainmenu!=null && this.currentMainmenu!=obj) {
-                Debug.write("New MainMenuItem",obj);
+                if ($debug) Debug.write("New MainMenuItem",obj);
                 this.currentMainmenu.bgc.setAttribute('visibility','hidden');
                 this.currentMainmenu.selected = false;
             } else {

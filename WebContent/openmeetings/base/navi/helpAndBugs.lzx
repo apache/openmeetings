@@ -1,7 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+<class name="helpAndBugs" extends="view" x="${ parent.width-290 }" layout="axis:x;spacing:2">
+    <view name="btn1" width="80" height="26">
+        <handler name="onmouseover">
+            this._bg.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg.setAttribute("visibility","hidden");
+        </handler>
+        <handler name="onclick">
+            quicklinkAct("userSettingsModule");
+        </handler>
+        <view name="_bg" visibility="hidden" width="$once{ parent.width }" y="4" opacity="0.4"
+            bgcolor="$once{ canvas.baseMouseOvercolorizer }" height="$once{ parent.height-4 }" />
+        <labelText labelid="5" x="10" y="6" fontsize="12" fgcolor="$once{ canvas.fontColorHeader }"/>
+    </view>
+    <view bgcolor="0x3C86C3" y="10" height="10" width="1" />
+    <view name="btn3" width="80" height="26">
+    	<handler name="onmouseover">
+            this._bg.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg.setAttribute("visibility","hidden");
+        </handler>
+        <handler name="onclick">
+            quicklinkAct('logout');
+        </handler>
+        <view name="_bg" visibility="hidden" width="$once{ parent.width }" y="4" opacity="0.4"
+            bgcolor="$once{ canvas.baseMouseOvercolorizer }" height="$once{ parent.height }" />
+        <labelText labelid="310" x="10" y="6" fontsize="12" fgcolor="$once{ canvas.fontColorHeader }"/>
+    </view>
+    <view bgcolor="0x3C86C3" y="10" height="10" width="1" />
+    <view name="btn2" width="120" height="26">
+    	<handler name="onmouseover">
+            this._bg.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg.setAttribute("visibility","hidden");
+        </handler>
+        <handler name="onclick">
+            lz.Browser.loadURL(canvas.currentappnamebugurl,"_blank");
+        </handler>
+        <view name="_bg" visibility="hidden" width="$once{ parent.width-4 }" y="4" opacity="0.4"
+            bgcolor="$once{ canvas.baseMouseOvercolorizer }" height="$once{ parent.height-4 }" />
+        <labelText labelid="284" x="10" y="6" fontsize="12" fgcolor="$once{ canvas.fontColorHeader }"/>
+    </view>
+</class>
+	
 
-<class name="helpAndBugs" extends="view" x="${ parent.width-290 }" layout="axis:x">
+<class name="helpAndBugs2" extends="view" x="${ parent.width-290 }" layout="axis:x">
     <view name="btn1" width="80">
         <view name="v1a" resource="cl_navibar_rsc" />
         <view name="v1b" x="10" width="$once{ parent.width-10 }"

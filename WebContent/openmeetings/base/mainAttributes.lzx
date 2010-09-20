@@ -47,6 +47,9 @@ these properties will be overwritten by config.xml -->
 <attribute name="baseMousecolorizer" value="0xC4D5E6" type="string" />	
 <attribute name="baseMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
 
+<attribute name="bgColorMenu" value="0xEEF0EB" type="string" />
+<attribute name="fontColorHeader" value="0x000000" type="string" />
+
 <attribute name="webAppRootKey" value="" type="string" />
 
 <attribute name="httpRootKey" value="/" type="string" />
