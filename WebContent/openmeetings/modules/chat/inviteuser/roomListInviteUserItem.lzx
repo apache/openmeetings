@@ -21,6 +21,7 @@
 		<attribute name="checkForMaxUsers" value="false" type="boolean" />
 		
 		<attribute name="publicSID" value="" type="string" />
+		<attribute name="user_id" value="0" type="number" />
 
 		<handler name="oninit">
 		<![CDATA[
@@ -137,6 +138,7 @@
 				new lz.chatParticipantsInviteMessage(canvas,{
     				    refObj:parent,
     				    publicSID:parent.publicSID,
+    				    user_id:parent.user_id,
     				    conferenceRoomName:parent.roomname,
     				    roomId:parent.roomid
     				});

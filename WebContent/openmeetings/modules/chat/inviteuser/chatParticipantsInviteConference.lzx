@@ -5,6 +5,7 @@
     width="490" height="430" y="240" x="240" closable="true" labelid="1131" >
 	
 	<attribute name="publicSID" value="" type="string" />
+	<attribute name="user_id" value="0" type="number" />
 	
     <view resource="messagebox_info_rsc" x="10" y="24" />
     
@@ -42,7 +43,8 @@
                                         roomid : value[eg].rooms_id,
                                         starttime : time,
                                         roomname : value[eg].name,
-                                        publicSID:parent.parent.publicSID
+                                        publicSID:parent.parent.publicSID,
+                                        user_id:parent.parent.user_id
                                     });
                         }
                     }

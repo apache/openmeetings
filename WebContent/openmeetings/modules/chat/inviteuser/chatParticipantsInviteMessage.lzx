@@ -8,6 +8,7 @@
 	<attribute name="refObj" value="null" />
 	
 	<attribute name="publicSID" value="" type="string" />
+	<attribute name="user_id" value="0" type="number" />
 	<attribute name="conferenceRoomName" value="" type="string" />
 	<attribute name="roomId" value="0" type="number" />
 	
@@ -25,27 +26,29 @@
 	
 	<method name="send">
 		
-		this.sendMessageWithClientByPublicSID.messageObject = new Object
-		this.sendMessageWithClientByPublicSID.messageObject["message"] = "inviteToRoom";
-		this.sendMessageWithClientByPublicSID.messageObject["action"] = "inviteToRoom";
-		this.sendMessageWithClientByPublicSID.messageObject["roomId"] = this.roomId;
-		this.sendMessageWithClientByPublicSID.messageObject["usermessage"] = this.message.getText();
-		this.sendMessageWithClientByPublicSID.messageObject["publicSID"] = canvas.publicSID;
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject = new Object
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject["message"] = "inviteToRoom";
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject["action"] = "inviteToRoom";
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject["roomId"] = this.roomId;
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject["usermessage"] = this.message.getText();
+		this.sendMessageWithClientByPublicSIDOrUser.messageObject["publicSID"] = canvas.publicSID;
 		
 		if ($debug) Debug.write("Send to _ ",this.publicSID);
+		if ($debug) Debug.write("Send to _ ",this.user_id);
 		
-		this.sendMessageWithClientByPublicSID.doCall();
+		this.sendMessageWithClientByPublicSIDOrUser.doCall();
 		
 	</method>
 	
-    <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+    <netRemoteCallHib name="sendMessageWithClientByPublicSIDOrUser" funcname="sendMessageWithClientByPublicSIDOrUser" 
                       remotecontext="$once{ canvas.thishib }" >  
         <attribute name="messageObject" value="null" />
         <netparam><method name="getValue">return parent.messageObject;</method></netparam>
         <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.user_id;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
-                if ($debug) Debug.write("+sendMessageWithClientByPublicSID : ",value);
+                if ($debug) Debug.write("+sendMessageWithClientByPublicSIDOrUser : ",value);
                 
                 if (parent._switch.getValue()) {
             

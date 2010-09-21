@@ -97,6 +97,20 @@ public class ClientListManager {
 		return null;
 	}
 	
+	public synchronized RoomClient getClientByUserId(Long userId) {
+		try {
+			for (Iterator<String> iter = clientList.keySet().iterator();iter.hasNext();) {
+				RoomClient rcl = clientList.get(iter.next());
+				if (rcl.getUser_id().equals(userId)) {
+					return rcl;
+				}
+			}
+		} catch (Exception err) {
+			log.error("[getClientByPublicSID]",err);
+		}
+		return null;
+	}
+	
 	public synchronized Boolean updateClientByStreamId(String streamId, RoomClient rcm) {
 		try {
 			if (clientList.containsKey(streamId)){

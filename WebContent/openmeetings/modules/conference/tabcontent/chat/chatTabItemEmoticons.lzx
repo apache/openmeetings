@@ -48,7 +48,8 @@
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");
             new lz.chatParticipantsInviteConference(canvas,{
-                            publicSID:parent.publicSID
+                            publicSID:parent.publicSID,
+                            user_id:parent.user_id
                         });
         </handler>
         <labelTooltip labelid="1131" />

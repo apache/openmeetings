@@ -2794,6 +2794,79 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}		
 	}
 	
+	public synchronized void sendMessageWithClientByPublicSIDOrUser(Object message, String publicSID, Long user_id) {
+		try {
+			//ApplicationContext appCtx = getContext().getApplicationContext();
+			
+			IScope globalScope = getContext().getGlobalScope();
+			
+			IScope webAppKeyScope = globalScope.getScope(ScopeApplicationAdapter.webAppRootKey);
+			
+			//log.debug("webAppKeyScope "+webAppKeyScope);
+			
+			//Get Room Id to send it to the correct Scope
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			
+			if (currentClient == null) {
+				currentClient = this.clientListManager.getClientByUserId(user_id);
+			}
+			
+			Collection<Set<IConnection>> conCollection = null;
+			
+			if (currentClient == null) {
+				//Must be from a previous session, search for user in current scope
+				IConnection current = Red5.getConnectionLocal();
+				//Notify all Clients of that Scope (Room)
+				conCollection = current.getScope().getConnections();
+			}  else {
+				//default Scope Name
+				String scopeName = "hibernate";
+				if (currentClient.getRoom_id() != null) {
+					scopeName = currentClient.getRoom_id().toString();
+				}
+				
+				IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
+				
+				if (scopeHibernate!=null){
+					conCollection = webAppKeyScope.getScope(scopeName).getConnections();
+				}
+			}
+			
+			
+			//log.debug("scopeHibernate "+scopeHibernate);
+			
+			//Notify the clients of the same scope (room) with user_id
+			
+			
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						if (rcl != null) {
+							if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						//continue;
+	    					} else {
+								//log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+ " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
+								if (rcl.getPublicSID().equals(publicSID)){
+									//log.debug("IS EQUAL ");
+									((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
+									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+message);
+								} else if (user_id != 0 && rcl.getUser_id() != null && rcl.getUser_id().equals(user_id)) {
+									((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
+									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+message);
+								}
+							}
+						}
+					}
+				}
+			}
+
+		} catch (Exception err) {
+			log.error("[sendMessageWithClient] ",err);
+			err.printStackTrace();
+		}		
+	}
+	
 	public synchronized Boolean getInterviewRecordingStatus() {
 		try {
 			
