@@ -44,7 +44,9 @@
 		  width="$once{ parent.width - 40 }" bgcolor="$once{ parent.usercolor }"
 		  name="header_user" />
 		  
-    <view visible="$once{ !parent.isDirectLink }" resource="test_setup_start_conference2_rsc" y="0" x="$once{ parent.width - 54 }">
+    <miniIcons visible="$once{ !parent.isDirectLink }" y="0" x="$once{ parent.width - 54 }"
+    		   resource="test_setup_start_conference2_rsc" width="16" height="16" 
+               showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");
             new lz.chatParticipantsInviteConference(canvas,{
@@ -53,7 +55,7 @@
                         });
         </handler>
         <labelTooltip labelid="1131" />
-    </view>  		  
+    </miniIcons>  		  
 	<text text="$once{ parent.usertime }" align="right" 
 		  fontsize="10" name="header_time" />
 	
