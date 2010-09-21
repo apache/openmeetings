@@ -587,6 +587,9 @@
                     canvas.setAttribute('picture_uri','');
                     canvas.setAttribute('language','');
                     canvas.setAttribute('currentuser',value.login);
+                    if (value.omTimeZone != null) {
+                        canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
+                    }
                     
                     if (value.level_id >= 2) {
                         canvas.becomemoderator = true;

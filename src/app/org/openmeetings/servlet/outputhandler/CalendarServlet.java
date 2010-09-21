@@ -90,13 +90,13 @@ public class CalendarServlet extends HttpServlet {
 				
 				for (Appointment appointment : appointements) {
 					
-					String timeZoneStr = httpServletRequest.getParameter("timeZoneStr");
+					String jNameTimeZone = httpServletRequest.getParameter("jNameTimeZone");
 					
-					if (timeZoneStr == null) {
-						timeZoneStr = "Europe/Berlin";
+					if (jNameTimeZone == null) {
+						jNameTimeZone = "Europe/Berlin";
 					}
 					
-					TimeZone timeZone = TimeZone.getTimeZone(timeZoneStr);
+					TimeZone timeZone = TimeZone.getTimeZone(jNameTimeZone);
 					
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeZone(timeZone);
@@ -104,8 +104,8 @@ public class CalendarServlet extends HttpServlet {
 					
 					log.debug("addAppointment offset :: "+offset);
 					
-					appointment.setAppointmentStarttime(new Date(appointment.getAppointmentStarttime().getTime() - offset));
-					appointment.setAppointmentEndtime(new Date(appointment.getAppointmentEndtime().getTime() - offset));
+					appointment.setAppointmentStarttime(new Date(appointment.getAppointmentStarttime().getTime() + offset));
+					appointment.setAppointmentEndtime(new Date(appointment.getAppointmentEndtime().getTime() + offset));
 					
 					int dayAsInt = appointment.getAppointmentStarttime().getDate();
 					

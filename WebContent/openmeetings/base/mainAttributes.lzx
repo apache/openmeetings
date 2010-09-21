@@ -201,6 +201,7 @@ these properties will be overwritten by config.xml -->
 <attribute name="currentusename" value="defaultname" type="string" />
 <attribute name="user_id" value="0" type="number" />
 <attribute name="firstName" value="" type="string" />
+<attribute name="jNameTimeZone" value="" type="string" />
 <attribute name="lastName" value="" type="string" />
 <attribute name="mail" value="" type="string" />
 <attribute name="lastLogin" value="" type="string" />
