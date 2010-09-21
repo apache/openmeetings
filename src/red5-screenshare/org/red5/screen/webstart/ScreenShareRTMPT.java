@@ -495,7 +495,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	synchronized public void setConnectionAsSharingClient() {
 		try {
 			
-			logger.debug("setConnectionAsSharingClient" );
+			//logger.debug("setConnectionAsSharingClient" );
 			
 			HashMap map = new HashMap();
 			map.put("screenX",VirtualScreenBean.vScreenSpinnerX);
@@ -544,7 +544,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	{
 		try {
 			
-			logger.debug("INVOKE ScreenShareRTMPTrAction" );
+			//logger.debug("INVOKE ScreenShareRTMPTrAction" );
 			
 			HashMap map = new HashMap();
 			map.put("stopStreaming", this.stopStreaming);
@@ -657,13 +657,13 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
     public void onStreamEvent( Notify notify ) {
 
-        logger.debug( "onStreamEvent " + notify );
+        //logger.debug( "onStreamEvent " + notify );
 
         ObjectMap map = (ObjectMap) notify.getCall().getArguments()[ 0 ];
         String code = (String) map.get( "code" );
 
         if ( StatusCodes.NS_PUBLISH_START.equals( code ) ) {
-            logger.debug( "onStreamEvent Publish start" );
+            //logger.debug( "onStreamEvent Publish start" );
             startPublish = true;
         }
     }
@@ -672,7 +672,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
     public void sendRemoteCursorEvent(Object obj) {
     	try {
     		
-    		logger.debug("#### sendRemoteCursorEvent ");
+    		//logger.debug("#### sendRemoteCursorEvent ");
 
             //logger.debug("Result Map Type "+obj.getClass().getName());
             
@@ -745,7 +745,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeydown -1 "+key);
+            	//logger.debug("key onkeydown -1 "+key);
             	boolean doAction = true;
             	
             	if (key == 221) {
@@ -777,7 +777,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             		key = 47;
             	}
             	
-            	logger.debug("key onkeydown -2 "+key);
+            	//logger.debug("key onkeydown -2 "+key);
             	
             	if (doAction) {
             		
@@ -792,7 +792,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeyup 1- "+key);
+            	//logger.debug("key onkeyup 1- "+key);
             	
             	boolean doAction = true;
             	
@@ -810,7 +810,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             		key = 47;
             	}
             	
-            	logger.debug("key onkeyup 2- "+key);
+            	//logger.debug("key onkeyup 2- "+key);
             	
             	if (doAction) {
             		
@@ -914,11 +914,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
          //clippy.setContents( selection,selection  );
         
-         logger.debug("os.name :: "+System.getProperty("os.name"));
+         //logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
          if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 	    	 
-        	 logger.debug("IS WINDOWS");
+        	 //logger.debug("IS WINDOWS");
         	 
         	 //drückt STRG+C == copy
         	 instance.keyPress( KeyEvent.VK_CONTROL );
@@ -932,7 +932,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
         	 
          } else {
         	 
-        	 logger.debug("IS MAC");
+        	 //logger.debug("IS MAC");
         	 
         	 //Macintosh simulate Copy
         	 instance.keyPress( 157 );
@@ -970,11 +970,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 		 Transferable transferableText = new StringSelection(charValue);
          clippy.setContents( transferableText, null  );
         
-         logger.debug("os.name :: "+System.getProperty("os.name"));
+         //logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
          if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 	    	 
-        	 logger.debug("IS WINDOWS");
+        	 //logger.debug("IS WINDOWS");
         	 
         	 //drückt STRG+V == einfügen
         	 instance.keyPress( KeyEvent.VK_CONTROL );
@@ -988,7 +988,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
         	 
          } else {
         	 
-        	 logger.debug("IS MAC");
+        	 //logger.debug("IS MAC");
         	 
         	 //Macintosh simulate Insert
         	 instance.keyPress( 157 );
@@ -1028,19 +1028,19 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	
 	        } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
 				
-				logger.debug("call get Method Name "+call.getServiceMethodName());
+				//logger.debug("call get Method Name "+call.getServiceMethodName());
 				
 				Object o = call.getResult();
 				
-				logger.debug("Result Map Type "+o.getClass().getName());
+				//logger.debug("Result Map Type "+o.getClass().getName());
 				
 				Map returnMap = (Map) o;
 				
-				logger.debug("result "+returnMap.get("result"));
+				//logger.debug("result "+returnMap.get("result"));
 				
-				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-					logger.debug("key "+iter.next());
-				}
+				//for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+				//	logger.debug("key "+iter.next());
+				//}
 				
 				if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
 					
@@ -1108,11 +1108,11 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 				
 				Map returnMap = (Map) o;
 				
-				logger.debug("result "+returnMap.get("result"));
+				//logger.debug("result "+returnMap.get("result"));
 				
-				for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-					logger.debug("key "+iter.next());
-				}
+				//for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+				//	logger.debug("key "+iter.next());
+				//}
 				
 				if (returnMap.get("result").equals("stopAll")) {
 				

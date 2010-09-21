@@ -687,7 +687,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
     public void sendRemoteCursorEvent(Object obj) {
     	try {
     		
-    		logger.debug("#### sendRemoteCursorEvent ");
+    		//logger.debug("#### sendRemoteCursorEvent ");
 
             //logger.debug("Result Map Type "+obj.getClass().getName());
             
@@ -760,7 +760,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeydown -1 "+key);
+            	//logger.debug("key onkeydown -1 "+key);
             	boolean doAction = true;
             	
             	if (key == 221) {
@@ -792,7 +792,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             		key = 47;
             	}
             	
-            	logger.debug("key onkeydown -2 "+key);
+            	//logger.debug("key onkeydown -2 "+key);
             	
             	if (doAction) {
             		
@@ -807,7 +807,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             	
             	Integer key = Integer.valueOf(returnMap.get("k").toString()).intValue();
             
-            	logger.debug("key onkeyup 1- "+key);
+            	//logger.debug("key onkeyup 1- "+key);
             	
             	boolean doAction = true;
             	
@@ -825,7 +825,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
             		key = 47;
             	}
             	
-            	logger.debug("key onkeyup 2- "+key);
+            	//logger.debug("key onkeyup 2- "+key);
             	
             	if (doAction) {
             		
@@ -930,11 +930,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 
          //clippy.setContents( selection,selection  );
         
-         logger.debug("os.name :: "+System.getProperty("os.name"));
+         //logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
          if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 	    	 
-        	 logger.debug("IS WINDOWS");
+        	 //logger.debug("IS WINDOWS");
         	 
         	 //drückt STRG+C == copy
         	 instance.keyPress( KeyEvent.VK_CONTROL );
@@ -948,7 +948,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
          } else {
         	 
-        	 logger.debug("IS MAC");
+        	 //logger.debug("IS MAC");
         	 
         	 //Macintosh simulate Copy
         	 instance.keyPress( 157 );
@@ -986,11 +986,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 		 Transferable transferableText = new StringSelection(charValue);
          clippy.setContents( transferableText, null  );
         
-         logger.debug("os.name :: "+System.getProperty("os.name"));
+         //logger.debug("os.name :: "+System.getProperty("os.name"));
     	 
          if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
 	    	 
-        	 logger.debug("IS WINDOWS");
+        	 //logger.debug("IS WINDOWS");
         	 
         	 //drückt STRG+V == einfügen
         	 instance.keyPress( KeyEvent.VK_CONTROL );
@@ -1004,7 +1004,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         	 
          } else {
         	 
-        	 logger.debug("IS MAC");
+        	 //logger.debug("IS MAC");
         	 
         	 //Macintosh simulate Insert
         	 instance.keyPress( 157 );
@@ -1044,23 +1044,23 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         
                 } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
                                 
-                                logger.debug("call get Method Name "+call.getServiceMethodName());
+                                //logger.debug("call get Method Name "+call.getServiceMethodName());
                                 
                                 Object o = call.getResult();
                                 
-                                logger.debug("Result Map Type "+o.getClass().getName());
+                                //logger.debug("Result Map Type "+o.getClass().getName());
                                 
                                 Map returnMap = (Map) o;
                                 
-                                logger.debug("result "+returnMap.get("result"));
+                                //logger.debug("result "+returnMap.get("result"));
                                 
-                                for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-                                        logger.debug("key "+iter.next());
-                                }
+                                //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                                //        logger.debug("key "+iter.next());
+                                //}
                                 
                                 if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
                                         
-                                        logger.debug("Stream not yet started - do it ");
+                                        //logger.debug("Stream not yet started - do it ");
                                         
                                         createStream( this );
                                         
@@ -1070,7 +1070,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                                 this.capture.resetBuffer();
                                         }
                                         
-                                        logger.debug("The Stream was already started ");
+                                        //logger.debug("The Stream was already started ");
                                 }
                                 
                                 if (returnMap.get("modus") != null) {
@@ -1119,11 +1119,11 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                 
                                 Map returnMap = (Map) o;
                                 
-                                logger.debug("result "+returnMap.get("result"));
+                                //logger.debug("result "+returnMap.get("result"));
                                 
-                                for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-                                        logger.debug("key "+iter.next());
-                                }
+                                //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                                //        logger.debug("key "+iter.next());
+                                //}
                                 
                                 if (returnMap.get("result").equals("stopAll")) {
                                 
@@ -1261,8 +1261,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                 	timeBetweenFrames = 1000;
                 }
                     
-                logger.debug("############ timeBetweenFrames :: "+timeBetweenFrames);
-                logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
+                //logger.debug("############ timeBetweenFrames :: "+timeBetweenFrames);
+                //logger.debug( "CaptureScreen: x=" + x + ", y=" + y + ", w=" + width + ", h=" + height + ",resizeX="+ resizeX + " resizeY= " +resizeY );
 
             }
 
