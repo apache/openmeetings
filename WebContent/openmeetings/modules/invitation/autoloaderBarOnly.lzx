@@ -5,7 +5,7 @@
     layout="axis:y;spacing:2">
 
 	<attribute name="maxwidth" value="100" type="number" />
-	<attribute name="maxsteps" value="12" type="number" />
+	<attribute name="maxsteps" value="13" type="number" />
 	<attribute name="currentsteps" value="0" type="number" />
 	
 	<method name="close">
@@ -51,15 +51,25 @@
     </netRemoteCallHib>	 
     
     <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" 
-		remotecontext="$once{ canvas.thishib }" >  
+		remotecontext="$once{ canvas.thishib }" dataobject="countrySet"> 
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
             parent.setProgress();
+            parent.getTimeZones.doCall();
+        </handler>  
+    </netRemoteCallHib>   
+    
+    <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" 
+		  remotecontext="$once{ canvas.thishib }" dataobject="timeZoneSet">
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("getStates: ",value);
+            parent.setProgress();
             parent.getUserSalutations.doCall();
         </handler>  
-    </netRemoteCallHib>    
+    </netRemoteCallHib> 
     
     <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" 
 		remotecontext="$once{ canvas.thishib }" >  

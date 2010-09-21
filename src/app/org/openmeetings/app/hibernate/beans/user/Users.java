@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 
@@ -51,6 +52,8 @@ public class Users {
     //Vars to simulate external Users
     private Long externalUserId;
     private String externalUserType;
+    
+    private OmTimeZone omTimeZone; //In UTC +/- hours
     
     private Sessiondata sessionData;
     
@@ -413,6 +416,22 @@ public class Users {
 	}
 	public void setUserSipData(UserSipData userSipData) {
 		this.userSipData = userSipData;
+	}
+
+	/**
+	 * @hibernate.many-to-one
+	 * column = "omtimezoneId"
+	 * class = "org.openmeetings.app.hibernate.beans.basic.OmTimeZone"
+	 * insert="true"
+	 * update="true"
+	 * outer-join="true"
+	 * lazy="false"
+     */
+	public OmTimeZone getOmTimeZone() {
+		return omTimeZone;
+	}
+	public void setOmTimeZone(OmTimeZone omTimeZone) {
+		this.omTimeZone = omTimeZone;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.io.File;
 import java.util.Iterator;
 import java.io.IOException;
@@ -17,7 +18,9 @@ import org.apache.velocity.tools.view.servlet.VelocityViewServlet;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
@@ -122,10 +125,18 @@ public class Install extends VelocityViewServlet {
 					allFonts.put("TimesNewRoman", "TimesNewRoman");
 					allFonts.put("Verdana", "Verdana");
 					allFonts.put("Arial", "Arial");
-						
+					
+					LinkedHashMap<String,String> allTimeZones = new LinkedHashMap<String,String>();
+					List<OmTimeZone> omTimeZoneList = ImportInitvalues.getInstance().getTimeZones(filePath);
+					for (OmTimeZone omTimeZone : omTimeZoneList) {
+						String labelName = omTimeZone.getJname() + " (" + omTimeZone.getLabel() + ")";
+						allTimeZones.put(omTimeZone.getJname(), labelName);
+					}
+					
 					Template tpl = super.getTemplate ("install_step1_"+lang+".vm");
 					ctx.put("allLanguages", allLanguages);
 					ctx.put("allFonts", allFonts);
+					ctx.put("allTimeZones", allTimeZones);
 					StringWriter writer = new StringWriter(); 
 					tpl.merge(ctx, writer);
 					
@@ -199,6 +210,7 @@ public class Install extends VelocityViewServlet {
 					String sip_phonerange_start = httpServletRequest.getParameter("sip_phonerange_start");
 					String sip_phonerange = httpServletRequest.getParameter("sip_phonerange");
 					
+					String timeZone = httpServletRequest.getParameter("timeZone");
 					
 					log.error("step 0+ start init with values. "+username+" ***** "+useremail+" "+orgname+" "+configdefault+" "+configreferer+" "+
 						configsmtp+" "+configmailuser+" "+configmailpass+" "+configdefaultLang + " " +
@@ -237,7 +249,7 @@ public class Install extends VelocityViewServlet {
 									sip_phonerange_start,
 									sip_phonerange);
 					
-					ImportInitvalues.getInstance().loadInitUserAndOrganisation(username, userpass, useremail, orgname);
+					ImportInitvalues.getInstance().loadInitUserAndOrganisation(username, userpass, useremail, orgname, timeZone);
 					ImportInitvalues.getInstance().loadDefaultRooms();
 					
 					// AppointMent Categories

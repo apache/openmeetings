@@ -20,6 +20,7 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.basic.SOAPLogin;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
@@ -40,6 +41,7 @@ import org.openmeetings.app.data.conference.Feedbackmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -574,6 +576,10 @@ public class MainService implements IPendingServiceCallback {
      */
     public List<States> getStates(){
     	return Statemanagement.getInstance().getStates();
+    }
+    
+    public List<OmTimeZone> getTimeZones() {
+    	return OmTimeZoneDaoImpl.getInstance().getOmTimeZones();
     }
 
     /**

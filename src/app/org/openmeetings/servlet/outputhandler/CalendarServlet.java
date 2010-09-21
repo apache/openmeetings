@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,7 +49,7 @@ public class CalendarServlet extends HttpServlet {
 			Long users_id = Sessionmanagement.getInstance().checkSession(sid);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 
-			if (true || (user_level!=null && user_level > 0)) {
+			if (user_level!=null && user_level > 0) {
 				
 				String yearStr = httpServletRequest.getParameter("year");
 				String monthStr = httpServletRequest.getParameter("month");
@@ -88,6 +89,23 @@ public class CalendarServlet extends HttpServlet {
 				Element day = null;
 				
 				for (Appointment appointment : appointements) {
+					
+					String timeZoneStr = httpServletRequest.getParameter("timeZoneStr");
+					
+					if (timeZoneStr == null) {
+						timeZoneStr = "Europe/Berlin";
+					}
+					
+					TimeZone timeZone = TimeZone.getTimeZone(timeZoneStr);
+					
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeZone(timeZone);
+					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+					
+					log.debug("addAppointment offset :: "+offset);
+					
+					appointment.setAppointmentStarttime(new Date(appointment.getAppointmentStarttime().getTime() - offset));
+					appointment.setAppointmentEndtime(new Date(appointment.getAppointmentEndtime().getTime() - offset));
 					
 					int dayAsInt = appointment.getAppointmentStarttime().getDate();
 					

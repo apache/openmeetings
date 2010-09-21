@@ -6,6 +6,7 @@
 <dataset name="languagesSet" />        
 
 <dataset name="countrySet" />
+<dataset name="timeZoneSet" />
 
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
     src="$once{ this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope }" >
@@ -508,9 +509,18 @@
             //Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
             canvas.thishib.loaderVar.setProgress();
-            parent.getUserSalutations.doCall();
+            parent.getTimeZones.doCall();
         </handler>  
     </netRemoteCallHib>  
+    
+    <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" dataobject="timeZoneSet">
+        <handler name="ondata" args="value">
+            //The onResult-Handler will be called be the rtmpconnection
+            //Debug.write("getStates: ",value);
+            canvas.thishib.loaderVar.setProgress();
+            parent.getUserSalutations.doCall();
+        </handler>  
+    </netRemoteCallHib>
     
     <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
     	<netparam><method name="getValue">return canvas.sessionId;</method></netparam>

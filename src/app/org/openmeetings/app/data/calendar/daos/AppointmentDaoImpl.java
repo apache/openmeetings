@@ -2,6 +2,7 @@ package org.openmeetings.app.data.calendar.daos;
 
 import java.lang.reflect.Array;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
@@ -197,6 +198,15 @@ public class AppointmentDaoImpl {
 			
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentLocation(appointmentLocation);
+			
+			Calendar cal = Calendar.getInstance();
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			log.debug("addAppointment offset :: "+offset);
+			
+			appointmentstart = new Date(appointmentstart.getTime() - offset);
+			appointmentend = new Date(appointmentend.getTime() - offset);
+			
 			ap.setAppointmentStarttime(appointmentstart);
 		 	ap.setAppointmentEndtime(appointmentend);
 			ap.setAppointmentDescription(appointmentDescription);
@@ -307,6 +317,14 @@ public class AppointmentDaoImpl {
 			
 			
 			Appointment ap = this.getAppointmentById(appointmentId);
+			
+			Calendar cal = Calendar.getInstance();
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			log.debug("addAppointment offset :: "+offset);
+			
+			appointmentstart = new Date(appointmentstart.getTime() - offset);
+			appointmentend = new Date(appointmentend.getTime() - offset);
 									
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentStarttime(appointmentstart);
@@ -429,6 +447,14 @@ public class AppointmentDaoImpl {
 			
 			
 			Appointment ap = this.getAppointmentById(appointmentId);
+			
+			Calendar cal = Calendar.getInstance();
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			log.debug("addAppointment offset :: "+offset);
+			
+			appointmentstart = new Date(appointmentstart.getTime() - offset);
+			appointmentend = new Date(appointmentend.getTime() - offset);
 									
 			ap.setAppointmentStarttime(appointmentstart);
 		 	ap.setAppointmentEndtime(appointmentend);

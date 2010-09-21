@@ -6,6 +6,8 @@
 	<attribute name="inittwice" value="false" type="boolean" />
     <attribute name="multiline" value="false" type="boolean" />
     <attribute name="ismenubuttonlabel" value="false" type="boolean" />
+    <attribute name="initByDataPathparent" value="false" type="boolean" />
+    
     <attribute name="holder" value="null" />
     
     <event name="setContent" />
@@ -19,6 +21,9 @@
 	    	if (this.inittwice){
 	    		this.setAttribute('text',canvas.getLabelName(this.labelid));
 	    	}
+	    	if (this.initByDataPathparent){
+                this.setAttribute('text',parent.text);
+            }
 	        var xVal = canvas.getMouse('x');
 	        var yVal = canvas.getMouse('y');
 			////Debug.write("mytext: ",this.mytext);

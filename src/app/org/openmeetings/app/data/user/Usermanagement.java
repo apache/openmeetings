@@ -18,6 +18,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UserSipDataDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -469,7 +470,7 @@ public class Usermanagement {
 			int availible, String telefon, String fax,
 			String mobil, String email, String comment, int status, List organisations,
 			int title_id, String phone, String sip_user, String sip_pass, String sip_auth, 
-			Boolean generateSipUserData) {
+			Boolean generateSipUserData, String jNameTimeZone) {
 
 		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level) && user_id != 0) {
 			try {
@@ -509,6 +510,7 @@ public class Usermanagement {
 					us.setAvailible(availible);
 					us.setStatus(status);
 					us.setTitle_id(title_id);
+					us.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 					 
 					if (level_id != 0)
 						us.setLevel_id(new Long(level_id));
@@ -889,7 +891,7 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
 										language_id, true, new LinkedList(), phone, baseURL, 
-										sendConfirmation,"","","", generateSipUserData);
+										sendConfirmation,"","","", generateSipUserData, "");
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -940,7 +942,8 @@ public class Usermanagement {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage, 
 			List organisations, String phone, String baseURL, Boolean sendConfirmation, 
-			String sip_user, String sip_pass, String sip_auth, boolean generateSipUserData) throws Exception {
+			String sip_user, String sip_pass, String sip_auth, boolean generateSipUserData,
+			String jName_timezone) throws Exception {
 		//TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -973,7 +976,7 @@ public class Usermanagement {
 					
 					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
 									Userpass,address_id, age, hash, 
-									sip_user, sip_pass, sip_auth, generateSipUserData);
+									sip_user, sip_pass, sip_auth, generateSipUserData, jName_timezone);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -1029,8 +1032,9 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, long adress_id, Date age, String hash, 
 			String sip_user, String sip_pass, String sip_auth, 
-			boolean generateSipUserData) {
+			boolean generateSipUserData, String jName_timezone) {
 		try {
+			
 			Users users = new Users();
 			users.setFirstname(firstname);
 			users.setLogin(login);
@@ -1045,6 +1049,7 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
+			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jName_timezone));
 			
 			if (generateSipUserData) {
 				
@@ -1305,6 +1310,8 @@ public class Usermanagement {
 					savedUser.setFirstname(values.get("firstname").toString());
 					savedUser.setLastname(values.get("lastname").toString());
 					savedUser.setTitle_id(Integer.parseInt(values.get("title_id").toString()));
+					
+					savedUser.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone((values.get("jnameTimeZone").toString())));
 					
 					String password = values.get("password").toString();
 					

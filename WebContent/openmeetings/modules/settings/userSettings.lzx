@@ -46,6 +46,7 @@
 			this.state.addAndSelectItem(obj.adresses.states.name,String(obj.adresses.states.state_id));
 			this.adress_comment.setAttribute('text',obj.adresses.comment);
 			this.salutation.selectItem(String(obj.title_id));
+			this._timeZone.selectItem(String(obj.omTimeZone.jname));
 			this._organisationslist.clearList();
 			for (var i=0;i<obj.organisation_users.length;i++){
 				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
@@ -101,6 +102,7 @@
   			this.parent.userObj.comment = this.parent.adress_comment.getText();
             this.parent.userObj.age = this.parent.age.getDate();
 			this.parent.userObj.title_id = Number(this.parent.salutation.getValue());
+			this.parent.userObj.jnameTimeZone = parent._timeZone.getValue();
             
 			var t = new lz.sharedObject();
             t.getLocal('userdata');
@@ -149,33 +151,40 @@
         
     <!-- 136:Lastname -->
     <labelText labelid="136" width="200" y="160" resize="false" x="2"/>
-        <customEdittext name="lastname" y="160" x="120" width="270" text="" />                
+        <customEdittext name="lastname" y="160" x="120" width="270" text="" />  
+        
+    <labelText labelid="1143" width="200" y="190" resize="false" x="2"/>
+         <resetCombobox name="_timeZone" editable="false" y="190" width="270" x="120"
+         			   fontsize="11" style="componentStyle">
+         	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+         </resetCombobox>       
 
     <!-- 137:Mail -->
-    <labelText labelid="137" width="200" y="190" resize="false" x="2"/>
-        <customEdittext name="email" y="190" x="120" width="270" text="" regexpType="email"/>
+    <labelText labelid="137" width="200" y="220" resize="false" x="2"/>
+        <customEdittext name="email" y="220" x="120" width="270" text="" regexpType="email"/>
     
     <!-- 607:Phone -->
-    <labelText labelid="607" width="200" y="220" resize="false" x="2"/>
-        <customEdittext name="phone" y="220" x="120" width="270" text="" />
+    <labelText labelid="607" width="200" y="250" resize="false" x="2"/>
+        <customEdittext name="phone" y="250" x="120" width="270" text="" />
         
     <!-- 138:Birthday -->
-    <labelText labelid="138" width="200" y="250" resize="false" x="2"/>
-        <dateField name="age" y="250" x="120" width="270" text="" />
+    <labelText labelid="138" width="200" y="280" resize="false" x="2"/>
+        <dateField name="age" y="280" x="120" width="270" text="" />
         
     <!-- 139:Street/No -->
-    <labelText labelid="139" width="200" y="280" resize="false" x="2"/>
-        <customEdittext name="street" y="280" x="120" width="220" text="" />
-        <customEdittext name="house" y="280" x="350" width="40" text="" />
+    <labelText labelid="139" width="200" y="310" resize="false" x="2"/>
+        <customEdittext name="street" y="310" x="120" width="220" text="" />
+        <customEdittext name="house" y="310" x="350" width="40" text="" />
         
     <!-- 140:ZIP/Town -->
-    <labelText labelid="140" width="280" y="310" resize="false" x="2"/>
-        <customEdittext name="zip" y="310" x="120" width="70" text="" />   
-        <customEdittext name="town" y="310" x="200" width="190" text="" />                        
+    <labelText labelid="140" width="280" y="340" resize="false" x="2"/>
+        <customEdittext name="zip" y="340" x="120" width="70" text="" />   
+        <customEdittext name="town" y="340" x="200" width="190" text="" />                        
          
     <!-- 141:Country -->
-    <labelText labelid="141" width="200" y="340" resize="false" x="2"/>  
-        <dynamicCombobox name="state" width="270" y="340" x="120"
+    <labelText labelid="141" width="200" y="370" resize="false" x="2"/>  
+        <dynamicCombobox name="state" width="270" y="370" x="120"
                          text="Switzerland" value="204" />
                          
                          <!--
@@ -185,8 +194,8 @@
 			
 	 
     <!-- 142:Adress-Info -->
-    <labelText labelid="142" width="200" y="370" resize="false" x="2"/>
-        <customEdittext name="adress_comment" y="370" x="120" width="270" 
+    <labelText labelid="142" width="200" y="400" resize="false" x="2"/>
+        <customEdittext name="adress_comment" y="400" x="120" width="270" 
             height="100" text="" multiline="true"/>
        
     <!-- 161:Organisations -->

@@ -299,7 +299,8 @@ public class UserService {
 		        		argObjectMap.get("sip_user").toString(),
 		        		argObjectMap.get("sip_pass").toString(),
 		        		argObjectMap.get("sip_auth").toString(),
-		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue()); 	
+		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
+		        		argObjectMap.get("jNameTimeZone").toString()); 	
     		} else {
 		        return Usermanagement.getInstance().updateUser(user_level,user_idClient, 
 		        		Long.valueOf(argObjectMap.get("level_id").toString()).longValue(), argObjectMap.get("login").toString(), 
@@ -318,7 +319,8 @@ public class UserService {
 		        		argObjectMap.get("sip_user").toString(),
 		        		argObjectMap.get("sip_pass").toString(),
 		        		argObjectMap.get("sip_auth").toString(),
-		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue()
+		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
+		        		argObjectMap.get("jNameTimeZone").toString()
 		        		); 
     		}
     	} catch (Exception ex) {

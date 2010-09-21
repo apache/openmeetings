@@ -626,34 +626,44 @@ public class LdapLoginManagement {
 		
 		try{
 			
+			Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+			String jName_timeZone = "";
+			
+			if (conf != null) {
+				jName_timeZone = conf.getConf_value();
+			}
+			
+			
 			//CHeck if LDAP Users get a SIP Account Issue 1099
 			
 			newUserId= Usermanagement.getInstance().registerUserInit(
-				2,//user_level
-				1,//level_id
-				1,//available
-				1,// status
-				login,// loginname
-				passwd,//passwd
-				lastname,
-				firstname,
-				email,
-				new java.util.Date(),
-				street,
-				additionalname,
-				fax,
-				zip,
-				state_id,
-				town,
-				0,
-				false, //sendWelcomeMessage
-				null,
-				phone,
-				"",//BaseURL is empty as we do not send an Email here
-				false,//send verification code
-				"","","",//sip_user, sip_pass, sip_auth
-				true //generate SIP Data if the config is enabled
-				);
+									2,//user_level
+									1,//level_id
+									1,//available
+									1,// status
+									login,// loginname
+									passwd,//passwd
+									lastname,
+									firstname,
+									email,
+									new java.util.Date(),
+									street,
+									additionalname,
+									fax,
+									zip,
+									state_id,
+									town,
+									0,
+									false, //sendWelcomeMessage
+									null,
+									phone,
+									"",//BaseURL is empty as we do not send an Email here
+									false,//send verification code
+									"","","",//sip_user, sip_pass, sip_auth
+									true, //generate SIP Data if the config is enabled
+									jName_timeZone
+								);
+							
 		}catch(Exception e){
 			log.error("Error creating user : " + e.getMessage());
 		}

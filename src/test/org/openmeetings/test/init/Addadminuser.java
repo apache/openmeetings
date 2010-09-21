@@ -24,7 +24,7 @@ public class Addadminuser extends TestCase{
 				"Sebastian", "seba.wagner@gmail.com", new java.util.Date(), 
 				"Bleichstrasse", "92", "fax number", "75173", 1, "Pforzheim", 1, 
 				true, null, "phone", "", false,
-				"","","",false);
+				"","","",false, "");
 		
 		log.error("new User: "+user_id);
 	}

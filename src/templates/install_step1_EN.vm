@@ -30,7 +30,7 @@ input, textarea, select {
 	margin: 0;
 	padding: 1px;
 	position:absolute;
-	left:540px;
+	left:440px;
 	background: #ddd;
 	font-size: 100%;
 	font-family: inherit;
@@ -39,7 +39,7 @@ input, textarea, select {
 select { padding: 0; }
 
 form.cmxform {
-	width: 800px;
+	width: 1024px;
 	font-size: 1.1em;
 	color: #333;
 	}
@@ -147,7 +147,15 @@ function checkEmail()
         <label for="useremail">EMail</label>
     	<input name="useremail" id="useremail" size="27" 
     		title="Enter a EMail" type="text" /><br/>
-		</li>
+		</li><li> 
+    	<label for="timeZone">User Time Zone</label>
+    	<select name="timeZone" id="timeZone" 
+    		size="1">
+			#foreach( $key in $allTimeZones.keySet() )
+			    <option value="$key">$allTimeZones.get($key)</option>
+			#end	
+	    </select><br/>
+	    </li> 
     </fieldset>
     
     <fieldset id="userOrga" >

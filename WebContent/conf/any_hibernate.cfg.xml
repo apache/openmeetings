@@ -52,6 +52,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Naviglobal.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Navimain.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Navisub.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/basic/OmTimeZone.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/SOAPLogin.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/basic/Sessiondata.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/calendar/Appointment.hbm.xml"/>

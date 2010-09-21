@@ -1,5 +1,6 @@
 package org.openmeetings.app.installation;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.LinkedHashMap;
@@ -15,6 +16,7 @@ import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.Navimanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.calendar.management.AppointmentRemindertypeLogic;
@@ -23,6 +25,7 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ImportInitvalues {
@@ -34,6 +37,8 @@ public class ImportInitvalues {
 	private static final String nameOfLanguageFile = "languages.xml";
 
 	private static final String nameOfCountriesFile = "countries.xml";
+	
+	private static final String nameOfTimeZoneFile = "timezones.xml";
 
 	private static final String nameOfErrorFile = "errorvalues.xml";
 
@@ -390,6 +395,22 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange.conference.currentindex",
 				""+0, null, "Number of used Phone Numbers in the sip.phonerange for the conferences");
 		
+		Calendar cal = Calendar.getInstance();
+		int offset = cal.get(Calendar.ZONE_OFFSET);
+		
+		offset = offset/1000/60/60;
+		
+		String timeZoneJavaFormat = "Etc/GMT";
+		
+		if (offset > 0) {
+			timeZoneJavaFormat += "+"+offset;
+		} else {
+			timeZoneJavaFormat += "-"+offset;
+		}
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "default.timezone",
+				timeZoneJavaFormat, null, "This is the default timezone if nothing is specified");
+		
 	}
 
 	public void loadDefaultRooms() {
@@ -441,7 +462,7 @@ public class ImportInitvalues {
 	}
 
 	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName) {
+			String email, String defaultOrganisationName, String timeZone) {
 		//Add user
 		try {
 			
@@ -450,7 +471,7 @@ public class ImportInitvalues {
 					new Long(3), 3, 1, 1, username, userpass, "lastname",
 					"firstname", email, new java.util.Date(), "street", "no",
 					"fax", "zip", 1, "town", 0, false, null, "phone", "", false,
-					"","","", false);
+					"","","", false, timeZone);
 
 			log.debug("Installation - User Added user-Id "+user_id);
 			
@@ -491,6 +512,53 @@ public class ImportInitvalues {
 			Statemanagement.getInstance().addState(country);
 
 		}
+	}
+	
+	private void loadTimeZoneFiles(String filePath) throws Exception {
+
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(filePath
+				+ ImportInitvalues.nameOfTimeZoneFile);
+
+		Element root = document.getRootElement();
+
+		for (Iterator it = root.elementIterator("timezone"); it.hasNext();) {
+
+			Element item = (Element) it.next();
+			String timeZoneName = item.attributeValue("name");
+			String timeZoneLabel = item.attributeValue("label");
+
+			OmTimeZoneDaoImpl.getInstance().addOmTimeZone(timeZoneName, timeZoneLabel);
+
+		}
+	}
+	
+	public List<OmTimeZone> getTimeZones(String filePath) throws Exception {
+
+		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
+		
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(filePath
+				+ ImportInitvalues.nameOfTimeZoneFile);
+
+		Element root = document.getRootElement();
+
+		for (Iterator it = root.elementIterator("timezone"); it.hasNext();) {
+
+			Element item = (Element) it.next();
+			String timeZoneName = item.attributeValue("name");
+			String timeZoneLabel = item.attributeValue("label");
+
+			OmTimeZone omTimeZone = new OmTimeZone();
+			omTimeZone.setJname(timeZoneName);
+			omTimeZone.setLabel(timeZoneLabel);
+			
+			omTimeZones.add(omTimeZone);
+
+		}
+		
+		return omTimeZones;
+
 	}
 
 	/**
@@ -579,6 +647,8 @@ public class ImportInitvalues {
 	public void loadInitLanguages(String filePath) throws Exception {
 
 		this.loadCountriesFiles(filePath);
+		
+		this.loadTimeZoneFiles(filePath);
 
 		//String listLanguages[] = {"deutsch", "english", "french", "spanish"};
 

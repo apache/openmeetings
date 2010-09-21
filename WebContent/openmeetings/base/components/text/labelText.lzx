@@ -34,7 +34,7 @@
         this.labelid = _labelid;
         this.setAttribute('text',canvas.getLabelName(this.labelid));
     </method>
-    <labelTooltip text="$once{ parent.text }" />
+    <labelTooltip initByDataPathparent="true" />
 </class>
 
 </library>
