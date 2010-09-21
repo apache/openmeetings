@@ -33,6 +33,7 @@
     <method name="resetItem">
         this.selected = false;
         this._bg.setAttribute("visibility","hidden");
+        this._ctext.setAttribute("fgcolor",0x000000);
     </method>
 
     <view name="_bg" visibility="hidden" width="${ parent.width-1 }" y="3"
@@ -42,6 +43,7 @@
 
     <handler name="onclick">
         this._bg.setAttribute("visibility","visible");
+        this._ctext.setAttribute("fgcolor",0xFFFFFF);
         if (this.isleaf) loadContent(this,null,null);
         this.selected=true;
         parent.parent.parent.setSubItem(this);
@@ -98,6 +100,7 @@
         this.selected = true;
         this.parent.parent.sendOpenMenu(this._menuRef,this);
         this.bgc.setAttribute('visibility','visible');
+        this._ctext.setAttribute("fgcolor",0xFFFFFF);
         if ($debug) Debug.write("onclick",this);
         if (this.isleaf) loadContent(this,null,null);
         else this._menuRef.subviews[0].onclick.sendEvent();
@@ -177,6 +180,7 @@
             if (this.currentMainmenu!=null && this.currentMainmenu!=obj) {
                 if ($debug) Debug.write("New MainMenuItem",obj);
                 this.currentMainmenu.bgc.setAttribute('visibility','hidden');
+                this.currentMainmenu._ctext.setAttribute("fgcolor",0x000000);
                 this.currentMainmenu.selected = false;
             } else {
                 obj.bgc.setAttribute('visibility','visible');
