@@ -71,7 +71,7 @@
                 if (parent.parent._inverseWording.getValue()) message = canvas.reverseWordingsBySplit(message)
                 parent.objMessage[4] = message;
                 parent.objMessage[5] = canvas.currentusercolor;
-                parent.objMessage[6] = canvas.currentuserpos;
+                parent.objMessage[6] = canvas.publicSID;
                 parent.objMessage[7] = canvas.isrtl;
                 parent.objMessage[8] = hib.userobject.user_id;
                 if (this.parent.parent.message.getText().length!=0){

@@ -58,13 +58,21 @@
             //Debug.write("newmessage: ",newmessage);
             //this._cbtext.setAttribute('text',this._cbtext.text+newmessage);
             var usercolor = value[5];
+            
+            var isDirectLink = false;
+            if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
+                                || canvas.directUserLogin || canvas.secureRemoteUserLogin) {
+                isDirectLink = true;               	
+            }
             if ( usercolor==null || usercolor==0 || usercolor.length==0 )usercolor=0xCCCCCC;
             //new lz.chatTabitem(this._cbtext,{cbtext:newmessage,user_id:value[8],usercolor:usercolor,username:username,usertime:value[1]});
             new lz.chatTabItemEmoticons(this._cbtext,{
 	                messageObj:messageObj,
                     user_id:value[8],
+                    publicSID:value[6],
 	                usercolor:usercolor,
 	                username:username,
+	                isDirectLink:isDirectLink,
 	                usertime:value[1]
                 });
             this.setScrollToMax();              

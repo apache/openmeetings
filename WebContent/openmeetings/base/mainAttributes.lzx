@@ -324,4 +324,6 @@ and some more references to temp-objects
 
 <attribute name="lzCalendarInfoTab" value="null"/>
 
+<attribute name="roomJumpId" value="0" type="number" />
+
 </library>

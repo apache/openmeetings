@@ -21,8 +21,8 @@
 	</handler>
 	
 	<method name="accept">
-		canvas.initroomid = this.roomId;
-		canvas.thishib.getRoomById.doCall();
+		canvas.roomJumpId = this.roomId;
+        quicklinkAct("jumpToRoom");
 		
 		this.close();
 	</method>

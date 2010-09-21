@@ -79,38 +79,18 @@
 
 		<method name="enterRoom">
 			
-			canvas.isConference = !this.isaudience;
-			if (this.isaudience)
-				connectedIsAudience = '_' + 'audi';
+			var roomid = 0;
+			
 			if (this.ispublic) {
-				var roomObj = this.obj;
-				hib.conferencedomain = "public";
-				hib.currentroomid = this.obj.rooms_id;
+				roomid = this.obj.rooms_id;
 				//Debug.write("ispublic");
 			} else {
-				var roomObj = this.obj.room;
-				hib.conferencedomain = this.obj.organisation.organisation_id;
-				hib.currentroomid = this.obj.room.rooms_id;
+				roomid = this.obj.room.rooms_id;
 				//Debug.write("non ispublic");
 			}
 			
-			if (this.roomType == 1) {
-				this.roomClassName = canvas.conferenceRoomModule;
-			} else if (this.roomType == 2) {
-				this.roomClassName = canvas.eventRoomModule;
-			} else if (this.roomType == 3) {
-                this.roomClassName = canvas.restrictedRoomModule;
-            } else if (this.roomType == 4) {
-                this.roomClassName = canvas.interviewRoomModule;
-            } else {
-				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
-			}
-			//the conferencedomain is no more interesting, swagner 07.10.2009
-			//if ($debug) Debug.write("hib.conferencedomain: ", hib.conferencedomain);
-
-			if ($debug) Debug.write("Test Setup ",this.roomClassName);
-            
-			new lz.testSetup(canvas,{roomClassName:this.roomClassName,roomObj:roomObj});
+			canvas.roomJumpId = roomid;
+			quicklinkAct("jumpToRoom");
 			
 			this.doCloseWindow();
 		</method>

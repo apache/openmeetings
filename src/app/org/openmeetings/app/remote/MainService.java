@@ -514,7 +514,7 @@ public class MainService implements IPendingServiceCallback {
         				if (user == null) {
 	        				long userId = Usermanagement.getInstance().addUserWithExternalKey(1, 0, 0, userObject.getFirstname(), 
 				        						userObject.getUsername(), userObject.getLastname(), 1L, "", null, null, "", 
-				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true);
+				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true, userObject.getEmail());
 	        				currentClient.setUser_id(userId);
         				} else {
         					currentClient.setUser_id(user.getUser_id());

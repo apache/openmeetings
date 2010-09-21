@@ -48,6 +48,7 @@
             new lz.chatTabItemEmoticons(this._cbtext,{
 	                messageObj:messageObj,user_id:value[8],
 	                usercolor:usercolor,
+	                publicSID:value[6],
 	                username:username,
 	                usertime:value[1]
                 });

@@ -1133,7 +1133,7 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Long adress_id, Date age, String hash, 
 			Long externalUserId, String externalUserType, 
-			boolean generateSipUserData) {
+			boolean generateSipUserData, String email) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
@@ -1144,7 +1144,7 @@ public class Usermanagement {
 			if (adress_id != null && adress_id > 0) {
 			    users.setAdresses(Addressmanagement.getInstance().getAdressbyId(adress_id));
 			} else {
-				adress_id = Addressmanagement.getInstance().saveAddress("", "", "", 1L, "", "", "", "", "external@noreply.com");
+				adress_id = Addressmanagement.getInstance().saveAddress("", "", "", 1L, "", "", "", "", email);
 				users.setAdresses(Addressmanagement.getInstance().getAdressbyId(adress_id));
 			}
 			
