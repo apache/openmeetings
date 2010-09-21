@@ -514,9 +514,19 @@ public class MainService implements IPendingServiceCallback {
         				Users user = Usermanagement.getInstance().getUserByExternalIdAndType(userObject.getExternalUserId(), userObject.getExternalUserType());
         				
         				if (user == null) {
+        					
+        					Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+        					String jName_timeZone = "";
+        					
+        					if (conf != null) {
+        						jName_timeZone = conf.getConf_value();
+        					}
+        					
 	        				long userId = Usermanagement.getInstance().addUserWithExternalKey(1, 0, 0, userObject.getFirstname(), 
 				        						userObject.getUsername(), userObject.getLastname(), 1L, "", null, null, "", 
-				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true, userObject.getEmail());
+				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true, 
+				        						userObject.getEmail(), jName_timeZone);
+	        				
 	        				currentClient.setUser_id(userId);
         				} else {
         					currentClient.setUser_id(user.getUser_id());
@@ -638,7 +648,7 @@ public class MainService implements IPendingServiceCallback {
         			regObject.get("fax").toString(), regObject.get("zip").toString(), 
         			Long.valueOf(regObject.get("states_id").toString()).longValue(), regObject.get("town").toString(), 
         			Long.valueOf(regObject.get("language_id").toString()).longValue(), "",
-        			baseURL, true);
+        			baseURL, true, regObject.get("jNameTimeZone").toString() );
     	} catch (Exception ex) {
     		log.error("registerUserByObject",ex);
     	}
@@ -670,7 +680,7 @@ public class MainService implements IPendingServiceCallback {
 				String firstname, String email, Date age, String street, String additionalname, 
 				String fax, String zip, long states_id, String town, long language_id, String phone){
     	return Usermanagement.getInstance().registerUser(Username, Userpass, lastname, firstname, email, 
-    			age, street, additionalname, fax, zip, states_id, town, language_id, phone, "", true);
+    			age, street, additionalname, fax, zip, states_id, town, language_id, phone, "", true, "");
 	}	
 	
 	/**

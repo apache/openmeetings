@@ -869,7 +869,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, String baseURL, 
-			boolean generateSipUserData) {
+			boolean generateSipUserData, String jNameTimeZone) {
 		try {
 			// Checks if FrontEndUsers can register
 			if (Configurationmanagement.getInstance().getConfKey(3,"allow_frontend_register").getConf_value().equals("1")) {
@@ -891,7 +891,7 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
 										language_id, true, new LinkedList(), phone, baseURL, 
-										sendConfirmation,"","","", generateSipUserData, "");
+										sendConfirmation,"","","", generateSipUserData, jNameTimeZone);
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -1138,7 +1138,7 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Long adress_id, Date age, String hash, 
 			Long externalUserId, String externalUserType, 
-			boolean generateSipUserData, String email) {
+			boolean generateSipUserData, String email, String jNameTimeZone) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
@@ -1161,6 +1161,7 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
+			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 			
 			if (generateSipUserData) {
 				

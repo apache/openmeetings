@@ -8,6 +8,7 @@ import org.apache.axis2.AxisFault;
 import org.openmeetings.app.remote.MainService;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -16,6 +17,7 @@ import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
@@ -102,7 +104,14 @@ public class UserService {
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
 	    	
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
-					
+				
+				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+				String jName_timeZone = "";
+				
+				if (conf != null) {
+					jName_timeZone = conf.getConf_value();
+				}
+				
 	    		Long user_id = Usermanagement.getInstance().registerUser(
 					    			username, userpass, 
 					    			lastname, firstname, email, 
@@ -113,8 +122,8 @@ public class UserService {
 					    			language_id, 
 					    			"",
 					    			baseURL,
-					    			true //generate SIP Data if the config is enabled
-					    			);
+					    			true, //generate SIP Data if the config is enabled
+					    			jName_timeZone);
 	    		
 	    		if (user_id < 0) {
 	    			return user_id;
@@ -139,6 +148,55 @@ public class UserService {
 			throw new AxisFault(err.getMessage());
 		}    			
     }
+    
+	public Long addNewUserWithTimeZone(String SID, String username, String userpass,
+			String lastname, String firstname, String email,
+			String additionalname, String street, String zip, String fax,
+			long states_id, String town, long language_id, String baseURL,
+			String jNameTimeZone)
+			throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+
+	    		Long user_id = Usermanagement.getInstance().registerUser(
+		    			username, userpass, 
+		    			lastname, firstname, email, 
+		    			new Date(), street, additionalname, 
+		    			fax, zip, 
+		    			states_id, 
+		    			town, 
+		    			language_id, 
+		    			"",
+		    			baseURL,
+		    			true, //generate SIP Data if the config is enabled
+		    			jNameTimeZone);
+
+				if (user_id < 0) {
+					return user_id;
+				}
+
+				Users user = Usermanagement.getInstance().getUserById(user_id);
+
+				// activate the User
+				user.setStatus(1);
+				user.setUpdatetime(new Date());
+
+				Usermanagement.getInstance().updateUser(user);
+
+				return user_id;
+
+			} else {
+				return new Long(-26);
+			}
+		} catch (Exception err) {
+			log.error("setUserObject", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
 	
 	/**
 	 * 

@@ -18,30 +18,61 @@
 	</handler>	
 
 	<handler name="onnew">
-		this.user_id=0;
-		this.level.selectItemAt(0);
-        this.username.setAttribute('text','');
-        this.firstname.setAttribute('text','');
-        this.lastname.setAttribute('text','');
-        this.email.setAttribute('text','');
-        this.phone.setAttribute('phone','');
-        this.age.setAttribute('text','');
-        this.street.setAttribute('text','');
-        this.house.setAttribute('text','');
-        this.zip.setAttribute('text','');
-        this.town.setAttribute('text','');
-		this.userpass1.setAttribute('text','');
-        var defaultstate = canvas.getCountryRecord(1);
-        this.state.addAndSelectItem(defaultstate.name,defaultstate.state_id);
-        this.adress_comment.setAttribute('text','');
-        this.status.selectItem(String('1'));
-        this._timeZone.selectItemAt(11);
-        this._organisationslist.clearList();
-        this.generateSipUserData.setValue(false);
-        this.sip_user.setAttribute('text','');
-        this.sip_pass.setAttribute('text','');
-        this.sip_auth.setAttribute('text','');
+		<![CDATA[
+    		this.user_id=0;
+    		this.level.selectItemAt(0);
+            this.username.setAttribute('text','');
+            this.firstname.setAttribute('text','');
+            this.lastname.setAttribute('text','');
+            this.email.setAttribute('text','');
+            this.phone.setAttribute('phone','');
+            this.age.setAttribute('text','');
+            this.street.setAttribute('text','');
+            this.house.setAttribute('text','');
+            this.zip.setAttribute('text','');
+            this.town.setAttribute('text','');
+    		this.userpass1.setAttribute('text','');
+            var defaultstate = canvas.getCountryRecord(1);
+            this.state.addAndSelectItem(defaultstate.name,defaultstate.state_id);
+            this.adress_comment.setAttribute('text','');
+            this.status.selectItem(String('1'));
+            
+            var t = this;
+            
+            function getTimeZoneOffsetCallback(returnValue) {
+                            
+                if ($debug) Debug.write("getTimeZoneOffsetCallback ",returnValue);
+                
+                var std_time_offset = Number(returnValue);
+                
+                t.setOffset(std_time_offset);
+                
+            }
+            
+            lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
+            
+            this._organisationslist.clearList();
+            this.generateSipUserData.setValue(false);
+            this.sip_user.setAttribute('text','');
+            this.sip_pass.setAttribute('text','');
+            this.sip_auth.setAttribute('text','');
+        ]]>
 	</handler>
+	
+	<method name="setOffset" args="std_time_offset">
+		<![CDATA[
+		var timeZoneJavaFormat = "Etc/GMT";
+        if (std_time_offset > 0) {
+            timeZoneJavaFormat += "+"+std_time_offset;
+        } else {
+            timeZoneJavaFormat += "-"+std_time_offset;
+        }
+        
+        if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
+        
+        this._timeZone.selectItem(timeZoneJavaFormat);
+        ]]>
+	</method>
 	
     <handler name="ondelete" >
 		if (this.user_id!=0){
