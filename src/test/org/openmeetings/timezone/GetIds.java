@@ -1,7 +1,9 @@
 package org.openmeetings.timezone;
 
 import java.util.Calendar;
-import java.util.TimeZone;
+import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 
 import junit.framework.TestCase;
 
@@ -17,7 +19,9 @@ public class GetIds extends TestCase {
 			String[] ids = TimeZone.getAvailableIDs();
 		    for (String id : ids) {
 		    	
-		    	TimeZone timeZone = TimeZone.getTimeZone(id);
+		    	TimeZoneRegistry timeRegistry = TimeZoneRegistryFactory.getInstance().createRegistry();
+		    	//TimeZone timeZone = TimeZone.getTimeZone(id);
+		    	TimeZone timeZone = timeRegistry.getTimeZone(id);
 		    	
 		    	Calendar cal = Calendar.getInstance();
 				cal.setTimeZone(timeZone);

@@ -137,7 +137,7 @@ public class CalendarService {
 
 				log.debug("updateAppointment");
 
-				System.out.println("appointmentId " + appointmentId);
+				log.debug("appointmentId " + appointmentId);
 
 				Appointment app = AppointmentLogic.getInstance()
 						.getAppointMentById(appointmentId);

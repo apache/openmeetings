@@ -3,6 +3,7 @@ package org.openmeetings.utils.mail;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
@@ -45,7 +46,8 @@ public class IcalHandler {
 	private net.fortuna.ical4j.model.Calendar icsCalendar;
 	
 	/** TimeZone */
-	private TimeZone timeZone;
+	//private TimeZone timeZone;
+	//private TimeZoneRegistry timeRegistry;
 	
 	/** Creation of a new Event */
 	public final static String ICAL_METHOD_REQUEST = "REQUEST";
@@ -64,8 +66,9 @@ public class IcalHandler {
 		log.debug("Icalhandler method type : " + methodType);
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
-		TimeZoneRegistry timeRegistry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		timeZone = timeRegistry.getTimeZone(java.util.TimeZone.getDefault().getID());
+		
+		//timeRegistry = TimeZoneRegistryFactory.getInstance().createRegistry();
+		//timeZone = timeRegistry.getTimeZone(java.util.TimeZone.getDefault().getID());
 	
 		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
@@ -95,9 +98,35 @@ public class IcalHandler {
 	 * @return UID of Meeting
 	 */
 	//---------------------------------------------------------------------------------------
-	public String addNewMeeting(GregorianCalendar startDate, GregorianCalendar endDate, String name, Vector<HashMap<String, String>> attendees, String description, HashMap<String, String> organizer, String uid) throws Exception{
-		log.debug("add new Meeting");
+	public String addNewMeeting(GregorianCalendar startDate, GregorianCalendar endDate, 
+			String name, Vector<HashMap<String, String>> attendees, 
+			String description, HashMap<String, String> organizer, String uid, 
+			String jNametimeZone) throws Exception{
 		
+		log.debug("add new Meeting -1 "+jNametimeZone);
+		log.debug("add new Meeting -2 "+java.util.TimeZone.getDefault().getID());
+		
+		//timeZone = timeRegistry.getTimeZone(jNametimeZone);
+		
+		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
+		
+//		String[] ids = TimeZone.getAvailableIDs();
+		
+		//<name>Etc/GMT-1</name>
+		
+//		System.out.println("getAvailableIDs" + ids);
+//		System.out.println("getAvailableIDs LENGTH" + ids.length);
+//		
+//	    for (String id : ids) {
+//	    	
+//	    	//TimeZone timeZone = TimeZone.getTimeZone(id);
+//	    	TimeZone timeZone = registry.getTimeZone(id);
+//			
+//			System.out.println("<name>" + id + "</name>");
+//	    }
+		
+		TimeZone timeZone = registry.getTimeZone(jNametimeZone);
+
 		startDate.setTimeZone(timeZone);
 		endDate.setTimeZone(timeZone);
 		
@@ -105,8 +134,16 @@ public class IcalHandler {
 		DateTime end = new DateTime(endDate.getTime());
 		VEvent meeting = new VEvent(start, end, name);
 
+		log.debug("add new Meeting -3 "+timeZone);
+		log.debug("add new Meeting -4 "+timeZone.getClass().getName());
+		
 		// add timezone info..
-		VTimeZone tz = timeZone.getVTimeZone();
+		//VTimeZone tz = timeZone.getVTimeZone();
+		VTimeZone tz = registry.getTimeZone(jNametimeZone).getVTimeZone();
+
+		log.debug("add new Meeting -5 "+tz);
+		//java.util.TimeZone.getTimeZone(jNametimeZone).getID()
+		
 		meeting.getProperties().add(tz.getTimeZoneId());
 		
 		

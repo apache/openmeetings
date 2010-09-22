@@ -2,13 +2,17 @@
 package org.openmeetings.app.data.calendar.management;
 
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
@@ -66,6 +70,25 @@ public class MeetingMemberLogic {
 			
 			log.debug(":::: addMeetingMember ..... "+point.getRemind().getTypId());
 			
+			Users us = Usermanagement.getInstance().getUserById(userid);
+			
+			String jNameTimeZone = null;
+			if (us != null && us.getOmTimeZone() != null) {
+				jNameTimeZone = us.getOmTimeZone().getJname();
+			} else {
+				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+				if (conf != null) {
+					jNameTimeZone = conf.getConf_value();
+				}
+			}
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(jNameTimeZone));
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			Date starttime = new Date(point.getAppointmentStarttime().getTime() + offset);
+			Date endtime = new Date(point.getAppointmentEndtime().getTime() + offset);
+			
 			if(point.getRemind().getTypId() == 1){
 				log.debug("no reminder required");
 			} else if(point.getRemind().getTypId() == 2){
@@ -83,8 +106,8 @@ public class MeetingMemberLogic {
 							isPasswordProtected, // passwordprotected
 							password, // invitationpass
 							2, // valid
-							point.getAppointmentStarttime(), // valid from
-							point.getAppointmentEndtime(), // valid to
+							starttime, // valid from
+							endtime, // valid to
 							meeting_organizer, // created by
 							baseUrl, language_id, 
 							true
@@ -106,11 +129,12 @@ public class MeetingMemberLogic {
 							isPasswordProtected, // passwordprotected
 							password, // invitationpass
 							2, // valid
-							point.getAppointmentStarttime(), // valid from
-							point.getAppointmentEndtime(), // valid to
+							starttime, // valid from
+							endtime, // valid to
 							meeting_organizer, // created by
 							point.getAppointmentId(),
-							member.getInvitor(), language_id
+							member.getInvitor(), language_id,
+							jNameTimeZone
 						);
 				
 			}

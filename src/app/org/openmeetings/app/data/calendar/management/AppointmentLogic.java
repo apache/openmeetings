@@ -185,7 +185,8 @@ public class AppointmentLogic {
 	    			MeetingMemberLogic.getInstance().addMeetingMember(clientMember.get("firstname").toString(), 
 	    							clientMember.get("lastname").toString(), 
 	    							"0", "0", id, null,  clientMember.get("email").toString(), baseUrl, 
-	    							userId, new Boolean(false), language_id, false, "");
+	    							Long.valueOf(clientMember.get("userId").toString()).longValue(), 
+	    							new Boolean(false), language_id, false, "");
 		   		
 		    	}
 		    }
