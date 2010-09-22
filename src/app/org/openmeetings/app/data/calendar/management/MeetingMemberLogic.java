@@ -9,10 +9,12 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
@@ -82,12 +84,25 @@ public class MeetingMemberLogic {
 				}
 			}
 			
+			OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+			
 			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(jNameTimeZone));
+			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 			
 			Date starttime = new Date(point.getAppointmentStarttime().getTime() + offset);
 			Date endtime = new Date(point.getAppointmentEndtime().getTime() + offset);
+			
+			System.out.println(omTimeZone.getIcal());
+			System.out.println(offset);
+			System.out.println(starttime);
+			System.out.println(endtime);
+			
+			String message = "Invitation to an openMeetings Event : " 
+					+ point.getAppointmentName() + ", " 
+					+ point.getAppointmentDescription() 
+					+ ", Start : " + starttime 
+					+ ", End : " + endtime; //message
 			
 			if(point.getRemind().getTypId() == 1){
 				log.debug("no reminder required");
@@ -97,7 +112,7 @@ public class MeetingMemberLogic {
 				Invitations invitation = Invitationmanagement.getInstance().addInvitationLink(
 							new Long(2), //userlevel
 							firstname + " " + lastname, //username
-							"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
+							message,
 							baseUrl, // baseURl
 							email, //email
 							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
@@ -120,7 +135,7 @@ public class MeetingMemberLogic {
 				
 				invitationId = Invitationmanagement.getInstance().addInvitationIcalLink(new Long(2), //userlevel
 							firstname + " " + lastname, //username
-							"Invitation to an openMeetings Event : " + point.getAppointmentName() + ", " + point.getAppointmentDescription() + ", Start : " + point.getAppointmentStarttime() + ", End : " + point.getAppointmentEndtime(), //message
+							message,
 							baseUrl, // baseURl
 							email, //email
 							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject

@@ -544,6 +544,7 @@
 			        		tObject.firstname = this.list.subviews[i].firstName;
 			        		tObject.lastname = this.list.subviews[i].lastName;
 			        		tObject.email = this.list.subviews[i].email;
+			        		tObject.userId = this.list.subviews[i].userId;
 	            			
 			        		tArray.push(tObject);
 	            		}

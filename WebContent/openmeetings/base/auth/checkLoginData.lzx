@@ -409,6 +409,7 @@
                     canvas.setAttribute('currentuser',value.login);
                     if (value.omTimeZone != null) {
                         canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
+                        canvas.timeZoneId = value.omTimeZone.omtimezoneId;
                     }
                     
                     if (value.level_id >= 2) {

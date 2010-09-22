@@ -131,7 +131,6 @@ public class IcalHandler {
 		
 		meeting.getProperties().add(tz.getTimeZoneId());
 		
-		
 		meeting.getProperties().add(new Description(description));
 		
 		meeting.getProperties().add(new Sequence(1));

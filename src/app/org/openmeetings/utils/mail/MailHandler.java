@@ -205,6 +205,10 @@ public class MailHandler {
 		
 		mimeMessage.setContent(multipart);
 		
+		// -- Set some other header information --
+		//mimeMessage.setHeader("X-Mailer", "XML-Mail");
+		mimeMessage.setSentDate(new Date());
+		
 		Transport trans = session.getTransport("smtp");
 		trans.send(mimeMessage);
 		

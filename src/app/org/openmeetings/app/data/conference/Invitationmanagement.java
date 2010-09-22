@@ -24,8 +24,10 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
@@ -275,8 +277,10 @@ public class Invitationmanagement {
 			}
 		}
 		
+		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+		
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(jNameTimeZone));
+		cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 		
 		Date starttime = new Date(appointment.getAppointmentStarttime().getTime() + offset);
@@ -409,13 +413,18 @@ public class Invitationmanagement {
 			String invitationsHash, Date dStart, Date dEnd, Long language_id){
 		try {
 				
-			String invitation_link = baseurl+"?lzproxied=solo&invitationHash="+invitationsHash;
+			String invitation_link = baseurl+"?invitationHash="+invitationsHash;
 			
 //			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 //	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			
 			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, language_id, dStart, dEnd);
 		
+			System.out.println(dStart);
+			System.out.println(dEnd);
+			
+			System.out.println(template);
+			
 			return MailHandler.sendMail(email, subject, template);
 
 		} catch (Exception err){

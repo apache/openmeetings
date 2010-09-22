@@ -181,10 +181,10 @@ public class AppointmentLogic {
 		    		
 			    	Map clientMember = (Map)mmClient.get(i);
 			    	
-			    	log.debug("clientMember.get('userId')"+clientMember.get("userId"));
+			    	log.debug("clientMember.get('userId') "+clientMember.get("userId"));
 			    	
 			    	Long sendToUserId = 0L;
-			    	if (clientMember.get("userId") == null) {
+			    	if (clientMember.get("userId") != null) {
 			    		sendToUserId = Long.valueOf(clientMember.get("userId").toString()).longValue();
 			    	}
 			    	

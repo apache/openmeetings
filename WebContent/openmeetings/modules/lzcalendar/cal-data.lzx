@@ -40,7 +40,7 @@
             			'&year=' + yr +
             			'&month=' + mo +
             			'&randomT=' + d.getTime() +
-            			'jNameTimeZone=' + canvasjNameTimeZone +
+            			'&timeZoneId=' + canvas.timeZoneId +
             			'&user=' + canvas.user_id;
                 
             	if ($debug) Debug.write("r ");

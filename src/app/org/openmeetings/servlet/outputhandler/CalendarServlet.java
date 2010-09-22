@@ -20,8 +20,10 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -94,6 +96,12 @@ public class CalendarServlet extends HttpServlet {
 					
 					if (jNameTimeZone == null) {
 						jNameTimeZone = "Europe/Berlin";
+					} else {
+						
+						//System.out.println("CalendarServlet TimeZone "+jNameTimeZone );
+						OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+						jNameTimeZone = omTimeZone.getIcal();
+						
 					}
 					
 					TimeZone timeZone = TimeZone.getTimeZone(jNameTimeZone);
@@ -102,7 +110,9 @@ public class CalendarServlet extends HttpServlet {
 					cal.setTimeZone(timeZone);
 					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 					
-					log.debug("addAppointment offset :: "+offset);
+					//System.out.println("CalendarServlet offset "+offset );
+					//System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID() );
+					//log.debug("addAppointment offset :: "+offset);
 					
 					appointment.setAppointmentStarttime(new Date(appointment.getAppointmentStarttime().getTime() + offset));
 					appointment.setAppointmentEndtime(new Date(appointment.getAppointmentEndtime().getTime() + offset));
