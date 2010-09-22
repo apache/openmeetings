@@ -200,12 +200,19 @@ public class Invitationmanagement {
 			}
 		}
 		
+		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+		
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(jNameTimeZone));
+		cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 		
 		Date starttime = new Date(appointment.getAppointmentStarttime().getTime() + offset);
 		Date endtime = new Date(appointment.getAppointmentEndtime().getTime() + offset);
+		
+//		System.out.println(omTimeZone.getIcal());
+//		System.out.println(offset);
+//		System.out.println(starttime);
+//		System.out.println(endtime);
 		
 		// checking reminderType
 		if(appointment.getRemind().getTypId() == 1){
@@ -382,7 +389,7 @@ public class Invitationmanagement {
 				invitation.setDeleted("false");
 				
 				Users us = UsersDaoImpl.getInstance().getUser(createdBy);
-				String hashRaw = us.getLogin()+us.getUser_id()+(System.currentTimeMillis());
+				String hashRaw = "InvitationHash"+(System.currentTimeMillis());
 				log.debug("addInvitationIcalLink : rawHash = " + hashRaw);
 				invitation.setHash(MD5.do_checksum(hashRaw));
 				
@@ -572,9 +579,12 @@ public class Invitationmanagement {
 		
 		String subject = "Cancelled OpenMeetings Appointment " + point.getAppointmentName();
 		
+		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+		
 		String message = "<html><body>Your Appointment " + point.getAppointmentName() + " has been cancelled by " + user.getAdresses().getEmail();
 		message += "<br><br>";
 		message += "Appointment : " + point.getAppointmentName() + "<br>";
+		message += "TimeZone : " + omTimeZone.getIcal() + "<br>";
 		message += "Start Time : " + startdate + "<br>";
 		message += "End Time : " + enddate + "<br>";
 		message += "</body></html>";
@@ -712,7 +722,10 @@ public class Invitationmanagement {
 			// Defining Organizer
 			Users user = Usermanagement.getInstance().getUserById(organizer_userId);
 			
-			HashMap<String, String> organizerAttendee = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
+			HashMap<String, String> organizerAttendee = handler.getAttendeeData(email, username, invitor);
+			if (user != null) {
+				organizerAttendee = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
+			}			
 			
 			GregorianCalendar start = new GregorianCalendar();
 			start.setTime(starttime); //Must be the calculated date base on the time zone
