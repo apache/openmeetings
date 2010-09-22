@@ -3434,4 +3434,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1143" name="user profile">
     <value>Timezone</value>
   </string>
+  <string id="1144" name="appointment notification">
+    <value>Event Details</value>
+  </string>
+  <string id="1145" name="appointment notification">
+    <value>Name</value>
+  </string>
+  <string id="1146" name="appointment notification">
+    <value>Description</value>
+  </string>
+  <string id="1147" name="appointment notification">
+    <value>Created by</value>
+  </string>
 </language>
