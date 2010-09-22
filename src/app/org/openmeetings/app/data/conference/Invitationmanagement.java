@@ -142,8 +142,8 @@ public class Invitationmanagement {
 					
 					if (sendMail) {
 						this.sendInvitionLink(username, message, baseurl, email,
-								subject, invitation.getHash(), validFromString,
-								validToString, language_id);
+								subject, invitation.getHash(), validFrom,
+								validTo, language_id);
 					}
 					
 					return invitation;
@@ -406,7 +406,7 @@ public class Invitationmanagement {
 	 */
 	private String sendInvitionLink(String username, String message, 
 			String baseurl, String email, String subject, 
-			String invitationsHash, String dStart, String dEnd, Long language_id){
+			String invitationsHash, Date dStart, Date dEnd, Long language_id){
 		try {
 				
 			String invitation_link = baseurl+"?lzproxied=solo&invitationHash="+invitationsHash;
@@ -672,7 +672,7 @@ public class Invitationmanagement {
 			
 //			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 //	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
-			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, language_id, "", "");
+			String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, language_id, starttime, endtime);
 		
 			IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 			
@@ -680,10 +680,10 @@ public class Invitationmanagement {
 			
 			// Transforming Meeting Members
 			
-			HashMap<String, String> dusselInDerHashMap = handler.getAttendeeData(email, username, invitor);
+			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
 			
 			Vector<HashMap<String, String>> atts = new Vector<HashMap<String,String>>();
-			atts.add(dusselInDerHashMap);
+			atts.add(attendeeList);
 			
 			// Defining Organizer
 			Users user = Usermanagement.getInstance().getUserById(organizer_userId);
@@ -696,7 +696,10 @@ public class Invitationmanagement {
 			GregorianCalendar end = new GregorianCalendar();
 			end.setTime(endtime); //Must be the calculated date base on the time zone
 			
-			String meetingId = handler.addNewMeeting(start, end, point.getAppointmentName(), atts, invitation_link, oberDussel, point.getIcalId(), jNametimeZone);
+			//Create ICal Message
+			String meetingId = handler.addNewMeeting(start, end, point.getAppointmentName(), 
+					atts, invitation_link, oberDussel, 
+					point.getIcalId(), jNametimeZone);
 			
 			// Writing back meetingUid
 			if(point.getIcalId() == null || point.getIcalId().length() < 1){
@@ -733,7 +736,7 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	public String sendInvitionLink(Long user_level, String username, String message, String domain, String room, 
-			String roomtype, String baseurl, String email, String subject, Long room_id){
+			String roomtype, String baseurl, String email, String subject, Long room_id, Date starttime, Date endtime){
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				
@@ -742,7 +745,9 @@ public class Invitationmanagement {
 				Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 		        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
 				
-				String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(username, message, invitation_link, default_lang_id, "", "");
+				String template = InvitationTemplate.getInstance().getRegisterInvitationTemplate(
+									username, message, invitation_link, default_lang_id, 
+									starttime, endtime);
 			
 				return MailHandler.sendMail(email, subject, template);
 

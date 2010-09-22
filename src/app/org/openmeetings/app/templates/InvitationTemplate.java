@@ -1,6 +1,7 @@
 package org.openmeetings.app.templates;
 
 import java.io.StringWriter;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,8 +37,8 @@ public class InvitationTemplate extends VelocityLoader{
 			                                    String message, 
 			                                    String invitation_link, 
 			                                    Long default_lang_id,
-			                                    String dStart,
-			                                    String dEnd){
+			                                    Date dStart,
+			                                    Date dEnd){
         try {
         	
         	Fieldlanguagesvalues labelid500 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(500), default_lang_id);
@@ -56,7 +57,7 @@ public class InvitationTemplate extends VelocityLoader{
 	        context.put("message", message);
 	        context.put("invitation_link", invitation_link);
 	        context.put("invitation_link2", invitation_link);
-	        if (dStart != "")
+	        if (dStart != null && dEnd != null)
 	        {
 	        	context.put("invitation_times", labelid570.getValue() + ": " + dStart + " - " + labelid571.getValue() + ": " + dEnd + "<br/><br/>");
 	        }

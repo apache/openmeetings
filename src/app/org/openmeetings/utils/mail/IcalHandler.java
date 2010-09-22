@@ -8,6 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -110,22 +112,9 @@ public class IcalHandler {
 		
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		
-//		String[] ids = TimeZone.getAvailableIDs();
+		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNametimeZone);
 		
-		//<name>Etc/GMT-1</name>
-		
-//		System.out.println("getAvailableIDs" + ids);
-//		System.out.println("getAvailableIDs LENGTH" + ids.length);
-//		
-//	    for (String id : ids) {
-//	    	
-//	    	//TimeZone timeZone = TimeZone.getTimeZone(id);
-//	    	TimeZone timeZone = registry.getTimeZone(id);
-//			
-//			System.out.println("<name>" + id + "</name>");
-//	    }
-		
-		TimeZone timeZone = registry.getTimeZone(jNametimeZone);
+		TimeZone timeZone = registry.getTimeZone(omTimeZone.getIcal());
 
 		startDate.setTimeZone(timeZone);
 		endDate.setTimeZone(timeZone);
@@ -134,15 +123,11 @@ public class IcalHandler {
 		DateTime end = new DateTime(endDate.getTime());
 		VEvent meeting = new VEvent(start, end, name);
 
-		log.debug("add new Meeting -3 "+timeZone);
-		log.debug("add new Meeting -4 "+timeZone.getClass().getName());
+		log.debug("DateTime start addNewMeeting "+start);
+		log.debug("DateTime end addNewMeeting "+end);
 		
 		// add timezone info..
-		//VTimeZone tz = timeZone.getVTimeZone();
-		VTimeZone tz = registry.getTimeZone(jNametimeZone).getVTimeZone();
-
-		log.debug("add new Meeting -5 "+tz);
-		//java.util.TimeZone.getTimeZone(jNametimeZone).getID()
+		VTimeZone tz = timeZone.getVTimeZone();
 		
 		meeting.getProperties().add(tz.getTimeZoneId());
 		

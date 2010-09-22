@@ -3506,4 +3506,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1142" name="chat invite user">
     <value>Deny</value>
   </string>
+  <string id="1143" name="user profile">
+    <value>Timezone</value>
+  </string>
 </language>

@@ -29,13 +29,14 @@ public class OmTimeZoneDaoImpl {
 		return instance;
 	}
 	
-	public Long addOmTimeZone(String name, String label) {
+	public Long addOmTimeZone(String name, String label, String iCal) {
 		try {
 			
 			OmTimeZone omTimeZone = new OmTimeZone();
 			
 			omTimeZone.setJname(name);
 			omTimeZone.setLabel(label);
+			omTimeZone.setIcal(iCal);
 			omTimeZone.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();

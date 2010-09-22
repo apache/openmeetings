@@ -12,6 +12,7 @@ public class OmTimeZone {
 	private Long omtimezoneId;
 	private String jname;
 	private String label;
+	private String ical;
 	private Date inserted;
 	public String frontEndLabel;
 	
@@ -48,9 +49,20 @@ public class OmTimeZone {
 	public String getLabel() {
 		return label;
 	}
-	
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="ical"
+     *  type="string"
+     */
+	public String getIcal() {
+		return ical;
+	}
+	public void setIcal(String ical) {
+		this.ical = ical;
 	}
 	
 	/**
@@ -61,6 +73,7 @@ public class OmTimeZone {
 	public Date getInserted() {
 		return inserted;
 	}
+	
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}

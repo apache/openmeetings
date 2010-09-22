@@ -527,8 +527,9 @@ public class ImportInitvalues {
 			Element item = (Element) it.next();
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
+			String iCal = item.attributeValue("iCal");
 
-			OmTimeZoneDaoImpl.getInstance().addOmTimeZone(timeZoneName, timeZoneLabel);
+			OmTimeZoneDaoImpl.getInstance().addOmTimeZone(timeZoneName, timeZoneLabel, iCal);
 
 		}
 	}

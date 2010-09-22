@@ -181,12 +181,18 @@ public class AppointmentLogic {
 		    		
 			    	Map clientMember = (Map)mmClient.get(i);
 			    	
+			    	log.debug("clientMember.get('userId')"+clientMember.get("userId"));
+			    	
+			    	Long sendToUserId = 0L;
+			    	if (clientMember.get("userId") == null) {
+			    		sendToUserId = Long.valueOf(clientMember.get("userId").toString()).longValue();
+			    	}
+			    	
 	    			//Not In Remote List available - extern user
 	    			MeetingMemberLogic.getInstance().addMeetingMember(clientMember.get("firstname").toString(), 
 	    							clientMember.get("lastname").toString(), 
 	    							"0", "0", id, null,  clientMember.get("email").toString(), baseUrl, 
-	    							Long.valueOf(clientMember.get("userId").toString()).longValue(), 
-	    							new Boolean(false), language_id, false, "");
+	    							sendToUserId, new Boolean(false), language_id, false, "");
 		   		
 		    	}
 		    }

@@ -8,6 +8,7 @@
     </id>
     <property name="jname" type="string" column="jname"/>
     <property name="label" type="string" column="label"/>
+    <property name="ical" type="string" column="ical"/>
     <property name="inserted" type="java.util.Date" column="inserted"/>
   </class>
 </hibernate-mapping>

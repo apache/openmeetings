@@ -718,7 +718,7 @@ public class MainService implements IPendingServiceCallback {
     		String room, String roomtype, String baseurl, String email, String subject, Long room_id){
     	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
     	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-    	return Invitationmanagement.getInstance().sendInvitionLink(user_level, username, message, domain, room, roomtype, baseurl, email, subject, room_id);
+    	return Invitationmanagement.getInstance().sendInvitionLink(user_level, username, message, domain, room, roomtype, baseurl, email, subject, room_id, null, null);
     }
 
     /**
