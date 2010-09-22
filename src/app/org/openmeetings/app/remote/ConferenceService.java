@@ -1,6 +1,7 @@
 package org.openmeetings.app.remote;
  
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,24 +9,33 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IConnection;
+import org.red5.server.api.Red5;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.math.CalendarPatterns;
 
 /**
  * 
@@ -244,6 +254,64 @@ public class ConferenceService {
 		
 	}
 	//--------------------------------------------------------------------------------------------
+	
+	
+	public Map getAppointMentAndTimeZones(Long room_id){
+		log.debug("getAppointMentDataForRoom");
+		
+		IConnection current = Red5.getConnectionLocal();
+		String streamid = current.getClient().getId();
+		
+		log.debug("getCurrentRoomClient -2- "+streamid);
+		
+		RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+		
+		Rooms room = Roommanagement.getInstance().getRoomById(room_id);
+		
+		if(room.getAppointment() == false)
+			return null;
+		
+		try{
+			Appointment appointment = AppointmentLogic.getInstance().getAppointmentByRoom(room_id);
+			
+			Map returnMap = new HashMap();
+			
+			returnMap.put("appointment", appointment);
+			
+			Users us = Usermanagement.getInstance().getUserById(currentClient.getUser_id());
+			
+			String jNameTimeZone = null;
+			if (us != null && us.getOmTimeZone() != null) {
+				jNameTimeZone = us.getOmTimeZone().getJname();
+			} else {
+				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+				if (conf != null) {
+					jNameTimeZone = conf.getConf_value();
+				}
+			}
+			
+			OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			Date starttime = new Date(appointment.getAppointmentStarttime().getTime() + offset);
+			Date endtime = new Date(appointment.getAppointmentEndtime().getTime() + offset);
+			
+			returnMap.put("appointment", appointment);
+			
+			returnMap.put("start", CalendarPatterns.getDateWithTimeByMiliSeconds(starttime));
+			returnMap.put("end", CalendarPatterns.getDateWithTimeByMiliSeconds(endtime));
+			returnMap.put("timeZone", omTimeZone.getIcal());
+			
+			return returnMap;
+		}catch(Exception e){
+			log.error("getAppointMentAndTimeZones " + e.getMessage());
+			return null;
+		}
+		
+	}
 	
 	/**
 	 * 

@@ -11,6 +11,7 @@
 	</resource>
 	
 	<include href="roomSidebar/" />
+	<include href="appointmentNotificationPopUp.lzx" />
 	<include href="baseRoomInnerList.lzx" />
     <include href="baseConferenceRoom.lzx" />
 	<include href="fixedWhiteboardPanel.lzx" />

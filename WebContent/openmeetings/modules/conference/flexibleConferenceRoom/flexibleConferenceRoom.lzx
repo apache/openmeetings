@@ -15,8 +15,8 @@
         canvas._conferencemenu.setAttribute('visibility','visible');
         
         if(roomobj.appointment){
-            new lz.winni(canvas.conferenceView,{ name:'appDetail',
-                    width:350, height:160, resizable:true, closeable:true, x:300,y:200, roomobj:this.roomobj });    
+            new lz.appointmentNotificationPopUp(canvas.conferenceView,{ 
+            			name:'appDetail', roomobj:this.roomobj });    
         } else{
             if ($debug) Debug.write("no appointed meeting");
         }

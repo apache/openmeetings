@@ -93,10 +93,10 @@ public class MeetingMemberLogic {
 			Date starttime = new Date(point.getAppointmentStarttime().getTime() + offset);
 			Date endtime = new Date(point.getAppointmentEndtime().getTime() + offset);
 			
-			System.out.println(omTimeZone.getIcal());
-			System.out.println(offset);
-			System.out.println(starttime);
-			System.out.println(endtime);
+//			System.out.println(omTimeZone.getIcal());
+//			System.out.println(offset);
+//			System.out.println(starttime);
+//			System.out.println(endtime);
 			
 			String message = "Invitation to an openMeetings Event : " 
 					+ point.getAppointmentName() + ", " 
@@ -149,7 +149,9 @@ public class MeetingMemberLogic {
 							meeting_organizer, // created by
 							point.getAppointmentId(),
 							member.getInvitor(), language_id,
-							jNameTimeZone
+							jNameTimeZone,
+							point.getAppointmentStarttime(),
+							point.getAppointmentEndtime()
 						);
 				
 			}

@@ -332,7 +332,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, Long appointMentId, Boolean invitor,
-			Long language_id, String jNameTimeZone){
+			Long language_id, String jNameTimeZone, Date gmtTimeStart, Date gmtTimeEnd){
 			log.debug("addInvitationIcalLink");
 			
 		try {
@@ -355,8 +355,23 @@ public class Invitationmanagement {
 					//period
 					invitation.setIsValidByTime(true);
 					invitation.setCanBeUsedOnlyOneTime(false);
-					invitation.setValidFrom(validFrom);
-					invitation.setValidTo(validTo);					
+					
+					//This has to be in the Server's time cause otherwise it is not 
+					//in the correct time-zone for the comparison later on if the invitation is still valid
+					// and subtract 5 minutes for users to access early
+					
+					Calendar cal = Calendar.getInstance();
+					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+					
+					log.debug("addAppointment offset :: "+offset);
+					
+					Date appointmentstart = new Date(gmtTimeStart.getTime() + offset);
+					Date appointmentend = new Date(gmtTimeEnd.getTime() + offset);
+					
+					Date gmtTimeStartShifted = new Date(appointmentstart.getTime() - ( 5 * 60 * 1000 ) );
+					
+					invitation.setValidFrom(gmtTimeStartShifted);
+					invitation.setValidTo(appointmentend);					
 				} else {
 					//one-time
 					invitation.setIsValidByTime(false);
@@ -571,10 +586,10 @@ public class Invitationmanagement {
 		
 		// Transforming Meeting Members
 		
-		HashMap<String, String> dusselInDerHashMap = handler.getAttendeeData(email, userName, invitor);
+		HashMap<String, String> attendeeInDerHashMap = handler.getAttendeeData(email, userName, invitor);
 		
 		Vector<HashMap<String, String>> atts = new Vector<HashMap<String,String>>();
-		atts.add(dusselInDerHashMap);
+		atts.add(attendeeInDerHashMap);
 		
 	
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
@@ -633,10 +648,10 @@ public class Invitationmanagement {
 		
 		// Transforming Meeting Members
 		
-		HashMap<String, String> dusselInDerHashMap = handler.getAttendeeData(email, userName, invitor);
+		HashMap<String, String> attendeeInDerHashMap = handler.getAttendeeData(email, userName, invitor);
 		
 		Vector<HashMap<String, String>> atts = new Vector<HashMap<String,String>>();
-		atts.add(dusselInDerHashMap);
+		atts.add(attendeeInDerHashMap);
 		
 	
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
@@ -677,7 +692,7 @@ public class Invitationmanagement {
 			Long language_id, Date starttime, Date endtime, String jNametimeZone){
 		try {
 				
-			String invitation_link = baseurl+"?lzproxied=solo&lzr=swf8&lzt=swf&invitationHash="+invitationsHash;
+			String invitation_link = baseurl+"?invitationHash="+invitationsHash;
 			
 //			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().
 //	        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
@@ -697,7 +712,7 @@ public class Invitationmanagement {
 			// Defining Organizer
 			Users user = Usermanagement.getInstance().getUserById(organizer_userId);
 			
-			HashMap<String, String> oberDussel = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
+			HashMap<String, String> organizerAttendee = handler.getAttendeeData(user.getAdresses().getEmail(), user.getLogin(), invitor);
 			
 			GregorianCalendar start = new GregorianCalendar();
 			start.setTime(starttime); //Must be the calculated date base on the time zone
@@ -707,7 +722,7 @@ public class Invitationmanagement {
 			
 			//Create ICal Message
 			String meetingId = handler.addNewMeeting(start, end, point.getAppointmentName(), 
-					atts, invitation_link, oberDussel, 
+					atts, invitation_link, organizerAttendee, 
 					point.getIcalId(), jNametimeZone);
 			
 			// Writing back meetingUid
