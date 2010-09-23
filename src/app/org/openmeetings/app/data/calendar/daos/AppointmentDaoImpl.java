@@ -758,7 +758,7 @@ public class AppointmentDaoImpl {
 	 * @return
 	 */
 	//---------------------------------------------------------------------------------------------
-	public List<Appointment> getTodaysAppoitmentsForAllUsers( ){
+	public List<Appointment> getTodaysAppointmentsForAllUsers( ){
 		try{
 			
 		    //log.debug("getTodaysAppoitmentsForAllUsers");	
