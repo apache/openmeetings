@@ -13,7 +13,7 @@
     <timezone name="Etc/GMT+4" label="Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Asia/Dubai" />
     <timezone name="Asia/Tehran" label="Tehran GMT+3.30" iCal="Asia/Tehran" />
     <timezone name="Etc/GMT+3" label="Moscow, Saint Petersburg, Samara, Iraq, Saudi Arabia" iCal="Europe/Moscow" />
-    <timezone name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Zurich" />
+    <timezone name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Helsinki" />
     <timezone name="Etc/GMT+1" label="France, Germany, Spain, Italy" iCal="Europe/Berlin" />
     <timezone name="Etc/GMT" label="Iceland, United Kingdom, Ireland" iCal="Europe/London" />
     <timezone name="Etc/GMT-1" label="Azores, Cape Verde" iCal="Atlantic/Cape_Verde" />
