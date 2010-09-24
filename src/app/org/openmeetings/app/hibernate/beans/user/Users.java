@@ -56,6 +56,7 @@ public class Users {
     private OmTimeZone omTimeZone; //In UTC +/- hours
     
     private Sessiondata sessionData;
+    private Boolean forceTimeZoneCheck;
     
 	public Users() {
 		super();
@@ -432,6 +433,18 @@ public class Users {
 	}
 	public void setOmTimeZone(OmTimeZone omTimeZone) {
 		this.omTimeZone = omTimeZone;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="forceTimeZoneCheck"
+     *  type="boolean"
+     */
+	public Boolean getForceTimeZoneCheck() {
+		return forceTimeZoneCheck;
+	}
+	public void setForceTimeZoneCheck(Boolean forceTimeZoneCheck) {
+		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 	
 }

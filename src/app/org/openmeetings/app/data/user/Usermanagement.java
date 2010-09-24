@@ -470,7 +470,7 @@ public class Usermanagement {
 			int availible, String telefon, String fax,
 			String mobil, String email, String comment, int status, List organisations,
 			int title_id, String phone, String sip_user, String sip_pass, String sip_auth, 
-			Boolean generateSipUserData, String jNameTimeZone) {
+			Boolean generateSipUserData, String jNameTimeZone, Boolean forceTimeZoneCheck) {
 
 		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level) && user_id != 0) {
 			try {
@@ -511,7 +511,8 @@ public class Usermanagement {
 					us.setStatus(status);
 					us.setTitle_id(title_id);
 					us.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
-					 
+					us.setForceTimeZoneCheck(forceTimeZoneCheck);
+					
 					if (level_id != 0)
 						us.setLevel_id(new Long(level_id));
 					if (password.length() != 0) {
@@ -891,7 +892,7 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
 										language_id, true, new LinkedList(), phone, baseURL, 
-										sendConfirmation,"","","", generateSipUserData, jNameTimeZone);
+										sendConfirmation,"","","", generateSipUserData, jNameTimeZone, false);
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -943,7 +944,7 @@ public class Usermanagement {
 			String town, long language_id, boolean sendWelcomeMessage, 
 			List organisations, String phone, String baseURL, Boolean sendConfirmation, 
 			String sip_user, String sip_pass, String sip_auth, boolean generateSipUserData,
-			String jName_timezone) throws Exception {
+			String jName_timezone, Boolean forceTimeZoneCheck) throws Exception {
 		//TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -976,7 +977,8 @@ public class Usermanagement {
 					
 					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
 									Userpass,address_id, age, hash, 
-									sip_user, sip_pass, sip_auth, generateSipUserData, jName_timezone);
+									sip_user, sip_pass, sip_auth, generateSipUserData, jName_timezone, 
+									forceTimeZoneCheck);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -1032,7 +1034,8 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, long adress_id, Date age, String hash, 
 			String sip_user, String sip_pass, String sip_auth, 
-			boolean generateSipUserData, String jName_timezone) {
+			boolean generateSipUserData, String jName_timezone,
+			Boolean forceTimeZoneCheck) {
 		try {
 			
 			Users users = new Users();
@@ -1050,6 +1053,7 @@ public class Usermanagement {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jName_timezone));
+			users.setForceTimeZoneCheck(forceTimeZoneCheck);
 			
 			if (generateSipUserData) {
 				
@@ -1341,7 +1345,7 @@ public class Usermanagement {
 					savedUser.getAdresses().setTown(values.get("town").toString());
 					savedUser.getAdresses().setAdditionalname(values.get("additionalname").toString());
 					savedUser.getAdresses().setZip(values.get("zip").toString());
-					
+					savedUser.setForceTimeZoneCheck(false);
 					savedUser.getAdresses().setStates(Statemanagement.getInstance().getStateById(Long.parseLong(values.get("state_id").toString())));
 					
 					//Addressmanagement.getInstance().updateAdress(savedUser.getAdresses());

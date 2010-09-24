@@ -50,7 +50,7 @@
 </class>
 
 
-<class name="weekbkgnd" extends="view" bgcolor="$once { canvas.basebgcolorizer }" y="26"
+<class name="weekbkgnd" extends="view" bgcolor="$once { canvas.basebgcolorizer }" y="52"
               width="810" height="26" >
     <!-- Day names appear as titles in month and week views.  They
          are constrained to their respective columns within the
@@ -111,9 +111,35 @@
 
     <!-- The top panel holds the views above the calendar grid, which include
          the day names that appear as column titles.  -->
-    <view font="Verdana,sans-serif" name="toppanel" x="0" y="-50"  width="806" 
-        fontsize="10">
-
+    <view font="Verdana,sans-serif" name="toppanel" x="0" y="-80"  width="810" 
+        	fontsize="10" bgcolor="$once { canvas.basebgcolorizer }">
+    	
+    	<handler name="oninit">
+			this.getUserSelf.doCall();
+	    </handler>
+	    
+	    <netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
+	  		remotecontext="$once{ canvas.thishib }" > 
+	  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		parent.initFields(value);
+	    		]]>
+	    	</handler>
+	  	</netRemoteCallHib>	
+	  	
+	  	<method name="initFields" args="obj">
+	    	<![CDATA[
+	    		if (obj.omTimeZone != null) {
+	                canvas.setAttribute('jNameTimeZone',obj.omTimeZone.jname);
+	                canvas.timeZoneId = obj.omTimeZone.omtimezoneId;
+	            }
+				this._timeZone.selectItem(String(obj.omTimeZone.jname));
+				
+				this._timeZone.selectionActive = true;
+	        ]]>
+	    </method>
+	    
         <!-- This is the bar that appears below the toolbar (and contains the
              day names. This comes first in the file because it needs to be
              behind the toolbar. -->
@@ -121,7 +147,7 @@
         
         <!-- TOOLBAR DISPLAY Month and a set of tools for
              manipulating that month -->
-        <view name="mbar" bgcolor="$once { canvas.basebgcolorizer }" width="810" >
+        <view name="mbar" bgcolor="$once { canvas.basebgcolorizer }" width="810" y="0">
 
 			<!--
             <view resource="menubar"/>
@@ -171,6 +197,36 @@
             </calButton>
             
         </view>
+        
+	    <labelText labelid="1143" width="200" y="30" resize="false" x="2" fgcolor="0xFFFFFF"/>
+	     <resetCombobox name="_timeZone" editable="false" y="28" width="300" x="120"
+	     			   fontsize="11" style="componentStyle">
+	     	<attribute name="selectionActive" value="false" type="boolean"/>
+	     	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+	            value="$path{ 'jname/text()' }" />
+	        <handler name="onselect">
+	        	if (this.selectionActive) {
+	        		parent.updateUserSelfTimeZone.jName = this.getValue();
+	        		parent.updateUserSelfTimeZone.doCall();
+	        	}
+	        </handler>
+	     </resetCombobox>  
+	     
+	    <netRemoteCallHib name="updateUserSelfTimeZone" funcname="userservice.updateUserSelfTimeZone" 
+	  		remotecontext="$once{ canvas.thishib }" > 
+	  		<attribute name="jName" value="" type="string"/>
+	  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	    	<netparam><method name="getValue"> return parent.jName; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+	    			if (value.omTimeZone != null) {
+		                canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
+		                canvas.timeZoneId = value.omTimeZone.omtimezoneId;
+		            }
+		    		quicklink('dashboardModuleCalendar');
+	    		]]>
+	    	</handler>
+	  	</netRemoteCallHib>	   
 
         <!-- animates in top panel on startup -->
 	    <animator name="slideInTopPanel" attribute="y" 
@@ -181,7 +237,7 @@
 
     <!-- The cal interior holds the views in the calendar with the exception
          of the top view.  -->
-    <view name="cal_interior" x="0" y="57" visible="false" 
+    <view name="cal_interior" x="0" y="83" visible="false" 
           opacity="0" clip="true"
           font="Verdana,sans-serif"
           width="810" height="516" pixellock="true">

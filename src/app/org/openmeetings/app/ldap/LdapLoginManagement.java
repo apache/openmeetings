@@ -661,7 +661,8 @@ public class LdapLoginManagement {
 									false,//send verification code
 									"","","",//sip_user, sip_pass, sip_auth
 									true, //generate SIP Data if the config is enabled
-									jName_timeZone
+									jName_timeZone, 
+									false
 								);
 							
 		}catch(Exception e){

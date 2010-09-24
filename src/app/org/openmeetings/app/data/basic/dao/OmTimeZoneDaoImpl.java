@@ -106,5 +106,30 @@ public class OmTimeZoneDaoImpl {
 		}
 		return null;
 	}
-
+	
+	public OmTimeZone getOmTimeZoneById(Long omtimezoneId) {
+		try {
+			String hql = "select sl from OmTimeZone as sl " +
+							"WHERE sl.omtimezoneId = :omtimezoneId";
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("omtimezoneId", omtimezoneId);
+			List<OmTimeZone> sList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			if (sList.size() > 0) {
+				return sList.get(0);
+			}
+			
+		} catch (HibernateException ex) {
+			log.error("[getOmTimeZoneById]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getOmTimeZoneById]: ",ex2);
+		}
+		return null;
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Emailmanagement;
@@ -300,7 +301,9 @@ public class UserService {
 		        		argObjectMap.get("sip_pass").toString(),
 		        		argObjectMap.get("sip_auth").toString(),
 		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
-		        		argObjectMap.get("jNameTimeZone").toString()); 	
+		        		argObjectMap.get("jNameTimeZone").toString(),
+		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue()
+		        		); 	
     		} else {
 		        return Usermanagement.getInstance().updateUser(user_level,user_idClient, 
 		        		Long.valueOf(argObjectMap.get("level_id").toString()).longValue(), argObjectMap.get("login").toString(), 
@@ -320,7 +323,8 @@ public class UserService {
 		        		argObjectMap.get("sip_pass").toString(),
 		        		argObjectMap.get("sip_auth").toString(),
 		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
-		        		argObjectMap.get("jNameTimeZone").toString()
+		        		argObjectMap.get("jNameTimeZone").toString(),
+		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue()
 		        		); 
     		}
     	} catch (Exception ex) {
@@ -406,6 +410,30 @@ public class UserService {
 		   
 	   } catch (Exception err) {
 		   log.error("[kickUserByStreamId]",err);
+	   }
+	   return null;
+   }
+   
+   public Users updateUserSelfTimeZone(String SID, String jname) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   Users us = Usermanagement.getInstance().getUserById(users_id);
+			   
+			   us.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jname));
+			   us.setForceTimeZoneCheck(false);
+			   us.setUpdatetime(new Date());
+			   
+			   Usermanagement.getInstance().updateUser(us);
+			   
+			   return us;
+			   
+		   }
+	   }  catch (Exception err) {
+		   log.error("[updateUserTimeZone]",err);
 	   }
 	   return null;
    }

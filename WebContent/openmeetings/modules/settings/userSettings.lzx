@@ -33,6 +33,14 @@
     	<![CDATA[
             this.userObj = obj;
 			this.user_id = obj.user_id;
+			
+			hib.userobject = obj;
+			
+			if (obj.omTimeZone != null) {
+                canvas.setAttribute('jNameTimeZone',obj.omTimeZone.jname);
+                canvas.timeZoneId = obj.omTimeZone.omtimezoneId;
+            }
+			
 			//this.username.setAttribute('text',obj.login);
 			this.firstname.setAttribute('text',obj.firstname);
 			this.lastname.setAttribute('text',obj.lastname);

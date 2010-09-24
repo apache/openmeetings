@@ -36,6 +36,7 @@
             this.state.addAndSelectItem(defaultstate.name,defaultstate.state_id);
             this.adress_comment.setAttribute('text','');
             this.status.selectItem(String('1'));
+            this.forceTimeZoneCheck.setValue(false);
             
             var t = this;
             
@@ -114,6 +115,17 @@
 			this.salutation.selectItem(String(obj.title_id));
 			this._timeZone.selectItem(String(obj.omTimeZone.jname));
 			
+			if (obj["forceTimeZoneCheck"] && obj.forceTimeZoneCheck!= null) {
+				if (obj.forceTimeZoneCheck) {
+					this.forceTimeZoneCheck.setValue(true);
+				} else {
+					this.forceTimeZoneCheck.setValue(false);
+				}
+			} else {
+				this.forceTimeZoneCheck.setValue(false);
+			}
+			
+			
 			this._organisationslist.clearList();
 			for (var i=0;i<obj.organisation_users.length;i++){
 				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
@@ -189,6 +201,7 @@
   			this.sendObject["level_id"] = Number(this.parent.level.getValue());
 			this.sendObject["title_id"] = Number(this.parent.salutation.getValue());
 			this.sendObject["jNameTimeZone"] = parent._timeZone.getValue();
+			this.sendObject["forceTimeZoneCheck"] = parent.forceTimeZoneCheck.getValue();
   			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
   			
   			this.sendObject["generateSipUserData"] = this.parent.generateSipUserData.getValue();
@@ -252,29 +265,38 @@
                        fontsize="11" style="componentStyle">
             <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
                 value="$path{ 'jname/text()' }" />
-         </resetCombobox>       
+         </resetCombobox>   
+             
+    <view resource="messagebox_info_rsc" x="0" y="220" />
+    
+    <labelText labelid="1149" x="24" y="220"  fontstyle="italic"
+               multiline="true" width="364" />
+               
+	<labelText labelid="1148" width="200" y="250" resize="false" x="2"/>  
+        <labelCheckbox name="forceTimeZoneCheck" width="270" y="250" x="130" fontsize="11" />
+	
 
-    <labelText labelid="137" width="200" y="220" resize="false" x="2"/>
-        <customEdittext name="email" y="220" x="120" width="270" regexpType="email" 
+    <labelText labelid="137" width="200" y="280" resize="false" x="2"/>
+        <customEdittext name="email" y="280" x="120" width="270" regexpType="email" 
         				text="" />
         				
-    <labelText labelid="607" width="200" y="250" resize="false" x="2"/>
-        <customEdittext name="phone" y="250" x="120" width="270"  
+    <labelText labelid="607" width="200" y="310" resize="false" x="2"/>
+        <customEdittext name="phone" y="310" x="120" width="270"  
         				text="" />
         
-    <labelText labelid="138" width="200" y="280" resize="false" x="2"/>
-        <dateField name="age" y="280" x="120" width="270" text="" />
+    <labelText labelid="138" width="200" y="340" resize="false" x="2"/>
+        <dateField name="age" y="340" x="120" width="270" text="" />
         
-    <labelText labelid="139" width="200" y="310" resize="false" x="2"/>
-        <customEdittext name="street" y="310" x="120" width="220" text="" />
-        <customEdittext name="house" y="310" x="350" width="40" text="" />
+    <labelText labelid="139" width="200" y="370" resize="false" x="2"/>
+        <customEdittext name="street" y="370" x="120" width="220" text="" />
+        <customEdittext name="house" y="370" x="350" width="40" text="" />
         
-    <labelText labelid="140" width="200" y="340" resize="false" x="2"/>
-        <customEdittext name="zip" y="340" x="120" width="70" text="" />   
-        <customEdittext name="town" y="340" x="200" width="190" text="" />                        
+    <labelText labelid="140" width="200" y="400" resize="false" x="2"/>
+        <customEdittext name="zip" y="400" x="120" width="70" text="" />   
+        <customEdittext name="town" y="400" x="200" width="190" text="" />                        
          
-    <labelText labelid="141" width="200" y="370" resize="false" x="2"/>  
-		<dynamicCombobox name="state" width="270" y="370" x="120"
+    <labelText labelid="141" width="200" y="430" resize="false" x="2"/>  
+		<dynamicCombobox name="state" width="270" y="430" x="120"
 						 text="Switzerland" value="204" />
     
     	<!--
@@ -283,8 +305,8 @@
             resultId="state_id" resultName="name" />    
 		 -->
 		 
-    <labelText labelid="158" width="200" y="400" resize="false" x="2"/>  
-        <resetCombobox name="status" width="200" y="400" x="120" editable="false" fontsize="11">
+    <labelText labelid="158" width="200" y="460" resize="false" x="2"/>  
+        <resetCombobox name="status" width="200" y="460" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
 	            <![CDATA[
 	            this.addItem(canvas.getLabelName(159),'0');
@@ -295,8 +317,8 @@
         </resetCombobox> 
 
 
-    <labelText labelid="169" width="200" y="430" resize="false" x="2"/>  
-        <resetCombobox name="level" width="200" y="430" x="120" editable="false" fontsize="11">
+    <labelText labelid="169" width="200" y="490" resize="false" x="2"/>  
+        <resetCombobox name="level" width="200" y="490" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
 	            <![CDATA[
 	            this.addItem(canvas.getLabelName(166),'1');
@@ -307,22 +329,22 @@
 	        </handler> 
         </resetCombobox> 
 	
-    <labelText labelid="142" width="200" y="460" resize="false" x="2"/>
-        <customScrollEdittext name="adress_comment" y="460" x="120" width="270" 
+    <labelText labelid="142" width="200" y="520" resize="false" x="2"/>
+        <customScrollEdittext name="adress_comment" y="520" x="120" width="270" 
                         height="70" text="" />
        
-    <labelText labelid="161" width="200" y="540" resize="false" x="2"/>     
-    <simpleValueList name="_organisationslist" y="540" x="120" width="270" height="100" 
+    <labelText labelid="161" width="200" y="600" resize="false" x="2"/>     
+    <simpleValueList name="_organisationslist" y="600" x="120" width="270" height="100" 
 		multiselect="true" />
 	
-	<baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="542" x="400"
+	<baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="602" x="400"
 		onclick="this.parent.addOrganisationToUser()" />		
 	<method name="addOrganisationToUser">
 		//if (this.user_id!=0)
 			new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.user_id});
 	</method>	
 	
-	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="542" x="430"
+	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="602" x="430"
 		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
 		<method name="confirmDelete">
 			if (this.parent._organisationslist._selected!=null)
@@ -331,30 +353,30 @@
 	</baseChooseIcon>
 	
     <!-- SIP Account Data -->
-    <labelText labelid="893" width="200" y="650" resize="false" 
+    <labelText labelid="893" width="200" y="710" resize="false" 
                x="0" fontstyle="bold" />   
     
-    <view resource="messagebox_info_rsc" x="0" y="670" />
+    <view resource="messagebox_info_rsc" x="0" y="730" />
     
-    <labelText labelid="894" x="24" y="670"  fontstyle="italic"
+    <labelText labelid="894" x="24" y="730"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="921" width="200" y="730" resize="false" x="2"/>  
-        <labelCheckbox name="generateSipUserData" width="270" y="730" x="140" fontsize="11" />
+    <labelText labelid="921" width="200" y="790" resize="false" x="2"/>  
+        <labelCheckbox name="generateSipUserData" width="270" y="790" x="140" fontsize="11" />
 
-    <labelText labelid="895" width="200" y="760" resize="false" x="2"/>
-        <customEdittext name="sip_user" y="760" x="120" width="270"  
+    <labelText labelid="895" width="200" y="820" resize="false" x="2"/>
+        <customEdittext name="sip_user" y="820" x="120" width="270"  
         				text="" />
         				
-	<labelText labelid="896" width="200" y="790" resize="false" x="2"/>
-        <customEdittext name="sip_pass" y="790" x="120" width="270"  
+	<labelText labelid="896" width="200" y="850" resize="false" x="2"/>
+        <customEdittext name="sip_pass" y="850" x="120" width="270"  
         				text="" />
         				
-    <labelText labelid="897" width="200" y="820" resize="false" x="2"/>
-        <customEdittext name="sip_auth" y="820" x="120" width="270"  
+    <labelText labelid="897" width="200" y="880" resize="false" x="2"/>
+        <customEdittext name="sip_auth" y="880" x="120" width="270"  
         				text="" />
         				
-	<view y="900" />        				
+	<view y="1000" />        				
         				        				
 </class>
 

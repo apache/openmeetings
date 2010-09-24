@@ -592,6 +592,10 @@
                         canvas.timeZoneId = value.omTimeZone.omtimezoneId;
                     }
                     
+                    if (value.forceTimeZoneCheck) {
+                    	new lz.labelerrorPopup(canvas,{errorlabelid:1150});
+                    }
+                    
                     if (value.level_id >= 2) {
                         canvas.becomemoderator = true;
                     } else {
