@@ -288,6 +288,14 @@ public class AppointmentLogic {
 			return;
 		}
 		
+		Calendar calInitial = Calendar.getInstance();
+		int offsetInitial = calInitial.get(Calendar.ZONE_OFFSET) + calInitial.get(Calendar.DST_OFFSET);
+		
+		// Check right time
+		Date now = new Date(System.currentTimeMillis() - offsetInitial);
+		
+		log.debug("doScheduledMeetingReminder : UTC now " + now);
+		
 		for(int i = 0; i < points.size(); i++){
 			Appointment ment = points.get(i);
 			
@@ -296,9 +304,6 @@ public class AppointmentLogic {
 				
 				log.debug("doScheduledMeetingReminder : Found appointment " +  ment.getAppointmentName());
 				
-				// Check right time
-				Date now = new Date(System.currentTimeMillis());
-				
 				Date appStart = ment.getAppointmentStarttime();
 				Date oneHourBeforeAppStart = new Date(System.currentTimeMillis());
 				oneHourBeforeAppStart.setTime(appStart.getTime());
@@ -306,6 +311,12 @@ public class AppointmentLogic {
 				
 				oneHourBeforeAppStart.setMinutes(appStart.getMinutes() - 5);
 				
+//				System.out.println("doScheduledMeetingReminder : Found appointment 1 " +now);
+//				System.out.println("doScheduledMeetingReminder : Found appointment 2 " +appStart);
+//				System.out.println("doScheduledMeetingReminder : Found appointment 3 " +oneHourBeforeAppStart);
+//				System.out.println("doScheduledMeetingReminder : Found appointment 4 " +now.before(appStart));
+//				System.out.println("doScheduledMeetingReminder : Found appointment 5 " +now.after(oneHourBeforeAppStart));
+//				
 				if(now.before(appStart) && now.after(oneHourBeforeAppStart)){
 					log.debug("Meeting " +  ment.getAppointmentName() + " is in reminder range...");
 					
