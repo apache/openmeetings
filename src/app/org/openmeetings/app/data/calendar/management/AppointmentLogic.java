@@ -1,18 +1,24 @@
 
 package org.openmeetings.app.data.calendar.management;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
@@ -298,7 +304,7 @@ public class AppointmentLogic {
 				oneHourBeforeAppStart.setTime(appStart.getTime());
 				//oneHourBeforeAppStart.setHours(appStart.getHours() -1);
 				
-				oneHourBeforeAppStart.setMinutes(appStart.getMinutes() - 15);
+				oneHourBeforeAppStart.setMinutes(appStart.getMinutes() - 5);
 				
 				if(now.before(appStart) && now.after(oneHourBeforeAppStart)){
 					log.debug("Meeting " +  ment.getAppointmentName() + " is in reminder range...");
@@ -310,12 +316,6 @@ public class AppointmentLogic {
 						log.debug("doScheduledMeetingReminder : no members in meeting!");
 						continue;
 					}
-					
-					String message = "Meeting : " + ment.getAppointmentName() + "<br>";
-					if(ment.getAppointmentDescription() != null && ment.getAppointmentDescription().length() > 0)
-						message += "(" + ment.getAppointmentDescription() + ")<br>";
-					message += "Start : " + ment.getAppointmentStarttime().toLocaleString() + "<br>";
-					
 					
 					String subject = "OpenMeetings Meeting Reminder";
 					
@@ -342,6 +342,36 @@ public class AppointmentLogic {
 								log.error("Error retrieving baseUrl from Invitation ID : " + inv.getInvitations_id());
 								continue;
 							}
+							
+							//ment.getAppointmentStarttime().toLocaleString()
+							
+							Users us = ment.getUserId();
+							
+							String jNameTimeZone = null;
+							if (us != null && us.getOmTimeZone() != null) {
+								jNameTimeZone = us.getOmTimeZone().getJname();
+							} else {
+								Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+								if (conf != null) {
+									jNameTimeZone = conf.getConf_value();
+								}
+							}
+							
+							OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+							
+							Calendar cal = Calendar.getInstance();
+							cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
+							int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+							
+							Date starttime = new Date(ment.getAppointmentStarttime().getTime() + offset);
+							Date endtime = new Date(ment.getAppointmentEndtime().getTime() + offset);
+							
+							String message = "Meeting : " + ment.getAppointmentName() + "<br>";
+							if(ment.getAppointmentDescription() != null && ment.getAppointmentDescription().length() > 0)
+								message += "(" + ment.getAppointmentDescription() + ")<br>";
+							message += "Start : " + starttime + "<br>";
+							message += "End : " + endtime + "<br>";
+							message += "Timezone : " + omTimeZone.getIcal() + "<br>";
 							
 							Invitationmanagement.getInstance().sendInvitationReminderLink("OpenMeetings", message, inv.getBaseUrl(), mm.getEmail(), subject, inv.getHash());
 							

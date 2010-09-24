@@ -472,7 +472,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationReminderLink");
 		
 		try{
-			String invitation_link = baseUrl+"?lzproxied=solo&lzr=swf8&lzt=swf&invitationHash="+invitationHash;
+			String invitation_link = baseUrl+"?invitationHash="+invitationHash;
 			
 			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			
