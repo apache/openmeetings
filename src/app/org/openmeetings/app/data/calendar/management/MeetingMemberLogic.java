@@ -129,12 +129,12 @@ public class MeetingMemberLogic {
 			Fieldlanguagesvalues labelid1153 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1153), language_id);
 			Fieldlanguagesvalues labelid1154 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1154), language_id);
 			
-			message += "<br/>" + labelid1153.getValue() 
+			message += "<br/>" + labelid1153.getValue() + ' ' 
 							+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
 							+ " (" + timeZoneName + ")"
 							+ "<br/>";
 			
-			message += labelid1154.getValue() 
+			message += labelid1154.getValue() + ' ' 
 							+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
 							+ " (" + timeZoneName + ")"
 							+ "<br/>";

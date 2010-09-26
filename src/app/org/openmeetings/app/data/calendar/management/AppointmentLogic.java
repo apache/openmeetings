@@ -427,12 +427,12 @@ public class AppointmentLogic {
 								
 							}
 							
-							message += "<br/>" + labelid1153.getValue() 
+							message += "<br/>" + labelid1153.getValue() + ' '
 											+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
 											+ " (" + timeZoneName + ")"
 											+ "<br/>";
 							
-							message += labelid1154.getValue() 
+							message += labelid1154.getValue() + ' '
 											+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
 											+ " (" + timeZoneName + ")"
 											+ "<br/>";
