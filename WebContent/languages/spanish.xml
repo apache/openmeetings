@@ -3464,4 +3464,28 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1150" name="time zone update message">
     <value>Please check the time zone in your user profile.</value>
   </string>
+  <string id="1151" name="calendar invitation message">
+    <value>New OpenMeetings conference:</value>
+  </string>
+  <string id="1152" name="calendar invitation message">
+    <value>Details:&lt;br/&gt;</value>
+  </string>
+  <string id="1153" name="calendar invitation message">
+    <value>Start:</value>
+  </string>
+  <string id="1154" name="calendar invitation message">
+    <value>End:</value>
+  </string>
+  <string id="1155" name="calendar invitation message">
+    <value>Changed OpenMeetings conference:</value>
+  </string>
+  <string id="1156" name="calendar invitation message">
+    <value>Organizer:</value>
+  </string>
+  <string id="1157" name="calendar invitation message">
+    <value>Canceled OpenMeetings conference:</value>
+  </string>
+  <string id="1158" name="calendar invitation message">
+    <value>OpenMeetings conference Reminder:</value>
+  </string>
 </language>
