@@ -176,8 +176,13 @@ public class AppointmentLogic {
 			// Adding Invitor as Meetingmember
 			Users user = Usermanagement.getInstance().getUserById(userId); 
 			
+			String jNameMemberTimeZone = "";
+			if (user.getOmTimeZone() != null) {
+				jNameMemberTimeZone = user.getOmTimeZone().getJname();
+			}
+			
 			MeetingMemberLogic.getInstance().addMeetingMember(user.getFirstname(), user.getLastname(), "", "", id, 
-						userId, user.getAdresses().getEmail(), baseUrl, userId, true, language_id, false, "");
+						userId, user.getAdresses().getEmail(), baseUrl, userId, true, language_id, false, "", jNameMemberTimeZone);
 			
 			
 			//add items
@@ -194,11 +199,23 @@ public class AppointmentLogic {
 			    		sendToUserId = Long.valueOf(clientMember.get("userId").toString()).longValue();
 			    	}
 			    	
-	    			//Not In Remote List available - extern user
+			    	jNameMemberTimeZone = clientMember.get("jNameTimeZone").toString();
+			    	
+	    			//Not In Remote List available - intern OR extern user
 	    			MeetingMemberLogic.getInstance().addMeetingMember(clientMember.get("firstname").toString(), 
 	    							clientMember.get("lastname").toString(), 
-	    							"0", "0", id, null,  clientMember.get("email").toString(), baseUrl, 
-	    							sendToUserId, new Boolean(false), language_id, false, "");
+	    							"0", 
+	    							"0", 
+	    							id, 
+	    							null,  
+	    							clientMember.get("email").toString(), 
+	    							baseUrl, 
+	    							sendToUserId, //sending To: External users have a 0 here
+	    							new Boolean(false), 
+	    							language_id, 
+	    							false, 
+	    							"", 
+	    							jNameMemberTimeZone);
 		   		
 		    	}
 		    }

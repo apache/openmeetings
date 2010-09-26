@@ -19,5 +19,6 @@
     <property name="deleted" type="boolean" column="deleted"/>
     <property name="comment" type="string" column="comment_field"/>
     <property name="invitor" type="boolean" column="invitor"/>
+    <many-to-one outer-join="true" insert="true" column="omtimezoneId" lazy="false" update="true" name="omTimeZone" class="org.openmeetings.app.hibernate.beans.basic.OmTimeZone"/>
   </class>
 </hibernate-mapping>

@@ -3,6 +3,7 @@ package org.openmeetings.app.hibernate.beans.calendar;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
@@ -32,6 +33,7 @@ public class MeetingMember {
 	
 	
 	private Invitations invitation;
+	private OmTimeZone omTimeZone;
 	
 	/**
      * 
@@ -215,6 +217,21 @@ public class MeetingMember {
 	public void setInvitor(Boolean invitor) {
 		this.invitor = invitor;
 	}
-	
+
+	/**
+	 * @hibernate.many-to-one
+	 * column = "omtimezoneId"
+	 * class = "org.openmeetings.app.hibernate.beans.basic.OmTimeZone"
+	 * insert="true"
+	 * update="true"
+	 * outer-join="true"
+	 * lazy="false"
+     */
+	public OmTimeZone getOmTimeZone() {
+		return omTimeZone;
+	}
+	public void setOmTimeZone(OmTimeZone omTimeZone) {
+		this.omTimeZone = omTimeZone;
+	}
 	
 }

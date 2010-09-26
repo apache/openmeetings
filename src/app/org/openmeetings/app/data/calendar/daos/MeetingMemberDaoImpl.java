@@ -9,6 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -226,7 +227,8 @@ public class MeetingMemberDaoImpl {
 	}
 	
 	public Long addMeetingMember(String firstname, String lastname, String memberStatus,
-			String appointmentStatus, Long appointmentId, Long userid, String email, Boolean moderator) {
+			String appointmentStatus, Long appointmentId, Long userid, String email, 
+			Boolean moderator, String jNameTimeZone) {
 		try {
 			
 			MeetingMember gm = new MeetingMember();
@@ -242,6 +244,8 @@ public class MeetingMemberDaoImpl {
 			gm.setStarttime(new Date());
 			gm.setDeleted(false);
 			gm.setInvitor(moderator);
+			
+			gm.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 						
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

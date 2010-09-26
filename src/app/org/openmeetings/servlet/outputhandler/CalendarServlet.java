@@ -130,9 +130,9 @@ public class CalendarServlet extends HttpServlet {
 					cal.setTimeZone(timeZone);
 					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 					
-					System.out.println("CalendarServlet offset "+offset );
-					System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID() );
-					log.debug("addAppointment offset :: "+offset);
+					//System.out.println("CalendarServlet offset "+offset );
+					//System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID() );
+					//log.debug("addAppointment offset :: "+offset);
 					
 					appointment.setAppointmentStarttime(new Date(appointment.getAppointmentStarttime().getTime() + offset));
 					appointment.setAppointmentEndtime(new Date(appointment.getAppointmentEndtime().getTime() + offset));
@@ -205,6 +205,13 @@ public class CalendarServlet extends HttpServlet {
 							
 							Element lastname = attendee.addElement("lastname");
 							lastname.addAttribute("value", meetingMember.getLastname());
+							
+							Element jNameTimeZoneMember = attendee.addElement("jNameTimeZone");
+							if (meetingMember.getOmTimeZone() != null) {
+								jNameTimeZoneMember.addAttribute("value", meetingMember.getOmTimeZone().getJname());
+							} else {
+								jNameTimeZoneMember.addAttribute("value", "");
+							}
 							
 						}
 						

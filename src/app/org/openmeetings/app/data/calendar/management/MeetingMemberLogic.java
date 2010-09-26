@@ -51,11 +51,12 @@ public class MeetingMemberLogic {
 	public Long addMeetingMember(String firstname, String lastname, String memberStatus,
 			String appointmentStatus, Long appointmentId, Long userid, String email, 
 			String baseUrl, Long meeting_organizer, Boolean invitor, 
-			Long language_id, Boolean isPasswordProtected, String password){
+			Long language_id, Boolean isPasswordProtected, String password, 
+			String jNameMemberTimeZone){
 		
 		try{
 			Long memberId =  MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  memberStatus,
-				 appointmentStatus,  appointmentId,  userid,  email, invitor);
+				 appointmentStatus,  appointmentId,  userid,  email, invitor, jNameMemberTimeZone);
 		
 			
 			// DefaultInvitation
@@ -73,18 +74,29 @@ public class MeetingMemberLogic {
 			log.debug(":::: addMeetingMember ..... "+point.getRemind().getTypId());
 			
 			Users us = Usermanagement.getInstance().getUserById(userid);
+			OmTimeZone omTimeZone = null;
 			
 			String jNameTimeZone = null;
 			if (us != null && us.getOmTimeZone() != null) {
+				//Internal User
 				jNameTimeZone = us.getOmTimeZone().getJname();
+				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			} else {
+				
+				//External User
+				jNameTimeZone = jNameMemberTimeZone;
+				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+				
+			}
+			
+			//If everything fails
+			if (omTimeZone == null) {
 				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
 				if (conf != null) {
 					jNameTimeZone = conf.getConf_value();
 				}
+				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			}
-			
-			OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));

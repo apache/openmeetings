@@ -1,0 +1,59 @@
+<library>
+	
+<class name="addExternalAttendee" extends="labelExplorerBox" width="420" height="240"
+	   closable="true" labelid="629" >
+	
+	<attribute name="refObj" value="null"/>	
+	
+	<handler name="oninit">
+		this._timeZone.selectItem(canvas.jNameTimeZone);
+	</handler>
+		
+	<labelText labelid="630" y="24" x="2" />
+	<customEdittext name="vorname" x="120" width="270" y="24" />
+	
+	<labelText labelid="631" y="54" x="2" />
+	<customEdittext name="nachname" x="120" width="270" y="54" />
+	
+	<labelText labelid="632" y="84" x="2" />
+	<customEdittext name="email" x="120" width="270" y="84" />
+	
+    <labelText labelid="1143" width="200" y="114" x="2" />
+     <resetCombobox name="_timeZone" editable="false" y="114" width="270" x="120"
+     			   fontsize="11" style="componentStyle">
+     	<attribute name="selectionActive" value="false" type="boolean"/>
+     	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+            value="$path{ 'jname/text()' }" />
+     </resetCombobox>  	
+	
+	<simpleLabelButton name="_ok" labelid="333" x="$once{ parent.width-220 }"
+					   width="100" y="$once{ parent.height - 30 }" >
+		<handler name="onclick">
+			parent.refObj.addListItem(
+				      0, 
+				      parent.vorname["text"], 
+				      parent.nachname["text"], 
+				      parent.email["text"],
+				      0,
+				      parent._timeZone.getValue()
+			      );
+			//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
+			parent.vorname="";
+			parent.nachname="";
+			parent.email="";
+			parent.close();
+			//parent.parent.parent.refObj.close();
+			//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
+		</handler>
+	</simpleLabelButton>
+	
+	<simpleLabelButton  name="_cancel" labelid="25" x="$once{ parent.width-110 }"
+					   width="100" y="$once{ parent.height - 30 }">
+		<handler name="onclick">
+			parent.close();
+		</handler>
+	</simpleLabelButton>
+	
+</class>
+
+</library>

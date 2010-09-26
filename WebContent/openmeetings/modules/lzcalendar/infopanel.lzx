@@ -36,7 +36,7 @@
             <view name="bline" height="1" width="${parent.width}"
                 bgcolor="0xC6C7C4" y="${parent.height - 1}"  />
             <text name="ttl" width="150" x="5" y="1"
-                fgcolor="#666666" pixellock="true"  >
+                fgcolor="0x222222" pixellock="true"  >
                 <attribute name="text" value="${classroot.label}"/>
             </text>
             <view name="arrowref" resource="tabarrow"
@@ -514,21 +514,32 @@
             
             <infoTab name="attendees" labelid="803" pixellock="true">
             	
-            	<calButton labelid="812" x="2" y="2">
+            	<calButton labelid="812" x="$once{ parent.width-this.width-2 }" y="2" width="160">
 	            	<handler name="onclick">
-	            		new lz.addAttendee(canvas,{refObj:parent});
+	            		new lz.addAttendee(canvas.main_content._content.inner,{refObj:parent});
+	            	</handler>
+	            </calButton>
+	            
+	            <calButton labelid="629" x="$once{ parent.width-this.width-2 }" y="22" width="160">
+	            	<handler name="onclick">
+	            		new lz.addExternalAttendee(canvas.main_content._content.inner,{
+	            							refObj:parent,
+	            							x:canvas.main_content._content.inner.x+canvas.main_content._content.inner.width/2, 
+			        			         	y:canvas.main_content._content.inner.y+40
+			        			         });
 	            	</handler>
 	            </calButton>
 	          
-	            <method name="addListItem" args="userId,firstName,lastName,email,memberId">
+	            <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
 	            	<![CDATA[
 	            	
-	            		new lz.attendeeListItem(this.list,{
+	            		new lz.attendeeListItem(this.list._content,{
 				            			userId:userId,
 				            			firstName:firstName,
 				            			lastName:lastName,
 				            			email:email,
-				            			memberId:memberId
+				            			memberId:memberId,
+				            			jNameTimeZone:jNameTimeZone
 				            		});
 	            	]]>
 	            </method> 
@@ -537,15 +548,16 @@
 	            	<![CDATA[
 	            		var tArray = new Array();
 	            		
-	            		for (var i=0;i<this.list.subviews.length;i++) {
+	            		for (var i=0;i<this.list._content.subviews.length;i++) {
 	            			
 	            			var tObject = new Object();
-	            			tObject.meetingMemberId = this.list.subviews[i].memberId;
-			        		tObject.firstname = this.list.subviews[i].firstName;
-			        		tObject.lastname = this.list.subviews[i].lastName;
-			        		tObject.email = this.list.subviews[i].email;
-			        		tObject.userId = this.list.subviews[i].userId;
-	            			
+	            			tObject.meetingMemberId = this.list._content.subviews[i].memberId;
+			        		tObject.firstname = this.list._content.subviews[i].firstName;
+			        		tObject.lastname = this.list._content.subviews[i].lastName;
+			        		tObject.email = this.list._content.subviews[i].email;
+			        		tObject.userId = this.list._content.subviews[i].userId;
+			        		tObject.jNameTimeZone = this.list._content.subviews[i].jNameTimeZone;
+			        		
 			        		tArray.push(tObject);
 	            		}
 	            		
@@ -586,37 +598,15 @@
 	            	]]>
 	            </method>
 	             -->
+	             
+	            
             	
-            	<view name="list" y="22" datapath="attendees/"
-            		  height="${ parent.height-22 }">
+            	<view name="list" y="42" height="${ parent.height-42 }" 
+            		  clip="true" bgcolor="0xFFFFFF" width="$once{ parent.width }">
             		
-            		<handler name="ondata" args="data">
-            			<![CDATA[
-	            			if ($debug) Debug.warn("attendees -1 ondata ",data);
-	            			
-	            			for (var eg in this.subviews){
-	            				this.subviews[eg].destroy();
-	            			}
-	            			
-	            			if (data == null) {
-	            				return;
-	            			}
-	            			
-	            			for (var i=0;i<data.childNodes.length;i++){
-	            				
-	            				var email = data.childNodes[i].childNodes[0].attributes.value;
-	            				var userId = data.childNodes[i].childNodes[1].attributes.value;
-	            				var memberId = data.childNodes[i].childNodes[2].attributes.value;
-	            				var firstName = data.childNodes[i].childNodes[3].attributes.value;
-	            				var lastName = data.childNodes[i].childNodes[4].attributes.value;
-	            				
-	            				parent.addListItem(userId,firstName,lastName,email,memberId);
-	            				
-	            			}
-            			]]>
-            		</handler>
-            		
-	            	<simplelayout axis="y" />
+            		<view name="_content">
+	            		<simplelayout axis="y" spacing="1" />
+	            	</view>
 	            	
 	            	<!--
 	            	<view datapath="attendee/">
@@ -640,10 +630,39 @@
 	            		</view>
 	            	</view>
 	            	 -->
+	            	<vscrollbar />
+            	</view>
+            	
+            	<view datapath="attendees/" width="0" height="0">
+            		
+            		<handler name="ondata" args="data">
+            			<![CDATA[
+	            			if ($debug) Debug.warn("attendees -1 ondata ",data);
+	            			
+	            			for (var eg in parent.list._content.subviews){
+	            				parent.list._content.subviews[eg].destroy();
+	            			}
+	            			
+	            			if (data == null) {
+	            				return;
+	            			}
+	            			
+	            			for (var i=0;i<data.childNodes.length;i++){
+	            				
+	            				var email = data.childNodes[i].childNodes[0].attributes.value;
+	            				var userId = data.childNodes[i].childNodes[1].attributes.value;
+	            				var memberId = data.childNodes[i].childNodes[2].attributes.value;
+	            				var firstName = data.childNodes[i].childNodes[3].attributes.value;
+	            				var lastName = data.childNodes[i].childNodes[4].attributes.value;
+	            				var jNameTimeZone = data.childNodes[i].childNodes[5].attributes.value;
+	            				parent.addListItem(userId,firstName,lastName,email,memberId,jNameTimeZone);
+	            				
+	            			}
+            			]]>
+            		</handler>
 	            	
             	</view>
             	
-            	<vscrollbar />
             	<!--
                 <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
                     width="175" height="280" datapath="attendees/@value" visible="true"/>
@@ -773,27 +792,29 @@
     </class>
     
     
-<class name="attendeeListItem" extends="view" >
+<class name="attendeeListItem" extends="view" bgcolor="$once{ canvas.bgColorMenuItems }">
 	
-	<attribute name="userId" value="0" type="number"/>
-	<attribute name="firstName" value="" type="string"/>
-	<attribute name="memberId" value="0" type="number"/>
-	<attribute name="lastName" value="" type="string"/>
-	<attribute name="email" value="" type="string"/>
+	<attribute name="userId" value="0" type="number" />
+	<attribute name="firstName" value="" type="string" />
+	<attribute name="memberId" value="0" type="number" />
+	<attribute name="lastName" value="" type="string" />
+	<attribute name="email" value="" type="string" />
+	<attribute name="jNameTimeZone" value="" type="string" />
 	
 	<view name="member">
 		<text resize="true" text="$once{ parent.parent.firstName + ',' + parent.parent.lastName }" />
 		<text resize="true" y="20" text="$once{ '(' + parent.parent.email + ')' }" />
 	</view>
 	
-	<view x="166" resource="delete_button" bgcolor="0xFFFFFF">
+	<miniIcons x="166" y="2" resource="delete_button" showhandcursor="true"
+			   width="16" height="16">
 		<handler name="onclick">
 			parent.destroy();
 		</handler>
-	</view>
+		<labelTooltip labelid="814" />
+	</miniIcons>
 	
-	<view height="1" width="200" y="40" 
-		  bgcolor="$once{ canvas.basebgcolorizer }" />
+	<labelTooltip text="$once{ canvas.getLabelName(1143) + ' ' + parent.jNameTimeZone }" />
 	
 </class>
     

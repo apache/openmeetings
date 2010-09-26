@@ -9,6 +9,9 @@
     
     <resource name="step_back_arrow" src="resources/1leftarrow.png" />
     <resource name="step_fwd_arrow" src="resources/1rightarrow.png" />
+    
+    <resource name="sort_up_rsc" src="resources/1uparrow.png" />    
+	<resource name="sort_down_rsc" src="resources/1downarrow.png" />   
 
 	<include href="turnOverList.lzx" />
     <include href="simpleTurnOverList.lzx" />

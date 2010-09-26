@@ -1197,7 +1197,7 @@ public class RoomService {
 				//Not In Remote List available - extern user
 				Long memberId = MeetingMemberLogic.getInstance().addMeetingMember(firstname, lastname, 
 								"0", "0", appointment.getAppointmentId(), null,  email, baseUrl, 
-								null, new Boolean(false), language_id, false, "");
+								null, new Boolean(false), language_id, false, "", "");
 				
 				return memberId;
 				
@@ -1206,6 +1206,39 @@ public class RoomService {
 			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
+			
+			throw new AxisFault(err.getMessage());
+		}
+		
+	}	
+	
+	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id, 
+			String firstname, String lastname, String email, String baseUrl, 
+			Long language_id, String jNameTimeZone) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				Appointment appointment = AppointmentDaoImpl.getInstance().getAppointmentByRoom(room_id);
+				
+				if (appointment == null) {
+					return -1L;
+				}
+				//Not In Remote List available - extern user
+				Long memberId = MeetingMemberLogic.getInstance().addMeetingMember(firstname, lastname, 
+								"0", "0", appointment.getAppointmentId(), null,  email, baseUrl, 
+								null, new Boolean(false), language_id, false, "", jNameTimeZone);
+				
+				return memberId;
+				
+			} else {
+				return -2L;
+			}
+		} catch (Exception err) {
+			log.error("[addExternalMeetingMemberRemindToRoom] ", err);
 			
 			throw new AxisFault(err.getMessage());
 		}

@@ -406,7 +406,14 @@ public class AppointmentDaoImpl {
 		    		
 		    		if (!found) {
 		    			
-						// Not In Remote List available - extern user
+		    			Long sendToUserId = 0L;
+				    	if (clientMember.get("userId") != null) {
+				    		sendToUserId = Long.valueOf(clientMember.get("userId").toString()).longValue();
+				    	}
+				    	
+				    	String jNameMemberTimeZone = clientMember.get("jNameTimeZone").toString();
+		    			
+						// Not In Remote List available - intern OR extern user
 						MeetingMemberLogic.getInstance().addMeetingMember(
 								clientMember.get("firstname").toString(),
 								clientMember.get("lastname").toString(), 
@@ -416,11 +423,12 @@ public class AppointmentDaoImpl {
 								null, //UserId
 								clientMember.get("email").toString(), //Email to send to
 								baseUrl, //URL to send to
-								users_id, //organizer
+								sendToUserId, //sending To: External users have a 0 here
 								new Boolean(false), //invitor
 								language_id, 
 								isPasswordProtected, 
-								password);
+								password,
+								jNameMemberTimeZone);
 
 		    		}
 		   		
