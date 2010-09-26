@@ -601,7 +601,7 @@
 	             
 	            
             	
-            	<view name="list" y="42" height="${ parent.height-42 }" 
+            	<view name="list" y="42" height="${ parent.height-62 }" 
             		  clip="true" bgcolor="0xFFFFFF" width="$once{ parent.width }">
             		
             		<view name="_content">
