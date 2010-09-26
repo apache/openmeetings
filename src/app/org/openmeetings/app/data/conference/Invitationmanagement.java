@@ -545,7 +545,7 @@ public class Invitationmanagement {
 		try{
 			String invitation_link = baseUrl+"?invitationHash="+invitationHash;
 			
-			message += message + "<br><br>";
+			message += "<br/>";
 			message += "<a href='" + invitation_link + "'>Click here to enter room</a>";
 			
 			return MailHandler.sendMail(email, subject, message);
