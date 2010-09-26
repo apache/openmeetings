@@ -208,7 +208,7 @@ public class CalendarServlet extends HttpServlet {
 							
 							Element jNameTimeZoneMember = attendee.addElement("jNameTimeZone");
 							if (meetingMember.getOmTimeZone() != null) {
-								jNameTimeZoneMember.addAttribute("value", meetingMember.getOmTimeZone().getJname());
+								jNameTimeZoneMember.addAttribute("value", meetingMember.getOmTimeZone().getIcal());
 							} else {
 								jNameTimeZoneMember.addAttribute("value", "");
 							}

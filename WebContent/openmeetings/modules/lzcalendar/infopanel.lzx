@@ -13,8 +13,7 @@
 
     <!-- CLASS: infoTab ================================================== -->
     <!-- ================================================================= -->
-    <class name="infoTab" extends="basetabelement" clickable="false" bgcolor="0xEEF0EB" 
-        clip="true">
+    <class name="infoTab" extends="basetabelement" clickable="false" bgcolor="0xEEF0EB" >
 
         <!-- ATTRIBUTES -->
         <attribute name="minheight" value="21"/>
@@ -29,21 +28,21 @@
 		
         <!-- VIEWS -->
         <view name="top" bgcolor="0xEEF0EB"
-            width="${immediateparent.width}" height="${parent.minheight}"
+            width="$once{immediateparent.width}" height="$once{parent.minheight}"
             onclick="classroot.parent.openTab(classroot,true)">
-            <view name="tline" height="1" width="${parent.width}"
+            <view name="tline" height="1" width="$once{parent.width}"
                 bgcolor="0xFDFFFF" y="0"/>
-            <view name="bline" height="1" width="${parent.width}"
-                bgcolor="0xC6C7C4" y="${parent.height - 1}"  />
-            <text name="ttl" width="150" x="5" y="1"
+            <view name="bline" height="1" width="$once{parent.width}"
+                bgcolor="0xC6C7C4" y="$once{parent.height - 1}"  />
+            <text name="ttl" width="150" x="5" y="1" fontstyle="bold"
                 fgcolor="0x222222" pixellock="true"  >
                 <attribute name="text" value="${classroot.label}"/>
             </text>
-            <view name="arrowref" resource="tabarrow"
-                x="${parent.width - 15}" y="${Math.floor(parent.height/2)}">
+            <view name="arrowref" resource="infoTabImage"
+					 x="$once{parent.width - 16}" y="2">
             </view>
         </view>
-        <view name="interior" clip="true" width="${immediateparent.width}"
+        <view name="interior" clip="true" width="$once{immediateparent.width}"
             options="releasetolayout" visible="false"/>
             <resizelayout axis="y"/>
             
@@ -52,15 +51,17 @@
             // tab is about to open
             this.interior.setAttribute('visible', true);
             this.top.setAttribute('bgcolor', 0xE2E4DF);
-            this.top.tline.setAttribute('bgcolor', 0xB8B9B5)
-            this.top.bline.setAttribute('bgcolor', 0xFDFFFF)
+            this.top.tline.setAttribute('bgcolor', 0xB8B9B5);
+            this.top.bline.setAttribute('bgcolor', 0xFDFFFF);
+            this.top.arrowref.setAttribute('frame', 2);
         </handler>
 
         <handler name="onclosestart" >
             //tab is about to close
             this.top.setAttribute('bgcolor', 0xEEF0EB);
-            this.top.tline.setAttribute('bgcolor', 0xFDFFFF)
-            this.top.bline.setAttribute('bgcolor', 0xC6C7C4)
+            this.top.tline.setAttribute('bgcolor', 0xFDFFFF);
+            this.top.bline.setAttribute('bgcolor', 0xC6C7C4);
+            this.top.arrowref.setAttribute('frame', 1);
         </handler>
 
         <handler name="onclosestop" >
@@ -428,15 +429,14 @@
         </view>
 
 
-        <view name="gutter1" bgcolor="0xEEF0EB" y="$once{parent.summary.height}"
-            width="${parent.width-7}" height="4">
+        <view name="gutter1" bgcolor="0xEEF0EB" y="83" width="198" height="4">
             <view name="tline" height="1" width="$once{parent.width}"
                 bgcolor="0xB8B9B5"/>
             <view name="bline" height="1" y="3" width="$once{parent.width}"
                 bgcolor="0xFDFFFF"/>
         </view>
 
-        <basetabslider name="tabs" height="365" width="100%" y="${parent.summary.height + 4}" pixellock="true"
+        <basetabslider name="tabs" height="365" width="198" y="${parent.summary.height + 4}" pixellock="true"
             slideduration="200" mintabheight="20" oninit="this.openTab(this.notes,true)" >
 
             <infoTab name="notes" labelid="802" pixellock="true">
@@ -512,7 +512,7 @@
                     
             </infoTab>
             
-            <infoTab name="attendees" labelid="803" pixellock="true">
+            <infoTab name="attendees" labelid="803" pixellock="true" bgcolor="0xE2E4DF">
             	
             	<calButton labelid="812" x="$once{ parent.width-this.width-2 }" y="2" width="160">
 	            	<handler name="onclick">
@@ -792,7 +792,8 @@
     </class>
     
     
-<class name="attendeeListItem" extends="view" bgcolor="$once{ canvas.bgColorMenuItems }">
+<class name="attendeeListItem" extends="view" clickable="true"
+	   bgcolor="$once{ canvas.bgColorMenuItems }">
 	
 	<attribute name="userId" value="0" type="number" />
 	<attribute name="firstName" value="" type="string" />
@@ -809,8 +810,15 @@
 	<miniIcons x="166" y="2" resource="delete_button" showhandcursor="true"
 			   width="16" height="16">
 		<handler name="onclick">
-			parent.destroy();
+			new lz.confirmationSingle(canvas.main_content._content.inner,{
+	                            	           labeliderror:832,
+	                            	           refObj:this,
+	                            	           showCheckBox:false
+                            	           });
 		</handler>
+		<method name="sendConfirmation" args="yesno" >
+            parent.destroy();
+        </method>
 		<labelTooltip labelid="814" />
 	</miniIcons>
 	

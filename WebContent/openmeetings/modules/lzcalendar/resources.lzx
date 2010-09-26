@@ -14,6 +14,11 @@
     <resource src="images/days-of-week/thurs.png" name="thursday_label"/>
     <resource src="images/days-of-week/fri.png"      name="friday_label"/>
     <resource src="images/days-of-week/sat.png"      name="saturday_label"/>
+    
+    <resource name="infoTabImage">
+	    <frame src="images/close_mini_rsc.png" />
+	    <frame src="images/open_mini_rsc.png" />
+    </resource>
 
     <!-- RESOURCES - ICONS FOR BUTTONS -->
     <resource src="images/buttons/iconday.png" name="iconDay"/>
