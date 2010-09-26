@@ -30,8 +30,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
@@ -47,7 +49,9 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.adresses.States;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
@@ -511,6 +515,26 @@ public class BackupImport extends HttpServlet {
 	        			String street = itemUsers.element("street").getText();
 	        			String town = itemUsers.element("town").getText();
 	        			String zip = itemUsers.element("zip").getText();
+	        			
+	        			if (itemUsers.element("omTimeZone") != null) {
+	        				OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(itemUsers.element("omTimeZone").getText());
+	        				
+	        				us.setOmTimeZone(omTimeZone);
+	        				us.setForceTimeZoneCheck(false);
+	        			} else {
+	        				
+	        				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+							if (conf != null) {
+								String jNameTimeZone = conf.getConf_value();
+								
+								OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+		        				us.setOmTimeZone(omTimeZone);
+		        				
+							}
+	        				
+	        				
+	        				us.setForceTimeZoneCheck(true);
+	        			}
 	        			
 	        			String phone = "";
 	        			if (itemUsers.element("phone") != null) {

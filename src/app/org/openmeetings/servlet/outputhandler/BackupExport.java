@@ -797,6 +797,10 @@ public class BackupExport extends HttpServlet {
 			user.addElement("title_id").setText(""+u.getTitle_id().toString());
 			user.addElement("level_id").setText(""+u.getLevel_id().toString());
 			
+			if (u.getOmTimeZone() != null) {
+				user.addElement("omTimeZone").setText(""+u.getOmTimeZone().getJname());
+			}
+			
 			if (u.getAdresses() != null) {
 				user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
 				user.addElement("comment").setText(u.getAdresses().getComment());
