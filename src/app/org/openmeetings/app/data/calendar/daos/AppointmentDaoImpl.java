@@ -351,9 +351,12 @@ public class AppointmentDaoImpl {
 			tx.commit();
 		    HibernateUtil.closeSession(idf);
 		    
-		    
+		    // Adding Invitor as Meetingmember
+			Users user = Usermanagement.getInstance().getUserById(users_id); 
+			
+			String invitorName = user.getFirstname() + " " + user.getLastname() + " [" + user.getAdresses().getEmail() + "]";
+			
 		    List<MeetingMember> meetingsRemoteMembers = MeetingMemberDaoImpl.getInstance().getMeetingMemberByAppointmentId(ap.getAppointmentId());
-		    
 		    
 		    //to remove
 		    for (MeetingMember memberRemote : meetingsRemoteMembers) {
@@ -377,12 +380,12 @@ public class AppointmentDaoImpl {
 		    	if (!found) {
 		    		
 					//Not in List in client delete it
-		    		MeetingMemberLogic.getInstance().deleteMeetingMember(memberRemote.getMeetingMemberId(), users_id);
+		    		MeetingMemberLogic.getInstance().deleteMeetingMember(memberRemote.getMeetingMemberId(), users_id, language_id);
 		    		//MeetingMemberDaoImpl.getInstance().deleteMeetingMember(memberRemote.getMeetingMemberId());
 		    	}
 		    	else{
 		    		// Notify member of changes
-		    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id);
+		    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id, invitorName);
 		    		
 		    	}
 		    }
@@ -428,7 +431,8 @@ public class AppointmentDaoImpl {
 								language_id, 
 								isPasswordProtected, 
 								password,
-								jNameMemberTimeZone);
+								jNameMemberTimeZone,
+								invitorName);
 
 		    		}
 		   		
@@ -480,12 +484,15 @@ public class AppointmentDaoImpl {
 		    
 		    List<MeetingMember> meetingsRemoteMembers = MeetingMemberDaoImpl.getInstance().getMeetingMemberByAppointmentId(ap.getAppointmentId());
 		    
+		    // Adding Invitor Name
+			Users user = Usermanagement.getInstance().getUserById(users_id); 
+		    String invitorName = user.getFirstname() + " " + user.getLastname() + " [" + user.getAdresses().getEmail() + "]";
 		    
 		    //Send notification of updated Event
 		    for (MeetingMember memberRemote : meetingsRemoteMembers) {
 		    	
 	    		// Notify member of changes
-	    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id);
+	    		Invitationmanagement.getInstance().updateInvitation(ap, memberRemote, users_id, language_id, invitorName);
 		    		
 		    }
 		    

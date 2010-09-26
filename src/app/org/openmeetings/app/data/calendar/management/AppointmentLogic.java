@@ -11,6 +11,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
@@ -22,8 +23,10 @@ import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
+import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.utils.math.CalendarPatterns;
 
 
 public class AppointmentLogic {
@@ -181,8 +184,11 @@ public class AppointmentLogic {
 				jNameMemberTimeZone = user.getOmTimeZone().getJname();
 			}
 			
+			String invitorName = user.getFirstname() + " " + user.getLastname() + " [" + user.getAdresses().getEmail() + "]";
+			
 			MeetingMemberLogic.getInstance().addMeetingMember(user.getFirstname(), user.getLastname(), "", "", id, 
-						userId, user.getAdresses().getEmail(), baseUrl, userId, true, language_id, false, "", jNameMemberTimeZone);
+						userId, user.getAdresses().getEmail(), baseUrl, userId, true, language_id, false, "", 
+						jNameMemberTimeZone, invitorName);
 			
 			
 			//add items
@@ -215,7 +221,8 @@ public class AppointmentLogic {
 	    							language_id, 
 	    							false, 
 	    							"", 
-	    							jNameMemberTimeZone);
+	    							jNameMemberTimeZone,
+	    							invitorName);
 		   		
 		    	}
 		    }
@@ -233,7 +240,7 @@ public class AppointmentLogic {
 	 * @return
 	 */
 	//-------------------------------------------------------------------------------------
-	public Long deleteAppointment(Long appointmentId, Long users_id){
+	public Long deleteAppointment(Long appointmentId, Long users_id, Long language_id){
 		log.debug("deleteAppointment : " + appointmentId);
 		
 		try{
@@ -257,7 +264,7 @@ public class AppointmentLogic {
 			if(members != null){
 				for(int i = 0; i < members.size(); i++){
 					log.debug("deleting member " + members.get(i).getEmail());
-					MeetingMemberLogic.getInstance().deleteMeetingMember(members.get(i).getMeetingMemberId(), users_id);
+					MeetingMemberLogic.getInstance().deleteMeetingMember(members.get(i).getMeetingMemberId(), users_id, language_id);
 				}
 			}
 			
@@ -313,8 +320,17 @@ public class AppointmentLogic {
 		
 		log.debug("doScheduledMeetingReminder : UTC now " + now);
 		
+		Long language_id = Long.valueOf(Configurationmanagement.getInstance().
+        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
+		
+		Fieldlanguagesvalues labelid1158 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1158), language_id);
+		Fieldlanguagesvalues labelid1153 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1153), language_id);
+		Fieldlanguagesvalues labelid1154 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1154), language_id);
+		
+		
 		for(int i = 0; i < points.size(); i++){
 			Appointment ment = points.get(i);
+			
 			
 			// Checking ReminderType - only ReminderType simple mail is concerned!
 			if(ment.getRemind().getTypId() == 2 || ment.getRemind().getTypId() == 3){
@@ -344,8 +360,6 @@ public class AppointmentLogic {
 						log.debug("doScheduledMeetingReminder : no members in meeting!");
 						continue;
 					}
-					
-					String subject = "OpenMeetings Meeting Reminder";
 					
 					for(int y =0; y < members.size(); y++){
 						MeetingMember mm = members.get(y);
@@ -387,21 +401,47 @@ public class AppointmentLogic {
 							
 							OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 							
+							String timeZoneName = omTimeZone.getIcal();
+							
 							Calendar cal = Calendar.getInstance();
-							cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
+							cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
 							int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 							
 							Date starttime = new Date(ment.getAppointmentStarttime().getTime() + offset);
 							Date endtime = new Date(ment.getAppointmentEndtime().getTime() + offset);
 							
-							String message = "Meeting : " + ment.getAppointmentName() + "<br>";
-							if(ment.getAppointmentDescription() != null && ment.getAppointmentDescription().length() > 0)
-								message += "(" + ment.getAppointmentDescription() + ")<br>";
-							message += "Start : " + starttime + "<br>";
-							message += "End : " + endtime + "<br>";
-							message += "Timezone : " + omTimeZone.getIcal() + "<br>";
+//							String message = "Meeting : " + ment.getAppointmentName() + "<br>";
+//							if(ment.getAppointmentDescription() != null && ment.getAppointmentDescription().length() > 0)
+//								message += "(" + ment.getAppointmentDescription() + ")<br>";
+//							message += "Start : " + starttime + "<br>";
+//							message += "End : " + endtime + "<br>";
+//							message += "Timezone : " + omTimeZone.getIcal() + "<br>";
 							
-							Invitationmanagement.getInstance().sendInvitationReminderLink("OpenMeetings", message, inv.getBaseUrl(), mm.getEmail(), subject, inv.getHash());
+							
+							String message = labelid1158.getValue() + " "+ ment.getAppointmentName();
+							
+							if (ment.getAppointmentDescription().length() != 0) {
+								
+								Fieldlanguagesvalues labelid1152 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1152), language_id);
+								message += labelid1152.getValue() + ment.getAppointmentDescription();
+								
+							}
+							
+							message += "<br/>" + labelid1153.getValue() 
+											+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
+											+ " (" + timeZoneName + ")"
+											+ "<br/>";
+							
+							message += labelid1154.getValue() 
+											+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
+											+ " (" + timeZoneName + ")"
+											+ "<br/>";
+							
+							//Fieldlanguagesvalues labelid1156 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1156), language_id);
+							//message = labelid1156.getValue() + invitorName + "<br/>";
+							
+							Invitationmanagement.getInstance().sendInvitationReminderLink(message, inv.getBaseUrl(), mm.getEmail(), 
+									labelid1158.getValue() + " "+ ment.getAppointmentName(), inv.getHash());
 							
 							inv.setUpdatetime(now);
 							Invitationmanagement.getInstance().updateInvitation(inv);
@@ -440,10 +480,12 @@ public class AppointmentLogic {
 			Long language_id, Boolean isPasswordProtected, String password){
 		
 		try {
+			
 			return AppointmentDaoImpl.getInstance().updateAppointment(appointmentId, 
 					appointmentName, appointmentDescription, appointmentstart, 
 					appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, 
 					mmClient, user_id, baseUrl, language_id, isPasswordProtected, password);
+			
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
 		}

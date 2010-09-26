@@ -9,6 +9,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
@@ -18,8 +19,10 @@ import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
+import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.math.CalendarPatterns;
 
 public class MeetingMemberLogic {
 	
@@ -52,7 +55,7 @@ public class MeetingMemberLogic {
 			String appointmentStatus, Long appointmentId, Long userid, String email, 
 			String baseUrl, Long meeting_organizer, Boolean invitor, 
 			Long language_id, Boolean isPasswordProtected, String password, 
-			String jNameMemberTimeZone){
+			String jNameMemberTimeZone, String invitorName){
 		
 		try{
 			Long memberId =  MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  memberStatus,
@@ -98,6 +101,8 @@ public class MeetingMemberLogic {
 				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			}
 			
+			String timeZoneName = omTimeZone.getIcal();
+			
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
@@ -110,11 +115,33 @@ public class MeetingMemberLogic {
 //			System.out.println(starttime);
 //			System.out.println(endtime);
 			
-			String message = "Invitation to an openMeetings Event : " 
-					+ point.getAppointmentName() + ", " 
-					+ point.getAppointmentDescription() 
-					+ ", Start : " + starttime 
-					+ ", End : " + endtime; //message
+			Fieldlanguagesvalues labelid1151 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1151), language_id);
+			
+			String message = labelid1151.getValue() + " " + point.getAppointmentName();
+			
+			if (point.getAppointmentDescription().length() != 0) {
+				
+				Fieldlanguagesvalues labelid1152 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1152), language_id);
+				message += labelid1152.getValue() + point.getAppointmentDescription();
+				
+			}
+			
+			Fieldlanguagesvalues labelid1153 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1153), language_id);
+			Fieldlanguagesvalues labelid1154 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1154), language_id);
+			
+			message += "<br/>" + labelid1153.getValue() 
+							+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
+							+ " (" + timeZoneName + ")"
+							+ "<br/>";
+			
+			message += labelid1154.getValue() 
+							+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
+							+ " (" + timeZoneName + ")"
+							+ "<br/>";
+			
+			Fieldlanguagesvalues labelid1156 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1156), language_id);
+			
+			message += labelid1156.getValue() + invitorName + "<br/>";
 			
 			if(point.getRemind().getTypId() == 1){
 				log.debug("no reminder required");
@@ -127,7 +154,7 @@ public class MeetingMemberLogic {
 							message,
 							baseUrl, // baseURl
 							email, //email
-							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
+							labelid1151.getValue() + " " + point.getAppointmentName(), //subject
 							point.getRoom().getRooms_id(), // room_id
 							"public",
 							isPasswordProtected, // passwordprotected
@@ -150,7 +177,7 @@ public class MeetingMemberLogic {
 							message,
 							baseUrl, // baseURl
 							email, //email
-							"Invitation to an openmeetings Event : " + point.getAppointmentName(), //subject
+							labelid1151.getValue() + " " + point.getAppointmentName(), //subject
 							point.getRoom().getRooms_id(), // room_id
 							"public",
 							isPasswordProtected, // passwordprotected
@@ -256,7 +283,7 @@ public class MeetingMemberLogic {
 	 * @return
 	 */
 	//--------------------------------------------------------------------------------------------
-	public Long deleteMeetingMember(Long meetingMemberId , Long users_id){
+	public Long deleteMeetingMember(Long meetingMemberId , Long users_id, Long language_id){
 		log.debug("meetingMemberLogic.deleteMeetingMember : " + meetingMemberId);
 		
 		try {
@@ -286,7 +313,7 @@ public class MeetingMemberLogic {
 			log.debug("before sending cancelMail");
 			
 			// cancel invitation
-			Invitationmanagement.getInstance().cancelInvitation(point, member, users_id);
+			Invitationmanagement.getInstance().cancelInvitation(point, member, users_id, language_id);
 			
 			log.debug("after sending cancelmail");
 			

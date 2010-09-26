@@ -47,8 +47,8 @@ public class InvitationTemplate extends VelocityLoader{
         	Fieldlanguagesvalues labelid503 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(503), default_lang_id);
         	Fieldlanguagesvalues labelid504 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(504), default_lang_id);
         	Fieldlanguagesvalues labelid505 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(505), default_lang_id);
-        	Fieldlanguagesvalues labelid570 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(570), default_lang_id);
-        	Fieldlanguagesvalues labelid571 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(571), default_lang_id);
+        	//Fieldlanguagesvalues labelid570 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(570), default_lang_id);
+        	//Fieldlanguagesvalues labelid571 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(571), default_lang_id);
         	
 	        /* lets make a Context and put data into it */
 	        VelocityContext context = new VelocityContext();
@@ -57,14 +57,7 @@ public class InvitationTemplate extends VelocityLoader{
 	        context.put("message", message);
 	        context.put("invitation_link", invitation_link);
 	        context.put("invitation_link2", invitation_link);
-	        if (dStart != null && dEnd != null)
-	        {
-	        	context.put("invitation_times", labelid570.getValue() + ": " + dStart + " - " + labelid571.getValue() + ": " + dEnd + "<br/><br/>");
-	        }
-	        else
-	        {
-	        	context.put("invitation_times", "" );
-	        }
+	        
 	        context.put("labelid500", labelid500.getValue());
 	        context.put("labelid501", labelid501.getValue());
 	        context.put("labelid502", labelid502.getValue());

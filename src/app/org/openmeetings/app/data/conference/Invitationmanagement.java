@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.InvitationTemplate;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -31,11 +32,13 @@ import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
+import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.utils.crypt.MD5;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.openmeetings.utils.mail.IcalHandler;
 import org.openmeetings.utils.mail.MailHandler;
+import org.openmeetings.utils.math.CalendarPatterns;
 
 /**
  * 
@@ -168,7 +171,8 @@ public class Invitationmanagement {
 	 * @param member
 	 */
 	//-----------------------------------------------------------------------------------------------
-	public void cancelInvitation(Appointment appointment, MeetingMember member,Long canceling_user_id){
+	public void cancelInvitation(Appointment appointment, MeetingMember member, 
+			Long canceling_user_id, Long language_id){
 		
 		log.debug("cancelInvitation");
 		
@@ -202,6 +206,8 @@ public class Invitationmanagement {
 		
 		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 		
+		String timeZoneName = omTimeZone.getIcal();
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
@@ -214,6 +220,36 @@ public class Invitationmanagement {
 //		System.out.println(starttime);
 //		System.out.println(endtime);
 		
+		
+		Fieldlanguagesvalues labelid1157 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1157), language_id);
+		
+		String message = labelid1157.getValue() + appointment.getAppointmentName();
+		
+		if (appointment.getAppointmentDescription().length() != 0) {
+			
+			Fieldlanguagesvalues labelid1152 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1152), language_id);
+			message += labelid1152.getValue() + appointment.getAppointmentDescription();
+			
+		}
+		
+		Fieldlanguagesvalues labelid1153 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1153), language_id);
+		Fieldlanguagesvalues labelid1154 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1154), language_id);
+		
+		message += "<br/>" + labelid1153.getValue() 
+						+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
+						+ " (" + timeZoneName + ")"
+						+ "<br/>";
+		
+		message += labelid1154.getValue() 
+						+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
+						+ " (" + timeZoneName + ")"
+						+ "<br/>";
+		
+		String invitorName = user.getFirstname() + " " + user.getLastname() + " [" + user.getAdresses().getEmail() + "]";
+		
+		Fieldlanguagesvalues labelid1156 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1156), language_id);
+		message += labelid1156.getValue() + invitorName + "<br/>";
+		
 		// checking reminderType
 		if(appointment.getRemind().getTypId() == 1){
 			log.debug("no remindertype defined -> no cancel of invitation");
@@ -221,13 +257,17 @@ public class Invitationmanagement {
 		else if(appointment.getRemind().getTypId() == 2){
 			log.debug("ReminderType simple mail -> sending simple mail...");
 			sendInvitationCancelMail(member.getEmail(), member.getAppointment(), 
-					user.getAdresses().getEmail(), starttime, endtime);
+					user.getAdresses().getEmail(), 
+					labelid1157.getValue() + appointment.getAppointmentName(), 
+					message);
 		}
 		else if(appointment.getRemind().getTypId() == 3){
 			try{
 				sendInvitationIcalCancelMail(member.getEmail(), member.getFirstname() + " " + member.getLastname(), 
 						appointment, canceling_user_id, member.getInvitor(), 
-						starttime, endtime, jNameTimeZone);
+						starttime, endtime, jNameTimeZone, 
+						labelid1157.getValue() + appointment.getAppointmentName(), 
+						message);
 			}catch(Exception e){
 				log.error("Error sending IcalCancelMail for User " + member.getEmail() + " : " + e.getMessage());
 			}
@@ -252,7 +292,7 @@ public class Invitationmanagement {
 	 */
 	//-----------------------------------------------------------------------------------------------
 	public void updateInvitation(Appointment appointment, MeetingMember member,
-				Long canceling_user_id, Long language_id){
+				Long canceling_user_id, Long language_id, String invitorName){
 		
 		log.debug("updateInvitation");
 		
@@ -286,12 +326,42 @@ public class Invitationmanagement {
 		
 		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 		
+		String timeZoneName = omTimeZone.getIcal();
+		
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
+		cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
 		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 		
 		Date starttime = new Date(appointment.getAppointmentStarttime().getTime() + offset);
 		Date endtime = new Date(appointment.getAppointmentEndtime().getTime() + offset);
+		
+		
+		Fieldlanguagesvalues labelid1155 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1155), language_id);
+		
+		String message = labelid1155.getValue() + " " + appointment.getAppointmentName();
+		
+		if (appointment.getAppointmentDescription().length() != 0) {
+			
+			Fieldlanguagesvalues labelid1152 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1152), language_id);
+			message += labelid1152.getValue() + appointment.getAppointmentDescription();
+			
+		}
+		
+		Fieldlanguagesvalues labelid1153 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1153), language_id);
+		Fieldlanguagesvalues labelid1154 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1154), language_id);
+		
+		message = "<br/>" + labelid1153.getValue() 
+						+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime) 
+						+ " (" + timeZoneName + ")"
+						+ "<br/>";
+		
+		message = labelid1154.getValue() 
+						+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) 
+						+ " (" + timeZoneName + ")"
+						+ "<br/>";
+		
+		Fieldlanguagesvalues labelid1156 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1156), language_id);
+		message = labelid1156.getValue() + invitorName + "<br/>";
 		
 		// checking reminderType
 		if(appointment.getRemind().getTypId() == 1){
@@ -300,13 +370,14 @@ public class Invitationmanagement {
 		else if(appointment.getRemind().getTypId() == 2){
 			log.debug("ReminderType simple mail -> sending simple mail...");
 			sendInvitationUpdateMail(member.getEmail(), appointment, user.getAdresses().getEmail(),
-					starttime, endtime);
+					labelid1155.getValue() + " " + appointment.getAppointmentName(), message);
 		}
 		else if(appointment.getRemind().getTypId() == 3){
 			try{
 				sendInvitationIcalUpdateMail(member.getEmail(), member.getFirstname() + " " + member.getLastname(), 
 						appointment, canceling_user_id, member.getInvitor(), language_id,
-						starttime, endtime, jNameTimeZone);
+						starttime, endtime, jNameTimeZone, 
+						labelid1155.getValue() + " " + appointment.getAppointmentName(), message);
 			}catch(Exception e){
 				log.error("Error sending IcalUpdateMail for User " + member.getEmail() + " : " + e.getMessage());
 			}
@@ -468,26 +539,16 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	//----------------------------------------------------------------------------------------------------
-	public String sendInvitationReminderLink(String userName, String message, String baseUrl, String email, String subject, String invitationHash){
+	public String sendInvitationReminderLink(String message, String baseUrl, String email, String subject, String invitationHash){
 		log.debug("sendInvitationReminderLink");
 		
 		try{
 			String invitation_link = baseUrl+"?invitationHash="+invitationHash;
 			
-			Long default_lang_id = Long.valueOf(Configurationmanagement.getInstance().getConfKey(3,"default_lang_id").getConf_value()).longValue();
+			message += message + "<br><br>";
+			message += "<a href='" + invitation_link + "'>Click here to enter room</a>";
 			
-			//String template = InvitationTemplate.getInstance().getReminderInvitationTemplate(userName, message, invitation_link, default_lang_id);
-			//TODO Velocity Template cant be found when running from QuartzJob
-			
-			String template = "";
-			template +="<html>";
-			template += "<body>";
-			template +="<b>OpenMeetings Meeting Reminder</b><br><br>";
-			template +=message + "<br><br>";
-			template += "<a href='" + invitation_link + "'>Click here to enter room</a>";
-			
-			
-			return MailHandler.sendMail(email, subject, template);
+			return MailHandler.sendMail(email, subject, message);
 		}catch(Exception e){
 			log.error("sendInvitationReminderLink",e);
 		}
@@ -506,18 +567,8 @@ public class Invitationmanagement {
 	 */
 	//--------------------------------------------------------------------------------------------------------------
 	private String sendInvitationCancelMail(String email, Appointment point, String cancelling_person, 
-			Date startdate , Date enddate){
+			String subject, String message){
 		log.debug("sendInvitationCancelmail");
-		
-		String subject = "Cancelled OpenMeetings Appointment " + point.getAppointmentName();
-		
-		String message = "<html><body>Your Appointment " + point.getAppointmentName() + " has been cancelled by " + cancelling_person;
-		message += "<br><br>";
-		message += "Appointment : " + point.getAppointmentName() + "<br>";
-		message += "Start Time : " + startdate + "<br>";
-		message += "End Time : " + enddate + "<br>";
-		message += "</body></html>";
-		
 		try{
 			 return MailHandler.sendMail(email, subject, message);
 		}catch(Exception e){
@@ -536,20 +587,9 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	//--------------------------------------------------------------------------------------------------------------
-	private String sendInvitationUpdateMail(String email, Appointment point, String cancelling_person,
-			 Date startdate, Date endedate){
+	private String sendInvitationUpdateMail(String email, Appointment point, 
+			String cancelling_person, String subject, String message){
 		log.debug("sendInvitationUpdateMail");
-		
-		String subject = "Update of OpenMeetings Appointment " + point.getAppointmentName();
-		
-		String message = "<html><body>Your Appointment " + point.getAppointmentName() + " has been updated by " + cancelling_person;
-		message += "<br><br>";
-		message += "<b>Appointment : " + point.getAppointmentName() + "</b><br>";
-		message += "Descrition : " + point.getAppointmentDescription() + "</br>";
-		message += "Start Time : " + startdate + "<br>";
-		message += "End Time : " + endedate + "<br>";
-		message += "</body></html>";
-		
 		try{
 			 return MailHandler.sendMail(email, subject, message);
 		}catch(Exception e){
@@ -570,24 +610,16 @@ public class Invitationmanagement {
 	 */
 	//--------------------------------------------------------------------------------------------------------------
 	private String sendInvitationIcalCancelMail(String email, String userName, Appointment point, 
-			Long organizer_userId, Boolean invitor, Date startdate, Date enddate, String jNameTimeZone) throws Exception{
+			Long organizer_userId, Boolean invitor, Date startdate, Date enddate, 
+			String jNameTimeZone, String subject, String message) throws Exception{
 		log.debug("sendInvitationIcalCancelMail");
 		
 		
 		// Defining Organizer
 		Users user = Usermanagement.getInstance().getUserById(organizer_userId);
 		
-		String subject = "Cancelled OpenMeetings Appointment " + point.getAppointmentName();
-		
 		OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 		
-		String message = "<html><body>Your Appointment " + point.getAppointmentName() + " has been cancelled by " + user.getAdresses().getEmail();
-		message += "<br><br>";
-		message += "Appointment : " + point.getAppointmentName() + "<br>";
-		message += "TimeZone : " + omTimeZone.getIcal() + "<br>";
-		message += "Start Time : " + startdate + "<br>";
-		message += "End Time : " + enddate + "<br>";
-		message += "</body></html>";
 		
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
 		
@@ -611,8 +643,7 @@ public class Invitationmanagement {
 		end.setTime(enddate);
 		
 		String meetingId = handler.addNewMeeting(start, end, point.getAppointmentName(), atts, 
-				"Canceled OpenMeetings Appointment : " + point.getAppointmentName(), 
-				attendeeList, point.getIcalId(), jNameTimeZone);
+				subject, attendeeList, point.getIcalId(), jNameTimeZone);
 		
 		
 		log.debug(handler.getICalDataAsString());
@@ -634,22 +665,13 @@ public class Invitationmanagement {
 	//--------------------------------------------------------------------------------------------------------------
 	private String sendInvitationIcalUpdateMail(String email, String userName, 
 			Appointment point, Long organizer_userId, Boolean invitor,
-			Long language_id, Date starttime, Date endtime, String jNameTimeZone) throws Exception{
+			Long language_id, Date starttime, Date endtime, String jNameTimeZone,
+			String subject, String message) throws Exception{
 		log.debug("sendInvitationIcalUpdateMail");
 		
 		
 		// Defining Organizer
 		Users user = Usermanagement.getInstance().getUserById(organizer_userId);
-		
-		String subject = "Update of OpenMeetings Appointment " + point.getAppointmentName();
-		
-		String message = "<html><body>Your Appointment " + point.getAppointmentName() + " has been updated by " + user.getAdresses().getEmail();
-		message += "<br><br>";
-		message += "<b>Appointment : " + point.getAppointmentName() + "</b><br>";
-		message += "Description : " + point.getAppointmentDescription() + "<br>";
-		message += "Start Time : " + starttime + "<br>";
-		message += "End Time : " + endtime + "<br>";
-		message += "</body></html>";
 		
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 		
@@ -673,9 +695,7 @@ public class Invitationmanagement {
 		end.setTime(endtime);
 		
 		String meetingId = handler.addNewMeeting(start, end, point.getAppointmentName(), atts, 
-				"Update of OpenMeetings Appointment : " + point.getAppointmentName(), 
-				attendeeList, point.getIcalId(), jNameTimeZone);
-		
+				subject, attendeeList, point.getIcalId(), jNameTimeZone);
 		
 		log.debug(handler.getICalDataAsString());
 		

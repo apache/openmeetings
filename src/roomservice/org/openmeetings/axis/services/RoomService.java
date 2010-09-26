@@ -29,6 +29,7 @@ import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.ConferenceService;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -1197,7 +1198,7 @@ public class RoomService {
 				//Not In Remote List available - extern user
 				Long memberId = MeetingMemberLogic.getInstance().addMeetingMember(firstname, lastname, 
 								"0", "0", appointment.getAppointmentId(), null,  email, baseUrl, 
-								null, new Boolean(false), language_id, false, "", "");
+								null, new Boolean(false), language_id, false, "", "", "");
 				
 				return memberId;
 				
@@ -1214,7 +1215,7 @@ public class RoomService {
 	
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id, 
 			String firstname, String lastname, String email, String baseUrl, 
-			Long language_id, String jNameTimeZone) throws AxisFault {
+			Long language_id, String jNameTimeZone, String invitorName) throws AxisFault {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
@@ -1227,10 +1228,11 @@ public class RoomService {
 				if (appointment == null) {
 					return -1L;
 				}
+				
 				//Not In Remote List available - extern user
 				Long memberId = MeetingMemberLogic.getInstance().addMeetingMember(firstname, lastname, 
 								"0", "0", appointment.getAppointmentId(), null,  email, baseUrl, 
-								null, new Boolean(false), language_id, false, "", jNameTimeZone);
+								null, new Boolean(false), language_id, false, "", jNameTimeZone, invitorName);
 				
 				return memberId;
 				

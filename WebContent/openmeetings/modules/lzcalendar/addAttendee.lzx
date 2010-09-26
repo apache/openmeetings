@@ -17,13 +17,19 @@
 				return;
 			}
 			
+			var jNameTimeZone = canvas.jNameTimeZone;
+			
+			if (this._turnoverlist._selected.omTimeZone != null) {
+				jNameTimeZone = this._turnoverlist._selected.omTimeZone.jname;
+			}
+			
             this.refObj.addListItem(
                               this._turnoverlist._selected.userId, 
                               this._turnoverlist._selected.firstname, 
                               this._turnoverlist._selected.lastname, 
                               this._turnoverlist._selected.email,
                               0,
-                              canvas.jNameTimeZone
+                              jNameTimeZone
                           );
 
 						      
@@ -118,12 +124,14 @@
 		    	this.clearList();
 		    	for (var i=0;i<records.length;i++){
 		    		new lz.attendeItemListItem(this._innerlist._inn._inn,{
-		    					obj:records[i],
-		    					userId:records[i].user_id,
-		    					login:records[i].login,
-		    					email:records[i].adresses.email,
-		    					firstname:records[i].firstname,
-		    					lastname:records[i].lastname});
+			    					obj:records[i],
+			    					userId:records[i].user_id,
+			    					login:records[i].login,
+			    					email:records[i].adresses.email,
+			    					firstname:records[i].firstname,
+			    					lastname:records[i].lastname,
+			    					omTimeZone:records[i].omTimeZone
+		    					});
 		    	}
 		    	this.sendInitialWidthUpdate();
 	    	]]>
@@ -186,6 +194,7 @@
 	<attribute name="firstname" value="" type="string" />
 	<attribute name="lastname" value="" type="string" />
 	<attribute name="email" value="" type="string" />
+	<attribute name="omTimeZone" value="null" />
 	
 	<turnOverTextItem text="$once{ parent.userId }" width="60" />
 	<turnOverTextItem text="$once{ parent.firstname }" width="100" />

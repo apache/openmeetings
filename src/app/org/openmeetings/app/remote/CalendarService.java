@@ -200,7 +200,7 @@ public class CalendarService {
 
 	}
 
-	public Long deleteAppointment(String SID, Long appointmentId) {
+	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) {
 
 		log.debug("deleteAppointment : " + appointmentId);
 
@@ -216,7 +216,7 @@ public class CalendarService {
 				Roommanagement.getInstance().deleteRoom(app.getRoom());
 
 				return AppointmentLogic.getInstance().deleteAppointment(
-						appointmentId, users_id);
+						appointmentId, users_id, language_id);
 			}
 
 		} catch (Exception err) {

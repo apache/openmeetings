@@ -9,8 +9,7 @@
 <body>
 <b>$labelid500</b><br />
 $labelid501 $user<br/>
-$labelid502 $message<br/><br/>
-$invitation_times
+$labelid502 $message<br/>
 
 <b>$labelid503</b><br/>
 <A HREF="$invitation_link">$labelid504</A><BR/>
