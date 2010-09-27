@@ -184,7 +184,7 @@ public class UsersDaoImpl {
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
+			Criteria crit = session.createCriteria(Users.class);
 
 			List<Users> ll = crit.list();
 			tx.commit();

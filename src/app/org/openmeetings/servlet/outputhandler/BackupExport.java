@@ -144,7 +144,12 @@ public class BackupExport extends HttpServlet {
 					
 					List<Users> uList = UsersDaoImpl.getInstance().getAllUsersDeleted();
 					
+					log.debug("Number of Users to be deleted "+uList);
+					
 					if (uList != null) {
+						
+						log.debug("Number of Users to be deleted "+uList.size());
+						
 						Document doc = this.createDocument(uList);
 						
 						String userListXML = backup_dir + "users.xml";
@@ -802,8 +807,8 @@ public class BackupExport extends HttpServlet {
 			}
 			
 			if (u.getAdresses() != null) {
-				user.addElement("additionalname").setText(u.getAdresses().getAdditionalname());
-				user.addElement("comment").setText(u.getAdresses().getComment());
+				user.addElement("additionalname").setText(""+u.getAdresses().getAdditionalname());
+				user.addElement("comment").setText(""+u.getAdresses().getComment());
 				//A User can not have a deleted Adress, you cannot delete the Adress of an User
 				//String deleted = u.getAdresses().getDeleted()
 				//Phone Number not done yet
