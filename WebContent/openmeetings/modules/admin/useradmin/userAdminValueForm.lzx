@@ -57,6 +57,11 @@
             this.sip_user.setAttribute('text','');
             this.sip_pass.setAttribute('text','');
             this.sip_auth.setAttribute('text','');
+            
+			this.userOffers.setAttribute('text',"");
+			this.userSearchs.setAttribute('text',"");
+			this.showContactData.selectItem("3");
+			
         ]]>
 	</handler>
 	
@@ -142,6 +147,31 @@
 		        this.sip_pass.setAttribute('text','');
 		        this.sip_auth.setAttribute('text','');
 			}
+			
+			if (obj.userOffers != null) {
+				this.userOffers.setAttribute('text',obj.userOffers);
+			} else {
+				this.userOffers.setAttribute('text',"");
+			}
+			
+			if (obj.userSearchs != null) {
+				this.userSearchs.setAttribute('text',obj.userSearchs);
+			} else {
+				this.userSearchs.setAttribute('text',"");
+			}
+			
+			if (obj.showContactData != null && obj.showContactDataToContacts != null) {
+				
+				if (obj.showContactData) {
+					this.showContactData.selectItem("1");
+				} else if (obj.showContactDataToContacts) {
+					this.showContactData.selectItem("2");
+				} else {
+					this.showContactData.selectItem("3");
+				}
+				
+			}
+			
         ]]>
     </method>
 	
@@ -208,6 +238,23 @@
   			this.sendObject["sip_user"] = this.parent.sip_user.getText();
   			this.sendObject["sip_pass"] = this.parent.sip_pass.getText();
   			this.sendObject["sip_auth"] = this.parent.sip_auth.getText();
+  			
+  			
+			this.sendObject["userOffers"] = parent.userOffers.getText();
+			this.sendObject["userSearchs"] = parent.userSearchs.getText();
+			
+			var showContactData = Number(parent.showContactData.getValue());
+			
+			if (showContactData == 1) {
+				this.sendObject["showContactData"] = true;
+				this.sendObject["showContactDataToContacts"] = true;
+			} else if (showContactData == 2) {
+				this.sendObject["showContactData"] = false;
+				this.sendObject["showContactDataToContacts"] = true;
+			} else if (showContactData == 3) {
+				this.sendObject["showContactData"] = false;
+				this.sendObject["showContactDataToContacts"] = false;
+			}
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -361,22 +408,40 @@
     <labelText labelid="894" x="24" y="730"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="921" width="200" y="790" resize="false" x="2"/>  
-        <labelCheckbox name="generateSipUserData" width="270" y="790" x="140" fontsize="11" />
+    <labelText labelid="921" width="200" y="760" resize="false" x="2"/>  
+        <labelCheckbox name="generateSipUserData" width="270" y="760" x="140" fontsize="11" />
 
-    <labelText labelid="895" width="200" y="820" resize="false" x="2"/>
-        <customEdittext name="sip_user" y="820" x="120" width="270"  
+    <labelText labelid="895" width="200" y="790" resize="false" x="2"/>
+        <customEdittext name="sip_user" y="790" x="120" width="270"  
         				text="" />
         				
-	<labelText labelid="896" width="200" y="850" resize="false" x="2"/>
-        <customEdittext name="sip_pass" y="850" x="120" width="270"  
+	<labelText labelid="896" width="200" y="820" resize="false" x="2"/>
+        <customEdittext name="sip_pass" y="820" x="120" width="270"  
         				text="" />
         				
-    <labelText labelid="897" width="200" y="880" resize="false" x="2"/>
-        <customEdittext name="sip_auth" y="880" x="120" width="270"  
+    <labelText labelid="897" width="200" y="850" resize="false" x="2"/>
+        <customEdittext name="sip_auth" y="850" x="120" width="270"  
         				text="" />
         				
-	<view y="1000" />        				
+    <!-- Community Settings -->
+    <labelText labelid="1159" width="200" y="880" resize="false" 
+               x="0" fontstyle="bold" />      				
+        				
+   	<radiogroup name="showContactData" layout="class:simplelayout;axis:y;spacing:2" y="910" x="10">
+        <labelRadioButton labelid="1160" value="1" />
+        <labelRadioButton labelid="1168" value="2" />
+        <labelRadioButton labelid="1169" value="3" />
+    </radiogroup> 
+    
+	<labelText labelid="1162" width="200" y="970" resize="false" x="2"/>
+        <customScrollEdittext name="userOffers" y="970" x="120" width="270" 
+           			 height="100" text="" />	
+
+	<labelText labelid="1163" width="200" y="1080" resize="false" x="2"/>
+        <customScrollEdittext name="userSearchs" y="1080" x="120" width="270" 
+           			 height="100" text="" />	
+		     				
+	<view y="1400" />        				
         				        				
 </class>
 

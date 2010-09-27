@@ -35,5 +35,9 @@
     <many-to-one outer-join="true" insert="true" column="userSipDataId" lazy="false" update="true" name="userSipData" class="org.openmeetings.app.hibernate.beans.user.UserSipData"/>
     <many-to-one outer-join="true" insert="true" column="omtimezoneId" lazy="false" update="true" name="omTimeZone" class="org.openmeetings.app.hibernate.beans.basic.OmTimeZone"/>
     <property name="forceTimeZoneCheck" type="boolean" column="forceTimeZoneCheck"/>
+    <property name="userOffers" type="string" column="user_offers"/>
+    <property name="userSearchs" type="string" column="user_searchs"/>
+    <property name="showContactData" type="boolean" column="show_contact_data"/>
+    <property name="showContactDataToContacts" type="boolean" column="show_contact_data_to_contacts"/>
   </class>
 </hibernate-mapping>

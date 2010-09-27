@@ -662,7 +662,11 @@ public class LdapLoginManagement {
 									"","","",//sip_user, sip_pass, sip_auth
 									true, //generate SIP Data if the config is enabled
 									jName_timeZone, 
-									false
+									false,
+									"",
+									"",
+									false,
+									true
 								);
 							
 		}catch(Exception e){

@@ -470,7 +470,8 @@ public class Usermanagement {
 			int availible, String telefon, String fax,
 			String mobil, String email, String comment, int status, List organisations,
 			int title_id, String phone, String sip_user, String sip_pass, String sip_auth, 
-			Boolean generateSipUserData, String jNameTimeZone, Boolean forceTimeZoneCheck) {
+			Boolean generateSipUserData, String jNameTimeZone, Boolean forceTimeZoneCheck, 
+			String userOffers, String userSearchs, Boolean showContactData, Boolean showContactDataToContacts) {
 
 		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level) && user_id != 0) {
 			try {
@@ -512,6 +513,11 @@ public class Usermanagement {
 					us.setTitle_id(title_id);
 					us.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 					us.setForceTimeZoneCheck(forceTimeZoneCheck);
+					
+					us.setUserOffers(userOffers);
+					us.setUserSearchs(userSearchs);
+					us.setShowContactData(showContactData);
+					us.setShowContactDataToContacts(showContactDataToContacts);
 					
 					if (level_id != 0)
 						us.setLevel_id(new Long(level_id));
@@ -892,7 +898,11 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
 										street, additionalname,fax, zip, states_id, town, 
 										language_id, true, new LinkedList(), phone, baseURL, 
-										sendConfirmation,"","","", generateSipUserData, jNameTimeZone, false);
+										sendConfirmation,"","","", generateSipUserData, jNameTimeZone, false,
+										"",
+										"",
+										false,
+										true);
 				
 				// Get the default organisation_id of registered users
 				if (user_id>0){
@@ -944,7 +954,8 @@ public class Usermanagement {
 			String town, long language_id, boolean sendWelcomeMessage, 
 			List organisations, String phone, String baseURL, Boolean sendConfirmation, 
 			String sip_user, String sip_pass, String sip_auth, boolean generateSipUserData,
-			String jName_timezone, Boolean forceTimeZoneCheck) throws Exception {
+			String jName_timezone, Boolean forceTimeZoneCheck, 
+			String userOffers, String userSearchs, Boolean showContactData, Boolean showContactDataToContacts) throws Exception {
 		//TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -978,7 +989,8 @@ public class Usermanagement {
 					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
 									Userpass,address_id, age, hash, 
 									sip_user, sip_pass, sip_auth, generateSipUserData, jName_timezone, 
-									forceTimeZoneCheck);
+									forceTimeZoneCheck, 
+									userOffers, userSearchs, showContactData, showContactDataToContacts);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -1035,7 +1047,8 @@ public class Usermanagement {
 			String userpass, long adress_id, Date age, String hash, 
 			String sip_user, String sip_pass, String sip_auth, 
 			boolean generateSipUserData, String jName_timezone,
-			Boolean forceTimeZoneCheck) {
+			Boolean forceTimeZoneCheck, 
+			String userOffers, String userSearchs, Boolean showContactData, Boolean showContactDataToContacts) {
 		try {
 			
 			Users users = new Users();
@@ -1054,6 +1067,11 @@ public class Usermanagement {
 			users.setActivatehash(hash);
 			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jName_timezone));
 			users.setForceTimeZoneCheck(forceTimeZoneCheck);
+			
+			users.setUserOffers(userOffers);
+			users.setUserSearchs(userSearchs);
+			users.setShowContactData(showContactData);
+			users.setShowContactDataToContacts(showContactDataToContacts);
 			
 			if (generateSipUserData) {
 				
@@ -1349,7 +1367,10 @@ public class Usermanagement {
 					savedUser.getAdresses().setStates(Statemanagement.getInstance().getStateById(Long.parseLong(values.get("state_id").toString())));
 					
 					//Addressmanagement.getInstance().updateAdress(savedUser.getAdresses());
-					
+					savedUser.setShowContactData(Boolean.valueOf(values.get("showContactData").toString()));
+					savedUser.setShowContactDataToContacts(Boolean.valueOf(values.get("showContactDataToContacts").toString()));
+					savedUser.setUserOffers(values.get("userOffers").toString());
+					savedUser.setUserSearchs(values.get("userSearchs").toString());
 					
 					//savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
 					
@@ -1732,6 +1753,159 @@ public class Usermanagement {
 		} catch (Exception ex2) {
 			log.error("[getUsersList] "+ex2);
 		}
+		return null;
+	}
+
+	public List<Users> searchUserProfile(String searchTxt, String userOffers,
+			String userSearchs, String orderBy, int start, int max, boolean asc) {
+		try {
+				
+			String hql = "select c from Users c " +
+						"where c.deleted = 'false' " +
+						"AND " +
+						"(" +
+								"(" +
+									"lower(c.login) LIKE lower(:search) " +
+									"OR lower(c.firstname) LIKE lower(:search) " +
+									"OR lower(c.lastname) LIKE lower(:search) " +
+								")" +
+							"OR" +
+								"(" +
+									"lower(c.userOffers) LIKE lower(:userOffers) " +
+								")" +
+							"OR" +
+								"(" +
+									"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+								")" +
+						")";
+						
+			hql += " ORDER BY " + orderBy;
+			
+			if (asc) {
+				hql += " ASC";
+			} else {
+				hql += " DESC";
+			}
+			
+			if (searchTxt.length() == 0) {
+				searchTxt = "%";
+			} else {
+				searchTxt = "%" + searchTxt + "%";
+			}
+			
+			if (userOffers.length() == 0) {
+				userOffers = "%";
+			} else {
+				userOffers = "%" + userOffers + "%";
+			}
+			
+			if (userSearchs.length() == 0) {
+				userSearchs = "%";
+			} else {
+				userSearchs = "%" + userSearchs + "%";
+			}
+			
+			//get all users
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Query query = session.createQuery(hql); 
+			query.setString("search", searchTxt);
+			query.setString("userOffers", userOffers);
+			query.setString("userSearchs", userSearchs);
+			query.setMaxResults(max);
+			query.setFirstResult(start);
+			
+			List<Users> userList = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return userList;	
+			
+		} catch (HibernateException ex) {
+			log.error("[getUsersList] "+ex);
+		} catch (Exception ex2) {
+			log.error("[getUsersList] "+ex2);
+		}
+		
+		return null;
+	}
+	
+	
+	public Long searchMaxUserProfile(String searchTxt, String userOffers,
+			String userSearchs, String orderBy, int start, int max, boolean asc) {
+		try {
+				
+			String hql = "select count(c.user_id) from Users c " +
+						"where c.deleted = 'false' " +
+						"AND " +
+						"(" +
+								"(" +
+									"lower(c.login) LIKE lower(:search) " +
+									"OR lower(c.firstname) LIKE lower(:search) " +
+									"OR lower(c.lastname) LIKE lower(:search) " +
+								")" +
+							"OR" +
+								"(" +
+									"lower(c.userOffers) LIKE lower(:userOffers) " +
+								")" +
+							"OR" +
+								"(" +
+									"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+								")" +
+						")";
+						
+			hql += " ORDER BY " + orderBy;
+			
+			if (asc) {
+				hql += " ASC";
+			} else {
+				hql += " DESC";
+			}
+			
+			if (searchTxt.length() == 0) {
+				searchTxt = "%";
+			} else {
+				searchTxt = "%" + searchTxt + "%";
+			}
+			
+			if (userOffers.length() == 0) {
+				userOffers = "%";
+			} else {
+				userOffers = "%" + userOffers + "%";
+			}
+			
+			if (userSearchs.length() == 0) {
+				userSearchs = "%";
+			} else {
+				userSearchs = "%" + userSearchs + "%";
+			}
+			
+			//get all users
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Query query = session.createQuery(hql); 
+			query.setString("search", searchTxt);
+			query.setString("userOffers", userOffers);
+			query.setString("userSearchs", userSearchs);
+			query.setMaxResults(max);
+			query.setFirstResult(start);
+			
+			List ll = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return (Long) ll.get(0);		
+			
+		} catch (HibernateException ex) {
+			log.error("[searchMaxUserProfile] "+ex);
+		} catch (Exception ex2) {
+			log.error("[searchMaxUserProfile] "+ex2);
+		}
+		
 		return null;
 	}
 

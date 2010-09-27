@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="searchUserProfileListItem" extends="basePagingListItem" showhandcursor="false" height="40">
+	
+	<attribute name="username" value="" type="string" />
+	<attribute name="timezone" value="" type="string" />
+	<attribute name="searchOffers" value="" type="string" />
+	<attribute name="searchSearchs" value="" type="string" />
+	
+	<turnOverTextItem name="_username" width="200" text="$once{ parent.username }" />
+	<turnOverTextItem name="_timezone" width="80" text="$once{ parent.timezone }" />
+	<turnOverTextItem name="_searchOffers" width="300" text="$once{ parent.searchOffers }" />
+	<turnOverTextItem name="_searchSearchs" width="300" text="$once{ parent.searchSearchs }" />
+	
+</class>
+
+<!---  modules:dashboard -->
+<class name="searchUserProfile" extends="view" y="24" height="$once{ canvas.height - 140 }">	
+
+
+	<method name="search">
+		<![CDATA[
+			this._searchUserResult._table.searchUserProfile.doCall();
+		]]>
+	</method>
+	
+	
+	<labelText labelid="1179" y="4" x="4"/>
+	
+	<customEdittext name="searchTxt" y="24" x="4" width="120" text="" />
+	
+	
+	<labelText labelid="1177" y="50" x="4"/>
+	
+	<customEdittext name="searchOffers" y="70" x="4" width="120" text="" />
+	
+	
+	<labelText labelid="1178" y="96" x="4" />
+	
+	<customEdittext name="searchSearchs" y="116" x="4" width="120" text="" />
+	
+	
+    <simpleLabelButton labelid="1176" width="80" x="44" 
+           y="152" onclick="this.parent.search();" />
+           
+           
+    <view name="_borderLine" width="1" x="129" 
+    	  height="$once{ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" />
+    	  
+    	  
+	<view name="_searchUserResult" x="130" height="$once{ parent.height }">
+		
+		<turnOverListOrderedPaged name="_table" showTopBar="true" x="0" height="$once{ parent.height }" 
+             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="c.lastname"
+             listItemName="searchUserProfileListItem" showHScrollbar="hidden"
+             multiselect="false" width="$once{ canvas.width - 130 }">
+			
+			<!--
+				public SearchResult searchUserProfile(String SID, String searchTxt, String userOffers, 
+		   			String userSearchs, String orderBy, int start, int max, boolean asc)
+		    -->
+		    <netRemoteCallHib name="searchUserProfile" funcname="userservice.searchUserProfile" 
+						  remotecontext="$once{ canvas.thishib }" >      
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchTxt.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchOffers.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.parent.parent.searchSearchs.getText(); </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+				<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		this.parent.renderContent(value.result);
+		    	</handler>
+		    </netRemoteCallHib>
+			
+			<handler name="oninit">
+	        	//addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected
+	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
+	            this.addHeaderItemOrdered(1181,80,"c.omTimeZone.omTimeZoneId",false,false);
+	            this.addHeaderItem(1182,300);
+	            this.addHeaderItem(1183,300);
+	        </handler>
+	        
+	        <handler name="onclickedItem" args="refObj">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("onclickedItem ",refObj);
+	                
+	            ]]>
+	        </handler>
+	        
+	        <!--
+	        <attribute name="username" value="" type="string" />
+			<attribute name="timezone" value="" type="string" />
+			<attribute name="searchOffers" value="" type="string" />
+			<attribute name="searchSearchs" value="" type="string" />
+			 -->
+	        
+	        <method name="renderContent" args="rList">
+	            <![CDATA[
+	            
+	            	this.renderList = rList;
+	            
+	                this.isLoaded = true;
+	                var list = this._innerlist._inn._inn;
+	                
+	                if (this.renderList == null) {
+	                	this.renderList = new Array();
+	                }
+	                //this.renderList = records;
+	                var records = this.renderList;
+	                this._innerlist._inn.setAttribute("y",0);
+	                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+	                this._innerlist._inn.resetItems();
+	                
+	                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+	                
+	                this._records.setAttribute("text",records.length);
+	                
+	                for (var i=0;i<list.subviews.length;i++){
+	                    
+	                    //if (i % 2 == 0) {
+	                    //    list.subviews[i].setIsSecond(true);
+	                    //} else {
+	                    //    list.subviews[i].setIsSecond(false);
+	                    //}
+	                    
+	                    if (records.length > i) {
+	                    	
+	                    	if ($debug) Debug.write("Render Item ",records[i]);
+	                        
+	                        list.subviews[i].setAttribute("clickable",true);
+	                        list.subviews[i].refObj = records[i];
+	                        
+	                        if (records[i]["isselected"] && records[i].isselected) {
+	                            list.subviews[i].isselected = true;
+	                        } else {
+	                            list.subviews[i].isselected = false;
+	                        }
+	                        
+	                        list.subviews[i].setAttribute("username",records[i].firstname+' '+records[i].lastname);
+	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '('+records[i].omTimeZone.ical+')');
+	                        list.subviews[i].setAttribute("searchOffers",records[i].userOffers);
+	                        list.subviews[i].setAttribute("searchSearchs",records[i].userSearchs);
+	                        
+	                        list.subviews[i].setAttribute("itemId",i);
+	                        
+	                    } else {
+	                        
+	                        list.subviews[i].refObj = null;
+	                        
+	                        list.subviews[i].isselected = false;
+	                        list.subviews[i].onmouseout.sendEvent();
+	                        
+	                        list.subviews[i].setAttribute("username",'');
+	                        list.subviews[i].setAttribute("timezone",'');
+	                        list.subviews[i].setAttribute("searchOffers",'');
+	                        list.subviews[i].setAttribute("searchSearchs",'');
+	                        
+	                        list.subviews[i].setAttribute("itemId","");
+	                        
+	                        list.subviews[i].setAttribute("clickable",false);
+	                        
+	                    }
+	                    
+	                }
+	                
+	                
+	                this.sendInitialWidthUpdate();
+	                
+	            ]]>
+	        </method>   
+			
+		</turnOverListOrderedPaged>
+		
+	</view>
+	
+
+</class>
+
+</library>

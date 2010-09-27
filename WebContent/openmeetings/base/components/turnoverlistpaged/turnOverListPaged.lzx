@@ -413,7 +413,7 @@
           name="_records" resize="true" visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }" />
     
     <!-- =========  List Header area  =========-->
-    <view name="_innerlisthead" height="${ parent.headerHeight }" width="${ parent.width }" y="22" clip="true">
+    <view name="_innerlisthead" height="${ parent.headerHeight }" width="${ parent.width }" y="$once{ parent.headerHeight + 2 }" clip="true">
         <view name="_inn" x="${ parent.parent._innerlist._inn.x }" layout="axis:x;spacing:0" />
     </view> 
     
@@ -427,23 +427,21 @@
 <class name="turnOverListPaged" extends="baseturnOverListPaged">
 
     <!-- =========  Control area  =========-->
-    <view name="_menu" align="right" y="2"
-          visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }" 
-          layout="axis:x;spacing:0">
-    	<button name="_pre1">
-    		<attribute name="isEnabled" value="true" type="boolean"/>
-            <handler name="onclick">
-                parent.parent.callfirst();
-            </handler>
-        </button>
-        <button name="_pre2">
-        	<attribute name="isEnabled" value="true" type="boolean"/>
-            <handler name="onclick">
-                parent.parent.callpre();
-            </handler>
-        </button>
-    	<view height="18" width="1" bgcolor="$once{ canvas.lightBackgroundBgColor }" />
-    	<combobox name="_step" width="100" editable="false" fontsize="10" >
+    <view name="_menu" align="right" y="2" layout="axis:x;spacing:0"
+          visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
+    	
+	    <!-- 368:goto first -->
+		<simpleLabelButtonTooltip name="_pre1" width="22" height="22" 
+			enabled="true" onclick="parent.parent.callfirst()" tooltipId="368">
+			<view resource="step_back_two_arrow" valign="middle" align="center" />
+		</simpleLabelButtonTooltip>
+	
+	    <!-- 369:goto previous -->
+		<simpleLabelButtonTooltip name="_pre2" width="22" height="22" 
+			enabled="false" onclick="parent.parent.callpre()" tooltipId="369" >
+			<view resource="step_back_arrow" valign="middle" align="center" />
+		</simpleLabelButtonTooltip>
+    	<resetCombobox name="_step" width="100" editable="false" fontsize="10" height="22" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <textlistitem value="10" text="10" />
             <textlistitem value="25" text="25" />
@@ -466,19 +464,20 @@
                 this.selectItem(String(parent.parent.step));
                 this.sendEventToReload = true;
             </handler>
-        </combobox>
-    	<button name="_next1">
-    		<attribute name="isEnabled" value="true" type="boolean"/>
-            <handler name="onclick">
-                parent.parent.callnext();
-            </handler>
-        </button>
-    	<button name="_next2">
-    		<attribute name="isEnabled" value="true" type="boolean"/>
-            <handler name="onclick">
-                parent.parent.calllast();
-            </handler>
-        </button>
+        </resetCombobox>
+        
+        <!-- 370:goto next -->
+		<simpleLabelButtonTooltip name="_next1" width="22" height="22" 
+			enabled="false" onclick="parent.callnext()" tooltipId="370">
+			<view resource="step_fwd_arrow" valign="middle" align="center" />
+		</simpleLabelButtonTooltip>
+	
+	    <!-- 371:goto last -->
+		<simpleLabelButtonTooltip name="_next2" width="22" height="22" 
+			enabled="true" onclick="parent.calllast()" tooltipId="371">
+			<view resource="step_fwd_two_arrow" valign="middle" align="center" />
+		</simpleLabelButtonTooltip>
+		
         <view height="18" width="1" bgcolor="$once{ canvas.lightBackgroundBgColor }" />
     </view>
     

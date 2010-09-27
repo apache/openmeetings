@@ -302,7 +302,11 @@ public class UserService {
 		        		argObjectMap.get("sip_auth").toString(),
 		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
 		        		argObjectMap.get("jNameTimeZone").toString(),
-		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue()
+		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue(),
+		        		argObjectMap.get("userOffers").toString(),
+		        		argObjectMap.get("userSearchs").toString(),
+		        		Boolean.valueOf(argObjectMap.get("showContactData").toString()).booleanValue(),
+		        		Boolean.valueOf(argObjectMap.get("showContactDataToContacts").toString()).booleanValue()
 		        		); 	
     		} else {
 		        return Usermanagement.getInstance().updateUser(user_level,user_idClient, 
@@ -324,7 +328,11 @@ public class UserService {
 		        		argObjectMap.get("sip_auth").toString(),
 		        		Boolean.valueOf(argObjectMap.get("generateSipUserData").toString()).booleanValue(),
 		        		argObjectMap.get("jNameTimeZone").toString(),
-		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue()
+		        		Boolean.valueOf(argObjectMap.get("forceTimeZoneCheck").toString()).booleanValue(),
+		        		argObjectMap.get("userOffers").toString(),
+		        		argObjectMap.get("userSearchs").toString(),
+		        		Boolean.valueOf(argObjectMap.get("showContactData").toString()).booleanValue(),
+		        		Boolean.valueOf(argObjectMap.get("showContactDataToContacts").toString()).booleanValue()
 		        		); 
     		}
     	} catch (Exception ex) {
@@ -434,6 +442,29 @@ public class UserService {
 		   }
 	   }  catch (Exception err) {
 		   log.error("[updateUserTimeZone]",err);
+	   }
+	   return null;
+   }
+   
+   public SearchResult searchUserProfile(String SID, String searchTxt, String userOffers, 
+		   String userSearchs, String orderBy, int start, int max, boolean asc) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   SearchResult searchResult = new SearchResult();
+			   searchResult.setObjectName(Users.class.getName());
+			   List<Users> userList = Usermanagement.getInstance().searchUserProfile(searchTxt,userOffers,userSearchs,orderBy,start,max,asc);
+			   searchResult.setResult(userList);
+			   Long resultInt = Usermanagement.getInstance().searchMaxUserProfile(searchTxt, userOffers, userSearchs, orderBy, start, max, asc);
+			   searchResult.setRecords(resultInt);
+			   
+			   return searchResult;
+		   }
+	   }  catch (Exception err) {
+		   log.error("[searchUserProfile]",err);
 	   }
 	   return null;
    }

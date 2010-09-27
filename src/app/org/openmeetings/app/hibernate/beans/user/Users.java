@@ -58,6 +58,11 @@ public class Users {
     private Sessiondata sessionData;
     private Boolean forceTimeZoneCheck;
     
+    private String userOffers;
+    private String userSearchs;
+    private Boolean showContactData;
+    private Boolean showContactDataToContacts;
+    
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -446,5 +451,55 @@ public class Users {
 	public void setForceTimeZoneCheck(Boolean forceTimeZoneCheck) {
 		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
+
+	/**
+     * @hibernate.property
+     *  column="user_offers"
+     *  type="string"
+     */
+	public String getUserOffers() {
+		return userOffers;
+	}
+	public void setUserOffers(String userOffers) {
+		this.userOffers = userOffers;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="user_searchs"
+     *  type="string"
+     */
+	public String getUserSearchs() {
+		return userSearchs;
+	}
+	public void setUserSearchs(String userSearchs) {
+		this.userSearchs = userSearchs;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="show_contact_data"
+     *  type="boolean"
+     */
+	public Boolean getShowContactData() {
+		return showContactData;
+	}
+	public void setShowContactData(Boolean showContactData) {
+		this.showContactData = showContactData;
+	}
+
+	/**
+     * @hibernate.property
+     *  column="show_contact_data_to_contacts"
+     *  type="boolean"
+     */
+	public Boolean getShowContactDataToContacts() {
+		return showContactDataToContacts;
+	}
+	public void setShowContactDataToContacts(Boolean showContactDataToContacts) {
+		this.showContactDataToContacts = showContactDataToContacts;
+	}
+	
+	
 	
 }
