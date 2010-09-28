@@ -3554,4 +3554,82 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1158" name="calendar invitation message">
     <value>OpenMeetings conference Reminder:</value>
   </string>
+  <string id="1159" name="user settings">
+    <value>Community settings</value>
+  </string>
+  <string id="1160" name="user settings">
+    <value>Show contact data to everybody</value>
+  </string>
+  <string id="1161" name="user settings">
+    <value>Add fields of interest that you offer or that you are searching to find interesting partners for a conference. Comma separate the terms (for example: Medical Service, Health assurance, ...)</value>
+  </string>
+  <string id="1162" name="user settings">
+    <value>My offerings</value>
+  </string>
+  <string id="1163" name="user settings">
+    <value>My interests</value>
+  </string>
+  <string id="1164" name="user settings">
+    <value>Name</value>
+  </string>
+  <string id="1165" name="user settings">
+    <value>Timezone</value>
+  </string>
+  <string id="1166" name="user settings">
+    <value>Fields of interest</value>
+  </string>
+  <string id="1167" name="user settings">
+    <value>Contact information</value>
+  </string>
+  <string id="1168" name="user settings">
+    <value>Show contact data to contacts only</value>
+  </string>
+  <string id="1169" name="user settings">
+    <value>Show contact data to nobody</value>
+  </string>
+  <string id="1170" name="user settings">
+    <value>My Profile</value>
+  </string>
+  <string id="1171" name="user settings">
+    <value>Edit settings</value>
+  </string>
+  <string id="1172" name="user settings">
+    <value>Search users</value>
+  </string>
+  <string id="1173" name="user settings">
+    <value>Watch your profile like other see you</value>
+  </string>
+  <string id="1174" name="user settings">
+    <value>Edit your settings, add your interests to be found</value>
+  </string>
+  <string id="1175" name="user settings">
+    <value>Search for other users and extend your network</value>
+  </string>
+  <string id="1176" name="user search">
+    <value>Search</value>
+  </string>
+  <string id="1177" name="user search">
+    <value>User offers</value>
+  </string>
+  <string id="1178" name="user search">
+    <value>User looks for</value>
+  </string>
+  <string id="1179" name="user search">
+    <value>Freetext</value>
+  </string>
+  <string id="1180" name="user search">
+    <value>Name</value>
+  </string>
+  <string id="1181" name="user search">
+    <value>Timezone</value>
+  </string>
+  <string id="1182" name="user search">
+    <value>Offers</value>
+  </string>
+  <string id="1183" name="user search">
+    <value>Searchs</value>
+  </string>
+  <string id="1184" name="user search">
+    <value>Searchresult</value>
+  </string>
 </language>
