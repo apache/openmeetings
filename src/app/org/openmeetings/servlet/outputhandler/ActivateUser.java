@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +37,8 @@ public class ActivateUser extends VelocityViewServlet {
                 
                 try {
                         String hash = httpServletRequest.getParameter("u");
+                        ServletContext context = getServletContext();
+                        String loginURL = context.getInitParameter("webAppRootKey");
                         
                         if (hash == null) {
                                 //No hash
@@ -45,7 +48,7 @@ public class ActivateUser extends VelocityViewServlet {
                                 Fieldlanguagesvalues labelid672 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(672), default_lang_id);
                                 
                                 ctx.put("message", labelid669.getValue());
-                                ctx.put("link", "<a href='/'>"+ labelid672.getValue() + "</a>");
+                                ctx.put("link", "<a href='"+loginURL+"'>"+ labelid672.getValue() + "</a>");
                                 return getVelocityEngine().getTemplate("activation_template.vm");
                         }
                         //
@@ -59,8 +62,9 @@ public class ActivateUser extends VelocityViewServlet {
                                 Fieldlanguagesvalues labelid669 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(669), default_lang_id);
                                 Fieldlanguagesvalues labelid672 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(672), default_lang_id);
                                 
+                                
                                 ctx.put("message", labelid669.getValue());
-                                ctx.put("link", "<a href='/'>"+ labelid672.getValue() + "</a>");
+                                ctx.put("link", "<a href='"+loginURL+"'>"+ labelid672.getValue() + "</a>");
                                 return getVelocityEngine().getTemplate("activation_template.vm");
                                 
                         } else if (user.getStatus() == 1) {
@@ -72,7 +76,7 @@ public class ActivateUser extends VelocityViewServlet {
                                 Fieldlanguagesvalues labelid672 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(672), default_lang_id);
                                 
                                 ctx.put("message", labelid670.getValue());
-                                ctx.put("link", "<a href='/'>"+ labelid672.getValue() + "</a>");
+                                ctx.put("link", "<a href='"+loginURL+"'>"+ labelid672.getValue() + "</a>");
                                 return getVelocityEngine().getTemplate("activation_template.vm");
                                 
                         } else if (user.getStatus() == 0) {
@@ -89,7 +93,7 @@ public class ActivateUser extends VelocityViewServlet {
                                 Fieldlanguagesvalues labelid672 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(672), default_lang_id);
                                 
                                 ctx.put("message", labelid671.getValue());
-                                ctx.put("link", "<a href='/'>"+ labelid672.getValue() + "</a>");
+                                ctx.put("link", "<a href='"+loginURL+"'>"+ labelid672.getValue() + "</a>");
                                 return getVelocityEngine().getTemplate("activation_template.vm");
                                 
                         } else {
@@ -100,7 +104,7 @@ public class ActivateUser extends VelocityViewServlet {
                                 Fieldlanguagesvalues labelid672 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(672), default_lang_id);
                                 
                                 ctx.put("message", "Unkown Status");
-                                ctx.put("link", "<a href='/'>"+ labelid672.getValue() + "</a>");
+                                ctx.put("link", "<a href='"+loginURL+"'>"+ labelid672.getValue() + "</a>");
                                 return getVelocityEngine().getTemplate("activation_template.vm");
                                 
                         }
