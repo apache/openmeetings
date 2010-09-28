@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+	<resource name="image_loading_placeholder_rsc" 
+			  src="resources/loading_symbol.swf" />
     
     <include href="userSettings.lzx" />
     <include href="searchUserProfile.lzx" />

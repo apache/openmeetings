@@ -130,16 +130,12 @@
 			<method name="initFields" args="obj">
 		    	<![CDATA[
 		    	
-		    		if (obj.pictureuri==null || obj.pictureuri.length==0){
-						obj.pictureuri = "d.jpg";
-					} else {
-						obj.pictureuri = "_profile_"+obj.pictureuri;
-					}
 			        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 			        		+canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
 			        		+'&moduleName=userprofile&parentPath=&room_id='
 			        		+'&sid='+canvas.sessionId;
-			        if ($debug) Debug.write("downloadurl "+downloadurl);
+			        		
+			        if ($debug) Debug.warn("downloadurl 1 ",downloadurl);
 			        this._userpic.setAttribute('src',downloadurl);
 			        
 			        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
@@ -365,10 +361,11 @@
 						} else {
 							value.pictureuri = "_profile_"+value.pictureuri;
 						}
+						var t = new Date();
 				        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 				        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.pictureuri
 				        		+'&moduleName=userprofile&parentPath=&room_id='
-				        		+'&sid='+canvas.sessionId;
+				        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
 				        if ($debug) Debug.write("downloadurl "+downloadurl);
 				        parent._userpic.setAttribute('src',downloadurl);	    		
 						//Debug.write("getUserSelf: ",value);

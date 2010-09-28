@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
+<class name="searchUserProfileImage" extends="view" width="120" height="100"
+	   bgcolor="0x333333">
+	
+	<attribute name="profileUrl" value="" type="string" />
+	
+	<view name="_placeholderBG" width="118" x="1" y="1"
+		  height="98" bgcolor="0xEFEFEF"></view>
+	<view x="58" y="48"
+		resource="image_loading_placeholder_rsc" ></view>
+	
+	<image name="_profileImage" src="$once{ parent.profileUrl }" x="1" y="1">
+		<handler name="onload">
+			parent._placeholderBG.destroy();
+			parent.setAttribute("width",this.width+2);
+			parent.setAttribute("height",this.height+2);
+		</handler>
+	</image>
+</class>
+	
 <class name="searchUserProfileListItem" extends="basePagingListItem" showhandcursor="false" height="40">
 	
 	<attribute name="username" value="" type="string" />
@@ -8,10 +27,53 @@
 	<attribute name="searchOffers" value="" type="string" />
 	<attribute name="searchSearchs" value="" type="string" />
 	
-	<turnOverTextItem name="_username" width="200" text="$once{ parent.username }" />
-	<turnOverTextItem name="_timezone" width="80" text="$once{ parent.timezone }" />
-	<turnOverTextItem name="_searchOffers" width="300" text="$once{ parent.searchOffers }" />
-	<turnOverTextItem name="_searchSearchs" width="300" text="$once{ parent.searchSearchs }" />
+	<attribute name="searchUserProfileImage" value="null" />
+	
+	<handler name="onmouseover">
+		<![CDATA[
+			if (this.refObj != null) {
+				
+				var pictureuri = this.refObj.pictureuri;
+				
+				if (pictureuri==null || pictureuri.length==0){
+					pictureuri = "d.jpg";
+				} else {
+					pictureuri = "_profile_"+pictureuri;
+				}
+				
+				var t=new Date();
+				
+		        var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+		        		+'&moduleName=userprofile&parentPath=&room_id='
+		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
+		        
+		        //if ($debug) Debug.write("profileUrl "+profileUrl);
+				
+				this.searchUserProfileImage = new lz.searchUserProfileImage(canvas,{
+									x:this.getAttributeRelative("x",canvas) - 120,
+									y:this.getAttributeRelative("y",canvas) - 30,
+									profileUrl:profileUrl
+								});
+			}
+		]]>
+	</handler>
+	
+	<handler name="onmouseout">
+		if (this.searchUserProfileImage != null) {
+			this.searchUserProfileImage.destroy();
+			this.searchUserProfileImage = null;
+		}
+	</handler>
+	
+	<turnOverTextItem name="_username" width="200" multiline="true"
+					  text="${ parent.username }" />
+	<turnOverTextItem name="_timezone" width="80" multiline="true"
+					  text="${ parent.timezone }" />
+	<turnOverTextItem name="_searchOffers" width="300" multiline="true"
+					  text="${ parent.searchOffers }" />
+	<turnOverTextItem name="_searchSearchs" width="300" multiline="true"
+					  text="${ parent.searchSearchs }" />
 	
 </class>
 
@@ -53,7 +115,7 @@
 		
 		<turnOverListOrderedPaged name="_table" showTopBar="true" x="0" height="$once{ parent.height }" 
              y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="c.lastname"
-             listItemName="searchUserProfileListItem" showHScrollbar="hidden"
+             listItemName="searchUserProfileListItem" showHScrollbar="hidden" menuBarXIndent="100"
              multiselect="false" width="$once{ canvas.width - 130 }">
 			
 			<!--
@@ -71,17 +133,31 @@
 				<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
 				<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
 		    	<handler name="ondata" args="value">
-		    		if ($debug) Debug.write("searchUserProfile: ",value);
-		    		//this.parent.destroy();
-		    		this.parent.initValues(value.records);
-		    		this.parent.renderContent(value.result);
+		    		<![CDATA[
+			    		//if ($debug) Debug.write("searchUserProfile: ",value);
+			    		//this.parent.destroy();
+			    		this.parent.initValues(value.records);
+			    		
+			    		for (var t=0;t<value.result.length;t++) {
+			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
+			    				if (canvas.salutationsInitValues[i].salutations_id == value.result[t].title_id) {
+					                value.result[t].title = canvas.salutationsInitValues[i].label.value;
+					                break;
+			    				}
+								
+				            }
+			    			
+			    		}
+			    		
+			    		this.parent.renderContent(value.result);
+		    		]]>
 		    	</handler>
 		    </netRemoteCallHib>
 			
 			<handler name="oninit">
 	        	//addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected
 	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
-	            this.addHeaderItemOrdered(1181,80,"c.omTimeZone.omTimeZoneId",false,false);
+	            this.addHeaderItemOrdered(1181,100,"c.omTimeZone.omTimeZoneId",false,false);
 	            this.addHeaderItem(1182,300);
 	            this.addHeaderItem(1183,300);
 	        </handler>
@@ -132,7 +208,7 @@
 	                    
 	                    if (records.length > i) {
 	                    	
-	                    	if ($debug) Debug.write("Render Item ",records[i]);
+	                    	//if ($debug) Debug.write("Render Item ",records[i]);
 	                        
 	                        list.subviews[i].setAttribute("clickable",true);
 	                        list.subviews[i].refObj = records[i];
@@ -143,8 +219,8 @@
 	                            list.subviews[i].isselected = false;
 	                        }
 	                        
-	                        list.subviews[i].setAttribute("username",records[i].firstname+' '+records[i].lastname);
-	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '('+records[i].omTimeZone.ical+')');
+	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname);
+	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '<br/>('+records[i].omTimeZone.ical+')');
 	                        list.subviews[i].setAttribute("searchOffers",records[i].userOffers);
 	                        list.subviews[i].setAttribute("searchSearchs",records[i].userSearchs);
 	                        
@@ -175,6 +251,65 @@
 	                
 	            ]]>
 	        </method>   
+		        
+	        <handler name="onScrollItem" args="item">
+	            <![CDATA[
+	                if (this.renderList.length > item.itemId) {
+	                    item.setAttribute("clickable",true);
+	                    item.refObj = this.renderList[item.itemId];
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+	                        item.isselected = true;
+	                        item.onmouseout.sendEvent();
+	                    } else {
+	                        item.isselected = false;
+	                        item.onmouseout.sendEvent();
+	                    }
+	                    
+	                    if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
+	                    
+	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
+	                    item.setAttribute("timezone",this.renderList[item.itemId].omTimeZone.jname + '<br/>('+this.renderList[item.itemId].omTimeZone.ical+')');
+                        item.setAttribute("searchOffers",this.renderList[item.itemId].userOffers);
+                        item.setAttribute("searchSearchs",this.renderList[item.itemId].userSearchs);
+	                        
+	                    item.setAttribute("itemId",item.itemId);
+	                    
+	                    item.updateIconByModScroll();
+	                        
+	                } else {
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    item.isselected = false;
+	                    item.onmouseout.sendEvent();
+	                    item.hideModeratorIcons();
+	                    
+	                    item.refObj = null;
+	                    
+	                    item.setAttribute("username","");
+	                    item.setAttribute("timezone","");
+                        item.setAttribute("searchOffers","");
+                        item.setAttribute("searchSearchs","");
+	                    
+	                    item.setAttribute("itemId","");
+	                    
+	                    item.setAttribute("clickable",false);
+	                }
+	                
+	            ]]>
+	        </handler>
+	        
 			
 		</turnOverListOrderedPaged>
 		
