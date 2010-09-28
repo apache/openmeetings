@@ -838,6 +838,12 @@ public class BackupExport extends HttpServlet {
 				user.addElement("phone").setText(""+u.getAdresses().getPhone());
 			}
 			
+			if (u.getUserSipData() != null) {
+				user.addElement("sip_username").setText(""+u.getUserSipData().getUsername());
+				user.addElement("sip_userpass").setText(""+u.getUserSipData().getUserpass());
+				user.addElement("sip_authid").setText(""+u.getUserSipData().getAuthId());
+			}
+			
 			
 			
 			Element user_organisations = user.addElement("organisations");

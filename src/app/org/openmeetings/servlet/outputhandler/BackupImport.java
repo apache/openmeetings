@@ -59,6 +59,7 @@ import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -503,6 +504,17 @@ public class BackupImport extends HttpServlet {
 	        			us.setTitle_id(importIntegerType(itemUsers.element("title_id").getText()));
 	        			us.setLevel_id(importLongType(itemUsers.element("level_id").getText()));
 	        			
+	        			//UserSIP Data
+	        			if (itemUsers.element("sip_username") != null 
+	        					&& itemUsers.element("sip_userpass") != null
+	        					&& itemUsers.element("sip_authid") != null) {
+	        				UserSipData userSipData = new UserSipData();
+	        				userSipData.setUsername(itemUsers.element("sip_username").getText());
+	        				userSipData.setUsername(itemUsers.element("sip_userpass").getText());
+	        				userSipData.setUsername(itemUsers.element("sip_authid").getText());
+	        				us.setUserSipData(userSipData);
+	        			}
+	        				
 	        			
 	        			String additionalname = itemUsers.element("additionalname").getText();
 	        			String comment = itemUsers.element("comment").getText();

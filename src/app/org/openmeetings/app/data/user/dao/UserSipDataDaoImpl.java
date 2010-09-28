@@ -45,9 +45,9 @@ public class UserSipDataDaoImpl {
 			
 			return userSipData;
 		} catch (HibernateException ex) {
-			log.error("getUser",ex);
+			log.error("getUserSipDataById",ex);
 		} catch (Exception ex2) {
-			log.error("getUser",ex2);
+			log.error("getUserSipDataById",ex2);
 		}
 		return null;
 	}

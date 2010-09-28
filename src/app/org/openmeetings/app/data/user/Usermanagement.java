@@ -1260,6 +1260,11 @@ public class Usermanagement {
 			
 			usr.setAdresses(Addressmanagement.getInstance().getAdressbyId(adresses_id));
 			
+			Long userSipDataId = UserSipDataDaoImpl.getInstance().addUserSipData(usr.getUserSipData());
+			if (userSipDataId != null) {
+				usr.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
+			}
+			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
