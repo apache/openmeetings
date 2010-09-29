@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -14,12 +16,20 @@ import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.templates.RequestContactConfirmTemplate;
+import org.openmeetings.app.templates.RequestContactTemplate;
+import org.openmeetings.utils.crypt.ManageCryptStyle;
+import org.openmeetings.utils.mail.MailHandler;
+import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.IScope;
 import org.slf4j.Logger;
@@ -468,6 +478,169 @@ public class UserService {
 	   }
 	   return null;
    }
+   
+   public Long requestUserToContactList(String SID, Long userToAdd_id, 
+		   		String domain, String port, String webapp) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   Long countContacts = UserContactsDaoImpl.getInstance().checkUserContacts(userToAdd_id, users_id);
+			   
+			   if (countContacts != null && countContacts > 0) {
+				   return -45L;
+			   }
+			   
+			   String hash = ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+				
+			   Long userContactId = UserContactsDaoImpl.getInstance().addUserContact(userToAdd_id, users_id, true, hash);
+			   
+			   Users user = Usermanagement.getInstance().getUserById(users_id);
+			   
+			   Users userToAdd = Usermanagement.getInstance().getUserById(userToAdd_id);
+			   
+			   Long language_id = userToAdd.getLanguage_id();
+			   if (language_id == null) {
+				   language_id = Long.valueOf(Configurationmanagement.getInstance().
+		        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
+			   }
+			   
+			   String message = "";
+			   
+			   Fieldlanguagesvalues fValue1192 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1192L, language_id);
+			   Fieldlanguagesvalues fValue1193 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1193L, language_id);
+			   Fieldlanguagesvalues fValue1194 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1194L, language_id);
+			   Fieldlanguagesvalues fValue1190 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1190L, language_id);
+			   Fieldlanguagesvalues fValue1191 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1191L, language_id);
+			   Fieldlanguagesvalues fValue1196 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1196L, language_id);
+	        	
+		   	   message += fValue1192.getValue() + " " + userToAdd.getFirstname() + " " + userToAdd.getLastname() + "<br/><br/>";
+			   message += user.getFirstname() + " " + user.getLastname()+ " "  + fValue1193.getValue() + "<br/>";
+			   message += fValue1194.getValue() + "<br/>";
+			   
+			   String baseURL = "http://" + domain + ":" + port + webapp;
+			   if (port.equals("80")) {
+					baseURL = "http://" + domain + webapp;
+			   } else if (port.equals("443")) {
+					baseURL = "https://" + domain + webapp;
+			   }
+			   
+			   String link = baseURL+"contactrequest?cuser="+hash;
+			   
+			   String accept_link = link + "&t=1";
+			   String deny_link = link + "&t=0";
+			   
+			   String aLinkHTML = "<a href='"+accept_link+"'>"+fValue1190.getValue()+"</a><br/>";
+			   String denyLinkHTML = "<a href='"+deny_link+"'>"+fValue1191.getValue()+"</a><br/>";
+			   String profileLinkHTML = "<a href='"+link+"'>"+fValue1196.getValue()+"</a><br/>";
+			   
+			   String template = RequestContactTemplate.getInstance().getRequestContactTemplate(message, 
+					   aLinkHTML, denyLinkHTML, profileLinkHTML);
+			   
+			   if (userToAdd.getAdresses() != null) {
+				   MailHandler.sendMail(userToAdd.getAdresses().getEmail(), user.getFirstname() + " " + user.getLastname()+ " "  + fValue1193.getValue(), template);
+			   }
+			   
+			   return userContactId;
+		   }
+	   }  catch (Exception err) {
+		   log.error("[requestuserToContactList]",err);
+	   }
+	   return null;
+   }
+   
+   public List<UserContacts> getPendingUserContacts(String SID) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   List<UserContacts> uList = UserContactsDaoImpl.getInstance().getContactRequestsByUserAndStatus(users_id, true);
+			   
+			   return uList;
+		   }
+		   
+	   } catch (Exception err) {
+		   log.error("[getPendingUserContact]",err);
+	   }
+	   return null;
+   }
+   
+   public List<UserContacts> getUserContacts(String SID) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   List<UserContacts> uList = UserContactsDaoImpl.getInstance().getContactsByUserAndStatus(users_id, false);
+			   
+			   return uList;
+		   }
+		   
+	   } catch (Exception err) {
+		   log.error("[getPendingUserContact]",err);
+	   }
+	   return null;
+   }
+
+   public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   if (pending) {
+				   
+				   UserContactsDaoImpl.getInstance().updateContactStatus(userContactId, false);
+				   
+				   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+			   
+				   UserContactsDaoImpl.getInstance().addUserContact(userContacts.getOwnerId(), users_id, false, "");
+				   
+				   Users user = Usermanagement.getInstance().getUserById(userContacts.getOwnerId());
+				   
+				   if (user.getAdresses() != null) {
+					   
+					   Long language_id = user.getLanguage_id();
+					   if (language_id == null) {
+						   language_id = Long.valueOf(Configurationmanagement.getInstance().
+				        		getConfKey(3,"default_lang_id").getConf_value()).longValue();
+					   }
+					   
+					   String message = "";
+					   
+					   Fieldlanguagesvalues fValue1192 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1192L, language_id);
+					   Fieldlanguagesvalues fValue1198 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1198L, language_id);
+					   
+					   message += fValue1192.getValue() + " " + user.getFirstname() + " " + user.getLastname() + "<br/><br/>";
+					   message += userContacts.getContact().getFirstname() + " " + userContacts.getContact().getLastname() + " " + fValue1198.getValue();
+					   
+					   String template = RequestContactConfirmTemplate.getInstance().getRequestContactTemplate(message);
+					   
+					   MailHandler.sendMail(user.getAdresses().getEmail(), userContacts.getContact().getFirstname() + " " + userContacts.getContact().getLastname() + " " + fValue1198.getValue(), template);
+					   
+				   }
+				   
+			   } else {
+				   
+				   UserContactsDaoImpl.getInstance().deleteUserContact(userContactId);
+				   
+			   }
+			   
+			   return userContactId;
+		   }
+		   
+	   } catch (Exception err) {
+		   log.error("[getPendingUserContact]",err);
+	   }
+	   return null;
+   }
+   
     
     
 }

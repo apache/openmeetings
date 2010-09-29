@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="user_contacts" lazy="false" name="org.openmeetings.app.hibernate.beans.user.UserContacts">
+    <id column="user_contact_id" name="userContactId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one outer-join="true" not-null="false" column="user_id" lazy="false" cascade="none" name="contact" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <property name="ownerId" type="long" column="owner_id"/>
+    <property name="pending" type="boolean" column="pending"/>
+    <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="updated" type="java.util.Date" column="updated"/>
+    <property name="hash" type="string" column="hash"/>
+  </class>
+</hibernate-mapping>

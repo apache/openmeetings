@@ -3,7 +3,7 @@
 	
 <class name="baseErrorDialog" extends="labelExplorerBox" labelid="204"
     docking="true" resizeable="false" closable="true" width="300" 
-	x="$once{ canvas.width/2-this.width/2 }" height="230">
+	x="$once{ canvas.width/2-this.width/2 }" height="130">
 	
     <attribute name="errortext" value="" type="string" />
 	<attribute name="errorid" value="0" type="number" />
@@ -20,11 +20,13 @@
 		</handler>
 	</netRemoteCallHib>		
 
-	<view y="24" width="298" height="180">
-		<text y="30" x="10" fontsize="10" fontstyle="bold" text="${ parent.parent.errortext }"
-			multiline="true" width="270" />
-		<vscrollbar />
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+		<text fontsize="10" fontstyle="bold" text="${ parent.parent.errortext }"
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
 	</view>
+	
 </class>
 	
 <class name="errorDialog" extends="baseErrorDialog">
@@ -89,7 +91,7 @@
 		this.close();
 	</method>
 	
-    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+    <simpleLabelButton name="_btn" labelid="333" width="100" x="$once{ parent.width-104 }" 
 		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
 	
 </class>
@@ -107,7 +109,7 @@
 		}
 	</handler>
 	
-    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-104 }" 
 		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
 	
 </class>
@@ -129,7 +131,7 @@
 		}
 	</handler>
 	
-    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-130 }" 
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-104 }" 
 		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
 	
 </class>

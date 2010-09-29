@@ -20,20 +20,20 @@
 </resource>
 
 <resource name="edit_add_remuve_rsc">
-    <frame src="edit_add.png" />
-    <frame src="edit_remove.png" />   
+    <frame src="plus_icon.png" />
+    <frame src="button_cancel.png" />   
 </resource>
 
 
 <resource name="play_webcam_show_dialog_rsc" src="audio-volume-high.png" />
 
-<resource name="list_add_rsc" src="edit_add.png" />
-<resource name="list_remove_rsc" src="editdelete.png" />
+<resource name="list_add_rsc" src="plus_icon.png" />
+<resource name="list_remove_rsc" src="button_cancel.png" />
 <!-- add for calendar -->
 
 <resource name="filesave_rsc" src="filesave.png" />
-<resource name="button_cancel_rsc" src="editdelete.png" />
-<resource name="edit_add_rsc" src="edit_add.png" />
+<resource name="button_cancel_rsc" src="button_cancel.png" />
+<resource name="edit_add_rsc" src="plus_icon.png" />
 <resource name="reload_rsc" src="reload_page.png" /> 
 
 <resource name="xoffice_rsc" src="x-office-presentation.png" />

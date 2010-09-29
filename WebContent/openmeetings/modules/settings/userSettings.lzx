@@ -111,6 +111,8 @@
 			</handler>
 		</menuListItemUserProfile>
 		
+		<menuListItemUserProfile name="_editUserContacts" labelid="1188" labelLabelid="1197" />
+		
 		<menuListItemUserProfile name="_editUserProfile" labelid="1171" labelLabelid="1174" />
 		
 		<menuListItemUserProfile name="_searchUserProfile" labelid="1172" labelLabelid="1175" />
@@ -563,6 +565,10 @@
 	    <searchUserProfile name="_searchUserProfile" visibility="hidden">
 	    	
 	    </searchUserProfile>
+	    
+	    <editUserContacts name="_editUserContacts" visibility="hidden">
+	    	
+	    </editUserContacts>
     
     </view>
            			      

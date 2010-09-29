@@ -156,7 +156,7 @@
     <!-- 361:You need to logout to see any changes. -->
 	<labelText x="470" labelid="361" y="2" resize="true" />  
 	
-	<fieldValueForm name="_fieldvalueform" x="470" y="60" >
+	<fieldValueForm name="_fieldvalueform" x="470" y="32" >
         <handler name="onnew" args="refObj">
             parent._turnoverlist.clearSelection();
         </handler>

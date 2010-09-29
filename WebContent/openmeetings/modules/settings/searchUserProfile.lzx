@@ -26,11 +26,28 @@
 	<attribute name="timezone" value="" type="string" />
 	<attribute name="searchOffers" value="" type="string" />
 	<attribute name="searchSearchs" value="" type="string" />
+	<attribute name="pending" value="false" type="boolean"/>
 	
 	<attribute name="searchUserProfileImage" value="null" />
 	
+	<handler name="onpending" args="p">
+		this.pending = p;
+		if (p) {
+			this.setAttribute("opacity",0.5);
+			this._icons.add.setAttribute("clickable",false);
+		} else {
+			this.setAttribute("opacity",1);
+			this._icons.add.setAttribute("clickable",true);
+		}
+	</handler>
+	
 	<handler name="onmouseover">
 		<![CDATA[
+			if (this.searchUserProfileImage != null) {
+				this.searchUserProfileImage.destroy();
+				this.searchUserProfileImage = null;
+			}
+			
 			if (this.refObj != null) {
 				
 				var pictureuri = this.refObj.pictureuri;
@@ -75,6 +92,48 @@
 	<turnOverTextItem name="_searchSearchs" width="300" multiline="true"
 					  text="${ parent.searchSearchs }" />
 	
+	<view name="_icons" >
+		
+		<view visible="${ parent.parent.clickable }">
+			
+		    <miniIcons name="add" y="1" x="1" resource="edit_add_rsc" width="18" height="18" 
+	               showhandcursor="true">
+		        <handler name="onclick">
+		            if ($debug) Debug.write("Start Conference");
+		            parent.parent.parent.requestUserToContactList.doCall();
+		        </handler>
+		        <labelTooltip labelid="1186" />
+		    </miniIcons> 
+	    
+	    </view>
+		
+		<view height="$once{ parent.parent.height }" width="1" 
+        	align="right" bgcolor="black" />
+	</view>
+	
+	<!--
+	public Long requestUserToContactList(String SID, Long userToAdd_id, 
+		   		String domain, String port, String webapp)
+	 -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.refObj.user_id; </method></netparam>
+    	<netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+    	<netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+    	<netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("requestUserToContactList: ",value);
+	    		if (value > 0) {
+	    			parent.setAttribute("pending",true);
+	    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
+	    		}
+	    		parent.onmouseout.sendEvent(null);
+    		]]>
+    	</handler>
+    </netRemoteCallHib>	
+					  
 </class>
 
 <!---  modules:dashboard -->
@@ -115,7 +174,7 @@
 		
 		<turnOverListOrderedPaged name="_table" showTopBar="true" x="0" height="$once{ parent.height }" 
              y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="c.lastname"
-             listItemName="searchUserProfileListItem" showHScrollbar="hidden" menuBarXIndent="100"
+             listItemName="searchUserProfileListItem" menuBarXIndent="100"
              multiselect="false" width="$once{ canvas.width - 130 }">
 			
 			<!--
@@ -139,9 +198,10 @@
 			    		this.parent.initValues(value.records);
 			    		
 			    		for (var t=0;t<value.result.length;t++) {
+			    			value.result[t]["pending"] = false;
 			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
 			    				if (canvas.salutationsInitValues[i].salutations_id == value.result[t].title_id) {
-					                value.result[t].title = canvas.salutationsInitValues[i].label.value;
+					                value.result[t]["title"] = canvas.salutationsInitValues[i].label.value;
 					                break;
 			    				}
 								
@@ -158,8 +218,9 @@
 	        	//addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected
 	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
 	            this.addHeaderItemOrdered(1181,100,"c.omTimeZone.omTimeZoneId",false,false);
-	            this.addHeaderItem(1182,300);
-	            this.addHeaderItem(1183,300);
+	            this.addHeaderItem(1182,250);
+	            this.addHeaderItem(1183,250);
+	            this.addHeaderItem(1185,100);
 	        </handler>
 	        
 	        <handler name="onclickedItem" args="refObj">
@@ -169,6 +230,10 @@
 	                
 	            ]]>
 	        </handler>
+	        
+	        <method name="updatePendingStatus" args="itemId">
+	        	this.renderList[itemId]["pending"] = true;
+	        </method>
 	        
 	        <!--
 	        <attribute name="username" value="" type="string" />
@@ -223,6 +288,7 @@
 	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '<br/>('+records[i].omTimeZone.ical+')');
 	                        list.subviews[i].setAttribute("searchOffers",records[i].userOffers);
 	                        list.subviews[i].setAttribute("searchSearchs",records[i].userSearchs);
+	                        list.subviews[i].setAttribute("pending",records[i].pending);
 	                        
 	                        list.subviews[i].setAttribute("itemId",i);
 	                        
@@ -237,6 +303,7 @@
 	                        list.subviews[i].setAttribute("timezone",'');
 	                        list.subviews[i].setAttribute("searchOffers",'');
 	                        list.subviews[i].setAttribute("searchSearchs",'');
+	                        list.subviews[i].setAttribute("pending",false);
 	                        
 	                        list.subviews[i].setAttribute("itemId","");
 	                        
@@ -272,12 +339,13 @@
 	                        item.onmouseout.sendEvent();
 	                    }
 	                    
-	                    if ($debug) Debug.write(item.itemId,this.renderList[item.itemId].isMod,this.renderList[item.itemId].publicSID);
+	                    //if ($debug) Debug.write(item.itemId);
 	                    
 	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
 	                    item.setAttribute("timezone",this.renderList[item.itemId].omTimeZone.jname + '<br/>('+this.renderList[item.itemId].omTimeZone.ical+')');
                         item.setAttribute("searchOffers",this.renderList[item.itemId].userOffers);
                         item.setAttribute("searchSearchs",this.renderList[item.itemId].userSearchs);
+	                    item.setAttribute("pending",this.renderList[item.itemId].pending);
 	                        
 	                    item.setAttribute("itemId",item.itemId);
 	                    
@@ -301,6 +369,7 @@
 	                    item.setAttribute("timezone","");
                         item.setAttribute("searchOffers","");
                         item.setAttribute("searchSearchs","");
+                        item.setAttribute("pending",false);
 	                    
 	                    item.setAttribute("itemId","");
 	                    

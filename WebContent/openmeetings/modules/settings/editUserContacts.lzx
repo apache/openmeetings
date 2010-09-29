@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="editUserContacts" extends="view" y="24" height="$once{ canvas.height - 134 }">
+	
+	<attribute name="contactContent" value="null"/>
+	
+	<handler name="onvisible" args="v">
+		if (v) {
+			if (this.contactContent == null) {
+				this.contactContent = new lz.editUserContactsContent(this);
+			}
+		} else {
+			if (this.contactContent != null) {
+				this.contactContent.destroy();
+				this.contactContent = null;
+			}
+		}
+	</handler>
+	
+	
+</class>
+
+<class name="pendingContactsListItem" extends="basePagingListItem" showhandcursor="false" height="40">
+	
+	<attribute name="username" value="" type="string" />
+	
+	<attribute name="searchUserProfileImage" value="null" />
+	
+	<handler name="onmouseover">
+		<![CDATA[
+			if (this.searchUserProfileImage != null) {
+				this.searchUserProfileImage.destroy();
+				this.searchUserProfileImage = null;
+			}
+			
+			if (this.refObj != null) {
+				
+				var pictureuri = this.refObj.pictureuri;
+				
+				if (pictureuri==null || pictureuri.length==0){
+					pictureuri = "d.jpg";
+				} else {
+					pictureuri = "_profile_"+pictureuri;
+				}
+				
+				var t=new Date();
+				
+		        var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+		        		+'&moduleName=userprofile&parentPath=&room_id='
+		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
+		        
+		        //if ($debug) Debug.write("profileUrl "+profileUrl);
+				
+				this.searchUserProfileImage = new lz.searchUserProfileImage(canvas,{
+									x:this.getAttributeRelative("x",canvas) + 200,
+									y:this.getAttributeRelative("y",canvas) - 30,
+									profileUrl:profileUrl
+								});
+			}
+		]]>
+	</handler>
+	
+	<handler name="onmouseout">
+		if (this.searchUserProfileImage != null) {
+			this.searchUserProfileImage.destroy();
+			this.searchUserProfileImage = null;
+		}
+	</handler>
+	
+	<turnOverTextItem name="_username" width="200" multiline="true"
+					  text="${ parent.username }" />
+					  
+					  <!--
+	<turnOverTextItem name="_timezone" width="80" multiline="true"
+					  text="${ parent.timezone }" />
+	<turnOverTextItem name="_searchOffers" width="300" multiline="true"
+					  text="${ parent.searchOffers }" />
+	<turnOverTextItem name="_searchSearchs" width="300" multiline="true"
+					  text="${ parent.searchSearchs }" />
+					   -->
+	
+	<view name="_icons" >
+		
+		<view visible="${ parent.parent.clickable }">
+			
+			<miniIcons name="add" y="1" x="1" resource="user_moderator_list_apply_rsc" width="18" height="18" 
+	               showhandcursor="true">
+				<handler name="onclick">
+		            parent.parent.parent.parent.parent.parent.parent.setPendingStatus(parent.parent.parent.refObj.userContactId,true);
+		        </handler>
+		        <labelTooltip labelid="1190" />
+		    </miniIcons>
+	    
+	    	<miniIcons name="deny" y="1" x="20" resource="button_cancel_rsc" width="18" height="18" 
+	               showhandcursor="true">
+				<handler name="onclick">
+		            parent.parent.parent.parent.parent.parent.parent.setPendingStatus(parent.parent.parent.refObj.userContactId,false);
+		        </handler>
+		        <labelTooltip labelid="1191" />
+		    </miniIcons>
+		    
+	    </view>
+		
+		<view height="$once{ parent.parent.height }" width="1" 
+        	align="right" bgcolor="black" />
+	</view>
+	
+</class>
+
+<class name="editUserContactsContent" extends="view" height="$once{ parent.height }">
+	
+	<!--
+	public Long changePendingStatusUserContacts(
+		String SID, Long userContactId, Boolean pending) {
+	 -->
+	<view name="_pendingContacts" height="$once{ parent.height/2 }">
+		
+		<!--
+		public List<UserContacts> getPendingUserContacts(String SID)
+		 -->
+		<handler name="oninit">
+			this._table.getPendingUserContacts.doCall();
+		</handler> 
+	    		 
+		
+		<labelText name="_labelPendingUsers" x="2" labelid="1189" fontstyle="bold" />
+		
+		<turnOverListOrderedPaged name="_table" showTopBar="false" x="2" 
+					  height="$once{ parent.height }" 
+		             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" 
+		             listItemName="pendingContactsListItem" menuBarXIndent="100"
+		             multiselect="false" width="270">
+			
+			<netRemoteCallHib name="getPendingUserContacts" funcname="userservice.getPendingUserContacts" 
+					  remotecontext="$once{ canvas.thishib }" >      
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("getPendingUserContacts: ",value);
+			    		
+			    		this.parent.initValues(value.length);
+			    		
+			    		if (value.length == 0) {
+			    			parent.parent.setAttribute("height",20);
+			    			parent.setAttribute("visibility","hidden");
+			    		}
+			    		
+			    		this.parent.parent._labelPendingUsers.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPendingUsers.labelid)+' <i>( '+value.length+' </i>)')
+			    		
+			    		var tResult = new Array();
+			    		for (var t=0;t<value.length;t++) {
+			    			value[t].contact["pending"] = value[t].pending;
+			    			value[t].contact["userContactId"] = value[t].userContactId;
+			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
+			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].contact.title_id) {
+					                value[t].contact["title"] = canvas.salutationsInitValues[i].label.value;
+					                break;
+			    				}
+				            }
+			    			tResult.push(value[t].contact);
+			    		}
+			    		
+			    		this.parent.renderContent(tResult);
+			    		
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+		
+			<handler name="oninit">
+	            this.addHeaderItem(1180,130);
+	            this.addHeaderItem(1185,120);
+	        </handler>
+	        
+	        <handler name="onclickedItem" args="refObj">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("onclickedItem ",refObj.refObj.userContactId);
+	                
+	            ]]>
+	        </handler>
+	        
+	        <method name="setPendingStatus" args="userContactId,pending">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("setPendingStatus ",userContactId,pending);
+	                
+	                this.changePendingStatusUserContacts.pending = pending;
+	                this.changePendingStatusUserContacts.userContactId = userContactId;
+	                this.changePendingStatusUserContacts.doCall();
+	            ]]>
+	        </method>
+	        
+	        <!--
+			public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending)
+			 -->
+		    <netRemoteCallHib name="changePendingStatusUserContacts" funcname="userservice.changePendingStatusUserContacts" 
+						  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+				<attribute name="userContactId" value="0" type="number" />
+				<attribute name="pending" value="true" type="boolean" />
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.userContactId; </method></netparam>
+		    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("requestUserToContactList: ",value);
+			    		if (value > 0) {
+			    			parent.setAttribute("pending",true);
+			    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
+			    		}
+			    		parent.getPendingUserContacts.doCall();
+			    		parent.parent.parent._availableContacts._table.getUserContacts.doCall();
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+	        
+	        <method name="updatePendingStatus" args="itemId">
+	        	this.renderList[itemId]["pending"] = true;
+	        </method>
+	        
+	        <method name="renderContent" args="rList">
+	            <![CDATA[
+	            
+	            	this.renderList = rList;
+	            
+	                this.isLoaded = true;
+	                var list = this._innerlist._inn._inn;
+	                
+	                if (this.renderList == null) {
+	                	this.renderList = new Array();
+	                }
+	                //this.renderList = records;
+	                var records = this.renderList;
+	                this._innerlist._inn.setAttribute("y",0);
+	                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+	                this._innerlist._inn.resetItems();
+	                
+	                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+	                
+	                this._records.setAttribute("text",records.length);
+	                
+	                for (var i=0;i<list.subviews.length;i++){
+	                    
+	                    //if (i % 2 == 0) {
+	                    //    list.subviews[i].setIsSecond(true);
+	                    //} else {
+	                    //    list.subviews[i].setIsSecond(false);
+	                    //}
+	                    
+	                    if (records.length > i) {
+	                    	
+	                    	//if ($debug) Debug.write("Render Item ",records[i]);
+	                        
+	                        list.subviews[i].setAttribute("clickable",true);
+	                        list.subviews[i].refObj = records[i];
+	                        
+	                        if (records[i]["isselected"] && records[i].isselected) {
+	                            list.subviews[i].isselected = true;
+	                        } else {
+	                            list.subviews[i].isselected = false;
+	                        }
+	                        
+	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname);
+	                        
+	                        list.subviews[i].setAttribute("itemId",i);
+	                        
+	                    } else {
+	                        
+	                        list.subviews[i].refObj = null;
+	                        
+	                        list.subviews[i].isselected = false;
+	                        list.subviews[i].onmouseout.sendEvent();
+	                        
+	                        list.subviews[i].setAttribute("username",'');
+	                        
+	                        list.subviews[i].setAttribute("itemId","");
+	                        
+	                        list.subviews[i].setAttribute("clickable",false);
+	                        
+	                    }
+	                    
+	                }
+	                
+	                
+	                this.sendInitialWidthUpdate();
+	                
+	            ]]>
+	        </method>   
+		        
+	        <handler name="onScrollItem" args="item">
+	            <![CDATA[
+	                if (this.renderList.length > item.itemId) {
+	                    item.setAttribute("clickable",true);
+	                    item.refObj = this.renderList[item.itemId];
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+	                        item.isselected = true;
+	                        item.onmouseout.sendEvent();
+	                    } else {
+	                        item.isselected = false;
+	                        item.onmouseout.sendEvent();
+	                    }
+	                    
+	                    //if ($debug) Debug.write(item.itemId);
+	                    
+	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
+	                        
+	                    item.setAttribute("itemId",item.itemId);
+	                    
+	                    item.updateIconByModScroll();
+	                        
+	                } else {
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    item.isselected = false;
+	                    item.onmouseout.sendEvent();
+	                    item.hideModeratorIcons();
+	                    
+	                    item.refObj = null;
+	                    
+	                    item.setAttribute("username","");
+	                    
+	                    item.setAttribute("itemId","");
+	                    
+	                    item.setAttribute("clickable",false);
+	                }
+	                
+	            ]]>
+	        </handler>
+	        
+			
+		</turnOverListOrderedPaged>
+		
+	</view> 
+	
+	<view name="_availableContacts" y="${ parent._pendingContacts.height + 2 }"
+		  height="${ parent.height - parent._pendingContacts.height - 4 }">
+		
+		
+		<!--
+		public List<UserContacts> getPendingUserContacts(String SID)
+		 -->
+		<handler name="oninit">
+			this._table.getUserContacts.doCall();
+		</handler> 
+		
+		<handler name="onheight" args="h">
+			this._table.renderByHeightChange();
+		</handler>
+	    		 
+		
+		<labelText name="_labelPendingUsers" x="2" labelid="1188" fontstyle="bold" />
+		
+		<turnOverListOrderedPaged name="_table" showTopBar="false" x="2" height="${ parent.height }" 
+		             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" 
+		             listItemName="pendingContactsListItem" menuBarXIndent="100"
+		             multiselect="false" width="270">
+			
+	        <method name="renderByHeightChange" >
+        	
+	        	this.clearList();
+	        	this._innerlist._inn.initItems(this.listItemName);
+	        	
+	        	this.renderContent(this.renderList);
+	        </method>
+			
+			<netRemoteCallHib name="getUserContacts" funcname="userservice.getUserContacts" 
+					  remotecontext="$once{ canvas.thishib }" >      
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("getPendingUserContacts: ",value);
+			    		
+			    		this.parent.initValues(value.length);
+			    		
+			    		this.parent.parent._labelPendingUsers.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPendingUsers.labelid)+' <i>( '+value.length+' </i>)')
+			    		
+			    		var tResult = new Array();
+			    		for (var t=0;t<value.length;t++) {
+			    			value[t].contact["pending"] = value[t].pending;
+			    			value[t].contact["userContactId"] = value[t].userContactId;
+			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
+			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].contact.title_id) {
+					                value[t].contact["title"] = canvas.salutationsInitValues[i].label.value;
+					                break;
+			    				}
+				            }
+			    			tResult.push(value[t].contact);
+			    		}
+			    		
+			    		this.parent.renderContent(tResult);
+			    		
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+		
+			<handler name="oninit">
+	            this.addHeaderItem(1180,130);
+	            this.addHeaderItem(1185,120);
+	        </handler>
+	        
+	        <handler name="onclickedItem" args="refObj">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("onclickedItem ",refObj.refObj.userContactId);
+	                
+	            ]]>
+	        </handler>
+	        
+	        <handler name="setPendingStatus" args="userContactId,pending">
+	            <![CDATA[
+	            
+	                if ($debug) Debug.write("setPendingStatus ",userContactId,pending);
+	                
+	                this.changePendingStatusUserContacts.pending = pending;
+	                this.changePendingStatusUserContacts.userContactId = userContactId;
+	                this.changePendingStatusUserContacts.doCall();
+	            ]]>
+	        </handler>
+	        
+	        <!--
+			public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending)
+			 -->
+		    <netRemoteCallHib name="changePendingStatusUserContacts" funcname="userservice.changePendingStatusUserContacts" 
+						  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+				<attribute name="userContactId" value="0" type="number" />
+				<attribute name="pending" value="true" type="boolean" />
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.userContactId; </method></netparam>
+		    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("requestUserToContactList: ",value);
+			    		if (value > 0) {
+			    			parent.setAttribute("pending",true);
+			    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
+			    		}
+			    		parent.onmouseout.sendEvent(null);
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+	        
+	        <method name="renderContent" args="rList">
+	            <![CDATA[
+	            
+	            	this.renderList = rList;
+	            
+	                this.isLoaded = true;
+	                var list = this._innerlist._inn._inn;
+	                
+	                if (this.renderList == null) {
+	                	this.renderList = new Array();
+	                }
+	                //this.renderList = records;
+	                var records = this.renderList;
+	                this._innerlist._inn.setAttribute("y",0);
+	                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+	                this._innerlist._inn.resetItems();
+	                
+	                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+	                
+	                this._records.setAttribute("text",records.length);
+	                
+	                for (var i=0;i<list.subviews.length;i++){
+	                    
+	                    //if (i % 2 == 0) {
+	                    //    list.subviews[i].setIsSecond(true);
+	                    //} else {
+	                    //    list.subviews[i].setIsSecond(false);
+	                    //}
+	                    
+	                    if (records.length > i) {
+	                    	
+	                    	//if ($debug) Debug.write("Render Item ",records[i]);
+	                        
+	                        list.subviews[i].setAttribute("clickable",true);
+	                        list.subviews[i].refObj = records[i];
+	                        
+	                        if (records[i]["isselected"] && records[i].isselected) {
+	                            list.subviews[i].isselected = true;
+	                        } else {
+	                            list.subviews[i].isselected = false;
+	                        }
+	                        
+	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname);
+	                        
+	                        list.subviews[i].setAttribute("itemId",i);
+	                        
+	                    } else {
+	                        
+	                        list.subviews[i].refObj = null;
+	                        
+	                        list.subviews[i].isselected = false;
+	                        list.subviews[i].onmouseout.sendEvent();
+	                        
+	                        list.subviews[i].setAttribute("username",'');
+	                        
+	                        list.subviews[i].setAttribute("itemId","");
+	                        
+	                        list.subviews[i].setAttribute("clickable",false);
+	                        
+	                    }
+	                    
+	                }
+	                
+	                
+	                this.sendInitialWidthUpdate();
+	                
+	            ]]>
+	        </method>   
+		        
+	        <handler name="onScrollItem" args="item">
+	            <![CDATA[
+	                if (this.renderList.length > item.itemId) {
+	                    item.setAttribute("clickable",true);
+	                    item.refObj = this.renderList[item.itemId];
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+	                        item.isselected = true;
+	                        item.onmouseout.sendEvent();
+	                    } else {
+	                        item.isselected = false;
+	                        item.onmouseout.sendEvent();
+	                    }
+	                    
+	                    //if ($debug) Debug.write(item.itemId);
+	                    
+	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
+	                        
+	                    item.setAttribute("itemId",item.itemId);
+	                    
+	                    item.updateIconByModScroll();
+	                        
+	                } else {
+	                    
+	                    //if (item.itemId % 2 == 0) {
+	                    //    item.setIsSecond(true);
+	                    //} else {
+	                    //    item.setIsSecond(false);
+	                    //}
+	                    
+	                    item.isselected = false;
+	                    item.onmouseout.sendEvent();
+	                    item.hideModeratorIcons();
+	                    
+	                    item.refObj = null;
+	                    
+	                    item.setAttribute("username","");
+	                    
+	                    item.setAttribute("itemId","");
+	                    
+	                    item.setAttribute("clickable",false);
+	                }
+	                
+	            ]]>
+	        </handler>
+	        
+			
+		</turnOverListOrderedPaged>
+		
+	</view>
+	
+	
+</class>	
+	
+</library>

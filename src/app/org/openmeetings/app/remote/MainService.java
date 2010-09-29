@@ -632,9 +632,9 @@ public class MainService implements IPendingServiceCallback {
     		
     		String baseURL = "http://"+domain+":"+port+webapp;
             if (port.equals("80")) {
-            	    baseURL = "http://"+domain+webapp;
+        	    baseURL = "http://"+domain+webapp;
             } else if (port.equals("443")) {
-            		baseURL = "https://"+domain+webapp;
+        		baseURL = "https://"+domain+webapp;
             }
             
 //            else if (port.equals("8443")) {
