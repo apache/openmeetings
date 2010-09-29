@@ -25,7 +25,7 @@
             this.firstname.setAttribute('text','');
             this.lastname.setAttribute('text','');
             this.email.setAttribute('text','');
-            this.phone.setAttribute('phone','');
+            this.phone.setAttribute('text','');
             this.age.setAttribute('text','');
             this.street.setAttribute('text','');
             this.house.setAttribute('text','');
