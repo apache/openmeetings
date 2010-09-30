@@ -2,6 +2,10 @@
 <library>
 	
 	<resource name="level_meter_rsc" src="resources/level_meter.png" />
+	
+	<resource name="start_conference_rsc" src="resources/wizzard_start_button.png" />
+	<resource name="start_conference2_rsc" src="resources/users_small.png" />
+	
 	<resource name="test_setup_start_conference_rsc" src="resources/wizzard_start_button.png" />
 	<resource name="test_setup_start_conference2_rsc" src="resources/wizzard_start_button2.png" />
     

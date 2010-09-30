@@ -26,7 +26,7 @@
 	<text text="$once{ parent.username }" x="40" resize="false"
 		  width="$once{ parent.width - 40 }" />	
 	
-	<miniIcons resource="test_setup_start_conference2_rsc" width="16" height="16" 
+	<miniIcons resource="start_conference2_rsc" width="16" height="16" 
 			   y="20" x="$once{ parent.width - 20 }" showhandcursor="true">
 		<handler name="onclick">
 			if ($debug) Debug.write("Start Conference");

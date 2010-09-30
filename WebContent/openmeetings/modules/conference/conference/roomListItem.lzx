@@ -152,7 +152,7 @@
 
 		<simpleLabelButton labelid="131" x="300" width="160" height="30" y="17"
 			onclick="parent.checkConditionsWhenButtonClicked(this)">
-			<view resource="test_setup_start_conference_rsc" x="130" y="4" />
+			<view resource="start_conference_rsc" x="130" y="4" />
 			<!--
 			<view resource="go_jump_rsc" x="$once{ parent.width-24 }" y="6" />
 			 -->
