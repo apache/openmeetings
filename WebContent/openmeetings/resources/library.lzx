@@ -32,7 +32,7 @@
 <!-- add for calendar -->
 
 <resource name="filesave_rsc" src="filesave.png" />
-<resource name="button_cancel_rsc" src="button_cancel.png" />
+<resource name="button_cancel_rsc" src="cancel_icon.png" />
 <resource name="edit_add_rsc" src="plus_icon.png" />
 <resource name="reload_rsc" src="reload_page.png" /> 
 
