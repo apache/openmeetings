@@ -3566,4 +3566,46 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1184" name="user search">
     <value>Searchresult</value>
   </string>
+  <string id="1185" name="user search">
+    <value>Actions</value>
+  </string>
+  <string id="1186" name="user search">
+    <value>Add to contacts</value>
+  </string>
+  <string id="1187" name="user search">
+    <value>Send message</value>
+  </string>
+  <string id="1188" name="user search">
+    <value>My contacts</value>
+  </string>
+  <string id="1189" name="user search">
+    <value>Pending contacts</value>
+  </string>
+  <string id="1190" name="user contacts">
+    <value>Accept</value>
+  </string>
+  <string id="1191" name="user contacts">
+    <value>Deny</value>
+  </string>
+  <string id="1192" name="user contact request">
+    <value>Hi,</value>
+  </string>
+  <string id="1193" name="user contact request">
+    <value>would like to add you as contact.</value>
+  </string>
+  <string id="1194" name="user contact request">
+    <value>Check your contact requests in OpenMeetings or click on those links to accept or deny the request</value>
+  </string>
+  <string id="1195" name="add user contact">
+    <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>
+  </string>
+  <string id="1196" name="user contact mail">
+    <value>Your contact list</value>
+  </string>
+  <string id="1197" name="user contacts">
+    <value>Edit your contact, manage your pending contacts!</value>
+  </string>
+  <string id="1198" name="user contacts">
+    <value>confirmed you as contact!</value>
+  </string>
 </language>
