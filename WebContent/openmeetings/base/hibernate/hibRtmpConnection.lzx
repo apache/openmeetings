@@ -1784,6 +1784,14 @@
         </handler>   
     </netRemoteCallHib> 
     
+    <netRemoteCallHib name="clearChatContent" funcname="clearChatContent">
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                canvas._chatcontent.reload();
+            ]]>
+        </handler>   
+    </netRemoteCallHib> 
     
     
 </class>

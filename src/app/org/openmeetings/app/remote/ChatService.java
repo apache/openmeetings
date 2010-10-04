@@ -177,6 +177,26 @@ public class ChatService implements IPendingServiceCallback {
 			
 			myChats.put(chatroom,myChatList);
 			
+			HashMap<String,Object> hsm = new HashMap<String,Object>();
+			
+			//broadcast to everybody in the room/domain
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+    			for (IConnection conn : conset) {
+    				if (conn != null) {
+    					if (conn instanceof IServiceCapableConnection) {
+			
+    						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+    						if (!rcl.getIsScreenClient()) {
+	    						log.debug("*..*idremote: " + rcl.getStreamid());
+	    						log.debug("*..*my idstreamid: " + currentClient.getStreamid());
+	    						((IServiceCapableConnection) conn).invoke("clearChatContent",new Object[] { hsm }, this);
+    						}
+    					}
+    				}
+				}
+			}		
+			
 			return myChatList;
 			
 		} catch (Exception err) {

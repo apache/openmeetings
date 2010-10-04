@@ -29,6 +29,14 @@
         ]]>
     </method>
     
+    <method name="reload">
+        //Debug.write("oninit");
+        <![CDATA[
+        	this._cbtext.clearChatOutput();
+            this.getRoomChatHistory.doCall();
+        ]]>
+    </method>    
+    
     <netRemoteCallHib name="getRoomChatHistory" funcname="chatservice.getRoomChatHistory" 
         remotecontext="$once{ canvas.thishib }" > 
         <handler name="ondata" args="value">

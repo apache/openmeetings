@@ -121,8 +121,8 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    Debug.write("clearChat : ",value);
-                    canvas._chatcontent.doInit();   
+                    if ($debug) Debug.write("clearChat : ",value);
+                       
                 ]]>
             </handler>   
         </netRemoteCallHib>     
