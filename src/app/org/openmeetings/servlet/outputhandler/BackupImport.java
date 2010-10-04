@@ -559,6 +559,9 @@ public class BackupImport extends HttpServlet {
 	        			}
 	        			
 	        			States st = Statemanagement.getInstance().getStateById(state_id);
+	        			if (st == null) {
+	        				Statemanagement.getInstance().getStateById(1L);
+	        			}
 	        			
 	        			Adresses adr = new Adresses();
 	        			adr.setAdditionalname(additionalname);

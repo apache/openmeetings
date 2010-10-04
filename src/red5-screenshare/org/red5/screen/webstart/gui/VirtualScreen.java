@@ -222,7 +222,8 @@ public class VirtualScreen {
 		ScreenShare.instance.t.add(ScreenShare.instance.jVScreenHeightSpin);
 		
 		
-		String[] selectResize = { ScreenShare.instance.label1090, ScreenShare.instance.label1091, ScreenShare.instance.label1092, ScreenShare.instance.label1093 };
+		//String[] selectResize = { ScreenShare.instance.label1090, ScreenShare.instance.label1091, ScreenShare.instance.label1092, ScreenShare.instance.label1093 };
+		String[] selectResize = { ScreenShare.instance.label1091, ScreenShare.instance.label1092, ScreenShare.instance.label1093 };
 		VirtualScreenBean.vScreenResizeX = 640;
 		VirtualScreenBean.vScreenResizeY = 400;
 		

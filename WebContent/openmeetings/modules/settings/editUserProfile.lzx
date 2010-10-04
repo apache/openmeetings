@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="editUserProfile" extends="baseContentSaveView" addIsVisible="false" deleteIsVisible="false">
+		
+	<!-- recordContent-id -->
+	<attribute name="user_id" value="0" type="number" />
+    <attribute name="userObj" value="null" />
+	
+	<!--handlers -->
+
+	<handler name="onsavecompleted" >
+		this.getUserSelf.doCall();
+	</handler>
+	
+	<handler name="onreload" >
+		this.getUserSelf.doCall();
+	</handler>	
+
+    <handler name="oninit">
+    	
+		this.getUserSelf.doCall();
+    </handler>
+    
+    <!-- methods -->
+    
+    <method name="sendRefresh">
+    	this.getUserSelf.doCall();
+    </method>    
+	
+    <method name="initFields" args="obj">
+    	<![CDATA[
+            this.userObj = obj;
+			this.user_id = obj.user_id;
+			
+			hib.userobject = obj;
+			
+			if (obj.omTimeZone != null) {
+                canvas.setAttribute('jNameTimeZone',obj.omTimeZone.jname);
+                canvas.timeZoneId = obj.omTimeZone.omtimezoneId;
+            }
+			
+			//this.username.setAttribute('text',obj.login);
+			this.firstname.setAttribute('text',obj.firstname);
+			this.lastname.setAttribute('text',obj.lastname);
+			this.email.setAttribute('text',obj.adresses.email);
+			this.phone.setAttribute('text', obj.adresses.phone);
+			this.age.setAttribute('text',parseDateToString(obj.age));
+			this.street.setAttribute('text',obj.adresses.street);
+			this.house.setAttribute('text',obj.adresses.additionalname);
+			this.zip.setAttribute('text',obj.adresses.zip);
+			this.town.setAttribute('text',obj.adresses.town);
+			this.state.addAndSelectItem(obj.adresses.states.name,String(obj.adresses.states.state_id));
+			this.adress_comment.setAttribute('text',obj.adresses.comment);
+			this.salutation.selectItem(String(obj.title_id));
+			this._timeZone.selectItem(String(obj.omTimeZone.jname));
+			this._organisationslist.clearList();
+			for (var i=0;i<obj.organisation_users.length;i++){
+				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
+			}
+			
+			if (obj.userOffers != null) {
+				this.userOffers.setAttribute('text',obj.userOffers);
+			}
+			if (obj.userSearchs != null) {
+				this.userSearchs.setAttribute('text',obj.userSearchs);
+			}
+			if (obj.showContactData != null && obj.showContactDataToContacts != null) {
+				
+				if (obj.showContactData) {
+					this.showContactData.selectItem("1");
+				} else if (obj.showContactDataToContacts) {
+					this.showContactData.selectItem("2");
+				} else {
+					this.showContactData.selectItem("3");
+				}
+				
+			}
+			
+			parent._userProfile.initFields(obj);
+			
+        ]]>
+    </method>
+	
+	<!-- remotecalls -->
+	
+  	<netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
+  		remotecontext="$once{ canvas.thishib }" > 
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+				if (value.pictureuri==null || value.pictureuri.length==0){
+					value.pictureuri = "d.jpg";
+				} else {
+					value.pictureuri = "_profile_"+value.pictureuri;
+				}
+				var t = new Date();
+		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.pictureuri
+		        		+'&moduleName=userprofile&parentPath=&room_id='
+		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
+		        if ($debug) Debug.write("downloadurl "+downloadurl);
+		        parent._userpic.setAttribute('src',downloadurl);	    		
+				//Debug.write("getUserSelf: ",value);
+	    		parent.initFields(value);
+    		]]>
+    	</handler>
+  	</netRemoteCallHib>	
+	
+
+  	<netRemoteCallHib name="updateUserSelfSmall" funcname="userservice.updateUserSelfSmall" 
+  		remotecontext="$once{ canvas.thishib }" registerObject="true" >   
+		<attribute name="sendObject" value="null" />
+		<!-- gets called by Observer -->
+  		<method name="prepareCall">
+            if (this.parent.userpass1.getText()==this.parent.userpass2.getText()){
+                this.parent.userObj.password = this.parent.userpass1.getText();
+            } else {
+                this.parent.userObj.password = '';
+            }
+            
+  			this.parent.userObj.firstname = this.parent.firstname.getText();
+  			this.parent.userObj.lastname = this.parent.lastname.getText();
+  			this.parent.userObj.email = this.parent.email.getText();
+  			this.parent.userObj.phone = this.parent.phone.getText();
+  			this.parent.userObj.street = this.parent.street.getText();
+  			this.parent.userObj.additionalname = this.parent.house.getText();
+  			this.parent.userObj.zip = this.parent.zip.getText();
+  			this.parent.userObj.town = this.parent.town.getText();
+  			this.parent.userObj.state_id = this.parent.state.getValue();
+  			this.parent.userObj.comment = this.parent.adress_comment.getText();
+            this.parent.userObj.age = this.parent.age.getDate();
+			this.parent.userObj.title_id = Number(this.parent.salutation.getValue());
+			this.parent.userObj.jnameTimeZone = parent._timeZone.getValue();
+			
+			this.parent.userObj.userOffers = parent.userOffers.getText();
+			this.parent.userObj.userSearchs = parent.userSearchs.getText();
+			
+			var showContactData = Number(parent.showContactData.getValue());
+			
+			if (showContactData == 1) {
+				this.parent.userObj.showContactData = true;
+				this.parent.userObj.showContactDataToContacts = true;
+			} else if (showContactData == 2) {
+				this.parent.userObj.showContactData = false;
+				this.parent.userObj.showContactDataToContacts = true;
+			} else if (showContactData == 3) {
+				this.parent.userObj.showContactData = false;
+				this.parent.userObj.showContactDataToContacts = false;
+			}
+            
+			var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            if (g==null) g = new Array();
+            g["showAudioVideoTest"] = parent.doShowTestWizzard.getValue();
+            t.setData('userdata',g);
+            t.flush();
+			
+            if ($debug) Debug.write("this.parent.userObj: ",this.parent.userObj);
+            if ($debug) Debug.write("this.parent.userObj.adresses.states ",this.parent.userObj.adresses.states);
+  		</method>
+  		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+    	<netparam><method name="getValue">return this.parent.parent.userObj;</method></netparam>	  		
+        <handler name="ondata" args="value"> 
+            if ($debug) Debug.write("updateUserSelfSmall: ",value);
+        </handler>
+  	</netRemoteCallHib>
+	
+	<!-- content -->	
+    
+    <!-- 143:userdata -->
+    <labelText labelid="143" width="200" y="40" resize="false" fontstyle="bold" />
+
+    <!-- 133:Password -->
+    <labelText labelid="133" width="200" y="70" resize="false" x="2"/>
+        <customEdittext name="userpass1" y="70" password="true" x="120" width="270" text="" />
+        
+    <!-- 134:Retype -->
+    <labelText labelid="134" width="200" y="100" resize="false" x="2"/>
+        <customEdittext name="userpass2" y="100" password="true" x="120" width="270" text="" />   
+    
+    <!-- 135:Firstname -->
+    <labelText labelid="135" width="200" y="130" resize="false" x="2"/>
+        <resetCombobox name="salutation" width="100" y="130" x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+	            for (var i=0;i<canvas.salutationsInitValues.length;i++){
+	                this.addItem(canvas.salutationsInitValues[i].label.value,canvas.salutationsInitValues[i].salutations_id);
+	            }
+	            this.selectItem(String(canvas.salutationsInitValues[0].salutations_id));
+	            ]]>
+	        </handler> 
+        </resetCombobox> 	
+        <customEdittext name="firstname" y="130" x="230" width="160" text="" />
+        
+    <!-- 136:Lastname -->
+    <labelText labelid="136" width="200" y="160" resize="false" x="2"/>
+        <customEdittext name="lastname" y="160" x="120" width="270" text="" />  
+        
+    <labelText labelid="1143" width="200" y="190" resize="false" x="2"/>
+         <resetCombobox name="_timeZone" editable="false" y="190" width="270" x="120"
+         			   fontsize="11" style="componentStyle">
+         	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+         </resetCombobox>       
+
+    <!-- 137:Mail -->
+    <labelText labelid="137" width="200" y="220" resize="false" x="2"/>
+        <customEdittext name="email" y="220" x="120" width="270" text="" regexpType="email"/>
+    
+    <!-- 607:Phone -->
+    <labelText labelid="607" width="200" y="250" resize="false" x="2"/>
+        <customEdittext name="phone" y="250" x="120" width="270" text="" />
+        
+    <!-- 138:Birthday -->
+    <labelText labelid="138" width="200" y="280" resize="false" x="2"/>
+        <dateField name="age" y="280" x="120" width="270" text="" />
+        
+    <!-- 139:Street/No -->
+    <labelText labelid="139" width="200" y="310" resize="false" x="2"/>
+        <customEdittext name="street" y="310" x="120" width="220" text="" />
+        <customEdittext name="house" y="310" x="350" width="40" text="" />
+        
+    <!-- 140:ZIP/Town -->
+    <labelText labelid="140" width="280" y="340" resize="false" x="2"/>
+        <customEdittext name="zip" y="340" x="120" width="70" text="" />   
+        <customEdittext name="town" y="340" x="200" width="190" text="" />                        
+         
+    <!-- 141:Country -->
+    <labelText labelid="141" width="200" y="370" resize="false" x="2"/>  
+        <dynamicCombobox name="state" width="270" y="370" x="120"
+                         text="Switzerland" value="204" />
+                         
+                         <!--
+		<validText name="state" width="270" y="340" x="120" fontsize="11" 
+            shownitems="7" validate_method="$once{ canvas.validateCountry }" 
+            resultId="state_id" resultName="name" /> -->
+			
+	 
+    <!-- 142:Adress-Info -->
+    <labelText labelid="142" width="200" y="400" resize="false" x="2"/>
+        <customEdittext name="adress_comment" y="400" x="120" width="270" 
+            height="100" text="" multiline="true"/>
+       
+    <!-- 161:Organisations -->
+    <labelText labelid="161" width="200" y="510" resize="false" x="2"/>     
+    <simpleValueList name="_organisationslist" y="510" x="120" width="270" height="100" 
+		multiselect="true" />
+		
+		
+    <image y="40" x="410" name="_userpic" />
+    
+    <!-- 379:Upload new Image -->
+    <simpleLabelButton y="50" labelid="379" x="550"
+        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});" /> 		
+     
+    <!-- Remember Me -->    
+    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="160" >
+        <handler name="oninit">
+            var t = new lz.sharedObject();
+            t.getLocal('userdata');
+            var g = t.getData('userdata');
+            var save = g["showAudioVideoTest"];
+            if ($debug) Debug.write("savecamdata save: ",save);
+            if(save) this.setValue(true);
+        </handler>         
+    </labelCheckbox>
+        
+        
+    <!-- Community settings -->
+    <labelText labelid="1159" width="200" y="200" resize="false" 
+               x="410" fontstyle="bold" visibility="hidden"/>   
+    
+   <radiogroup name="showContactData" visibility="hidden"
+   			layout="class:simplelayout;axis:y;spacing:2" y="230" x="420">
+        <labelRadioButton labelid="1160" value="1" />
+        <labelRadioButton labelid="1168" value="2" />
+        <labelRadioButton labelid="1169" value="3" />
+    </radiogroup> 
+ 
+    <view resource="messagebox_info_rsc" x="410" y="290" visibility="hidden"/>
+    
+    <labelText labelid="1161" x="434" y="290"  fontstyle="italic"
+               multiline="true" width="366" visibility="hidden"/>  
+                 
+	<labelText labelid="1162" width="200" y="360" resize="false" x="410" visibility="hidden"/>
+        <customScrollEdittext name="userOffers" y="340" x="530" width="270" 
+           			 height="100" text="" visibility="hidden"/>	
+
+	<labelText labelid="1163" width="200" y="470" resize="false" x="410" visibility="hidden"/>
+        <customScrollEdittext name="userSearchs" y="450" x="530" width="270" 
+           			 height="100" text="" visibility="hidden"/>	
+           			 
+</class>
+	
+</library>

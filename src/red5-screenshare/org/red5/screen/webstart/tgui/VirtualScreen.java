@@ -222,7 +222,8 @@ public class VirtualScreen {
 		ScreenShareRTMPT.instance.t.add(ScreenShareRTMPT.instance.jVScreenHeightSpin);
 		
 		
-		String[] selectResize = { ScreenShareRTMPT.instance.label1090,ScreenShareRTMPT.instance.label1091,ScreenShareRTMPT.instance.label1092,ScreenShareRTMPT.instance.label1093 };
+		//String[] selectResize = { ScreenShareRTMPT.instance.label1090,ScreenShareRTMPT.instance.label1091,ScreenShareRTMPT.instance.label1092,ScreenShareRTMPT.instance.label1093 };
+		String[] selectResize = { ScreenShareRTMPT.instance.label1091,ScreenShareRTMPT.instance.label1092,ScreenShareRTMPT.instance.label1093 };
 		VirtualScreenBean.vScreenResizeX = 640;
 		VirtualScreenBean.vScreenResizeY = 400;
 		

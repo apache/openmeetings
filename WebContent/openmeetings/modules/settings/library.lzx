@@ -5,6 +5,7 @@
 			  src="resources/loading_symbol.swf" />
     
     <include href="userSettings.lzx" />
+    <include href="editUserProfile.lzx" />
     <include href="editUserContacts.lzx" />
     <include href="searchUserProfile.lzx" />
 
