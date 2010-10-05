@@ -205,6 +205,9 @@
             
             this.sendObject["isClosed"] = parent.isClosed.getValue();
             this.sendObject["redirectURL"] = parent.redirectURL.getText();
+            
+            this.sendObject["sipNumber"] = parent.sipNumber.getText();
+            this.sendObject["conferencePin"] =  parent.conferencePin.getText();
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -574,14 +577,10 @@
                multiline="true" width="270" />   
      
     <labelText labelid="1003" x="400" y="670" width="270" /> 
-                         
-    <labelText name="sipNumber" x="520" y="670" fgcolor="0x999999" bgcolor="0xFFFFFF" 
-    		   height="20" width="180" resize="false"/>  
+    	<customEdittext name="sipNumber" x="520" y="670" width="180" />  
                
     <labelText labelid="1004" x="400" y="692" width="270" />                 
-               
-    <labelText name="conferencePin" x="520" y="692" fgcolor="0x999999" bgcolor="0xFFFFFF" 
-    		   height="20" width="180" resize="false"/>                         
+    	<customEdittext name="conferencePin" x="520" y="692" width="180" />                         
                 
     <view x="400" y="1000" />    
     

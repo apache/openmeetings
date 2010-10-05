@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+<class name="dtmfButton" extends="button" width="20" height="20" >
+	<attribute name="dtmf" value="" type="string"/>
+	<handler name="onclick">
+		callDTMFButton(this,this.text);
+	</handler>
+	<method name="doNextSipNumber">
+		if ($debug) Debug.write("doNextSipNumber ",this.text);
+	</method>
+</class>
+	
+<class name="debugPinCode" extends="labelExplorerBox" title="Enter PIN Code"
+    docking="true" resizeable="false" closable="true" width="100" x="14" height="120">
+	
+	
+	<view y="24">
+		
+		<dtmfButton text="1" x="20" dtmf="1"/> 
+			<dtmfButton text="2" x="40" dtmf="2"/> 
+				<dtmfButton text="3" x="60" dtmf="3"/>
+				
+		<dtmfButton text="4" x="20" y="20" dtmf="4"/> 
+			<dtmfButton text="5" x="40" y="20" dtmf="5"/> 
+				<dtmfButton text="6" x="60" y="20" dtmf="6"/>
+				
+		<dtmfButton text="7" x="20" y="40" dtmf="7"/> 
+			<dtmfButton text="8" x="40" y="40" dtmf="8"/> 
+				<dtmfButton text="9" x="60" y="40" dtmf="9"/>
+				
+		<dtmfButton text="10" x="20" y="60" dtmf="10"/>
+		
+	</view>
+	
+	
+</class>
 
 <class name="baseConferenceRoom" extends="baseContentView" destroyByMethod="true" >
 	
@@ -31,22 +66,26 @@
                 	
                 	if ($debug) Debug.write("Dial SIP Number: ",canvas.currentRoomObject.sipNumber);
                 	
-                	this.sipNumberAsArray = new Array();
+                	//this.sipNumberAsArray = new Array();
                 	
-                	var numberAsString = ""+canvas.currentRoomObject.sipNumber;
+                	//var numberAsString = ""+;
                 	
-                	for (var i=0;i<numberAsString.length;i++) {
-                		var charString = numberAsString.charAt(i);
-                		if ($debug) Debug.write("Dial charString: ",charString);
-                		if (charString == "+") {
-                			this.sipNumberAsArray.push(Number("0"));
-                		} else {
-                			this.sipNumberAsArray.push(Number(charString));
-                		}
-                		
-                	}
+                	preCustomStartCallByCallTo(canvas.currentRoomObject.sipNumber);
                 	
-                	this.startDialing();
+                	new lz.debugPinCode(canvas);
+                	
+                	//for (var i=0;i<numberAsString.length;i++) {
+                	//	var charString = numberAsString.charAt(i);
+                	//	if ($debug) Debug.write("Dial charString: ",charString);
+                	//	if (charString == "+") {
+                	//		this.sipNumberAsArray.push(Number("0"));
+                	//	} else {
+                	//		this.sipNumberAsArray.push(Number(charString));
+                	//	}
+                	//	
+                	//}
+                	//
+                	//this.startDialing();
                 	
                 } else {
                 	

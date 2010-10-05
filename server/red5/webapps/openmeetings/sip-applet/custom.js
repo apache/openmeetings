@@ -122,6 +122,14 @@ function preCustomStartCall()
 {
 	setCallTo(document.getElementById("callto").value);
 }
+
+function preCustomStartCallByCallTo(callto)
+{
+	setCallTo(callto);
+	
+	return "ok "+callto;
+}
+
 function customOnBusy()
 {
 	statusBar("Busy");

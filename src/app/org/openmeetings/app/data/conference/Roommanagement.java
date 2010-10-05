@@ -745,7 +745,9 @@ public class Roommanagement {
 			Boolean allowUserQuestions,
 			Boolean isAudioOnly,
 			Boolean isClosed,
-			String redirectURL){
+			String redirectURL,
+			String sipNumber,
+			String conferencePin){
 		
 		log.debug("addRoom");
 		
@@ -773,6 +775,9 @@ public class Roommanagement {
 				
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
+				
+				r.setSipNumber(sipNumber);
+				r.setConferencePin(conferencePin);
 				
 				//handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = OpenXGHttpClient.getInstance().openSIPgCreateConference();
@@ -1354,7 +1359,9 @@ public class Roommanagement {
 			Boolean allowUserQuestions,
 			Boolean isAudioOnly,
 			Boolean isClosed,
-			String redirectURL){
+			String redirectURL,
+			String sipNumber,
+			String conferencePin){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1378,6 +1385,9 @@ public class Roommanagement {
 				
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
+
+				r.setSipNumber(sipNumber);
+				r.setConferencePin(conferencePin);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();

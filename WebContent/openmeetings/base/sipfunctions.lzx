@@ -125,6 +125,21 @@ function callbackDTMFButton(returnValue) {
     
 }
 
+function preCustomStartCallByCallTo(sipNumber) {
+	
+	//preCustomStartCall(); startCall();
+    lz.Browser.callJS("preCustomStartCallByCallTo",preCustomStartCallByCallToCallBack,sipNumber);
+    
+}
+
+function preCustomStartCallByCallToCallBack(returnValue) {
+    
+	if ($debug) Debug.write("preCustomStartCallByCallToCallBack ",returnValue);
+	
+    startCall();
+    
+}
+
 
 function preCustomStartCall() {
     

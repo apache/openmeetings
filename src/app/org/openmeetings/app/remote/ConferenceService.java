@@ -538,7 +538,9 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isAudioOnly").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isClosed").toString()),
-	        			argObjectMap.get("redirectURL").toString());
+	        			argObjectMap.get("redirectURL").toString(),
+	        			argObjectMap.get("sipNumber").toString(),
+	        			argObjectMap.get("conferencePin").toString());
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -553,7 +555,9 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isAudioOnly").toString()),
 	        			Boolean.valueOf(argObjectMap.get("isClosed").toString()),
-	        			argObjectMap.get("redirectURL").toString());
+	        			argObjectMap.get("redirectURL").toString(),
+	        			argObjectMap.get("sipNumber").toString(),
+	        			argObjectMap.get("conferencePin").toString());
 	        }
 	        
 		} catch (Exception e){

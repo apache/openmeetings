@@ -159,7 +159,9 @@ public class AppointmentLogic {
 				true,				// Allow User Questions
 				false,              // isAudioOnly
 				false, 		        // isClosed
-				"");				// redirectURL
+				"", 				// redirectURL
+				"", 				// sipNumber
+				"");				// conferencePIN
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);
