@@ -1092,7 +1092,10 @@ public class FlvInterviewReConverter {
                 String executable_fileName = "";        
                 String pathToIMagick = this.getPathToImageMagick();
                 
-                String runtimeFile = "interviewMerge.bat";
+                Date tnow = new Date();
+                String runtimeFile = "interviewMerge"+tnow.getTime()+".bat";
+                
+                //String runtimeFile = "interviewMerge.bat";
                 executable_fileName = ScopeApplicationAdapter.batchFileFir
                 			 + runtimeFile;
                 
@@ -1122,6 +1125,9 @@ public class FlvInterviewReConverter {
                 fos.write(fileContent.getBytes());
                 fos.close();
                 
+                File now = new File(executable_fileName);
+                now.setExecutable(true);
+                
                 Runtime rt = Runtime.getRuntime();                      
                 returnMap.put("command", cmd.toString());
                 Process proc = rt.exec(cmd);
@@ -1139,6 +1145,11 @@ public class FlvInterviewReConverter {
                 int exitVal = proc.waitFor();
                 //log.debug("exitVal: "+exitVal);
                 returnMap.put("exitValue", exitVal);
+
+                if (now.exists()) {
+                	now.delete();
+                }
+                
                 return returnMap;
         } catch (Throwable t) {
                 t.printStackTrace();
