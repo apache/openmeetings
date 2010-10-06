@@ -25,6 +25,7 @@ import org.openmeetings.app.data.flvrecord.listener.StreamTranscodingListener;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingLog;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -679,6 +680,22 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	        }
 		} catch (Exception err){
 			log.error("[getFlvRecordingWithMetaData] ",err);
+			err.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<FlvRecordingLog> getFlvRecordingLog(String SID, Long flvRecordingId) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	return this.flvRecordingLogDaoImpl.getFLVRecordingLogByRecordingId(flvRecordingId);
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[getFlvRecordingLog] ",err);
 			err.printStackTrace();
 		}
 		return null;

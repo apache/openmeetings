@@ -377,40 +377,74 @@
     
     <conferenceBox name="_recordingsInfo" labelid="862" valign="bottom"
                    textInset="30" closeable="true" isopen="true" closedHeight="32"
-                   width="$once{ parent.width - 12 }" height="160">
+                   width="$once{ parent.width - 12 }" height="180">
         
-        <view name="content" y="34" bgcolor="0xFFFFFF" 
+        <view name="content" y="34" bgcolor="0xEFEFEF" 
               width="$once{ parent.width }" height="$once{ parent.height - 34 }">
             
             <attribute name="recordingName" value="" type="string" />
             <attribute name="alternateName" value="" type="string" />
             
-            <view name="_show_log" resource="recorder_show_log_rsc" y="-2" x="$once{ parent.width - 18 }">
+            <!--
+            <labelText text="Cut" resize="true" x="$once{ parent.width - 118 }" y="0"/>
+            
+            <customEdittext name="left" x="$once{ parent.width - 108 }" width="26" text="0" y="0"/>
+             -->
+            
+            <labelText text="Shift (in ms)" resize="true" x="0" y="0"/>
+            
+            <labelText text="Left" resize="true" x="$once{ parent.width - 200 }" y="0"/>
+            
+            <customEdittext name="leftTime" x="$once{ parent.width - 158 }" width="26" text="0" y="0"/>
+            
+            <labelText text="Right" resize="true" x="$once{ parent.width - 118 }" y="0"/>
+            
+            <customEdittext name="rightTime" x="$once{ parent.width - 68 }" width="26" text="0" y="0"/>
+            
+            
+            <labelText text="Loudness" resize="true" x="0" y="20"/>
+            
+            <labelText text="Left" resize="true" x="$once{ parent.width - 200 }" y="20"/>
+            
+            <customEdittext name="left" x="$once{ parent.width - 158 }" width="26" text="0" y="20"/>
+            
+            <labelText text="Right" resize="true" x="$once{ parent.width - 118 }" y="20"/>
+            
+            <customEdittext name="right" x="$once{ parent.width - 68 }" width="26" text="0" y="20"/>
+            
+            <view name="_show_log1" resource="flv_reload_rsc" y="18" x="$once{ parent.width - 36 }">
+                <handler name="onclick" args="clickObj">
+                    parent.parent.parent.parent._recordingsViewMain.restartConversion(parent.left.getText(),parent.right.getText(),parent.leftTime.getText(),parent.rightTime.getText());
+                </handler>
+                <labelTooltip text="Re-Sample File" />
+            </view>
+            
+            <view name="_show_log2" resource="recorder_show_log_rsc" y="18" x="$once{ parent.width - 18 }">
             	<handler name="onclick" args="clickObj">
             		parent.parent.parent.parent._recordingsViewMain.showLog();
             	</handler>
             	<labelTooltip labelid="902" />
             </view>
             
-            <labelText labelid="863" y="16" />
-            <labelText name="_flvName" y="16" x="80" multiline="true" height="32" 
+            <labelText labelid="863" y="38" />
+            <labelText name="_flvName" y="38" x="80" multiline="true" height="32" 
                        width="${ parent.width-80 }"/>
             
-            <labelText labelid="864" y="36" />
-            <labelText name="_flvLength" y="36" x="80" />
+            <labelText labelid="864" y="58" />
+            <labelText name="_flvLength" y="58" x="80" />
             
-            <labelText labelid="865" y="56" />
-            <labelText name="_flvDate" y="56" x="80" />
+            <labelText labelid="865" y="78" />
+            <labelText name="_flvDate" y="78" x="80" />
             
             <!--
             <labelText labelid="866" y="60" />
             <labelText name="_flvBy" y="60" />
              -->
             
-            <labelText labelid="874" y="76" />
-            <labelText name="_flvRoom" y="76" x="80" />
+            <labelText labelid="874" y="98" />
+            <labelText name="_flvRoom" y="98" x="80" />
             
-            <simpleLabelButton y="100" align="right" text_padding_x="40"
+            <simpleLabelButton y="120" align="right" text_padding_x="40"
                               height="26" width="$once{ parent.width / 2 }" labelid="883">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
@@ -435,7 +469,7 @@
             </simpleLabelButton>
             
             
-            <simpleLabelButton y="100" align="left" text_padding_x="40" 
+            <simpleLabelButton y="120" align="left" text_padding_x="40" 
                               height="26" width="$once{ parent.width / 2 }" labelid="884">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">

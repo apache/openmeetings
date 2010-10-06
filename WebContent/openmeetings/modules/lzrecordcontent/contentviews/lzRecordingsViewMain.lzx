@@ -27,8 +27,82 @@
         </handler>
         
         <method name="showLog">
-        	new lz.messageRecordingWin(canvas,{error:this.recordingLog,labelTitleId:903});
+        	if ($debug) Debug.write("getFlvRecordingLog flvRecordingId ",this.getFlvRecordingLog.flvRecordingId);
+        	this.getFlvRecordingLog.doCall();
         </method>
+        
+        <netRemoteCallHib name="getFlvRecordingLog" funcname="flvrecorderservice.getFlvRecordingLog" 
+            remotecontext="$once{ canvas.thishib }" showLoading="false"> 
+            <attribute name="flvRecordingId" value="0" type="number"/>  
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.flvRecordingId;</method></netparam>
+            <handler name="ondata" args="value">    
+                <![CDATA[
+                    var tLogString = "";
+                    var headerMessage = "<br/>"+canvas.getLabelName(889);
+                    for (var i = 0;i<value.length;i++) {
+                        
+                        tLogString += headerMessage 
+                                    + parseDateToStringTimeSecunds(value[i].inserted)
+                                    + '<br/>'
+                                    + value[i].msgType
+                                    + '<br/>'
+                                    + value[i].fullMessage
+                                    + '<br/>'
+                                    + value[i].exitValue
+                                    + '<br/>';
+                        
+                    }
+                    
+                    if ($debug) Debug.write("getFlvRecordingLog: ");
+                    
+                    new lz.messageRecordingWin(canvas,{error:tLogString,labelTitleId:903});
+                ]]>
+            </handler>
+        </netRemoteCallHib> 
+        
+        <method name="restartConversion" args="left,right,leftTime,rightTime">
+        	<![CDATA[
+	            if ($debug) Debug.write("restartConversion ",this.getFlvRecordingLog.flvRecordingId);
+	            
+	            if (left == "" || right == "" || leftTime == "" || rightTime == "") {
+	            	new lz.labelerrorPopup(canvas,{
+			            		error:'You have to set at least 0 as value for Left, Right, Time'
+			            	});
+	            	return;
+	            }
+	            
+	            this.restartInterviewConversion.left = Number(left);
+	            this.restartInterviewConversion.right = Number(right);
+	            
+	            this.restartInterviewConversion.leftTime = Math.round(Number(leftTime));
+	            this.restartInterviewConversion.rightTime = Math.round(Number(rightTime));
+	            
+	            if ($debug) Debug.write("this.restartInterviewConversion.left :: ",this.restartInterviewConversion.left);
+	            if ($debug) Debug.write("this.restartInterviewConversion.right :: ",this.restartInterviewConversion.right);
+	            
+	            this.restartInterviewConversion.doCall();
+            ]]>
+        </method>
+        
+        <netRemoteCallHib name="restartInterviewConversion" funcname="flvrecorderservice.restartInterviewConversion" 
+            remotecontext="$once{ canvas.thishib }" showLoading="false"> 
+            <attribute name="flvRecordingId" value="0" type="number"/>
+            <attribute name="left" value="0" type="number"/>  
+            <attribute name="right" value="0" type="number"/>
+            <attribute name="leftTime" value="0" type="number"/>
+            <attribute name="rightTime" value="0" type="number"/>         
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.flvRecordingId;</method></netparam>
+            <netparam><method name="getValue">return parent.left;</method></netparam>
+            <netparam><method name="getValue">return parent.right;</method></netparam>
+            <netparam><method name="getValue">return parent.leftTime;</method></netparam>
+            <netparam><method name="getValue">return parent.rightTime;</method></netparam>
+            <handler name="ondata" args="value">    
+                if ($debug) Debug.write("restartInterviewConversion: ",value);
+                new lz.errorPopup(canvas,{error:"Re-Sampling Started, that can take some time, click on the Interview to get the status "});
+            </handler>
+        </netRemoteCallHib> 
         
         <method name="setNewStream" args="recording">
         	<![CDATA[
@@ -46,7 +120,11 @@
     			
     			this.recordingName = recording.fileHash;
     			
+    			this.getFlvRecordingLog.flvRecordingId = recording.flvRecordingId;
+    			this.restartInterviewConversion.flvRecordingId = recording.flvRecordingId;
+    			
     			//Check if recording is not yet completed or if it has failed
+    			// *** This is disabled for now as the Log can grow too big ***
     			for (var i = 0;i<recording.flvRecordingLog.length;i++) {
     				
     				if (recording.flvRecordingLog[i].exitValue != "0") {
