@@ -16,6 +16,7 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
 import org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverterTask;
+import org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.openmeetings.app.data.flvrecord.listener.ListenerAdapter;
 import org.openmeetings.app.data.flvrecord.listener.StreamAudioListener;
@@ -52,6 +53,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private Roommanagement roommanagement;
 	private FlvRecorderConverterTask flvRecorderConverterTask;
 	private FlvInterviewConverterTask flvInterviewConverterTask;
+	private FlvInterviewReConverterTask flvInterviewReConverterTask;
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
 	private ScopeApplicationAdapter scopeApplicationAdapter = null;
 	
@@ -110,6 +112,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void setFlvInterviewConverterTask(
 			FlvInterviewConverterTask flvInterviewConverterTask) {
 		this.flvInterviewConverterTask = flvInterviewConverterTask;
+	}
+	
+	public FlvInterviewReConverterTask getFlvInterviewReConverterTask() {
+		return flvInterviewReConverterTask;
+	}
+	public void setFlvInterviewReConverterTask(
+			FlvInterviewReConverterTask flvInterviewReConverterTask) {
+		this.flvInterviewReConverterTask = flvInterviewReConverterTask;
 	}
 
 	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
@@ -913,5 +923,34 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return 0;
 	}
 	
+	public Long restartInterviewConversion(String SID, Long flvRecordingId, Integer leftSideLoud, Integer rightSideLoud,
+			Integer leftSideTime, Integer rightSideTime) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){	
+	        	
+	        	log.debug("updateFileOrFolderName "+flvRecordingId);
+	        	
+	        	FlvRecording flvRecording = this.flvRecordingDaoImpl.getFlvRecordingById(flvRecordingId);
+	        	
+	        	if (flvRecording.getIsInterview() == null || !flvRecording.getIsInterview()) {
+	        		return -1L;
+	        	}
+	        	
+	        	flvRecording.setPreviewImage(null);
+	        	
+	        	flvRecording.setProgressPostProcessing(0);
+	        	
+	        	this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+	        	
+	        	this.flvInterviewReConverterTask.startConversionThread(flvRecordingId, leftSideLoud, rightSideLoud, leftSideTime, rightSideTime);
+	        	
+	        }
+		} catch (Exception err){
+			log.error("[restartInterviewConversion] ",err);
+		}
+		return null;
+	}
 	
 }

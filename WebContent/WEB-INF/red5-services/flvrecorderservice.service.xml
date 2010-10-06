@@ -17,6 +17,7 @@
         <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
         <property name="flvRecorderConverterTask" ref="openmeetings.FlvRecorderConverterTask" />
         <property name="flvInterviewConverterTask" ref="openmeetings.FlvInterviewConverterTask" />
+        <property name="flvInterviewReConverterTask" ref="openmeetings.FlvInterviewReConverterTask" />
         <property name="flvRecordingLogDaoImpl" ref="openmeetings.FlvRecordingLogDaoImpl" />
         <property name="scopeApplicationAdapter" ref="web.handler.openmeetings" />
     </bean> 
@@ -55,6 +56,12 @@
         <constructor-arg type="org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverter" ref="openmeetings.FlvInterviewConverter"/>
     </bean>
     
+    <bean id="openmeetings.FlvInterviewReConverterTask" class="org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverterTask">
+        <constructor-arg type="org.springframework.core.task.TaskExecutor" 
+                         ref="openmeetings.TaskExecutor" />
+        <constructor-arg type="org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverter" ref="openmeetings.FlvInterviewReConverter"/>
+    </bean> 
+    
     <bean id="openmeetings.FlvInterviewConverter" 
         class="org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverter" >
         <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
@@ -66,6 +73,15 @@
     
     <bean id="openmeetings.FlvRecorderConverter" 
         class="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverter" >
+        <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
+        <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
+        <property name="configurationmanagement" ref="openmeetings.Configurationmanagement" />
+        <property name="flvRecordingLogDaoImpl" ref="openmeetings.FlvRecordingLogDaoImpl" />
+        <property name="flvRecordingMetaDeltaDaoImpl" ref="openmeetings.FlvRecordingMetaDeltaDaoImpl" />
+    </bean>   
+    
+    <bean id="openmeetings.FlvInterviewReConverter" 
+        class="org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverter" >
         <property name="flvRecordingDaoImpl" ref="openmeetings.FlvRecordingDaoImpl" />
         <property name="flvRecordingMetaDataDaoImpl" ref="openmeetings.FlvRecordingMetaDataDaoImpl" />
         <property name="configurationmanagement" ref="openmeetings.Configurationmanagement" />

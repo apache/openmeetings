@@ -54,6 +54,26 @@ public class FlvRecordingLogDaoImpl {
 		return null;
 	}	
 	
+	public void deleteFLVRecordingLogByRecordingId(Long flvRecordingId){
+		try {
+			List<FlvRecordingLog> flvRecordingLogs = this.getFLVRecordingLogByRecordingId(flvRecordingId);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
+				session.delete(flvRecordingLog);
+			}
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (HibernateException ex) {
+			log.error("[deleteFLVRecordingLogByRecordingId] ", ex);
+		} catch (Exception ex2) {
+			log.error("[deleteFLVRecordingLogByRecordingId] ", ex2);
+		}
+	}
+	
 	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, HashMap<String, Object> returnMap) {
 		try { 
 			
