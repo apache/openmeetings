@@ -25,6 +25,10 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class FlvInterviewConverter {
+	
+	//Windows has some problems in reading the image number correctly without index
+	//that is why we have to say %09d (=max a number with 9 decimals) instead of %d (=infinite)
+	//private final int maxDecimalPoint = 9;
 
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(FlvInterviewConverter.class);
@@ -654,9 +658,19 @@ public class FlvInterviewConverter {
 								currentImageNumber -= initialMissingImages;
 							}
 							
-							String imageName = "image"+currentImageNumber+".png";
+							//String roundUpName = ""+currentImageNumber;
+							//int missingDecimals = maxDecimalPoint - roundUpName.length();
 							
-							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter);
+							String addZeros = "";
+//							if (missingDecimals > 0) {
+//								for (int tK=0;tK<missingDecimals;tK++) {
+//									addZeros += "0";
+//								}
+//							}
+							String imageName = "image"+addZeros+currentImageNumber+".png";
+							
+							
+							//log.debug("imageName :: "+imageName+" AT: "+sequenceCounter+ " ZT: "+missingDecimals+" AZ "+addZeros);
 							
 							String outputMetaImageFullData = streamFolderName + flvRecordingMetaData.getFlvRecordingMetaDataId() 
 																+ File.separatorChar + imageName;
@@ -691,7 +705,17 @@ public class FlvInterviewConverter {
 				//Now we should have found the needed Images to calculate, in case not we add an empty black screen
 				for (int i=0;i<frameRate;i++) {
 					
-					String outputImageName = outputImageMergedData + "image" + outputFrameNumbers[i] + ".png";
+//					String roundUpName = ""+outputFrameNumbers[i];
+//					int missingDecimals = maxDecimalPoint - roundUpName.length();
+					
+					String addZeros = "";
+//					if (missingDecimals > 0) {
+//						for (int tK=0;tK<missingDecimals;tK++) {
+//							addZeros += "0";
+//						}
+//					}
+					
+					String outputImageName = outputImageMergedData + "image" + addZeros + outputFrameNumbers[i] + ".png";
 					
 					if (interviewPod1Images[i] == null) {
 						interviewPod1Images[i] = defaultInterviewImage;
@@ -905,10 +929,10 @@ public class FlvInterviewConverter {
 								+ flvRecordingMetaData.getFlvRecordingMetaDataId() 
 								+ File.separatorChar ;
 					
-				this.deleteDirectory(new File(outputMetaImageFullData));
+				//this.deleteDirectory(new File(outputMetaImageFullData));
 			}
 			
-			this.deleteDirectory(new File(outputImageMergedData));
+			//this.deleteDirectory(new File(outputImageMergedData));
 
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);

@@ -1,0 +1,12 @@
+ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\INTERVIEW_8\image%d.png -r 25 -vcodec flv -qmax 1 -qmin 1 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\COMPLETE_INTERVIEW_TEST2.flv
+
+
+ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\INTERVIEW_8\image%d.png -r 25 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\COMPLETE_INTERVIEW_TEST2.avi
+
+
+ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\8\image%9d.png -r 25 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\COMPLETE_INTERVIEW_TEST3.avi
+
+
+ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\INTERVIEW_12\image%20d.png -r 25 -vcodec flv -qmax 1 -qmin 1 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\COMPLETE_INTERVIEW_12.flv
+
+
