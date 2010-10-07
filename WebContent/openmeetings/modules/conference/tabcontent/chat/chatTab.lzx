@@ -12,7 +12,7 @@ This is used in the conference.
      -->
      
 	<view name="_chatoutputborder" height="${ parent.height-48 }"
-       bgcolor="$once{ canvas.basebgcolorizer }"  width="${ parent.width-2 }">
+       bgcolor="$once{ canvas.basebgcolorizer }"  width="${ parent.width-4 }">
 		
 		<chatOutput name="_chatoutput" x="1" y="1" >
 			<handler name="oninit">

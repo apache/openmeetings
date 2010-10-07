@@ -24,14 +24,20 @@
     <attribute name="x_insetResource" value="4" type="number" />
     <attribute name="y_insetResource" value="4" type="number" />
     
+    <attribute name="width_insetResource" value="18" type="number" />
+    <attribute name="height_insetResource" value="18" type="number" />
+    
 	<method name="setText" args="txt">
 		this.setAttribute('text',txt);
 	</method>
 	<view layout="axis:x" name="_bg" x="1.5" y="1.5">
 		<view name="_b2" resource="blue_btn_rsc" stretches="both" width="${ this.parent.parent.width-3 }" height="${ this.parent.parent.height-3 }" />
 	</view>
-    <view x="$once{ parent.x_insetResource }" y="$once{ parent.x_insetResource }" 
-          height="18" width="18" stretches="both"
+    <view name="_rscIcon" stretches="both" 
+	  	  x="$once{ parent.x_insetResource }" 
+    	  y="$once{ parent.x_insetResource }" 
+          width="$once{ parent.width_insetResource }" 
+          height="$once{ parent.height_insetResource }" 
           resource="$once{ parent.resoureceItem }" />
     <view name="disAbledView" visibility="${ ( !parent.enabled ) ? 'visible' : 'hidden' }"
           bgcolor="white" opacity="0.6"
@@ -42,9 +48,17 @@
 	 -->
      
 	<handler name="onmouseover">
+		this._rscIcon.setAttribute("x",this._rscIcon.x-1);
+		this._rscIcon.setAttribute("y",this._rscIcon.y-1);
+		this._rscIcon.setAttribute("width",this._rscIcon.width+2);
+		this._rscIcon.setAttribute("height",this._rscIcon.height+2);
 		this._bg._b2.setAttribute('frame',2);
 	</handler>
 	<handler name="onmouseout">
+		this._rscIcon.setAttribute("x",this._rscIcon.x+1);
+		this._rscIcon.setAttribute("y",this._rscIcon.y+1);
+		this._rscIcon.setAttribute("width",this._rscIcon.width-2);
+		this._rscIcon.setAttribute("height",this._rscIcon.height-2);
 		this._bg._b2.setAttribute('frame',1);
 	</handler>
 	<handler name="onmousedown">

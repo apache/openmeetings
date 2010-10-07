@@ -2,6 +2,8 @@
 <library>
 	
 	<resource name="delete_chat_log_rsc" src="resources/cancel.png" />
+	<resource name="copy_chat_log_rsc" src="resources/edit-copy.png" />
+	<resource name="smile_chat_log_rsc" src="resources/smile.swf" />
 
 	<include href="chatTabBottomRoomList.lzx" />
 	<include href="chatOutputRoomsList.lzx" />

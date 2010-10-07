@@ -4,7 +4,7 @@
 <!--- View of the buttom area of chat. It contains buttons of message,emoticons,clear. -->
 <class name="chatTabBottom" extends="view" >
 
-		<view x="0" y="0" height="20" width="${ parent.width }" name="message" 
+		<view x="0" y="0" height="20" width="${ parent.width-2 }" name="message" 
 			  bgcolor="$once{ canvas.basebgcolorizer }">
 			<method name="getText">
 				return this._ctext.getText();
@@ -61,10 +61,11 @@
         <labelTooltip labelid="581" />
     </labelCheckbox>
 
-    <view name="_button" layout="axis:x;spacing:0" y="22" align="right">
+    <view name="_button" layout="axis:x;spacing:2" y="22" align="right">
         
         <attribute name="objMessage" value="null" />
-        <simpleLabelButton align="right" y="0" labelid="220" name="_button" width="70" > 
+        
+        <simpleLabelButton name="_button" labelid="220" height="21" width="80" > 
             <handler name="onclick">
                 parent.objMessage = new Array ();
                 parent.objMessage[0] = 'chat';
@@ -87,8 +88,25 @@
                 }
             </handler>
         </simpleLabelButton>
+        
+        <!--
+        <miniIcons resource="copy_chat_log_rsc"	y="0" x="$once{ parent.width - 72 }" width="16" height="16" 
+				   showhandcursor="true">
+			<handler name="onclick">
+	            if ($debug) Debug.write("Start Conference");
+	            new lz.chatParticipantsInviteConference(canvas,{
+	                            publicSID:parent.publicSID,
+	                            user_id:parent.user_id
+	                        });
+	        </handler>
+	        <labelTooltip labelid="1131" />
+		</miniIcons>
+		 -->
 
-        <simpleLabelButton name="_show_emots" y="0">
+
+        <blueButton name="_show_emots" y="0" resoureceItem="smile_chat_log_rsc"
+        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
+        			width_insetResource="16" height_insetResource="16">
             <handler name="onclick">
                 //parent.clearOverallChat.doCall();
                 var pick = new lz.emotIconsSelector(canvas,{
@@ -98,6 +116,7 @@
                     });
                 lz.ModeManager.makeModal( pick );
             </handler>
+            <!--
             <view x="2" y="1">
                 <handler name="oninit">
                     var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'public/emoticons/smile_btn.swf';
@@ -105,16 +124,38 @@
                     //if ($debug) Debug.write("CHAT SWFURL",swfurl);
                 </handler>
             </view>
+             -->
             <labelTooltip labelid="445" />
-        </simpleLabelButton>    
-                
-        <simpleLabelButton x="20" y="0" name="_delete_chat_log">
+            
+        </blueButton>  
+        
+        <blueButton width="20" height="20" resoureceItem="copy_chat_log_rsc"
+        			x_insetResource="2" y_insetResource="2" 
+        			width_insetResource="16" height_insetResource="16">
             <handler name="onclick">
                 parent.clearChat.doCall();
             </handler>
+            <!--
             <view x="3" y="1" resource="delete_chat_log_rsc" />
+             -->
+            <labelTooltip labelid="1200" />
+            
+        </blueButton>  
+                
+        <blueButton width="20" height="20" resoureceItem="button_cancel_rsc"
+        			x_insetResource="2" y_insetResource="2" 
+        			width_insetResource="16" height_insetResource="16">
+            <handler name="onclick">
+                parent.clearChat.doCall();
+            </handler>
+            <!--
+            <view x="3" y="1" resource="delete_chat_log_rsc" />
+             -->
             <labelTooltip labelid="442" />
-        </simpleLabelButton>
+            
+        </blueButton>
+        
+        <view width="1" />
         
         <netRemoteCallHib name="clearChat" funcname="chatservice.clearChat" 
             remotecontext="$once{ canvas.thishib }" > 

@@ -45,7 +45,7 @@
 		  name="header_user" />
 		  
     <miniIcons visible="$once{ !parent.isDirectLink }" y="0" x="$once{ parent.width - 54 }"
-    		   resource="test_setup_start_conference2_rsc" width="16" height="16" 
+    		   resource="start_conference2_rsc" width="16" height="16" 
                showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");

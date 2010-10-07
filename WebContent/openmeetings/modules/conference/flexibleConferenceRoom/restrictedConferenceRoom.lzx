@@ -103,6 +103,10 @@
                 this.content.setAttribute("visibility","hidden");
             }
         </handler>
+        
+        <labelText labelid="1199" x="${ parent.width - this.width }" bgcolor="0xFFFFFF"
+        		   y="2" fontsize="10" fontstyle="bold" fgcolor="0xFF3300" />
+        
         <chatTab name="content" y="22" height="${ parent.height-22 }" visibility="hidden"
                  width="${ parent.width }" />
     </basePropertyPanel>    

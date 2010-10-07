@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/userservice"/>
+	<classpathentry kind="src" path="src/red5-screenshare"/>
 	<classpathentry kind="src" path="src/roomservice"/>
 	<classpathentry kind="src" path="src/app"/>
 	<classpathentry kind="src" path="src/stored"/>
