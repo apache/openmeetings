@@ -16,7 +16,7 @@
 		  height="$once{ parent.height-21 }" />
 	
 	<!-- message and buttons area-->
-	<view y="22" bgcolor="white" x="4" height="$once{ parent.height-25 }" >
+	<view y="22" bgcolor="0xFFFFFF" x="4" height="$once{ parent.height-25 }" >
 		<view name="_chatoutputborder" height="$once{ parent.height-48 }"
 	        bgcolor="$once{ canvas.basebgcolorizer }" width="604">
 			<overAllChatOutput name="_chatoutput" x="1" y="1" >

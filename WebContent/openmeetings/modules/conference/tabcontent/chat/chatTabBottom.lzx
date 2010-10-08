@@ -133,7 +133,14 @@
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
             <handler name="onclick">
-                parent.clearChat.doCall();
+                <![CDATA[
+                
+                	var tString = canvas._chatcontent.getLog();
+                
+                	new lz.showChatLog(canvas,{
+			                		error:tString
+			                	});
+                ]]>
             </handler>
             <!--
             <view x="3" y="1" resource="delete_chat_log_rsc" />
@@ -145,7 +152,13 @@
         <blueButton width="20" height="20" resoureceItem="button_cancel_rsc"
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
+            
             <handler name="onclick">
+            	if (!canvas.ismoderator) {
+        			//Do not allow
+        			new lz.labelerrorPopup(canvas,{errorlabelid:783});
+        			return;
+        		}
                 parent.clearChat.doCall();
             </handler>
             <!--

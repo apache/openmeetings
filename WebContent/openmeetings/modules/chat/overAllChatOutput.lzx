@@ -27,7 +27,27 @@
                 }
             ]]>
         </handler>   
-    </netRemoteCallHib>     
+    </netRemoteCallHib>   
+    
+    <method name="getLog">
+    	<![CDATA[
+    		var tString = "";
+    		
+    		for (var i=0;i<this._cbtext.subviews.length;i++) {
+    			
+    			if (i!=0) {
+    				tString += "<br/>";
+    			}
+    			
+    			tString += this._cbtext.subviews[i].username + ': '
+    					+ this._cbtext.subviews[i].message;
+    			
+    		}
+    		
+    		return tString;
+    	
+    	]]>
+    </method>   
     
     <method name="addChatHistory" args="value,client">
         <![CDATA[
@@ -49,6 +69,7 @@
 	                messageObj:messageObj,user_id:value[8],
 	                usercolor:usercolor,
 	                publicSID:value[6],
+	                message:value[4],
 	                username:username,
 	                usertime:value[1]
                 });

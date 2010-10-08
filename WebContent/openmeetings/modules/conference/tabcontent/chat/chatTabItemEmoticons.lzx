@@ -11,6 +11,7 @@
 	<attribute name="publicSID" value="" type="string" />
 	<attribute name="messageObj" value="null" />
 	<attribute name="isDirectLink" value="false" type="boolean" />
+	<attribute name="message" value="" type="string" />
 	
 	<handler name="oninit">
 		<![CDATA[
