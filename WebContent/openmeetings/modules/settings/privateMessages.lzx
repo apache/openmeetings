@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-	
 <class name="privateMessagItem" extends="basePagingListItem" showhandcursor="false" height="20">
 	
 	<attribute name="from" value="" type="string"/>
@@ -24,6 +23,33 @@
 <class name="privateMessages" extends="view" height="$once{ parent.height }" 
 	   width="$once{ canvas.width - 276 }">
 	
+	<attribute name="newMessageActive" value="false" type="boolean" />
+	
+	<method name="newMessage">
+		if (this.newMessageActive) {
+			this._newPrivateMessage.destroy();
+		}
+		
+		new lz.newPrivateMessage(this,{
+						x:154,
+						refObj:this,
+						width:this._table.width+8,
+						height:this.height-2
+					});
+				
+		this.newMessageActive = true;
+	</method>
+	
+	<view name="_statusAndGroups" width="152">
+		
+		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5">
+			<handler name="onclick">
+				parent.parent.newMessage();
+			</handler>
+			<labelTooltip labelid="1208"></labelTooltip>
+		</simpleLabelRoundButton>
+		
+	</view>
 	
 	
 	<view height="$once{ parent.height }" width="1" x="154" 
@@ -32,7 +58,7 @@
 	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
 	
 	<turnOverListOrderedPaged name="_table" showTopBar="true" x="160" 
-					 height="240" width="$once{ parent.width-this.x-2 }"
+					 height="250" width="$once{ parent.width-this.x-2 }"
 		             y="24" itemHeight="20" listLabelId="1184" headerHeight="22" 
 		             listItemName="privateMessagItem" menuBarXIndent="100"
 		             multiselect="false" orderby="c.inserted">

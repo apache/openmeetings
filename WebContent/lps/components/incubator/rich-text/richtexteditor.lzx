@@ -9,8 +9,6 @@
 <include href="../lzcombobox.lzx"/>
 <include href="../borderinput.lzx"/>
 <include href="../textstyle.lzx"/>
-<include href="../tooltip/tooltip.lzx"/>
-<include href="../tooltip/tooltipview.lzx" />
     
 <include href="richtexttoolbar.lzx"/>
 <include href="richtexteditarea.lzx"/>

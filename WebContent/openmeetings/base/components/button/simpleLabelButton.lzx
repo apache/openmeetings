@@ -12,7 +12,8 @@
 	
 </class>
 
-<class name="simpleLabelRoundButton" extends="roundrectbutton" fontsize="11" height="20" style="componentStyle">
+<class name="simpleLabelRoundButton" extends="roundrectbutton" 
+	   fontsize="11" height="20" style="componentStyle" fontstyle="bold">
 
     <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
     <method name="setLabelId" args="_labelid" >

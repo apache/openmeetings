@@ -4,8 +4,11 @@
 	<resource name="image_loading_placeholder_rsc" 
 			  src="resources/loading_symbol.swf" />
     
+    <include href="incubator/rich-text/richtexteditor.lzx"/>
+    
     <include href="userSettings.lzx" />
     <include href="editUserProfile.lzx" />
+    <include href="newPrivateMessage.lzx" />
     <include href="privateMessages.lzx" />
     <include href="userContacts.lzx" />
     <include href="editUserContacts.lzx" />

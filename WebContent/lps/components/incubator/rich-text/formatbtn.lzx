@@ -6,7 +6,6 @@
     
     <!-- dependencies  -->
     <include href="../stylishbutton.lzx" />
-    <include href="../tooltip/tooltip.lzx" />
     
     <!--- class for use of <xref linkend="lz.richtexttoolbar" /> buttons  -->
     <class name="formatbtn" extends="stylishbutton" width="26" 

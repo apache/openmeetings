@@ -24,6 +24,13 @@
 		<view name="_b2" resource="aqua_rsc1" stretches="both" width="${ this.parent.parent.width-14 }" height="20.5" />
 		<view name="_b3" resource="aqua_rsc3" stretches="both" width="7" height="20.5" />
 	</view>
+	
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this._text.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+	
 	<text name="_text" x="${ this.parent.width/2-this.width/2 }" fontsize="10" fgcolor="0x333333" fontstyle="bold" y="3" text="defaulttext" resize="true" />
 	
 	<handler name="onmouseover">
