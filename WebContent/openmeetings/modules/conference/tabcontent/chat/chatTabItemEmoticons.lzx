@@ -111,8 +111,11 @@
 					
 					for (var k = 0;k<tString.length;k++){
 						this.setAttribute('text',this.getText()+textObject[k]["text"]+"\r");
-						//Debug.write("text: ",k,textObject[k]["lineWidth"],textObject[k]["text"]);
+						//if ($debug) Debug.write("text: ",k,textObject[k]["lineWidth"],textObject[k]["text"]);
 					}	
+					
+					//if ($debug) Debug.write("text: ",this.getText());
+					
 					//Debug.write(this.sprite.__LZtextclip.getTextFormat());
 					tFormat.leading = parent.leading;
 					this.sprite.__LZtextclip.setTextFormat(tFormat);
@@ -139,7 +142,15 @@
 				
 				
 			]]>
-		</handler>		
+		</handler>	
+		
+		<method name="link" args="str">
+			<![CDATA[
+			
+				
+			
+			]]>
+		</method>	
 
 	</text>
 

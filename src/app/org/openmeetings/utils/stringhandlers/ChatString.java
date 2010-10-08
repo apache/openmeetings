@@ -6,6 +6,9 @@ import java.text.StringCharacterIterator;
 import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 import org.openmeetings.app.remote.red5.EmoticonsManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
@@ -47,6 +50,8 @@ public class ChatString {
 		try {
 			LinkedList<String[]> list = new LinkedList<String[]>();
 			
+			//log.debug("this.link(message) "+this.link(message));
+			
 			String[] messageStr = {"text",message};
 			list.add(messageStr);
 			
@@ -62,11 +67,12 @@ public class ChatString {
 				}
 			}			
 			
-			log.error("#########  ");
-			for (Iterator<String[]> iter = list.iterator();iter.hasNext();){
-				String[] stringArray = iter.next();
-				log.error(stringArray[0]+"||"+stringArray[1]);
-			}			
+//			log.debug("#########  ");
+//			for (Iterator<String[]> iter = list.iterator();iter.hasNext();){
+//				String[] stringArray = iter.next();
+//				//stringArray[1] = this.link(stringArray[1]);
+//				log.debug(stringArray[0]+"||"+stringArray[1]);
+//			}			
 			
 			return list;
 			
@@ -204,5 +210,43 @@ public class ChatString {
 	    }
 	    return result.toString();
 	  }	
+	  
+	  public String link(String input) {
+			try {
+				
+				String tReturn = "";
+				
+				String parts[] = input.split(" ");
+				
+				for (int t=0;t<parts.length;t++) {
+					
+					String text = parts[t];
+		
+					//System.out.println("Part 1 "+text);
+					
+					Matcher matcher = Pattern.compile("(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))").matcher(text);
 
+					if (matcher.find()) {
+						text = matcher.replaceFirst("<u><FONT color=\"#0000CC\"><a href='" + text + "'>" + text
+								+ "</a></FONT></u>");
+
+					}
+					
+					//System.out.println("Part 2 "+text);
+					
+					if (t != 0) {
+						tReturn += " ";
+					}
+					
+					tReturn += text;
+				
+				}
+				
+				return tReturn;
+				
+			} catch (Exception e) {
+				log.error("[link]",e);
+			}
+			return "";
+		}
 }
