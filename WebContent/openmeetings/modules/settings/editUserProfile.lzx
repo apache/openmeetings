@@ -270,27 +270,27 @@
         
     <!-- Community settings -->
     <labelText labelid="1159" width="200" y="200" resize="false" 
-               x="410" fontstyle="bold" visibility="hidden"/>   
+               x="410" fontstyle="bold" visibility="visible"/>   
     
-   <radiogroup name="showContactData" visibility="hidden"
+   <radiogroup name="showContactData" visibility="visible"
    			layout="class:simplelayout;axis:y;spacing:2" y="230" x="420">
         <labelRadioButton labelid="1160" value="1" />
         <labelRadioButton labelid="1168" value="2" />
         <labelRadioButton labelid="1169" value="3" />
     </radiogroup> 
  
-    <view resource="messagebox_info_rsc" x="410" y="290" visibility="hidden"/>
+    <view resource="messagebox_info_rsc" x="410" y="290" visibility="visible"/>
     
     <labelText labelid="1161" x="434" y="290"  fontstyle="italic"
-               multiline="true" width="366" visibility="hidden"/>  
+               multiline="true" width="366" visibility="visible"/>  
                  
-	<labelText labelid="1162" width="200" y="360" resize="false" x="410" visibility="hidden"/>
+	<labelText labelid="1162" width="200" y="360" resize="false" x="410" visibility="visible"/>
         <customScrollEdittext name="userOffers" y="340" x="530" width="270" 
-           			 height="100" text="" visibility="hidden"/>	
+           			 height="100" text="" visibility="visible"/>	
 
-	<labelText labelid="1163" width="200" y="470" resize="false" x="410" visibility="hidden"/>
+	<labelText labelid="1163" width="200" y="470" resize="false" x="410" visibility="visible"/>
         <customScrollEdittext name="userSearchs" y="450" x="530" width="270" 
-           			 height="100" text="" visibility="hidden"/>	
+           			 height="100" text="" visibility="visible"/>	
            			 
 </class>
 	

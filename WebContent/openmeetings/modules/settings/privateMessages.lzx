@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	
+<class name="privateMessagItem" extends="basePagingListItem" showhandcursor="false" height="20">
+	
+	<attribute name="from" value="" type="string"/>
+	<attribute name="subject" value="" type="string"/>
+	<attribute name="strTime" value="" type="string"/>
+	
+	<view width="200">
+		<view height="$once{ parent.parent.height }" width="1" 
+        align="right" bgcolor="black" />
+	</view>
+	<turnOverTextItem name="_timezone" width="80" 
+					  text="${ parent.from }" />
+	<turnOverTextItem name="_searchOffers" width="300"
+					  text="${ parent.subject }" />
+	<turnOverTextItem name="_searchSearchs" width="300"
+					  text="${ parent.strTime }" />
+	
+</class>	
+	
+<class name="privateMessages" extends="view" height="$once{ parent.height }" 
+	   width="$once{ canvas.width - 276 }">
+	
+	
+	
+	<view height="$once{ parent.height }" width="1" x="154" 
+		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
+	
+	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
+	
+	<turnOverListOrderedPaged name="_table" showTopBar="true" x="160" 
+					 height="240" width="$once{ parent.width-this.x-2 }"
+		             y="24" itemHeight="20" listLabelId="1184" headerHeight="22" 
+		             listItemName="privateMessagItem" menuBarXIndent="100"
+		             multiselect="false" orderby="c.inserted">
+			
+		<handler name="oninit">
+			this.addHeaderItem(1205,20);
+			
+			this.addHeaderItemOrdered(1202,160,"c.from.lastname",false,false);
+			this.addHeaderItemOrdered(1203,this.width-316,"c.subject",false,false);
+			this.addHeaderItemOrdered(1204,120,"c.orderby",true,true);
+			
+			this.getInbox.doCall();
+		</handler>
+		
+		<!--
+		public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max)
+		 -->
+	    <netRemoteCallHib name="getInbox" funcname="userservice.getInbox" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		var countUnRead = 0;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[i].strTime = parseDateToStringTime(value.result[i].inserted);
+		    			if (!value.result[i].isRead) {
+		    				countUnRead++;
+		    			}
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid)+' <i>( '+countUnRead+' </i>)');
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>		
+			
+	</turnOverListOrderedPaged>
+	
+</class>
+
+</library>

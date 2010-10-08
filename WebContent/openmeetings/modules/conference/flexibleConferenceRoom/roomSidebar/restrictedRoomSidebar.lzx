@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="retrictedRoomSidebar" extends="view" width="280" 
+<class name="restrictedRoomSidebar" extends="view" width="280" 
        height="${ canvas.height - 28 }" y="0" clip="true">
     
     <attribute name="selected" value="null" />

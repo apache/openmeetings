@@ -4,7 +4,7 @@
 	<include href="eventRoomSidebar.lzx" />
     <include href="conferenceRoomSidebar.lzx" />
     <include href="interviewRoomSidebar.lzx" />
-    <include href="retrictedRoomSidebar.lzx" />
+    <include href="restrictedRoomSidebar.lzx" />
     <include href="conferenceRoomSidebarTabButton.lzx" />
     
 </library>

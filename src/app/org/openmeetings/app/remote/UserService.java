@@ -2,8 +2,10 @@ package org.openmeetings.app.remote;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -11,16 +13,20 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
 import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
@@ -641,6 +647,196 @@ public class UserService {
 	   return null;
    }
    
+    public Long composeMail(String SID, Map receipents, String subject, String message, Boolean bookedRoom, 
+    		Date appointmentstart, Date appointmentend, Long parentMessageId) {
+    	try {
+    		
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		    Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		    // users only
+ 		    if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 		    	
+ 		    	Users from = Usermanagement.getInstance().getUserById(users_id);
+ 		    	
+ 		    	Rooms room = null;
+ 		    	
+ 		    	if (bookedRoom) {
+ 		    		Long room_id = Roommanagement.getInstance().addRoom(
+ 		   				3,					// Userlevel
+ 		   				subject,	// name	
+ 		   				1L,					// RoomType	
+ 		   				"",					// Comment
+ 		   				new Long(100),		// Number of participants
+ 		   				false,				// public
+ 		   				null,				// Organisations
+ 		   				true,				// Appointment
+ 		   				false,				// Demo Room => Meeting Timer
+ 		   				null,               // Meeting Timer time in seconds
+ 		   				false, 				// Is Moderated Room
+ 		   				null, 				// Moderation List Room
+ 		   				true,				// Allow User Questions
+ 		   				false,              // isAudioOnly
+ 		   				false, 		        // isClosed
+ 		   				"", 				// redirectURL
+ 		   				"", 				// sipNumber
+ 		   				"");				// conferencePIN
+ 		    		
+ 		    		room = Roommanagement.getInstance().getRoomById(room_id);
+ 		    		
+ 		    	}
+ 		    		
+ 		    	
+ 		    	
+ 		    	for (Iterator iter = receipents.keySet().iterator();iter.hasNext();) {
+ 		    		
+ 		    		Map receipent = (Map) receipents.get(iter.next());
+ 		    		
+ 		    		Long userReceipent = (Long) receipent.get(users_id);
+ 		    		
+ 		    		Users to = Usermanagement.getInstance().getUserById(userReceipent);
+ 		    		
+ 		    		PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, bookedRoom, room);
+ 		    		
+ 		    	}
+ 		    	
+ 		    	
+ 		    	
+ 		    }
+    		
+    	} catch (Exception err) {
+ 		   log.error("[composeMail]",err);
+ 	   }
+ 	   return null;
+    }
     
+	public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				SearchResult searchResult = new SearchResult();
+				searchResult.setObjectName(Users.class.getName());
+				List<PrivateMessages> userList = PrivateMessagesDaoImpl
+									.getInstance().getPrivateMessagesByUser(users_id,
+											search, orderBy, start, asc, 0L, max);
+				
+				searchResult.setResult(userList);
+				
+				Long resultInt = PrivateMessagesDaoImpl
+									.getInstance().countPrivateMessagesByUser(users_id,search, 0L);
+				
+				searchResult.setRecords(resultInt);
+
+				return searchResult;
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
+	public SearchResult getSend(String SID, String orderBy, Integer start, Boolean asc, Integer max) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				SearchResult searchResult = new SearchResult();
+				searchResult.setObjectName(Users.class.getName());
+				List<PrivateMessages> userList = PrivateMessagesDaoImpl
+									.getInstance().getSendPrivateMessagesByUser(users_id,
+											orderBy, start, asc, 0L, max);
+				
+				searchResult.setResult(userList);
+				
+				Long resultInt = PrivateMessagesDaoImpl
+									.getInstance().countSendPrivateMessagesByUser(users_id,0L);
+				
+				searchResult.setRecords(resultInt);
+
+				return searchResult;
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+    
+	public SearchResult getFolder(String SID, Long privateMessageFolderId, String orderBy, 
+			Integer start, Boolean asc, Integer max) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				SearchResult searchResult = new SearchResult();
+				searchResult.setObjectName(Users.class.getName());
+				List<PrivateMessages> userList = PrivateMessagesDaoImpl
+									.getInstance().getFolderPrivateMessagesByUser(users_id,
+											orderBy, start, asc, privateMessageFolderId, max);
+				
+				searchResult.setResult(userList);
+				
+				Long resultInt = PrivateMessagesDaoImpl
+									.getInstance().countFolderPrivateMessagesByUser(users_id,privateMessageFolderId);
+				
+				searchResult.setRecords(resultInt);
+
+				return searchResult;
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
+	public Long moveMailToFolder(String SID, Long privateMessageId,
+			Long newFolderId) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+			}
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
+	public Long markReadStatusMail(String SID, Long privateMessageId,
+			Boolean isRead) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+			}
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
     
 }

@@ -87,7 +87,7 @@
         </handler>
     </netRemoteCallHib>
     
-    <retrictedRoomSidebar name="_sidePanel" restricted="true" 
+    <restrictedRoomSidebar name="_sidePanel" restricted="true" 
                       listType="eventUserListTableWithNames" />
     
     <basePropertyPanel name="_chatPanelStrict" labelid="616"

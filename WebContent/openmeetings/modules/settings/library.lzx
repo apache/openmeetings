@@ -6,6 +6,8 @@
     
     <include href="userSettings.lzx" />
     <include href="editUserProfile.lzx" />
+    <include href="privateMessages.lzx" />
+    <include href="userContacts.lzx" />
     <include href="editUserContacts.lzx" />
     <include href="searchUserProfile.lzx" />
 
