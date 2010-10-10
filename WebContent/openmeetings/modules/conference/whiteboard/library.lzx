@@ -13,6 +13,7 @@
 <resource name="_boundingBoxPointerTR" src="resources/boundingBoxTR.png" />
 <resource name="_boundingBoxPointerTL" src="resources/boundingBoxTL.png" />
 <resource name="_boundingBoxPointerUR" src="resources/boundingBoxUR.png" />
+<resource name="_boundingBoxPointerURNoGripper" src="resources/boundingBoxULNoGripper.png" />
 <resource name="_boundingBoxPointerUL" src="resources/boundingBoxUL.png" />
 <resource name="_boundingBoxPointer" src="resources/boundingBoxPointer.png" />
 

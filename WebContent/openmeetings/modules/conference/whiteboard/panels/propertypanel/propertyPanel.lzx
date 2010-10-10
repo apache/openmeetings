@@ -102,7 +102,7 @@
             
             this._content._documentsPanel._currentSlideNo.setAttribute("text",objRef.slideNumber);
             this._content._documentsPanel._zoom.setAttribute("text",objRef.currentzoomFactor);
-            this._content._fullFit.setValue(objRef.fullFit);
+            //this._content._fullFit.setValue(objRef.fullFit);
             
         }
 		
@@ -235,7 +235,7 @@
                 }
             </handler>
         </resetCombobox>
-        
+        <!--
 	    <labelCheckbox x="344" y="54" name="_fullFit" labelid="847" >
             <handler name="onvalue" args="v">
                 if (parent.parent.ignoreUpdates) {
@@ -245,7 +245,9 @@
                 
                 parent.parent.parent._drawareaMask._drawarea.doFullFit(v);
             </handler>
-	    </labelCheckbox>        
+            <labelTooltip labelid="1212" multiline="true" />
+	    </labelCheckbox> 
+	     -->       
 		
 		<view name="_documentsPanel" x="480" y="52" layout="axis:x;spacing:2">
 			
@@ -253,13 +255,13 @@
                 //if ($debug) Debug.write("oninit: ",this);
                 this._currentSlideNo.setAttribute('text',canvas.currentSlideNo);
                 this._totalSlideNo.setAttribute('text',canvas.currentSlideTotal);
-                this._zoom.setAttribute('text',canvas.currentSlideZoom);
+                //this._zoom.setAttribute('text',canvas.currentSlideZoom);
             </handler>
             <handler name="preclose">
                 //if ($debug) Debug.write("onclose: ",this);
                 canvas.currentSlideNo = Number(this._currentSlideNo.getText());
                 canvas.currentSlideTotal = Number(this._totalSlideNo.getText());
-                canvas.currentSlideZoom = Number(this._zoom.getText());
+                //canvas.currentSlideZoom = Number(this._zoom.getText());
             </handler>
 			
 			<method name="addCurrentObject" args="itemObj">
@@ -318,6 +320,7 @@
             <labelText y="6" labelid="254" />     
             <labelText name="_totalSlideNo" y="6" width="40" />  
             
+            <!--
             <documentPanelHPanelSeperator />
                 
             <drawDocumentPanelItem name="b7" modi="doc_zoom_minus" resoureceItem="doc_zoom_minus" 
@@ -327,6 +330,7 @@
             
             <labelText y="6" name="_zoom" width="30" height="24" />
             <labelText y="6" labelid="253" />
+             -->
             
 		</view>
 		

@@ -12,7 +12,7 @@
  -->
 
 
-<class name="fixedWhiteBoard" extends="view" >
+<class name="fixedWhiteBoard" extends="view" width="${ parent.width }">
     
     <attribute name="baseurl" value="" type="string" />
     <attribute name="fileName" value="" type="string" />
@@ -144,14 +144,71 @@
             ]]>        
     </method> 
     
+    <view name="zoombox" y="-30" align="right" layout="axis:x;spacing:2"
+    	  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+    	
+    	<attribute name="ignoreUpdates" value="false" type="boolean" />
+    	
+    	<method name="setWhiteboardValues" args="fullFit,zoom">
+    		if ($debug) Debug.write("setWhiteboardValues -1- ",fullFit,zoom);
+    		this.ignoreUpdates = true;
+    		this._zoom.setSliderValue(zoom);
+    		this._fullFit.setValue(fullFit);
+    		this.ignoreUpdates = false;
+    	</method>
+    	
+    	<method name="setCurrentScaleByFullFit" args="tScale">
+    		if ($debug) Debug.write("setCurrentScaleByFullFit -2- ",tScale);
+    		this.ignoreUpdates = true;
+    		this._zoom.setSliderValue(tScale);
+    		this.ignoreUpdates = false;
+    	</method>
+    	
+    	<labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" fgcolor="0xFFFFFF">
+            <handler name="onvalue" args="v">
+                if (parent.ignoreUpdates) {
+                    return;
+                }
+                if ($debug) Debug.warn("onvalue Full Fit ",v);
+                
+                parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
+            </handler>
+            <labelTooltip labelid="1212" multiline="true" />
+	    </labelCheckbox>
+	    
+	    <changeWidthSlider name="_zoom" initialNumberInit="50" 
+              boxPosition="down" initialNumber="50" maximum="200">
+            <handler name="oninitialNumber" args="i">
+                if (parent.ignoreUpdates) {
+                    return;
+                }
+                
+                if ($debug) Debug.warn("onvalue Zoom Fit ",this.initialNumber);
+                
+                parent._fullFit.setValue(false);
+                
+                parent.parent._drawareaMask._drawarea.doUpdateZoom(parent._fullFit.getValue(),this.initialNumber);
+            </handler>
+        </changeWidthSlider>
+        
+        <view width="2" />
+	    
+    </view>
+  
+    
     <!-- 
         The Content Area    
      -->
-    <view width="${ parent.parent.width-2 }" 
+    <view name="_drawareaMask" width="${ parent.parent.width-2 }" 
     	  height="${ (canvas.ismoderator) ? (parent.parent.height-33-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-33-parent._propertyPanel.height) : (parent.parent.height-33)) }" 
-    	  y="0" name="_drawareaMask" clip="true" bgcolor="white" >
+    	  y="0" clip="true" bgcolor="white" >
     	
-    	
+    	<handler name="onmousedown">
+    		this._drawarea.onmousedownMethod();
+    	</handler>
+    	<handler name="onmouseup">
+    		this._drawarea.onmouseupMethod();
+    	</handler>
         <remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" 
         				  restricted="$once{ parent.parent.restricted }"
         				  width="${parent.width}" height="${parent.height}" >
@@ -165,9 +222,11 @@
                 //Debug.write("onprogress: ",perc);
                 this.parent.parent._progress.setProgress(perc);
             </handler>
+            <!--
             <handler name="onmousedown" >
                 //Debug.write("onprogress: ",perc);
             </handler>
+             -->
             <handler name="ondrawmodus" args="d">
                 this.drawmodus = d;
                 //change Enabled Status of Toolbar Menu Button

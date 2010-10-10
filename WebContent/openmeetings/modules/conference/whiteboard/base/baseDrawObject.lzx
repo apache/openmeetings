@@ -6,6 +6,8 @@
     <!-- it uses some of the attribute's defined in baseDrawImage -->
     <attribute name="newSlideNumber" value="1" type="number" />
     
+    <attribute name="fullFit" value="true" type="boolean" />
+    
     <attribute name="modernToolbar" value="false" type="boolean" />
 
     <!-- 
@@ -25,9 +27,93 @@
         	url,fileName,moduleName,parentPath,room,domain,slideNumber,
         	100,0,0,0,0,
         	this.startNewObjectSyncProcess.uniqueObjectSyncName,
-            standardFileName,true);
+            standardFileName,this.fullFit);
             
         
+    </method>
+    
+    <method name="setCurrentScaleByFullFit" args="scaleFactor">
+    	<![CDATA[
+    	
+    		var tScale = Math.round(scaleFactor*100);
+    		
+    		this.getDisplayObject()._xscale = tScale;
+    		this.getDisplayObject()._yscale = tScale;
+    		
+    		if ($debug) Debug.write("setCurrentScaleByFullFit -1- ",tScale);
+    		
+    		parent.parent.zoombox.setCurrentScaleByFullFit(tScale);
+    	
+    	]]>
+    </method>
+    
+    <method name="doUpdateFullFit" args="fullFit,zoom">
+    	<![CDATA[
+    	
+    		var actionObject = new Array();
+    		actionObject.push("whiteboardObj");
+    		actionObject.push(fullFit);
+    		
+    		this.doFullFit(fullFit);
+    		
+    		actionObject.push(this.getDisplayObject()._xscale);
+    		
+    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject()._xscale);
+    		
+    		this.onsharedMessage('draw',actionObject);	
+    	
+    	]]>
+    </method>
+    
+    <method name="doUpdateZoom" args="fullFit,zoom">
+    	<![CDATA[
+    	
+    		var actionObject = new Array();
+    		actionObject.push("whiteboardObj");
+    		actionObject.push(fullFit);
+    		actionObject.push(zoom);
+    		
+    		if ($debug) Debug.write("doUpdateZoom ",this.fullFit,zoom);
+    		
+    		
+    		this.getDisplayObject()._xscale = zoom;
+    		this.getDisplayObject()._yscale = zoom;
+    		
+    		
+    		this.onsharedMessage('draw',actionObject);	
+    	
+    	]]>
+    </method>
+    
+    <method name="doUpdateFullFitAndZoomRemote" args="actionObject,refObj">
+    	<![CDATA[
+    	
+    		parent.parent.zoombox.setWhiteboardValues(actionObject[1],actionObject[2]);
+    	
+    		this.doFullFit(actionObject[1]);
+    		if ($debug) Debug.write("doUpdateFullFitAndZoomRemote ",fullFit,actionObject[2]);
+    		
+    		if (!actionObject[1]) {
+	    		this.getDisplayObject()._xscale = actionObject[2];
+	    		this.getDisplayObject()._yscale = actionObject[2];
+    		}
+    	
+    	]]>
+    </method>
+    
+    <method name="doFullFit" args="v">
+        <![CDATA[
+        
+        	this.fullFit = v;
+        	
+            if (this.ObjectByName && this.ObjectByName.typeOfObject=="swf") {    
+                if (v) {
+                    if ($debug) Debug.write("Do Full Fit");
+                    this.ObjectByName._swfView.initialLoadFullFit();
+                }
+            }
+            
+        ]]>
     </method>
     
     <method name="checkSWFPresentation" args="url,fileName,moduleName,parentPath,room,domain,slideNumber">
@@ -400,6 +486,10 @@
                 } else if (action=="doc_last"){
                     this.ObjectByName._swfView.setAttribute('frame',(this.ObjectByName._swfView.totalframes));
                 } else if (action=="doc_zoom_minus"){
+                	
+                	if ($debug) Debug.write("doc_zoom_minus ");
+                	return;
+                	
                     this.ObjectByName.currentzoomFactor-=this.ObjectByName.zoomlevel;       
                     var newwidth = (this.ObjectByName.initwidth/100)*this.ObjectByName.currentzoomFactor;
                     var newheight = (this.ObjectByName.initheight/100)*this.ObjectByName.currentzoomFactor;
@@ -407,6 +497,10 @@
                     this.ObjectByName._swfView.setAttribute('height',newheight);
                     this.boundingref.doSetInnerObjectsBounds(newwidth,newheight);
                 } else if (action=="doc_zoom_plus"){
+                	
+                	if ($debug) Debug.write("doc_zoom_plus ");
+                	return;
+                	
                     this.ObjectByName.currentzoomFactor+=this.ObjectByName.zoomlevel;       
                     //Debug.write("doc_zoom_plus 1",this.ObjectByName.currentzoomFactor,this.ObjectByName.zoomlevel);
                     var newwidth = (this.ObjectByName.initwidth/100)*this.ObjectByName.currentzoomFactor;
@@ -504,36 +598,19 @@
                     
         			docToolbar._currentSlideNo.setAttribute('text',this.ObjectByName._swfView.frame);
                     docToolbar._totalSlideNo.setAttribute('text',this.ObjectByName._swfView.totalframes);
-                    docToolbar._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
-                    docToolbar.parent._fullFit.setValue(this.ObjectByName.fullFit);
+                    //docToolbar._zoom.setAttribute('text',this.ObjectByName.currentzoomFactor);
+                    //docToolbar.parent._fullFit.setValue(this.ObjectByName.fullFit);
         		} else {
         			docToolbar._currentSlideNo.setAttribute('text',"0");
                     docToolbar._totalSlideNo.setAttribute('text',"0");
-                    docToolbar._zoom.setAttribute('text',"100");
-                    docToolbar.parent._fullFit.setValue(false);
+                    //docToolbar._zoom.setAttribute('text',"100");
+                    //docToolbar.parent._fullFit.setValue(false);
         		}
                 
                 docToolbar.parent.parent.ignoreUpdates = false;
     	        
         	}
     	]]>
-    </method>
-    
-    <method name="doFullFit" args="v">
-        <![CDATA[
-            if (this.ObjectByName && this.ObjectByName.typeOfObject=="swf") {    
-                if (v) {
-                    if ($debug) Debug.write("Do Full Fit");
-                    this.ObjectByName.fullFit = true;
-                    this.ObjectByName._swfView.initialLoadFullFit();
-                } else {
-                    this.ObjectByName.fullFit = false;
-                }
-                
-                if ($debug) Debug.info("doFullFit sendCurrentSWFObject :: ",this.ObjectByName.name);
-                this.sendCurrentSWFObject(this.ObjectByName);
-            }
-        ]]>
     </method>
     
     <method name="doDeleteFromDocumentsBar" args="itemRefName">
@@ -593,8 +670,8 @@
 			obj._swfView.setAttribute('y',lastactionObject[10]);
 			obj._swfView.setAttribute('width',lastactionObject[11]);
             obj._swfView.setAttribute('height',lastactionObject[12]);
-            obj.zoomlevel = lastactionObject[13];
-            obj.currentzoomFactor = lastactionObject[16];
+            //obj.zoomlevel = lastactionObject[13];
+            //obj.currentzoomFactor = lastactionObject[16];
             obj.fullFit = lastactionObject[19];
             
             if ($debug) Debug.write("DO initialLoadFullFit ?? ",obj.fullFit);

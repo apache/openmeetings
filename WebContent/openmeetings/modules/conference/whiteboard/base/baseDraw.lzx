@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="baseDraw" extends="drawview" cachebitmap="false" clickable="true" >
-
+<class name="baseDraw" extends="drawview" cachebitmap="false" >
+	<!--  clickable="true" -->
 	<attribute name="currentlayer" value="null" />
 	<attribute name="layers" value="null" />
 	
@@ -223,7 +223,12 @@
 			}
 			while (this.basdrawredoView.subviews.length > 0) {
 				this.basdrawredoView.subviews[0].destroy();
-			}			
+			}	
+			
+			this.getDisplayObject()._xscale = 100;
+    		this.getDisplayObject()._yscale = 100;
+    		parent.parent.zoombox.setWhiteboardValues(true,100);
+			
 			this.layers = new Array();
 			this.redolayers = new Array();
 			this.baseactionobjectList = new Array();
@@ -495,7 +500,7 @@
 		//this.setAttribute('drawmodus',this.getAttribute('drawmodus'));				
 	</method>
              
-	<handler name="onmousedown" >
+	<method name="onmousedownMethod" >
 		if ($debug) Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
 			if (this.letterObjectIsActive){
@@ -541,9 +546,9 @@
 	            mousetracker_del.register(lz.Idle,'onidle');
 	        }
         }
-	</handler>
+	</method>
 
-	<handler name="onmouseup" >
+	<method name="onmouseupMethod" >
         if ($debug) Debug.write("onmouseup this.drawmodus: ",this.drawmodus);
 		<![CDATA[	
 	        if (canvas.ismoderator || canvas.isAllowedToDraw) {
@@ -591,11 +596,13 @@
 	        	}
             }
 		]]>
-	</handler>  
+	</method>  
     
+    <!--
     <handler name="onclick" args="obj">
         //Debug.write("click on whiteBoard ",obj);
     </handler>
+     -->
 
   	<method name="trackmouse" args="item">
     	<![CDATA[
@@ -818,7 +825,12 @@
 				this.drawellipseToHistory(lastactionObject,this);
 			} else if(actionObject[0]=='pointerWhiteBoard'){
                 this.drawPointerToHistory(lastactionObject,this);
+            } else if(actionObject[0]=='whiteboardObj'){
+                this.doUpdateFullFitAndZoomRemote(lastactionObject,this);
+                //Do not update Anything on the baseObjectList
+                return;
             }
+            
 			//set counter to maximum otherwise trouble in naming conventions
 			//the 6th array index count from the end of each object is always the counter of the
 			//object

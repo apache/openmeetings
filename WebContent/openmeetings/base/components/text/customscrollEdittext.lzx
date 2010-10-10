@@ -6,6 +6,8 @@
 <class name="customScrollEdittext" extends="view" >
 	
 	<attribute name="text" value="" type="string" />
+	
+	<event name="ontextChange" />
 
     <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
     <method name="setLabelId" args="_labelid" >

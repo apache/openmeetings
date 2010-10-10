@@ -42,7 +42,7 @@
             </setter>
             <handler name="ontext" args="t">
             	if ($debug) Debug.write("++ ontext",t);
-            	parent.parent.ontext.sendEvent(t);
+            	parent.parent.ontextChange.sendEvent(t);
             </handler>
             <handler name="onscroll" args="IGNORE_THIS_ARG">
                 this.setAttribute('pos', -this.lineheight * (this.scroll - 1));

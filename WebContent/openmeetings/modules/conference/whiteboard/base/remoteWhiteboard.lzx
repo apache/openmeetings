@@ -8,12 +8,26 @@
 	
 	<attribute name="loadObjectDelegate" value="null" />
 
-	<method name="loadObjectList" args="objList">
+	<method name="loadObjectList" args="whiteBoardObject">
 		<![CDATA[
 		
-			this.loadingObjectList = objList;
+			//if ($debug) Debug.write("loadObjectList :1: ",whiteBoardObject.fullFit,whiteBoardObject.zoom);
+		
+			parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
+		
+			this.fullFit = whiteBoardObject.fullFit;
 			
-			if ($debug) Debug.write("loadObjectList :: ",this.loadingObjectList);
+			this.getDisplayObject()._xscale = whiteBoardObject.zoom;
+    		this.getDisplayObject()._yscale = whiteBoardObject.zoom;
+			
+			this.loadingObjectList = new Array();
+			
+			for (var eg in whiteBoardObject.objList) {
+				this.loadingObjectList.push(whiteBoardObject.objList[eg]);
+			}
+			
+			//return;
+			//if ($debug) Debug.write("loadObjectList :2: ",this.loadingObjectList);
 			
 			function sortItemByIndex(a,b){
                 var a1 = a[a.length-8];
@@ -28,15 +42,15 @@
                 }
             }
             
-            for (var i=0;i<this.loadingObjectList.length;i++) {
-            	if ($debug) Debug.write(" 1 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
-            }
+            //for (var i=0;i<this.loadingObjectList.length;i++) {
+            //	if ($debug) Debug.write(" 1 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            //}
             
             this.loadingObjectList.sort(sortItemByIndex);
 			
-            for (var i=0;i<this.loadingObjectList.length;i++) {
-                if ($debug) Debug.write(" 2 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
-            }
+            //for (var i=0;i<this.loadingObjectList.length;i++) {
+            //    if ($debug) Debug.write(" 2 ",i,this.loadingObjectList[i][0],this.loadingObjectList[i][this.loadingObjectList[i].length-8]);
+            //}
             
 			this.loadingObjectListId = 0;
 			//this.loadObjectDelegate = new LzDelegate( this, "loadRemoteObject" );

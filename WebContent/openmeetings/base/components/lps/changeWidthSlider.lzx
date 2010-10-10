@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>  
 
-<class name="changeWidthSlider" extends="basePropertySelector" bgcolor="white" width="60" height="24">
+<class name="changeWidthSlider" extends="basePropertySelector" bgcolor="0xFFFFFF" width="60" height="24">
 
     <attribute name="numberAlign" value="right" type="string"/>
     <attribute name="minimum" type="number" value="1" />
@@ -59,13 +59,19 @@
             x="4" y="3" />
             <handler name="onclick">
             	if (this.parent.boxPosition=="up"){
-            		var pick = new lz.changeWidthSliderWin(canvas,{initialNumber:parent.numericValue.tempValue,
-            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
-            			y:(parent.getAttributeRelative('y',canvas)-140+parent.height)});
+            		var pick = new lz.changeWidthSliderWin(canvas,{
+					            			initialNumber:parent.numericValue.tempValue,
+					            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
+					            			maxvalue:parent.maximum,
+					            			y:(parent.getAttributeRelative('y',canvas)-140+parent.height)
+				            			});
             	} else {
-            		var pick = new lz.changeWidthSliderWin(canvas,{initialNumber:parent.numericValue.tempValue,
-            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
-            			y:(parent.getAttributeRelative('y',canvas))});
+            		var pick = new lz.changeWidthSliderWin(canvas,{
+					            			initialNumber:parent.numericValue.tempValue,
+					            			btnRef:this.parent,x:(parent.getAttributeRelative('x',canvas)),
+					            			maxvalue:parent.maximum,
+					            			y:(parent.getAttributeRelative('y',canvas))
+				            			});
             	}
                 lz.ModeManager.makeModal( pick );
             </handler>
@@ -86,6 +92,7 @@
     
     <attribute name="btnRef" value="null" />
     <attribute name="initialNumber" value="3" type="number"/>
+    <attribute name="maxvalue" value="100" type="number" />
     
     <!--- @keywords private -->
     <method name="passModeEvent" args="eventStr,view" > 
@@ -111,7 +118,7 @@
 
     <view bgcolor="$once{ canvas.baseMousecolorizer }" width="58" height="138" x="1" y="1" />
     
-    <vslider name="_slider" height="120" y="10" x="10" minvalue="1" maxvalue="100" 
+    <vslider name="_slider" height="120" y="10" x="10" minvalue="1" maxvalue="$once{ parent.maxvalue }" 
         initvalue="$once{ parent.initialNumber }" showrange="false" >
         <handler name="onvalue" args="v">
             //if ($debug) Debug.write("onvalue",v);

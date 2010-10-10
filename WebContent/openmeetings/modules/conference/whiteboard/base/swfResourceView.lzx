@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-<class name="swfResourceView" extends="view" 
-    clip="true" width="${ parent.width }" height="${ parent.height }">
+<class name="swfResourceView" extends="view" >
     
     <attribute name="refObj" value="null" />
 	<attribute name="alterModus" value="true" type="boolean" />
@@ -40,7 +39,7 @@
 	<!-- holds the reference_id to the SyncProcess -->
 	<attribute name="uniqueObjectSyncName" value="" type="string" />    
     
-    <view name="_swfView" play="false" stretches="both">
+    <view name="_swfView" play="false">
     	
     	<attribute name="timeisInited" value="false" type="boolean" />
         <attribute name="sendObjectDel" value="null" />
@@ -99,68 +98,24 @@
         <method name="initialLoadFullFit">
             <![CDATA[
             
-                if (parent.fullFit) {
+            	if ($debug) Debug.write(" -- fullFit -- ",parent.parent.fullFit);
+            
+                if (parent.parent.fullFit) {
                     
-                    if ($debug) Debug.write(" -- fullFit -- ");
+                    if ($debug) Debug.write(" -- fullFit -2- ",this.width,this.height);
+                    if ($debug) Debug.write(" -- fullFit -3- ",parent.parent.width,parent.parent.height);
                     
-                    var newwidth = (parent.initwidth/100)*80;
-                    var newheight = (parent.initheight/100)*80;
+                    var xScale = parent.parent.width/this.width;
+                    var yScale = parent.parent.height/this.height;
                     
-                    if (this.width > parent.width || this.height > parent.height) {
-                        
-                        if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
-                            
-                            parent.currentzoomFactor = 80;
-                            parent.currentzoom = 80;
-                            
-                        } else {
-                        
-                            newwidth = (parent.initwidth/100)*60;
-                            newheight = (parent.initheight/100)*60;
+                    if ($debug) Debug.write(" -- fullFit -4- ",xScale,yScale);
                     
-                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
-                                
-                                parent.currentzoomFactor = 80;
-                                parent.currentzoom = 80;
-                           
-                            } else {
-                            
-	                            newwidth = (parent.initwidth/100)*40;
-	                            newheight = (parent.initheight/100)*40;
-	                    
-	                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
-	                                
-                                    parent.currentzoomFactor = 40;
-                                    parent.currentzoom = 40;
-                                    
-	                            } else {
-	                            
-		                            newwidth = (parent.initwidth/100)*20;
-		                            newheight = (parent.initheight/100)*20;
-		                    
-		                            if (parent.width - newwidth > 0 && parent.height - newheight > 0) {
-		                                
-                                        parent.currentzoomFactor = 20;
-                                        parent.currentzoom = 20;
-                                        
-		                            } else {
-                                        
-                                        if ($debug) Debug.write(" COULD NOT SHRINK smaller then 20");
-                                        
-                                    }
-                                
-                                }
-                            
-                            }
-                        
-                        }
-                        
+                    if (xScale < yScale) {
+                    	parent.parent.setCurrentScaleByFullFit(xScale);
+                    } else {
+                    	parent.parent.setCurrentScaleByFullFit(yScale);
                     }
                     
-                    if ($debug) Debug.write("initialLoadFullFit",parent.currentzoomFactor);
-                        
-                    this.setAttribute('width',newwidth);
-                    this.setAttribute('height',newheight);
                 }
             
             ]]>
@@ -313,11 +268,12 @@
         
     </view>    
     
+    <!--
     <vscrollbar name="_scrollstv"
                 visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" /> 
     <hscrollbar name="_scrollsth"
                 visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />
-        
+     -->   
 </class>
 
 </library>

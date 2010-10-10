@@ -65,6 +65,11 @@
 		    	if ($debug) Debug.write("DESTROY the clickable view");
 		    	//this._innerDrag.destroy();
 		    }
+		    
+		    if (!this.canBeResized) {
+		    	this._gripperNoResize.setAttribute("visibility","visible");
+		    	this._gripperResize.setAttribute("visibility","hidden");
+		    }
 		
 			this.setAttribute('x',this.ex);
 			this.setAttribute('y',this.ey);
@@ -248,7 +253,8 @@
 	        if (this.objRef.typeOfObject == 'swf'){
 	            if (canvas.ismoderator || canvas.isAllowedToDraw) {
                     //if ($debug) Debug.write("-- setCurrentMouseWheelObject --",this.objRef._scrollstv);
-                    setCurrentMouseWheelObject(this.objRef._scrollstv);
+                    //FIXME: This is disabled for now
+                    //setCurrentMouseWheelObject(this.objRef._scrollstv);
                 }
 	        }
         ]]>
@@ -371,10 +377,13 @@
     
 	<view resource="_boundingBoxPointerTL" x="0" y="0" />
 	<view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
-	<view resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
+	<view name="_gripperResize" visibility="visible" 
+		resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
 		onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
 		<labelTooltip labelid="252" />
 	</view>
+	<view name="_gripperNoResize" visibility="hidden" 
+		resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
 	<view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
     
 </class>
