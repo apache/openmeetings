@@ -3599,4 +3599,43 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1198" name="user contacts">
     <value>confirmed you as contact!</value>
   </string>
+  <string id="1199" name="chat info message">
+    <value></value>
+  </string>
+  <string id="1200" name="chat log icon">
+    <value>Show / Copy chat log</value>
+  </string>
+  <string id="1201" name="chat log window">
+    <value>Chat Log</value>
+  </string>
+  <string id="1202" name="private message">
+    <value>From</value>
+  </string>
+  <string id="1203" name="private message">
+    <value>Subject</value>
+  </string>
+  <string id="1204" name="private message">
+    <value>Send</value>
+  </string>
+  <string id="1205" name="private message">
+    <value></value>
+  </string>
+  <string id="1206" name="private message">
+    <value>Messages</value>
+  </string>
+  <string id="1207" name="private message">
+    <value>New Mail</value>
+  </string>
+  <string id="1208" name="private message">
+    <value>Click to write a new message to any of your contacts</value>
+  </string>
+  <string id="1209" name="private message">
+    <value>Write new message</value>
+  </string>
+  <string id="1210" name="private message">
+    <value>To:</value>
+  </string>
+  <string id="1211" name="private message">
+    <value>Subject:</value>
+  </string>
 </language>
