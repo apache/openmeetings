@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openmeetings.app.conference.whiteboard.WhiteBoardObject;
 import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -77,7 +78,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * Loading the List of Objects on the whiteboard
 	 * @return HashMap<String,Map>
 	 */
-	public LinkedList<List> getRoomItems(){
+	public WhiteBoardObject getRoomItems(){
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -85,15 +86,19 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long room_id = currentClient.getRoom_id();
 			
 			log.debug("getRoomItems: "+room_id);
-			HashMap<String,List> roomItems = this.whiteBoardObjectListManager.getWhiteBoardObjectListByRoomId(room_id);
 			
-			LinkedList<List> itemList = new LinkedList<List>();
-			for (Iterator<String> it = roomItems.keySet().iterator();it.hasNext();){
-				itemList.add(roomItems.get(it.next()));
-			}
+			return this.whiteBoardObjectListManager.getWhiteBoardObjectRoomId(room_id);
+			
+			//HashMap<String,List> roomItems = this.whiteBoardObjectListManager.getWhiteBoardObjectListByRoomId(room_id);
+			
+			//There is a client side sorting now so no need for this
+//			LinkedList<List> itemList = new LinkedList<List>();
+//			for (Iterator<String> it = roomItems.keySet().iterator();it.hasNext();){
+//				itemList.add(roomItems.get(it.next()));
+//			}
 			
 			
-			return itemList;
+			//return itemList;
 		} catch (Exception err) {
 			log.error("[getRoomItems]",err);
 		}

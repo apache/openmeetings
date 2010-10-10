@@ -6,11 +6,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.conference.whiteboard.WhiteBoardObject;
 import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
 
 public class WhiteBoardObjectListManager {
 	
-	private static HashMap<Long,HashMap<String,List>> whiteBoardObjectList = new HashMap<Long,HashMap<String,List>>();
+	private static HashMap<Long,WhiteBoardObject> whiteBoardObjectList = new HashMap<Long,WhiteBoardObject>();
 	private static HashMap<Long,Map<String,WhiteboardSyncLockObject>> whiteBoardSyncList = new HashMap<Long,Map<String,WhiteboardSyncLockObject>>();
 	
 	private static HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>>();
@@ -29,11 +30,23 @@ public class WhiteBoardObjectListManager {
 		return instance;
 	}
 	
+	public synchronized WhiteBoardObject getWhiteBoardObjectRoomId(Long room_id){
+		WhiteBoardObject whiteBoardObject = whiteBoardObjectList.get(room_id);
+		if (whiteBoardObject == null) {
+			whiteBoardObject = new WhiteBoardObject();
+		}
+		return whiteBoardObject;
+	}
+	
 	/*
 	 * Room items a Whiteboard
 	 */
 	public synchronized HashMap<String,List> getWhiteBoardObjectListByRoomId(Long room_id){
-		HashMap<String,List> roomList = whiteBoardObjectList.get(room_id);
+		WhiteBoardObject whiteBoardObject = whiteBoardObjectList.get(room_id);
+		if (whiteBoardObject == null) {
+			whiteBoardObject = new WhiteBoardObject();
+		}
+		HashMap<String,List>roomList = whiteBoardObject.getObjList();
 		if (roomList == null) {
 			roomList = new HashMap<String,List>();
 		}
@@ -103,14 +116,24 @@ public class WhiteBoardObjectListManager {
 	 * Whiteboard Object List
 	 * 
 	 */
-	public synchronized HashMap<Long,HashMap<String,List>> getWhiteBoardObjectList(){
-		return whiteBoardObjectList;
+//	public synchronized HashMap<Long,HashMap<String,List>> getWhiteBoardObjectList(){
+//		return whiteBoardObjectList;
+//	}
+//	public synchronized void setWhiteBoardObjectList(HashMap<Long,HashMap<String,List>> whiteBoardObjectListNew){
+//		whiteBoardObjectList = whiteBoardObjectListNew;
+//	}
+	
+	public synchronized void setWhiteBoardObject(Long room_id, WhiteBoardObject whiteBoardObject){
+		whiteBoardObjectList.put(room_id, whiteBoardObject);
 	}
-	public synchronized void setWhiteBoardObjectList(HashMap<Long,HashMap<String,List>> whiteBoardObjectListNew){
-		whiteBoardObjectList = whiteBoardObjectListNew;
-	}
+	
 	public synchronized void setWhiteBoardObjectListRoomObj(Long room_id, HashMap<String,List> roomList){
-		whiteBoardObjectList.put(room_id, roomList);
+		WhiteBoardObject whiteBoardObject = whiteBoardObjectList.get(room_id);
+		if (whiteBoardObject == null) {
+			whiteBoardObject = new WhiteBoardObject();
+		}
+		whiteBoardObject.setObjList(roomList);
+		whiteBoardObjectList.put(room_id, whiteBoardObject);
 	}
 
 }

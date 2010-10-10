@@ -57,9 +57,9 @@ public class WhiteboardManagement {
 					WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
 				}
 			} else if (action.equals("clear")) {
-				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
-				roomList = new HashMap<String,List>();
-				WhiteBoardObjectListManager.getInstance().setWhiteBoardObjectListRoomObj(room_id, roomList);
+				
+				WhiteBoardObjectListManager.getInstance().setWhiteBoardObject(room_id, new WhiteBoardObject());
+				
 			} else if (action.equals("delete") || action.equals("undo")) {
 				HashMap<String,List> roomList = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectListByRoomId(room_id);
 				String objectOID = actionObject.get(actionObject.size()-1).toString();
@@ -206,6 +206,21 @@ public class WhiteboardManagement {
 			
 		} catch (Exception err) {
 			log.error("[addWhiteBoardObject]",err);
+		}
+	}
+
+	public void updateWhiteboardObject(Long room_id, List actionObject) {
+		try {
+			
+			WhiteBoardObject whiteBoardObject = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectRoomId(room_id);
+			
+			whiteBoardObject.setFullFit((Boolean) actionObject.get(1));
+			whiteBoardObject.setZoom((Integer) actionObject.get(2));
+			
+			WhiteBoardObjectListManager.getInstance().setWhiteBoardObject(room_id, whiteBoardObject);
+			
+		} catch (Exception err) {
+			log.error("[updateWhiteboardObject]",err);
 		}
 	}
 	
