@@ -3713,4 +3713,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1211" name="private message">
     <value>Subject:</value>
   </string>
+  <string id="1212" name="whiteboard full-fit">
+    <value>Enable full fit and the whiteboard will zoom the hole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
+  </string>
 </language>

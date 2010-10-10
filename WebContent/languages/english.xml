@@ -3601,7 +3601,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>confirmed you as contact!</value>
   </string>
   <string id="1199" name="chat info message">
-    <value></value>
+    <value>(Please do not use Chat for support questions. Support information is available on launch page.)</value>
   </string>
   <string id="1200" name="chat log icon">
     <value>Show / Copy chat log</value>
@@ -3638,5 +3638,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1211" name="private message">
     <value>Subject:</value>
+  </string>
+  <string id="1212" name="whiteboard full-fit">
+    <value>Enable full fit and the whiteboard will zoom the hole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
   </string>
 </language>
