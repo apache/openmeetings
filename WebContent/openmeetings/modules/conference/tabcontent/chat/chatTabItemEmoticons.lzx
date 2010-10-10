@@ -63,7 +63,7 @@
 	<!-- space between each line of text -->
 	<attribute name="leading" value="5" type="number" />
 	
-	<text multiline="true" x="40" y="20" width="$once{ parent.width - 40 }" fontsize="11" selectable="false" name="multi" >
+	<text multiline="true" x="40" y="20" width="$once{ parent.width - 40 }" fontsize="11" selectable="true" name="multi" >
 		<handler name="oninit">
 			<![CDATA[
 				
