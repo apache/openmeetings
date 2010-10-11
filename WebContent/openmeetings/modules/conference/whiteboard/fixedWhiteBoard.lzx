@@ -12,7 +12,7 @@
  -->
 
 
-<class name="fixedWhiteBoard" extends="view" width="${ parent.width }">
+<class name="fixedWhiteBoard" extends="view" width="${ parent.width }" >
     
     <attribute name="baseurl" value="" type="string" />
     <attribute name="fileName" value="" type="string" />
@@ -209,11 +209,54 @@
     	<handler name="onmouseup">
     		this._drawarea.onmouseupMethod();
     	</handler>
-        <remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" 
-        				  restricted="$once{ parent.parent.restricted }"
-        				  width="${parent.width}" height="${parent.height}" >
+    	
+    	<handler name="onmouseover">
+    		this._drawarea.onmouseoverMethod();
+    	</handler>
+    	<handler name="onmouseout">
+    		this._drawarea.onmouseoutMethod();
+    	</handler>
+    	
+        <remoteWhiteboard name="_drawarea" isRemoteOID="true" 
+        				  restricted="$once{ parent.parent.restricted }" >
+        	
+        	<attribute name="sendUpdate" value="true" type="boolean"/>
+        	
+        	<handler name="onx" args="x">
+        		if (this.sendUpdate) {
+        			if ($debug) Debug.write("# x",x);
+        			parent.parent.scrollContainer.calcScrollContent();
+        		}
+        	</handler>
+        	
+        	<handler name="ony" args="y">
+        		if (this.sendUpdate) {
+        			if ($debug) Debug.write("# y",y);
+        			parent.parent.scrollContainer.calcScrollContent();
+        		}
+        	</handler>
+        	
+        	<handler name="onheight" args="h">
+        		if ($debug) Debug.write("# height",h);
+        		//this.dragger.drag_min_x = parent.width - w;
+        		parent.parent.scrollContainer.calcScrollContent();
+        	</handler>
+        	
+        	<handler name="onwidth" args="w">
+        		if ($debug) Debug.write("# width",w);
+        		//this.dragger.drag_min_y = parent.height - h;
+        		parent.parent.scrollContainer.calcScrollContent();
+        	</handler>
+        	
+        	<handler name="onupdateScale" args="tRef">
+        		if ($debug) Debug.write("# updateScale",this.getDisplayObject()._xscale);
+        		parent.parent.scrollContainer.calcScrollContent();
+        	</handler>
+        	
             <attribute name="initH"/>
             <attribute name="initW"/>
+            
+            
             <handler name="oninit">
             	canvas._drawarea = this; 
             </handler>
@@ -322,7 +365,7 @@
                 return parent.parent.panelArea._mainToolsPanel;
             </method>
     	    
-        </remoteWhiteboard>  
+        </remoteWhiteboard> 
         
         <!--
         <vscrollbar />
@@ -330,7 +373,76 @@
          -->
     </view>
     
+    <view name="scrollContainer" width="${ parent.parent.width-2 }" 
+    	  visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+    	  height="${ (canvas.ismoderator) ? (parent.parent.height-33-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-33-parent._propertyPanel.height) : (parent.parent.height-33)) }" >
+    	
+    	<attribute name="sendUpdate" value="true" type="boolean"/>
+    	
+    	<method name="calcScrollContent">
+    		var rHeight = Math.round(parent._drawareaMask._drawarea.height * (parent._drawareaMask._drawarea.getDisplayObject()._xscale / 100));
+    		var rWidth = Math.round(parent._drawareaMask._drawarea.width * (parent._drawareaMask._drawarea.getDisplayObject()._yscale / 100));
+    		this.sendUpdate = false;
+    		this.scrollview.setAttribute("x",parent._drawareaMask._drawarea.x);
+    		this.scrollview.setAttribute("y",parent._drawareaMask._drawarea.y);
+    		this.scrollview.setAttribute("height",rHeight);
+    		this.scrollview.setAttribute("width",rWidth);
+    		this.sendUpdate = true;
+    	</method>
+    	
+    	<view name="scrollview">
+    		
+	    	<attribute name="timeisInited" value="false" type="boolean" />
+        	<attribute name="sendObjectDel" value="null" />
+        	
+        	<handler name="oninit">
+	            this.sendObjectDel = new LzDelegate( this, "sendObject" );
+	        </handler>
+    		
+    		<handler name="onx" args="x">
+    			if (parent.sendUpdate) {
+    				if ($debug) Debug.write("# scrollview x",x);
+    				parent.parent._drawareaMask._drawarea.setAttribute("x",x);
+    				
+    				if (!this.timeisInited){
+		                this.timeisInited=true;
+		                lz.Timer.addTimer( this.sendObjectDel, 250 );
+		            } else {
+		                lz.Timer.resetTimer( this.sendObjectDel, 250 );
+		            }
+    			}
+    		</handler>
+    		<handler name="ony" args="y">
+    			if (parent.sendUpdate) {
+    				if ($debug) Debug.write("# scrollview y",y);
+    				parent.parent._drawareaMask._drawarea.setAttribute("y",y);
+    				
+    				if (!this.timeisInited){
+		                this.timeisInited=true;
+		                lz.Timer.addTimer( this.sendObjectDel, 250 );
+		            } else {
+		                lz.Timer.resetTimer( this.sendObjectDel, 250 );
+		            }
+    			}
+    		</handler>
+    		
+    		<method name="sendObject" args="itemRef">
+	            if ($debug) Debug.info("sendObject :: scrollview");
+	            
+	            var tArray = new Array();
+	    		tArray[0] = "moveMap";
+	    		tArray[1] = this.x;
+	    		tArray[2] = this.y;
+	    		
+	            this.parent.parent._drawareaMask._drawarea.onsharedMessage('moveMap',tArray);
+	            this.timeisInited=false;
+	        </method>
+    	</view>
     
+	    <vscrollbar name="_scrollstv"/> 
+	    <hscrollbar name="_scrollsth" /> 
+    
+    </view>
     
         <netRemoteCallHib name="sendMessageWithClientById" funcname="sendMessageWithClientById"
             remotecontext="$once{ canvas.thishib }" >

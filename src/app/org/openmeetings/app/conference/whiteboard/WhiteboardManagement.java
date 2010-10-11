@@ -223,5 +223,20 @@ public class WhiteboardManagement {
 			log.error("[updateWhiteboardObject]",err);
 		}
 	}
+
+	public void updateWhiteboardObjectPos(Long room_id, List actionObject) {
+		try {
+			
+			WhiteBoardObject whiteBoardObject = WhiteBoardObjectListManager.getInstance().getWhiteBoardObjectRoomId(room_id);
+			
+			whiteBoardObject.setX((Integer) actionObject.get(1));
+			whiteBoardObject.setY((Integer) actionObject.get(2));
+			
+			WhiteBoardObjectListManager.getInstance().setWhiteBoardObject(room_id, whiteBoardObject);
+			
+		} catch (Exception err) {
+			log.error("[updateWhiteboardObjectPos]",err);
+		}
+	}
 	
 }

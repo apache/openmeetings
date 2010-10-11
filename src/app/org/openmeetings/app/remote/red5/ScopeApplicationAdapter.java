@@ -2017,15 +2017,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			
 			Long room_id = currentClient.getRoom_id();	
 				
-			List actionObject = (List) whiteboardObj.get(3);
+			String action = whiteboardObj.get(2).toString();	
+			
 			
 			//log.debug("***** sendVars: " + actionObject.get(0));
 			
-			if (actionObject != null && actionObject.get(0).equals("whiteboardObj")) {
+			if (action != null && action.equals("whiteboardObj")) {
 				//log.debug("***** sendVars: " + actionObject.get(1));
 				//log.debug("***** sendVars: " + actionObject.get(2));
 				//Update Whiteboard Object
+				List actionObject = (List) whiteboardObj.get(3);
 				WhiteboardManagement.getInstance().updateWhiteboardObject(room_id, actionObject);
+			} else if (action != null && action.equals("moveMap")) {
+				//log.debug("***** sendVars: " + actionObject.get(1));
+				//log.debug("***** sendVars: " + actionObject.get(2));
+				//Update Whiteboard Object
+				List actionObject = (List) whiteboardObj.get(3);
+				WhiteboardManagement.getInstance().updateWhiteboardObjectPos(room_id, actionObject);
 			} else {
 				//Store event in list
 				WhiteboardManagement.getInstance().addWhiteBoardObject(room_id, whiteboardObj);

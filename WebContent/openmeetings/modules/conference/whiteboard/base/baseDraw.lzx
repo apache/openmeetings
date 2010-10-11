@@ -26,6 +26,8 @@
   	<!-- This Counter just adds, it dosen't shows the absolute number of items
   		(ask this.layers.length to get the number of drawings) -->
   	<attribute name="counter" value="0" type="number" />
+  	
+  	<event name="onupdateScale" />
 
   	<method name="getCounter">
 		//Debug.write("### getCounter :",this.counter);
@@ -89,6 +91,8 @@
 		the nesseccary room + domain for this conferenceView is set
 		-->
 	<event name="onopenWhiteBoard" />
+	
+	<attribute name="isDragging" value="false" type="boolean"/>
 	
 	<!-- ############
 		init
@@ -225,8 +229,14 @@
 				this.basdrawredoView.subviews[0].destroy();
 			}	
 			
+			this.setAttribute("x",0);
+			this.setAttribute("y",0);
+			
 			this.getDisplayObject()._xscale = 100;
     		this.getDisplayObject()._yscale = 100;
+    		
+    		this.onupdateScale.sendEvent(null);
+    		
     		parent.parent.zoombox.setWhiteboardValues(true,100);
 			
 			this.layers = new Array();
@@ -499,6 +509,17 @@
 		}	
 		//this.setAttribute('drawmodus',this.getAttribute('drawmodus'));				
 	</method>
+	
+	<method name="onmouseoverMethod" >
+		//if ($debug) Debug.write("onmouseoverMethod ",this.isDragging);
+		if (this.drawmodus=="drag"){
+			lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+		}
+	</method>
+	
+	<method name="onmouseoutMethod" >
+        lz.Cursor.unlock();
+    </method>
              
 	<method name="onmousedownMethod" >
 		if ($debug) Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
@@ -509,7 +530,20 @@
 				//bool = true;
 			}	
 			
-			if(this.drawmodus=="hand"){
+			if(this.drawmodus=="drag"){
+				if ($debug) Debug.write("x1 ",this.x);
+				if ($debug) Debug.write("y1 ",this.y);
+				var tx1 = this.x;
+				var ty1 = this.y;
+				this.isDragging = true;
+				this.dragger.apply();
+				var tx1 = this.x;
+				var ty1 = this.y;
+				this.setAttribute("x",tx1);
+				this.setAttribute("y",ty1);
+				if ($debug) Debug.write("x2 ",this.x);
+				if ($debug) Debug.write("y2 ",this.y);
+			} else if(this.drawmodus=="hand"){
 				this.doSetHandBodus();
 			} else if(this.drawmodus=="paint"){
 				this.startPaint();
@@ -554,7 +588,27 @@
 	        if (canvas.ismoderator || canvas.isAllowedToDraw) {
 				//var bool = false;
 				
-				if(this.drawmodus=="paint"){
+				if(this.drawmodus=="drag"){
+	        		this.isDragging = false;
+	        		this.dragger.remove();
+	        		
+	        		if ($debug) Debug.write("x3 ",this.x);
+					if ($debug) Debug.write("y3 ",this.y);
+	        		
+	        		this.setAttribute("x",Math.round(this.x));
+	        		this.setAttribute("y",Math.round(this.y));
+	        		
+	        		var tArray = new Array();
+		    		tArray[0] = "moveMap";
+		    		tArray[1] = this.x;
+		    		tArray[2] = this.y;
+		    		
+		    		this.onsharedMessage('moveMap',tArray);
+		    		
+		    		if ($debug) Debug.write("x4 ",this.x);
+					if ($debug) Debug.write("y4 ",this.y);
+	        		
+	        	} else if(this.drawmodus=="paint"){
 					this.endPaint();
 					mousetracker_del.unregisterAll();
 				} else if(this.drawmodus=="line"){
@@ -825,10 +879,6 @@
 				this.drawellipseToHistory(lastactionObject,this);
 			} else if(actionObject[0]=='pointerWhiteBoard'){
                 this.drawPointerToHistory(lastactionObject,this);
-            } else if(actionObject[0]=='whiteboardObj'){
-                this.doUpdateFullFitAndZoomRemote(lastactionObject,this);
-                //Do not update Anything on the baseObjectList
-                return;
             }
             
 			//set counter to maximum otherwise trouble in naming conventions
@@ -900,6 +950,13 @@
 			}
 		} else if (action=="swf"){
 			this.remoteObjectUpdate(actionObject);	
+		} else if (action=="moveMap") {
+			this.setAttribute("x",actionObject[1]);
+			this.setAttribute("y",actionObject[2]);	
+		} else if(action=='whiteboardObj'){
+            this.doUpdateFullFitAndZoomRemote(actionObject,this);
+        } else {
+			if ($debug) Debug.warn("Unkown action type :: ",action);
 		}
 		]]>
 	</method>
@@ -1171,7 +1228,7 @@
         ]]>
     </method>
 
-    
+    <dragstate name="dragger" />
     
 </class>
 

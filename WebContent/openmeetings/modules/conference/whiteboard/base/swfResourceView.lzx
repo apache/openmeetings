@@ -41,8 +41,10 @@
     
     <view name="_swfView" play="false">
     	
+    	<!--
     	<attribute name="timeisInited" value="false" type="boolean" />
         <attribute name="sendObjectDel" value="null" />
+         -->
         
         <!-- Do not send update events in case 
             this is sync event broadcasted by another user -->
@@ -60,6 +62,7 @@
             ////Debug.write("onstop",i);
         </handler>
         
+        <!--
         <handler name="oninit">
             this.sendObjectDel = new LzDelegate( this, "sendObject" );
         </handler>
@@ -94,6 +97,7 @@
             this.parent.parent.sendCurrentSWFObject(this.parent);
             this.timeisInited=false;
         </method>
+         -->
         
         <method name="initialLoadFullFit">
             <![CDATA[
@@ -105,8 +109,9 @@
                     if ($debug) Debug.write(" -- fullFit -2- ",this.width,this.height);
                     if ($debug) Debug.write(" -- fullFit -3- ",parent.parent.width,parent.parent.height);
                     
-                    var xScale = parent.parent.width/this.width;
-                    var yScale = parent.parent.height/this.height;
+                    //Scale to container width/height
+                    var xScale = (parent.parent.parent.width-16)/this.width;
+                    var yScale = (parent.parent.parent.height-16)/this.height;
                     
                     if ($debug) Debug.write(" -- fullFit -4- ",xScale,yScale);
                     

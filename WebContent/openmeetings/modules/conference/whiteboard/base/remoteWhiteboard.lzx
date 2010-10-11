@@ -15,10 +15,15 @@
 		
 			parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
+			this.setAttribute("x",whiteBoardObject.x);
+			this.setAttribute("y",whiteBoardObject.y);	
+			
 			this.fullFit = whiteBoardObject.fullFit;
 			
 			this.getDisplayObject()._xscale = whiteBoardObject.zoom;
     		this.getDisplayObject()._yscale = whiteBoardObject.zoom;
+    		
+    		this.onupdateScale.sendEvent(null);
 			
 			this.loadingObjectList = new Array();
 			
@@ -110,6 +115,7 @@
 				this.sendCompletedSyncEvent.doCall();
 				this.updateAllObjectsToSlideNumber();
 				this.setModusWithUpdate("hand");
+				this.onupdateScale.sendEvent(null);
 			}
 		]]>
 	</method>

@@ -82,7 +82,7 @@
             </handler>
         </simpleLabelButton>
 
-		<blueButton name="_show_emots" y="0" resoureceItem="smile_chat_log_rsc"
+		<blueButton name="_show_emots" y="0" resourceItem="smile_chat_log_rsc"
         			x_insetResource="2" y_insetResource="2" width="20" height="20" 
         			width_insetResource="16" height_insetResource="16">
             <handler name="onclick">
@@ -97,7 +97,7 @@
             <labelTooltip labelid="445" />
         </blueButton>  
         
-        <blueButton width="20" height="20" resoureceItem="copy_chat_log_rsc"
+        <blueButton width="20" height="20" resourceItem="copy_chat_log_rsc"
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
             <handler name="onclick">
@@ -113,7 +113,7 @@
             <labelTooltip labelid="1200" />
         </blueButton>  
                 
-        <blueButton width="20" height="20" resoureceItem="button_cancel_rsc"
+        <blueButton width="20" height="20" resourceItem="button_cancel_rsc"
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
             

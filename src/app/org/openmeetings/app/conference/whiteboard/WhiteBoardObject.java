@@ -7,10 +7,24 @@ import java.util.List;
 public class WhiteBoardObject {
 	
 	private Date created = new Date();
+	private Integer x = 0;
+	private Integer y = 0;
 	private Integer zoom = 100;
 	private Boolean fullFit = true;
 	private HashMap<String,List> objList = new HashMap<String,List>();
 	
+	public Integer getX() {
+		return x;
+	}
+	public void setX(Integer x) {
+		this.x = x;
+	}
+	public Integer getY() {
+		return y;
+	}
+	public void setY(Integer y) {
+		this.y = y;
+	}
 	public Date getCreated() {
 		return created;
 	}

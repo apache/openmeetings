@@ -19,7 +19,7 @@
      -->
 	<attribute name="text" value="defaulttext" type="string" />
     
-    <attribute name="resoureceItem" value="" type="string" />
+    <attribute name="resourceItem" value="" type="string" />
     
     <attribute name="x_insetResource" value="4" type="number" />
     <attribute name="y_insetResource" value="4" type="number" />
@@ -38,7 +38,7 @@
     	  y="$once{ parent.x_insetResource }" 
           width="$once{ parent.width_insetResource }" 
           height="$once{ parent.height_insetResource }" 
-          resource="$once{ parent.resoureceItem }" />
+          resource="$once{ parent.resourceItem }" />
     <view name="disAbledView" visibility="${ ( !parent.enabled ) ? 'visible' : 'hidden' }"
           bgcolor="white" opacity="0.6"
           width="$once{ parent.width }" height="$once{ parent.height }" />

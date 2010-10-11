@@ -40,6 +40,11 @@
     		this.getDisplayObject()._xscale = tScale;
     		this.getDisplayObject()._yscale = tScale;
     		
+    		this.setAttribute("x",0);
+    		this.setAttribute("y",0);
+    		
+    		//Already send by x,y change
+    		//this.onupdateScale.sendEvent(null);
     		if ($debug) Debug.write("setCurrentScaleByFullFit -1- ",tScale);
     		
     		parent.parent.zoombox.setCurrentScaleByFullFit(tScale);
@@ -60,7 +65,7 @@
     		
     		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject()._xscale);
     		
-    		this.onsharedMessage('draw',actionObject);	
+    		this.onsharedMessage('whiteboardObj',actionObject);	
     	
     	]]>
     </method>
@@ -79,8 +84,8 @@
     		this.getDisplayObject()._xscale = zoom;
     		this.getDisplayObject()._yscale = zoom;
     		
-    		
-    		this.onsharedMessage('draw',actionObject);	
+    		this.onupdateScale.sendEvent(null);
+    		this.onsharedMessage('whiteboardObj',actionObject);	
     	
     	]]>
     </method>
@@ -96,6 +101,7 @@
     		if (!actionObject[1]) {
 	    		this.getDisplayObject()._xscale = actionObject[2];
 	    		this.getDisplayObject()._yscale = actionObject[2];
+	    		this.onupdateScale.sendEvent(null);
     		}
     	
     	]]>

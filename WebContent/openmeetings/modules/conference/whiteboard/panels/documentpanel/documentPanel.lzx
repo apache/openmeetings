@@ -30,13 +30,13 @@
 <class name="verticalDocumentIconBar" extends="view" y="22" x="4">
 	<simplelayout axis="y" spacing="2" />
 
-    <drawDocumentPanelItem name="b3" x="2" modi="doc_first" resoureceItem="doc_first" 
+    <drawDocumentPanelItem name="b3" x="2" modi="doc_first" resourceItem="doc_first" 
         labelid="255" />		
-    <drawDocumentPanelItem name="b4" x="2" modi="doc_pre" resoureceItem="doc_pre" 
+    <drawDocumentPanelItem name="b4" x="2" modi="doc_pre" resourceItem="doc_pre" 
         labelid="256" />			
-    <drawDocumentPanelItem name="b5" x="2" modi="doc_next" resoureceItem="doc_next" 
+    <drawDocumentPanelItem name="b5" x="2" modi="doc_next" resourceItem="doc_next" 
         labelid="257" />		
-    <drawDocumentPanelItem name="b6" x="2" modi="doc_last" resoureceItem="doc_last" 
+    <drawDocumentPanelItem name="b6" x="2" modi="doc_last" resourceItem="doc_last" 
         labelid="258" />		
         
     <customEdittext name="_currentSlideNo" regexpType="number"
@@ -46,9 +46,9 @@
     
     <documentPanelVPanelSeperator />
         
-    <drawDocumentPanelItem name="b7" x="2" modi="doc_zoom_minus" resoureceItem="doc_zoom_minus" 
+    <drawDocumentPanelItem name="b7" x="2" modi="doc_zoom_minus" resourceItem="doc_zoom_minus" 
         labelid="259" />		
-    <drawDocumentPanelItem name="b8" x="2" modi="doc_zoom_plus" resoureceItem="doc_zoom_plus" 
+    <drawDocumentPanelItem name="b8" x="2" modi="doc_zoom_plus" resourceItem="doc_zoom_plus" 
         labelid="260" />	
       
     <labelText y="6" name="_zoom" width="30" />
@@ -83,13 +83,13 @@
 	
 	<simplelayout axis="x" spacing="2" />
 
-    <drawDocumentPanelItem name="b3" modi="doc_first" resoureceItem="doc_first" 
+    <drawDocumentPanelItem name="b3" modi="doc_first" resourceItem="doc_first" 
         labelid="255" />		
-    <drawDocumentPanelItem name="b4" modi="doc_pre" resoureceItem="doc_pre" 
+    <drawDocumentPanelItem name="b4" modi="doc_pre" resourceItem="doc_pre" 
         labelid="256" />			
-    <drawDocumentPanelItem name="b5" modi="doc_next" resoureceItem="doc_next" 
+    <drawDocumentPanelItem name="b5" modi="doc_next" resourceItem="doc_next" 
         labelid="257" />		
-    <drawDocumentPanelItem name="b6" modi="doc_last" resoureceItem="doc_last" 
+    <drawDocumentPanelItem name="b6" modi="doc_last" resourceItem="doc_last" 
         labelid="258" />		
 
     <customEdittext name="_currentSlideNo" width="40" height="24" regexpType="number" >
@@ -103,9 +103,9 @@
     
     <documentPanelHPanelSeperator />
         
-    <drawDocumentPanelItem name="b7" modi="doc_zoom_minus" resoureceItem="doc_zoom_minus" 
+    <drawDocumentPanelItem name="b7" modi="doc_zoom_minus" resourceItem="doc_zoom_minus" 
         labelid="259" />		
-    <drawDocumentPanelItem name="b8" modi="doc_zoom_plus" resoureceItem="doc_zoom_plus" 
+    <drawDocumentPanelItem name="b8" modi="doc_zoom_plus" resourceItem="doc_zoom_plus" 
         labelid="260" />	
     
     <labelText y="6" name="_zoom" width="30" height="24" />

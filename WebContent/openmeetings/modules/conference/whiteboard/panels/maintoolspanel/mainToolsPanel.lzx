@@ -3,69 +3,75 @@
 	
 <class name="verticalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="y" spacing="2" />
-	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
-	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resoureceItem="plainSlides" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
 	<!--
-	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
+	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
+	 -->
+	<!--
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
 	 -->
 	<mainToolsHPanelSeperator>
         <attribute name="modi" value="" type="string"/>
     </mainToolsHPanelSeperator>
-	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resourceItem="revert" />
     <!--
-	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resourceItem="next" />
      -->
 	<mainToolsHPanelSeperator>
 		<attribute name="modi" value="" type="string"/>
 	</mainToolsHPanelSeperator>
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
-						resoureceItem="menupointer_rsc" />
+						resourceItem="menupointer_rsc" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
                         labelid="557" x_insetResource="1" y_insetResource="1"
-                        resoureceItem="pointer_whiteboard_menu_rsc" />
-	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resoureceItem="letter" />
-	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resoureceItem="paint" />
-	<mainToolsPanelItem name="line" modi="line" labelid="75" resoureceItem="line_rsc" />
-	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resoureceItem="uline_rsc" />
-	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resoureceItem="rectangle" />
-	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resoureceItem="ellipse" />
-	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resoureceItem="drawarrowicon_rsc" />
+                        resourceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resourceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resourceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resourceItem="drawarrowicon_rsc" />
 </class>
 
 <class name="horizontalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="x" spacing="2" />
-	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resoureceItem="plain" setSelectionToItem="false" />
-	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resoureceItem="plainSlides" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
 	<!--
-	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resoureceItem="saveobj" setSelectionToItem="false" />
+	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
+	 -->
+	<!--
+	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
 	 -->
 	<mainToolsVPanelSeperator>
         <attribute name="modi" value="" type="string"/>
     </mainToolsVPanelSeperator>
-	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resoureceItem="revert" />
+	<redoUndoToolsPanelItem name="revert" doredo="false" labelid="70" resourceItem="revert" />
     <!--
-	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resoureceItem="next" />
+	<redoUndoToolsPanelItem name="next" doredo="true" labelid="71" resourceItem="next" />
      -->
 	<mainToolsVPanelSeperator>
         <attribute name="modi" value="" type="string"/>
     </mainToolsVPanelSeperator>	
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
-						resoureceItem="menupointer_rsc" />
+						resourceItem="menupointer_rsc" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
                         labelid="557" x_insetResource="1" y_insetResource="1"
-                        resoureceItem="pointer_whiteboard_menu_rsc" />
-	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resoureceItem="letter" />
-	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resoureceItem="paint" />
-	<mainToolsPanelItem name="line" modi="line" labelid="75" resoureceItem="line_rsc" />
-	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resoureceItem="uline_rsc" />
-	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resoureceItem="rectangle" />
-	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resoureceItem="ellipse" />
-	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resoureceItem="drawarrowicon_rsc" />
+                        resourceItem="pointer_whiteboard_menu_rsc" />
+	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
+	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
+	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
+	<mainToolsPanelItem name="rectangle" modi="rectangle" labelid="77" resourceItem="rectangle" />
+	<mainToolsPanelItem name="ellipse" modi="ellipse" labelid="78" resourceItem="ellipse" />
+	<mainToolsPanelItem name="drawarrow" modi="drawarrow" labelid="79" resourceItem="drawarrowicon_rsc" />
 </class>
 
 	
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
-	   width="372" height="33" title="" docking="true"
+	   width="368" height="33" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   leftClassPanel="mainToolsLeftPanel"
@@ -73,7 +79,7 @@
 	   bottomClassPanel="mainToolsTopPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="true"
-	   hWidth="33" hHeight="372">
+	   hWidth="33" hHeight="368">
 	
     <method name="updateToolSelection" args="modi">
     	<![CDATA[
@@ -96,7 +102,7 @@
 </class>	
 	
 <class name="mainToolsLeftPanel" extends="baseLeftPanel" 
-	   width="33" height="372" title="" docking="true"
+	   width="33" height="368" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   topClassPanel="mainToolsTopPanel"
@@ -104,7 +110,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="false"
-	   vWidth="372" vHeight="33">
+	   vWidth="368" vHeight="33">
 	
     <method name="updateToolSelection" args="modi">
         <![CDATA[
@@ -133,13 +139,13 @@
 <class name="verticalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
     <simplelayout axis="y" spacing="2" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
-                        resoureceItem="pointer_whiteboard_menu_rsc" />
+                        resourceItem="pointer_whiteboard_menu_rsc" />
 </class>
 
 <class name="horizontalMenuIconBarPointer" extends="view" y="22" x="4" clickable="true">
     <simplelayout axis="x" spacing="2" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" 
-                        resoureceItem="pointer_whiteboard_menu_rsc" />
+                        resourceItem="pointer_whiteboard_menu_rsc" />
 </class>
 
 <class name="mainToolsTopPanelPointer" extends="baseTopPanel" 
