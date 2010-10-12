@@ -844,7 +844,7 @@ public class UserService {
 	 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 	 		   // admins only
-	 		   if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+	 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 	 			   
 	 			   RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
 	 			   

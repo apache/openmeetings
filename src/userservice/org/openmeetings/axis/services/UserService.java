@@ -499,4 +499,20 @@ public class UserService {
 		return null;
 	}
 	
+	public Boolean kickUserByPublicSID(String SID, String publicSID) {
+		try {
+			Boolean salida = false;
+
+			salida = Usermanagement.getInstance().kickUserByPublicSID(SID, publicSID);
+
+			if (salida == null)
+				salida = false;
+
+			return salida;
+		} catch (Exception err) {
+			log.error("[kickUser]", err);
+		}
+		return null;
+	}
+	
 }
