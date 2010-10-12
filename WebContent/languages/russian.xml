@@ -3648,4 +3648,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1212" name="whiteboard full-fit">
     <value>Enable full fit and the whiteboard will zoom the hole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
   </string>
+  <string id="1213" name="user-list">
+    <value>Kick user</value>
+  </string>
+  <string id="1214" name="user-list">
+    <value>You cannot kick yourself out of the conference room! If you want to leave it close the browser or use the exit button!</value>
+  </string>
+  <string id="1215" name="kick-user">
+    <value>Do you really want to disconnect this user from this conference room?</value>
+  </string>
+  <string id="1216" name="kick-user">
+    <value>Confirm action ...</value>
+  </string>
+  <string id="1217" name="kick-user">
+    <value>You cannot kick a Super-Moderator out of a room!</value>
+  </string>
 </language>
