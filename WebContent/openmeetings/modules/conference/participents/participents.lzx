@@ -317,6 +317,7 @@
                 this._miniIcons._denyRemote.setAttribute("visibility","hidden");
                 
                 if (canvas.ismoderator) {
+                	this._x._kickUser.setAttribute("visibility","visible");
                     if (canvas.ismoderator && canvas.publicSID != this.refObj.publicSID) {
                         this._miniIcons._isMod.setAttribute("showhandcursor",true);
                         this._miniIcons._isMod._text.setAttribute("text",canvas.getLabelName(675));
@@ -325,6 +326,7 @@
                         this._miniIcons._isMod.setAttribute("showhandcursor",false);
                     }
                 } else {
+                	this._x._kickUser.setAttribute("visibility","hidden");
                     this._miniIcons._isMod._text.setAttribute("text","");
                     this._miniIcons._isMod.setAttribute("showhandcursor",false);
                 }
@@ -335,6 +337,7 @@
                 //if this User is the Moderator he can grant access to whiteboard to anybody
                 if (canvas.ismoderator) {
                     
+                	this._x._kickUser.setAttribute("visibility","visible");
                     this._miniIcons._isModAddbutton.setAttribute("visibility","visible");
                     
                     if (this.refObj.canDraw) {
@@ -379,6 +382,7 @@
                     
                 } else {
                     
+                	this._x._kickUser.setAttribute("visibility","hidden");
                     this._miniIcons._isModAddbutton.setAttribute("visibility","hidden");
                     
                     if (this.refObj.canDraw) {
@@ -493,7 +497,51 @@
     <labelText name="_firstName" fontsize="10" x="40" text="$once{ parent.firstname }" />
     <labelText name="_lastName" fontsize="10" x="40" y="20" text="$once{ parent.lastname }" />
     
-    <view name="_miniIcons" x="133" valign="bottom" height="18">
+    <view name="_x" x="132" y="2">
+	    <miniIcons name="_kickUser" width="16" height="16" x="100"
+	               resource="kick_user_rsc" showhandcursor="true">
+	        <handler name="onclick">
+	        	
+	        	if (parent.parent.refObj.publicSID == canvas.publicSID) {
+	                new lz.labelerrorPopup(canvas.main_content._content.inner,{
+	                            errorlabelid:1214
+	                        });
+	                return;
+	            }
+	                
+	        	if (parent.isSuperModerator) {
+	                new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:1217});
+	                return;
+	            }
+	        	
+	            if ($debug) Debug.write("USER Kick: ",parent.parent.refObj.publicSID);
+	            new lz.confirmationSingle(canvas.main_content._content.inner,{
+	                                           labelid:1216,labeliderror:1215,
+	                                           refObj:this,showCheckBox:false});
+	            
+	        </handler>
+	        
+	        <method name="sendConfirmation" args="yesno" >
+	            this.kickUserByPublicSID.publicSID = parent.parent.refObj.publicSID;
+	            this.kickUserByPublicSID.doCall();
+	        </method>
+	        
+	        <netRemoteCallHib name="kickUserByPublicSID" funcname="userservice.kickUserByPublicSID" 
+	                          remotecontext="$once{ canvas.thishib }" >    
+	            <attribute name="publicSID" value="" type="string" />  
+	            <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+	            <netparam><method name="getValue"> return parent.publicSID; </method></netparam>
+	            <handler name="ondata" args="value">
+	                if ($debug) Debug.write("kickUserByPublicSID: ",value);
+	                //this.parent.destroy();
+	            </handler>
+	        </netRemoteCallHib> 
+	        
+	        <labelTooltip labelid="1213" />
+	    </miniIcons>   
+    </view>
+    
+    <view name="_miniIcons" x="133" y="22" height="18">
         
         <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
                    height="16" showhandcursor="false">

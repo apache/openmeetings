@@ -838,5 +838,39 @@ public class UserService {
 		return null;
 	}
 	
-    
+	 
+	   public Boolean kickUserByPublicSID(String SID, String publicSID) {
+	 	   try {
+	 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	 		   // admins only
+	 		   if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+	 			   
+	 			   RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
+	 			   
+	 			   if (rcl == null) {
+	 				   return true;
+	 			   }
+	 			   String scopeName = "hibernate";
+	 			   if (rcl.getRoom_id() != null) {
+	 				   scopeName = rcl.getRoom_id().toString();
+	 			   }
+	 			   IScope currentScope = this.scopeApplicationAdapter.getRoomScope(scopeName);
+	 			   
+	 			   HashMap<Integer,String> messageObj = new HashMap<Integer,String>();
+	 			   messageObj.put(0, "kick");
+	 			   
+	 			   this.scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
+	 			   
+	 			   
+	 			   this.scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+	 			   
+	 			   return true;
+	 		   }
+	 		   
+	 	   } catch (Exception err) {
+	 		   log.error("[kickUserByStreamId]",err);
+	 	   }
+	 	   return null;
+	    }
 }

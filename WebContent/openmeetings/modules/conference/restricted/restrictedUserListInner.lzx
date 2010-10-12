@@ -300,6 +300,24 @@
             }
         </method>
         
+        <!--
+        <method name="removeUserByPublicSid" args="refObj">
+        	<![CDATA[
+        	
+        		if ($debug) Debug.write("removeUserByPublicSid ",refObj.itemId);
+        		
+        		if ($debug) Debug.write(":: removeUserByPublicSid :1:",this.renderList.length);
+                
+        		this.renderList.splice(refObj.itemId,1);
+        		
+        		if ($debug) Debug.write(":: removeUserByPublicSid :2:",this.renderList.length);
+        		
+        		this.renderContent();
+        	
+        	]]>
+        </method>
+         -->
+        
         <method name="renderByNewUser" args="refObj">
         	this.renderDelegateStarted = false;
         	this.renderContent();

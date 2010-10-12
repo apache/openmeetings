@@ -9,6 +9,7 @@
 	
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
+	<resource name="kick_user_rsc" src="resources/cancel_icon.png" />
 	
 	<resource name="screen_allow_rsc" src="resources/background_small.png" />
     <resource name="screen_deny_rsc" src="resources/background_small_no.png" />
