@@ -347,7 +347,7 @@
                     canvas.setAttribute('mail','');
                     canvas.setAttribute('lastLogin','');
                     canvas.setAttribute('official_code','');
-                    canvas.setAttribute('picture_uri','');
+                    canvas.setAttribute('picture_uri',value.picture_uri);
                     canvas.setAttribute('language','');
                     //canvas.setAttribute('currentuser',value.login);
                     

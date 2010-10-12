@@ -233,8 +233,10 @@
         
         	if ($debug) Debug.write("fadeText :: ",this.refObj);
         
+        	if (canvas.picture_uri != "") {
+        		var downloadurl = canvas.picture_uri;
             //Do Load the Custom Moodle Profilee Picture
-            if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
+        	} else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
                 
                 if (this.refObj.externalUserId == 1) {
                     //Means it is a guest
