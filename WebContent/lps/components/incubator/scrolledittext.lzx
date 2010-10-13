@@ -44,6 +44,10 @@
             	if ($debug) Debug.write("++ ontext",t);
             	parent.parent.ontextChange.sendEvent(t);
             </handler>
+			<handler name="onblur">
+            	if ($debug) Debug.write("++ onblur");
+            	parent.parent.onblur.sendEvent();
+            </handler>
             <handler name="onscroll" args="IGNORE_THIS_ARG">
                 this.setAttribute('pos', -this.lineheight * (this.scroll - 1));
             </handler>

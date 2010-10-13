@@ -15,9 +15,188 @@
 	
 	<customScrollEdittext name="_to" y="22" x="80" width="$once{ parent.width-82 }" 
 						  text="" height="60">
-		<handler name="ontext" args="t">
-			if ($debug) Debug.write("-- ontext ",t);
+		
+		<attribute name="sendUpdateText" value="true" type="boolean"/>
+		
+		<handler name="oninit">
+			this._list.refObj = this;
+			this._list.setAttribute("width",this.width);
 		</handler>
+		
+		<handler name="ontextChange" args="t">
+			<![CDATA[
+				if ($debug) Debug.write("-- ontextChange ",this.sendUpdateText,t);
+				
+				if (!this.sendUpdateText) {
+					return;
+				}
+				
+				var tAString = t.split(",");
+				
+				var tString = tAString[tAString.length-1];
+				
+				if ($debug) Debug.write("-- tString ",tString);
+				
+				tString.replace(" ","");
+				
+				if (tString != "") {
+					
+					this.startSearch(tString);
+					
+				}
+				
+			]]>
+		</handler>
+		
+		<method name="addText" args="txt">
+			<![CDATA[
+			
+				if ($debug) Debug.write("-- addText ",txt);
+				
+				var t = this.getText();
+				var tAString = t.split(",");
+				
+				var nString = "";
+				
+				if ($debug) Debug.write("-- tAString.length ",tAString.length);
+				
+				for (var i=0;i<tAString.length-1;i++) {
+					if (i!=0) {
+						nString += ",";
+					}
+					nString += tAString;
+					if ($debug) Debug.write("-- nString 1 ",nString);
+				}
+				
+				if ($debug) Debug.write("-- nString 2 ",nString);
+				
+				if (nString != "") {
+					nString += ","
+				}
+				
+				nString += txt;
+				
+				if ($debug) Debug.write("-- nString 3 ",nString);
+				
+				this.sendUpdateText = false;
+				this.setAttribute("text",nString);
+				this.sendUpdateText = true;
+			
+			]]>
+		</method>
+		
+		<handler name="onblur">
+			<![CDATA[
+			
+				if (!this.sendUpdateText) {
+					return;
+				}
+			
+				if ($debug) Debug.write("-- onblur");
+				
+				if (this._list.visibility == "visible") {
+					this._list.setAttribute("visibility","hidden");
+				}
+				
+				var t = this.getText();
+				var tAString = t.split(",");
+				
+				var lastString = tAString[tAString.length-1];
+				
+				var lastChar = lastString.charAt(lastString.length-1);
+
+				if (lastChar != ">") {
+					var nString = "";
+					
+					for (var i=0;i<tAString.length-1;i++) {
+						if (i!=0) {
+							nString += ",";
+						}
+						nString += tAString;
+					}
+					
+					this.sendUpdateText = false;
+					this.setAttribute("text",nString);
+					this.sendUpdateText = true;
+					
+				}
+				
+			]]>
+		</handler>
+		
+		<method name="startSearch" args="tString">
+			<![CDATA[
+			
+				if ($debug) Debug.write("startSearch :: ",tString);
+				var tResultA = new Array();
+				
+				for (var i=0;i<canvas.userContacts.length;i++) {
+					
+					if (canvas.userContacts[i].contact.firstname.startsWith(tString) 
+						|| canvas.userContacts[i].contact.lastname.startsWith(tString) 
+						|| canvas.userContacts[i].contact.adresses.email.startsWith(tString) ) {
+					
+						tResultA.push(canvas.userContacts[i]);
+							
+					}
+					
+				}
+				
+				if (tResultA.length > 0) {
+					this._list.removeAllItems();
+					
+					for (var k=0;k<tResultA.length;k++) {
+						
+						this._list.addItem(tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' &#60;' + tResultA[k].contact.adresses.email + '&#62;', tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' <' + tResultA[k].contact.adresses.email + '>'); 
+						
+					}
+					
+					
+				} else {
+					
+					this._list.removeAllItems();
+					
+					this._list.addItem("No Contact Found","0");
+					
+				}
+				
+				this.sendUpdateText = false;
+				this._list.sendUpdateAttr = false;
+				this._list.selectItemAt(0);
+				this._list.sendUpdateAttr = true;
+				
+				//lz.Focus.setFocus(this._list, true);
+				this.sendUpdateText = true;
+				
+				//this._list.setHilite(this._list.getItemAt(0));
+				this._list.setAttribute("visibility","visible");
+				
+				if ($debug) Debug.write("LIST :1: ",this._list.sendUpdateAttr);
+			
+			]]>
+		</method>
+		<floatinglist name="_list" width="100" 
+					  attach="bottom" visibility="hidden">
+			<attribute name="sendUpdateAttr" value="true" type="boolean"/>
+			<attribute name="refObj" value="null"/>
+			<handler name="onfocus">
+				if ($debug) Debug.write("onfocus");
+				this.setAttribute("visibility","visible");
+			</handler>
+			<handler name="onselect" args="sel">
+				if ($debug) Debug.write("onselect :1: ",this.sendUpdateAttr);
+				if (this.sendUpdateAttr) {
+					if ($debug) Debug.write("onselect :2: ",sel.value);
+					if (sel.value != "0") {
+						if ($debug) Debug.write("this.parent :: ",this.parent);
+						this.refObj.addText(sel.value);
+						this.setAttribute("visibility","hidden");
+					}
+				}
+			</handler>
+            <textlistitem text="one"/>
+            <textlistitem text="two"/>
+        </floatinglist>
 	</customScrollEdittext>
 	
 	<labelText name="_labelSubject" x="2" labelid="1211" y="86"/>

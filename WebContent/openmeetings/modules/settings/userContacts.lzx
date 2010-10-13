@@ -276,6 +276,8 @@
 		    		<![CDATA[
 			    		if ($debug) Debug.write("getPendingUserContacts: ",value);
 			    		
+			    		canvas.userContacts = value;
+			    		
 			    		this.parent.initValues(value.length);
 			    		
 			    		this.parent.parent._labelPendingUsers.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPendingUsers.labelid)+' <i>( '+value.length+' </i>)')
