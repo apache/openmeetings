@@ -17,8 +17,10 @@
 						  text="" height="60">
 		
 		<attribute name="sendUpdateText" value="true" type="boolean"/>
+		<attribute name="sendSingleUpdateText" value="true" type="boolean"/>
 		
 		<handler name="oninit">
+			this.closeDelegate = new LzDelegate( this, "onblurFunction" );
 			this._list.refObj = this;
 			this._list.setAttribute("width",this.width);
 		</handler>
@@ -35,9 +37,11 @@
 				
 				var tString = tAString[tAString.length-1];
 				
-				if ($debug) Debug.write("-- tString ",tString);
+				if ($debug) Debug.write("-1- tString ",tString);
 				
-				tString.replace(" ","");
+				tString = tString.split(' ').join('');
+				
+				if ($debug) Debug.write("-2- tString ",tString);
 				
 				if (tString != "") {
 					
@@ -62,16 +66,16 @@
 				
 				for (var i=0;i<tAString.length-1;i++) {
 					if (i!=0) {
-						nString += ",";
+						nString += ", ";
 					}
-					nString += tAString;
+					nString += tAString[i];
 					if ($debug) Debug.write("-- nString 1 ",nString);
 				}
 				
 				if ($debug) Debug.write("-- nString 2 ",nString);
 				
 				if (nString != "") {
-					nString += ","
+					nString += ", "
 				}
 				
 				nString += txt;
@@ -91,15 +95,27 @@
 				if (!this.sendUpdateText) {
 					return;
 				}
-			
+				
+				lz.Timer.addTimer( this.closeDelegate, 10 );
+				
+			]]>
+		</handler>				
+				
+		<method name="onblurFunction" args="refObj" >
+			<![CDATA[
 				if ($debug) Debug.write("-- onblur");
+				
+				if (!this.sendSingleUpdateText) {
+					this.sendSingleUpdateText = true;
+					return;
+				}
 				
 				if (this._list.visibility == "visible") {
 					this._list.setAttribute("visibility","hidden");
 				}
 				
 				var t = this.getText();
-				var tAString = t.split(",");
+				var tAString = t.split(", ");
 				
 				var lastString = tAString[tAString.length-1];
 				
@@ -112,7 +128,7 @@
 						if (i!=0) {
 							nString += ",";
 						}
-						nString += tAString;
+						nString += tAString[i];
 					}
 					
 					this.sendUpdateText = false;
@@ -122,7 +138,7 @@
 				}
 				
 			]]>
-		</handler>
+		</method>
 		
 		<method name="startSearch" args="tString">
 			<![CDATA[
@@ -181,7 +197,7 @@
 			<attribute name="refObj" value="null"/>
 			<handler name="onfocus">
 				if ($debug) Debug.write("onfocus");
-				this.setAttribute("visibility","visible");
+				this.refObj.sendSingleUpdateText = false;
 			</handler>
 			<handler name="onselect" args="sel">
 				if ($debug) Debug.write("onselect :1: ",this.sendUpdateAttr);
@@ -204,9 +220,128 @@
 	<customEdittext name="firstname" y="84" x="80" width="$once{ parent.width-82 }" />
 		
 	<richtexteditor name="_richText" y="108" clip="true"
-					width="$once{ parent.width }" height="$once{ parent.height-128 }">
+					width="$once{ parent.width }" height="$once{ parent.height-202 }">
 		
 	</richtexteditor> 	
+	
+	<labelCheckbox name="_bookRoom" labelid="1218"
+				   width="270" y="$once{ parent.height-120 }" x="4">
+		<handler name="onvalue" args="v">
+			if ($debug) Debug.write("onvalue ",v);
+			if (v) {
+				parent._hideRoomConfig.setAttribute("visibility","hidden");
+			} else {
+				parent._hideRoomConfig.setAttribute("visibility","visible");
+			}
+		</handler>
+	</labelCheckbox>
+	
+	<view name="_roomConfigBG" width="290" height="76" bgcolor="0xDDDDDD" 
+		   opacity="0.1" y="$once{ parent.height-104 }" x="2">
+	</view>
+	
+	<labelText labelid="194" width="200" y="$once{ parent.height-100 }" resize="false" x="4"/>  
+        <resetCombobox name="_roomtype" width="164" y="$once{ parent.height-100 }" 
+        			   x="120" editable="false" fontsize="11">
+	        <handler name="oninit" >
+	            <![CDATA[
+		            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
+		                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+		            }
+		            this.selectItemAt(0);
+	            ]]>
+	        </handler> 
+        </resetCombobox> 
+        
+	<labelText labelid="1219" width="200" y="$once{ parent.height-76 }" resize="false" x="4"/>  
+	<dateField x="120" y="$once{ parent.height-76 }" name="_valid_from" 
+			   setDefaultToday="true" additionalDay="1" />		
+	<customEdittext name="_timeFrom" 
+					width="50" x="232" y="$once{ parent.height-76 }" 
+					regexpType="time">
+		<handler name="oninit">
+			<![CDATA[
+				var tDate = new Date();
+				var hour = tDate.getHours();
+				if (hour < 10) {
+					hour = "0"+hour;
+				}
+				
+				var minutes = tDate.getMinutes();
+				if (minutes < 15) {
+					minutes = "00";
+				} else if (minutes < 30) {
+					minutes = "15";
+				} else if (minutes < 45) {
+					minutes = "30";
+				} else {
+					minutes = "45";
+				}
+				
+				var hour2 = tDate.getHours()+1;
+				if (hour2 < 10) {
+					hour2 = "0"+hour;
+				} else if (hour2 > 25) {
+					hour2 = 24;
+				}
+				
+				this.setAttribute("text",hour+":"+minutes);
+				parent._timeTo.setAttribute("text",hour2+":"+minutes);
+			]]>
+		</handler>
+	</customEdittext>
+        
+    <labelText labelid="1220" width="200" y="$once{ parent.height-52 }" resize="false" x="4"/>  
+	<dateField x="120" y="$once{ parent.height-52 }" name="_valid_to" 
+			   setDefaultToday="true" additionalDay="1" />		
+	<customEdittext name="_timeTo" 
+					width="50" x="232" y="$once{ parent.height-52 }" 
+					regexpType="time">
+	</customEdittext>
+	
+	<!-- allowUserQuestions Description -->          
+    <view resource="messagebox_info_rsc" x="302" y="$once{ parent.height-96 }" />
+    
+    <labelText labelid="1221" x="324" y="$once{ parent.height-96 }" fontstyle="italic"
+               multiline="true" width="$once{ parent.width-332 }" /> 
+	
+	<view name="_hideRoomConfig" width="290" height="76" bgcolor="0xFFFFFF" 
+		   opacity="0.6" y="$once{ parent.height-104 }" x="2">
+		<handler name="onclick">
+			parent._bookRoom.setValue(true);
+		</handler>
+	</view>
+		   
+	<!-- label: send -->
+	<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
+		<handler name="onclick">
+			<![CDATA[
+				var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
+					
+					if (port != 80) {
+						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
+					} else {
+						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+					}
+				} else {
+					parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+				}
+				
+				
+			]]>
+		</handler>
+	</simpleLabelButton>
+
+	<!-- label: cancel -->
+	<simpleLabelButton labelid="219" x="$once{ parent.width-130 }" width="120" y="$once{ parent.height-26 }">
+		<handler name="onclick">
+			parent.close();
+		</handler>
+	</simpleLabelButton>
+	   		   
 						  
 </class>	
 	
