@@ -17,6 +17,10 @@
 		this.setAttribute('bgcolor',0xFFFFFF);
 	</method>
 	
+	<method name="doDeselect">
+		this.deselect();
+	</method>
+	
 	<handler name="onmouseover">
 		if (!this.isselected) {
 			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);

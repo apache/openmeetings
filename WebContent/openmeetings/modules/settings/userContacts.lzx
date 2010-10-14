@@ -44,15 +44,13 @@
 			    		
 			    		var tResult = new Array();
 			    		for (var t=0;t<value.length;t++) {
-			    			value[t].contact["pending"] = value[t].pending;
-			    			value[t].contact["userContactId"] = value[t].userContactId;
 			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
-			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].contact.title_id) {
-					                value[t].contact["title"] = canvas.salutationsInitValues[i].label.value;
+			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].owner.title_id) {
+					                value[t].owner["title"] = canvas.salutationsInitValues[i].label.value;
 					                break;
 			    				}
 				            }
-			    			tResult.push(value[t].contact);
+			    			tResult.push(value[t]);
 			    		}
 			    		
 			    		this.parent.renderContent(tResult);
@@ -97,11 +95,7 @@
 		    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
 		    	<handler name="ondata" args="value">
 		    		<![CDATA[
-			    		if ($debug) Debug.write("requestUserToContactList: ",value);
-			    		if (value > 0) {
-			    			parent.setAttribute("pending",true);
-			    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
-			    		}
+			    		if ($debug) Debug.write("changePendingStatusUserContacts: ",value);
 			    		parent.getPendingUserContacts.doCall();
 			    		parent.parent.parent._availableContacts._table.getUserContacts.doCall();
 		    		]]>
@@ -154,7 +148,7 @@
 	                            list.subviews[i].isselected = false;
 	                        }
 	                        
-	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname);
+	                        list.subviews[i].setAttribute("username",records[i].owner.title + ' ' + records[i].owner.firstname+' '+records[i].owner.lastname);
 	                        
 	                        list.subviews[i].setAttribute("itemId",i);
 	                        
@@ -203,12 +197,10 @@
 	                    
 	                    //if ($debug) Debug.write(item.itemId);
 	                    
-	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
+	                    item.setAttribute("username",this.renderList[item.itemId].owner.title + ' ' + this.renderList[item.itemId].owner.firstname+' '+this.renderList[item.itemId].owner.lastname);
 	                        
 	                    item.setAttribute("itemId",item.itemId);
 	                    
-	                    item.updateIconByModScroll();
-	                        
 	                } else {
 	                    
 	                    //if (item.itemId % 2 == 0) {
@@ -219,7 +211,6 @@
 	                    
 	                    item.isselected = false;
 	                    item.onmouseout.sendEvent();
-	                    item.hideModeratorIcons();
 	                    
 	                    item.refObj = null;
 	                    
@@ -274,7 +265,7 @@
 				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
 		    	<handler name="ondata" args="value">
 		    		<![CDATA[
-			    		if ($debug) Debug.write("getPendingUserContacts: ",value);
+			    		if ($debug) Debug.write("getUserContacts: ",value);
 			    		
 			    		canvas.userContacts = value;
 			    		
@@ -442,8 +433,6 @@
 	                        
 	                    item.setAttribute("itemId",item.itemId);
 	                    
-	                    item.updateIconByModScroll();
-	                        
 	                } else {
 	                    
 	                    //if (item.itemId % 2 == 0) {
@@ -454,7 +443,6 @@
 	                    
 	                    item.isselected = false;
 	                    item.onmouseout.sendEvent();
-	                    item.hideModeratorIcons();
 	                    
 	                    item.refObj = null;
 	                    

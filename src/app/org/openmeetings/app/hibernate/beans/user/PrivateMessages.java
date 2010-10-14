@@ -19,6 +19,7 @@ public class PrivateMessages {
 	public Date inserted;
 	public Users from;
 	public Users to;
+	private Users owner;
 	
 	public Boolean bookedRoom;
 	public Rooms room;
@@ -110,7 +111,23 @@ public class PrivateMessages {
 	public void setTo(Users to) {
 		this.to = to;
 	}
-
+	
+	/**
+     * @hibernate.many-to-one
+     *  cascade="none"
+     *  column="owner_id"
+     *  lazy="false"
+     *  class="org.openmeetings.app.hibernate.beans.user.Users"
+     *  not-null="false"
+     *  outer-join="true"
+     */
+	public Users getOwner() {
+		return owner;
+	}
+	public void setOwner(Users owner) {
+		this.owner = owner;
+	}
+	
 	/**
      * @hibernate.property
      *  column="booked_room"

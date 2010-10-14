@@ -11,10 +11,12 @@
     <property name="inserted" type="java.util.Date" column="inserted"/>
     <many-to-one outer-join="true" not-null="false" column="from_id" lazy="false" cascade="none" name="from" class="org.openmeetings.app.hibernate.beans.user.Users"/>
     <many-to-one outer-join="true" not-null="false" column="to_id" lazy="false" cascade="none" name="to" class="org.openmeetings.app.hibernate.beans.user.Users"/>
+    <many-to-one outer-join="true" not-null="false" column="owner_id" lazy="false" cascade="none" name="owner" class="org.openmeetings.app.hibernate.beans.user.Users"/>
     <property name="bookedRoom" type="boolean" column="booked_room"/>
     <many-to-one outer-join="true" not-null="false" column="rooms_id" lazy="false" cascade="none" name="room" class="org.openmeetings.app.hibernate.beans.rooms.Rooms"/>
     <property name="parentMessage" type="long" column="parent_message_id"/>
     <property name="isTrash" type="boolean" column="is_trash"/>
     <property name="privateMessageFolderId" type="long" column="private_message_folder_id"/>
+    <property name="isRead" type="boolean" column="is_read"/>
   </class>
 </hibernate-mapping>

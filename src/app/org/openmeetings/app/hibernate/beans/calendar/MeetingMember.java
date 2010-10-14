@@ -35,6 +35,8 @@ public class MeetingMember {
 	private Invitations invitation;
 	private OmTimeZone omTimeZone;
 	
+	private Boolean isConnectedEvent;
+	
 	/**
      * 
      * @hibernate.id
@@ -233,5 +235,18 @@ public class MeetingMember {
 	public void setOmTimeZone(OmTimeZone omTimeZone) {
 		this.omTimeZone = omTimeZone;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_connected_event"
+     *  type="boolean"
+     */ 
+	public Boolean getIsConnectedEvent() {
+		return isConnectedEvent;
+	}
+	public void setIsConnectedEvent(Boolean isConnectedEvent) {
+		this.isConnectedEvent = isConnectedEvent;
+	}
+	
 	
 }

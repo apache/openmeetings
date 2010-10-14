@@ -7,16 +7,32 @@
 	<attribute name="subject" value="" type="string"/>
 	<attribute name="strTime" value="" type="string"/>
 	
+	<attribute name="isRead" value="false" type="boolean"/>
+	
+	<attribute name="itemSelected" value="false" type="boolean"/>
+	
 	<view width="200">
+		
+		<handler name="onclick">
+			if (parent.clickable) {
+				parent.parent.parent.parent.parent.itemSelected(parent,!parent.itemSelected);
+			}
+		</handler>
+		
+		<checkbox name="_selected" y="2" x="2"
+				  visibility="${ (parent.parent.clickable) ? 'visible' : 'hidden' }" 
+				  value="${ parent.parent.itemSelected }" />
+		
 		<view height="$once{ parent.parent.height }" width="1" 
-        align="right" bgcolor="black" />
+        				align="right" bgcolor="black" />
 	</view>
+	
 	<turnOverTextItem name="_timezone" width="80" 
-					  text="${ parent.from }" />
+					  text="${ parent.from }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
 	<turnOverTextItem name="_searchOffers" width="300"
-					  text="${ parent.subject }" />
+					  text="${ parent.subject }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
 	<turnOverTextItem name="_searchSearchs" width="300"
-					  text="${ parent.strTime }" />
+					  text="${ parent.strTime }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
 	
 </class>	
 	
@@ -40,7 +56,7 @@
 		this.newMessageActive = true;
 	</method>
 	
-	<view name="_statusAndGroups" width="152">
+	<view name="_status" width="152">
 		
 		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5">
 			<handler name="onclick">
@@ -51,6 +67,28 @@
 		
 	</view>
 	
+	<view name="_Buttons" width="152" y="35" layout="axis:y;spacing:1">
+		
+		<simpleLabelButton labelid="1222" width="142" x="5">
+			<handler name="onclick">
+				parent.parent._table.getInbox.doCall();
+			</handler>
+		</simpleLabelButton>
+		
+		<simpleLabelButton labelid="1223" width="142" x="5">
+			<handler name="onclick">
+				parent.parent._table.getSend.doCall();
+			</handler>
+		</simpleLabelButton>
+		
+		<simpleLabelButton labelid="1224" width="142" x="5">
+			<handler name="onclick">
+				parent.parent._table.getSend.doCall();
+			</handler>
+		</simpleLabelButton>
+		
+	</view>
+	
 	
 	<view height="$once{ parent.height }" width="1" x="154" 
 		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
@@ -58,20 +96,80 @@
 	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
 	
 	<turnOverListOrderedPaged name="_table" showTopBar="true" x="160" 
-					 height="250" width="$once{ parent.width-this.x-2 }"
+					 height="250" width="$once{ parent.width-160-2 }"
 		             y="24" itemHeight="20" listLabelId="1184" headerHeight="22" 
 		             listItemName="privateMessagItem" menuBarXIndent="100"
 		             multiselect="false" orderby="c.inserted">
+		
+		<attribute name="isInbox" value="false" type="boolean" />
 			
 		<handler name="oninit">
 			this.addHeaderItem(1205,20);
 			
 			this.addHeaderItemOrdered(1202,160,"c.from.lastname",false,false);
 			this.addHeaderItemOrdered(1203,this.width-316,"c.subject",false,false);
-			this.addHeaderItemOrdered(1204,120,"c.orderby",true,true);
+			this.addHeaderItemOrdered(1204,120,"c.inserted",true,true);
 			
 			this.getInbox.doCall();
 		</handler>
+		
+		<method name="itemSelected" args="listObj,bool">
+			<![CDATA[
+			
+				if ($debug) Debug.write("itemSelected :: ",listObj);
+				
+				listObj.setAttribute("itemSelected",bool);
+				this.renderList[listObj.itemId].itemSelected = bool;
+				
+			
+			]]>
+		</method>
+		
+		<handler name="onclickedItem" args="listObj">
+			<![CDATA[
+			
+				if ($debug) Debug.write("onclickedItem :: ",listObj.refObj);
+				
+				if (this.isInbox) {
+					
+					if (!listObj.isRead) {
+						
+						this.renderList[listObj.itemId].isRead = true;
+						
+						listObj.setAttribute("isRead",true);
+						
+						
+						if ($debug) Debug.write("onclickedItem :: ",listObj.refObj.privateMessageId);
+						
+						this.markReadStatusMail.privateMessageId = listObj.refObj.privateMessageId;
+						this.markReadStatusMail.isRead = true;
+						
+						this.markReadStatusMail.doCall();
+					}
+					
+				}
+			
+			]]>
+		</handler>
+		
+		<!--
+		public Long markReadStatusMail(String SID, Long privateMessageId,
+			Boolean isRead)
+	     -->
+	    <netRemoteCallHib name="markReadStatusMail" funcname="userservice.markReadStatusMail" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="privateMessageId" value="0" type="number"/>
+			<attribute name="isRead" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.privateMessageId; </method></netparam>
+			<netparam><method name="getValue"> return parent.isRead; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("markReadStatusMail: ",value);
+		    		//this.parent.destroy();
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
 		
 		<!--
 		public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max)
@@ -90,11 +188,15 @@
 		    		//this.parent.destroy();
 		    		this.parent.initValues(value.records);
 		    		
+		    		parent.isInbox = true;
+		    		
 		    		var countUnRead = 0;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
-		    			value.result[i].strTime = parseDateToStringTime(value.result[i].inserted);
-		    			if (!value.result[i].isRead) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].from.firstname+' '+value.result[k].from.lastname+' &#60;'+value.result[k].from.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    			if (!value.result[k].isRead) {
 		    				countUnRead++;
 		    			}
 		    		}
@@ -104,9 +206,199 @@
 		    		this.parent.renderContent(value.result);
 	    		]]>
 	    	</handler>
-	    </netRemoteCallHib>		
+	    </netRemoteCallHib>	
+	    
+	    <!--
+	    public SearchResult getSend(String SID, String orderBy, Integer start, Boolean asc, Integer max) {
+		 -->
+	    <netRemoteCallHib name="getSend" funcname="userservice.getSend" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <!--
+		    from" value="" type="string"/>
+			<attribute name="subject" value="" type="string"/>
+			<attribute name="strTime
+	     -->	
+	    
+	    <method name="renderContent" args="rList">
+            <![CDATA[
+            
+            	this.renderList = rList;
+            
+                this.isLoaded = true;
+                var list = this._innerlist._inn._inn;
+                
+                if (this.renderList == null) {
+                	this.renderList = new Array();
+                }
+                //this.renderList = records;
+                var records = this.renderList;
+                this._innerlist._inn.setAttribute("y",0);
+                this._innerlist._inn._inn.setAttribute("height",records.length*this.itemHeight);
+                this._innerlist._inn.resetItems();
+                
+                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
+                
+                this._records.setAttribute("text",records.length);
+                
+                for (var i=0;i<list.subviews.length;i++){
+                    
+                    //if (i % 2 == 0) {
+                    //    list.subviews[i].setIsSecond(true);
+                    //} else {
+                    //    list.subviews[i].setIsSecond(false);
+                    //}
+                    
+                    if (records.length > i) {
+                    	
+                    	//if ($debug) Debug.write("Render Item ",records[i]);
+                        
+                        list.subviews[i].setAttribute("clickable",true);
+                        list.subviews[i].refObj = records[i];
+                        
+                        if (records[i]["isselected"] && records[i].isselected) {
+                            list.subviews[i].isselected = true;
+                        } else {
+                            list.subviews[i].isselected = false;
+                        }
+                        
+                        list.subviews[i].setAttribute("from",records[i].userName);
+                        list.subviews[i].setAttribute("subject",records[i].subject);
+                        list.subviews[i].setAttribute("strTime",records[i].strTime);
+                        list.subviews[i].setAttribute("itemSelected",records[i].itemSelected);
+                        
+                        if (this.isInbox) {
+                        	list.subviews[i].setAttribute("isRead",records[i].isRead);
+                        } else {
+                        	list.subviews[i].setAttribute("isRead",true);
+                        }
+                        
+                        list.subviews[i].setAttribute("itemId",i);
+                        
+                    } else {
+                        
+                        list.subviews[i].refObj = null;
+                        
+                        list.subviews[i].isselected = false;
+                        list.subviews[i].onmouseout.sendEvent();
+                        
+                        list.subviews[i].setAttribute("from",'');
+                        list.subviews[i].setAttribute("subject",'');
+                        list.subviews[i].setAttribute("strTime",'');
+                        list.subviews[i].setAttribute("itemSelected",false);
+                        
+                        list.subviews[i].setAttribute("itemId","");
+                        
+                        list.subviews[i].setAttribute("clickable",false);
+                        
+                    }
+                    
+                }
+                
+                
+                this.sendInitialWidthUpdate();
+                
+            ]]>
+        </method>   
+	        
+        <handler name="onScrollItem" args="item">
+            <![CDATA[
+                if (this.renderList.length > item.itemId) {
+                    item.setAttribute("clickable",true);
+                    item.refObj = this.renderList[item.itemId];
+                    
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+                    if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+                        item.isselected = true;
+                        item.onmouseout.sendEvent();
+                    } else {
+                        item.isselected = false;
+                        item.onmouseout.sendEvent();
+                    }
+                    
+                    //if ($debug) Debug.write(item.itemId);
+                    
+                    item.setAttribute("from",this.renderList[item.itemId].userName);
+                    item.setAttribute("subject",this.renderList[item.itemId].subject);
+                    item.setAttribute("strTime",this.renderList[item.itemId].strTime);
+                    item.setAttribute("itemSelected",this.renderList[item.itemId].itemSelected);
+                    
+                    if (this.isInbox) {
+                    	item.setAttribute("isRead",this.renderList[item.itemId].isRead);
+                    } else {
+                    	list.subviews[i].setAttribute("isRead",true);
+                    }
+                    
+                    item.setAttribute("itemId",item.itemId);
+                    
+                } else {
+                    
+                    //if (item.itemId % 2 == 0) {
+                    //    item.setIsSecond(true);
+                    //} else {
+                    //    item.setIsSecond(false);
+                    //}
+                    
+                    item.isselected = false;
+                    item.onmouseout.sendEvent();
+                    
+                    item.refObj = null;
+                    
+                    item.setAttribute("from","");
+                    item.setAttribute("subject","");
+                    item.setAttribute("strTime","");
+                    item.setAttribute("itemSelected",false);
+                    
+                    item.setAttribute("itemId","");
+                    
+                    item.setAttribute("clickable",false);
+                    
+                }
+                
+            ]]>
+        </handler>
+    
 			
 	</turnOverListOrderedPaged>
+	
+	
+	<view name="_privateMessageDetails" width="$once{ parent.width-160-2 }" y="274" 
+		  height="${ parent.height - 274 }">
+		
+		
+		
+	</view>
 	
 </class>
 

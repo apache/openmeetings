@@ -7,9 +7,72 @@
 	
 	<attribute name="refObj" value="null"/>
 	
+	<attribute name="parentMessageId" value="0" type="number" />
+	
+	<attribute name="receipents" value="null" />
+	
 	<handler name="onclose">
 		this.refObj.newMessageActive = false;
 	</handler>
+	
+	<method name="send">
+		<![CDATA[
+		
+			var tAString = this._to.getText().split(",");
+			
+			this.receipents = new Array();
+			
+			for (var i=0;i<tAString.length;i++) {
+				
+				var sString = tAString[i];
+				
+				var t1 = sString.indexOf("<");
+				var t2 = sString.indexOf(">");
+				
+				if ($debug) Debug.write("++ ",i,sString,t1,t2);
+				
+				var email = sString.substring(t1+1, t2);
+				
+				if ($debug) Debug.write("++ ",email);
+				
+				this.receipents.push(email);
+				
+			}
+			
+			if ($debug) Debug.write("receipents :: ",this.receipents);
+			if ($debug) Debug.write("receipents :: ",this._richText.getText());
+		
+			this.composeMail.doCall();
+		]]>
+	</method>
+	
+	<!--
+	public Long composeMail(String SID, Map receipents, String subject, String message, Boolean bookedRoom, 
+    		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
+    		Long parentMessageId, Long roomtype_id)
+	 -->
+	<netRemoteCallHib name="composeMail" funcname="userservice.composeMail" remotecontext="$once{ canvas.thishib }" >    
+    		
+    		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		    <netparam><method name="getValue">return parent.parent.receipents</method></netparam>
+            <netparam><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._richText.getText();</method></netparam>
+            <netparam><method name="getValue">return this.parent.parent._bookRoom.getValue();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
+            <netparam><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
+            <netparam><method name="getValue">return parent.parent.parentMessageId;</method></netparam>
+            <netparam><method name="getValue">return Number(parent.parent._roomtype.getValue());</method></netparam>
+            
+            <handler name="ondata" args="value">
+            	<![CDATA[
+                	//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("sendInvitationHash : ",value);
+			parent.close();
+           ]]>
+		</handler>   
+	</netRemoteCallHib>	
 	
 	<labelText name="_labelTo" x="2" labelid="1210" y="24"/>
 	
@@ -217,7 +280,7 @@
 	
 	<labelText name="_labelSubject" x="2" labelid="1211" y="86"/>
 	
-	<customEdittext name="firstname" y="84" x="80" width="$once{ parent.width-82 }" />
+	<customEdittext name="_subject" y="84" x="80" width="$once{ parent.width-82 }" />
 		
 	<richtexteditor name="_richText" y="108" clip="true"
 					width="$once{ parent.width }" height="$once{ parent.height-202 }">
@@ -330,7 +393,7 @@
 					parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 				}
 				
-				
+				parent.send();
 			]]>
 		</handler>
 	</simpleLabelButton>

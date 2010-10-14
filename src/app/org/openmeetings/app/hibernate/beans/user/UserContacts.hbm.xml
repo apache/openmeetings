@@ -7,7 +7,7 @@
       <generator class="increment"/>
     </id>
     <many-to-one outer-join="true" not-null="false" column="user_id" lazy="false" cascade="none" name="contact" class="org.openmeetings.app.hibernate.beans.user.Users"/>
-    <property name="ownerId" type="long" column="owner_id"/>
+    <many-to-one outer-join="true" not-null="false" column="owner_id" lazy="false" cascade="none" name="owner" class="org.openmeetings.app.hibernate.beans.user.Users"/>
     <property name="pending" type="boolean" column="pending"/>
     <property name="inserted" type="java.util.Date" column="inserted"/>
     <property name="updated" type="java.util.Date" column="updated"/>

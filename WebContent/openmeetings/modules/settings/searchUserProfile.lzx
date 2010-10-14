@@ -348,8 +348,6 @@
 	                    item.setAttribute("pending",this.renderList[item.itemId].pending);
 	                        
 	                    item.setAttribute("itemId",item.itemId);
-	                    
-	                    item.updateIconByModScroll();
 	                        
 	                } else {
 	                    
@@ -361,7 +359,6 @@
 	                    
 	                    item.isselected = false;
 	                    item.onmouseout.sendEvent();
-	                    item.hideModeratorIcons();
 	                    
 	                    item.refObj = null;
 	                    
@@ -374,6 +371,7 @@
 	                    item.setAttribute("itemId","");
 	                    
 	                    item.setAttribute("clickable",false);
+	                    
 	                }
 	                
 	            ]]>

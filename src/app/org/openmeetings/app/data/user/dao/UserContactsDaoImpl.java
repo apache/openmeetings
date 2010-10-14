@@ -34,7 +34,7 @@ public class UserContactsDaoImpl {
 			
 			UserContacts userContact = new UserContacts();
 			userContact.setInserted(new Date());
-			userContact.setOwnerId(ownerId);
+			userContact.setOwner(Usermanagement.getInstance().getUserById(ownerId));
 			userContact.setContact(Usermanagement.getInstance().getUserById(user_id));
 			userContact.setPending(pending);
 			userContact.setHash(hash);
@@ -81,7 +81,7 @@ public class UserContactsDaoImpl {
 	public Integer deleteAllUserContacts(Long ownerId) {
 		try {
 			
-			String hql = "delete from UserContacts where ownerId = :ownerId";
+			String hql = "delete from UserContacts where owner.user_id = :ownerId";
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -105,7 +105,7 @@ public class UserContactsDaoImpl {
 		try {
 			
 			String hql = "select count(c.userContactId) from UserContacts c " +
-							"where c.contact.user_id = :user_id AND c.ownerId = :ownerId ";
+							"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId ";
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -157,7 +157,7 @@ public class UserContactsDaoImpl {
 		try {
 			
 			String hql = "select c from UserContacts c " +
-							"where c.ownerId = :ownerId " +
+							"where c.owner.user_id = :ownerId " +
 							"AND c.pending = :pending " +
 							"AND c.contact.deleted != 'true'";
 			

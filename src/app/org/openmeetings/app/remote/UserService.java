@@ -1,5 +1,6 @@
 package org.openmeetings.app.remote;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,8 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Emailmanagement;
@@ -606,9 +609,9 @@ public class UserService {
 				   
 				   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
 			   
-				   UserContactsDaoImpl.getInstance().addUserContact(userContacts.getOwnerId(), users_id, false, "");
+				   UserContactsDaoImpl.getInstance().addUserContact(userContacts.getOwner().getUser_id(), users_id, false, "");
 				   
-				   Users user = Usermanagement.getInstance().getUserById(userContacts.getOwnerId());
+				   Users user = Usermanagement.getInstance().getUserById(userContacts.getOwner().getUser_id());
 				   
 				   if (user.getAdresses() != null) {
 					   
@@ -647,14 +650,44 @@ public class UserService {
 	   return null;
    }
    
-    public Long composeMail(String SID, Map receipents, String subject, String message, Boolean bookedRoom, 
-    		Date appointmentstart, Date appointmentend, Long parentMessageId) {
+    public Long composeMail(String SID, List<String> receipents, String subject, String message, Boolean bookedRoom, 
+    		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
+    		Long parentMessageId, Long roomtype_id) {
     	try {
     		
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
  		    Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
  		    // users only
  		    if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 		    	
+ 		    	Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+ 		    	Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
+ 		    	
+ 		    	Integer validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+ 		    	Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
+ 		    	
+ 		    	log.info("validFromHour: "+validFromHour);
+ 		    	log.info("validFromMinute: "+validFromMinute);
+ 		    	
+ 		    	//TODO: Remove deprecated Java-Date handlers
+ 		    	Calendar calFrom = Calendar.getInstance();
+ 		    	int year = validFromDate.getYear()+1900;
+ 		    	int month = validFromDate.getMonth();
+ 		    	int date = validFromDate.getDate();
+ 		    	calFrom.set(year, month, date, validFromHour, validFromMinute, 0);
+ 				
+ 				
+ 				Calendar calTo= Calendar.getInstance();
+ 		    	int yearTo = validToDate.getYear()+1900;
+ 		    	int monthTo = validToDate.getMonth();
+ 		    	int dateTo = validToDate.getDate();
+ 		    	calTo.set(yearTo, monthTo, dateTo, validToHour, validToMinute, 0);
+ 		    	
+ 		    	Date appointmentstart = calFrom.getTime();
+ 		    	Date appointmentend = calTo.getTime();
+ 		    	
+ 		    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(appointmentstart));
+ 		    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(appointmentend));
  		    	
  		    	Users from = Usermanagement.getInstance().getUserById(users_id);
  		    	
@@ -664,7 +697,7 @@ public class UserService {
  		    		Long room_id = Roommanagement.getInstance().addRoom(
  		   				3,					// Userlevel
  		   				subject,	// name	
- 		   				1L,					// RoomType	
+ 		   				roomtype_id,					// RoomType	
  		   				"",					// Comment
  		   				new Long(100),		// Number of participants
  		   				false,				// public
@@ -685,18 +718,39 @@ public class UserService {
  		    		
  		    	}
  		    		
+ 		    	receipents.add(from.getAdresses().getEmail());
  		    	
- 		    	
- 		    	for (Iterator iter = receipents.keySet().iterator();iter.hasNext();) {
+ 		    	for (String email : receipents) {
  		    		
- 		    		Map receipent = (Map) receipents.get(iter.next());
+ 		    		//Map receipent = (Map) receipents.get(iter.next());
  		    		
- 		    		Long userReceipent = (Long) receipent.get(users_id);
+ 		    		//String email = receipent.get("email").toString();
  		    		
- 		    		Users to = Usermanagement.getInstance().getUserById(userReceipent);
+ 		    		Users to = Usermanagement.getInstance().getUserByLoginOrEmail(email);
  		    		
- 		    		PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, bookedRoom, room);
+ 		    		if (to == null){
+	 		       		throw new Exception("Could not find user "+email);
+	 		       	}
  		    		
+ 		    		Boolean invitor = false;
+	    			if (email.equals(from.getAdresses().getEmail())) {
+	    				invitor = true;
+	    			} else {
+	    				
+	    				//One message to the Send
+	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, from, bookedRoom, room);
+	    				
+	    				//One message to the Inbox
+	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, to, bookedRoom, room);
+	    				
+	    			}
+ 		    		
+ 		    		if (bookedRoom) {
+ 		    			
+ 		    			//But add the appointement to everyboy
+ 		    			this.addAppointementToUser(subject, message, to, receipents, room, appointmentstart, appointmentend, invitor);
+ 		    			
+ 		    		}
  		    	}
  		    	
  		    	
@@ -707,6 +761,35 @@ public class UserService {
  		   log.error("[composeMail]",err);
  	   }
  	   return null;
+    }
+    
+    /*
+     * Date appointmentstart = calFrom.getTime();
+ 	 * Date appointmentend = calTo.getTime();
+     */
+    private void addAppointementToUser(String subject, String message, Users to, List<String> receipents, Rooms room, 
+    		Date appointmentstart, Date appointmentend, Boolean invitor) throws Exception {
+    	
+    	Long appointmentId =  AppointmentDaoImpl.getInstance().addAppointment(subject, to.getUser_id(), "", message,
+   				appointmentstart, appointmentend, false, false, false, false, 1L, 2L, room, to.getLanguage_id(), false, "");
+    	
+    	for (String email : receipents) {
+	    		
+	    		//Map receipent = (Map) receipents.get(iter.next());
+    		
+	    		//String email = receipent.get("email").toString();
+	    		
+	    		Users meetingMember = Usermanagement.getInstance().getUserByLoginOrEmail(email);
+	    		
+	    		String firstname = meetingMember.getFirstname();
+	    		String lastname = meetingMember.getLastname();
+	    		
+	    		MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  "0",
+	  				 "0",  appointmentId,  meetingMember.getUser_id(),  email, invitor, 
+	  				 meetingMember.getOmTimeZone().getJname(), true);
+	    		
+	    	}
+    	
     }
     
 	public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max) {
@@ -741,7 +824,7 @@ public class UserService {
 		return null;
 	}
 	
-	public SearchResult getSend(String SID, String orderBy, Integer start, Boolean asc, Integer max) {
+	public SearchResult getSend(String SID, String search, String orderBy, Integer start, Boolean asc, Integer max) {
 		try {
 
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -754,12 +837,44 @@ public class UserService {
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = PrivateMessagesDaoImpl
 									.getInstance().getSendPrivateMessagesByUser(users_id,
-											orderBy, start, asc, 0L, max);
+											search, orderBy, start, asc, 0L, max);
 				
 				searchResult.setResult(userList);
 				
 				Long resultInt = PrivateMessagesDaoImpl
-									.getInstance().countSendPrivateMessagesByUser(users_id,0L);
+									.getInstance().countSendPrivateMessagesByUser(users_id, search, 0L);
+				
+				searchResult.setRecords(resultInt);
+
+				return searchResult;
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
+	public SearchResult getTrash(String SID, String search, String orderBy, Integer start, Boolean asc, Integer max) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				SearchResult searchResult = new SearchResult();
+				searchResult.setObjectName(Users.class.getName());
+				List<PrivateMessages> userList = PrivateMessagesDaoImpl
+									.getInstance().getSendPrivateMessagesByUser(users_id,
+											search, orderBy, start, asc, 0L, max);
+				
+				searchResult.setResult(userList);
+				
+				Long resultInt = PrivateMessagesDaoImpl
+									.getInstance().countSendPrivateMessagesByUser(users_id, search, 0L);
 				
 				searchResult.setRecords(resultInt);
 
@@ -830,10 +945,16 @@ public class UserService {
 					users_id);
 			// users only
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				PrivateMessages privateMessage = PrivateMessagesDaoImpl.getInstance().getPrivateMessagesById(privateMessageId);
+				
+				privateMessage.setIsRead(isRead);
+				
+				PrivateMessagesDaoImpl.getInstance().updatePrivateMessages(privateMessage);
 
 			}
 		} catch (Exception err) {
-			log.error("[getInbox]", err);
+			log.error("[markReadStatusMail]", err);
 		}
 		return null;
 	}

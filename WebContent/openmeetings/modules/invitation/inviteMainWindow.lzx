@@ -12,13 +12,13 @@
 		<attribute name="roomType" value="conference" type="string" />
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
 		
-	    	<handler name="oninit">
-	    		lz.ModeManager.makeModal(this);
-	    	</handler>
-	    
-	    	<handler name="onclose">
-	    		lz.ModeManager.release(this);
-	    	</handler>	
+    	<handler name="oninit">
+    		lz.ModeManager.makeModal(this);
+    	</handler>
+    
+    	<handler name="onclose">
+    		lz.ModeManager.release(this);
+    	</handler>	
 		
 		<!-- label: recipient -->
 		<labelText labelid="216" y="24" width="120" />

@@ -12,7 +12,7 @@ public class UserContacts {
 	
 	private long userContactId;
 	private Users contact;
-	private Long ownerId;
+	private Users owner;
 	private Boolean pending;
 	private String hash;
 	private Date inserted;
@@ -47,16 +47,20 @@ public class UserContacts {
 		this.contact = contact;
 	}
 	
-    /**
-     * @hibernate.property
+	/**
+     * @hibernate.many-to-one
+     *  cascade="none"
      *  column="owner_id"
-     *  type="long"
-     */  
-	public Long getOwnerId() {
-		return ownerId;
+     *  lazy="false"
+     *  class="org.openmeetings.app.hibernate.beans.user.Users"
+     *  not-null="false"
+     *  outer-join="true"
+     */ 
+	public Users getOwner() {
+		return owner;
 	}
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
+	public void setOwner(Users owner) {
+		this.owner = owner;
 	}
 	
 	/**

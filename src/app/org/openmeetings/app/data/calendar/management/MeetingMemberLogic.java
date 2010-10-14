@@ -59,7 +59,8 @@ public class MeetingMemberLogic {
 		
 		try{
 			Long memberId =  MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  memberStatus,
-				 appointmentStatus,  appointmentId,  userid,  email, invitor, jNameMemberTimeZone);
+				 appointmentStatus,  appointmentId,  userid,  email, invitor, 
+				 jNameMemberTimeZone, false);
 		
 			
 			// DefaultInvitation

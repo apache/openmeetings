@@ -228,7 +228,7 @@ public class MeetingMemberDaoImpl {
 	
 	public Long addMeetingMember(String firstname, String lastname, String memberStatus,
 			String appointmentStatus, Long appointmentId, Long userid, String email, 
-			Boolean moderator, String jNameTimeZone) {
+			Boolean moderator, String jNameTimeZone, Boolean isConnectedEvent) {
 		try {
 			
 			MeetingMember gm = new MeetingMember();
@@ -244,6 +244,7 @@ public class MeetingMemberDaoImpl {
 			gm.setStarttime(new Date());
 			gm.setDeleted(false);
 			gm.setInvitor(moderator);
+			gm.setIsConnectedEvent(isConnectedEvent);
 			
 			gm.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 						
