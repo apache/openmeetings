@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <timezones>
-    <timezone name="Etc/GMT+12" label="Fiji, New Zealand" iCal="Pacific/Fiji" />
-    <timezone name="Etc/GMT+11" label="Wladiwostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
-    <timezone name="Etc/GMT+10" label="Australia" iCal="Australia/Sydney" />
-    <timezone name="Etc/GMT+9" label="Japan/Korea Standard Time, Zabaykalsky, East Timor" iCal="Asia/Tokyo" />
-    <timezone name="Etc/GMT+8" label="China Standard Time, Irkutsk, Philippines, Singapore" iCal="Asia/Singapore" />
-    <timezone name="Etc/GMT+7" label="Indochina Time, Krasnoyarsk, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
-    <timezone name="Etc/GMT+6" label="Novosibirsk, Almaty, Bangladesh" iCal="Asia/Dhaka" />
-    <timezone name="IST" label="Indian Standard Time GMT+5.30" iCal="Asia/Kolkata" />
-    <timezone name="Etc/GMT+5" label="Russia, Sverdlovsk, Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
-    <timezone name="Asia/Kabul" label="Kabul GMT+4.30 " iCal="Asia/Kabul" />
-    <timezone name="Etc/GMT+4" label="Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Asia/Dubai" />
-    <timezone name="Asia/Tehran" label="Tehran GMT+3.30" iCal="Asia/Tehran" />
-    <timezone name="Etc/GMT+3" label="Moscow, Saint Petersburg, Samara, Iraq, Saudi Arabia" iCal="Europe/Moscow" />
-    <timezone name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Helsinki" />
-    <timezone name="Etc/GMT+1" label="France, Germany, Spain, Italy" iCal="Europe/Berlin" />
-    <timezone name="Etc/GMT" label="Iceland, United Kingdom, Ireland" iCal="Europe/London" />
-    <timezone name="Etc/GMT-1" label="Azores, Cape Verde" iCal="Atlantic/Cape_Verde" />
-    <timezone name="Etc/GMT-2" label="Fernando de Noronha" iCal="America/Noronha" />
-    <timezone name="Etc/GMT-3" label="Rio de Janeiro, São Paulo, Argentina, Uruguay" iCal="America/Sao_Paulo" />
-    <timezone name="Etc/GMT-4" label="Nova Scotia, Dominican Republic, Puerto Rico" iCal="America/Santiago" />
-    <timezone name="Etc/GMT-5" label="Ottawa, Toronto, Montreal, Boston, New York" iCal="America/New_York" />
-    <timezone name="Etc/GMT-6" label="Costa Rica , Dallas, El Salvador, Guatemala, Honduras" iCal="America/El_Salvador" />
-    <timezone name="Etc/GMT-7" label="Alberta, Colorado, Arizona, Chihuahua, Sonora" iCal="America/Mexico_City" />
-    <timezone name="Etc/GMT-8" label="Vancouver, Portland, Las Vegas, California" iCal="America/Los_Angeles" />
-    <timezone name="Etc/GMT-9" label="Anchorage, Fairbanks, Juneau" iCal="America/Juneau" />
-    <timezone name="Etc/GMT-10" label="Hawaii" iCal="Pacific/Honolulu" />
-    <timezone name="Etc/GMT-11" label="Samoa" iCal="Pacific/Apia" />
+    <timezone orderId="1" name="Etc/GMT+12" label="Fiji, New Zealand" iCal="Pacific/Fiji" />
+    <timezone orderId="2" name="Etc/GMT+11" label="Wladiwostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
+    <timezone orderId="3" name="Etc/GMT+10" label="Australia" iCal="Australia/Sydney" />
+    <timezone orderId="4" name="Etc/GMT+9" label="Japan/Korea Standard Time, Zabaykalsky, East Timor" iCal="Asia/Tokyo" />
+    <timezone orderId="5" name="Etc/GMT+8" label="China Standard Time, Irkutsk, Philippines, Singapore" iCal="Asia/Singapore" />
+    <timezone orderId="6" name="Etc/GMT+7" label="Indochina Time, Krasnoyarsk, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
+    <timezone orderId="7" name="Etc/GMT+6" label="Novosibirsk, Almaty, Bangladesh" iCal="Asia/Dhaka" />
+    <timezone orderId="8" name="IST" label="Indian Standard Time GMT+5.30" iCal="Asia/Kolkata" />
+    <timezone orderId="9" name="Etc/GMT+5" label="Russia, Sverdlovsk, Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
+    <timezone orderId="10" name="Asia/Kabul" label="Kabul GMT+4.30 " iCal="Asia/Kabul" />
+    <timezone orderId="11" name="Etc/GMT+4" label="Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Asia/Dubai" />
+    <timezone orderId="12" name="Asia/Tehran" label="Tehran GMT+3.30" iCal="Asia/Tehran" />
+    <timezone orderId="13" name="Etc/GMT+3" label="Moscow, Saint Petersburg, Samara, Iraq, Saudi Arabia" iCal="Europe/Moscow" />
+    <timezone orderId="14" name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Helsinki" />
+    <timezone orderId="15" name="Etc/GMT+1" label="France, Germany, Spain, Italy" iCal="Europe/Berlin" />
+    <timezone orderId="16" name="Etc/GMT" label="Iceland, United Kingdom, Ireland" iCal="Europe/London" />
+    <timezone orderId="17" name="Etc/GMT-1" label="Azores, Cape Verde" iCal="Atlantic/Cape_Verde" />
+    <timezone orderId="18" name="Etc/GMT-2" label="Fernando de Noronha" iCal="America/Noronha" />
+    <timezone orderId="19" name="Etc/GMT-3" label="Rio de Janeiro, São Paulo, Argentina, Uruguay" iCal="America/Sao_Paulo" />
+    <timezone orderId="20" name="Etc/GMT-4" label="Nova Scotia, Dominican Republic, Puerto Rico, Santiago" iCal="America/Santiago" />
+    <timezone orderId="21" name="Etc/GMT-5" label="Ottawa, Toronto, Montreal, Boston, New York" iCal="America/New_York" />
+    <timezone orderId="24" name="Etc/GMT-6" label="Costa Rica , El Salvador, Guatemala, Honduras" iCal="America/El_Salvador" />
+    <timezone orderId="26" name="Etc/GMT-7" label="Mexico City, Chihuahua, Sonora" iCal="America/Mexico_City" />
+    <timezone orderId="27" name="Etc/GMT-8" label="Vancouver, Portland, Las Vegas, California" iCal="America/Los_Angeles" />
+    <timezone orderId="28" name="Etc/GMT-9" label="Anchorage, Fairbanks, Juneau" iCal="America/Juneau" />
+    <timezone orderId="29" name="Etc/GMT-10" label="Hawaii" iCal="Pacific/Honolulu" />
+    <timezone orderId="30" name="Etc/GMT-11" label="Samoa" iCal="Pacific/Apia" />
+    <timezone orderId="23" name="Etc/GMT-6(Chicago)" label="Chicago, Dallas" iCal="America/Chicago" />
+    <timezone orderId="25" name="Etc/GMT-7(Phoenix)" label="Alberta, Colorado, Phoenix" iCal="America/Phoenix" />
+    <timezone orderId="22" name="Etc/GMT-5(Panama)" label="Panama Port-au-Prince" iCal="America/Panama" />
 </timezones>

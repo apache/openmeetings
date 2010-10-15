@@ -29,7 +29,7 @@ public class OmTimeZoneDaoImpl {
 		return instance;
 	}
 	
-	public Long addOmTimeZone(String name, String label, String iCal) {
+	public Long addOmTimeZone(String name, String label, String iCal, Integer orderId) {
 		try {
 			
 			OmTimeZone omTimeZone = new OmTimeZone();
@@ -37,6 +37,7 @@ public class OmTimeZoneDaoImpl {
 			omTimeZone.setJname(name);
 			omTimeZone.setLabel(label);
 			omTimeZone.setIcal(iCal);
+			omTimeZone.setOrderId(orderId);
 			omTimeZone.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
@@ -58,7 +59,8 @@ public class OmTimeZoneDaoImpl {
 	
 	public List<OmTimeZone> getOmTimeZones() {
 		try {
-			String hql = "select sl from OmTimeZone as sl ";
+			String hql = "select sl from OmTimeZone as sl " +
+					"ORDER BY sl.orderId";
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

@@ -128,8 +128,10 @@ public class Install extends VelocityViewServlet {
 					
 					LinkedHashMap<String,String> allTimeZones = new LinkedHashMap<String,String>();
 					List<OmTimeZone> omTimeZoneList = ImportInitvalues.getInstance().getTimeZones(filePath);
+					log.debug("omTimeZoneList :: "+omTimeZoneList.size());
 					for (OmTimeZone omTimeZone : omTimeZoneList) {
 						String labelName = omTimeZone.getJname() + " (" + omTimeZone.getLabel() + ")";
+						log.debug("labelName :: "+labelName);
 						allTimeZones.put(omTimeZone.getJname(), labelName);
 					}
 					

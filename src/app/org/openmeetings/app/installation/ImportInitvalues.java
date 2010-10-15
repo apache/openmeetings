@@ -536,8 +536,9 @@ public class ImportInitvalues {
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
 			String iCal = item.attributeValue("iCal");
+			Integer orderId = Integer.valueOf(item.attributeValue("orderId"));
 
-			OmTimeZoneDaoImpl.getInstance().addOmTimeZone(timeZoneName, timeZoneLabel, iCal);
+			OmTimeZoneDaoImpl.getInstance().addOmTimeZone(timeZoneName, timeZoneLabel, iCal, orderId);
 
 		}
 	}
@@ -557,10 +558,12 @@ public class ImportInitvalues {
 			Element item = (Element) it.next();
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
+			Integer orderId = Integer.valueOf(item.attributeValue("orderId"));
 
 			OmTimeZone omTimeZone = new OmTimeZone();
 			omTimeZone.setJname(timeZoneName);
 			omTimeZone.setLabel(timeZoneLabel);
+			omTimeZone.setOrderId(orderId);
 			
 			omTimeZones.add(omTimeZone);
 

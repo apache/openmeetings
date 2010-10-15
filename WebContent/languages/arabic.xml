@@ -3658,4 +3658,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1217" name="kick-user">
     <value>You cannot kick a Super-Moderator out of a room!</value>
   </string>
+  <string id="1218" name="private message">
+    <value>Book conference room</value>
+  </string>
+  <string id="1219" name="private message">
+    <value>Start</value>
+  </string>
+  <string id="1220" name="private message">
+    <value>End</value>
+  </string>
+  <string id="1221" name="private message">
+    <value>Add an optional request for meeting to the message and create conference room for the participants. The Event is then copied in every Calendar of the participants.</value>
+  </string>
+  <string id="1222" name="private message">
+    <value>Inbox</value>
+  </string>
+  <string id="1223" name="private message">
+    <value>Send</value>
+  </string>
+  <string id="1224" name="private message">
+    <value>Trash</value>
+  </string>
 </language>

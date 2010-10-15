@@ -14,6 +14,7 @@ public class OmTimeZone {
 	private String label;
 	private String ical;
 	private Date inserted;
+	public Integer orderId;
 	public String frontEndLabel;
 	
 	/**
@@ -78,9 +79,23 @@ public class OmTimeZone {
 		this.inserted = inserted;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="order_id"
+     *  type="int"
+     */
+	public Integer getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+	
+	
 	public String getFrontEndLabel() {
 		return frontEndLabel;
 	}
+	
 	public void setFrontEndLabel(String frontEndLabel) {
 		this.frontEndLabel = frontEndLabel;
 	}

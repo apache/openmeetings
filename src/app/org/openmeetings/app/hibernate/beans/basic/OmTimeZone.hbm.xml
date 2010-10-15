@@ -10,5 +10,6 @@
     <property name="label" type="string" column="label"/>
     <property name="ical" type="string" column="ical"/>
     <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="orderId" type="int" column="order_id"/>
   </class>
 </hibernate-mapping>
