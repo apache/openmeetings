@@ -101,8 +101,7 @@
 		    	<handler name="ondata" args="value">
 		    		<![CDATA[
 			    		if ($debug) Debug.write("changePendingStatusUserContacts: ",value);
-			    		parent.getPendingUserContacts.doCall();
-			    		parent.parent.parent._availableContacts._table.getUserContacts.doCall();
+			    		parent.parent.parent.reload();
 		    		]]>
 		    	</handler>
 		    </netRemoteCallHib>	
@@ -254,7 +253,7 @@
 		
 		<turnOverListOrderedPaged name="_table" showTopBar="false" x="2" height="${ parent.height }" 
 		             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" 
-		             listItemName="pendingContactsListItem" menuBarXIndent="100"
+		             listItemName="contactsListItem" menuBarXIndent="100"
 		             multiselect="false" width="270">
 			
 	        <method name="renderByHeightChange" >
@@ -310,35 +309,29 @@
 	            ]]>
 	        </handler>
 	        
-	        <handler name="setPendingStatus" args="userContactId,pending">
+	        <method name="removeContactUserMethod" args="userContactId">
 	            <![CDATA[
 	            
-	                if ($debug) Debug.write("setPendingStatus ",userContactId,pending);
+	                if ($debug) Debug.write("removeUser ",userContactId,pending);
 	                
-	                this.changePendingStatusUserContacts.pending = pending;
-	                this.changePendingStatusUserContacts.userContactId = userContactId;
-	                this.changePendingStatusUserContacts.doCall();
+	                this.removeContactUser.userContactId = userContactId;
+	                this.removeContactUser.doCall();
 	            ]]>
-	        </handler>
+	        </method>
 	        
 	        <!--
-			public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending)
+			public Integer removeContactUser(String SID, Long userContactId)
 			 -->
-		    <netRemoteCallHib name="changePendingStatusUserContacts" funcname="userservice.changePendingStatusUserContacts" 
+		    <netRemoteCallHib name="removeContactUser" funcname="userservice.removeContactUser" 
 						  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
 				<attribute name="userContactId" value="0" type="number" />
 				<attribute name="pending" value="true" type="boolean" />
 				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
 				<netparam><method name="getValue"> return parent.userContactId; </method></netparam>
-		    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
 		    	<handler name="ondata" args="value">
 		    		<![CDATA[
-			    		if ($debug) Debug.write("requestUserToContactList: ",value);
-			    		if (value > 0) {
-			    			parent.setAttribute("pending",true);
-			    			parent.parent.parent.parent.parent.updatePendingStatus(parent.itemId);
-			    		}
-			    		parent.onmouseout.sendEvent(null);
+			    		if ($debug) Debug.write("removeContactUser: ",value);
+			    		parent.parent.parent.reload();
 		    		]]>
 		    	</handler>
 		    </netRemoteCallHib>	

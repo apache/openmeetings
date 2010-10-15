@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="pendingContactsListItem" extends="basePagingListItem" showhandcursor="false" height="40">
+<class name="contactsListItem" extends="basePagingListItem" showhandcursor="false" height="40">
 	
 	<attribute name="username" value="" type="string" />
 	
@@ -65,20 +65,20 @@
 		
 		<view visible="${ parent.parent.clickable }">
 			
-			<miniIcons name="add" y="1" x="1" resource="user_moderator_list_apply_rsc" width="18" height="18" 
+	    	<miniIcons name="deny" y="1" x="1" resource="button_cancel_rsc" width="18" height="18" 
 	               showhandcursor="true">
 				<handler name="onclick">
-		            parent.parent.parent.parent.parent.parent.parent.setPendingStatus(parent.parent.parent.refObj.userContactId,true);
+					new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                           labelid:1233,labeliderror:1232,
+                                           refObj:this,showCheckBox:false});
+            
 		        </handler>
-		        <labelTooltip labelid="1190" />
-		    </miniIcons>
-	    
-	    	<miniIcons name="deny" y="1" x="20" resource="button_cancel_rsc" width="18" height="18" 
-	               showhandcursor="true">
-				<handler name="onclick">
-		            parent.parent.parent.parent.parent.parent.parent.setPendingStatus(parent.parent.parent.refObj.userContactId,false);
-		        </handler>
-		        <labelTooltip labelid="1191" />
+		        
+		        <method name="sendConfirmation" args="yesno" >
+		            parent.parent.parent.parent.parent.parent.parent.removeContactUserMethod(parent.parent.parent.refObj.userContactId);
+		        </method>
+		            
+		        <labelTooltip labelid="1234" />
 		    </miniIcons>
 		    
 	    </view>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-    
+	
+    <include href="contactsListItem.lzx" />
     <include href="pendingContactsListItem.lzx" />
     <include href="userContacts.lzx" />
     <include href="editUserContacts.lzx" />

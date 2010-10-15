@@ -654,7 +654,29 @@ public class UserService {
 	   }
 	   return null;
    }
-
+   
+   public Integer removeContactUser(String SID, Long userContactId) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+			   
+			   if (userContacts == null) {
+				   return -49;
+			   }
+			   
+			   return UserContactsDaoImpl.getInstance().deleteUserContact(userContactId);
+			   
+		   }
+	   } catch (Exception err) {
+		   log.error("[removeContactUser]",err);
+	   }
+	   return null;
+   }
+   
    public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending) {
 	   try {
 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
