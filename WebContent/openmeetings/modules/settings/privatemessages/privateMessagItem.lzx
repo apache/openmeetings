@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	
+<class name="privateMessagItem" extends="basePagingListItem" showhandcursor="false" height="20">
+	
+	<attribute name="from" value="" type="string"/>
+	<attribute name="subject" value="" type="string"/>
+	<attribute name="strTime" value="" type="string"/>
+	
+	<attribute name="isRead" value="false" type="boolean"/>
+	
+	<attribute name="itemSelected" value="false" type="boolean"/>
+	
+	<view width="200">
+		
+		<handler name="onclick">
+			if (parent.clickable) {
+				parent.parent.parent.parent.parent.itemSelected(parent,!parent.itemSelected);
+			}
+		</handler>
+		
+		<checkbox name="_selected" y="2" x="2"
+				  visibility="${ (parent.parent.clickable) ? 'visible' : 'hidden' }" 
+				  value="${ parent.parent.itemSelected }" />
+		
+		<view height="$once{ parent.parent.height }" width="1" 
+        				align="right" bgcolor="black" />
+	</view>
+	
+	<turnOverTextItem name="_timezone" width="80" 
+					  text="${ parent.from }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
+	<turnOverTextItem name="_searchOffers" width="300"
+					  text="${ parent.subject }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
+	<turnOverTextItem name="_searchSearchs" width="300"
+					  text="${ parent.strTime }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
+	
+</class>	
+
+</library>

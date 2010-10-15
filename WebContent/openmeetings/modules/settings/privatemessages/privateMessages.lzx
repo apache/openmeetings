@@ -1,41 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="privateMessagItem" extends="basePagingListItem" showhandcursor="false" height="20">
-	
-	<attribute name="from" value="" type="string"/>
-	<attribute name="subject" value="" type="string"/>
-	<attribute name="strTime" value="" type="string"/>
-	
-	<attribute name="isRead" value="false" type="boolean"/>
-	
-	<attribute name="itemSelected" value="false" type="boolean"/>
-	
-	<view width="200">
-		
-		<handler name="onclick">
-			if (parent.clickable) {
-				parent.parent.parent.parent.parent.itemSelected(parent,!parent.itemSelected);
-			}
-		</handler>
-		
-		<checkbox name="_selected" y="2" x="2"
-				  visibility="${ (parent.parent.clickable) ? 'visible' : 'hidden' }" 
-				  value="${ parent.parent.itemSelected }" />
-		
-		<view height="$once{ parent.parent.height }" width="1" 
-        				align="right" bgcolor="black" />
-	</view>
-	
-	<turnOverTextItem name="_timezone" width="80" 
-					  text="${ parent.from }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
-	<turnOverTextItem name="_searchOffers" width="300"
-					  text="${ parent.subject }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
-	<turnOverTextItem name="_searchSearchs" width="300"
-					  text="${ parent.strTime }" fontstyle="${ (parent.isRead) ? 'plain' : 'bold' }" />
-	
-</class>	
-	
 <class name="privateMessages" extends="view" height="$once{ parent.height }" 
 	   width="$once{ canvas.width - 276 }">
 	
@@ -473,76 +438,5 @@
 	</view>
 	
 </class>
-
-
-<class name="pendingUserStatus" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
-	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }">
-	
-	<attribute name="message" value="" type="string" />
-	<attribute name="userContactId" value="0" type="number" />
-
-	<method name="setPendingStatus" args="pending">
-        <![CDATA[
-        
-            if ($debug) Debug.write("setPendingStatus ",this.userContactId,pending);
-            
-            this.changePendingStatusUserContacts.pending = pending;
-            this.changePendingStatusUserContacts.doCall();
-        ]]>
-    </method>
-    
-    <method name="close">
-    	this.destroy();
-    	parent.pendingUserStatusRef = null;
-    </method>
-    
-    <!--
-	public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending)
-	 -->
-    <netRemoteCallHib name="changePendingStatusUserContacts" funcname="userservice.changePendingStatusUserContacts" 
-				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
-		<attribute name="pending" value="true" type="boolean" />
-		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
-		<netparam><method name="getValue"> return parent.parent.userContactId; </method></netparam>
-    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
-    	<handler name="ondata" args="value">
-    		<![CDATA[
-	    		if ($debug) Debug.write("changePendingStatusUserContacts: ",value);
-	    		parent.parent.parent.parent._userContacts.reload();
-    		]]>
-    	</handler>
-    </netRemoteCallHib>
-    
-    <view name="_bg" x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
-    	  bgcolor="0xFFFFFF" />
-    	  
-	<miniIconsPresenter name="_close" x="$once{ parent.width-20 }" y="2"
-        iconRessourceName="btn_presenter_close2">
-        <handler name="onclick">
-            this.parent.close();
-        </handler>
-        <labelTooltip labelid="430" />
-    </miniIconsPresenter>  
-    
-	<miniIcons name="add" x="10" y="10" resource="user_moderator_list_apply_rsc" width="18" height="18" 
-           showhandcursor="true">
-		<handler name="onclick">
-           parent.setPendingStatus(true);
-        </handler>
-        <labelTooltip labelid="1190" />
-    </miniIcons>
-
-	<miniIcons name="deny" x="30" y="10" resource="button_cancel_rsc" width="18" height="18" 
-           showhandcursor="true">
-		<handler name="onclick">
-            parent.setPendingStatus(false);
-        </handler>
-        <labelTooltip labelid="1191" />
-    </miniIcons>
-    
-    <labelText text="$once{ parent.message }" y="10" x="60"
-    		   width="$once{ parent.width-this.x-20 }" resize="false" multiline="true" />
-    
-</class>    
 
 </library>

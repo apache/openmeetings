@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	
+    <include href="newPrivateMessage.lzx" />
+    <include href="privateMessagItem.lzx" />
+    <include href="privateMessages.lzx" />
+    <include href="pendingUserStatus.lzx" />
+
+
+</library>

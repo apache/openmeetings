@@ -6,12 +6,11 @@
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     
+    <include href="privatemessages/" />
+    <include href="usercontacts/" />
+    
     <include href="userSettings.lzx" />
     <include href="editUserProfile.lzx" />
-    <include href="newPrivateMessage.lzx" />
-    <include href="privateMessages.lzx" />
-    <include href="userContacts.lzx" />
-    <include href="editUserContacts.lzx" />
     <include href="searchUserProfile.lzx" />
 
 </library>

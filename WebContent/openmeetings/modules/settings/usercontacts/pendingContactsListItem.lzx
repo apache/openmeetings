@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
-	<include href="userContacts.lzx" />
-	
-<class name="editUserContacts" extends="view" y="24" height="$once{ canvas.height - 134 }">
-	
-	<attribute name="contactContent" value="null"/>
-	
-	<handler name="onvisible" args="v">
-		if (v) {
-			if (this.contactContent == null) {
-				this.contactContent = new lz.editUserContactsContent(this);
-			}
-		} else {
-			if (this.contactContent != null) {
-				this.contactContent.destroy();
-				this.contactContent = null;
-			}
-		}
-	</handler>
-	
-	
-</class>
 
 <class name="pendingContactsListItem" extends="basePagingListItem" showhandcursor="false" height="40">
 	
@@ -110,19 +89,4 @@
 	
 </class>
 
-<class name="editUserContactsContent" extends="view" height="$once{ parent.height }">
-	
-	
-	<privateMessages name="_privateMessages" x="0" y="0" />
-	
-	
-	<view height="$once{ parent.height }" width="1" x="$once{ canvas.width-276 }" 
-		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
-	
-	
-	<userContacts name="_userContacts" />
-	
-	
-</class>	
-	
 </library>
