@@ -3,18 +3,18 @@
  
 <!--- Organization choice modal window when an organization is added to a user.-->
 <class name="chooseOrganisationWindow" extends="labelExplorerBox" labelid="173"
-    docking="true" width="400" x="100" y="300" height="230">
+    docking="true" width="400" x="400" y="300" height="200">
     
     <attribute name="item_id" value="0" type="number" />
     <attribute name="refObj" value="null" />
     
     <handler name="oninit">
-        lz.ModeManager.makeModal(this);
+        //lz.ModeManager.makeModal(this);
 		this.getOrganisations.doCall();
     </handler>
     
     <handler name="onclose">
-        lz.ModeManager.release(this);
+        //lz.ModeManager.release(this);
     </handler>
 	
 	<netRemoteCallHib name="getOrganisations" funcname="organisationservice.getOrganisations" remotecontext="$once{ canvas.thishib }" >      
@@ -38,15 +38,15 @@
 	</netRemoteCallHib>			
 	
     <labelText labelid="161" width="200" y="24" resize="false" x="2"/>     
-    <simpleValueList name="_organisationslist" y="24" x="120" width="270" height="100" 
+    <simpleValueList name="_organisationslist" y="24" x="120" width="270" height="120" 
 		multiselect="true" />
 	
-	<simpleLabelButton labelid="174" x="180" y="200" width="100">
+	<simpleLabelButton labelid="174" x="290" y="200" width="100">
 		<handler name="onclick">
 			this.parent.close();
 		</handler>
 	</simpleLabelButton>
-	<simpleLabelButton labelid="175" x="290" y="200" width="100">
+	<simpleLabelButton labelid="175" x="180" y="200" width="100">
 		<handler name="onclick">
 			<![CDATA[
 				for (var i=0;i<this.parent._organisationslist._selected.length;i++){

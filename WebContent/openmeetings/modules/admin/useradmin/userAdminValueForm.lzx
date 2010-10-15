@@ -397,7 +397,7 @@
 		onclick="this.parent.addOrganisationToUser()" />	-->	
 	<method name="addOrganisationToUser">
 		//if (this.user_id!=0)
-			new lz.chooseOrganisationWindow(canvas.main_content._content.inner,{refObj:this,item_id:this.user_id});
+			new lz.chooseOrganisationWindow(parent,{refObj:this,item_id:this.user_id});
 	</method>	
 	
 	<blueButton width="20" height="20" resourceItem="button_cancel_rsc"
