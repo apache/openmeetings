@@ -100,6 +100,10 @@
 	               showhandcursor="true">
 		        <handler name="onclick">
 		            if ($debug) Debug.write("Start Conference");
+		            if (hib.userobject.user_id == parent.parent.parent.refObj.user_id) {
+		            	new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+		            	return;
+		            }
 		            parent.parent.parent.requestUserToContactList.doCall();
 		        </handler>
 		        <labelTooltip labelid="1186" />
@@ -229,6 +233,10 @@
 	                if ($debug) Debug.write("onclickedItem ",refObj);
 	                
 	            ]]>
+	        </handler>
+	        
+	        <handler name="onUpdateOrder">
+	        	this.searchUserProfile.doCall();
 	        </handler>
 	        
 	        <method name="updatePendingStatus" args="itemId">

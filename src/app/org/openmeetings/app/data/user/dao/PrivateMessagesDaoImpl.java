@@ -32,7 +32,8 @@ public class PrivateMessagesDaoImpl {
 	}
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
-			Users from, Users to, Users owner, Boolean bookedRoom, Rooms room) {
+			Users from, Users to, Users owner, Boolean bookedRoom, Rooms room,
+			Boolean isContactRequest, Long userContactId) {
 		try {
 			PrivateMessages privateMessage = new PrivateMessages();
 			privateMessage.setInserted(new Date());
@@ -47,6 +48,8 @@ public class PrivateMessagesDaoImpl {
 			privateMessage.setIsTrash(false);
 			privateMessage.setPrivateMessageFolderId(0L);
 			privateMessage.setIsRead(false);
+			privateMessage.setIsContactRequest(isContactRequest);
+			privateMessage.setUserContactId(userContactId);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

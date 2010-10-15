@@ -101,7 +101,16 @@
 		             listItemName="privateMessagItem" menuBarXIndent="100"
 		             multiselect="false" orderby="c.inserted">
 		
+		
+		<attribute name="countUnRead" value="0" type="number" />
 		<attribute name="isInbox" value="false" type="boolean" />
+		
+		<method name="updatePrivateMessageLabelText" args="countUnRead">
+			<![CDATA[
+		    	this.countUnRead = countUnRead;
+		    	parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(parent._labelPrivateMessages.labelid)+' <i>( '+this.countUnRead+' </i>)');
+	    	]]>
+	    </method>
 			
 		<handler name="oninit">
 			this.addHeaderItem(1205,20);
@@ -144,10 +153,14 @@
 						this.markReadStatusMail.privateMessageId = listObj.refObj.privateMessageId;
 						this.markReadStatusMail.isRead = true;
 						
+						this.updatePrivateMessageLabelText(this.countUnRead-1);
+						
 						this.markReadStatusMail.doCall();
 					}
 					
 				}
+				
+				parent._privateMessageDetails.loadMessageDetails(listObj.refObj);
 			
 			]]>
 		</handler>
@@ -170,7 +183,7 @@
 	    		]]>
 	    	</handler>
 	    </netRemoteCallHib>	
-		
+	    
 		<!--
 		public SearchResult getInbox(String SID, String search, String orderBy, int start, Boolean asc, Integer max)
 		 -->
@@ -190,18 +203,18 @@
 		    		
 		    		parent.isInbox = true;
 		    		
-		    		var countUnRead = 0;
+		    		parent.countUnRead = 0;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
 		    			value.result[k].userName = value.result[k].from.firstname+' '+value.result[k].from.lastname+' &#60;'+value.result[k].from.adresses.email+'&#62;';
 		    			value.result[k].itemSelected = false;
 		    			if (!value.result[k].isRead) {
-		    				countUnRead++;
+		    				parent.countUnRead++;
 		    			}
 		    		}
 		    		
-		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid)+' <i>( '+countUnRead+' </i>)');
+		    		parent.updatePrivateMessageLabelText(parent.countUnRead);
 		    		
 		    		this.parent.renderContent(value.result);
 	    		]]>
@@ -393,13 +406,143 @@
 	</turnOverListOrderedPaged>
 	
 	
-	<view name="_privateMessageDetails" width="$once{ parent.width-160-2 }" y="274" 
+	<view name="_privateMessageDetails" x="160" width="$once{ parent.width-160-2 }" y="274" 
 		  height="${ parent.height - 274 }">
 		
+		<attribute name="pendingUserStatusRef" value="null"/>
+		
+		<method name="loadMessageDetails" args="refObj">
+			<![CDATA[
+			
+				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.adresses.email+'&#62;');
+				this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
+				
+				this.subject.setAttribute("text",refObj.subject);
+				
+				this.message.message.setAttribute("text",refObj.message);
+				
+				if (this.pendingUserStatusRef != null) {
+					this.pendingUserStatusRef.destroy();
+				}
+				
+				if (refObj.isContactRequest) {
+					this.checkPendingStatus.userContactId = refObj.userContactId;
+					this.checkPendingStatus.doCall();
+				}
+			
+			]]>
+		</method>
+		
+		<!--
+		 public Long checkPendingStatus(String SID, Long userContactId)
+		 -->
+		<netRemoteCallHib name="checkPendingStatus" funcname="userservice.checkPendingStatus" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<attribute name="userContactId" value="0" type="number" />
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.userContactId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("checkPendingStatus: ",value);
+		    		if (value > 0) {
+		    			parent.pendingUserStatusRef = new lz.pendingUserStatus(parent,{
+								userContactId:this.userContactId,
+								message:parent.subject.getText()
+							});
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>		 
+		
+		<labelText name="_labelFrom" x="2" labelid="1202" />
+		<labelText name="from" width="$once{ parent.width-100 }" x="100" resize="false" />
+		
+		<labelText name="_labelTo" x="2" labelid="1210" y="20"/>
+		<labelText name="to" width="$once{ parent.width-100 }" x="100" y="20" resize="false" />
+		
+		<labelText name="_labelSubject" x="2" labelid="1211" y="40"/>
+		<labelText name="subject" width="$once{ parent.width-100 }" x="100" y="40" resize="false" />
+		
+		<view name="message" y="60" width="$once{ parent.width }" height="${ parent.height-60 }">
+			<labelText name="message" width="$once{ parent.width-16 }" 
+					   multiline="true" resize="false" />
+			<vscrollbar />
+		</view>
 		
 		
 	</view>
 	
 </class>
+
+
+<class name="pendingUserStatus" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
+	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }">
+	
+	<attribute name="message" value="" type="string" />
+	<attribute name="userContactId" value="0" type="number" />
+
+	<method name="setPendingStatus" args="pending">
+        <![CDATA[
+        
+            if ($debug) Debug.write("setPendingStatus ",this.userContactId,pending);
+            
+            this.changePendingStatusUserContacts.pending = pending;
+            this.changePendingStatusUserContacts.doCall();
+        ]]>
+    </method>
+    
+    <method name="close">
+    	this.destroy();
+    	parent.pendingUserStatusRef = null;
+    </method>
+    
+    <!--
+	public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending)
+	 -->
+    <netRemoteCallHib name="changePendingStatusUserContacts" funcname="userservice.changePendingStatusUserContacts" 
+				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+		<attribute name="pending" value="true" type="boolean" />
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.userContactId; </method></netparam>
+    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("changePendingStatusUserContacts: ",value);
+	    		parent.parent.parent.parent._userContacts.reload();
+    		]]>
+    	</handler>
+    </netRemoteCallHib>
+    
+    <view name="_bg" x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
+    	  bgcolor="0xFFFFFF" />
+    	  
+	<miniIconsPresenter name="_close" x="$once{ parent.width-20 }" y="2"
+        iconRessourceName="btn_presenter_close2">
+        <handler name="onclick">
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" />
+    </miniIconsPresenter>  
+    
+	<miniIcons name="add" x="10" y="10" resource="user_moderator_list_apply_rsc" width="18" height="18" 
+           showhandcursor="true">
+		<handler name="onclick">
+           parent.setPendingStatus(true);
+        </handler>
+        <labelTooltip labelid="1190" />
+    </miniIcons>
+
+	<miniIcons name="deny" x="30" y="10" resource="button_cancel_rsc" width="18" height="18" 
+           showhandcursor="true">
+		<handler name="onclick">
+            parent.setPendingStatus(false);
+        </handler>
+        <labelTooltip labelid="1191" />
+    </miniIcons>
+    
+    <labelText text="$once{ parent.message }" y="10" x="60"
+    		   width="$once{ parent.width-this.x-20 }" resize="false" multiline="true" />
+    
+</class>    
 
 </library>

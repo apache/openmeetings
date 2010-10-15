@@ -227,6 +227,20 @@
             canvas.resetHash = hash;        
         }
         
+        var cuserItem = lz.Browser.getInitArg('cuser');
+        if (cuserItem!=undefined){
+            canvas.cuser = cuserItem;  
+            
+            //Lookup additional actions
+            var tAccept = lz.Browser.getInitArg('tAccept');
+            if (tAccept != undefined) {
+            	canvas.cuserStatus = tAccept;
+            } else {
+            	canvas.cuserStatus = "none";
+            }
+            
+        }
+        
         var moodleRoom = lz.Browser.getInitArg('moodleRoom');
         var becomemoderator = lz.Browser.getInitArg('becomemoderator');
         

@@ -3568,7 +3568,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Send message</value>
   </string>
   <string id="1188" name="user search">
-    <value>My contacts</value>
+    <value>Contacts and Messages</value>
   </string>
   <string id="1189" name="user search">
     <value>Pending contacts</value>
@@ -3601,7 +3601,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>confirmed you as contact!</value>
   </string>
   <string id="1199" name="chat info message">
-    <value></value>
+    <value>(Please do not use Chat for support questions. Support information is available on launch page.)</value>
   </string>
   <string id="1200" name="chat log icon">
     <value>Show / Copy chat log</value>
@@ -3677,5 +3677,23 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1224" name="private message">
     <value>Trash</value>
+  </string>
+  <string id="1225" name="private message">
+    <value>This is you! You cannot add yourself as your own contact.</value>
+  </string>
+  <string id="1226" name="user contacts">
+    <value>The user is already denied!</value>
+  </string>
+  <string id="1227" name="user contacts">
+    <value>The user is already approved!</value>
+  </string>
+  <string id="1228" name="user contacts">
+    <value>This user contact hash is invalid!</value>
+  </string>
+  <string id="1229" name="user contacts">
+    <value>User added to contact list!</value>
+  </string>
+  <string id="1230" name="user contacts">
+    <value>User denied as contact and removed from pending contact list!</value>
   </string>
 </language>

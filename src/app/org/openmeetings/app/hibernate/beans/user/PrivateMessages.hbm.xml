@@ -18,5 +18,7 @@
     <property name="isTrash" type="boolean" column="is_trash"/>
     <property name="privateMessageFolderId" type="long" column="private_message_folder_id"/>
     <property name="isRead" type="boolean" column="is_read"/>
+    <property name="isContactRequest" type="boolean" column="is_contact_request"/>
+    <property name="userContactId" type="long" column="user_contact_id"/>
   </class>
 </hibernate-mapping>

@@ -131,7 +131,7 @@ public class UserContactsDaoImpl {
 		try {
 			
 			String hql = "select c from UserContacts c " +
-							"where hash like :hash ";
+							"where c.hash like :hash ";
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -142,7 +142,7 @@ public class UserContactsDaoImpl {
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-			if (ll.size() == 1) {
+			if (ll.size() > 0) {
 				return ll.get(0);
 			}
 			
@@ -233,6 +233,9 @@ public class UserContactsDaoImpl {
 			
 			UserContacts userContacts = this.getUserContacts(userContactId);
 			
+			if (userContacts == null) {
+				return null;
+			}
 			userContacts.setPending(pending);
 			userContacts.setUpdated(new Date());
 			

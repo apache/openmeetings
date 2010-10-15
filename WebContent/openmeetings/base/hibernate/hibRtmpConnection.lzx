@@ -690,8 +690,9 @@
         <netparam><method name="getValue"> return hib.currentdomainObj.organisation_id;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            Debug.write("getNavi: ",value);
+            if ($debug) Debug.write("getNavi: ",value);
             canvas.thishib.loaderVar.close();
+            //The Main-Navi will automatically init the Dashboard 
             new lz.mainNavi(canvas._mainbgcontentNavi,{name:'navi',naviObject:value});
             new lz.helpAndBugs(canvas._mainbgcontentNavi,{name:'help'});
         </handler>  
@@ -722,7 +723,7 @@
         <netRemoteCallHib name="testMethod" funcname="testMethod">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
-                Debug.write("testMethod ",value);                   
+                if ($debug) Debug.write("testMethod ",value);                   
             </handler>  
         </netRemoteCallHib>
 

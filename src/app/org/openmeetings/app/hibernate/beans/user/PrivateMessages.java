@@ -30,6 +30,9 @@ public class PrivateMessages {
 	
 	public Long parentMessage;
 	public Long privateMessageFolderId;
+	
+	public Boolean isContactRequest;
+	public Long userContactId;
 
 	/**
      * 
@@ -202,6 +205,30 @@ public class PrivateMessages {
 	}
 	public void setIsRead(Boolean isRead) {
 		this.isRead = isRead;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_contact_request"
+     *  type="boolean"
+     */
+	public Boolean getIsContactRequest() {
+		return isContactRequest;
+	}
+	public void setIsContactRequest(Boolean isContactRequest) {
+		this.isContactRequest = isContactRequest;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="user_contact_id"
+     *  type="long"
+     */
+	public Long getUserContactId() {
+		return userContactId;
+	}
+	public void setUserContactId(Long userContactId) {
+		this.userContactId = userContactId;
 	}
 	
 }

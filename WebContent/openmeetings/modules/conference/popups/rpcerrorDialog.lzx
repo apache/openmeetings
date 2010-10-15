@@ -109,7 +109,7 @@
 		}
 	</handler>
 	
-    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-104 }" 
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-124 }" 
 		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
 	
 </class>
@@ -131,7 +131,7 @@
 		}
 	</handler>
 	
-    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-104 }" 
+    <simpleLabelButton name="_btn" labelid="333" width="120" x="$once{ parent.width-124 }" 
 		y="$once{ parent.height-24 }" onclick="parent.doCallBack();" /> 
 	
 </class>

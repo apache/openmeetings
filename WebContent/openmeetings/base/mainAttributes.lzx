@@ -330,4 +330,14 @@ and some more references to temp-objects
 
 <attribute name="userContacts" value="null" />
 
+<!--
+	Loads a User profile page directly instead of loading the Dashboard
+	cuser is a hash that can be found in the UserContacts Table
+ -->	 
+<attribute name="cuser" value="" type="string"/>
+<!--
+	Indicates if the user does accept or deny a user contact request
+ -->	
+<attribute name="cuserStatus" value="none" type="string"/>
+
 </library>

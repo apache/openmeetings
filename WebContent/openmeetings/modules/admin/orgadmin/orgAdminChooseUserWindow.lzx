@@ -54,7 +54,7 @@
     <simpleValueList name="_userlist" y="84" x="120" width="270" height="100" 
 		multiselect="false" />
 	
-    <simpleLabelButton labelid="175" x="180" y="260" width="100">
+    <simpleLabelButton labelid="175" x="180" y="$once{ parent.height-30 }" width="100">
         <handler name="onclick">
             <![CDATA[
                 this.parent.usersId = this.parent._userlist._selected.value;
@@ -71,7 +71,7 @@
         </handler>
     </simpleLabelButton>
     
-    <simpleLabelButton labelid="174" x="290" y="260" width="100">
+    <simpleLabelButton labelid="174" x="290" y="$once{ parent.height-30 }" width="100">
         <handler name="onclick">
             this.parent.close();
         </handler>

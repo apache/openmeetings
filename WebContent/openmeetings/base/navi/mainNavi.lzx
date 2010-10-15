@@ -86,7 +86,7 @@
 
     <handler name="oninit">
         <![CDATA[
-            Debug.write(this.list,list.length);
+            if ($debug) Debug.write(this.list,list.length);
             if (list!=null && list.length!=0){
                 this._menuRef = new lz.subitemsListContainter(this.parent.parent.subitemlist)
                 for (var i=0;i<this.list.length;i++) {
@@ -212,12 +212,55 @@
                         textToolTip:value[i].tooltip.value,
 	                    action:value[i].action
                     });
-                if (i==0) t1.onclick.sendEvent();
+                
+                if (canvas.cuser == "") {
+                	if (i==0) t1.onclick.sendEvent();
+                }
+                
                 //Debug.write("t1: ",t1);
             }
             //Debug.write("this: ",this);
+            
+            if (canvas.cuser != "") {
+            	if (canvas.cuserStatus == "yes") {
+            		this.changeUserContactByHash.pending = true;
+            		this.changeUserContactByHash.doCall();
+            	} else if (canvas.cuserStatus == "no") {
+            		this.changeUserContactByHash.pending = false;
+            		this.changeUserContactByHash.doCall();
+            	} else {
+            		quicklinkAct("userSettingsModule");
+            	}
+            }
       ]]>
     </handler>
+    
+    <!--
+    	public Object changeUserContactByHash(String SID, String hash, Boolean status)
+     -->
+    <netRemoteCallHib name="changeUserContactByHash" funcname="userservice.changeUserContactByHash" 
+				  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+		<attribute name="pending" value="true" type="boolean" />
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return canvas.cuser; </method></netparam>
+    	<netparam><method name="getValue"> return parent.pending; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("changePendingStatusUserContacts 1: ",value);
+	    		if ($debug) Debug.write("changePendingStatusUserContacts 2: ",canvas.cuser);
+	    		
+	    		if (value > 0) {
+	    			if (this.pending) {
+	    				new lz.labelerrorPopup(canvas,{labelid:217,errorlabelid:1229});
+	    			} else {
+	    				new lz.labelerrorPopup(canvas,{labelid:217,errorlabelid:1230});
+	    			}
+	    		}
+	    		
+	    		quicklinkAct("userSettingsModule");
+    		]]>
+    	</handler>
+    </netRemoteCallHib>
 
 </class>
 

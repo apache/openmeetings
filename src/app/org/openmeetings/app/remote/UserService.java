@@ -536,10 +536,12 @@ public class UserService {
 					baseURL = "https://" + domain + webapp;
 			   }
 			   
-			   String link = baseURL+"contactrequest?cuser="+hash;
+			   PrivateMessagesDaoImpl.getInstance().addPrivateMessage(user.getFirstname() + " " + user.getLastname()+ " "  + fValue1193.getValue(), message, 0L, user, userToAdd, userToAdd, false, null, true, userContactId);
 			   
-			   String accept_link = link + "&t=1";
-			   String deny_link = link + "&t=0";
+			   String link = baseURL+"?cuser="+hash;
+			   
+			   String accept_link = link + "&tAccept=yes";
+			   String deny_link = link + "&tAccept=no";
 			   
 			   String aLinkHTML = "<a href='"+accept_link+"'>"+fValue1190.getValue()+"</a><br/>";
 			   String denyLinkHTML = "<a href='"+deny_link+"'>"+fValue1191.getValue()+"</a><br/>";
@@ -578,6 +580,38 @@ public class UserService {
 	   return null;
    }
    
+   public Object changeUserContactByHash(String SID, String hash, Boolean status) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   UserContacts userContact = UserContactsDaoImpl.getInstance().getContactsByHash(hash);
+			   
+			   if (userContact == null) {
+				   
+				   log.error("changeUserContactByHash "+hash);
+				   
+				   return -48L;
+			   }
+			   
+			   if (userContact.getContact().getUser_id().equals(users_id)) {
+
+				   return this.changePendingStatusUserContacts(SID, userContact.getUserContactId(), status);
+				   
+			   } else {
+				   return -48L;
+			   }
+			   
+		   }
+		   
+	   } catch (Exception err) {
+		   log.error("[changeUserContactByHash]",err);
+	   }
+	   return null;
+   }
+   
    public List<UserContacts> getUserContacts(String SID) {
 	   try {
 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -595,6 +629,31 @@ public class UserService {
 	   }
 	   return null;
    }
+   
+   public Long checkPendingStatus(String SID, Long userContactId) {
+	   try {
+		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		   // users only
+		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+			   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+			   
+			   if (userContacts == null) {
+				   return -46L;
+			   }
+			   
+			   if (userContacts.getPending() != null && !userContacts.getPending()) {
+				   return -47L;
+			   }
+			   
+			   return userContactId;
+		   }
+	   } catch (Exception err) {
+		   log.error("[checkPendingStatus]",err);
+	   }
+	   return null;
+   }
 
    public Long changePendingStatusUserContacts(String SID, Long userContactId, Boolean pending) {
 	   try {
@@ -603,15 +662,25 @@ public class UserService {
 		   // users only
 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 			   
+			   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+			   
+			   if (userContacts == null) {
+				   return -46L;
+			   }
+			   
+			   if (userContacts.getPending() != null && !userContacts.getPending()) {
+				   return -47L;
+			   }
+			   
 			   if (pending) {
 				   
 				   UserContactsDaoImpl.getInstance().updateContactStatus(userContactId, false);
 				   
-				   UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+				   userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
 			   
 				   UserContactsDaoImpl.getInstance().addUserContact(userContacts.getOwner().getUser_id(), users_id, false, "");
 				   
-				   Users user = Usermanagement.getInstance().getUserById(userContacts.getOwner().getUser_id());
+				   Users user = userContacts.getOwner();
 				   
 				   if (user.getAdresses() != null) {
 					   
@@ -630,6 +699,8 @@ public class UserService {
 					   message += userContacts.getContact().getFirstname() + " " + userContacts.getContact().getLastname() + " " + fValue1198.getValue();
 					   
 					   String template = RequestContactConfirmTemplate.getInstance().getRequestContactTemplate(message);
+					   
+					   PrivateMessagesDaoImpl.getInstance().addPrivateMessage(user.getFirstname() + " " + user.getLastname()+ " "  + fValue1198.getValue(), message, 0L, userContacts.getContact(), user, user, false, null, false, 0L);
 					   
 					   MailHandler.sendMail(user.getAdresses().getEmail(), userContacts.getContact().getFirstname() + " " + userContacts.getContact().getLastname() + " " + fValue1198.getValue(), template);
 					   
@@ -738,10 +809,10 @@ public class UserService {
 	    			} else {
 	    				
 	    				//One message to the Send
-	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, from, bookedRoom, room);
+	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, from, bookedRoom, room, false, 0L);
 	    				
 	    				//One message to the Inbox
-	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, to, bookedRoom, room);
+	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, to, bookedRoom, room, false, 0L);
 	    				
 	    			}
  		    		

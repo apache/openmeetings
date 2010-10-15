@@ -4,6 +4,11 @@
 <class name="userContacts" extends="view" height="${ parent.height }"
 	   width="276" x="$once{ canvas.width-this.width + 2 }">
 	
+	<method name="reload">
+		this._pendingContacts._table.getPendingUserContacts.doCall();
+		this._availableContacts._table.getUserContacts.doCall();
+	</method>
+	
 	<!--
 	public Long changePendingStatusUserContacts(
 		String SID, Long userContactId, Boolean pending) {
