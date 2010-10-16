@@ -106,34 +106,25 @@
 		
 		<simplelayout axis="x" spacing="0" />
 		
+		<!--
 		<menuListItemUserProfile name="_userProfile" labelid="1170" labelLabelid="1173">
-			<!--
-			<handler name="oninit">
-				this.onclick.sendEvent(null);
-			</handler>
-			 -->
 		</menuListItemUserProfile>
 		
 		<menuListItemUserProfile name="_editUserContacts" labelid="1188" labelLabelid="1197" >
-			<!--
-			<handler name="oninit">
-				this.onclick.sendEvent(null);
-			</handler>
-			 -->
 		</menuListItemUserProfile>
-		 
+		 -->
 		 
 		<menuListItemUserProfile name="_editUserProfile" labelid="1171" labelLabelid="1174">
-			<!--
+			<!-- -->
 			<handler name="oninit">
 				this.onclick.sendEvent(null);
 			</handler>
-			 -->
+			
 		</menuListItemUserProfile>
 		
-		<!---->
+		<!--
 		<menuListItemUserProfile name="_searchUserProfile" labelid="1172" labelLabelid="1175" />
-		
+		-->
 	</view>
 	
 	<view name="_content">
