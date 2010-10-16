@@ -78,6 +78,7 @@
     <handler name="oninit">
         //this.getRssFeeds.doCall();
         _mainScrollBar.setAttribute("visibility","hidden");
+        this._menu._editUserContacts.onclick.sendEvent(null);
     </handler>
     
     <handler name="ontabcontentleave">
@@ -104,27 +105,35 @@
 	<view name="_menu" x="1">
 		
 		<simplelayout axis="x" spacing="0" />
-		<!--
+		
 		<menuListItemUserProfile name="_userProfile" labelid="1170" labelLabelid="1173">
+			<!--
 			<handler name="oninit">
 				this.onclick.sendEvent(null);
 			</handler>
+			 -->
 		</menuListItemUserProfile>
 		
-		<menuListItemUserProfile name="_editUserContacts" labelid="1188" labelLabelid="1197" />
-		 -->
+		<menuListItemUserProfile name="_editUserContacts" labelid="1188" labelLabelid="1197" >
+			<!--
+			<handler name="oninit">
+				this.onclick.sendEvent(null);
+			</handler>
+			 -->
+		</menuListItemUserProfile>
+		 
 		 
 		<menuListItemUserProfile name="_editUserProfile" labelid="1171" labelLabelid="1174">
-			
+			<!--
 			<handler name="oninit">
 				this.onclick.sendEvent(null);
 			</handler>
-			 
+			 -->
 		</menuListItemUserProfile>
 		
-		<!--
+		<!---->
 		<menuListItemUserProfile name="_searchUserProfile" labelid="1172" labelLabelid="1175" />
-		-->
+		
 	</view>
 	
 	<view name="_content">
@@ -135,150 +144,8 @@
 			}
 		</method>
 		
-		<view name="_userProfile" y="24">
+		<viewUserProfile name="_userProfile" y="24" />
 			
-			<method name="initFields" args="obj">
-		    	<![CDATA[
-		    	
-			        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-			        		+canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
-			        		+'&moduleName=userprofile&parentPath=&room_id='
-			        		+'&sid='+canvas.sessionId;
-			        		
-			        if ($debug) Debug.warn("downloadurl 1 ",downloadurl);
-			        this._userpic.setAttribute('src',downloadurl);
-			        
-			        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
-		    			
-			        tUserName += " <u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.lastname) +"'>" + this.removeWhitespace(obj.lastname) + "</a></FONT></u>";
-		    	
-		    		this.username.setAttribute("text",tUserName);
-		    		
-		    		this.timezone.setAttribute("text",canvas.jNameTimeZone);
-		    		
-		    		var aOfferings = obj.userOffers.split(",");
-		    		
-		    		var tOfferings = "";
-		    		
-		    		for (var t=0;t<aOfferings.length;t++) {
-		    			
-		    			tOfferings += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchOffers,"+ this.removeWhitespace(aOfferings[t]) +"'>" + this.removeWhitespace(aOfferings[t]) + "</a></FONT></u>";
-		    			
-		    			if (t+1 < aOfferings.length) {
-		    				tOfferings += ", ";
-		    			}
-		    		}
-		    		
-		    		this.userOffers._text.setAttribute("text",tOfferings);
-		    		
-		    		
-		    		var aSearchs = obj.userSearchs.split(",");
-		    		
-		    		var tSearchs = "";
-		    		
-		    		for (var t=0;t<aSearchs.length;t++) {
-		    			
-		    			tSearchs += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(aSearchs[t]) +"'>" + this.removeWhitespace(aSearchs[t]) + "</a></FONT></u>";
-		    			
-		    			if (t+1 < aSearchs.length) {
-		    				tSearchs += ", ";
-		    			}
-		    		}
-		    		
-		    		this.userSearchs._text.setAttribute("text",tSearchs);
-		    	
-		    	]]>
-	    	</method>
-	    	
-	    	<method name="removeWhitespace" args="str">
-	    		<![CDATA[
-	    		
-	    			if ($debug) Debug.write("removeWhitespace 1 ",str);
-	    			if ($debug) Debug.write("removeWhitespace 2 ",str.length);
-	    		
-					var tResultingString = "";
-					
-	    			for (var i=0;i<str.length;i++) {
-	    				
-	    				var tChar = str.substring(i,i+1);
-	    				
-	    				if (tChar != " ") {
-	    					tResultingString = str.substring(i,str.length);
-	    					break;
-	    				}
-	    				
-	    			}
-	    			
-	    			for (var i=tResultingString.length;i>0;i--) {
-	    				
-	    				var tChar = tResultingString.substring(i-1,i);
-	    				
-	    				if (tChar != " ") {
-	    					tResultingString = tResultingString.substring(0,i);
-	    					break;
-	    				}
-	    				
-	    			}
-	    			
-	    			
-	    			return tResultingString;
-	    			
-	    		
-	    		]]>
-	    	</method>
-	    	
-	    	<image y="10" x="10" name="_userpic" />
-	    	
-	    	<view x="180" width="260" y="10" height="120" bgcolor="0xFFFFFF" />
-	    	
-	    	<labelText name="usernameLabel" x="180" y="10" labelid="1164" />
-	    	<labelText name="username" x="260" y="10" />
-	    	
-	    	<labelText name="timezoneLabel" x="180" y="30" labelid="1165" />
-	    	<labelText name="timezone" x="260" y="30" />
-	    	
-	    	
-		    <simpleLabelButton text="Dummy1" width="100" x="10" y="160">
-		    	<handler name="onclick">
-		    		if ($debug) Debug.write("Dummy1");
-		    	</handler>
-		    </simpleLabelButton> 
-		    
-		    <simpleLabelButton text="Dummy2" width="100" x="120" y="160">
-		    	<handler name="onclick">
-		    		if ($debug) Debug.write("Dummy2");
-		    	</handler>
-		    </simpleLabelButton> 
-		    
-		    <simpleLabelButton text="Dummy3" width="100" x="230" y="160">
-		    	<handler name="onclick">
-		    		if ($debug) Debug.write("Dummy3");
-		    	</handler>
-		    </simpleLabelButton> 
-	    	
-	    	<labelText name="userFields" x="10" y="190" labelid="1166" fontstyle="bold" />
-	    	
-	    	<labelText name="userOffersLabel" x="10" y="210" labelid="1162" />
-	    	
-	    	<view name="userOffers" x="120" y="210" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
-	    		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
-	    		<vscrollbar />
-	    	</view>
-	    	
-	    	<labelText name="userSearchsLabel" x="10" y="320" labelid="1163" />
-	    	
-	    	<view name="userSearchs" x="120" y="320" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
-	    		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
-	    		<vscrollbar />
-	    	</view>
-	    	
-	    	<labelText name="userContact" x="10" y="430" labelid="1167" fontstyle="bold" />
-	    	
-	    	
-	    	
-			
-		</view>
-		
 		<editUserProfile name="_editUserProfile" visibility="hidden" y="24" />
 	    
 	    <searchUserProfile name="_searchUserProfile" visibility="hidden">

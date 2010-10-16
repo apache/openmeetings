@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="viewUserProfileWindow" extends="guiPresenter" labelid="1235" isdragable="true" 
+    minimizable="true" maximizable="false" fullToolBar="true" y="100" x="$once{ (parent.width-this.width)/2 }"
+    resizeable="false" width="470" height="$once{ parent.height-this.y-10 }" >
+	
+	<attribute name="userId" value="0" type="number"/>
+	
+	<handler name="oninit">
+		this.getUserById.doCall();
+	</handler>
+	
+	<!--
+	public Users getUserById(String SID, long user_id)
+	 -->
+	<netRemoteCallHib name="getUserById" funcname="userservice.getUserById" 
+			  remotecontext="$once{ canvas.thishib }" >      
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.userId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("getUserById: ",value);
+	    		
+	    		if (value.pictureuri==null || value.pictureuri.length==0){
+					value.pictureuri = "d.jpg";
+				} else {
+					value.pictureuri = "_profile_"+value.pictureuri;
+				}
+	    		
+	    		parent.setAttribute("title",parent.title+" "+value.firstname+" "+value.lastname);
+	    		
+	    		this.parent.viewUserProfile.viewUserProfile.initFields(value);
+	    		
+    		]]>
+    	</handler>
+    </netRemoteCallHib>	
+			 
+	
+	<view name="viewUserProfile" y="24" height="$once{ parent.height-60 }" 
+		  width="$once{ parent.width-2 }" >
+		
+		<viewUserProfile name="viewUserProfile" />
+		
+		<vscrollbar />
+		
+	</view>
+	
+	<simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>   
+	
+    <simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
+    	<handler name="onclick">
+    		this.parent.close();
+    	</handler>
+    </simpleLabelButton>
+	
+</class>	
+	
+<!--- User Profile Setting Panel -->
+<class name="viewUserProfile" extends="view" >
+			
+	<method name="initFields" args="obj">
+    	<![CDATA[
+    	
+	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        		+canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
+	        		+'&moduleName=userprofile&parentPath=&room_id='
+	        		+'&sid='+canvas.sessionId;
+	        		
+	        if ($debug) Debug.warn("downloadurl 1 ",downloadurl);
+	        this._userpic.setAttribute('src',downloadurl);
+	        
+	        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
+    			
+	        tUserName += " <u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.lastname) +"'>" + this.removeWhitespace(obj.lastname) + "</a></FONT></u>";
+    	
+    		this.username.setAttribute("text",tUserName);
+    		
+    		this.timezone.setAttribute("text",canvas.jNameTimeZone);
+    		
+    		var aOfferings = obj.userOffers.split(",");
+    		
+    		var tOfferings = "";
+    		
+    		for (var t=0;t<aOfferings.length;t++) {
+    			
+    			tOfferings += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchOffers,"+ this.removeWhitespace(aOfferings[t]) +"'>" + this.removeWhitespace(aOfferings[t]) + "</a></FONT></u>";
+    			
+    			if (t+1 < aOfferings.length) {
+    				tOfferings += ", ";
+    			}
+    		}
+    		
+    		this.userOffers._text.setAttribute("text",tOfferings);
+    		
+    		
+    		var aSearchs = obj.userSearchs.split(",");
+    		
+    		var tSearchs = "";
+    		
+    		for (var t=0;t<aSearchs.length;t++) {
+    			
+    			tSearchs += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(aSearchs[t]) +"'>" + this.removeWhitespace(aSearchs[t]) + "</a></FONT></u>";
+    			
+    			if (t+1 < aSearchs.length) {
+    				tSearchs += ", ";
+    			}
+    		}
+    		
+    		this.userSearchs._text.setAttribute("text",tSearchs);
+    	
+    	]]>
+	</method>
+	
+	<method name="removeWhitespace" args="str">
+		<![CDATA[
+		
+			if ($debug) Debug.write("removeWhitespace 1 ",str);
+			if ($debug) Debug.write("removeWhitespace 2 ",str.length);
+		
+			var tResultingString = "";
+			
+			for (var i=0;i<str.length;i++) {
+				
+				var tChar = str.substring(i,i+1);
+				
+				if (tChar != " ") {
+					tResultingString = str.substring(i,str.length);
+					break;
+				}
+				
+			}
+			
+			for (var i=tResultingString.length;i>0;i--) {
+				
+				var tChar = tResultingString.substring(i-1,i);
+				
+				if (tChar != " ") {
+					tResultingString = tResultingString.substring(0,i);
+					break;
+				}
+				
+			}
+			
+			
+			return tResultingString;
+			
+		
+		]]>
+	</method>
+	
+	<image y="10" x="10" name="_userpic" />
+	
+	<view x="180" width="260" y="10" height="120" bgcolor="0xFFFFFF" />
+	
+	<labelText name="usernameLabel" x="180" y="10" labelid="1164" />
+	<labelText name="username" x="260" y="10" />
+	
+	<labelText name="timezoneLabel" x="180" y="30" labelid="1165" />
+	<labelText name="timezone" x="260" y="30" />
+	
+	<labelText name="userFields" x="10" y="190" labelid="1166" fontstyle="bold" />
+	
+	<labelText name="userOffersLabel" x="10" y="210" labelid="1162" />
+	
+	<view name="userOffers" x="120" y="210" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
+		<vscrollbar />
+	</view>
+	
+	<labelText name="userSearchsLabel" x="10" y="320" labelid="1163" />
+	
+	<view name="userSearchs" x="120" y="320" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
+		<vscrollbar />
+	</view>
+	
+	<labelText name="userContact" x="10" y="430" labelid="1167" fontstyle="bold" />
+	    	
+</class>
+
+
+</library>
