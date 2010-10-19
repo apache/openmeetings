@@ -3,6 +3,10 @@
 	
 	<resource name="image_loading_placeholder_rsc" 
 			  src="resources/loading_symbol.swf" />
+	
+	<resource name="private_message_select_part_rsc" 
+			  src="resources/select_part.png" />		  
+			  
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     

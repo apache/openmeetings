@@ -247,9 +247,21 @@
     </method>
     
     <method name="calllast">
-        this.start = this.records-this.step;
+    	var newMaxPages = Math.floor(this.records/this.step);
+    	if ($debug) Debug.write("calllast 1 ",newMaxPages);
+        this.start = newMaxPages*this.step;
+        if ($debug) Debug.write("calllast 2 ",this.start);
+        if (this.start == this.records) {
+        	this.start = this.records-this.step;
+        }
+        if ($debug) Debug.write("calllast 3 ",this.start);
+        if ($debug) Debug.write("calllast 4 ",this.records);
         this.oncallnext.sendEvent();
         this.onload.sendEvent();
+        
+        //this.start = this.records-this.step;
+        //this.oncallnext.sendEvent();
+        //this.onload.sendEvent();
     </method>
     
     <method name="callnext">
@@ -427,21 +439,37 @@
 <class name="turnOverListPaged" extends="baseturnOverListPaged">
 
     <!-- =========  Control area  =========-->
-    <view name="_menu" align="right" y="2" layout="axis:x;spacing:0"
+    <view name="_menu" align="right" y="2" layout="axis:x;spacing:1"
           visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
     	
 	    <!-- 368:goto first -->
+	    <blueButton y="0" resourceItem="step_back_two_arrow"
+        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
+        			width_insetResource="16" height_insetResource="16"
+        			onclick="parent.parent.callfirst()">
+	    	<labelTooltip labelid="368" />
+	    </blueButton>
+	    <!--
 		<simpleLabelButtonTooltip name="_pre1" width="22" height="22" 
 			enabled="true" onclick="parent.parent.callfirst()" tooltipId="368">
 			<view resource="step_back_two_arrow" valign="middle" align="center" />
 		</simpleLabelButtonTooltip>
+		 -->
 	
 	    <!-- 369:goto previous -->
+	    <blueButton y="0" resourceItem="step_back_arrow"
+        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
+        			width_insetResource="16" height_insetResource="16"
+        			onclick="parent.parent.callpre()">
+	    	<labelTooltip labelid="369" />
+	    </blueButton>
+	    <!--
 		<simpleLabelButtonTooltip name="_pre2" width="22" height="22" 
 			enabled="false" onclick="parent.parent.callpre()" tooltipId="369" >
 			<view resource="step_back_arrow" valign="middle" align="center" />
 		</simpleLabelButtonTooltip>
-    	<resetCombobox name="_step" width="100" editable="false" fontsize="10" height="22" >
+		 -->
+    	<resetCombobox name="_step" width="100" editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <textlistitem value="10" text="10" />
             <textlistitem value="25" text="25" />
@@ -467,18 +495,37 @@
         </resetCombobox>
         
         <!-- 370:goto next -->
+        <blueButton y="0" resourceItem="step_fwd_arrow"
+        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
+        			width_insetResource="16" height_insetResource="16"
+        			onclick="parent.parent.callnext()">
+	    	<labelTooltip labelid="370" />
+	    </blueButton>
+	    <!--
 		<simpleLabelButtonTooltip name="_next1" width="22" height="22" 
-			enabled="false" onclick="parent.callnext()" tooltipId="370">
+			enabled="false" onclick="parent.parent.callnext()" tooltipId="370">
 			<view resource="step_fwd_arrow" valign="middle" align="center" />
 		</simpleLabelButtonTooltip>
-	
+		 -->
+		
 	    <!-- 371:goto last -->
+	    <blueButton y="0" resourceItem="step_fwd_two_arrow"
+        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
+        			width_insetResource="16" height_insetResource="16"
+        			onclick="parent.parent.calllast()">
+	    	<labelTooltip labelid="371" />
+	    </blueButton>
+	    <!--
 		<simpleLabelButtonTooltip name="_next2" width="22" height="22" 
-			enabled="true" onclick="parent.calllast()" tooltipId="371">
+			enabled="true" onclick="parent.parent.calllast()" tooltipId="371">
 			<view resource="step_fwd_two_arrow" valign="middle" align="center" />
 		</simpleLabelButtonTooltip>
+		 -->
 		
+		<view width="2" />
+		<!--
         <view height="18" width="1" bgcolor="$once{ canvas.lightBackgroundBgColor }" />
+         -->
     </view>
     
     

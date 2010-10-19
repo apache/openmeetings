@@ -58,12 +58,12 @@
 	<view height="$once{ parent.height }" width="1" x="154" 
 		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
 	
-	<labelText name="_labelPrivateMessages" x="160" labelid="1237" fontstyle="bold" />
+	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
 	
-	<turnOverListOrderedPaged name="_table" showTopBar="true" x="160" 
-					 height="250" width="$once{ parent.width-160-2 }"
-		             y="24" itemHeight="20" listLabelId="1184" headerHeight="22" 
-		             listItemName="privateMessagItem" menuBarXIndent="100"
+	<turnOverListOrderedPaged name="_table" showTopBar="true" x="158" 
+					 height="250" width="$once{ parent.width-160 }"
+		             y="24" itemHeight="20" listLabelId="1237" headerHeight="22" 
+		             listItemName="privateMessagItem" menuBarXIndent="80"
 		             multiselect="false" orderby="c.inserted">
 		
 		
@@ -370,9 +370,76 @@
 			
 	</turnOverListOrderedPaged>
 	
+	<view y="274" x="158" layout="axis:x;spacing:2">
+		<view resource="private_message_select_part_rsc"></view>
+		
+		<resetCombobox name="_action" width="100" 
+					   editable="false" fontsize="10" height="20" >
+            <attribute name="sendEventToReload" value="false" type="boolean" />
+            <handler name="oninit">
+                this.addItem(canvas.getLabelName(1252),"0");
+                this.addItem(canvas.getLabelName(1239),"1");
+                this.addItem(canvas.getLabelName(1240),"2");
+                this.addItem(canvas.getLabelName(1241),"3");
+                this.addItem(canvas.getLabelName(1242),"4");
+                this.selectItemAt(0);
+            </handler>
+            <handler name="onselect" args="sel">
+                if (sel.value == "1") {
+                	
+                } else if (sel.value == "2") {
+                	
+                } else if (sel.value == "3") {
+                	
+                } else if (sel.value == "4") {
+                	
+                }
+            </handler>
+        </resetCombobox>
+        
+        <simpleLabelButton labelid="1245" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		
+        	</handler>
+        	<labelTooltip labelid="1246" />
+        </simpleLabelButton>
+        
+        <simpleLabelButton labelid="1247" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton labelid="1248" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		
+        	</handler>
+        </simpleLabelButton>
+        
+        <resetCombobox name="_move" width="140" x="42"
+					   editable="false" fontsize="10" height="20" >
+            <attribute name="sendEventToReload" value="false" type="boolean" />
+            <handler name="oninit">
+                this.addItem(canvas.getLabelName(1243),"0");
+                this.addItem(canvas.getLabelName(1244),"0");
+                this.selectItemAt(0);
+            </handler>
+            <handler name="onselect" args="sel">
+                if (sel.value == "1") {
+                	
+                } else if (sel.value == "2") {
+                	
+                } else if (sel.value == "3") {
+                	
+                } else if (sel.value == "4") {
+                	
+                }
+            </handler>
+        </resetCombobox>
+	</view>
 	
-	<view name="_privateMessageDetails" x="160" width="$once{ parent.width-160-2 }" y="274" 
-		  height="${ parent.height - 274 }">
+	<view name="_privateMessageDetails" x="155" width="$once{ parent.width-155 }" y="296" 
+		  height="${ parent.height - 298 }">
 		
 		<attribute name="pendingUserStatusRef" value="null"/>
 		
@@ -418,17 +485,27 @@
 	    		]]>
 	    	</handler>
 	    </netRemoteCallHib>		 
+	    
+	    <view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
+		  height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
 		
-		<labelText name="_labelFrom" x="2" labelid="1202" />
-		<labelText name="from" width="$once{ parent.width-100 }" x="100" resize="false" />
+		<view name="_privateMessageDetailsBorder3" width="$once{ parent.width }" y="1"
+		  	height="61" bgcolor="0x666666" opacity="0.2" />
+		  	
+		<labelText name="_labelFrom" x="2" labelid="1202" y="2" />
+		<labelText name="from" width="$once{ parent.width-100 }" x="100" y="2" resize="false" />
 		
-		<labelText name="_labelTo" x="2" labelid="1210" y="20"/>
-		<labelText name="to" width="$once{ parent.width-100 }" x="100" y="20" resize="false" />
+		<labelText name="_labelTo" x="2" labelid="1210" y="22"/>
+		<labelText name="to" width="$once{ parent.width-100 }" x="100" y="22" resize="false" />
 		
-		<labelText name="_labelSubject" x="2" labelid="1211" y="40"/>
-		<labelText name="subject" width="$once{ parent.width-100 }" x="100" y="40" resize="false" />
+		<labelText name="_labelSubject" x="2" labelid="1211" y="42"/>
+		<labelText name="subject" width="$once{ parent.width-100 }" x="100" y="42" resize="false" />
 		
-		<view name="message" y="60" width="$once{ parent.width }" height="${ parent.height-60 }">
+		<view name="_privateMessageDetailsBorder1" width="$once{ parent.width }" y="62"
+		  	height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		  
+		<view name="message" y="64" bgcolor="0xFFFFFF" x="2"
+			  width="$once{ parent.width-4 }" height="${ parent.height-64 }">
 			<labelText name="message" width="$once{ parent.width-16 }" 
 					   multiline="true" resize="false" />
 			<vscrollbar />
