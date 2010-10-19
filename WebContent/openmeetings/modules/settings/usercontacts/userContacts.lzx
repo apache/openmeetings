@@ -309,6 +309,10 @@
 	            ]]>
 	        </handler>
 	        
+	        <method name="addMessage" args="userObject">
+	        	parent.parent.parent._privateMessages.newMessage(userObject);
+	        </method>
+	        
 	        <method name="removeContactUserMethod" args="userContactId">
 	            <![CDATA[
 	            

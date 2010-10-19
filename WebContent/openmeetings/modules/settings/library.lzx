@@ -5,7 +5,19 @@
 			  src="resources/loading_symbol.swf" />
 	
 	<resource name="private_message_select_part_rsc" 
-			  src="resources/select_part.png" />		  
+			  src="resources/select_part.png" />	
+			  
+	<resource name="private_message_send_rsc" 
+			  src="resources/mail-closed-alt-send.png" />	 
+			  
+	<resource name="private_message_receive_rsc" 
+			  src="resources/mail-closed-alt-receive.png" />	
+			   
+	<resource name="private_message_add_rsc" 
+			  src="resources/mail-closed-add.png" />	
+			  
+	<resource name="private_message_trash_rsc" 
+			  src="resources/trash.png" />	
 			  
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>

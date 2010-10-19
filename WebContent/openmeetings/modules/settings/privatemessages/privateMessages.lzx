@@ -6,7 +6,7 @@
 	
 	<attribute name="newMessageActive" value="false" type="boolean" />
 	
-	<method name="newMessage">
+	<method name="newMessage" args="userObject">
 		if (this.newMessageActive) {
 			this._newPrivateMessage.destroy();
 		}
@@ -14,6 +14,7 @@
 		new lz.newPrivateMessage(this,{
 						x:154,
 						refObj:this,
+						userObject:userObject,
 						width:this._table.width+8,
 						height:this.height-2
 					});
@@ -25,8 +26,9 @@
 		
 		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5">
 			<handler name="onclick">
-				parent.parent.newMessage();
+				parent.parent.newMessage(null);
 			</handler>
+			<view resource="private_message_add_rsc" x="10" ></view>
 			<labelTooltip labelid="1208"></labelTooltip>
 		</simpleLabelRoundButton>
 		
@@ -38,18 +40,21 @@
 			<handler name="onclick">
 				parent.parent._table.getInbox.doCall();
 			</handler>
+			<view resource="private_message_receive_rsc" x="10" ></view>
 		</simpleLabelButton>
 		
 		<simpleLabelButton labelid="1223" width="142" x="5">
 			<handler name="onclick">
 				parent.parent._table.getSend.doCall();
 			</handler>
+			<view resource="private_message_send_rsc" x="10" ></view>
 		</simpleLabelButton>
 		
 		<simpleLabelButton labelid="1224" width="142" x="5">
 			<handler name="onclick">
 				parent.parent._table.getSend.doCall();
 			</handler>
+			<view resource="private_message_trash_rsc" x="10" y="2"></view>
 		</simpleLabelButton>
 		
 	</view>
@@ -69,6 +74,7 @@
 		
 		<attribute name="countUnRead" value="0" type="number" />
 		<attribute name="isInbox" value="false" type="boolean" />
+		<attribute name="isSend" value="false" type="boolean" />
 		
 		<method name="updatePrivateMessageLabelText" args="countUnRead">
 			<![CDATA[
@@ -85,6 +91,14 @@
 			this.addHeaderItemOrdered(1204,120,"c.inserted",true,true);
 			
 			this.getInbox.doCall();
+		</handler>
+		
+		<handler name="onload">
+			if (this.isInbox) {
+				this.getInbox.doCall();
+			} else if (this.isSend) {
+				this.getSend.doCall();
+			}
 		</handler>
 		
 		<method name="itemSelected" args="listObj,bool">
@@ -167,6 +181,7 @@
 		    		this.parent.initValues(value.records);
 		    		
 		    		parent.isInbox = true;
+		    		parent.isSend = false;
 		    		
 		    		parent.countUnRead = 0;
 		    		
@@ -204,6 +219,7 @@
 		    		this.parent.initValues(value.records);
 		    		
 		    		parent.isInbox = false;
+		    		parent.isSend = true;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
@@ -490,7 +506,7 @@
 		  height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
 		
 		<view name="_privateMessageDetailsBorder3" width="$once{ parent.width }" y="1"
-		  	height="61" bgcolor="0x666666" opacity="0.2" />
+		  	height="61" bgcolor="0x666666" opacity="0.1" />
 		  	
 		<labelText name="_labelFrom" x="2" labelid="1202" y="2" />
 		<labelText name="from" width="$once{ parent.width-100 }" x="100" y="2" resize="false" />

@@ -7,9 +7,25 @@
 	
 	<attribute name="refObj" value="null"/>
 	
+	<attribute name="userObject" value="null" />
+	
 	<attribute name="parentMessageId" value="0" type="number" />
 	
 	<attribute name="receipents" value="null" />
+	
+	<handler name="oninit">
+		<![CDATA[
+			if (this.userObject != null) {
+				
+				var tString = this.userObject.firstname + ' ' + this.userObject.lastname  + ' ' 
+							+ '<' + this.userObject.adresses.email + '>';
+				
+				this._to.sendUpdateText = false;
+				this._to.setAttribute("text",tString);
+				this._to.sendUpdateText = true;
+			}
+		]]>
+	</handler>
 	
 	<handler name="onclose">
 		this.refObj.newMessageActive = false;
