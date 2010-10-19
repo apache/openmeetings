@@ -58,7 +58,7 @@
 	<view height="$once{ parent.height }" width="1" x="154" 
 		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
 	
-	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
+	<labelText name="_labelPrivateMessages" x="160" labelid="1237" fontstyle="bold" />
 	
 	<turnOverListOrderedPaged name="_table" showTopBar="true" x="160" 
 					 height="250" width="$once{ parent.width-160-2 }"

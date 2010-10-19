@@ -65,8 +65,8 @@
 		    </netRemoteCallHib>	
 		
 			<handler name="oninit">
-	            this.addHeaderItem(1180,130);
-	            this.addHeaderItem(1185,120);
+	            this.addHeaderItem(1180,190);
+	            this.addHeaderItem(1185,60);
 	        </handler>
 	        
 	        <handler name="onclickedItem" args="refObj">
@@ -297,8 +297,8 @@
 		    </netRemoteCallHib>	
 		
 			<handler name="oninit">
-	            this.addHeaderItem(1180,130);
-	            this.addHeaderItem(1185,120);
+	            this.addHeaderItem(1180,190);
+	            this.addHeaderItem(1185,60);
 	        </handler>
 	        
 	        <handler name="onclickedItem" args="refObj">
