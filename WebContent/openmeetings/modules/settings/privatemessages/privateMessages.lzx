@@ -69,7 +69,7 @@
 					 height="250" width="$once{ parent.width-160 }"
 		             y="24" itemHeight="20" listLabelId="1237" headerHeight="22" 
 		             listItemName="privateMessagItem" menuBarXIndent="80"
-		             multiselect="false" orderby="c.inserted">
+		             multiselect="true" orderby="c.inserted">
 		
 		
 		<attribute name="countUnRead" value="0" type="number" />
@@ -113,10 +113,93 @@
 			]]>
 		</method>
 		
+		<method name="selectUnread">
+			<![CDATA[
+			
+				if (!this.isInbox) {
+					return;
+				}
+            	
+            	//list.subviews[i].setAttribute("isRead",records[i].isRead);
+			
+	            this._selectedRefObj = new Array();
+	            this._selected = new Array();
+	            
+	            for (var i=0;i<this.renderList.length;i++) {
+	            	if (!this.renderList[i].isRead) {
+		            	this.renderList[i].itemSelected = true;
+		                this.renderList[i].isselected = true;
+		                this._selectedRefObj.push(i);
+	            	} else {
+	            		this.renderList[i].itemSelected = false;
+		                this.renderList[i].isselected = false;
+	            	}
+	            }
+	            
+	            if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+	        
+	            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+	            	if (!this._innerlist._inn._inn.subviews[i].isRead) {
+		            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+			            this._innerlist._inn._inn.subviews[i].isselected = true;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+		                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+	            	} else {
+	            		this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
+			            this._innerlist._inn._inn.subviews[i].isselected = false;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	            	}
+		        }
+			]]>
+		</method>
+		
+		<method name="selectRead">
+			<![CDATA[
+				if (!this.isInbox) {
+					return;
+				}
+            	
+            	//list.subviews[i].setAttribute("isRead",records[i].isRead);
+			
+	            this._selectedRefObj = new Array();
+	            this._selected = new Array();
+	            
+	            for (var i=0;i<this.renderList.length;i++) {
+	            	if (this.renderList[i].isRead) {
+		            	this.renderList[i].itemSelected = true;
+		                this.renderList[i].isselected = true;
+		                this._selectedRefObj.push(i);
+	            	} else {
+	            		this.renderList[i].itemSelected = false;
+		                this.renderList[i].isselected = false;
+	            	}
+	            }
+	            
+	            if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+	        
+	            for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+	            	if (this._innerlist._inn._inn.subviews[i].isRead) {
+		            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+			            this._innerlist._inn._inn.subviews[i].isselected = true;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+		                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+	            	} else {
+	            		this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
+			            this._innerlist._inn._inn.subviews[i].isselected = false;
+		                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	            	}
+		        }
+			]]>
+		</method>
+		
 		<handler name="onclickedItem" args="listObj">
 			<![CDATA[
 			
 				if ($debug) Debug.write("onclickedItem :: ",listObj.refObj);
+				
+				var bool = !listObj.itemSelected;
+				
+				this.itemSelected(listObj,bool);
 				
 				if (this.isInbox) {
 					
@@ -259,7 +342,7 @@
                 
                 if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
                 
-                this._records.setAttribute("text",records.length);
+                //this._records.setAttribute("text",records.length);
                 
                 for (var i=0;i<list.subviews.length;i++){
                     
@@ -334,9 +417,11 @@
                     //}
                     
                     if (this.renderList[item.itemId]["isselected"] && this.renderList[item.itemId].isselected) {
+                        //if ($debug) Debug.write("item.isselected ",item.itemId);
                         item.isselected = true;
                         item.onmouseout.sendEvent();
                     } else {
+                    	//if ($debug) Debug.write("item NOT .isselected ",item.itemId);
                         item.isselected = false;
                         item.onmouseout.sendEvent();
                     }
@@ -402,13 +487,13 @@
             </handler>
             <handler name="onselect" args="sel">
                 if (sel.value == "1") {
-                	
+                	parent.parent._table.selectAll();
                 } else if (sel.value == "2") {
-                	
+                	parent.parent._table.deselectAll();
                 } else if (sel.value == "3") {
-                	
+                	parent.parent._table.selectUnread();
                 } else if (sel.value == "4") {
-                	
+                	parent.parent._table.selectRead();
                 }
             </handler>
         </resetCombobox>

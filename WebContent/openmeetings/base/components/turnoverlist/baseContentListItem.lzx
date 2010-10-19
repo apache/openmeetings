@@ -30,6 +30,8 @@
 	<handler name="onmouseout">
 		if (!this.isselected) {
 			this.setAttribute('bgcolor',0xFFFFFF);
+		} else {
+			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
 		}
 	</handler>
 	

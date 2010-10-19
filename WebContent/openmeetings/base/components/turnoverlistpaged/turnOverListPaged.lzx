@@ -79,6 +79,7 @@
             this._selected = new Array();
             
             for (var i=0;i<this.renderList.length;i++) {
+            	this.renderList[i].itemSelected = true;
                 this.renderList[i].isselected = true;
                 this._selectedRefObj.push(i);
             }
@@ -86,6 +87,7 @@
             if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
         
             for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
 	            this._innerlist._inn._inn.subviews[i].isselected = true;
                 this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
                 this._selected.push(this._innerlist._inn._inn.subviews[i]);
@@ -140,10 +142,12 @@
             this._selected = new Array();
             
             for (var i=0;i<this.renderList.length;i++) {
+            	this.renderList[i].itemSelected = false;
                 this.renderList[i].isselected = false;
             }
             
             for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
+            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",false);
                 this._innerlist._inn._inn.subviews[i].isselected = false;
                 this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
             }
@@ -164,12 +168,14 @@
                             if ($debug) Debug.write("onclickedItem Deselect ALL -2- ",this._selectedRefObj.length);    
                             
                             for (var i=0;i<this._selected.length;i++){
+                            	this._selected[i].setAttribute("itemSelected",false);
                                 this._selected[i].isselected = false;
                                 this._selected[i].doDeselect();
                             }
                             
                             for (var i=0;i<this._selectedRefObj.length;i++){
                                 if ($debug) Debug.write("DESELECT ITEM ID ",this._selectedRefObj[i]);
+                                this.renderList[this._selectedRefObj[i]].itemSelected = false;
                                 this.renderList[this._selectedRefObj[i]].isselected = false;
                             }
                             
