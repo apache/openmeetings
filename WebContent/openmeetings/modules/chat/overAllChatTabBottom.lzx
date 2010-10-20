@@ -82,7 +82,7 @@
             </handler>
         </simpleLabelButton>
 
-        <miniIcons y="1" x="80" resource="smile_chat_log_rsc" width="16" height="16" 
+        <miniIcons y="2" x="82" resource="smile_chat_log_rsc" width="16" height="16" 
                    showhandcursor="true">
             <handler name="onclick">
                 var pick = new lz.emotIconsSelector(canvas,{
@@ -111,7 +111,7 @@
         </blueButton>  
          -->
         
-        <miniIcons y="1" x="100" resource="copy_chat_log_rsc" width="16" height="16" 
+        <miniIcons y="2" x="102" resource="copy_chat_log_rsc" width="16" height="16" 
                    showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
@@ -143,7 +143,7 @@
         </blueButton> 
          --> 
         
-        <miniIcons y="1" x="120" resource="button_cancel_rsc" width="16" height="16" 
+        <miniIcons y="2" x="122" resource="button_cancel_rsc" width="16" height="16" 
                    showhandcursor="true">
             <handler name="onclick">
                 parent.clearOverallChat.doCall();

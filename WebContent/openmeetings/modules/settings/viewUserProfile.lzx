@@ -35,10 +35,30 @@
     		]]>
     	</handler>
     </netRemoteCallHib>	
-			 
+	
+    <!--
+    public Long requestUserToContactList(String SID, Long userToAdd_id, 
+                String domain, String port, String webapp)
+     -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.viewUserProfile.viewUserProfile.userObject.user_id; </method></netparam>
+        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("requestUserToContactList: ",value);
+                if (value > 0) {
+                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
 	
 	<view name="viewUserProfile" y="24" height="$once{ parent.height-60 }" 
-		  width="$once{ parent.width-2 }" >
+		  width="$once{ parent.width-2 }" clip="true">
 		
 		<viewUserProfile name="viewUserProfile" />
 		
@@ -46,9 +66,13 @@
 		
 	</view>
 	
-	<simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
+	<simpleLabelButton labelid="1186" width="200" x="$once{ parent.width - 310 }" y="$once{ parent.height - 26 }">
     	<handler name="onclick">
-    		this.parent.close();
+    		if (hib.userobject.user_id == parent.viewUserProfile.viewUserProfile.userObject.user_id) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+                return;
+            }
+            parent.requestUserToContactList.doCall();
     	</handler>
     </simpleLabelButton>   
 	
@@ -62,9 +86,13 @@
 	
 <!--- User Profile Setting Panel -->
 <class name="viewUserProfile" extends="view" >
+	
+	<attribute name="userObject" value="null" />
 			
 	<method name="initFields" args="obj">
     	<![CDATA[
+    	
+    	    this.userObject = obj;
     	
 	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	        		+canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
@@ -112,8 +140,56 @@
     		}
     		
     		this.userSearchs._text.setAttribute("text",tSearchs);
+    		
+    		if (hib.userobject.user_id == this.userObject.user_id) {
+    			//Self always show
+    			this.showUserContactData();
+    		} else if (obj.showContactData) {
+    			this.showUserContactData();
+    		}  else if (obj.showContactDataToContacts) {
+                this.checkUserIsInContactList.doCall();
+            } else {
+    			this.userContactData.setAttribute("text",canvas.getLabelName(1268));
+    		}
+    		
     	
     	]]>
+	</method>
+	
+	<!--
+	public Boolean checkUserIsInContactList(String SID, Long user_id)
+	 -->
+	<netRemoteCallHib name="checkUserIsInContactList" funcname="userservice.checkUserIsInContactList" 
+              remotecontext="$once{ canvas.thishib }" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.userObject.user_id; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("checkUserIsInContactList: ",value);
+                
+                if (value){
+                    parent.showUserContactData();
+                } else {
+                    parent.userContactData.setAttribute("text",canvas.getLabelName(1269));
+                }
+                
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+	
+	<method name="showUserContactData">
+		<![CDATA[
+		
+            var tString = this.userObject.adresses.street + this.userObject.adresses.additionalname + "<br/>";
+		    tString +=  this.userObject.adresses.zip + " " + this.userObject.adresses.town + "<br/>";
+		    tString +=  this.userObject.adresses.states.name + "<br/><br/>";
+            tString +=  this.userObject.adresses.email + "<br/>";
+            tString +=  this.userObject.adresses.phone + "<br/><br/>";
+            tString +=  this.userObject.adresses.comment + "<br/>";
+            
+            this.userContactData.setAttribute("text",tString);
+            
+		]]>
 	</method>
 	
 	<method name="removeWhitespace" args="str">
@@ -163,23 +239,28 @@
 	<labelText name="timezoneLabel" x="180" y="30" labelid="1165" />
 	<labelText name="timezone" x="260" y="30" />
 	
-	<labelText name="userFields" x="10" y="190" labelid="1166" fontstyle="bold" />
+	<labelText name="userFields" x="10" y="140" labelid="1166" fontstyle="bold" />
 	
-	<labelText name="userOffersLabel" x="10" y="210" labelid="1162" />
+	<labelText name="userOffersLabel" x="10" y="160" labelid="1162" />
 	
-	<view name="userOffers" x="120" y="210" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+	<view name="userOffers" x="120" y="160" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
 		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
 		<vscrollbar />
 	</view>
 	
-	<labelText name="userSearchsLabel" x="10" y="320" labelid="1163" />
+	<labelText name="userSearchsLabel" x="10" y="270" labelid="1163" />
 	
-	<view name="userSearchs" x="120" y="320" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
+	<view name="userSearchs" x="120" y="270" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
 		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
 		<vscrollbar />
 	</view>
 	
-	<labelText name="userContact" x="10" y="430" labelid="1167" fontstyle="bold" />
+	<labelText name="userContact" x="10" y="380" labelid="1167" fontstyle="bold" />
+	
+	<labelText x="10" y="400" labelid="1270" />
+	
+	<labelText name="userContactData" x="120" y="400" multiline="true" width="320" 
+			   selectable="true" bgcolor="0xFFFFFF" resize="false" />
 	    	
 </class>
 

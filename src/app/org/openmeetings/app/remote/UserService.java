@@ -1195,6 +1195,33 @@ public class UserService {
  	   return null;
     }
 	
+	public Boolean checkUserIsInContactList(String SID, Long user_id) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				List<UserContacts> uList = UserContactsDaoImpl.getInstance().getContactsByUserAndStatus(users_id, false);
+				
+				for (UserContacts userContact : uList) {
+					
+					if (userContact.getContact().getUser_id().equals(user_id)) {
+						return true;
+					}
+					
+				}
+				
+				return false;
+				
+			}
+
+		} catch (Exception err) {
+			log.error("[checkUserIsInContactList]", err);
+		}
+		return null;
+	}
+	
 	public Long updatePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);

@@ -451,7 +451,7 @@
           visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
     	
 	    <!-- 368:goto first -->
-	    <miniIcons y="1" x="0" resource="step_back_two_arrow" width="16" height="16" 
+	    <miniIcons y="2" x="0" resource="step_back_two_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callfirst();
@@ -474,7 +474,7 @@
 		 -->
 	
 	    <!-- 369:goto previous -->
-	    <miniIcons y="1" x="20" resource="step_back_arrow" width="16" height="16" 
+	    <miniIcons y="2" x="20" resource="step_back_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callpre();
@@ -521,7 +521,7 @@
         </resetCombobox>
         
         <!-- 370:goto next -->
-        <miniIcons y="1" x="140" resource="step_fwd_arrow" width="16" height="16" 
+        <miniIcons y="2" x="140" resource="step_fwd_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callnext();
@@ -544,7 +544,7 @@
 		 -->
 		
 	    <!-- 371:goto last -->
-	    <miniIcons y="1" x="160" resource="step_fwd_two_arrow" width="16" height="16" 
+	    <miniIcons y="2" x="160" resource="step_fwd_two_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.calllast();

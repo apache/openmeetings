@@ -42,8 +42,20 @@
 	</handler>
 	
 	<method name="calllast">
-		this.start = this.records-this.step;
-		this.oncallnext.sendEvent();
+		var newMaxPages = Math.floor(this.records/this.step);
+        if ($debug) Debug.write("calllast 1 ",newMaxPages);
+        this.start = newMaxPages*this.step;
+        if ($debug) Debug.write("calllast 2 ",this.start);
+        if (this.start == this.records) {
+            this.start = this.records-this.step;
+        }
+        if ($debug) Debug.write("calllast 3 ",this.start);
+        if ($debug) Debug.write("calllast 4 ",this.records);
+        this.oncallnext.sendEvent();
+        this.onload.sendEvent();
+        
+		//this.start = this.records-this.step;
+		//this.oncallnext.sendEvent();
 	</method>
 	
 	<method name="callnext">
@@ -163,20 +175,38 @@
     <labelText name="_records" x="2" resize="true" />
     
     <!-- 368:goto first -->
+    <miniIcons y="2" x="$once{ parent.width-188 }" resource="step_back_two_arrow" width="16" height="16" 
+                   showhandcursor="true">
+        <handler name="onclick">
+            parent.callfirst();
+        </handler>
+        <labelTooltip labelid="368" />
+    </miniIcons>
+    <!--   
 	<simpleLabelButtonTooltip name="_pre1" x="$once{ parent.width-188 }" width="22" height="22" 
 		enabled="true" onclick="parent.callfirst()" tooltipId="368">
 		<view resource="step_back_two_arrow" valign="middle" align="center" />
 	</simpleLabelButtonTooltip>
+	 -->
 
     <!-- 369:goto previous -->
+    <miniIcons y="2" x="$once{ parent.width-166 }" resource="step_back_arrow" width="16" height="16" 
+                   showhandcursor="true">
+        <handler name="onclick">
+            parent.callpre();
+        </handler>
+        <labelTooltip labelid="369" />
+    </miniIcons>
+    <!--
 	<simpleLabelButtonTooltip name="_pre2" x="$once{ parent.width-166 }" width="22" height="22" 
 		enabled="false" onclick="parent.callpre()" tooltipId="369" >
 		<view resource="step_back_arrow" valign="middle" align="center" />
 	</simpleLabelButtonTooltip>
+	 -->
 
     <!-- combobox to decide the step number -->
-    <resetCombobox name="languages" width="100" x="$once{ parent.width-144 }" 
-			  editable="false" height="22" >
+    <resetCombobox name="languages" width="96" x="$once{ parent.width-144 }" 
+			  editable="false" height="20" >
 		<attribute name="sendEventToReload" value="false" type="boolean" />
         <textlistitem value="10" text="10" />
         <textlistitem value="25" text="25" />
@@ -196,16 +226,34 @@
 	</resetCombobox>
 	
 	<!-- 370:goto next -->
+	<miniIcons y="2" x="$once{ parent.width-44 }" resource="step_fwd_arrow" width="16" height="16" 
+                   showhandcursor="true">
+        <handler name="onclick">
+            parent.callnext();
+        </handler>
+        <labelTooltip labelid="370" />
+    </miniIcons>
+    <!-- 
 	<simpleLabelButtonTooltip name="_next1" x="$once{ parent.width-44 }" width="22" height="22" 
 		enabled="false" onclick="parent.callnext()" tooltipId="370">
 		<view resource="step_fwd_arrow" valign="middle" align="center" />
 	</simpleLabelButtonTooltip>
+	 -->
 
     <!-- 371:goto last -->
+    <miniIcons y="2" x="$once{ parent.width-21 }" resource="step_fwd_two_arrow" width="16" height="16" 
+                   showhandcursor="true">
+        <handler name="onclick">
+            parent.calllast();
+        </handler>
+        <labelTooltip labelid="371" />
+    </miniIcons>
+    <!--
 	<simpleLabelButtonTooltip name="_next2" x="$once{ parent.width-21 }" width="22" height="22" 
 		enabled="true" onclick="parent.calllast()" tooltipId="371">
 		<view resource="step_fwd_two_arrow" valign="middle" align="center" />
 	</simpleLabelButtonTooltip>
+	 -->
 	
     <!-- =========  BgArea area  =========-->
     <view width="$once{ parent.width }" bgcolor="0x000000"
