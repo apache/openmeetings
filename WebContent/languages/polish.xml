@@ -3875,4 +3875,19 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1265" name="private message folder">
     <value>Do you really want to delete this folder? There is no way to undo that.</value>
   </string>
+  <string id="1266" name="user contacts">
+    <value>Your request was send to the user. The user will receive a notification to accept or deny your request. Only accepted requests are in your contact list of course!</value>
+  </string>
+  <string id="1267" name="user contacts">
+    <value>Message</value>
+  </string>
+  <string id="1268" name="user view profile">
+    <value>The user does not share his personal contact data.</value>
+  </string>
+  <string id="1269" name="user view profile">
+    <value>The user does share his personal contact data only to contacts.</value>
+  </string>
+  <string id="1270" name="user view profile">
+    <value>Address &amp; Phone</value>
+  </string>
 </language>
