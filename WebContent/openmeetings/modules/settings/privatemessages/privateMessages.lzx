@@ -246,6 +246,50 @@
 	    	</handler>
 	    </netRemoteCallHib>	
 	    
+	    <method name="finalDelete">
+	    	<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+			
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.deletePrivateMessages.doCall();
+				
+			]]>
+	    </method>
+	    
+	    <!--
+	    public Integer deletePrivateMessages(String SID, List privateMessageIntsIds)
+	     -->
+	    <netRemoteCallHib name="deletePrivateMessages" funcname="userservice.deletePrivateMessages" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("deletePrivateMessages: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
 	    <method name="markToRead" args="isRead">
 			<![CDATA[
 				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
@@ -467,13 +511,19 @@
             
             	this._selectedRefObj = new Array();
 	            this._selected = new Array();
-            
+	            
             	if (this.isTrash) {
             		parent._actionButtons._moveToTrash.setAttribute("visibility","hidden");
             		parent._actionButtons._moveToInbox.setAttribute("visibility","visible");
+            		parent._actionButtons._read.setAttribute("visibility","hidden");
+            		parent._actionButtons._unread.setAttribute("visibility","hidden");
+            		parent._actionButtons._finalDelete.setAttribute("visibility","visible");
             	} else {
             		parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
             		parent._actionButtons._moveToInbox.setAttribute("visibility","hidden");
+            		parent._actionButtons._read.setAttribute("visibility","visible");
+            		parent._actionButtons._unread.setAttribute("visibility","visible");
+            		parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
             	}
             
             	this.renderList = rList;
@@ -657,6 +707,19 @@
         	<labelTooltip labelid="1246" />
         </simpleLabelButton>
         
+        <simpleLabelButton name="_read" labelid="1248" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.markToRead(true);
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton name="_unread" labelid="1247" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.markToRead(false);
+        	</handler>
+        </simpleLabelButton>
+        
+        
         <simpleLabelButton name="_moveToInbox" labelid="1255" visibility="hidden"
         				   fontstyle="plain" width="120" height="21">
         	<handler name="onclick">
@@ -665,16 +728,12 @@
         	<labelTooltip labelid="1246" />
         </simpleLabelButton>
         
-        <simpleLabelButton labelid="1248" fontstyle="plain" width="80" height="21">
+        <simpleLabelButton name="_finalDelete" labelid="1256" visibility="hidden"
+        				   fontstyle="plain" width="120" height="21">
         	<handler name="onclick">
-        		parent.parent._table.markToRead(true);
+        		parent.parent._table.finalDelete();
         	</handler>
-        </simpleLabelButton>
-        
-        <simpleLabelButton labelid="1247" fontstyle="plain" width="80" height="21">
-        	<handler name="onclick">
-        		parent.parent._table.markToRead(false);
-        	</handler>
+        	<labelTooltip labelid="1257" />
         </simpleLabelButton>
         
         <resetCombobox name="_move" width="140" x="42"

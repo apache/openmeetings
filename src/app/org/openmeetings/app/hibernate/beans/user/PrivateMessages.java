@@ -12,27 +12,27 @@ import org.openmeetings.app.hibernate.beans.rooms.Rooms;
  */
 public class PrivateMessages {
 	
-	public long privateMessageId;
-	public String subject;
-	public String message;
+	private long privateMessageId;
+	private String subject;
+	private String message;
 	
-	public Date inserted;
-	public Users from;
-	public Users to;
+	private Date inserted;
+	private Users from;
+	private Users to;
 	private Users owner;
 	
-	public Boolean bookedRoom;
-	public Rooms room;
+	private Boolean bookedRoom;
+	private Rooms room;
 	
-	public Boolean isRead;
+	private Boolean isRead;
 	
 	private Boolean isTrash;
 	
-	public Long parentMessage;
-	public Long privateMessageFolderId;
+	private Long parentMessage;
+	private Long privateMessageFolderId;
 	
-	public Boolean isContactRequest;
-	public Long userContactId;
+	private Boolean isContactRequest;
+	private Long userContactId;
 
 	/**
      * 

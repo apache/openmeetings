@@ -1015,7 +1015,7 @@ public class UserService {
 		return null;
 	}
 	
-	public Long moveMailToFolder(String SID, Long privateMessageId,
+	public Integer moveMailsToFolder(String SID, List privateMessageIntsIds,
 			Long newFolderId) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -1024,9 +1024,17 @@ public class UserService {
 			// users only
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 
+				List<Long> privateMessageIds = new LinkedList<Long>();
+				
+				for (Object pMessageId : privateMessageIntsIds) {
+					privateMessageIds.add(Long.valueOf(pMessageId.toString()).longValue());
+				}
+				
+				return PrivateMessagesDaoImpl.getInstance().moveMailsToFolder(privateMessageIds, newFolderId);
+				
 			}
 		} catch (Exception err) {
-			log.error("[getInbox]", err);
+			log.error("[moveMailsToFolder]", err);
 		}
 		return null;
 	}
@@ -1052,6 +1060,29 @@ public class UserService {
 			}
 		} catch (Exception err) {
 			log.error("[moveMailsToTrash]", err);
+		}
+		return -1;
+	}
+	
+	public Integer deletePrivateMessages(String SID, List privateMessageIntsIds) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				List<Long> privateMessageIds = new LinkedList<Long>();
+				
+				for (Object pMessageId : privateMessageIntsIds) {
+					privateMessageIds.add(Long.valueOf(pMessageId.toString()).longValue());
+				}
+				
+				return PrivateMessagesDaoImpl.getInstance().deletePrivateMessages(privateMessageIds);
+				
+			}
+		} catch (Exception err) {
+			log.error("[markReadStatusMails]", err);
 		}
 		return -1;
 	}

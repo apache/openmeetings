@@ -531,7 +531,81 @@ public class PrivateMessagesDaoImpl {
 		}
 		return -1;
 	}
+
+	public Integer moveMailsToFolder(List<Long> privateMessageIds, Long privateMessageFolderId) {
+		try {
+			
+			String hql = "UPDATE PrivateMessages c " +
+						"SET c.privateMessageFolderId = :privateMessageFolderId " +
+						"where c.privateMessageId IN (:privateMessageIds) ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameterList("privateMessageIds", privateMessageIds);
+			int updatedEntities = query.executeUpdate();
+			
+			//Refresh the Entities in the Cache as Hibernate will not do it!
+			for (Long privateMessageId : privateMessageIds) {
+				String hqlSel = "select c from PrivateMessages c " +
+								"where c.privateMessageId = :privateMessageId ";
 	
+				Query querySel = session.createQuery(hqlSel); 
+				querySel.setLong("privateMessageId", privateMessageId);
+				
+				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				
+				if (privateMessages != null) {
+					session.refresh(privateMessages);
+				}
+			}
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return updatedEntities;
+		} catch (Exception e) {
+			log.error("[updatePrivateMessagesReadStatus]",e);
+		}
+		return -1;
+	}
 	
-	
+	public int deletePrivateMessages(List<Long> privateMessageIds) {
+		try {
+			
+			String hql = "DELETE PrivateMessages c " +
+						"where c.privateMessageId IN (:privateMessageIds) ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setParameterList("privateMessageIds", privateMessageIds);
+			int updatedEntities = query.executeUpdate();
+			
+//			//Refresh the Entities in the Cache as Hibernate will not do it!
+//			for (Long privateMessageId : privateMessageIds) {
+//				String hqlSel = "select c from PrivateMessages c " +
+//								"where c.privateMessageId = :privateMessageId ";
+//	
+//				Query querySel = session.createQuery(hqlSel); 
+//				querySel.setLong("privateMessageId", privateMessageId);
+//				
+//				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+//				
+//				if (privateMessages != null) {
+//					session.refresh(privateMessages);
+//				}
+//			}
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return updatedEntities;
+		} catch (Exception e) {
+			log.error("[updatePrivateMessagesReadStatus]",e);
+		}
+		return -1;
+	}
+
 }
