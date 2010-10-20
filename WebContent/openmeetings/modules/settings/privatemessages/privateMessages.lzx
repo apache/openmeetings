@@ -52,7 +52,8 @@
 		
 		<simpleLabelButton labelid="1224" width="142" x="5">
 			<handler name="onclick">
-				parent.parent._table.getSend.doCall();
+				//this.setAttribute("enabled",false);
+				parent.parent._table.getTrash.doCall();
 			</handler>
 			<view resource="private_message_trash_rsc" x="10" y="2"></view>
 		</simpleLabelButton>
@@ -75,6 +76,10 @@
 		<attribute name="countUnRead" value="0" type="number" />
 		<attribute name="isInbox" value="false" type="boolean" />
 		<attribute name="isSend" value="false" type="boolean" />
+		<attribute name="isTrash" value="false" type="boolean" />
+		<attribute name="isFolder" value="false" type="boolean" />
+		
+		<attribute name="selectedRefObjIds" value="null"/>
 		
 		<method name="updatePrivateMessageLabelText" args="countUnRead">
 			<![CDATA[
@@ -98,6 +103,8 @@
 				this.getInbox.doCall();
 			} else if (this.isSend) {
 				this.getSend.doCall();
+			} else if (this.isTrash) {
+				this.getTrash.doCall();
 			}
 		</handler>
 		
@@ -192,6 +199,102 @@
 			]]>
 		</method>
 		
+		<method name="moveToTrash" args="isTrash">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+				
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.moveMailsToTrash.isTrash = isTrash;
+				this.moveMailsToTrash.doCall();
+				
+			]]>
+		</method>
+		
+		<!--
+		public Long moveMailsToTrash(String SID, List privateMessageIds, Boolean isTrash)
+		 -->
+		<netRemoteCallHib name="moveMailsToTrash" funcname="userservice.moveMailsToTrash" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="isTrash" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.isTrash; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("moveMailsToTrash: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <method name="markToRead" args="isRead">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				this.selectedRefObjIds = new Array();
+			
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				if ($debug) Debug.write("this.markReadStatusMails ",isRead);
+				
+				this.markReadStatusMails.isRead = isRead;
+				this.markReadStatusMails.doCall();
+				
+			]]>
+		</method>
+	    
+	    <!--
+	    public Long markReadStatusMails(String SID, List privateMessageIntsIds, Boolean isRead)
+	     -->
+	    <netRemoteCallHib name="markReadStatusMails" funcname="userservice.markReadStatusMails" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="isRead" value="false" type="boolean"/>        
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.isRead; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("markReadStatusMails: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+		
 		<handler name="onclickedItem" args="listObj">
 			<![CDATA[
 			
@@ -259,12 +362,13 @@
 			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[
-		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		if ($debug) Debug.write("getInbox: ",value);
 		    		//this.parent.destroy();
 		    		this.parent.initValues(value.records);
 		    		
 		    		parent.isInbox = true;
 		    		parent.isSend = false;
+		    		parent.isTrash = false;
 		    		
 		    		parent.countUnRead = 0;
 		    		
@@ -303,6 +407,41 @@
 		    		
 		    		parent.isInbox = false;
 		    		parent.isSend = true;
+		    		parent.isTrash = false;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    <!--
+	    public SearchResult getTrash(String SID, String search, String orderBy, Integer start, Boolean asc, Integer max)
+	     -->
+	    <netRemoteCallHib name="getTrash" funcname="userservice.getTrash" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		//if ($debug) Debug.write("searchUserProfile: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		parent.isSend = false;
+		    		parent.isTrash = true;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
@@ -325,6 +464,17 @@
 	    
 	    <method name="renderContent" args="rList">
             <![CDATA[
+            
+            	this._selectedRefObj = new Array();
+	            this._selected = new Array();
+            
+            	if (this.isTrash) {
+            		parent._actionButtons._moveToTrash.setAttribute("visibility","hidden");
+            		parent._actionButtons._moveToInbox.setAttribute("visibility","visible");
+            	} else {
+            		parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
+            		parent._actionButtons._moveToInbox.setAttribute("visibility","hidden");
+            	}
             
             	this.renderList = rList;
             
@@ -396,6 +546,8 @@
                         
                     }
                     
+                    list.subviews[i].onmouseout.sendEvent();
+                    
                 }
                 
                 
@@ -436,7 +588,7 @@
                     if (this.isInbox) {
                     	item.setAttribute("isRead",this.renderList[item.itemId].isRead);
                     } else {
-                    	list.subviews[i].setAttribute("isRead",true);
+                    	item.subviews[i].setAttribute("isRead",true);
                     }
                     
                     item.setAttribute("itemId",item.itemId);
@@ -471,7 +623,7 @@
 			
 	</turnOverListOrderedPaged>
 	
-	<view y="274" x="158" layout="axis:x;spacing:2">
+	<view name="_actionButtons" y="274" x="158" layout="axis:x;spacing:2">
 		<view resource="private_message_select_part_rsc"></view>
 		
 		<resetCombobox name="_action" width="100" 
@@ -498,22 +650,30 @@
             </handler>
         </resetCombobox>
         
-        <simpleLabelButton labelid="1245" fontstyle="plain" width="80" height="21">
+        <simpleLabelButton name="_moveToTrash" labelid="1245" fontstyle="plain" width="80" height="21">
         	<handler name="onclick">
-        		
+        		parent.parent._table.moveToTrash(true);
         	</handler>
         	<labelTooltip labelid="1246" />
         </simpleLabelButton>
         
-        <simpleLabelButton labelid="1247" fontstyle="plain" width="80" height="21">
+        <simpleLabelButton name="_moveToInbox" labelid="1255" visibility="hidden"
+        				   fontstyle="plain" width="120" height="21">
         	<handler name="onclick">
-        		
+        		parent.parent._table.moveToTrash(false);
         	</handler>
+        	<labelTooltip labelid="1246" />
         </simpleLabelButton>
         
         <simpleLabelButton labelid="1248" fontstyle="plain" width="80" height="21">
         	<handler name="onclick">
-        		
+        		parent.parent._table.markToRead(true);
+        	</handler>
+        </simpleLabelButton>
+        
+        <simpleLabelButton labelid="1247" fontstyle="plain" width="80" height="21">
+        	<handler name="onclick">
+        		parent.parent._table.markToRead(false);
         	</handler>
         </simpleLabelButton>
         

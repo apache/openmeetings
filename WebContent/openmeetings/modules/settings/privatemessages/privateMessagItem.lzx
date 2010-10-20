@@ -16,11 +16,13 @@
 		
 		<handler name="onclick">
 			if (parent.clickable) {
-				parent.parent.parent.parent.parent.itemSelected(parent,!parent.itemSelected);
+				if ($debug) Debug.write("SEND CLICK TO PARENT");
+				parent.onclick.sendEvent();
+				//parent.parent.parent.parent.parent.itemSelected(parent,!parent.itemSelected);
 			}
 		</handler>
 		
-		<checkbox name="_selected" y="2" x="2"
+		<checkbox name="_selected" y="2" x="2" clickable="false"
 				  visibility="${ (parent.parent.clickable) ? 'visible' : 'hidden' }" 
 				  value="${ parent.parent.itemSelected }" />
 		

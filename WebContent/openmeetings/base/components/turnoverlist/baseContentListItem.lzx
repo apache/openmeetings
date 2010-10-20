@@ -36,6 +36,7 @@
 	</handler>
 	
 	<handler name="onclick">
+		if ($debug) Debug.write("baseContentListItem -- onclick");
 		this.parent.parent.parent.parent.onclickedItem.sendEvent(this);
 	</handler>
     

@@ -155,7 +155,7 @@ public class PrivateMessagesDaoImpl {
 			
 			String hql = "select c from PrivateMessages c " +
 						"where c.to.user_id = :toUserId " +
-						"AND c.isTrash = false " +
+						"AND c.isTrash = :isTrash " +
 						"AND c.owner.user_id = :toUserId " +
 						"AND c.privateMessageFolderId = :privateMessageFolderId ";
 			
@@ -183,6 +183,7 @@ public class PrivateMessagesDaoImpl {
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
 			query.setLong("toUserId", toUserId);
+			query.setBoolean("isTrash", false);
 			query.setLong("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
 				query.setString("search", "%"+search+"%");
@@ -206,7 +207,7 @@ public class PrivateMessagesDaoImpl {
 			
 			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
 						"where c.from.user_id = :toUserId " +
-						"AND c.isTrash = false " +
+						"AND c.isTrash = :isTrash " +
 						"AND c.owner.user_id = :toUserId " +
 						"AND c.privateMessageFolderId = :privateMessageFolderId ";
 			
@@ -226,6 +227,7 @@ public class PrivateMessagesDaoImpl {
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
 			query.setLong("toUserId", toUserId);
+			query.setBoolean("isTrash", false);
 			query.setLong("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
 				query.setString("search", "%"+search+"%");
@@ -242,12 +244,13 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
-	public List<PrivateMessages> getTrashPrivateMessagesByUser(String search, 
+	public List<PrivateMessages> getTrashPrivateMessagesByUser(Long user_id, String search, 
 			String orderBy, int start, Boolean asc, int max) {
 		try {
 			
 			String hql = "select c from PrivateMessages c " +
-						"where c.isTrash = true ";
+						"where c.isTrash = true " +
+						"AND c.owner.user_id = :user_id ";
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
@@ -275,6 +278,7 @@ public class PrivateMessagesDaoImpl {
 			if (search.length() != 0) {
 				query.setString("search", "%"+search+"%");
 			}
+			query.setLong("user_id", user_id);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.list();
@@ -288,11 +292,12 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
-	public Long countTrashPrivateMessagesByUser(Long toUserId, String search) {
+	public Long countTrashPrivateMessagesByUser(Long user_id, String search) {
 		try {
 			
-			String hql = "select c from PrivateMessages c " +
-						"where c.isTrash = true ";
+			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
+						"where c.isTrash = true  " +
+						"AND c.owner.user_id = :user_id ";
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
@@ -309,7 +314,7 @@ public class PrivateMessagesDaoImpl {
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
+			query.setLong("user_id", user_id);
 			if (search.length() != 0) {
 				query.setString("search", "%"+search+"%");
 			}
@@ -376,6 +381,7 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
+	
 	public Long countFolderPrivateMessagesByUser(Long toUserId, Long privateMessageFolderId) {
 		try {
 			
@@ -435,6 +441,53 @@ public class PrivateMessagesDaoImpl {
 			log.error("[getFolderPrivateMessagesByUser]",e);
 		}
 		return null;
+	}
+
+	public int updatePrivateMessagesToTrash(List privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
+		try {
+			
+			String hql = "UPDATE PrivateMessages c " +
+						"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
+						"where c.privateMessageId IN (:privateMessageIds) ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setBoolean("isTrash", isTrash);
+			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameterList("privateMessageIds", privateMessageIds);
+			int updatedEntities = query.executeUpdate();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return updatedEntities;
+		} catch (Exception e) {
+			log.error("[updatePrivateMessagesToTrash]",e);
+		}
+		return -1;
+	}
+	
+	public int updatePrivateMessagesReadStatus(List privateMessageIds, Boolean isRead) {
+		try {
+			
+			String hql = "UPDATE PrivateMessages c " +
+						"SET c.isRead = :isRead " +
+						"where c.privateMessageId IN (:privateMessageIds) ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setBoolean("isRead", isRead);
+			query.setParameterList("privateMessageIds", privateMessageIds);
+			int updatedEntities = query.executeUpdate();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return updatedEntities;
+		} catch (Exception e) {
+			log.error("[updatePrivateMessagesReadStatus]",e);
+		}
+		return -1;
 	}
 	
 	

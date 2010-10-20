@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -961,13 +962,13 @@ public class UserService {
 				SearchResult searchResult = new SearchResult();
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = PrivateMessagesDaoImpl
-									.getInstance().getSendPrivateMessagesByUser(users_id,
-											search, orderBy, start, asc, 0L, max);
+									.getInstance().getTrashPrivateMessagesByUser(users_id,
+											search, orderBy, start, asc, max);
 				
 				searchResult.setResult(userList);
 				
 				Long resultInt = PrivateMessagesDaoImpl
-									.getInstance().countSendPrivateMessagesByUser(users_id, search, 0L);
+									.getInstance().countTrashPrivateMessagesByUser(users_id, search);
 				
 				searchResult.setRecords(resultInt);
 
@@ -1030,7 +1031,57 @@ public class UserService {
 		return null;
 	}
 	
-	public Long markReadStatusMail(String SID, Long privateMessageId,
+	public Integer moveMailsToTrash(String SID, List privateMessageIntsIds, Boolean isTrash) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				List<Long> privateMessageIds = new LinkedList<Long>();
+				
+				for (Object pMessageId : privateMessageIntsIds) {
+					privateMessageIds.add(Long.valueOf(pMessageId.toString()).longValue());
+				}
+				
+				log.debug("moveMailsToTrash :: "+isTrash);
+
+				return PrivateMessagesDaoImpl.getInstance().updatePrivateMessagesToTrash(privateMessageIds, isTrash, 0L);
+				
+			}
+		} catch (Exception err) {
+			log.error("[moveMailsToTrash]", err);
+		}
+		return -1;
+	}
+	
+	public Integer markReadStatusMails(String SID, List privateMessageIntsIds, Boolean isRead) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				List<Long> privateMessageIds = new LinkedList<Long>();
+				
+				for (Object pMessageId : privateMessageIntsIds) {
+					privateMessageIds.add(Long.valueOf(pMessageId.toString()).longValue());
+				}
+				
+				log.debug("markReadStatusMails :: "+isRead);
+
+				return PrivateMessagesDaoImpl.getInstance().updatePrivateMessagesReadStatus(privateMessageIds, isRead);
+				
+			}
+		} catch (Exception err) {
+			log.error("[markReadStatusMails]", err);
+		}
+		return -1;
+	}
+	
+	public Integer markReadStatusMail(String SID, Long privateMessageId,
 			Boolean isRead) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -1039,11 +1090,16 @@ public class UserService {
 			// users only
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				
-				PrivateMessages privateMessage = PrivateMessagesDaoImpl.getInstance().getPrivateMessagesById(privateMessageId);
+				List<Long> privateMessageIds = new LinkedList<Long>();
+				privateMessageIds.add(privateMessageId);
 				
-				privateMessage.setIsRead(isRead);
+				return PrivateMessagesDaoImpl.getInstance().updatePrivateMessagesReadStatus(privateMessageIds, isRead);
 				
-				PrivateMessagesDaoImpl.getInstance().updatePrivateMessages(privateMessage);
+//				PrivateMessages privateMessage = PrivateMessagesDaoImpl.getInstance().getPrivateMessagesById(privateMessageId);
+//				
+//				privateMessage.setIsRead(isRead);
+//				
+//				PrivateMessagesDaoImpl.getInstance().updatePrivateMessages(privateMessage);
 
 			}
 		} catch (Exception err) {
