@@ -3770,4 +3770,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1255" name="private message">
     <value>Move to Inbox</value>
   </string>
+  <string id="1256" name="private message">
+    <value>Delete (final)</value>
+  </string>
+  <string id="1257" name="private message">
+    <value>This action cannot be undone!</value>
+  </string>
+  <string id="1258" name="private message">
+    <value>Add folder</value>
+  </string>
+  <string id="1259" name="private message">
+    <value>Add folders and organize your messages!</value>
+  </string>
+  <string id="1260" name="private message">
+    <value>Add folder</value>
+  </string>
+  <string id="1261" name="private message">
+    <value>Add</value>
+  </string>
 </language>
