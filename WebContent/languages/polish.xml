@@ -3669,7 +3669,7 @@ transmitowania głosu i obrazu wideo.</value>
     <value>Your contact list</value>
   </string>
   <string id="1197" name="user contacts">
-    <value>Edit your contact, manage your pending contacts!</value>
+    <value>Edit your contact and messages,&lt;br/&gt; manage your pending contacts!</value>
   </string>
   <string id="1198" name="user contacts">
     <value>confirmed you as contact!</value>
@@ -3741,7 +3741,7 @@ transmitowania głosu i obrazu wideo.</value>
     <value>End</value>
   </string>
   <string id="1221" name="private message">
-    <value>Add an optional request for meeting to the message and create conference room for the participants. The Event is then copied in every Calendar of the participants.</value>
+    <value>Add an optional request for meeting to the message and create a conference room. The Event is then copied in the calendar of every participant.</value>
   </string>
   <string id="1222" name="private message">
     <value>Inbox</value>
@@ -3862,5 +3862,17 @@ transmitowania głosu i obrazu wideo.</value>
   </string>
   <string id="1261" name="private message">
     <value>Add</value>
+  </string>
+  <string id="1262" name="private message folder">
+    <value>Delete folder</value>
+  </string>
+  <string id="1263" name="private message folder">
+    <value>You cannot delete this folder, there are still messages inside! Delete first the messages or move them to another folder.</value>
+  </string>
+  <string id="1264" name="private message folder">
+    <value>Edit name</value>
+  </string>
+  <string id="1265" name="private message folder">
+    <value>Do you really want to delete this folder? There is no way to undo that.</value>
   </string>
 </language>
