@@ -984,7 +984,7 @@ public class UserService {
 		return null;
 	}
     
-	public SearchResult getFolder(String SID, Long privateMessageFolderId, String orderBy, 
+	public SearchResult getFolder(String SID, Long privateMessageFolderId, String search, String orderBy, 
 			Integer start, Boolean asc, Integer max) {
 		try {
 
@@ -998,12 +998,12 @@ public class UserService {
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = PrivateMessagesDaoImpl
 									.getInstance().getFolderPrivateMessagesByUser(users_id,
-											orderBy, start, asc, privateMessageFolderId, max);
+											search, orderBy, start, asc, privateMessageFolderId, max);
 				
 				searchResult.setResult(userList);
 				
 				Long resultInt = PrivateMessagesDaoImpl
-									.getInstance().countFolderPrivateMessagesByUser(users_id,privateMessageFolderId);
+									.getInstance().countFolderPrivateMessagesByUser(users_id,privateMessageFolderId, search);
 				
 				searchResult.setRecords(resultInt);
 

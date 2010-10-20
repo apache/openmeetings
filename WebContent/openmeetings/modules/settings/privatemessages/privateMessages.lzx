@@ -103,7 +103,7 @@
 		 
 		<view height="1"></view>
 		 
-		<simpleLabelButton labelid="1258" width="142" x="5" height="22">
+		<simpleLabelButton name="_addFolder" labelid="1258" width="142" x="5" height="22">
 			<handler name="onclick">
 				//this.setAttribute("enabled",false);
 				new lz.newPrivateMessageFolder(canvas,{refObj:this});
@@ -147,6 +147,8 @@
 		    
 		    <method name="loadPrivateMessage" args="privateMessageFolderId,refObj">
 		    	parent.selectMenuItem(refObj);
+		    	parent.parent._table.privateMessageFolderId = privateMessageFolderId;
+		    	parent.parent._table.getFolder.doCall();
 		    </method>
 		    
 		    <method name="loadResult" args="tList">
@@ -160,6 +162,8 @@
 				    				folderName:tList[i].folderName
 				    			});
 		    		}
+		    		
+		    		parent.parent._actionButtons._move.initItems(tList);
 		    	
 		    	]]>
 		    </method>
@@ -188,6 +192,7 @@
 		<attribute name="isSend" value="false" type="boolean" />
 		<attribute name="isTrash" value="false" type="boolean" />
 		<attribute name="isFolder" value="false" type="boolean" />
+		<attribute name="privateMessageFolderId" value="0" type="number" />
 		
 		<attribute name="selectedRefObjIds" value="null"/>
 		
@@ -348,13 +353,62 @@
 		    		} else if (parent.isSend) {
 		    			parent.getSend.doCall();
 		    		} else if (parent.isFolder) {
-		    			
+		    			parent.getFolder.doCall();
 		    		} else if (parent.isTrash) {
 		    			parent.getTrash.doCall();
 		    		}
 	    		]]>
 	    	</handler>
 	    </netRemoteCallHib>	
+	    
+	    <method name="moveToFolderById" args="newFolderId">
+			<![CDATA[
+				if (this._selectedRefObj == null || this._selectedRefObj.length == 0) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1254});
+				}
+				
+				if ($debug) Debug.write("moveToFolderById ",newFolderId);
+				
+				this.selectedRefObjIds = new Array();
+				
+				for (var i=0;i<this._selectedRefObj.length;i++) {
+					this.selectedRefObjIds.push(this.renderList[this._selectedRefObj[i]].privateMessageId);
+				}
+				
+				if ($debug) Debug.write("this._selectedRefObj ",this._selectedRefObj);
+				if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
+			
+				this.moveMailsToFolder.newFolderId = newFolderId;
+				this.moveMailsToFolder.doCall();
+				
+			]]>
+		</method>
+	    <!--
+	    public Integer moveMailsToFolder(String SID, List privateMessageIntsIds,
+			Long newFolderId)
+		 -->
+	    <netRemoteCallHib name="moveMailsToFolder" funcname="userservice.moveMailsToFolder" 
+					  remotecontext="$once{ canvas.thishib }" >  
+			<attribute name="newFolderId" value="0" type="number" />
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.selectedRefObjIds; </method></netparam>
+			<netparam><method name="getValue"> return parent.newFolderId; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("moveMailsToFolder: ",value);
+		    		//this.parent.destroy();
+		    		if (parent.isInbox) {
+		    			parent.getInbox.doCall();
+		    		} else if (parent.isSend) {
+		    			parent.getSend.doCall();
+		    		} else if (parent.isFolder) {
+		    			parent.getFolder.doCall();
+		    		} else if (parent.isTrash) {
+		    			parent.getTrash.doCall();
+		    		}
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>			 
 	    
 	    <method name="finalDelete">
 	    	<![CDATA[
@@ -392,7 +446,7 @@
 		    		} else if (parent.isSend) {
 		    			parent.getSend.doCall();
 		    		} else if (parent.isFolder) {
-		    			
+		    			parent.getFolder.doCall();
 		    		} else if (parent.isTrash) {
 		    			parent.getTrash.doCall();
 		    		}
@@ -441,7 +495,7 @@
 		    		} else if (parent.isSend) {
 		    			parent.getSend.doCall();
 		    		} else if (parent.isFolder) {
-		    			
+		    			parent.getFolder.doCall();
 		    		} else if (parent.isTrash) {
 		    			parent.getTrash.doCall();
 		    		}
@@ -523,6 +577,7 @@
 		    		parent.isInbox = true;
 		    		parent.isSend = false;
 		    		parent.isTrash = false;
+		    		parent.isFolder = false;
 		    		
 		    		parent.countUnRead = 0;
 		    		
@@ -562,6 +617,7 @@
 		    		parent.isInbox = false;
 		    		parent.isSend = true;
 		    		parent.isTrash = false;
+		    		parent.isFolder = false;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
@@ -596,6 +652,45 @@
 		    		parent.isInbox = false;
 		    		parent.isSend = false;
 		    		parent.isTrash = true;
+		    		parent.isFolder = false;
+		    		
+		    		for (var k=0;k<value.result.length;k++) {
+		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
+		    			value.result[k].itemSelected = false;
+		    		}
+		    		
+		    		parent.parent._labelPrivateMessages.setAttribute("text",canvas.getLabelName(this.parent.parent._labelPrivateMessages.labelid));
+		    		
+		    		this.parent.renderContent(value.result);
+	    		]]>
+	    	</handler>
+	    </netRemoteCallHib>	
+	    
+	    
+	    <!--
+	    public SearchResult getFolder(String SID, Long privateMessageFolderId, String search, String orderBy, 
+			Integer start, Boolean asc, Integer max)
+	     -->
+	    <netRemoteCallHib name="getFolder" funcname="userservice.getFolder" 
+					  remotecontext="$once{ canvas.thishib }" >      
+			<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.privateMessageFolderId; </method></netparam>
+			<netparam><method name="getValue"> return ""; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.start; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
+			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("getFolder: ",value);
+		    		//this.parent.destroy();
+		    		this.parent.initValues(value.records);
+		    		
+		    		parent.isInbox = false;
+		    		parent.isSend = false;
+		    		parent.isTrash = true;
+		    		parent.isFolder = true;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
@@ -790,11 +885,11 @@
 					   editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <handler name="oninit">
-                this.addItem(canvas.getLabelName(1252),"0");
-                this.addItem(canvas.getLabelName(1239),"1");
-                this.addItem(canvas.getLabelName(1240),"2");
-                this.addItem(canvas.getLabelName(1241),"3");
-                this.addItem(canvas.getLabelName(1242),"4");
+                this.addItem(canvas.getLabelName(1252),"0");//Actions ...
+                this.addItem(canvas.getLabelName(1239),"1");//Select All 
+                this.addItem(canvas.getLabelName(1240),"2");//Select None
+                this.addItem(canvas.getLabelName(1241),"3");//Select Unread
+                this.addItem(canvas.getLabelName(1242),"4");//Select Read
                 this.selectItemAt(0);
             </handler>
             <handler name="onselect" args="sel">
@@ -848,21 +943,37 @@
         <resetCombobox name="_move" width="140" x="42"
 					   editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
+            <method name="initItems" args="tList">
+            	<![CDATA[
+	            	this.reset();
+	            	
+	            	this.addItem(canvas.getLabelName(1243),"0");//Move to folder ...
+	            	
+	            	for (var i=0;i<tList.length;i++) {
+	            		
+	            		this.addItem(tList[i].folderName,tList[i].privateMessageFolderId);
+	            		
+	            	}
+	            	
+	            	this.addItem(canvas.getLabelName(1244),"-1");//Create Folder ...
+	            	this.selectItemAt(0);
+            	]]>
+            </method>
             <handler name="oninit">
-                this.addItem(canvas.getLabelName(1243),"0");
-                this.addItem(canvas.getLabelName(1244),"0");
-                this.selectItemAt(0);
+                //this.addItem(canvas.getLabelName(1243),"0");//Move to folder ...
+                //this.addItem(canvas.getLabelName(1244),"-1");//Create Folder ...
+                //this.selectItemAt(0);
             </handler>
             <handler name="onselect" args="sel">
-                if (sel.value == "1") {
-                	
-                } else if (sel.value == "2") {
-                	
-                } else if (sel.value == "3") {
-                	
-                } else if (sel.value == "4") {
-                	
-                }
+            	<![CDATA[
+            		if ($debug) debug.write("onselect :: ",sel.value);
+	                if (sel.value == "-1") {
+	                	//Init Add Folder Dialog
+	                	parent.parent._Buttons._addFolder.onclick.sendEvent(null);
+	                } else if (Number(sel.value) > 0) {
+	                	parent.parent._table.moveToFolderById(Number(sel.value));
+	                }
+                ]]>
             </handler>
         </resetCombobox>
 	</view>

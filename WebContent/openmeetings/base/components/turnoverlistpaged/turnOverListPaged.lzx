@@ -87,10 +87,12 @@
             if ($debug) Debug.write("this._selectedRefObj LENGTH ",this._selectedRefObj.length);
         
             for (var i=0;i<this._innerlist._inn._inn.subviews.length;i++){
-            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
-	            this._innerlist._inn._inn.subviews[i].isselected = true;
-                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
-                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+            	if (this._innerlist._inn._inn.subviews[i].clickable) {
+	            	this._innerlist._inn._inn.subviews[i].setAttribute("itemSelected",true);
+		            this._innerlist._inn._inn.subviews[i].isselected = true;
+	                this._innerlist._inn._inn.subviews[i].onmouseout.sendEvent();
+	                this._selected.push(this._innerlist._inn._inn.subviews[i]);
+            	}
 	        }
         
         ]]>

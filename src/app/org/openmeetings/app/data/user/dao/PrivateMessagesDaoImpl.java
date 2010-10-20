@@ -382,19 +382,33 @@ public class PrivateMessagesDaoImpl {
 	}
 	
 	
-	public Long countFolderPrivateMessagesByUser(Long toUserId, Long privateMessageFolderId) {
+	public Long countFolderPrivateMessagesByUser(Long toUserId, Long privateMessageFolderId, String search) {
 		try {
 			
 			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
 						"where c.isTrash = false " +
+						"AND c.owner.user_id = :toUserId " +
 						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-			
 
+			if (search.length() != 0) {
+				hql += "AND ( ";
+				hql += "lower(c.subject) LIKE lower(:search) ";
+				hql += "OR lower(c.message) LIKE lower(:search) ";
+				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
+				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
+				hql += "OR lower(c.from.login) LIKE lower(:search) ";
+				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += " ) ";
+			}
+			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
 			query.setLong("toUserId", toUserId);
+			if (search.length() != 0) {
+				query.setString("search", "%"+search+"%");
+			}
 			query.setLong("privateMessageFolderId", privateMessageFolderId);
 			List ll = query.list();
 			tx.commit();
@@ -408,13 +422,25 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
-	public List<PrivateMessages> getFolderPrivateMessagesByUser(Long toUserId, String orderBy, 
+	public List<PrivateMessages> getFolderPrivateMessagesByUser(Long toUserId, String search, String orderBy, 
 			int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
 			
 			String hql = "select c from PrivateMessages c " +
-						"where c.isTrash = false " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
+							"where c.isTrash = :isTrash " +
+							"AND c.owner.user_id = :toUserId " +
+							"AND c.privateMessageFolderId = :privateMessageFolderId ";
+
+			if (search.length() != 0) {
+				hql += "AND ( ";
+				hql += "lower(c.subject) LIKE lower(:search) ";
+				hql += "OR lower(c.message) LIKE lower(:search) ";
+				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
+				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
+				hql += "OR lower(c.from.login) LIKE lower(:search) ";
+				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += " ) ";
+			}
 			
 			hql += "ORDER BY "+orderBy;
 			
@@ -423,20 +449,29 @@ public class PrivateMessagesDaoImpl {
 			} else {
 				hql += " DESC";
 			}
-
+			
+			log.debug("HQL "+hql);
+			
+			log.debug("privateMessageFolderId "+privateMessageFolderId);
+			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
 			query.setLong("toUserId", toUserId);
+			query.setBoolean("isTrash", false);
 			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			if (search.length() != 0) {
+				query.setString("search", "%"+search+"%");
+			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-			return ll;	
+			return ll;
+			
 		} catch (Exception e) {
 			log.error("[getFolderPrivateMessagesByUser]",e);
 		}
@@ -536,7 +571,7 @@ public class PrivateMessagesDaoImpl {
 		try {
 			
 			String hql = "UPDATE PrivateMessages c " +
-						"SET c.privateMessageFolderId = :privateMessageFolderId " +
+						"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Object idf = HibernateUtil.createSession();
