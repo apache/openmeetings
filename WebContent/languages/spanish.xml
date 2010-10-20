@@ -3704,4 +3704,79 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1230" name="user contacts">
     <value>User denied as contact and removed from pending contact list!</value>
   </string>
+  <string id="1231" name="user contacts">
+    <value>There is no such contact!</value>
+  </string>
+  <string id="1232" name="user contacts">
+    <value>Would you really like to remove that contact?</value>
+  </string>
+  <string id="1233" name="user contacts">
+    <value>Confirm contact removal</value>
+  </string>
+  <string id="1234" name="user contacts">
+    <value>Delete contact from list</value>
+  </string>
+  <string id="1235" name="user profile">
+    <value>User Profile</value>
+  </string>
+  <string id="1236" name="user profile">
+    <value>Show user profile</value>
+  </string>
+  <string id="1237" name="private message">
+    <value>Messages</value>
+  </string>
+  <string id="1238" name="private message">
+    <value>Search</value>
+  </string>
+  <string id="1239" name="private message">
+    <value>Select all</value>
+  </string>
+  <string id="1240" name="private message">
+    <value>Select none</value>
+  </string>
+  <string id="1241" name="private message">
+    <value>Select unread</value>
+  </string>
+  <string id="1242" name="private message">
+    <value>Select read</value>
+  </string>
+  <string id="1243" name="private message">
+    <value>Move to folder ...</value>
+  </string>
+  <string id="1244" name="private message">
+    <value>Add new folder ...</value>
+  </string>
+  <string id="1245" name="private message">
+    <value>Delete</value>
+  </string>
+  <string id="1246" name="private message">
+    <value>Deleted mails are still in your trash folder!</value>
+  </string>
+  <string id="1247" name="private message">
+    <value>Mark unread</value>
+  </string>
+  <string id="1248" name="private message">
+    <value>Mark read</value>
+  </string>
+  <string id="1249" name="private message">
+    <value>Answer</value>
+  </string>
+  <string id="1250" name="private message">
+    <value>Answer everybody</value>
+  </string>
+  <string id="1251" name="private message">
+    <value>Forward</value>
+  </string>
+  <string id="1252" name="private message">
+    <value>Actions ...</value>
+  </string>
+  <string id="1253" name="user contacts">
+    <value>Send private message</value>
+  </string>
+  <string id="1254" name="private message">
+    <value>Nothing selected!</value>
+  </string>
+  <string id="1255" name="private message">
+    <value>Move to Inbox</value>
+  </string>
 </language>
