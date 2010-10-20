@@ -23,6 +23,7 @@ import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -30,6 +31,7 @@ import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
 import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.beans.user.Users;
@@ -1139,39 +1141,116 @@ public class UserService {
 		return null;
 	}
 	
+	public List<PrivateMessageFolder> getPrivateMessageFoldersByUser(String SID) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+		    Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+		    // admins only
+		    if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			   
+	    		return PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderByUserId(users_id);
+			   
+		    }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[getPrivateMessageFolderByUser]",err);
+ 	   }
+ 	   return null;
+    }
+	
+	public Long addPrivateMessageFolder(String SID, String folderName) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		   // admins only
+ 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 			   
+ 			  PrivateMessageFolderDaoImpl.getInstance().addPrivateMessageFolder(folderName, users_id);
+ 			   
+ 		   }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[addPrivateMessageFolder]",err);
+ 	   }
+ 	   return null;
+    }
+	
+	public Long updatePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		   // admins only
+ 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 			   
+ 			  PrivateMessageFolder privateMessageFolder = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderById(privateMessageFolderId);
+ 			   
+ 			  privateMessageFolder.setFolderName(folderName);
+ 			  privateMessageFolder.setUpdated(new Date());
+ 			 
+ 			  PrivateMessageFolderDaoImpl.getInstance().updatePrivateMessages(privateMessageFolder);
+ 			 
+ 			  return privateMessageFolderId;
+ 			 
+ 		   }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[updatePrivateMessageFolder]",err);
+ 	   }
+ 	   return null;
+    }
+	
+	public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		   // admins only
+ 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 			   
+ 			  PrivateMessageFolder privateMessageFolder = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderById(privateMessageFolderId);
+ 			   
+ 			  PrivateMessageFolderDaoImpl.getInstance().deletePrivateMessages(privateMessageFolder);
+ 			 
+ 		   }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[deletePrivateMessageFolder]",err);
+ 	   }
+ 	   return null;
+    }
+	
 	 
-	   public Boolean kickUserByPublicSID(String SID, String publicSID) {
-	 	   try {
-	 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	 		   // admins only
-	 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-	 			   
-	 			   RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
-	 			   
-	 			   if (rcl == null) {
-	 				   return true;
-	 			   }
-	 			   String scopeName = "hibernate";
-	 			   if (rcl.getRoom_id() != null) {
-	 				   scopeName = rcl.getRoom_id().toString();
-	 			   }
-	 			   IScope currentScope = this.scopeApplicationAdapter.getRoomScope(scopeName);
-	 			   
-	 			   HashMap<Integer,String> messageObj = new HashMap<Integer,String>();
-	 			   messageObj.put(0, "kick");
-	 			   
-	 			   this.scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
-	 			   
-	 			   
-	 			   this.scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
-	 			   
-	 			   return true;
-	 		   }
-	 		   
-	 	   } catch (Exception err) {
-	 		   log.error("[kickUserByStreamId]",err);
-	 	   }
-	 	   return null;
-	    }
+	public Boolean kickUserByPublicSID(String SID, String publicSID) {
+ 	   try {
+ 		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		   // admins only
+ 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 			   
+ 			   RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
+ 			   
+ 			   if (rcl == null) {
+ 				   return true;
+ 			   }
+ 			   String scopeName = "hibernate";
+ 			   if (rcl.getRoom_id() != null) {
+ 				   scopeName = rcl.getRoom_id().toString();
+ 			   }
+ 			   IScope currentScope = this.scopeApplicationAdapter.getRoomScope(scopeName);
+ 			   
+ 			   HashMap<Integer,String> messageObj = new HashMap<Integer,String>();
+ 			   messageObj.put(0, "kick");
+ 			   
+ 			   this.scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
+ 			   
+ 			   
+ 			   this.scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+ 			   
+ 			   return true;
+ 		   }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[kickUserByStreamId]",err);
+ 	   }
+ 	   return null;
+    }
 }

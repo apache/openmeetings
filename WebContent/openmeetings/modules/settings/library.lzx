@@ -18,7 +18,12 @@
 			  
 	<resource name="private_message_trash_rsc" 
 			  src="resources/trash.png" />	
-			  
+	
+	<resource name="private_message_folder_add_rsc" 
+			  src="resources/folder-add.png" />		
+	
+	<resource name="private_message_folder_rsc" 
+			  src="resources/folder.png" />			  
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     

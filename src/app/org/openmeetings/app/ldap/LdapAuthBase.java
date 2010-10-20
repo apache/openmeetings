@@ -103,6 +103,7 @@ public class LdapAuthBase {
 	    		authContext = new InitialDirContext(ldapAuthenticateProperties);
 	    	} catch (Exception ae){
 	    		log.error("\n\nAuthentification on LDAP Server failed : " + ae.getMessage());
+	    		log.error("[Authentification on LDAP Server failed]",ae);
 	    		return false;
 	    	}
 	    }
@@ -113,6 +114,7 @@ public class LdapAuthBase {
 	    		authContext = new InitialDirContext(ldapAuthenticateProperties);
 	    	}catch(Exception e){
 	    		log.error("\n\nConnection to LDAP Server failed : " + e.getMessage());
+	    		log.error("[Connection to LDAP Server failed]",e);
 	    		return false;
 	    	}
 	    }
@@ -208,6 +210,7 @@ public class LdapAuthBase {
 			  }
 		}catch(Exception e){
 			log.error("Error occured on LDAP Search : " + e.getMessage());
+			log.error("Error occured on LDAP Search : " , e);
 		}
 		
 		return result;
@@ -241,6 +244,7 @@ public class LdapAuthBase {
 			}
 		} catch (NamingException e) {
 			log.error("Error occured on LDAP Search : " + e.getMessage());
+			log.error("Error occured on LDAP Search : " , e);
 		}
 		return uidCnDictionary;
 	}

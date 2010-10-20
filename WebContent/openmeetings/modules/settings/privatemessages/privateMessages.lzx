@@ -24,7 +24,7 @@
 	
 	<view name="_status" width="152">
 		
-		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5">
+		<simpleLabelRoundButton labelid="1207" y="5" width="142" x="5" height="22">
 			<handler name="onclick">
 				parent.parent.newMessage(null);
 			</handler>
@@ -36,26 +36,89 @@
 	
 	<view name="_Buttons" width="152" y="35" layout="axis:y;spacing:1">
 		
-		<simpleLabelButton labelid="1222" width="142" x="5">
+		<simpleLabelButton labelid="1222" width="142" x="5" height="22">
 			<handler name="onclick">
 				parent.parent._table.getInbox.doCall();
 			</handler>
 			<view resource="private_message_receive_rsc" x="10" ></view>
 		</simpleLabelButton>
 		
-		<simpleLabelButton labelid="1223" width="142" x="5">
+		<simpleLabelButton labelid="1223" width="142" x="5" height="22">
 			<handler name="onclick">
 				parent.parent._table.getSend.doCall();
 			</handler>
 			<view resource="private_message_send_rsc" x="10" ></view>
 		</simpleLabelButton>
 		
-		<simpleLabelButton labelid="1224" width="142" x="5">
+		<simpleLabelButton labelid="1224" width="142" x="5" height="22">
 			<handler name="onclick">
 				//this.setAttribute("enabled",false);
 				parent.parent._table.getTrash.doCall();
 			</handler>
 			<view resource="private_message_trash_rsc" x="10" y="2"></view>
+		</simpleLabelButton>
+		
+		<view width="153" height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		
+		<view name="_privateFolders" layout="axis:y;spacing:1">
+			
+			<handler name="oninit">
+				this.getPrivateMessageFoldersByUser.doCall();
+			</handler>
+			
+			<method name="removeAll">
+				<![CDATA[
+					for (var eg in this.subviews) {
+						this.subviews[eg].destroy();
+					}
+				]]>
+			</method>
+			<!--
+			public List<PrivateMessageFolder> getPrivateMessageFoldersByUser(String SID)
+			 -->
+			<netRemoteCallHib name="getPrivateMessageFoldersByUser" funcname="userservice.getPrivateMessageFoldersByUser" 
+					  remotecontext="$once{ canvas.thishib }" >  
+				<attribute name="isTrash" value="false" type="boolean"/>        
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("getPrivateMessageFoldersByUser: ",value);
+			    		parent.loadResult(value);
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>	
+		    
+		    <method name="loadResult" args="tList">
+		    	<![CDATA[
+		    	
+		    		this.removeAll();
+		    		
+		    		for (var i=0;i<tList.length;i++) {
+		    			new lz.privateMessageFolder(this,{
+				    				privateMessageFolderId:tList[i].privateMessageFolderId,
+				    				text:tList[i].folderName
+				    			});
+		    		}
+		    	
+		    	]]>
+		    </method>
+		    
+	    	
+			
+		</view>
+		
+		<view width="153" height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		
+		<simpleLabelButton labelid="1258" width="142" x="5" height="22">
+			<handler name="onclick">
+				//this.setAttribute("enabled",false);
+				new lz.newPrivateMessageFolder(canvas,{refObj:this});
+			</handler>
+			<method name="sendReload">
+				parent._privateFolders.getPrivateMessageFoldersByUser.doCall();
+			</method>
+			<view resource="private_message_folder_add_rsc" x="10" y="2"></view>
+			<labelTooltip labelid="1259" />
 		</simpleLabelButton>
 		
 	</view>
