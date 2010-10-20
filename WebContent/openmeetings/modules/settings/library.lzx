@@ -8,7 +8,7 @@
 			  src="resources/select_part.png" />	
 			  
 	<resource name="private_message_send_rsc" 
-			  src="resources/mail-closed-alt-send.png" />	 
+			  src="resources/folder_sent_mail.png" />	 
 			  
 	<resource name="private_message_receive_rsc" 
 			  src="resources/mail-closed-alt-receive.png" />	
@@ -20,10 +20,13 @@
 			  src="resources/trash.png" />	
 	
 	<resource name="private_message_folder_add_rsc" 
-			  src="resources/folder-add.png" />		
+			  src="resources/folder_new.png" />		
 	
 	<resource name="private_message_folder_rsc" 
-			  src="resources/folder.png" />			  
+			  src="resources/folder.png" />	
+			  
+	<resource name="private_message_inbox_rsc" 
+			  src="resources/folder_inbox.png" />			  
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     

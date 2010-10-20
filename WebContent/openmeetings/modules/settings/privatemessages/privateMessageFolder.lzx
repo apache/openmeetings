@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="privateMessageFolder" extends="simpleLabelButton" width="142" x="5" height="22">
+<class name="privateMessageFolder" extends="view" x="16" >
 	
+	<attribute name="folderName" value="" type="string" />
 	<attribute name="privateMessageFolderId" value="0" type="number" />
 	
 	<handler name="onclick">
 		//this.setAttribute("enabled",false);
-		parent.loadPrivateMessage(this.privateMessageFolderId);
+		parent.loadPrivateMessage(this.privateMessageFolderId,this);
 	</handler>
 	
-	<view resource="private_message_folder_rsc" x="10" y="2"></view>
+	<view resource="private_message_folder_rsc" x="0" y="0" />
 	
-	<labelTooltip labelid="1257" />	   
+	<labelText name="_text" fontstyle="bold" x="20" text="$once{ parent.folderName }" />
 						  
 </class>	
 	

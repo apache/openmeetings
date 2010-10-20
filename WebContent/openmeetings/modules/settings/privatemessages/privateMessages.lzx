@@ -6,6 +6,10 @@
 	
 	<attribute name="newMessageActive" value="false" type="boolean" />
 	
+	<handler name="oninit">
+		this._Buttons._inbox.onclick.sendEvent(null);
+	</handler>
+	
 	<method name="newMessage" args="userObject">
 		if (this.newMessageActive) {
 			this._newPrivateMessage.destroy();
@@ -34,8 +38,46 @@
 		
 	</view>
 	
-	<view name="_Buttons" width="152" y="35" layout="axis:y;spacing:1">
+	<view name="_Buttons" width="152" y="35" layout="axis:y;spacing:2">
 		
+		<attribute name="selectMenuItemObj" value="null" />
+		
+		<method name="selectMenuItem" args="refObj">
+			if (this.selectMenuItemObj != null) {
+				this.selectMenuItemObj._text.setAttribute("bgcolor",0xEEF0EB);
+			}
+			this.selectMenuItemObj = refObj;
+			this.selectMenuItemObj._text.setAttribute("bgcolor",0xD3D3D3);
+		</method>
+		
+		<view name="_inbox" x="16">
+			<handler name="onclick">
+				parent.parent._table.getInbox.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_inbox_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1222" />
+		</view>
+		
+		<view name="_send" x="16">
+			<handler name="onclick">
+				parent.parent._table.getSend.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_send_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1223" />
+		</view>
+		
+		<view name="_trash" x="16">
+			<handler name="onclick">
+				parent.parent._table.getTrash.doCall();
+				parent.selectMenuItem(this);
+			</handler>
+			<view resource="private_message_trash_rsc" x="0" ></view>
+			<labelText x="20" name="_text" fontstyle="bold" labelid="1224" />
+		</view>
+		
+		<!--
 		<simpleLabelButton labelid="1222" width="142" x="5" height="22">
 			<handler name="onclick">
 				parent.parent._table.getInbox.doCall();
@@ -57,8 +99,23 @@
 			</handler>
 			<view resource="private_message_trash_rsc" x="10" y="2"></view>
 		</simpleLabelButton>
+		 -->
+		 
+		<view height="1"></view>
+		 
+		<simpleLabelButton labelid="1258" width="142" x="5" height="22">
+			<handler name="onclick">
+				//this.setAttribute("enabled",false);
+				new lz.newPrivateMessageFolder(canvas,{refObj:this});
+			</handler>
+			<method name="sendReload">
+				parent._privateFolders.getPrivateMessageFoldersByUser.doCall();
+			</method>
+			<view resource="private_message_folder_add_rsc" x="10" y="2"></view>
+			<labelTooltip labelid="1259" />
+		</simpleLabelButton>
 		
-		<view width="153" height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		<view height="1"></view>
 		
 		<view name="_privateFolders" layout="axis:y;spacing:1">
 			
@@ -88,6 +145,10 @@
 		    	</handler>
 		    </netRemoteCallHib>	
 		    
+		    <method name="loadPrivateMessage" args="privateMessageFolderId,refObj">
+		    	parent.selectMenuItem(refObj);
+		    </method>
+		    
 		    <method name="loadResult" args="tList">
 		    	<![CDATA[
 		    	
@@ -96,7 +157,7 @@
 		    		for (var i=0;i<tList.length;i++) {
 		    			new lz.privateMessageFolder(this,{
 				    				privateMessageFolderId:tList[i].privateMessageFolderId,
-				    				text:tList[i].folderName
+				    				folderName:tList[i].folderName
 				    			});
 		    		}
 		    	
@@ -106,20 +167,6 @@
 	    	
 			
 		</view>
-		
-		<view width="153" height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
-		
-		<simpleLabelButton labelid="1258" width="142" x="5" height="22">
-			<handler name="onclick">
-				//this.setAttribute("enabled",false);
-				new lz.newPrivateMessageFolder(canvas,{refObj:this});
-			</handler>
-			<method name="sendReload">
-				parent._privateFolders.getPrivateMessageFoldersByUser.doCall();
-			</method>
-			<view resource="private_message_folder_add_rsc" x="10" y="2"></view>
-			<labelTooltip labelid="1259" />
-		</simpleLabelButton>
 		
 	</view>
 	
@@ -158,7 +205,7 @@
 			this.addHeaderItemOrdered(1203,this.width-316,"c.subject",false,false);
 			this.addHeaderItemOrdered(1204,120,"c.inserted",true,true);
 			
-			this.getInbox.doCall();
+			//this.getInbox.doCall();
 		</handler>
 		
 		<handler name="onload">
@@ -788,7 +835,6 @@
         	<handler name="onclick">
         		parent.parent._table.moveToTrash(false);
         	</handler>
-        	<labelTooltip labelid="1246" />
         </simpleLabelButton>
         
         <simpleLabelButton name="_finalDelete" labelid="1256" visibility="hidden"
