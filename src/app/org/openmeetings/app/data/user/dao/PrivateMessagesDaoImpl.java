@@ -443,7 +443,7 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 
-	public int updatePrivateMessagesToTrash(List privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
+	public int updatePrivateMessagesToTrash(List<Long> privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
 		try {
 			
 			String hql = "UPDATE PrivateMessages c " +
@@ -458,16 +458,42 @@ public class PrivateMessagesDaoImpl {
 			query.setLong("privateMessageFolderId", privateMessageFolderId);
 			query.setParameterList("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
+			
+			//Refresh the Entities in the Cache as Hibernate will not do it!
+			for (Long privateMessageId : privateMessageIds) {
+				String hqlSel = "select c from PrivateMessages c " +
+								"where c.privateMessageId = :privateMessageId ";
+	
+				Query querySel = session.createQuery(hqlSel); 
+				querySel.setLong("privateMessageId", privateMessageId);
+				
+				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				
+				if (privateMessages != null) {
+					session.refresh(privateMessages);
+				}
+			}
+			
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
+			
+			
+			
+			
+			
+			
 			return updatedEntities;
+			
+			
+			
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesToTrash]",e);
 		}
 		return -1;
 	}
 	
-	public int updatePrivateMessagesReadStatus(List privateMessageIds, Boolean isRead) {
+	public int updatePrivateMessagesReadStatus(List<Long> privateMessageIds, Boolean isRead) {
 		try {
 			
 			String hql = "UPDATE PrivateMessages c " +
@@ -481,6 +507,22 @@ public class PrivateMessagesDaoImpl {
 			query.setBoolean("isRead", isRead);
 			query.setParameterList("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
+			
+			//Refresh the Entities in the Cache as Hibernate will not do it!
+			for (Long privateMessageId : privateMessageIds) {
+				String hqlSel = "select c from PrivateMessages c " +
+								"where c.privateMessageId = :privateMessageId ";
+	
+				Query querySel = session.createQuery(hqlSel); 
+				querySel.setLong("privateMessageId", privateMessageId);
+				
+				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				
+				if (privateMessages != null) {
+					session.refresh(privateMessages);
+				}
+			}
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return updatedEntities;
