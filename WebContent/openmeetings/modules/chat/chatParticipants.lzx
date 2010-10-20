@@ -4,10 +4,12 @@
 <!--- it shows chat participants. -->
 <class name="chatParticipants" extends="view" height="40" clickable="true"
 	   width="$once{ parent.width }" bgcolor="$once{ canvas.bgColorMenuItems }">
+	
 	<attribute name="user_id" value="0" type="number" />
 	<attribute name="username" value="" type="string" />
 	<attribute name="connectedSince" value="" type="string" />
 	<attribute name="publicSID" value="" type="string" />
+	
 	<handler name="oninit">
 		<![CDATA[
 			if($debug) Debug.write("chatParticipants/WIDTH: "+this.width);
@@ -22,9 +24,55 @@
 	        //Debug.write("TIME: "+this.usertime);
         ]]>
 	</handler>
+	
+	<!--
+    public Long requestUserToContactList(String SID, Long userToAdd_id, 
+                String domain, String port, String webapp)
+     -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.user_id; </method></netparam>
+        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("requestUserToContactList: ",value);
+                if (value > 0) {
+                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
+	
 	<image name="_userpic" />
 	<text text="$once{ parent.username }" x="40" resize="false"
 		  width="$once{ parent.width - 40 }" />	
+		  
+	<miniIcons name="add" resource="edit_add_rsc" width="16" height="16" 
+                   y="20" x="$once{ parent.width - 60 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            if (hib.userobject.user_id == parent.user_id) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+                return;
+            }
+            parent.requestUserToContactList.doCall();
+        </handler>
+        <labelTooltip labelid="1186" />
+    </miniIcons>
+	
+	<miniIcons resource="user_profile_rsc" width="16" height="16" 
+               y="20" x="$once{ parent.width - 40 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.viewUserProfileWindow(canvas,{
+                                userId:parent.user_id
+                            });
+        </handler>
+        <labelTooltip labelid="1236" />
+    </miniIcons>    
 	
 	<miniIcons resource="start_conference2_rsc" width="16" height="16" 
 			   y="20" x="$once{ parent.width - 20 }" showhandcursor="true">

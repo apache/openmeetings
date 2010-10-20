@@ -55,7 +55,7 @@
         <labelTooltip labelid="581" />
     </labelCheckbox>
 
-    <view name="_button" layout="axis:x;spacing:2" y="22" align="right">
+    <view name="_button" width="140" y="22" align="right">
         
         <attribute name="objMessage" value="null" />
         <simpleLabelButton labelid="220" name="_button" width="80" height="21"> 
@@ -82,6 +82,19 @@
             </handler>
         </simpleLabelButton>
 
+        <miniIcons y="1" x="80" resource="smile_chat_log_rsc" width="16" height="16" 
+                   showhandcursor="true">
+            <handler name="onclick">
+                var pick = new lz.emotIconsSelector(canvas,{
+                        btnRef:this.parent.parent,
+                        x:(this.getAttributeRelative('x',canvas)-140),
+                        y:(this.getAttributeRelative('y',canvas)-140)
+                    });
+                lz.ModeManager.makeModal( pick );
+            </handler>
+            <labelTooltip labelid="445" />
+        </miniIcons>
+        <!--
 		<blueButton name="_show_emots" y="0" resourceItem="smile_chat_log_rsc"
         			x_insetResource="2" y_insetResource="2" width="20" height="20" 
         			width_insetResource="16" height_insetResource="16">
@@ -96,7 +109,23 @@
             </handler>
             <labelTooltip labelid="445" />
         </blueButton>  
+         -->
         
+        <miniIcons y="1" x="100" resource="copy_chat_log_rsc" width="16" height="16" 
+                   showhandcursor="true">
+            <handler name="onclick">
+                <![CDATA[
+                
+                    var tString = canvas._overallchatcontent.getLog();
+                
+                    new lz.showChatLog(canvas,{
+                                    error:tString
+                                });
+                ]]>
+            </handler>
+            <labelTooltip labelid="1200" />
+        </miniIcons>
+        <!--
         <blueButton width="20" height="20" resourceItem="copy_chat_log_rsc"
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
@@ -111,8 +140,17 @@
                 ]]>
             </handler>
             <labelTooltip labelid="1200" />
-        </blueButton>  
-                
+        </blueButton> 
+         --> 
+        
+        <miniIcons y="1" x="120" resource="button_cancel_rsc" width="16" height="16" 
+                   showhandcursor="true">
+            <handler name="onclick">
+                parent.clearOverallChat.doCall();
+            </handler>
+            <labelTooltip labelid="442" />
+        </miniIcons>      
+        <!--  
         <blueButton width="20" height="20" resourceItem="button_cancel_rsc"
         			x_insetResource="2" y_insetResource="2" 
         			width_insetResource="16" height_insetResource="16">
@@ -122,6 +160,7 @@
             </handler>
             <labelTooltip labelid="442" />
         </blueButton>
+         -->
 
 		<!--
         <simpleLabelButton name="_show_emots" y="0">

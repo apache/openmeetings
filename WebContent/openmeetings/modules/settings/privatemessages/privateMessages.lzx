@@ -44,9 +44,11 @@
 		
 		<method name="selectMenuItem" args="refObj">
 			if (this.selectMenuItemObj != null) {
+				this.selectMenuItemObj.selected = false;
 				this.selectMenuItemObj._text.setAttribute("bgcolor",0xEEF0EB);
 			}
 			this.selectMenuItemObj = refObj;
+			this.selectMenuItemObj.selected = true;
 			this.selectMenuItemObj._text.setAttribute("bgcolor",0xD3D3D3);
 		</method>
 		
@@ -56,6 +58,7 @@
 		</method>
 		
 		<view name="_inbox" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
 			<handler name="onclick">
 				parent.parent._table.getInbox.doCall();
 				parent.selectMenuItem(this);
@@ -65,6 +68,7 @@
 		</view>
 		
 		<view name="_send" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
 			<handler name="onclick">
 				parent.parent._table.getSend.doCall();
 				parent.selectMenuItem(this);
@@ -74,6 +78,7 @@
 		</view>
 		
 		<view name="_trash" x="16" width="130">
+			<attribute name="selected" value="false" type="boolean" />
 			<handler name="onclick">
 				parent.parent._table.getTrash.doCall();
 				parent.selectMenuItem(this);
@@ -144,12 +149,17 @@
 			 -->
 			<netRemoteCallHib name="getPrivateMessageFoldersByUser" funcname="userservice.getPrivateMessageFoldersByUser" 
 					  remotecontext="$once{ canvas.thishib }" >  
-				<attribute name="isTrash" value="false" type="boolean"/>        
+				<attribute name="onlyUpdateDropDown" value="false" type="boolean"/>    
 				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
 		    	<handler name="ondata" args="value">
 		    		<![CDATA[
 			    		if ($debug) Debug.write("getPrivateMessageFoldersByUser: ",value);
-			    		parent.loadResult(value);
+			    		if (this.onlyUpdateDropDown) {
+			    			this.onlyUpdateDropDown = false;
+			    			parent.parent.parent._actionButtons._move.initItems(value);
+			    		} else {
+			    			parent.loadResult(value);
+			    		}
 		    		]]>
 		    	</handler>
 		    </netRemoteCallHib>	
@@ -167,6 +177,14 @@
 		    	this.deletePrivateMessageFolder.privateMessageFolderId = privateMessageFolderId;
 		    	this.deletePrivateMessageFolder.doCall();
 		    </method>
+		    
+		    <!--
+				Send update to drop down list of folder names 
+			 -->
+			<method name="updateConnectedFolderBox">
+				this.getPrivateMessageFoldersByUser.onlyUpdateDropDown = true;
+				this.getPrivateMessageFoldersByUser.doCall();
+			</method>
 		    
 		    <!--
 		    public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName)
