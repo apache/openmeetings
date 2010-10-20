@@ -1017,6 +1017,26 @@ public class UserService {
 		return null;
 	}
 	
+	public Long getFolderCount(String SID, Long privateMessageFolderId) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+				return PrivateMessagesDaoImpl.getInstance().countFolderPrivateMessagesByUser(users_id,privateMessageFolderId, "");
+				
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getInbox]", err);
+		}
+		return null;
+	}
+	
 	public Integer moveMailsToFolder(String SID, List privateMessageIntsIds,
 			Long newFolderId) {
 		try {
@@ -1145,7 +1165,7 @@ public class UserService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 		    Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-		    // admins only
+		    // users only
 		    if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 			   
 	    		return PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderByUserId(users_id);
@@ -1162,7 +1182,7 @@ public class UserService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
  		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
- 		   // admins only
+ 		   // users only
  		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
  			   
  			  PrivateMessageFolderDaoImpl.getInstance().addPrivateMessageFolder(folderName, users_id);
@@ -1179,7 +1199,7 @@ public class UserService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
  		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
- 		   // admins only
+ 		   // users only
  		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
  			   
  			  PrivateMessageFolder privateMessageFolder = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderById(privateMessageFolderId);
@@ -1199,11 +1219,11 @@ public class UserService {
  	   return null;
     }
 	
-	public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName) {
+	public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
  		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
- 		   // admins only
+ 		   // users only
  		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
  			   
  			  PrivateMessageFolder privateMessageFolder = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderById(privateMessageFolderId);
@@ -1223,7 +1243,7 @@ public class UserService {
  	   try {
  		   Long users_id = Sessionmanagement.getInstance().checkSession(SID);
  		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
- 		   // admins only
+ 		   // users only
  		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
  			   
  			   RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);

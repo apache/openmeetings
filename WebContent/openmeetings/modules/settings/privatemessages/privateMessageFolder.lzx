@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="privateMessageFolder" extends="view" x="16" >
+<class name="privateMessageFolder" extends="view" x="16" width="136">
 	
 	<attribute name="folderName" value="" type="string" />
 	<attribute name="privateMessageFolderId" value="0" type="number" />
@@ -14,6 +14,38 @@
 	<view resource="private_message_folder_rsc" x="0" y="0" />
 	
 	<labelText name="_text" fontstyle="bold" x="20" text="$once{ parent.folderName }" />
+	
+	<miniIcons name="deny" y="1" x="120" resource="button_cancel_rsc" width="16" height="16" 
+	               showhandcursor="true">
+		<handler name="onclick">
+			parent.getFolderCount.doCall();
+        </handler>
+        <labelTooltip labelid="1262" />
+    </miniIcons>
+    
+    <!--
+    public Long getFolderCount(String SID, Long privateMessageFolderId)
+     -->
+	<netRemoteCallHib name="getFolderCount" funcname="userservice.getFolderCount" 
+			  remotecontext="$once{ canvas.thishib }" >  
+		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+		<netparam><method name="getValue"> return parent.parent.privateMessageFolderId; </method></netparam>
+    	<handler name="ondata" args="value">
+    		<![CDATA[
+	    		if ($debug) Debug.write("getFolderCount: ",value);
+	    		if (value == 0) {
+	    			new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                   labelid:1262,labeliderror:1265,
+                                   refObj:this,showCheckBox:false});
+	    		} else {
+	    			new lz.labelerrorPopup(canvas,{errorlabelid:1263});
+	    		}
+    		]]>
+    	</handler>
+    	<method name="sendConfirmation" args="yesno" >
+            parent.parent.deleteFolder(parent.privateMessageFolderId,this);
+        </method>
+    </netRemoteCallHib>	
 						  
 </class>	
 	

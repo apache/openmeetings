@@ -50,7 +50,12 @@
 			this.selectMenuItemObj._text.setAttribute("bgcolor",0xD3D3D3);
 		</method>
 		
-		<view name="_inbox" x="16">
+		<method name="resetMenuItem">
+			this.selectMenuItemObj = null;
+			this._inbox.onclick.sendEvent(null);
+		</method>
+		
+		<view name="_inbox" x="16" width="130">
 			<handler name="onclick">
 				parent.parent._table.getInbox.doCall();
 				parent.selectMenuItem(this);
@@ -59,7 +64,7 @@
 			<labelText x="20" name="_text" fontstyle="bold" labelid="1222" />
 		</view>
 		
-		<view name="_send" x="16">
+		<view name="_send" x="16" width="130">
 			<handler name="onclick">
 				parent.parent._table.getSend.doCall();
 				parent.selectMenuItem(this);
@@ -68,7 +73,7 @@
 			<labelText x="20" name="_text" fontstyle="bold" labelid="1223" />
 		</view>
 		
-		<view name="_trash" x="16">
+		<view name="_trash" x="16" width="130">
 			<handler name="onclick">
 				parent.parent._table.getTrash.doCall();
 				parent.selectMenuItem(this);
@@ -120,8 +125,12 @@
 		<view name="_privateFolders" layout="axis:y;spacing:1">
 			
 			<handler name="oninit">
-				this.getPrivateMessageFoldersByUser.doCall();
+				this.reload();
 			</handler>
+			
+			<method name="reload">
+				this.getPrivateMessageFoldersByUser.doCall();
+			</method>
 			
 			<method name="removeAll">
 				<![CDATA[
@@ -150,6 +159,30 @@
 		    	parent.parent._table.privateMessageFolderId = privateMessageFolderId;
 		    	parent.parent._table.getFolder.doCall();
 		    </method>
+		    
+		    <method name="deleteFolder" args="privateMessageFolderId,refObj">
+		    	if (parent.selectMenuItemObj == refObj) {
+		    		parent.parent.resetMenuItem();
+		    	}
+		    	this.deletePrivateMessageFolder.privateMessageFolderId = privateMessageFolderId;
+		    	this.deletePrivateMessageFolder.doCall();
+		    </method>
+		    
+		    <!--
+		    public Long deletePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName)
+		     -->
+		    <netRemoteCallHib name="deletePrivateMessageFolder" funcname="userservice.deletePrivateMessageFolder" 
+					  remotecontext="$once{ canvas.thishib }" >  
+				<attribute name="privateMessageFolderId" value="0" type="number"/>        
+				<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+				<netparam><method name="getValue"> return parent.privateMessageFolderId; </method></netparam>
+		    	<handler name="ondata" args="value">
+		    		<![CDATA[
+			    		if ($debug) Debug.write("deletePrivateMessageFolder: ",value);
+			    		parent.reload();
+		    		]]>
+		    	</handler>
+		    </netRemoteCallHib>
 		    
 		    <method name="loadResult" args="tList">
 		    	<![CDATA[
