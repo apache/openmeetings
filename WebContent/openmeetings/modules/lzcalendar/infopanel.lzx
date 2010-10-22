@@ -83,6 +83,7 @@
         <attribute name="dataapply" value="false"/>
         
         <attribute name="appointementId" value="$path{ 'appointementId/@value' }" type="number" />
+        <attribute name="isConnectedEvent" value="$path{ 'isConnectedEvent/@value' }" type="boolean" />
         
         <attribute name="_erinnerungatr" value="null"/>
         <attribute name="roomtype" type="number" value="1" />
@@ -118,6 +119,21 @@
         </handler>
         
         <method name="saveOrUpdateAppointement">
+            <![CDATA[
+                
+                if ($debug) Debug.write("saveOrUpdateAppointement isConnectedEvent ",this.isConnectedEvent);
+            
+                if (this.isConnectedEvent) {
+                	new lz.confirmationSingle(canvas,{refObj:this,labelid:1273,
+                        labeliderror:1272,showCheckBox:false});
+                } else {
+                	this.sendConfirmation(true,true);
+                }
+                
+            ]]>
+        </method>
+        
+        <method name="sendConfirmation" args="confirm,bool">
         	<![CDATA[
         	
         		if ($debug) Debug.write("saveOrUpdateAppointement ",this.appointementId);

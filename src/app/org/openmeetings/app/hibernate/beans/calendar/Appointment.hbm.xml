@@ -27,5 +27,6 @@
     <property name="language_id" type="long" column="language_id"/>
     <property name="isPasswordProtected" type="boolean" column="is_password_protected"/>
     <property name="password" type="string" column="password"/>
+    <property name="isConnectedEvent" type="boolean" column="is_connected_event"/>
   </class>
 </hibernate-mapping>

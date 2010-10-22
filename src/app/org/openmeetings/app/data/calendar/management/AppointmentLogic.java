@@ -482,14 +482,16 @@ public class AppointmentLogic {
 			Date appointmentstart, Date appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, Long categoryId, 
 			Long remind, List mmClient , Long user_id, String baseUrl,
-			Long language_id, Boolean isPasswordProtected, String password){
+			Long language_id, Boolean isPasswordProtected, String password,
+			String iCalTimeZone){
 		
 		try {
 			
 			return AppointmentDaoImpl.getInstance().updateAppointment(appointmentId, 
 					appointmentName, appointmentDescription, appointmentstart, 
 					appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, 
-					mmClient, user_id, baseUrl, language_id, isPasswordProtected, password);
+					mmClient, user_id, baseUrl, language_id, isPasswordProtected, password,
+					iCalTimeZone);
 			
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
@@ -499,11 +501,11 @@ public class AppointmentLogic {
 	
 	public Long updateAppointmentByTime(Long appointmentId, 
 			Date appointmentstart, Date appointmentend, Long user_id, 
-			String baseUrl, Long language_id){
+			String baseUrl, Long language_id, String iCalTimeZone){
 		
 		try {
 			return AppointmentDaoImpl.getInstance().updateAppointmentByTime(appointmentId, 
-					appointmentstart, appointmentend, user_id, baseUrl, language_id);
+					appointmentstart, appointmentend, user_id, baseUrl, language_id, iCalTimeZone);
 		} catch (Exception err) {
 			log.error("[updateAppointment]",err);
 		}

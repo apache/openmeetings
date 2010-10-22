@@ -16,6 +16,7 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class CalendarService {
@@ -142,10 +143,13 @@ public class CalendarService {
 				Appointment app = AppointmentLogic.getInstance()
 						.getAppointMentById(appointmentId);
 
+				Users user = Usermanagement.getInstance().getUserById(users_id);
+				
 				return AppointmentLogic.getInstance().updateAppointmentByTime(
 						appointmentId, 
 						appointmentstart, appointmentend, 
-						users_id, baseurl, language_id);
+						users_id, baseurl, language_id, 
+						user.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -186,11 +190,14 @@ public class CalendarService {
 					Roommanagement.getInstance().updateRoomObject(room);
 				}
 
+				Users user = Usermanagement.getInstance().getUserById(users_id);
+				
 				return AppointmentLogic.getInstance().updateAppointment(
 						appointmentId, appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl, language_id, false, "");
+						users_id, baseurl, language_id, false, "", 
+						user.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);

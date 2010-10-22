@@ -154,6 +154,9 @@ public class CalendarServlet extends HttpServlet {
 						Element appointementId = event.addElement("appointementId");
 						appointementId.addAttribute("value",""+appointment.getAppointmentId());
 						
+						Element isConnectedEvent = event.addElement("isConnectedEvent");
+						isConnectedEvent.addAttribute("value",""+appointment.getIsConnectedEvent());
+						
 						Element summary = event.addElement("summary");
 						summary.addAttribute("value",appointment.getAppointmentName());
 						

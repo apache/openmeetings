@@ -816,6 +816,8 @@ public class UserService {
  		    		
  		    	recipients.add(from.getAdresses().getEmail());
  		    	
+ 		    	String sendJNameTimeZone = from.getOmTimeZone().getJname();
+ 		    	
  		    	for (String email : recipients) {
  		    		
  		    		//Map receipent = (Map) recipients.get(iter.next());
@@ -844,7 +846,9 @@ public class UserService {
  		    		if (bookedRoom) {
  		    			
  		    			//But add the appointment to everybody
- 		    			this.addAppointmentToUser(subject, message, to, recipients, room, appointmentstart, appointmentend, invitor, true);
+ 		    			this.addAppointmentToUser(subject, message, to, recipients, 
+ 		    						room, appointmentstart, appointmentend, invitor, 
+ 		    						true, sendJNameTimeZone);
  		    			
  		    		}
  		    	}
@@ -862,12 +866,13 @@ public class UserService {
  	 * Date appointmentend = calTo.getTime();
      */
     private void addAppointmentToUser(String subject, String message, Users to, List<String> recipients, Rooms room, 
-    		Date appointmentstart, Date appointmentend, Boolean invitor, Boolean isConnectedEvent) throws Exception {
+    		Date appointmentstart, Date appointmentend, Boolean invitor, 
+    		Boolean isConnectedEvent, String sendJNameTimeZone) throws Exception {
     	
     	Long appointmentId =  AppointmentDaoImpl.getInstance().addAppointment(subject, to.getUser_id(), "", message,
    				appointmentstart, appointmentend, false, false, 
    				false, false, 1L, 2L, room, to.getLanguage_id(), 
-   				false, "", isConnectedEvent, to.getOmTimeZone().getJname());
+   				false, "", isConnectedEvent, sendJNameTimeZone);
     	
     	for (String email : recipients) {
 	    		

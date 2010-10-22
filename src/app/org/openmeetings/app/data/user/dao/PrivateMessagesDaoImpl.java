@@ -642,5 +642,28 @@ public class PrivateMessagesDaoImpl {
 		}
 		return -1;
 	}
+	
+	public List<PrivateMessages> getPrivateMessagesByRoom(Long roomId) {
+		try {
+			
+			String hql = "select c from PrivateMessages c " +
+						"where c.room.rooms_id = :roomId ";
+			
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setLong("roomId", roomId);
+			List<PrivateMessages> ll = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return ll;	
+		} catch (Exception e) {
+			log.error("[getPrivateMessagesByRoom]",e);
+		}
+		return null;
+	}
 
 }
