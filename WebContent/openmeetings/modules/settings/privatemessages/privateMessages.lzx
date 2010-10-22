@@ -740,7 +740,7 @@
 		    		
 		    		parent.isInbox = false;
 		    		parent.isSend = false;
-		    		parent.isTrash = true;
+		    		parent.isTrash = false;
 		    		parent.isFolder = true;
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
@@ -774,13 +774,19 @@
             		parent._actionButtons._read.setAttribute("visibility","hidden");
             		parent._actionButtons._unread.setAttribute("visibility","hidden");
             		parent._actionButtons._finalDelete.setAttribute("visibility","visible");
-            	} else {
-            		parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
-            		parent._actionButtons._moveToInbox.setAttribute("visibility","hidden");
-            		parent._actionButtons._read.setAttribute("visibility","visible");
-            		parent._actionButtons._unread.setAttribute("visibility","visible");
-            		parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
-            	}
+            	} else if (this.isFolder) {
+                    parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
+                    parent._actionButtons._moveToInbox.setAttribute("visibility","visible");
+                    parent._actionButtons._read.setAttribute("visibility","visible");
+                    parent._actionButtons._unread.setAttribute("visibility","visible");
+                    parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
+                } else {
+                    parent._actionButtons._moveToTrash.setAttribute("visibility","visible");
+                    parent._actionButtons._moveToInbox.setAttribute("visibility","hidden");
+                    parent._actionButtons._read.setAttribute("visibility","visible");
+                    parent._actionButtons._unread.setAttribute("visibility","visible");
+                    parent._actionButtons._finalDelete.setAttribute("visibility","hidden");
+                }
             
             	this.renderList = rList;
             
@@ -932,7 +938,7 @@
 	<view name="_actionButtons" y="274" x="158" layout="axis:x;spacing:2">
 		<view resource="private_message_select_part_rsc"></view>
 		
-		<resetCombobox name="_action" width="100" 
+		<resetCombobox name="_action" width="90" 
 					   editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <handler name="oninit">
@@ -991,7 +997,7 @@
         	<labelTooltip labelid="1257" />
         </simpleLabelButton>
         
-        <resetCombobox name="_move" width="140" x="42"
+        <resetCombobox name="_move" width="120" x="42"
 					   editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <method name="initItems" args="tList">

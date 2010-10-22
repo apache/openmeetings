@@ -340,4 +340,6 @@ and some more references to temp-objects
  -->	
 <attribute name="cuserStatus" value="none" type="string"/>
 
+<attribute name="userSettingsModuleOpt" value="userProfile" type="string"/>
+
 </library>

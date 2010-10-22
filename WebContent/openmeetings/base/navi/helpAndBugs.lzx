@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="helpAndBugs" extends="view" x="${ parent.width-290 }" layout="axis:x;spacing:2">
+<class name="helpAndBugs" extends="view" x="${ parent.width-460 }" layout="axis:x;spacing:2">
+    <view name="btn0" width="170" height="26">
+        <handler name="onmouseover">
+            this._bg.setAttribute("visibility","visible");
+        </handler>
+        <handler name="onmouseout">
+            this._bg.setAttribute("visibility","hidden");
+        </handler>
+        <handler name="onclick">
+        	canvas.userSettingsModuleOpt = "contactMessages";
+            quicklinkAct("userSettingsModule");
+        </handler>
+        <view name="_bg" visibility="hidden" width="$once{ parent.width }" y="4" opacity="0.4"
+            bgcolor="$once{ canvas.baseMouseOvercolorizer }" height="$once{ parent.height-4 }" />
+        <labelText labelid="1188" x="10" y="6" fontsize="12" fgcolor="$once{ canvas.fontColorHeader }"/>
+    </view>
+    <view bgcolor="0x3C86C3" y="10" height="10" width="1" />
     <view name="btn1" width="80" height="26">
         <handler name="onmouseover">
             this._bg.setAttribute("visibility","visible");
@@ -10,6 +26,7 @@
             this._bg.setAttribute("visibility","hidden");
         </handler>
         <handler name="onclick">
+        	canvas.userSettingsModuleOpt = "userProfile";
             quicklinkAct("userSettingsModule");
         </handler>
         <view name="_bg" visibility="hidden" width="$once{ parent.width }" y="4" opacity="0.4"
