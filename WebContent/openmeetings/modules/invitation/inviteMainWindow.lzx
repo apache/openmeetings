@@ -7,15 +7,50 @@
 		label: send invitation
 	-->
 	<class name="inviteMainWindow" extends="labelExplorerBox" labelid="214" 
-			docking="true" closable="true" width="464" x="200" y="100" height="380">
+			docking="true" closable="true" width="464" x="200" y="100" height="410">
 		
 		<attribute name="roomType" value="conference" type="string" />
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
-		
+    	
     	<handler name="oninit">
-    		lz.ModeManager.makeModal(this);
-    	</handler>
-    
+            <![CDATA[
+            
+                lz.ModeManager.makeModal(this);
+                var pressEnter = new LzDelegate(this, "register");
+                lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
+                
+                var t = this;
+                
+                function getTimeZoneOffsetCallback(returnValue) {
+                                
+                    if ($debug) Debug.write("getTimeZoneOffsetCallback ",returnValue);
+                    
+                    var std_time_offset = Number(returnValue);
+                    
+                    t.setOffset(std_time_offset);
+                    
+                }
+                
+                lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
+                
+            ]]>
+        </handler>
+        
+        <method name="setOffset" args="std_time_offset">
+            <![CDATA[
+            var timeZoneJavaFormat = "Etc/GMT";
+            if (std_time_offset > 0) {
+                timeZoneJavaFormat += "+"+std_time_offset;
+            } else {
+                timeZoneJavaFormat += "-"+std_time_offset;
+            }
+            
+            if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
+            
+            this._timeZone.selectItem(timeZoneJavaFormat);
+            ]]>
+        </method> 
+        
     	<handler name="onclose">
     		lz.ModeManager.release(this);
     	</handler>	
@@ -67,7 +102,15 @@
 		<dateField x="120" y="314" name="_valid_to" setDefaultToday="true" additionalDay="1" enabled="${ ((parent._valid.value==2) ? true : false ) }" />		
 		<customEdittext name="_timeTo" enabled="${ ((parent._valid.value==2) ? true : false ) }"
 						width="50" x="232" y="314" text="$once{ getStringTime() }" regexpType="time" />				   
-	
+
+        <labelText labelid="1143" width="200" y="344" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }"  x="4" />
+        <resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
+         			   enabled="${ ((parent._valid.value==2) ? true : false ) }"
+         			   fontsize="11" style="componentStyle">
+            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
+                value="$path{ 'jname/text()' }" />
+        </resetCombobox>    
+         
 		<!-- label: send -->
 		<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
@@ -121,6 +164,7 @@
 	            <netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
 	            <netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
                 <netparam><method name="getValue">return hib.userlang;</method></netparam>
+                <netparam><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
                 
 	            <handler name="ondata" args="value">
 	            	<![CDATA[

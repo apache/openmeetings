@@ -218,10 +218,10 @@ public class AppointmentLogic {
 	    							"0", 
 	    							"0", 
 	    							id, 
-	    							null,  
+	    							sendToUserId,  //sending To: External users have a 0 here
 	    							clientMember.get("email").toString(), 
 	    							baseUrl, 
-	    							sendToUserId, //sending To: External users have a 0 here
+	    							userId,
 	    							new Boolean(false), 
 	    							language_id, 
 	    							false, 

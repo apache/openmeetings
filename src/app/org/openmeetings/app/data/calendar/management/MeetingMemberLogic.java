@@ -82,11 +82,13 @@ public class MeetingMemberLogic {
 			
 			String jNameTimeZone = null;
 			if (us != null && us.getOmTimeZone() != null) {
+				System.out.println("Internal User ");
 				//Internal User
 				jNameTimeZone = us.getOmTimeZone().getJname();
 				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			} else {
 				
+				System.out.println("External User ");
 				//External User
 				jNameTimeZone = jNameMemberTimeZone;
 				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
@@ -108,13 +110,17 @@ public class MeetingMemberLogic {
 			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 			
+			System.out.println("1"+point.getAppointmentStarttime().getTime());
+			System.out.println("2"+point.getAppointmentEndtime().getTime());
+			
 			Date starttime = new Date(point.getAppointmentStarttime().getTime() + offset);
 			Date endtime = new Date(point.getAppointmentEndtime().getTime() + offset);
 			
-//			System.out.println(omTimeZone.getIcal());
-//			System.out.println(offset);
-//			System.out.println(starttime);
-//			System.out.println(endtime);
+			System.out.println("jNameTimeZone "+jNameTimeZone);
+			System.out.println("Ical "+omTimeZone.getIcal());
+			System.out.println(offset);
+			System.out.println("3"+starttime);
+			System.out.println("4"+endtime);
 			
 			Fieldlanguagesvalues labelid1151 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1151), language_id);
 			
@@ -160,18 +166,23 @@ public class MeetingMemberLogic {
 							"public",
 							isPasswordProtected, // passwordprotected
 							password, // invitationpass
-							2, // valid
+							2, // valid type
 							starttime, // valid from
 							endtime, // valid to
 							meeting_organizer, // created by
 							baseUrl, language_id, 
-							true
+							true, //really send mail sendMail
+							point.getAppointmentStarttime(),
+							point.getAppointmentEndtime() 
 						);
 				
 				invitationId = invitation.getInvitations_id();
 				
 			} else if(point.getRemind().getTypId() == 3){
 				log.debug("Reminder for Appointment : iCal mail");
+				
+				System.out.println("5"+starttime);
+				System.out.println("6"+endtime);
 				
 				invitationId = Invitationmanagement.getInstance().addInvitationIcalLink(new Long(2), //userlevel
 							firstname + " " + lastname, //username

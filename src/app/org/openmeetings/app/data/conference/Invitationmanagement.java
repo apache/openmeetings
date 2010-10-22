@@ -85,9 +85,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, String baseUrl, Long language_id,
-			Boolean sendMail){
-			String validFromString = "";
-			String validToString = "";
+			Boolean sendMail, Date gmtTimeStart, Date gmtTimeEnd){
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				
@@ -110,10 +108,14 @@ public class Invitationmanagement {
 					//period
 					invitation.setIsValidByTime(true);
 					invitation.setCanBeUsedOnlyOneTime(false);
-					invitation.setValidFrom(validFrom);
-					invitation.setValidTo(validTo);		
-					validFromString = dateFormat.format(validFrom);
-					validToString = dateFormat.format(validTo);
+					
+					Date gmtTimeStartShifted = new Date(gmtTimeStart.getTime() - ( 5 * 60 * 1000 ) );
+					
+					invitation.setValidFrom(gmtTimeStartShifted);
+					invitation.setValidTo(gmtTimeEnd);	
+					
+					//invitation.setValidFrom(validFrom);
+					//invitation.setValidTo(validTo);		
 				} else {
 					//one-time
 					invitation.setIsValidByTime(false);
@@ -438,18 +440,20 @@ public class Invitationmanagement {
 					//in the correct time-zone for the comparison later on if the invitation is still valid
 					// and subtract 5 minutes for users to access early
 					
-					Calendar cal = Calendar.getInstance();
-					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+//					Calendar cal = Calendar.getInstance();
+//					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+//					
+//					log.debug("addAppointment offset :: "+offset);
+//					
+//					Date appointmentstart = new Date(gmtTimeStart.getTime() + offset);
+//					Date appointmentend = new Date(gmtTimeEnd.getTime() + offset);
+//					
+//					Date gmtTimeStartShifted = new Date(appointmentstart.getTime() - ( 5 * 60 * 1000 ) );
 					
-					log.debug("addAppointment offset :: "+offset);
-					
-					Date appointmentstart = new Date(gmtTimeStart.getTime() + offset);
-					Date appointmentend = new Date(gmtTimeEnd.getTime() + offset);
-					
-					Date gmtTimeStartShifted = new Date(appointmentstart.getTime() - ( 5 * 60 * 1000 ) );
+					Date gmtTimeStartShifted = new Date(gmtTimeStart.getTime() - ( 5 * 60 * 1000 ) );
 					
 					invitation.setValidFrom(gmtTimeStartShifted);
-					invitation.setValidTo(appointmentend);					
+					invitation.setValidTo(gmtTimeEnd);	
 				} else {
 					//one-time
 					invitation.setIsValidByTime(false);
@@ -893,14 +897,23 @@ public class Invitationmanagement {
 
 				} else if (invitation.getIsValidByTime()){
 					Date today = new Date();
-					if (invitation.getValidFrom().getTime() <= today.getTime() 
-							&& invitation.getValidTo().getTime() >= today.getTime()) {
+					
+					Calendar cal = Calendar.getInstance();
+					int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+					
+					log.debug("addAppointment offset :: "+offset);
+					
+					Date appointmentstart = new Date(invitation.getValidFrom().getTime() + offset);
+					Date appointmentend = new Date(invitation.getValidTo().getTime() + offset);
+					
+					if (appointmentstart.getTime() <= today.getTime() 
+							&& appointmentend.getTime() >= today.getTime()) {
 						this.updateInvitation(invitation);
 						invitation.setInvitationpass(null);
 						return invitation;
 					} else {
 						//Invitation is of type *period* and is not valid anymore
-						return new Long(-33);
+						return new Long(-50);
 					}
 				} else {
 					//Invitation is not limited, neither time nor single-usage
