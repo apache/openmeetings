@@ -746,7 +746,7 @@ public class UserService {
 	   return null;
    }
    
-    public Long composeMail(String SID, List<String> receipents, String subject, String message, Boolean bookedRoom, 
+    public Long composeMail(String SID, List<String> recipients, String subject, String message, Boolean bookedRoom, 
     		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
     		Long parentMessageId, Long roomtype_id) {
     	try {
@@ -814,11 +814,11 @@ public class UserService {
  		    		
  		    	}
  		    		
- 		    	receipents.add(from.getAdresses().getEmail());
+ 		    	recipients.add(from.getAdresses().getEmail());
  		    	
- 		    	for (String email : receipents) {
+ 		    	for (String email : recipients) {
  		    		
- 		    		//Map receipent = (Map) receipents.get(iter.next());
+ 		    		//Map receipent = (Map) recipients.get(iter.next());
  		    		
  		    		//String email = receipent.get("email").toString();
  		    		
@@ -843,13 +843,11 @@ public class UserService {
  		    		
  		    		if (bookedRoom) {
  		    			
- 		    			//But add the appointement to everyboy
- 		    			this.addAppointementToUser(subject, message, to, receipents, room, appointmentstart, appointmentend, invitor);
+ 		    			//But add the appointment to everybody
+ 		    			this.addAppointmentToUser(subject, message, to, recipients, room, appointmentstart, appointmentend, invitor, true);
  		    			
  		    		}
  		    	}
- 		    	
- 		    	
  		    	
  		    }
     		
@@ -863,15 +861,17 @@ public class UserService {
      * Date appointmentstart = calFrom.getTime();
  	 * Date appointmentend = calTo.getTime();
      */
-    private void addAppointementToUser(String subject, String message, Users to, List<String> receipents, Rooms room, 
-    		Date appointmentstart, Date appointmentend, Boolean invitor) throws Exception {
+    private void addAppointmentToUser(String subject, String message, Users to, List<String> recipients, Rooms room, 
+    		Date appointmentstart, Date appointmentend, Boolean invitor, Boolean isConnectedEvent) throws Exception {
     	
     	Long appointmentId =  AppointmentDaoImpl.getInstance().addAppointment(subject, to.getUser_id(), "", message,
-   				appointmentstart, appointmentend, false, false, false, false, 1L, 2L, room, to.getLanguage_id(), false, "");
+   				appointmentstart, appointmentend, false, false, 
+   				false, false, 1L, 2L, room, to.getLanguage_id(), 
+   				false, "", isConnectedEvent, to.getOmTimeZone().getJname());
     	
-    	for (String email : receipents) {
+    	for (String email : recipients) {
 	    		
-	    		//Map receipent = (Map) receipents.get(iter.next());
+	    		//Map receipent = (Map) recipients.get(iter.next());
     		
 	    		//String email = receipent.get("email").toString();
 	    		
@@ -882,7 +882,7 @@ public class UserService {
 	    		
 	    		MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname,  lastname,  "0",
 	  				 "0",  appointmentId,  meetingMember.getUser_id(),  email, invitor, 
-	  				 meetingMember.getOmTimeZone().getJname(), true);
+	  				 meetingMember.getOmTimeZone().getJname(), isConnectedEvent);
 	    		
 	    	}
     	

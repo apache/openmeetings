@@ -174,13 +174,16 @@ public class AppointmentLogic {
 			log.debug("Room " + room_id + " ok!");
 		
 		try{
-			Long id =  AppointmentDaoImpl.getInstance().addAppointment(appointmentName, userId, appointmentLocation, appointmentDescription,
-				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind, room, language_id, false, "");
-		
 			
 			// Adding Invitor as Meetingmember
-			Users user = Usermanagement.getInstance().getUserById(userId); 
+			Users user = Usermanagement.getInstance().getUserById(userId);
 			
+			Long id =  AppointmentDaoImpl.getInstance().addAppointment(
+								appointmentName, userId, appointmentLocation, appointmentDescription,
+								appointmentstart, appointmentend, isDaily, isWeekly, 
+								isMonthly, isYearly, categoryId, remind, room, 
+								language_id, false, "", false, user.getOmTimeZone().getJname());
+		
 			String jNameMemberTimeZone = "";
 			if (user.getOmTimeZone() != null) {
 				jNameMemberTimeZone = user.getOmTimeZone().getJname();

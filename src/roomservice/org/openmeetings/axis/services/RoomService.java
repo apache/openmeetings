@@ -1159,6 +1159,8 @@ public class RoomService {
 		    		return rooms_id;
 		    	}
 		    	
+		    	Users us = Usermanagement.getInstance().getUserById(users_id);
+		    	
 		    	AppointmentDaoImpl.getInstance().addAppointment("appointmentName", users_id, "appointmentLocation", "appointmentDescription", 
 		    			dFrom, dTo, //appointmentstart, appointmentend, 
 		    			false, false, false, false, //isDaily, isWeekly, isMonthly, isYearly, 
@@ -1167,8 +1169,9 @@ public class RoomService {
 		    			Roommanagement.getInstance().getRoomById(rooms_id), 
 		    			1L, //language_id
 		    			isPasswordProtected, //isPasswordProtected
-		    			password //password
-		    			);
+		    			password, //password
+		    			false,
+		    			us.getOmTimeZone().getJname());
 		    	
 		    	return rooms_id;
 	    	

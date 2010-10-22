@@ -46,6 +46,8 @@ public class Appointment {
 	private Long language_id;
 	private Boolean isPasswordProtected;
 	private String password;
+	
+	private Boolean isConnectedEvent;
 
 	/**
      * 
@@ -365,6 +367,17 @@ public class Appointment {
 		this.password = password;
 	}
 	
+	/**
+     * @hibernate.property
+     *  column="is_connected_event"
+     *  type="boolean"
+     */ 
+	public Boolean getIsConnectedEvent() {
+		return isConnectedEvent;
+	}
+	public void setIsConnectedEvent(Boolean isConnectedEvent) {
+		this.isConnectedEvent = isConnectedEvent;
+	}
 	
 }
 

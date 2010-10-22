@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
@@ -17,10 +18,12 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
@@ -187,11 +190,13 @@ public class AppointmentDaoImpl {
 	 * @return
 	 */
 	//----------------------------------------------------------------------------------------------------------------------------
-	public Long addAppointment(String appointmentName, Long userId, String appointmentLocation,String appointmentDescription, 
+	public Long addAppointment(String appointmentName, Long userId, 
+			String appointmentLocation,String appointmentDescription, 
 			Date appointmentstart, Date appointmentend, 
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, 
 			Long categoryId, Long remind, Rooms room, Long language_id, 
-			Boolean isPasswordProtected, String password) {
+			Boolean isPasswordProtected, String password, Boolean isConnectedEvent, 
+			String jNameTimeZone) {
 		try {
 			
 			Appointment ap = new Appointment();
@@ -199,7 +204,12 @@ public class AppointmentDaoImpl {
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentLocation(appointmentLocation);
 			
+			OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+			
+			String timeZoneName = omTimeZone.getIcal();
+			
 			Calendar cal = Calendar.getInstance();
+			cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
 			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 			
 			log.debug("addAppointment offset :: "+offset);
@@ -223,6 +233,7 @@ public class AppointmentDaoImpl {
 			ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
 			ap.setAppointmentCategory(AppointmentCategoryDaoImpl.getInstance().getAppointmentCategoryById(categoryId));
 			ap.setRoom(room);
+			ap.setIsConnectedEvent(isConnectedEvent);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -288,6 +299,64 @@ public class AppointmentDaoImpl {
 		return null;
 	}
 	
+	public Long updateAppointmentWithoutMailEvent(Long appointmentId, String appointmentName, String appointmentDescription, 
+			Date appointmentstart, Date appointmentend,
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly, Boolean isYearly, 
+			Long categoryId, Long remind, List mmClient, Long users_id, String baseUrl,
+			Long language_id, Boolean isPasswordProtected, String password) {
+		
+			log.debug("AppointmentDAOImpl.updateAppointment");
+		try {
+			
+			
+			Appointment ap = this.getAppointmentById(appointmentId);
+			
+			Calendar cal = Calendar.getInstance();
+			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+			
+			log.debug("addAppointment offset :: "+offset);
+			
+			appointmentstart = new Date(appointmentstart.getTime() - offset);
+			appointmentend = new Date(appointmentend.getTime() - offset);
+									
+			ap.setAppointmentName(appointmentName);
+			ap.setAppointmentStarttime(appointmentstart);
+		 	ap.setAppointmentEndtime(appointmentend);
+			ap.setAppointmentDescription(appointmentDescription);			
+			ap.setUpdatetime(new Date());
+			ap.setRemind(AppointmentReminderTypDaoImpl.getInstance().getAppointmentReminderTypById(remind));
+			ap.setIsDaily(isDaily);
+			ap.setIsWeekly(isWeekly);
+			ap.setIsMonthly(isMonthly);
+			ap.setIsYearly(isYearly);
+			ap.setLanguage_id(language_id);
+			ap.setIsPasswordProtected(isPasswordProtected);
+			ap.setPassword(password);
+			//ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
+			ap.setAppointmentCategory(AppointmentCategoryDaoImpl.getInstance().getAppointmentCategoryById(categoryId));
+						
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			session.update(ap);
+
+			tx.commit();
+		    HibernateUtil.closeSession(idf);
+		    
+		    
+		    
+		    
+		    
+		    return appointmentId;
+		} catch (HibernateException ex) {
+			log.error("[updateAppointment]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[updateAppointment]: ",ex2);
+		}
+		return null;
+		
+	}
 	/**
 	 * 
 	 * @param appointmentId
