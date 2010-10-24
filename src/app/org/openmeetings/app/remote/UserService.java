@@ -1227,6 +1227,27 @@ public class UserService {
 		return null;
 	}
 	
+	public void shareCalendarUserContact(String SID, Long userContactId, Boolean shareCalendar) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+			// users only
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+				
+				UserContacts userContacts = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
+				
+				userContacts.setShareCalendar(shareCalendar);
+				
+				UserContactsDaoImpl.getInstance().updateContact(userContacts);
+				
+			}
+
+		} catch (Exception err) {
+			log.error("[shareCalendarUserContact]", err);
+		}
+	}
+	
 	public Long updatePrivateMessageFolder(String SID, Long privateMessageFolderId, String folderName) {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);

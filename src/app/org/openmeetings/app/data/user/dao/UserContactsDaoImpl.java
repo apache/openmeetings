@@ -253,5 +253,21 @@ public class UserContactsDaoImpl {
 		}
 		return null;
 	}
+	
+	public void updateContact(UserContacts userContacts) {
+		try {
+			userContacts.setUpdated(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			session.update(userContacts);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (Exception e) {
+			log.error("[updateContact]",e);
+		}
+	}
 
 }

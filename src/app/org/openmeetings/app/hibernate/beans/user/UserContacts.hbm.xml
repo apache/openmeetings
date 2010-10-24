@@ -12,5 +12,6 @@
     <property name="inserted" type="java.util.Date" column="inserted"/>
     <property name="updated" type="java.util.Date" column="updated"/>
     <property name="hash" type="string" column="hash"/>
+    <property name="shareCalendar" type="boolean" column="share_calendar"/>
   </class>
 </hibernate-mapping>

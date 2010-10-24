@@ -4,7 +4,7 @@
 <class name="contactsListItem" extends="basePagingListItem" showhandcursor="false" height="40">
 	
 	<attribute name="username" value="" type="string" />
-	
+	<attribute name="shareCalendar" value="false" type="boolean" />
 	<attribute name="searchUserProfileImage" value="null" />
 	
 	<handler name="onmouseover">
@@ -85,7 +85,28 @@
 		        <labelTooltip labelid="1236" />
 		    </miniIcons> 
 		    
-		    <miniIcons name="deny" y="1" x="40" resource="button_cancel_rsc" width="18" height="18" 
+		    <!--
+		     setCalendarSharing
+		     -->
+		    <miniIcons name="shareCalendar" y="1" x="40" resource="user_contact_calendar_add_rsc" width="18" height="18" 
+                   visibility="${ (parent.parent.parent.shareCalendar) ? 'hidden' : 'visible' }" showhandcursor="true">
+                <handler name="onclick">
+                    if ($debug) Debug.write("Do Share ");
+                    parent.parent.parent.parent.parent.parent.parent.setCalendarSharing(parent.parent.parent.refObj.userContactId, true);
+                </handler>
+                <labelTooltip labelid="1274" />
+            </miniIcons> 
+            
+            <miniIcons name="unShareCalendar" y="1" x="40" resource="user_contact_calendar_delete_rsc" width="18" height="18" 
+                   visibility="${ (parent.parent.parent.shareCalendar) ? 'visible' : 'hidden' }" showhandcursor="true">
+                <handler name="onclick">
+                    if ($debug) Debug.write("Do Not Share ");
+                    parent.parent.parent.parent.parent.parent.parent.setCalendarSharing(parent.parent.parent.refObj.userContactId, false);
+                </handler>
+                <labelTooltip labelid="1275" />
+            </miniIcons> 
+		    
+		    <miniIcons name="deny" y="1" x="60" resource="button_cancel_rsc" width="18" height="18" 
 	               showhandcursor="true">
 				<handler name="onclick">
 					new lz.confirmationSingle(canvas.main_content._content.inner,{

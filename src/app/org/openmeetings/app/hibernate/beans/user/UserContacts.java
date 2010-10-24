@@ -17,6 +17,7 @@ public class UserContacts {
 	private String hash;
 	private Date inserted;
 	private Date updated;
+	private Boolean shareCalendar;
 	
 	/**
      * 
@@ -111,6 +112,16 @@ public class UserContacts {
 		this.hash = hash;
 	}
 	
-	
+	/**
+     * @hibernate.property
+     *  column="share_calendar"
+     *  type="boolean"
+     */
+	public Boolean getShareCalendar() {
+		return shareCalendar;
+	}
+	public void setShareCalendar(Boolean shareCalendar) {
+		this.shareCalendar = shareCalendar;
+	}
 	
 }

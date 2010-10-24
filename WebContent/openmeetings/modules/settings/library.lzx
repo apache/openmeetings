@@ -26,7 +26,13 @@
 			  src="resources/folder.png" />	
 			  
 	<resource name="private_message_inbox_rsc" 
-			  src="resources/folder_inbox.png" />			  
+			  src="resources/folder_inbox.png" />	
+			  
+	<resource name="user_contact_calendar_add_rsc" 
+              src="resources/calendar-add.png" />  
+			  
+	<resource name="user_contact_calendar_delete_rsc" 
+              src="resources/calendar-delete.png" />    
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     
