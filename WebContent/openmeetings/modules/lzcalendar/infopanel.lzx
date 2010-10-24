@@ -84,6 +84,7 @@
         
         <attribute name="appointementId" value="$path{ 'appointementId/@value' }" type="number" />
         <attribute name="isConnectedEvent" value="$path{ 'isConnectedEvent/@value' }" type="boolean" />
+        <attribute name="rooms_id" value="$path{ 'rooms_id/@value'}" type="number" />
         
         <attribute name="_erinnerungatr" value="null"/>
         <attribute name="roomtype" type="number" value="1" />
@@ -280,7 +281,7 @@
 	    </netRemoteCallHib> 
 	    
         <!-- VIEWS -->
-        <view name="summary" width="198" height="83" bgcolor="0xEEF0EB">
+        <view name="summary" width="198" height="103" bgcolor="0xEEF0EB">
             <view y="10" name="content" x="10" width="${parent.width - 20}" height="65">
                 <inputtextbox name="title"
                     width="${immediateparent.width}" height="20"
@@ -425,7 +426,25 @@
                         datapath="end[1]" 
                         onclick="canvas.eventDataMgr.changetime('end',+1);"/>
                 </view>
-                <view bgcolor="0xEEF0EB" height="1" width="${parent.width - 10}" x="5" />
+                
+                <view name="_gotoRoom" height="20" width="$once{ parent.width }">
+                	
+                	<calButton name="_gotoRoom" labelid="1282" x="${ parent.width - this.width }" >
+                        <handler name="onclick" args="c">
+                        	<![CDATA[
+                        	    if ($debug) Debug.write("rooms_id :: ",parent.parent.parent.parent.rooms_id);
+                            	if (parent.parent.parent.parent.rooms_id > 0) {
+                            		canvas.initroomid = parent.parent.parent.parent.rooms_id;
+                            		canvas.thishib.getRoomById.doCall();
+                            	}
+                        	]]>
+                        </handler>
+                        <labelTooltip labelid="1283" />
+                    </calButton>
+                    
+                </view>
+                
+                <view bgcolor="0xEEF0EB" height="1" width="$once{parent.width - 10}" x="5" />
                <!--
                 <view>
                     <text x="20" text="Label" />
@@ -446,14 +465,14 @@
         </view>
 
 
-        <view name="gutter1" bgcolor="0xEEF0EB" y="83" width="198" height="4">
+        <view name="gutter1" bgcolor="0xEEF0EB" y="103" width="198" height="4">
             <view name="tline" height="1" width="$once{parent.width}"
                 bgcolor="0xB8B9B5"/>
             <view name="bline" height="1" y="3" width="$once{parent.width}"
                 bgcolor="0xFDFFFF"/>
         </view>
 
-        <basetabslider name="tabs" height="365" width="198" y="${parent.summary.height + 4}" pixellock="true"
+        <basetabslider name="tabs" height="345" width="198" y="${parent.summary.height + 4}" pixellock="true"
             slideduration="200" mintabheight="20" oninit="this.openTab(this.notes,true)" >
 
             <infoTab name="notes" labelid="802" pixellock="true">
@@ -654,10 +673,16 @@
             		
             		<handler name="ondata" args="data">
             			<![CDATA[
-	            			if ($debug) Debug.warn("attendees -1 ondata ",data);
+	            			if ($debug) Debug.warn("attendees -1 ondata ",parent.parent.parent.rooms_id);
 	            			
 	            			for (var eg in parent.list._content.subviews){
 	            				parent.list._content.subviews[eg].destroy();
+	            			}
+	            			
+	            			if (parent.parent.parent.rooms_id > 0) {
+	            				parent.parent.parent.summary.content._gotoRoom._gotoRoom.setAttribute("visibility","visible");
+	            			} else {
+	            				parent.parent.parent.summary.content._gotoRoom._gotoRoom.setAttribute("visibility","visible");
 	            			}
 	            			
 	            			if (data == null) {
@@ -688,9 +713,10 @@
 
         </basetabslider>
 
-        <view name="gutter2"  bgcolor="0xEEF0EB" 
+        <view name="gutter2" bgcolor="0xEEF0EB" 
               y="${parent.tabs.y + parent.tabs.height}" height="3" 
               width="$once{parent.width-7}" >
+        	
             <view name="tline" height="1" width="$once{parent.width}"
                 bgcolor="0xB8B9B5"/>
             <view name="bline" height="1" y="3" width="$once{parent.width}"

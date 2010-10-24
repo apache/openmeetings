@@ -163,6 +163,15 @@ public class CalendarServlet extends HttpServlet {
 						Element isConnectedEvent = event.addElement("isConnectedEvent");
 						isConnectedEvent.addAttribute("value",""+appointment.getIsConnectedEvent());
 						
+						if (appointment.getRoom() != null) {
+							Element rooms_id = event.addElement("rooms_id");
+							rooms_id.addAttribute("value",""+appointment.getRoom().getRooms_id());
+						} else {
+							Element rooms_id = event.addElement("rooms_id");
+							rooms_id.addAttribute("value","0");
+						}
+						
+						
 						Element summary = event.addElement("summary");
 						summary.addAttribute("value",appointment.getAppointmentName());
 						

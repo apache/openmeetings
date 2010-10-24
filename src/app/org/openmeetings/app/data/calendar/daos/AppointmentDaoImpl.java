@@ -68,8 +68,8 @@ public class AppointmentDaoImpl {
 		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
 		
 		String hql = "select a from Appointment a " +
-		"WHERE a.deleted != :deleted " +
-		"AND a.room.rooms_id = :room_id ";
+					"WHERE a.deleted != :deleted " +
+					"AND a.room.rooms_id = :room_id ";
 		
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
@@ -79,12 +79,16 @@ public class AppointmentDaoImpl {
 		query.setLong("room_id",room_id);
 		
 		
-		Appointment appoint = (Appointment) query.uniqueResult();
+		List<Appointment> appoint = query.list();
+		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		
-		return appoint;
-
+		if (appoint.size() > 0) {
+			return appoint.get(0);
+		}
+		
+		return null;
 	}
 	//-----------------------------------------------------------------------------------------------
 	
