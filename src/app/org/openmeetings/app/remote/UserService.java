@@ -1291,6 +1291,23 @@ public class UserService {
  	   return null;
     }
 	
+	public List<UserContacts> getUserContactsWithShareCalendar(String SID) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+ 		   Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+ 		   // users only
+ 		   if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+ 			   
+		   	   return UserContactsDaoImpl.getInstance().getContactsByShareCalendar(users_id, true);
+ 			 
+ 		   }
+ 		   
+ 	   } catch (Exception err) {
+ 		   log.error("[getContactsByShareCalendar]",err);
+ 	   }
+ 	   return null;
+    }
+	
 	 
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
  	   try {

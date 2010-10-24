@@ -32,7 +32,10 @@
               src="resources/calendar-add.png" />  
 			  
 	<resource name="user_contact_calendar_delete_rsc" 
-              src="resources/calendar-delete.png" />    
+              src="resources/calendar-delete.png" /> 
+              
+    <resource name="user_contact_calendar_system_undo_rsc" 
+              src="resources/system-undo.png" />   
     
     <include href="incubator/rich-text/richtexteditor.lzx"/>
     

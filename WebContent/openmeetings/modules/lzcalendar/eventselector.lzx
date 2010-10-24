@@ -329,6 +329,11 @@
         		//	return;
         		//}
         		
+        		if (canvas.contactUser != 0) {
+                    new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+                    return;
+                }
+        		
 	            this.mdel.register( lz.Idle, "onidle" );
 	            
 	            this.setAttribute('dragging',true);
@@ -346,6 +351,11 @@
         <method name="domouseup" args="v">
         	<![CDATA[
 	            if ( this.dragging ){
+	            	
+	            	if (canvas.contactUser != 0) {
+                        new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+                        return;
+                    }
 	            	
 	            	if ($debug) Debug.write("Remove Drag State");
 	            	

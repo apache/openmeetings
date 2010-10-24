@@ -58,6 +58,7 @@ public class CalendarServlet extends HttpServlet {
 				String yearStr = httpServletRequest.getParameter("year");
 				String monthStr = httpServletRequest.getParameter("month");
 				String userStr = httpServletRequest.getParameter("user");
+				String contactUser = httpServletRequest.getParameter("contactUser");
 				
 				Calendar starttime = GregorianCalendar.getInstance();
 				
@@ -75,7 +76,12 @@ public class CalendarServlet extends HttpServlet {
 				endtime.set(Calendar.SECOND, 0);
 				endtime.set(Calendar.YEAR, Integer.parseInt(yearStr));
 				
-				List<Appointment> appointements = AppointmentLogic.getInstance().getAppointmentByRange(Long.parseLong(userStr), new Date(starttime.getTimeInMillis()), new Date(endtime.getTimeInMillis()));
+				Long userToShowId = Long.parseLong(contactUser);
+				if (userToShowId == 0) {
+					userToShowId = Long.parseLong(userStr);
+				}
+				
+				List<Appointment> appointements = AppointmentLogic.getInstance().getAppointmentByRange(userToShowId, new Date(starttime.getTimeInMillis()), new Date(endtime.getTimeInMillis()));
 				
 				Document document = DocumentHelper.createDocument();
 				document.setXMLEncoding("UTF-8");

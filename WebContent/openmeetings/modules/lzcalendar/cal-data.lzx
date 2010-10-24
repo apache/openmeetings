@@ -41,7 +41,8 @@
             			'&month=' + mo +
             			'&randomT=' + d.getTime() +
             			'&timeZoneId=' + canvas.timeZoneId +
-            			'&user=' + canvas.user_id;
+            			'&user=' + canvas.user_id +
+            			'&contactUser=' + canvas.contactUser;
                 
             	if ($debug) Debug.write("r ");
             	if ($debug) Debug.write(r);

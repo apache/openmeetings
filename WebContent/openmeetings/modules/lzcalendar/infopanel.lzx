@@ -698,6 +698,12 @@
 
             <calButton labelid="813" x="10" y="13">
                 <handler name="onclick">
+                	
+                	if (canvas.contactUser != 0) {
+                        new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+                        return;
+                    }
+                	
                     canvas.eventDataMgr.changeTitle(parent.parent.summary.content.title.getText());
                     canvas.eventDataMgr.changeNotes(classroot.tabs.notes.txt.getText());
                     
@@ -716,6 +722,11 @@
             
             <calButton labelid="814" x="${parent.width - this.width - 10}" y="13">
             	<handler name="onclick" args="c">
+            		
+            		if (canvas.contactUser != 0) {
+            			new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+            			return;
+            		}
             		
             		if (Number(parent.parent.appointementId) == 0) {
             			canvas.eventDataMgr.deleteEvent();

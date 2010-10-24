@@ -179,6 +179,32 @@ public class UserContactsDaoImpl {
 		return null;
 	}
 	
+	public List<UserContacts> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
+		try {
+			
+			String hql = "select c from UserContacts c " +
+							"where c.contact.user_id = :contactId " +
+							"AND c.shareCalendar = :shareCalendar " +
+							"AND c.contact.deleted != 'true'";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			query.setLong("contactId", contactId);
+			query.setBoolean("shareCalendar", shareCalendar);
+			List<UserContacts> ll = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return ll;
+			
+		} catch (Exception e) {
+			log.error("[getContactsByShareCalendar]",e);
+		}
+		return null;
+	}
+	
 	public List<UserContacts> getContactRequestsByUserAndStatus(Long user_id, Boolean pending) {
 		try {
 			

@@ -32,11 +32,80 @@
 		</handler> 
 	</dateSelector> 
 	
-	<view resource="messagebox_info_rsc" x="10" y="144" />
 	
-	<labelText labelid="807" x="36" y="148" fontstyle="bold" />
+	<view resource="messagebox_info_rsc" x="4" y="144" />
 	
-	<labelText labelid="806" x="10" y="170" multiline="true" width="190" />
+	<labelText labelid="807" x="30" y="148" fontstyle="bold" />
+	
+	<labelText labelid="806" x="4" y="176" multiline="true" width="190" />
+	
+	
+	<labelText labelid="1276" x="4" y="226" fontstyle="bold" />
+	
+	<view resource="messagebox_info_rsc" x="6" y="246" 
+		  width="16" height="16" stretches="both" />
+	
+	<labelText labelid="1277" x="24" y="242" multiline="true" width="166" />
+	
+	<!--
+	
+	 -->
+    <miniIcons x="172" y="282" resource="user_contact_calendar_system_undo_rsc" width="16" height="16" 
+               showhandcursor="true">
+        <handler name="onclick">
+            canvas.contactUser = 0;
+            parent.lzCalendarContent.calgrid.reloadAll();
+        </handler>
+        <labelTooltip labelid="1279" />
+    </miniIcons>
+	
+	<list name="_userContacts" y="300" x="4" fontsize="11" 
+		  height="294" width="186" bordersize="1" itemclassname="textlistitem">
+		
+		<handler name="oninit">
+			
+			this._setbordercolor = true;
+            this.setAttribute('bgcolor', canvas.basebgcolorizer);
+            this._setbordercolor = false;
+			
+			this.getUserContactsWithShareCalendar.doCall();
+		</handler>
+		
+		<handler name="onselect" args="sel">
+			<![CDATA[
+		        if ($debug) Debug.write("onselect :: ",sel);
+		        
+		        canvas.contactUser = Number(sel.value);
+		        
+		        parent.lzCalendarContent.calgrid.reloadAll();
+		        
+			]]>
+		</handler>
+		
+		<!--
+		public List<UserContacts> getUserContactsWithShareCalendar(String SID)
+		 -->
+		<netRemoteCallHib name="getUserContactsWithShareCalendar" funcname="userservice.getUserContactsWithShareCalendar" 
+                          remotecontext="$once{ canvas.thishib }" >
+            
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            
+            <handler name="ondata" args="valueList">
+                <![CDATA[
+                    if ($debug) Debug.write("getUserContactsWithShareCalendar ",valueList);
+
+                    parent.removeAllItems();
+                    
+                    for (var i=0;i<valueList.length;i++) {
+                    	
+                    	parent.addItem(valueList[i].owner.firstname + ' ' + valueList[i].owner.lastname,valueList[i].owner.user_id);
+                    	
+                    }
+                ]]>
+            </handler>
+        </netRemoteCallHib>
+		
+	</list>
 	
 	<lzCalendarContent name="lzCalendarContent" x="206">
 		<handler name="oninit">
@@ -95,6 +164,7 @@
 	<attribute name="isloaded" value="false" type="boolean" />
 	
 	<handler name="oninit">
+		canvas.contactUser = 0;
 		canvas.calMonths = [canvas.getLabelName(469),canvas.getLabelName(470),
 								canvas.getLabelName(471),canvas.getLabelName(472),
 								canvas.getLabelName(473),canvas.getLabelName(474),
@@ -563,6 +633,8 @@
           
           <method name="reloadAll">
           	  <![CDATA[
+          	  
+          	  parent.eventselector.hide();
           	  
           	  //Empty Data
           	  localdatacontroller.clearDataPointer();
