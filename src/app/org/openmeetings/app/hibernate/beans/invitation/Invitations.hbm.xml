@@ -23,5 +23,6 @@
     <property name="invitationWasUsed" type="boolean" column="invitationWasUsed"/>
     <property name="isValidByTime" type="boolean" column="isValidByTime"/>
     <property name="baseUrl" type="string" column="baseUrl"/>
+    <property name="appointmentId" type="long" column="appointment_id"/>
   </class>
 </hibernate-mapping>

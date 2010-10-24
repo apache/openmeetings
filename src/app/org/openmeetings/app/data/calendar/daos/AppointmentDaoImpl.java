@@ -478,6 +478,7 @@ public class AppointmentDaoImpl {
 			appointmentstart = new Date(appointmentstart.getTime() - offset);
 			appointmentend = new Date(appointmentend.getTime() - offset);
 			
+			//change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEvents(ap, appointmentName, appointmentDescription, 
 							appointmentstart, appointmentend, isDaily, isWeekly, 
@@ -486,6 +487,9 @@ public class AppointmentDaoImpl {
 							users_id, baseUrl, language_id, isPasswordProtected, 
 							password);
 			}
+			
+			//Update Invitation hash to new time
+			Invitationmanagement.getInstance().updateInvitationByAppointment(appointmentId,appointmentstart,appointmentend);
 									
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentStarttime(appointmentstart);
@@ -630,9 +634,13 @@ public class AppointmentDaoImpl {
 			appointmentstart = new Date(appointmentstart.getTime() - offset);
 			appointmentend = new Date(appointmentend.getTime() - offset);
 			
+			//change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEventsTimeOnly(ap, appointmentstart, appointmentend);
 			}
+			
+			//Update Invitation hash to new time
+			Invitationmanagement.getInstance().updateInvitationByAppointment(appointmentId,appointmentstart,appointmentend);
 									
 			ap.setAppointmentStarttime(appointmentstart);
 		 	ap.setAppointmentEndtime(appointmentend);

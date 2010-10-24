@@ -20,7 +20,6 @@ import org.openmeetings.app.templates.InvitationTemplate;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
-import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -85,7 +84,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, String baseUrl, Long language_id,
-			Boolean sendMail, Date gmtTimeStart, Date gmtTimeEnd){
+			Boolean sendMail, Date gmtTimeStart, Date gmtTimeEnd, Long appointmentId){
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				
@@ -135,6 +134,7 @@ public class Invitationmanagement {
 				invitation.setRoom(Roommanagement.getInstance().getRoomById(rooms_id));
 				invitation.setConferencedomain(conferencedomain);
 				invitation.setStarttime(new Date());
+				invitation.setAppointmentId(appointmentId);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
@@ -412,7 +412,8 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject, Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, Long appointMentId, Boolean invitor,
-			Long language_id, String jNameTimeZone, Date gmtTimeStart, Date gmtTimeEnd){
+			Long language_id, String jNameTimeZone, Date gmtTimeStart, Date gmtTimeEnd,
+			Long appointmentId){
 			log.debug("addInvitationIcalLink");
 			
 		try {
@@ -475,6 +476,7 @@ public class Invitationmanagement {
 				invitation.setRoom(Roommanagement.getInstance().getRoomById(rooms_id));
 				invitation.setConferencedomain(conferencedomain);
 				invitation.setStarttime(new Date());
+				invitation.setAppointmentId(appointmentId);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
@@ -851,6 +853,33 @@ public class Invitationmanagement {
 		}
 	}
 	
+	public Invitations getInvitationbyAppointementId(Long invId){
+		log.debug("getInvitationbyId");
+		
+		
+		try{
+			String hql = "select invi from Invitations invi " +
+						"WHERE invi.deleted != :deleted " +
+						"AND invi.invitations_id = :invid";
+				
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("deleted", "true");
+			query.setLong("invid",invId);
+	
+			Invitations inv = (Invitations) query.uniqueResult();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+	
+			return inv;
+		}catch(Exception e){
+			log.error("getInvitationsbyId : " , e);
+			return null;
+		}
+	}
+	
 	/**
 	 * 
 	 * @param hashCode
@@ -974,5 +1003,37 @@ public class Invitationmanagement {
 			log.error("[checkInvitationPass] ",ex2);
 		}
 		return new Long(-1);
+	}
+
+	public void updateInvitationByAppointment(Long appointmentId,
+			Date appointmentstart, Date appointmentend) {
+		try {
+			
+			Date gmtTimeStartShifted = new Date(appointmentstart.getTime() - ( 5 * 60 * 1000 ) );
+			
+			String hql = "select a from Invitations a " +					
+							"WHERE a.appointmentId = :appointmentId  ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("appointmentId",appointmentId);
+			
+			List<Invitations> listInvitations = query.list();
+			
+			
+			for (Invitations inv : listInvitations) {
+				inv.setValidFrom(gmtTimeStartShifted);
+				inv.setValidTo(appointmentend);
+				session.update(inv);
+			}
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+		} catch (Exception err) {
+			
+		}
 	}
 }

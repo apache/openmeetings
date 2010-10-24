@@ -2,6 +2,7 @@ package org.openmeetings.app.hibernate.beans.invitation;
 
 import java.util.Date;
 
+import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
@@ -40,6 +41,8 @@ public class Invitations {
 	//An invitation which is canBeUsedOnlyOneTime = true can be only used one-time
 	private Boolean canBeUsedOnlyOneTime = false;
 	private Boolean invitationWasUsed = false;
+	
+	private Long appointmentId;
 	
 	// BaseuRL defined at creation of InvitationLink - used for chronological reminders on serverside (updates)
 	private String baseUrl;
@@ -279,6 +282,17 @@ public class Invitations {
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
-	
+
+	/**
+     * @hibernate.property
+     *  column="appointment_id"
+     *  type="long"
+     */
+	public Long getAppointmentId() {
+		return appointmentId;
+	}
+	public void setAppointmentId(Long appointmentId) {
+		this.appointmentId = appointmentId;
+	}
 
 }

@@ -792,7 +792,7 @@ public class RoomService {
 		    									username, username, username, room_id, "",
 								    			isPasswordProtected, invitationpass, 
 								    			valid, dFrom, dTo, users_id, "", 
-								    			1L, false, dFrom, dTo);
+								    			1L, false, dFrom, dTo, null);
 		    	
 		    	if(invitation != null) {
 		    		
@@ -901,7 +901,7 @@ public class RoomService {
 								    			baseurl, email, subject, room_id, "",
 								    			isPasswordProtected, invitationpass, 
 								    			valid, dFrom, dTo, users_id, baseurl, 
-								    			language_id, sendMail, dFrom, dTo);
+								    			language_id, sendMail, dFrom, dTo, null);
 		    	
 		    	if(invitation != null) {
 		    		
@@ -986,7 +986,7 @@ public class RoomService {
 								    			baseurl, email, subject, room_id, "",
 								    			isPasswordProtected, invitationpass, 
 								    			valid, dFrom, dTo, users_id, baseurl, 
-								    			language_id, sendMail, dFrom, dTo);
+								    			language_id, sendMail, dFrom, dTo, null);
 		    	
 		    	if(invitation != null) {
 		    		

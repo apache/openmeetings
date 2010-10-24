@@ -110,17 +110,17 @@ public class MeetingMemberLogic {
 			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
 			int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 			
-			System.out.println("1"+point.getAppointmentStarttime().getTime());
-			System.out.println("2"+point.getAppointmentEndtime().getTime());
+//			System.out.println("1"+point.getAppointmentStarttime().getTime());
+//			System.out.println("2"+point.getAppointmentEndtime().getTime());
 			
 			Date starttime = new Date(point.getAppointmentStarttime().getTime() + offset);
 			Date endtime = new Date(point.getAppointmentEndtime().getTime() + offset);
 			
-			System.out.println("jNameTimeZone "+jNameTimeZone);
-			System.out.println("Ical "+omTimeZone.getIcal());
-			System.out.println(offset);
-			System.out.println("3"+starttime);
-			System.out.println("4"+endtime);
+//			System.out.println("jNameTimeZone "+jNameTimeZone);
+//			System.out.println("Ical "+omTimeZone.getIcal());
+//			System.out.println(offset);
+//			System.out.println("3"+starttime);
+//			System.out.println("4"+endtime);
 			
 			Fieldlanguagesvalues labelid1151 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(new Long(1151), language_id);
 			
@@ -173,7 +173,8 @@ public class MeetingMemberLogic {
 							baseUrl, language_id, 
 							true, //really send mail sendMail
 							point.getAppointmentStarttime(),
-							point.getAppointmentEndtime() 
+							point.getAppointmentEndtime(),
+							point.getAppointmentId()
 						);
 				
 				invitationId = invitation.getInvitations_id();
@@ -202,7 +203,8 @@ public class MeetingMemberLogic {
 							member.getInvitor(), language_id,
 							jNameTimeZone,
 							point.getAppointmentStarttime(),
-							point.getAppointmentEndtime()
+							point.getAppointmentEndtime(),
+							point.getAppointmentId()
 						);
 				
 			}
