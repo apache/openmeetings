@@ -436,6 +436,8 @@
                             	if (parent.parent.parent.parent.rooms_id > 0) {
                             		canvas.initroomid = parent.parent.parent.parent.rooms_id;
                             		canvas.thishib.getRoomById.doCall();
+                            	} else {
+                            		new lz.labelerrorPopup(canvas,{errorlabelid:1285});
                             	}
                         	]]>
                         </handler>

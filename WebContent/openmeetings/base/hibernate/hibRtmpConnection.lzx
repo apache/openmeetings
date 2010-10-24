@@ -379,6 +379,8 @@
                     } else {
 					   canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
                     }
+				} else {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1286});
 				}
             ]]>
         </handler>   

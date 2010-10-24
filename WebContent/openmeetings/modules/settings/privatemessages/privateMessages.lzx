@@ -571,8 +571,7 @@
 						
 						listObj.setAttribute("isRead",true);
 						
-						
-						if ($debug) Debug.write("onclickedItem :: ",listObj.refObj.privateMessageId);
+						//if ($debug) Debug.write("onclickedItem :: ",listObj.refObj.privateMessageId);
 						
 						this.markReadStatusMail.privateMessageId = listObj.refObj.privateMessageId;
 						this.markReadStatusMail.isRead = true;
@@ -1023,7 +1022,7 @@
             </handler>
             <handler name="onselect" args="sel">
             	<![CDATA[
-            		if ($debug) debug.write("onselect :: ",sel.value);
+            		if ($debug) Debug.write("onselect :: ",sel.value);
 	                if (sel.value == "-1") {
 	                	//Init Add Folder Dialog
 	                	parent.parent._Buttons._addFolder.onclick.sendEvent(null);
@@ -1039,6 +1038,7 @@
 		  height="${ parent.height - 298 }">
 		
 		<attribute name="pendingUserStatusRef" value="null"/>
+		<attribute name="roomObjectRef" value="null"/>
 		
 		<method name="loadMessageDetails" args="refObj">
 			<![CDATA[
@@ -1057,6 +1057,20 @@
 				if (refObj.isContactRequest) {
 					this.checkPendingStatus.userContactId = refObj.userContactId;
 					this.checkPendingStatus.doCall();
+				}
+				
+				if (this.roomObjectRef != null) {
+                    this.roomObjectRef.destroy();
+                }
+				
+				if (refObj.room != null) {
+				    
+				    if ($debug) Debug.write("loadMessageDetails :: ",refObj.room);
+				    
+				    this.roomObjectRef = new lz.roomAccessMessage(this,{
+                            				        rooms_id:refObj.room.rooms_id
+                            				    });
+				    
 				}
 			
 			]]>

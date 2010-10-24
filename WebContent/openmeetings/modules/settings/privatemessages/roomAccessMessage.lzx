@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	
+<class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
+	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }">
+	
+	<attribute name="rooms_id" value="0" type="number" />
+
+    <view name="_bg" x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
+    	  bgcolor="0xFFFFFF" />
+    	  
+	<miniIconsPresenter name="_close" x="$once{ parent.width-20 }" y="2"
+        iconRessourceName="btn_presenter_close2">
+        <handler name="onclick">
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" />
+    </miniIconsPresenter>  
+    
+    <simpleLabelButton labelid="1283" x="10" y="10">
+    	<handler name="onclick">
+            canvas.initroomid = parent.rooms_id;
+            canvas.thishib.getRoomById.doCall();
+        </handler>
+        <labelTooltip labelid="1284" />
+    </simpleLabelButton>
+    
+</class> 
+	
+
+</library>
