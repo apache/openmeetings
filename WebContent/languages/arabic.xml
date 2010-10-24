@@ -3820,4 +3820,49 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1271" name="error code">
     <value>You invitation code is no valid, the code is only valid for a period of time.</value>
   </string>
+  <string id="1272" name="user calendar">
+    <value>This event is connected to several calendars of other users. Your change will also update their calendar. Would you really like to update the event?</value>
+  </string>
+  <string id="1273" name="user calendar">
+    <value>Confirm update</value>
+  </string>
+  <string id="1274" name="user contacts">
+    <value>Allow contact to see my calendar (view only)</value>
+  </string>
+  <string id="1275" name="user contacts">
+    <value>Do not share calendar</value>
+  </string>
+  <string id="1276" name="user contacts">
+    <value>Calendar of contacts</value>
+  </string>
+  <string id="1277" name="user contacts">
+    <value>Your contacts need to approve you first to be able to see their calendar.</value>
+  </string>
+  <string id="1278" name="user contacts">
+    <value>You cannot store or delete events from other calendars then your own!</value>
+  </string>
+  <string id="1279" name="user contacts">
+    <value>Show my own calendar again!</value>
+  </string>
+  <string id="1280" name="user calendar">
+    <value>This event is connected to several calendars of other users. Your action will also delete the event from their calendar. Would you really like to delete the event?</value>
+  </string>
+  <string id="1281" name="user calendar">
+    <value>Confirm action</value>
+  </string>
+  <string id="1282" name="user calendar">
+    <value>Enter room</value>
+  </string>
+  <string id="1283" name="user calendar">
+    <value>Access the conference room</value>
+  </string>
+  <string id="1284" name="private message">
+    <value>There is a conference room and event booked with this private message.</value>
+  </string>
+  <string id="1285" name="user calendar">
+    <value>You need to store the event first!</value>
+  </string>
+  <string id="1286" name="access rooms error">
+    <value>There is no such room available. The event in the calendar and connected room is already deleted!</value>
+  </string>
 </language>
