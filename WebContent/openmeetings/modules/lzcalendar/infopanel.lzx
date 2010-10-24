@@ -718,8 +718,6 @@
                 </handler>
             </calButton>
                 
-                
-            
             <calButton labelid="814" x="${parent.width - this.width - 10}" y="13">
             	<handler name="onclick" args="c">
             		
@@ -730,10 +728,13 @@
             		
             		if (Number(parent.parent.appointementId) == 0) {
             			canvas.eventDataMgr.deleteEvent();
+            		} else if (parent.parent.isConnectedEvent) {
+            			new lz.confirmationSingle(canvas,{refObj:this,labelid:1281,
+                                    labeliderror:1280,showCheckBox:false});
             		} else {
             			new lz.confirmationSingle(canvas,{refObj:this,labelid:797,
             						showCheckBox:false,labeliderror:796});
-            		}
+            		} 
             	</handler>
             	<method name="sendConfirmation" args="refObj,t">
             		parent.parent.deleteAppointment.doCall();

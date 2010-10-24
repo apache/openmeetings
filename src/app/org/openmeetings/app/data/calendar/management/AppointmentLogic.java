@@ -252,6 +252,21 @@ public class AppointmentLogic {
 			
 			Appointment point = getAppointMentById(appointmentId);
 			
+			if (point.getIsConnectedEvent() != null && point.getIsConnectedEvent()) {
+				List<Appointment> appointments = AppointmentDaoImpl.getInstance().getAppointmentsByRoomId(point.getRoom().getRooms_id());
+				
+				for (Appointment appointment : appointments) {
+					
+					if (!appointment.getAppointmentId().equals(appointmentId)) {
+						
+						AppointmentDaoImpl.getInstance().deleteAppointement(appointment.getAppointmentId());
+						
+					}
+					
+				}
+				
+			}
+			
 			if(point == null){
 				log.error("No appointment found for ID " + appointmentId);
 				return null;

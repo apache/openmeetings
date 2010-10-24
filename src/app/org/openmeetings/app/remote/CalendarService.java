@@ -218,12 +218,13 @@ public class CalendarService {
 					users_id);
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 
-				Appointment app = AppointmentLogic.getInstance()
-						.getAppointMentById(appointmentId);
-				Roommanagement.getInstance().deleteRoom(app.getRoom());
+//				Appointment app = AppointmentLogic.getInstance()
+//						.getAppointMentById(appointmentId);
+//				Roommanagement.getInstance().deleteRoom(app.getRoom());
 
 				return AppointmentLogic.getInstance().deleteAppointment(
-						appointmentId, users_id, language_id);
+											appointmentId, users_id, language_id);
+				
 			}
 
 		} catch (Exception err) {
