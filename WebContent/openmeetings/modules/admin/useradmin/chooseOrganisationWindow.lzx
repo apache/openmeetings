@@ -41,12 +41,12 @@
     <simpleValueList name="_organisationslist" y="24" x="120" width="270" height="120" 
 		multiselect="true" />
 	
-	<simpleLabelButton labelid="174" x="290" y="200" width="100">
+	<simpleLabelButton labelid="174" x="290" y="170" width="100">
 		<handler name="onclick">
 			this.parent.close();
 		</handler>
 	</simpleLabelButton>
-	<simpleLabelButton labelid="175" x="180" y="200" width="100">
+	<simpleLabelButton labelid="175" x="180" y="170" width="100">
 		<handler name="onclick">
 			<![CDATA[
 				for (var i=0;i<this.parent._organisationslist._selected.length;i++){

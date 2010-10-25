@@ -1813,6 +1813,8 @@ public class Usermanagement {
 									"lower(c.login) LIKE lower(:search) " +
 									"OR lower(c.firstname) LIKE lower(:search) " +
 									"OR lower(c.lastname) LIKE lower(:search) " +
+									"OR lower(c.adresses.email) LIKE lower(:search) " +
+									"OR lower(c.adresses.town) LIKE lower(:search) " +
 								")" +
 							"OR" +
 								"(" +
@@ -1879,7 +1881,7 @@ public class Usermanagement {
 	
 	
 	public Long searchMaxUserProfile(String searchTxt, String userOffers,
-			String userSearchs, String orderBy, int start, int max, boolean asc) {
+			String userSearchs) {
 		try {
 				
 			String hql = "select count(c.user_id) from Users c " +
@@ -1890,6 +1892,8 @@ public class Usermanagement {
 									"lower(c.login) LIKE lower(:search) " +
 									"OR lower(c.firstname) LIKE lower(:search) " +
 									"OR lower(c.lastname) LIKE lower(:search) " +
+									"OR lower(c.adresses.email) LIKE lower(:search) " +
+									"OR lower(c.adresses.town) LIKE lower(:search) " +
 								")" +
 							"OR" +
 								"(" +
@@ -1901,14 +1905,6 @@ public class Usermanagement {
 								")" +
 						")";
 						
-			hql += " ORDER BY " + orderBy;
-			
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
-			}
-			
 			if (searchTxt.length() == 0) {
 				searchTxt = "%";
 			} else {
@@ -1936,8 +1932,6 @@ public class Usermanagement {
 			query.setString("search", searchTxt);
 			query.setString("userOffers", userOffers);
 			query.setString("userSearchs", userSearchs);
-			query.setMaxResults(max);
-			query.setFirstResult(start);
 			
 			List ll = query.list();
 			tx.commit();

@@ -60,10 +60,16 @@
 				
 				var t=new Date();
 				
-		        var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-		        		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
-		        		+'&moduleName=userprofile&parentPath=&room_id='
-		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
+				var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+                    +'&moduleName=remoteuserprofile&parentPath=&room_id='
+                    +'&remoteUserid='+this.refObj.user_id+'&r='+t.getTime()
+                    +'&sid='+canvas.sessionId;
+                    
+		        //var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        //		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+		        //		+'&moduleName=userprofile&parentPath=&room_id='
+		        //		+'&sid='+canvas.sessionId+'&r='+t.getTime();
 		        
 		        //if ($debug) Debug.write("profileUrl "+profileUrl);
 				
@@ -109,7 +115,17 @@
 		        <labelTooltip labelid="1186" />
 		    </miniIcons> 
 		    
-		    <miniIcons name="profile" y="1" x="20" resource="user_profile_rsc" width="18" height="18" 
+		    <miniIcons name="message" y="1" x="20" resource="private_message_add_rsc" width="18" height="18" 
+                   showhandcursor="true">
+                <handler name="onclick">
+                    if ($debug) Debug.write("Start Conference 1 ",parent.parent.parent.refObj.user_id);
+                    if ($debug) Debug.write("Start Conference 2 ",parent.parent.parent.parent.parent.parent.parent);
+                    parent.parent.parent.parent.parent.parent.parent.newMessage(parent.parent.parent.refObj);
+                </handler>
+                <labelTooltip labelid="1253" />
+            </miniIcons> 
+		    
+		    <miniIcons name="profile" y="1" x="40" resource="user_profile_rsc" width="18" height="18" 
 	               showhandcursor="true">
 		        <handler name="onclick">
 		            if ($debug) Debug.write("Start Conference");
@@ -193,6 +209,9 @@
              listItemName="searchUserProfileListItem" menuBarXIndent="100"
              multiselect="false" width="$once{ canvas.width - 130 }">
 			
+			<attribute name="_newPrivateMessage" value="null" />
+			<attribute name="newMessageActive" value="false" type="boolean"/>
+			
 			<!--
 				public SearchResult searchUserProfile(String SID, String searchTxt, String userOffers, 
 		   			String userSearchs, String orderBy, int start, int max, boolean asc)
@@ -235,9 +254,25 @@
 	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
 	            this.addHeaderItemOrdered(1181,100,"c.omTimeZone.omTimeZoneId",false,false);
 	            this.addHeaderItem(1182,250);
-	            this.addHeaderItem(1183,250);
-	            this.addHeaderItem(1185,100);
+	            this.addHeaderItem(1183,this.width-250-60-100-200-16);
+	            this.addHeaderItem(1185,60);
 	        </handler>
+	        
+	        <method name="newMessage" args="userObject">
+                if (this.newMessageActive) {
+                    this._newPrivateMessage.destroy();
+                }
+                
+                new lz.newPrivateMessage(this,{
+                                x:0,
+                                refObj:this,
+                                userObject:userObject,
+                                width:this.width,
+                                height:this.height
+                            });
+                        
+                this.newMessageActive = true;
+            </method>
 	        
 	        <handler name="onclickedItem" args="refObj">
 	            <![CDATA[
@@ -304,7 +339,7 @@
 	                            list.subviews[i].isselected = false;
 	                        }
 	                        
-	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname);
+	                        list.subviews[i].setAttribute("username",records[i].title + ' ' + records[i].firstname+' '+records[i].lastname + ' ['+records[i].login+']');
 	                        list.subviews[i].setAttribute("timezone",records[i].omTimeZone.jname + '<br/>('+records[i].omTimeZone.ical+')');
 	                        list.subviews[i].setAttribute("searchOffers",records[i].userOffers);
 	                        list.subviews[i].setAttribute("searchSearchs",records[i].userSearchs);
@@ -361,7 +396,7 @@
 	                    
 	                    //if ($debug) Debug.write(item.itemId);
 	                    
-	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname);
+	                    item.setAttribute("username",this.renderList[item.itemId].title + ' ' + this.renderList[item.itemId].firstname+' '+this.renderList[item.itemId].lastname + ' ['+this.renderList[item.itemId].login+']');
 	                    item.setAttribute("timezone",this.renderList[item.itemId].omTimeZone.jname + '<br/>('+this.renderList[item.itemId].omTimeZone.ical+')');
                         item.setAttribute("searchOffers",this.renderList[item.itemId].userOffers);
                         item.setAttribute("searchSearchs",this.renderList[item.itemId].userSearchs);

@@ -24,13 +24,20 @@
 					pictureuri = "_profile_"+pictureuri;
 				}
 				
-				var t=new Date();
+				//var t=new Date();
 				
-		        var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-		        		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
-		        		+'&moduleName=userprofile&parentPath=&room_id='
-		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
-		        
+		       // var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		       // 		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+		        //		+'&moduleName=userprofile&parentPath=&room_id='
+		        //		+'&sid='+canvas.sessionId+'&r='+t.getTime();
+		        		
+		        var t=new Date();
+                
+                var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                    +canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
+                    +'&moduleName=remoteuserprofile&parentPath=&room_id='
+                    +'&remoteUserid='+this.refObj.user_id+'&r='+t.getTime()
+                    +'&sid='+canvas.sessionId;
 		        //if ($debug) Debug.write("profileUrl "+profileUrl);
 				
 				this.searchUserProfileImage = new lz.searchUserProfileImage(canvas,{
