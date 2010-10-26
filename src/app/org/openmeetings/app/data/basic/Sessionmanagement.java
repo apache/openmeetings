@@ -536,18 +536,40 @@ public class Sessionmanagement {
 	 * @param date
 	 * @return
 	 */
-	private List getSessionToDelete(Date date){
+	private List<Sessiondata> getSessionToDelete(Date refresh_time){
 		try {
 			//log.debug("****** sessionToDelete: "+date);
+//			Object idf = HibernateUtil.createSession();
+//			Session session = HibernateUtil.getSession();
+//			Transaction tx = session.beginTransaction();
+//			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
+//			crit.add(Restrictions.lt("refresh_time", date));
+//			List fullList = crit.list();
+//			tx.commit();
+//			HibernateUtil.closeSession(idf);
+//			return fullList;
+			
+			String hql = "Select c from Sessiondata c " +
+							"WHERE c.refresh_time < :refresh_time " +
+							"AND ( " +
+							"c.storePermanent IS NULL " +
+							"OR " +
+							"c.storePermanent = false " +
+							")";
+			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.lt("refresh_time", date));
-			List fullList = crit.list();
+			Query query = session.createQuery(hql);
+			query.setDate("refresh_time", refresh_time);
+			List<Sessiondata> fullList = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-			return fullList;
+			
+			log.debug("Sessions To Delete :: "+fullList.size());
+			
+			return fullList;			
+			
 		} catch (HibernateException ex) {
 			log.error("[getSessionToDelete]: " ,ex);
 		} catch (Exception ex2) {
