@@ -46,22 +46,30 @@ public class RoomService {
 	
 	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault{
 		try {
-			List<Rooms> roomList = ConferenceService.getInstance().getRoomsPublic(SID, roomtypes_id);
-			//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
-			if (roomList!=null && roomList.size()!=0) {
-				//roomsListObject.setRoomList(roomList);
-				Rooms[] roomItems = new Rooms[roomList.size()];
-				int count = 0;
-				for (Iterator<Rooms>it = roomList.iterator();it.hasNext();){
-					Rooms room = it.next();
-					room.setCurrentusers(null);
-					roomItems[count] = room;
-					count++;
-				}
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkAdminLevel(User_level)){
 				
-				return roomItems;
-			}
-			log.debug("roomList SIZE: "+roomList.size());
+	        	List<Rooms> roomList = Roommanagement.getInstance().getPublicRooms(User_level, roomtypes_id);
+				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+				if (roomList!=null && roomList.size()!=0) {
+					//roomsListObject.setRoomList(roomList);
+					Rooms[] roomItems = new Rooms[roomList.size()];
+					int count = 0;
+					for (Iterator<Rooms>it = roomList.iterator();it.hasNext();){
+						Rooms room = it.next();
+						room.setCurrentusers(null);
+						roomItems[count] = room;
+						count++;
+					}
+					
+					return roomItems;
+				}
+				log.debug("roomList SIZE: "+roomList.size());
+			
+	        }
 			return null;
 		} catch (Exception err) {
 			log.error("[getRoomsPublic] ",err);
