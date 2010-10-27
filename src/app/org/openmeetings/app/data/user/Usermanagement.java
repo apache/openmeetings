@@ -1806,25 +1806,108 @@ public class Usermanagement {
 		try {
 				
 			String hql = "select c from Users c " +
-						"where c.deleted = 'false' " +
-						"AND " +
-						"(" +
-								"(" +
-									"lower(c.login) LIKE lower(:search) " +
-									"OR lower(c.firstname) LIKE lower(:search) " +
-									"OR lower(c.lastname) LIKE lower(:search) " +
-									"OR lower(c.adresses.email) LIKE lower(:search) " +
-									"OR lower(c.adresses.town) LIKE lower(:search) " +
-								")" +
-							"OR" +
-								"(" +
-									"lower(c.userOffers) LIKE lower(:userOffers) " +
-								")" +
-							"OR" +
-								"(" +
-									"lower(c.userSearchs) LIKE lower(:userSearchs) " +
-								")" +
-						")";
+						"where c.deleted = 'false' ";
+						
+						if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
+						
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+						
+						} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+									")";
+							
+						} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+							
+						} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+							
+						} else if (searchTxt.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+									")";
+							
+						} else if (userOffers.length() != 0) {
+
+							hql += "AND " +
+									"(" +
+										"(" +
+											"lower(c.userOffers) LIKE lower(:userOffers) " +
+										")" +
+									")";
+							
+						} else if (userSearchs.length() != 0) {
+
+							hql += "AND " +
+									"(" +
+										"(" +
+											"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+										")" +
+										")";
+							
+						}
 						
 			hql += " ORDER BY " + orderBy;
 			
@@ -1834,23 +1917,19 @@ public class Usermanagement {
 				hql += " DESC";
 			}
 			
-			if (searchTxt.length() == 0) {
-				searchTxt = "%";
-			} else {
+			if (searchTxt.length() != 0) {
 				searchTxt = "%" + searchTxt + "%";
 			}
 			
-			if (userOffers.length() == 0) {
-				userOffers = "%";
-			} else {
+			if (userOffers.length() != 0) {
 				userOffers = "%" + userOffers + "%";
 			}
 			
-			if (userSearchs.length() == 0) {
-				userSearchs = "%";
-			} else {
+			if (userSearchs.length() != 0) {
 				userSearchs = "%" + userSearchs + "%";
 			}
+			
+			log.debug("hql :: "+hql);
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
@@ -1858,22 +1937,238 @@ public class Usermanagement {
 			Transaction tx = session.beginTransaction();
 			
 			Query query = session.createQuery(hql); 
-			query.setString("search", searchTxt);
-			query.setString("userOffers", userOffers);
-			query.setString("userSearchs", userSearchs);
+			
+			if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userOffers", userOffers);
+				query.setString("userSearchs", userSearchs);
+			
+			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userOffers", userOffers);
+				
+			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userSearchs", userSearchs);
+				
+			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("userOffers", userOffers);
+				query.setString("userSearchs", userSearchs);
+				
+			} else if (searchTxt.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				
+			} else if (userOffers.length() != 0) {
+
+				query.setString("userOffers", userOffers);
+				
+			} else if (userSearchs.length() != 0) {
+
+				query.setString("userSearchs", userSearchs);
+				
+			}
+			
+			
 			query.setMaxResults(max);
 			query.setFirstResult(start);
 			
 			List<Users> userList = query.list();
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return userList;	
 			
 		} catch (HibernateException ex) {
-			log.error("[getUsersList] "+ex);
+			log.error("[getUsersList] ",ex);
 		} catch (Exception ex2) {
-			log.error("[getUsersList] "+ex2);
+			log.error("[getUsersList] ",ex2);
+		}
+		
+		return null;
+	}
+	
+	public Long searchCountUserProfile(String searchTxt, String userOffers,
+			String userSearchs) {
+		try {
+				
+			String hql = "select count(c.user_id) from Users c " +
+						"where c.deleted = 'false' ";
+						
+						if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
+						
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+						
+						} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+									")";
+							
+						} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+							
+						} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+											"(" +
+												"lower(c.userOffers) LIKE lower(:userOffers) " +
+											")" +
+										"AND" +
+											"(" +
+												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											")" +
+									")";
+							
+						} else if (searchTxt.length() != 0) {
+							
+							hql += "AND " +
+									"(" +
+										"(" +
+												"lower(c.login) LIKE lower(:search) " +
+												"OR lower(c.firstname) LIKE lower(:search) " +
+												"OR lower(c.lastname) LIKE lower(:search) " +
+												"OR lower(c.adresses.email) LIKE lower(:search) " +
+												"OR lower(c.adresses.town) LIKE lower(:search) " +
+											")" +
+									")";
+							
+						} else if (userOffers.length() != 0) {
+
+							hql += "AND " +
+									"(" +
+										"(" +
+											"lower(c.userOffers) LIKE lower(:userOffers) " +
+										")" +
+									")";
+							
+						} else if (userSearchs.length() != 0) {
+
+							hql += "AND " +
+									"(" +
+										"(" +
+											"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+										")" +
+										")";
+							
+						}
+						
+			if (searchTxt.length() != 0) {
+				searchTxt = "%" + searchTxt + "%";
+			}
+			
+			if (userOffers.length() != 0) {
+				userOffers = "%" + userOffers + "%";
+			}
+			
+			if (userSearchs.length() != 0) {
+				userSearchs = "%" + userSearchs + "%";
+			}
+			
+			log.debug("hql :: "+hql);
+			
+			//get all users
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Query query = session.createQuery(hql); 
+			
+			if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userOffers", userOffers);
+				query.setString("userSearchs", userSearchs);
+			
+			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userOffers", userOffers);
+				
+			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				query.setString("userSearchs", userSearchs);
+				
+			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
+				
+				query.setString("userOffers", userOffers);
+				query.setString("userSearchs", userSearchs);
+				
+			} else if (searchTxt.length() != 0) {
+				
+				query.setString("search", searchTxt);
+				
+			} else if (userOffers.length() != 0) {
+
+				query.setString("userOffers", userOffers);
+				
+			} else if (userSearchs.length() != 0) {
+
+				query.setString("userSearchs", userSearchs);
+				
+			}
+			
+			
+			List userList = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return (Long) userList.get(0);	
+			
+		} catch (HibernateException ex) {
+			log.error("[getUsersList] ",ex);
+		} catch (Exception ex2) {
+			log.error("[getUsersList] ",ex2);
 		}
 		
 		return null;

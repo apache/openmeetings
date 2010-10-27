@@ -139,7 +139,7 @@
     		
     		for (var t=0;t<aSearchs.length;t++) {
     			
-    			tSearchs += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(aSearchs[t]) +"'>" + this.removeWhitespace(aSearchs[t]) + "</a></FONT></u>";
+    			tSearchs += "<u><FONT color='#0000CC'><a href='asfunction:_root.searchInterest,"+ this.removeWhitespace(aSearchs[t]) +"'>" + this.removeWhitespace(aSearchs[t]) + "</a></FONT></u>";
     			
     			if (t+1 < aSearchs.length) {
     				tSearchs += ", ";

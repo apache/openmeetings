@@ -2,20 +2,6 @@
 <library>
 	
 	
-<script>
-	<![CDATA[
-	
-		function searchOffers(str) {
-			if ($debug) Debug.write("searchOffers ",str);
-		}
-		
-		function searchUsers(str) {
-			if ($debug) Debug.write("searchUsers ",str);
-		}
-	
-	]]>
-</script>
-
 <class name="menuListItemUserProfile" extends="view" height="24"
     width="${ this._ctext.width+20 }" >
 
@@ -80,12 +66,17 @@
         _mainScrollBar.setAttribute("visibility","hidden");
         if (canvas.userSettingsModuleOpt == "userProfile") {
         	this._menu._editUserProfile.onclick.sendEvent(null);
+        } else if (canvas.userSettingsModuleOpt == "userSearch") {
+            this._menu._searchUserProfile.onclick.sendEvent(null);
+            this._content._searchUserProfile.searchByUpdate();
         } else {
         	this._menu._editUserContacts.onclick.sendEvent(null);
         }
     </handler>
     
     <handler name="ontabcontentleave">
+    	//Clear reference to search to make sure it will re-initialize
+    	canvas.userSettingsSearchRef = null;
     	_mainScrollBar.setAttribute("visibility","visible");
     </handler>
 	

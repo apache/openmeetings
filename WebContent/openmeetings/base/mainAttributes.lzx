@@ -342,6 +342,10 @@ and some more references to temp-objects
 
 <attribute name="userSettingsModuleOpt" value="userProfile" type="string"/>
 
+<attribute name="userSettingsSearchType" value="" type="string"/>
+<attribute name="userSettingsSearchPhrase" value="" type="string"/>
+<attribute name="userSettingsSearchRef" value="null"/>
+
 <attribute name="contactUser" value="0" type="number" />
 
 </library>

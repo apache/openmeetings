@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="searchUserProfileImage" extends="view" width="120" height="100"
+	   bgcolor="0x333333">
+	
+	<attribute name="profileUrl" value="" type="string" />
+	
+	<view name="_placeholderBG" width="118" x="1" y="1"
+		  height="98" bgcolor="0xEFEFEF"></view>
+	<view x="58" y="48"
+		resource="image_loading_placeholder_rsc" ></view>
+	
+	<image name="_profileImage" src="$once{ parent.profileUrl }" x="1" y="1">
+		<handler name="onload">
+			parent._placeholderBG.destroy();
+			parent.setAttribute("width",this.width+2);
+			parent.setAttribute("height",this.height+2);
+		</handler>
+	</image>
+</class>
+	
+</library>

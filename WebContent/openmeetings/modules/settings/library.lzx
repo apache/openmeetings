@@ -41,10 +41,11 @@
     
     <include href="privatemessages/" />
     <include href="usercontacts/" />
+    <include href="searchuserprofile/" />
     
     <include href="viewUserProfile.lzx" />
     <include href="userSettings.lzx" />
     <include href="editUserProfile.lzx" />
-    <include href="searchUserProfile.lzx" />
+    
 
 </library>

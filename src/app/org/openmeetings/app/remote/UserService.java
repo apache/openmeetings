@@ -480,7 +480,7 @@ public class UserService {
 			   searchResult.setObjectName(Users.class.getName());
 			   List<Users> userList = Usermanagement.getInstance().searchUserProfile(searchTxt,userOffers,userSearchs,orderBy,start,max,asc);
 			   searchResult.setResult(userList);
-			   Long resultInt = Usermanagement.getInstance().searchMaxUserProfile(searchTxt, userOffers, userSearchs);
+			   Long resultInt = Usermanagement.getInstance().searchCountUserProfile(searchTxt, userOffers, userSearchs);
 			   searchResult.setRecords(resultInt);
 			   
 			   return searchResult;
