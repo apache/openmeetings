@@ -3870,4 +3870,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1286" name="access rooms error">
     <value>There is no such room available. The event in the calendar and connected room is already deleted!</value>
   </string>
+  <string id="1287" name="nick name">
+    <value>Choose your nickname</value>
+  </string>
+  <string id="1288" name="nick name">
+    <value>Firstname</value>
+  </string>
+  <string id="1289" name="nick name">
+    <value>Lastname</value>
+  </string>
+  <string id="1290" name="nick name">
+    <value>Email</value>
+  </string>
+  <string id="1291" name="nick name">
+    <value>Ok</value>
+  </string>
+  <string id="1292" name="nick name">
+    <value>Minimum length 4 chars! For both, firstname and lastname.</value>
+  </string>
+  <string id="1293" name="nick name">
+    <value>Please enter a valid email!</value>
+  </string>
 </language>
