@@ -344,7 +344,11 @@ public class UserService {
 				}
 				
 				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, room_id, 
-															becomeModerator,showAudioVideoTest,false, null);
+															becomeModerator,showAudioVideoTest,
+															false, //allowSameURLMultipleTimes
+															null, //recording_id
+															false //showNickNameDialogAsInt
+															);
 				
 				if (hash != null) {
 					return hash;
@@ -402,7 +406,76 @@ public class UserService {
 				}
 				
 				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, room_id, 
-															becomeModerator,showAudioVideoTest,true, null);
+															becomeModerator,showAudioVideoTest,
+															true, //allowSameURLMultipleTimes
+															null, //recording_id
+															false //showNickNameDialogAsInt
+															);
+				
+				if (hash != null) {
+					return hash;
+				}
+				
+			} else {
+				return ""+new Long(-26);
+			}
+		} catch (Exception err){
+			log.error("setUserObjectWithAndGenerateRoomHash",err);
+		}
+		return ""+new Long(-1);			
+	}
+	
+	public String setUserAndNickName(String SID, String username, String firstname, String lastname, 
+			String profilePictureUrl, String email, Long externalUserId, String externalUserType,
+			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt, 
+			int showNickNameDialogAsInt){
+		try {
+			
+			log.debug("UserService.setUserObjectAndGenerateRoomHashByURLAndNick");
+			
+	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				
+				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
+						profilePictureUrl, email, externalUserId, externalUserType);
+				
+				log.debug("username "+username);
+				log.debug("firstname "+firstname);
+				log.debug("lastname "+lastname);
+				log.debug("profilePictureUrl "+profilePictureUrl);
+				log.debug("email "+email);
+				log.debug("externalUserId "+externalUserId);
+				log.debug("externalUserType " +externalUserType);
+				log.debug("showNickNameDialogAsInt" + showNickNameDialogAsInt);
+				
+				//XStream xStream = new XStream(new XppDriver());
+				XStream xStream = new XStream(new DomDriver("UTF-8"));
+				xStream.setMode(XStream.NO_REFERENCES);
+				String xmlString = xStream.toXML(remoteSessionObject);
+				
+				log.debug("xmlString "+xmlString);
+				
+				Sessionmanagement.getInstance().updateUserRemoteSession(SID, xmlString);
+				
+				boolean becomeModerator = false;
+				if (becomeModeratorAsInt != 0) {
+					becomeModerator = true;
+				}
+				
+				boolean showAudioVideoTest = false;
+				if (showAudioVideoTestAsInt != 0) {
+					showAudioVideoTest = true;
+				}
+				
+				boolean showNickNameDialog = false;
+				if (showNickNameDialogAsInt != 0) {
+					showNickNameDialog = true;
+				}
+				
+				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, room_id, 
+															becomeModerator,showAudioVideoTest,true, null,
+															showNickNameDialog);
 				
 				if (hash != null) {
 					return hash;
@@ -448,7 +521,11 @@ public class UserService {
 				
 				
 				String hash = SOAPLoginDaoImpl.getInstance().addSOAPLogin(SID, null, 
-															false,false,true, recording_id);
+															false,false,
+															true, //allowSameURLMultipleTimes
+															recording_id, //recording_id
+															false //showNickNameDialogAsInt
+															);
 				
 				if (hash != null) {
 					return hash;

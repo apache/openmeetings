@@ -180,7 +180,18 @@ function getStringTime(){
     var minutes = dateObj.getMinutes();
     if (minutes<10) minutes="0"+minutes;
     return ''+hours+':'+minutes;
-}    
+}   
+
+function getStringTimeWithSeconds(){
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}   
 
 function parseDateToString(dateObj){
     // if($debug) Debug.write("FUNC/parseDateToString",dateObj);

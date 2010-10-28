@@ -222,7 +222,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("ClientConnect", rcm.getUser_id(), 
 					streamId, null, rcm.getUserip(), rcm.getScope(), 
-					rcm.getExternalUserId(), rcm.getExternalUserType());
+					rcm.getExternalUserId(), rcm.getExternalUserType(),
+					rcm.getMail(),rcm.getFirstname(),rcm.getLastname());
 
 		} catch (Exception err){
 			log.error("roomJoin",err);
@@ -619,7 +620,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("roomLeave", currentClient.getUser_id(), 
 					currentClient.getStreamid(), room_id, currentClient.getUserip(), "", 
-					currentClient.getExternalUserId(), currentClient.getExternalUserType());
+					currentClient.getExternalUserId(), currentClient.getExternalUserType(),
+					currentClient.getMail(),currentClient.getFirstname(),currentClient.getLastname()
+					);
 			
 			
 			//Remove User from Sync List's
@@ -1370,7 +1373,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//Log the User
 			ConferenceLogDaoImpl.getInstance().addConferenceLog("roomEnter", currentClient.getUser_id(), 
 					streamid, room_id, currentClient.getUserip(), "", 
-					currentClient.getExternalUserId(), currentClient.getExternalUserType());
+					currentClient.getExternalUserId(), currentClient.getExternalUserType(),
+					currentClient.getMail(),currentClient.getFirstname(),currentClient.getLastname()
+					);
 			
 			log.debug("##### setRoomValues : " + currentClient.getUsername()+" "+currentClient.getStreamid()); // just a unique number
 

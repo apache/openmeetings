@@ -15,6 +15,7 @@
     <property name="becomemoderator" type="boolean" column="becomemoderator"/>
     <property name="showAudioVideoTest" type="boolean" column="showaudiovideotest"/>
     <property name="allowSameURLMultipleTimes" type="boolean" column="allow_same_url_multiple_times"/>
+    <property name="showNickNameDialog" type="boolean" column="show_nick_name_dialog"/>
     <property name="clientURL" type="string" column="client_url"/>
     <property name="roomRecordingId" type="long" column="room_recording_id"/>
   </class>

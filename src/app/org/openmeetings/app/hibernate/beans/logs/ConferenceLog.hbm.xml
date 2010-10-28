@@ -16,5 +16,8 @@
     <property name="scopeName" type="string" column="scopename"/>
     <property name="externalUserId" type="long" column="external_user_id"/>
     <property name="externalUserType" type="string" column="external_user_type"/>
+    <property name="email" type="string" column="email"/>
+    <property name="firstname" type="string" column="firstname"/>
+    <property name="lastname" type="string" column="lastname"/>
   </class>
 </hibernate-mapping>

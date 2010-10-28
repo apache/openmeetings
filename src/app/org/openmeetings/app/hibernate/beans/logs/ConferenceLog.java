@@ -23,6 +23,9 @@ public class ConferenceLog {
 	private Long room_id;
 	private String userip;
 	private String scopeName;
+	private String email;
+	private String firstname;
+	private String lastname;
 	
 	/**
      * 
@@ -160,6 +163,41 @@ public class ConferenceLog {
 	public void setExternalUserType(String externalUserType) {
 		this.externalUserType = externalUserType;
 	}
-
+	
+	/**
+     * @hibernate.property
+     *  column="email"
+     *  type="string"
+     */
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="firstname"
+     *  type="string"
+     */
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="lastname"
+     *  type="string"
+     */
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 	
 }

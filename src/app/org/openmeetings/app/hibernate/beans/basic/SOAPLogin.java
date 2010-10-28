@@ -19,6 +19,7 @@ public class SOAPLogin {
 	private Boolean becomemoderator;
 	private Boolean showAudioVideoTest;
 	private Boolean allowSameURLMultipleTimes;
+	private Boolean showNickNameDialog;
 	private String clientURL;
 	private Long roomRecordingId;
 	
@@ -143,6 +144,18 @@ public class SOAPLogin {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
 
+	/**
+     * @hibernate.property
+     *  column="show_nick_name_dialog"
+     *  type="boolean"
+     */
+	public Boolean getShowNickNameDialog() {
+		return showNickNameDialog;
+	}
+	public void setShowNickNameDialog(Boolean showNickNameDialog) {
+		this.showNickNameDialog = showNickNameDialog;
+	}
+	
 	/**
      * @hibernate.property
      *  column="client_url"

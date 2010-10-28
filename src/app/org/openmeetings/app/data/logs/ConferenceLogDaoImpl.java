@@ -31,7 +31,8 @@ public class ConferenceLogDaoImpl {
 
 	public Long addConferenceLog(String eventType, Long userId, String streamid, 
 			Long room_id, String userip, String scopeName, 
-			Long externalUserId, String externalUserType) {
+			Long externalUserId, String externalUserType, String email,
+			String firstname, String lastname) {
 		try {
 			
 			ConferenceLogType confLogType = ConferenceLogTypeDaoImpl.getInstance().getConferenceLogTypeByEventName(eventType);
@@ -50,6 +51,9 @@ public class ConferenceLogDaoImpl {
 			confLog.setUserip(userip);
 			confLog.setExternalUserId(externalUserId);
 			confLog.setExternalUserType(externalUserType);
+			confLog.setFirstname(firstname);
+			confLog.setLastname(lastname);
+			confLog.setEmail(email);
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();

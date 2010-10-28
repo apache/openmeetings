@@ -29,6 +29,7 @@ import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.beans.user.Userdata;
 
 import org.openmeetings.app.data.basic.*;
+import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -460,6 +461,7 @@ public class MainService implements IPendingServiceCallback {
 				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
 				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
+				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
                 
 				return returnSoapLogin;
 				
@@ -470,6 +472,42 @@ public class MainService implements IPendingServiceCallback {
     		log.error("[secureLoginByRemote]",err);
     	}
     	return null;
+    }
+    
+    /**
+     * Function is called if the user loggs in via a secureHash
+     * and sets the param showNickNameDialog in the Object SOAPLogin to true
+     * the user gets displayed an additional dialog to enter his nickname
+     * 
+     * @return
+     */
+    
+    public Long setUserNickName(String firstname, String lastname, String email) {
+    	try {
+    		
+    		IConnection current = Red5.getConnectionLocal();
+			String streamId = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamId);	
+			
+			currentClient.setFirstname(firstname);
+			currentClient.setLastname(lastname);
+			currentClient.setMail(email);
+			
+			//Log the User
+			ConferenceLogDaoImpl.getInstance().addConferenceLog("nicknameEnter", currentClient.getUser_id(), 
+					streamId, null, currentClient.getUserip(), currentClient.getScope(), 
+					currentClient.getExternalUserId(), currentClient.getExternalUserType(),
+					currentClient.getMail(),currentClient.getFirstname(),currentClient.getLastname()
+					);
+			
+			this.clientListManager.updateClientByStreamId(streamId, currentClient);
+			
+			return 1L;
+    		
+    	} catch (Exception err) {
+    		log.error("[setUserNickName] ",err);
+    	}
+    	return new Long(-1);
     }
     
     /**

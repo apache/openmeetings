@@ -20,5 +20,6 @@
     <include href="meetingTimer.lzx" />
     <include href="incomingScreenSharing.lzx" />
     <include href="redirectBox.lzx" />
+    <include href="chooseNickName.lzx" />
     
 </library>

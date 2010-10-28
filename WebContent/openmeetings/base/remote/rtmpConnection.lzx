@@ -255,7 +255,8 @@
             } else if(this.remotecontext  instanceof lz.rtmpConnection){
         	    rtmpObject = this.remotecontext;
             } else {
-        	    Debug.warn("ERROR: no remotecontext availible abort call");
+        	    if ($debug) Debug.warn("ERROR: no remotecontext availible abort call", this.funcname, this);
+        	    return;
             }
         	//Debug.write('call', this, rtmpObject, rtmpObject.status);
         	//Debug.write('call', this.remotecontext);

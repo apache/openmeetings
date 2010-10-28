@@ -299,13 +299,22 @@
 						return;
 					}
 					
+					canvas.showNickNameDialog = value.showNickNameDialog;
+					
+					if ($debug) Debug.write("markSessionAsLogedIn9 ",canvas.showNickNameDialog);
+                
+					
 					canvas.initroomid = value.room_id;
 					canvas.becomemoderator = value.becomemoderator;
                     canvas.showAudioVideoTest = value.showAudioVideoTest;
                     
                     canvas.roomRecordingId = value.roomRecordingId;
 					
-					parent.getCurrentRoomClient.doCall();
+                    if (canvas.showNickNameDialog) {
+                    	new lz.chooseNickName(canvas);
+                    } else {
+					    parent.getCurrentRoomClient.doCall();
+                    }
 				}
             ]]>
         </handler>   

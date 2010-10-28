@@ -348,4 +348,6 @@ and some more references to temp-objects
 
 <attribute name="contactUser" value="0" type="number" />
 
+<attribute name="showNickNameDialog" value="false" type="boolean" />
+
 </library>
