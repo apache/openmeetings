@@ -104,7 +104,7 @@ public class CalendarServlet extends HttpServlet {
 					
 					String timeZoneIdAsStr = httpServletRequest.getParameter("timeZoneId");
 					
-					System.out.println("CalendarServlet jNameTimeZone "+jNameTimeZone );
+					log.debug("CalendarServlet jNameTimeZone "+jNameTimeZone );
 					
 					if (timeZoneIdAsStr == null) {
 						

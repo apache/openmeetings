@@ -1035,7 +1035,7 @@
 	</view>
 	
 	<view name="_privateMessageDetails" x="155" width="$once{ parent.width-155 }" y="296" 
-		  height="${ parent.height - 298 }">
+		  height="${ parent.height - 298 }" clip="true">
 		
 		<attribute name="pendingUserStatusRef" value="null"/>
 		<attribute name="roomObjectRef" value="null"/>
@@ -1104,13 +1104,16 @@
 		  	height="61" bgcolor="0x666666" opacity="0.1" />
 		  	
 		<labelText name="_labelFrom" x="2" labelid="1202" y="2" />
-		<labelText name="from" width="$once{ parent.width-100 }" x="100" y="2" resize="false" />
+		<labelText name="from" width="$once{ parent.width-100 }" fontstyle="italic"
+				   x="100" y="2" resize="false" />
 		
 		<labelText name="_labelTo" x="2" labelid="1210" y="22"/>
-		<labelText name="to" width="$once{ parent.width-100 }" x="100" y="22" resize="false" />
+		<labelText name="to" width="$once{ parent.width-100 }" fontstyle="italic"
+				   x="100" y="22" resize="false" />
 		
 		<labelText name="_labelSubject" x="2" labelid="1211" y="42"/>
-		<labelText name="subject" width="$once{ parent.width-100 }" x="100" y="42" resize="false" />
+		<labelText name="subject" width="$once{ parent.width-100 }" fontstyle="bold"
+				   x="100" y="42" resize="false" />
 		
 		<view name="_privateMessageDetailsBorder1" width="$once{ parent.width }" y="62"
 		  	height="1" bgcolor="$once{ canvas.basebgcolorizer }" />

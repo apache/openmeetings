@@ -3,9 +3,35 @@
 
 	
 <class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
-	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }">
+	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }"
+	   visibility="hidden">
 	
 	<attribute name="rooms_id" value="0" type="number" />
+	
+	<handler name="oninit">
+		this.getAppointmentByRoomId.doCall();
+	</handler>
+	
+	<netRemoteCallHib name="getAppointmentByRoomId" funcname="calendarservice.getAppointmentByRoomId" 
+                      remotecontext="$once{ canvas.thishib }" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.rooms_id; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("checkPendingStatus: ",value);
+                
+                if (value == null) {
+                	parent.destroy();
+                } else {
+                	parent.setAttribute("visibility","visible");
+                }
+                //private Date appointmentStarttime;
+                //private Date appointmentEndtime;
+                parent._content._labels._start._text.setAttribute("text",parseDateToStringTimeSecunds(value.appointmentStarttime));
+                parent._content._labels._end._text.setAttribute("text",parseDateToStringTimeSecunds(value.appointmentEndtime));
+            ]]>
+        </handler>
+    </netRemoteCallHib> 
 
     <view name="_bg" x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
     	  bgcolor="0xFFFFFF" />
@@ -18,13 +44,33 @@
         <labelTooltip labelid="430" />
     </miniIconsPresenter>  
     
-    <simpleLabelButton labelid="1283" x="10" y="10">
-    	<handler name="onclick">
-            canvas.initroomid = parent.rooms_id;
-            canvas.thishib.getRoomById.doCall();
-        </handler>
-        <labelTooltip labelid="1284" />
-    </simpleLabelButton>
+    <view name="_content" x="10" layout="axis:x;spacing:2">
+    	
+    	<simpleLabelButton labelid="1283" y="10">
+            <handler name="onclick">
+                canvas.initroomid = parent.parent.rooms_id;
+                canvas.thishib.getRoomById.doCall();
+            </handler>
+            <labelTooltip labelid="1284" />
+        </simpleLabelButton>
+    
+        <view name="_labels" layout="axis:y;spacing:0">
+        	
+        	<view name="_start">
+        		<labelText labelid="1219" />
+        		<labelText name="_text" x="80" />
+        	</view>
+        	
+        	<view name="_end">
+                <labelText labelid="1220" />
+                <labelText name="_text" x="80" />
+            </view>
+        	
+        </view>
+    
+    </view>
+    
+    
     
 </class> 
 	

@@ -1,14 +1,17 @@
 package org.openmeetings.app.remote;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -232,6 +235,48 @@ public class CalendarService {
 		}
 		return null;
 
+	}
+	
+	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
+		try {
+
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+//				Appointment app = AppointmentLogic.getInstance()
+//						.getAppointMentById(appointmentId);
+//				Roommanagement.getInstance().deleteRoom(app.getRoom());
+				
+				Appointment appointment = new Appointment();
+
+				Appointment appStored = AppointmentDaoImpl.getInstance().getAppointmentByRoomId(
+															users_id, room_id);
+
+				Users user = Usermanagement.getInstance().getUserById(users_id);
+				
+				TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeZone(timeZone);
+				int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+				
+				//System.out.println("CalendarServlet offset "+offset );
+				//System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID() );
+				//log.debug("addAppointment offset :: "+offset);
+				
+				appointment.setAppointmentStarttime(new Date(appStored.getAppointmentStarttime().getTime() + offset));
+				appointment.setAppointmentEndtime(new Date(appStored.getAppointmentEndtime().getTime() + offset));
+				
+				
+				return appointment;
+			}
+
+		} catch (Exception err) {
+			log.error("[getAppointmentByRoomId]", err);
+		}
+		return null;
 	}
 
 }

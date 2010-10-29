@@ -1006,6 +1006,42 @@ public class AppointmentDaoImpl {
 		}
 	}
 	//---------------------------------------------------------------------------------------------
+
+	public Appointment getAppointmentByRoomId(Long user_id, Long rooms_id) {
+		try{
+			
+		    //log.debug("getAppointmentByRoomId");	
+			
+			String hql = "select a from Appointment a " +
+								"WHERE a.deleted != :deleted " +
+								"AND a.userId.user_id = :user_id " +
+								"AND a.room.rooms_id = :rooms_id ";
+			
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			
+			query.setString("deleted", "true");
+			query.setLong("user_id", user_id);
+			query.setLong("rooms_id", rooms_id);
+			
+			List<Appointment> listAppoints = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			if (listAppoints.size() > 0) {
+				return listAppoints.get(0);
+			}
+			
+			return null;
+			
+		}catch(Exception e){
+			log.error("[getAppointmentByRoomId]" , e);
+			return null;
+		}
+	}
 	
 	
 }
