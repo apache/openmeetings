@@ -2,8 +2,8 @@
 <library>
 
 <!--- chat output area. It shows chat history on-init.  -->
-<class name="overAllChatOutput" extends="view" height="$once{ parent.height-2 }" 
-            clip="true" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" >
+<class name="overAllChatOutput" extends="view" height="${ parent.height-2 }" 
+            clip="true" bgcolor="0xFFFFFF" width="${ parent.width-2 }" >
 
     <handler name="oninit">
         if($debug) Debug.write("overAllChatOutput/oninit");

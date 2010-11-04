@@ -310,6 +310,10 @@
                     canvas.landingZone = value.landingZone;
                     
                     canvas.roomRecordingId = value.roomRecordingId;
+                    
+                    if (canvas.roomRecordingId == null) {
+                    	canvas.roomRecordingId = 0;
+                    }
 					
                     if (canvas.showNickNameDialog) {
                     	new lz.chooseNickName(canvas);

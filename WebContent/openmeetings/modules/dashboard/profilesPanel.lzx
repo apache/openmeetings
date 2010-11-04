@@ -3,10 +3,10 @@
 
 <!--- Logged-in User Profile Panel on the dashboard -->
 <class name="profilesPanel" extends="guiPresenter" resizeable="false"
-    width="300" height="224" y="10" closable="true" labelid="375" >
+    width="${ canvas.width - this.x - 10 }" height="224" y="10" closable="true" labelid="375" >
 	
-	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
-		  height="$once{ parent.height-21 }" >
+	<view y="20" bgcolor="0xFFFFFF" x="1" width="${ parent.width-2 }" 
+		  height="$once{ parent.height-21 }" clip="true">
 	
 	<handler name="oninit">
         <![CDATA[
@@ -54,10 +54,14 @@
     <image y="20" x="10" name="_userpic" />
     
     <simpleLabelButton y="40" labelid="379" x="150" width="140"
-        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});" />  
+        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});">
+    	<labelTooltip labelid="379" />
+    </simpleLabelButton>  
         
     <simpleLabelButton y="70" labelid="377" x="150" width="140"
-        onclick="quicklinkAct('userSettingsModule')" />  
+        onclick="quicklinkAct('userSettingsModule')">
+    	<labelTooltip labelid="377" />
+    </simpleLabelButton> 
              
     <labelText fontstyle="bold" x="2" y="124" labelid="281" width="200"/>
     

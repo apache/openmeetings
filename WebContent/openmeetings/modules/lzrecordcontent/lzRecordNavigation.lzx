@@ -19,17 +19,17 @@
     
     <handler name="oninit">
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
-        if (canvas.roomRecordingId == 0) {
-        	this.getFLVExplorerByRoom.doCall();
-        } else {
+        if (canvas.roomRecordingId > 0) {
         	_mainScrollBar.setAttribute("visibility","hidden");
-	        canvas._mainbgcontentNavi.setAttribute('height',0);
-	        canvas.setAttribute('naviHeightDelta',0);
-        	this.parentFolderId = canvas.roomRecordingId;
-        	this.getFlvRecordingWithMetaData.doCall();
-        	this._doClose.doStart();
+            canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeightDelta',0);
+            this.parentFolderId = canvas.roomRecordingId;
+            this.getFlvRecordingWithMetaData.doCall();
+            this._doClose.doStart();
             this.isOpen = false;
             this._minimizeSidebar._icon.setAttribute("frame",2);
+        } else {
+        	this.getFLVExplorerByRoom.doCall();
         }
     </handler>
     

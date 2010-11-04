@@ -38,11 +38,11 @@
         </handler>   
     </netRemoteCallHib>      
     
-	<infosPanel x="10" />
+	<infosPanel x="10" isdragable="false" minimizable="false" maximizable="false" closable="false" />
 	
-	<profilesPanel x="520" />
+	<profilesPanel x="520" isdragable="false" minimizable="false" maximizable="false" closable="false" />
 
-	<overAllChat name="_overallchat" />
+	<overAllChat name="_overallchat" isdragable="false" minimizable="false" maximizable="false" closable="false" />
 	
 	<!--
     <rssPanel name="feed1" x="10" y="230" />

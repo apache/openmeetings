@@ -3,79 +3,81 @@
 
 <!--- Chat module of the dashboard. The fixed size is 810x280 -->
 <class name="overAllChat" extends="guiPresenter" resizeable="false"
-    width="810" height="280" y="240" x="10" closable="true" labelid="443" >
-	<!-- 443:Chat -->
-	
-	<handler name="onclose">
-		if($debug) Debug.write("overAllChat/close(): ",this);
-		canvas._overallchatcontent=null;
-	</handler>
-	
-	<!-- background area. all of the chat contents are putted on this view. -->
-	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
-		  height="$once{ parent.height-21 }" />
-	
-	<!-- message and buttons area-->
-	<view y="22" bgcolor="0xFFFFFF" x="4" height="$once{ parent.height-25 }" >
-		<view name="_chatoutputborder" height="$once{ parent.height-48 }"
-	        bgcolor="$once{ canvas.basebgcolorizer }" width="604">
-			<overAllChatOutput name="_chatoutput" x="1" y="1" >
-				<handler name="oninit">
-					if (canvas._overallchatcontent!=null) canvas._overallchatcontent.parent.parent.parent.close();
-					canvas._overallchatcontent = this;
-				</handler>
-			</overAllChatOutput>
-		</view>
-		<overAllChatTabBottom name="_chattabbottom" 
-					   y="$once{ parent.height-46 }" x="0" width="604" />
-	</view>
-	
-	<!-- background of chat participant area -->
-	<view x="$once{ parent.width-193 }" y="22" name="_chatparticipantsBorderLeft" bgcolor="$once{ canvas.basebgcolorizer }" 
-		  height="$once{ parent.height-22 }" width="1" />
-		  
-	<view x="$once{ parent.width-192 }" y="22" name="_chatparticipantsBorderTop" bgcolor="$once{ canvas.basebgcolorizer }" 
+    width="${ canvas.width-20 }" height="${ canvas.height-370 }" 
+    y="240" x="10" closable="true" labelid="443" >
+    <!-- 443:Chat -->
+    
+    <handler name="onclose">
+        if($debug) Debug.write("overAllChat/close(): ",this);
+        canvas._overallchatcontent=null;
+    </handler>
+    
+    <!-- background area. all of the chat contents are putted on this view. -->
+    <view y="20" bgcolor="white" x="1" width="${ parent.width-2 }" 
+          height="$once{ parent.height-21 }" />
+    
+    <!-- message and buttons area-->
+    <view y="22" bgcolor="0xFFFFFF" x="4" height="${ parent.height-25 }" >
+        <view name="_chatoutputborder" height="${ parent.height-48 }"
+            bgcolor="$once{ canvas.basebgcolorizer }" width="${ parent.parent.width - 206 }">
+        	<!-- 604 -->
+            <overAllChatOutput name="_chatoutput" x="1" y="1" >
+                <handler name="oninit">
+                    if (canvas._overallchatcontent!=null) canvas._overallchatcontent.parent.parent.parent.close();
+                    canvas._overallchatcontent = this;
+                </handler>
+            </overAllChatOutput>
+        </view>
+        <overAllChatTabBottom name="_chattabbottom" 
+                       y="${ parent.height-46 }" x="0" width="${ parent.parent.width - 206 }" />
+    </view>
+    
+    <!-- background of chat participant area -->
+    <view x="${ parent.width-193 }" y="22" name="_chatparticipantsBorderLeft" bgcolor="$once{ canvas.basebgcolorizer }" 
+          height="$once{ parent.height-22 }" width="1" />
+          
+    <view x="${ parent.width-192 }" y="22" name="_chatparticipantsBorderTop" bgcolor="$once{ canvas.basebgcolorizer }" 
           height="1" width="191" />
-	
-	<!-- chat participants area -->
-	<view x="$once{ parent.width-191 }" y="23" name="_chatparticipants" bgcolor="0xFFFFFF"
-		  height="$once{ parent.height-25 }" width="190" clip="true" >
-	    <handler name="oninit">
-	    	this.getChatOverallUsers.doCall();
-	    </handler>
-	    
-	        <netRemoteCallHib name="getChatOverallUsers" funcname="chatservice.getChatOverallUsers" 
-				remotecontext="$once{ canvas.thishib }" > 
-	            <handler name="ondata" args="value">
-	            	<![CDATA[
-	                	//The onResult-Handler will be called be the rtmpconnection
-						if ($debug) Debug.write("getChatOverallUsers : ",value);
-						for (var i=0;i<value.overallList.length;i++){
-							new lz.chatParticipants(this.parent._list,{
+    
+    <!-- chat participants area -->
+    <view x="${ parent.width-191 }" y="23" name="_chatparticipants" bgcolor="0xFFFFFF"
+          height="$once{ parent.height-25 }" width="190" clip="true" >
+        <handler name="oninit">
+            this.getChatOverallUsers.doCall();
+        </handler>
+        
+            <netRemoteCallHib name="getChatOverallUsers" funcname="chatservice.getChatOverallUsers" 
+                remotecontext="$once{ canvas.thishib }" > 
+                <handler name="ondata" args="value">
+                    <![CDATA[
+                        //The onResult-Handler will be called be the rtmpconnection
+                        if ($debug) Debug.write("getChatOverallUsers : ",value);
+                        for (var i=0;i<value.overallList.length;i++){
+                            new lz.chatParticipants(this.parent._list,{
                                     user_id:value.overallList[i].user_id,
                                     publicSID:value.overallList[i].publicSID,
                                     connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSecunds(value.overallList[i].connectedSince),
                                     username:value.overallList[i].firstname+" "+value.overallList[i].lastname
-                                });				
-						}
-	                ]]>
-	            </handler>   
-	        </netRemoteCallHib>
-	        
-	        <method name="removeItemById" args="user_id">
-	        	<![CDATA[
-	        		for (var i=0;i<this._list.subviews.length;i++) {
-	        			if (this._list.subviews[i].user_id==user_id) {
-	        				this._list.subviews[i].destroy();
-	        			}
-	        		}
-	        	]]>
-	        </method>
-	        
-		<view name="_list" width="176" layout="axis:y;spacing:1" />
-		<vscrollbar name="_scroll" />
-	</view>
-	
+                                });             
+                        }
+                    ]]>
+                </handler>   
+            </netRemoteCallHib>
+            
+            <method name="removeItemById" args="user_id">
+                <![CDATA[
+                    for (var i=0;i<this._list.subviews.length;i++) {
+                        if (this._list.subviews[i].user_id==user_id) {
+                            this._list.subviews[i].destroy();
+                        }
+                    }
+                ]]>
+            </method>
+            
+        <view name="_list" width="176" layout="axis:y;spacing:1" />
+        <vscrollbar name="_scroll" />
+    </view>
+    
 </class>
 
 

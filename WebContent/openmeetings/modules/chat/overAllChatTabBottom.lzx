@@ -4,27 +4,27 @@
 <!--- View of the buttom area of chat. It contains buttons of message,emoticons,clear. -->
 <class name="overAllChatTabBottom" extends="view" >
 
-        <view x="0" y="0" height="20" width="${ parent.width }" name="message" 
-              bgcolor="$once{ canvas.basebgcolorizer }">
-            <method name="getText">
-                return this._ctext.getText();
-            </method>
-            <method name="setText" args="txt">
-                this._ctext.setAttribute('text',txt);
-            </method>
-            <customInputtext name="_ctext" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }"
-                x="1" y="1" bgcolor="white" >
-                <handler name="onkeyup" args="key">
-                    <![CDATA[
-                    // 13 is return
-                    if ((key==27) || (key==13)) {
-                        this.parent.parent._button._button.onclick.sendEvent();
-                    }
-                    ]]>
-                </handler>
-            </customInputtext>        
-        </view>
-        
+    <view x="0" y="0" height="20" width="${ parent.width }" name="message" 
+          bgcolor="$once{ canvas.basebgcolorizer }">
+        <method name="getText">
+            return this._ctext.getText();
+        </method>
+        <method name="setText" args="txt">
+            this._ctext.setAttribute('text',txt);
+        </method>
+        <customInputtext name="_ctext" width="${ parent.width-2 }" height="$once{ parent.height-2 }"
+            x="1" y="1" bgcolor="white" >
+            <handler name="onkeyup" args="key">
+                <![CDATA[
+                // 13 is return
+                if ((key==27) || (key==13)) {
+                    this.parent.parent._button._button.onclick.sendEvent();
+                }
+                ]]>
+            </handler>
+        </customInputtext>        
+    </view>
+    
     <labelCheckbox name="_inverseWording" x="2" y="24" labelid="580">
         <attribute name="doUpdate" value="false" type="boolean" />
         <handler name="oninit">
