@@ -99,6 +99,7 @@
                     user_id:value[8],
                     publicSID:value[6],
                     message:value[4],
+                    picture_uri:client.picture_uri,
 	                usercolor:usercolor,
 	                username:username,
 	                isDirectLink:isDirectLink,

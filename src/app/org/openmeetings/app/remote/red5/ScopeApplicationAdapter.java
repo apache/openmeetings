@@ -1787,6 +1787,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 	
+	public synchronized RoomClient setUsernameReconnect(String SID, Long userId, 
+					String username, String firstname, String lastname, 
+					String picture_uri){
+		try {
+			log.debug("#*#*#*#*#*#*# setUsername userId: "+userId+" username: "+username+" firstname: "+firstname+" lastname: "+lastname);
+			IConnection current = Red5.getConnectionLocal();			
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			
+			log.debug("[setUsername] id: "+currentClient.getStreamid());
+			
+			currentClient.setUsername(username);
+			currentClient.setUser_id(userId);
+			currentClient.setPicture_uri(picture_uri);
+			currentClient.setUserObject(userId, username, firstname, lastname);
+			
+			//Update Session Data
+			log.debug("UDPATE SESSION "+SID+", "+userId);
+			Sessionmanagement.getInstance().updateUserWithoutSession(SID, userId);
+			
+			Users user = Usermanagement.getInstance().getUserById(userId);
+			
+			if (user != null) {
+				currentClient.setExternalUserId(user.getExternalUserId());
+				currentClient.setExternalUserType(user.getExternalUserType());
+			}
+			
+			//only fill this value from User-Record
+			//cause invited users have non
+			//you cannot set the firstname,lastname from the UserRecord
+			Users us = UsersDaoImpl.getInstance().getUser(userId);
+			if (us!=null && us.getPictureuri()!=null){
+				//set Picture-URI
+				log.debug("###### SET PICTURE URI");
+				currentClient.setPicture_uri(us.getPictureuri());
+			}
+			this.clientListManager.updateClientByStreamId(streamid, currentClient);
+			return currentClient;
+		} catch (Exception err){
+			log.error("[setUsername]",err);
+		}
+		return null;
+	}
+	
 	/**
 	 * this is set initial directly after login/loading language
 	 * 
@@ -1797,7 +1841,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @param orgdomain
 	 * @return
 	 */
-	public synchronized RoomClient setUsernameAndSession(String SID, Long userId, String username, String firstname, String lastname){
+	public synchronized RoomClient setUsernameAndSession(String SID, Long userId, 
+					String username, String firstname, String lastname){
 		try {
 			log.debug("#*#*#*#*#*#*# setUsername userId: "+userId+" username: "+username+" firstname: "+firstname+" lastname: "+lastname);
 			IConnection current = Red5.getConnectionLocal();			

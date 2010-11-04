@@ -69,6 +69,7 @@
 	                messageObj:messageObj,user_id:value[8],
 	                usercolor:usercolor,
 	                publicSID:value[6],
+	                picture_uri:client.picture_uri,
 	                message:value[4],
 	                username:username,
 	                usertime:value[1]

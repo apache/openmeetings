@@ -12,19 +12,28 @@
 	<attribute name="messageObj" value="null" />
 	<attribute name="isDirectLink" value="false" type="boolean" />
 	<attribute name="message" value="" type="string" />
+	<attribute name="picture_uri" value="" type="string"/>
 	
 	<handler name="oninit">
 		<![CDATA[
-			if($debug) Debug.write("chatTabItemEmoticons/WIDTH: "+this.width);
-	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	        		+canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
-	        		+'&moduleName=chat&parentPath=&room_id='
-	        		+'&remoteUserid='+this.user_id
-	        		+'&sid='+canvas.sessionId;
+		
+		    if (this.picture_uri != null && this.picture_uri != "" && this.picture_uri != "Unbenannt2.jpg") {
+                
+                var downloadurl = this.picture_uri;  
+                
+            } else {
+            	if($debug) Debug.write("chatTabItemEmoticons/WIDTH: "+this.width);
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                        +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
+                        +'&moduleName=chat&parentPath=&room_id='
+                        +'&remoteUserid='+this.user_id
+                        +'&sid='+canvas.sessionId;
+            }
+			
 	        //Debug.write("downloadurl "+downloadurl);
 	        this._userpic.setAttribute('src',downloadurl);	
 	        
-	         if(canvas.isrtl == 'true'){
+	        if(canvas.isrtl == 'true'){
 	         	if($debug) Debug.write("chatTabItemEmoticons RTL is set");
 	       
 	        	this.header_user.setAttribute('textalign', 'right');
@@ -38,7 +47,18 @@
         ]]>
 	</handler>
 	
-	<image name="_userpic" />
+	<image name="_userpic" stretches="both">
+		<handler name="onload">
+            <![CDATA[
+                if (this.height > 38) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/38);
+                    this.setAttribute('height',38);
+                    this.setAttribute('width',width);
+                }
+            ]]>
+        </handler>
+	</image>
 	
 	
 	<text text="$once{ parent.username }" x="40" resize="false" fontsize="10"
