@@ -18,7 +18,6 @@
 	</handler>	
 
     <handler name="oninit">
-    	
 		this.getUserSelf.doCall();
     </handler>
     

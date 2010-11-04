@@ -7,19 +7,16 @@
         function searchOffers(str) {
             if ($debug) Debug.write("searchOffers ",str);
             
-            
         	canvas.userSettingsSearchType = "searchOffers";
         	canvas.userSettingsSearchPhrase = str;
             	
             if (canvas.userSettingsSearchRef == null) {
-            	canvas.userSettingsModuleOpt == "userSearch";
+            	canvas.userSettingsModuleOpt = "userSearch";
             	quicklinkAct("userSettingsModule");
             } else {
             	canvas.userSettingsSearchRef.searchByUpdate();
+            	canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
             }
-            
-            canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
-            
         }
         
         function searchUsers(str) {
@@ -29,14 +26,12 @@
             canvas.userSettingsSearchPhrase = str;
             
             if (canvas.userSettingsSearchRef == null) {
-                canvas.userSettingsModuleOpt == "userSearch";
+                canvas.userSettingsModuleOpt = "userSearch";
                 quicklinkAct("userSettingsModule");
             } else {
                 canvas.userSettingsSearchRef.searchByUpdate();
+                canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
             }
-            
-            canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
-            
         }
         
         function searchInterest(str) {
@@ -46,14 +41,12 @@
             canvas.userSettingsSearchPhrase = str;
                 
             if (canvas.userSettingsSearchRef == null) {
-                canvas.userSettingsModuleOpt == "userSearch";
+                canvas.userSettingsModuleOpt = "userSearch";
                 quicklinkAct("userSettingsModule");
             } else {
                 canvas.userSettingsSearchRef.searchByUpdate();
+                canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
             }
-            
-            canvas.userSettingsSearchRef.parent.parent._menu._searchUserProfile.onclick.sendEvent();
-            
         }
     
     ]]>
@@ -69,15 +62,22 @@
 	</method>
 	
 	<method name="searchByUpdate">
+		if ($debug) Debug.write("searchByUpdate -2- ",canvas.userSettingsSearchType);
 		canvas.userSettingsModuleOpt = "";
 		if (canvas.userSettingsSearchType == "searchOffers") {
+			this.searchInterest.setAttribute("text","");
+			this.searchTxt.setAttribute("text","");
             this.searchOffers.setAttribute("text",canvas.userSettingsSearchPhrase);
             this.search();
         } else if (canvas.userSettingsSearchType == "searchInterest") {
             this.searchInterest.setAttribute("text",canvas.userSettingsSearchPhrase);
+            this.searchTxt.setAttribute("text","");
+            this.searchOffers.setAttribute("text","");
             this.search();
         } else if (canvas.userSettingsSearchType == "searchUsers") {
+        	this.searchInterest.setAttribute("text","");
             this.searchTxt.setAttribute("text",canvas.userSettingsSearchPhrase);
+            this.searchOffers.setAttribute("text","");
             this.search();
         }
 	</method>

@@ -109,9 +109,9 @@
 	        if ($debug) Debug.warn("downloadurl 1 ",downloadurl);
 	        this._userpic.setAttribute('src',downloadurl);
 	        
-	        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
+	        var tUserName = "<u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(obj.firstname) +"'>" + this.removeWhitespace(obj.firstname) + "</a></FONT></u>";
     			
-	        tUserName += " <u><FONT color='#0000CC'><a href='asfunction:_root.searchUser,"+ this.removeWhitespace(obj.lastname) +"'>" + this.removeWhitespace(obj.lastname) + "</a></FONT></u>";
+	        tUserName += " <u><FONT color='#0000CC'><a href='asfunction:_root.searchUsers,"+ this.removeWhitespace(obj.lastname) +"'>" + this.removeWhitespace(obj.lastname) + "</a></FONT></u>";
     	
     		this.username.setAttribute("text",tUserName);
     		

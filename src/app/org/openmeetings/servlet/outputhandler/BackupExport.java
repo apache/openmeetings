@@ -83,8 +83,8 @@ public class BackupExport extends HttpServlet {
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);
 
-			// if (user_level!=null && user_level > 0) {
-			if (true) {
+			if (user_level!=null && user_level > 0) {
+			//if (true) {
 				
 				String moduleName = httpServletRequest.getParameter("moduleName");
 				if (moduleName == null) {
@@ -240,6 +240,12 @@ public class BackupExport extends HttpServlet {
 						this.serializetoXML(fos, "UTF-8", doc);
 						
 					}
+					
+					/* #####################
+					 * Private Messages
+					 */
+					
+					
 					
 					/* #####################
 					 * Backup Room Files

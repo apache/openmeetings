@@ -63,6 +63,11 @@
 	
     <handler name="oninit">
         //this.getRssFeeds.doCall();
+        
+        //if ($debug) Debug.write("userSettings -1- ################################ ");
+        //if ($debug) Debug.write("userSettings -1- ",canvas.userSettingsModuleOpt);
+        //if ($debug) Debug.write("userSettings -1- ################################ ");
+        
         _mainScrollBar.setAttribute("visibility","hidden");
         if (canvas.userSettingsModuleOpt == "userProfile") {
         	this._menu._editUserProfile.onclick.sendEvent(null);
@@ -132,15 +137,15 @@
 		
 		<viewUserProfile name="_userProfile" y="24" />
 			
-		<editUserProfile name="_editUserProfile" visibility="hidden" y="24" />
-	    
-	    <searchUserProfile name="_searchUserProfile" visibility="hidden">
-	    	
-	    </searchUserProfile>
-	    
 	    <editUserContacts name="_editUserContacts" visibility="hidden">
 	    	
 	    </editUserContacts>
+	    
+	    <editUserProfile name="_editUserProfile" visibility="hidden" y="24" />
+	    
+	    <searchUserProfile name="_searchUserProfile" visibility="hidden">
+            
+        </searchUserProfile>
     
     </view>
            			      
