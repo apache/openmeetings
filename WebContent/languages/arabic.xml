@@ -3886,4 +3886,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1293" name="nick name">
     <value>Please enter a valid email!</value>
   </string>
+  <string id="1294" name="auth from">
+    <value>Facebook</value>
+  </string>
+  <string id="1295" name="auth form">
+    <value>Login with your Facebook account</value>
+  </string>
+  <string id="1296" name="view profile">
+    <value>Member since</value>
+  </string>
 </language>
