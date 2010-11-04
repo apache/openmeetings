@@ -3,7 +3,7 @@
 
 <!--- Chat module of the dashboard. The fixed size is 810x280 -->
 <class name="overAllChat" extends="guiPresenter" resizeable="false"
-    width="${ canvas.width-20 }" height="${ canvas.height-370 }" 
+    width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
     y="240" x="10" closable="true" labelid="443" >
     <!-- 443:Chat -->
     
@@ -41,7 +41,7 @@
     
     <!-- chat participants area -->
     <view x="${ parent.width-191 }" y="23" name="_chatparticipants" bgcolor="0xFFFFFF"
-          height="$once{ parent.height-25 }" width="190" clip="true" >
+          height="${ parent.height-25 }" width="190" clip="true" >
         <handler name="oninit">
             this.getChatOverallUsers.doCall();
         </handler>

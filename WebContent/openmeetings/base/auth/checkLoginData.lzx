@@ -329,8 +329,9 @@
         <labelTooltip labelid="1295" />
     </simpleLabelButton>       
         
-    <simpleLabelButton name="b2" labelid="112" width="120" x="330" y="$once{ parent.height-40 }">
-        <handler name="onclick" height="22">
+    <simpleLabelButton name="b2" labelid="112" width="120" x="330" 
+    				   y="$once{ parent.height-40 }" height="22">
+        <handler name="onclick" >
             this.parent.errormess.setAttribute('text','');
             this.parent.loginUser.doCall();
             

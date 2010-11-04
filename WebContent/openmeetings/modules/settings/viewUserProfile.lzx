@@ -115,7 +115,9 @@
     	
     		this.username.setAttribute("text",tUserName);
     		
-    		this.timezone.setAttribute("text",canvas.jNameTimeZone);
+    		this.timezone.setAttribute("text",this.userObject.omTimeZone.jname + ' (' + this.userObject.omTimeZone.ical + ')');
+    		
+    		this.memberSince.setAttribute("text",parseDateToString(this.userObject.starttime));
     		
     		var aOfferings = obj.userOffers.split(",");
     		
@@ -202,8 +204,8 @@
 	<method name="removeWhitespace" args="str">
 		<![CDATA[
 		
-			if ($debug) Debug.write("removeWhitespace 1 ",str);
-			if ($debug) Debug.write("removeWhitespace 2 ",str.length);
+			//if ($debug) Debug.write("removeWhitespace 1 ",str);
+			//if ($debug) Debug.write("removeWhitespace 2 ",str.length);
 		
 			var tResultingString = "";
 			
@@ -245,6 +247,9 @@
 	
 	<labelText name="timezoneLabel" x="180" y="30" labelid="1165" />
 	<labelText name="timezone" x="260" y="30" />
+	
+	<labelText name="memberSinceLabel" x="180" y="50" labelid="1296" />
+    <labelText name="memberSince" x="260" y="50" />
 	
 	<labelText name="userFields" x="10" y="140" labelid="1166" fontstyle="bold" />
 	

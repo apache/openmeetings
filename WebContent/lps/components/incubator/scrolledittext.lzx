@@ -41,7 +41,7 @@
                 }
             </setter>
             <handler name="ontext" args="t">
-            	if ($debug) Debug.write("++ ontext",t);
+            	//if ($debug) Debug.write("++ ontext",t);
             	parent.parent.ontextChange.sendEvent(t);
             </handler>
 			<handler name="onblur">
