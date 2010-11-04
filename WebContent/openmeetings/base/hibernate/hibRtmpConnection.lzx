@@ -307,6 +307,7 @@
 					canvas.initroomid = value.room_id;
 					canvas.becomemoderator = value.becomemoderator;
                     canvas.showAudioVideoTest = value.showAudioVideoTest;
+                    canvas.landingZone = value.landingZone;
                     
                     canvas.roomRecordingId = value.roomRecordingId;
 					
@@ -360,7 +361,9 @@
                     canvas.setAttribute('language','');
                     //canvas.setAttribute('currentuser',value.login);
                     
-                    if (canvas.roomRecordingId > 0) {
+                    if (canvas.landingZone == "dashboard") {
+                    	parent.getRoomTypes.doCall();
+                    } else if (canvas.roomRecordingId > 0) {
 						//parent.getRoomById.doCall();
 						var obj = new Array();
 						obj["action"] = "recordModule";

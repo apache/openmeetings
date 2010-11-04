@@ -22,6 +22,7 @@ public class SOAPLogin {
 	private Boolean showNickNameDialog;
 	private String clientURL;
 	private Long roomRecordingId;
+	private String landingZone;
 	
 	/**
      * 
@@ -178,6 +179,18 @@ public class SOAPLogin {
 	}
 	public void setRoomRecordingId(Long roomRecordingId) {
 		this.roomRecordingId = roomRecordingId;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="landing_zone"
+     *  type="string"
+     */
+	public String getLandingZone() {
+		return landingZone;
+	}
+	public void setLandingZone(String landingZone) {
+		this.landingZone = landingZone;
 	}
 	
 }

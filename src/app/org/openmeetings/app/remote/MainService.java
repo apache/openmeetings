@@ -462,6 +462,7 @@ public class MainService implements IPendingServiceCallback {
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
 				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
 				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
+				returnSoapLogin.setLandingZone(soapLogin.getLandingZone());
                 
 				return returnSoapLogin;
 				
