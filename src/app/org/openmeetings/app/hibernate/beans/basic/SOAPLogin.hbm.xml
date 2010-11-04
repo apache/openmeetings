@@ -18,5 +18,6 @@
     <property name="showNickNameDialog" type="boolean" column="show_nick_name_dialog"/>
     <property name="clientURL" type="string" column="client_url"/>
     <property name="roomRecordingId" type="long" column="room_recording_id"/>
+    <property name="landingZone" type="string" column="landing_zone"/>
   </class>
 </hibernate-mapping>

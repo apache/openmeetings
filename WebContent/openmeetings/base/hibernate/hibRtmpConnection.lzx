@@ -326,7 +326,7 @@
     	<netparam name="remoteSessionId"><method name="getValue">return canvas.remoteUserSid;</method></netparam>
         <handler name="ondata" args="value">
         	<![CDATA[
-        		canvas.thishib.loaderVar.close();
+        		
             	//The onResult-Handler will be called be the rtmpconnection
 				if ($debug) Debug.write("loginUserByRemote -1-: ",value);
 				if ($debug) Debug.write("loginUserByRemote -2-: ",canvas.remoteUserSid);
@@ -361,14 +361,18 @@
                     canvas.setAttribute('language','');
                     //canvas.setAttribute('currentuser',value.login);
                     
+                    if ($debug) Debug.write("canvas.landingZone :: ",canvas.landingZone);
+                    
                     if (canvas.landingZone == "dashboard") {
                     	parent.getRoomTypes.doCall();
                     } else if (canvas.roomRecordingId > 0) {
+                    	canvas.thishib.loaderVar.close();
 						//parent.getRoomById.doCall();
 						var obj = new Array();
 						obj["action"] = "recordModule";
 						loadContent(obj,null,null);
                     } else {
+                    	canvas.thishib.loaderVar.close();
                     	parent.getRoomById.doCall();
                     }
 				}
