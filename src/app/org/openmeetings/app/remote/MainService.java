@@ -3,6 +3,7 @@ package org.openmeetings.app.remote;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
@@ -639,6 +640,21 @@ public class MainService implements IPendingServiceCallback {
      */
     public Configuration allowFrontendRegister(String SID){
     	return Configurationmanagement.getInstance().getConfKey(3, "allow_frontend_register");
+    }
+    
+    public List<Configuration> getLoginOptions(String SID){
+    	try {
+    		
+    		List<Configuration> cList = new LinkedList<Configuration>();
+    		cList.add(Configurationmanagement.getInstance().getConfKey(3, "allow_frontend_register"));
+    		cList.add(Configurationmanagement.getInstance().getConfKey(3, "show.facebook.login"));
+    		
+    		return cList;
+    	} catch (Exception err) {
+    		log.error("[getLoginOptions]",err);
+    	}
+    	return null;
+    	
     }
     
     /**

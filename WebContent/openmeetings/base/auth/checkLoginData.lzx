@@ -4,8 +4,8 @@
 <!--- LOGIN panel window -->
 <class name="checkLoginData" extends="labelExplorerBox" labelid="108"
     docking="true" resizeable="false" closable="false" 
-    width="360" height="260"
-     x="$once{ canvas.width/2 - this.width/2 }"  y="10">
+    width="460" height="260"
+     x="$once{ canvas.width/2 - this.width/2 }"  y="120">
     
     <handler name="onclose">
         if (this.childObj!=null) this.childObj.close();
@@ -56,8 +56,8 @@
     <attribute name="labeliderror" value="0" type="number" />
     <attribute name="enterPressed" type="boolean" value="false"/>
     
-    <labelText name="n1" labelid="109" width="200" y="26" resize="false" x="2"/>
-        <customEdittext name="username" y="24" x="120" width="230" >
+    <labelText name="n1" labelid="109" width="300" y="26" resize="false" x="2"/>
+        <customEdittext name="username" y="24" x="120" width="330" >
             <handler name="oninit">
                 var t = new lz.sharedObject();
                 t.getLocal('userdata');
@@ -81,8 +81,8 @@
             </handler>
         </customEdittext>    
 
-    <labelText name="n2" labelid="110" width="200" y="56" resize="false" x="2"/>
-        <customEdittext name="userpass" y="54" password="true" x="120" width="230" >
+    <labelText name="n2" labelid="110" width="300" y="56" resize="false" x="2"/>
+        <customEdittext name="userpass" y="54" password="true" x="120" width="330" >
             <handler name="oninit">
                 var t = new lz.sharedObject();
                 t.getLocal('userdata');
@@ -105,9 +105,9 @@
             </handler>
         </customEdittext>
     
-    <labelText name="n3" labelid="111" width="200" y="86" resize="false" x="2"/>  
+    <labelText name="n3" labelid="111" width="300" y="86" resize="false" x="2"/>  
         
-        <resetCombobox name="languages" width="230" y="84" x="120" >
+        <resetCombobox name="languages" width="330" y="84" x="120" >
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" 
                 value="$path{ 'language_id/text()' }" />
             <handler name="oninit">
@@ -141,9 +141,9 @@
             </handler>
         </resetCombobox>
 
-    <labelText name="n5" text="Color-Style" width="200" y="116" resize="false" x="2"/>  
+    <labelText name="n5" text="Color-Style" width="300" y="116" resize="false" x="2"/>  
         
-        <resetCombobox name="colors" width="230" y="114" x="120">
+        <resetCombobox name="colors" width="330" y="114" x="120">
             <attribute name="initselect" value="true" type="boolean" />
             <handler name="oninit">
                 this.addItem('redorange','redorange');
@@ -197,7 +197,7 @@
                         canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
                     }
                     this.parent.close();
-                    new lz.checkLoginData(canvas.main_content._content.inner);
+                    new lz.checkLoginData(canvas);
                 }
             </handler>
             <handler name="onkeyup" args="key">
@@ -217,7 +217,7 @@
         </resetCombobox>    
     
     <labelText name="nlabelquality" text="Quality" y="146" x="2" visible="true" width="140" />     
-        <resetCombobox name="ncomboquality" width="230" y="144" x="120" editable="false" >
+        <resetCombobox name="ncomboquality" width="330" y="144" x="120" editable="false" >
             <handler name="oninit">
                 this.addItem("best ~ 16KB upload","best");
                 this.addItem("medium ~ 10KB upload ","medium");
@@ -254,8 +254,8 @@
             </handler>
         </resetCombobox>
         
-	<labelText name="domain_label" text="Domain" width="200" y="174" resize="false" x="2" />     
-        <resetCombobox name="domain" width="230" y="174" x="120" editable="false">
+	<labelText name="domain_label" text="Domain" width="300" y="174" resize="false" x="2" />     
+        <resetCombobox name="domain" width="330" y="174" x="120" editable="false">
         	<handler name="oninit">
         		//this.addItem("localhost","localhost");
         		//this.addItem("eu.p-f.biz","SA-MeetingEU");
@@ -307,21 +307,30 @@
     <labelText name="organisation_label_info" labelid="617" width="350" 
                multiline="true" y="22" resize="false" x="2" visible="false" />     
     
-    <labelText name="organisation_label" labelid="184" width="200" y="86" resize="false" x="2" visible="false" />     
-        <resetCombobox name="organisation" width="230" y="84" x="120" editable="false" visible="false" />
+    <labelText name="organisation_label" labelid="184" width="300" y="86" resize="false" x="2" visible="false" />     
+        <resetCombobox name="organisation" width="330" y="84" x="120" editable="false" visible="false" />
         
     <simpleLabelButton labelid="123" name="_register" width="120" y="$once{ parent.height-40 }" 
-        visible="false" x="100">
+        visible="false" x="70" height="22">
         <handler name="onclick">
             this.parent._register.setAttribute('visible',false);
-            this.parent.childObj = new lz.registerNewUser(canvas.main_content._content.inner,{refObj:this.parent});     
+            this.parent.childObj = new lz.registerNewUser(canvas,{refObj:this.parent});     
             lz.Keys.removeKeyComboCall(this.parent.pressEnter, ["enter"]);
-            parent.showRegForm.doStart();
+            //parent.showRegForm.doStart();
         </handler>
-    </simpleLabelButton>          
-        
-    <simpleLabelButton name="b2" labelid="112" width="120" x="230" y="$once{ parent.height-40 }">
+    </simpleLabelButton>     
+    
+    <simpleLabelButton labelid="1294" name="_facebook" width="120" y="$once{ parent.height-40 }" 
+            visible="false" x="200" height="22">
+    	<view resource="icon_facebook_rsc_png" x="2" y="1"></view>
         <handler name="onclick">
+            lz.Browser.loadURL("http://apps.facebook.com/openmeetings/","_parent");
+        </handler>
+        <labelTooltip labelid="1295" />
+    </simpleLabelButton>       
+        
+    <simpleLabelButton name="b2" labelid="112" width="120" x="330" y="$once{ parent.height-40 }">
+        <handler name="onclick" height="22">
             this.parent.errormess.setAttribute('text','');
             this.parent.loginUser.doCall();
             
@@ -335,8 +344,8 @@
         </handler>
     </simpleLabelButton>   
         
-    <simpleLabelButton name="b3" labelid="185" width="120" x="230" y="$once{ parent.height-40 }"
-        visible="false">
+    <simpleLabelButton name="b3" labelid="185" width="120" x="330" y="$once{ parent.height-40 }"
+            visible="false" height="22">
         <handler name="onclick">
             var orgIndexId = Number(parent.organisation.getValue());
             hib.currentdomain = hib.userobject.organisation_users[orgIndexId].organisation.name;
@@ -500,15 +509,18 @@
         </handler>
     </netRemoteCallHib>
     
-    <netRemoteCallHib name="allowFrontendRegister" funcname="xmlcrm.allowFrontendRegister" remotecontext="$once{ canvas.thishib }" >      
+    <netRemoteCallHib name="getLoginOptions" funcname="xmlcrm.getLoginOptions" remotecontext="$once{ canvas.thishib }" >      
         <handler name="oninit">
             this.doCall();
         </handler> 
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("allowFrontendRegister: ",value);
-            if (value.conf_value==1){
+            if (value[0].conf_value==1){
                 parent._register.setAttribute('visible',true);
+            }
+            if (value[1].conf_value==1){
+                parent._facebook.setAttribute('visible',true);
             }
         </handler>  
     </netRemoteCallHib>    

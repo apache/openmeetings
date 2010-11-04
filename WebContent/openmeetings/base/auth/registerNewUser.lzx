@@ -2,7 +2,8 @@
 <library>
 
 <class name="registerNewUser" extends="labelExplorerBox" labelid="113"
-    docking="true" resizeable="false" closable="false" width="400" x="400" y="10" height="360">
+    docking="true" resizeable="false" closable="false" width="500" 
+    x="$once{ canvas.width/2 - this.width/2 }" y="-370" height="360">
     
     <attribute name="refObj" value="null" />
     <attribute name="regObject" value="null" />
@@ -55,55 +56,55 @@
         this.registerB.onclick.sendEvent();
     </method>
     
-    <labelText labelid="117" width="200" y="42" resize="false" x="2"/>
-        <customEdittext name="firstname" y="42" x="120" width="270" text="">
+    <labelText labelid="117" width="300" y="42" resize="false" x="2"/>
+        <customEdittext name="firstname" y="42" x="120" width="370" text="">
         	<handler name="onvalue" args="txt">
         		parent.username.setAttribute("text",txt+"."+parent.lastname.text);
         	</handler>
         </customEdittext>
         
-    <labelText labelid="118" width="200" y="72" resize="false" x="2"/>
-        <customEdittext name="lastname" y="72" x="120" width="270" text="">
+    <labelText labelid="118" width="300" y="72" resize="false" x="2"/>
+        <customEdittext name="lastname" y="72" x="120" width="370" text="">
         	<handler name="onvalue" args="txt">
         		parent.username.setAttribute("text",parent.firstname.text+"."+txt);
         	</handler>
         </customEdittext>
         
-    <labelText labelid="114" width="200" y="102" resize="false" x="2"/>
-        <customEdittext name="username" y="102" x="120" width="270" text="" />
+    <labelText labelid="114" width="300" y="102" resize="false" x="2"/>
+        <customEdittext name="username" y="102" x="120" width="370" text="" />
 
-    <labelText labelid="115" width="200" y="132" resize="false" x="2"/>
-        <customEdittext name="userpass1" y="132" password="true" x="120" width="270" text="" />
+    <labelText labelid="115" width="300" y="132" resize="false" x="2"/>
+        <customEdittext name="userpass1" y="132" password="true" x="120" width="370" text="" />
         
-    <labelText labelid="116" width="200" y="162" resize="false" x="2"/>
-        <customEdittext name="userpass2" y="162" password="true" x="120" width="270" text="" />
+    <labelText labelid="116" width="300" y="162" resize="false" x="2"/>
+        <customEdittext name="userpass2" y="162" password="true" x="120" width="370" text="" />
                     
 
-    <labelText labelid="119" width="200" y="192" resize="false" x="2"/>
+    <labelText labelid="119" width="300" y="192" resize="false" x="2"/>
         <customEdittext name="email" y="192" x="120" regexpType="email" 
-        				width="270" text="" />
+        				width="370" text="" />
         				
-    <labelText labelid="1143" width="200" y="222" resize="false" x="2"/>
-         <resetCombobox name="_timeZone" editable="false" y="222" width="270" x="120"
+    <labelText labelid="1143" width="300" y="222" resize="false" x="2"/>
+         <resetCombobox name="_timeZone" editable="false" y="222" width="370" x="120"
                        fontsize="11" style="componentStyle">
             <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
                 value="$path{ 'jname/text()' }" />
          </resetCombobox>         				
          
-    <labelText labelid="120" width="200" y="252" resize="false" x="2"/>  
+    <labelText labelid="120" width="300" y="252" resize="false" x="2"/>  
 
-		<dynamicCombobox name="_state" width="270" y="252" x="120" 
+		<dynamicCombobox name="_state" width="370" y="252" x="120" 
 						 text="Switzerland" value="204" />
 		
 		<!--
-		<validText name="state" width="270" y="222" x="120" fontsize="11" 
+		<validText name="state" width="370" y="222" x="120" fontsize="11" 
             shownitems="7" validate_method="$once{ canvas.validateCountry }" 
             resultId="state_id" resultName="name" />        
              -->
 <!--
-    <labelText text="Language: " width="200" y="252" resize="false" x="2"/>  
+    <labelText text="Language: " width="300" y="252" resize="false" x="2"/>  
         
-        <resetCombobox name="languages" width="270" y="252" x="120" editable="false">
+        <resetCombobox name="languages" width="370" y="252" x="120" editable="false">
             <netRemoteCallHib name="getLanguages" funcname="xmlcrm.getLanguages" remotecontext="$once{ canvas.thishib }" >      
                 <handler name="oninit">
                     this.doCall();
@@ -121,7 +122,7 @@
             </netRemoteCallHib>
         </resetCombobox>       
          -->   
-    <simpleLabelButton name="registerB" labelid="121" width="120" x="140" y="332">
+    <simpleLabelButton name="registerB" labelid="121" width="120" x="240" y="332">
     	<handler name="onclick">
             <![CDATA[
                 var pwd1 = this.parent.userpass1.getText();
@@ -160,7 +161,7 @@
     	</handler>
     </simpleLabelButton>   
     
-    <simpleLabelButton labelid="122" width="120" x="270" y="332">
+    <simpleLabelButton labelid="122" width="120" x="370" y="332">
     	<handler name="onclick">
     		this.parent.close();
     	</handler>
@@ -187,6 +188,9 @@
 			]]>
          </handler>  
      </netRemoteCallHib>	
+     
+     
+     <animator name="showRegForm" attribute="y" to="120" duration="1000" start="true" />
 	
 </class>
 

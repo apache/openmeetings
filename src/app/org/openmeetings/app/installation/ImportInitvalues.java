@@ -411,6 +411,9 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "default.timezone",
 				timeZoneJavaFormat, null, "This is the default timezone if nothing is specified");
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "show.facebook.login",
+				""+0, null, "Show Facebook Login");
+		
 	}
 
 	public void loadDefaultRooms() {
