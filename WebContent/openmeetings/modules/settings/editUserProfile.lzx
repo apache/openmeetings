@@ -269,7 +269,7 @@
     <!-- 379:Upload new Image -->
     <simpleLabelButton y="174" labelid="1300" x="550">
     	<handler name="onclick">
-    		new lz.editWhiteboardDefault(canvas.main_content._content.inner,{x:400,y:140});
+    		new lz.editWhiteboardDefault(parent,{x:400,y:140});
     	</handler>
     </simpleLabelButton>       
       

@@ -3893,4 +3893,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1296" name="view profile">
     <value>Member since</value>
   </string>
+  <string id="1297" name="direct login message">
+    <value>You've logged with your Facebook account. You should update your profile with the correct email. Otherwise you will not receive invitations and private messages from other users.</value>
+  </string>
+  <string id="1298" name="direct login message header">
+    <value>Message</value>
+  </string>
+  <string id="1299" name="direct login message checkbox control">
+    <value>Do not show update profile message again</value>
+  </string>
+  <string id="1300" name="profile settings button">
+    <value>more display options ...</value>
+  </string>
 </language>
