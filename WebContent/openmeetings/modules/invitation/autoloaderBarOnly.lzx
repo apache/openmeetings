@@ -5,7 +5,7 @@
     layout="axis:y;spacing:2">
 
 	<attribute name="maxwidth" value="100" type="number" />
-	<attribute name="maxsteps" value="18" type="number" />
+	<attribute name="maxsteps" value="19" type="number" />
 	<attribute name="currentsteps" value="0" type="number" />
 	
 	<method name="close">
@@ -29,7 +29,7 @@
 		remotecontext="$once{ canvas.thishib }" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="1100" type="number" />    
+    	<attribute name="max" value="1200" type="number" />    
         <netparam><method name="getValue">return canvas.thishib.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 

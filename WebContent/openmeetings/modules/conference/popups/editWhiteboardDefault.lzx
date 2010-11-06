@@ -53,6 +53,15 @@
          t = new lz.questionCheckbox(this._settings.inner,{name:"askagainclearwml",labelid:212,valBool:g["wmlfile"]["askagainclear"]});
          
          t = new lz.questionCheckbox(this._settings.inner,{name:"donotaskagainrdc",labelid:1127,valBool:g["image"]["donotaskagainrdc"]});
+		 
+         
+		 if (g["doShowUpdateProfileMessage"] == null) {
+		 	new lz.questionCheckbox(this._settings.inner,{name:"doShowUpdateProfileMessage",labelid:1299,valBool:false});
+		 } else {
+		 	new lz.questionCheckbox(this._settings.inner,{name:"doShowUpdateProfileMessage",labelid:1299,valBool:g["doShowUpdateProfileMessage"]});
+		 }
+         
+		 
 		 //Debug.write("t: ",t);
     </handler>    
     
@@ -72,22 +81,26 @@
 		//always true
          g["wmlfile"]["clearField"]=true;
          g["wmlfile"]["askagainclear"]=this._settings.inner.askagainclearwml.holddatainSO.getValue();
-				
+		
+         g["doShowUpdateProfileMessage"] = this._settings.inner.doShowUpdateProfileMessage.holddatainSO.getValue();
+         
 	     t.setData('userdata',g);
 	     t.flush();  
     </method>
     
-    <simpleLabelButton labelid="61" width="100" x="180" y="216">
+    <simpleLabelButton labelid="61" width="100" x="290" y="216">
     	<handler name="onclick">
     		this.parent.close();
     	</handler>
-    </simpleLabelButton>    
-    <simpleLabelButton labelid="60" width="100" x="290" y="216">
+    </simpleLabelButton> 
+       
+    <simpleLabelButton labelid="60" width="100" x="180" y="216">
     	<handler name="onclick">
     		parent.storesettings();
     		this.parent.close();
     	</handler>
     </simpleLabelButton>    
+    
 </class>
 
 </library>

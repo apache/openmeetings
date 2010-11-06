@@ -410,7 +410,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="1100" type="number" />    
+    	<attribute name="max" value="1200" type="number" />    
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 
@@ -712,13 +712,45 @@
         <netparam><method name="getValue"> return parent.parent.userlang; </method></netparam> 
         <netparam><method name="getValue"> return hib.currentdomainObj.organisation_id;</method></netparam>
         <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getNavi: ",value);
-            canvas.thishib.loaderVar.close();
-            //The Main-Navi will automatically init the Dashboard 
-            new lz.mainNavi(canvas._mainbgcontentNavi,{name:'navi',naviObject:value});
-            new lz.helpAndBugs(canvas._mainbgcontentNavi,{name:'help'});
-        </handler>  
+        	<![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("getNavi: ",value);
+                canvas.thishib.loaderVar.close();
+                //The Main-Navi will automatically init the Dashboard 
+                new lz.mainNavi(canvas._mainbgcontentNavi,{name:'navi',naviObject:value});
+                new lz.helpAndBugs(canvas._mainbgcontentNavi,{name:'help'});
+                
+                if (canvas.landingZone == "dashboard") {
+                    
+                    var t = new lz.sharedObject();
+                    t.getLocal('userdata');
+                    var g = t.getData('userdata');
+                    
+                    if ($debug) Debug.write("doShowUpdateProfileMessage",g["doShowUpdateProfileMessage"]);
+                    
+                    if (g["doShowUpdateProfileMessage"]) {
+                        //Do not show message
+                    } else {
+                        new lz.rememberMessage(canvas.main_content._content.inner,{labelid:1298,labeliderror:1297,refObj:this});
+                    }
+                    
+                }
+            ]]>
+        </handler>
+        
+        <method name="sendConfirmation" args="askagain" >
+            
+            //Debug.write("clear yesno,askagain: ",yesno,askagain);
+            //can only be true in this case
+        
+             var t = new lz.sharedObject();
+             t.getLocal('userdata');
+             var g = t.getData('userdata');
+             if (g==null) g = new Array();
+             g["doShowUpdateProfileMessage"]=askagain;
+             t.setData('userdata',g);
+             t.flush();     
+        </method>     
     </netRemoteCallHib>
     
         <netRemoteCallHib name="setId" funcname="setId">

@@ -255,7 +255,7 @@
         onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});" /> 		
      
     <!-- Remember Me -->    
-    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="160" >
+    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="156" >
         <handler name="oninit">
             var t = new lz.sharedObject();
             t.getLocal('userdata');
@@ -265,7 +265,14 @@
             if(save) this.setValue(true);
         </handler>         
     </labelCheckbox>
-        
+       
+    <!-- 379:Upload new Image -->
+    <simpleLabelButton y="174" labelid="1300" x="550">
+    	<handler name="onclick">
+    		new lz.editWhiteboardDefault(canvas.main_content._content.inner,{x:400,y:140});
+    	</handler>
+    </simpleLabelButton>       
+      
         
     <!-- Community settings -->
     <labelText labelid="1159" width="200" y="200" resize="false" 

@@ -58,7 +58,7 @@
     </handler>
     
     <labelCheckbox name="holddatainSO" visibility="$once{ (parent.showCheckBox) ? 'visible' : 'hidden' }" 
-                   labelid="64" x="10" y="$once{ parent.height - 60 }" />
+                   labelid="64" x="10" y="$once{ parent.height - 46 }" />
     
     <simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
     	<handler name="onclick">
@@ -73,6 +73,35 @@
     		this.parent.refObj.sendConfirmation(true,t);
     	</handler>
     </simpleLabelButton>    
+</class>
+
+<class name="rememberMessage" extends="labelExplorerBox" labelid="832"
+	   x="$once{ canvas.width/2 - this.width/2 }" y="100"
+	   docking="true" resizeable="false" closable="true" height="140" width="300">
+    
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="showCheckBox" value="true" type="boolean" />
+    
+    <attribute name="labeliderror" value="0" type="number" />
+    
+    <view x="4" resource="warning_icon_rsc" y="24" />
+
+    <labelText labelid="$once{ parent.labeliderror }" y="24" 
+               width="$once{ parent.width - 40 }"
+        multiline="true" resize="false" x="30" />
+        
+    <labelCheckbox name="holddatainSO" visibility="$once{ (parent.showCheckBox) ? 'visible' : 'hidden' }" 
+                   labelid="64" x="10" y="$once{ parent.height - 46 }" />
+    
+    <simpleLabelButton labelid="642" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
+        <handler name="onclick">
+        	var t = parent.holddatainSO.getValue();
+            this.parent.close();
+            this.parent.refObj.sendConfirmation(t);
+        </handler>
+    </simpleLabelButton>    
+     
 </class>
 	
 </library>
