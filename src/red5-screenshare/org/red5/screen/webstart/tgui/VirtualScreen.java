@@ -234,7 +234,7 @@ public class VirtualScreen {
 		
 		JComboBox comboResize  = new JComboBox(selectResize);	
 		comboResize.setBounds(250, 330, 200, 24);
-		comboResize.setSelectedIndex(0);
+		comboResize.setSelectedIndex(ScreenShareRTMPT.instance.defaultQualityScreensharing);
 		comboResize.addActionListener(new GetResizeChoice()); 
 		
 		ScreenShareRTMPT.instance.jVScreenResizeMode = comboResize;

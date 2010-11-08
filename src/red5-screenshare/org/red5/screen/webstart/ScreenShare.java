@@ -143,6 +143,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         public String host = "btg199251";
         public String app = "oflaDemo";
         public int port = 1935;
+        public int defaultQualityScreensharing = 0;
         
         public Long organization_id = 0L;
         
@@ -203,7 +204,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                 	
                         instance = new ScreenShare();
         
-                        if (args.length == 6) {
+                        if (args.length == 7) {
                                 
                                 
                                 instance.host = args[0];
@@ -214,6 +215,8 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                 String labelTexts = args[4];
                                 
                                 instance.organization_id = Long.parseLong(args[5]);
+                                
+                                instance.defaultQualityScreensharing = Integer.parseInt(args[6]);
                                 
                                 if (labelTexts.length() > 0) {
                                         String[] textArray = labelTexts.split(";");

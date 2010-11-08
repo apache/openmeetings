@@ -13,7 +13,7 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.servlet.VelocityViewServlet;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.cfg.Configuration;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -287,6 +287,14 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 						    ctx.put("codebase", codebase);
 							ctx.put("red5-host", rtmphostlocal);
 							ctx.put("red5-app", ScopeApplicationAdapter.webAppRootKey+"/"+room);
+							
+							Configuration configuration = Configurationmanagement.getInstance().getConfKey(3L, "default.quality.screensharing");
+							String default_quality_screensharing = "1";
+							if (configuration != null) {
+								default_quality_screensharing = configuration.getConf_value();
+							}
+							
+							ctx.put("default_quality_screensharing", default_quality_screensharing);
 						    
 							String port = httpServletRequest.getParameter("port");
 							if (port == null) {

@@ -311,7 +311,7 @@
         <resetCombobox name="organisation" width="330" y="84" x="120" editable="false" visible="false" />
         
     <simpleLabelButton labelid="123" name="_register" width="120" y="$once{ parent.height-40 }" 
-        visible="false" x="70" height="22">
+        visible="false" x="10" height="22">
         <handler name="onclick">
             this.parent._register.setAttribute('visible',false);
             this.parent.childObj = new lz.registerNewUser(canvas,{refObj:this.parent});     

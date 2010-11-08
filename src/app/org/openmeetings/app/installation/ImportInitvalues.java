@@ -414,6 +414,9 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "show.facebook.login",
 				""+0, null, "Show Facebook Login");
 		
+		Configurationmanagement.getInstance().addConfByKey(3, "default.quality.screensharing",
+				"0", null, "Default selection in ScreenSharing Quality");
+		
 	}
 
 	public void loadDefaultRooms() {
