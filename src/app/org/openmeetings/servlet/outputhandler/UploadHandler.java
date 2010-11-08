@@ -28,6 +28,8 @@ import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.itextpdf.text.pdf.PdfReader;
+
 public class UploadHandler extends HttpServlet {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(UploadHandler.class, ScopeApplicationAdapter.webAppRootKey);
@@ -288,8 +290,49 @@ public class UploadHandler extends HttpServlet {
 							//convert to pdf, thumbs, swf and xml-description
 							returnError = GeneratePDF.getInstance().convertPDF(current_dir, newFileSystemName , newFileSystemExtName, roomName, true, completeName);
 						} else if (isPDF) {
+							
+							boolean isEncrypted = false;
+							try {
+								//Check if PDF is encrpyted
+								PdfReader pdfReader = new PdfReader(completeName);
+								
+								log.debug("pdfReader.isEncrypted() :: "+pdfReader.isEncrypted());
+								
+								if (pdfReader.isEncrypted()) {
+									isEncrypted = true;
+								}
+								
+							} catch (Exception err) {
+								isEncrypted = true;
+							}
+							
+							log.debug("isEncrypted :: "+isEncrypted);
+							
+							HashMap<String, Object> returnError2 = new HashMap<String, Object>();
+							
+							if (isEncrypted) {
+								//Do convert pdf to other pdf first
+								String inputfile = completeName + newFileSystemExtName;
+								
+								completeName = completeName + "_NOT_ENCRYPTED";
+								newFileSystemName = newFileSystemName + "_NOT_ENCRYPTED";
+								
+								String outputfile = completeName + newFileSystemExtName;
+								
+								returnError2 = GenerateThumbs.getInstance().decodePDF(inputfile, outputfile);
+								
+								File f_old = new File(inputfile);
+								if (f_old.exists()) {
+									f_old.delete();
+								}
+								
+							}
+							
 							//convert to thumbs, swf and xml-description
 							returnError = GeneratePDF.getInstance().convertPDF(current_dir, newFileSystemName , newFileSystemExtName, roomName, false, completeName);						
+						
+							returnError.put("decodePDF", returnError2);
+							
 						} else if (isImage) {
 							
 							log.debug("##### isImage! userProfilePic: "+userProfilePic);

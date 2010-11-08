@@ -64,6 +64,21 @@ public class GenerateThumbs {
 			return this.processImageWindows(argv);
 		}
 	}
+	
+	public HashMap<String, Object> decodePDF(String inputfile, String outputfile) {
+
+		String[] argv = new String[] {
+				GenerateImage.getPathToImageMagic(), //FIXME
+				inputfile,
+				outputfile };
+		
+		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
+			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+		} else {
+			return this.processImageWindows(argv);
+		}
+		
+	}
 
 	public HashMap<String, Object> generateBatchThumb(String current_dir,
 			String inputfile, String outputpath, Integer thumbSize, String pre) {
