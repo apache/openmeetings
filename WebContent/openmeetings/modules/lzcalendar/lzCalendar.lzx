@@ -585,6 +585,8 @@
 
               var dtstart = new Date(this.startdate);
               var lastVisibleDay = this.gridlayout.rows*7;
+              
+              var tNow = new Date();
 
               for (k=0;k< this.subviews.length && k <= lastVisibleDay; k++) {
                   // to get start of next day, add 26 hours, then
@@ -600,7 +602,7 @@
 
                   //Debug.write("dtstart:  "+dtstart.getDate());
 
-                  if (firstDay=="" && dtstart.getDate()==1)
+                  if (firstDay=="" && dtstart.getDate()==tNow.getDate())
                       firstDay=dayview;
 
                   if ($debug) Debug.write( "k, DATE, subview =" + k + "," + dtstart.toString() + "," + dayview);
@@ -625,9 +627,15 @@
                   if ($debug) Debug.write( "request mo " + mo +" yr " + yr);
                   dataloader.loadData( mo+1 , yr );
               }
+              
+              //var tCurrent = new Date();
+              
+              //firstDay.setDate(tCurrent.getDate());
 
-              // point to the new 1st day of the month
+              // point to the new current day of the month
               this.daySelectionMgr.select( firstDay );
+              if ($debug) Debug.write("ReSet it to the current day ",firstDay);
+              
               ]]>
           </method>
           
