@@ -57,13 +57,15 @@ public class FlvRecordingMetaDataDaoImpl {
 		try { 
 			
 			String hql = "SELECT c FROM FlvRecordingMetaData c " +
-					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId";
+					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
+					"AND c.deleted != :deleted ";
 			
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql);
 			query.setLong("flvRecordingId", flvRecordingId);
+			query.setString("deleted", "true");
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.list();
 			tx.commit();

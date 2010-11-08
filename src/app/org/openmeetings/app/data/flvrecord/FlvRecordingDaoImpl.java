@@ -58,6 +58,32 @@ public class FlvRecordingDaoImpl {
 		}
 		return null;
 	}
+
+	public List<FlvRecording> getFlvRecordings() {
+		try { 
+			
+			String hql = "SELECT c FROM FlvRecording c " +
+							"WHERE c.deleted != :deleted ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setString("deleted", "true");
+			
+			List<FlvRecording> flvRecordings = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordings;
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordings]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordings]: ",ex2);
+		}
+		return null;
+	}
 	
 	public List<FlvRecording> getFlvRecordingByExternalRoomType(String externalRoomType) {
 		try { 

@@ -824,7 +824,7 @@ public class UserService {
  		    		
  		    		//String email = receipent.get("email").toString();
  		    		
- 		    		Users to = Usermanagement.getInstance().getUserByLoginOrEmail(email);
+ 		    		Users to = Usermanagement.getInstance().getUserByEmail(email);
  		    		
  		    		if (to == null){
 	 		       		throw new Exception("Could not find user "+email);

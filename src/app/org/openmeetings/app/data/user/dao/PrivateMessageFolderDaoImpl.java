@@ -73,6 +73,26 @@ public class PrivateMessageFolderDaoImpl {
 		return null;
 	}
 
+	public List<PrivateMessageFolder> getPrivateMessageFolders() {
+		try {
+			String hql = "select c from PrivateMessageFolder c ";
+
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			
+			List<PrivateMessageFolder> privateMessageFolders = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return privateMessageFolders;
+		} catch (Exception e) {
+			log.error("[getPrivateMessageFolderById]",e);
+		}
+		return null;
+	}
+
 	public void updatePrivateMessages(PrivateMessageFolder privateMessageFolder) {
 		try {
 			

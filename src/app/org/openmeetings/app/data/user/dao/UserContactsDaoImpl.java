@@ -254,6 +254,27 @@ public class UserContactsDaoImpl {
 		return null;
 	}
 	
+	public List<UserContacts> getUserContacts() {
+		try {
+			
+			String hql = "select c from UserContacts c ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			List<UserContacts> userContacts = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return userContacts;
+			
+		} catch (Exception e) {
+			log.error("[getUserContacts]",e);
+		}
+		return null;
+	}
+	
 	public Long updateContactStatus(Long userContactId, Boolean pending) {
 		try {
 			

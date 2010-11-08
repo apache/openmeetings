@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
+import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
+import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 
 import org.dom4j.Document;
@@ -33,6 +36,8 @@ import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
@@ -40,9 +45,14 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessageFolder;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
+import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -244,7 +254,69 @@ public class BackupExport extends HttpServlet {
 					/* #####################
 					 * Private Messages
 					 */
+					List<PrivateMessages> privateMessages = PrivateMessagesDaoImpl.getInstance().getPrivateMessages();
 					
+					if (privateMessages != null) {
+						Document doc = this.createPrivateMessagesDocument(privateMessages);
+						
+						String aListXML = backup_dir + "privateMessages.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+					}
+					
+					
+					/* #####################
+					 * Private Message Folders
+					 */
+					List<PrivateMessageFolder> privateMessageFolders = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolders();
+					
+					if (privateMessageFolders != null) {
+						Document doc = this.createPrivateMessageFolderDocument(privateMessageFolders);
+						
+						String aListXML = backup_dir + "privateMessageFolder.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+					}
+					
+					
+					/* #####################
+					 * User Contacts
+					 */
+					List<UserContacts> userContacts = UserContactsDaoImpl.getInstance().getUserContacts();
+					
+					if (privateMessageFolders != null) {
+						Document doc = this.createUserContactsDocument(userContacts);
+						
+						String aListXML = backup_dir + "userContacts.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+					}
+
+					
+					/* #####################
+					 * Recordings
+					 */
+					List<FlvRecording> flvRecordings =  FlvRecordingDaoImpl.getInstance().getFlvRecordings();
+					
+					for (FlvRecording flvRecording : flvRecordings) {
+						flvRecording.setFlvRecordingMetaData(FlvRecordingMetaDataDaoImpl.getInstance().getFlvRecordingMetaDataByRecording(flvRecording.getFlvRecordingId()));
+					}
+					
+					if (privateMessageFolders != null) {
+						Document doc = this.createFlvRecordingDocument(flvRecordings);
+						
+						String aListXML = backup_dir + "flvRecordings.xml";
+
+						FileOutputStream fos = new FileOutputStream(aListXML);
+						
+						this.serializetoXML(fos, "UTF-8", doc);
+					}
 					
 					
 					/* #####################
@@ -275,6 +347,21 @@ public class BackupExport extends HttpServlet {
 							
 						}
 					}
+					
+					/* #####################
+					 * Backup Recording Files
+					 */
+					File targetDirRec = new File(backup_dir + File.separatorChar + "recordingFiles");
+					
+					if (!targetDirRec.exists()) {
+						targetDirRec.mkdir();
+					}
+					
+					
+					File sourceDirRec = new File(current_dir + "streams" + File.separatorChar 
+											+ "hibernate" + File.separatorChar);
+					
+					copyDirectory(sourceDirRec,targetDirRec);
 					
 					
 					String full_path = backup_file + ".zip";
@@ -662,6 +749,213 @@ public class BackupExport extends HttpServlet {
 	
 		return document;
 	}	
+	
+
+	private Document createPrivateMessagesDocument(
+			List<PrivateMessages> privateMessages) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element privatemessages = root.addElement("privatemessages");
+		
+		for (Iterator<PrivateMessages> it = privateMessages.iterator();it.hasNext();) {
+			PrivateMessages pm = it.next();
+			
+			Element privateMessage = privatemessages.addElement("privatemessage");
+			
+			privateMessage.addElement("privateMessageId").setText(""+pm.getPrivateMessageId());
+			privateMessage.addElement("message").setText(""+pm.getMessage());
+			privateMessage.addElement("subject").setText(""+pm.getSubject());
+			privateMessage.addElement("privateMessageFolderId").setText(""+pm.getPrivateMessageFolderId());
+			privateMessage.addElement("userContactId").setText(""+pm.getUserContactId());
+			privateMessage.addElement("parentMessage").setText(""+pm.getParentMessage());
+			privateMessage.addElement("bookedRoom").setText(""+pm.getBookedRoom());
+			if (pm.getFrom() != null) {
+				privateMessage.addElement("from").setText(""+pm.getFrom().getUser_id());
+			} else {
+				privateMessage.addElement("from").setText("0");
+			}
+			if (pm.getTo() != null) {
+				privateMessage.addElement("to").setText(""+pm.getTo().getUser_id());
+			} else {
+				privateMessage.addElement("to").setText("0");
+			}
+			privateMessage.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(pm.getInserted()));
+			privateMessage.addElement("isContactRequest").setText(""+pm.getIsContactRequest());
+			privateMessage.addElement("isRead").setText(""+pm.getIsRead());
+			privateMessage.addElement("isTrash").setText(""+pm.getIsTrash());
+			if (pm.getOwner() != null) {
+				privateMessage.addElement("owner").setText(""+pm.getOwner().getUser_id());
+			} else {
+				privateMessage.addElement("owner").setText("0");
+			}
+			privateMessage.addElement("hashCode").setText(""+pm.hashCode());
+			if (pm.getRoom() != null) {
+				privateMessage.addElement("hashCode").setText(""+pm.getRoom().getRooms_id());
+			} else {
+				privateMessage.addElement("hashCode").setText("0");
+			}
+			
+		}
+	
+		return document;
+	}
+	
+
+	private Document createFlvRecordingDocument(List<FlvRecording> flvRecordings) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element flvrecordings = root.addElement("flvrecordings");
+		
+		for (Iterator<FlvRecording> it = flvRecordings.iterator();it.hasNext();) {
+			FlvRecording flvRec = it.next();
+			
+			Element flvrecording = flvrecordings.addElement("flvrecording");
+			
+			flvrecording.addElement("alternateDownload").setText(""+flvRec.getAlternateDownload());
+			flvrecording.addElement("comment").setText(""+flvRec.getComment());
+			flvrecording.addElement("deleted").setText(""+flvRec.getDeleted());
+			flvrecording.addElement("fileHash").setText(""+flvRec.getFileHash());
+			flvrecording.addElement("fileName").setText(""+flvRec.getFileName());
+			flvrecording.addElement("flvRecordingId").setText(""+flvRec.getFlvRecordingId());
+			flvrecording.addElement("previewImage").setText(""+flvRec.getPreviewImage());
+			flvrecording.addElement("recorderStreamId").setText(""+flvRec.getRecorderStreamId());
+			flvrecording.addElement("fileSize").setText(""+flvRec.getFileSize());
+			flvrecording.addElement("flvHeight").setText(""+flvRec.getFlvHeight());
+			flvrecording.addElement("flvWidth").setText(""+flvRec.getFlvWidth());
+			flvrecording.addElement("height").setText(""+flvRec.getHeight());
+			flvrecording.addElement("width").setText(""+flvRec.getWidth());
+			flvrecording.addElement("insertedBy").setText(""+flvRec.getInsertedBy());
+			flvrecording.addElement("organization_id").setText(""+flvRec.getOrganization_id());
+			flvrecording.addElement("ownerId").setText(""+flvRec.getOwnerId());
+			flvrecording.addElement("parentFileExplorerItemId").setText(""+flvRec.getParentFileExplorerItemId());
+			flvrecording.addElement("progressPostProcessing").setText(""+flvRec.getProgressPostProcessing());
+			flvrecording.addElement("room_id").setText(""+flvRec.getRoom_id());
+			flvrecording.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getInserted()));
+			flvrecording.addElement("isFolder").setText(""+flvRec.getIsFolder());
+			flvrecording.addElement("isImage").setText(""+flvRec.getIsImage());
+			flvrecording.addElement("isInterview").setText(""+flvRec.getIsInterview());
+			flvrecording.addElement("isPresentation").setText(""+flvRec.getIsPresentation());
+			flvrecording.addElement("isRecording").setText(""+flvRec.getIsRecording());
+			flvrecording.addElement("recordEnd").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordEnd()));
+			flvrecording.addElement("recordStart").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordStart()));
+			
+			
+			Element flvrecordingmetadatas = flvrecording.addElement("flvrecordingmetadatas");
+			
+			for (Iterator<FlvRecordingMetaData> itMeta = flvRec.getFlvRecordingMetaData().iterator();itMeta.hasNext();) {
+				FlvRecordingMetaData flvMeta = itMeta.next();
+				
+				Element flvrecordingmetadata = flvrecordingmetadatas.addElement("flvrecordingmetadata");
+				
+				flvrecordingmetadata.addElement("flvRecordingMetaDataId").setText(""+flvMeta.getFlvRecordingMetaDataId());
+				flvrecordingmetadata.addElement("freeTextUserName").setText(""+flvMeta.getFreeTextUserName());
+				flvrecordingmetadata.addElement("fullWavAudioData").setText(""+flvMeta.getFullWavAudioData());
+				flvrecordingmetadata.addElement("streamName").setText(""+flvMeta.getStreamName());
+				flvrecordingmetadata.addElement("wavAudioData").setText(""+flvMeta.getWavAudioData());
+				flvrecordingmetadata.addElement("initialGapSeconds").setText(""+flvMeta.getInitialGapSeconds());
+				flvrecordingmetadata.addElement("insertedBy").setText(""+flvMeta.getInsertedBy());
+				flvrecordingmetadata.addElement("interiewPodId").setText(""+flvMeta.getInteriewPodId());
+				flvrecordingmetadata.addElement("audioIsValid").setText(""+flvMeta.getAudioIsValid());
+				flvrecordingmetadata.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getInserted()));
+				flvrecordingmetadata.addElement("isAudioOnly").setText(""+flvMeta.getIsAudioOnly());
+				flvrecordingmetadata.addElement("isScreenData").setText(""+flvMeta.getIsScreenData());
+				flvrecordingmetadata.addElement("isVideoOnly").setText(""+flvMeta.getIsVideoOnly());
+				flvrecordingmetadata.addElement("recordEnd").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordEnd()));
+				flvrecordingmetadata.addElement("recordStart").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordStart()));
+				flvrecordingmetadata.addElement("updated").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getUpdated()));
+				
+			}
+			
+		}
+	
+		return document;
+	}
+	
+	private Document createPrivateMessageFolderDocument(
+			List<PrivateMessageFolder> privateMessageFolders) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element privatemessagefolders = root.addElement("privatemessagefolders");
+		
+		for (Iterator<PrivateMessageFolder> it = privateMessageFolders.iterator();it.hasNext();) {
+			PrivateMessageFolder pmf = it.next();
+			
+			Element privateMessageFolder = privatemessagefolders.addElement("privatemessagefolder");
+			
+			privateMessageFolder.addElement("privateMessageFolderId").setText(""+pmf.getPrivateMessageFolderId());
+			privateMessageFolder.addElement("folderName").setText(""+pmf.getFolderName());
+			privateMessageFolder.addElement("userId").setText(""+pmf.getUserId());
+			
+		}
+	
+		return document;
+	}
+	
+	private Document createUserContactsDocument(List<UserContacts> userContacts) throws Exception {
+		Document document = DocumentHelper.createDocument();
+		document.setXMLEncoding("UTF-8");
+		document.addComment(
+				"###############################################\n" +
+				"This File is auto-generated by the Backup Tool \n" +
+				"you should use the BackupPanel to modify or change this file \n" +
+				"see http://code.google.com/p/openmeetings/wiki/BackupPanel for Details \n" +
+				"###############################################");
+		
+		Element root = document.addElement("root");
+		
+		Element usercontacts = root.addElement("usercontacts");
+		
+		for (Iterator<UserContacts> it = userContacts.iterator();it.hasNext();) {
+			UserContacts uc = it.next();
+			
+			Element usercontact = usercontacts.addElement("usercontact");
+			
+			usercontact.addElement("userContactId").setText(""+uc.getUserContactId());
+			usercontact.addElement("hash").setText(""+uc.getHash());
+			if (uc.getContact() != null) {
+				usercontact.addElement("contact").setText(""+uc.getContact().getUser_id());
+			} else {
+				usercontact.addElement("contact").setText("0");
+			}
+			if (uc.getOwner() != null) {
+				usercontact.addElement("owner").setText(""+uc.getOwner().getUser_id());
+			} else {
+				usercontact.addElement("owner").setText("0");
+			}
+			usercontact.addElement("pending").setText(""+uc.getPending());
+			usercontact.addElement("shareCalendar").setText(""+uc.getShareCalendar());
+			
+		}
+	
+		return document;
+	}
 	
 	private Document createOrgRoomsDocument(List<Rooms_Organisation> roomOrgList) throws Exception {
 		Document document = DocumentHelper.createDocument();

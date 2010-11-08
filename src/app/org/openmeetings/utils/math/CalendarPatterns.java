@@ -30,6 +30,9 @@ public class CalendarPatterns {
     }
     
     public static String getDateWithTimeByMiliSeconds(Date t){
+    	if (t == null) {
+    		return null;
+    	}
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date dateOld = new Date();
         long timeAdv = t.getTime();
@@ -67,6 +70,9 @@ public class CalendarPatterns {
     
     public static Date parseDateWithHour(String dateString) {
     	try {
+    		if (dateString == null && dateString == "") {
+        		return null;
+        	}
     		return dateFormat__ddMMyyyyHHmmss.parse(dateString);
     	} catch (Exception e) {
     		log.error("parseDate",e);

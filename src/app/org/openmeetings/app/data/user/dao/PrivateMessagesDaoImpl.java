@@ -67,6 +67,28 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
+	public List<PrivateMessages> getPrivateMessages() {
+		try {
+			
+			String hql = "select c from PrivateMessages c ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql); 
+			
+			List<PrivateMessages> privateMessages = query.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return privateMessages;
+			
+		} catch (Exception e) {
+			log.error("[getPrivateMessages]",e);
+		}
+		return null;
+	}
+	
 	public PrivateMessages getPrivateMessagesById(Long privateMessageId) {
 		try {
 			

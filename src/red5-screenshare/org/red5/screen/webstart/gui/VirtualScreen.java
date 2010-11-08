@@ -234,8 +234,8 @@ public class VirtualScreen {
 		
 		JComboBox comboResize  = new JComboBox(selectResize);	
 		comboResize.setBounds(250, 330, 200, 24);
-		comboResize.setSelectedIndex(ScreenShare.instance.defaultQualityScreensharing);
 		comboResize.addActionListener(new GetResizeChoice()); 
+		comboResize.setSelectedIndex(ScreenShare.instance.defaultQualityScreensharing);
 		
 		ScreenShare.instance.jVScreenResizeMode = comboResize;
 		ScreenShare.instance.t.add(ScreenShare.instance.jVScreenResizeMode);
@@ -301,6 +301,7 @@ public class VirtualScreen {
 		
 		 logger.debug("########## calcRescaleFactors vScreenResizeX " + VirtualScreenBean.vScreenResizeX);
          logger.debug("########## calcRescaleFactors vScreenResizeY " + VirtualScreenBean.vScreenResizeY);
+         logger.debug("########## calcRescaleFactors vScreenScaleFactor " + VirtualScreenBean.vScreenScaleFactor);
          
 	}
 

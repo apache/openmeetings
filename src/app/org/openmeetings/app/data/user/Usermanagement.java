@@ -1564,7 +1564,39 @@ public class Usermanagement {
 		List<Users> ll = query.list();
 		
 		if (ll.size() > 1) {
-			throw new Exception("ALERT :: There are two users in the database that have either same login or Email ");
+			log.error("ALERT :: There are two users in the database that have either same login or Email ");
+			return ll.get(0);
+			//throw new Exception("ALERT :: There are two users in the database that have either same login or Email ");
+		} else if (ll.size() == 1){
+			return ll.get(0);
+		} else {
+			return null;
+		}
+		
+	}
+	
+	public Users getUserByEmail(String userOrEmail) throws Exception{
+		log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
+		
+		String hql = "SELECT c from Users AS c " +
+				"WHERE " +
+				"c.adresses.email LIKE :userOrEmail";
+		
+		Object idf = HibernateUtil.createSession();
+		Session session = HibernateUtil.getSession();
+		Transaction tx = session.beginTransaction();
+		
+		session.flush();
+		
+		Query query = session.createQuery(hql);
+		query.setString("userOrEmail", userOrEmail);
+		
+		List<Users> ll = query.list();
+		
+		if (ll.size() > 1) {
+			log.error("ALERT :: There are two users in the database that have same Email ");
+			return ll.get(0);
+			//throw new Exception("ALERT :: There are two users in the database that have either same login or Email ");
 		} else if (ll.size() == 1){
 			return ll.get(0);
 		} else {
