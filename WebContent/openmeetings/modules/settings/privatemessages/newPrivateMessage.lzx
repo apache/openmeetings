@@ -80,7 +80,10 @@
             <netparam><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
             <netparam><method name="getValue">return parent.parent.parentMessageId;</method></netparam>
             <netparam><method name="getValue">return Number(parent.parent._roomtype.getValue());</method></netparam>
-            
+            <!--String domain, String port, String webapp-->
+            <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+            <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+            <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
             <handler name="ondata" args="value">
             	<![CDATA[
                 	//The onResult-Handler will be called be the rtmpconnection

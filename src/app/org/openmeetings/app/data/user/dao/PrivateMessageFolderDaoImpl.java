@@ -51,6 +51,26 @@ public class PrivateMessageFolderDaoImpl {
 		return null;
 	}
 	
+	public Long addPrivateMessageFolderObj(PrivateMessageFolder privateMessageFolder) {
+		try {
+			privateMessageFolder.setInserted(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long privateMessageFolderId = (Long) session.save(privateMessageFolder);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return privateMessageFolderId;	
+		} catch (Exception e) {
+			log.error("[addPrivateMessageFolder]",e);
+		}
+		return null;
+	}
+	
 	public PrivateMessageFolder getPrivateMessageFolderById(Long privateMessageFolderId) {
 		try {
 			String hql = "select c from PrivateMessageFolder c " +

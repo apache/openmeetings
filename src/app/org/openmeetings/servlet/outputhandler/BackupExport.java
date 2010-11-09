@@ -302,7 +302,7 @@ public class BackupExport extends HttpServlet {
 					/* #####################
 					 * Recordings
 					 */
-					List<FlvRecording> flvRecordings =  FlvRecordingDaoImpl.getInstance().getFlvRecordings();
+					List<FlvRecording> flvRecordings =  FlvRecordingDaoImpl.getInstance().getAllFlvRecordings();
 					
 					for (FlvRecording flvRecording : flvRecordings) {
 						flvRecording.setFlvRecordingMetaData(FlvRecordingMetaDataDaoImpl.getInstance().getFlvRecordingMetaDataByRecording(flvRecording.getFlvRecordingId()));
@@ -797,11 +797,11 @@ public class BackupExport extends HttpServlet {
 			} else {
 				privateMessage.addElement("owner").setText("0");
 			}
-			privateMessage.addElement("hashCode").setText(""+pm.hashCode());
+			
 			if (pm.getRoom() != null) {
-				privateMessage.addElement("hashCode").setText(""+pm.getRoom().getRooms_id());
+				privateMessage.addElement("room").setText(""+pm.getRoom().getRooms_id());
 			} else {
-				privateMessage.addElement("hashCode").setText("0");
+				privateMessage.addElement("room").setText("0");
 			}
 			
 		}

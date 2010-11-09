@@ -45,6 +45,9 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
+import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
+import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GeneratePDF;
@@ -63,6 +66,9 @@ import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessageFolder;
+import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
+import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -424,6 +430,45 @@ public class BackupImport extends HttpServlet {
 						this.importFlvRecordings(flvRecordingsListFile);
 					}
 					
+					/* #####################
+					 * Import Private Message Folders
+					 * 
+					 */
+					String  privateMessageFoldersXML = completeName + File.separatorChar + "privateMessageFolder.xml";
+					File privateMessageFoldersFile = new File(privateMessageFoldersXML);
+					if (!privateMessageFoldersFile.exists()) {
+						log.debug("privateMessageFoldersFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importPrivateMessageFolders(privateMessageFoldersFile);
+					}
+					
+					/* #####################
+					 * Import Private Messages
+					 * 
+					 */
+					String  privateMessagesXML = completeName + File.separatorChar + "privateMessages.xml";
+					File privateMessagesFile = new File(privateMessagesXML);
+					if (!privateMessagesFile.exists()) {
+						log.debug("privateMessagesFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importPrivateMessages(privateMessagesFile);
+					}
+
+					/* #####################
+					 * Import User Contacts
+					 * 
+					 */
+					String  userContactsXML = completeName + File.separatorChar + "userContacts.xml";
+					File userContactsFile = new File(userContactsXML);
+					if (!userContactsFile.exists()) {
+						log.debug("userContactsFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importUserContacts(userContactsFile);
+					}
+					
 					this.deleteDirectory(f);
 					
 					LinkedHashMap<String,Object> hs = new LinkedHashMap<String,Object>();
@@ -731,6 +776,7 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			String alternateDownload = flvObject.element("alternateDownload").getText();
 	        			String comment = flvObject.element("comment").getText();
+	        			String deleted = flvObject.element("deleted").getText();
 	        			String fileHash = flvObject.element("fileHash").getText();
 	        			String fileName = flvObject.element("fileName").getText();
 	        			String previewImage = flvObject.element("previewImage").getText();
@@ -782,7 +828,7 @@ public class BackupImport extends HttpServlet {
 	        			flvRecording.setIsRecording(isRecording);
 	        			flvRecording.setRecordEnd(recordEnd);
 	        			flvRecording.setRecordStart(recordStart);
-	        			flvRecording.setDeleted("false");
+	        			flvRecording.setDeleted(deleted);
 	        			
 	        			flvRecording.setFlvRecordingMetaData(new LinkedList<FlvRecordingMetaData>());
 	        			
@@ -845,6 +891,197 @@ public class BackupImport extends HttpServlet {
 		}
 		return null;
 	}
+	
+
+	private void importPrivateMessageFolders(File privateMessageFoldersFile) throws Exception {
+		
+		List<PrivateMessageFolder> privateMessageFolders = this.getPrivateMessageFoldersByXML(privateMessageFoldersFile);
+		
+		for (PrivateMessageFolder privateMessageFolder : privateMessageFolders) {
+
+			PrivateMessageFolderDaoImpl.getInstance().addPrivateMessageFolderObj(privateMessageFolder);
+			
+		}
+		
+	}
+
+	private List<PrivateMessageFolder> getPrivateMessageFoldersByXML(
+											File privateMessageFoldersFile) {
+		try {
+			
+			List<PrivateMessageFolder> pmfList = new LinkedList<PrivateMessageFolder>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(privateMessageFoldersFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("privatemessagefolders")) {
+	        		
+	        		for (Iterator<Element> innerIter = itemObject.elementIterator( "privatemessagefolder" ); innerIter.hasNext(); ) {
+	        			
+	        			Element pmfObject = innerIter.next();
+	        			
+	        			String folderName = pmfObject.element("folderName").getText();
+	        			Long userId = importLongType(pmfObject.element("userId").getText());
+	        			
+	        			PrivateMessageFolder privateMessageFolder = new PrivateMessageFolder();
+	        			privateMessageFolder.setFolderName(folderName);
+	        			privateMessageFolder.setUserId(userId);
+	        			
+	        			pmfList.add(privateMessageFolder);
+	        			
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        return pmfList;
+			
+		} catch (Exception err) {
+			log.error("[getPrivateMessageFoldersByXML]",err);
+		}
+		return null;
+	}
+	
+
+	private void importPrivateMessages(File privateMessagesFile) throws Exception {
+		
+		List<PrivateMessages> pmList = this.getPrivateMessagesByXML(privateMessagesFile);
+		
+		for (PrivateMessages pm : pmList) {
+			
+			PrivateMessagesDaoImpl.getInstance().addPrivateMessageObj(pm);
+			
+		}
+		
+	}
+	
+	private List<PrivateMessages> getPrivateMessagesByXML(
+										File privateMessagesFile) {
+		try {
+			
+			List<PrivateMessages> pmList = new LinkedList<PrivateMessages>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(privateMessagesFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("privatemessages")) {
+	        		
+	        		for (Iterator<Element> innerIter = itemObject.elementIterator( "privatemessage" ); innerIter.hasNext(); ) {
+	        			
+	        			Element pmObject = innerIter.next();
+	        			
+	        			String message = pmObject.element("message").getText();
+	        			String subject = pmObject.element("subject").getText();
+	        			Long privateMessageFolderId = importLongType(pmObject.element("privateMessageFolderId").getText());
+	        			Long userContactId = importLongType(pmObject.element("userContactId").getText());
+	        			Long parentMessage = importLongType(pmObject.element("parentMessage").getText());
+	        			Boolean bookedRoom = importBooleanType(pmObject.element("bookedRoom").getText());
+	        			Users from = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("from").getText()));
+	        			Users to = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("to").getText()));
+	        			Date inserted = CalendarPatterns.parseDateWithHour(pmObject.element("inserted").getText());
+	        			Boolean isContactRequest = importBooleanType(pmObject.element("isContactRequest").getText());
+	        			Boolean isRead = importBooleanType(pmObject.element("isRead").getText());
+	        			Boolean isTrash = importBooleanType(pmObject.element("isTrash").getText());
+	        			Users owner = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("owner").getText()));
+	        			Rooms room = Roommanagement.getInstance().getRoomById(importLongType(pmObject.element("room").getText()));
+	        			
+	        			PrivateMessages pm = new PrivateMessages();
+	        			pm.setMessage(message);
+	        			pm.setSubject(subject);
+	        			pm.setPrivateMessageFolderId(privateMessageFolderId);
+	        			pm.setUserContactId(userContactId);
+	        			pm.setParentMessage(parentMessage);
+	        			pm.setBookedRoom(bookedRoom);
+	        			pm.setFrom(from);
+	        			pm.setTo(to);
+	        			pm.setInserted(inserted);
+	        			pm.setIsContactRequest(isContactRequest);
+	        			pm.setIsRead(isRead);
+	        			pm.setIsTrash(isTrash);
+	        			pm.setOwner(owner);
+	        			pm.setRoom(room);
+	        			
+	        			pmList.add(pm);
+	        			
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        return pmList;
+			
+		} catch (Exception err) {
+			log.error("[getPrivateMessagesByXML]",err);
+		}
+		return null;
+	}
+	
+
+	private void importUserContacts(File userContactsFile) throws Exception {
+		
+		List<UserContacts> ucList = this.getUserContactsByXML(userContactsFile);
+		
+		for (UserContacts uc : ucList) {
+			
+			UserContactsDaoImpl.getInstance().addUserContactObj(uc);
+			
+		}
+	}
+
+	private List<UserContacts> getUserContactsByXML(File userContactsFile) {
+		try {
+			
+			List<UserContacts> ucList = new LinkedList<UserContacts>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(userContactsFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        	Element itemObject =  i.next();
+	        	if (itemObject.getName().equals("usercontacts")) {
+	        		
+	        		for (Iterator<Element> innerIter = itemObject.elementIterator( "usercontact" ); innerIter.hasNext(); ) {
+	        			
+	        			Element usercontact = innerIter.next();
+	        			
+	        			String hash = usercontact.element("hash").getText();
+	        			Users contact = Usermanagement.getInstance().getUserById(importLongType(usercontact.element("contact").getText()));
+	        			Users owner = Usermanagement.getInstance().getUserById(importLongType(usercontact.element("owner").getText()));
+	        			Boolean pending = importBooleanType(usercontact.element("pending").getText());
+	        			Boolean shareCalendar = importBooleanType(usercontact.element("shareCalendar").getText());
+	        			
+	        			UserContacts userContacts = new UserContacts();
+	        			userContacts.setHash(hash);
+	        			userContacts.setContact(contact);
+	        			userContacts.setOwner(owner);
+	        			userContacts.setPending(pending);
+	        			userContacts.setShareCalendar(shareCalendar);
+	        			
+	        			ucList.add(userContacts);
+	        			
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        return ucList;
+			
+		} catch (Exception err) {
+			log.error("[getUserContactsByXML]",err);
+		}
+		return null;
+	}
+	
 
 	private void importOrganizsations(File orgFile) throws Exception {
 		

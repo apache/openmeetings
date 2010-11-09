@@ -67,6 +67,25 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
+	public Long addPrivateMessageObj(PrivateMessages privateMessage) {
+		try {
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long privateMessageId = (Long) session.save(privateMessage);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return privateMessageId;			
+		} catch (Exception e) {
+			log.error("[addPrivateMessage]",e);
+		}
+		return null;
+	}
+	
 	public List<PrivateMessages> getPrivateMessages() {
 		try {
 			

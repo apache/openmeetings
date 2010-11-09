@@ -55,6 +55,27 @@ public class UserContactsDaoImpl {
 		return null;
 	}
 	
+	public Long addUserContactObj(UserContacts userContact) {
+		try {
+			
+			userContact.setInserted(new Date());
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long userContactId = (Long) session.save(userContact);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return userContactId;			
+		} catch (Exception e) {
+			log.error("[addUserContact]",e);
+		}
+		return null;
+	}
+	
 	public Integer deleteUserContact(Long userContactId) {
 		try {
 			

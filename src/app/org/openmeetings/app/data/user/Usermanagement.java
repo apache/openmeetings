@@ -1474,6 +1474,10 @@ public class Usermanagement {
 	public Users getUserById(Long id) throws Exception{
 		log.debug("Usermanagement.getUserById");
 		
+		if (id == 0) {
+			return null;
+		}
+		
 		Object idf = HibernateUtil.createSession();
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();

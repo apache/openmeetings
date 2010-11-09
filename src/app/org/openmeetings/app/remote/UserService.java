@@ -748,7 +748,7 @@ public class UserService {
    
     public Long composeMail(String SID, List<String> recipients, String subject, String message, Boolean bookedRoom, 
     		Date validFromDate, String validFromTime, Date validToDate, String validToTime,
-    		Long parentMessageId, Long roomtype_id) {
+    		Long parentMessageId, Long roomtype_id, String domain, String port, String webapp) {
     	try {
     		
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -818,6 +818,15 @@ public class UserService {
  		    	
  		    	String sendJNameTimeZone = from.getOmTimeZone().getJname();
  		    	
+				String baseURL = "http://" + domain + ":" + port + webapp;
+				if (port.equals("80")) {
+					baseURL = "http://" + domain + webapp;
+				} else if (port.equals("443")) {
+					baseURL = "https://" + domain + webapp;
+				}
+				
+				String profile_link = baseURL + "?cuser=1";
+				
  		    	for (String email : recipients) {
  		    		
  		    		//Map receipent = (Map) recipients.get(iter.next());
@@ -840,6 +849,20 @@ public class UserService {
 	    				
 	    				//One message to the Inbox
 	    				PrivateMessagesDaoImpl.getInstance().addPrivateMessage(subject, message, parentMessageId, from, to, to, bookedRoom, room, false, 0L);
+	    				
+	    				//One copy of the Inbox message to the user
+	    				Long language_id = to.getLanguage_id();
+					    if (language_id == null) {
+						    language_id = Long.valueOf(Configurationmanagement.getInstance().
+				        		 getConfKey(3,"default_lang_id").getConf_value()).longValue();
+					    }
+	    				
+					    Fieldlanguagesvalues fValue1301 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1301L, language_id);
+					    Fieldlanguagesvalues fValue1302 = Fieldmanagment.getInstance().getFieldByIdAndLanguage(1302L, language_id);
+	    				
+					    String aLinkHTML = "<br/><br/><a href='"+profile_link+"'>"+fValue1302.getValue()+"</a><br/>";
+					    
+	    				MailHandler.sendMail(email,fValue1301.getValue() + " " + subject, message.replaceAll("\\<.*?>","") + aLinkHTML);
 	    				
 	    			}
  		    		

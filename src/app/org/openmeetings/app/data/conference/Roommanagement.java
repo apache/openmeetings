@@ -199,6 +199,11 @@ public class Roommanagement {
 	public Rooms getRoomById(long rooms_id){
 		log.debug("getRoombyId : " + rooms_id);
 		try {
+			
+			if (rooms_id == 0) {
+				return null;
+			}
+			
 			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted != :deleted";
 			Rooms room = null;
 			
