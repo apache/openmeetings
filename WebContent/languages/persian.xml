@@ -3906,4 +3906,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1300" name="profile settings button">
     <value>more display options ...</value>
   </string>
+  <string id="1301" name="private message">
+    <value>New private message:</value>
+  </string>
+  <string id="1302" name="private message">
+    <value>Click here to visit your profile to see the full message ...</value>
+  </string>
 </language>
