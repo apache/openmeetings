@@ -183,6 +183,28 @@ public class FlvRecordingMetaDataDaoImpl {
 		}
 		return null;
 	}
+	
+	public Long addFlvRecordingMetaDataObj(FlvRecordingMetaData flvRecordingMetaData) {
+		try {
+
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+
+			Long flvRecordingMetaDataId = (Long) session.save(flvRecordingMetaData);
+
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+
+			return flvRecordingMetaDataId;
+
+		} catch (HibernateException ex) {
+			log.error("[addFlvRecordingMetaDataObj]: ", ex);
+		} catch (Exception ex2) {
+			log.error("[addFlvRecordingMetaDataObj]: ", ex2);
+		}
+		return null;
+	}
 
 	public Long updateFlvRecordingMetaDataEndDate(Long flvRecordingMetaDataId, 
 										Date recordEnd) {

@@ -70,7 +70,7 @@ public class CalendarPatterns {
     
     public static Date parseDateWithHour(String dateString) {
     	try {
-    		if (dateString == null && dateString == "") {
+    		if (dateString == null || dateString == "" || dateString == "null") {
         		return null;
         	}
     		return dateFormat__ddMMyyyyHHmmss.parse(dateString);

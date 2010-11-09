@@ -40,6 +40,8 @@ import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -56,6 +58,8 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms_Organisation;
@@ -313,6 +317,23 @@ public class BackupImport extends HttpServlet {
 		            	}
 		            	
 		            }
+		            
+		            
+		            //Now check the recordings and import them
+		            
+		            File sourceDirRec = new File(completeName + File.separatorChar + "recordingFiles");
+		            
+		            
+		            log.debug("sourceDirRec PATH " + sourceDirRec.getAbsolutePath());
+		            
+		            if (sourceDirRec.exists()) {
+		            	
+		            	File targetDirRec = new File(current_dir + "streams" + File.separatorChar 
+												+ "hibernate" + File.separatorChar);
+		            	
+		            	copyDirectory(sourceDirRec,targetDirRec);
+		            	
+		            }
 					
 					/* #####################
 					 * Import Organizations
@@ -390,6 +411,18 @@ public class BackupImport extends HttpServlet {
 						this.importLdapConfig(ldapConfigListFile);
 					}
 					
+					/* #####################
+					 * Import Recordings
+					 * 
+					 */
+					String flvRecordingsListXML = completeName + File.separatorChar + "flvRecordings.xml";
+					File flvRecordingsListFile = new File(flvRecordingsListXML);
+					if (!flvRecordingsListFile.exists()) {
+						log.debug("flvRecordingsListFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importFlvRecordings(flvRecordingsListFile);
+					}
 					
 					this.deleteDirectory(f);
 					
@@ -416,6 +449,37 @@ public class BackupImport extends HttpServlet {
 		
 		return;
 	}
+
+	public void copyDirectory(File sourceLocation , File targetLocation)
+    		throws IOException {
+        
+	 //log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
+	 
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists()) {
+                targetLocation.mkdir();
+            }
+            
+            String[] children = sourceLocation.list();
+            for (int i=0; i<children.length; i++) {
+                copyDirectory(new File(sourceLocation, children[i]),
+                        new File(targetLocation, children[i]));
+            }
+        } else {
+            
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+            
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+        }
+    }
 	
 	public void copyFile(File sourceLocation , File targetLocation) throws IOException {
             
@@ -618,6 +682,166 @@ public class BackupImport extends HttpServlet {
 			
 		} catch (Exception err) {
 			log.error("[getUsersByXML]",err);
+		}
+		return null;
+	}
+	
+
+	private void importFlvRecordings(File flvRecordingsListFile) throws Exception {
+		
+		List<FlvRecording> flvRecordings = this.getFlvRecordings(flvRecordingsListFile);
+		
+		for (FlvRecording flvRecording : flvRecordings) {
+			
+			Long flvRecordingId = FlvRecordingDaoImpl.getInstance().addFlvRecordingObj(flvRecording);
+			
+			for (FlvRecordingMetaData flvRecordingMetaData : flvRecording.getFlvRecordingMetaData()) {
+				
+				FlvRecording flvRecordingSaved = FlvRecordingDaoImpl.getInstance().getFlvRecordingById(flvRecordingId);
+				
+				flvRecordingMetaData.setFlvRecording(flvRecordingSaved);
+				
+				FlvRecordingMetaDataDaoImpl.getInstance().addFlvRecordingMetaDataObj(flvRecordingMetaData);
+				
+			}
+			
+		}
+		
+	}
+
+	private List<FlvRecording> getFlvRecordings(File flvRecordingsListFile) {
+		try {
+
+			List<FlvRecording> flvList = new LinkedList<FlvRecording>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(flvRecordingsListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+				
+	        	Element itemObject =  i.next();
+	        	
+	        	if (itemObject.getName().equals("flvrecordings")) {
+	        		
+	        		for (Iterator<Element> innerIter = itemObject.elementIterator( "flvrecording" ); innerIter.hasNext(); ) {
+	        			
+	        			Element flvObject = innerIter.next();
+	        			
+	        			String alternateDownload = flvObject.element("alternateDownload").getText();
+	        			String comment = flvObject.element("comment").getText();
+	        			String fileHash = flvObject.element("fileHash").getText();
+	        			String fileName = flvObject.element("fileName").getText();
+	        			String previewImage = flvObject.element("previewImage").getText();
+	        			String recorderStreamId = flvObject.element("recorderStreamId").getText();
+	        			Long fileSize = importLongType(flvObject.element("fileSize").getText());
+	        			Integer flvHeight = importIntegerType(flvObject.element("flvHeight").getText());
+	        			Integer flvWidth = importIntegerType(flvObject.element("flvWidth").getText());
+	        			Integer height = importIntegerType(flvObject.element("height").getText());
+	        			Integer width = importIntegerType(flvObject.element("width").getText());
+	        			Long insertedBy = importLongType(flvObject.element("insertedBy").getText());
+	        			Long organization_id = importLongType(flvObject.element("organization_id").getText());
+	        			Long ownerId = importLongType(flvObject.element("ownerId").getText());
+	        			Long parentFileExplorerItemId = importLongType(flvObject.element("parentFileExplorerItemId").getText());
+	        			Integer progressPostProcessing = importIntegerType(flvObject.element("progressPostProcessing").getText());
+	        			Long room_id = importLongType(flvObject.element("room_id").getText());
+	        			Date inserted = CalendarPatterns.parseDateWithHour(flvObject.element("inserted").getText());
+	        			Boolean isFolder = importBooleanType(flvObject.element("isFolder").getText());
+	        			Boolean isImage = importBooleanType(flvObject.element("isImage").getText());
+	        			Boolean isInterview = importBooleanType(flvObject.element("isInterview").getText());
+	        			Boolean isPresentation = importBooleanType(flvObject.element("isPresentation").getText());
+	        			Boolean isRecording = importBooleanType(flvObject.element("isRecording").getText());
+	        			Date recordEnd = CalendarPatterns.parseDateWithHour(flvObject.element("recordEnd").getText());
+	        			Date recordStart = CalendarPatterns.parseDateWithHour(flvObject.element("recordStart").getText());
+	        			
+	        			
+	        			FlvRecording flvRecording = new FlvRecording();
+	        			flvRecording.setAlternateDownload(alternateDownload);
+	        			flvRecording.setComment(comment);
+	        			flvRecording.setFileHash(fileHash);
+	        			flvRecording.setFileName(fileName);
+	        			flvRecording.setPreviewImage(previewImage);
+	        			flvRecording.setRecorderStreamId(recorderStreamId);
+	        			flvRecording.setFileSize(fileSize);
+	        			flvRecording.setFlvHeight(flvHeight);
+	        			flvRecording.setFlvWidth(flvWidth);
+	        			flvRecording.setHeight(height);
+	        			flvRecording.setWidth(width);
+	        			flvRecording.setInsertedBy(insertedBy);
+	        			flvRecording.setOrganization_id(organization_id);
+	        			flvRecording.setOwnerId(ownerId);
+	        			flvRecording.setParentFileExplorerItemId(parentFileExplorerItemId);
+	        			flvRecording.setProgressPostProcessing(progressPostProcessing);
+	        			flvRecording.setRoom_id(room_id);
+	        			flvRecording.setInserted(inserted);
+	        			flvRecording.setIsFolder(isFolder);
+	        			flvRecording.setIsImage(isImage);
+	        			flvRecording.setIsInterview(isInterview);
+	        			flvRecording.setIsPresentation(isPresentation);
+	        			flvRecording.setIsRecording(isRecording);
+	        			flvRecording.setRecordEnd(recordEnd);
+	        			flvRecording.setRecordStart(recordStart);
+	        			flvRecording.setDeleted("false");
+	        			
+	        			flvRecording.setFlvRecordingMetaData(new LinkedList<FlvRecordingMetaData>());
+	        			
+	        			
+	        			Element flvrecordingmetadatas = flvObject.element("flvrecordingmetadatas");
+	        			
+	        			for (Iterator<Element> innerIterMetas = flvrecordingmetadatas.elementIterator( "flvrecordingmetadata" ); innerIterMetas.hasNext(); ) {
+	        				
+	        				Element flvrecordingmetadataObj = innerIterMetas.next();
+	        				
+	        				String freeTextUserName = flvrecordingmetadataObj.element("freeTextUserName").getText();
+	        				String fullWavAudioData = flvrecordingmetadataObj.element("fullWavAudioData").getText();
+	        				String streamName = flvrecordingmetadataObj.element("streamName").getText();
+	        				String wavAudioData = flvrecordingmetadataObj.element("wavAudioData").getText();
+	        				Integer initialGapSeconds = importIntegerType(flvrecordingmetadataObj.element("initialGapSeconds").getText());
+	        				Long insertedBy1 = importLongType(flvrecordingmetadataObj.element("insertedBy").getText());
+	        				Integer interiewPodId = importIntegerType(flvrecordingmetadataObj.element("interiewPodId").getText());
+	        				Boolean audioIsValid = importBooleanType(flvrecordingmetadataObj.element("audioIsValid").getText());
+	        				Date inserted1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("inserted").getText());
+	        				Boolean isAudioOnly = importBooleanType(flvrecordingmetadataObj.element("isAudioOnly").getText());
+	        				Boolean isScreenData = importBooleanType(flvrecordingmetadataObj.element("isScreenData").getText());
+	        				Boolean isVideoOnly = importBooleanType(flvrecordingmetadataObj.element("isVideoOnly").getText());
+	        				Date recordEnd1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("recordEnd").getText());
+	        				Date recordStart1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("recordStart").getText());
+	        				Date updated = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("updated").getText());
+	        				
+	        				FlvRecordingMetaData flvrecordingmetadata = new FlvRecordingMetaData();
+	        				flvrecordingmetadata.setFreeTextUserName(freeTextUserName);
+	        				flvrecordingmetadata.setFullWavAudioData(fullWavAudioData);
+	        				flvrecordingmetadata.setStreamName(streamName);
+	        				flvrecordingmetadata.setWavAudioData(wavAudioData);
+	        				flvrecordingmetadata.setInitialGapSeconds(initialGapSeconds);
+	        				flvrecordingmetadata.setInsertedBy(insertedBy1);
+	        				flvrecordingmetadata.setInteriewPodId(interiewPodId);
+	        				flvrecordingmetadata.setAudioIsValid(audioIsValid);
+	        				flvrecordingmetadata.setInserted(inserted1);
+	        				flvrecordingmetadata.setIsAudioOnly(isAudioOnly);
+	        				flvrecordingmetadata.setIsScreenData(isScreenData);
+	        				flvrecordingmetadata.setIsVideoOnly(isVideoOnly);
+	        				flvrecordingmetadata.setRecordEnd(recordEnd1);
+	        				flvrecordingmetadata.setRecordStart(recordStart1);
+	        				flvrecordingmetadata.setUpdated(updated);
+	        				flvrecordingmetadata.setDeleted("false");
+	        				
+	        				flvRecording.getFlvRecordingMetaData().add(flvrecordingmetadata);
+	        				
+	        			}
+	        			
+	        			flvList.add(flvRecording);
+	        			
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        return flvList;
+			
+		} catch (Exception err) {
+			log.error("[getFlvRecordings]",err);
 		}
 		return null;
 	}

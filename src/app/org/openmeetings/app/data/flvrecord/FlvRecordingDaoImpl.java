@@ -385,6 +385,27 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
+	public Long addFlvRecordingObj(FlvRecording flvRecording) {
+		try { 
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			Long flvRecordingId = (Long) session.save(flvRecording);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return flvRecordingId;
+		} catch (HibernateException ex) {
+			log.error("[addFlvRecording]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[addFlvRecording]: ",ex2);
+		}
+		return null;
+	}
+	
 	public void updateFlvRecordingOrganization(Long flvRecordingId, Long organization_id) {
 		try {
 			
