@@ -65,6 +65,70 @@
 		  width="$once{ parent.width - 40 }" bgcolor="$once{ parent.usercolor }"
 		  name="header_user" />
 		  
+    <miniIcons name="add" resource="edit_add_rsc" width="16" height="16" 
+                   y="0" x="$once{ parent.width - 114 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            if (hib.userobject.user_id == parent.user_id) {
+                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+                return;
+            }
+            parent.requestUserToContactList.doCall();
+        </handler>
+        <labelTooltip labelid="1186" />
+    </miniIcons>
+    
+    <!--
+    public Long requestUserToContactList(String SID, Long userToAdd_id, 
+                String domain, String port, String webapp)
+     -->
+    <netRemoteCallHib name="requestUserToContactList" funcname="userservice.requestUserToContactList" 
+                  remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.user_id; </method></netparam>
+        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+        <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
+        <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("requestUserToContactList: ",value);
+                if (value > 0) {
+                    new lz.labelerrorPopup(canvas,{labelid:1267,errorlabelid:1266});
+                }
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+    
+    <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
+                   y="0" x="$once{ parent.width - 94 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                userObject:null,
+                                isdragable:true,
+                                user_id:parent.user_id,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+        </handler>
+        <labelTooltip labelid="1253" />
+    </miniIcons>
+    
+    <miniIcons resource="user_profile_rsc" width="16" height="16" 
+               y="0" x="$once{ parent.width - 74 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.viewUserProfileWindow(canvas,{
+                                userId:parent.user_id
+                            });
+        </handler>
+        <labelTooltip labelid="1236" />
+    </miniIcons>    		  
+		  
     <miniIcons visible="$once{ !parent.isDirectLink }" y="0" x="$once{ parent.width - 54 }"
     		   resource="start_conference2_rsc" width="16" height="16" 
                showhandcursor="true">
