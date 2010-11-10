@@ -4,8 +4,18 @@
 <!--- Admin module to configure the Conference or Audience room.-->
 <class name="roomAdmin" extends="baseContentView">	
 	
-	<turnOverList name="_turnoverlist" width="400" height="${ canvas.height - 110 }" x="2" y="0" 
-		orderby="rooms_id" step="50" asc="true">
+	<labelText x="2" y="8" labelid="714" />
+	
+	<customEdittext name="_search" y="4" x="120" width="200" height="24"/>
+    
+    <simpleLabelButton labelid="715" x="330" width="70" height="24" y="4">
+        <handler name="onclick">
+            parent._turnoverlist.getRooms.doCall();
+        </handler>
+    </simpleLabelButton>
+	
+	<turnOverList name="_turnoverlist" width="400" height="${ canvas.height - 140 }" x="2" y="30" 
+		orderby="c.rooms_id" step="50" asc="true">
 
 		<handler name="oninit">
 			this.addHeaderItem(188,60);
@@ -34,7 +44,8 @@
 			<netparam><method name="getValue"> return parent.parent.step; </method></netparam>
 			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
 			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
-	    	<handler name="ondata" args="value">
+	    	<netparam><method name="getValue"> return parent.parent.parent._search.getText(); </method></netparam>
+            <handler name="ondata" args="value">
 	    		//Debug.write("getRooms: ",value);
 	    		//this.parent.destroy();
 	    		this.parent.initValues(value.records);

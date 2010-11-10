@@ -17,7 +17,7 @@
 	<handler name="oninit">
 		<![CDATA[
 		
-		    if (this.picture_uri != null && this.picture_uri != "" && this.picture_uri != "Unbenannt2.jpg") {
+		    if (this.picture_uri.startsWith("http")) {
                 
                 var downloadurl = this.picture_uri;  
                 

@@ -226,7 +226,9 @@ public class MainService implements IPendingServiceCallback {
 		    			for (IConnection cons : conset) {
 		    				if (cons != null) {
 		    					RoomClient rcl = this.clientListManager.getClientByStreamId(cons.getClient().getId());
-		    					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+		    					if (rcl == null) {
+									//continue;
+								} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 		    						//continue;
 		    					} else {
 			    					if (cons instanceof IServiceCapableConnection) {
@@ -565,10 +567,15 @@ public class MainService implements IPendingServiceCallback {
 	        				long userId = Usermanagement.getInstance().addUserWithExternalKey(1, 0, 0, userObject.getFirstname(), 
 				        						userObject.getUsername(), userObject.getLastname(), 1L, "", null, null, "", 
 				        						userObject.getExternalUserId(), userObject.getExternalUserType(), true, 
-				        						userObject.getEmail(), jName_timeZone);
+				        						userObject.getEmail(), jName_timeZone,userObject.getPictureUrl());
 	        				
 	        				currentClient.setUser_id(userId);
         				} else {
+        					
+        					user.setPictureuri(userObject.getPictureUrl());
+        					
+        					Usermanagement.getInstance().updateUser(user);
+        					
         					currentClient.setUser_id(user.getUser_id());
         				}
         			}

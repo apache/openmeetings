@@ -429,16 +429,7 @@
 		            	parent.getRoomTypes.doCall();
 		            } else {
 		            	parent.initlanguageLoaded=true;
-		            	
-					    if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
-					    		|| canvas.directUserLogin || canvas.secureRemoteUserLogin){
-					    	canvas.thishib.loaderVar.setProgress();
-					        if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
-					        parent.markSessionAsLogedIn.doCall();
-					    } else {
-					    	canvas.thishib.loaderVar.setProgress();
-		            	    parent.getStates.doCall();
-					    }
+		            	parent.getStates.doCall();
 		            }
 				}
 			]]>
@@ -576,17 +567,28 @@
 					canvas.loadNextStepTestApp();
 				} else {
 					
-					//Check if user is auto-logged in by session
-					var t = new lz.sharedObject();
-                    if($debug) Debug.write("checkLoginData/t: ",t);
-                    t.getLocal('userdata');
-                    var g = t.getData('userdata');
-                    if($debug) Debug.write("checkLoginData/g: ",g);
-                    var storedSession = g["storedSession"];
-                    if($debug) Debug.write("checkLoginData/save: ",save);
+					if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
+                                || canvas.directUserLogin || canvas.secureRemoteUserLogin){
+                        canvas.thishib.loaderVar.setProgress();
+                        if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
+                        parent.markSessionAsLogedIn.doCall();
+                    } else {
+                        canvas.thishib.loaderVar.setProgress();
                     
-                    parent.loginByRemember.currentHashSession = storedSession;
-                    parent.loginByRemember.doCall();
+				
+    					//Check if user is auto-logged in by session
+    					var t = new lz.sharedObject();
+                        if($debug) Debug.write("checkLoginData/t: ",t);
+                        t.getLocal('userdata');
+                        var g = t.getData('userdata');
+                        if($debug) Debug.write("checkLoginData/g: ",g);
+                        var storedSession = g["storedSession"];
+                        if($debug) Debug.write("checkLoginData/save: ",save);
+                        
+                        parent.loginByRemember.currentHashSession = storedSession;
+                        parent.loginByRemember.doCall();
+                
+                    }
 					
 				}
 			}

@@ -433,12 +433,12 @@ public class ConferenceService {
 	 * @param asc
 	 * @return
 	 */
-	public SearchResult getRooms(String SID, int start, int max, String orderby, boolean asc){
+	public SearchResult getRooms(String SID, int start, int max, String orderby, boolean asc, String search){
 		log.debug("getRooms");
 		
 		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
         Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-        return Roommanagement.getInstance().getRooms(user_level, start, max, orderby, asc);
+        return Roommanagement.getInstance().getRooms(user_level, start, max, orderby, asc, search);
 	}
 	
 	public SearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby, boolean asc){

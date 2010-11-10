@@ -1160,7 +1160,8 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Long adress_id, Date age, String hash, 
 			Long externalUserId, String externalUserType, 
-			boolean generateSipUserData, String email, String jNameTimeZone) {
+			boolean generateSipUserData, String email, String jNameTimeZone,
+			String pictureuri) {
 		try {
 			Users users = new Users();
 			users.setFirstname(firstname);
@@ -1183,6 +1184,7 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
+			users.setPictureuri(pictureuri);
 			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 			
 			if (generateSipUserData) {
@@ -1764,7 +1766,7 @@ public class Usermanagement {
         } else {
                 log.error("[updateUser] "+"Error: No USER_ID given");
         }
-}
+    }
 
 	/**
 	 * @param user_level

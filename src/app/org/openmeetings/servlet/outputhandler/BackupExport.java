@@ -1113,7 +1113,11 @@ public class BackupExport extends HttpServlet {
 				//String deleted = u.getAdresses().getDeleted()
 				//Phone Number not done yet
 				user.addElement("fax").setText(""+u.getAdresses().getFax());
-				user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
+				if (u.getAdresses().getStates() != null) {
+					user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
+				} else {
+					user.addElement("state_id").setText("1");
+				}
 				user.addElement("street").setText(""+u.getAdresses().getStreet());
 				user.addElement("town").setText(""+u.getAdresses().getTown());
 				user.addElement("zip").setText(""+u.getAdresses().getZip());

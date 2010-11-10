@@ -116,7 +116,7 @@
         <handler name="ondata" args="roomStatus">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            //if ($debug) Debug.write("setRoomValues1: ",value);
+            if ($debug) Debug.write("setRoomValues1: ",roomStatus);
             //if ($debug) Debug.write("setRoomValues2: ",hib.currentroomid);
             
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);

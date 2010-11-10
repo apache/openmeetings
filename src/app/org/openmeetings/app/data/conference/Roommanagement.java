@@ -287,13 +287,14 @@ public class Roommanagement {
         }
 
 	
-	public SearchResult getRooms(long user_level, int start, int max, String orderby, boolean asc){
+	public SearchResult getRooms(long user_level, int start, int max, String orderby, 
+				boolean asc, String search){
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
 				SearchResult sResult = new SearchResult();
-				sResult.setRecords(this.selectMaxFromRooms());
+				sResult.setRecords(this.selectMaxFromRooms(search));
 				sResult.setObjectName(Rooms.class.getName());
-				sResult.setResult(this.getRoomsInternatl(start, max, orderby, asc));
+				sResult.setResult(this.getRoomsInternatlByHQL(start, max, orderby, asc, search));
 				return sResult;
 			}
 		} catch (HibernateException ex) {
@@ -308,7 +309,7 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
 				SearchResult sResult = new SearchResult();
-				sResult.setRecords(this.selectMaxFromRooms());
+				sResult.setRecords(this.selectMaxFromRooms(""));
 				sResult.setObjectName(Rooms.class.getName());
 				
 				List<Rooms> rooms = this.getRoomsInternatl(start, max, orderby, asc);
@@ -394,16 +395,24 @@ public class Roommanagement {
 		return null;
 	}
 	
-	public Long selectMaxFromRooms(){
+	public Long selectMaxFromRooms(String search){
 		try {
 			String hql = "select count(c.rooms_id) from Rooms c " +
-						"where c.deleted <> 'true'";
+						"where c.deleted != 'true' " +
+						"AND c.name LIKE :search ";
+			
+			if (search.length() == 0) {
+				search = "%";
+			} else {
+				search = "%"+search+"%";
+			}
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session.createQuery(hql); 
+			query.setString("search", search);
 			List ll = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -438,6 +447,64 @@ public class Roommanagement {
 			if (asc) crit.addOrder(Order.asc(orderby));
 			else crit.addOrder(Order.desc(orderby));
 			List<Rooms> ll = crit.list();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return ll;
+		} catch (HibernateException ex) {
+			log.error("[getRooms ] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRooms ] ", ex2);
+		}
+		return null;
+	}
+	
+	/**
+	 * gets a list of all availible rooms
+	 * @param user_level
+	 * @param start
+	 * @param max
+	 * @param orderby
+	 * @param asc
+	 * @return
+	 */
+	public List<Rooms> getRoomsInternatlByHQL(int start, int max, String orderby, boolean asc, String search){
+		try {
+			
+			String hql = "select c from Rooms c " +
+					"where c.deleted != 'true' " +
+					"AND c.name LIKE :search ";
+
+			if (search.length() == 0) {
+				search = "%";
+			} else {
+				search = "%"+search+"%";
+			}
+			
+			hql += " ORDER BY "+orderby;
+			
+			if (asc) {
+				hql += " ASC";
+			} else {
+				hql += " DESC";
+			}
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			
+//			Criteria crit = session.createCriteria(Rooms.class);
+//			crit.setFirstResult(start);
+//			crit.setMaxResults(max);
+//			crit.add(Restrictions.ne("deleted", "true"));
+//			if (asc) crit.addOrder(Order.asc(orderby));
+//			else crit.addOrder(Order.desc(orderby));
+			
+			Query query = session.createQuery(hql); 
+			query.setString("search", search);
+			query.setFirstResult(start);
+			query.setMaxResults(max);
+			
+			List<Rooms> ll = query.list();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
