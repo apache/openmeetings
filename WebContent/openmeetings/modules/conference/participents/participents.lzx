@@ -234,7 +234,7 @@
         	if ($debug) Debug.write("fadeText :1: ",this.refObj);
         	if ($debug) Debug.write("fadeText :2: ",this.refObj.picture_uri);
         
-        	if (this.refObj.picture_uri != "" && this.refObj.picture_uri != null && this.refObj.picture_uri != "Unbenannt2.jpg") {
+        	if (this.refObj.startsWith("http")) {
         		var downloadurl = this.refObj.picture_uri;
             //Do Load the Custom Moodle Profilee Picture
         	} else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {

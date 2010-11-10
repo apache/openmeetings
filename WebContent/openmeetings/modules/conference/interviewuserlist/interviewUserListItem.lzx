@@ -56,7 +56,7 @@
     
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
-            if (this.refObj.picture_uri != "" && this.refObj.picture_uri != null && this.refObj.picture_uri != "Unbenannt2.jpg") {
+            if (this.refObj.picture_uri.startsWith("http")) {
                 var downloadurl = this.refObj.picture_uri;
             //Do Load the Custom Moodle Profilee Picture
             } else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
