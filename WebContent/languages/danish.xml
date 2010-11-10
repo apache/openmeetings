@@ -3600,7 +3600,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>confirmed you as contact!</value>
   </string>
   <string id="1199" name="chat info message">
-    <value>(Please do not use Chat for support questions. Support information is available on launch page.)</value>
+    <value></value>
   </string>
   <string id="1200" name="chat log icon">
     <value>Show / Copy chat log</value>
