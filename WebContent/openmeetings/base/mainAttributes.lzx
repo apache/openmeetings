@@ -365,4 +365,11 @@ and some more references to temp-objects
  -->
 <attribute name="landingZone" value="" type="string"/>
 
+<!--
+    if the users logs in via SOAP he does not see the exit button by default
+    only if the landingZone == dashboard
+ -->
+<attribute name="destroyExitButton" value="true" type="boolean" />
+
+
 </library>

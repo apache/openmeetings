@@ -369,6 +369,7 @@
                     if ($debug) Debug.write("canvas.landingZone :: ",canvas.landingZone);
                     
                     if (canvas.landingZone == "dashboard") {
+                    	canvas.destroyExitButton = false;
                     	parent.getRoomTypes.doCall();
                     } else if (canvas.roomRecordingId > 0) {
                     	canvas.thishib.loaderVar.close();
@@ -724,6 +725,8 @@
                 
                 if (canvas.landingZone == "dashboard") {
                     
+                	canvas.destroyExitButton = false;
+                	
                     var t = new lz.sharedObject();
                     t.getLocal('userdata');
                     var g = t.getData('userdata');

@@ -57,7 +57,9 @@
 	                <![CDATA[
 	                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
 	                    	if ($debug) Debug.write("this mbarcontent ",this);
-	                        parent._exitbtn.destroy();
+	                    	if (canvas.destroyExitButton) {
+	                            parent._exitbtn.destroy();
+	                    	}
 	                    }
 	                    
 	                    if(canvas.isrtl == 'true'){
