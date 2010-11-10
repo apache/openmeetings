@@ -116,8 +116,10 @@
 	            	</handler>
 	            </_labelMenuItem>
 	            <menuseparator/>
+	            <!--
 	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
                 <menuseparator/>
+                 -->
 	            <_labelMenuItem id="lblCamMic" labelid="306" command="cmd_editCamMicSettings" />
 	            <_labelMenuItem id="lblBoard" labelid="307" command="cmd_editBoardSettings" />
 	            <menuseparator/>  
@@ -243,8 +245,10 @@
 	                </handler>
 	            </_labelMenuItem>
 	            <menuseparator/> 
+	            <!--
 	            <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
 	            <menuseparator/>
+	             -->
 	            <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
 	            <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
 	            <menuseparator/>  
@@ -330,8 +334,10 @@
                     </handler>
                 </_labelMenuItem>
                 <menuseparator/> 
+                <!--
                 <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ canvas.ismoderator }" />
                 <menuseparator/>
+                 -->
                 <_labelMenuItem labelid="306" command="cmd_editCamMicSettings" enabled="${ canvas.ismoderator }" />
                 <_labelMenuItem labelid="307" command="cmd_editBoardSettings" enabled="${ canvas.ismoderator }" />
                 <menuseparator/>  
