@@ -74,7 +74,7 @@
 		  width="$once{ parent.width - 40 }" />	
 		  
 	<miniIcons name="add" resource="edit_add_rsc" width="16" height="16" 
-                   y="20" x="$once{ parent.width - 60 }" showhandcursor="true">
+                   y="20" x="$once{ parent.width - 80 }" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");
             if (hib.userobject.user_id == parent.user_id) {
@@ -84,6 +84,25 @@
             parent.requestUserToContactList.doCall();
         </handler>
         <labelTooltip labelid="1186" />
+    </miniIcons>
+    
+    <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
+                   y="20" x="$once{ parent.width - 60 }" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Start Conference");
+            new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                userObject:null,
+                                isdragable:true,
+                                user_id:parent.user_id,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+        </handler>
+        <labelTooltip labelid="1253" />
     </miniIcons>
 	
 	<miniIcons resource="user_profile_rsc" width="16" height="16" 

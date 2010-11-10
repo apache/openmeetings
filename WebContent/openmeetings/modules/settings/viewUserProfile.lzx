@@ -68,7 +68,23 @@
 		
 	</view>
 	
-	<simpleLabelButton labelid="1186" width="200" x="$once{ parent.width - 310 }" y="$once{ parent.height - 26 }">
+	<simpleLabelButton labelid="1253" width="190" x="5" y="$once{ parent.height - 26 }">
+        <handler name="onclick">
+            new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                isdragable:true,
+                                userObject:null,
+                                user_id:parent.viewUserProfile.viewUserProfile.userObject.user_id,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+        </handler>
+    </simpleLabelButton>  
+	
+	<simpleLabelButton labelid="1186" width="160" x="$once{ parent.width - 270 }" y="$once{ parent.height - 26 }">
     	<handler name="onclick">
     		if (hib.userobject.user_id == parent.viewUserProfile.viewUserProfile.userObject.user_id) {
                 new lz.labelerrorPopup(canvas,{errorlabelid:1225});

@@ -9,6 +9,8 @@
 	
 	<attribute name="userObject" value="null" />
 	
+	<attribute name="user_id" value="0" type="number"/>
+	
 	<attribute name="parentMessageId" value="0" type="number" />
 	
 	<attribute name="receipents" value="null" />
@@ -23,12 +25,34 @@
 				this._to.sendUpdateText = false;
 				this._to.setAttribute("text",tString);
 				this._to.sendUpdateText = true;
+			} else if (this.user_id != 0) {
+				this.getUserById.doCall();
 			}
 		]]>
 	</handler>
 	
+	<netRemoteCallHib name="getUserById" funcname="userservice.getUserById" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return parent.parent.user_id;</method></netparam>
+        <handler name="ondata" args="value">
+        	<![CDATA[
+            if($debug) Debug.write("[admin]userValueForm/getUserById: ",value.lastname);
+            parent.userObject = value;
+            var tString = value.firstname + ' ' + value.lastname  + ' ' 
+                            + '<' + value.adresses.email + '>';
+                
+            parent._to.sendUpdateText = false;
+            parent._to.setAttribute("text",tString);
+            parent._to.sendUpdateText = true;
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+	
 	<handler name="onclose">
-		this.refObj.newMessageActive = false;
+		if (this.refObj != null) {
+		    this.refObj.newMessageActive = false;
+		}
 	</handler>
 	
 	<method name="send">
