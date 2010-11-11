@@ -3,7 +3,7 @@
 
 	
 <class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
-	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-40 }"
+	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-62 }"
 	   visibility="hidden">
 	
 	<attribute name="rooms_id" value="0" type="number" />

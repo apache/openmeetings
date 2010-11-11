@@ -1040,8 +1040,14 @@
 		<attribute name="pendingUserStatusRef" value="null"/>
 		<attribute name="roomObjectRef" value="null"/>
 		
+		<attribute name="senderuserId" value="0" type="number" />
+		
 		<method name="loadMessageDetails" args="refObj">
 			<![CDATA[
+			
+			    this.senderuserId = refObj.from.user_id;
+			    
+			    this._answer_area.setAttribute("visibility","visible");
 			
 				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.adresses.email+'&#62;');
 				this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
@@ -1119,10 +1125,34 @@
 		  	height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
 		  
 		<view name="message" y="64" bgcolor="0xFFFFFF" x="2"
-			  width="$once{ parent.width-4 }" height="${ parent.height-64 }">
+			  width="$once{ parent.width-4 }" height="${ parent.height-86 }">
 			<labelText name="message" width="$once{ parent.width-16 }" 
 					   multiline="true" resize="false" />
 			<vscrollbar />
+		</view>
+		
+		<view name="_answer_area" height="22" visibility="hidden"
+			  y="${ parent.height-22 }" width="$once{ parent.width }">
+			
+			<view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
+                    height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+			
+            <!-- label: cancel -->
+            <simpleLabelButton labelid="1303" x="$once{ parent.width-130 }" width="120" y="2">
+                <handler name="onclick">
+                    new lz.newPrivateMessage(canvas,{
+                                x:200,y:120,
+                                refObj:null,
+                                minimizable:true,
+                                maximizable:true,
+                                userObject:null,
+                                isdragable:true,
+                                user_id:parent.parent.senderuserId,
+                                width:canvas.width-300,
+                                height:canvas.height-130
+                            });
+                </handler>
+            </simpleLabelButton>
 		</view>
 		
 		
