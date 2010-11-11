@@ -903,7 +903,7 @@ public class UserService {
     		
 	    		//String email = receipent.get("email").toString();
 	    		
-	    		Users meetingMember = Usermanagement.getInstance().getUserByLoginOrEmail(email);
+	    		Users meetingMember = Usermanagement.getInstance().getUserByEmail(email);
 	    		
 	    		String firstname = meetingMember.getFirstname();
 	    		String lastname = meetingMember.getLastname();

@@ -247,7 +247,7 @@
 	                
 	                if ($debug) Debug.write(":: renderContent ::",this.renderList.length,list.subviews.length);
 	                
-	                this._records.setAttribute("text",records.length);
+	                //this._records.setAttribute("text",records.length);
 	                
 	                for (var i=0;i<list.subviews.length;i++){
 	                    
