@@ -353,7 +353,7 @@ public class RoomService {
 	}
 	
 	public SearchResult getRooms(String SID, int start, int max, String orderby, boolean asc){
-		return ConferenceService.getInstance().getRooms(SID, start, max, orderby, asc);
+		return ConferenceService.getInstance().getRooms(SID, start, max, orderby, asc,"");
 	}
 	
 	public SearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby, boolean asc){
