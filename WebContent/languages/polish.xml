@@ -3986,4 +3986,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1302" name="private message">
     <value>Click here to visit your profile to see the full message ...</value>
   </string>
+  <string id="1303" name="private message">
+    <value>Reply</value>
+  </string>
 </language>
