@@ -75,8 +75,13 @@ public class GeneratePDF {
 			HashMap<String,Object> processSWF = GenerateSWF.getInstance().generateSwf(current_dir, destinationFolder, destinationFolder, fileName);
 			returnError.put("processSWF", processSWF);	
 		} else {
+			
+			log.debug("-- generateBatchThumb --");
+			
 			HashMap<String,Object> processThumb = GenerateThumbs.getInstance().generateBatchThumb(current_dir, fileFullPath, destinationFolder, 80, "thumb");
 			returnError.put("processThumb", processThumb);
+			
+			
 			HashMap<String,Object> processSWF = GenerateSWF.getInstance().generateSwf(current_dir, (new File(fileFullPath)).getParentFile().getAbsolutePath()+File.separatorChar , destinationFolder, fileName);
 			returnError.put("processSWF", processSWF);				
 		}

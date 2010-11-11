@@ -97,7 +97,8 @@ public class GenerateThumbs {
 					Integer.toString(thumbSize), inputfile,
 					outputpath + "_" + pre + "_page-%%04d.jpg" };
 			
-			return this.processImageWindows(argv);
+			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			//return this.processImageWindows(argv);
 		}
 	}
 

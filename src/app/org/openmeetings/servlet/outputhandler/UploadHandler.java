@@ -294,15 +294,20 @@ public class UploadHandler extends HttpServlet {
 							boolean isEncrypted = false;
 							try {
 								//Check if PDF is encrpyted
-								PdfReader pdfReader = new PdfReader(completeName);
+								PdfReader pdfReader = new PdfReader(completeName + newFileSystemExtName);
 								
 								log.debug("pdfReader.isEncrypted() :: "+pdfReader.isEncrypted());
+								
+								log.debug("isMetadataEncrypted : "+pdfReader.isMetadataEncrypted());
+								log.debug("is128Key : "+pdfReader.is128Key());
+								log.debug("isEncrypted : "+pdfReader.isEncrypted());
 								
 								if (pdfReader.isEncrypted()) {
 									isEncrypted = true;
 								}
 								
 							} catch (Exception err) {
+								log.error("isEncrypted ",err);
 								isEncrypted = true;
 							}
 							
@@ -314,8 +319,8 @@ public class UploadHandler extends HttpServlet {
 								//Do convert pdf to other pdf first
 								String inputfile = completeName + newFileSystemExtName;
 								
-								completeName = completeName + "_NOT_ENCRYPTED";
-								newFileSystemName = newFileSystemName + "_NOT_ENCRYPTED";
+								completeName = completeName + "_N_E";
+								newFileSystemName = newFileSystemName + "_N_E";
 								
 								String outputfile = completeName + newFileSystemExtName;
 								
@@ -331,7 +336,7 @@ public class UploadHandler extends HttpServlet {
 							//convert to thumbs, swf and xml-description
 							returnError = GeneratePDF.getInstance().convertPDF(current_dir, newFileSystemName , newFileSystemExtName, roomName, false, completeName);						
 						
-							returnError.put("decodePDF", returnError2);
+							//returnError.put("decodePDF", returnError2);
 							
 						} else if (isImage) {
 							
