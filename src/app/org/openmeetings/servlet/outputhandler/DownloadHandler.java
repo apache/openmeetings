@@ -174,6 +174,8 @@ public class DownloadHandler extends HttpServlet {
 						}
 					}
 					
+					
+					
 				} else if (moduleName.equals("remoteuserprofilebig")){
 					working_dir += "profiles" + File.separatorChar;
 					File f = new File(working_dir);
@@ -276,9 +278,10 @@ public class DownloadHandler extends HttpServlet {
 									File.separatorChar + DownloadHandler.defaultSWFName;
 						} else {
 							//Any document, must be a download request
-							requestedFile = DownloadHandler.defaultPDFName;
+							//OR a Moodle Loggedin User
+							requestedFile = DownloadHandler.defaultImageName;
 							full_path = current_dir + File.separatorChar + "default" + 
-								File.separatorChar + DownloadHandler.defaultPDFName;
+								File.separatorChar + DownloadHandler.defaultImageName;
 						}
 					}
 					

@@ -889,7 +889,7 @@ public class Invitationmanagement {
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
 			String hql = "select c from Invitations as c " +
-					"where c.hash = :hashCode " +
+					"where c.hash LIKE :hashCode " +
 					"AND c.deleted = :deleted";
 			Object idf = HibernateUtil.createSession();
 			Session session = HibernateUtil.getSession();
@@ -917,7 +917,7 @@ public class Invitationmanagement {
 							//set to true if this is the first time / a normal getInvitation-Query
 							invitation.setInvitationWasUsed(true);
 							this.updateInvitation(invitation);
-							invitation.setInvitationpass(null);
+							//invitation.setInvitationpass(null);
 							return invitation;
 						}
 					} else {
@@ -938,7 +938,7 @@ public class Invitationmanagement {
 					if (appointmentstart.getTime() <= today.getTime() 
 							&& appointmentend.getTime() >= today.getTime()) {
 						this.updateInvitation(invitation);
-						invitation.setInvitationpass(null);
+						//invitation.setInvitationpass(null);
 						return invitation;
 					} else {
 						//Invitation is of type *period* and is not valid anymore
@@ -947,7 +947,7 @@ public class Invitationmanagement {
 				} else {
 					//Invitation is not limited, neither time nor single-usage
 					this.updateInvitation(invitation);
-					invitation.setInvitationpass(null);
+					//invitation.setInvitationpass(null);
 					return invitation;
 				}
 			}
@@ -991,6 +991,11 @@ public class Invitationmanagement {
 			log.debug("checkInvitationPass - obj: "+obj);
 			if (obj instanceof Invitations){
 				Invitations invitation = (Invitations) obj;
+				
+//				log.debug("invitationId "+invitation.getInvitations_id());
+//				log.debug("pass "+pass);
+//				log.debug("getInvitationpass "+invitation.getInvitationpass());
+				
 				if (ManageCryptStyle.getInstance().getInstanceOfCrypt().verifyPassword(pass, invitation.getInvitationpass())){
 					return new Long(1);
 				} else {
