@@ -24,7 +24,7 @@
                 parent.clearList();
                 //Debug.write("getRoomChatHistory: ",value);
                 for (var i=0;i<value.length;i++){
-                	Debug.write(value[i].message,value[i].client);
+                	if ($debug) Debug.write(value[i].message,value[i].client);
                 	
                 	parent.addChatHistory(value[i].message,value[i].client);
                 }
