@@ -47,7 +47,14 @@
             
             if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
             
-            this._timeZone.selectItem(timeZoneJavaFormat);
+            var tItem =  this._timeZone.getItem(timeZoneJavaFormat);
+            
+            if (tItem != null) {
+            	this._timeZone.selectItem(timeZoneJavaFormat);
+            } else {
+            	this._timeZone.selectItemAt(0);
+            }
+            
             ]]>
         </method> 
         
