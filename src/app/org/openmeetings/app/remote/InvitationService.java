@@ -8,10 +8,12 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -88,6 +90,15 @@ public class InvitationService implements IPendingServiceCallback {
 	    	
 	    	OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
 			
+	    	//If everything fails
+			if (omTimeZone == null) {
+				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
+				if (conf != null) {
+					jNameTimeZone = conf.getConf_value();
+				}
+				omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone);
+			}
+	    	
 			String timeZoneName = omTimeZone.getIcal();
 			
 	    	Calendar cal = Calendar.getInstance();
