@@ -146,6 +146,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         public int defaultQualityScreensharing = 0;
         
         public Long organization_id = 0L;
+        public Long user_id = null;
         
         public boolean startRecording = false;
         public boolean stopRecording = false;
@@ -204,7 +205,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                 	
                         instance = new ScreenShare();
         
-                        if (args.length == 7) {
+                        if (args.length == 8) {
                                 
                                 
                                 instance.host = args[0];
@@ -215,8 +216,10 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                                 String labelTexts = args[4];
                                 
                                 instance.organization_id = Long.parseLong(args[5]);
+                          
                                 
                                 instance.defaultQualityScreensharing = Integer.parseInt(args[6]);
+                                instance.user_id =  Long.parseLong(args[7]);
                                 
                                 if (labelTexts.length() > 0) {
                                         String[] textArray = labelTexts.split(";");
@@ -535,6 +538,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
                         map.put("startStreaming", this.startStreaming);
                         
                         map.put("organization_id", this.organization_id);
+                        map.put("user_id", this.user_id);
                         
                         invoke("setConnectionAsSharingClient",new Object[] { map }, this);
                         
@@ -939,7 +943,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	    	 
         	 //logger.debug("IS WINDOWS");
         	 
-        	 //drückt STRG+C == copy
+        	 //drï¿½ckt STRG+C == copy
         	 instance.keyPress( KeyEvent.VK_CONTROL );
         	 Thread.sleep(200);
              instance.keyPress(KeyEvent.VK_C);
@@ -977,7 +981,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         ex.printStackTrace();
       }
       return "";
-      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
+      //clippy.setContents( clippysContent ,null); //zurï¿½cksetzen vom alten Kontext
     }
     
     private void pressSpecialSign(String charValue, Robot instance)
@@ -995,7 +999,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
 	    	 
         	 //logger.debug("IS WINDOWS");
         	 
-        	 //drückt STRG+V == einfügen
+        	 //drï¿½ckt STRG+V == einfï¿½gen
         	 instance.keyPress( KeyEvent.VK_CONTROL );
         	 Thread.sleep(100);
              instance.keyPress(KeyEvent.VK_V);
@@ -1032,7 +1036,7 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
       {
         ex.printStackTrace();
       }
-      //clippy.setContents( clippysContent ,null); //zurücksetzen vom alten Kontext
+      //clippy.setContents( clippysContent ,null); //zurï¿½cksetzen vom alten Kontext
     }
     
     public void resultReceived( IPendingServiceCall call ) {

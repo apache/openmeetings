@@ -547,6 +547,9 @@ public class FlvRecorderConverter {
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17.flv
 			// final1.flv
 
+			int flvWidth = flvRecording.getWidth();
+			int flvHeight = flvRecording.getHeight();
+			/*
 			int flvWidth = 640;
 			int flvHeight = 480;
 
@@ -563,8 +566,8 @@ public class FlvRecorderConverter {
 						Math.round(flvRecording.getHeight() / scaleFactor))
 						.intValue();
 
-			} else if (flvRecording.getWidth() > 640) {
-				Double scaleFactor = (Math.floor(flvRecording.getWidth() / 640)) + 1;
+			} else if (flvRecording.getWidth() > flvWidth) {
+				Double scaleFactor = (Math.floor(flvRecording.getWidth() / flvWidth)) + 1;
 
 				log.debug("scaleFactor :: " + scaleFactor);
 
@@ -576,6 +579,7 @@ public class FlvRecorderConverter {
 						.intValue();
 
 			}
+			*/
 			
 			log.debug("flvWidth -1- "+flvWidth);
 			log.debug("flvHeight -1- "+flvHeight);

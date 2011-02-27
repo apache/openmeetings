@@ -387,6 +387,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				
 				//Set this connection to be a RTMP-Java Client
 				currentClient.setIsScreenClient(true);
+				currentClient.setUser_id(Long.parseLong(map.get("user_id").toString()));
 				
 				if (startStreaming) {
 					currentClient.setStartStreaming(true);

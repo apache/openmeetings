@@ -77,6 +77,56 @@ public class RoomService {
 		}
 	}
 	
+	public void deleteFlvRecording(String SID, Long flvRecordingId) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				FlvRecordingDaoImpl.getInstance().deleteFlvRecording(flvRecordingId);
+								
+			}
+			//return null;
+		} catch (Exception err) {
+			log.error("[deleteFlvRecording] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}	
+	
+	public FlvRecording[] getFlvRecordingByExternalRoomTypeAndCreator(String SID, String externalRoomType, Long insertedBy) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				List<FlvRecording> recordingList = FlvRecordingDaoImpl.getInstance().getFlvRecordingByExternalRoomTypeAndCreator(externalRoomType, insertedBy);
+				
+				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+				if (recordingList!=null && recordingList.size()!=0) {
+					//roomsListObject.setRoomList(roomList);
+					FlvRecording[] recordingListItems = new FlvRecording[recordingList.size()];
+					int count = 0;
+					for (Iterator<FlvRecording>it = recordingList.iterator();it.hasNext();){
+						FlvRecording flvRecording = it.next();
+						recordingListItems[count] = flvRecording;
+						count++;
+					}
+					
+					return recordingListItems;
+				}
+				
+				return null;
+			}
+			
+			return null;
+		} catch (Exception err) {
+			log.error("[getFlvRecordingByExternalRoomType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(String SID, String externalRoomType) throws AxisFault {
 		try {
 			

@@ -295,6 +295,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 							}
 							
 							ctx.put("default_quality_screensharing", default_quality_screensharing);
+							
+							ctx.put("user_id", users_id);
 						    
 							String port = httpServletRequest.getParameter("port");
 							if (port == null) {
