@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <!-- Generated file - Do not edit! -->
 
@@ -42,11 +42,11 @@
         <property name="hibernate.cache.use_structured_entries">false</property>
 
 
-		<property name="c3p0.max_size">20</property>
-		<property name="c3p0.min_size">2</property>
-        <property name="c3p0.idle_test_period">100</property>
-		<property name="c3p0.max_statements">100</property>
-		<property name="c3p0.timeout">100</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.min_size">2</property>
+        <property name="hibernate.c3p0.idle_test_period">100</property>
+		<property name="hibernate.c3p0.max_statements">100</property>
+		<property name="hibernate.c3p0.timeout">100</property>
 
 		<!-- mapping files -->
     <mapping resource="org/openmeetings/app/hibernate/beans/adresses/Adresses.hbm.xml"/>

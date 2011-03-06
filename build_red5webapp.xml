@@ -57,7 +57,7 @@
 	</path>
 
     <!-- Hibernate -->
-    <property name="hibernate.lib" value="${project.lib}/hibernate_331"/>
+    <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
     <!-- Log4j -->
     <property name="log4j.lib" value="${project.lib}/log4j" />
     <!-- xDoclet -->
