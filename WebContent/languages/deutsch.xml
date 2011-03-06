@@ -1879,7 +1879,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Nachricht:</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-    <value>Klicken Sie auf diesen Link um in den Raum zu gelangen:</value>
+    <value>Klicken Sie auf diesen Link um in den Raum zu gelangen [Der Link funktioniert erst 15 Minuten vor dem Meeting!]:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
     <value>Klicken Sie hier</value>
