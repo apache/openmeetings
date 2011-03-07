@@ -7,7 +7,7 @@
       <generator class="increment"/>
     </id>
     <property name="fileName" type="string" column="filename"/>
-    <property name="comment" type="string" column="comment"/>
+    <property name="comment" type="string" column="comment_field"/>
     <property name="fileHash" type="string" column="filehash"/>
     <property name="parentFileExplorerItemId" type="long" column="parent_fileexploreritem_id"/>
     <property name="room_id" type="long" column="room_id"/>
