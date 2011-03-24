@@ -53,6 +53,7 @@
     
     <labelTooltip name="_labelTooltip" multiline="false">
         <handler name="setContent">
+        	if ($debug) Debug.write(parent.obj);
             this.setAttribute('text',"publicSID: "+parent.obj.publicSID);
         </handler>
     </labelTooltip>

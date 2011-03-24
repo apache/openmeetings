@@ -412,7 +412,7 @@ public class MainService implements IPendingServiceCallback {
     	*/
     } 
     
-    public Object secureLoginByRemote(String secureHash) {
+    public Object secureLoginByRemote(String SID, String secureHash) {
     	try {
     		
     		log.debug("############### secureLoginByRemote "+secureHash);
@@ -440,6 +440,11 @@ public class MainService implements IPendingServiceCallback {
     		} 
     			
 			Long loginReturn = this.loginUserByRemote(soapLogin.getSessionHash());
+			
+			IConnection current = Red5.getConnectionLocal();
+			String streamId = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamId);	
+			Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
 			
 			if (loginReturn == null) {
 				return -1L;
@@ -587,6 +592,8 @@ public class MainService implements IPendingServiceCallback {
         			currentClient.setMail(userObject.getEmail());
         			
         			log.debug("UPDATE USER BY STREAMID "+streamId);
+        			
+        			Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
         			
         			this.clientListManager.updateClientByStreamId(streamId, currentClient);
         			

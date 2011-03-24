@@ -284,7 +284,8 @@
     </netRemoteCallHib> 
     
     <netRemoteCallHib name="secureLoginByRemote" activeErrorHandler="true" 
-    	funcname="xmlcrm.secureLoginByRemote" >          
+    	funcname="xmlcrm.secureLoginByRemote" >  
+    	<netparam><method name="getValue">return canvas.sessionId;</method></netparam>       
     	<netparam name="remoteSessionId"><method name="getValue">return canvas.secureHash;</method></netparam>
         <handler name="ondata" args="value">
         	<![CDATA[
