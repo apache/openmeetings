@@ -444,7 +444,10 @@ public class MainService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamId);	
-			Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
+			
+			if (currentClient.getUser_id() != null) {
+				Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
+			}
 			
 			if (loginReturn == null) {
 				return -1L;
@@ -593,7 +596,9 @@ public class MainService implements IPendingServiceCallback {
         			
         			log.debug("UPDATE USER BY STREAMID "+streamId);
         			
-        			Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
+        			if (currentClient.getUser_id() != null) {
+        				Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
+        			}
         			
         			this.clientListManager.updateClientByStreamId(streamId, currentClient);
         			
