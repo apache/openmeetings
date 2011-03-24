@@ -92,9 +92,42 @@ public class RoomService {
 			log.error("[deleteFlvRecording] ",err);
 			throw new AxisFault(err.getMessage());
 		}
-	}	
+	}
 	
-	public FlvRecording[] getFlvRecordingByExternalRoomTypeAndCreator(String SID, String externalRoomType, Long insertedBy) throws AxisFault {
+	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID, String externalUserId) throws AxisFault {
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
+	    	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+				List<FlvRecording> recordingList = FlvRecordingDaoImpl.getInstance().getFlvRecordingByExternalUserId(Long.parseLong(externalUserId));
+				
+				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
+				if (recordingList!=null && recordingList.size()!=0) {
+					//roomsListObject.setRoomList(roomList);
+					FLVRecordingReturn[] recordingListItems = new FLVRecordingReturn[recordingList.size()];
+					int count = 0;
+					for (Iterator<FlvRecording>it = recordingList.iterator();it.hasNext();){
+						FlvRecording flvRecording = it.next();
+						recordingListItems[count] = FLVRecordingReturn.initObject(flvRecording);
+						count++;
+					}
+					
+					return recordingListItems;
+				}
+				
+				return null;
+			}
+			
+			return null;
+		} catch (Exception err) {
+			log.error("[getFlvRecordingByExternalRoomType] ",err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(String SID, String externalRoomType, Long insertedBy) throws AxisFault {
 		try {
 			
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -106,11 +139,11 @@ public class RoomService {
 				//We need to re-marshal the Rooms object cause Axis2 cannot use our objects
 				if (recordingList!=null && recordingList.size()!=0) {
 					//roomsListObject.setRoomList(roomList);
-					FlvRecording[] recordingListItems = new FlvRecording[recordingList.size()];
+					FLVRecordingReturn[] recordingListItems = new FLVRecordingReturn[recordingList.size()];
 					int count = 0;
 					for (Iterator<FlvRecording>it = recordingList.iterator();it.hasNext();){
 						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = flvRecording;
+						recordingListItems[count] = FLVRecordingReturn.initObject(flvRecording);
 						count++;
 					}
 					

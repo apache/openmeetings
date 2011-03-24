@@ -85,6 +85,41 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 	
+	
+	public List<FlvRecording> getFlvRecordingByExternalUserId(Long externalUserId) {
+		try { 
+			
+			log.debug("getFlvRecordingByExternalUserId :externalUserId: "+externalUserId);
+			
+			String hql = "SELECT c FROM FlvRecording c, Rooms r, Users u " +
+					"WHERE c.room_id = r.rooms_id " +
+					"AND c.insertedBy = u.user_id " +
+					"AND u.externalUserId = :externalUserId " +
+					"AND c.deleted != :deleted ";
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("externalUserId", externalUserId);
+			query.setString("deleted", "true");
+			
+			List<FlvRecording> flvRecordingList = query.list();
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+						
+			log.debug("getFlvRecordingByExternalRoomType :: "+flvRecordingList.size());
+			
+			return flvRecordingList;
+		} catch (HibernateException ex) {
+			log.error("[getFlvRecordingByExternalRoomType]: ",ex);
+		} catch (Exception ex2) {
+			log.error("[getFlvRecordingByExternalRoomType]: ",ex2);
+		}
+		return null;
+	}
+	
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeAndCreator(String externalRoomType, Long insertedBy) {
 		try { 
 			

@@ -461,6 +461,7 @@
             	<include name="org/openmeetings/axis/services/RoomReturn.class"/>
                 <include name="org/openmeetings/axis/services/RoomService.class"/>
             	<include name="org/openmeetings/axis/services/RoomCountBean.class"/>
+            	<include name="org/openmeetings/axis/services/FLVRecordingReturn.class"/>
             </fileset>
         </jar>  
         <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/UserService.aar">
