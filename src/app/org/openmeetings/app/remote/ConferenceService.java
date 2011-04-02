@@ -540,7 +540,8 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("isClosed").toString()),
 	        			argObjectMap.get("redirectURL").toString(),
 	        			argObjectMap.get("sipNumber").toString(),
-	        			argObjectMap.get("conferencePin").toString());
+	        			argObjectMap.get("conferencePin").toString(),
+	        			Long.valueOf(argObjectMap.get("ownerId").toString()).longValue());
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -557,7 +558,8 @@ public class ConferenceService {
 	        			Boolean.valueOf(argObjectMap.get("isClosed").toString()),
 	        			argObjectMap.get("redirectURL").toString(),
 	        			argObjectMap.get("sipNumber").toString(),
-	        			argObjectMap.get("conferencePin").toString());
+	        			argObjectMap.get("conferencePin").toString(),
+	        			Long.valueOf(argObjectMap.get("ownerId").toString()).longValue());
 	        }
 	        
 		} catch (Exception e){
@@ -662,5 +664,14 @@ public class ConferenceService {
         Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
         return Roommanagement.getInstance().getRoomsWithCurrentUsersByListAndType(user_level, start, max, orderby, asc, externalRoomType);
 	}	
+	
+	public Rooms getRoomByOwnerAndType(String SID, Long roomtypesId, String roomName) {
+		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+        	return Roommanagement.getInstance().getRoomByOwnerAndTypeId(users_id, roomtypesId, roomName);
+        }
+        return null;
+	}
 	
 }

@@ -3913,6 +3913,21 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Click here to visit your profile to see the full message ...</value>
   </string>
   <string id="1303" name="private message">
-    <value>Reply</value>
+    <value>Anworten</value>
+  </string>
+  <string id="1304" name="dashboard">
+    <value>Räume und Chat</value>
+  </string>
+  <string id="1305" name="dashboard">
+    <value>Meine Räume</value>
+  </string>
+  <string id="1306" name="my rooms">
+    <value>Mein Konferenzraum (für 1-16 Benutzer)</value>
+  </string>
+  <string id="1307" name="my rooms">
+    <value>My Webinarraum (für 1-120 Benutzer)</value>
+  </string>
+  <string id="1308" name="room administration">
+    <value>Owner Id</value>
   </string>
 </language>

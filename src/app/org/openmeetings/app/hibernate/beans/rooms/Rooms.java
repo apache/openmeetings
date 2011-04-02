@@ -68,6 +68,8 @@ public class Rooms {
 	
 	private Boolean isClosed;
 	private String redirectURL;
+	
+	private Long ownerId; //Those are the rooms from the myrooms section
     
     /**
      * @hibernate.property
@@ -512,6 +514,18 @@ public class Rooms {
 	}
 	public void setRedirectURL(String redirectURL) {
 		this.redirectURL = redirectURL;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="owner_id"
+     *  type="long"
+     */
+	public Long getOwnerId() {
+		return ownerId;
+	}
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 	
     

@@ -37,6 +37,7 @@
         this.isClosed.setValue(false);
         this.redirectURL.setAttribute("text","");
         this._listRoomModerators.clearList();
+        this.ownerId.setAttribute("text","0");
 	</handler>
 	
     <handler name="ondelete" >
@@ -128,6 +129,13 @@
             this._turnoverlist.clearList();
             this._turnoverlist.getRoomClientsMapByRoomId.doCall();
             
+            if (obj.ownerId != null) {
+                this.ownerId.setAttribute("text",obj.ownerId);
+            } else {
+                this.ownerId.setAttribute("text","0");
+            }
+            
+            
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
     </method>
@@ -208,6 +216,10 @@
             
             this.sendObject["sipNumber"] = parent.sipNumber.getText();
             this.sendObject["conferencePin"] =  parent.conferencePin.getText();
+            
+            var ownerId = parent.ownerId.getText();
+            if (ownerId == "") ownerId = 0;
+            this.sendObject["ownerId"] = ownerId;
 
   			if ($debug) Debug.write("prepareCall: ",this.sendObject);
   		</method>
@@ -252,6 +264,7 @@
                     this.addItem(25,25);
                     this.addItem(50,50);
                     this.addItem(100,100);
+                    this.addItem(150,150);
                     this.addItem(200,200);
                     this.addItem(1000,1000);
 	            	this.selectItemAt(1);
@@ -581,6 +594,9 @@
                
     <labelText labelid="1004" x="400" y="692" width="270" />                 
     	<customEdittext name="conferencePin" x="520" y="692" width="180" />                         
+    
+    <labelText labelid="1308" x="400" y="722" width="270" />                 
+        <customEdittext name="ownerId" x="520" y="722" width="180" />      
                 
     <view x="400" y="1000" />    
     

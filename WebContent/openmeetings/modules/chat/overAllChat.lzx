@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
-
+ 
 <!--- Chat module of the dashboard. The fixed size is 810x280 -->
-<class name="overAllChat" extends="guiPresenter" resizeable="false"
-    width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
-    y="240" x="10" closable="true" labelid="443" >
+<class name="overAllChat" extends="view" x="2"
+    width="${ parent.width-4 }" height="${ parent.height }" >
     <!-- 443:Chat -->
     
     <handler name="onclose">
@@ -13,11 +12,11 @@
     </handler>
     
     <!-- background area. all of the chat contents are putted on this view. -->
-    <view y="20" bgcolor="white" x="1" width="${ parent.width-2 }" 
-          height="$once{ parent.height-21 }" />
+    <view y="0" bgcolor="0xFFFFFF" x="0" width="${ parent.width }" 
+          height="$once{ parent.height }" />
     
     <!-- message and buttons area-->
-    <view y="22" bgcolor="0xFFFFFF" x="4" height="${ parent.height-25 }" >
+    <view y="2" bgcolor="0xFFFFFF" x="4" height="${ parent.height-2 }" >
         <view name="_chatoutputborder" height="${ parent.height-48 }"
             bgcolor="$once{ canvas.basebgcolorizer }" width="${ parent.parent.width - 206 }">
         	<!-- 604 -->
@@ -33,15 +32,15 @@
     </view>
     
     <!-- background of chat participant area -->
-    <view x="${ parent.width-193 }" y="22" name="_chatparticipantsBorderLeft" bgcolor="$once{ canvas.basebgcolorizer }" 
-          height="$once{ parent.height-22 }" width="1" />
+    <view x="${ parent.width-193 }" y="2" name="_chatparticipantsBorderLeft" bgcolor="$once{ canvas.basebgcolorizer }" 
+          height="$once{ parent.height-2 }" width="1" />
           
-    <view x="${ parent.width-192 }" y="22" name="_chatparticipantsBorderTop" bgcolor="$once{ canvas.basebgcolorizer }" 
+    <view x="${ parent.width-192 }" y="2" name="_chatparticipantsBorderTop" bgcolor="$once{ canvas.basebgcolorizer }" 
           height="1" width="191" />
     
     <!-- chat participants area -->
-    <view x="${ parent.width-191 }" y="23" name="_chatparticipants" bgcolor="0xFFFFFF"
-          height="${ parent.height-25 }" width="190" clip="true" >
+    <view x="${ parent.width-191 }" y="3" name="_chatparticipants" bgcolor="0xFFFFFF"
+          height="${ parent.height-5 }" width="190" clip="true" >
         <handler name="oninit">
             this.getChatOverallUsers.doCall();
         </handler>

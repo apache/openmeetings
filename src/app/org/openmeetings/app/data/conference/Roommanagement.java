@@ -819,7 +819,8 @@ public class Roommanagement {
 			Boolean isClosed,
 			String redirectURL,
 			String sipNumber,
-			String conferencePin){
+			String conferencePin,
+			Long ownerId){
 		
 		log.debug("addRoom");
 		
@@ -850,6 +851,7 @@ public class Roommanagement {
 				
 				r.setSipNumber(sipNumber);
 				r.setConferencePin(conferencePin);
+				r.setOwnerId(ownerId);
 				
 				//handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = OpenXGHttpClient.getInstance().openSIPgCreateConference();
@@ -1433,7 +1435,8 @@ public class Roommanagement {
 			Boolean isClosed,
 			String redirectURL,
 			String sipNumber,
-			String conferencePin){
+			String conferencePin,
+			Long ownerId){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1460,6 +1463,7 @@ public class Roommanagement {
 
 				r.setSipNumber(sipNumber);
 				r.setConferencePin(conferencePin);
+				r.setOwnerId(ownerId);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
@@ -1757,6 +1761,80 @@ public class Roommanagement {
 		}catch(Exception e){
 			log.error("Error updateRoomObject : " , e);
 		}
+	}
+	
+	/**
+	 * Get a Rooms-Object or NULL
+	 * @param rooms_id
+	 * @return Rooms-Object or NULL
+	 */
+	public Rooms getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId, String roomName){
+		try {
+			
+			if (roomtypesId == null || roomtypesId == 0) {
+				return null;
+			}
+			log.debug("getRoomByOwnerAndTypeId : " + ownerId +" || " + roomtypesId);
+			
+			String hql = "select c from Rooms as c " +
+					"where c.ownerId = :ownerId " +
+					"AND c.roomtype.roomtypes_id = :roomtypesId " +
+					"AND c.deleted != :deleted";
+			
+			Rooms room = null;
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery(hql);
+			query.setLong("ownerId", ownerId);
+			query.setLong("roomtypesId", roomtypesId);
+			query.setString("deleted", "true");
+			List ll = query.list();
+			if (ll.size()>0){
+				room = (Rooms) ll.get(0);
+				session.flush();
+				session.refresh(room);
+			}
+			
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			if (room != null){
+				return room;
+			} else{
+				log.debug("Could not find room " + ownerId +" || " + roomtypesId);
+				
+				Long rooms_id =  this.addRoom(3L, roomName, 
+												roomtypesId,
+							        			"My Rooms of ownerId "+ownerId, 
+							        			(roomtypesId == 1) ? 25L : 150L, //numberOfPartizipants
+							        			false, // ispublic 
+							        			null, //organisations
+							        			false, //appointment
+							        			false, //isDemoRoom
+							        			null, //demoTime
+							        			false, //isModeratedRoom
+							        			null, //roomModerators
+							        			true, //allowUserQuestions
+							        			false, //isAudioOnly
+							        			false, //isClosed
+							        			"", //redirectURL
+							        			"", //sipNumber
+							        			"", //conferencePin
+							        			ownerId
+						        			);
+				
+				if (rooms_id != null) {
+					return this.getRoomById(rooms_id);
+				}
+			}
+		} catch (HibernateException ex) {
+			log.error("[getRoomByOwnerAndTypeId] ", ex);
+		} catch (Exception ex2) {
+			log.error("[getRoomByOwnerAndTypeId] ", ex2);
+		}
+		return null;
 	}
 	
 }

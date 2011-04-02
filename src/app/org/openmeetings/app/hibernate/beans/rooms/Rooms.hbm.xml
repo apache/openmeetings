@@ -26,5 +26,6 @@
     <property name="isAudioOnly" type="boolean" column="is_audio_only"/>
     <property name="isClosed" type="boolean" column="is_closed"/>
     <property name="redirectURL" type="string" column="redirect_url"/>
+    <property name="ownerId" type="long" column="owner_id"/>
   </class>
 </hibernate-mapping>

@@ -25,48 +25,52 @@
 		<handler name="oninit">
 		<![CDATA[
 
-			//if ($debug) Debug.write("obj: ",obj);
-			if (this.ispublic) {
-				this.maxUsers = obj.numberOfPartizipants;
-			} else {
-				this.maxUsers = obj.room.numberOfPartizipants;
-			}
-			this._users.setAttribute('text', canvas.getLabelName(398) + ' '
-							+ this.currentusers.length + " / " + this.maxUsers);
-			var tString = canvas.getLabelName(401) + "<br/>";
-			for (var i = 0; i < this.currentusers.length; i++) {
-				tString += this.currentusers[i].firstname + " "
-						+ this.currentusers[i].lastname + " ("
-						+ this.currentusers[i].username + ") "
-						+ canvas.getLabelName(399)
-						+ parseDateToStringTime(this.currentusers[i].roomEnter)
-						+ " <br/>";
-			}
-			this._labeltooltip.setAttribute('text', tString);
+		    if (obj != null) {
+    			//if ($debug) Debug.write("obj: ",obj);
+    			if (this.ispublic) {
+    				this.maxUsers = obj.numberOfPartizipants;
+    			} else {
+    				this.maxUsers = obj.room.numberOfPartizipants;
+    			}
+    			this._users.setAttribute('text', canvas.getLabelName(398) + ' '
+    							+ this.currentusers.length + " / " + this.maxUsers);
+    			var tString = canvas.getLabelName(401) + "<br/>";
+    			for (var i = 0; i < this.currentusers.length; i++) {
+    				tString += this.currentusers[i].firstname + " "
+    						+ this.currentusers[i].lastname + " ("
+    						+ this.currentusers[i].username + ") "
+    						+ canvas.getLabelName(399)
+    						+ parseDateToStringTime(this.currentusers[i].roomEnter)
+    						+ " <br/>";
+    			}
+    			this._labeltooltip.setAttribute('text', tString);
+		    }
 		]]>
 		</handler>
 
 		<handler name="onclick">
-			canvas.isConference = !this.isaudience;
-			if (this.isaudience)
-				connectedIsAudience = '_' + 'audi';
-			if (this.ispublic) {
-				hib.conferencedomain = "public";
-				hib.currentroomid = this.obj.rooms_id;
-				//Debug.write("ispublic");
-			} else {
-				hib.conferencedomain = this.obj.organisation.organisation_id;
-				hib.currentroomid = this.obj.room.rooms_id;
-				//Debug.write("non ispublic");
+			if (obj != null) {
+    			canvas.isConference = !this.isaudience;
+    			if (this.isaudience)
+    				connectedIsAudience = '_' + 'audi';
+    			if (this.ispublic) {
+    				hib.conferencedomain = "public";
+    				hib.currentroomid = this.obj.rooms_id;
+    				//Debug.write("ispublic");
+    			} else {
+    				hib.conferencedomain = this.obj.organisation.organisation_id;
+    				hib.currentroomid = this.obj.room.rooms_id;
+    				//Debug.write("non ispublic");
+    			}
+    			if ($debug) Debug.write("onclick", this);
+    			parent.parent.parent.parent.parent._roomlistdetails.doinit(
+    					this.currentusers, this.roomid, this.roomname);
 			}
-			if ($debug) Debug.write("onclick", this);
-			parent.parent.parent.parent.parent._roomlistdetails.doinit(
-					this.currentusers, this.roomid, this.roomname);
 		</handler>
 
 		<method name="checkMaxUsers">
 		<![CDATA[
-			if (this.currentusers.length < this.maxUsers) {
+			if (this.currentusers == null || this.currentusers.length < this.maxUsers) {
 				this.enterRoom();
 			} else {
 				new lz.labelerrorPopup(canvas,{errorlabelid:99});
@@ -76,8 +80,32 @@
 			}
 		]]>
 		</method>
-
+		
 		<method name="enterRoom">
+			if (this.obj == null) {
+				this.getRoomByOwnerAndType.doCall();
+			} else {
+				this.initRoom();
+			}
+		</method>
+		
+		<netRemoteCallHib name="getRoomByOwnerAndType" funcname="conferenceservice.getRoomByOwnerAndType"
+            remotecontext="$once{ canvas.thishib }" >
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+            <netparam> <method name="getValue">return parent.parent.roomType;</method></netparam>
+            <netparam> <method name="getValue">return parent.parent.roomname;</method></netparam>
+            <handler name="ondata" args="value">
+            <![CDATA[
+                if ($debug) Debug.write("getRoomByOwnerAndType: ", value);
+                if (value != null) {
+                    parent.obj = value;
+                    parent.enterRoom();
+                }
+            ]]>
+            </handler>
+        </netRemoteCallHib>
+
+		<method name="initRoom">
 			
 			canvas.isConference = !this.isaudience;
 			if (this.isaudience)

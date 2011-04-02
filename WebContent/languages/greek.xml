@@ -3915,4 +3915,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1303" name="private message">
     <value>Reply</value>
   </string>
+  <string id="1304" name="dashboard">
+    <value>Rooms and chats</value>
+  </string>
+  <string id="1305" name="dashboard">
+    <value>My rooms</value>
+  </string>
+  <string id="1306" name="my rooms">
+    <value>My conference room (for 1-16 users)</value>
+  </string>
+  <string id="1307" name="my rooms">
+    <value>My webinar room (for 1-120 users)</value>
+  </string>
+  <string id="1308" name="room administration">
+    <value>Owner Id</value>
+  </string>
 </language>

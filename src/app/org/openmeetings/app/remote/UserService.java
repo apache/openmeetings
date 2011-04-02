@@ -808,7 +808,8 @@ public class UserService {
  		   				false, 		        // isClosed
  		   				"", 				// redirectURL
  		   				"", 				// sipNumber
- 		   				"");				// conferencePIN
+ 		   				"",					// conferencePIN
+ 		   				null);				// ownerId
  		    		
  		    		room = Roommanagement.getInstance().getRoomById(room_id);
  		    		

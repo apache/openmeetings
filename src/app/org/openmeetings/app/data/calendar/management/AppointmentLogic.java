@@ -161,7 +161,8 @@ public class AppointmentLogic {
 				false, 		        // isClosed
 				"", 				// redirectURL
 				"", 				// sipNumber
-				"");				// conferencePIN
+				"",					// conferencePIN
+				null);				// ownerID
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);

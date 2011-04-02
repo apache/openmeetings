@@ -395,6 +395,11 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "sip.phonerange.conference.currentindex",
 				""+0, null, "Number of used Phone Numbers in the sip.phonerange for the conferences");
 		
+		// ***************************************
+		// ***************************************
+		// Timezone settings
+		// ***************************************
+		
 		Calendar cal = Calendar.getInstance();
 		int offset = cal.get(Calendar.ZONE_OFFSET);
 		
@@ -411,11 +416,22 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "default.timezone",
 				timeZoneJavaFormat, null, "This is the default timezone if nothing is specified");
 		
+		// ***************************************
+		// ***************************************
+		// additional settings
+		// ***************************************
+		
 		Configurationmanagement.getInstance().addConfByKey(3, "show.facebook.login",
 				""+0, null, "Show Facebook Login");
 		
 		Configurationmanagement.getInstance().addConfByKey(3, "default.quality.screensharing",
 				"0", null, "Default selection in ScreenSharing Quality");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "default.dashboard.tab",
+				"1", null, "Default selection in Dashboard tabs as tab-index-id");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "dashboard.show.myrooms",
+				"1", null, "Show My Rooms Tab");
 		
 	}
 
@@ -435,37 +451,37 @@ public class ImportInitvalues {
 		
 		Roommanagement.getInstance().addRoom(3, "public Interview Room", interview_Id,
 				"", new Long(16), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "");
+				false, false, "", "", "", null);
 		
 		Roommanagement.getInstance().addRoom(3, "public Conference Room", conference_Id,
 				"", new Long(32), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "");
+				false, false, "", "", "", null);
 
 		Roommanagement.getInstance().addRoom(3, "public Video Only Room", conference_Id,
 				"", new Long(32), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "");
+				false, false, "", "", "", null);
 
 		Roommanagement.getInstance().addRoom(3,
 				"public Video And Whiteboard Room", conference_Id, "", new Long(32), true,
-				null, false, false, null, false, null, true, false, false, "", "", "");
+				null, false, false, null, false, null, true, false, false, "", "", "", null);
 
 		Roommanagement.getInstance().addRoom(3, "public Restricted Room", restricted_Id,
 				"", new Long(100), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "");
+				false, false, "", "", "", null);
 		
 		long room2 = Roommanagement.getInstance().addRoom(3,
 				"private Conference Room", conference_Id, "", new Long(32), false, null,
-				false, false, null, false, null, true, false, false, "", "", "");
+				false, false, null, false, null, true, false, false, "", "", "", null);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room2, 1);
 
 		Roommanagement.getInstance().addRoom(3, 
 				"public Audience Room", audience_Id, "", new Long(32), true, null, 
-				false, false, null, false, null, true, false, false, "", "", "");
+				false, false, null, false, null, true, false, false, "", "", "", null);
 
 		long room4 = Roommanagement.getInstance().addRoom(3,
 				"private Audience Room", audience_Id, "", new Long(32), false, null, 
-				false, false, null, false, null, true, false, false, "", "", "");
+				false, false, null, false, null, true, false, false, "", "", "", null);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room4, 1);
 

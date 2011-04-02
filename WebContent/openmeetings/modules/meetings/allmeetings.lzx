@@ -83,13 +83,13 @@
         </view>
         
 		<conferenceRoomSidebarTabButton name="publicTabButton" selected="true"
-        		currentIconRsc="users_tab_btn" x="0" labelid="777" width="${ (parent.width-6)/3 }"/>
+        		currentIconRsc="icon_btn_rooms_conference" x="0" labelid="777" width="${ (parent.width-6)/3 }"/>
 		
 		<conferenceRoomSidebarTabButton name="privateTabButton" width="${ (parent.width-6)/3 }"
-        		x="$once{ ((parent.width)/3)+2 }" currentIconRsc="users_tab_btn" labelid="779" />
+        		x="$once{ ((parent.width)/3)+2 }" currentIconRsc="icon_btn_rooms_conference" labelid="779" />
         		
         <conferenceRoomSidebarTabButton name="myTabButton" width="${ (parent.width-6)/3 }"
-        		x="$once{ (((parent.width)/3)*2)+4 }" currentIconRsc="users_tab_btn" labelid="781" />
+        		x="$once{ (((parent.width)/3)*2)+4 }" currentIconRsc="icon_btn_rooms_conference" labelid="781" />
 		
 		
 	</view>
@@ -241,6 +241,21 @@
 				
 				<handler name="oninit">
 					canvas.thishib.roomtype = "public";
+					
+                    new lz.roomListItem(this.inn.inn.inn, 
+                                           {
+                                                roomType:1,
+                                                ispublic:true,
+                                                roomname : canvas.getLabelName(1306)
+                                            });
+
+                    new lz.roomListItem(this.inn.inn.inn, 
+                                           {
+                                                roomType:3,
+                                                ispublic:true,
+                                                roomname : canvas.getLabelName(1307)
+                                            });
+                        
 					this.getAppointedMeetingRoomsWithoutType.doCall();
 				</handler>    
 	        

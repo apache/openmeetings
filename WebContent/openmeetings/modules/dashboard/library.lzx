@@ -7,6 +7,8 @@
     <resource name="icon_btn_dashboard_3" src="resources/wizzard_button_3.png" />
     <resource name="icon_btn_dashboard_4" src="resources/wizzard_button_4.png" />
     
+    <resource name="icon_btn_chat_dashboard" src="resources/internet-group-chat2.png" />
+    <resource name="icon_btn_rooms_conference" src="resources/network-transmit-receive2.png" />
 	 
 	<include href="infosPanel.lzx" />
 	<include href="profilesPanel.lzx" />

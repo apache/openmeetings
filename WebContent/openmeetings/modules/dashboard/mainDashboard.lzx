@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+<class name="labeledTabpane" extends="tabpane">
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+</class>
 
 <!---  modules:dashboard -->
 <class name="mainDashboard" extends="baseContentView">	
@@ -42,8 +50,162 @@
 	
 	<profilesPanel x="520" isdragable="false" minimizable="false" maximizable="false" closable="false" />
 
-	<overAllChat name="_overallchat" isdragable="false" minimizable="false" maximizable="false" closable="false" />
+    <!--- Chat module of the dashboard. The fixed size is 810x280
+    <class name="overAllChat" extends="guiPresenter" resizeable="false"
+        width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
+        y="240" x="10" closable="true" labelid="443" 
+        isdragable="false" minimizable="false" 
+                 maximizable="false" closable="false">
+     -->
+
+    <guiPresenter name="_bottomArea" resizeable="false" y="240" x="10" closable="true" labelid="1304" 
+            width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
+            isdragable="false" minimizable="false" maximizable="false" >
+    	
+    	<attribute name="refObjItem" value="null" />
+    	
+    	<method name="doSelection" args="objRef">
+            if (this.refObjItem != null) {
+                this.refObjItem.deselect();
+            }
+            this.refObjItem = objRef;
+            
+            if (this.refObjItem.name == "myRoomsTabButton"){
+                this._boxes.myMeetings.setAttribute("visibility","visible");
+                this._boxes._overallchat.setAttribute("visibility","hidden");
+            } else if (this.refObjItem.name == "chatTabButton"){
+                this._boxes.myMeetings.setAttribute("visibility","hidden");
+                this._boxes._overallchat.setAttribute("visibility","visible");
+            }
+            
+            this.refObjItem.select();
+        </method>
+    	
+    	<view name="_tabbar" x="1" y="1" width="${ parent.width-2 }" height="36" >
+    		
+    		<view width="${ parent.width }" height="$once{ parent.height }" 
+              stretches="both" resource="presenter_thumb_rsc" >
+                <handler name="oninit">
+                    <![CDATA[
+                        this.setTintRGB(canvas.basebgcolorizer,90);
+                    ]]>
+                </handler>
+                <method name="setTintRGB" args="color, brightness">
+                    <![CDATA[
+                        if (color != "" && color != null){
+        
+                            if (brightness == null) { brightness = 0; }
+                            var rgb = color;
+                            var red=(rgb >> 16) & 0xFF;
+                            var green=(rgb >> 8) & 0xFF;
+                            var blue=rgb & 0xFF;
+                
+                            this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                        rb : 0, gb : 0, bb : 0 } );
+                                                        
+                        }
+                    ]]>
+                </method>            
+            </view>
+            
+            <conferenceRoomSidebarTabButton name="myRoomsTabButton" selected="true" height="$once{ parent.height }"
+                    currentIconRsc="icon_btn_rooms_conference" x="0" labelid="1305" width="${ (parent.width-2)/2 }"/>
+            
+            <conferenceRoomSidebarTabButton name="chatTabButton" width="${ (parent.width-2)/2 }" height="$once{ parent.height }"
+                    x="$once{ ((parent.width)/2)+2 }" currentIconRsc="icon_btn_chat_dashboard" labelid="443" />
+        
+        </view>        
+    		
+    	<view name="_boxes" height="${ parent.height-44 }" width="${ parent.width }" y="43">	
+    	
+            <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" >
+        
+                <!-- Declared conference rooms list -->
+                <view y="2" height="${ parent.height-4 }">
+                    
+                    <handler name="oninit">
+                        
+                        new lz.roomListItem(this.inn.inn.inn, 
+                                               {
+                                                    roomType:1,
+                                                    ispublic:true,
+                                                    roomname : canvas.getLabelName(1306)
+                                                });
+
+                        new lz.roomListItem(this.inn.inn.inn, 
+                                               {
+                                                    roomType:3,
+                                                    ispublic:true,
+                                                    roomname : canvas.getLabelName(1307)
+                                                });
+                                                
+                        this.getAppointedMeetingRoomsWithoutType.doCall();
+                    </handler>    
+                
+                    <netRemoteCallHib name="getAppointedMeetingRoomsWithoutType" funcname="conferenceservice.getAppointedMeetingRoomsWithoutType" remotecontext="$once{ canvas.thishib }" >   
+                        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+                        <handler name="ondata" args="value">    
+                            <![CDATA[
+                                if ($debug) Debug.write("getRoomsPublic: ", value);
+                                if (value != null) {
+                                    for (var eg = 0; eg < value.length; eg++) {
+                                        var time = value[eg].starttime.getHours()
+                                                + ':'
+                                                + value[eg].starttime.getMinutes()
+                                                + ' '
+                                                + value[eg].starttime.getDate()
+                                                + '.'
+                                                + (value[eg].starttime.getMonth() + 1)
+                                                + '.'
+                                                + value[eg].starttime.getFullYear();
+                                        new lz.roomListItem(parent.inn.inn.inn, 
+                                               {
+                                                    roomType:value[eg].roomtype.roomtypes_id,
+                                                    currentusers : value[eg].currentusers,
+                                                    obj : value[eg],
+                                                    ispublic : true,
+                                                    roomid : value[eg].rooms_id,
+                                                    starttime : time,
+                                                    roomname : value[eg].name
+                                                });
+                                    }
+        
+                                    
+                                }
+                                
+                            ]]>                                         
+                        </handler>  
+                    </netRemoteCallHib> 
+         
+                    <!-- inn.inn.inn view would be setted object by above ondata hander. -->
+                    <view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
+                        <view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
+                            <view name="inn" layout="axis:y;spacing:1"/>
+                            <vscrollbar />
+                        </view>
+                    </view>
+                </view>
+                
+                <view x="500" resource="info_text_icon_rsc" y="4" />
+                
+                <labelText labelid="782" x="530" width="${ parent.width-540 }" y="4" multiline="true" />
+        
+                <!-- description panel for eache room. right hand on this class view.
+                        roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
+                            Mar 24 2008 commented by onokeiji@gmal.com
+                     -->
+                <roomListDetails x="510" y="4" name="_roomlistdetails" visibility="hidden"
+                				 height="${ parent.height-4 }" />
+                				 
+            </view>
+            
+            <overAllChat name="_overallchat" visibility="hidden" />
+            
+    	</view>        
+    	
+	   
 	
+    </guiPresenter>
 	<!--
     <rssPanel name="feed1" x="10" y="230" />
 

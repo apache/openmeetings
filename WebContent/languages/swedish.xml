@@ -2350,7 +2350,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>My Rooms</value>
   </string>
   <string id="782" name="overview room">
-    <value>Rooms in this section are created for personal usage. They are created through the calendar and have a start and a end date. They are only listed in this section as long as they are valid.</value>
+    <value>Rooms in this section are created for personal usage. There are some standard rooms plus the ones that are created through the calendar and have a start and an end date. The rooms created via the calendar are only listed in this section as long as they are valid.</value>
   </string>
   <string id="783" name="restricted room">
     <value>You have to be moderator to do this.</value>
@@ -3914,5 +3914,20 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1303" name="private message">
     <value>Reply</value>
+  </string>
+  <string id="1304" name="dashboard">
+    <value>Rooms and chats</value>
+  </string>
+  <string id="1305" name="dashboard">
+    <value>My rooms</value>
+  </string>
+  <string id="1306" name="my rooms">
+    <value>My conference room (for 1-16 users)</value>
+  </string>
+  <string id="1307" name="my rooms">
+    <value>My webinar room (for 1-120 users)</value>
+  </string>
+  <string id="1308" name="room administration">
+    <value>Owner Id</value>
   </string>
 </language>
