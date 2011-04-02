@@ -237,7 +237,7 @@
 			<labelText labelid="782" x="30" width="400" multiline="true" />
 			
 			<!-- Declared conference rooms list -->
-			<view y="50" height="${ parent.height-50 }">
+			<view y="60" height="${ parent.height-60 }">
 				
 				<handler name="oninit">
 					canvas.thishib.roomtype = "public";
