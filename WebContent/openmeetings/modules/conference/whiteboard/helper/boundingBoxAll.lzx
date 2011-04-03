@@ -56,6 +56,7 @@
     <attribute name="minheight" value="2"/>    
 	
 	<method name="__LZRemoveItem" args="itemRef">
+		this.whiteboardRef.deleteItemByName(this.objRef.name);
 		//Debug.write("__LZRemoveItem");
 	</method>
 	
@@ -323,7 +324,7 @@
 					x="${ parent.width-this.width-parent.innerInsetScrollbars }" >
 		<handler name="onclick">
 			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
-			this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
+			parent.__LZRemoveItem(null);
 		</handler>
 	</baseChooseIcon>	    
     
