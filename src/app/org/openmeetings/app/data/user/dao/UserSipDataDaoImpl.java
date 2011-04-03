@@ -32,6 +32,10 @@ public class UserSipDataDaoImpl {
 	public UserSipData getUserSipDataById(Long userSipDataId) {
 		try {
 			
+			if (userSipDataId == null) {
+				return null;
+			}
+			
 			String hql = "select c from UserSipData as c where c.userSipDataId = :userSipDataId";
 			
 			Object idf = HibernateUtil.createSession();
