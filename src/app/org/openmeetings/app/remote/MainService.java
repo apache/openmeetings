@@ -923,6 +923,27 @@ public class MainService implements IPendingServiceCallback {
 		// TODO Auto-generated method stub
 		log.debug("[resultReceived]"+arg0);
 	}
+	
+	public List<Configuration> getDashboardConfiguration(String SID) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+	    	if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
+	    		
+	    		List<Configuration> cfManagementList = new LinkedList<Configuration>();
+	    		
+	    		cfManagementList.add(Configurationmanagement.getInstance().getConfKey(3L, "dashboard.show.chat"));
+	    		cfManagementList.add(Configurationmanagement.getInstance().getConfKey(3L, "dashboard.show.myrooms"));
+	    		cfManagementList.add(Configurationmanagement.getInstance().getConfKey(3L, "dashboard.show.rssfeed"));
+	    		cfManagementList.add(Configurationmanagement.getInstance().getConfKey(3L, "default.dashboard.tab"));
+	    		
+	    		return cfManagementList;
+	    	}
+    	} catch (Exception err) {
+			log.error("[getDashboardConfiguration]",err);
+		}	
+		return null;
+	}
 
     
     /*

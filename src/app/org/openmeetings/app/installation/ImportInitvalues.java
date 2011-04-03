@@ -428,10 +428,16 @@ public class ImportInitvalues {
 				"0", null, "Default selection in ScreenSharing Quality");
 		
 		Configurationmanagement.getInstance().addConfByKey(3, "default.dashboard.tab",
-				"1", null, "Default selection in Dashboard tabs as tab-index-id");
+				"0", null, "Default selection in Dashboard tabs as tab-index-id");
 		
 		Configurationmanagement.getInstance().addConfByKey(3, "dashboard.show.myrooms",
 				"1", null, "Show My Rooms Tab");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "dashboard.show.chat",
+				"1", null, "Show Chat Tab");
+		
+		Configurationmanagement.getInstance().addConfByKey(3, "dashboard.show.rssfeed",
+				"0", null, "Show RSS Tab");
 		
 	}
 

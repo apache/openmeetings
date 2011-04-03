@@ -26,8 +26,100 @@
    
     <handler name="oninit">
         //this.getRssFeeds.doCall();
+        this.getDashboardConfiguration.doCall();
         _mainScrollBar.setAttribute("visibility","hidden");
     </handler>
+    
+    <netRemoteCallHib name="getDashboardConfiguration" funcname="xmlcrm.getDashboardConfiguration" 
+    				  remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
+        <handler name="ondata" args="value">    
+            <![CDATA[
+                if ($debug) Debug.write("getDashboardConfiguration: ", value);
+                parent.parseConfiguration(value);
+            ]]>                                         
+        </handler>  
+    </netRemoteCallHib> 
+    
+    <method name="parseConfiguration" args="cfManagementList">
+    	<![CDATA[
+    	
+    	   var tCountVisibleTabs = 0;
+    	   for (var i=0;i<cfManagementList.length;i++) {
+    	   	
+    	   	   var tConfigurationObj = cfManagementList[i];
+    	   	   
+    	   	   switch (tConfigurationObj.conf_key) {
+    	   	   	   case "dashboard.show.myrooms":
+    	   	   	       if (Number(tConfigurationObj.conf_value) == 1) {
+                            tCountVisibleTabs++;
+    	   	   	       } else {
+    	   	   	       	    this._bottomArea._tabbar.myRoomsTabButton.setAttribute("visibility","hidden");
+    	   	   	       }
+    	   	   	       break;
+    	   	   	   case "dashboard.show.rssfeed":
+    	   	   	       if (Number(tConfigurationObj.conf_value) == 1) {
+                            tCountVisibleTabs++;
+                            this.getRssFeeds.doCall();
+                       } else {
+                       	    this._bottomArea._tabbar.rssFeed1TabButton.setAttribute("visibility","hidden");
+                       }
+                       break;
+                   case "dashboard.show.chat":
+                       if (Number(tConfigurationObj.conf_value) == 1) {
+                            tCountVisibleTabs++;
+                       } else {
+                            this._bottomArea._tabbar.chatTabButton.setAttribute("visibility","hidden");
+                       }
+                       break;
+                   default:
+                       if ($debug) Debug.write("Unkown Tab Key ",tConfigurationObj.conf_key);
+                       break;
+    	   	   }
+               
+    	   }
+    	   
+    	   var tFoundVisibleDefaultTab = false;
+    	   for (var i=0;i<cfManagementList.length;i++) {
+            
+               var tConfigurationObj = cfManagementList[i];
+               
+               if (tConfigurationObj.conf_key == "default.dashboard.tab") {
+                
+                   var tIndexNumber = Number(tConfigurationObj.conf_value);
+                   var tObj = this._bottomArea._tabbar.subviews[tIndexNumber];
+                   
+                   if ($debug) Debug.write("tIndexNumber|tObj",tIndexNumber,tObj);
+                   
+                   if (tObj && tObj.visible) {
+                   	   tFoundVisibleDefaultTab = true;
+                       tObj.onclick.sendEvent(null);
+                   }
+                
+               }
+            
+           }
+           
+           if ($debug) Debug.write("tFoundVisibleDefaultTab|tCountVisibleTabs",tFoundVisibleDefaultTab,tCountVisibleTabs);
+    	   
+           if (!tFoundVisibleDefaultTab && tCountVisibleTabs>0) {
+           	   
+           	   for (var i=0;i<this._bottomArea._tabbar.subviews.length;i++) {
+           	   	
+           	   	   var tObj = this._bottomArea._tabbar.subviews[i];
+           	   	   if ($debug) Debug.write("tObj && tObj.visible",tObj,tObj.visible);
+           	   	   
+           	   	   if (tObj && tObj.visible) {
+                       tObj.onclick.sendEvent(null);
+                       break;
+                   }
+           	   }
+           }
+           
+    	   this._bottomArea.setAttribute("visibility","visible");
+    	   
+    	]]>
+    </method>
     
     <handler name="ontabcontentleave">
     	canvas._overallchatcontent = null;
@@ -40,8 +132,8 @@
         <handler name="ondata" args="value">
         	<![CDATA[
                 Debug.write("getRssFeeds: ",value);
-                parent.feed1.feed.outputRSS(value.feed1);
-                parent.feed2.feed.outputRSS(value.feed2);
+                parent._bottomArea._boxes.feed1.outputRSS(value.feed2);
+                //parent.feed2.feed.outputRSS(value.feed2);
             ]]>
         </handler>   
     </netRemoteCallHib>      
@@ -59,7 +151,7 @@
      -->
 
     <guiPresenter name="_bottomArea" resizeable="false" y="240" x="10" closable="true" labelid="1304" 
-            width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
+            width="${ canvas.width-20 }" height="${ canvas.height-360 }" visibility="hidden"
             isdragable="false" minimizable="false" maximizable="false" >
     	
     	<attribute name="refObjItem" value="null" />
@@ -73,52 +165,64 @@
             if (this.refObjItem.name == "myRoomsTabButton"){
                 this._boxes.myMeetings.setAttribute("visibility","visible");
                 this._boxes._overallchat.setAttribute("visibility","hidden");
+                this._boxes.feed1.setAttribute("visibility","hidden");
             } else if (this.refObjItem.name == "chatTabButton"){
                 this._boxes.myMeetings.setAttribute("visibility","hidden");
                 this._boxes._overallchat.setAttribute("visibility","visible");
+                this._boxes.feed1.setAttribute("visibility","hidden");
+            } else if (this.refObjItem.name == "rssFeed1TabButton"){
+                this._boxes.myMeetings.setAttribute("visibility","hidden");
+                this._boxes._overallchat.setAttribute("visibility","hidden");
+                this._boxes.feed1.setAttribute("visibility","visible");
             }
+            
             
             this.refObjItem.select();
         </method>
+        
+        <view width="${ parent.width-2 }" x="1" y="1" height="$once{ parent._tabbar.height }" 
+          stretches="both" resource="presenter_thumb_rsc" >
+            <handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,90);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                    if (color != "" && color != null){
+    
+                        if (brightness == null) { brightness = 0; }
+                        var rgb = color;
+                        var red=(rgb >> 16) & 0xFF;
+                        var green=(rgb >> 8) & 0xFF;
+                        var blue=rgb & 0xFF;
+            
+                        this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                    rb : 0, gb : 0, bb : 0 } );
+                                                    
+                    }
+                ]]>
+            </method>            
+        </view>
     	
-    	<view name="_tabbar" x="1" y="1" width="${ parent.width-2 }" height="36" >
+    	<view name="_tabbar" x="1" y="1" width="${ parent.width-2 }" height="36"
+    		  layout="axis:x;spacing:2">
     		
-    		<view width="${ parent.width }" height="$once{ parent.height }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-                <handler name="oninit">
-                    <![CDATA[
-                        this.setTintRGB(canvas.basebgcolorizer,90);
-                    ]]>
-                </handler>
-                <method name="setTintRGB" args="color, brightness">
-                    <![CDATA[
-                        if (color != "" && color != null){
-        
-                            if (brightness == null) { brightness = 0; }
-                            var rgb = color;
-                            var red=(rgb >> 16) & 0xFF;
-                            var green=(rgb >> 8) & 0xFF;
-                            var blue=rgb & 0xFF;
-                
-                            this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                        rb : 0, gb : 0, bb : 0 } );
-                                                        
-                        }
-                    ]]>
-                </method>            
-            </view>
+    		<conferenceRoomSidebarTabButton name="myRoomsTabButton" height="$once{ parent.height }"
+                    currentIconRsc="icon_btn_rooms_conference" labelid="1305" width="${ (parent.width-4)/3 }"
+                    />
+    		
+            <conferenceRoomSidebarTabButton name="chatTabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+                    currentIconRsc="icon_btn_chat_dashboard" labelid="443" />
             
-            <conferenceRoomSidebarTabButton name="myRoomsTabButton" selected="true" height="$once{ parent.height }"
-                    currentIconRsc="icon_btn_rooms_conference" x="0" labelid="1305" width="${ (parent.width-2)/2 }"/>
-            
-            <conferenceRoomSidebarTabButton name="chatTabButton" width="${ (parent.width-2)/2 }" height="$once{ parent.height }"
-                    x="$once{ ((parent.width)/2)+2 }" currentIconRsc="icon_btn_chat_dashboard" labelid="443" />
-        
+            <conferenceRoomSidebarTabButton name="rssFeed1TabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+                    currentIconRsc="icon_btn_rss_conference" labelid="277" />
+                    
         </view>        
     		
     	<view name="_boxes" height="${ parent.height-44 }" width="${ parent.width }" y="43">	
     	
-            <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" >
+            <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" visibility="hidden" >
         
                 <!-- Declared conference rooms list -->
                 <view y="2" height="${ parent.height-4 }">
@@ -200,6 +304,13 @@
             </view>
             
             <overAllChat name="_overallchat" visibility="hidden" />
+            
+            <rssBox name="feed1" visibility="hidden" width="${ parent.width }" 
+                            height="${ parent.height }" y="0" x="0" />
+
+               <!--
+            <rssPanel name="feed2" x="420" y="230" visibility="hidden" />
+                -->
             
     	</view>        
     	

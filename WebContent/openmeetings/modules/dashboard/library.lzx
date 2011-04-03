@@ -9,6 +9,7 @@
     
     <resource name="icon_btn_chat_dashboard" src="resources/internet-group-chat2.png" />
     <resource name="icon_btn_rooms_conference" src="resources/network-transmit-receive2.png" />
+    <resource name="icon_btn_rss_conference" src="resources/rss_small.png" />
 	 
 	<include href="infosPanel.lzx" />
 	<include href="profilesPanel.lzx" />

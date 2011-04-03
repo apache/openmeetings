@@ -939,31 +939,31 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Logout</value>
   </string>
   <string id="311" name="loginwindow">
-    <value>Visão Desktop</value>
+    <value>Forgotten your password?</value>
   </string>
   <string id="312" name="loginwindow">
-    <value>iniciar visão Desktop</value>
+    <value>Reset password</value>
   </string>
   <string id="313" name="loginwindow">
-    <value>Vídeo e Áudio</value>
+    <value>Using email address</value>
   </string>
   <string id="314" name="loginwindow">
-    <value>Chat</value>
+    <value>Using login</value>
   </string>
   <string id="315" name="loginwindow">
-    <value>Lousa</value>
+    <value>Your email address</value>
   </string>
   <string id="316" name="loginwindow">
-    <value>Moderação</value>
+    <value>Your login</value>
   </string>
   <string id="317" name="loginwindow">
-    <value>Arquivos</value>
+    <value>Send email with a reset link</value>
   </string>
   <string id="318" name="loginwindow">
-    <value>Usuários</value>
+    <value>No such email address was found. Make sure you entered the same email address you used to create your account.</value>
   </string>
   <string id="319" name="loginwindow">
-    <value>Conjuntos</value>
+    <value>Please enter either an email address or a username</value>
   </string>
   <string id="320" name="loginwindow">
     <value>Não existe usuário conectado com este nome</value>

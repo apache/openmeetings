@@ -38,7 +38,7 @@
         this.inner.outputRSS(value);
     </method>
     <view name="inner" clip="true" bgcolor="0xFFFFFF" 
-        x="1" y="1" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }">
+        x="1" y="1" width="${ parent.width-2 }" height="${ parent.height-2 }">
         <method name="outputRSS" args="value">
             <![CDATA[
                 var t = new Array();
@@ -53,7 +53,7 @@
                 }
             ]]>
         </method>
-        <view name="content" layout="axis:y" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width-14 }" />        
+        <view name="content" layout="axis:y" bgcolor="$once{ canvas.basebgcolorizer }" width="${ parent.width-14 }" />        
         <vscrollbar name="_scrollbar" />
     </view>
 </class>   
