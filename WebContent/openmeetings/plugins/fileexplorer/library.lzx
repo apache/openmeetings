@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+    <include href="presentations/" />
+    <include href="tabbar/" />
+    <include href="upload/" />
+    <include href="treeitems/" />
+    
+    <include href="dynamicFileName.lzx" />
+    <include href="dragItemFileExplorer.lzx" />
+    <include href="fileExplorerWindow.lzx" />
+    <include href="fileExplorer.lzx" />
+    
+    
+</library>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="fileexploreritem" lazy="false" name="org.openmeetings.app.hibernate.beans.files.FileExplorerItem">
+    <id column="fileexploreritem_id" name="fileExplorerItemId">
+      <generator class="increment"/>
+    </id>
+    <property name="fileName" type="string" column="filename"/>
+    <property name="fileHash" type="string" column="filehash"/>
+    <property name="parentFileExplorerItemId" type="long" column="parent_fileexploreritem_id"/>
+    <property name="ownerId" type="long" column="owner_id"/>
+    <property name="room_id" type="long" column="room_id"/>
+    <property name="isFolder" type="boolean" column="is_folder"/>
+    <property name="isImage" type="boolean" column="is_image"/>
+    <property name="isVideo" type="boolean" column="is_video"/>
+    <property name="isPresentation" type="boolean" column="is_presentation"/>
+    <property name="insertedBy" type="long" column="inserted_by"/>
+    <property name="inserted" type="java.util.Date" column="inserted"/>
+    <property name="deleted" type="string" column="deleted"/>
+    <property name="updated" type="java.util.Date" column="updated"/>
+    <property name="fileSize" type="long" column="filesize"/>
+    <property name="flvWidth" type="int" column="flv_width"/>
+    <property name="flvHeight" type="int" column="flv_height"/>
+    <property name="previewImage" type="string" column="preview_image"/>
+  </class>
+</hibernate-mapping>

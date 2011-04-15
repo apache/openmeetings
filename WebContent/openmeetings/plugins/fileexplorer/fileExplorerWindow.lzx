@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!-- ###################
+    Class fileExplorerWindow
+ -->
+<class name="fileExplorerWindow" extends="labelExplorerBox" title="Files" 
+	docking="true" resizeable="false" closable="false" visibility="hidden"
+    width="600" x="300" height="300" y="100">
+    
+	<handler name="oninit">
+		canvas._fileExplorerWindow = this;
+	</handler>
+	
+	<method name="reload">
+		this.setAttribute("x",300);
+		this.setAttribute("y",100);
+		this._fileExplorer.loadFiles();
+	</method>
+	
+	<method name="closeIt">
+		this.setAttribute("visibility","hidden");
+	</method>
+	
+	<fileExplorer name="_fileExplorer" width="$once{ parent.width-2 }" height="$once{ parent.height-38 }" y="8">
+		<handler name="onClose" args="refObj">
+			parent.closeIt();
+		</handler>
+	</fileExplorer>
+
+	<simpleLabelButton labelid="85" width="100" x="$once{ parent.width - 104 }" y="$once{ parent.height - 24 }">
+    	<handler name="onclick">
+    		this.parent.closeIt();
+    	</handler>
+    </simpleLabelButton>
+    
+</class>
+
+</library>

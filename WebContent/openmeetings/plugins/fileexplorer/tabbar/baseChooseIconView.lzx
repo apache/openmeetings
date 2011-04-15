@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="baseChooseIconView" extends="view" width="24" height="24" 
+       bgcolor="$once{ canvas.basebgcolorizer }"  >
+    
+    <attribute name="resourceN" value="" type="string" />
+    <attribute name="isselected" value="false" type="boolean" />
+    <attribute name="labelid" value="0" type="number" />
+    
+    <handler name="oninit">
+        if (this.isselected){
+            this.onclick.sendEvent();
+        }
+    </handler> 
+    
+    <handler name="onmouseover">
+        this._bg.setAttribute("bgcolor",canvas.baseMousecolorizer);
+    </handler>
+    
+    <handler name="onmouseout">
+        this._bg.setAttribute("bgcolor",0xFFFFFF);
+    </handler>
+    
+    <view name="_bg" x="1" y="1" width="$once{ parent.width-1 }" 
+          height="$once{ parent.height-2 }" bgcolor="0xFFFFFF" />
+    
+    <view x="2" y="2" resource="$once{ parent.resourceN }" />
+             
+    <labelTooltip labelid="$once{ parent.labelid }" inittwice="true" />
+</class>
+
+</library>

@@ -100,6 +100,7 @@
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Userlevel.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users.hbm.xml"/>
     <mapping resource="org/openmeetings/app/hibernate/beans/user/Users_Usergroups.hbm.xml"/>
+    <mapping resource="org/openmeetings/app/hibernate/beans/files/FileExplorerItem.hbm.xml"/>
     
 	</session-factory>
 

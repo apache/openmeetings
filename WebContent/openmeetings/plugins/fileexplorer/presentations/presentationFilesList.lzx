@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+<!--  -->
+
+<class name="presentationFilesList" extends="view" 
+       x="0" y="40" height="${ parent.height-40 }" 
+        width="${ parent.width }" bgcolor="$once{ canvas.basebgcolorizer }">
+    
+    <event name="onclose" />
+    
+	<view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
+		  x="1" y="1" bgcolor="white" />
+
+	<attribute name="uploadmodul" value="$once{ canvas.uploadmoduleimg }" type="string" />
+
+    <method name="addPresentationThumb" args="thumbName,no">
+        new lz.listPresentationThumbExplorer(this._table._listcontent,{isExplorer:true,
+        					uploadmodul:this.uploadmodul,thumbname:thumbName,no:no});
+    </method>
+    
+    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName">
+        new lz.listPresentationFileOrigExplorer(this._table._listcontent,{isExplorer:true,
+        				isoriginal:true,uploadmodul:this.uploadmodul,
+        				originalName:originalName,pdfname:pdfname,swfName:swfName});
+    </method>
+    
+    <method name="addListpresentationFilePDF" args="pdfname,swfName">
+        new lz.listPresentationFilePDFExplorer(this._table._listcontent,{isExplorer:true,isoriginal:true,uploadmodul:this.uploadmodul,pdfname:pdfname,swfName:swfName});
+    </method>
+	    
+    <method name="resetList">
+    	this._table.destroy();
+    	new lz.imageListInnerTableExplorer(this,{name:'_table'});
+    	this._hideForNonMods.bringToFront();
+    </method>
+    
+    <method name="highlightItem" args="obj">
+    	<![CDATA[
+    		for (var i=0;i<this._table._listcontent.subviews.length;i++){
+    			if (!this._table._listcontent.subviews[i].isPpt){
+                    //Debug.write("this._table._listcontent.subviews[i]: ",this._table._listcontent.subviews[i]);
+    				this._table._listcontent.subviews[i]._thumbText.setAttribute('text','<font>'+this._table._listcontent.subviews[i].filenamePure+'</font>');
+                }
+    		}
+    		obj._thumbText.setAttribute('text','<font><b>'+obj.filenamePure+'</b></font>');
+    	]]>
+    </method>
+    
+	<imageListInnerTableExplorer name="_table" y="20"
+						 height="${ parent.height-22 }" />
+	
+    <view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }" y="0">
+        <baseChooseIconView name="_trashIcon" labelid="718" height="20" width="19" 
+                         resourceN="file_explorer_close_rsc">
+            <handler name="onclick">
+                parent.parent.onclose.sendEvent();
+            </handler>
+        </baseChooseIconView>
+        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+    </view>
+    
+</class>
+
+</library>

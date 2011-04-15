@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+    <include href="baseChooseIconView.lzx" />
+    <include href="documentsLoaderIcon.lzx" />
+    <include href="documentsTabBar.lzx" />
+    
+</library>

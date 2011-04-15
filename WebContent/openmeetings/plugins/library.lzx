@@ -3,6 +3,7 @@
 
     <!-- Add the Folder and Entry for your Plugin here -->
 
+	<include href="fileexplorer/"/>
     <include href="sponsors/"/>
 
 </library>

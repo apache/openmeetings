@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!-- ###################
+    Class fileExplorer
+ -->
+<class name="fileExplorer" extends="view" >
+    
+    <attribute name="parentFolderId" value="-2" type="number" />
+    
+    <attribute name="_selected" value="null" />
+    
+    <event name="onClose"/>
+    
+    <handler name="oninit">
+        lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
+    </handler>
+    
+    <method name="loadFiles">
+    	this.getFileExplorerByRoom.doCall();
+    </method>
+    
+    <handler name="onvisible">
+        //This is thrown whenever an uploaded Document has completed
+        if (this._selected == null) {
+            this.getFileExplorerByRoom.doCall();
+        } else {
+        	if (this._selected.isFolder) {
+            	this._selected.refresh();
+        	} else {
+        		this.getFileExplorerByRoom.doCall();
+        	}
+        }
+    </handler>
+    
+    <method name="selectItem" args="itemRef">
+        if (this._selected != null) {
+            this._selected.deselectItem();
+        }
+        
+        this._selected = itemRef;
+        this._selected.selectItem();
+        
+        //Set parent folder id for next Folder or uploaded file
+        if (this._selected.fileExplorerItemId == 0) {
+            if (this._selected.isOwner) {
+                this.parentFolderId = -2;
+            } else {
+                this.parentFolderId = 0;
+            }
+        } else {
+            this.parentFolderId = this._selected.fileExplorerItemId;
+        }
+        
+    </method>
+    
+    <method name="addFile">
+    	
+    	if ($debug) Debug.write("addFile :: ",this._selected,this.parentFolderId);
+    	
+    	var isOwner = 0;
+    	if (this.parentFolderId == -2) {
+    		isOwner = 1;
+    	} else {
+    		//Check if its a subfolder of a Owners Dir
+    		if (this._selected != null) {
+    			var checkForOwer = this._selected.checkForIsOwner();
+    			if ($debug) Debug.write("checkForOwer ::",checkForOwer);
+    			if (checkForOwer) {
+    				isOwner = 1;
+    			}
+    		}
+    	}
+    	
+    	if ($debug) Debug.write("addFile :: ",isOwner);
+    	
+        new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                            x:60,uploadmodule:canvas.uploadmoduleimg,
+                            parentFolderId:this.parentFolderId,
+                            isOwner:isOwner,
+                            fileExplorerRef:this,
+                            isOnlyImage:true,
+                            servletName:'FileExplorerUploadHandler'
+                        });
+    </method>
+    
+    <method name="addFolder">
+        if (this._selected == null) {
+            this._filearea._contentarea.subviews[0].addFolder();
+        } else {
+            if (this._selected.isFolder) {
+                this._selected.addFolder();
+            } else {
+            	if ($debug) Debug.write("this._selected ",this._selected);
+                this._selected.parent.parent.addFolder();
+            }
+        }
+    </method>
+    
+    <method name="loadDocument" args="itemObj">
+        this.selectItem(itemObj);
+        this._documentsTabs.setAttribute("height",20);
+        this._documentsTabs.setAttribute("visibility","visible");
+        this._documentsTabs.hideAll();
+        var t = new lz.presentationPreview(this,{
+                        documentObj:itemObj,
+                        refObjList:this
+                    });
+        //t.sendToBack();
+        //this._bg1.sendToBack();
+        //this._bg2.sendToBack();
+        this._documentsTabs.bringToFront();
+        return t;
+    </method>
+    
+    <method name="playVideo" args="itemObj">
+    	this.selectItem(itemObj);
+    	
+    	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName);
+    	
+    </method>
+    
+    <!--
+        public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id)
+     -->
+    <netRemoteCallHib name="getFileExplorerByRoom" funcname="fileservice.getFileExplorerByRoom" 
+        remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>         
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
+            parent.parseRootItems(value);
+        </handler>
+    </netRemoteCallHib>  
+    
+    <!--
+        Parse Items and generate Output
+     --> 
+    <method name="parseRootItems" args="roomObject">
+        <![CDATA[
+            this.clearContent();
+            
+            var homeSizeInMBytes = Math.round( (roomObject.userHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._userSpace._userHomeSize.setAttribute("text","" + homeSizeInMBytes + " MBytes");
+            
+            var roomHomeSizeInMBytes = Math.round( (roomObject.roomHomeSize / 1024 / 1024) * 100) / 100;
+            
+            this._userSpace._roomHomeSize.setAttribute("text","" + roomHomeSizeInMBytes + " MBytes");
+            
+            var homeIcon = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(706),
+                                        name:'_home',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_home_rsc',
+                                        isOwner:true,
+                                        refObjListRoot:this
+                                    });
+                                    
+            homeIcon.content.setAttribute("visibility","visible");
+            homeIcon.icon_folder_pre.setAttribute("frame",2);
+            homeIcon._folderIcon.setAttribute("frame",2);
+            
+            //Home area
+            for (var i=0;i<roomObject.userHome.length;i++) {
+                var fileExplorerItem = roomObject.userHome[i];
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFileExplorerItem(homeIcon.content,{
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isImage) {
+                    new lz.imageFileExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_image_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isPresentation) {
+                    new lz.documentFileExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isPresentation:true,
+                                            fileIcon:'file_explorer_document_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isVideo) {
+                    new lz.videoFileExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            isVideo:true,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_video_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+            //Public - Room Area
+            var roomHome = new lz.rootFileExplorerItem(this._filearea._contentarea,{
+                                        open:true,
+                                        fileName:canvas.getLabelName(707),
+                                        name:'_roomHome',
+                                        isRoot:true,
+                                        fileIcon:'file_explorer_folder_network_rsc',
+                                        refObjListRoot:this
+                                    });
+                                    
+            roomHome.content.setAttribute("visibility","visible");
+            roomHome.icon_folder_pre.setAttribute("frame",2);
+            roomHome._folderIcon.setAttribute("frame",2);
+            
+            //Public area
+            for (var i=0;i<roomObject.roomHome.length;i++) {
+                var fileExplorerItem = roomObject.roomHome[i];
+                if ($debug) Debug.write("fileExplorerItem.fileExplorerItemId, ",fileExplorerItem.fileExplorerItemId);
+                if (fileExplorerItem.isFolder) {
+                    new lz.folderFileExplorerItem(roomHome.content,{
+                                            fileName:fileExplorerItem.fileName,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileIcon:'icon_folder_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isImage) {
+                    new lz.imageFileExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_image_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isPresentation) {
+                    new lz.documentFileExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isPresentation:true,
+                                            fileIcon:'file_explorer_document_rsc',
+                                            refObjListRoot:this
+                                        });
+                } else if (fileExplorerItem.isVideo) {
+                    new lz.videoFileExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            isVideo:true,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileHash:fileExplorerItem.fileHash,
+                                            isFolder:false,isImage:true,
+                                            fileIcon:'file_explorer_video_rsc',
+                                            refObjListRoot:this
+                                        });
+                }
+            }
+            
+        ]]>
+    </method>
+    
+    <method name="clearContent">
+        <![CDATA[
+            for (var eg in this._filearea._contentarea.subviews) {
+                this._filearea._contentarea.subviews[eg].destroy();
+            }
+        ]]>
+    </method>
+    
+    <!--
+        Borders
+     --> 
+    
+    <view name="_bg1" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width }" 
+          x="0" y="14" height="${ parent.height-14 }" />
+          
+    <view name="_bg2" bgcolor="0xFFFFFF" x="1" y="14" width="$once{ parent.width - 2 }" 
+          height="${ parent.height-15 }" />
+    
+    <!--      
+    <view name="_border1a" x="0" y="0" width="1" 
+          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
+    <view name="_border1b" x="${ parent.width-1 }" y="0" width="1" 
+          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
+     -->
+               
+    <view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }" 
+          height="1" bgcolor="$once{ canvas.basebgcolorizer }" />     
+    
+    <!--
+        Documents - Tabbar
+     --> 
+    <documentsTabBar name="_documentsTabs" y="14" width="$once{ parent.width }"
+                    visibility="hidden" />
+    	
+    
+    <!--
+        File Tree Content Tabbar
+     --> 
+     
+    <view name="_fileBar" layout="axis:x" x="0" y="${ 14 + parent._documentsTabs.height }">
+        <baseChooseIconView labelid="702" height="20" width="19" 
+                            resourceN="file_explorer_add_file_rsc">
+            <handler name="onclick">
+                if ($debug) Debug.write("Upload File");
+                parent.parent.addFile();
+            </handler>
+        </baseChooseIconView>
+        <baseChooseIconView labelid="703" height="20" width="19" 
+                            resourceN="file_explorer_add_folder_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Add Folder");
+                parent.parent.addFolder();
+            </handler>
+        </baseChooseIconView>
+        <baseChooseIconView labelid="704" height="20" width="19" 
+                            resourceN="file_explorer_reload_rsc" >
+            <handler name="onclick">
+                if ($debug) Debug.write("Refresh Folder");
+                parent.parent.getFileExplorerByRoom.doCall();
+            </handler>
+        </baseChooseIconView>
+        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content Trashbar
+     --> 
+     
+    <view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }" 
+          y="${ 14 + parent._documentsTabs.height }">
+        <baseChooseIconView name="_trashIcon" labelid="705" height="20" width="19" 
+                         resourceN="file_explorer_trash_rsc">
+            <attribute name="isTrashCan" value="true" type="boolean" />
+            <handler name="onclick">
+                if ($debug) Debug.write("Delete Folder and Files");
+            </handler>
+            <handler name="onmousetrackover">
+                //if ($debug) Debug.write("onmousetrackover");
+                canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
+                this.onmouseover.sendEvent();
+            </handler>
+            <handler name="onmousetrackout">
+                //if ($debug) Debug.write("onmousetrackout");
+                canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
+                this.onmouseout.sendEvent();
+            </handler>
+            <handler name="onmousetrackup">
+                if ($debug) Debug.write("onmousetrackup");
+                this.onmouseout.sendEvent();
+            </handler> 
+        </baseChooseIconView>
+        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+    </view>
+    
+    <!--
+        File Tree Content
+     --> 
+    
+    <view name="_filearea" x="1" y="${ 34 + parent._documentsTabs.height }" clip="true"
+          height="${ parent.height - 35 - parent._documentsTabs.height - parent._userSpace.height }" 
+          width="$once{ parent.width - 2 }">
+        
+        <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
+        
+        <attribute name="currentDragItem" value="null" />
+        
+        <handler name="oninit">
+            canvas.currentImagesListdraw = this;
+        </handler>
+        
+        <view name="_contentarea" layout="axis:y;inset:1" />
+        
+        <vscrollbar name="_scrollbar" />
+        <hscrollbar name="_hscrollbar" />
+    </view>
+    
+    <view name="_userSpace" height="40" valign="bottom" width="$once{ parent.width - 2 }">
+    	
+    	<labelText name="_userHomeSizeLabel" labelid="923" />
+    	
+    	<labelText name="_userHomeSize" align="right" />
+    	
+    	<labelText name="_roomHomeSizeLabel" labelid="924" y="20" />
+    	
+    	<labelText name="_roomHomeSize" align="right" y="20" />
+    	
+    </view>
+    
+</class>
+
+</library>

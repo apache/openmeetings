@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+	<include href="imageListInnerTableExplorer.lzx" />
+    
+    <include href="baseListPresentationItemExplorer.lzx" />
+    <include href="listPresentationThumbExplorer.lzx" />
+    <include href="listPresentationFilePDFExplorer.lzx" />
+    <include href="listPresentationFileOrigExplorer.lzx" />
+    
+</library>

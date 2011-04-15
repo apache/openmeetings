@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="presentationPreview" extends="view" x="1" y="33" clip="true"
+        height="${ parent.height - 34 }" width="$once{ parent.width - 2 }">
+	
+	
+	<attribute name="documentObj" value="null" />
+	<attribute name="refObjList" value="null" />
+	
+	<attribute name="miniButton" value="null" />
+	
+	<attribute name="uploadmoduleimgfolder" value="" type="string" />
+	
+	<handler name="oninit">
+		this.addFolderSequence(this.documentObj.fileHash);
+		if ($debug) Debug.write("presentationPreview 1 ",this.width);
+		if ($debug) Debug.write("presentationPreview 2 ",this.height);
+		this.miniButton = this.refObjList._documentsTabs.addItem(this);
+	</handler>
+	
+	<method name="addFolderSequence" args="foldername">
+        <![CDATA[
+        if ($debug) Debug.write("foldername ",foldername);
+        this.uploadmoduleimgfolder = '/';
+        this.uploadmoduleimgfolder += foldername;
+        canvas.uploadmoduleimgfolder = this.uploadmoduleimgfolder;
+        this.getListOfFilesExplorer.doCall();
+        ]]>
+    </method>
+    
+    <netRemoteCallHib name="getListOfFilesExplorer" funcname="fileservice.getListOfFilesExplorer" 
+        remotecontext="$once{ canvas.thishib }" >   
+        <netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+        <netparam><method name="getValue">return '';</method></netparam>
+        <netparam><method name="getValue">return parent.parent.uploadmoduleimgfolder;</method></netparam>
+        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>         
+        <handler name="ondata" args="value">    
+            if ($debug) Debug.write("getListOfFiles -1-: ",value);
+            if ($debug) Debug.write("getListOfFiles -2-: ","");
+            if ($debug) Debug.write("getListOfFiles -3-: ",parent.uploadmoduleimgfolder);
+            parent.renderItems(value);
+        </handler>
+    </netRemoteCallHib>     
+    
+    <method name="renderItems" args="filesObj" >
+        if ($debug) Debug.write("this: ",this);
+        if ($debug) Debug.write("filesObj: ",filesObj);
+        <![CDATA[
+            var value = filesObj;
+            if (value['presentationObject']==null){
+                if ($debug) Debug.warn("This should not happen value['presentationObject'] IS NULL");
+            } else {
+            
+                if ($debug) Debug.write("value.presentationObject: ",value.presentationObject);
+            
+                if (typeof(value.presentationObject.pdfDocument)=="undefined"){
+                    //Is PDF only
+                    //Debug.write("Is PDF only");
+                    this._imageslistdraw.addListpresentationFilePDF(value.presentationObject.originalDocument,value.presentationObject.swfDocument);
+                } else {
+                    //Is original Document + PDF-Document
+                    //Debug.write("Is original Document + PDF-Document");
+                    this._imageslistdraw.addListpresentationFileOrig(value.presentationObject.originalDocument,value.presentationObject.pdfDocument,value.presentationObject.swfDocument);
+                }
+            
+                for (var eg=0;eg<value.presentationObject.thumbs.thumbs.length;eg++){
+                    ////Debug.write(value.presentationObject.thumbs.thumbs[eg].filename);
+                    this._imageslistdraw.addPresentationThumb(value.presentationObject.thumbs.thumbs[eg].filename,(eg+1));
+                }
+            
+            }
+        ]]>   
+    </method> 
+    
+    <presentationFilesList name="_imageslistdraw" x="0" y="0" width="$once{ parent.width }"
+    				height="${ parent.height }" >
+    	<handler name="onclose">
+    		parent.miniButton.close();
+    	</handler>
+    </presentationFilesList>
+	
+</class>
+
+</library>

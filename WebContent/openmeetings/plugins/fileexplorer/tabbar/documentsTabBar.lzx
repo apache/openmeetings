@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="documentsTabBar" extends="view" height="0" y="14" layout="axis:x" >
+    
+    <attribute name="currentItem"/>
+    
+    <method name="sendSelection" args="itemRef">
+        this.hideAll();
+        itemRef.setSelection();
+        if (itemRef.refObj == null) {
+            parent._filearea.setAttribute("visibility","visible");
+            parent._trashBar.setAttribute("visibility","visible");
+            parent._fileBar.setAttribute("visibility","visible");
+            parent._border2.setAttribute("visibility","visible");
+        } else {
+        	//if ($debug) Debug.write(itemRef.refObj);
+            itemRef.refObj.setAttribute("visibility","visible");
+        }
+    </method>
+    
+    <method name="hideSelection" args="itemRef">
+        if (itemRef.refObj == null) {
+            parent._filearea.setAttribute("visibility","hidden");
+            parent._trashBar.setAttribute("visibility","hidden");
+            parent._fileBar.setAttribute("visibility","hidden");
+            parent._border2.setAttribute("visibility","hidden");
+        } else {
+            itemRef.refObj.setAttribute("visibility","hidden");
+        }
+    </method>
+    
+    <method name="close" args="buttonRef">
+    	buttonRef.refObj.destroy();
+    	buttonRef.destroy();
+    	this._content.subviews[this._content.subviews.length-1].onclick.sendEvent();
+    </method>
+    
+    <method name="hideAll">
+        <![CDATA[
+            for (var eg in this._content.subviews) {
+                this._content.subviews[eg].hide();
+            }
+        ]]>
+    </method>
+    
+    <method name="addItem" args="tab">
+        var t = new lz.documentsLoaderIcon(this._content,{
+                   resourceN:tab.documentObj.fileIcon,
+                   refObj:tab,
+                   labeltext:tab.documentObj.fileName
+                });
+        t.onclick.sendEvent();
+        return t;
+    </method>
+    
+    <view name="_border2" x="0" y="19" options="ignorelayout: true"
+          width="$once{ parent.width }" height="2" 
+          bgcolor="$once{ canvas.basebgcolorizer }" /> 
+           
+    <view name="_content" layout="axis:x">  
+        <documentsLoaderIcon name="_explorerTreeView" 
+            resourceN="file_explorer_view_tree_rsc" height="20" width="19" 
+            labeltext="$once{ canvas.getLabelName(717) }" />
+    </view>    
+    <view name="_border" height="20" width="1" 
+        bgcolor="$once{ canvas.basebgcolorizer }" />
+</class>
+
+</library>

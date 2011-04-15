@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="documentsLoaderIcon" extends="view" height="20" width="19" 
+       bgcolor="$once{ canvas.basebgcolorizer }"  >
+    
+    <attribute name="resourceN" value="" type="string" />
+    <attribute name="isselected" value="false" type="boolean" />
+    <attribute name="labeltext" value="" type="string" />
+    
+    <attribute name="refObj" value="null" />
+    
+    <method name="hide">
+        this._bg.setAttribute("height",this.height-2);
+        parent.parent.hideSelection(this);
+    </method>
+    
+    <method name="setSelection">
+    	this._bg.setAttribute("height",this.height);
+    </method>
+    
+    <handler name="onclick">
+        parent.parent.sendSelection(this);
+    </handler>
+    
+    <handler name="oninit">
+        if (this.isselected){
+            this.onclick.sendEvent();
+        }
+    </handler> 
+    
+    <method name="close">
+    	parent.parent.close(this);
+    </method>
+    
+    <handler name="onmouseover">
+        this._bg.setAttribute("bgcolor",canvas.baseMousecolorizer);
+    </handler>
+    
+    <handler name="onmouseout">
+        this._bg.setAttribute("bgcolor",0xFFFFFF);
+    </handler>
+    
+    <view name="_bg" x="1" y="1" width="$once{ parent.width-1 }" 
+          height="$once{ parent.height-2 }" bgcolor="0xFFFFFF" />
+    
+    <view x="2" y="2" resource="$once{ parent.resourceN }" />
+             
+    <labelTooltip text="$once{ parent.labeltext }" />
+</class>
+
+</library>
