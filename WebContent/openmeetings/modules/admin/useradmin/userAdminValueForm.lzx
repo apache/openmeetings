@@ -353,7 +353,7 @@
 		 -->
 		 
     <labelText labelid="158" width="200" y="460" resize="false" x="2"/>  
-        <resetCombobox name="status" width="200" y="460" x="120" editable="false" fontsize="11">
+        <resetCombobox name="status" width="270" y="460" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
 	            <![CDATA[
 	            this.addItem(canvas.getLabelName(159),'0');
@@ -365,12 +365,13 @@
 
 
     <labelText labelid="169" width="200" y="490" resize="false" x="2"/>  
-        <resetCombobox name="level" width="200" y="490" x="120" editable="false" fontsize="11">
+        <resetCombobox name="level" width="270" y="490" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
 	            <![CDATA[
 	            this.addItem(canvas.getLabelName(166),'1');
 	            this.addItem(canvas.getLabelName(167),'2');
 				this.addItem(canvas.getLabelName(168),'3');
+				this.addItem(canvas.getLabelName(1311),'4');
 	            this.selectItem('1');
 	            ]]>
 	        </handler> 
