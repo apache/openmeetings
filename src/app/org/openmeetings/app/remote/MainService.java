@@ -469,8 +469,14 @@ public class MainService implements IPendingServiceCallback {
 			}
 			
 			if (loginReturn == null) {
+				
+				log.debug("loginReturn IS NULL for SID: "+soapLogin.getSessionHash());
+				
 				return -1L;
 			} else if (loginReturn < 0) {
+				
+				log.debug("loginReturn IS < 0 for SID: "+soapLogin.getSessionHash());
+				
 				return loginReturn;
 			} else {
 				
@@ -551,7 +557,7 @@ public class MainService implements IPendingServiceCallback {
     	try {
         	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
         	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-        	if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+        	if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
         		
         		Sessiondata sd = Sessionmanagement.getInstance().getSessionByHash(SID);
         		if (sd == null || sd.getSessionXml() == null) {

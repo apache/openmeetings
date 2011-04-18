@@ -429,11 +429,11 @@ public class UserService {
 	
 	public String setUserObjectMainLandingZone(String SID, String username, String firstname, String lastname, 
 			String profilePictureUrl, String email, Long externalUserId, String externalUserType){
-		log.debug("UserService.setUserObject");
+		log.debug("UserService.setUserObjectMainLandingZone");
 	     
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
+	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);	
 			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
@@ -469,6 +469,9 @@ public class UserService {
 				}
 				
 			} else {
+				
+				log.debug("Invalid access via SOAP "+SID+" UserD"+users_id+" "+user_level);
+				
 				return ""+new Long(-26);
 			}
 		} catch (Exception err){
