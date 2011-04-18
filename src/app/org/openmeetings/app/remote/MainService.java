@@ -253,6 +253,25 @@ public class MainService implements IPendingServiceCallback {
     	}
     	return null;
     }
+    
+    public Object webLoginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id, Long ldapConfigId){
+    	
+    	Object returnValue = this.loginUser(SID, usernameOrEmail, Userpass, storePermanent, language_id, ldapConfigId);
+    	
+    	if (returnValue instanceof Long) {
+    		return returnValue;
+    	} else if (returnValue instanceof Users) {
+    		Users us = (Users) returnValue;
+    		if (AuthLevelmanagement.getInstance().checkUserLevel(us.getLevel_id())) {
+    			return us;
+    		} else {
+    			return -52L;
+    		}
+    	}
+    	
+    	return returnValue;
+    	
+    }
        
     /**
      * auth function, use the SID you get by getsessiondata

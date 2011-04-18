@@ -3929,4 +3929,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1308" name="room administration">
     <value>Owner Id</value>
   </string>
+  <string id="1309" name="login error">
+    <value>Please enter a password</value>
+  </string>
+  <string id="1310" name="login error">
+    <value>You need an account with User-Level User, Moderator or Admin</value>
+  </string>
 </language>

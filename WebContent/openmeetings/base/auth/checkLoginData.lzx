@@ -5,7 +5,7 @@
 <class name="checkLoginData" extends="labelExplorerBox" labelid="108"
     docking="true" resizeable="false" closable="false" 
     width="460" height="260"
-     x="$once{ canvas.width/2 - this.width/2 }"  y="120">
+     x="$once{ canvas.width/2 - this.width/2 }"  y="60">
     
     <handler name="onclose">
         if (this.childObj!=null) this.childObj.close();
@@ -197,7 +197,7 @@
                         canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
                     }
                     this.parent.close();
-                    new lz.checkLoginData(canvas);
+                    new lz.checkLoginData(canvas.main_content._content.inner);
                 }
             </handler>
             <handler name="onkeyup" args="key">
@@ -333,6 +333,12 @@
     				   y="$once{ parent.height-40 }" height="22">
         <handler name="onclick" >
             this.parent.errormess.setAttribute('text','');
+            
+            if (this.parent.userpass.getText().length == 0) {
+            	new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-51});
+            	return;
+            }
+            
             this.parent.loginUser.doCall();
             
             //Recheck the Applet Status 

@@ -59,6 +59,7 @@ public class ImportInitvalues {
 		Usermanagement.getInstance().addUserLevel("User", 1);
 		Usermanagement.getInstance().addUserLevel("Moderator", 2);
 		Usermanagement.getInstance().addUserLevel("Admin", 3);
+		Usermanagement.getInstance().addUserLevel("Web-Service (only access via SOAP)", 4);
 
 		/* ########################
 		 * Dashboard Menu Points

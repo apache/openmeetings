@@ -5,6 +5,10 @@
     docking="true" resizeable="false" closable="true" width="300" 
 	x="$once{ canvas.width/2-this.width/2 }" height="130">
 	
+	<handler name="oninit">
+        this.bringToFront();
+    </handler>
+	
     <attribute name="errortext" value="" type="string" />
 	<attribute name="errorid" value="0" type="number" />
 
@@ -50,7 +54,7 @@
     
     <handler name="oninit">
         lz.ModeManager.makeModal(this);
-        Debug.write("contentsavewindow: ",errorid);
+        if ($debug) Debug.write("contentsavewindow: ",errorid);
         this.startSave();
     </handler>
     

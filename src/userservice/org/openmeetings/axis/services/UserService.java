@@ -103,7 +103,7 @@ public class UserService {
     		Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);		
 	    	
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				Configuration conf = Configurationmanagement.getInstance().getConfKey(3L, "default.timezone");
 				String jName_timeZone = "";
@@ -160,7 +160,7 @@ public class UserService {
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
 
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
 
 	    		Long user_id = Usermanagement.getInstance().registerUser(
 		    			username, userpass, 
@@ -215,7 +215,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email);
@@ -270,7 +270,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
@@ -311,7 +311,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
@@ -374,7 +374,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
@@ -434,7 +434,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
@@ -487,7 +487,7 @@ public class UserService {
 			
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, lastname, 
 						profilePictureUrl, email, externalUserId, externalUserType);
@@ -551,7 +551,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(username, firstname, "", 
 						"", "", externalUserId, externalUserType);
@@ -600,7 +600,7 @@ public class UserService {
 		try {
 	    	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	    	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);			
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 				
 				return Organisationmanagement.getInstance().addUserToOrganisation(user_id, organisation_id, users_id, comment);
 				
@@ -617,7 +617,7 @@ public class UserService {
 		try {   
 	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	        if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)){
 	        	return Organisationmanagement.getInstance().getUsersSearchResultByOrganisationId(organisation_id, start, max, orderby, asc);
 	        } else {
 	        	log.error("Need Administration Account");

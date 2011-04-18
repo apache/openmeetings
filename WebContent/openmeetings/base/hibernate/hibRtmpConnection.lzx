@@ -633,7 +633,7 @@
                     
                     if (value.sessionData == null) {
                     	if ($debug) Debug.write("No Language Found to assign");
-                    	new lz.checkLoginData(canvas);
+                    	new lz.checkLoginData(canvas.main_content._content.inner);
                     	return;
                     }
                     
@@ -676,12 +676,12 @@
                         }
                     } else {
                     	if ($debug) Debug.write("No Organization Found to assign");
-                    	new lz.checkLoginData(canvas);
+                    	new lz.checkLoginData(canvas.main_content._content.inner);
                     }
          	      
          	   } else {
          	   	   if ($debug) Debug.write("No RPC-Sesion Found to assign");
-         	   	   new lz.checkLoginData(canvas);
+         	   	   new lz.checkLoginData(canvas.main_content._content.inner);
          	   }
          	]]>
         </handler>

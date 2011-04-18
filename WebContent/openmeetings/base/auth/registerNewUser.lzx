@@ -178,7 +178,7 @@
          <handler name="ondata" args="value">
          	<![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            Debug.write("registerUserByObject: ",value);
+            if ($debug) Debug.write("registerUserByObject: ",value);
 			if (!(value<0)){
 				//Debug.write("successfully registered");
                  new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-18});
