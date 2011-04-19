@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="whiteboardMiniButton" extends="view" width="250" height="18" y="2"
+    bgcolor="$once{ canvas.basebgcolorizer }">
+     
+    <attribute name="btnName" value="" type="string" />
+    <attribute name="objRef" value="null" />
+
+    <attribute name="zielx" value="200" type="number" />
+    <attribute name="zielwidth" value="100" type="number" />    
+    
+    <attribute name="isactive" value="true" type="boolean" />
+    
+    <attribute name="isHidden" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        this.calcTextWidth();
+        parent.onwidth.sendEvent();
+    </handler>
+    
+    <handler name="onwidth">
+        if (this.isinited){
+            this.calcTextWidth();
+        }
+    </handler>
+    
+    <method name="disableItem">
+        //if ($debug) Debug.write("disableItem :: set visibility to hidden");
+        this.isHidden = true;
+        this.setAttribute("visibility","hidden");
+        //this.destroy();
+    </method>
+    
+    <method name="enableItem">
+        this.setAttribute("visibility","visible");
+        this.isHidden = false;
+    </method>
+    
+    <method name="calcTextWidth">
+        <![CDATA[
+            if (this.isHidden) {
+                return;
+            }
+            ////////if ($debug)  //Debug.write(this,this._text,this._text.getTextWidth());
+            if (this._text.getTextWidth()>(this.width-24)) {
+                this._long.setAttribute('visibility','visible');
+                this._text.setAttribute('width',this.width-26);
+            } else {
+                this._long.setAttribute('visibility','hidden');
+                this._text.setAttribute('width',this.width-18);
+            }
+        ]]>        
+    </method>
+        
+    <handler name="onclick">
+        if (this.isHidden) {
+            return;
+        }
+        this._minimizebtn_mo.setAttribute('visibility','visible');
+        this._minimizebtn_dn.setAttribute('visibility','hidden');
+        if ($debug) Debug.write(" :: onclick :: ");
+        this.sendActiveWindow(this.objRef);
+    </handler>
+    
+    <handler name="onmouseover">
+        if (this.isHidden) {
+            return;
+        }
+        this._minimizebtn_mo.setAttribute('visibility','visible');
+        this._minimizebtn_dn.setAttribute('visibility','hidden');
+    </handler>
+    <handler name="onmouseout">
+        if (this.isHidden) {
+            return;
+        }
+        if (this.isactive) {
+            this._minimizebtn_mo.setAttribute('visibility','hidden');
+            this._minimizebtn_dn.setAttribute('visibility','visible');
+        } else {
+            this._minimizebtn_mo.setAttribute('visibility','hidden');
+            this._minimizebtn_dn.setAttribute('visibility','hidden');
+        }        
+    </handler>
+    <handler name="onmousedown">
+        if (this.isHidden) {
+            return;
+        }        
+        this._minimizebtn_mo.setAttribute('visibility','hidden');
+        this._minimizebtn_dn.setAttribute('visibility','visible');
+    </handler>
+    <handler name="onmouseup">
+        if (this.isHidden) {
+            return;
+        }        
+        this._minimizebtn_mo.setAttribute('visibility','visible');
+        this._minimizebtn_dn.setAttribute('visibility','hidden');
+    </handler>
+    
+    <method name="sendActiveWindow" args="win">
+        this.parent.sendActiveWindow(this,win);
+    </method>    
+
+	<method name="activateSynced">
+		this.parent.sendActiveWindowSynced(this,win);
+	</method>
+    
+    <view name="_minimizebtn_mo" width="${ parent.width-2 }" height="16"
+        bgcolor="white" opacity="0.3" visibility="hidden" x="1" y="1" />
+
+    <view name="_minimizebtn_dn" width="${ parent.width-2 }" height="16"
+        bgcolor="black" opacity="0.3" visibility="hidden" x="1" y="1" />
+    
+
+    <text text="${ parent.btnName }" fgcolor="0xFFFFFF" resize="false" 
+        x="1" fontsize="10" name="_text" />
+    
+        <view y="1" x="${ parent.width-18 }" name="_close"
+            resource="btn_presenter_close"
+            visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" 
+            onmouseover="this.setAttribute('frame',2)"
+            onmouseout="this.setAttribute('frame',1)"
+            onmousedown="this.setAttribute('frame',3)"
+            onmouseup="this.setAttribute('frame',1)" >
+            <handler name="onclick">
+                this.setAttribute('frame',2);
+                new lz.confirmationSingle(canvas,{
+                           refObj:this,
+                           labeliderror:1161,
+                           showCheckBox:false
+                        });
+            </handler>
+            <method name="sendConfirmation" args="bool,askAgain">
+                if (bool) {
+                    this.parent.parent.removeObject(this.parent);
+                }
+            </method>
+            <labelTooltip text="close" />
+        </view>     
+ 
+    <text y="1" name="_long" text="..." 
+        x="${ parent.width-28 }" fontsize="$once{ canvas.defaultFontSize }" />
+
+    <labelTooltip text="${ parent.btnName }" />
+</class>
+
+</library>

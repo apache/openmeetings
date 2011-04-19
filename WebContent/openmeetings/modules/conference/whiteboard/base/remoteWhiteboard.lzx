@@ -7,16 +7,22 @@
 	<attribute name="loadingObjectList" value="null" />
 	
 	<attribute name="loadObjectDelegate" value="null" />
-
+	
 	<method name="loadObjectList" args="whiteBoardObject">
 		<![CDATA[
 		
-			//if ($debug) Debug.write("loadObjectList :1: ",whiteBoardObject.fullFit,whiteBoardObject.zoom);
+			if ($debug) Debug.write("loadObjectList :1: ",whiteBoardObject,whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
 			parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
 			this.setAttribute("x",whiteBoardObject.x);
 			this.setAttribute("y",whiteBoardObject.y);	
+			
+			/*
+			if (whiteBoardObject.brainStorming != null) {
+                this.loadBrainStormingObject(whiteBoardObject.brainStorming);
+            }
+            */
 			
 			this.fullFit = whiteBoardObject.fullFit;
 			
@@ -27,8 +33,8 @@
 			
 			this.loadingObjectList = new Array();
 			
-			for (var eg in whiteBoardObject.objList) {
-				this.loadingObjectList.push(whiteBoardObject.objList[eg]);
+			for (var eg in whiteBoardObject.roomItems) {
+				this.loadingObjectList.push(whiteBoardObject.roomItems[eg]);
 			}
 			
 			//return;

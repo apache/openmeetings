@@ -5,5 +5,6 @@
 
 	<include href="fileexplorer/"/>
     <include href="sponsors/"/>
+    <include href="conference/"/>
 
 </library>

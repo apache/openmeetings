@@ -111,7 +111,7 @@
                  width="${ parent.width }" />
     </basePropertyPanel>    
        
-    <fixedWhiteboardPanel name="_whiteboard" labelid="615"
+    <fixedFileExplorerWhiteboardPanel name="_whiteboard" labelid="615"
         y="0" x="${ parent._sidePanel.width }" restricted="true" 
         width="${ canvas.width - parent._sidePanel.width }"
         height="${ canvas.height - (parent._chatPanelStrict.height) - 28 }" />

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<resource name="add_whiteboard_rsc" src="resources/edit_add.png" />
+
+	<include href="basePropertyPanelWhiteboard.lzx" />
+    <include href="fixedFileExplorerWhiteBoard.lzx" />
+    <include href="fixedFileExplorerWhiteboardPanel.lzx" />
+    <include href="whiteboardMiniButton.lzx" />
+    <include href="whiteboardBarmenu.lzx" />
+
+</library>

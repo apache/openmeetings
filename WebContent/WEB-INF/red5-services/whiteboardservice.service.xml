@@ -10,9 +10,10 @@
     <!-- Class for Methods which can be invoked by the client -->
     <bean id="whiteboardservice.service"  
         class="org.openmeetings.app.remote.WhiteBoardService">
-        <property name="scopeApplicationAdapter" ref="web.handler.openmeetings" />
+        <property name="scopeApplicationAdapter" ref="web.handler" />
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
         <property name="whiteBoardObjectListManager" ref="openmeetings.WhiteBoardObjectListManager" />
-    </bean>     
+        <property name="whiteBoardObjectListManagerById" ref="openmeetings.WhiteBoardObjectListManagerById" />
+    </bean>   
                     
 </beans>
