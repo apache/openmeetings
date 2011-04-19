@@ -38,7 +38,11 @@
  
     <bean id="openmeetings.WhiteBoardObjectListManager"
         class="org.openmeetings.app.remote.red5.WhiteBoardObjectListManager">
-    </bean>      
+    </bean> 
+    
+    <bean id="openmeetings.WhiteBoardObjectListManagerById"
+        class="org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById">
+    </bean>       
         
     <!-- DATABASE Connection via hibernate
     <bean id="theSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">

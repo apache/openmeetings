@@ -1069,6 +1069,16 @@
             </handler>   
         </netRemoteCallHib>  
         
+         <netRemoteCallHib name="sendVarsToWhiteboardById" funcname="sendVarsToWhiteboardById">
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
+                    canvas._drawarea.parent.parent.parent.sendWatchObjectByWhiteboard(value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib> 
+        
         <!--
             Adds this User to the List of current Moderators
          -->
@@ -1340,22 +1350,32 @@
                 
                 ]]>
             </handler>   
-        </netRemoteCallHib>    
+        </netRemoteCallHib> 
         <netRemoteCallHib name="sendVarsToMessage" funcname="sendVarsToMessage">
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
                     //Debug.write("sendVarsToMessage : ",value);
                     if (value[0]=='audioActivity'){
-	                    //canvas.currentModApply
-	                    //Debug.write("audioActivity Client ",value[1],value[2]);
-	                    canvas._videocontainer.setSpeakingByPos(value[2],value[1]);	                    
-                	} else if (value[0]=='chat'){
-                		// Not Used
-                		Debug.warn("Not Used");
+                        //canvas.currentModApply
+                        //Debug.write("audioActivity Client ",value[1],value[2]);
+                        canvas._videocontainer.setSpeakingByPos(value[2],value[1]);                     
+                    } else if (value[0]=='chat'){
+                        // Not Used
+                        //Debug.warn("Not Used");
                         canvas.addChatHistory(value);
-                    } else if(value[0]=='fileslist'){
-                        canvas.currentImagesListdraw.parent.onvisible.sendEvent(true);
+                    } else if (value[0]=='activateWhiteboard'){
+                        // Not Used
+                        //Debug.warn("Not Used");
+                        canvas._drawarea.parent.parent.parent.activateWhiteboard(value);
+                    } else if (value[0]=='newWhiteboard'){
+                        // Not Used
+                        //Debug.warn("Not Used");
+                        canvas._drawarea.parent.parent.parent.newWhiteboard(value);
+                    } else if (value[0]=='removeWindow'){
+                        // Not Used
+                        //Debug.warn("Not Used");
+                        canvas._drawarea.parent.parent.parent.removeWindow(value);
                     } else if(value[0]=='fileslist'){
                         canvas.currentImagesListdraw.parent.onvisible.sendEvent(true);
                     } else if(value[0]=='initBrowser'){
@@ -1365,9 +1385,10 @@
                     } else if(value[0]=='closeBrowserURL'){
                         canvas.closeBrowser(value);
                     }
+                    
                 ]]>
             </handler>   
-        </netRemoteCallHib>  
+        </netRemoteCallHib>   
         <netRemoteCallHib name="sendVarsModeratorGeneral" funcname="sendVarsModeratorGeneral">
             <netparam name="vars"><method name="getValue">return canvas.VarsModeratorGeneral;</method></netparam>
             <handler name="ondata" args="value">

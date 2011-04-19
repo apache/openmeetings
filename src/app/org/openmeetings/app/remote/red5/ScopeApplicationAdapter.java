@@ -2156,6 +2156,132 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 	}
 	
+	/**
+	 * This Function is triggered from the Whiteboard
+	 * 
+	 * @param whiteboardObj
+	 * @return
+	 */
+	public synchronized void sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
+		//
+		try {
+			
+			//In previous version this has been always a Map, now its a List
+			//so I re-wrapp that class to be a Map again.
+			//swagner 13.02.2009
+			//log.debug("*..*sendVars1: " + whiteboardObjParam);
+			//log.debug("*..*sendVars2: " + whiteboardObjParam.getClass());
+			//log.debug("*..*sendVars3: " + whiteboardObjParam.getClass().getName());
+			
+			Map whiteboardObj = new HashMap();
+			int i = 0;
+			for (Iterator iter = whiteboardObjParam.iterator();iter.hasNext();) {
+				Object obj = iter.next();
+				//log.debug("obj"+obj);
+				whiteboardObj.put(i, obj);
+				i++;
+			}
+			
+			//Map whiteboardObj = (Map) whiteboardObjParam;
+ 			
+			// Check if this User is the Mod:
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			
+			if (currentClient == null) {
+				return;
+			}
+			
+			Long room_id = currentClient.getRoom_id();	
+				
+			//log.debug("***** sendVars: " + whiteboardObj);
+			
+			//Store event in list
+			String action = whiteboardObj.get(2).toString();	
+			
+			if (action.equals("deleteMindMapNodes")) {
+				
+				//Simulate Single Delete Events for z-Index
+				List actionObject = (List) whiteboardObj.get(3);
+				
+				List<List> itemObjects = (List) actionObject.get(3);
+				
+				Map whiteboardTempObj = new HashMap();
+				whiteboardTempObj.put(2,"delete");
+				
+				for (List itemObject : itemObjects) {
+					
+					List<Object> tempActionObject = new LinkedList<Object>();
+					tempActionObject.add("mindmapnode");
+					tempActionObject.add(itemObject.get(0)); //z-Index -8
+					tempActionObject.add(null); //simulate -7
+					tempActionObject.add(null); //simulate -6
+					tempActionObject.add(null); //simulate -5
+					tempActionObject.add(null); //simulate -4
+					tempActionObject.add(null); //simulate -3
+					tempActionObject.add(null); //simulate -2
+					tempActionObject.add(itemObject.get(1)); //Object-Name -1
+					
+					whiteboardTempObj.put(3, tempActionObject);
+					
+					WhiteboardManagement.getInstance().addWhiteBoardObjectById(room_id, whiteboardTempObj, whiteboardId);
+					
+				}
+				
+			} else {
+				
+				WhiteboardManagement.getInstance().addWhiteBoardObjectById(room_id, whiteboardObj, whiteboardId);
+				
+			}
+			
+			
+			
+			int numberOfUsers = 0;
+			
+			//This is no longer necessary
+			//boolean ismod = currentClient.getIsMod();
+			
+			//log.debug("*..*ismod: " + ismod);
+	
+			//if (ismod) {
+			
+			Map<String,Object> sendObject = new HashMap<String,Object>();
+			sendObject.put("id", whiteboardId);
+			sendObject.put("param", whiteboardObjParam);
+			
+			//Notify all Clients of that Scope (Room)
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+							if ((rcl == null) || (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())) {
+	    						continue;
+	    					} else {
+								//log.debug("*..*idremote: " + rcl.getStreamid());
+								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
+								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById", new Object[] { sendObject },this);
+									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
+									numberOfUsers++;
+								}
+							}
+						}
+					}						
+				}
+			}			
+			
+			//return numberOfUsers;
+			//} else {
+			//	// log.debug("*..*you are not allowed to send: "+ismod);
+			//	return -1;
+			//}
+		} catch (Exception err) {
+			log.error("[sendVarsByWhiteboardId]",err);
+		}
+	}
+	
 
 	public synchronized int sendVarsModeratorGeneral(Object vars) {
 		log.debug("*..*sendVars: " + vars);

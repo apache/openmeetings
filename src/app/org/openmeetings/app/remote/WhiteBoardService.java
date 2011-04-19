@@ -1,5 +1,6 @@
 package org.openmeetings.app.remote;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openmeetings.app.conference.whiteboard.WhiteBoardObject;
+import org.openmeetings.app.conference.whiteboard.WhiteboardObject;
+import org.openmeetings.app.conference.whiteboard.WhiteboardObjectList;
 import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -18,6 +20,7 @@ import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManager;
+import org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
@@ -34,7 +37,7 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class WhiteBoardService implements IPendingServiceCallback {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, ScopeApplicationAdapter.webAppRootKey);
+private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, "openmeetings");
 	
 	private WhiteBoardService() {}
 	
@@ -44,6 +47,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	private ScopeApplicationAdapter scopeApplicationAdapter = null;
 	private ClientListManager clientListManager = null;
 	private WhiteBoardObjectListManager whiteBoardObjectListManager = null;
+	private WhiteBoardObjectListManagerById whiteBoardObjectListManagerById = null;
 	 
 	public static synchronized WhiteBoardService getInstance() {
 		if (instance == null) {
@@ -73,12 +77,18 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			ScopeApplicationAdapter scopeApplicationAdapter) {
 		this.scopeApplicationAdapter = scopeApplicationAdapter;
 	}
-
+	public WhiteBoardObjectListManagerById getWhiteBoardObjectListManagerById() {
+		return whiteBoardObjectListManagerById;
+	}
+	public void setWhiteBoardObjectListManagerById(
+			WhiteBoardObjectListManagerById whiteBoardObjectListManagerById) {
+		this.whiteBoardObjectListManagerById = whiteBoardObjectListManagerById;
+	}
 	/**
 	 * Loading the List of Objects on the whiteboard
 	 * @return HashMap<String,Map>
 	 */
-	public WhiteBoardObject getRoomItems(){
+	public WhiteboardObject getRoomItems(){
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -101,6 +111,122 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			//return itemList;
 		} catch (Exception err) {
 			log.error("[getRoomItems]",err);
+		}
+		return null;
+	}
+	
+	public Long getNewWhiteboardId() {
+		try {
+			
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			Long room_id = currentClient.getRoom_id();
+			
+			
+			Long whiteBoardId =  this.whiteBoardObjectListManagerById.getNewWhiteboardId(room_id);
+			
+			return whiteBoardId;
+			
+		} catch (Exception err) {
+			log.error("[deleteWhiteboard]",err);
+		}
+		return null;
+	}
+	
+	public Boolean deleteWhiteboard(Long whiteBoardId) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			Long room_id = currentClient.getRoom_id();
+			
+			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(room_id);
+		
+			for (Iterator<Long> iter = whiteboardObjectList.getWhiteboardObjects().keySet().iterator();iter.hasNext();) {
+				Long storedWhiteboardId = iter.next();
+				
+				log.debug(" :: storedWhiteboardId :: "+storedWhiteboardId);
+				
+				if (storedWhiteboardId.equals(whiteBoardId)) {
+					log.debug("Found Whiteboard to Remove");
+				}
+			}
+			Object returnValue = whiteboardObjectList.getWhiteboardObjects().remove(whiteBoardId);
+			
+			log.debug(" :: whiteBoardId :: "+whiteBoardId);
+			
+			this.whiteBoardObjectListManagerById.setWhiteBoardObjectListRoomObj(room_id, whiteboardObjectList);
+			
+			if (returnValue != null) {
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (Exception err) {
+			log.error("[deleteWhiteboard]",err);
+		}
+		return null;
+	}
+	
+	public WhiteboardObjectList getRoomItemsBy(){
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+			Long room_id = currentClient.getRoom_id();
+			
+			log.debug("getRoomItems: "+room_id);
+			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(room_id);
+			
+			LinkedList<List> completeList = new LinkedList<List>();
+			
+			//LinkedList<List> itemList = new LinkedList<List>();
+			
+			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
+				
+				Long whiteBoardId = this.whiteBoardObjectListManagerById.getNewWhiteboardId(room_id);
+				
+				this.whiteBoardObjectListManagerById.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id, new WhiteboardObject(), whiteBoardId);
+				
+				log.debug("Init New Room List");
+				
+				whiteboardObjectList = this.whiteBoardObjectListManagerById.getWhiteBoardObjectListByRoomId(room_id);
+				
+				return whiteboardObjectList;
+				
+			} else {
+				
+				return whiteboardObjectList;
+				
+//				for (Iterator<Long> it = whiteboardObjectList.getWhiteboardObjects().keySet().iterator();it.hasNext();){
+//					WhiteboardObject whiteboardObject = whiteboardObjectList.getWhiteboardObjects().get(it.next());
+//					
+//					LinkedList<List> itemList = new LinkedList<List>();
+//					for (Iterator<String> it2 = whiteboardItems.keySet().iterator();it2.hasNext();){
+//						itemList.add(whiteboardItems.get(it2.next()));
+//					}
+//					
+//					completeList.add(itemList);
+//				}
+				
+//				for (Iterator<Long> it = roomItems.keySet().iterator();it.hasNext();){
+//					HashMap<String,List> whiteboardItems = roomItems.get(it.next());
+//					
+//					LinkedList<List> itemList = new LinkedList<List>();
+//					for (Iterator<String> it2 = whiteboardItems.keySet().iterator();it2.hasNext();){
+//						itemList.add(whiteboardItems.get(it2.next()));
+//					}
+//					
+//					completeList.add(itemList);
+//				}
+				
+			}
+			
+			//return completeList;
+		} catch (Exception err) {
+			log.error("[getRoomItemsBy]",err);
 		}
 		return null;
 	}
@@ -711,6 +837,23 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		} catch (Exception err) {
 			log.error("[removeUserFromAllLists]",err);
 		}
+	}
+	
+	public String[] getClipArtIcons() {
+		try {
+			
+			String current_dir = ScopeApplicationAdapter.webAppPath
+									+ File.separatorChar + "public"
+									+ File.separatorChar + "cliparts";
+			
+			File clipart_dir = new File(current_dir);
+			
+			return clipart_dir.list();
+			
+		} catch (Exception err) {
+			log.error("[getClipArtIcons]",err);
+		}
+		return null;
 	}
 	
 	public void resultReceived(IPendingServiceCall arg0) {
