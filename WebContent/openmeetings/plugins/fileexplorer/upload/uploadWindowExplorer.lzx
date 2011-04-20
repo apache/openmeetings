@@ -66,7 +66,7 @@
     
         <method name="onCompleteByRemote" args="tArrayValueObj">
             
-            if ($debug) Debug.write("onCompleteByRemote ");
+            if ($debug) Debug.write("onCompleteByRemote ",tArrayValueObj);
             this.parent.progressBar.setValue(100);
             this.parent.upload.setAttribute('enabled', false);
             this.parent.upload.setAttribute("visible",false);

@@ -1590,7 +1590,7 @@
                                 error = true;
                             }
                         }
-                        canvas.currentUploadWindow.myFileUpload.onCompleteByRemote();
+                        canvas.currentUploadWindow.myFileUpload.onCompleteByRemote(value);
                         if (error) {
                             new lz.converterPopup(canvas.main_content._content.inner,{error:value.error});
                         }

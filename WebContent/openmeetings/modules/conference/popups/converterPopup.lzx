@@ -2,7 +2,7 @@
 <library>
 
 <class name="converterPopup" extends="labelExplorerBox" labelid="204"
-	docking="true" resizeable="false" closable="true" 
+	docking="true" resizeable="true" closable="true" 
     width="324" x="200" height="230">
 
 	<attribute name="error" value="null" />
@@ -18,7 +18,7 @@
         this.errorView.errorView.setAttribute('text',dtString);
     </handler>
 
-	<view y="24" width="318" height="200" x="2" clip="true" name="errorView">
+	<view y="24" width="${ parent.width - 4 }" height="${ parent.height - 30 }" x="2" clip="true" name="errorView">
 		<text y="30" fontsize="10" fontstyle="bold" name="errorView"
 			multiline="true" width="300" selectable="true" />
 		<vscrollbar />
