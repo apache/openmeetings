@@ -3947,4 +3947,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1311" name="user administration">
     <value>Web-Service (only access via SOAP)</value>
   </string>
+  <string id="1312" name="upload file explorer">
+    <value>Do directly load to whiteboard</value>
+  </string>
+  <string id="1313" name="whiteboard close confirmation">
+    <value>Do you really want to remove this whiteboard? This action cannot be undone!</value>
+  </string>
 </language>

@@ -200,7 +200,7 @@
 	</view>
 	
 	<labelCheckbox name="_loadToWhiteboard" x="4" y="174" fontsize="11" 
-				   labelid="1328" value="true" />
+				   labelid="1312" value="true" />
 	
 	<simpleLabelButton name="_close" x="100" y="194" labelid="595" width="160" height="20">
 		<handler name="onclick">
