@@ -7,5 +7,6 @@
     <include href="videoFileExplorerItem.lzx" />
     <include href="documentFileExplorerItem.lzx" />
     <include href="rootFileExplorerItem.lzx" />
+    <include href="wmlFileExplorerItem.lzx" />
     
 </library>

@@ -23,5 +23,7 @@
     <property name="flvWidth" type="int" column="flv_width"/>
     <property name="flvHeight" type="int" column="flv_height"/>
     <property name="previewImage" type="string" column="preview_image"/>
+    <property name="wmlFilePath" type="string" column="wml_file_path"/>
+    <property name="isStoredWmlFile" type="boolean" column="is_stored_wml_file"/>
   </class>
 </hibernate-mapping>

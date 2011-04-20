@@ -3945,4 +3945,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1313" name="whiteboard close confirmation">
     <value>Do you really want to remove this whiteboard? This action cannot be undone!</value>
   </string>
+  <string id="1314" name="whiteboard load WML">
+    <value>Load to whiteboard</value>
+  </string>
 </language>

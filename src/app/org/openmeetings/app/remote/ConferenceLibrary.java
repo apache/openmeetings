@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -753,12 +754,19 @@ public class ConferenceLibrary {
 		return null;
 	}	
 	
-	public Long saveAsObject(String SID, Long room_id, String fileName, Object t){
+	public Long saveAsObject(String SID, Long room_id, String fileName, Object tObjectRef){
 		try {
 	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
 	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){		
-				LinkedHashMap tObject = (LinkedHashMap)t;
+				//LinkedHashMap tObject = (LinkedHashMap)t;
+	        	//ArrayList tObject = (ArrayList)t;
+	        	
+	        	log.debug("saveAsObject :1: "+tObjectRef);
+	        	log.debug("saveAsObject :2: "+tObjectRef.getClass().getName());
+	        	
+	        	ArrayList tObject = (ArrayList) tObjectRef;
+	        	
 				log.debug("saveAsObject"+tObject.size());
 				
 				String roomName = room_id.toString();				
@@ -766,17 +774,34 @@ public class ConferenceLibrary {
 						+ File.separatorChar + "upload" + File.separatorChar
 						+ roomName + File.separatorChar;
 
-				log.error("### this is my working directory: "+current_dir);
+				log.debug("### this is my working directory: "+current_dir);
 				
-				return LibraryDocumentConverter.getInstance().writeToLocalFolder(current_dir, fileName, tObject);
+				String wmlPath = LibraryDocumentConverter.getInstance().writeToLocalFolder(current_dir, fileName, tObject);
+				
+				//String wmlPhat = current_dir + File.separatorChar+fileName +".xml";
+				
+				Long fileExplorerId = FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileName, "", 0L, 
+											null, //OwnerID => only set if its directly root in Owner Directory, other Folders and Files
+													//maybe are also in a Home directory but just because their parent is
+											room_id, users_id, 
+											false, //isFolder
+											false, //isImage
+											false, //isPresentation
+											wmlPath, //WML Path
+											true //isStoredWML file
+											);
+				
+				
+				
+				return fileExplorerId;
 	        }
 		} catch (Exception err){
 			log.error("[saveAsImage] ",err);
 		}	        
-		return null;
+		return -1L;
 	}
 	
-	public LinkedHashMap loadWmlObject(String SID, Long room_id, String fileName){
+	public ArrayList loadWmlObject(String SID, Long room_id, String fileName){
 		try {
 	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);  
@@ -885,7 +910,9 @@ public class ConferenceLibrary {
 								room_id, users_id, 
 								true, //isFolder
 								false, //isImage
-								false //isPresentation
+								false, //isPresentation
+								"", //WML Paht
+								false //isStoredWML file
 								);
 	        	} else {
 		        	return FileExplorerItemDaoImpl
@@ -895,7 +922,9 @@ public class ConferenceLibrary {
 										room_id, users_id, 
 										true, //isFolder
 										false, //isImage
-										false //isPresentation
+										false, //isPresentation
+										"", //WML Paht
+										false //isStoredWML file
 										);
 	        	}
 	        }

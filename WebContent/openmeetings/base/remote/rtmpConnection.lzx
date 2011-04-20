@@ -248,7 +248,7 @@
                 return -1;
             }
 
-            ////Debug.write("call", this, this.parent, this.parent.status);
+            //if ($debug) Debug.write("call", this, this.parent, this.parent.status);
             var rtmpObject = null;
             if (this.parent instanceof lz.rtmpConnection){
         	    rtmpObject = this.parent;

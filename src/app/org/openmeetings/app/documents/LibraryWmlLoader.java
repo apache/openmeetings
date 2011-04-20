@@ -2,6 +2,7 @@ package org.openmeetings.app.documents;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -36,7 +37,7 @@ public class LibraryWmlLoader {
 		return instance;
 	}
 
-	public LinkedHashMap loadWmlFile(String filePath, String fileName){
+	public ArrayList loadWmlFile(String filePath, String fileName){
 		try {
 			LinkedHashMap lMap = new LinkedHashMap();
 			String filepathComplete = filePath+wmlFolderName+fileName+fileExt;
@@ -52,9 +53,10 @@ public class LibraryWmlLoader {
 		    	xmlString += reader.readLine();
 		    }
 			
-		    lMap = (LinkedHashMap) xStream.fromXML(xmlString);
+		    //lMap = (LinkedHashMap) xStream.fromXML(xmlString);
+		   ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
 			
-			return lMap;
+			return lMapList;
 		} catch (Exception err){
 			log.error("loadWmlFile",err);
 		}

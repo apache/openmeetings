@@ -38,6 +38,7 @@
     
     <resource name="file_explorer_image_rsc" src="resources/image.png" />
     <resource name="file_explorer_document_rsc" src="resources/x-office-presentation.png" />
+    <resource name="file_explorer_wml_rsc" src="resources/kpresenter_kpr.png" />
     <resource name="file_explorer_folder_rsc" src="resources/folder_blue_open.png" />
      
     <resource name="file_explorer_folder_network_rsc" src="resources/network.png" />

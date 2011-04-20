@@ -34,6 +34,10 @@ public class FileExplorerItem {
 	private Integer flvHeight;
 	private String previewImage;
 	
+	private String wmlFilePath;
+	private Boolean isStoredWmlFile;
+
+		
 	/**
 	 *
 	 * @hibernate.id
@@ -246,9 +250,33 @@ public class FileExplorerItem {
      */	
 	public String getPreviewImage() {
 		return previewImage;
-	}
+	}	
 	public void setPreviewImage(String previewImage) {
 		this.previewImage = previewImage;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="wml_file_path"
+     *  type="string"
+     */
+	public String getWmlFilePath() {
+		return wmlFilePath;
+	}
+	public void setWmlFilePath(String wmlFilePath) {
+		this.wmlFilePath = wmlFilePath;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="is_stored_wml_file"
+     *  type="boolean"
+     */
+	public Boolean getIsStoredWmlFile() {
+		return isStoredWmlFile;
+	}
+	public void setIsStoredWmlFile(Boolean isStoredWmlFile) {
+		this.isStoredWmlFile = isStoredWmlFile;
 	}
 	
 }

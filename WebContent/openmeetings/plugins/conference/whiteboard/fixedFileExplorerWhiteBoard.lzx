@@ -161,6 +161,11 @@
           height="${ (canvas.ismoderator) ? (parent.parent.height-42-parent._propertyPanel.height) : ((canvas.isAllowedToDraw) ? (parent.parent.height-42-parent._propertyPanel.height) : (parent.parent.height-42)) }" 
           y="0" name="_drawareaMask" clip="true" bgcolor="0xFFFFFF" >
     	
+    	<handler name="oninit">
+            if ($debug) Debug.info("lz.Track.register ",canvas.currentImagesListdraw.currentTrackGroupName);
+            lz.Track.register(this, canvas.currentImagesListdraw.currentTrackGroupName);
+        </handler>
+    	
     	<handler name="onmousedown">
             this._drawarea.onmousedownMethod();
         </handler>
@@ -174,6 +179,23 @@
         <handler name="onmouseout">
             this._drawarea.onmouseoutMethod();
         </handler>
+        
+        <handler name="onmousetrackover">
+            if ($debug) Debug.write("onmousetrackover");
+            canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
+            parent.setAttribute("bgcolor",0x93FE92);
+        </handler>
+        
+        <handler name="onmousetrackout">
+            if ($debug) Debug.write("onmousetrackout");
+            canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
+            parent.setAttribute("bgcolor",0xFFFFFF);
+        </handler>
+        
+        <handler name="onmousetrackup">
+            if ($debug) Debug.write("onmousetrackup");
+            parent.setAttribute("bgcolor",0xFFFFFF);
+        </handler>   
     	
     	<remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" 
                           restricted="$once{ parent.parent.restricted }" >
@@ -215,26 +237,7 @@
             <attribute name="initW"/>
             <handler name="oninit">
                 canvas._drawarea = this; 
-                if ($debug) Debug.info("lz.Track.register ",canvas.currentImagesListdraw.currentTrackGroupName);
-                lz.Track.register(this, canvas.currentImagesListdraw.currentTrackGroupName);
             </handler>
-            
-            <handler name="onmousetrackover">
-                if ($debug) Debug.write("onmousetrackover");
-                canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
-                parent.setAttribute("bgcolor",0x93FE92);
-            </handler>
-            
-            <handler name="onmousetrackout">
-                if ($debug) Debug.write("onmousetrackout");
-                canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
-                parent.setAttribute("bgcolor",0xFFFFFF);
-            </handler>
-            
-            <handler name="onmousetrackup">
-                if ($debug) Debug.write("onmousetrackup");
-                parent.setAttribute("bgcolor",0xFFFFFF);
-            </handler>   
             
             <handler name="onprogress" args="perc">
                 //Debug.write("onprogress: ",perc);

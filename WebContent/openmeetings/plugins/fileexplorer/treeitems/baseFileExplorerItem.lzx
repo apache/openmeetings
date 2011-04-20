@@ -181,6 +181,11 @@
 		this.refObjListRoot.loadDocument(this);
 	</method>
 	
+	<method name="loadWmlFile">
+		this.refObjListRoot.loadWmlFile(this);
+	</method>
+
+	
 	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
 		<![CDATA[
     		if ($debug) Debug.write("addOrUpdateFolderName ",fileExplorerItemId);
@@ -217,7 +222,10 @@
             if ($debug) Debug.write("Is this selected => Double Click !!!");
             this.singleClickStarted = false;
             lz.Timer.removeTimer( this.singleClickDelegate );
-            if (this.isFolder) {
+            
+            if (this.isWmlFile){
+				this.loadWmlFile();
+			} else if (this.isFolder) {
                 this.doSingleClick(null);
             } else if (this.isPresentation) {
                 this.loadDocument();
@@ -338,9 +346,18 @@
                                             fileIcon:'file_explorer_image_rsc',
                                             refObjListRoot:this.refObjListRoot
                                         });
-                }
+                }else if (fileExplorerItem.isStoredWmlFile) { 
+                	new lz.wmlFileExplorerItem(this.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileIcon:'file_explorer_document_rsc',
+                                            isWmlFile: true,
+                                            refObjListRoot:this.refObjListRoot                	
+            							});
+
+            	}
             }
-            
         ]]>
     </method>
     

@@ -161,9 +161,10 @@
 		<netparam><method name="getValue"> return parent.parent.fileData;</method></netparam>
         <handler name="ondata" args="value">	
 			<![CDATA[
-				//Debug.write("  saveAsImage: ",value);   
+				if ($debug) Debug.write("  saveAsImage: ",value);   
 			    if (value>0){
 					parent.savefileDataWinRef.close();
+					canvas.currentFileExplorer.loadFiles();
 				} else {
 					new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:value});
 				}

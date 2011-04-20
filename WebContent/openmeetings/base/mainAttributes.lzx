@@ -371,5 +371,6 @@ and some more references to temp-objects
  -->
 <attribute name="destroyExitButton" value="true" type="boolean" />
 
+<attribute name="currentFileExplorer" value="null"/>
 
 </library>

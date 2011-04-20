@@ -93,7 +93,7 @@
         
     </view>
     
-    <uploadTab name="_files" y="36" width="$once{ parent.width-12 }"
+    <fileExplorer name="_files" y="36" width="$once{ parent.width-12 }"
                height="${ parent.height-36 }" visibility="hidden" />
     
     <restrictedUserList name="_videocontainer" y="36" 

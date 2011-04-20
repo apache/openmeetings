@@ -8,9 +8,9 @@
 	<!--
 	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
 	 -->
-	<!--
+	<!-- -->
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
-	 -->
+	
 	<mainToolsHPanelSeperator>
         <attribute name="modi" value="" type="string"/>
     </mainToolsHPanelSeperator>
@@ -42,9 +42,9 @@
 	<!--
 	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
 	 -->
-	<!--
+	<!-- -->
 	<mainToolsPanelItem name="saveobj" modi="saveobj" labelid="197" resourceItem="saveobj" setSelectionToItem="false" />
-	 -->
+	
 	<mainToolsVPanelSeperator>
         <attribute name="modi" value="" type="string"/>
     </mainToolsVPanelSeperator>
@@ -71,7 +71,7 @@
 
 	
 <class name="mainToolsTopPanel" extends="baseTopPanel" 
-	   width="368" height="33" title="" docking="true"
+	   width="394" height="33" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   leftClassPanel="mainToolsLeftPanel"
@@ -79,7 +79,7 @@
 	   bottomClassPanel="mainToolsTopPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="true"
-	   hWidth="33" hHeight="368">
+	   hWidth="33" hHeight="394">
 	
     <method name="updateToolSelection" args="modi">
     	<![CDATA[
@@ -102,7 +102,7 @@
 </class>	
 	
 <class name="mainToolsLeftPanel" extends="baseLeftPanel" 
-	   width="33" height="368" title="" docking="true"
+	   width="33" height="394" title="" docking="true"
 	   activationClassBounding="mainToolsLeftPanel"
 	   activationVClassBounding="mainToolsTopPanel"
 	   topClassPanel="mainToolsTopPanel"
@@ -110,7 +110,7 @@
 	   leftClassPanel="mainToolsLeftPanel"
 	   rightClassPanel="mainToolsLeftPanel"
 	   verticalClassActive="false"
-	   vWidth="368" vHeight="33">
+	   vWidth="394" vHeight="33">
 	
     <method name="updateToolSelection" args="modi">
         <![CDATA[

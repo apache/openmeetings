@@ -282,7 +282,7 @@ public class FileExplorerUploadHandler extends HttpServlet {
 					                                                                ownerId, room_id_to_Store, users_id, 
 					                                                                false, //isFolder
 					                                                                setImageFlag, 
-					                                                                isPresentation);
+					                                                                isPresentation,"", false);
                                         
 
                                         log.debug("canBeConverted: "+canBeConverted);

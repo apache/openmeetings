@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 
@@ -45,10 +46,10 @@ public class LibraryDocumentConverter {
 		return instance;
 	}
 	
-	public Long writeToLocalFolder(String filePath, String fileName, LinkedHashMap objList) {
+	public String writeToLocalFolder(String filePath, String fileName, ArrayList objList) {
 		try {
 			
-			log.error("filePath: "+filePath);
+			log.debug("filePath: "+filePath);
 			
 			String fileNameExtName = fileName.substring(fileName.length()-4,fileName.length());
 			if (fileNameExtName.equals(fileExt)){
@@ -58,7 +59,8 @@ public class LibraryDocumentConverter {
 			}
 			
 			if (fileName.length()<=0){
-				return new Long(-21);
+				//return new Long(-21);
+				return "-20";
 			}
 			
 			String filepathComplete = filePath+wmlFolderName+fileName+fileExt;
@@ -75,7 +77,8 @@ public class LibraryDocumentConverter {
 			}
 			
 			if (this.checkFileExist(filepathComplete)){
-				return new Long(-20);
+				//return new Long(-20);
+				return "-20";
 			}		
 			
 			XStream xStream = new XStream(new XppDriver());
@@ -87,7 +90,9 @@ public class LibraryDocumentConverter {
 		    pw.flush();
 		    pw.close();
 	    
-		    return new Long(1);
+		    //return new Long(1);
+		    
+		    return filepathComplete;
 		    
 		} catch (Exception err){
 			log.error("writeToLocalFolder",err);
