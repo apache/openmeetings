@@ -336,7 +336,7 @@
 		
 		<!-- 340 -->
 		<view name="_clickLayer" clickable="true" opacity="0.75" x="340"
-			  width="460" height="$once{ parent.height - this.y - 4 }" 
+			  width="460" height="$once{ parent.height - this.y }" 
 			  y="20" showhandcursor="false" bgcolor="0xFFFFFF" />
 		
 	</view>
