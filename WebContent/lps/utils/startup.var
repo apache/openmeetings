@@ -1,4 +1,0 @@
-<params ping_url="http://127.0.0.1:8080/lps-4.7.1/lps/utils/test.lzx?lzt=xml"
-        succ_url="http://127.0.0.1:8080/lps-4.7.1/laszlo-explorer/index.jsp"
-	fail_url="startup_error.html" timeout="360000" ping_interval="5000" pad="pad"
-/>

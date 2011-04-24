@@ -89,7 +89,7 @@
               visible="$once{!this.classroot.classroot.opened}">
 
             <attribute name="text" 
-                        value="${ classroot.startHour }" type="text" />/>
+                        value="${ classroot.startHour }" type="text" />
 
             <datapath xpath="start[1]">
                 <!-- Usually data bound views are 'automagically' displayed

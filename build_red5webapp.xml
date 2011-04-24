@@ -44,16 +44,18 @@
 	
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/red5/webapps/${project.distname}/" />
-	<property name="laszlo.home" value="${basedir}/WebContent"/>
+	<property name="laszlo.home" value="${basedir}/openlaszlo"/>
 	<property name="laszlo.src.dir" value="${basedir}/WebContent/${project.distname}"/>
 	<property name="laszlo.debug" value="false"/>
 	<property name="laszlo.proxied" value = "solo"/>
 
 	<path id = "laszlo.lib">
-	    <pathelement location="${laszlo.home}/WEB-INF/lps/server/build" />
-	    <pathelement location="${laszlo.home}/WEB-INF/classes" />
-	    <fileset dir = "${laszlo.home}/WEB-INF/3rd-party/jars/dev" includes="**/*.jar"/>
-	    <fileset dir = "${laszlo.home}/WEB-INF/lib" includes="**/*.jar"/>
+		<!-- swf8 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
+			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar"/>
+		<!-- swf10 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
+			fxgutils.jar"/>
 	</path>
 
     <!-- Hibernate -->

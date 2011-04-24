@@ -42,20 +42,6 @@
     <!-- libraries -->
     <property name="project.lib" value="./lib"/>
 	
-	<!-- LPS Properties -->
-	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/red5/webapps/${project.distname}/" />
-	<property name="laszlo.home" value="${basedir}/WebContent"/>
-	<property name="laszlo.src.dir" value="${basedir}/WebContent/${project.distname}"/>
-	<property name="laszlo.debug" value="false"/>
-	<property name="laszlo.proxied" value = "solo"/>
-
-	<path id = "laszlo.lib">
-	    <pathelement location="${laszlo.home}/WEB-INF/lps/server/build" />
-	    <pathelement location="${laszlo.home}/WEB-INF/classes" />
-	    <fileset dir = "${laszlo.home}/WEB-INF/3rd-party/jars/dev" includes="**/*.jar"/>
-	    <fileset dir = "${laszlo.home}/WEB-INF/lib" includes="**/*.jar"/>
-	</path>
-
     <!-- Hibernate -->
     <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
     <!-- Log4j -->
