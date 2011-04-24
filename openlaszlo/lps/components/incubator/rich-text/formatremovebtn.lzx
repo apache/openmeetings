@@ -1,0 +1,33 @@
+<!-- inline tool composed of a custom button
+    used to reset the all of the formatting of the current paragraph -->
+<stylishbutton name="unformatBtn" iconname="resetfmt"
+    width="26" focusable="false" style="formatbtn_style"  y="${Math.round((parent.height-this.height)/2)}">
+    <attribute name="toolbar" value="$once{this.parent}" />
+    <attribute name="editor" value="$once{this.parent.editor}" />                
+    <tooltip>Remove formatting</tooltip>
+    
+    <!--- 
+        Called when the user clicks the button. Asks the editor to reset the formatting
+        of the selection.
+        @keywords private -->
+    <handler name="onclick" method="doClick" />
+    <method name="doClick" args="ignore">
+        // Debug.write("unformat"); 
+        if (this.toolbar._passthruchanges) {
+        this.editor._resetFormatToDefaults();
+        this.editor.setCurrentFormat(this.editor.currentformat); 
+        }                        
+        this.editor.delegateRestoreSelection(); 
+    </method>
+    
+    <!--- @keywords private -->
+    <handler name="onmouseover">          
+        this.editor.saveSelectionRegion();            
+    </handler>
+    
+</stylishbutton>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

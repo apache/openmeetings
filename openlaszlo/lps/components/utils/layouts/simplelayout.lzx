@@ -1,0 +1,147 @@
+<library>
+    <include href="utils/layouts/layout.lzx"/>
+<class name="simplelayout" extends="layout" >
+    <!--- The axis in which this layout operates. One of 'x' or 'y'. -->
+    <attribute name="axis" value="y" setter="this.setAxis( axis )" 
+               type="string" />
+
+    <!--- A pixel amount to inset the first view controlled by the layout-->
+    <attribute name="inset" value="0"
+        setter="this.inset = inset;
+               if( this.subviews &amp;&amp; this.subviews.length ) this.update();
+               if (this['oninset']) this.oninset.sendEvent(this.inset)"/>
+
+    <!--- A pixel amount to use between each view in the layout -->
+    <attribute name="spacing" value="0"
+               setter="this.spacing = spacing;
+                      if(this.subviews &amp;&amp; this.subviews.length ) this.update();
+                      if (this['onspacing']) this.onspacing.sendEvent(this.spacing)"/>
+
+    <!--- @keywords private -->
+    <method name="setAxis" args="a" >
+        if (this['axis'] == null || this.axis != a) {
+            this.axis = a;
+            this.sizeAxis = a == "x" ? "width" : "height"
+
+            if( this.subviews.length ) this.update();
+            if (this['onaxis']) this.onaxis.sendEvent(this.axis);
+        }
+    </method>
+
+    <!--- @keywords private -->
+    <method name="addSubview" args="newsub"><![CDATA[
+        this.updateDelegate.register( newsub,  "on" + this.sizeAxis);
+        this.updateDelegate.register( newsub,  "onvisible" );
+        //this is an optimization to avoid calling update in the simple case
+        //where a single subview was just added
+        if (!this.locked) {
+            var rv = null;
+            var sv = this.subviews;
+            for (var i = sv.length-1; i >= 0; --i) {
+                if (sv[i].visible) {
+                    rv = sv[i];
+                    break;
+                }
+            } 
+            
+            if (rv) {
+                var p = rv[ this.axis ] + rv[ this.sizeAxis ] + this.spacing;
+            } else {
+                var p = this.inset;
+            }
+            
+            newsub.setAttribute(this.axis, p);
+        }
+        super.addSubview( newsub );
+    ]]></method>
+
+    <!--- This method is usually called automatically when any of the views
+          controlled by the layout change their size in the layout axis, or
+          their visibility. However it can be called directly to force the
+          layout to update -->
+    <method name="update" args="v=null">
+        <![CDATA[
+        if ( this.locked ) return;
+        var l = this.subviews.length;
+        var c = this.inset;
+
+        for(var i=0; i < l; i++) {
+            var s = this.subviews[i]; 
+            if ( !s.visible ) continue;
+            if ( s[ this.axis ] != c ){
+                s.setAttribute( this.axis , c );
+            }
+            // use computed bounds when necessary
+            if (s.usegetbounds){
+                s = s.getBounds();
+            }
+            c += this.spacing + s[ this.sizeAxis ];
+        }
+        ]]>
+    </method>
+    <doc>
+        <tag name="shortdesc"><text>A quick layout for arranging siblings vertically or horizontally.</text></tag>
+<text>        <p>
+            <literal>simplelayout</literal> extends <sgmltag class="element" role="LzLayout">&lt;LzLayout&gt;</sgmltag>. <literal>simplelayout</literal> arranges sibling views along the <literal>x</literal> and <literal>y</literal> axis, or both. <literal>simplelayout</literal> places each sibling view based on the width
+            (or height) of the previous subview, depending on whether the x-axis or the y-axis was specified.</p>
+        
+        
+        <p>The following example illustrates the use of
+            <literal>simplelayout</literal>. The first instance of <literal>simplelayout</literal> lays out the sibling views 'across' and 'down' along the y-axis. Then the 'across' and 'down' views apply their own <literal>simplelayout</literal>: three blue views are simply laid out on the x-axis within the 'across' view, and three red views are simply laid out on the y-axis within the 'down' view. </p>
+        <example title="Using simplelayout">
+    &lt;canvas height=&quot;160&quot;&gt;
+        
+        &lt;simplelayout axis=&quot;y&quot; spacing=&quot;10&quot;/&gt;
+        
+        &lt;view id=&quot;across&quot;&gt;
+            &lt;simplelayout axis=&quot;x&quot; spacing=&quot;10&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+        &lt;/view&gt;
+        
+        &lt;view id=&quot;down&quot;&gt;
+            &lt;simplelayout axis=&quot;y&quot; spacing=&quot;10&quot;/&gt;
+            &lt;view bgcolor=&quot;red&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;red&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;red&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+        &lt;/view&gt;
+        
+    &lt;/canvas&gt;
+        </example>
+        <p>More than one layout can be applied to a view as long as the attributes are controlled by only one layout. This next example demonstrates this feature.</p>
+        <example title="Using more than one layout">
+    &lt;canvas height=&quot;120&quot;&gt;
+        &lt;view &gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;simplelayout axis=&quot;x&quot; spacing=&quot;0&quot;/&gt;
+            &lt;simplelayout axis=&quot;y&quot; spacing=&quot;0&quot;/&gt;
+        &lt;/view &gt;
+    &lt;/canvas&gt;
+        </example>
+        <p>Finally, like all layouts, when an attribute of a subview changes its value and that new value effects the overall layout, then the layout object will update automatically. This is shown in the next example.</p>
+        <example title="Using attributes with layouts">
+    &lt;canvas height=&quot;65&quot;&gt;
+        &lt;view&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;view bgcolor=&quot;red&quot; height=&quot;30&quot; width=&quot;50&quot;
+                onclick=&quot;this.animate(&apos;width&apos;, 100, 500, true)&quot;/&gt;
+            &lt;view bgcolor=&quot;blue&quot; height=&quot;30&quot; width=&quot;50&quot;/&gt;
+            &lt;simplelayout axis=&quot;x&quot; spacing=&quot;10&quot;/&gt;
+        &lt;/view&gt;
+        &lt;view &gt;
+            &lt;text&gt;Click on the red rectangle. Layout is conserved as its size changes.&lt;/text&gt;
+        &lt;/view&gt;
+        &lt;simplelayout axis=&quot;y&quot; spacing=&quot;15&quot;/&gt;
+    &lt;/canvas&gt;
+        </example></text>
+    </doc>
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

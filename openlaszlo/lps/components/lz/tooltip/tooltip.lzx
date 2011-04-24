@@ -1,0 +1,75 @@
+<library>
+
+<include href="tooltipview.lzx"/>
+<!--
+    @devnote Individual tooltips are very lightweight, they contain
+    only their text, a few parameters, and a handler for their
+    parent's mouseover that causes the tooltipview to start thinking
+    about displaying it.
+-->
+<class name="tooltip" extends="node" initstage="late">
+    <!---
+        The text that will be displayed by the tooltip.  If the text
+        is <code>null</code> or empty, no tooltip will be displayed.
+    -->
+    <attribute name="text" type="text" />
+    <!---
+        The vertical offset of tooltip from the mouse position.
+    -->
+    <attribute name="yoffset" value="25" />
+    <!---
+        Whether the tooltip is horizontally aligned by it's left edge
+        (default) or right edge relative to the mouse position.
+
+        @lzxtype right | left
+    -->
+    <attribute name="tipalign" value="left" type="string" />
+    <!---
+        Whether the tooltip shows up above or below the mouse
+        position. Default will position heuristically to keep
+        the tooltip visible on the canvas.
+
+        @lzxtype above | below | default
+    -->
+    <attribute name="tipvalign" value="default" type="string" />
+
+    <!--- @keywords private -->
+    <handler name="onmouseover" args="ignore" reference="this.parent"><![CDATA[
+        if (this.text && (this.text != "")) {
+          canvas.tooltipview.setAttribute('tooltip', this);
+        }
+    ]]></handler>
+
+    <doc>
+      <tag name="shortdesc"><text>A floating "tooltip" for a view.</text></tag>
+      <text>
+        <p>
+          The <classname>tooltip</classname> allows you to show a floating "tooltip" on any
+          view.  To use it you make it a child of a view.  The parent view has
+          to be clickable for the tooltip to work.  Setting clickable to false
+          will disable the tooltip.
+        </p>
+
+        <example title="Tooltip"><![CDATA[
+          <canvas height="60" layout="axis:y; spacing: 10">
+            <text>Mouse over the button to see the tip</text>
+            <button text="Button, button">
+              <tooltip>Click or mouse out to hide tip</tooltip>
+            </button>
+          </canvas>
+        ]]></example>
+
+        <p>
+          The appearance of the tooltip is determined by the canvas.tooltipview element
+        </p>
+
+      </text>
+    </doc>
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

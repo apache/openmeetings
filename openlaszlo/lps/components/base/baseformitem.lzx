@@ -1,0 +1,209 @@
+<library>
+    <include href="base/basevaluecomponent.lzx" />
+
+    <!-- An abstract class for components which might submit data to a form.
+          Baseformitem supports listening for a changed value. A value
+          is changed if the current value was modified at any point.-->
+    <class name="baseformitem" extends="basevaluecomponent">
+
+        <!--- the form (if any) that contains this component
+              @keywords private -->
+        <attribute name="_parentform" value="null"/>
+
+        <!--- The name used when submitting the data of the form item.
+              If no submitname is given before oninit, the 'name' attribute is used.
+              Unlike the name attribute, submitname may be changed at runtime. -->
+        <attribute name="submitname" value="" type="string"/>
+
+        <!--- If submit is true, then the value of this element will be submitted
+              with the form.  By default, submit is true when enabled.  -->
+        <attribute name="submit" value="${enabled}" type="boolean"/>
+
+        <!--- Boolean to determine whether the baseformitem was changed. -->
+        <attribute name="changed" value="false" 
+                   setter="this.setChanged(changed)" />
+
+        <!--- The value of the baseformitem. -->
+        <attribute name="value" value="null" 
+                   setter="this.setValue(value,false)" />
+
+        <!--- Event sent when baseformitem is changed. Only sent once when true
+              or once when false. -->
+        <event name="onchanged" />
+
+        <!--- Event sent whenever checkbox value changes. -->
+        <event name="onvalue" />
+
+        <!--- Rollback value for the baseformitem. -->
+        <attribute name="rollbackvalue" value="null" />
+
+        <!--- If true, the component will not inform its parent form
+             that it has changed. Useful in conjunction with submit=false -->
+        <attribute name="ignoreform" value="false" />
+
+        <method name="init"><![CDATA[
+            // set up submitname before baseclasses have a chance to see ""
+            if (this.submitname == "") this.submitname = this.name;
+            if (this.submitname == "") {
+                if ($debug) {
+                    Debug.error('name required for form submit', this);
+                }
+            }
+            super.init();
+            var fp = this.findForm();
+            if (fp != null) {
+                fp.addFormItem(this);
+                this._parentform = fp;
+            }
+        ]]></method>
+
+        <method name="destroy">
+            if (this._parentform)
+                this._parentform.removeFormItem(this);
+            super.destroy();
+        </method>
+
+        <!--- Setter to set baseformitem to changed. Should be called by
+              subclasses whenever a value is set. The first time this is called,
+              the changed value is not set since it assumes subclasses are
+              setting their initial value. 
+              @param Boolean changed: true if changed, else false.
+              @param Boolean skipform: true to skip notifying parent form
+              @keywords public -->
+        <method name="setChanged" args="changed,skipform=null"><![CDATA[
+
+            // Rollbackvalue will be value if init is not completed.
+            if (! this._initcomplete) {
+                this.changed = false;
+                return;
+            }
+
+            var oldchanged = this.changed;
+            this.changed = changed;
+
+            // Only send changed event if it wasn't changed before.
+            if (this.changed != oldchanged) {
+                if (this.onchanged) this.onchanged.sendEvent(this.changed);
+            }
+
+            // Only set parent's changed property if parent hasn't changed
+            if (! skipform && this.changed && ! ignoreform) { 
+                // It's possible that baseformitem is not in a form.
+                if (this['_parentform'] && 
+                    this._parentform['changed'] != undefined && 
+                    ! this._parentform.changed) {
+                    this._parentform.setChanged(changed, false);
+                }
+            }
+            // notify about reset to original state...
+            if(!skipform && !this.changed && !ignoreform){
+                // It's possible that baseformitem is not in a form.
+                if(this['_parentform'] &&
+                    this._parentform['changed'] != undefined &&
+                    this._parentform.changed){
+                    this._parentform.setChanged(changed, true);
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- Rollback value and set changed to false. -->
+        <method name="rollback">
+            if (this.rollbackvalue != this['value']) {
+                this.setAttribute('value', this.rollbackvalue);
+            }
+            this.setAttribute('changed', false);
+        </method>
+
+        <!--- Commit value and set changed to false. -->
+        <method name="commit">
+            this.rollbackvalue = this.value;
+            this.setAttribute('changed', false);
+        </method>
+
+        <!--- Set the value for the baseformitem.
+              @param Any v: the value of the baseformitem. 
+              @param Boolean isinitvalue: if true, the rollbackvalue is set. -->
+        <method name="setValue" args="v,isinitvalue=null"><![CDATA[
+            var didchange = (this.value != v);
+            this.value = v;
+            if (isinitvalue || ! this._initcomplete) {
+                this.rollbackvalue = v;
+            }
+            this.setChanged(didchange && !isinitvalue && this.rollbackvalue != v);
+            if (this['onvalue']) this.onvalue.sendEvent(v);
+            ]]>
+        </method>
+
+        <!--- Override acceptValue to pass the magic second argument
+             to setValue so the new value is an initializer
+
+            @access private -->
+        <method name="acceptValue" args="data, type=null">
+          if (type == null) type = this.type;
+          this.setValue(lz.Type.acceptTypeValue(type, data, this, 'value'), true);
+        </method>
+
+        <!--- Finds a baseform ancestor
+              @return a form if found, else null. -->
+        <method name="findForm">
+            if (_parentform != null)
+                return _parentform;
+            else {
+                var p = this.immediateparent;
+                var fp = null;
+                while (p != canvas) {
+                     if (p['formdata']) {
+                        fp = p;
+                        break;
+                     }
+                     p = p.immediateparent;
+                }
+                return fp;
+            }
+        </method>
+
+        <!--- This returns the value of the component in XML format:
+                <code> submit_name="value"</code>
+                @param Boolean convert: if true, boolean values
+                will be converted to 1 and 0 -->
+        <method name="toXML" args="convert">
+            var val = this.value;
+            if (convert) {
+                // Force javascript to convert booleans to numbers
+                if (typeof(val) == 'boolean') val = val - 0;
+            }
+            if ($debug) {
+                if (this.submitname == "") {
+                    Debug.format("WARNING: submitname not given for object %w (baseformitem.toXML)\n", this);
+                }
+            }
+            return (lz.Browser.xmlEscape(this.submitname) + "=\"" + lz.Browser.xmlEscape(val) + '"'); 
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>an abstract class for components which are used in a form</text></tag>
+          <text>
+            <p>This abstract class works with <sgmltag class="element" role="lz.form">&lt;form&gt;</sgmltag> or
+            <sgmltag class="element" role="lz.baseform">&lt;baseform&gt;</sgmltag>.  All form components subclass this.</p>
+            
+              <p><b>See Also:</b></p>
+              
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.form">&lt;form&gt;</sgmltag> and <sgmltag class="element" role="lz.submit">&lt;submit&gt;</sgmltag>
+                  </li>
+                  <li>Form components:
+                      <sgmltag class="element" role="lz.checkbox">&lt;checkbox&gt;</sgmltag>, <sgmltag class="element" role="lz.radiogroup">&lt;radiogroup&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.combobox">&lt;combobox&gt;</sgmltag>, <sgmltag class="element" role="lz.button">&lt;button&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.edittext">&lt;edittext&gt;</sgmltag>, and <sgmltag class="element" role="lz.list">&lt;list&gt;</sgmltag>
+                  </li>
+              </ul>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

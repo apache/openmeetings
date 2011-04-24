@@ -1,0 +1,155 @@
+<library>
+    <!-- Provides component grouping for a form. A form is typicaly a
+          collection of UI elements where each represents data from the user
+          that will be submitted to the server as a request.
+          Baseform supports listening for a changed value. A value is
+          changed if the value of any of its baseformitems were modified at any
+          point.
+          -->
+    <class name="baseform">
+        <!--- Holds a reference to each datacomponent contained within the
+              form. -->
+        <attribute name="formdata"/>
+        <!--- Boolean to determine whether the baseformitem was changed. -->
+        <attribute name="changed" value="false" 
+                   setter="this.setChanged(changed, false)" />
+
+        <!--- Event sent when baseformitem is changed. Only sent once when true
+              or once when false. -->
+        <event name="onchanged" />
+
+        <!--- Formdata object is made early for child components.
+              @keywords private -->
+        <method name="construct" args="parent, args">
+            super.construct(parent, args);
+            this.formdata = {};
+        </method>
+
+        <method name="addFormItem" args="item">
+            var base = item.name;
+            if (base == null) base = "$noname"
+            var itemname = base;
+            var count = 1;
+            while (this.formdata[itemname]) {
+                itemname = base + count++;
+            }
+            this.formdata[itemname] = item;
+        </method>
+
+        <method name="removeFormItem" args="item">
+            for (var name in this.formdata) {
+                if (this.formdata[name] == item) {
+                    delete this.formdata[name];
+                }
+            }
+        </method>
+
+        <!--- Setter to to set baseform's status to changed. Baseformitems
+              should set baseform's changed to true when its values change and
+              set baseform's changed to false when its values are rollback or
+              committed.
+              @param Boolean changed: true if changed, else false.
+              @param Boolean skipformdata: if true, set formdata changed
+              values, else don't. -->
+        <method name="setChanged" args="changed,skipformdata"><![CDATA[
+            // This is being set with default value, which should be false.
+            if (! isinited) {
+                this.changed = false;
+                return;
+            }
+
+            var oldchanged = this.changed;
+            this.changed = changed;
+
+            // if we got notified about a reset check if we are complete in
+            // original state
+            if(!changed && skipformdata && this['formdata']){
+                var fd = this.formdata;
+                for(var k in fd){
+                    if(fd[k].changed){
+                        // still something in changed state...
+                        this.changed = true;
+                        break;
+                    }
+                }
+            }
+
+            // set formdata all to unchanged if changed is set to false.
+            if (! changed && ! skipformdata && this['formdata'] ) {
+                var fd = this.formdata;
+                for (var k in fd) {
+                    fd[k].setChanged(false, true);
+                }
+            }
+
+            // Only send changed event if it wasn't changed before.
+            if (this.changed != oldchanged) {
+                if (this.onchanged) this.onchanged.sendEvent(this.changed);
+            }
+            ]]>
+        </method>
+
+
+        <!--- Rollback baseform's baseformitem values and sets baseform and
+              baseformitems to changed=false. -->
+        <method name="rollback">
+            if (! this.changed) return;
+            if (this['formdata']) {
+                var fd = this.formdata;
+                for (var k in fd) {
+                    fd[k].rollback();
+                }
+            }
+            this.setChanged(false, true);
+        </method>
+
+
+        <!--- Commits baseform's baseformitem values and sets baseform and
+              baseformitems to changed=false. -->
+        <method name="commit">
+            if (! this.changed) return;
+            if (this['formdata']) {
+                var fd = this.formdata;
+                for (var k in fd) {
+                    fd[k].commit();
+                }
+            }
+            this.setChanged(false, true);
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>web form</text></tag>
+          <text>
+            <p>The <tagname>baseform</tagname> tag allows you to create a web
+            form.  The data represented by components that are enclosed in the
+            form tag can be sent to the server using the <sgmltag class="element" role="lz.submit">&lt;submit&gt;</sgmltag>
+            tag.  Each form component, such as <sgmltag class="element" role="lz.checkbox">&lt;checkbox&gt;</sgmltag>,
+            <sgmltag class="element" role="lz.combobox">&lt;combobox&gt;</sgmltag> or <sgmltag class="element" role="lz.radiogroup">&lt;radiogroup&gt;</sgmltag> must have
+            a name.  The data is submitted as name-value pairs, using the name and
+            value of the component.</p>
+            
+            <p><classname>baseform</classname> provides no layout for its
+            contents.  If you want a simple automatic form layout use the
+            <sgmltag class="element" role="lz.form">&lt;form&gt;</sgmltag> tag.</p>
+            
+              <p><b>See Also:</b></p>
+ 
+                 <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.form">&lt;form&gt;</sgmltag> and <sgmltag class="element" role="lz.submit">&lt;submit&gt;</sgmltag>
+                  </li>
+                  <li>Form components:
+                      <sgmltag class="element" role="lz.checkbox">&lt;checkbox&gt;</sgmltag>, <sgmltag class="element" role="lz.radiogroup">&lt;radiogroup&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.combobox">&lt;combobox&gt;</sgmltag>, <sgmltag class="element" role="lz.button">&lt;button&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.edittext">&lt;edittext&gt;</sgmltag>, and <sgmltag class="element" role="lz.list">&lt;list&gt;</sgmltag>
+                  </li>
+              </ul>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,110 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+    <include href="utils/layouts/simpleboundslayout.lzx"/>
+    <include href="incubator/tooltipmanager.lzx"/>
+    
+    <class name="fisheye" defaultplacement="center" >
+        <attribute name="start_size"    value="24" />
+        <attribute name="expanded_size" value="100" />
+        <attribute name="halo_size"     value="20" />
+        
+        
+        <tooltipManager name="tooltipmanager" delay="300"/>
+
+
+        <view name="center" 
+            x="${parent.width/2 - this.width/2}"
+            y="${parent.height/2 - this.height/2}"
+            >
+            
+            <simpleboundslayout axis="x" spacing="10"/> 
+        </view>
+    </class>
+    
+    <class name="fisheye_item" valign="middle">
+        <attribute name="icon" type="string" />
+        <attribute name="text" type="text" />
+        
+        <attribute name="start_size"    value="${parent.start_size}" />
+        <attribute name="expanded_size" value="${parent.expanded_size}" />
+        <attribute name="halo_size"     value="${parent.halo_size}" />
+        
+        <attribute name="myTooltipManager"     value="$once{parent.tooltipmanager}" />
+        <attribute name="tooltip" value="${this.text}" />
+        
+        
+        <handler name="oninit">
+            myTooltipManager.register(this);
+        </handler>
+
+        <view   resource="$once{parent.icon}" 
+                width="$once{parent.start_size}"
+                height="$once{parent.start_size}"
+                valign="middle"
+                align="center"
+                stretches="both"
+                >
+                <attribute name="old_x" value="$once{canvas.getMouse('x')}" />
+                <attribute name="old_y" value="$once{canvas.getMouse('y')}" />
+                
+
+                <handler name="onmousemove" reference="canvas"><![CDATA[
+                    var global_x = canvas.getMouse("x");
+                    var global_y = canvas.getMouse("y");
+                    
+                    if(old_x == global_x && old_y == global_y) return;
+                    this.old_x = global_x;
+                    this.old_y = global_y;
+                
+                    var my_x = this.getAttributeRelative( "x", canvas );
+                    var my_y = this.getAttributeRelative( "y", canvas );
+                
+                    var center_x = my_x + this.width/2;
+                    var center_y = my_y + this.height/2;
+                
+                    var dist_from_center = 
+                        (global_x-center_x)*(global_x-center_x) +
+                        (global_y-center_y)*(global_y-center_y)
+                    ;
+                    
+
+                        
+                    var halo = classroot.expanded_size/2 + parent.halo_size;
+                    halo *= halo;
+                    var percentIn = (halo - dist_from_center)/halo;
+
+                    if ($debug) {
+                        Debug.write("Percentage In = "+percentIn);
+                    }
+
+                    var diff = (classroot.expanded_size - classroot.start_size);
+                    var amount = percentIn * diff;
+                    
+                
+                    
+                    if (this['lastamount'] == amount) return;
+                    if(amount > 0) {
+                        
+                         this.setAttribute("width",parent.start_size+amount);
+                         this.setAttribute("height",parent.start_size+amount);
+                         
+                    } else {
+                       
+                        this.setAttribute("width",parent.start_size);
+                        this.setAttribute("height",parent.start_size);
+                    }
+                    this.lastamount = amount;
+
+                    ]]>
+                </handler>
+        </view>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

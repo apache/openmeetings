@@ -1,0 +1,249 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007-2010 Laszlo Systems, Inc.  All Rights Reserved.         *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<library>
+    <include href="colormenu.lzx"/>
+    <include href="../../../lz/window.lzx"/>
+    <colormenu id="inspectorcolormenu">
+        <method name="setnewcolor" args="c">
+            owner.setnewcolor(c);
+        </method>
+    </colormenu>
+
+    <class name="colorbox" width="12" height="12"
+        bgcolor="${color == null ? 0xeaeaea : 0x000000}">
+        <attribute name="obj" value="null" when="always"/>
+<!--        <attribute name="color" value="${obj == null ? null : obj.bgcolor}"/>-->
+        <attribute name="color" value="null"/>
+        <handler name="onobj">
+            new LzDelegate(this, 'updatecolor', obj, 'onbgcolor');
+            updatecolor();
+        </handler>
+        <method name="updatecolor" args="ignore=null">
+            setAttribute('color', this.obj.bgcolor);
+        </method>
+
+        <method name="setnewcolor" args="c">
+            this.obj.setAttribute('bgcolor', c);
+            // updatecolor was getting white when color == null ???
+            setAttribute('color', c);
+        </method>
+
+        <view x="1" y="1" width="10" height="10" bgcolor="${parent.color}"
+            onmousedown="inspectorcolormenu.open(parent)"
+            onmouseup="inspectorcolormenu.close()">
+        </view>
+    </class>
+
+    <class name="toggletext" clickable='${!this.editing}'>
+        <attribute name="text" type="text"/>
+        <attribute name="editing" value="false"/>
+        <handler name="onclick">
+            setAttribute('editing', true);
+            lz.Focus.setFocus(editbox);
+        </handler>
+        <text visible="${!parent.editing}" resize="true" name="t"
+              y="$once{ parent.height /2 - this.height/2}"
+              text="${parent.text}"/>
+
+        <state applied="${parent.editing}" pooling="true"
+               onapply="parent.editbox.setAttribute('text', parent.text)"
+               onremove="parent.setAttribute('text', parent.editbox.getText())">
+            <edittext name="editbox" width="${parent.t.width + 10}">
+                <method name="init">
+                    this.globalMouseDel = new LzDelegate( this,
+                                                          "checkMouse" );
+                    super.init();
+                </method>
+                <handler name="onfocus">
+                    this.globalMouseDel.register( lz.GlobalMouse,
+                                                  "onmousedown" );
+                </handler>
+                <handler name="onblur">
+                    this.globalMouseDel.unregisterAll();
+                    parent.setAttribute( 'editing' , false );
+                </handler>
+                <method name="checkMouse" args="who">
+                    if ( !this.containsPt( this.getMouse( 'x' ) ,
+                                          this.getMouse( 'y' ) ) ){
+                        parent.setAttribute( 'editing' ,false );
+                    }
+                </method>
+                <handler name="onkeyup" args="k">
+                    if ( k == 13 ){
+                        parent.setAttribute( "editing" , false );
+                    }
+                </handler>
+            </edittext>
+        </state>
+    </class>
+
+    <class name="propedit" extends="toggletext">
+        <attribute name="obj" value="null" when="once"/>
+        <attribute name="prop" value="" type="string"/>
+        <attribute name="isnumber" value="true"/>
+        <handler name="onediting">
+            if (this.editing == false) {
+                if (this.isnumber) this.obj.setAttribute(prop, Number(text));
+                else this.obj.setAttribute(prop, text);
+            }
+        </handler>
+    </class>
+
+    <class name="item" x="10">
+        <attribute name="reference" when="always"/>
+        <attribute name="root" when="once" value="this"/>
+        <attribute name="open" value="false"/>
+        <attribute name="opendefaultplacement" value="true"/>
+        <attribute name="showcomponenthelpers" value="false"/>
+        <attribute name="isview" value="false" type="boolean"/>
+        <simplelayout/>
+        <view layout="axis:x; spacing:4">
+            <text text="..." onclick="Debug.write(classroot.reference)"/>
+            <text text="${classroot.isview ? 
+                        (classroot.reference.visible ? 'o ' : 'x ')
+                        : '  '}" 
+                        resize="true"
+                onclick="classroot.isview ?
+                         classroot.reference.setAttribute('visible', !classroot.reference['visible'])
+                         : false"/>
+            <text
+                onclick="classroot.toggle()"
+                onmouseover="parent.setAttribute('bgcolor', 0xddddff)"
+                onmouseout="parent.setAttribute('bgcolor', null)">
+                <handler name="oninit" ><![CDATA[
+                    var ref = classroot.reference;
+                    var idname = '';
+                    if (ref.id != null) {
+                        idname = '#' + ref.id;
+                    } else if (ref.name != null) {
+                        idname = ref.name;
+                    }
+                    var text = classroot.getDisplayName(ref);
+                    this.setAttribute('text', idname ? text + ' (' + idname + ')' : text);
+                ]]></handler>
+            </text>
+            <state applied="${classroot.isview}">
+                <colorbox y="1" obj="classroot.reference"/>
+                <propedit text="${classroot.reference.x}" obj="classroot.reference" prop="x"/>
+                <propedit text="${classroot.reference.y}" obj="classroot.reference" prop="y"/>
+                <propedit text="${classroot.reference.width}" obj="classroot.reference" prop="width"/>
+                <propedit text="${classroot.reference.height}" obj="classroot.reference" prop="height"/>
+            </state>
+        </view>
+        <view name="children" layout="class:simplelayout"/>
+        <method name="toggle"> <![CDATA[
+            if (!open) {
+                var nodes = this.reference.subnodes || [];
+
+                if (this.root.opendefaultplacement) {
+                     if (this.reference.defaultplacement != null) {
+                        var defplace = this.reference.searchSubnodes( "name" , this.reference.defaultplacement );
+                        nodes = defplace.subnodes;
+                    }
+                }
+                var hidehelpers = (this.reference === canvas && !this.showcomponenthelpers);
+                for (var i=0, len=nodes.length; i<len; i++) {
+                    var show = true;
+                    if (hidehelpers) {
+                       switch (getTagName(nodes[i])) {
+                        case '_componentmanager':
+                        case 'style':
+                        case 'focusoverlay':
+                        case 'LzDebugWindow':
+                        case 'inspector':
+                        case 'colormenu':
+                            show = false;
+                       }
+                    }
+                    if (show) new lz.item(this.children, 
+                                           {reference: nodes[i],
+                                            root:this.root,
+                                            isview: nodes[i] is lz.view});
+                }
+                setAttribute('open', true);
+            } else {
+                var sviews = this.children.subviews || [];
+                while (sviews.length) {
+                    sviews[0].destroy();
+                }
+                setAttribute('open', false);
+            }
+        ]]>
+        </method>
+        <passthrough when="$as3">
+            import flash.utils.*;
+        </passthrough>
+        <switch>
+            <when property="$as3">
+                <method name="getClassName" args="who"><![CDATA[
+                    // '[class xxx]'
+                    var cname = who.constructor.toString();
+                    cname = cname.substring('[class '.length, cname.length - 1);
+                    return cname;
+                ]]></method>
+                <method name="getSuperClass" args="who"><![CDATA[
+                    try {
+                        return getDefinitionByName(getQualifiedSuperclassName(who));
+                    } catch (e:ReferenceError) {
+                    }
+                ]]></method>
+            </when>
+            <otherwise>
+                <method name="getClassName" args="who"><![CDATA[
+                    var cname = who.constructor['classname'] || '';
+                    return cname;
+                ]]></method>
+                <method name="getSuperClass" args="who"><![CDATA[
+                    return who.constructor.prototype.constructor;
+                ]]></method>
+            </otherwise>
+        </switch>
+        <method name="getDisplayName" args="who"><![CDATA[
+            var name = getTagName(who);
+            if (name != null) {
+                name = '&lt;' + name + '&gt;';
+            } else {
+                name = getClassName(who);
+                if (name.indexOf('Lz') == 0) {
+                    if (lz[name.substring(2)] === who.constructor) {
+                        // c.f. lz.ReplicationManager
+                        name = 'lz.' + name.substring(2);
+                    }
+                }
+            }
+            return name;
+        ]]></method>
+        <method name="getTagName" args="who"><![CDATA[
+            var c = who.constructor;
+            if (c['tagname'] == null) {
+                var cname = getClassName(who);
+                if (cname.indexOf('$lzc$class_') == 0) {
+                    // an anonymous class, get base class for tagname
+                    c = getSuperClass(who) || {};
+                }
+            }
+            return c['tagname'];
+        ]]></method>
+    </class>
+
+    <class name="inspector" extends="window"
+        title="Inspector" x="$once{canvas.width-this.width}"
+        width="340" height="200" resizable="true">
+        <view width="100%" height="${immediateparent.height-parent.settings.height}" clip="true">
+            <!-- item is the root node, it exands as you drill down -->
+            <item name="it" reference="canvas"
+                showcomponenthelpers="${classroot.settings.componenthelpers.value}"
+                opendefaultplacement="${classroot.settings.dp.value}"/>
+            <vscrollbar/>
+        </view>
+        <view name="settings" valign="bottom" layout="axis:y" bgcolor="0xeaeaea" width="100%">
+            <checkbox name="dp" value="true">open defaultplacement view</checkbox>
+            <checkbox name="componenthelpers" value="false">when opening canvas, show all component helpers</checkbox>
+        </view>
+    </class>
+
+    <inspector />
+
+</library>

@@ -1,0 +1,383 @@
+<library>
+
+    <include href="base/baseformitem.lzx"/>
+
+    <!--- A private inputtext class used by baseedittext that basically passes
+          its events (onfocus, onblur, onkeyup, onkeydown, ontext) up. Instances
+          of _internalinputtext should only exist in a baseedittext class. Note
+          that _internalinputtext assumes that its parent is a baseedittext.
+
+          Baseedittext controls _internalinputtexts y position and multiline
+          setting. Subclasses and instances should not override these
+          attributes.
+
+          @keywords private -->
+    <class name="_newinternalinputtext" extends="inputtext">
+
+        <!--- True means that doSetValue called internal inputtext and inputtext
+              should not call doSetValue back. -->
+        <attribute name="ignorecallup" value="false" />
+
+        <!--- Values like password and textwidth, which can't be changed at
+              runtime, must be passed in early to inputtext .
+              @keywords private -->
+        <method name="construct" args="parent, args">
+            // args from parent
+            if ( parent['password'] != null )  args.password = parent.password;
+            parent._field = this;
+            super.construct(  parent, args );
+        </method>
+
+        <!--- Sent if whenever the focus moves into _internalinputtext. -->
+        <handler name="onfocus" args="s">
+            if (parent['onfocus']) parent.onfocus.sendEvent(s);
+        </handler>
+        <!--- Sent if whenever the focus moves out of _internalinputtext. -->
+        <handler name="onblur" args="s">
+             if (parent['onblur']) parent.onblur.sendEvent(s);
+        </handler>
+        <!--- Sent whenever a user keys up. -->
+        <handler name="onkeyup" args="kc"> <![CDATA[
+              if (parent['onkeyup']) parent.onkeyup.sendEvent(kc);
+              ]]>
+        </handler>
+        <!--- Sent whenever a user keys down. -->
+        <handler name="onkeydown" args="kc"> <![CDATA[
+              if (parent['onkeydown']) parent.onkeydown.sendEvent(kc);
+              ]]>
+        </handler>
+        <!--- Sent whenever a user enters a valid new character. -->
+        <handler name="ontext" method="doOnText" />
+        <method name="doOnText" args="ignore">
+            if (! this.ignorecallup) {
+                parent.doSetValue(this.getText(),false,true);
+            }
+            this.ignorecallup = false;
+        </method>
+        <!--- Get focus bracket for _internalinputtext to be the dimensions of
+              baseedittext.
+              @keywords private -->
+        <method name="getFocusRect" >
+           var fx = parent.getAttributeRelative('x',canvas);
+           var fy = parent.getAttributeRelative('y',canvas);
+           var fw = parent.getAttributeRelative('width',canvas);
+           var fh = parent.getAttributeRelative('height',canvas);
+           return [fx,fy,fw,fh];
+        </method>
+        <!-- Used so that we can put a getPrevSelection method on an instance of
+             this class. -->
+        <method name="getPrevSelection" >
+            if ( parent['getPrevSelection'] )  return parent.getPrevSelection()
+            return null; // default tab order occurs
+        </method>
+        <!-- Used so that we can put a getNextSelection method on an instance of
+             this class. -->
+        <method name="getNextSelection" >
+            if ( parent['getNextSelection'] )  return parent.getNextSelection()
+            return null; // default tab order occurs
+        </method>
+    </class>
+
+
+    <!--- This component provides the look and feel for user editable text, data
+          binding, and focus events. -->
+    <class name="baseedittext" extends="baseformitem" focusable="false">
+        <!--- The text that appears in the component. Text and value are the
+              same. -->
+        <attribute name="text" type="html" setter="this.doSetValue(text, false, false)"/>
+
+        <!--- The text that appears in the component. Text and value are the
+              same. -->
+        <attribute name="value" value="null" setter="this.doSetValue(value, false, false)"/>
+
+        <!--- Set to true for multiple lines. -->
+        <attribute name="multiline" value="false"/>
+
+        <!--- Set to true for a password field. Text will appear as ****. 
+              This attribute cannot be changed at runtime.
+              @keywords final -->
+        <attribute name="password" value="false" />
+
+        <!--- The maximum number of chars that can be entered. Default is
+              unlimited. -->
+        <attribute name="maxlength" value="null" type="number"/>
+
+        <!--- An expression to restrict the set of characters that are allowed
+              to be entered. For example, [0-9]*, [012]*, [a-zA-Z]*,
+              [0-9A-Z]*. You can restrict the number of characters using
+              maxlength. Default is any character. -->
+        <attribute name="pattern" value="$once{null}" type="string" />
+
+        <!--- The height of the edit text box. -->
+        <attribute name="height" value="20"/>
+
+        <!--- The width of the edit text box. -->
+        <attribute name="width" value="106"/>
+
+        <!--- Font size of the text. -->
+        <attribute name="fontsize" value="13"/>
+
+        <!--- Sent when the value of the text changes. -->
+        <event name="onvalue" />
+
+        <!--- Setting the fgcolor of text has the unfortunate effect of setting
+              the hilite color as well, so it is disabled here.
+              @keywords private-->
+        <attribute name="fgcolor" setter=""/>
+
+        <!--- @keywords private -->
+        <attribute name="_fgcolor" value="0"/>
+
+        <!--- This should be null if not set during early init.
+              @keywords private -->
+        <attribute name="_initialtext" value="" type="string"/>
+
+        <!--- Boolean to see if baseedittext needs to place y position for text
+              during init.
+              @keywords private -->
+        <attribute name="_initialtexty" value="false" />
+
+        <!--- Reference to _internalinputtext. This is set by the
+              _internalinputtext during its initialization. _internalinputtext
+              is not defined by baseeditext and should be declared by subclasses
+              for proper visual placement.
+              @keywords private -->
+        <attribute name="_field" value="null" />
+
+        <!--- Set baseedittext height and correctly place text for
+              internalinputfield using _placeTextY().
+              @keywords private -->
+        <setter name="height" args="h">
+            super.setAttribute('height', h);
+            this._initialtexty = (!this._initcomplete);
+            if (this._initcomplete) this._placeTextY()
+        </setter>
+
+        <!--- Set edittext's and _field's multiline attributes. Will affect text
+              placement if multiline attribute changes.
+              @keywords private -->
+        <setter name="multiline" args="newMultiline">
+            this.multiline = newMultiline;
+            if (this._initcomplete) {
+                this._field.setAttribute('multiline', newMultiline);
+                this._placeTextY();
+            }
+        </setter>
+
+        <!--- If multiline, places text two pixels from top, else it calculates
+              the middle point for the textbox. 
+              @keywords private -->
+        <method name="_placeTextY">
+            if (this._field) {
+                if (this.multiline) {
+                    this._field.setAttribute('y', 2);
+                } else {
+                    this._field.setAttribute('y', (this.height - this._field.fontsize) / 2 - 3);
+                }
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            <![CDATA[
+            super.init();
+
+            // Make sure the initial rollback value is "", not "null"
+            this.rollbackvalue = "";
+            // Check to see if we have to set text during init.
+            if ( this['_initialtext'] != null ){
+                this.doSetValue( this._initialtext, true, false );
+            }
+            // Make sure value and text are in sync
+            this.value = this.text;
+
+            // Check to see if we have to place text during init.
+            if (this[ '_initialtexty' ] ) {
+                this._placeTextY()
+            }
+
+            if (this._field) {  // if you instantiate a baseedittext, 
+                                // it will not have an _field
+                if (this.multiline != this._field.multiline) {
+                    this._field.setAttribute("multiline", this.multiline);
+                }
+                if (this.maxlength != null) {
+                    this._field.setAttribute('maxlength', this.maxlength);
+                }
+                if (this.pattern != null) {
+                    this._field.setAttribute('pattern', this.pattern);
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- Set text. Wraps doSetValue().
+              @param String t: text to set.
+              @param Boolean isinitvalue: if the text to set is an
+              initvalue. -->
+        <method name="setText" args="t,isinitvalue=false">
+            if (! isinitvalue) {
+              if ($debug) {
+                Debug.deprecated(this, arguments.callee, this.setAttribute);
+              }
+            }
+            this.doSetValue(t,isinitvalue, false);
+        </method>
+
+        <!--- Override acceptValue to pass the magic second argument
+             to doSetValue so the new value is an initializer
+
+            @access private -->
+        <method name="acceptValue" args="data, type=null">
+          if (type == null) type = this.type;
+          this.doSetValue(lz.Type.acceptTypeValue(type, data, this, 'value'), true, false);
+        </method>
+
+        <!--- Set the value (text) of baseedittext.
+              @param String value: the string to set.
+              @param Boolean isinitvalue: if the string is an initvalue. -->
+        <method name="doSetValue" args="value,isinitvalue,_ignorecalldown"><![CDATA[
+              //----------------------------------------------------------------
+              // @param Boolean _ignorecalldown: if true, means that setValue
+              // should not call internal inputtext since that's what called
+              // setValue. This is a private parameter that should only be used
+              // by internalinputtext.
+              //----------------------------------------------------------------
+
+            if (this._initcomplete) {
+
+                if (! _ignorecalldown) {
+                    if (this._field) {
+                        // Have to set internal inputtext's nocallback attr. It
+                        // can't be passed into _field.setAttribute('text', ) since it's not an
+                        // laszlo method. Nocallback means that setValue called
+                        // internal inputtext and inputtext should not call setValue
+                        // back.
+                        this._field.ignorecallup = true;
+
+                        // _internalinputtext's ontext will trigger an ontext and
+                        // onvalue event so we don't send those events here.
+                        this._field.setAttribute('text', value);
+                    }
+                }
+               
+                this.text = value;
+
+                // It's important to call super.setValue *after* setting text to value,
+                // because super.setValue may send an event that other components listen
+                // to, and so the invariant that text = value must hold here.
+                super.setValue(value,isinitvalue);
+
+                if (this['ontext']) this.ontext.sendEvent(value);
+
+            } else {
+                if (this._initialtext == '' || this._initialtext == null) {
+                    this._initialtext = value;
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- Clears the text field. 
+              @param Boolean isinitvalue: if true, clear and set empty string as
+              initial value.. -->
+        <method name="clearText" args="isinitvalue">
+            this.doSetValue('', isinitvalue, false);
+        </method>
+
+        <!-- Sets the maxmimum number of characters which can be entered.
+             @param Number n: max length for edittext. -->
+        <method name="setMaxlength" args="n">
+            this.setAttribute('maxlength', n);
+            this._field.setMaxlength(n);
+        </method>
+
+        <!--- Positions the text selection within the text field. If this object
+              does not already have the focus, this has the ancillary effect of
+              giving it the focus.
+              @param Number start: The beginning of the text selection, or the
+              position for the text cursor if no end is given. The index is 0
+              based.
+              @param Number end: (optional) The end of the text selection. If
+              not given, then the text cursor is positioned at the start point,
+              but no text is selected. -->
+        <method name="setSelection" args="start,end=null">
+            this._field.setSelection(start, end);
+        </method>
+
+        <!--- Get the current selection position.
+              @return position of current selection. -->
+        <method name="getSelectionPosition">
+            return this._field.getSelectionPosition();
+        </method>
+
+        <!--- Get the current selection size.
+              @return size of current selection. -->
+        <method name="getSelectionSize">
+            return this._field.getSelectionSize();
+        </method>
+
+        <!-- @private -->
+        <method name="setPattern" args="r">
+          if ($debug) {
+            Debug.deprecated(this, arguments.callee, this.setAttribute);
+          }
+          this.setAttribute('pattern', r);
+        </method>
+
+        <!--- @private -->
+        <event name="onpattern" />
+        <!-- Set the characters which can be entered into a text field. -->
+        <setter name="pattern" args="r">
+            this.pattern = r;
+            if (this.onpattern.ready) { this.onpattern.sendEvent(r); }
+            if (this._initcomplete) {
+              this._field.setAttribute('pattern', r);
+            }
+        </setter>
+
+        <!--- Returns string displayed in this component. Also see getText().
+              @return String: the text string in input box. -->
+        <method name="getValue">
+            if (this._initcomplete) {
+                return (this._field ? this._field.getText() : "");
+            } else {
+                return this._initialtext;
+            }
+        </method>
+
+        <!--- Returns the text displayed in this component. The same as calling
+              getValue(false).
+              @return String: the string displayed. -->
+        <method name="getText">
+            if (this._initcomplete) {
+                return  (this._field ? this._field.getText() : "");
+            } else {
+                return this._initialtext;
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_showEnabled">
+            this._field.setAttribute('enabled', this._enabled);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                if (this.bgcolor) {
+                    this._field.setAttribute('bgcolor',s.textfieldcolor);
+                }
+                if (this['_face']) {
+                    this._face.setAttribute('bgcolor',s.textfieldcolor);
+                }
+            }
+        </method>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

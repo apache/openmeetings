@@ -1,0 +1,238 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/strokestyle.lzx"/>
+    <include href="../common/label.lzx"/>
+    <include href="axis.lzx"/>
+    <!-- Begin Horizontal Axis Class -->
+    <!---
+     Represents the X-axis on the rectangular chart extends from Axis class
+     @access public
+     -->
+    <class name="horizontalaxis" extends="axis">
+    <!--- @keyword private-->
+    <attribute name="datacolumn" type="string" value="x" />
+    <!--- @keyword private-->
+    <attribute name="labelLenght" type="number" value="0" />
+    <!--- Init method-->
+    <method name="init">    
+            this.setAttribute('height', objStroke.strokeWidth);
+            super.init();
+    </method>
+
+    <!--- Render the horizontal axis line
+        @keyword private
+        -->    
+    <method name="renderAxis"> 
+         <![CDATA[
+        this.minimumRender = parent.minx;
+        this.maximumRender = parent.maxx;
+
+            objStroke.renderStroke(0, 0, this.width, 0);
+          ]]>
+    </method>
+    <!--- Render axis title
+         @keyword private 
+        -->
+    <method name="renderTitle"> <![CDATA[
+    if ( this.titleX == null && this.titleY == null ){
+            switch( this.titleLocation ) {
+                case "high":
+                    this.titleView.setAttribute('x', (this.width - this.titleView.width)/2);
+                    this.titleView.setAttribute('y', -(this.height + this.style.tickmajor.length)- this.titleGap - this.titleView.height);
+                    break;
+                
+                case "low":
+                    this.titleView.setAttribute('x', (this.width - this.titleView.width)/2);
+                    this.titleView.setAttribute('y', (this.height + this.tickMarksView.height)+ this.titleGap);
+                    if ( this.titleView.embeddedFont(style.label.fontname) ){
+                        if ( style.label.fontangle > 20 &&  style.label.fontangle < 45)
+                            this.titleView.setAttribute('x', this.titleView.x + this.titleView.width/4);
+                        else if ( style.label.fontangle > 45 &&  style.label.fontangle <= 270){
+                            this.titleView.setAttribute('x', this.titleView.x + this.titleView.width/2);
+                            if ( style.label.fontangle > 90 &&  style.label.fontangle <= 180)
+                                this.titleView.setAttribute('y', this.titleView.y + this.titleView.height);
+                            else if ( style.label.fontangle > 180)
+                                this.titleView.setAttribute('y', this.titleView.y + this.titleView.width);
+                        }
+                        if (  style.label.fontangle > 0 )
+                            this.titleView.setAttribute('height', this.titleView.width);
+                    }
+                    break;
+                
+                case "default":
+                    this.titleView.setAttribute('x', this.width  + this.titleGap);
+                    this.titleView.setAttribute('y', -(this.titleView.height/2));
+                    break;
+            }
+        } else {
+            this.titleView.setAttribute('x', this.titleX);
+            this.titleView.setAttribute('y', this.titleY);
+        }       
+            ]]> </method>
+            
+    <!--- setter for scale and offset 
+        @keyword private-->   
+    <method name="setScaleAndOffset">
+        <![CDATA[            
+            this.scale = this.width / (this.maximum - this.minimum);
+            this.offset = - this.minimum * this.scale;        
+        ]]>
+    </method>        
+
+    <!--- Method to return a pixel position given graph data
+        @param Number pInput: for linear charts a graphicable data.
+        @keyword private 
+        -->
+    <method name="getPixelDistance" args="pInput">
+    <![CDATA[
+        //FIXME : Find out why the current pixel rate is not accurate
+        return ( (pInput - minimumRender) * ( (this.width) / (this.maximumRender - this.minimumRender) ));
+    ]]>
+    </method>
+    <!---
+        Get the length of the axis in pixels.
+        @keyword private
+        -->
+    <method name="getAxisLength">
+    <![CDATA[
+        return this.width;
+    ]]>        
+    </method>
+    <!--- Check label location and change placement to avoid labels
+            overlaping
+            @keywords private -->
+    <method name="reposLabels" args="pMarks"> 
+    <![CDATA[     
+            var labelstyle = this.style.tickmajor;
+            if (this.labelArray!=null && this.labelArray.length > 0) {
+            
+                var lLevels = 1;
+                var lReposInProgress = false;
+                var lInitalYMark = this.labelArray[0].y;
+
+                do 
+                {
+                    lReposInProgress = false;
+                    var lMaxPosPerLevel = new Array(lLevels);            
+
+                    for (var i=0; i < this.labelArray.length ; i++) { 
+                        var lCL = i%lLevels  // Find level, index to 0  
+                        var lL = this.labelArray[i]; //find label    
+                        
+                        if ( i>=lLevels ) {
+                                                        
+                            if ( lL.x < lMaxPosPerLevel[lCL]) {
+                                //add one level
+                                lLevels*=2;
+                                //break the for loop
+                                lReposInProgress = true;
+                                break;                                
+                            } else {
+                                //update max in the level
+                                lMaxPosPerLevel[lCL] = this.labelArray[i].x + this.labelArray[i].getTextWidth();
+                            }
+                        } else {
+                             //set inital pos for each level
+                             lMaxPosPerLevel[lCL] = lL.x + lL.getTextWidth();
+                        }
+                        
+                        //Set label y
+                        lL.setAttribute('y', lInitalYMark + (lCL * (labelstyle.label.fontsize+2) ));
+                    }
+
+                    this.tickMarksView.setAttribute('height', (lLevels * (labelstyle.label.fontsize+3)));
+                    
+                }while(lReposInProgress);
+            }            
+        ]]> 
+        </method>
+        <!---
+            Set the max length of the rightMargin.
+            @keyword private
+            -->
+        <method name="setRightMargin">
+        <![CDATA[
+            for (var i=0; i < this.labelArray.length ; i++) { 
+                var lL = this.labelArray[i]; //find label    
+                if ( this.labelLenght < (lL.x + lL.getTextWidth()) ){
+                    this.labelLenght = lL.x + lL.getTextWidth();
+                }
+            }
+            if ( parent.rightMargin == null ){
+                if ( this.width < this.labelLenght ){
+                    parent.rightMargin = this.labelLenght - this.width + parent.defaultRightMargin;
+                } else {
+                    parent.rightMargin = parent.defaultRightMargin;
+                }
+            }
+            this.labelLenght = 0;
+        ]]>        
+        </method>
+        <!--- Render a tick mark
+                @param Number pOffset: displacement depending on the position of the tickmark
+                @param Number pPos: actual tickmark position along the axis
+                @param expression pStyle: tickmark style object to use on the render
+                @keywords private -->
+        <method name="renderTickMark" args="pOffset,pPos,pStyle"> <![CDATA[
+                this.beginPath();
+                
+                this.moveTo(pPos, pStyle.length-pOffset);
+                this.lineTo(pPos, pOffset);
+                 
+                //set color
+                this.strokeStyle = pStyle.color;
+                this.lineWidth = pStyle.size;
+                //complete line
+                this.stroke();
+            ]]>
+        </method>
+        <!--- Set label position
+                @keywords private -->
+        <method name="setLabelPos" args="pLabel,pOffset,pTW,pTH,pPos">
+        <![CDATA[
+            pLabel.setAttribute('x', pPos-(pTW/2));
+            pLabel.setAttribute('y', this.height+pOffset);
+
+            if ( (pLabel.getTextHeight() + this.style.tickmajor.length) >= this.tickMarksView.height )
+                this.tickMarksView.setAttribute('height', this.style.tickmajor.length + pLabel.getTextHeight());
+        ]]> 
+        </method>           
+        <!--- Render tickmarks 
+        @keyword private-->     
+        <method name="renderTick"> <![CDATA[        
+            if(parent.constructor.tagname=='barchart' && this.columnName.toUpperCase()=='Y' && type.toUpperCase()=='CATEGORICAL') {
+                //Debug.write("RENDERTICKBAR");
+                renderBarTick();
+            } else {
+                if (type.toUpperCase()=='CATEGORICAL') {
+                    renderCategoricalTick();
+                } else if (type.toUpperCase()=='LINEAR') {
+                    renderLinearTick();
+                }
+           }
+           ]]> </method>
+        <doc>
+          <tag name="shortdesc"><text>
+              a horizontal axis for a chart
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+</library>
+<!-- End Horizontal Axis Class -->
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@ -->

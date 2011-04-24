@@ -1,0 +1,137 @@
+<library>
+    <include href="base/basevaluecomponent.lzx" />
+
+    <!-- A group of items that typically is used within a baselist. -->
+        <class name="baselistitem" extends="basevaluecomponent" clickable="true" focusable="false">
+
+        <!--- Whether this item is selected. Our containing list will adopt the value
+              of this component when it is selected. -->
+        <attribute name="selected" value="false" setter="this._setSelected(selected)"/>
+
+        <!--- Event sent when this item is selected. -->
+        <event name="onselected" />
+
+        <!--- Event sent when the user makes a selection. -->
+        <event name="onselect" />
+
+        <!--- This is the event that sets this item as selected with its
+              parent( an extension of baselist ).
+              The default is onclick, but it can be set to anything like
+              onmousetrackup as in the combobox component.
+              @keywords private -->
+        <attribute name="_selectonevent" value="onclick" type="string" setter="this.setSelectOnEvent(_selectonevent)" />
+
+        <!--- @keywords private -->
+        <setter name="datapath" args="dp">
+            if (null != this.datapath) {
+                this.datapath.setXPath(dp);
+            } else {
+                var data_args = { xpath : dp }
+                if (this._parentcomponent.dataoption == "lazy" ||
+                    this._parentcomponent.dataoption == "resize") {
+                    data_args.replication = _parentcomponent.dataoption;
+                    if (parent['spacing'])
+                        data_args.spacing = parent.spacing;
+                } else if (this._parentcomponent.dataoption == "pooling") {
+                   data_args.pooling = true;
+                }
+                new lz.datapath ( this, data_args );
+            }
+        </setter>
+
+        <!--- @keywords private -->
+        <attribute name="_valuedatapath" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="_textdatapath" value="null"/>
+        <!--- @keywords private -->
+        <method name="dataBindAttribute" args="attr, path, type">
+            if (this._parentcomponent.dataoption == "lazy" ||
+                this._parentcomponent.dataoption == "resize") {
+                if (attr == 'text') this._textdatapath = path;
+                else if (attr == 'value') this._valuedatapath = path;
+            }
+            super.dataBindAttribute(attr, path, type);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="setSelectOnEvent" args="es">
+                this._selectDL = new LzDelegate(this,'doClick',this,es);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doClick" args="ignore">
+            // FIXME [hqm 2006-09] LPP-2829 is it really ok that _parentcomponent is ever null?
+          if (this._parentcomponent) {
+              this._parentcomponent.select(this);
+          }
+        </method>
+
+        <!--- when the user clicks on an item, the
+              parent component needs to get the focus, so that the user may start
+              navigating with the arrow keys after a click
+              @keywords private -->
+        <method name="_doMousedown" args="ignore">  <![CDATA[
+            super._doMousedown(ignore);
+            var parcomp = this._parentcomponent;
+            if (!this.focusable && parcomp && parcomp.focusable) {
+               parcomp.__focusfromchild = true;
+               lz.Focus.setFocus(parcomp, false); // false => focus from mouse
+               parcomp.__focusfromchild = false;
+            }
+        ]]> </method>
+
+        <!--- sets the selected attribute, called by the selection manager
+              if this is within a baselist, this method is guaranteed
+              to be called after all subviews are initialized
+              @keywords private -->
+        <method name="setSelected" args="s">
+            <![CDATA[
+                this.selected = s;
+                if (this.onselect.ready) this.onselect.sendEvent(this);
+                if (this.onselected.ready) this.onselected.sendEvent(this);
+            ]]>
+        </method>
+
+        <!--- this is a setter for the selected attribute
+              it simply calls the parent's select method, which is
+              responsible for calling setSelected
+              If you want to set whether this view is selected, use
+              setAttribute('selected', true)
+              @keywords private -->
+        <method name="_setSelected" args="s">
+            <![CDATA[
+                // set the value of the 'selected' attribute here
+                // since this may be called before the selection manager is
+                // created
+                this.selected = s;
+                if (s) {
+                    if ($debug) {
+                      if (s == "false") {
+                        Debug.warn("attempt to set %s.selected to %#w, interpreted as true", this, s);
+                      }
+                    }
+                    parent.select(this);
+                }
+            ]]>
+        </method>
+
+        <!---  Sets this item to be highlighted to distinguish it in a list of items.
+           -->
+        <method name="setHilite" args="hilite">
+          // abstract base method
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>a group of these are managed by a baselist</text></tag>
+          <text>
+            <p>See <classname>baselist</classname> for details.</p>
+          </text>
+        </doc>
+        </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

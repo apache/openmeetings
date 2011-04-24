@@ -1,0 +1,463 @@
+<library>
+<!---
+   
+    @copyright Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.
+               Use is subject to license terms.
+   
+    @affects lzselectionmanager
+    @access public
+    @topic LFC
+    @subtopic Helpers
+    @lzxname selectionmanager
+    @devnote TODO: [20080930 anba] (LPP-6080) uncomment typing in method signatures
+  -->
+
+<class name="selectionmanager" extends="node">
+    <doc>
+        <tag name="shortdesc"><text>Manages selection among a series of objects.</text></tag>
+    <text>
+        <p>Selection managers manage selection among a series of objects. They
+    enable standard control and shift click modifiers to aid range
+    selection. Selection managers provide methods to manipulate, add to
+    and clear the selection.  For example:</p>
+   
+    <example><![CDATA[
+    <canvas>
+   
+      <dataset name="fruits">
+        <fruit>Oranges</fruit>
+        <fruit>Apples</fruit>
+        <fruit>Bananas</fruit>
+        <fruit>Grapes</fruit>
+        <fruit>Kiwis</fruit>
+        <fruit>Papayas</fruit>
+        <fruit>Watermelon</fruit>
+        <fruit>Strawberries</fruit>
+        <fruit>Cherries</fruit>
+      </dataset>
+   
+      <simplelayout/>
+   
+      <text>Select a series of items below. The control and shift-click modifiers
+      help select ranges.</text>
+   
+      <view name="fruitlist">
+        <selectionmanager name="selector" toggle="true"/>
+        <simplelayout/>
+   
+        <view name="listitem"
+              datapath="fruits:/fruit"
+              onclick="parent.selector.select(this);">
+          <text name="txt" datapath="text()"/>
+   
+          <method name="setSelected" args="amselected">
+            if (amselected) {
+              var txtColor = 0xFFFFFF;
+              var bgcolor = 0x999999;
+            } else {
+              var txtColor = 0x000000;
+              var bgcolor = 0xFFFFFF;
+            }
+            this.setAttribute('bgcolor', bgcolor);
+            this.txt.setAttribute('fgcolor', txtColor);
+          </method>
+        </view>
+   
+        <method name="deleteSelected">
+          var csel = this.selector.getSelection();
+          for (var i = csel.length - 1; i >= 0; i = i - 1) {
+            csel[i].destroy();
+          }
+          this.selector.clearSelection();
+        </method>
+      </view>
+      <button onclick="fruitlist.deleteSelected();">Delete selection</button>
+    </canvas>
+    ]]></example>
+    </text>
+    </doc>
+    <!--- The name of the method to call on an object when an object's
+        selectedness changes. The method is called with a single Boolean
+        argument. The default value for this field is <code>setSelected</code>.
+        (This feature is not available for <tagname>dataselectionmanager</tagname>.)
+        @type String
+        @lzxtype string
+      -->
+    <attribute name="sel" type="string" value="setSelected"/>
+
+    <!---
+        @access private
+        @type Object
+      -->
+    <attribute name="selectedHash"/>
+
+    <!---
+        @access private
+        @type Array
+      -->
+    <attribute name="selected"/>
+
+    <!---
+        @type Boolean
+        @lzxtype boolean
+      -->
+    <attribute name="toggle" type="boolean"/>
+
+    <!---
+        @type *
+        @access private
+      -->
+    <attribute name="lastRangeStart"/>
+
+    <!---
+        @access private
+      -->
+    <method name="construct" args="parent, args">
+        super.construct(parent, args);
+        this.__LZsetSelection([]);
+    </method>
+
+    <!---
+        @access private
+      -->
+    <method name="destroy">
+        if ( this.__LZdeleted ) return;
+        this.__LZsetSelection([]);
+        super.destroy();
+    </method>
+
+    <!---
+    /* generic functions for selection managers */
+    -->
+
+    <!---
+        Adds an object to the current selection
+        @param d:* object to select
+        @param o:LzView view for object, may be <code>null</code>
+        @return void
+        @access private
+      -->
+    <method name="__LZaddToSelection" args="d:*, o:LzView" returns="void"><![CDATA[
+        if (d != null && ! this.__LZisSelected(d)) {
+            this.selected.push(d);
+            this.__LZsetSelected(d, o, true);
+        }
+    ]]></method>
+
+    <!---
+        Removes an object from the current selection
+        @param d:* object to unselect
+        @param o:LzView view for object, may be <code>null</code>
+        @return void
+        @access private
+      -->
+    <method name="__LZremoveFromSelection" args="d:*, o:LzView" returns="void">
+        var i:int = this.__LZindexOf(d);
+        if (i != -1) {
+            this.selected.splice(i, 1);
+            this.__LZsetSelected(d, o, false);
+        }
+    </method>
+
+    <!---
+        Some runtimes don't support <code>Array.prototype.indexOf</code>
+        @param d:* element to search
+        @return int: index of <param>d</param> in <attribute>selected</attribute>
+        @access private
+      -->
+    <method name="__LZindexOf" args="d:*" returns="int">
+        var sela:Array = this.selected;
+        for (var i:int = sela.length - 1; i >= 0; --i) {
+            if (sela[i] === d) return i;
+        }
+        return -1;
+    </method>
+
+    <!---
+        Sets the current selection to <param>sela</param> and unselects
+        all objects in <param>unsel</param>. Both, <param>sela</param> and
+        <param>unsel</param>, must be subsets of the current selection.
+        @param sela:Array the new selection, {sela &#8838; selected}
+        @param unsel:Array objects to be unselected, {unsel &#8838; selected}
+        @return void
+        @access private
+      -->
+    <method name="__LZupdateSelection" args="sela:Array, unsel:Array" returns="void">
+        this.__LZsetSelection(sela);
+        for (var i:int = unsel.length - 1; i >= 0; --i) {
+            var d:* = unsel[i];
+            this.__LZsetSelected(d, this.__LZgetView(d), false);
+        }
+    </method>
+
+    <!---
+        Selects the range returned by <method>createRange</method> from
+        <param>s</param> to <param>e</param>
+        @param s:* The object that was at top of the selection stack
+        @param e:LzView  The newly selected view
+        @return void
+        @access private
+      -->
+    <method name="__LZselectRange" args="s:*, e:LzView" returns="void">
+        var range:Array = this.createRange(s, e);
+        if (range != null) {
+            var split:Object = this.__LZsplitRange(range);
+            this.__LZupdateSelection(split.unchanged, split.removed);
+            this.lastRangeStart = s;
+            var newsel:Array = split.added;
+            for (var i:int = newsel.length - 1; i >= 0; --i) {
+                var d:* = newsel[i];
+                this.__LZaddToSelection(d, this.__LZgetView(d));
+            }
+        } else {
+            this.clearSelection();
+            this.lastRangeStart = s;
+        }
+    </method>
+
+    <!---
+        Returns sublist of <param>list</param> between <param>start</param> and
+        <param>end</param>, including both elements. If <param>start</param>
+        occurs before <param>end</param>, the sublist starts with
+        <param>start</param> and includes all following elements up to
+        <param>end</param>. If <param>end</param> occurs before
+        <param>start</param>, the sublist starts with <param>end</param> and
+        includes all preceding elements up to <param>start</param>.
+        @param list:Array  array used as input
+        @param start:* starting element of sublist
+        @param end:* ending element of sublist
+        @return Array sublist of <param>list</param> or <code>null</code> if
+        <param>start</param> or <param>end</param> wasn't found
+        @access private
+      -->
+    <method name="__LZgetSubList" args="list:Array, start:*, end:*" returns="Array"><![CDATA[
+        var st:int = -1;
+        var en:int = -1;
+        for (var i:int = list.length - 1; i >= 0 && (st == -1 || en == -1); --i) {
+            if (list[i] === start) st = i;
+            if (list[i] === end) en = i;
+        }
+        var sublist:Array = null;
+        if (st != -1 && en != -1) {
+            if (en < st) {
+                sublist = list.slice(en, st + 1);
+                sublist.reverse();
+            } else {
+                sublist = list.slice(st, en + 1);
+            }
+        }
+        return sublist;
+    ]]></method>
+
+    <!--
+    /* implementation specific functions, must be overriden in subclasses */
+    -->
+
+    <!---
+        Returns the selection-object for a view
+        @param o:LzView  input view
+        @return selection-object for view
+        @access private
+      -->
+    <method name="__LZgetObject" args="o:LzView">
+        return o;
+    </method>
+
+    <!---
+        Returns the view for a selection-object
+        @param d:* input selection-object
+        @return LzView view for selection-object
+        @access private
+      -->
+    <method name="__LZgetView" args="d:*" returns="LzView">
+        return d;
+    </method>
+
+    <!---
+        Sets <attribute>selected</attribute> to <param>sela</param>
+        @param sela:Array  the new selection
+        @return void
+        @access private
+      -->
+    <method name="__LZsetSelection" args="sela:Array" returns="void">
+        var selh:Object = {};
+        for (var i:int = sela.length - 1; i >= 0; --i) {
+            selh[sela[i].__LZUID] = true;
+        }
+        this.selectedHash = selh;
+        this.selected = sela;
+        this.lastRangeStart = null;
+    </method>
+
+    <!---
+        Returns the selectedness for <param>d</param>
+        @param d:* input selection-object
+        @return Boolean <code>true</code> if <param>d</param> is selected
+        @access private
+      -->
+    <method name="__LZisSelected" args="d:*" returns="Boolean">
+        return (this.selectedHash[d.__LZUID] == true);
+    </method>
+
+    <!---
+        Makes the given object selected or unselected.
+        @param d:* object to make selected
+        @param o:LzView  view for <param>d</param>, may be <code>null</code>
+        @param sel:Boolean  <code>true</code> if selected
+        @return void
+        @access private
+      -->
+    <method name="__LZsetSelected" args="d:*, o:LzView, sel:Boolean" returns="void">
+        if (sel) {
+            this.selectedHash[o.__LZUID] = true;
+        } else {
+            delete this.selectedHash[o.__LZUID];
+        }
+        if (o[this.sel]) {
+            o[this.sel](sel);
+        } else if ($debug) {
+            Debug.warn("Could not find method %w in %w", this.sel, o);
+        }
+    </method>
+
+    <!---
+        Partitions the range and current selection into a triple of:
+        <ol>
+        <li>elements which are in the range and currently selected</li>
+        <li>elements which are in the range and not currently selected</li>
+        <li>elements which are not in the range but currently selected</li>
+        </ol>
+        @param range:Array input range array
+        @return Object [{selected &#8745; range}, {range \ selected}, {selected \ range}]
+        @access private
+        @devnote only added this function because a generic approach
+        requires O(n*m) whereas this runs in O(n+m)
+      -->
+    <method name="__LZsplitRange" args="range:Array" returns="Object">
+        var sela:Array = this.selected;
+        var selh:Object = this.selectedHash;
+        var rhash:Object = {};
+        var unchanged:Array = [], added:Array = [], removed:Array = [];
+        for (var i:int = range.length - 1; i >= 0; --i) {
+            var o:LzView = range[i];
+            if (selh[o.__LZUID]) {
+                unchanged.push(o);
+                rhash[o.__LZUID] = true;
+            } else {
+                added.push(o);
+            }
+        }
+        for (var i:int = sela.length - 1; i >= 0; --i) {
+            var o:LzView = sela[i];
+            if (! rhash[o.__LZUID]) {
+                removed.push(o);
+            }
+        }
+        return {unchanged: unchanged, added: added, removed: removed};
+    </method>
+
+    <!---
+        Creates the range for all objects between <param>s</param>
+        and <param>e</param>
+        @param s:* starting point for the range-selection
+        @param e:LzView  ending point for the range-selection
+        @return Array range from <param>s</param> to <param>e</param>
+        @access private
+        @devnote This function should possibly be made public, consider
+        range-selection in a 2-dimensional space, e.g. a table with cells
+        where you can select each cell. In that case, range-selection solely
+        based on the subviews-array won't work.
+      -->
+    <method name="createRange" args="s:*, e:LzView" returns="Array">
+        return this.__LZgetSubList(s.immediateparent.subviews, s, e);
+    </method>
+
+    <!--
+    /* public interfaces for selection managers */
+    -->
+
+    <!---
+        Tests for selectedness of input.
+        @param o:LzView  The view to test for selectedness.
+        @return Boolean The selectedness of the input view.
+      -->
+    <method name="isSelected" args="o" returns="Boolean">
+        return this.__LZisSelected(this.__LZgetObject(o));
+    </method>
+
+    <!---
+        Called with a new view to be selected.
+        @param o:LzView  The new view to make selected
+        @devnote TODO: Add returns="/*void*/", LzView type
+      -->
+    <method name="select" args="o"><![CDATA[
+        var d:* = this.__LZgetObject(o);
+        var issel:Boolean = this.__LZisSelected(d);
+        if (issel && (this.toggle || this.isMultiSelect(o))) {
+            this.unselect(o);
+        } else {
+            if (this.selected.length > 0 && this.isRangeSelect(o)) {
+                var s:* = this.lastRangeStart || this.selected[0];
+                this.__LZselectRange(s, o);
+            } else {
+                if (! this.isMultiSelect(o)) {
+                    var i:int = (issel ? this.__LZindexOf(d) : -1);
+                    var sela:Array = this.selected;
+                    this.__LZupdateSelection(i != -1 ? sela.splice(i, 1) : [], sela);
+                }
+                this.__LZaddToSelection(d, o);
+            }
+        }
+    ]]></method>
+
+    <!---
+        Unselects the given view.
+        @param o:LzView  The view to make unselected
+        @devnote TODO: Add returns="/*void*/", LzView type
+      -->
+    <method name="unselect" args="o">
+        this.__LZremoveFromSelection(this.__LZgetObject(o), o);
+    </method>
+
+    <!---
+        Unselects any selected objects.
+        @devnote TODO: Add returns="/*void*/", LzView type
+      -->
+    <method name="clearSelection">
+        this.__LZupdateSelection([], this.selected);
+    </method>
+
+    <!---
+        Returns an array representing the current selection.
+        @return Array An array representing the current selection.
+      -->
+    <method name="getSelection" returns="Array">
+        return this.selected.concat();
+    </method>
+
+    <!---
+        Determines whether the additional selection should be multi-selected or
+        should replace the existing selection
+        @param o:LzView  The newly selected view
+        @return Boolean If <code>true</code>, multi select. If
+        <code>false</code>, don't multi select
+        @devnote TODO: Add returns="/*Boolean*/", LzView type
+      -->
+    <method name="isMultiSelect" args="o">
+        return lz.Keys.isKeyDown( "control" );
+    </method>
+
+    <!---
+        Determines whether the additional selection should be range-selected or
+        should replace the existing selection
+        @param o:LzView  The newly selected view
+        @return Boolean If <code>true</code>, range select. If
+        <code>false</code>, don't range select
+        @devnote TODO: Add returns="/*Boolean*/", LzView type
+      -->
+    <method name="isRangeSelect" args="o">
+        return lz.Keys.isKeyDown( "shift" );
+    </method>
+</class>
+
+</library>

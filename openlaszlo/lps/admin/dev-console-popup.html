@@ -1,0 +1,42 @@
+<html>
+<head>
+<script type="text/javascript" src="../includes/embed.js"></script>
+</head>
+<body>
+<script language="JavaScript">
+
+
+function getQueryString (key) {
+    var qString = window.location.search;
+    //find start of key string
+    if (qString.indexOf('?'+ key) > -1) {
+        qString = qString.substr(qString.indexOf('?'+ key)) ;
+    }
+    else if (qString.indexOf('&'+ key) > -1) {
+        qString = qString.substr(qString.indexOf('&'+ key)) ;
+    }
+    else {
+        //key not found so return nothing
+        return null;
+    }
+    //use split to parse out the key name
+    qString = qString.split('=')[1];
+
+    //chop off the end of the string if any.
+    qString = qString.split('&')[0];
+
+    //return Query String Value
+    return unescape(qString);
+
+}
+
+var appuid = getQueryString('lzappuid');
+var appinfo = getQueryString('appinfo');
+
+lzEmbed({url: '/lps-dev/lps/admin/dev-console.lzx?lzappuid='+appuid+ '&lzt=swf&appinfo=' + escape(appinfo), bgcolor: '#9494ad', width: '100%', height: 370});
+
+
+
+</script>
+</body>
+</html>

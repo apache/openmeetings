@@ -1,0 +1,89 @@
+<library>
+    <include href="utils/layouts/layout.lzx"/>
+    <class name="simpleboundslayout" extends="layout">
+        <!--- The axis in which this layout operates, 'x' or 'y'. -->
+        <attribute name="axis" value="y" setter="this.setAxis( axis )" 
+                type="string" />
+                
+        <!--- A pixel amount to use between each view in the layout. -->
+        <attribute name="spacing" value="0" 
+                setter="this.spacing = spacing; 
+                        if( this.subviews.length ) this.update()"/>
+
+        <!--- setter for the axis attribute. The default value is 'y' 
+          @param string a: 'x' oy 'y' -->
+        <method name="setAxis" args="a" >
+            this.axis = a;
+            this.sizeAxis = a == "x" ? "width" : "height"
+        </method>
+
+        <!--- @keywords private -->
+        <method name="addSubview" args="newsub">
+            this.updateDelegate.register( newsub,  "onx");
+            this.updateDelegate.register( newsub,  "ony");
+            this.updateDelegate.register( newsub,  "onrotation");
+            this.updateDelegate.register( newsub,  "onwidth");
+            this.updateDelegate.register( newsub,  "onheight");
+            this.updateDelegate.register( newsub,  "onvisible");
+            super.addSubview( newsub );
+            this.update();
+
+        </method>
+
+        <!--- This method is usually called automatically when any of the views
+              controlled by the layout change their size in the layout axis, or
+              their visibility. However it can be called directly to force the
+              layout to update -->
+        <method name="update" args="v=null">
+            <![CDATA[
+            if ( this.locked ) return;
+            this.locked=true;
+            var l = this.subviews.length;
+            var c = 0;
+                
+            for(var i=0; i < l; i++) {
+                var s = this.subviews[i]; 
+                if ( !s.visible ) continue;
+                var sb = s.getBounds();
+                if ( s[ this.axis ] != c - sb[ this.axis + "offset"] ){
+                    s.setAttribute( this.axis , c - sb[ this.axis + "offset"] );
+                }
+                c += this.spacing + sb[ this.sizeAxis ] ;
+            }
+            this.locked=false;
+            
+            ]]>
+        </method>
+        <doc>
+        <tag name="shortdesc"><text>Arranges a set of views along an 'x' or 'y' axis with respect to the bounding rect of the views</text></tag>
+        <text>
+              <para>Views have a bounding rectangle that can be different than the rectangle that is defined by their position, width and height. 
+              <classname>simpleboundslayout</classname> uses that bounding rectangle to lay out a set of views along an x or y axis, similar to 
+              <sgmltag class="element" role="lz.simplelayout">&lt;simplelayout&gt;</sgmltag> that uses a views position and its width or height. 
+              The example below shows the difference when using <classname>simpleboundslayout</classname> vs. a <classname>simplelayout</classname> 
+              for a set of three views.</para>
+            <example title="Example of simpleboundslayout">
+<![CDATA[<canvas height="100">
+  <include href="utils/layouts/simpleboundslayout.lzx"/>
+  <view bgcolor="0x8A8A8A" x="10" y="10">
+    <view width="60" height="60" bgcolor="teal"/>       
+    <view width="60" height="60" bgcolor="blue" rotation="45"/> 
+    <view width="60" height="60" bgcolor="teal"/>           
+    <simpleboundslayout axis="x"/> 
+  </view >
+  <view bgcolor="0x8A8A8A" x="250" y="10">
+    <view width="60" height="60" bgcolor="teal"/>       
+    <view width="60" height="60" bgcolor="blue" rotation="45"/> 
+    <view width="60" height="60" bgcolor="teal"/>           
+    <simplelayout axis="x"/> 
+  </view >
+</canvas>]]></example>
+        </text>
+    </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2006, 2008-2010  Laszlo Systems, Inc.  All Rights Reserved.  *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

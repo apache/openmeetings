@@ -1,0 +1,217 @@
+<!---
+    @topic Incubator
+    @subtopic Components
+-->
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008, 2009, 2010 Laszlo Systems, Inc.  All Rights Reserved. *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+    <class name="fileupload">
+
+        <passthrough when="$as3">
+          import flash.events.*;
+          import flash.net.*;
+        </passthrough>
+
+        <!--- message of feedback to user -->    
+        <attribute name="msg" type="string" value="" />
+        
+        <!--- Max file size in bytes -->
+        <attribute name="maxsize" value="10000" />
+        
+        <!--- file reference, for internal use 
+            @access private -->
+        <attribute name="fileref" value="$once{new flash.net.FileReference()}" />
+        
+        <!--- Enable upload. True to enable uploading, false to disable uploading. -->
+        <attribute name="uploadenable" value="false" type="boolean"/>
+        
+        <switch>
+          <when property="$as2">
+            <handler name="oninit" args="invoker">
+              <![CDATA[
+                 fileref.addListener(invoker);
+              ]]>
+            </handler>
+          </when>
+          <when property="$as3">
+            <handler name="oninit" args="invoker">
+              <![CDATA[
+              fileref.addEventListener(Event.CANCEL, cancelHandler);
+              fileref.addEventListener(Event.COMPLETE, completeHandler);
+              fileref.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+              fileref.addEventListener(Event.OPEN, openHandler);
+              fileref.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+              fileref.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+              fileref.addEventListener(Event.SELECT, selectHandler);
+              fileref.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+              ]]>
+            </handler>
+          </when>
+        </switch>
+
+        <method name="browse">
+            <![CDATA[
+                fileref.browse();
+            ]]>
+        </method>
+        
+        <method name="getName">
+            <![CDATA[
+                return fileref.name;
+            ]]>
+        </method>
+        
+        <!--- Call to actually upload the file to the server. 
+            @param url: the url of the server to which to upload
+        -->
+        <method name="upload" args="url">
+            <![CDATA[
+                if(fileref.size/1000 > maxsize){
+                    var exceed = 'Error: Uploaded file size:' + Math.round(fileref.size/1000) + 'k bytes exceeded ' + maxsize/1000000 + ' Mb limitation';
+                    this.setAttribute("msg", exceed);
+                }  else {
+                    if(uploadenable){
+                        if ($as3) {
+                            fileref.upload(new URLRequest(url));
+                        } else {
+                            fileref.upload(url);
+                        }
+                    }
+                }
+            ]]>
+        </method>
+        
+        <!-- AS3 event handlers -->
+        <switch>
+          <when property="$as3">
+           <method name="cancelHandler" args="event:Event">
+             // if ($debug) {
+             //     Debug.write(this, "got onCancel", event);
+             // }
+             this.onCancel();
+           </method>
+
+           <method name="progressHandler" args="event:ProgressEvent">
+             var file:FileReference = event.target cast FileReference;
+             // if ($debug) {
+             //     Debug.write(this, "got onProgress name=", file.name,
+             //                 "bytesLoaded=", event.bytesLoaded, "bytesTotal=", event.bytesTotal);
+             // }
+             this.onProgress(file, event.bytesLoaded, event.bytesTotal);
+           </method>
+
+           <method name="openHandler" args="event:Event">
+             // if ($debug) {
+             //     Debug.write(this, "got onOpen");
+             // }
+             this.onOpen();
+           </method>
+
+           <method name="completeHandler" args="event:Event">
+             // if ($debug) {
+             //     Debug.write(this, "got onComplete");
+             // }
+             this.onComplete(event.target);
+           </method>
+
+           <method name="securityErrorHandler" args="event:SecurityErrorEvent">
+             // if ($debug) {
+             //     Debug.write(this, "got onSecurityError");
+             // }
+             this.onSecurityError();
+           </method>
+
+           <method name="ioErrorHandler" args="event:IOErrorEvent">
+             // if ($debug) {
+             //     Debug.write(this, "got onIOError");
+             // }
+             this.onIOError();
+           </method>
+
+           <method name="selectHandler" args="event:Event">
+             var file:FileReference = FileReference(event.target);
+             // if ($debug) {
+             //     Debug.write(this, "got onSelect", "name=", file.name);
+             // }
+             this.onSelect(file);
+           </method>
+
+
+           <method name="httpStatusHandler" args="event:HTTPStatusEvent">
+             <![CDATA[
+             // if ($debug) {
+             //     Debug.write(this, "got onHTTPError");
+             // }
+             if (event.status >= 400 && event.status < 500) {
+               this.onHTTPError();
+             }
+             ]]>
+           </method>
+          </when>
+        </switch>
+
+        <!-- END AS3 event handlers -->
+
+        <method name="onSelect" args="fr">
+        </method>
+        
+        <method name="onCancel">
+        </method>
+        
+        <method name="onProgress" args="fr,bytesLoaded,bytesTotal" >
+        </method>
+        
+        <method name="onOpen">
+        </method>
+        
+        <method name="onComplete" args="fr">
+          if (fr) {
+             this.setAttribute("msg", fr.name + " upload completed!");
+          }
+        </method>
+        
+        <method name="onSecurityError">
+            this.setAttribute("msg", 'Security Error!');
+        </method>
+        
+        <method name="onIOError">
+             this.setAttribute("msg", 'IO Error!');
+        </method>
+        
+        <method name="onHTTPError">
+             this.setAttribute("msg", 'Http Error!');
+        </method>
+
+
+        <doc>
+            <tag name="shortdesc"><text>A swf8-specific class for uploading a single file to a server</text></tag>
+            <text>
+                <p>
+                A class for uploading a single file using the Flash 8 file upload api. This only works with
+                the swf8 runtime, that is, with lzr=swf8.
+                </p>
+                <p>
+                Using this class requires a service to which to upload. A sample upload jsp is provided, 
+                which uses the cos.jar library from servlets.com. To use the example, copy cos.jar from
+                <a href="http://www.servlets.com/cos/index.html">servlets.com</a> into $TOMCAT_HOME/common/lib
+                and rename lps/components/incubator/uploader/example/upload.jsp.txt to upload.jsp. 
+                On windows, edit upload.jsp to have the upload destination of your choice, ie "C:/", 
+                by changing the value of saveDirectory. The destination
+                directory is currently /tmp/uploader, which will work for mac and linux servers.
+                Restart tomcat, so it will see the new jar, then visit 
+                <a href="http://localhost:8080/legals/lps/components/incubator/uploader/example/test-fileupload.lzx?lzr=swf8">
+                    http://localhost:8080/legals/lps/components/incubator/uploader/example/test-fileupload.lzx?lzr=swf8</a>
+                </p>
+                <p>
+                    To upload multiple files, see <tagname>multiplefileupload</tagname>
+                </p>
+                <p>(The terms of the servlets.com license forbid it from being redistributed 
+                with Open Laszlo.)
+                </p>
+            </text>
+        </doc>
+        
+    </class>
+</library>

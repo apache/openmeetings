@@ -1,0 +1,127 @@
+<!---
+      @topic Incubator
+      @subtopic Rich Text Editor
+  -->
+<library>
+    <include href="baserichedittext.lzx" />
+
+    <!--- 
+        scrollrichedittext
+        A class which wraps up baserichedittext and ui for scrolling the textarea. 
+        [gregor 10.26.05]
+    -->
+    <class name="scrollrichedittext" extends="baserichedittext" 
+           multiline="true">
+
+        <!--- The default width of the text area border. -->
+        <attribute name="border" value="0" />
+
+        <!--- Name of class to instantiate for vertical scroll bar.
+              @keywords public -->
+        <attribute name="vscrollbarclassname" type="string" value="vscrollbar"/>
+        
+        <!--- Width to give for scrollbar
+              @keywords private -->
+        <attribute name="vscrollwidth" value="${(_vs &amp;&amp; _vs.visible) ? _vs.width : 0}"/>
+        
+        <!--- Our vertical scrollbar
+              @keywords private -->
+        <attribute name="_vs" value="null"/>
+        
+        <!--- @keywords private -->
+        <method name="ensurevscrollbar">
+            if (this._vs == null) {
+                var classname = this.vscrollbarclassname;
+                if (classname == "") {
+                    classname = "vscrollbar";
+                }
+                if ($debug) {
+                    if (typeof(lz[classname]) == "undefined") {
+                        Debug.error("%s.scrollbarclassname invalid: %s", this, classname);
+                    }
+                }
+                
+                this._vs = new (lz[classname])(this, 
+                                                 { axis: "y",
+                                                   scrollattr: "pos",
+                                                   scrolltarget: this.inp });
+                var vsinit = function () {
+                    var p = this.parent;
+                    
+                    // _vs.x="${parent.width - this.width}" 
+                    this.addProperty("__constraintX", function(ignore) { this.setAttribute("x", this.parent.width - this.width); });
+                    this.applyConstraintMethod("__constraintX", [p, "width", this, "width"]);
+                    
+                    // _vs.stepsize="${parent.inp.lineheight}" 
+                    this.addProperty("__constraintStepsize", function(ignore) { this.setAttribute("stepsize", this.parent.inp.lineheight); });
+                    this.applyConstraintMethod("__constraintStepsize", [p.inp, "lineheight"]);
+                    
+                    // _vs.scrollmax="${parent.inp.maxheight}" 
+                    this.addProperty("__constraintScrollmax", function(ignore) { this.setAttribute("scrollmax", this.parent.inp.maxheight); });
+                    this.applyConstraintMethod("__constraintScrollmax", [p.inp, "maxheight"]);
+                }
+                
+                vsinit.call(this._vs);
+            }
+        </method>
+        
+        <method name="init">
+            super.init();
+            this.ensurevscrollbar();
+        </method>
+
+        <_richinternalinputtext name="inp" x="${parent.border}" 
+            y="${parent.border}" 
+            height="${parent.height-parent.border*2}"
+            width="${parent.width - parent.vscrollwidth - parent.border*2 }">
+            <attribute name="maxheight" 
+                       value="${this.height + this.lineheight * (this.maxscroll - 1)}"/>
+            <event name="onpos" />
+            <attribute name="pos" value="0" setter="this.setPos(pos)"/>
+
+
+            <method name="init">
+                super.init();
+                // Store a link to the enclosing rich text edit area deep in this
+                // swf sprite, so that we can do a clever fix for LPP-4396, 
+                // "clicking bold moves insertion point." 
+                // See the lz.ModeManager.rawMouseEvent handler defined in 
+                // richtexteditarea.lzx to see how we use this breadcrumb. 
+                this.sprite.__LZtextclip.__LZrte = this.parent;
+            </method>
+            <!--- Set the scroll position and update the scrollbar to match 
+                @param Number p: position-->
+            <method name="setPos" args="p">
+                
+                if (this.isinited) {
+                    this.setAttribute('scroll', Math.ceil(1 - (p / this.lineheight)));
+                    this.pos = p;
+                    if (this.onpos) this.onpos.sendEvent(p);
+                }
+            </method>
+            
+            <handler name="onscroll">
+                this.setPos(-this.lineheight * (this.scroll - 1), true);
+            </handler>
+        </_richinternalinputtext>
+        
+        <!--- Overrides a parent method which calculates y position for text
+            in a way that doesn't make sense for this class. We just trap the 
+            call and do nothing. This field is positioned in y by the constraint
+            y=${parent.border}
+            Note: although this method is a no-op, it still has to be declared,
+            so the parent class's method does not get called on instances of 
+            this class. 
+        -->
+        <method name="_placeTextY">
+            // Do nothing. 
+        </method>
+
+   </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

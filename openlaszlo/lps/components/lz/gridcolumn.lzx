@@ -1,0 +1,156 @@
+<library>
+    <include href="button.lzx" />
+    <include href="base/basegridcolumn.lzx" />   
+
+    <resource name="colResize" src="resources/grid/grid_cursor.swf"/>
+    <resource name="lzgridsortarrow_rsrc">
+        <frame src="resources/grid/sort_arrow_up.swf"/>
+        <frame src="resources/grid/sort_arrow_dn.swf"/>
+    </resource>
+
+    <class name="gridcolumn" extends="basegridcolumn">
+        <!--- If set to false, the column cannot be resized. -->
+        <attribute name="resizable" value="true" type="boolean"/>
+
+        <!--- If true, the column header is clickable and will initiate a 
+              sort -->
+        <attribute name="sortable" type="boolean" value="true"/>
+        <!--- If set to false, then no header will be shown for this column.-->
+        <attribute name="showheader" value="true" type="boolean"/>
+        <!--- The width of the resizer between columns.-->
+        <attribute name="resizemargin" value="3" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="colwidth" value="${this.width - 
+                                    (this.resizable ? 4 : 2) }"/>
+
+        <!--- @keywords private -->
+        <method name="init">
+            if ( ! this.hassetwidth ){
+                if ( this.showheader ){
+                    this.setAttribute('width', mybutton.measureWidth()  );
+                } else {
+                    this.setAttribute('width', this.minwidth );
+                }
+            }
+            if ( this.showheader ){
+                mybutton.widthConstraint.setAttribute('applied', true);
+            }
+            super.init();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if ( showheader ){
+                setTint(mybutton.sortarrow, s.textcolor);
+                if ( resizable ){
+                    setTint(resizer, s.basecolor);
+                }
+            }
+            super._applystyle( s );
+        </method>
+
+        <!--- @keywords private -->
+        <state applied="${classroot.showheader}" placement="header">
+            <button name="mybutton" 
+                    clip="true"
+                    placement="header"
+                    text="${classroot.text}"  
+                    text_padding_x="20"
+                    focusable="$once{classroot.sortable}"
+                    doesenter="false"
+                    onclick="parent.doSort()"
+                    clickable="$once{classroot.sortable}">
+
+                <setter name="clickable" args="cl">
+                    <![CDATA[ super.setAttribute ('clickable', cl && this.classroot.sortable );]]>
+                </setter>
+                    
+                <view resource="lzgridsortarrow_rsrc"  name="sortarrow"
+                      x="${ parent._title.x + parent._title.width + 2}"
+                      y="${ parent.titleshift + parent.height/2 - height/2}"
+                      frame="${ classroot.ascendsort ? 1 : 2 }"
+                      visible="${ classroot.hasSort }"/>
+
+                <state name="widthConstraint" placement="header">
+                    <attribute name="width" 
+                               value="${ classroot.width - 
+                                         ( parent.resizable &amp;&amp; parent['resizer'] ? 
+                                           parent['resizer'].width : 0 ) }"/>
+                </state>
+            </button>
+
+            <state placement="header" applied="${parent.resizable}">
+                <view height="${parent.height-1}"
+                    x="${parent.mybutton.width - 1}"
+                    placement="header"
+                    name="resizer"
+                    clickable="$once{parent.resizable}"
+                    cursor="colResize"
+                    onmousedown="lz.Cursor.lock();parent.rs.setAttribute('applied', true)"
+                    onmouseup="lz.Cursor.unlock();parent.rs.setAttribute('applied', false)" >
+                    <view resource="resources/grid/column_resize_top.swf"/>
+                    <view resource="resources/grid/column_resize_mid.swf"
+                        stretches="height"/>
+                    <view resource="resources/grid/column_resize_bot.swf"/>
+                    <stableborderlayout axis="y"/>
+                </view>
+            </state>
+
+            <state name="rs" placement="header">
+                <attribute name="__resize_xroffset"
+                           value="$once{ this.x - this.width + 
+                                         this.getMouse( 'x' ) }"/>
+                    
+                <attribute name="width" 
+                     value="${Math.max( minwidth, this.immediateparent.getMouse( 'x' )- __resize_xroffset)}"/>
+            </state>
+        </state>
+
+
+        <doc>
+          <tag name="shortdesc"><text>
+              Declares a column in a grid.
+          </text></tag>
+          <text>
+            <p>
+              The <classname>gridcolumn</classname> class can be used to declare a
+              column in a <classname>grid</classname> with the standard column
+              header look without specifying exactly what goes inside the
+              column. This can be useful for embedding other components within a
+              grid.</p>
+
+            <example>
+              &lt;canvas height="160"&gt;
+              &lt;dataset name="contacts" request="true"
+              src="http:resources/contactsdata.xml"/&gt;
+
+              &lt;grid datapath="contacts:/resultset"&gt;
+              &lt;gridcolumn showheader="false" width="50"&gt;
+              &lt;view bgcolor="#CCCCCC" width="${parent.width}"
+              placement="header"
+              height="${parent.immediateparent.height-1}"/&gt;
+              &lt;text datapath="position()"/&gt;
+              &lt;/gridcolumn&gt;
+              &lt;gridcolumn width="200"&gt; Name
+              &lt;text datapath="@displayname" resize="false"/&gt;
+              &lt;/gridcolumn&gt;
+              &lt;gridcolumn sortable="false"&gt; Home
+              &lt;checkbox value="$path{'@home_default'}"
+              xoffset="${10-parent.width/2}"&gt;
+              &lt;handler name="onvalue"&gt;
+              this.datapath.updateData();
+              &lt;/handler&gt;
+              &lt;/checkbox&gt;
+              &lt;/gridcolumn&gt;
+              &lt;/grid&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

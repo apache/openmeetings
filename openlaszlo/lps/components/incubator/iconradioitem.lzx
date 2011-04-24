@@ -1,0 +1,135 @@
+<library>
+    <include href="custombutton.lzx" />
+    <include href="iconradioitem-resources.lzx" />
+
+    <!--- the iconradioitem class is a radio button with only an icon
+        @START_CODE
+        <iconradioitem iconname="target" />
+        @END_CODE
+    -->
+   <class name="iconradioitem" extends="baselistitem" 
+        height="18" >
+   
+        <!--- icon filename -->
+        <attribute name="iconname"  value=""  type="string" />
+        
+        <!--- icon x position. calculated if not specified explicitly -->
+        <attribute name="icon_x"    value="null"  />
+        <!--- icon y position. calculated if not specified explicitly -->
+        <attribute name="icon_y"    value="null"  />
+        
+         <!--- background resources -->
+        <attribute name="leftrsc"        value="iconradiobutton_small_left_rsc"  type="string" />
+        <attribute name="middlersc"      value="iconradiobutton_small_middle_rsc"  type="string" />
+        <attribute name="rightrsc"       value="iconradiobutton_small_right_rsc"  type="string" />
+
+        <!-- button background -->
+        <!-- have to use placeholder resources so that basebutton initializes correctly -->     
+        <view name="left"   resource="iconradiotransparent_button_rsc" height="${parent.height}" 
+            x="0"  >
+            <handler name="onload">this.updateResourceSize();</handler>
+        </view>
+        <view name="middle" resource="iconradiotransparent_button_rsc" height="${parent.height}" 
+            x="${parent.left.width}" width="${parent.width-parent.left.width-parent.right.width}" stretches="both">
+            <handler name="onload">this.updateResourceSize();</handler>
+        </view>
+        <view name="right"  resource="iconradiotransparent_button_rsc" height="${parent.height}" 
+            x="${parent.width-width}" stretches="height">
+            <handler name="onload">this.updateResourceSize();</handler>
+        </view>
+        <view x="${parent.width-width}" name="line" bgcolor="black" width="1" height="${parent.height-1}" visible="false" />
+         
+        <view name="icon" resource="$once{classroot.iconname ? classroot.iconname + '_icon_rsc' : ''}"
+            x="${ classroot.icon_x != null ? classroot.icon_x:(parent.width-width)/2}" 
+            y="${ classroot.icon_y != null ? classroot.icon_y : 4 }"  />
+
+        <!-- load resource -->
+        <!--- @keywords private -->
+        <method name="init" >
+            <![CDATA[
+            super.init();
+
+            if ( leftrsc != "" )
+            {
+                // set resource.  also need to set tint again.
+                this.left.setAttribute('resource', leftrsc);
+                if (this.style != null && this.style.basecolor != null)
+                    this.setTint(this.left, this.style.basecolor);
+            }
+                
+            if ( middlersc != "" )
+            {
+                this.middle.setAttribute('resource', middlersc);
+                this.setTint(this.middle, this.style.basecolor);
+            }
+            
+            if ( rightrsc != "" )
+            {
+                this.right.setAttribute('resource', rightrsc);
+                this.setTint(this.right, this.style.basecolor);
+            } else {
+                this.line.setAttribute('visible', true);
+            }
+            ]]>
+       </method>
+
+        <!---  @keywords private -->
+        <attribute name="_down" value="false" type="boolean"/>
+        <!---  @keywords private -->
+        <handler name="onmouseover">
+            this.setFrame((this.selected || this._down) ? 3 : 2);
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmouseout">
+            this.setFrame(this.selected ? 3 : 1);
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmouseup">
+            this.setFrame(this.selected ? 3 : 1);
+            this._down = false;
+        </handler>
+        <!---  @keywords private -->
+        <handler name="onmousedown">
+            this.setFrame(3);
+            this._down = true;
+        </handler>
+        <!--- Display hilite (handles key navigation) -->
+        <!---  @keywords private -->
+        <method name="setHilite" args="v" >
+            this.setFrame((this.selected || this._down) ? 3 : (v ? 2 : 1));
+        </method>
+
+        <!---  @keywords private -->
+        <method name="setSelected" args="s">
+            <![CDATA[
+                this.selected = s;
+                if (this.onselect) this.onselect.sendEvent(this);
+                if (this.onselected) this.onselected.sendEvent(this);
+                this.setFrame(s ? 3 : 1);
+            ]]>
+        </method>
+        
+        <!---  @keywords private -->
+        <method name="setFrame" args="f">
+            this.left.setAttribute('frame', f);
+            this.middle.setAttribute('frame', f);
+            this.right.setAttribute('frame', f);
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                this.setTint(this.left, s.basecolor);
+                this.setTint(this.middle, s.basecolor);
+                this.setTint(this.right, s.basecolor);
+            }
+        </method>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

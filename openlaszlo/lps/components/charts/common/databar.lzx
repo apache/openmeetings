@@ -1,0 +1,145 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+<!--- @keyword private
+    Render a bar or column of data in the chart-->
+    <class name="databar" extends="drawview">
+        <!--- @keywords private -->
+        <attribute name="tooltip" type="string" value=""/> 
+        <!--- @keywords private -->
+        <attribute name="style" type="string"/>
+        <!--- @keywords private -->
+        <strokestyle name="strokeDataBar"/>
+
+        <!--- shows the data tooltip on mouseover event 
+            @keyword private-->
+        <handler name="onmouseover">
+        <![CDATA[ 
+            if(tooltip != null && parent.parent.datatipEnabled){
+                parent.parent.datatooltip.style = this.style.tip;
+                parent.parent.datatooltip.show(tooltip);
+            }            
+        ]]>
+        </handler>
+
+        <!--- hides the data tooltip on mouseout event 
+            @keyword private-->
+        <handler name="onmouseout">
+            parent.parent.datatooltip.hide();
+        </handler>
+
+        <!--- @keywords private -->
+        <text name="txt"/>
+
+        <!--- @keywords private -->
+        <method name="setText" args="t">
+            txt.setAttribute('text', t);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="render"> 
+        <![CDATA[ 
+            var borderWidth = 0;
+            if (parent.parent.databorderEnabled) {
+                if((style["line"] != null))
+                {
+                    borderWidth =  style.line.size;                               
+                    this.strokeDataBar.setAttribute( "strokeColor", style.line.color );
+                    this.strokeDataBar.setAttribute( "strokeWidth", borderWidth );
+                    this.strokeDataBar.setAttribute( "strokeType", style.line.type);
+                    this.strokeDataBar.globalAlpha = style.line.opacity;
+                }
+            }
+            
+            if( parent.constructor.tagname == "barchartplotarea" ) {
+                if (parent.parent.databorderEnabled) {
+                    this.renderBorder(width, - borderWidth, 
+                                      1 + borderWidth / 2, height - 1 );
+                }
+                this.drawRect(width - borderWidth / 2, - borderWidth - 1, 
+                                  1 + borderWidth, height );
+            }
+            else if( style.region.image != null ) {
+                this.setSource( style.region.image );
+                this.setAttribute( "stretches", style.region.stretches );
+                this.setAttribute('opacity', style.region.opacity);
+
+            }
+            else if( parent.constructor.tagname == "columnchartplotarea" ) {
+                if (parent.parent.databorderEnabled) {
+
+                    this.renderBorder(borderWidth / 2, borderWidth/2, 
+                                      width - 1 - borderWidth / 2, height - 1 - borderWidth / 2);
+                }
+                this.drawRect(borderWidth, borderWidth/2, 
+                              width - 1 - borderWidth, height );
+            }
+
+           if( style.region.gradient != null ) {
+               var g = null;
+
+               if( style.region.gradient == "linear" ) {
+                   g = this.createLinearGradient(0, 0, this.width, this.height);
+               } else if ( this.style.region.gradient == "radial" ) {
+                   g = this.createRadialGradient(0, 0,
+                                              .7, this.width, this.height, 0);
+               }
+
+               if( g != null ) {
+                   this.globalAlpha = 0;
+                   g.addColorStop(0, 0x000000);
+                   this.globalAlpha = 1;
+                   g.addColorStop(1, style.region.color);
+                   this.fillStyle = g;
+               }
+           }
+            
+           if (style.region.gradient == "none" || style.region.gradient == null) {
+                    this.fillStyle = style.region.color;
+           }
+           
+            this.globalAlpha = style.region.opacity;
+            this.fill();
+        ]]>
+        </method>
+        
+        <!--- render the bar
+            @param Number startx: The start x position
+            @param Number starty: The satrt y position
+            @param Number endx: The end x position
+            @param Number endy: The end y position
+            @keywords private -->
+        <method name="drawRect" args="startx, starty, endx, endy">
+            this.beginPath();
+            this.moveTo(startx, starty);
+            this.lineTo(endx, starty);
+            this.lineTo(endx, endy);
+            this.lineTo(startx, endy);
+            this.lineTo(startx, starty);            
+        </method>        
+
+        <!--- render the border
+            @param Number startx: The start x position
+            @param Number starty: The satrt y position
+            @param Number endx: The end x position
+            @param Number endy: The end y position
+            @keywords private -->
+        <method name="renderBorder" args="startx, starty, endx, endy">
+            this.strokeDataBar.clear();
+            this.strokeDataBar.renderStroke(startx, starty, endx, starty);
+            this.strokeDataBar.renderStroke(endx, starty, endx, endy);
+            this.strokeDataBar.renderStroke(endx, endy, startx, endy);
+            this.strokeDataBar.renderStroke(startx, endy, startx, starty);
+        </method>
+        <handler name="onMouseDown">
+            parent.onMouseDown.sendEvent();
+        </handler>
+    </class>    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

@@ -1,0 +1,50 @@
+<library>
+
+    <!--- Implements the laszlo look of baseedittext. -->
+    <class name="lzedittext" extends="baseedittext">
+        <view name="bottomright" bgcolor="0xBEBDCD" width="${parent.width}" 
+              height="${parent.height}"/>
+        <view name="topleft" bgcolor="0x646464" width="${parent.width-1}" 
+              height="${parent.height-1}"/>
+        <view name="_face" bgcolor="0xffffff" width="${parent.width-2}" 
+              height="${parent.height-2}" x="1" y="1"/>
+        <_newinternalinputtext name="txt" x="3" width="${parent.width - 6}"
+                               height="${parent.height}">
+          <!-- so that we can put a getPrevSelection method on an instance of this class -->           
+            <method name="getPrevSelection" >
+                if ( parent['getPrevSelection'] ) {
+                   return parent.getPrevSelection();
+                }
+                return null; // so that default tab order occurs
+            </method>
+
+            <!-- so that we can put a getNextSelection method on an instance of this class -->           
+            <method name="getNextSelection" >
+                if ( parent['getNextSelection'] )  return parent.getNextSelection()
+                return null; // so that default tab order occurs
+            </method>
+        </_newinternalinputtext>
+
+        <method name="getPrevSelection" >
+                if ( parent['getPrevSelection'] ) {
+                   return parent.getPrevSelection();
+                }
+                return null; // so that default tab order occurs
+        </method>
+<!-- commented out because pave doesn't deal with setting text attributes
+    at runtime at this time. [awm 6.21.05] -->        
+        <!--- @keywords private -->
+<!--        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                this.setAttribute("font", s.font);
+                this.setAttribute("fontsize", s.fontsize);
+            }
+        </method> -->
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006,2010 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

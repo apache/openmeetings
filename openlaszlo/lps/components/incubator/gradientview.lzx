@@ -1,0 +1,196 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@    -->   
+<library>
+  <include href="extensions/drawview.lzx"/>
+  <!-- gradientview written by Brendan Fagan -->
+  <class name="gradientview" extends="drawview">
+    <!-- no gradient rendered if not specified -->
+    <attribute name="colorFrom" type="color" />
+    <!-- defaults to colorFrom if not specified -->
+    <attribute name="colorTo" type="color"  />
+
+    <!-- defaults to 0 -->
+    <attribute name="borderSize" type="number" value="0" />
+    <!-- defaults to borderSize if not specified -->
+    <attribute name="borderSizeTop" type="number" value="0" />
+    <!-- defaults to borderSize if not specified -->
+    <attribute name="borderSizeBottom" type="number" value="0" />
+    <!-- defaults to borderSize if not specified -->
+    <attribute name="borderSizeLeft" type="number" value="0" />
+    <!-- defaults to borderSize if not specified -->
+    <attribute name="borderSizeRight" type="number" value="0" />
+      
+    <!-- defaults to 0x000000 -->
+    <attribute name="borderColor" type="color" value="0x000000" />
+    <!-- defaults to borderColor if not specified -->
+    <attribute name="borderColorTop" type="color" />
+    <!-- defaults to borderColor if not specified -->
+    <attribute name="borderColorBottom" type="color" />
+    <!-- defaults to borderColor if not specified -->
+    <attribute name="borderColorLeft" type="color" />
+    <!-- defaults to borderColor if not specified -->
+    <attribute name="borderColorRight" type="color" />
+    
+    <!-- options: linear, radial -->
+    <attribute name="gradientType" type="string" value="linear" />
+    <!-- used for linear gradient; options: vertical, horizontal, diagonalleft, diagonalright -->
+    <attribute name="gradientOrientation" type="string" value="vertical" />
+    
+    <!-- internal use only -->
+    <attribute name="stretchHeight" type="number"/>
+    <!-- internal use only -->
+    <attribute name="stretchWidth" type="number"/>
+
+  
+
+    <handler name="onheight">
+      <![CDATA[
+      this.setAttribute('stretchHeight',this.height);
+      this.draw();
+      ]]>
+    </handler>
+    <handler name="onwidth">
+      <![CDATA[
+      this.setAttribute('stretchWidth',this.width);
+      this.draw();
+      ]]>
+    </handler>
+    
+    <handler name="oncontext" method="draw"/>
+
+    <method name="draw" args="ignore=null">
+      <![CDATA[
+        if (! this.context) return;
+        this.clear();
+          
+        if (this.stretchHeight == null) {
+          this.stretchHeight = this.height;
+          if (this.measureHeight() > this.height) { this.stretchHeight = this.measureHeight(); } 
+        }
+        
+        if (this.stretchWidth == null) {
+          this.stretchWidth = this.width;
+          if (this.measureWidth() > this.width) { this.stretchWidth = this.measureWidth(); }
+        }
+        
+        // define box for gradient
+        this.beginPath();
+                this.rect(0, 0, this.stretchWidth, this.stretchHeight);
+        this.closePath();
+
+        // create gradient color
+        var g;
+        if (this.gradientType == 'linear') {
+          if (this.gradientOrientation == 'vertical') {
+            g = this.createLinearGradient(0,0,0,this.stretchHeight);
+          }
+          
+          if (this.gradientOrientation == 'horizontal') {
+            g = this.createLinearGradient(0,this.stretchHeight,this.stretchWidth,this.stretchHeight);
+          }
+          
+          if (this.gradientOrientation == 'diagonalleft') {
+            g = this.createLinearGradient(0,0,this.stretchWidth,this.stretchHeight);
+          }
+          
+          if (this.gradientOrientation == 'diagonalright') {
+            g = this.createLinearGradient(this.stretchWidth,0,0,this.stretchHeight);
+          }
+        } 
+        
+        if  (this.gradientType == 'radial') {
+          g = this.createRadialGradient(0-(this.stretchWidth*.5),-(this.stretchHeight*.5),0,this.stretchWidth*1.5,this.stretchHeight*1.5,0);
+        }
+        
+        if ((g != null) && (this.colorFrom != null)) {
+
+          this.globalAlpha = 1;
+          g.addColorStop(0, this.colorFrom);
+          g.addColorStop(1, this.colorTo != null ? this.colorTo : this.colorFrom);
+          this.fillStyle = g;
+          this.fill();
+        }
+        
+        if ((this.borderSize > 0) || (this.borderSizeTop > 0)) {
+          if (this['borderColorTop'] == null) {
+            this.borderColorTop = this.borderColor;
+          }
+                    
+          // create top border
+          this.beginPath();
+          
+          var borderWidth = this.borderSizeTop ? this.borderSizeTop : this.borderSize;
+          var borderOffset = borderWidth - 1;
+          
+          this.moveTo(borderOffset,borderOffset);
+          this.lineTo(this.stretchWidth,borderOffset);
+          this.strokeStyle = this.borderColorTop;
+          this.lineWidth = borderWidth;
+          this.stroke();
+          this.closePath();
+          
+        }
+                
+        if ((this.borderSize > 0) || (this.borderSizeBottom > 0)) {
+          if (this['borderColorBottom'] == null) {
+            this.borderColorBottom = this.borderColor;
+          }
+          // create bottom border
+          this.beginPath();
+          
+          var borderWidth = this.borderSizeBottom ? this.borderSizeBottom : this.borderSize;
+          var borderOffset = borderWidth - 1;
+          
+          this.moveTo(borderOffset,this.stretchHeight-1);
+          this.lineTo(this.stretchWidth,this.stretchHeight-1);
+          this.strokeStyle = this.borderColorBottom;
+          this.lineWidth = borderWidth;
+          this.stroke();
+          this.closePath();
+        }        
+
+        if ((this.borderSize > 0) || (this.borderSizeLeft > 0)) {  
+          if (this['borderColorLeft'] == null) {
+            this.borderColorLeft= this.borderColor;
+          }
+        
+          // create left border
+          this.beginPath();
+          
+          var borderWidth = this.borderSizeLeft ? this.borderSizeLeft : this.borderSize;
+          var borderOffset = borderWidth - 1;
+          
+          this.moveTo(borderOffset,borderOffset);
+          this.lineTo(borderOffset,this.stretchHeight-borderOffset);
+          this.strokeStyle = this.borderColorLeft;
+          this.lineWidth = borderWidth;
+          this.stroke();
+          this.closePath();
+          
+        }
+
+        if ((this.borderSize > 0) || (this.borderSizeRight > 0)) {  
+          if (this.borderColorRight == null) {
+            this.borderColorRight= this.borderColor;
+          }
+        
+          // create right border
+          this.beginPath();
+          
+          var borderWidth = this.borderSizeRight ? this.borderSizeRight : this.borderSize;
+          var borderOffset = borderWidth - 1;
+          
+          this.moveTo(this.stretchWidth-1,borderOffset);
+          this.lineTo(this.stretchWidth-1,this.stretchHeight-1);
+          this.strokeStyle = this.borderColorRight;
+          this.lineWidth = borderWidth;
+          this.stroke();
+          this.closePath();
+        }
+        ]]>
+    </method>
+  </class>
+</library>

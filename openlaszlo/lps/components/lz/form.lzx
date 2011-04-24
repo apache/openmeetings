@@ -1,0 +1,198 @@
+<library>
+    <include href="../base/baseform.lzx"/>
+
+    <!-- Extends the component grouping features of baseform to also provide
+          standard layout for from controls. Buttons will be placed in a view at
+          the bottom right of the form (placement 'buttonplace'). A form is
+          typicaly a collection of UI elements where each represents data from
+          the user that will be submitted to the server as a request. -->
+    <class name="form" extends="baseform"
+        layout="class: simplelayout; spacing: 10; axis: y" >
+
+        <!--- @keywords private -->
+        <method name="construct" args="p,args"> <![CDATA[
+            super.construct(p, args);
+            // need to set these attributes before subviews are created
+            // otherwise they will calculate width/height incorrectly
+            setAttribute('_useformwidth', this.hassetwidth);
+            setAttribute('_useformheight', this.hassetheight);
+        ]]> </method>
+
+        <!--- The default placement view for subviews that go in this form.
+              @keywords private final -->
+        <attribute name="defaultplacement" type="string" value="content"/>
+
+        <!--- If true, use content's width to determine size of form. If false,
+              use form's width to determine width of content area.
+              @keywords private -->
+        <attribute name="_useformwidth" value="true"/>
+
+        <!--- If true, use content's height to determine size of form. If
+              false, use form's width to determine width of content area.
+              @keywords private -->
+        <attribute name="_useformheight" value="true"/>
+
+        <!--- @keywords private -->
+        <state name="_noformwidth" applied="${!classroot._useformwidth}">
+            <attribute name="width" 
+               value="${this.inset_left + this.content.width + 
+                        this.inset_right}"/>
+        </state>
+        <state name="_noformheight" applied="${!classroot._useformheight}">
+            <attribute name="height" 
+              value="${this.inset_top + this.content.height + 
+                 (buttonplace.height != 0 ?  buttonplace.height + spacing : 0) +
+                      this.inset_bottom}"/>
+        </state>
+
+        <!--- Vertical space between content and button area. If forms height is
+              specified, the button area will be flush against the form's bottom
+              right corner (adjusted by any layout that the form has). -->
+        <attribute name="spacing" value="10"/>
+
+        <!--- The top inset for content appearing within form. -->
+        <attribute name="inset_top" value="10"/>
+        <!--- The left inset for content appearing within form. -->
+        <attribute name="inset_left" value="10"/>
+        <!--- The bottom inset for content appearing within form. -->
+        <attribute name="inset_bottom" value="10"/>
+        <!--- The right inset for content appearing within form. -->
+        <attribute name="inset_right" value="10"/>
+
+        <!--- @keywords private -->
+        <method name="determinePlacement" args="newsubview, placement, args">
+        <![CDATA[
+            var place = null;
+            if (args['placement'] != null) {
+                // explicit placement desired by subview
+                place = this.searchSubnodes( "name" , placement );
+            }
+
+            if (place == null) {
+                if (newsubview instanceof lz.button) {
+                    place = this.buttonplace;
+                } else {
+                    place = this.content;
+                }
+            }
+            return place;
+        ]]>
+        </method>
+
+        <!-- content area of form -->
+        <view name="content" 
+              x="${classroot.inset_left}" 
+              y="${classroot.inset_top}" >
+
+            <state name="_useformwidth" applied="${classroot._useformwidth}">
+                <attribute name="width" 
+                    value="${classroot.width - classroot.inset_left 
+                                             - classroot.inset_right}" />
+            </state>
+            <state name="_useformheight" applied="${classroot._useformheight}">
+                <attribute name="height" 
+                    value="${classroot.height - classroot.inset_top 
+                                - classroot.inset_bottom
+                                 - classroot.buttonplace.height != 0 ?
+                                   classroot.buttonplace.height 
+                                  + classroot.spacing 
+                                 : 0}" />
+            </state>
+        </view>
+
+        <view name="buttonplace" 
+              layout="class: simplelayout; axis: x; spacing: 10">
+
+              <state name="_noformwidth" applied="${!classroot._useformwidth}">
+                  <attribute name="x" 
+                       value="${classroot.content.x + 
+                                classroot.content.width + 
+                                - this.width}" />
+              </state>
+              <state name="_formwidth" 
+                     applied="${classroot._useformwidth}">
+                  <attribute name="x" 
+                       value="${classroot.width - classroot.inset_right 
+                                                - this.width}" />
+              </state>
+
+              <state name="_noformheight" applied="${!classroot._useformheight}">
+                  <attribute name="y" 
+                       value="${classroot.content.y + 
+                                classroot.content.height +
+                                classroot.spacing}" />
+              </state>
+
+              <state name="_formheight" 
+                     applied="${classroot._useformheight}">
+                  <attribute name="y" 
+                       value="${classroot.height - classroot.inset_bottom
+                                                 - this.height}" />
+              </state>
+
+         </view>
+        <doc>
+          <tag name="shortdesc"><text>
+              web form with standard layout
+          </text></tag>
+          <text>
+            <p>The <tagname>form</tagname> tag allows you to create a web form and
+              provides automatic layout.  Most components are laid out vertically
+              with buttons at the lower right.  The data represented by components
+              that are enclosed in the form tag can be sent to the server using the
+              <tagname>submit</tagname> tag.  Each form component, such as
+              <classname>checkbox</classname>, <classname>combobox</classname> or
+              <classname>radiogroup</classname> must have a name.  The data is
+              submitted as name-value pairs, using the name and value of the
+              component.</p>
+
+            <example>
+              &lt;canvas height="200"&gt;
+              &lt;dataset name="echoer" type="http" src="/@WEBAPP@/examples/components/echo.jsp" /&gt;
+              &lt;window id="win" &gt;
+              &lt;form&gt;
+              &lt;submit name="survey" dataset="${echoer}"/&gt;
+              &lt;statictext&gt;What is your favorite vacation spot?&lt;/statictext&gt;
+              &lt;radiogroup name="place"&gt;
+              &lt;radiobutton&gt;Hawaii&lt;/radiobutton&gt;
+              &lt;radiobutton&gt;Paris&lt;/radiobutton&gt;
+              &lt;radiobutton&gt;Jamaica&lt;/radiobutton&gt;
+              &lt;/radiogroup&gt;
+              &lt;button isdefault="true"
+              onclick="parent.survey.submit()"&gt;submit&lt;/button&gt;
+              &lt;/form&gt;
+              &lt;/window&gt;
+              
+              &lt;view x="260" y="20" 
+              layout="class: simplelayout" datapath="echoer:/response"&gt;
+              &lt;text text="Data received" /&gt;
+              &lt;view layout="axis: y" &gt;
+              &lt;view datapath="formcomponent" layout="axis:x" &gt;
+              &lt;text resize="true" datapath="@name"/&gt;
+              &lt;text text=":"/&gt;
+              &lt;text resize="true" datapath="text()"/&gt;
+              &lt;/view&gt;
+              &lt;/view&gt;
+              &lt;/view&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <p>If you want to include buttons in the form that are not placed in
+              the lower-right, you can specify <code>placement="content"</code> in
+              the button tag.  To use a custom layout with a form, use the
+              <tagname>baseform</tagname> tag.</p>
+
+            <seealso>
+              <classes>baseform submit</classes>
+              <classes label="Form components">checkbox radiogroup combobox button edittext list</classes>
+            </seealso>
+          </text>
+        </doc>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,94 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<canvas>
+<include href="incubator/roundrectbutton.lzx" />
+
+<greenstyle name="greenish" />
+<purplestyle name="purplish" />
+<goldstyle name="goldish" />
+<silverstyle name="silverish" />
+<bluestyle name="blueish" />
+<whitestyle name="whiteish" />
+
+
+<window title="greenish" style="greenish" x="30" y="30"  resizable="true">
+    <wrappinglayout spacing="5" />
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <button>normal button</button>
+    <button>normal button</button>
+    <radiogroup>
+            <radiobutton>Yes, I want to know more</radiobutton>
+            <radiobutton>No, I prefer to remain blissfully unaware</radiobutton>
+            <radiobutton>Please tell my neighbor, who may tell me</radiobutton>
+     </radiogroup>      
+</window>
+<window title="purplish" style="purplish" x="70" y="70"  resizable="true">
+    <wrappinglayout spacing="5" />
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <button>normal button</button>
+    <button>normal button</button>          
+    <radiogroup>
+            <radiobutton>Yes, I want to know more</radiobutton>
+            <radiobutton>No, I prefer to remain blissfully unaware</radiobutton>
+            <radiobutton>Please tell my neighbor, who may tell me</radiobutton>
+     </radiogroup>      
+</window>
+<window title="goldish" style="goldish" x="110" y="110"  resizable="true">
+    <wrappinglayout spacing="5" />
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <button>normal button</button>
+    <button>normal button</button>          
+    <radiogroup>
+            <radiobutton>Yes, I want to know more</radiobutton>
+            <radiobutton>No, I prefer to remain blissfully unaware</radiobutton>
+            <radiobutton>Please tell my neighbor, who may tell me</radiobutton>
+     </radiogroup>      
+</window>
+<window title="silverish" style="silverish" x="150" y="150"  resizable="true">
+    <wrappinglayout spacing="5" />
+    <roundrectbutton text="silverish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <button>normal button</button>
+    <button>normal button</button>
+    <radiogroup>
+            <radiobutton>Yes, I want to know more</radiobutton>
+            <radiobutton>No, I prefer to remain blissfully unaware</radiobutton>
+            <radiobutton>Please tell my neighbor, who may tell me</radiobutton>
+     </radiogroup>      
+</window>
+
+<window title="blueish" style="blueish" x="190" y="190"  resizable="true">
+    <simplelayout axis="y" spacing="5" />
+    <button>normal button</button>
+    <button>normal button</button>
+    <slider name="widther" minvalue="0" maxvalue="200" value="50" x="10" width="${parent.width-20}" />         
+    <radiogroup>
+            <radiobutton>Yes, I want to know more</radiobutton>
+            <radiobutton>No, I prefer to remain blissfully unaware</radiobutton>
+            <radiobutton>Please tell my neighbor, who may tell me</radiobutton>
+     </radiogroup>      
+    
+    <roundrectbutton text="blueish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" /> 
+    <roundrectbutton text="eepish" height="20" width="${parent.widther.value}"/> 
+    <roundrectbutton text="eepish" height="20" width="${parent.widther.value}"/> 
+</window>
+
+
+
+</canvas>
+

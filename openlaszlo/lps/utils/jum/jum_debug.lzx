@@ -1,0 +1,208 @@
+<script><![CDATA[
+
+function LzTestSuite( nm ) {
+    this.name = nm; 
+    this.totaltests = 0; 
+    this.passedtests = 0;
+    this.failedtests = 0; 
+}
+
+
+// doJUM is true if we should use JUM for tests. We want to use jum for tests if
+// it is available. 
+doJUM = (typeof(jum) == 'object');
+
+var allsuites = []; 
+var alltests = [];
+var numtestcases = 0; 
+var numtestcasesran = 0; 
+var numtestspassed = 0; 
+var numtestsfailed = 0; 
+var numsuitespassed = 0;
+var numsuitesfailed = 0; 
+
+lztest_throw = function( description ) {
+    Debug.error( description ); 
+}
+
+// Set a delegate so we start the tests as soon as everything is loaded,
+// but not if jum is running the tests. In rhino runtime with jum, we kick
+// off the tests in a different way. See lps/utils/jum/epilogue.js
+if (!doJUM) {
+    var startTestsDelegate = new LzDelegate(canvas, "startTests");
+    startTestsDelegate.register(canvas, "oninit"); 
+}
+
+canvas.startTests = function() {
+    Debug.write("canvas.startTests"); 
+    findTests();
+    runTests();
+    summaryReport();
+    failIfFailure();
+    Debug.write("canvas.startTests: done with tests"); 
+}
+
+function LzTestSuite() {
+}
+
+function findTests() {
+    // Debug.write("findTests..."); 
+    for (var n in this) {
+        var t = this[n];
+        if (typeof(t) == "object") {
+            if (n.indexOf("suite") == 0 ) {
+                // Debug.write("found test suite: ", n);                 
+                allsuites.push(n); 
+                alltests[n] = []; 
+                                
+                for (var j in t) {
+                    var k = t[j]; 
+                    if ((typeof(k) == "function") && (j.indexOf("test") == 0)) {
+                        // Debug.write("yep it's a test"); 
+                        alltests[n].push(j); 
+                        numtestcases = numtestcases + 1; 
+                        
+                    }
+                }
+            }
+        }
+    }
+    Debug.write("Got ", allsuites.length, " suites and ", numtestcases, " total test cases"); 
+}
+        
+function runTests() {
+    // Debug.write("runTests"); 
+    for (var n in allsuites) {
+        var suite = allsuites[n]; 
+        // Debug.write("the suite: ", suite); 
+        var tests = alltests[suite];
+        // Debug.write("the tests: ", tests); 
+        for (var t in tests) {
+            var thetestcase = tests[t];
+            // Debug.write("going to run ", thetestcase);         
+            lztest_runonetest( this[suite][thetestcase] ); 
+            // this[suite][thetestcase]();
+            numtestcasesran = numtestcasesran + 1; 
+        }
+    }
+    // Debug.write("Done with tests."); 
+}        
+
+function lztest_runonetest( fn ) {
+    // Debug.write("lztest_runonetest: ", fn ); 
+    fn(); 
+}
+
+// The throw function is a no-op. Particular runtimes (rhino) may rewrite it to
+// do something exciting like actually throw an exception. 
+function lztest_throw( msg ) {
+    Debug.error("lztest_throw (lzx): ", msg); 
+}
+        
+        
+function summaryReport() {
+    Debug.write("(summaryReport) Ran " + numtestcasesran + " of " 
+                + numtestcases + " testcases, "
+                + " failed " + numtestsfailed); 
+}
+
+function failIfFailure() {
+    if (numtestsfailed > 0) {
+        var msg = "failIfFailure.... Failed " + numtestsfailed + " test cases of "
+            + numtestcases + " total test cases."; 
+        Debug.error( msg ); 
+        lztest_throw(msg);         
+    }
+}
+
+// fail is a failure mechanism which will work on dhtml or swf runtimes. 
+fail = function( description ) {
+    // This is not right, because fail might be called more than once in one
+    // test suite. 
+    numtestsfailed = numtestsfailed + 1; 
+    Debug.error("got a failure: " + description);     
+}
+
+assertTrue = function(condition, assertion) {
+    if (!condition)  {
+        var errmsg = "FAIL: assertTrue('" + condition + "') failed"
+                    + (assertion ? ': ' + assertion : '');      
+        fail(errmsg); 
+    }
+}
+assertFalse = function(condition, assertion) {
+    if (condition)  {
+        var errmsg = "FAIL: assertFalse('" + condition + "') failed"
+                    + (assertion ? ': ' + assertion : '');      
+        fail(errmsg); 
+    }
+}
+
+assertEquals = function(expected, actual, message) {
+    if (! (expected == actual)) {
+        var errmsg = "FAIL: " + message + "Equals expected " + expected + ", got " + actual; 
+        fail(errmsg); 
+    }
+}
+
+assertNull = function(object, message) {
+    if (object !== null) {
+       fail(message + " Null " + null + object);
+    }
+}
+
+assertNotNull = function(object, message) {
+    if (object === null) {
+       fail(message + " NotNull " + "non-null value: " + object);
+    }
+}
+
+assertSame = function(expected, actual, message) {
+    if (typeof(expected) == "undefined" && typeof(actual) == "undefined") {
+        return;
+    }
+    
+    if (expected !== actual) {
+        fail(message + " Same: expected " + expected + ", got " + actual);
+    }
+}
+
+assertNotSame = function(expected, actual, message) {
+    if (expected === actual) {
+        var msg = "NotSame " + msg + " expected anything but " + expected + ", got ", actual; 
+        this.fail(msg);
+    }
+}
+
+assertUndefined = function(object, message) {
+    if (typeof(object) != "undefined") {
+       fail(message + " undefined value  " + object);
+    }
+}
+
+assertNotUndefined = function(object, message) {
+    if (typeof(object) == "undefined") {
+        fail(message + " undefined value  " + object);
+    }
+}
+
+assertWithin = function(expected, actual, delta, message) {
+    // handle infinite expected
+    if (expected == actual) return;
+
+    var error = (actual <= expected) ? (expected - actual) : (actual - expected);
+    // note NaN compares are always false
+    if (! (error <= delta)) {
+        fail(message + "Within" + "" + expected + "\u00B1" + delta + " " + actual);
+    }
+}
+
+
+
+]]>
+</script>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2006 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

@@ -1,0 +1,56 @@
+<library>
+    <class name="mred" align="center" valign="middle" visible="false" >
+
+        <attribute name="urlnum" value="0"/>
+        <attribute name="running" value="0"/>
+
+        <method name="advance">
+            if (this.running == 1) {
+                this.setSource( urls[ urlnum ] );
+                this.urlnum = ( this.urlnum + 1 ) % this.urls.length;
+                lz.Timer.resetTimer( this.timedel, 6000 );
+             }
+        </method>
+
+        <attribute name="timedel"
+                   value="${new LzDelegate ( this , 'advance' )}"/>
+
+        <handler name="onvisible">
+            if ( !this.isinited ) return;
+            if ( this.visible ){
+                this.running = 1;
+                this.advance();
+                lz.Timer.addTimer( this.timedel, 6000 );
+                this.audio.play();
+            } else {
+                this.running = 0;
+                this.setAttribute('visible', false);
+                lz.Timer.removeTimer( this.timedel );
+                this.stop();
+                this.audio.stop();
+            }
+        </handler>
+
+        <view name="audio" play="false" 
+          resource="http://www.openlaszlo.org/images/mredfirstseason.mp3" />
+
+        <command onselect="parent.setAttribute('visible',  !parent.visible )"
+                 key="['Control', 'E','D']"/>
+
+        <command onselect="parent.setAttribute('visible',  !parent.visible )"
+                 key="['Control', 'Z','D']"/>
+
+        <attribute name="urls"
+            value="[ 'http://www.openlaszlo.org/images/edsurf.gif',
+                     'http://www.openlaszlo.org/images/ednpals2.gif',
+                     'http://www.openlaszlo.org/images/edchess1.jpg',
+                     'http://www.openlaszlo.org/images/edandalaninbarn.jpg'
+                   ]" />
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

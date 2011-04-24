@@ -1,0 +1,22 @@
+<canvas>
+<include href="lzunit"/>
+<include href="incubator/newvscrollbar.lzx" />
+<include href="incubator/newhscrollbar.lzx" />
+
+<view height="200" width="200" bgcolor="0x7F7F7F">
+    <view height="800" width="800" name="foo">
+        <handler name="onclick">
+            setAttribute('width', this.width > 100 ? 100 : 800); 
+            setAttribute('height', this.height > 100 ? 100 : 800);
+        </handler>
+    </view>
+    <newvscrollbar scrolltarget="$once{parent.foo}" axis="y" scrollattr="y"/>
+    <newhscrollbar scrolltarget="$once{parent.foo}" axis="x" scrollattr="x"/>
+</view>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

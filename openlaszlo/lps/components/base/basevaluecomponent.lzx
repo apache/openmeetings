@@ -1,0 +1,86 @@
+<library>
+    <include href="base/basecomponent.lzx" />
+
+    <!--- an abstract class for components that represent a value for data -->
+    <class name="basevaluecomponent" extends="basecomponent">
+        <!--- the value that this item represents. When selected,
+        the parent selection group's value will be set to this value.
+        Most subclasses require you to call getValue() to get the
+        value of the attribute.  -->
+        <attribute name="value" value="null"/>
+        <!--- The type of value of the item. Default is 'expression',
+             which will attempt to heuristicate the type from the
+             value. -->
+        <attribute name="type" type="string" value="expression"/>
+
+        <!--- returns the value that is represented by this component
+        -->
+        <method name="getValue">
+            return this.value == null ? this.text : this.value;
+        </method>
+
+        <!--- TODO: [2008-11-14 ptw] There needs to be a simpler way
+             to declare simple dependencies like this in LZX
+             @access private
+        -->
+        <method name="$lzc$getValue_dependencies" args="who, self">
+          // Since we don't know which one of these getValue will
+          // return, we have to depend on both of them
+          return [this, 'value', this, 'text'];
+        </method>
+
+        <!--- Set `value` according to `type` from a String
+
+              Used to set a typed value from a string representation.
+
+              @param String data: the string representation of `value` (according to `type`).
+              @param String type: (optional) the name of the type to use, defaults to `this.type`
+        -->
+        <method name="acceptValue" args="data, type=null"><![CDATA[
+          if (type == null) type = this.type;
+          // Some subclasses (e.g., textlistitem) want to see the
+          // value as text, so we have to call the super method
+          super.acceptValue(data, type)
+          // This is the main feature of this subclass, to parse the
+          // textual data into a value of the proper type
+          this.acceptAttribute('value', type, data);
+        ]]></method>
+
+        <!--- Return `value` according to `type` as a String
+
+              Used to get a string representation of a typed value.
+
+              @param String type: (optional) the name of the type to use, defaults to `this.type`
+              @return String: the string representation of `value` (according to `type`)
+        -->
+        <method name="presentValue" args="type=null">
+          if (type == null) type = this.type;
+          // subclasses may override getValue
+          return lz.Type.presentTypeValue(type, this.getValue(), this, 'value');
+        </method>
+        <!--- TODO: [2008-11-14 ptw] There needs to be a simpler way
+             to declare simple dependencies like this in LZX
+             @access private
+        -->
+        <method name="$lzc$presentValue_dependencies" args="who, self, type=null">
+          // Our dependencies are just the dependencies of
+          // getValue and a dependency on our type
+          return [this, 'type'].concat(this.$lzc$getValue_dependencies(who, self));
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>an abstract class for components which represent data</text></tag>
+          <text>
+            <p>
+            This abstract class provides a value attribute with data binding to a specific
+            valuedatapath.
+            </p>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

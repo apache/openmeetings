@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************
+* [[validators/emailvalidator]]
+* 2005/12/21 ver.2.0.0
+* 2005/12/06 ver.1.0.1 add trim attribute [togawa manabu]
+*
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp 
+********************************************************
+-->
+<!---
+      @topic Incubator
+      @subtopic Validators
+  -->
+<library>
+<include href="basevalidator.lzx" />
+    
+    <class name="emailvalidator" extends="basevalidator" errorstring="Not a valid e-mail address">
+        <attribute name="trim" type="boolean" value="true" />
+
+        <attribute name="missingatmarkErrorstring" type="string" value="Missing the @ character in your email address." />
+        <attribute name="toomanyatmarkErrorstring" type="string" value="Too many @ characters in your email address." />
+        <attribute name="missingperiodErrorstring" type="string" value="The domain in your email address is missing a period." /> 
+        <attribute name="incorrectlydomainErrorstring" type="string" value="The domain in your email address is incorrectly formatted." />
+        <method name="doValidation" args="val">
+            <![CDATA[
+
+            var valtext = getValueText(val);
+
+            if(required && valtext.length < 1){
+                this.setErrorstring(this.requiredErrorstring);
+                return false;
+            }
+            
+            if(valtext != ""){
+                if(valtext.indexOf("@") < 0){
+                    this.setErrorstring(this.missingatmarkErrorstring);
+                    return false;
+                }
+
+                var splitedvaltext = valtext.split("@");
+                if(splitedvaltext.length != 2){
+                    this.setErrorstring(this.toomanyatmarkErrorstring);
+                    return false;
+                }
+                
+                if(splitedvaltext[1].indexOf(".") < 0){
+                    this.setErrorstring(this.missingperiodErrorstring);
+                    return false;
+                }
+                                
+                var spliteddomaintext = splitedvaltext[1].split(".")
+                for(var j = 0; j < spliteddomaintext.length; j ++){
+                    if(spliteddomaintext[j] == ""){
+                        this.setErrorstring(this.incorrectlydomainErrorstring);
+                        return false;
+                    }
+                }
+            }
+            
+            this.setErrorstring("");
+            return true;
+            ]]>
+        </method>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2007 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,127 @@
+<library>
+    <!--- Associates a form with a dataset. -->
+    <class name="submit" extends="node">
+        <!--- The dataset that specifies the request url, which will also hold
+              the result of the query. -->
+        <attribute name="dataset" value="null" />
+        <!--- Read-only status of data request. Possible values are 'ok',
+              'requesting', and 'error'. -->
+        <attribute name="status" type="string" value="ok" />
+        <!--- Error from most recent response or empty string; cleared to empty
+              string each time a request on the dataset is made. -->
+        <attribute name="error" type="string" value="" />
+
+        <!--- @access private -->
+        <attribute name="_timeoutDel" value="null" />
+        <!--- @access private -->
+        <attribute name="_errorDel" value="null" />
+        <!--- @access private -->
+        <attribute name="_dataDel" value="null" />
+
+        <!--- @access private -->
+        <setter name="dataset" args="dset" >
+            this._clearDels();
+
+            this.dataset = dset;
+
+            if (dset == null) {
+                return;
+            }
+
+            this._dataDel = new LzDelegate(this, "_recvdata",
+                                           this.dataset, "ondata");
+            this._errorDel = new LzDelegate(this, "_recverror",
+                                            this.dataset, "onerror");
+            this._timeoutDel = new LzDelegate(this, "_recvtimeout",
+                                              this.dataset, "ontimeout");
+        </setter>
+
+        <!--- Method to set the dataset associated with form.
+              @param LzDataset dset: a dataset. 
+              @deprecated Use setAttribute('dataset', ...) instead.
+        -->
+        <method name="setDataset" args="dset" >
+            if ($debug) Debug.deprecated(this, arguments.callee, this.setAttribute);
+            this.setAttribute("dataset", dset);
+        </method>
+
+        <!--- @access private -->
+        <method name="_recvdata" args="v">
+            this.setAttribute('status', 'ok');
+            this.setAttribute('error', '');
+        </method>
+
+        <!--- @access private -->
+        <method name="_recverror" args="v">
+            if ($debug) Debug.error('form submission error: %s', this.dataset);
+            this.setAttribute('status', 'error');
+            this.setAttribute('error', this.dataset.getErrorString());
+        </method>
+
+        <!--- @access private -->
+        <method name="_recvtimeout" args="v">
+            if ($debug) Debug.error('form submission timeout');
+            this.setAttribute('status', 'timeout');
+            this.setAttribute('error', this.dataset.getErrorString());
+        </method>
+
+        <!--- Data from all sibling components and their children will send as a
+              request to the server using <attribute>dataset</attribute>. -->
+        <method name="submit"> <![CDATA[
+            if (! this.dataset) {
+                return;
+            }
+            //Debug.write('submit', parent, parent.formdata);
+            var query_data = new lz.Param();  // data for the query
+            for (var i in parent.formdata) {
+               var item = parent.formdata[i];
+               var submitname = item.submitname;
+               if (submitname == "") submitname = item.name;
+               if (submitname != "" && parent.formdata[i].submit) {
+                    query_data.addValue(submitname,item.getValue(), true);
+               }
+            }
+
+            this.setAttribute('status', 'requesting');
+            this.setAttribute('error', '');
+            this.dataset.setQueryString( query_data );
+            this.dataset.doRequest();
+            ]]>
+        </method>
+
+        <!--- Remove any existing delegates.
+              @access private -->
+        <method name="_clearDels">
+            if (this._dataDel) {
+                this._dataDel.unregisterAll();
+                this._dataDel = null;
+            }
+            if (this._errorDel) {
+                this._errorDel.unregisterAll();
+                this._errorDel = null;
+            }
+            if (this._timeoutDel) {
+                this._timeoutDel.unregisterAll();
+                this._timeoutDel = null;
+            }
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>associates a form with a dataset</text></tag>
+          <text>
+            <p>
+            Used with <classname>form</classname> or <classname>baseform</classname>, the <tagname>submit</tagname> tag associates the
+            form with its dataset.  See <tagname>form</tagname> tag for example code.
+            </p>
+            
+            <seealso>
+            <tags>form baseform dataset</tags>
+            </seealso>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

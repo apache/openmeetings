@@ -1,0 +1,116 @@
+<!--
+    Class: window
+    implements an area of the screen that can be dragged, resized or closed
+    by the user.  Standard placement is defined for menubar, toolbar and icon.
+-->
+<library>
+    <include href="lz/button.lzx" />
+    <include href="lz/windowpanel.lzx" />
+    <include href="utils/layouts/simplelayout.lzx"/>
+    <include href="utils/layouts/resizelayout.lzx"/>
+    <include href="lz/modaldialog.lzx" />
+    <include href="lz/alert.lzx" />
+
+    <class name="window" extends="windowpanel">
+        <attribute name="defaultplacement" value="wcontent" type="string"/>
+        <!--- If true, a resize control will appear in the lower-right corner,
+              allowing the user to resize the window. -->
+        <attribute name="resizable" value="false"/>
+
+        <!--- may be called by subclasses to control resizing of the window
+              based on mouse movement, typically called onmousedown from a
+              resizer control 
+              @access private -->
+        <method name="_startResize">
+            super._startResize();
+            setAttribute('_usecontentwidth', false);
+            setAttribute('_usecontentheight', false);
+        </method>
+
+        <state name="resizeable" applied="${this.classroot.resizable}">
+            <view name="_resizeControl" placement="null"
+                x="${classroot.width - this.width - classroot.inset_right}"
+                y="${classroot.height - this.height - classroot.inset_right}"
+                resource="window_resizebtn_rsc"
+                onmouseover="if (this.frame == 1) setAttribute('frame', 2);"
+                onmouseout="if (this.frame == 2) setAttribute('frame', 1);"
+                onmousedown="classroot._startResize();setAttribute('frame', 3);"
+                onmouseup="classroot._stopResize(); setAttribute('frame', 1);"
+                oninit="classroot.setTint(this, classroot.style.basecolor)"
+                />
+        </state>
+        <view name="menubar" width="${parent.wframe.width}" clip="true"
+            oninit="classroot.menubar = this">
+            <!-- placement for menubar -->
+        </view>
+        <view name="toolbar" width="${parent.wframe.width}" clip="true"
+            oninit="classroot.toolbar = this">
+            <!-- placement for toolbar -->
+        </view>
+        <view name="wframe"
+            width="${wcontent.width+2}" height="${wcontent.height+2}"
+            options="releasetolayout" bgcolor="0x6A6A6A">
+            <view name="wcontent" x="1" y="1"
+                clip="true" bgcolor="${classroot.content.bgcolor}">
+                <state applied="${!classroot._usecontentwidth}">
+                    <attribute name="width" value="${parent.immediateparent.width - 2}"/>
+                </state>
+                <state applied="${!classroot._usecontentheight}">
+                    <attribute name="height"
+                        value="${parent.immediateparent.height -
+                                parent.immediateparent.menubar.height -
+                                parent.immediateparent.toolbar.height - 2}"/>
+                </state>
+                <!-- this is the "defaultplacement" view -->
+            </view>
+        </view>
+        <resizelayout axis="y"/>
+
+        <!--- @keywords private -->
+        <attribute name="_resizeControl" value="null"/>
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            super._applystyle(s);
+            if (this._resizeControl) {
+                 this.setTint(this._resizeControl, s.basecolor);
+            }
+       </method>
+        <doc>
+            <tag name="shortdesc"><text>
+                A window.
+            </text></tag>
+            <text>
+                <p>The <tagname>window</tagname> tag creates a floating view that may be moved and optionally resized by the user. Set the <attribute>closeable</attribute> attribute to <attribute>true</attribute> in order to show a window close button.</p>
+    <example>&lt;canvas height=&quot;250&quot;&gt;
+    &lt;window x=&quot;10&quot; y=&quot;10&quot; width=&quot;300&quot; height=&quot;200&quot;
+        title=&quot;my window&quot;
+        resizable=&quot;true&quot; closeable=&quot;true&quot;&gt;
+        &lt;text&gt;Hello&lt;/text&gt;
+    &lt;/window&gt;
+&lt;/canvas&gt;
+    </example>
+                <p>Views placed within a <tagname>window</tagname> tag will be placed inside the smaller content area within the window. Because of this, you will often want to constrain to the dimensions of the content area, rather than to the window dimensions. To do this, tags placed within a window can use the <attribute>immediateparent</attribute> property rather than the <attribute>parent</attribute> property.</p>
+                <example>&lt;canvas height=&quot;150&quot;&gt;
+    &lt;window x=&quot;10&quot; y=&quot;10&quot; width=&quot;200&quot; height=&quot;100&quot;
+        resizable=&quot;true&quot;&gt;
+        &lt;button width=&quot;${immediateparent.width}&quot;
+            height=&quot;${immediateparent.height}&quot;&gt;
+            This is a really big button
+        &lt;/button&gt;
+    &lt;/window&gt;
+&lt;/canvas&gt;
+                </example>
+                <p><b>See also:</b></p>
+                <ul>
+                    <li><p><a href="lz.modaldialog.html"><tagname>modaldialog</tagname></a> and <a href="lz.alert.html"><tagname>alert</tagname></a></p></li>
+                </ul>
+                
+            </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,113 @@
+<library>
+    <include href="base/basefocusview.lzx"/>
+
+    <!-- resources -->
+    <resource name="lzfocusbracket_rsrc">
+        <frame src="lz/resources/focus/focus_top_lft.png"/>
+        <frame src="lz/resources/focus/focus_top_rt.png" />
+        <frame src="lz/resources/focus/focus_bot_lft.png" />
+        <frame src="lz/resources/focus/focus_bot_rt.png" />
+    </resource>
+
+    <resource name="lzfocusbracket_shdw">
+        <frame src="lz/resources/focus/focus_top_lft_shdw.png" />
+        <frame src="lz/resources/focus/focus_top_rt_shdw.png" />
+        <frame src="lz/resources/focus/focus_bot_lft_shdw.png" />
+        <frame src="lz/resources/focus/focus_bot_rt_shdw.png" />
+    </resource>
+
+    <class name="focusoverlay" extends="basefocusview" >
+        <!--- the offset is used by the brackets to 'offset' themselves from the
+              bounding rect of the focusoverlay. The bounce effect is achieved
+              by animating this parameter -->
+        <attribute name="offset" value="5" />
+
+        <view name="topleft" 
+              x="${-classroot.offset}" 
+              y="${-classroot.offset}" >
+            <view resource="lzfocusbracket_shdw" x="1" y="1" opacity=".25"/>
+            <view resource="lzfocusbracket_rsrc"/>
+        </view>
+        
+        <view name="topright" 
+              x="${parent.width - width + classroot.offset }" 
+              y="${-classroot.offset}"  >
+            <view resource="lzfocusbracket_shdw" frame="2" x="1" y="1" opacity=".25"/>
+            <view resource="lzfocusbracket_rsrc" frame="2"/>
+        </view>
+        
+        <view name="bottomleft" 
+              x="${-classroot.offset}"
+              y="${parent.height - height + classroot.offset }"  >
+            <view resource="lzfocusbracket_shdw" frame="3" x="1" y="1" opacity=".25"/>
+            <view resource="lzfocusbracket_rsrc" frame="3"/>
+        </view>
+        
+        <view name="bottomright" 
+              x="${ parent.width - width + classroot.offset  }" 
+              y="${ parent.height - height + classroot.offset }" >
+            <view resource="lzfocusbracket_shdw" frame="4" x="1" y="1" opacity=".25"/>
+            <view resource="lzfocusbracket_rsrc" frame="4"/>
+        </view>
+        
+        <!--- overrides base method to add a bounce effect as the brackets move from view to view
+              @param LzView v: The view that will receive the focus -->
+        <method name="doFocus" args="v">
+            // add a bounce to the default focus animation for the brackets.
+            super.doFocus( v );
+            if ( visible ) this.bounce();
+        </method>
+        
+        <!--- the expand and contract effect of the focus brackets with each new focus -  called by doFocus -->
+        <method name="bounce" >
+            this.animate('offset',12, duration/2.0);
+            this.animate('offset',5, duration);
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>an abstract class for the focus indicator</text></tag>
+          <text>
+            <p>An abstract base class that responds to focus by animating to the
+            focused view and sizing itself to that view.  A subclass of this view
+            may be used to override the default look and feel of the focus
+            indicator.</p>
+            
+            <p>By default, a class called <classname>focusoverlay</classname> is
+            used which highlights the corners of the focused view and adds a
+            bounce animation when it arrives at the focusable view. To override
+            this behavior and use your own class, set
+            <code>canvas.focusclass</code> to the name of a class that extends
+            <classname>basefocusview</classname>.  To make it so there is no
+            visual focus indicator set the canvas'
+            <attribute>focusclass</attribute> attribute to <code>null</code>.</p>
+            
+            <p>
+            In some browsers you need to click on the application before keyboard navigation
+            will work.  You can experiment with the example below.  Tab and shift-tab will
+            move the focus between components.  Space will activate the checkbox.  Return or
+            space will activate the button.
+            </p>
+            <example title="Custom Focus Indicator">
+            &lt;canvas height="120" &gt;
+              &lt;class name="myfocusclass" extends="basefocusview"&gt;
+                &lt;view bgcolor="blue" y="${parent.height+1}" height="2" width="${parent.width}"/&gt;
+              &lt;/class&gt;
+            
+              &lt;attribute name="focusclass" value="myfocusclass" type="string"/&gt;
+              &lt;view x="20" y="20"&gt;
+                &lt;simplelayout spacing="10"/&gt;
+                &lt;checkbox&gt;I would like fries with that&lt;/checkbox&gt;
+                &lt;checkbox&gt;Rush delivery&lt;/checkbox&gt;
+                &lt;button&gt;Order&lt;/button&gt;
+              &lt;/view&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

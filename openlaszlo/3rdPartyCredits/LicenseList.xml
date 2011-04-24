@@ -1,0 +1,1284 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:html="http://www.w3.org/TR/REC-html40"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>JCrowley</Author>
+  <LastAuthor>Jim Grandy</LastAuthor>
+  <Created>2007-03-14T20:12:51Z</Created>
+  <LastSaved>2007-03-16T07:55:27Z</LastSaved>
+  <Version>11.768</Version>
+  <Copyright>Copyright 2007 Laszlo Systems Inc. All rights reserved.</Copyright>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+  <Colors>
+   <Color>
+    <Index>16</Index>
+    <RGB>#9999FF</RGB>
+   </Color>
+   <Color>
+    <Index>17</Index>
+    <RGB>#993366</RGB>
+   </Color>
+   <Color>
+    <Index>18</Index>
+    <RGB>#FFFFCC</RGB>
+   </Color>
+   <Color>
+    <Index>19</Index>
+    <RGB>#CCFFFF</RGB>
+   </Color>
+   <Color>
+    <Index>20</Index>
+    <RGB>#660066</RGB>
+   </Color>
+   <Color>
+    <Index>21</Index>
+    <RGB>#FF8080</RGB>
+   </Color>
+   <Color>
+    <Index>22</Index>
+    <RGB>#0066CC</RGB>
+   </Color>
+   <Color>
+    <Index>23</Index>
+    <RGB>#CCCCFF</RGB>
+   </Color>
+   <Color>
+    <Index>24</Index>
+    <RGB>#000080</RGB>
+   </Color>
+   <Color>
+    <Index>25</Index>
+    <RGB>#FF00FF</RGB>
+   </Color>
+   <Color>
+    <Index>26</Index>
+    <RGB>#FFFF00</RGB>
+   </Color>
+   <Color>
+    <Index>27</Index>
+    <RGB>#00FFFF</RGB>
+   </Color>
+   <Color>
+    <Index>28</Index>
+    <RGB>#800080</RGB>
+   </Color>
+   <Color>
+    <Index>29</Index>
+    <RGB>#800000</RGB>
+   </Color>
+   <Color>
+    <Index>30</Index>
+    <RGB>#008080</RGB>
+   </Color>
+   <Color>
+    <Index>31</Index>
+    <RGB>#0000FF</RGB>
+   </Color>
+  </Colors>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>18660</WindowHeight>
+  <WindowWidth>22220</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>340</WindowTopY>
+  <TabRatio>600</TabRatio>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21" ss:Name="Hyperlink">
+   <Font ss:Color="#0000D4" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s22">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+  </Style>
+  <Style ss:ID="s24">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s25">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s26">
+   <Font ss:FontName="Courier New" x:Family="Modern"/>
+  </Style>
+  <Style ss:ID="s27">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Font ss:FontName="Courier New" x:Family="Modern"/>
+  </Style>
+  <Style ss:ID="s30" ss:Parent="s21">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s31">
+   <Font ss:FontName="Arial Unicode MS"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="256" ss:ExpandedRowCount="142" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="65.0" ss:DefaultRowHeight="12.0">
+   <Column ss:AutoFitWidth="0" ss:Width="145.0"/>
+   <Column ss:AutoFitWidth="0" ss:Width="461.0"/>
+   <Column ss:StyleID="s23" ss:Width="179.0"/>
+   <Column ss:Width="382.0"/>
+   <Column ss:AutoFitWidth="0" ss:Width="286.0"/>
+   <Column ss:AutoFitWidth="0" ss:Width="53.0" ss:Span="250"/>
+   <Row ss:AutoFitHeight="0" ss:Height="24.0" ss:StyleID="s22">
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Name</Data></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">File and Location</Data></Cell>
+    <Cell ss:StyleID="s25"><Data ss:Type="String">Version (M=manifest, F=filename, R=readme)</Data></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">License Type</Data></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">License Link</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">activation.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/activation.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://java.sun.com/products/javabeans/glasgow/jaf.html"><Data
+      ss:Type="String">http://java.sun.com/products/javabeans/glasgow/jaf.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">activation.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/activation.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://java.sun.com/products/javabeans/glasgow/jaf.html"><Data
+      ss:Type="String">http://java.sun.com/products/javabeans/glasgow/jaf.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">activation.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/activation.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://java.sun.com/products/javabeans/glasgow/jaf.html"><Data
+      ss:Type="String">http://java.sun.com/products/javabeans/glasgow/jaf.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">ant.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/ant.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.6.1 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">ant-contrib.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/ant-contrib.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0b2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">axis.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/axis.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2RC1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">axis.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/axis.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2RC1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">axis-ant.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/axis-ant.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2RC1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">batik-css.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/batik-css.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell><Data ss:Type="String">http://xmlgraphics.apache.org/batik/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">batik-svggen.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/batik-svggen.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell><Data ss:Type="String">http://xmlgraphics.apache.org/batik/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">batik-util.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/batik-util.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell><Data ss:Type="String">http://xmlgraphics.apache.org/batik/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="25.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">Bitstream Vera Font</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">lps/fonts/bitstream-vera-1.10</Data></Cell>
+    <Cell><Data ss:Type="Number">1.1</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Bitstream Vera Fonts Copyright </Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://svn.openlaszlo.org/openlaszlo/branches/3.3/lps/fonts/bitstream-vera-1.10/copyright.txt"><Data
+      ss:Type="String">http://svn.openlaszlo.org/openlaszlo/branches/3.3/lps/fonts/bitstream-vera-1.10/copyright.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">bootstrap.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/bin/bootstrap.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 (specification) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">bsf.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/bsf.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">BUFakeDom.js</Data></Cell>
+    <Cell><Data ss:Type="String">3rd-party/tools/BUFakeDom.js</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Academic Free License 1.2</Data></Cell>
+    <Cell><Data ss:Type="String">http://www.opensource.org/licenses/academic.php</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-ant.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-ant.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-ant.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/catalina-ant.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-cluster.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-cluster.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-i18n-es.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-i18n-es.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-i18n-fr.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-i18n-fr.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-i18n-ja.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-i18n-ja.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">catalina-optional.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/catalina-optional.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-beanutils.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/commons-beanutils.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.6 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-beanutils.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-beanutils.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.6 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-codec-1.3.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-codec-1.3.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.3 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-collections.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/commons-collections.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-collections.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-collections.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-daemon.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/bin/commons-daemon.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-dbcp-1.1.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/commons-dbcp-1.1.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-digester.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/commons-digester.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.5 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-discovery.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/commons-discovery.jar</Data></Cell>
+    <Cell><Data ss:Type="String">0.2-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-discovery.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-discovery.jar</Data></Cell>
+    <Cell><Data ss:Type="String">0.2-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-el.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/commons-el.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-fileupload-1.0.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/commons-fileupload-1.0.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-httpclient-2.0-rc1.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/connection/server-api/WEB-INF/lib/commons-httpclient-2.0-rc1.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.0-rc1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-httpclient-3.0.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-httpclient-3.0.jar</Data></Cell>
+    <Cell><Data ss:Type="String">3.0 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-jexl-1.0-dev.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-jexl-1.0-dev.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0-dev (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-jxpath.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">3rd-party/jars/dev/commons-jxpath.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0-beta2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-logging.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/commons-logging.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.4 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-logging.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/commons-logging.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.3 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-logging.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/commons-logging.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.3 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-logging-api.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/bin/commons-logging-api.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.3 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-modeler.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/commons-modeler.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">commons-pool-1.1.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/commons-pool-1.1.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">custom_rhino.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">3rd-party/jars/custom_rhino.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">MPL License Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.mozilla.org/MPL/"><Data
+      ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">DocBook XML 4.5</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">vendor/docbook-xml-4.5</Data></Cell>
+    <Cell><Data ss:Type="Number">4.5</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">DocBook License</Data></Cell>
+    <Cell><Data ss:Type="String">http://wiki.docbook.org/topic/DocBookLicense</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">DocBook XSL 1.65.1</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">vendor/docbook-xsl-1.65.1</Data></Cell>
+    <Cell><Data ss:Type="String">1.65.1</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">DocBook License</Data></Cell>
+    <Cell><Data ss:Type="String">http://wiki.docbook.org/topic/DocBookLicense</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">DocBook XSL 1.71.1</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">vendor/docbook-xsl-1.71.1</Data></Cell>
+    <Cell><Data ss:Type="String">1.71.1</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">DocBook License</Data></Cell>
+    <Cell><Data ss:Type="String">http://wiki.docbook.org/topic/DocBookLicense</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">Dojo 0.40.0</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">vendor/dojo-0.4.0</Data></Cell>
+    <Cell><Data ss:Type="String">0.4.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">BSD License</Data></Cell>
+    <Cell><Data ss:Type="String">http://opensource.org/licenses/bsd-license.php</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="40.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">edu.oswego.cs.dl.util.concurrent</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">WEB-INF/lps/server/src/edu/oswego/cs/dl/util/concurrent</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Public Domain</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">fop.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">3rd-party/jars/dev/fop.jar</Data></Cell>
+    <Cell><Data ss:Type="String">0.19.0-CVS (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">ftp.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/ftp.jar</Data></Cell>
+    <Cell><Data ss:Type="String"> (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">GNU Lesser General Public License</Data></Cell>
+    <Cell><Data ss:Type="String">http://crawler.archive.org/cmdline-jmxclient/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">iso-relax.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/iso-relax.jar</Data></Cell>
+    <Cell><Data ss:Type="String">20030108 (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Copyright (c) 2001-2002, SourceForge ISO-RELAX Project</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jakarta-regexp-1.2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/jakarta-regexp-1.2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2 (F)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jakarta-regexp-1.3.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/jakarta-regexp-1.3.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.3 (F)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="14.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jasper-compiler.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/jasper-compiler.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s31"><Data ss:Type="String">JasPer License Version 2.0</Data></Cell>
+    <Cell><Data ss:Type="String">http://www.ece.uvic.ca/~mdadams/jasper/LICENSE</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="14.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jasper-runtime.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/jasper-runtime.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s31"><Data ss:Type="String">JasPer License Version 2.0</Data></Cell>
+    <Cell><Data ss:Type="String">http://www.ece.uvic.ca/~mdadams/jasper/LICENSE</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">javamail-1.4.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/javamail-1.4.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.4 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement </Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://java.sun.com/products/javamail/javamail-1_2.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jaxrpc.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/jaxrpc.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1 (specification) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://java.sun.com/xml/downloads/jaxrpc.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jaxrpc.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/jaxrpc.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1 (specification) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://java.sun.com/xml/downloads/jaxrpc.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdbcpool-0.99.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/jdbcwebapp/WEB-INF/lib/jdbcpool-0.99.jar</Data></Cell>
+    <Cell><Data ss:Type="String">0.99 (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdbcpool-0.99.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/potstore/WEB-INF/lib/jdbcpool-0.99.jar</Data></Cell>
+    <Cell><Data ss:Type="String">0.99 (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdom.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/connection/server-api/WEB-INF/lib/jdom.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 beta8-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">BSD/Apache</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdom.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/jdbcwebapp/WEB-INF/lib/jdom.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 beta8-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">BSD/Apache</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdom.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/potstore/WEB-INF/lib/jdom.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 beta8-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">BSD/Apache</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jdom.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/jdom.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0.1 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">BSD/Apache (Copyright (C) 2000-2004 Jason Hunter &amp; Brett McLaughlin.)</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">Jgenerator</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">WEB-INF/lps/server/jgenerator-2.2</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">The JGenerator Software License, Version 1.0 Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.flashgap.com/license.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jing.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/jing.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Jing Copying Conditions</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.thaiopensource.com/relaxng/copying.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jing.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/jing.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Jing Copying Conditions</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.thaiopensource.com/relaxng/copying.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jkconfig.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/jkconfig.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jkshm.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/jkshm.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jmx.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/bin/jmx.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">GNU Lesser General Public License</Data></Cell>
+    <Cell><Data ss:Type="String">http://crawler.archive.org/cmdline-jmxclient/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">js.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/js.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Netscape Publice License Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/NPL-1.1.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jsp-api.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/jsp-api.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.0.public_draft (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">junit.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/junit.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">jython.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/jython.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">BeOpen / CNRI license </Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.jython.org/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.6.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/log4j-1.2.6.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.6 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.6.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/connection/server-api/WEB-INF/lib/log4j-1.2.6.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.6 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.6.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/jdbcwebapp/WEB-INF/lib/log4j-1.2.6.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.6 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.6.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/log4j-1.2.6.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.6 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.6.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/potstore/WEB-INF/lib/log4j-1.2.6.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.6 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">log4j-1.2.8.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/log4j-1.2.8.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.8 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache License, Version 2.0 </Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="24.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">miniml Fonts</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">lps/fonts/{ceriph-*.ttf,copy-*.ttf,header-*.ttf,hooge-*.ttf,italic-*.ttf,kroeger-*.ttf,mono-*.ttf,standard-*.ttf,uni-*.ttf}</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">&quot;Free&quot;</Data></Cell>
+    <Cell><Data ss:Type="String">http://www.miniml.com/fonts/license/index.htm</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">mysql-connector-java-3.0.6-stable-bin.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/jdbcwebapp/WEB-INF/lib/mysql-connector-java-3.0.6-stable-bin.jar</Data></Cell>
+    <Cell><Data ss:Type="String">3.0.6-stable (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">GNU Lesser General Public License</Data></Cell>
+    <Cell><Data ss:Type="String">http://crawler.archive.org/cmdline-jmxclient/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">mysql-connector-java-3.0.6-stable-bin.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/potstore/WEB-INF/lib/mysql-connector-java-3.0.6-stable-bin.jar</Data></Cell>
+    <Cell><Data ss:Type="String">3.0.6-stable (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">GNU Lesser General Public License</Data></Cell>
+    <Cell><Data ss:Type="String">http://crawler.archive.org/cmdline-jmxclient/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">naming-common.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/naming-common.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">naming-factory.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/naming-factory.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">naming-java.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/naming-java.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">naming-resources.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/naming-resources.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="24.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">Open Office Fonts</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">lps/fonts/{arioso*.ttf,chevara*.ttf,conga*.ttf,helmet*.ttf,timmons*.ttf)&#10;</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Industry Standards Source License (SISSL)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.openoffice.org/license.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">PyXML</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">vendor/PyXML-0.8.3.tar.gz</Data></Cell>
+    <Cell><Data ss:Type="String">0.8.3</Data></Cell>
+    <Cell><Data ss:Type="String">Python License (CNRI Python License) </Data></Cell>
+    <Cell><Data ss:Type="String">http://www.opensource.org/licenses/pythonpl.php</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">resolver.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/xerces-2_6_2/resolver.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">The Apache Software License, Version 1.1 </Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://xml.apache.org/dist/LICENSE.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saaj.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/saaj.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://java.sun.com/xml/downloads/saaj.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saaj.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/saaj.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2 (specification) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Sun Microsystems, Inc. Binary Code License Agreement</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://java.sun.com/xml/downloads/saaj.html</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">sac.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/sac.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon-6.5.3-lz-p1.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/saxon-6.5.3-lz-p1.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5.3-lz-p1 (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon643.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/saxon643.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.4.3 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon644.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/saxon644.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.4.4 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon65.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/saxon65.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon65.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/saxon65/dist/saxon65.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon65.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/saxon65.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon651.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/saxon651.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5.1 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon651.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/saxon651.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5.1 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">saxon655.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/saxon655.jar</Data></Cell>
+    <Cell><Data ss:Type="String">6.5.5 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Mozilla Public License Version 1.0</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.mozilla.org/MPL/</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">serializer.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/serializer.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.7.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">The Apache Software License, Version 1.1 </Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://xml.apache.org/dist/LICENSE.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlet-2.2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/jdbcwebapp/servlet-2.2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.2 (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlet-2.2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/perf/potstore/servlet-2.2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.2 (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlet-2.3.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">3rd-party/jars/dev/servlet-2.3.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.3.1 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlet-api.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/lib/servlet-api.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.4.public_draft (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlets-common.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/servlets-common.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlets-default.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/servlets-default.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlets-invoker.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/servlets-invoker.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">servlets-webdav.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/servlets-webdav.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">swflib.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/swflib.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-coyote.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-coyote.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-http11.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-http11.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0-dev (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-jk.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-jk.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-jk2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-jk2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.1 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-jni.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-jni.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">tomcat-util.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/server/lib/tomcat-util.jar</Data></Cell>
+    <Cell><Data ss:Type="String">5.1 (implementation) (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="25.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">trang.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/trang.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Thai Open Source Software Copyright</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://www.thaiopensource.com/download/old/relaxng/20020724/copying.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="25.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">Verity Font</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">lps/fonts/verity</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Verity readme and license document</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://svn.openlaszlo.org/openlaszlo/branches/3.3/lps/fonts/verity/readme.txt"><Data
+      ss:Type="String">http://svn.openlaszlo.org/openlaszlo/branches/3.3/lps/fonts/verity/readme.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">wsdl4j.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/rpc/soap/https/version/webapps/axis/WEB-INF/lib/wsdl4j.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.5 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Common Public License, Version 0.5</Data></Cell>
+    <Cell><Data ss:Type="String">http://dsd.lbl.gov/firefish/licenses/wsdl4j.LICENSE.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">wsdl4j.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/wsdl4j.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.5 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Common Public License, Version 0.5</Data></Cell>
+    <Cell><Data ss:Type="String">http://dsd.lbl.gov/firefish/licenses/wsdl4j.LICENSE.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/endorsed/xalan.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/xalan.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.7.0 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/xalan2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/xalan2/dist/xalan2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan2.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/xalan2.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan25.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/docbook-xsl-1.65.1/extensions/xalan25.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.5 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan27.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/xalan27/dist/xalan27.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.7 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xalan27.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/docbook-xsl-1.71.1/extensions/xalan27.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.7 (F)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xerces.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">test/connection/server-api/WEB-INF/lib/xerces.jar</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">?</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xercesImpl.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">3rd-party/jars/dev/xercesImpl.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.6.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xercesImpl.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/endorsed/xercesImpl.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.6.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xercesImpl.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/experimental/xerces-2_6_2/xercesImpl.jar</Data></Cell>
+    <Cell><Data ss:Type="String">2.6.2 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">The Apache Software License, Version 1.1 </Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">http://xml.apache.org/dist/LICENSE.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xmlParserAPIs.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">server/common/endorsed/xmlParserAPIs.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2.01 (implementation) (M)</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Apache Software License, Version 1.1</Data></Cell>
+    <Cell ss:StyleID="s30" ss:HRef="http://www.apache.org/licenses/LICENSE-1.1"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-1.1</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xmlrpc-1.2-b1.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/xmlrpc-1.2-b1.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.2-b1 (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xmlunit1.0.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">vendor/xmlunit1.0.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.0 (F)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.0">
+    <Cell ss:StyleID="s26"><Data ss:Type="String">xpp3-1.1.3.4d_b4.jar</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="String">WEB-INF/lib/xpp3-1.1.3.4d_b4.jar</Data></Cell>
+    <Cell><Data ss:Type="String">1.1.3.4d_b4 (M)</Data></Cell>
+    <Cell><Data ss:Type="String">Apache License, Version 2.0</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.apache.org/licenses/LICENSE-2.0.txt"><Data
+      ss:Type="String">http://www.apache.org/licenses/LICENSE-2.0.txt</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <HorizontalResolution>-4</HorizontalResolution>
+    <VerticalResolution>-4</VerticalResolution>
+   </Print>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>96</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+     <RangeSelection>R1:R65536</RangeSelection>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <Sorting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Sort>Name</Sort>
+  </Sorting>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="256" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="65.0" ss:DefaultRowHeight="12.0">
+   <Column ss:AutoFitWidth="0" ss:Width="53.0" ss:Span="255"/>
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <HorizontalResolution>-4</HorizontalResolution>
+    <VerticalResolution>-4</VerticalResolution>
+   </Print>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="256" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="65.0" ss:DefaultRowHeight="12.0">
+   <Column ss:AutoFitWidth="0" ss:Width="53.0" ss:Span="255"/>
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

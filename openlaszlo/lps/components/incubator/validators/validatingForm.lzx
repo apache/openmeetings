@@ -1,0 +1,80 @@
+<!--
+********************************************************
+* [[validators/validatingForm]]
+* 2005/12/21 ver.2.0.0
+* 2005/12/06 ver.1.0.1 add subnodes validating.
+
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp
+********************************************************
+-->
+<!---
+      @topic Incubator
+      @subtopic Validators
+  -->
+<library>
+    <class name="validatingForm" extends="form" initstage="late"> 
+        <attribute name="validators" />
+        <attribute name="errorcount" type="number" value="0" />
+        
+        <handler name="oninit" method="classinit" />
+        <method name="classinit" args="ignore">
+            this.errors = new Array();
+            this.validators = new Array();
+            recursive(this);
+
+            this.clearErrors();
+        </method>
+        
+        <method name="clearErrors">
+        <![CDATA[
+            for(var i = 0; i < this.validators.length; i++){
+                this.validators[i].cleanErrors();
+            }
+        ]]>
+        </method>
+
+        <method name="recursive" args="newsub">
+            <![CDATA[
+            for( var i = 0; i < newsub.subnodes.length ; i++ ){
+                if( newsub.subnodes[i].subnodes ){
+                    if( 0 < newsub.subnodes[i].subnodes.length )
+                        recursive(newsub.subnodes[i]);
+                }
+                addevents(newsub.subnodes[i]);  
+
+            }
+            ]]>
+        </method>
+
+        <method name="addevents" args="obj">
+            if(typeof obj.isformvalidator != "undefined"){
+                if(obj.isformvalidator == true){
+                    new lz.Delegate( this, "iserrorchanged", obj, "oniserror");
+                    this.validators.push(obj);
+                }
+            }
+        </method>
+
+        <method name="iserrorchanged" args="ignore=true">
+            <![CDATA[
+            var count = 0;
+            for(var i = 0; i < this.validators.length; i++){
+                if(this.validators[i].iserror){
+                    count ++;
+                }
+            }
+            if(count != this.errorcount)
+                this.setAttribute("errorcount", count);
+            ]]>
+        </method>
+        
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

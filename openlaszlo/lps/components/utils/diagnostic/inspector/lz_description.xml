@@ -1,0 +1,13 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+<lzapplication>
+    <appname>Inspector</appname>
+    <shortdesc>
+        A debugging view for looking at the view heirarchy.  Click on a view to see its subviews.  You can change bgcolor and view position.  Click on the x/o to toggle visibility. Click on '...' will send the instance to the debugger, where you can click on it for further inspection.
+    </shortdesc>
+    <authorfirstname>Sarah</authorfirstname>
+    <authorlastname>Allen</authorlastname>
+    <authorwebsite>http://www.ultrasaurus.com/</authorwebsite>
+</lzapplication>

@@ -1,0 +1,47 @@
+<library>
+    <!--- resizes its immediateparent in response to mouse events, when applied -->
+    <class name="resizestate" extends="state" >
+        <!--- the x offset from the mouse
+              @access private -->
+        <attribute name="__resize_xroffset"
+                   value="this.x - this.width + this.getMouse( 'x' )" when="once" />
+        <!--- @access private -->
+        <attribute name="width" 
+                   value="${this.immediateparent.getMouse( 'x' )- this.__resize_xroffset}"/>
+
+        <!--- the y offset from the mouse
+              @access private -->
+        <attribute name="__resize_yroffset"
+                   value="this.y - this.height + this.getMouse( 'y' )" when="once" />
+        <!--- @access private -->
+        <attribute name="height" 
+                   value="${this.immediateparent.getMouse( 'y' )- this.__resize_yroffset}"/>
+        <doc>
+          <tag name="shortdesc"><text>A standard resize behavior.</text></tag>
+          <text>
+            <p><classname>resizestate</classname> can be used to change the
+            width and height of a view in response to the movement of the
+            mouse.</p>
+            
+            <p>In the example below, the <classname>resizestate</classname> tracks
+            differences in the mouse position from after it is applied, so the
+            bottom right corner of the resizing view <em>does not</em> snap to the
+            mouse position.</p>
+            
+            <example title="Resizing a view using the mouse">
+            &lt;canvas height="120"&gt;
+              &lt;view bgcolor="green" width="100" height="100"
+                    onmousedown="rs.setAttribute('applied', true)" onmouseup="rs.setAttribute('applied', false)"&gt;
+                &lt;resizestate name="rs"/&gt;
+              &lt;/view&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

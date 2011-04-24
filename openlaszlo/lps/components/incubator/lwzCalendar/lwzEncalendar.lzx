@@ -1,0 +1,226 @@
+<library >
+     
+    <class name="myday" 
+           extends="basedatepickerday" 
+           bgcolor="#D5E4F3"
+           width="20"
+           height="20">
+          
+           
+        <handler name="onclick"> 
+        <![CDATA[
+            if( !this.disabled ) {
+                this.setAttribute('selected', true);  
+               
+            } 
+        ]]>
+        </handler>
+        <handler name="onselected"> 
+            if( this.selected ) { 
+               
+                selectedview.setAttribute('visible', true );
+            } else { 
+              
+               selectedview.setAttribute('visible', false );
+            }
+        </handler>
+         <handler name="onmouseover"> 
+        <![CDATA[
+            if( !this.disabled ) { 
+                dateview.setAttribute('visible', true ); 
+            }
+        ]]>
+         </handler>
+
+        <handler name="onmouseout"> 
+           <![CDATA[
+            dateview.setAttribute('visible', false );
+            
+             ]]>
+        </handler>
+        
+        <view name="dateview" visible="false" width="${parent.width}" height="${parent.width}" bgcolor="#00ff00"/>
+        <view name="selectedview" visible="false" width="${parent.width}" height="${parent.width}" bgcolor="#325693"/>
+        <text text="${parent.daynum}"
+              visible="${!parent.disabled}" 
+              opacity="${parent.selectable ? 1 : .3 }"/>
+             
+          
+            
+    </class>
+
+    <class name="myweek" extends="basedatepickerweek">
+        <simplelayout axis="x" spacing="1"/> 
+    </class> 
+    
+    <class name="lwzendatepicker" 
+           extends="basedatepicker" 
+           weekclass="lz.myweek"
+           dayclass="lz.myday"
+           xinset="0"
+           yinset="0">
+           
+                
+        <method name="setMonthToShow" args="month, year">
+            super.setMonthToShow(month,year);
+            this.display.month.datapath.setXPath(
+            "datepicker_strings_en:/months/month[@index='" + month + "']/@full" );
+            this.disyear.year.setAttribute('text', year);
+        </method>
+        
+        <handler name="onselecteddate">
+            
+            if( this.selecteddate != null ) {
+                this.selected.year.setAttribute('text', this.selecteddate.getFullYear() );
+                this.selected.month.datapath.setXPath(
+                        "datepicker_strings_en:/months/month[@index='" + 
+                        this.selecteddate.getMonth() + "']/@full" ); 
+                this.selected.mydate.setAttribute('text', this.selecteddate.getDate() );
+                
+               var selectedtime = this.selected.month.text;
+               
+               var getmonvalue = month2value(selectedtime);
+                             
+               this.selected.datavalue.setAttribute('text', this.selected.year.text+"-"+getmonvalue+"-"+judgeday(selected.mydate.text));
+                Debug.write(this.selected.datavalue.text);
+            }
+        </handler>
+        <method name="month2value" args="enmonth">
+              <![CDATA[
+             
+                 switch(enmonth){
+                       case "January":
+                       return '01';
+                       break;
+                       
+                       case "February":
+                       return  '02';
+                       break;
+                       
+                       case "March":
+                       return  '03';
+                       break;
+                       
+                       case "April":
+                       return  '04';
+                       break;
+                       
+                       case "May":
+                       return  '05';
+                       break;
+                       
+                       case "June":
+                       return  '06';
+                       break;
+                                        
+                       case "July":
+                       return  '07';
+                       break;
+                       
+                       case "August":
+                       return  '08';
+                       break;
+                       
+                       case "September":
+                       return '09';
+                       break;
+                       
+                       case "October":
+                       return  '10';
+                       break;
+                       
+                       case "November":
+                       return  '11';
+                       break;
+                       
+                       case "December":
+                       return  '12';
+                       break; 
+                     }
+              ]]>
+            </method>
+            <method name="judgeday" args="datavalue">
+            <![CDATA[
+               var datanum = Number(datavalue);
+               if(datanum<10){
+                    var newdata = "0"+datavalue;
+                    return newdata;             
+               }else{
+                    return datavalue;               
+               }     
+               ]]>       
+            </method>
+        <view options="ignorelayout">
+            <text width="20" height="20" bgcolor="#6495ED" text="Su"/>
+            <text width="20" height="20" bgcolor="#6699CC" text="Mo"/>
+            <text width="20" height="20" bgcolor="#6699CC" text="Te"/>
+            <text width="20" height="20" bgcolor="#6699CC" text="We"/>
+            <text width="20" height="20" bgcolor="#6699CC" text="Th"/>
+            <text width="20" height="20" bgcolor="#6699CC" text="Fr"/>
+            <text width="20" height="20" bgcolor="#6495ED" text="Sa"/>
+            <simplelayout axis="x" spacing="1"/>
+        </view>
+        <view name="disyear" y="150"> 
+            <button width="20" height="20">
+               <![CDATA[<<]]>  
+               <handler name="onclick">
+                   <![CDATA[
+                     for(var i=0; i<12; i++){
+                        classroot.showPreviousMonth();                     
+                     }
+                   ]]>               
+               </handler>
+            </button>
+            <text name="year" resize="true" x="36"/>
+            <button x="127" width="20" height="20">
+               <![CDATA[>>]]>   
+               <handler name="onclick">
+                   <![CDATA[
+                     for(var i=0; i<12; i++){
+                       classroot.showNextMonth();                      
+                     }
+                   ]]>               
+               </handler>
+            </button>
+            
+        </view> 
+        <view name="display" y="150"> 
+            <button onclick="classroot.showPreviousMonth()" x="20" width="20" height="20">
+               <![CDATA[<]]>
+            </button>
+            <text name="month" datapath="." resize="true" x="66"/>
+            <button onclick="classroot.showNextMonth()" x="107" width="20" height="20">
+               <![CDATA[>]]>
+            </button>
+            
+        </view>
+         
+        <method name="getyear">
+           return selected.year.text;        
+        </method>
+        <method name="getmonth">
+           return selected.month.text;        
+        </method>
+        <method name="getday">
+           return selected.mydata.text;       
+        </method> 
+        <method name="getdayvalue">
+           return selected.datavalue.text;        
+        </method>    
+        <view name="selected" visible="false">            
+            <text name="month" datapath="." resize="true"/>
+            <text name="mydate" resize="true"/>
+            <text name="year" resize="true"/>
+            <text name="datavalue" resize="true"/>
+            <simplelayout axis="x" spacing="2"/>
+        </view> 
+
+        <simplelayout axis="y" placement="content" spacing="1" inset="20"/> 
+        
+    </class> 
+    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

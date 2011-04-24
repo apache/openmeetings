@@ -1,0 +1,94 @@
+<library>
+    <mixin name="memorymonitor_mixin">
+        <passthrough when="$as3">
+            import flash.system.System;
+        </passthrough>
+
+        <switch>
+            <when property="$as3">
+                <method name="gc" args="ignore=null">
+                    //Debug.info('flash.system.System.gc()');
+                    flash.system.System.gc();
+                </method>
+                <method name="getTotalMemory" args="ignore=null">
+                    return flash.system.System.totalMemory;
+                </method>
+            </when>
+        </switch>
+    </mixin>
+
+    <class name="memorymonitor_model" with="memorymonitor_mixin" extends="node">
+        <attribute name="current" type="number" value="-1"/>
+        <attribute name="max" type="number" value="0"/>
+        <attribute name="scale" type="number" value="1 / 1024"/>
+        <switch>
+            <when property="$as3">
+                <handler name="onscale" method="update"/>
+                <handler name="onidle" reference="lz.Idle" method="update"/>
+                <method name="update" args="ignore=null">
+                    var current = this.getTotalMemory() * this.scale;
+                    if (current > this.max) {
+                        this.setAttribute('max', current);
+                    }
+                    this.setAttribute('current', current);
+                </method>
+            </when>
+        </switch>
+    </class>
+
+    <!-- default memory monitor instance -->
+    <view name="memorymonitor" align="right" initstage="late" options="ignorelayout" width="100">
+        <memorymonitor_model name="memory"/>
+        <switch>
+            <when property="$as3">
+                <attribute name="scale" type="number" value="${this.memory.current / this.memory.max}"/>
+                <drawview width="100%" height="100%">
+                    <handler name="onscale" method="redraw" reference="parent"/>
+                    <handler name="onmouseover" method="redraw" reference="parent"/>
+                    <handler name="onmouseout" method="redraw" reference="parent"/>
+                    <handler name="onwidth" method="redraw"/>
+                    <handler name="onheight" method="redraw"/>
+                    <handler name="oncontext" method="redraw"/>
+                    <method name="redraw" args="ignore=null">
+                        if (! this.context) return;
+                        this.clear();
+
+                        var inset = 2;
+                        var width = this.width;
+                        var height = this.height;
+                        this.globalAlpha = this.isMouseOver() ? .2 : .3;
+                        this.fillStyle = 0x000000;
+
+                        this.beginPath();
+                        this.rect(0,0,width,height, inset);
+                        this.closePath();
+                        this.fill();
+
+                        var sizeinset = inset * 2;
+                        width = (width - sizeinset) * parent.scale;
+                        height = height - sizeinset;
+
+                        this.beginPath();
+                        this.rect(inset,inset,width,height,inset);
+                        this.closePath();
+                        this.fill();
+                    </method>
+                </drawview>
+                <text text="${Math.floor(parent.memory.current) + 'k|' + Math.floor(parent.scale * 100) + '%'}" align="center"/>
+                <handler name="oninit">
+                    this.setAttribute('clickable', true);
+                    this.bringToFront();
+                    //(Math.floor(this.getTotalMemory() / (1024 * 102.4)) / 10) + 'mb'
+                </handler>
+                <handler name="onclick">
+                    this.memory.gc();
+                </handler>
+            </when>
+        </switch>
+    </view>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

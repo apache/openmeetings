@@ -1,0 +1,93 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2007-2010 Laszlo Systems, Inc.  All Rights Reserved.         *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+<library>
+    <include href="extensions/av/mediastream.lzx"/>
+    <include href="extensions/av/videoview.lzx"/>
+
+    <!--- used by videoplayer component
+          @access private -->
+    <class name="videoscreen"
+        bgcolor="0x000000"
+        visible="${(this.width &gt; 1) &amp;&amp; (this.height &gt; 1)}"
+    >
+
+        <!--- true for verbose debug logging -->
+        <attribute name="debug" value="false"/>
+        <attribute name="starttime" value="0" type="number"/>
+        <attribute name="type" type="string" value="http"/>
+
+        <attribute name="url" type="string" value=""/>
+
+        <attribute name="autoplay" value="false"/>
+
+        <attribute name="capturing" value="false"/>
+
+        <attribute name="volume" value="1.0"/>
+
+        <attribute name="borderLeft" value="5"/>
+
+        <attribute name="borderRight" value="5"/>
+
+        <attribute name="borderTop" value="5"/>
+
+        <attribute name="borderBottom" value="5"/>
+
+        <attribute name="aspectRatio" value="$once{
+            4 / 3}"/>
+
+        <attribute name="videoWidth" value="${
+            Math.min(this.innerWidth,
+                     this.innerHeight * this.aspectRatio)}"/>
+
+        <attribute name="videoHeight" value="${
+            Math.min(this.innerHeight,
+                     this.innerWidth / this.aspectRatio)}"/>
+
+        <!--- the actual width of the videoview 
+            @access private
+        -->
+        <attribute name="innerWidth" value="${
+            this.width - (this.borderLeft + this.borderRight)}"/>
+
+        <!--- the actual height of the videoview 
+            @access private
+        -->
+        <attribute name="innerHeight" value="${
+            this.height - (this.borderTop + this.borderBottom)}"/>
+
+        <mediastream 
+            name="ms"
+            autoplay="${classroot.autoplay}"
+            type="${classroot.type}" 
+            url="${classroot.url}"
+            debug="${parent.debug}" 
+        />
+
+        <videoview 
+            name="vv"
+            x="${parent.borderLeft + (parent.innerWidth-parent.videoWidth)/2}"
+            y="${parent.borderTop + (parent.innerHeight-parent.videoHeight)/2}"
+            width="${parent.videoWidth}"
+            height="${parent.videoHeight}"
+            stream="$once{classroot.ms}"
+            visible="${parent.visible &amp;&amp; (this.width &gt; 1) &amp;&amp; (this.height &gt; 1)}"
+            playvolume="${classroot.volume}"
+            starttime="${classroot.starttime}"
+            debug="${parent.debug}"
+        >
+
+        <camera name="mycam"
+            show="${classroot.capturing}" />
+        <microphone name="mymic"
+            capturing="${classroot.capturing}" />
+
+        </videoview>
+
+
+    </class>
+
+
+</library>

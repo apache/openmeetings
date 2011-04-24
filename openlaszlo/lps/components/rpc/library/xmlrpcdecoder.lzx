@@ -1,0 +1,276 @@
+<library>
+
+<script when="immediate">
+<![CDATA[
+class LzXMLRPCDecoder {
+
+    public static function xmlrpc_2_js_type(xmlrpctype:String) {
+        switch(xmlrpctype.toLowerCase())
+        {
+          case 'base64':
+          case 'string':
+          return 'string';
+          case 'datetime.iso8601':
+          return 'Date';
+          case 'int':
+          case 'i4':
+          return 'integer';
+          case 'struct':
+          return 'object';
+          case 'array':
+          return 'array';
+          case 'double':
+          return 'number';
+          case 'undefined':
+          return 'mixed';
+          case 'boolean':
+          case 'null':
+          default:
+          // unknown: might be any xmlrpc type
+          return xmlrpctype.toLowerCase();
+        }
+    }
+
+
+    // Takes XML element of form <value>.....</value>
+    // returns a JS object
+    /*Tag   Type    Example
+      <i4> or <int> four-byte signed integer    -12
+      <boolean> 0 (false) or 1 (true)   1
+      <string>  string  hello world
+      <double>  double-precision signed floating point number   -12.214
+      <dateTime.iso8601>    date/time   19980717T14:08:55
+      <base64>  base64-encoded binary   eW91IGNhbid0IHJlYWQgdGhpcyE=
+
+      custom extension to XML RPC protocol:
+      <null/> ==> javascript null
+    */
+
+    public static function xmlrpc2jsobj (node:LzDataNodeMixin):* {
+        if ( node instanceof LzDataText ){
+            // <value>foobar<value> is a String value
+            return ((node cast LzDataText).data);
+        } else if (node instanceof LzDataElement) {
+            var elt:LzDataElement = (node cast LzDataElement);
+            if (elt.nodeName == "string") {
+                if ((elt.childNodes == null || elt.childNodes.length == 0)) {
+                    // covers the <value><string/></value> case
+                    return "";
+                } else {
+                    // covers the <value><string>stringdata</string></value> case
+                    return ((elt.childNodes[0] cast LzDataText).data);
+                }
+            }
+
+            if (! elt.hasChildNodes()) {
+                Debug.error('xmlrpc2jsobj got element with no child nodes', elt);
+                return (void 0);
+            } 
+
+            var datatype = elt.nodeName;
+            // first child is a data type
+            switch (datatype) {
+              case 'i4':
+              case 'int':
+              case 'double':
+                return Number((elt.childNodes[0] cast LzDataText).data);
+                break;
+              case 'boolean':
+                var val = (elt.childNodes[0] cast LzDataText).data;
+                return val == 0 ? false : true;
+                break;
+              case 'dateTime.iso8601':
+                return LzXMLRPCDecoder.decodeISO8601(((elt.childNodes[0] cast LzDataText).data));
+                break;
+              case 'base64':
+                return LzXMLRPCDecoder.decodeBase64((elt.childNodes[0] cast LzDataText).data);
+                break;
+              case 'struct':
+                return LzXMLRPCDecoder.decodeStruct(elt);
+                break;
+              case 'array':
+                return LzXMLRPCDecoder.decodeArray(elt.childNodes[0]);
+                break;
+              case 'null':
+                return null;
+                break;
+              default:
+                Debug.error("unknown xml rpc data type", datatype);
+                return null;
+                break;
+            }
+        }
+    }
+
+    /*
+      <struct>
+        <member>
+           <name>lowerBound</name>
+           <value><i4>18</i4></value>
+        </member>
+        <member>
+          <name>upperBound</name>
+          <value><i4>139</i4></value>
+      </member>
+     </struct>
+
+   <struct>s can be recursive, any <value> may contain a <struct> or any
+   other type, including an <array>, described below.
+
+    */
+    public static function decodeStruct(elt:LzDataElement) {
+        var members:Array = elt.childNodes;
+        var result = {};
+        var val:*;
+        for (var i:int = 0; i < members.length; i++) {
+            var member:LzDataElement = elt.childNodes[i];
+            var nameElt:LzDataElement = member.childNodes[0];
+            var name:String = (nameElt.childNodes[0] cast LzDataText).data;
+            var valElt:LzDataElement = member.childNodes[1];
+            if (valElt.hasChildNodes()) {
+                val = LzXMLRPCDecoder.xmlrpc2jsobj(valElt.childNodes[0]);
+            } else {
+                val = "";
+            }
+            result[name] = val;
+        }
+        return result;
+    }
+
+    /*
+    <array>s
+
+    A value can also be of type <array>.
+
+    An <array> contains a single <data> element, which can contain any number of <value>s.
+
+    Here's an example of a four-element array:
+
+    <array>
+       <data>
+          <value><i4>12</i4></value>
+          <value><string>Egypt</string></value>
+          <value><boolean>0</boolean></value>
+          <value><i4>-31</i4></value>
+          </data>
+       </array>
+*/
+    public static function decodeArray(elt:LzDataElement) {
+        var values:Array = elt.childNodes;
+        var result = [];
+        for (var i:int = 0; i < values.length; i++) {
+            var val:* = LzXMLRPCDecoder.xmlrpc2jsobj(values[i].childNodes[0]);
+            result[i] = val;
+        }
+        return result;        
+    }
+
+    static function replace (s,c1,c2) {
+        var arr = [];
+        arr = s.split(c1);
+        return arr.join(c2);
+    }
+
+
+    public static function decodeBase64(s:String):String {
+        var b64s='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        var d=[];
+        var i=0;
+        s=LzXMLRPCDecoder.replace(s,"\n","");
+        s=LzXMLRPCDecoder.replace(s,"\r",""); 
+        s=LzXMLRPCDecoder.replace(s,"=","");
+
+        while (i<s.length) {            
+            d[d.length] = String.fromCharCode((b64s.indexOf(s.charAt(i)) << 2) | (b64s.indexOf(s.charAt(i+1)) >> 4));
+            d[d.length] = String.fromCharCode(((b64s.indexOf(s.charAt(i+1)) & 15) << 4) | (b64s.indexOf(s.charAt(i+2)) >> 2));
+            d[d.length] = String.fromCharCode(((b64s.indexOf(s.charAt(i+2)) & 3) << 6) | b64s.indexOf(s.charAt(i+3)));
+            i+=4;
+        }
+
+        if (s.length%4 == 2) d = d.slice(0, d.length-2);
+        if (s.length%4 == 3) d = d.slice(0, d.length-1);
+
+        return d.join("");
+    }
+
+
+    /**
+       http://en.wikipedia.org/wiki/ISO_8601#Week_dates
+
+       Handles
+       YYYYMMDD
+       YYYY-MM-DD
+
+       YYYYMMDDTHHMMSS
+       YYYY-MM-DDTHHMMSS
+
+       YYYY-MM-DDTHH:MM:SS
+       YYYYMMDDTHH:MM:SS
+
+       Does not yet handle:
+
+        + timezone designators or offsets 
+
+        + "week" format, e.g., YYY-Www-D
+
+        + Ordinal dates: YYYY-DDD
+
+     */
+    public static function decodeISO8601(time:String, utc:Boolean=false) {
+        var hours = 0;
+        var minutes = 0;
+        var seconds = 0;
+
+        var idx = 0;
+        var year = time.substring(0,4);
+
+        var hyphen = time.indexOf("-");
+        idx = (hyphen >= 0) ? hyphen+1 : 4;
+        time = time.substring(idx, time.length);
+        var month = time.substring(0,2);
+
+        hyphen = time.indexOf("-");
+        idx = (hyphen >= 0) ? hyphen+1 : 2;
+        time = time.substring(idx, time.length);
+        var day = time.substring(0,2);
+
+        time = time.substring(2,time.length);
+
+        var hours_idx = time.indexOf('T');
+        if (hours_idx >= 0) {
+            idx = hours_idx + 1;
+
+            // trim off 'T'
+            time = time.substring(idx, time.length);
+
+            hours = time.substring(0, 2);
+
+            var colon = time.indexOf(':');
+            idx = (colon >= 0) ? colon+1 : 2;
+            time = time.substring(idx, time.length);
+
+            minutes = time.substring(0, 2);
+            var colon = time.indexOf(':');
+            idx = (colon >= 0) ? colon+1 : 2;
+            time = time.substring(idx, time.length);
+            seconds = time.substring(0, 2);
+
+        }
+
+        if (utc) {
+            return new Date(Date.UTC(year,month-1,day,hours,minutes,seconds));
+        } else {
+            return new Date(year,month-1,day,hours,minutes,seconds);
+        }
+    }
+
+}
+]]>
+</script>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

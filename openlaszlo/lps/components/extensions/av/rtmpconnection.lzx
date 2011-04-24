@@ -1,0 +1,370 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+  <!--
+      Originally written by Sarah Allen
+      Improvements by Sebastian Wagner
+      Support for OL 4.2/SWF9 by Raju Bitter
+  -->
+
+    <class name="rtmpconnection">
+        <doc>
+            <tag name="shortdesc"><text>Allows connections to RTMP servers</text></tag>
+            <text>
+                <p><tagname>rtmpconnection</tagname> allows applications to connect to RTMP servers, like http://osflash.org/red5 or http://www.wowzamedia.com/.  Note that you'll need a server running with the appropriate URLs set up for this example to work.</p> 
+                
+                <example><programlisting class="code">
+                &lt;canvas&gt;
+                    &lt;rtmpconnection src="rtmp://localhost:1935/simplevideostreaming/" autoconnect="true"/&gt;
+                    &lt;videoplayer url="Extremists.flv" type="rtmp" autoplay="true" width="320" height="240"/&gt;
+                &lt;/canvas&gt;
+                </programlisting></example>
+            </text>
+        </doc> 
+
+        <passthrough when="$as3">
+            import flash.net.NetConnection;
+            import flash.events.ErrorEvent;
+            import flash.events.StatusEvent;
+            import flash.events.IOErrorEvent;
+            import flash.events.NetStatusEvent;
+            import flash.events.SecurityErrorEvent;
+            import flash.events.AsyncErrorEvent;
+        </passthrough>
+
+        <!--- Connect automatically during init. If false, you need to explicitly
+            call connect().
+            @type Boolean
+            @access public
+        -->
+        <attribute name="autoconnect" value="true" type="boolean" />
+            
+        <!--- String to indicate connection status.
+            @type string
+            @access public
+        -->
+        <attribute name="status" value="disconnected" type="string"/>
+
+        <!--- Number to indicate what stage of connection we're in:
+            0: disconnected, 1: connecting, 2: connected.
+            @type Number
+            @access public
+        -->
+        <attribute name="stage" value="0" type="number"/>
+
+        <!--- A reference to the Flash NetConnection object.
+            @type Object
+            @access private
+        -->
+        <attribute name="_nc" value="null" type="expression" />
+
+        <!--- Application url, for example
+            "rtmp:/appname" or "rtmp://myserver.com/myapp/".
+            @type String
+            @access private
+        -->
+        <attribute name="src" value="" type="string"/>
+
+        <!--- Connection parameters that will be sent to the server when NetConnection.connect() is called
+            @type Expression
+        -->
+        <attribute name="connectionparams" value="null" type="expression" />
+
+        <!--- Alternate application url, used if the connection for src 
+                fails for example : "rtmp:/appname" or 
+                "rtmp://myserver.com/myapp/". -->
+        <attribute name="altsrc" value="" type="string"/>
+
+        <!--- If true, use altsrc to connect
+                @keywords private -->
+        <attribute name="_usealtsrc" value="false" type="boolean"/>
+
+        <!--- Number of milliseconds to wait for connection at src before 
+                using altsrc URL -->
+        <attribute name="connectiontimeout" value="3000" type="number"/>
+`
+        <!--- Turn on for verbose debugger output.
+            @type Boolean
+            @access public
+        -->
+        <attribute name="debug" value="false"/>
+
+        <!--- A shared hash of connections
+            @type Object
+            @access private
+        -->
+        <attribute name="connections" value="null" type="expression" allocation="class"/>
+        
+        <!--- The AMF object encoding to use for this connection, either 0 or 3.
+            @type Number
+            @keywords final  -->
+        <attribute name="objectencoding" value="0" type="number" />
+
+        <!--- Event sent when connection established. -->
+        <event name="onconnect"/>
+        <!--- Event sent when an error occurs
+            @access private -->
+        <event name="onerror"/>
+        
+        <method name="init"> <![CDATA[
+            super.init();
+
+            // Store new RTMP connections in lz.rtmpconnection.connections. If no
+            // name is set for an rtmpconnection use "_default". Other real-time
+            // objects will use the lz.rtmpconnection.connections["_default"] NetConnection
+            if (this.name == null) {
+                this.name = "_default";
+            }
+            
+            if (lz.rtmpconnection.connections != null && lz.rtmpconnection.connections[this.name] != null) {
+                if ($debug) {
+                    if (this.name == "_default") {
+                        Debug.warn("A default RTMP connection already exists, please name connections if you use more than one");
+                    } else {
+                        Debug.warn("An RTMP connection already exists with the name '%s': %w", this.name, lz.rtmpconnection.connections[this.name]);
+                    }
+                }
+            }
+            
+            
+            if (lz.rtmpconnection.connections == null) {
+                lz.rtmpconnection.connections = {};
+                if (this.name != "_default")
+                    lz.rtmpconnection.connections._default = this;
+            }
+            lz.rtmpconnection.connections[this.name] = this;
+
+            if (this.debug) {
+                // This is the way a function is called by the remote Interface has
+                // to be implemented ...
+                /**
+                this._nc.setId = function(id) {
+                    _root.Debug.write("########## Method called by rtmp Server");
+                    _root.Debug.write("---------------> id: ", id);
+                }
+                **/
+
+            }
+
+            /** the following code should work now, but it hasn't
+                been tested, so I'll leave it commented out -sa
+            this._nc.__resolve = function(name) {
+                //_root.Debug.write("__resolve " , name, typeof(this[name]));
+                //_root.Debug.write("  arguments.callee.name " , 
+                //                     arguments.callee.name);
+                if (typeof(this.t[name]) == "function") {
+                    this.t[name].apply(arguments);
+                }
+            };
+            **/
+            if (this.autoconnect) {
+                this.connect();
+            }
+        ]]>
+        </method>
+
+        <method name="_onSecurityError" args="error">
+            var errstr = error + '';
+            if ($debug) Debug.warn("rtmpconnection _onSecurityError() " + errstr);
+            if (this.onerror.ready) {
+                this.onerror.sendEvent(errstr);
+            }
+        </method>
+            
+        <!--- Create connection
+            @keywords private -->
+        <method name="_createconnection"><![CDATA[
+            this.setAttribute('_nc', new NetConnection());
+            if ($as3) {
+                this._nc.objectEncoding = this.objectencoding;
+                this._nc.addEventListener(NetStatusEvent.NET_STATUS, this._onStatus);
+                this._nc.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this._onSecurityError);
+                this._nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, this._onSecurityError);
+                this._nc.client = this;
+
+            } else {
+                // $swf8 or $swf7
+                // For some reason this cannot be done as a closure (in FP7).
+                // See bug lpp-2197.
+                this._nc.t = this;
+                this._nc.onStatus = function(info) {
+                    this.t._onStatus(info);
+                };
+            }
+            ]]>
+        </method>
+
+        <!--- Handle missing callback - stoopid AS3....
+            @keywords private -->
+        <method name="onBWDone"></method>
+
+        <!--- Connect to the rtmp server. -->
+        <method name="connect">
+            //Debug.write("rtmpconnection.connect, stage", this.stage);
+            if (this.stage > 0) {
+                return; // already connected or connecting
+            }
+
+            var src = this._usealtsrc ? this.altsrc : this.src;
+            if (src == 'null') src = null;
+
+            if (this.debug) {
+                if ($debug) Debug.write("initiating connection to ", src);
+            }
+
+            if ($debug) {
+                if (src == "") {
+                    Debug.write("no src url defined for", this);
+                    return;
+                } else if (typeof(src) != "string") {
+                    Debug.write("src", src, "must be a string in", this);
+                    return;
+                }
+            }
+
+            this._connecturl = src;
+
+            this._createconnection();
+            this._doconnect();
+            
+            this.setAttribute("status", "connecting");
+            this.setAttribute("stage", 1);
+            if (! this['_connectionTimeoutDel']) this._connectionTimeoutDel = new LzDelegate(this, '_handleConnectionTimeout');
+            lz.Timer.addTimer( this._connectionTimeoutDel, this.connectiontimeout );
+        </method>
+
+        <!--- flash callback used by swf9 to connect - called by setTimeout from mediastream - see LPP-7999
+            @keywords private -->
+        <method name="_doconnect" args=""><![CDATA[
+            this._nc.connect(src,this.connectionparams);
+        ]]>
+        </method>
+
+        <!--- Handle connection timeouts
+            @keywords private -->
+        <method name="_handleConnectionTimeout" args="ignore=null"><![CDATA[
+            if (this.stage < 2) {
+                this.setAttribute("status", "timed out");
+                this.setAttribute("stage", 0);
+                this._handleConnectionFailure("timed out");
+            }
+        ]]>
+        </method>
+
+        <!--- Handle connection failure, attempt to reconnect using altsrc
+            @keywords private -->
+        <method name="_handleConnectionFailure" args="msg"><![CDATA[
+            this._nc.close();
+            if (this.debug) {
+                if ($debug) Debug.warn("error connecting to", this._connecturl, ":", msg);
+            }
+
+            if (! this._usealtsrc && this.altsrc != '') {
+                // attempt connection to altsrc
+                this._usealtsrc = true;
+
+                this.connect();
+            } else if (this._connecturl == altsrc) {
+                // reset so subsequent calls to connect() will try again.
+                this._usealtsrc = false;
+            }
+        ]]>
+        </method>
+
+        <method name="_onStatus" args="evt">
+            if ($as3) evt = evt.info;
+            var code = evt.code;
+            
+            // only used for debugging
+            var description = evt['description'] ? evt.description : "";
+
+            //Debug.write(evt);
+            //Debug.write("rtmpconnection", this, "_onStatus", code, description);
+
+            if (this.debug) {
+                if ($debug) Debug.write("rtmpconnection", this, "_onStatus", code);
+            }
+            
+            var msg = "";
+            var s = this.stage;
+
+            switch (code) {
+
+                case "NetConnection.Connect.AppShutdown": {
+                    // The application has been shut down 
+                    // (for example, if the application is out of memory 
+                    // resources and must be shut down to prevent the 
+                    // server from crashing) or the server has been shut down.
+                    msg = "disconnected (error)";
+                    s = 0;
+                    break;
+                }
+
+                case "NetConnection.Connect.Closed": {
+                    // The connection was successfully closed.
+                    msg = "disconnected";
+                    s = 0;
+                    break;
+                }
+
+                case "NetConnection.Connect.Failed": {
+                    // The connection attempt failed; 
+                    // for example, the server is not running.
+                    msg = "connection failed";
+                    s = 0;
+                    break;
+                }
+
+                case "NetConnection.Connect.Rejected": {
+                    // The client does not have permission to connect 
+                    // to the application, or the application expected 
+                    // different parameters from those that were passed, 
+                    // or the application specifically rejected the client.
+                    msg = "connection rejected";
+                    s = 0;
+                    break;
+                }
+
+                case "NetConnection.Connect.Success": {
+                    // The connection attempt succeeded.
+                    msg = "connected";
+                    s = 2;
+                    break;
+                }
+
+                default: {
+                    msg = code;
+                    break;
+                }
+
+            }
+
+            this.setAttribute("status", msg);
+            this.setAttribute("stage", s);
+
+            lz.Timer.removeTimer(this._connectionTimeoutDel);
+
+            if (s == 2) {
+                if (this.debug) {
+                    if ($debug) Debug.write("connected to " + this._connecturl);
+                }
+                if (this.onconnect.ready) {
+                    this.onconnect.sendEvent();
+                }
+            } else if (msg != 'disconnected') {
+                // disconnection isn't a failure.
+                this._handleConnectionFailure(msg);
+            }
+        </method>
+
+        <method name="callMethod" args="func, obj, params">
+            if (this.debug) {
+                if ($debug) Debug.write("callMethod: func, obj, params", func, obj, params);
+            }
+
+            this._nc.call(func, obj, params);
+        </method>
+    </class>
+</library>

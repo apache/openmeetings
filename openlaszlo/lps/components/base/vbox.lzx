@@ -1,0 +1,31 @@
+<library>
+    <include href="utils/layouts/simplelayout.lzx"/>
+    <class name="vbox">
+        <attribute name="spacing" value="0"/>
+        <attribute name="inset" value="0"/>
+        <simplelayout spacing="${parent.spacing}" inset="${parent.inset}" axis="y"/>
+        <doc>
+          <tag name="shortdesc"><text>A vertical box for grouping subviews</text></tag>
+          <text>
+            <example title="vbox">
+            &lt;canvas&gt;
+                &lt;vbox&gt;
+                    &lt;handler name="onclick"&gt;
+                        this.animate('spacing', this.spacing == 10 ? 0 : 10, 1000);
+                    &lt;/handler&gt;
+                    &lt;text&gt;click&lt;/text&gt;
+                    &lt;text&gt;to&lt;/text&gt;
+                    &lt;text&gt;animate&lt;/text&gt;
+                    &lt;text&gt;spacing&lt;/text&gt;
+                &lt;/vbox&gt;
+            &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2007 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

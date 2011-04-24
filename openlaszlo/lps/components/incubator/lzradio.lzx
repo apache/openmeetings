@@ -1,0 +1,53 @@
+<library>
+   <include href="baseradio.lzx"/>
+
+   <!--- Subclass of radiobutton with customizable look.  apps should either
+        include lzradio_resources.lzx (to get default look) or define
+        a "lzradio_rsrc" resource with the same format. -->
+   <class name="lzradiobutton" extends="baseradiobutton">
+
+        <!--- The x position of the text label. Default: 2 pixels past
+              radiobutton resource. -->
+        <attribute name="text_x"
+            value="$once{this._rb.width + 2}" type="number"/>
+        <!--- The y position of the text label. Default: centered. -->
+        <attribute name="text_y"
+            value="$once{this._rb.height/2 - this._title.height/2}" type="number"/>
+
+        <handler name="onselected">
+            this._rb.setAttribute('statenum', this.selected ? 1 : 0);
+        </handler>
+        <handler name="onmouseover">
+           this._rb.onmouseover.sendEvent();
+        </handler>
+        <handler name="onmouseout">
+           this._rb.onmouseout.sendEvent();
+        </handler>
+
+        <multistatebutton name="_rb" resource="lzradio_rsrc" text=""
+                          statenum="${parent.selected ? 1 : 0}" 
+                          statelength="4" maxstate="1"
+                          reference="parent" />
+
+        <text name="_title" resize="true" x="$once{classroot.text_x}" 
+              y="$once{classroot.text_y}" text="${parent.text}"/>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this['style'] != null) {
+                if (this._enabled) {
+                    this._title.setAttribute('fgcolor',s.textcolor);
+                } else {
+                    this._title.setAttribute('fgcolor',s.textdisabledcolor);
+                }
+            }
+        </method>
+
+   </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

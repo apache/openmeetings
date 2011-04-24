@@ -1,0 +1,186 @@
+<!-- slider is not part of the laszlo charting component. It is here to serve as an example only -->
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <resource name="slider_background" src="images/slider_background.swf"/>
+    <resource name="slider_l" src="images/slider_l.swf"/>
+    <resource name="slider_m" src="images/slider_m.swf"/>
+    <resource name="slider_r" src="images/slider_r.swf"/>
+    <resource name="slider_back_lc" src="images/slider_back_lc.swf"/>
+    <resource name="slider_back_m" src="images/slider_back_m.swf"/>
+    <resource name="slider_back_rc" src="images/slider_back_rc.swf"/>
+    
+    <!--- @keyword private -->  
+    <class name="ticks" width="100%" height="10" extends="drawview">
+        <attribute name="numticks" value="2"/>
+        <handler name="oninit">
+        <![CDATA[
+            var spacing = this.width / (numticks - 1);
+            
+            for(var i = 0; i < this.numticks; i++)
+            {        
+                var xlocation = spacing * i;
+                this.beginPath();
+                this.moveTo(xlocation, 0);
+                this.lineTo(xlocation, 10);
+                this.lineWidth = 1;                        
+                this.strokeStyle = 0x0000ff;                
+                this.stroke();
+            }
+
+        ]]>    
+        </handler>
+    </class>
+
+    <resource name="slider_arrow">
+        <frame src="images/slider_arrow_n.swf"/>
+        <frame src="images/slider_arrow_r.swf"/>
+        <frame src="images/slider_arrow_s.swf"/>
+    </resource>
+
+    <script>
+        <![CDATA[
+        function limit(min, max, value)
+        {
+            if (value > max) return max;
+            if (value < min) return min;
+            return value;
+
+        }
+        ]]>
+    </script>
+    
+    <!--- @keyword private -->  
+    <class name="xdragstate" extends="state">
+        <attribute name="xdoffset" value="this.getMouse( 'x' )" when="once" />
+        <attribute name="x"
+                value="${limit(minx, maxx,
+                    this.immediateparent.getMouse( 'x' ) - this.xdoffset)}" />
+    </class>
+
+    <!--- @keyword private -->  
+    <class name="sliderknob" y="-4" width="1" height="1">
+        <attribute name="minx" value="0"/>
+        <attribute name="maxy" value="100"/>
+        <attribute name="isMouseDown" value="false"/>
+       
+        <xdragstate name="dragger" />
+        <basebutton align="center" resource="slider_arrow">
+            <handler name="onmousedown">
+                parent.setAttribute("isMouseDown", true);
+                parent.dragger.setAttribute('applied', true);
+                classroot.bringToFront();
+                
+            </handler>
+            <handler name="onmouseup">
+                parent.setAttribute("isMouseDown", false);
+                parent.dragger.setAttribute('applied', false);
+                
+            </handler>
+        </basebutton>
+    </class>
+
+    <!--- @keyword private -->  
+    <class name="custombaseslider">
+        <attribute name="width" value="100"/>
+        <attribute name="minlimit" value="0"/>
+        <attribute name="maxlimit" value="100"/>
+        <attribute name="valueratio" value="(this.maxlimit  - this.minlimit) / this.width" when="always"/>
+        <attribute name="startlabel" value="this.minlimit" when="once"/>
+        <attribute name="endlabel" value="this.maxlimit" when="once"/>
+        <attribute name="majordivision" value="2"/>
+        <attribute name="minordivision" value="5"/>        
+
+        
+        <view name="track" x="-3" y="-1" width="${parent.width + 6}">            
+            <stableborderlayout axis="x"/>
+            <view resource="slider_back_lc"/>
+            <view resource="slider_back_m" stretches="width"/>
+            <view resource="slider_back_rc"/>
+        </view>
+
+        
+        <ticks y="7" numticks="3" height="9" width="${parent.width}" visible="false"/>
+        
+                
+        <view name="labels" width="100%"  y="20"  fgcolor="0x666666">            
+            <text name="label1" fgcolor="0x666666" text="${parent.parent.startlabel.toString()}" align="left" resize="true" visible="true"/>
+            <text name="label2" fgcolor="0x666666" text="${parent.parent.endlabel.toString()}" align="right" resize="true" visible="true"/>    
+        </view>               
+    </class>
+    <!--- @keyword private -->  
+    <class name="simpleslider" extends="custombaseslider">
+        <attribute name="value" value="this.minlimit + this.knob.x * this.valueratio" when="always"/>
+
+        <view x="-3" width="${parent.knob.x + 6}">
+            <stableborderlayout axis="x"/>
+            <view resource="slider_l"/>
+            <view resource="slider_m" stretches="width"/>
+            <view resource="slider_r"/>
+        </view>
+        
+        <sliderknob  name="knob" x="$once{parent.track.x + parent.width  / 2}">
+            <attribute name="minx" value="0"/>                 
+            <attribute name="maxx" value="$once{parent.width}"/>
+        </sliderknob>
+        
+    </class>
+    <!--- @keyword private -->  
+    <class name="rangeslider" extends="custombaseslider">
+        <attribute name="minvalue" value="this.minlimit + this.leftknob.x * this.valueratio" when="always"/>
+        <attribute name="maxvalue" value="this.minlimit + this.rightknob.x * this.valueratio"  when="always"/>
+        <attribute name="isMouseDown" value="false"/>
+        <view x="${parent.leftknob.x - 3}" width="${parent.rightknob.x-parent.leftknob.x+6}">
+            <stableborderlayout axis="x"/>
+            <view resource="slider_l"/>
+            <view resource="slider_m" stretches="width"/>
+            <view resource="slider_r"/>
+        </view>
+
+        <sliderknob name="leftknob" x="0">
+            <attribute name="minx" value="0"/>                 
+            <attribute name="maxx" value="${parent.rightknob.x}"/>
+            
+        </sliderknob>
+        
+        <sliderknob name="rightknob" x="$once{parent.width}">
+            <attribute name="minx" value="${parent.leftknob.x}"/>
+            <attribute name="maxx" value="$once{parent.width}"/>
+            
+        </sliderknob>
+        <handler name="onisMousedown" reference="leftknob">
+            Debug.write("set left");
+            this.setAttribute("isMouseDown", leftknob.isMouseDown);        
+        </handler>
+                
+        <handler name="onisMousedown" reference="rightknob">
+            Debug.write("set right");
+            this.setAttribute("isMouseDown", rightknob.isMouseDown);
+        </handler>
+        
+        <handler name="onmaxlimit">
+            Debug.write("*************slider width: " + this.width);
+            leftknob.setAttribute('x', 0);
+            rightknob.setAttribute('x', this.width);
+        </handler>
+        
+        <method name="setMinValue" args="minvalue">
+        <![CDATA[
+            var temp = (minvalue - this.minlimit);
+            if(temp < 0) temp = 0;
+            this.leftknob.setAttribute('x', temp /  this.valueratio);
+        ]]>
+        </method>
+        
+        <method name="setMaxValue" args="maxvalue">
+            var temp = (maxvalue - this.minlimit);
+            
+            this.rightknob.setAttribute('x', temp /  this.valueratio);
+        </method>
+        
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

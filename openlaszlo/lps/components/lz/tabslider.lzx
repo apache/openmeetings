@@ -1,0 +1,124 @@
+<library>
+    <include href="../base/basetabslider.lzx" />
+
+    <!-- Tabslider is a container for tabelements. Tabslider determines the
+         boundary of the tabs and has an additional border that can be assigned
+         a color and size. -->
+    <class name="tabslider" extends="basetabslider"
+        styleable="true" clip="true" >
+        <!--- Default placement of children is content. 
+              @keywords private -->
+        <attribute name="defaultplacement" value="content" type="string"/>
+
+        <!--- Item class elements to use as children. -->
+        <attribute name="itemclassname" value="tabelement"/>
+
+        <!--- The border color. Default is constrained to the 
+              <tagname>style</tagname>'s <attribute>bordercolor</attribute> 
+              value. -->
+        <attribute name="bordercolor"  value="${this.style != null ? this.style.bordercolor : null}"
+                   setter="this.setBorderColor( bordercolor )" type="color" />
+
+        <!--- The size of the border. -->
+        <attribute name="bordersize"  value="1" setter="this.setBordersize(bordersize)" />
+
+        <view name="content"
+            x="${parent.bordersize}"
+            y="${parent.bordersize}"
+            bgcolor="${classroot.bgcolor}"           
+            width="${parent.width - 2*parent.bordersize}"
+            height="${parent.height - 2*parent.bordersize}"  >
+
+            <handler name="onaddsubview" args="v" >
+               classroot.doAddSubview(v);
+            </handler>
+        </view>
+
+        <!--- Setter for border size.
+              @param Number size: the size of the border. -->
+        <method name="setBordersize" args="size" ><![CDATA[
+            var sz = size;
+            if (sz < 0) sz = 0; //dont allow negative values
+            this.bordersize = sz;
+            if (typeof(this.onbordersize) != "undefined" ) this.onbordersize.sendEvent(sz);
+        ]]></method>
+
+        <!--- Setter for border color.
+              @param Number color: the color number. -->
+        <method name="setBorderColor" args="color" >
+            this.bordercolor = color;
+            this.setAttribute('bgcolor', color); 
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                super._applystyle(s);
+                this.interiorcolor = s.bgcolor;
+                this.fgcolor = s.textcolor;
+                this.bordercolor = s.bordercolor;
+                if (this.bgcolor == null) {
+                    this.content.setAttribute('bgcolor', s.bgcolor);
+                }
+            }
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>
+                A Container that animates and coordinates the sliding of Tabelements.
+            </text></tag>
+            <text>
+                <p>
+                    A <classname>tabslider</classname> coordinates the opening and 
+                    closing of its <xref linkend="lz.tabelement"/> contained within
+                    its scope. Only the <classname>tabelement</classname> can be 
+                    opened at one time. The height of the opened <classname>tabelement</classname>
+                    is determined by the height of the <classname>tabslider</classname> 
+                    minus the total height of all the tabelements when they are closed.
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="250">
+  <tabslider width="150" x="10" y="10"
+             height="200"
+             spacing="2" slideduration="300">
+    <tabelement text="Tabelement One"/>
+    <tabelement text="Tabelement Two"/>
+    <tabelement text="Tabelement Three"/>
+  </tabslider>
+</canvas>
+                    ]]>
+                </example>
+                <p>
+                    The height of a <classname>tabelement</classname> (when it is closed) is defined in 
+                    the tabelement's <attribute>minheight</attribute> attribute with a default value of 
+                    22. This can also be specified on the tabslider itself using 
+                    the attribute i<attribute>mintabheight</attribute>, which will be applied to all of 
+                    its tabelements.
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="250">
+  <tabslider width="150" x="10" y="10"
+             height="200" mintabheight="40"
+             spacing="2" slideduration="300">
+    <tabelement text="Tabelement One" minheight="20"/>
+    <tabelement text="Tabelement Two"/>
+    <tabelement text="Tabelement Three"/>
+  </tabslider>
+</canvas>
+                    ]]>
+                </example>
+                <seealso>
+                    <classes>tabelement</classes>
+                    <component-design id="tabslider" title="Tab Slider"/>
+                </seealso>
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

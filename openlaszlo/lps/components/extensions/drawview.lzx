@@ -1,0 +1,2207 @@
+<!---
+
+    @copyright Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.
+               Use is subject to license terms.
+
+    @access public
+    @affects lzdrawview
+    @topic LFC
+    @subtopic Views
+  -->
+<library>
+
+  <interface name="drawview" extends="view">
+
+    <doc>
+      <tag name="shortdesc"><text>Adds procedural drawing APIs to view.</text></tag>
+      <text>
+        <p><tagname>drawview</tagname> adds procedural drawing APIs to <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag></p>
+
+        <p><tagname>drawview</tagname> implements a subset of the WHATWG drawing APIs, which can be found at:
+        <a href="http://www.whatwg.org/specs/web-apps/current-work/#the-canvas-element">http://www.whatwg.org/specs/web-apps/current-work/#the-canvas-element</a>
+        </p>
+
+        <example><programlisting class="code">
+        &lt;canvas&gt;
+            &lt;drawview width="200" height="300"&gt;
+                &lt;handler name="oncontext"&gt;
+                    this.moveTo(100, 100);
+                    this.lineTo(100, 200);
+                    this.quadraticCurveTo(150, 250, 200, 200);
+                    this.closePath();
+
+                    this.fillStyle = 0x0000ff;
+                    this.globalAlpha = .5;
+                    this.fill();
+
+                    this.strokeStyle = 0xffff00;
+                    this.lineWidth = 5;
+                    this.stroke();
+
+                    var g = this.createRadialGradient(75, 75, .7, 300, 300, 0)
+                    this.globalAlpha = 0;
+                    g.addColorStop(0, 0x000000);
+                    this.globalAlpha = 1;
+                    g.addColorStop(1, 0xffffff);
+                    this.fillStyle = g;
+                    this.fill();
+
+                    this.strokeStyle = 0x000000;
+                    this.lineWidth = 0;
+                    this.stroke();
+
+                    this.beginPath();
+                    this.lineTo(75, 0);
+                    this.lineTo(75, 75);
+                    this.lineTo(0, 75);
+                    this.lineTo(0, 0);
+                    this.closePath();
+
+                    var g = this.createLinearGradient(0, 0, 75, 75)
+                    this.globalAlpha = 0;
+                    g.addColorStop(0, 0x000000);
+                    this.globalAlpha = 1;
+                    g.addColorStop(1, 0xffffff);
+                    this.fillStyle = g;
+                    this.fill();
+                &lt;/handler&gt;
+            &lt;/drawview&gt;
+        &lt;/canvas&gt;
+        </programlisting></example>
+
+        <p><classname>drawview</classname> extends <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag>,
+        which is the fundamental visual class of LZX.</p>
+      </text>
+    </doc>
+
+    <!--- Gives an alpha value that is applied to shapes and images
+          before they are composited onto the canvas. The valid range of
+          values is from 0.0 (fully transparent) to 1.0 (no additional
+          transparency). If the attribute is set to values outside this range,
+          it is ignored. When the context is created, the globalAlpha
+          attribute initially has the value 1.0.
+          @type Number
+          @lzxtype number
+          @lzxdefault 1.0
+          @access public
+    -->
+    <attribute name="globalAlpha" value="1" type="number"/>
+
+    <!--- Gives the default width of lines, in coordinate space units.
+          Negative values are ignored.  0 draws hairlines in swf - lines that
+          are always 1 pixel wide even when scaled.
+          @type Number
+          @lzxtype number
+          @lzxdefault 1
+          @access public
+    -->
+    <attribute name="lineWidth" value="1" type="number"/>
+
+    <!--- Gives the default lineCap value for lines. Round for consistency between swf and dhtml.
+          @type String
+          @lzxtype "butt" | "round" | "square"
+          @lzxdefault "butt"
+          @access public
+    -->
+    <attribute name="lineCap" value="butt" type="string"/>
+
+    <!--- Gives the default lineJoin value for lines. Round for consistency between swf and dhtml.
+          @type String
+          @lzxtype "round" | "bevel" | "miter"
+          @lzxdefault "miter"
+          @access public
+    -->
+    <attribute name="lineJoin" value="miter" type="string"/>
+
+    <!--- Gives the default miterLimit value for lines.
+          @type Number
+          @lzxtype number
+          @lzxdefault 10
+          @access public
+    -->
+    <attribute name="miterLimit" value="10" type="number"/>
+
+    <!--- Represents the colour to use for the lines around shapes.  Specified as a hexadecimal number (0xffffff) or a CSS string ('#ff00ff' or '#f0f').
+        @type String
+        @lzxtype string
+        @lzxdefault "#000000"
+        @access public
+    -->
+    <attribute name="strokeStyle" value="#000000" type="string"/>
+
+    <!--- Represents the colour or style to use for the fill inside the shapes. Can be either a hexadecimal number (0xffffff), a CSS string ('#ff00ff' or '#f0f'), or a CanvasGradient/LzCanvasGradient.
+        @type String
+        @lzxtype string
+        @lzxdefault "#000000"
+        @access public
+    -->
+    <attribute name="fillStyle" value="#000000" type="string"/>
+
+    <!--- If true, the bitmap result will be cached where possible. (swf-only)
+      @access public
+    -->
+    <attribute name="cachebitmap" value="true" type="boolean"/>
+
+    <!--- If true, the size of the drawview will be set dynamically based on its contents, where possible. (swf-only)
+      @access public
+    -->
+    <attribute name="measuresize" value="true" type="boolean"/>
+
+    <!--- If true, lines will be offset by lineWidth / 2 to appear aliased (dhtml-only)
+      @access public
+    -->
+    <attribute name="aliaslines" value="false" type="boolean"/>
+
+    <!---
+      Resets the list of subpaths to an empty list, and calls moveTo() with the point (0,0).
+    -->
+    <method name="beginPath"/>
+
+    <!---
+      Adds a straight line from the current position to the first point in the last subpath and marks the subpath as closed, if the last subpath isn't closed, and if it has more than one point in its list of points. If the last subpath is not open or has only one point, it does nothing.
+    -->
+    <method name="closePath"/>
+
+    <!---
+      Sets the current position to the given coordinate and creates a new subpath with that point as its first (and only) point. If there was a previous subpath, and it consists of just one point, then that subpath is removed from the path.
+      @param Number x: x position to move to
+      @param Number y: y position to move to
+    -->
+    <method name="moveTo" args="x, y"/>
+
+    <!---
+      Adds the given coordinate (x, y) to the list of points of the subpath, and connects the current position to that point with a straight line. It then sets the current position to the given coordinate (x, y).
+      @param Number x: x position to draw to
+      @param Number y: y position to draw to
+    -->
+    <method name="lineTo" args="x, y"/>
+
+    <!---
+      Adds the given coordinate (x, y) to the list of points of the subpath, and connects the current position to that point with a quadratic curve with control point (cpx, cpy). It then sets the current position to the given coordinate (x, y).
+      @param Number cpx: curve control point's x position
+      @param Number cpy: curve control point's y position
+      @param Number x: x position to draw to
+      @param Number y: y position to draw to
+    -->
+    <method name="quadraticCurveTo" args="cpx, cpy, x, y"/>
+
+    <!---
+      Adds the given coordinate (x, y) to the list of points of
+      the subpath, and connects the two points with a bezier curve with control
+      points (cp1x, cp1y) and (cp2x, cp2y). It then sets the current position to
+      the given coordinate (x, y).
+
+      @param Number cp1x: X value of control point 1
+      @param Number cp1y: Y value of control point 1
+      @param Number cp2x: X value of control point 2
+      @param Number cp2y: Y value of control point 2
+      @param Number x: X value of endpoint
+      @param Number y: Y value of endpoint
+    -->
+    <method name="bezierCurveTo" args="cp1x, cp1y, cp2x, cp2y, x, y"/>
+
+    <!---
+      Fills each subpath of the current path in turn, using fillStyle, and using the non-zero winding number rule. Open subpaths are implicitly closed when being filled (without affecting the actual subpaths).
+      Note that closePath() is called before the line is filled.
+    -->
+    <method name="fill" />
+
+    <!---
+      Strokes each subpath of the current path in turn, using the strokeStyle and lineWidth attributes.
+    -->
+    <method name="stroke" />
+
+    <!---
+      Clears drawing area
+    -->
+    <method name="clear" />
+
+    <!---
+      Takes four arguments, representing the start point (x0, y0) and end point (x1, y1) of the gradient, in coordinate space units, and returns an object representing a linear gradient initialised with that line.
+      Linear gradients are rendered such that at the starting point on the canvas the colour at offset 0 is used, that at the ending point the color at offset 1 is used, that all points on a line perpendicular to the line between the start and end points have the colour at the point where those two lines cross. (Of course, the colours are only painted where the shape they are being painted on needs them.)
+
+      @param Number x0: Starting x position
+      @param Number y0: Starting y position
+      @param Number x1: Ending x position
+      @param Number y1: Ending y position
+      @return LzCanvasGradient: Opaque class used to add color/offset/alpha steps - see LzCanvasGradient.addColorStop();
+    -->
+    <method name="createLinearGradient" args="x0, y0, x1, y1" />
+
+    <!---
+      Takes six arguments, the first three representing the start point (x0, y0) and rotation r0, and the last three representing the end point (x1, y1) and radius r1. The values are in coordinate space units.
+      Rotation doesn't appear to work for radial gradients.  Even so, it can be set by specifying r0 in radians.  r1 is ignored.
+
+      @param Number x0: Starting x position
+      @param Number y0: Starting y position
+      @param Number r0: Rotation of the gradient - not working
+      @param Number x1: Ending x position
+      @param Number y1: Ending y position
+      @param Number r1: Ignored
+      @return LzCanvasGradient: Opaque class used to add color/offset/alpha steps - see addColorStop();
+    -->
+    <method name="createRadialGradient" args="x0, y0, r0, x1, y1, r1" />
+
+    <!---
+      Adds an arc to the current path. The arc is a segment of a circle that has radius as given.
+      The circle segment is determined by the two angles startAngle and endAngle and begins at the given coordinate (x,y).
+      If anticlockwise is true, the arc is drawn counter-clockwise, otherwise it is drawn counter-clockwise (anti-clockwise).
+
+      @param Number x: Starting x position
+      @param Number y: Starting y position
+      @param Number radius: Radius
+      @param Number startAngle: Angle to start in radians
+      @param Number endAngle: Angle to end in radians
+      @param Number anticlockwise: counter-clockwise if true, clockwise otherwise
+    -->
+    <method name="arc" args="x, y, radius, startAngle, endAngle, anticlockwise" />
+
+    <!---
+      Rect creates a new subpath containing just the rectangle with top left coordinate (x, y), width w and height h.
+      Based on mc.drawRect() - by Ric Ewing (ric@formequalsfunction.com)
+
+      @param Number x: starting x position
+      @param Number y: starting y position
+      @param Number width: Width
+      @param Number height: Height
+      @param Number topleftradius: Optional radius of rounding for topleft corner.  If no other radius parameters are specified, topleftradius is used for all corners.
+      @param Number toprightradius: Optional radius of rounding for topright corner.
+      @param Number bottomrightradius: Optional radius of rounding for bottomright corner.
+      @param Number bottomleftradius: Optional radius of rounding for bottomleft corner.
+    -->
+    <method name="rect" args="x,y,width,height=0,topleftradius=0,toprightradius=null,bottomrightradius=null,bottomleftradius=null" />
+
+    <!---
+      Draws an oval at the origin x, y with a radius radius.  If yRadius is specified, radius is the x radius of the oval.
+      Based on mc.drawOval() - by Ric Ewing (ric@formequalsfunction.com) - version 1.1 - 4.7.2002
+
+      @param Number x: Starting x position
+      @param Number y: Starting y position
+      @param Number radius: The radius of the oval. If [optional] yRadius is defined, r is the x radius.
+      @param Number yRadius: Optional y radius of the oval
+    -->
+    <method name="oval" args="x, y, radius, yRadius" />
+
+  </interface> <!-- drawview -->
+
+  <!-- these methods are shared across runtimes -->
+  <script when="immediate"><![CDATA[
+    mixin DrawviewShared {
+        function DrawviewShared (parent:LzNode? = null, attrs:Object? = null, children:Array? = null, instcall:Boolean = false) {
+            super(parent, attrs, children, instcall);
+        }
+        function lineTo(x:Number,y:Number) { }
+        function moveTo(x:Number,y:Number) { }
+        function quadraticCurveTo(cx:Number, cy:Number, px:Number, py:Number) {}
+
+        // factor used to convert radians to degrees
+        var __radtodegfactor:Number = 180 / Math.PI;
+
+/* From http://www.w3.org/TR/html5/the-canvas-element.html#dom-context-2d-arc :
+The arc(x, y, radius, startAngle, endAngle, anticlockwise) method draws an arc. If the context has any subpaths, then the method must add a straight line from the last point in the subpath to the start point of the arc. In any case, it must draw the arc between the start point of the arc and the end point of the arc, and add the start and end points of the arc to the subpath. The arc and its start and end points are defined as follows:
+
+Consider a circle that has its origin at (x, y) and that has radius radius. The points at startAngle and endAngle along this circle's circumference, measured in radians clockwise from the positive x-axis, are the start and end points respectively.
+
+If the anticlockwise argument is false and endAngle-startAngle is equal to or greater than 2π, or, if the anticlockwise argument is true and startAngle-endAngle is equal to or greater than 2π, then the arc is the whole circumference of this circle.
+
+Otherwise, the arc is the path along the circumference of this circle from the start point to the end point, going anti-clockwise if the anticlockwise argument is true, and clockwise otherwise. Since the points are on the circle, as opposed to being simply angles from zero, the arc can never cover an angle greater than 2π radians. If the two points are the same, or if the radius is zero, then the arc is defined as being of zero length in both directions.
+
+Negative values for radius must cause the implementation to raise an INDEX_SIZE_ERR exception.
+*/
+        // 
+        function arc(x, y, radius, startAngle, endAngle, anticlockwise = false) {
+            if (startAngle == null || endAngle == null) return;
+
+            // The points at startAngle and endAngle along this circle's circumference, measured in radians clockwise from the positive x-axis, are the start and end points respectively.
+            // Invert the angles
+            startAngle = - startAngle;
+            endAngle = - endAngle;
+
+
+            var arc;
+
+            if ((anticlockwise == false && endAngle - startAngle >= 2 * Math.PI) || (anticlockwise == true && startAngle - endAngle >= 2 * Math.PI)) {
+                //If the anticlockwise argument is false and endAngle-startAngle is equal to or greater than 2π, or, if the anticlockwise argument is true and startAngle-endAngle is equal to or greater than 2π, then the arc is the whole circumference of this circle.
+                arc = 360;
+            } else if (startAngle == endAngle || radius == 0) {
+                //If the two points are the same, or if the radius is zero, then the arc is defined as being of zero length in both directions.
+                arc = 0;
+            } else {
+                //Otherwise, the arc is the path along the circumference of this circle from the start point to the end point, going anti-clockwise if the anticlockwise argument is true, and clockwise otherwise.
+                var startDeg = startAngle * this.__radtodegfactor;
+                var endDeg = endAngle * this.__radtodegfactor;
+
+                if (anticlockwise) {
+                    if (endDeg < startDeg) {
+                        arc = - ((startDeg - endDeg) - 360);
+                    } else {
+                        arc = (endDeg - startDeg) + 360;
+                    }
+                } else {
+                    if (endDeg < startDeg) {
+                        arc = - ((startDeg - endDeg) + 360);
+                    } else {
+                        arc = (endDeg - startDeg) - 360;
+                    }
+                }
+
+
+
+                while (arc < -360) {
+                    arc += 360;
+                }
+                while (arc > 360) {
+                    arc -= 360;
+                }
+                //console.log('_drawArc', arc, startDeg, endDeg, anticlockwise);
+            }
+
+            // Since the points are on the circle, as opposed to being simply angles from zero, the arc can never cover an angle greater than 2π radians.  
+
+            // TODO:
+            //If the context has any subpaths, then the method must add a straight line from the last point in the subpath to the start point of the arc.
+            var sx:Number = x + radius*Math.cos(startAngle);
+            var sy:Number = y + radius*Math.sin(2 * Math.PI - startAngle);
+            this.moveTo(sx, sy);
+            //retain the center of the arc as the center point passed in.
+            this._drawArc(x, y, radius, arc, startAngle * this.__radtodegfactor);
+        }
+
+        function rect(x,y,width,height,topleftradius=0,toprightradius=null,bottomrightradius=null,bottomleftradius=null) {
+            // use shared method
+            LzKernelUtils.rect(this,x,y,width,height,topleftradius,toprightradius,bottomrightradius,bottomleftradius);
+        }
+
+        function oval(x, y, radius, yRadius = NaN) {
+            // if only yRadius is undefined, yRadius = radius
+            if (isNaN(yRadius)) {
+                yRadius = radius;
+            }
+            const s:Number = (radius < 10 && yRadius < 10) ? 5 : 8;
+            // covert to radians for our calculations
+            const theta:Number = Math.PI/ (s / 2);
+            // calculate the distance for the control point
+            const xrCtrl:Number = radius/Math.cos(theta/2);
+            const yrCtrl:Number = yRadius/Math.cos(theta/2);
+            // start on the right side of the circle
+            this.moveTo(x+radius, y);
+            // init variables
+            var angle:Number = 0, angleMid:Number, px:Number, py:Number, cx:Number, cy:Number;
+            // this loop draws the circle in n segments
+            for (var i:int = 0; i<s; i++) {
+                // increment our angles
+                angle += theta;
+                angleMid = angle-(theta/2);
+                // calculate our control point
+                cx = x+Math.cos(angleMid)*xrCtrl;
+                cy = y+Math.sin(angleMid)*yrCtrl;
+                // calculate our end point
+                px = x+Math.cos(angle)*radius;
+                py = y+Math.sin(angle)*yRadius;
+                // draw the circle segment
+                this.quadraticCurveTo(cx, cy, px, py);
+            }
+            return {x:px, y:py};
+        }
+
+        function _drawArc(x:Number, y:Number, radius:Number, arc:Number, startAngle:Number, yRadius:Number = NaN) :Object {
+            // if yRadius is undefined, yRadius = radius
+            if (isNaN(yRadius)) {
+                yRadius = radius;
+            }
+            // no sense in drawing more than is needed :)
+            if (Math.abs(arc)>360) {
+                arc = 360;
+            }
+            // Flash uses 8 segments per circle, to match that, we draw in a maximum
+            // of 45 degree segments. First we calculate how many segments are needed
+            // for our arc.
+            const segs:Number = Math.ceil(Math.abs(arc)/45);
+            // Init vars
+            var bx:Number, by:Number;
+            // if our arc is larger than 45 degrees, draw as 45 degree segments
+            // so that we match Flash's native circle routines.
+            if (segs > 0) {
+                // Now calculate the sweep of each segment
+                const segAngle:Number = arc/segs;
+                // The math requires radians rather than degrees. To convert from degrees
+                // use the formula (degrees/180)*Math.PI to get radians.
+                const theta:Number = -(segAngle/180)*Math.PI;
+                // convert angle startAngle to radians
+                var angle:Number = -(startAngle/180)*Math.PI;
+                var angleMid:Number, cx:Number, cy:Number;
+                // Loop for drawing arc segments
+                for (var i:int = 0; i<segs; i++) {
+                    // increment our angle
+                    angle += theta;
+                    // find the angle halfway between the last angle and the new
+                    angleMid = angle-(theta/2);
+                    // calculate our end point
+                    bx = x+Math.cos(angle)*radius;
+                    by = y+Math.sin(angle)*yRadius;
+                    // calculate our control point
+                    cx = x+Math.cos(angleMid)*(radius/Math.cos(theta/2));
+                    cy = y+Math.sin(angleMid)*(yRadius/Math.cos(theta/2));
+                    // draw the arc segment
+                    this.quadraticCurveTo(cx, cy, bx, by);
+                }
+            }
+            // In the native draw methods the user must specify the end point
+            // which means that they always know where they are ending at, but
+            // here the endpoint is unknown unless the user calculates it on their
+            // own. Lets be nice and let save them the hassle by passing it back.
+            return {x:bx, y:by};
+        }
+
+        function distance(p0, p1) {
+            // These would be useful generally, but put them inside the
+            // function so they don't pollute the general namespace.
+            var dx:Number = p1.x - p0.x;
+            var dy:Number = p1.y - p0.y;
+            return Math.sqrt(dx*dx+dy*dy);
+        }
+
+        function intersection(p0, p1, p2, p3) {
+                // returns null if they're collinear and non-identical
+                // returns -1 if they're collinear and identical
+                var u:Number = (p3.x-p2.x)*(p0.y-p2.y) - (p3.y-p2.y)*(p0.x-p2.x);
+                var d:Number = (p3.y-p2.y)*(p1.x-p0.x) - (p3.x-p2.x)*(p1.y-p0.y);
+                if (d == 0) {
+                    if (u == 0) {
+                        return -1;//identical
+                    } else {
+                        return null;//non-identical
+                    }
+                }
+                u /= d;
+                return {x: p0.x + (p1.x-p0.x) * u,
+                        y: p0.y + (p1.y-p0.y) * u};
+        }
+
+        function midpoint(p0, p1) {
+            return {x: (p0.x+p1.x)/2, y: (p0.y+p1.y)/2};
+        }
+
+        var globalAlpha:Number = 1;
+        var lineWidth:Number = 1;
+        var lineCap:String = 'butt';
+        var lineJoin:String = 'miter';
+        var miterLimit:Number = 10;
+        var strokeStyle:* = '#000000';
+        var fillStyle:* = '#000000';
+    }
+  ]]></script>
+
+  <!-- runtime-specific implementations -->
+  <switch>
+    <when runtime="dhtml">
+      <script when="immediate"><![CDATA[
+        // Classes that implement an interface must obey the LZX
+        // tag->class mapping convention and must be dynamic
+        dynamic class $lzc$class_drawview extends LzView with DrawviewShared {
+            // Next two are part of the required LFC tag class protocol
+            static var tagname = 'drawview';
+            static var attributes = new LzInheritedHash(LzView.attributes);
+
+            // cache values, used to avoid resetting context values
+            private var __globalAlpha = null;
+            private var __lineWidth = null;
+            private var __lineCap = null;
+            private var __lineJoin = null;
+            private var __miterLimit = null;
+            private var __strokeStyle = null;
+            private var __fillStyle = null;
+            // Track whether the path needs to be drawn again by comparing with
+            // the __path length
+            private var __pathdrawn = -1;
+            // Prevent unneeded calls to clear()
+            private var __dirty = false;
+            // Track whether this path is currently open or not.
+            private var __pathisopen = false;
+
+            // contains context states, used for save/restore()
+            var __contextstates = null;
+
+            function init() {
+                super.init();
+                this.createContext();
+            }
+
+            override function construct(parent, args) {
+                super.construct(parent, args);
+                this.__contextstates = [];
+            }
+
+            // called when the context has been created
+            override function $lzc$set_context(context) {
+                this.beginPath();
+                if (this.context) {
+                    this.__lineWidth = null;
+                    this.__lineCap = null;
+                    this.__lineJoin = null;
+                    this.__miterLimit = null;
+                    this.__fillStyle = null;
+                    this.__strokeStyle = null;
+                    this.__globalAlpha = null;
+                }
+                // Add capability so folks know if they can use canvas text APIs
+                // disable for iPad for now...
+                if (context['fillText'] && lz.embed.browser.browser !== 'iPad') {
+                    this.capabilities['2dcanvastext'] = true;
+                }
+                super.$lzc$set_context(context);
+            }
+
+            // hash of image resources for drawImage
+            static var images = {};
+            var __drawImageCnt = 0;
+
+            function getImage(url) {
+                var cache = lz.drawview.images;
+                if (! cache[url]) {
+                    var loadurl = url;
+                    if (url.indexOf('http:') != 0 && url.indexOf('https:') != 0) {
+                        loadurl = this.sprite.getResourceUrls(url)[0];
+                    }
+                    var img = new Image();
+                    img.src = loadurl;
+                    cache[url] = img;
+                    if (loadurl != url) {
+                        cache[loadurl] = img;
+                    }
+                }
+                return cache[url];
+            }
+
+            function drawImage(image, x=0, y=0, w=null, h=null, r=0) {
+                if ($debug) this.__checkContext();
+                if (image == null) {
+                    // use a copy of this canvas
+                    image = this.sprite.__LZcanvas;
+                } else if (typeof image == 'string') {
+                    // load the image
+                    image = this.getImage(image);
+                }
+                if (! image) return;
+                this.__dirty = true;
+                // default to image size per http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-drawimage
+                if (w == null) w = image.width;
+                if (h == null) h = image.height;
+
+                var nodename = image.nodeName;
+                // canvas and img tags are valid
+                var valid = (image && image.nodeType == 1 && (nodename == 'IMG') || nodename == 'CANVAS'); 
+                // canvas is always complete
+                var complete = (image && image.complete) || nodename == 'CANVAS';
+                if (! valid) {
+                    if ($debug) {
+                        Debug.warn("Invalid image for lz.drawview.drawImage(): %w", image);
+                    }
+                } else if (! complete) {
+                    // TODO [20090308 anba] drawImage needs to be defered,
+                    // maybe emit a debug-message to inform user
+                    var fname = '__drawImage' + (this.__drawImageCnt++);
+                    // create a closure to save arguments
+                    this[fname] = function () {
+                        // remove handler and delete closure
+                        lz.embed.removeEventHandler(image, 'load', this, fname);
+                        delete this[fname];
+                        this.drawImage(image, x, y, w, h, r);
+                    }
+                    // defer until image is completely loaded
+                    lz.embed.attachEventHandler(image, 'load', this, fname);
+                } else {
+                    this.__updateFillStyle();
+
+                    var dotransform = x || y || r;
+                    if (dotransform) {
+                        this.context.save();
+                        if (x || y) {
+                            this.context.translate(x, y);
+                        }
+                        if (r) {
+                            this.context.rotate(r);
+                        }
+                    }
+
+                    if (w == null) w = image.width;
+                    if (h == null) h = image.height;
+
+                    this.context.drawImage(image, 0, 0, w, h);
+
+                    if (dotransform) {
+                        this.context.restore();
+                    }
+                }
+            }
+
+            //Fills or strokes (respectively) the given text at the given position. If a maximum width is provided, the text will be scaled to fit that width if necessary.
+            function fillText(text, x, y, maxWidth = null) {
+                if (! this.capabilities['2dcanvastext']) {
+                    if ($debug) {
+                        Debug.warn('lz.drawview.fillText() is not currently supported in %w.', $runtime);
+                    }
+                    return;
+                }
+                this.__styleText();
+                this.__dirty = true;
+                this.__updateFillStyle();
+                if (maxWidth) {
+                    this.context.fillText(text,x,y,maxWidth);
+                } else {
+                    this.context.fillText(text,x,y);
+                }
+            }
+            function strokeText(text, x, y, maxWidth = null) {
+                if (! this.capabilities['2dcanvastext']) {
+                    if ($debug) {
+                        Debug.warn('lz.drawview.strokeText() is not currently supported in %w.', $runtime);
+                    }
+                    return;
+                }
+                this.__styleText();
+                this.__dirty = true;
+                this.__updateLineStyle();
+                if (maxWidth) {
+                    this.context.strokeText(text,x,y,maxWidth);
+                } else {
+                    this.context.strokeText(text,x,y);
+                }
+            }
+
+            function measureText(text) {
+                if (! this.capabilities['2dcanvastext']) {
+                    if ($debug) {
+                        Debug.warn('lz.drawview.measureText() is not currently supported in %w.', $runtime);
+                    }
+                    return;
+                }
+                this.__styleText();
+                return this.context.measureText(text);
+            }
+
+            // Applies this view's styling to the html5 canvas
+            function __styleText() {
+                var font = this.font || canvas.font;
+                var fontsize = (this.fontsize || canvas.fontsize) + 'px';
+                var fontstyle = this.fontstyle || 'plain';
+
+                if (fontstyle == "plain") {
+                    var fweight = "normal";
+                    var fstyle = "normal";
+                } else if (fontstyle == "bold") {
+                    var fweight = "bold";
+                    var fstyle = "normal";
+                } else if (fontstyle == "italic") {
+                    var fweight = "normal";
+                    var fstyle = "italic";        
+                } else if (fontstyle == "bold italic" || fontstyle == "bolditalic") {
+                    var fweight = "bold";
+                    var fstyle = "italic";        
+                }
+
+                // Assemble CSS font attribute per HTML5 canvas styling rules
+                var css = fstyle + ' ' + fweight + ' ' + fontsize + ' ' + font;
+                //Debug.debug('css', css);
+                this.context.font = css;
+            }
+            
+
+            function __checkContext() {
+                if ($debug) {
+                    if (! this['context']) Debug.warn('this.context is not yet defined.  Please check for the presence of the context property before using drawing methods, and/or register for the oncontext event to find out when the property is available.');
+                }
+            }
+
+            function beginPath() {
+                this.__path = [[1,0,0]];
+                this.__pathisopen = true;
+                this.__pathdrawn = -1;
+            }
+
+            function closePath() {
+                if (this.__pathisopen) {
+                    this.__path.push([0]);
+                }
+                this.__pathisopen = false;
+            }
+
+            function moveTo(x,y) {
+                if (this.__pathisopen) {
+                    this.__path.push([1, x,y]);
+                }
+            }
+
+            function lineTo(x,y) {
+                if (this.__pathisopen) {
+                    this.__path.push([2, x,y]);
+                }
+            }
+
+            function quadraticCurveTo(cpx, cpy, x, y) {
+                if (this.__pathisopen) {
+                    this.__path.push([3, cpx, cpy, x, y]);
+                }
+            }
+
+            function bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+                if (this.__pathisopen) {
+                    this.__path.push([4, cp1x, cp1y, cp2x, cp2y, x, y]);
+                }
+            }
+
+            // Use native arc
+            function arc(x, y, radius, startAngle, endAngle, anticlockwise) {
+                if (this.__pathisopen) {
+                    var sx:Number = x + radius*Math.cos(-startAngle);
+                    var sy:Number = y + radius*Math.sin(2 * Math.PI + startAngle);
+                    // TODO:
+                    //If the context has any subpaths, then the method must add a straight line from the last point in the subpath to the start point of the arc.
+                    this.__path.push([1, sx, sy]);
+                    this.__path.push([5, x, y, radius, startAngle, endAngle, anticlockwise]);
+                }
+            }
+            function fill() {
+                this.__updateFillStyle();
+                this.__playPath(0);
+                this.context.fill();
+            }
+
+            function __updateFillStyle() {
+                if (this.__globalAlpha != this.globalAlpha) {
+                    this.__globalAlpha = this.context.globalAlpha = this.globalAlpha;
+                }
+                if (this.__fillStyle != this.fillStyle) {
+                    if (this.fillStyle instanceof LzCanvasGradient) {
+                        this.fillStyle.__applyFillTo(this.context);
+                    } else {
+                        this.context.fillStyle = LzColorUtils.torgb(this.fillStyle)
+                    }
+                    this.__fillStyle = this.fillStyle;
+                }
+            }
+
+            var __strokeOffset = 0;
+            function __updateLineStyle() {
+                if (this.__globalAlpha != this.globalAlpha) {
+                    this.__globalAlpha = this.context.globalAlpha = this.globalAlpha;
+                }
+                if (this.__lineWidth != this.lineWidth) {
+                    this.__lineWidth = this.context.lineWidth = this.lineWidth;
+                    if (this.aliaslines) {
+                        // Offset by .5 if lineWidth is an odd number - see LPP-8780
+                        this.__strokeOffset = (this.lineWidth % 2) ? .5 : 0;
+                    }
+                }
+                if (this.__lineCap != this.lineCap) {
+                    this.__lineCap = this.context.lineCap = this.lineCap;
+                }
+                if (this.__lineJoin != this.lineJoin) {
+                    this.__lineJoin = this.context.lineJoin = this.lineJoin;
+                }
+                if (this.__miterLimit != this.miterLimit) {
+                    this.__miterLimit = this.context.miterLimit = this.miterLimit;
+                }
+                if (this.__strokeStyle != this.strokeStyle) {
+                    if (this.strokeStyle instanceof LzCanvasGradient) {
+                        this.strokeStyle.__applyStrokeTo(this.context);
+                    } else {
+                        this.context.strokeStyle =  LzColorUtils.torgb(this.strokeStyle);
+                    }
+                    this.__strokeStyle = this.strokeStyle;
+                }
+            }
+
+            function __playPath(offset) {
+                var path = this.__path;
+                var l = path.length;
+                if (l == 0) return;
+                if ($debug) this.__checkContext();
+
+                // Skip offsets for stroke
+                if (this.__pathdrawn === l && this.__lastoffset === offset) return;
+                if (offset) {
+                    this.context.translate(offset, offset);
+                }
+
+                // clear() should happen
+                this.__dirty = true;
+
+                this.context.beginPath();
+                
+                for (var i = 0; i < l; i += 1) {
+                    var a = path[i];
+                    switch (a[0]) {
+                        case 0:
+                            this.context.closePath();
+                            break;
+                        case 1:
+                            this.context.moveTo(a[1], a[2]);
+                            break;
+                        case 2:
+                            this.context.lineTo(a[1], a[2]);
+                            break;
+                        case 3:
+                            this.context.quadraticCurveTo(a[1], a[2], a[3], a[4]);
+                            break;
+                        case 4:
+                            this.context.bezierCurveTo(a[1], a[2], a[3], a[4], a[5], a[6]);
+                            break;
+                        case 5:
+                            this.context.arc(a[1], a[2], a[3], a[4], a[5], a[6])
+                            break;
+                    }
+                }
+                if (offset) {
+                    this.context.translate(-offset, -offset);
+                }
+                this.__pathdrawn = l;
+                this.__lastoffset = offset;
+            }
+
+            function clipPath() {
+                this.__playPath(0);
+                this.context.clip();
+            }
+
+            function clipButton() {
+                if ($debug) {
+                    Debug.warn('lz.drawview.clipButton() is not currently supported in %w.', $runtime);
+                }
+            }
+
+            function stroke() {
+                this.__updateLineStyle();
+                this.__playPath(this.__strokeOffset);
+                this.context.stroke();
+            }
+
+            function clear() {
+                if (this['__dirty'] == false) return;
+                this.__pathdrawn = -1;
+                this.__dirty = false;
+                if ($debug) this.__checkContext();
+                this.context.clearRect(0, 0, this.width, this.height);
+            }
+
+            function clearMask() {
+                if ($debug) {
+                    Debug.warn('lz.drawview.clearMask() is not currently supported in %w.', $runtime);
+                }
+            }
+
+            function createLinearGradient(x0, y0, x1, y1) {
+                return new LzCanvasGradient(this, [x0, y0, x1, y1], false);
+            }
+
+            function createRadialGradient(x0, y0, r0, x1, y1, r1) {
+                return new LzCanvasGradient(this, [x0, y0, r0, x1, y1, r1], true);
+            }
+
+            function rotate(r) {
+                this.context.rotate(r);
+            }
+
+            function translate(x, y) {
+                this.context.translate(x, y);
+            }
+
+            function scale(x, y) {
+                this.context.scale(x, y);
+            }
+
+            function save() {
+                this.__contextstates.push({fillStyle: this.fillStyle, strokeStyle: this.strokeStyle, globalAlpha: this.globalAlpha, lineWidth: this.lineWidth, lineCap: this.lineCap, lineJoin: this.lineJoin, miterLimit: this.miterLimit});
+                this.context.save();
+            }
+
+            function restore() {
+                var state = this.__contextstates.pop();
+                if (state) {
+                    for (var i in state) {
+                        // restore to both regular and cached values, since they'll match the context values already
+                        this[i] = this['__' + i] = state[i];
+                    }
+                }
+                this.context.restore();
+            }
+
+            function fillRect(x, y, w, h) {
+                this.__dirty = true;
+                this.__updateFillStyle();
+                this.context.fillRect(x, y, w, h);
+            }
+
+            function clearRect(x, y, w, h) {
+                this.context.clearRect(x, y, w, h);
+            }
+
+            function strokeRect(x, y, w, h) {
+                this.__dirty = true;
+                this.__updateLineStyle();
+                this.context.strokeRect(x, y, w, h);
+            }
+        } // End of drawview
+        lz[$lzc$class_drawview.tagname] = $lzc$class_drawview;
+
+        /**
+          * <p>
+          * The <tagname>LzCanvasGradient</tagname> is used by drawviews to describe a gradient fill.
+          * </p>
+          *
+          * @shortdesc An object for describing gradient fills
+          * @devnote LzCanvasGradient is an opaque object, which is used for assigning to
+          * other attributes, e.g. fillStyle.  It is also used to add color stops.
+          * An LzCanvasGradient is returned by drawview.createLinearGradient or
+          * drawview.createRadialGradient.
+          */
+        class LzCanvasGradient {
+            /** @access private */
+            var __context = null;
+            /** @access private */
+            var __g = null;
+
+            function LzCanvasGradient(c, args, isradial) {
+                this.__context = c;
+                var context = c.context;
+                if (isradial) {
+                    this.__g = context.createRadialGradient(args[0], args[1], args[2], args[3], args[4], args[5]);
+                } else {
+                    this.__g = context.createLinearGradient(args[0], args[1], args[2], args[3]);
+                }
+            }
+
+            /**
+              * Adds a new stop to a gradient. gradients are rendered such that at the starting point the colour at offset 0 is used, that at the ending point the color at offset 1 is used.  globalAlpha is stored for each gradient step added.
+              * @param Number o: The offset this stop used for placement in the gradient.  Gradients are rendered such that for the starting point the colour at offset 0 is used, that at the ending point the color at offset 1 is used and all colors between those offsets are blended.  Must be less than 0 or greater than 1.
+              * @param Number c: The color to be used at this color.  A hexadecimal value, e.g. 0xffffff
+              */
+            function addColorStop(o, c) {
+                var cstopColor = LzColorUtils.torgb(c);
+                var gAlpha = this.__context.globalAlpha;
+                if (gAlpha != null && gAlpha != 1) {
+                    // add globalAlpha (if there is no explicit alpha value)
+                    cstopColor = this.torgba(cstopColor, gAlpha);
+                }
+                if ($debug) {
+                    try {
+                        this.__g.addColorStop(o, cstopColor);
+                    } catch (e) {
+                            Debug.warn('drawview gradient addColorStop() called with an invalid offset or color value: %w, %w.  Converted color to %w and received the error %w.', o, c, cstopColor, e);
+                    }
+                } else {
+                    this.__g.addColorStop(o, cstopColor);
+                }
+            }
+
+            /**
+            * @access private
+            */
+            function torgba (rgb, alpha) {
+                if (rgb.indexOf("rgba") == -1) {
+                    // remove "rgb(" and ")"
+                    var rgba = rgb.substring(4, rgb.length - 1).split(',');
+                    rgba.push(alpha);
+                    return "rgba(" + rgba.join(',') + ")";
+                } else {
+                    // already in rgba() format
+                    return rgb;
+                }
+            }
+
+            /**
+            * @access private
+            */
+            function __applyFillTo(scope) {
+                scope.fillStyle = this.__g;
+            }
+
+            /**
+            * @access private
+            */
+            function __applyStrokeTo(scope) {
+                scope.strokeStyle = this.__g;
+            }
+        }
+      ]]></script>
+    </when>
+    <otherwise>
+      <!-- TODO [jgrandy 6/1/2007] <otherwise> should be <when runtime="as2"> but that isn't currently supported -->
+      <script when="immediate"><![CDATA[
+        // Classes that implement an interface must obey the LZX
+        // tag->class mapping convention and must be dynamic
+        dynamic class $lzc$class_drawview extends LzView with DrawviewShared {
+            if ($as3) {
+                #passthrough (toplevel:true) {
+                import flash.geom.Matrix;
+                import flash.geom.Rectangle;
+                import flash.display.Bitmap;
+                import flash.display.BitmapData;
+                import flash.display.Graphics;
+                import flash.display.Sprite;
+                }#
+            }
+            // Next two are part of the required LFC tag class protocol
+            static var tagname:String = 'drawview';
+            static var attributes = new LzInheritedHash(LzView.attributes);
+            static var __colorcache:Object = {};
+            // Prevent unneeded calls to clear()
+            private var __dirty:Boolean = false;
+
+            private var __path :Array = [];
+            // Track whether this path is currently open or not.
+            private var __pathisopen :Boolean = false;
+            // whether to measure the width/height dimensions after redrawing
+            var measuresize :Boolean = true;
+            //const __MOVETO_OP :int = 1;
+            //const __LINETO_OP :int = 2;
+            //const __QCURVE_OP :int = 3;
+
+            // The container for the bitmap and all contexts
+            var __drawcontainer:Sprite = null;
+            // The container for the current context
+            var __drawcontext:Sprite = null;
+            // The container for __bitmapdata
+            var __bitmapcontainer:Bitmap = null;
+            // A background bitmap that contains all restored/transformed drawing state
+            var __bitmapdata:BitmapData = null;
+            var __norebuild:Boolean = false;
+            // Contains a stack of drawing contexts, used by save/restore()
+            var __contexts :Array = null;
+            // contains context states, used for save/restore()
+            var __contextstates:Array = null;
+            
+
+            // hash of image resources for drawImage
+            static var images:Object = {};
+
+            function $lzc$class_drawview (parent:LzNode? = null, attrs:Object? = null, children:Array? = null, instcall:Boolean = false) {
+                super(parent, attrs, children, instcall);
+            }
+
+            override function construct(parent, args) {
+                // default to bitmap caching on, unless clip = true
+                if (args['cachebitmap'] == null && args['clip'] != true) args['cachebitmap'] = true;
+                super.construct(parent, args);
+                this.__contexts = [];
+                this.__contextstates = [];
+            }
+
+            override function init () {
+                super.init();
+                this.context = this.createContainer();
+                this.beginPath();
+                this.$lzc$set_context(this.context);
+            }
+
+            function beginPath() {
+                this.__path = [];
+                this.__pathisopen = true;
+                this.context.moveTo(0, 0);
+            }
+
+            function closePath() {
+                if (this.__pathisopen && this.__path.length > 1) {
+                    this.__pathisopen = false;
+                    var path:Array = this.__path[0];
+                    var op = path[0];
+                    if (op == 1 || op == 2) {
+                        //(op == this.__MOVETO_OP || op == this.__LINETO_OP)
+                        //inlined:
+                        //var x:Number = path[1];
+                        //var y:Number = path[2];
+                        //this.lineTo(x, y);
+                        this.__path.push([2, path[1], path[2]]);
+                    } else if (op == 3) {
+                        //(op == this.__QCURVE_OP)
+                        //inlined:
+                        //var x:Number = path[3];
+                        //var y:Number = path[4];
+                        //this.lineTo(x, y);
+                        this.__path.push([2, path[3], path[4]]);
+                    }
+                    //Debug.write('closePath', x, y);
+                }
+            }
+
+            override function moveTo(x:Number, y:Number) {
+                if (this.__pathisopen) {
+                    // __MOVETO_OP
+                    this.__path.push([1, x, y]);
+                }
+            }
+
+            override function lineTo (x:Number, y:Number) {
+                if (this.__pathisopen) {
+                    // __LINETO_OP
+                    this.__path.push([2, x, y]);
+                }
+            }
+
+            override function quadraticCurveTo(cpx:Number, cpy:Number, x:Number, y:Number) {
+                if (this.__pathisopen) {
+                    // __QCURVE_OP
+                    this.__path.push([3, cpx, cpy, x, y]);
+                }
+            }
+
+            const bezierCurveTo_error:Number = 10;
+
+            function bezierCurveTo(cp1x:Number, cp1y:Number, cp2x:Number, cp2y:Number, x:Number, y:Number) {
+                var error:Number = this.bezierCurveTo_error;
+
+                // Start from the cursor position, or (0, 0)
+                var x0:Number = 0, y0:Number = 0;
+                if (this.__path.length) {
+                    var instr:Array = this.__path[this.__path.length - 1];
+                    x0 = instr[instr.length - 2];
+                    y0 = instr[instr.length - 1];
+                }
+                // The algorithm used is to recursively subdivide the cubic until
+                // it's close enough to a quadratic, and then draw that.
+                // The code below has the effect of
+                //   function draw_cubic(cubic) {
+                //     if (|midpoint(cubic)-midpoint(quadratic)| < error)
+                //       draw_quadratic(qudratic);
+                //     else
+                //       map(draw_cubic, subdivide(cubic));
+                //   }
+                // where the recursion has been replaced by an explicit
+                // work item queue.
+
+                // To avoid recursion and undue temporary structure, the following
+                // loop has a funny control flow.  Each iteration either pops
+                // the next work item from queue, or creates two new work items
+                // and pushes one to the queue while setting +points+ to the other one.
+                // The loop effectively exits from the *middle*, when the next
+                // work item is null.  (This continues to the loop test,
+                // which then exits.)
+
+                // each item is a list of control points, with a sentinel of null
+                var work_items:Array = [null];
+                // the current work item
+                var points:Array = [{x: x0, y: y0}, {x: cp1x, y: cp1y}, {x: cp2x, y: cp2y}, {x: x, y: y}];
+                while (points) {
+                    // Posit a quadratic.  For C1 continuity, control point has to
+                    // be at the intersection of the tangents.
+                    var q1:* = this.intersection(points[0], points[1], points[2], points[3]);
+                    var q0:Object = points[0];
+                    var q2:Object = points[3];
+
+                    if (q1 == null || q1 == -1) {
+                        var flush:Boolean = true;
+                        var start_first:Boolean = points[0].x == points[1].x && points[0].y == points[1].y;
+                        var second_end:Boolean = points[2].x == points[3].x && points[2].y == points[3].y;
+                        if (start_first) {
+                            if (second_end) {
+                                this.lineTo(q2.x, q2.y);
+                            } else {
+                                var q1:Object = points[2];
+                                this.quadraticCurveTo(q1.x, q1.y, q2.x, q2.y);
+                            }
+                        } else if (second_end) {
+                            var q1:Object = points[1];
+                            this.quadraticCurveTo(q1.x, q1.y, q2.x, q2.y);
+                        } else {
+                            //both straight lines are collinear
+                            //now we have to test whether they're identical or non-identical
+                            if (q1 == null) {
+                                q1 = {x:0,y:0};//default-value...
+                                flush = false;
+                            } else {
+                                this.lineTo(q2.x, q2.y);
+                            }
+                        }
+                        if (flush) {
+                            points = work_items.pop();
+                            continue;
+                        }
+                    }
+
+                    // Compute the triangle, since the fringe is the subdivision
+                    // if we need that and the peak is the midpoint which we need
+                    // in any case
+                    var m:Array = [points, [], [], []];
+                    for (var i:int = 1; i < 4; i++) {
+                        for (var j:int = 0; j < 4 - i; j++) {
+                            var c0:Object = m[i-1][j];
+                            var c1:Object = m[i-1][j+1];
+                            m[i][j] = {x: (c0.x + c1.x)/2,
+                                    y: (c0.y + c1.y)/2};
+                        }
+                    }
+
+                    var qa:Object = this.midpoint(q0, q1);
+                    var qb:Object = this.midpoint(q1, q2);
+                    var qm:Object = this.midpoint(qa, qb);
+                    // Is the midpoint of the quadratic close to the midpoint of
+                    // the cubic?  If so, use it as the approximation.
+                    if (this.distance(qm, m[3][0]) < error) {
+                        this.quadraticCurveTo(q1.x, q1.y, q2.x, q2.y);
+                        points = work_items.pop();
+                        continue;
+                    }
+                    // Otherwise subdivide the cubic.  The first division is the
+                    // next work item, and the second goes on the work queue.
+                    var left:Array = new Array(4), right:Array = new Array(4);
+                    for (var i:int = 0; i < 4; i++) {
+                        left[i]  = m[i][0];
+                        right[i] = m[3-i][i];
+                    }
+                    points = left;
+                    work_items.push(right);
+                }
+            }
+
+            function __getColor(val:*) :Object {
+                var ccache:Object = lz.drawview.__colorcache;
+                var cachedColor:Object = ccache[val];
+                if (cachedColor == null) {
+                    var rgba:Number = LzColorUtils.hextoint(val);
+                    var color:uint = (rgba | 0);
+                    var alpha:Number = rgba - color;
+                    // FIXME [anba 20090216] explicit alpha of 0 is ignored
+                    cachedColor = ccache[val] = {c: color, a: (alpha != 0 ? alpha * 100 : null)};
+                }
+                return cachedColor;
+            }
+
+            function fill() {
+                if (this.fillStyle instanceof LzCanvasGradient) {
+                    this.fillStyle.__applyFillTo(this.context);
+                } else {
+                    var color:Object = this.__getColor(this.fillStyle);
+                    var alpha:Number = color.a != null ? color.a : this.globalAlpha;
+                    if ($as2) { alpha *= 100; }
+                    this.context.beginFill(color.c, alpha);
+                }
+                this.closePath();
+                this.__playPath(this.context);
+                this.context.endFill();
+                if (this.measuresize) this.__updateSize();
+            }
+
+            function __playPath(context:*) :void {
+                this.__dirty = true;
+                if ($as2) { context._visible = false; }
+                var path:Array = this.__path;
+                //Debug.write(path, context);
+                for (var i:int = 0; i < path.length; i++) {
+                    var op:Array = path[i];
+                    switch (op[0]) {
+                        case 1:
+                            //__MOVETO_OP
+                            //Debug.write(context, 'moveTo', op[1], op[2]);
+                            context.moveTo(op[1], op[2]);
+                            break;
+                        case 2:
+                            //__LINETO_OP
+                            //Debug.write(context, 'lineTo', op[1], op[2]);
+                            context.lineTo(op[1], op[2]);
+                            break;
+                        case 3:
+                            //__QCURVE_OP
+                            //Debug.write(context, 'quadraticCurveTo', op[1], op[2], op[3], op[4]);
+                            context.curveTo(op[1], op[2], op[3], op[4]);
+                            break;
+                    }
+                }
+                if ($as2) { context._visible = true; }
+            }
+
+            function stroke() {
+                this.__updateLineStyle();
+                this.__playPath(this.context);
+                this.context.lineStyle(undefined);
+                this.__updateSize();
+            }
+
+            function __updateLineStyle() {
+                if (this.strokeStyle instanceof LzCanvasGradient) {
+                    this.strokeStyle.__applyStrokeTo(this.context);
+                } else {
+                    var color:Object = this.__getColor(this.strokeStyle);
+                    var alpha:Number = color.a != null ? color.a : this.globalAlpha;
+                    if ($as2) { alpha *= 100; }
+                    var linecap = this.lineCap == 'butt' ? 'none' : this.lineCap;
+                    this.context.lineStyle(this.lineWidth, color.c, alpha, false, 'normal',
+                        linecap, this.lineJoin, this.miterLimit);
+                }
+            }
+
+            function clear() {
+                if (this['__dirty'] == false) return;
+                this.__dirty = false;
+                this.context.clear();
+                if (this['__bitmapdata']) {
+                    this.clearRect(0,0,this.width,this.height);
+                }
+            }
+
+            function createLinearGradient(x0:Number, y0:Number, x1:Number, y1:Number) {
+                var dx:Number = x1-x0;
+                var dy:Number = y1-y0;
+                var r:Number = Math.atan2(dy, dx);
+                var h:Number = Math.sqrt(dx*dx + dy*dy);
+                var w:Number = h;
+                var y:Number = Math.min(y0, y1);
+                var x:Number = Math.min(x0, x1);
+
+                var g:LzCanvasGradient = new LzCanvasGradient(this, {matrixType:"box", x:x, y:y, w:w, h:h, r:r}, false);
+                //Debug.write('createLinearGradient', {matrixType:"box", x:x0, y:y0, w:w, h:h, r:r});
+                return g;
+            }
+
+            function createRadialGradient(x0:Number, y0:Number, r0, x1:Number, y1:Number, r1:Number) {
+                var w:Number = x1-x0;
+                var h:Number = y1-y0;
+                // Rotation doesn't seem to work
+                var r:Number = r0 != null ? r0 : Math.atan2(h, w);
+                var g:LzCanvasGradient = new LzCanvasGradient(this, {matrixType:"box", x:x0, y:y0, w:w, h:h, r:r}, true);
+                //Debug.write('createRadialGradient', {matrixType:"box", x:x0, y:y0, w:w, h:h, r:r});
+                return g;
+            }
+
+            var __tr:Number = 0;
+            // accumulate rotation, radians is expected to be clockwise
+            function rotate(radians:Number) {
+                this.__saveToBitmap();
+
+                this.__tr += radians * this.__radtodegfactor;
+                if ($as2) {
+                    this.__drawcontext._rotation = this.__tr;
+                } else {
+                    this.__drawcontext.rotation = this.__tr;
+                }
+            }
+ 
+            // Saves the current drawing state to the bitmap
+            function __saveToBitmap() {
+                if (! this.__bitmapdata) {
+                    // we don't yet have a bitmap, so create one
+                    this.rebuildBitmap();
+                }
+                //if (! this.__bitmapdata) return;
+                //var xoff = this.__measurewidth ? 0 : this.width * .5;
+                //var yoff = this.__measureheight ? 0 : this.height * .5;
+
+                // Offset to the center to ensure we can grab the whole drawing
+                //if ($as2) {
+                //    this.__drawcontext._x += xoff;
+                //    this.__drawcontext._y += yoff;
+                //} else {
+                //    this.__drawcontext.x += xoff;
+                //    this.__drawcontext.y += yoff;
+                //}
+
+                var m:Matrix = this.getIdentityMatrix();
+                // Translate bitmap to original position to compensate for offset above
+                //m.translate(-xoff, -yoff);
+
+                if (this.__bitmapcontainer) {
+                    // hide to avoid copying the bitmap onto itself
+                    if ($as2) {
+                        this.__bitmapcontainer._visible = false;
+                    } else {
+                        this.__bitmapcontainer.visible = false;
+                    }
+                }
+                // copy drawcontainer state to the bitmap
+                this.copyBitmap(this.__drawcontainer, this.width, this.height, this.__bitmapdata, m)
+                if (this.__bitmapcontainer) {
+                    if ($as2) {
+                        this.__bitmapcontainer._visible = true;
+                    } else {
+                        this.__bitmapcontainer.visible = true;
+                    }
+                }
+
+                // Move back to original position
+                //if ($as2) {
+                //    this.__drawcontext._x -= xoff;
+                //    this.__drawcontext._y -= yoff;
+                //} else {
+                //    this.__drawcontext.x -= xoff;
+                //    this.__drawcontext.y -= yoff;
+                //}
+
+                // Clear the context now that we've copied it
+                this.context.clear();
+            }
+
+            // accumulate translation
+            var __tx:Number = 0;
+            var __ty:Number = 0;
+            function translate(x:Number, y:Number) {
+                this.__saveToBitmap();
+
+                // scaling affects translation in swf
+                this.__tx += x * this.__sx;
+                this.__ty += y * this.__sy;
+                if ($as2) {
+                    this.__drawcontext._x = this.__tx;
+                    this.__drawcontext._y = this.__ty;
+                } else {
+                    this.__drawcontext.x = this.__tx;
+                    this.__drawcontext.y = this.__ty;
+                }
+            }
+
+            // accumulate scale in the horizontal and vertical directions
+            var __sx:Number = 1;
+            var __sy:Number = 1;
+            function scale(x:Number, y:Number) {
+                this.__saveToBitmap();
+
+                this.__sx *= x;
+                this.__sy *= y;
+
+                if ($as2) {
+                    this.__drawcontext._xscale = this.__sx * 100;
+                    this.__drawcontext._yscale = this.__sy * 100;
+                } else {
+                    this.__drawcontext.scaleX = this.__sx;
+                    this.__drawcontext.scaleY = this.__sy;
+                }
+            }
+
+
+            // shared by clip/button masking routines
+            private function __drawPath(context) {
+                this.closePath();
+                context.clear();
+                context.beginFill(0xff00ff, 0);
+                this.__playPath(context);
+                context.endFill();
+            }
+
+            // Listen for view size updates
+            override function $lzc$set_width(w) {
+                super.$lzc$set_width(w);
+                if (this._setrescwidth || this._setrescheight) {
+                    // stretches is on
+                    this.__updateSize();
+                }
+                if (! this.__norebuild && this.__bitmapdata) this.rebuildBitmap();
+            }
+
+            override function updateWidth(w) {
+                super.updateWidth(w);
+                if (this._setrescwidth) {
+                    // stretches is on
+                    if ($as3) {
+                        if (this.__drawcontainer) {
+                            this.__drawcontainer.scaleX = this.width / this.unstretchedwidth;
+                        }
+                    }
+                }
+                if (! this.__norebuild && (this.__bitmapdata || ! this.measuresize)) this.rebuildBitmap();
+            }
+
+            override function $lzc$set_height(h) {
+                super.$lzc$set_height(h);
+                if (this._setrescwidth || this._setrescheight) {
+                    // stretches is on
+                    this.__updateSize();
+                }
+                if (! this.__norebuild && this.__bitmapdata) this.rebuildBitmap();
+            }
+
+            override function updateHeight(h) {
+                super.updateHeight(h);
+                if (this._setrescheight) {
+                    // stretches is on
+                    if ($as3) {
+                        if (this.__drawcontainer) {
+                            this.__drawcontainer.scaleY = this.height / this.unstretchedheight;
+                        }
+                    }
+                }
+                if (! this.__norebuild && (this.__bitmapdata || ! this.measuresize)) this.rebuildBitmap();
+            }
+
+            protected function __updateSize() :void {
+                if (! this.__drawcontainer) return;
+                var measureSize:Boolean = (this.hassetwidth == false || this.hassetheight == false || this._setrescwidth || this._setrescheight) && this.measuresize;
+                if (! measureSize) return;
+
+                var rebuildBitmapLater = false;
+                if (this.__bitmapdata) {
+                    // __bitmapcontainer needs to be removed while measuring the context's size
+                    this.clearBitmap();
+                    rebuildBitmapLater = true;
+                }
+
+                // don't rebuild bitmap in width/height setter
+                this.__norebuild = true;
+
+                // measure size, turning off scaling if stretches is on
+                var width, height;
+                var mc = this.__drawcontainer;
+                if ($as3) {
+                    // turn off scaling if stretches is on
+                    if (this._setrescwidth) {
+                        mc.scaleX = 1;
+                    }
+                    if (this._setrescheight) {
+                        mc.scaleY = 1;
+                    }
+
+                    width = mc.width;
+                    height = mc.height;
+                } else {
+                    width = mc._width;
+                    height = mc._height;
+                }
+
+                var sizechanged = false;
+
+                // update the size and scaling if stretches is on
+                if (this.width !== width) {
+                    sizechanged = true;
+                    if (this.hassetwidth == false) {
+                        this.updateWidth(width);
+                    } else if (this._setrescwidth) {
+                        // stretches is on...
+                        this.updateWidth(width);
+                    }
+                }
+
+                if (this.height !== height) {
+                    sizechanged = true;
+                    if (this.hassetheight == false) {
+                        this.updateHeight(height);
+                    } else if (this._setrescheight) {
+                        // stretches is on...
+                        this.updateHeight(height);
+                    }
+                }
+
+                this.__norebuild = false
+                if (rebuildBitmapLater) {
+                    this.rebuildBitmap();
+                }
+            }
+
+            function fillText(text:String, x:Number, y:Number, maxWidth = null) {
+                if ($debug) {
+                    Debug.warn('lz.drawview.fillText() is not currently supported in %w.', $runtime);
+                }
+            }
+
+            function strokeText(text:String, x:Number, y:Number, maxWidth = null) {
+                if ($debug) {
+                    Debug.warn('lz.drawview.strokeText() is not currently supported in %w.', $runtime);
+                }
+            }
+            function measureText(text:String) {
+                if ($debug) {
+                    Debug.warn('lz.drawview.measureText() is not currently supported in %w.', $runtime);
+                }
+            }
+
+            if ($as3) {
+                function clearMask() {
+                    if (this.clipcontext) {
+                        this.clipcontext.clear();
+                        this.clipcontext = null;
+                    }
+                    if (this.clickcontext) {
+                        this.clickcontext.clear();
+                        this.clickcontext = null;
+                    }
+                }
+
+                function clipPath() {
+                    var masksprite = this.sprite.masksprite;
+                    if (! masksprite) {
+                        this.sprite.applyMask();
+                        masksprite = this.sprite.masksprite;
+                    }
+                    if (! this.clipcontext) {
+                        this.clipcontext = masksprite.graphics;
+                    }
+                    this.__drawPath(this.clipcontext);
+                    // reset scale of mask
+                    masksprite.scaleX = 1;
+                    masksprite.scaleY = 1;
+                }
+
+                function clipButton() {
+                    if (! this.clickable) this.setAttribute('clickable', true);
+                    if (! this.sprite.clickregion) this.setAttribute('clickregion', null);
+                    var clickregion:Sprite = this.sprite.clickregion
+                    if (! this.clickcontext) {
+                        this.sprite.hitArea = clickregion;
+                        // update sizes in case scale changes
+                        this.sprite.clickregionwidth = this.width;
+                        this.sprite.clickregionheight = this.height;
+                        // Add the clickregion as a child sprite to ensure the 
+                        // mouse is active
+                        this.sprite.addChild(clickregion);
+                        //Debug.warn('clipButton', clickregion, this.sprite);
+                        this.clickcontext = clickregion.graphics;
+                    }
+                    this.__drawPath(this.clickcontext);
+                    // reset scale of clickregion 
+                    clickregion.scaleX = 1;
+                    clickregion.scaleY = 1;
+                }
+
+
+                if ($swf9) {
+                    private var __sizelimit:Number = 2880 * 2880;
+                } else { 
+                    private var __sizelimit:Number = 4095 * 4095;
+                }
+
+                // Rebuild bitmap drawing layer
+                private function rebuildBitmap () :void {
+                    if (this.__norebuild || ! this.__drawcontainer) return;
+                    var width = this.width;
+                    var height = this.height;
+                    if (width < 1 || height < 1) return;
+                    // TODO: construct multiple bitmaps to deal with this limitaion
+                    if ((width * height) > this.__sizelimit) {
+                        if ($debug) {
+                            Debug.warn('Drawview is too large for bitmap operations: drawImage(), save(), restore() and fillRect() may not work properly.  For best results, ensure this drawview is no larger than a total of %w pixels total, width x height.  See http://jira.openlaszlo.org/jira/browse/LPP-8697 for more details: %w', this.__sizelimit, this);
+                        }
+                        return;
+                    }
+                    if (this.__bitmapdata && width == this.__bitmapdata.width && height == this.__bitmapdata.height) return;
+
+                    var bitmapdata:BitmapData = new flash.display.BitmapData(width, height, true, 0x000000ff);
+                    if (bitmapdata) {
+                        // copy any existing bitmap data
+                        if (this.__bitmapdata) {
+                            //this.copyBitmap(this.__bitmapdata, this.width, this.height, bitmapdata);
+                            // clear any old data
+                            this.clearBitmap();
+                        }
+
+                        this.__bitmapdata = bitmapdata;
+                        this.__bitmapcontainer = new flash.display.Bitmap(bitmapdata);
+                        this.__drawcontainer.addChildAt(this.__bitmapcontainer, 0);
+                    }
+                }
+
+                // destroy old bitmap data
+                private function clearBitmap() :void {
+                    if (this.__bitmapdata) {
+                        this.__bitmapdata.dispose();
+                        this.__bitmapdata = null;
+                    }
+                    if (this.__bitmapcontainer) {
+                        this.__drawcontainer.removeChild(this.__bitmapcontainer);
+                        this.__bitmapcontainer = null;
+                    }
+                }
+
+                function getImage(name:String):BitmapData {
+                    var cache = lz.drawview.images;
+                    if (! cache[name]) {
+                        var resinfo:Object = LzResourceLibrary[name];
+                        var assetclass:Class;
+                        // single frame resources get an entry in LzResourceLibrary which has
+                        // 'assetclass' pointing to the resource Class object.
+                        if (resinfo.assetclass is Class) {
+                            assetclass = resinfo.assetclass;
+                        } else {
+                            // Multiframe resources have an array of Class objects in frames[]
+                            assetclass = resinfo.frames[0];
+                        }
+
+                        if (this.resourceCache == null) {
+                            this.resourceCache = [];
+                        }
+                        var asset = this.resourceCache[name];
+                        if (asset == null) {
+                            //Debug.write('CACHE MISS, new ',assetclass);
+                            asset = new assetclass();
+                            asset.scaleX = 1.0;
+                            asset.scaleY = 1.0;
+                            this.resourceCache[name] = asset;
+                        }
+
+                        var bounds:Rectangle = asset.getBounds(asset);
+
+                        var assetsprite = this.sprite.addChild(asset);
+                        cache[name] = copyBitmap(assetsprite, bounds.width, bounds.height);
+                        this.sprite.removeChild(asset);
+                    }
+
+                    return cache[name];
+                }
+
+                // create a new container, only used at init time
+                private function createContainer() {
+                    var drawcontainer:Sprite = new Sprite();
+                    drawcontainer.mouseChildren = false;
+                    this.getDisplayObject().addChildAt(drawcontainer, 0);
+                    this.__drawcontainer = drawcontainer;
+
+                    this.__drawcontext = this.createDrawingContext();
+
+                    return this.__drawcontext.graphics;
+                }
+
+                // Create new context to draw in
+                private function createDrawingContext() {
+                    var drawcontext:Sprite = new Sprite();
+                    this.__drawcontainer.addChild(drawcontext);
+                    return drawcontext;
+                }
+
+                function save() {
+                    this.__contextstates.push({fillStyle: this.fillStyle, strokeStyle: this.strokeStyle, globalAlpha: this.globalAlpha, lineWidth: this.lineWidth, lineCap: this.lineCap, lineJoin: this.lineJoin, miterLimit: this.miterLimit});
+                    // reset accumulated transforms
+                    this.__sx = this.__sy = 1;
+                    this.__tr = this.__tx = this.__ty = 0;
+
+                    // Store this.context:MovieClip
+                    this.__contexts.push(this.__drawcontext);
+
+                    var drawcontext = createDrawingContext();
+
+                    // Copy transforms from old context
+                    drawcontext.x = this.__drawcontext.x;
+                    drawcontext.y = this.__drawcontext.y;
+                    drawcontext.rotation = this.__drawcontext.rotation;
+                    drawcontext.scaleX = this.__drawcontext.scaleX;
+                    drawcontext.scaleY = this.__drawcontext.scaleY;
+
+                    this.__drawcontext = drawcontext;
+                    this.context = drawcontext.graphics;
+                }
+
+                function restore() {
+                    var state = this.__contextstates.pop();
+                    if (state) {
+                        for (var i in state) {
+                            // restore to both regular values, since they'll match the context values already
+                            this[i] = state[i];
+                        }
+                    }
+
+                    if (this.__contexts.length) {
+                        this.__saveToBitmap();
+                        this.__drawcontainer.removeChild(this.__drawcontext);
+                        this.__drawcontext = this.__contexts.pop();
+                        this.context = this.__drawcontext.graphics;
+                    }
+                }
+                // end as3
+            } else {
+                // See http://livedocs.adobe.com/flash/9.0/main/00001393.html
+                private var __sizelimit = 2880 * 2880;
+
+                // as2
+                function clearMask() {
+                    var maskclip = this.sprite.__LZmaskClip;
+                    if (maskclip) {
+                        maskclip.clear();
+                    }
+                }
+
+                function clip() {
+                    if ($debug) Debug.warn('lz.drawview.clip() is deprecated.  Use clipPath() instead.');
+                    this.clipPath();
+                }
+
+                function clipPath() {
+                    this.sprite.applyMask(true);
+                    var maskclip = this.sprite.__LZmaskClip;
+                    this.__drawPath(maskclip);
+                    this.updateResourceSize();
+                    // reset scale of mask
+                    maskclip._xscale = 100;
+                    maskclip._yscale = 100;
+                }
+
+                function clipButton() {
+                    var mc:MovieClip = this.getDisplayObject();
+                    //Debug.write('clip', this, mc, this.sprite.__LZbuttonRef);
+                    if (! this['__clipmc']) {
+                        this.__clipmc = this.sprite.__LZmovieClipRef.createEmptyMovieClip("$lzclipmc", 6);
+                        this.sprite.__LZbuttonRef.setMask(this.__clipmc);
+                    }
+                    this.__drawPath(this.__clipmc);
+                    this.updateResourceSize();
+                }
+
+                // Movieclip used to contain the bitmap, used so __bitmapcontainer can keep its place
+                var __bitmapmc = null;
+
+                // Rebuild bitmap drawing layer
+                private function rebuildBitmap () :void {
+                    if (this.__norebuild || ! this.__drawcontainer) return;
+                    var width = this.width;
+                    var height = this.height;
+                    if (width < 1 || height < 1) return;
+                    if ((width * height) > this.__sizelimit) {
+                        if ($debug) {
+                            Debug.warn('Drawview is too large for bitmap operations: drawImage(), save(), restore() and fillRect() may not work properly.  For best results, ensure this drawview is no larger than a total of %w pixels total, width x height.  See http://jira.openlaszlo.org/jira/browse/LPP-8697 for more details: %w', this.__sizelimit, this);
+                        }
+                        return;
+                    }
+                    if (this.__bitmapdata && width == this.__bitmapdata.width && height == this.__bitmapdata.height) return;
+                    var bitmapdata = new flash.display.BitmapData(width, height, true, 0x000000ff);
+                    if (bitmapdata) {
+                        // clear any old data first
+                        this.clearBitmap();
+
+                        this.__bitmapdata = bitmapdata;
+                        this.__bitmapmc = this.__bitmapcontainer.createEmptyMovieClip("__bitmapcontainer", 1);
+                        this.__bitmapmc.attachBitmap(bitmapdata, 2, "auto", true);
+                        this.__updateContextMenu();
+                    }
+                }
+
+                // destroy old bitmap data
+                private function clearBitmap() :void {
+                    if (this.__bitmapdata) {
+                        this.__bitmapdata.dispose();
+                        this.__bitmapdata = null;
+                    }
+                    if (this.__bitmapmc) {
+                        this.__bitmapmc.removeMovieClip();
+                        this.__bitmapmc = null;
+                    }
+                }
+
+                override function $lzc$set_contextmenu (cmenu:LzContextMenu) :void {
+                    super.$lzc$set_contextmenu(cmenu);
+                    this.__updateContextMenu();
+                }
+
+                // Install/remove context menus on all drawing contexts and the bitmap
+                private function __updateContextMenu():void {
+                    // Install right-click context menu if there is one
+                    var cmenu:LzContextMenu = this.sprite['__contextmenu'];
+                    if (cmenu) {
+                        var menu = cmenu.kernel.__LZcontextMenu();
+                        if (this.__drawcontext) this.__drawcontext.menu = menu;
+                        if (this.__bitmapcontainer) this.__bitmapcontainer.menu = menu;
+                        for (var i = 0; i < this.__contexts.length; i++) {
+                            if (this.__contexts[i]) {
+                                this.__contexts[i].menu = menu;
+                            }
+                        }
+                    } else {
+                        if (this.__drawcontext) delete this.__drawcontext.menu
+                        if (this.__bitmapcontainer) delete this.__bitmapcontainer.menu;
+                        for (var i = 0; i < this.__contexts.length; i++) {
+                            if (this.__contexts[i]) {
+                                delete this.__contexts[i].menu;
+                            }
+                        }
+                    }
+                }
+
+                function getImage(name:String):BitmapData {
+                    var cache = lz.drawview.images;
+                    if (! cache[name]) {
+                        var container:MovieClip = createEmptyMovieClip("loader", getNextHighestDepth());
+                        if (name.indexOf('http:') == 0 || name.indexOf('https:') == 0) {
+                            var loader:MovieClip = container.createEmptyMovieClip("loader", container.getNextHighestDepth());
+                            loader.loadMovie(name);
+                            container.onEnterFrame = function() {
+                                if (loader._width > 0) {
+                                    cache[name] = this.copyBitmap(loader, loader._width, loader._height);
+                                    delete this.onEnterFrame;
+                                    container.removeMovieClip();
+                                }
+                            }
+                        } else {
+                            // measure size
+                            container.attachMovie(name, 'resc', container.getNextHighestDepth());
+                            cache[name] = this.copyBitmap(container, container._width, container._height);
+                            container.removeMovieClip();
+                        }
+                    }
+                    return cache[name];
+                }
+
+                // create a new container, only used at init time
+                private function createContainer() {
+                    var drawcontainer:MovieClip = this.getDisplayObject().createEmptyMovieClip("drawcontainer", 1);
+                    this.__drawcontainer = drawcontainer.createEmptyMovieClip("drawing", drawcontainer.getNextHighestDepth());
+
+                    // create bitmap container here to ensure we're behind the drawing context
+                    var depth:Number = this.__drawcontainer.getNextHighestDepth();
+                    this.__bitmapcontainer = this.__drawcontainer.createEmptyMovieClip('bitmap', depth);
+
+                    // context and __drawcontext are the same for AS2
+                    this.__drawcontext = this.createDrawingContext();
+                    this.__updateContextMenu();
+
+                    return this.__drawcontext;
+                }
+
+                // Create new context to draw in
+                private function createDrawingContext() {
+                    var depth:Number = this.__drawcontainer.getNextHighestDepth();
+                    // context and __drawcontext are the same for AS2
+                    return this.__drawcontainer.createEmptyMovieClip('draw' + depth, depth);
+                }
+
+                function save() {
+                    this.__contextstates.push({fillStyle: this.fillStyle, strokeStyle: this.strokeStyle, globalAlpha: this.globalAlpha, lineWidth: this.lineWidth, lineCap: this.lineCap, lineJoin: this.lineJoin, miterLimit: this.miterLimit});
+
+                    this.__sx = this.__sy = 1;
+                    this.__tx = this.__ty = 0;
+
+                    // Store this.context:MovieClip
+                    this.__contexts.push(this.__drawcontext);
+
+                    var newcontext = this.createDrawingContext();
+
+                    // Copy from old context
+                    newcontext._x = this.__drawcontext._x;
+                    newcontext._y = this.__drawcontext._y;
+                    newcontext._rotation = this.__drawcontext._rotation;
+                    newcontext._xscale = this.__drawcontext._xscale;
+                    newcontext._yscale = this.__drawcontext._yscale;
+
+                    // context and __drawcontext are the same for AS2
+                    this.__drawcontext = this.context = newcontext;
+                }
+
+                function restore() {
+                    var state = this.__contextstates.pop();
+                    if (state) {
+                        // restore state
+                        for (var i in state) {
+                            this[i] = state[i];
+                        }
+                    }
+
+                    if (this.__contexts.length) {
+                        this.__saveToBitmap();
+                        this.__drawcontext.removeMovieClip();
+                        // context and __drawcontext are the same for AS2
+                        this.__drawcontext = this.context = this.__contexts.pop();
+                    }
+                }
+            } // End of as2/as3 conditionals
+
+            function fillRect(x:Number, y:Number, w:Number, h:Number) {
+                if (! w && ! h) return;
+                this.__dirty = true;
+                if (this.fillStyle instanceof LzCanvasGradient) {
+                    this.fillStyle.__applyFillTo(this.context);
+                    this.__strokeRect(x,y,w,h);
+                    this.context.endFill();
+                } else {
+                    var color:Object = this.__getColor(this.fillStyle);
+                    var alpha:Number = color.a != null ? color.a : this.globalAlpha;
+                    if (alpha == 1) {
+                        // Use fillRect when we don't need alpha since it replaces the pixels
+                        var rect:Rectangle = new flash.geom.Rectangle(x, y, w, h);
+                        if (! this.__bitmapdata) {
+                            this.rebuildBitmap();
+                        }
+                        this.__bitmapdata.fillRect(rect, color.c + 0xff000000);
+                    } else {
+                        // can't use fillRect() with alpha because it replaces the pixels
+                        // fillRect() must not affect the current path, per http://www.whatwg.org/specs/web-apps/current-work/#simple-shapes-%28rectangles%29
+                        var color:Object = this.__getColor(this.fillStyle);
+                        var alpha:Number = color.a != null ? color.a : this.globalAlpha;
+                        if ($as2) { alpha *= 100; }
+                        this.context.beginFill(color.c, alpha);
+
+                        this.__strokeRect(x,y,w,h);
+
+                        this.context.endFill();
+
+                    }
+                }
+            }
+
+            // If both height and width are zero, this method has no effect, 
+            // since there is no path to stroke (it's a point). If only one of 
+            // the two is zero, then the method will draw a line instead (the 
+            // path for the outline is just a straight line along the non-zero 
+            // dimension).
+            function __strokeRect(x:Number, y:Number, w:Number, h:Number) {
+                if (w == 0 && h == 0) return;
+                this.context.moveTo(x,y);
+                if (w != 0) {
+                    // top
+                    this.context.lineTo(x + w,y);
+                    if (h != 0) {
+                        // right
+                        this.context.lineTo(x + w,y + h);
+                    }
+                }
+                if (h != 0) {
+                    // bottom
+                    this.context.lineTo(x,y + h);
+                    if (w != 0) {
+                        // left
+                        this.context.lineTo(x,y);
+                    }
+                }
+
+                // move back to the implicit 0,0 set in beginPath();
+                this.context.moveTo(0,0);
+
+                if (this.measuresize) this.__updateSize();
+            }
+
+            function clearRect(x:Number, y:Number, w:Number, h:Number) {
+                if (! w && ! h) return;
+                if (w < 1 || h < 1) return;
+                this.__saveToBitmap();
+                var rect:Rectangle = new flash.geom.Rectangle(x, y, w, h);
+                this.__bitmapdata.fillRect(rect, 0x000000ff);
+            }
+
+            // The strokeRect(x, y, w, h) method must stroke the specified 
+            // rectangle's path using the strokeStyle, lineWidth, lineJoin, 
+            // and (if appropriate) miterLimit attributes. 
+            function strokeRect(x:Number, y:Number, w:Number, h:Number) {
+                if (! w && ! h) return;
+                this.__dirty = true;
+                this.__updateLineStyle();
+                this.__strokeRect(x,y,w,h);
+                this.context.lineStyle(undefined);
+            }
+
+            private function getIdentityMatrix():Matrix {
+                return new flash.geom.Matrix();
+            }
+
+            function drawImage(image=null, x:Number=0, y:Number=0, w=null, h=null, r:Number=0) {
+                // TODO: deal with runtime-loaded images
+                if (image == null) {
+                    // save state to the bitmap
+                    this.__saveToBitmap();
+                    // get a copy of the current bitmap
+                    if (w == null) w = this.width;
+                    if (h == null) h = this.height;
+                    image = copyBitmap(this.__bitmapdata, w, h);
+                    if (! image) return;
+                } else if (typeof image == 'string') {
+                    image = this.getImage(image);
+                    if (! image) return;
+                    if (w == null) w = image.width;
+                    if (h == null) h = image.height;
+                }
+
+                this.__dirty = true;
+                // default to image size per http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-drawimage
+
+                var matrix:Matrix = this.getIdentityMatrix();
+
+                // Apply accumulated translations
+                var scalewidth:Number = w ? w / image.width : 1;
+                var scaleheight:Number = h ? h / image.height : 1;
+                matrix.scale(scalewidth * this.__sx, scaleheight * this.__sy);
+                matrix.rotate(r + this.__tr);
+                var tx:Number = x + this.__tx;
+                var ty:Number = y + this.__ty;
+                matrix.translate(tx, ty);
+
+                if (! this.__bitmapdata) {
+                    this.rebuildBitmap();
+                }
+                this.copyBitmap(image, this.width, this.height, this.__bitmapdata, matrix);
+            }
+            
+            private function copyBitmap(from:*, w:Number, h:Number, to:BitmapData = null, m:Matrix = null) {
+                var tmp:BitmapData = new flash.display.BitmapData(w, h, true, 0x000000ff);
+
+                tmp.draw(from);
+
+                // If to wasn't supplied, return the bitmap as-is.
+                if (! to) {
+                    return tmp;
+                }
+                if (! m) {
+                    m = this.getIdentityMatrix();
+                }
+                to.draw(tmp, m, null, null, null, true);
+                tmp.dispose();
+            }
+        } // End of drawview
+
+        lz[$lzc$class_drawview.tagname] = $lzc$class_drawview;
+
+        /**
+          * <p>
+          * The <tagname>LzCanvasGradient</tagname> is used by drawviews to describe a gradient fill.
+          * </p>
+          *
+          * @shortdesc An object for describing gradient fills
+          * @devnote LzCanvasGradient is an opaque object, which is used for assigning to
+          * other attributes, e.g. fillStyle.  It is also used to add color stops.
+          * An LzCanvasGradient is returned by drawview.createLinearGradient or
+          * drawview.createRadialGradient.
+          */
+        class LzCanvasGradient {
+            if ($as3) {
+                #passthrough (toplevel:true) {
+                import flash.geom.Matrix;
+                }#
+            }
+            /** @access private */
+            var __context :* = null;
+            /** @access private */
+            var __matrix :Matrix = null;
+            /** @access private */
+            var __type :String = null;
+            /** @access private */
+            var __colors :Array = null;
+            /** @access private */
+            var __alphas :Array = null;
+            /** @access private */
+            var __offsets :Array = null;
+
+            function LzCanvasGradient(c:*, m:Object, isradial:Boolean) {
+                this.__context = c;
+                var matrix:Matrix = new flash.geom.Matrix();
+                matrix.createGradientBox(m.w, m.h, m.r, m.x, m.y);
+                this.__matrix = matrix;
+                this.__type = isradial ? 'radial' : 'linear';
+                this.__colors = [];
+                this.__alphas = [];
+                this.__offsets = [];
+            }
+
+            /**
+            * Adds a new stop to a gradient. gradients are rendered such that at the starting point the colour at offset 0 is used, that at the ending point the color at offset 1 is used.  globalAlpha is stored for each gradient step added.
+            * @param Number o: The offset this stop used for placement in the gradient.  Gradients are rendered such that for the starting point the colour at offset 0 is used, that at the ending point the color at offset 1 is used and all colors between those offsets are blended.  Must be less than 0 or greater than 1.
+            * @param Number c: The color to be used at this color.  A hexadecimal value, e.g. 0xffffff
+            */
+            function addColorStop(o:Number, c:*) :void {
+                this.__offsets.push(o * 255);
+                var color:Object = this.__context.__getColor(c);
+                this.__colors.push(color.c);
+                var alpha:Number = color.a != null ? color.a : this.__context.globalAlpha;
+                if ($as2) { alpha *= 100; }
+                this.__alphas.push(alpha);
+            }
+
+            /**
+            * @access private
+            */
+            function __applyFillTo(m:*) :void {
+                // @devnote swf8: m instanceof MovieClip
+                // @devnote swf9: m instanceof flash.display.Graphics
+                m.beginGradientFill(this.__type, this.__colors, this.__alphas, this.__offsets, this.__matrix);
+            }
+
+            /**
+            * @access private
+            */
+            function __applyStrokeTo(m:*) :void {
+                // @devnote swf8: m instanceof MovieClip
+                // @devnote swf9: m instanceof flash.display.Graphics
+                m.lineGradientStyle(this.__type, this.__colors, this.__alphas, this.__offsets, this.__matrix);
+            }
+        }
+      ]]></script>
+    </otherwise>
+  </switch>
+</library>

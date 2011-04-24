@@ -1,0 +1,340 @@
+<library>
+    <!-- CLASS INDEX:
+        <dataseries/>
+        <chartdata/>
+        -->
+
+    <!--- The dataseries class handles the data for charting
+        and graphing.  Multiple dataseries objects can be
+        declared on a given chart, resulting in multiple
+        sets of data displayed.  (Of beta quality.) -->
+    <class name="dataseries" datapath="${parent.parent.datapath}">
+        <!--- Public attributes -->
+        <!--- The data to be linked to the x axis.  (Also used for piechart data.) -->
+        <attribute name="xdatapath" type="string" value=""/>
+        <!--- The data to be linked to the y axis. -->
+        <attribute name="ydatapath" type="string" value=""/>
+        <!--- Is this series of data enabled? -->
+        <attribute name="dataenabled" value="true"/>
+        <!--- The path of the label data. -->
+        <attribute name="label" type="string" value=""/>
+        <!--- Color of the line, bar or pie piece. -->
+        <attribute name="datacolor" type="string" value=""/>
+        <!--- Bar resource, if any. -->
+        <attribute name="dataresource" type="string" value=""/>
+        <!--- Opacity of the bar, line or pie piece. -->
+        <attribute name="dataopacity" type="string" value="$once{null}"/>
+        <!--- (To be developed:) Whether a tooltip is available onmouseover. -->
+        <attribute name="tooltip" type="boolean" value="false"/>
+        <!--- Whether a bar has animation.  Currently only works
+            for bars, but may eventually be worked into other
+            chart types. -->
+        <attribute name="animationinit" type="string" value=""/>
+
+        <!--- Size of a label's text. -->
+        <attribute name="labeltextsize" type="string" value="10"/>
+        <!--- Color of a label's text. -->
+        <attribute name="labeltextcolor" type="color" value="#000000"/>
+        <!--- Color of the label. -->
+        <attribute name="labelcolor" type="color" value="#EEEEEE"/>
+        <!--- Color of a label's border. -->
+        <attribute name="labelborder" type="string" value="#000000"/>
+        <!--- Width of a label's border.  (Set 0 for none.)-->
+        <attribute name="labelborderwidth" type="string" value="1"/>
+
+        <!--- Barchart-specific attributes -->
+        <!--- Whether to draw labels at the bases of bars, and
+            what data to use.  No labels are drawn if not specified. -->
+        <attribute name="baselabels" type="string" value="$once{null}"/>
+        <!--- Angle of baselabels.  (Determines rotation of tick labels
+            at the bases of bars.  Not compatible with DHTML.) -->
+        <attribute name="baselabelangle" type="number" value="$once{null}"/>
+
+        <!--- Linechart-specific attributes -->
+        <!--- The size of the points. -->
+        <attribute name="pointdiameter" type="string" value="5"/>
+        <!--- Whether to draw points, and if so, which color. -->
+        <attribute name="pointsvisible" type="string" value=""/>
+        <!--- Whether to draw a line between points, and if so, which color.
+            If using data for this attribute, this will determine whether
+            to draw a line from the last point to the current point. -->
+        <attribute name="linesvisible" type="string" value=""/>
+        <!--- The thickness of the line from the last point to the current point.
+            If using data for this attribute, this will determine the thickness
+            of the line from the last point to the current point. -->
+        <attribute name="linethickness" type="string" value="1"/>
+        <!--- Whether to draw borders around points, and if so, which color. -->
+        <attribute name="pointborder" type="string" value=""/>
+        <!--- What shape to make the point. -->
+        <attribute name="pointshape" type="string" value="square"/>
+        <!--- The opacity of the points. -->
+        <attribute name="pointopacity" type="string" value="1"/>
+        <!--- The border around the points. -->
+        <attribute name="pointborderwidth" type="string" value="1"/>
+        <!--- Whether to fill beneath the line, and if so, which color. -->
+        <attribute name="fillbelow" type="string" value="$once{null}"/>
+        <!--- The opacity of the filled area below the line. -->
+        <attribute name="fbopacity" type="string" value=".2"/>
+
+        <!--- Piechart-specific attributes -->
+        <!--- Whether the area behind the pie is colored, and if so,
+            what color. -->
+        <attribute name="piebgcolor" type="color" value="$once{null}"/>
+        <!--- The color of each piece's border. -->
+        <attribute name="bordercolor" type="string" value="$once{null}"/>
+        <!--- The width of each piece's border. -->
+        <attribute name="borderwidth" type="string" value="$once{null}"/>
+        <!--- Whether certain pieces should have radii different from the
+            overall pie, and if so, how much shorter or longer, percentage-wise.
+            (e.g. A value of 10 would mean 10% greater a radius.) -->
+        <attribute name="radiusadjust" type="string" value="$once{null}"/>
+        <!--- Whether to draw the background circle, and if so, what color. -->
+        <attribute name="drawbg" type="color" value="$once{null}"/>
+        <!--- Whether to draw an outline around the background circle's
+            circumference, and if so, what color. -->
+        <attribute name="drawbgborder" type="color" value="$once{null}"/>
+        <!--- Thickness of the background circle's circumference outline. -->
+        <attribute name="bgborderwidth" type="number" value="1"/>
+        <!--- Whether the pieces should move away from the center on mouseover. -->
+        <attribute name="explode" type="boolean" value="false"/>
+        <!--- Whether or not there's a legend associated with this data.
+            Values: top, bottom, left, right,
+            manualtop, manualbottom, manualleft, manualright. -->
+        <attribute name="legend" type="string" value="$once{null}"/>
+        <!--- In a piechart, legends are generated dynamically, as there can be
+            multiple charts, and we potentially need one for each pie in the
+            chart.  Thus, for each dynamically-generated legend, we can specify
+            the attributes on each dataset. -->
+        <!--- The color of the legend border, if any. -->
+        <attribute name="legendborder" type="color" value="#000000"/>
+        <!--- The width of the legend border. -->
+        <attribute name="legendborderwidth" type="number" value="1"/>
+        <!--- Background color of the legend, if any. -->
+        <attribute name="legendbg" type="color" value="#CCCCCC"/>
+        <!--- The onmouseover highlight for legend elements. -->
+        <attribute name="legendhl" type="color" value="$once{null}"/>
+        <!--- The title of the legend.  If not null, appears at the top of
+            the legend. -->
+        <attribute name="legendtitle" type="string" value="$once{null}"/>
+        <!--- The position of the title: left, right, center. -->
+        <attribute name="legendtitleposition" type="string" value="left"/>
+        <!--- The location of the data to be used in the legend.  If unspecified,
+            the numerical values of the piechart will be used. -->
+        <attribute name="legenddatapath" type="string" value="$once{null}"/>
+        <!--- If legend is 'manual', this sets the x coordinate of the legend. -->
+        <attribute name="legendx" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the y coordinate of the legend. -->
+        <attribute name="legendy" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the width of the legend. -->
+        <attribute name="legendwidth" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the height of the legend. -->
+        <attribute name="legendheight" type="number" value="0"/>
+        <!--- Whether to show the legend when the chart is minimized, when
+            there are multiple charts. (It is strongly recommended this
+            be set to false for multiple pies.) -->
+        <attribute name="showlegendminimized" type="boolean" value="true"/>
+
+        <!--- Private attributes -->
+
+        <!--- @keywords private
+            An array of data, from an xpathQuery on xdatapath. -->
+        <attribute name="xdata" value="$once{[]}"/>
+        <!--- @keywords private
+            An array of data, from an xpathQuery on ydatapath. -->
+        <attribute name="ydata" value="$once{[]}"/>
+        <!--- @keywords private
+            An array of data, from an xpathQuery on label. -->
+        <attribute name="labeldata" value="$once{[]}"/>
+        <!--- @keywords private
+            An array of data, from an xpathQuery on dataresource. -->
+        <attribute name="rscdata" value="$once{[]}"/>
+        <!--- @keywords private
+            An array of opacity data, from an xpathQuery on dataopacity. -->
+        <attribute name="opacdata" value="$once{[]}"/>
+        <!--- @keywords private
+            An array of data, from an xpathQuery on datacolor. -->
+        <attribute name="colordata" value="$once{[]}"/>
+        <!--- @keywords private
+            If x or y data is strings, this will serialize it.
+            Will only work for one direction of data.  How
+            could you have strings in both directions? -->
+        <attribute name="serializeddata" value="$once{[]}"/>
+        
+        <!--- Barchart-specific attributes. -->
+        <!--- @keywords private
+            The data for labels along the tick access that track
+            the bases of bars. -->
+        <attribute name="baselabeldata" value="$once{[]}"/>
+        
+        <!--- Linechart-specific attributes. -->
+        <!--- @keywords private
+            Data for point diameters, if a datapath is specified
+            for point diameter. -->
+        <attribute name="pointddata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for whether points are visible, if a datapath is
+            specified for point visibility. -->
+        <attribute name="pvdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for whether a line is visible, if a datapath is
+            specified for line visibility. -->
+        <attribute name="lvdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the thickness of the line, if a datapath is
+            specified for line thickness. -->
+        <attribute name="lthickdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the color of the borders of points, if a datapath is
+            specified for the point border color. -->
+        <attribute name="pborderdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the shapes of points, if a datapath is specified
+            for the point shape. -->
+        <attribute name="pshapedata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the opacity of points, if a datapath is specified
+            for point opacity. -->
+        <attribute name="popacdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the widths of point borders, if a datapath is specified
+            for point border width. -->
+        <attribute name="pbwidthdata" value="$once{[]}"/>
+        
+        <!--- Piechart-specific attributes. -->
+        <!--- @keywords private
+            Data for the borders of pie pieces, if a datapath is specified
+            for pie piece border width. -->
+        <attribute name="borderdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the widths of pie piece borders, if a datapath is specified
+            for pie piece border width. -->
+        <attribute name="borderwidthdata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for what data is to be used for the legend.  (Piechart legends
+            behave differently from other legends, due to multiple chart
+            generation.) -->
+        <attribute name="legenddata" value="$once{[]}"/>
+        <!--- @keywords private
+            Data for the offset for piece radii, if a datapath is specified
+            for radius offset. -->
+        <attribute name="raddata" value="$once{[]}"/>
+
+        <handler name="ondata" method="sortData"/>
+        
+        <!--- Processes all the data, reading xpathQueries on locations
+            specified in attributes into different arrays, to be used in
+            the chart. -->
+        <method name="sortData" args="ignore">
+            <![CDATA[
+            var dp = this.datapath;
+
+            this.setAttribute('xdata', dp.xpathQuery(this.xdatapath));
+            this.setAttribute('ydata', dp.xpathQuery(this.ydatapath));
+            if(this.legenddatapath != null){
+                this.setAttribute('legenddata', dp.xpathQuery(this.legenddatapath));
+            }
+            if(this.dataresource != '' && this.dataresource != null){
+                this.setAttribute('rscdata', dp.xpathQuery(this.dataresource));
+            }
+            if(this.dataopacity != '' && this.dataopacity != null){
+                this.setAttribute('opacdata', dp.xpathQuery(this.dataopacity));
+            } else {
+                this.setAttribute('dataopacity', 1);
+            }
+            if(this.label != '' && this.label != null){
+                this.setAttribute('labeldata', dp.xpathQuery(this.label));
+            }
+            if(this.datacolor != '' && this.datacolor != null){
+                if(this.linesvisible.indexOf('#') != 0){
+                    this.setAttribute('colordata', dp.xpathQuery(this.datacolor));
+                }
+            }
+            if(this.baselabels != '' && this.baselabels != null){
+                this.setAttribute('baselabeldata', dp.xpathQuery(this.baselabels));
+            }
+            if(this.pointdiameter != ''&& this.pointdiameter != null){
+                this.setAttribute('pointddata', dp.xpathQuery(this.pointdiameter));
+            }
+            if(this.pointsvisible != '' && this.pointsvisible != null){
+                if(this.pointsvisible.indexOf('#') != 0){
+                    this.setAttribute('pvdata', dp.xpathQuery(this.pointsvisible));
+                }
+            }
+            if(this.linesvisible != '' && this.linesvisible != null){
+                if(this.linesvisible.indexOf('#') != 0){
+                    this.setAttribute('lvdata', dp.xpathQuery(this.linesvisible));
+                }
+            }
+            if(this.linethickness != '' && this.linethickness != null){
+                this.setAttribute('lthickdata', dp.xpathQuery(this.linethickness));
+            }
+            if(this.pointborder != '' && this.pointborder != null){
+                this.setAttribute('pborderdata', dp.xpathQuery(this.pointborder));
+            }
+            if(this.pointshape != '' && this.pointshape != null){
+                this.setAttribute('pshapedata', dp.xpathQuery(this.pointshape));
+            }
+            if(this.pointopacity != '' && this.pointopacity != null){
+                this.setAttribute('popacdata', dp.xpathQuery(this.pointopacity));
+            }
+            if(this.pointborderwidth != '' && this.pointborderwidth != null){
+                this.setAttribute('pbwidthdata', dp.xpathQuery(this.pointborderwidth));
+            }
+            if(this.bordercolor != '' && this.bordercolor != null){
+                this.setAttribute('borderdata', dp.xpathQuery(this.bordercolor));
+            }
+            if(this.borderwidth != '' && this.borderwidth != null){
+                this.setAttribute('borderwidthdata', dp.xpathQuery(this.borderwidth));
+            }
+            if(this.radiusadjust != '' && this.radiusadjust != null){
+                this.setAttribute('raddata', dp.xpathQuery(this.radiusadjust));
+            }
+            
+            parent.parent.setAttribute('seriesnumber',
+                this.countSiblingDataseries());
+            ]]>
+        </method>
+        <!--- @keywords private
+            Counts how many dataseries instances there are. -->
+        <method name="countSiblingDataseries">
+            <![CDATA[
+            var siblength = parent.subnodes.length;
+            var sibnum = 0;
+            for(var i = 0; i <= siblength; i++){
+                if(parent.subnodes[i] instanceof lz.dataseries){
+                    sibnum++;
+                }
+            }
+            return sibnum;
+            ]]>
+        </method>
+        <!--- @keywords private
+            To be developed: In the event of string data, converts
+            to numbers.  Not entirely sure this is necessary.  After
+            all, how do you comparatively quantize strings? -->
+        <method name="serializeStringData">
+            <![CDATA[
+            
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+    
+    <!--- A container class for dataseries instances.  Helps organize and
+        locate the data. All dataseries tags in a chart must be children
+        of this class. -->
+    <class name="chartdata" datapath="${parent.datapath}"/>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

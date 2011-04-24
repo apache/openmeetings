@@ -1,0 +1,358 @@
+<library>
+    <include href="base/baseformitem.lzx" />
+
+    <class name="_internalinputtext" extends="inputtext">
+        <method name="construct" args="parent, args">
+            // args from parent
+            if ( parent['textwidth'] != null ) args.textwidth = parent.textwidth;
+            if ( parent['_initialtext'] != null ) args.text = parent._initialtext;
+            if ( parent['password'] != null ) args.password = parent.password;
+            if ( parent['multiline'] != null ) args.multiline = parent.multiline;
+            super.construct(  parent, args );
+        </method>
+        <doc>
+          <text>Class for use in edittext, takes its parent's arguments
+                when it constructs.</text>
+          <tag name="access"><text>private</text></tag>
+        </doc>
+    </class>
+
+
+    <!--- This component provides the look and feel for user editable text, data
+          binding, and focus events. -->
+    <class name="edittext" extends="baseformitem"
+           focusable="false" defaultplacement="content">
+        <!--- The text that appears in the component. -->
+        <attribute name="text" type="text"/>
+
+        <!--- Set to true for multiple lines.
+              @keywords final -->
+        <attribute name="multiline" value="false"/>
+
+        <!--- Set to true for a password field. Text will appear as ****.
+              @keywords final -->
+        <attribute name="password" value="false"/>
+
+        <!--- Set to true if you plan to change the width or height of the
+              component at run-time.
+              @keywords final -->
+        <attribute name="resizable" value="false"/>
+
+        <!--- The height of the edit text box. -->
+        <attribute name="height" value="26"/>
+        <!--- The width of the edit text box. -->
+        <attribute name="width" value="106"/>
+
+        <!--- the y position of the text. default: centered, unless it is mutltiline -->
+        <attribute name="text_y"
+            value="${multiline ? 2 : Math.round(((this.height - this.field.getTextHeight())/2))} " type="number"/>
+
+        <!--- The maximum number of chars that can be entered. -->
+        <attribute name="maxlength" value="null" type="number"/>
+
+        <!--- A regular expression describing set of characters allowed in
+              this field. Restrict the characters that can be entered to a
+              pattern specified by a regular expression. Currently only the
+              expression [ ]* enclosing a set of characters or character
+              ranges, preceded by an optional "^", is supported. 
+              examples: [0-9]* , [a-zA-Z0-9]*, [^0-9]* -->
+        <attribute name="pattern" type="string" value=""/>
+
+        <!--- @keywords private
+        setting the fgcolor of text has the unfortunate effect of setting
+        the hilite color as well, so it is disabled here-->
+        <attribute name="fgcolor" setter="" value="#000000"/>
+
+        <!--- @keywords private -->
+        <attribute name="_fgcolor" value="0"/>
+
+        <!--- @keywords private -->
+        <attribute name="_initialtext" value="" type="string"/>
+
+        <!--- @keywords private -->
+        <method name="init">
+            <![CDATA[
+            if (!this.hassetwidth) {
+                if (typeof(this.textwidth) == "undefined") {
+                    this.textwidth = 100;
+                }
+                setAttribute('width', this.textwidth + 6);
+            }
+            super.init();
+            if ( this._initialtext != null ){
+                this.setAttribute('text', this._initialtext );
+            }
+
+            field.setAttribute('maxlength', this.maxlength);
+            field.setAttribute('pattern', this.pattern);
+
+            ]]>
+        </method>
+
+        <!--- @deprecated Use setAttribute('text', ...) instead.
+              @keywords private -->
+        <method name="setText" args="t">
+            if ($debug) Debug.warn("edittext.setText is deprecated. Use setAttribute instead");
+            this.setAttribute('text', t);
+        </method>
+
+        <!--- @keywords private -->
+        <setter name="text" args="t">
+            <![CDATA[
+            // text value and event sent by this.field.ontext handler
+            if (this._initcomplete) {
+                this.setValue(t, true);
+                this.field.setAttribute('text', t);
+            } else {
+                this.text = t;
+                this._initialtext = t;
+            }
+            ]]>
+        </setter>
+
+        <!--- Clears the text field. -->
+        <method name="clearText" >
+            this.setAttribute('text', "");
+        </method>
+        
+        <!--- @deprecated Use setAttribute('maxlength', ...) instead.
+              @keywords private -->
+        <method name="setMaxlength" args="n">
+          if ($debug) Debug.warn("edittext.setMaxlength is deprecated. Use setAttribute instead");
+          this.setAttribute('maxlength', n);
+        </method>
+
+
+        <!--- @deprecated Use setAttribute('pattern', ...) instead.
+              @keywords private -->
+        <method name="setPattern" args="r">
+          if ($debug) Debug.warn("edittext.setPattern is deprecated. Use setAttribute instead");
+          this.setAttribute('pattern', r);
+        </method>
+
+        <!--- @keywords private -->
+        <setter name="maxlength" args="n">
+            if (this['maxlength'] === n) return;
+            this.maxlength = n;
+            if (this.isinited) field.setAttribute('maxlength', n);
+            if (this['onmaxlength']) this.onmaxlength.sendEvent(n);
+        </setter> 
+
+        <!--- @keywords private -->
+        <setter name="pattern" args="n">
+            if (this['pattern'] === n) return;
+            this.pattern = n;
+            if (this.isinited) field.setAttribute('pattern', n);
+            if (this['onpattern']) this.onpattern.sendEvent(n);
+        </setter>
+
+
+        <!--- Positions the text selection within the text field.
+              @param Number start: The beginning of the text selection, or 
+              the position for the text cursor if no end is given. 
+              The index is 0 based.
+              @param Number end: The end of the text selection. Optional. 
+              If not given, then the text cursor is positioned at the start
+              point, but no text is selected.-->
+        <method name="setSelection" args="start,end=null">
+            field.setSelection(start, end);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="getFocusRect"  >
+           var fx = this.getAttributeRelative('x',canvas);
+           var fy = this.getAttributeRelative('y',canvas);
+           var fw = this.getAttributeRelative('width',canvas);
+           var fh = this.getAttributeRelative('height',canvas);
+           return [fx,fy,fw,fh];
+        </method>
+
+        <view name="_outerbezel" 
+            width="${parent.width}" height="${parent.height}">
+            <state applied="${this.classroot.enabled}" pooling="true">
+                <view bgcolor="0x989898" width="100%" height="1"/>
+                <view bgcolor="0x989898" width="1" height="100%"/>
+                <view bgcolor="0xe1e1e1" width="1" align="right" height="100%"/>
+                <view bgcolor="0xe1e1e1" valign="bottom" width="100%" height="1"/>
+            </state>
+        </view>
+        <view name="_innerbezel" 
+            x="1" y="1" width="${parent.width-2}" height="${parent.height-2}">
+            <state applied="${this.classroot.enabled}" pooling="true">
+                <view bgcolor="0x262626" width="${parent.width - 1}" height="1"/>
+                <view bgcolor="0x262626" width="1" height="100%"/>
+                <view bgcolor="0xefefef" valign="bottom" width="100%" height="1"/>
+            </state>
+            <state applied="${! this.classroot.enabled}" pooling="true">
+                <view bgcolor="0xa4a4a4" width="100%" height="100%"/>
+                <view bgcolor="white" x="1" y="1" width="${parent.width - 2}" height="${parent.height - 2}"/>
+            </state>
+        </view>
+        <view name="_face"
+            x="2" y="2" width="${parent.width-3}" height="${parent.height-4}"/>
+
+        <setter name="font" args="f">
+            super.setAttribute('font', f);
+            if (this['field']) field.setAttribute('font', f);
+        </setter>
+        <setter name="fontsize" args="f">
+            super.setAttribute('fontsize', f);
+            if (this['field']) field.setAttribute('fontsize', f);
+        </setter>
+        <setter name="fontstyle" args="f">
+            super.setAttribute('fontstyle', f);
+            if (this['field']) field.setAttribute('fontstyle', f);
+        </setter>
+
+        <view name="content" x="3" y="${this.classroot.text_y}"
+            width="${parent.width - 4}"
+            height="${parent.height - y - 2}" /> <!-- -2 to account for border of edittext -->
+
+        <_internalinputtext name="field"
+            password="$once{parent.password}"
+            x="3" y="${this.classroot.text_y}"
+            width="${parent.width - 4}"
+            height="${parent.height - y - 2}" > <!-- -2 to account for border of edittext -->
+            
+            <handler name="onfocus" args="s">
+                if (parent['onfocus']) parent.onfocus.sendEvent(s);
+            </handler>
+            <handler name="onblur" args="s">
+                if (parent['onblur']) parent.onblur.sendEvent(s);
+            </handler>
+            <handler name="onkeyup" args="kc"> <![CDATA[
+                if (parent['onkeyup']) parent.onkeyup.sendEvent(kc);
+                if (kc == 13 && parent.doesenter) parent.doEnterUp();
+            ]]>
+            </handler>
+            <handler name="onkeydown" args="kc"> <![CDATA[
+                if (parent['onkeydown']) parent.onkeydown.sendEvent(kc);
+                if (kc == 13 && parent.doesenter) parent.doEnterDown();
+            ]]>
+            </handler>
+
+            <method name="getFocusRect" >
+                return parent.getFocusRect();
+            </method>
+            <handler name="ontext">
+            <![CDATA[
+                // Don't use parent.updateData() or parent.setAttribute('text') because they call the text setter - which will call this method or clobber _initialtext
+                parent.text = this.getText();
+                if (parent['ontext'] && parent.ontext.ready) parent.ontext.sendEvent(parent.text);
+                parent.setValue(parent.text, false);
+            ]]>
+            </handler>
+
+         </_internalinputtext>
+
+        <!--- Returns the string displayed in this component, like getValue().
+              @return String: the string displayed. -->
+        <method name="getText">
+            if (this._initcomplete) {
+                 return this.field.getText();
+            } else {
+                return this._initialtext;
+            }
+        </method>
+
+        <!---
+
+           For backward compatibility, applyData uses the LFC
+           interface, and acceptValue uses applyData.  TODO:
+           [2008-11-17 ptw] Fixed in New Components
+
+           @keywords private
+        -->
+        <method name="applyData" args="d">
+            this.field.applyData( d );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="acceptValue" args="d, type=null">
+            this.applyData( d );
+        </method>
+
+        <!---
+           For backward compatibility, updateData causes the text of
+           the component to be updated, as opposed to presentValue,
+           which will call getValue (and not update).
+
+           @keywords private
+        -->
+        <method name="updateData">
+            this.updateText();
+            return this.text;
+        </method>
+
+        <!--- Updates the text property of the component to the text that is
+             entered in its input field. -->
+        <method name="updateText">
+            this.setAttribute('text', this.field.getText() );
+        </method>
+
+        <!--- Returns string displayed in this component, like getText().
+              @return String: the string displayed. -->
+        <method name="getValue">
+            return  this.field.getText();
+        </method>
+        <!--- TODO: [2008-11-14 ptw] There needs to be a simpler way
+             to declare simple dependencies like this in LZX
+             @access private
+        -->
+        <method name="$lzc$getValue_dependencies" args="who, self">
+          self = this.field
+          return self.$lzc$getText_dependencies(who, self);
+        </method>
+
+
+        <!--- @keywords private -->
+        <method name="_showEnabled">
+            if (_enabled) {
+                this.field.setAttribute('enabled', true);
+                this.field.setAttribute('fgcolor', this.style != null ? this.style.textcolor : null);
+                this._face.setAttribute( 'opacity', 1 );
+                this._outerbezel.setAttribute('frame', 1 );
+                this._innerbezel.setAttribute('frame', 1 );
+            } else {
+                this.field.setAttribute('enabled', false);
+                this.field.setAttribute('width', this.width - 6);
+                this.field.setAttribute('height', this.height - 6);
+                this.field.setAttribute('fgcolor', this.style != null ? this.style.textdisabledcolor : null);
+                this._face.setAttribute( 'opacity', .65 );
+                this._outerbezel.setAttribute('frame', 2 );
+                this._innerbezel.setAttribute('frame', 2 );
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                //field.setAttribute('bgcolor',s.textfieldcolor);
+                _face.setAttribute('bgcolor',s.textfieldcolor);
+            }
+        </method>
+        <doc>
+          <tag name="shortdesc">
+            <text>
+              text input component with lz components look and feel
+          </text></tag>
+          <text>
+            <p>The <varname>edittext</varname> tag provides a text input field which has a
+              look and feel to match the lz component set.  It can accept any
+              <tagname>inputtext</tagname> attribute.</p>
+
+            <example title="Simple edittext">
+              &lt;canvas bgcolor="blue" height="60" &gt;
+              &lt;edittext width="200" x="20" y="20"&gt;default text goes here&lt;/edittext&gt;
+              &lt;/canvas&gt;
+            </example>
+
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

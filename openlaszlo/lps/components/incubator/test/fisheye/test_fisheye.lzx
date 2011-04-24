@@ -1,0 +1,41 @@
+<canvas width="100%" height="100%">
+    <include href="incubator/fisheye_lib.lzx" />
+
+    <resource name="csv"        src="upload_csv.png"        />
+    <resource name="db"         src="upload_db.png"         />
+    <resource name="buckets"    src="configure_buckets.png" />
+
+    <view width="100%" height="50" bgcolor="#aaaaaa" y="200">
+    
+        <fisheye width="100%" height="100%">
+            <fisheye_item icon="csv">
+                Tooltip1
+                <handler name="onclick">
+                    Debug.write("Clicked CSV");
+                </handler>
+            </fisheye_item>
+            
+            <fisheye_item icon="db">
+                tooltip2
+                <handler name="onclick">
+                    Debug.write("Clicked DB");
+                </handler>
+            </fisheye_item>
+            
+            
+            <fisheye_item icon="buckets">
+                tooltip3
+                <handler name="onclick">
+                    Debug.write("Clicked Buckets");
+                </handler>
+            </fisheye_item>
+            
+        </fisheye>
+    
+    </view>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

@@ -1,0 +1,14 @@
+/*
+xmlrpc.js beta version 1
+Tool for creating XML-RPC formatted requests in JavaScript
+
+Copyright 2001 Scott Andrew LePera
+scott@scottandrew.com
+http://www.scottandrew.com/xml-rpc
+
+License: 
+You are granted the right to use and/or redistribute this 
+code only if this license and the copyright notice are included 
+and you accept that no warranty of any kind is made or implied 
+by the author.
+*/

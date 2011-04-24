@@ -1,0 +1,801 @@
+<library>
+
+    <class name="rpc" extends="node">
+
+        <!--- Load remote object during init. If false, create remote object by
+              calling load(). Default is true. -->
+        <attribute name="autoload" value="true" type="boolean" />
+
+        <!--- The remote proxy object. Proxy is set after the rpc object
+              loads. Proxy contains client-side function stubs to remote
+              methods. Each method takes an array of arguments and a delegate
+              like:
+
+                myrpc.proxy.remoteFunc( [ p1, p2, ..., pN ], delegate );
+
+              Remote methods with no arguments are passed in an empty array
+              like:
+
+                myrpc.proxy.otherRemoteFunc( [], delegate );
+
+              The delegate is used to handle the return value since RPC calls
+              are asynchronous.
+
+              @keywords readonly -->
+        <attribute name="proxy" value="null" type="expression" />
+
+        <!-- holds meta data from server, about proxy functions -->
+        <attribute name="proxyinfo" value="null" type="expression" />
+
+        <!--- Make connection secure between client and the LPS secure
+             (HTTPS). Default is false. -->
+        <attribute name="secure" value="false" type="boolean" />
+
+        <!--- The port to use for the secure socket between the client and the
+              LPS. If secure is false, this value is ignored.  -->
+        <attribute name="secureport" value="null" type="number" />
+
+        <!--- This event is triggered when the remote object is loaded.
+              @access public -->
+        <event name="onload" />
+        <!--- This event is triggered when the remote object is unloaded.
+              @access public
+        -->
+        <event name="onunload" />
+        <!--- This event is triggered when declared inner calls do not handle
+              their ondata events. 
+              @access public -->
+        <event name="ondata" />
+        <!--- This event is triggered when an error or timeout occurs associated
+              with getting this object or calling one of its remote methods. 
+              @access public -->
+        <event name="onerror" />
+
+        <!--- @keywords private -->
+        <attribute name="_loadDel" value="null" type="expression" />
+        <!--- @keywords private -->
+        <attribute name="_unloadDel" value="null" type="expression" />
+        <!--- @keywords private -->
+        <attribute name="_registered" value="${[]}" type="expression" />
+        <!--- Flag to verify with proxy whether declared calls exist.
+              @keywords private -->
+        <attribute name="_verifywithproxy" value="true" type="boolean" />
+
+        <!--=================================================================-->
+        <!-- public methods                                                  -->
+        <!--=================================================================-->
+
+        <!--- ABSTRACT: method to load the remote object interface. -->
+        <method name="load">
+            Debug.error(this.name, "load method not defined");
+        </method>
+
+        <!--- Interface to unload proxy stub. Default is to null proxy. -->
+        <method name="unload">
+            this._unloadDel.execute( { status: 'ok' } );
+        </method>
+
+
+        <!--=================================================================-->
+        <!-- private methods                                                 -->
+        <!--=================================================================-->
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this._loadDel = new LzDelegate(this , "_load");
+            this._unloadDel = new LzDelegate(this , "_unload");
+            if (this.autoload) this.load();
+        </method>
+
+
+        <!--- @keywords private -->
+        <method name="_load" args="o">
+        <![CDATA[
+            if (o.status == "error") {
+                if (this.onerror != LzDeclaredEvent) {
+                    this.onerror.sendEvent(o.message + ' ' + o['error']);
+                } else {
+                    Debug.error(this.name, "load error:", o.message);
+                }
+                return false;
+            }
+
+            if (this._setup(o) && this.onload) {
+                this.onload.sendEvent();
+            }
+        ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_unload" args="o">
+        <![CDATA[
+            if (o.status == "error") {
+                if (this.onerror != LzDeclaredEvent) {
+                    this.onerror.sendEvent(o.message, o['error']);
+                } else {
+                    Debug.error(this.name, "load error:", o.message);
+                }
+                return false;
+            }
+            this.proxy = null;
+            this.proxyinfo = null;
+            if (this.onunload) this.onunload.sendEvent();
+        ]]>
+        </method>
+
+        <!--- Register a remote function to a call member
+              @keywords private -->
+        <method name="_register" args="callcontext,funcname">
+            <![CDATA[
+            if ( this.proxy == null ) {
+                this._registered.push( { c: callcontext, f: funcname } );
+                return;
+            }
+            
+            //If the remotecall is registered dynamically AFTER the remotecontext is already loaded 
+            //This part becomes active and the STUB is created swagner 12.03.2009
+            
+            if (!this.proxy[funcname]) {
+                this.proxy[funcname] = this.makeProxyStubFunction(funcname);
+            }
+
+            if (this._verifywithproxy && typeof(this.proxy[funcname]) != 'function') {
+                Debug.write(this.name, "warning: function", funcname, "not defined");
+                //continue;
+            }
+            
+            for (var k in this.proxy) {
+                var tpka = this.proxy[k]['args'];
+                if (tpka == null) {
+                    tpka = this.proxy[k].args = {};
+                }
+                tpka.secure = this.secure;
+                tpka.secureport = this.secureport;
+                tpka.scope = this.scope;
+                tpka.attributename = this.attributename;
+                tpka.objectreturntype = this.objectreturntype;
+            }
+            //c._funcref = this.proxy[funcname];
+            
+            callcontext._funcref = this.proxy[funcname];
+            ]]>
+        </method>
+
+
+        <!--- If error, returns false, else true.
+              @param Object o: data object returned from server. Can contain an
+              error or the actual client object.
+              @keywords private
+        -->
+        <method name="_setup" args="o">
+        <![CDATA[
+            this.proxyinfo = o.stub;
+
+            if (this.proxy == null) {
+                this.proxy = {};
+            }
+
+            // register proxy functions for remotecall objects using
+            // remotecontext reference.
+            for (var i=0; i < this._registered.length; i++) {
+                var item = this._registered[i];
+                var fname = item.f;
+                this.proxy[fname] = this.makeProxyStubFunction(fname);
+                item.c['_funcref'] = this.proxy[fname];
+            }
+
+            if (this.subnodes) {
+                for (var k=0, len=this.subnodes.length; k<len; k++) {
+                    var c = this.subnodes[k];
+                    if ( ! (c instanceof lz.remotecall) ) continue;
+
+                    // funcname is required
+                    var fn = c['funcname'];
+
+
+                    if (fn == null) continue;
+
+                    if (c['name'] == null) c['name'] = fn;
+
+                    if (!this.proxy[fn]) {
+                        this.proxy[fn] = this.makeProxyStubFunction(fn);
+                    }
+
+                    if (this._verifywithproxy && typeof(this.proxy[fn]) != 'function') {
+                        Debug.write(this.name, "warning: function", fn, "not defined");
+                        continue;
+                    }
+                    c._funcref = this.proxy[fn];
+                }
+            }
+            return true;
+        ]]>
+        </method>
+
+
+       <method name="makeProxyStubFunction" args="fn">
+        <![CDATA[                                                
+                 return function(...ignore) { Debug.write('base rpc does not automatically define proxy stubs'); };
+       ]]>                                                
+       </method>
+
+
+        <doc>
+            <tag name="shortdesc"><text>remote procedure call</text></tag>
+            <text>
+                <p>The <tag>&lt;rpc&gt;</tag> tag is the abstract base class for RPC classes. Subclasses 
+                    must implement the <method>load()</method> method, which is responsible for creating 
+                    the proxy object. The proxy object contains a set of function stubs 
+                    that invoke a remote function (or procedure) over the network. It's 
+                    up to the caller of the stub function to know what parameters need to 
+                    be passed in by looking at what the backend remote function expects. 
+                    If calling a JavaRemoting (<sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>) function, looking at the associated 
+                    Java API will be necessary. If calling a SOAP (<sgmltag class="element" role="lz.soap">&lt;soap&gt;</sgmltag>) function, the 
+                    developer will need to look at the corresponding operation in a WSDL file.</p>
+                <p>The implementation of this class can be found in lps/components/rpc/rpc.lzx. For details, see the 
+                    <a href="../developers/rpc.html">RPC</a> chapter of the Developer's Guide.</p>
+                <p>Objects derived from rpc use function stubs in the proxy object to invoke a remote function. 
+                    Each function stub expects an array of arguments and a delegate to deal with the return value, 
+                    respectively. Both the array and the delegate are required. If a function has no arguments, 
+                    rpc passes in an empty array.</p>
+                
+                <example title="Invoking remote function using proxy function stub">
+    &lt;canvas debug="true" height="280"&gt;
+    
+        &lt;debug x="10" y="40" width="470" height="230" /&gt;
+    
+        &lt;soap name="temperature" autoload="false"
+            wsdl="http://developerdays.com/cgi-bin/tempconverter.exe/wsdl/ITempConverter"&gt;
+            &lt;method name="init"&gt;
+                super.init();
+                Debug.debug('soap service loading...');
+                this.load();
+            &lt;/method&gt;
+        &lt;handler name="onload"&gt;
+            Debug.debug('temperature service loaded!');
+            Debug.debug('---');
+    
+            // don't allow others to call RPC object until proxy is loaded.
+            canvas.convert.setAttribute('visible', true);
+            &lt;/handler&gt;   
+            &lt;/soap&gt; 
+            &lt;button name="convert" text="convert" x="10" y="10" visible="false"&gt;      
+            &lt;attribute name="myDel" value="$once{new LzDelegate(this, 'myhandler')}" /&gt;       
+            &lt;handler name="onclick"&gt;
+            var f = 100;
+            canvas.temperature.proxy.FtoC([ f ], this.myDel)
+            Debug.debug('Invoking FtoC...');
+        &lt;/handler&gt;
+        &lt;method name="myhandler" args="data"&gt;
+            Debug.debug('got data: %w', data);
+        &lt;/method&gt;
+    
+        &lt;/button&gt;
+    
+    &lt;/canvas&gt;
+                </example>
+                <p>Alternatively, you can use remotecall for a more declarative approach to invoking functions. 
+                    See the <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag> reference or the <link linkend="rpc">RPC chapter</link> of the Developer's Guide for more information.</p>
+                <example title="Invoking remote function using remotecall">
+    &lt;canvas debug="true" height="280"&gt;
+    
+        &lt;debug x="10" y="40" width="470" height="230" /&gt;
+    
+        &lt;soap name="temperature" autoload="false"
+            wsdl="http://developerdays.com/cgi-bin/tempconverter.exe/wsdl/ITempConverter"&gt;
+    
+        &lt;method name="init"&gt;
+            super.init();
+            Debug.debug('soap service loading...');
+            this.load();
+        &lt;/method&gt;
+    
+        &lt;handler name="onload"&gt;
+            Debug.debug('temperature service loaded!');
+            Debug.debug('---');
+    
+            // don't allow others to call RPC object until proxy is loaded.
+            canvas.convert.setAttribute('visible', true);
+        &lt;/handler&gt;
+    
+        &lt;remotecall funcname="FtoC"&gt;
+        &lt;param value="100" /&gt;
+    
+            &lt;handler name="ondata" args="value"&gt;
+                Debug.debug('got data: %w', value);
+                &lt;/handler&gt;
+                &lt;handler name="onerror" args="errmsg"&gt;
+                Debug.debug('error: %w', errmsg);
+            &lt;/handler&gt;
+    
+        &lt;/remotecall&gt;
+    
+    &lt;/soap&gt;
+    
+    &lt;button name="convert" text="convert" x="10" y="10" visible="false"&gt;
+        &lt;handler name="onclick"&gt;
+            canvas.temperature.FtoC.invoke();
+        Debug.debug('Invoking FtoC...');
+        &lt;/handler&gt;
+    &lt;/button&gt;
+    
+    &lt;/canvas&gt;
+                </example>
+                <p><b>See Also:</b></p>
+                    <ul>
+                        <li>
+                            <sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.soap">&lt;soap&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.xmlrpc">&lt;xmlrpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <link linkend="rpc">Developer's Guide: RPC chapter</link>
+                        </li>
+                        <li>
+                            <link linkend="rpc-javarpc">Developer's Guide: JavaRPC chapter</link>
+                        </li>
+                        <li>
+                            <link linkend="rpc-soap">Developer's Guide: SOAP chapter</link>
+                        </li>
+                        <li>
+                            <link linkend="rpc-xmlrpc">Developer's Guide: XML-RPC chapter</link>
+                        </li>
+                    </ul>
+                    
+            </text>
+        </doc>
+    </class>
+
+    <class name="remotecall" extends="node">
+        <!--- Name of remotecall. Default is value of funcname attribute. -->
+        <attribute name="name" value="$once{null}" />
+        <!--- Name of remote function this remotecall refers. -->
+        <attribute name="funcname" value="$once{null}" type="string" />
+        <!--- If an LzDataset or an LzDataElement is set, return values will
+              be mapped into the dataobject. -->
+        <attribute name="dataobject" value="null" type="expression" />
+        <!--- If set, this is the remote object context in which funcname is run
+              from. -->
+        <attribute name="remotecontext" value="null" type="expression" />
+
+        <!--- If true, a remote response returns an object. The object of a
+             successful response will contain the return value (data), an object
+             containing specific information about the request (info), and the
+             associated unique sequence request number (seqnum), e.g., { data:
+             ..., info: ..., seqnu: ...}. A failure response returns an object
+             that contains the error message (message), the error type (error),
+             an object containing specific information about the request (info),
+             and the associated unique sequence request number (seqnum), e.g., {
+             message: ..., error: ..., info: ..., seqnum: ...}. If false, an
+             error just returns the error message and a successful response
+             returns a value. Default is false. -->
+        <attribute name="inforeturnvalue" value="false" type="boolean" />
+
+        <!--- This event is triggered when data is returned from a remote
+              method. -->
+        <event name="ondata" /> 
+        <!--- This event is triggered when an error occurs. -->
+        <event name="onerror" />
+
+        <!--- Reference to remote function.
+              @keywords private readonly -->
+        <attribute name="_funcref" value="null" type="expression" />
+
+        <!--- Call this method to invoke function with passed in parameters. 
+              @param Array params: array of parameters. A parameter can be an
+              object, array, or primitive type. This is optional if
+              &lt;param&gt;s have been declared this remotecall''s body.
+              @param LzDelegate delegate: (optional) the remotecall will use the
+              passed in delegate, otherwise it will run the default. Note: if
+              LzDelegate passed in contains a property called 'dataobject', the
+              return value will be mapped to it. The dataobject property can be
+              a dataset or a LzDataElement object.
+              @return Number: the unique sequence request number associated with
+              this call, or -1 if there was a problem invoking this method. -->
+        <method name="invoke" args="params = null, delegate = null">
+        <![CDATA[
+            if (typeof(this._funcref) != 'function') {
+                Debug.error(this.name, "could not invoke; is remote service loaded?");
+                return -1;
+            }
+
+            if (params == null) {
+                params = [];
+                if (this.subnodes != null) {
+                    for (var i=0; i < this.subnodes.length; i++) {
+                        // if getValue method is declared in param, call that
+                        // instead to get value.
+                        var tsi = this.subnodes[i];
+                        params[i] = tsi.getValue();
+                    }
+                }
+            } else if (! (params instanceof Array)) {
+                Debug.error(this.name, "first argument (params) is not an array");
+                return -1;
+            }
+
+            if (delegate == null) {
+                delegate = this._delegate
+            } else if ( ! ( delegate instanceof LzDelegate ) ) {
+                Debug.error(this.name, "second argument (delegate) is not a delegate");
+                return -1;
+            }
+
+            return this._funcref(params, delegate);
+        ]]>
+        </method>
+
+
+        <!--- @keywords private -->
+        <method name="init">
+            if (this.funcname == null) {
+                Debug.error(this.name, "required funcname is not set");
+                return;
+            }
+
+            super.init();
+
+            if ( this.name == null ) {
+                this.setAttribute('name', this.funcname);
+            }
+
+            if (this.remotecontext != null) {
+                this.remotecontext._register(this, this.funcname);
+            }
+
+            this._delegate = new LzDelegate(this, '_handler');
+            this._delegate.dataobject = this.dataobject;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_handler" args="o">
+        <![CDATA[
+            // responseheaders are SOAP specific
+            if (o.opinfo['responseheaders'] != null) {
+                var r = new LzDataElement("root", { }, o.opinfo.responseheaders);
+                if ( this.remotecontext != null && this.remotecontext.responseheaders != null) {
+                    this.remotecontext.responseheaders.setAttribute("data", r);
+                } else if ( parent.responseheaders != null ) {
+                    parent.responseheaders.setAttribute("data", r);
+                }
+            }
+
+            var retval;
+            if (o.status == 'error') {
+                retval = 
+                    inforeturnvalue
+                    ? { message: o.message, error: o['error'], 
+                        info: o.opinfo, seqnum: o.seqnum }
+                    :  o.message;
+
+                if (this.onerror != LzDeclaredEvent) {
+                    this.onerror.sendEvent(retval);
+                } else if (parent.onerror != LzDeclaredEvent) {
+                    parent.onerror.sendEvent(retval);
+                } else if (this.remotecontext != null &&
+                           this.remotecontext['onerror'] &&
+                           this.remotecontext.onerror != LzDeclaredEvent
+                           ) {
+                    this.remotecontext.onerror.sendEvent(retval);
+                } else {
+                    Debug.error(this.name, "remotecall onerror:", o.error);
+                }
+                return;
+            }
+
+            retval = 
+                inforeturnvalue
+                ? { data: o.data, info: o.opinfo, seqnum: o.seqnum }
+                : o.data;
+
+            if (this['ondata'] && this.ondata != LzDeclaredEvent) {
+                this.ondata.sendEvent(retval);
+            } else if (parent['ondata'] && parent.ondata != LzDeclaredEvent) {
+                parent.ondata.sendEvent(retval);
+            } else if (this.remotecontext != null &&
+                       this.remotecontext['ondata']) {
+                this.remotecontext.ondata.sendEvent(retval);     
+            }
+        ]]>
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>A class to use rpc methods declaratively</text></tag><text>
+            <p>The &lt;remotecall&gt; element allows for a more declarative style approach to using RPC functions. Calling 
+            function stubs will generally result in your code looking very scripty.</p>
+            <p>Remotecall requires the funcname attribute to be set. Funcname refers to the remote function name. By default, 
+                the name of the remotecall is the same as funcname unless explicitly set to something else. Multiple remotecalls 
+                can refer to the same funcname, but remotecall names must be unique within the same element context.</p>
+            <p>&lt;param&gt; elements declared in the remotecall body are used when invoking the remote function. The declaration order of 
+            &lt;param&gt;s should match what the remote function expects.</p>
+                <example title="Using RPC methods">
+    &lt;canvas debug="true" height="280"&gt;
+    
+        &lt;debug x="10" y="40" width="470" height="230" /&gt;
+        
+        &lt;soap name="temperature" autoload="false"
+        wsdl="http://developerdays.com/cgi-bin/tempconverter.exe/wsdl/ITempConverter"&gt;
+        
+            &lt;method name="init"&gt;
+                super.init();
+                Debug.debug('soap service loading...');
+                this.load();
+            &lt;/method&gt;
+            
+            &lt;handler name="onload"&gt;
+            Debug.debug('temperature service loaded!');
+            Debug.debug('---');
+            
+            // don't allow others to call RPC object until proxy is loaded.
+            canvas.convert.setAttribute('visible', true);
+            &lt;/handler&gt;
+            
+            &lt;handler name="ondata" args="value"&gt;
+                Debug.debug('soap object parent ondata: %w', value);
+            &lt;/handler&gt;
+            
+            &lt;remotecall <em>name="ftoc1" funcname="FtoC"</em>&gt;
+                &lt;param value="100" /&gt;
+            &lt;/remotecall&gt;
+            
+            &lt;remotecall <em>name="ftoc2" funcname="FtoC"</em>&gt;
+                &lt;param value="200" /&gt;
+                &lt;handler name="ondata" args="value"&gt;
+                    Debug.debug('ftoc ondata: %w', value);
+                &lt;/handler&gt;
+            &lt;/remotecall&gt;
+        
+        &lt;/soap&gt;
+        
+        &lt;view name="convert" x="10" y="10" visible="false" 
+                layout="axis: x; spacing: 5"&gt;
+            &lt;button text="convert 100F to C"&gt;
+                &lt;handler name="onclick"&gt;
+                canvas.temperature.ftoc1.invoke()
+                Debug.debug('Invoking FtoC 1...');
+                &lt;/handler&gt;
+            &lt;/button&gt;
+                &lt;button text="convert 200F to C"&gt;
+                &lt;handler name="onclick"&gt;
+                    canvas.temperature.ftoc2.invoke()
+                    Debug.debug('Invoking FtoC 2...');
+                &lt;/handler&gt;
+            &lt;/button&gt;
+        &lt;/view&gt;
+    
+    &lt;/canvas&gt;
+                </example>
+                    <p>Any events not handled by remotecall can be handled by a remotecall's parent. A remotecall element can be 
+                        declared anywhere in the view hierarchy. However, if it's not within an RPC object 
+                        (like &lt;soap&gt;, &lt;javarpc, &lt;xmlrpc&gt;), the remotecontext attribute must be set. The remotecontext tells the 
+                        remotemethod which RPC object to refer to when invoking the remote method.</p>
+
+                <example>
+    &lt;canvas debug="true" height="280"&gt;
+    
+        &lt;debug x="10" y="40" width="470" height="230" /&gt;
+        
+        &lt;soap name="temperature" autoload="false"
+                wsdl="http://developerdays.com/cgi-bin/tempconverter.exe/wsdl/ITempConverter"&gt;
+        
+            &lt;method name="init"&gt;
+                super.init();
+                Debug.debug('soap service loading...');
+                this.load();
+            &lt;/method&gt;
+            
+            &lt;handler name="onload"&gt;
+                Debug.debug('temperature service loaded!');
+                Debug.debug('---');
+                
+                // don't allow others to call RPC object until proxy is loaded.
+                canvas.convert.setAttribute('visible', true);
+            &lt;/handler&gt;
+            
+            &lt;handler name="ondata" args="value"&gt;
+                Debug.debug('soap object ondata: %w', value);
+                &lt;/handler&gt;
+                
+                &lt;handler name="onerror" args="errmsg"&gt;
+                Debug.debug('error: %w', errmsg);
+            &lt;/handler&gt;
+        
+        &lt;/soap&gt;
+        
+        &lt;view name="convert" x="10" y="10" visible="false" 
+                layout="axis: x; spacing: 5"&gt;
+        
+            &lt;button text="convert 100F to C"&gt;
+            
+                &lt;handler name="onclick"&gt;
+                    this.FtoC.invoke()
+                    Debug.debug('Converting 100F to Celsius...');
+                &lt;/handler&gt;
+                
+                &lt;remotecall funcname="FtoC" 
+                    remotecontext="$once{canvas.temperature}"&gt;
+                    &lt;param value="100" /&gt;
+                &lt;/remotecall&gt;
+            
+            &lt;/button&gt;
+            
+            &lt;button text="convert 200F to C"&gt;
+            
+                &lt;handler name="onclick"&gt;
+                this.FtoC.invoke()
+                    Debug.debug('Converting 200F to Celsius...');
+                &lt;/handler&gt;
+                
+                &lt;remotecall funcname="FtoC"
+                    remotecontext="$once{canvas.temperature}"&gt;
+                    &lt;param value="200" /&gt;
+                    &lt;handler name="ondata" args="value"&gt;
+                        Debug.debug('200F in Celsius is %w', value);
+                    &lt;/handler&gt;
+                &lt;/remotecall&gt;
+            &lt;/button&gt;
+        &lt;/view&gt;
+        
+    &lt;/canvas&gt;
+</example>
+<p>The order in which events (ondata, onerror) are handled are as follow:</p>
+<ol>
+    
+    <li>Use event handler defined in remotecall.</li>
+    
+    <li>Else use event handler defined in parent.</li>
+    
+    <li>Else if remotecall is defined outside of RPC object (i.e. remotecontext
+        attribute is set) use event handler defined in RPC object (i.e. remotecontext
+        value).</li>
+    
+    <li>Otherwise event is not handled.</li> 
+    
+</ol>
+<p>To databind to a successful return value, you can set the dataobject
+    attribute to a dataset. For more information on databinding with RPC, see the 
+    <link linkend="rpc">RPC chapter</link></p>
+<example>
+    &lt;canvas debug="true" height="300" width="680"&gt;
+    
+        &lt;debug x="225" width="450" height="280" /&gt;
+        
+        &lt;dataset name="googleDset" /&gt;
+        
+        &lt;soap name="google" wsdl="http://api.google.com/GoogleSearch.wsdl"&gt;
+            &lt;handler name="onload"&gt;
+                Debug.debug('google soap service stub loaded');
+            &lt;/handler&gt;
+            
+            &lt;handler name="onerror" args="error"&gt;
+                Debug.debug('error: %w', error);
+            &lt;/handler&gt;
+            
+            &lt;remotecall name="search" funcname="doGoogleSearch" 
+                dataobject="googleDset"&gt;
+                
+                &lt;param value="'2TKUw4ZQFHJ84ByemZK0EXV0Lj+7xGOx'" /&gt;
+                &lt;param value="'sweet'" /&gt;
+                &lt;param value="1" /&gt;
+                &lt;param value="10" /&gt;
+                &lt;param value="true" /&gt;
+                &lt;param value="''" /&gt;
+                &lt;param value="true" /&gt;
+                &lt;param value="''" /&gt;
+                &lt;param value="''" /&gt;
+                &lt;param value="''" /&gt;
+                
+                &lt;handler name="ondata" args="value"&gt;
+                    Debug.debug('got result');
+                    Debug.inspect(value);
+                &lt;/handler&gt;
+            
+            &lt;/remotecall&gt;
+        &lt;/soap&gt;
+        
+        &lt;view layout="spacing: 5" &gt;
+            &lt;button text="search" onclick="google.search.invoke()" /&gt;
+            &lt;view bgcolor="yellow" layout="axis: y" &gt;
+                &lt;view&gt;
+                &lt;datapath xpath="googleDset:/resultElements/item" pooling="true" /&gt;
+                &lt;text datapath="URL/text()" resize="true"/&gt;
+                &lt;/view&gt;
+            &lt;/view&gt;
+        &lt;/view&gt;
+    &lt;/canvas&gt;
+                </example>
+               
+            
+                <p><b>See Also:</b></p>
+     
+                    <ul>
+                        <li>
+                            <sgmltag class="element" role="lz.param">&lt;param&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.rpc">&lt;rpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.soap">&lt;soap&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.xmlrpc">&lt;xmlrpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <link linkend="rpc">Developer's Guide: RPC chapter</link>
+                        </li>
+                    </ul>
+            </text>
+        </doc>
+
+    </class>
+
+
+    <!-- 'Element to use inside remotecall. -->
+    <class name="param" extends="node">
+        <!--- Value to use for parameter. A <code>getValue()</code> method can be declared
+              inside param to use its return as the parameter value. If both
+              <code>value</code> attribute and <code>getValue()</code> method are declared, param will use
+              <code>getValue()</code>. -->
+        <attribute name="value" value="null" type="expression" />
+        <!--- Returns value.
+            @return *: the value to use for this parameter -->
+        <method name="getValue">
+          return this.value;
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>param tag for remotecall</text></tag>
+            <text>
+                <p>Tag to declaratively set parameter values for <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag>. If a 
+                    <code>getValue()</code> method is declared in the body of <code>remotecall</code>, use its return as 
+                    value for parameter. If both <code>getValue()</code> method and <code>value</code> attribute are set in 
+                    param, <code>getValue()</code> wins.</p>
+                <programlisting title="Usage example">
+    &lt;remotecall name="func1" funcname="someFunc"&gt;
+        &lt;param value="'some string value'" /&gt;
+    &lt;/remotecall&gt;
+    
+    &lt;remotecall name="func2" funcname="someFunc"&gt;
+        &lt;param&gt;
+            &lt;method name="getValue"&gt;
+            return 'some string value';
+            &lt;/method&gt;
+        &lt;/param&gt;
+    &lt;/remotecall&gt; 
+    
+    &lt;remotecall name="func2" funcname="someFunc"&gt;
+        &lt;!-- param will use getValue's return value. --&gt;
+        &lt;param value="'a value'"&gt;
+            &lt;method name="getValue"&gt;
+            return 'some string value';
+            &lt;/method&gt;
+        &lt;/param&gt;
+    &lt;/remotecall&gt; 
+                </programlisting>
+               <p> <b>See Also:</b></p>
+                    <ul>
+                        <li>
+                            <a href="../reference/remotecall.html"><code class="classname">remotecall</code></a>
+                        </li>
+                    </ul>
+                    
+            </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

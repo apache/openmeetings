@@ -1,0 +1,311 @@
+<!-- Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved. -->
+<library>
+    <!--- This is a declared replicator for visual elements. Unlike
+        OpenLaszlo''s data-replication feature, a replicator can take an
+        arbitrary node set that may be passed in as an array.
+        Non-replicating elements may be used inside a replicator; only
+        the last child inside the replicator is replicated.
+
+        The data attribute of the replicated (cloned) view is set by the
+        setData method with data from the nodes array when the clone is
+        bound. -->
+    <class name="replicator" extends="node">
+        <!--- If true, then instances of the replicated instance are reused
+            when possible -->
+        <attribute name="pool" value="true" type="boolean"/>
+
+        <!--- The size (width or height) in the replication axis of the view
+            being replicated.  Assumes all subviews have same replicated size. -->
+        <attribute name="replicatedsize" value="null" />
+
+        <!--- The axis in which to replicate-->
+        <attribute name="axis" value="y" type="string"/>
+
+        <!--- A pixel amount to use between each replicated view -->
+        <attribute name="spacing" value="0" />
+
+        <!--- The view that will contain the replicated nodes.  Defaults to the immediateparent of the replicator. -->
+        <attribute name="container" />
+
+        <!--- The view that will clip the replicated nodes.  Defaults to the immediateparent of the container -->
+        <attribute name="mask" />
+
+        <!--- The list of elements controlled by this repliator -->
+        <attribute name="clones" value="null"/>
+
+        <!--- The list of nodes over which this replictor acts -->
+        <attribute name="nodes" value="null" setter="this.setNodes(nodes)"/>
+
+        <!--- Compute nodes from this dataset -->
+        <attribute name="dataset" />
+        <!--- Compute nodes from this xpath query against the specified dataset -->
+        <attribute name="xpath" type="string"/>
+
+        <attribute name="_sizes" value="{ x : 'width', y: 'height' }"/>
+        <!--- Array of maps of additional properties by clone number -->
+        <attribute name="_cloneprops" value="null"/>
+        <attribute name="_clonepool" value="null"/>
+
+        <!-- @keywords private -->
+        <method name="construct" args="p,a">
+            this.clones = [];
+            this._cloneprops = [];
+            this._clonepool = [];
+            super.construct(p, a);
+            this.container = this.immediateparent;
+            this.mask = this.container.immediateparent;
+        </method>
+
+        <!-- @keywords private -->
+        <method name="init">
+            <![CDATA[
+            super.init();
+            if (this['dataset'] && this['xpath']) {
+                this._pointer = this.dataset.getPointer();
+                this._ondatadel = new LzDelegate(this, '_updateChildren', this.dataset, 'onDocumentChange')
+                this._updateChildren();
+            }
+            ]]>
+        </method>
+
+        <method name="destroy">
+            this._pointer = null;
+            this.dataset = null;
+            super.destroy();
+        </method>
+
+        <!-- @keywords private -->
+        <method name="_updateChildren" args="ignore=null" >
+            <![CDATA[
+            // TODO: use changepackage to do something smarter here
+            var p = this._pointer.xpathQuery(this.xpath);
+            if (p && ! (p is Array)) p = [p]; 
+            this.setNodes(p);
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="createChildren" args="c">
+            <![CDATA[
+            super.createChildren( [] ); 
+            this.replicated = c[0];
+
+            if ( c.length > 1 ) {
+              if ($debug) Debug.warn("%s: only a single child view is replicated", this);
+              this.container.createChildren( c );
+            } else {
+              this.__LZinstantiationDone();
+            }
+            ]]>
+        </method>
+
+        <event name="onnodes"/>
+
+        <!-- @keywords private -->
+        <method name="set_nodes" args="n">
+            this.setNodes(n);
+        </method>
+
+        <!-- Replicate over the given list of elements.
+            @param Array n: The list of elements over which to replicate -->
+        <method name="setNodes" args="n">
+            <![CDATA[
+            this.nodes = n;
+            this.__adjustVisibleClones();
+            this.setAttribute("replicatedsize", this.clones.length == 0
+                         ? 0
+                         : this.clones[this.clones.length-1][this._sizes[this.axis]]);
+            if (this.onnodes.ready) { this.onnodes.sendEvent(); }
+            ]]>
+        </method>
+
+        <!-- Insert a node in existing list of elements.
+            @param Number idx: index to insert element
+                @param Object n: node to insert -->
+        <method name="insertNode" args="idx,n">
+            this.nodes.splice(idx, 0, n);
+            this._cloneprops.splice(idx,0, null); // maintain cloneprops indices
+            this.__adjustVisibleClones();
+        </method>
+
+        <!-- Called internally, but may be overridden.  This is the method
+            which binds a given clone to an element in the nodes array.
+            @param LzView v: the clone being bound
+            @param Number n: The number of the element the clone is being
+                bound to. -->
+        <method name="bind" args="v,n">
+            <![CDATA[
+            v.setAttribute( "clonenumber" , n );
+            this.setData( v , n );
+            this.update( v , n );
+            // Cooperate with dataselectionmanager, if there is one
+            if (v.datapath is LzDatapath) {
+                var datapath:LzDatapath = v.datapath cast LzDatapath;
+                var noden = this.nodes[n];
+                if (noden is LzDataNodeMixin) {
+                    // FIXME: [2009-01-19 ptw] (LPP-5840) Uncomment when fixed
+                    var datanode /* :LzDataNodeMixin */ = noden /* cast LzDataNodeMixin */;
+                    var isSelected = datanode.sel;
+                    var wasSelected = datapath.sel;
+                    if (isSelected != wasSelected) {
+                        v.setSelected(datapath.sel = isSelected);
+                    }
+                }
+            }
+            if ( this._cloneprops[ n ] != null) {
+                var p = this._cloneprops[ n ];
+                // p is a hash, see setClonePropertyByCN
+                for ( var k in p ){
+                    v.setAttribute( k, p[ k ] );
+                }
+            }
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="setCloneProperty" args="v,prop,val">
+            this.setClonePropertyByCN( v.clonenumber, prop ,val );
+        </method>
+
+        <!-- @keywords private -->
+        <method name="setClonePropertyByCN" args="n,prop,val">
+            if ( this._cloneprops[ n ] == null ) { this._cloneprops[ n ] = {}; }
+            this._cloneprops[ n ][ prop ] = val;
+            var v = this.getCloneIfVisible( n );
+            if ( v ) v.setAttribute( prop , val );
+        </method>
+
+        <!-- @keywords private -->
+        <method name="update" args="v,n">
+            if ( v[ "update" ] ) v.update( v.data , n );
+        </method>
+
+        <!-- TODO: defaults for clone attributes
+            Called internally, but may be overridden.  This method is called
+            when a given clone is about to be pooled or destroyed. -->
+        <method name="unbind" args="v">
+            <![CDATA[
+            var n = v.clonenumber;
+            v.setAttribute( "clonenumber", null );
+            v.setAttribute( "data" ,  null );
+            if ( n != null && this._cloneprops[ n ] != null ) {
+                var p = this._cloneprops[ n ];
+                // p is a hash, see setClonePropertyByCN
+                for (var k in p){
+                    v.setAttribute( k, null );
+                }
+            }
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="getClone">
+            var v;
+            if ( this._clonepool.length ) {
+                v  = this._clonepool.pop();
+                if (v.visible != true) v.setAttribute('visible', true );
+            } else {
+                v =  this._makeClone();
+            }
+            return v;
+        </method>
+
+        <!-- @keywords private -->
+        <method name="_makeClone">
+            var v = this.container.makeChild( this.replicated );
+            v.setAttribute( "clonenumber", null );
+            // emulate datapath behavior
+            v.setAttribute( "cloneManager", this );
+            return v;
+        </method>
+
+        <!-- @keywords private -->
+        <method name="poolClone" args="c">
+            if ( c.clonenumber ) this.unbind( c );
+            if (c.visible != false) c.setAttribute('visible', false );
+            this._clonepool.push( c );
+        </method>
+
+        <!-- @keywords private -->
+        <method name="getCloneIfVisible" args="n">
+            return this.clones[ n ];
+        </method>
+
+        <!-- Called internally, but may be overridden.  This method is called
+            to set the data of a clone to an element in the nodes array.
+            
+            @param LzView v: The clone whose data is being set.
+            @param n: The node to which it is being set. -->
+        <method name="setData" args="v:*,n=null">
+            if (v) {
+                v.setAttribute('data', this.nodes[ n ]);
+                v.applyData(this.nodes[n]);
+            }
+        </method>
+
+        <!-- @keywords private -->
+        <method name="__adjustVisibleClones" args="ignore=null" >
+            <![CDATA[
+            var layouts = this.container.layouts;
+            if (layouts) {
+                for (var i=0, len=layouts.length; i<len; i++) {
+                    layouts[i].lock();
+                }
+            }
+            while( this.clones.length ) this.poolClone( this.clones.pop() );
+            if (this['nodes'] != null) {
+                var len = this.nodes.length;
+                for (var i = 0; i < len; i++) {
+                    var cl = this.getClone();
+                    this.bind( cl, i );
+                    this.clones[ i ] = cl;
+                }
+            }
+            if (layouts) {
+                for (var i=0, len=layouts.length; i<len; i++) {
+                    layouts[i].unlock();
+                }
+            }
+            ]]>
+        </method>
+
+        <!-- Gets the clone for the given offset, scrolling it into view first
+            if necessary.
+            @param Number n: The offset of the clone to get. -->
+        <method name="getCloneForOffset" args="n">
+            this.ensureInView( n );
+            return this.clones[ n ];
+        </method>
+
+        <!-- Gets the clone for the given datanode
+            @param LzDataNodeMixin datanode: The datanode of the clone to get -->
+        <method name="getCloneForNode" args="datanode,dontmake = false"><![CDATA[
+            if (datanode is LzDataNodeMixin) {
+                var cls = this.clones;
+                for (var i = 0, len = cls.length; i < len; i++) {
+                    var datapath = cls[i].datapath;
+                    if ((datapath is LzDatapath) && (datapath.p == datanode)) {
+                        return cls[ i ];
+                    }
+                }
+            }
+        ]]></method>
+
+        <!-- Ensures that the clone at the given offset is visible under the mask
+            @param Number n: The offset of the clone to scroll in view -->
+        <method name="ensureInView" args="n">
+            <![CDATA[
+            var y = this.container.y;
+            var pos = n*this.replicatedsize;
+            var ny = y;
+
+            if (typeof mask != 'undefined' && this.replicatedsize+pos >= this.mask.height - y) {
+                ny = this.mask.height - pos - this.replicatedsize;
+            } else if (pos < -y) ny = -pos;
+
+            if (y != ny) this.container.setAttribute('y', ny);
+            ]]>
+        </method>
+    </class>
+
+</library>

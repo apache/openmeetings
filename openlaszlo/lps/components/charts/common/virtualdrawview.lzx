@@ -1,0 +1,228 @@
+<library>
+    <!--- @access private 
+    virtualdrawview override the drawing api methods to provide drawing in virtual spac coordinate. 
+    -->
+    <include href="extensions/drawview.lzx"/>
+    <class name="virtualdrawview"  extends="drawview" clickable="true"  clip="true">
+        <!--- @access private -->
+        <viewspool name="_viewspool" parentview="${parent}" viewclass="datapoints"/>
+        
+        <!--- @access private -->
+        <attribute name="minx" type="number" value="0"/>
+        <!--- @access private -->
+        <attribute name="miny" type="number" value="0"/>
+        <!--- @access private -->
+        <attribute name="maxx" type="number" value="100"/>
+        <!--- @access private -->
+        <attribute name="maxy" type="number" value="100"/>
+        <!--- @access private -->
+        <attribute name="_xscale" type="number" value="1"/>
+        <!--- @access private -->
+        <attribute name="_yscale" type="number" value="1"/>
+        <!--- @access private -->
+        <attribute name="_xoffset" type="number" value="0"/>
+        <!--- @access private -->
+        <attribute name="_yoffset" type="number" value="0"/>
+        <!--- @access private -->
+        <attribute name="markers"/>
+
+        <!--- set boundary for the virtual coordinate
+            @param Number minx: min x of the boundary
+            @param Number miny: min y of the boundary
+            @param Number maxx: max y of the boundary
+            @param Number maxy: max y of the boundary
+         -->
+        <method name="setDataBound" args="minx, miny, maxx, maxy">
+            this.minx = minx;
+            this.miny = miny;
+            this.maxx = maxx;
+            this.maxy = maxy;
+            this._xscale = this.width / (this.maxx - this.minx);
+            this._xoffset = - this.minx * this._xscale;
+            this._yscale = this.height / (this.maxy - this.miny);
+            this._yoffset = - this.miny * this._yscale; 
+            
+            //flip y   
+                 
+            this._yoffset = this.height - this._yoffset;
+            this._yscale = -this._yscale;                                 
+        </method>
+        
+        <!--- virtual coordinate to physical coordinate for x
+            @param Number x: x in virtual coordinate
+            @return Number: x in physical coordinate
+         -->           
+        <method name="toDeviceX" args="x">
+            return x * this._xscale + this._xoffset;
+        </method>
+        
+        <!--- virtual coordinate to physical coordinate for y
+            @param Number y: y in virtual coordinate
+            @return Number: y in physical coordinate
+         -->       
+        <method name="toDeviceY" args="y">
+            return y * this._yscale + this._yoffset;            
+        </method>
+        
+        <!--- physical coordinate to virtual coordinate for x
+            @param Number x: x in physical coordinate
+            @return Number: x in virtual coordinate
+         -->          
+        <method name="toVirtualX" args="x">        
+            return (x -  this._xoffset) / this._xscale;
+        </method>
+        
+        <!--- physical coordinate to virtual coordinate for y
+            @param Number y: y in physical coordinate
+            @return Number: y in virtual coordinate
+        -->   
+        <method name="toVirtualY" args="y">        
+            return (y -  this._yoffset) / this._yscale; 
+        </method>  
+        
+        <!--- moveTo in virtual coordinate
+         -->
+        <method name="moveTo" args="x, y">
+            //Debug.write("moveTo(" + x + ", " + y + ")");            
+            //Debug.write("moveTo2(" + x * this._xscale + this._xoffset+ ", " + y * this._yscale + this._yoffset + ")");            
+            super.moveTo(x * this._xscale + this._xoffset, y * this._yscale + this._yoffset);
+        </method>        
+        
+        <!--- lineTo in  virtual coordinate
+         -->
+        <method name="lineTo" args="x, y">
+            //Debug.write("lineTo(" + x + ", " + y + ")");
+            //Debug.write("lineto2(" + x * this._xscale + this._xoffset+ ", " + y * this._yscale + this._yoffset + ")");            
+            super.lineTo(x * this._xscale + this._xoffset, y * this._yscale + this._yoffset);
+        </method>
+         
+         <!--- quadriaticCurveTo in virtual coordinate 
+         -->       
+         <method name="quadraticCurveTo" args="cx, cy, x, y">
+            super.quadraticCurveTo(cx * _xscale + _xoffset, cy * _yscale + _yoffset, x * _xscale + _xoffset, y * _yscale + _yoffset);
+        </method>
+        
+        
+        <!--- @access private
+            might not be used
+         -->
+        <method name="drawRect" args="startx, starty, endx, endy">
+            this.beginPath();
+            this.moveTo(startx, starty);
+            this.lineTo(endx, starty);
+            this.lineTo(endx, endy);
+            this.lineTo(startx, endy);
+            this.lineTo(startx, starty);
+            this.closePath();
+        </method>
+        
+
+        <!--- @access private
+            might not be used
+         -->
+        <method name="drawvgridline" args="y">            
+            this.beginPath();
+            this.moveTo(this.minx, y);
+            this.lineTo(this.maxx, y);
+            this.endPath();
+            this.strokeStyle = 0xff0000;
+            this.lineWidth = 1;
+            this.stroke();
+        </method>                        
+        
+        <!--- @access private
+             TODO:: This method will be put into consideration for
+                    optimization of the renderPlotArea() methods -->           
+        <method name="pruneArray" args="pArray, pHMin, pHMax, pVMin, pVMax">
+        <![CDATA[
+            var i;
+            var lHArray = new Array();
+            var lVArray = new Array();
+            var lTArray = new Array();
+            var lLArray = new Array();
+
+            var pHArray = pArray[0];
+            var pVArray = pArray[1];
+            var pTArray = pArray[2];
+            var pLArray = pArray[3];
+
+            if( this.constructor.tagname != "barchartplotarea" ) {
+                if( pHArray != null && pHArray.length > 0 ) {
+            for( i = 0; i < pHArray.length; i++ ) {
+                if( pHArray[i] >= pHMin && pHArray[i] <= pHMax ) {
+                    lHArray.push(pHArray[i]);
+                    lVArray.push(pVArray[i]);
+                            lTArray.push(pTArray[i]);
+                            lLArray.push(pLArray[i]);
+                }
+            }
+                }
+            } else {
+            for( i = 0; i < pVArray.length; i++ ) {
+                if( pVArray[i] >= pVMin && pVArray[i] <= pVMax ) {
+                    lVArray.push(pVArray[i]);
+                        lHArray.push(pHArray[i]);
+                        lTArray.push(pTArray[i]);
+                        lLArray.push(pLArray[i]);
+                }
+            }
+            }
+
+
+
+            var lReturnArray = new Array( lHArray, lVArray, lTArray, lLArray );
+
+            return lReturnArray;
+        ]]> 
+        </method>
+
+        <!--- @access private
+            TODO:: This method will be put into consideration for
+                    optimization of the renderPlotArea() methods -->
+        <method name="loadDataSeriesValues" args="pLeafSeries">
+            <![CDATA[
+            if(pLeafSeries.getDataColumn(parent.haxis.columnName) != null){
+                var xseries = pLeafSeries.getDataColumn(parent.haxis.columnName).values;
+            } else {
+                var xseries = null;
+            }
+            if(pLeafSeries.getDataColumn(parent.vaxis.columnName) != null){
+                var yseries = pLeafSeries.getDataColumn(parent.vaxis.columnName).values;
+            } else {
+                var yseries = null;
+            }
+            var tooltipseries = new Array();
+            var labelseries = new Array();
+
+           if( parent.dataPointsEnabled ){
+                   if(parent.datatipColumn != null && pLeafSeries.getDataColumn(parent.datatipColumn) != null){
+                       tooltipseries = pLeafSeries.getDataColumn(parent.datatipColumn).values;
+                   }
+           }
+
+            if ( parent.datalabelEnabled ){
+                if(parent.datalabelColumn != "null" && pLeafSeries.getDataColumn(parent.datalabelColumn) != null){
+                    labelseries = pLeafSeries.getDataColumn(parent.datalabelColumn).values;
+                }
+            }
+
+            var larrayOfArray = new Array( xseries, yseries, tooltipseries, labelseries );
+
+            return larrayOfArray;
+            ]]>
+        </method>
+
+        <method name="clear">
+            super.clear();
+            _viewspool.reclaimAll();            
+        </method>
+                
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2007 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@ -->

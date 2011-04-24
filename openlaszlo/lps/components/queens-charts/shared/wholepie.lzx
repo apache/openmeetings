@@ -1,0 +1,456 @@
+<library>
+    <include href="piepiece.lzx"/>
+    
+    <!--- This is the class that assembles and contains all the elements
+        of an individual pie.  Nearly all of the attributes are set when the
+        object is instantiated by piechart.  There should be one of these
+        for each dataseries.  (Of beta quality.) -->
+    <class name="wholepie" extends="view"
+        visible="${parent.selectedpie == this || parent.selectedpie == null}">
+        <!-- Public attributes. -->
+
+        <!--- Whether to draw the background circle behind the pie pieces,
+            and if so, what color. -->
+        <attribute name="drawbg" type="color" value="$once{null}"/>
+        <!--- Whether to draw the background border around the circle
+            behind the pie pieces, and if so, what color. -->
+        <attribute name="drawbgborder" type="color" value="$once{null}"/>
+        <!--- The width of the background border around the circle
+            behind the pie pieces. -->
+        <attribute name="bgborderwidth" type="number" value="1"/>
+        <!--- An array of the values of individual pieces. -->
+        <attribute name="piecevalues" value="$once{[]}"/>
+        <!--- An array of the colors of individual pieces. -->
+        <attribute name="colorvalues" value="$once{[]}"/>
+        <!--- An array of border colors of individual pieces. -->
+        <attribute name="bordercolors" value="$once{[]}"/>
+        <!--- An array of border widths of individual pieces. -->
+        <attribute name="borderwidths" value="$once{[]}"/>
+        <!--- An array of piece opacity values. -->
+        <attribute name="opacvalues" value="$once{[]}"/>
+        <!--- An array of the values to use in the legend. -->
+        <attribute name="legendvalues" value="$once{[]}"/>
+        <!--- An array of the radius alterations for pie
+            pieces, if any. -->
+        <attribute name="radiusvalues" value="$once{[]}"/>
+        <!--- An array of the label values for pie pieces. -->
+        <attribute name="labelvalues" value="$once{[]}"/>
+        <!--- An array of label colors for pie pieces. -->
+        <attribute name="labelcolors" value="$once{[]}"/>
+        <!--- An array of label borders for pie pieces. -->
+        <attribute name="labelborders" value="$once{[]}"/>
+        <!--- An array of label border widths for pie pieces. -->
+        <attribute name="labelbwidth" value="$once{[]}"/>
+        <!--- An array of label text sizes for pie pieces. -->
+        <attribute name="labeltsize" value="$once{[]}"/>
+        <!--- An array of label text colors for pie pieces. -->
+        <attribute name="labeltcolor" value="$once{[]}"/>
+        <!--- Whether or not to explode the pie pieces onmouseover. -->
+        <attribute name="explode" type="boolean" value="false"/>
+        <!--- Whether to include a legend, and if so, where to place it. -->
+        <attribute name="legend" type="string" value="$once{null}"/>
+        <!--- Border color for the legend. -->
+        <attribute name="lborder" type="color" value="$once{null}"/>
+        <!--- Border width of the legend. -->
+        <attribute name="lborderwidth" type="number" value="1"/>
+        <!--- Background color of the legend. -->
+        <attribute name="lbgcolor" type="color" value="$once{null}"/>
+        <!--- Highlight color of an individual legend element, when
+            moused over. -->
+        <attribute name="lhlcolor" type="color" value="$once{null}"/>
+        <!--- Title of the legend, if any. -->
+        <attribute name="ltitle" type="string" value="$once{null}"/>
+        <!--- If legend is 'manual', this sets the x coordinate of the legend. -->
+        <attribute name="legendx" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the y coordinate of the legend. -->
+        <attribute name="legendy" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the width of the legend. -->
+        <attribute name="legendwidth" type="number" value="0"/>
+        <!--- If legend is 'manual', this sets the height of the legend. -->
+        <attribute name="legendheight" type="number" value="0"/>
+        <!--- Whether to show the legend when the chart is minimized, when
+            there are multiple charts. -->
+        <attribute name="showlegendminimized" type="boolean" value="true"/>
+        <!--- The position of the title: left, right, center. -->
+        <attribute name="legendtitleposition" type="string" value="left"/>
+        
+        <!-- Private attributes. -->
+        <!--- @keywords private -->
+        <attribute name="pienumber" type="number" value="0"/>
+        <!--- @keywords private -->
+        <attribute name="allpies" type="number" value="0"/>
+        <!--- @keywords private -->
+        <attribute name="pievalue" type="number" value="0"/>
+        <!--- values corrected for null data. -->
+        <!--- @keywords private -->
+        <attribute name="corrvalues" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrcolors" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrborder" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrbwidth" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corropac" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlegend" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrrad" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabel" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabelcolor" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabelborder" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabelbwidth" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabeltsize" value="$once{[]}"/>
+        <!--- @keywords private -->
+        <attribute name="corrlabeltcolor" value="$once{[]}"/>
+        <!--- @keywords private
+            The original x position of the pie, prior to expansion. -->
+        <attribute name="origx" type="number" value="$once{this.x}"/>
+        <!--- @keywords private
+            The original y position of the pie, prior to expansion. -->
+        <attribute name="origy" type="number" value="$once{this.y}"/>
+        <!--- @keywords private
+            The original width of the pie, prior to expansion. -->
+        <attribute name="origwidth" type="number" value="$once{this.width}"/>
+        <!--- @keywords private
+            The original height of the pie, prior to expansion. -->
+        <attribute name="origheight" type="number" value="$once{this.height}"/>
+        <!--- If there are multiple charts, this indicates whether this chart
+            is currently expanded. -->
+        <attribute name="expanded" type="boolean" value="false"/>
+        <!--- @keywords private
+            Mouse move delegate that will be called on idle to check what
+            wedge the mouse is currently over -->
+        <attribute name="checkwedgeoverdel" 
+                   value="$once{new LzDelegate(this, 'checkWedgeOver')}"/>
+        <!--- Wedge the mouse is currently over -->
+        <attribute name="wedgeover" value="$once{null}"/>
+
+        <handler name="oninit">
+          this.buildPie();
+        </handler>
+        
+        <!--- If a piece is clicked on, send that event to that piece.
+            If not, zoom in and out from this particular pie. -->
+        <handler name="onclick">
+            if(this.wedgeover != null){
+                this.wedgeover.onclick.sendEvent();
+            } else {
+                if(!this.expanded){
+                    this.setAttribute('expanded', true);
+                    this.setAttribute('width', parent.width);
+                    this.setAttribute('height', parent.height);
+                    this.setAttribute('x', 0);
+                    this.setAttribute('y', 0);
+                    this.eatPie();
+                    this.buildPie();
+                    parent.setAttribute('selectedpie', this);
+                } else {
+                    this.setAttribute('expanded', false);
+                    this.setAttribute('width', this.origwidth);
+                    this.setAttribute('height', this.origheight);
+                    this.setAttribute('x', this.origx);
+                    this.setAttribute('y', this.origy);
+                    this.eatPie();
+                    this.buildPie();
+                    parent.setAttribute('selectedpie', null);
+                }
+            }
+        </handler>
+        
+        <!--- Start checking to see what wedge we're over.
+            (I borrowed this from Ming's TROWE code, with some modifications.) -->
+        <handler name="onmouseover">
+            this.checkwedgeoverdel.register(lz.Idle, "onidle");
+        </handler>
+
+        <!--- End checking to see what wedge we're over -->
+        <handler name="onmouseout">
+            this.checkwedgeoverdel.unregisterAll();
+            //Clear out our wedgeover attribute
+            if(this.wedgeover != null){
+                this.wedgeover.onmouseout.sendEvent();
+            }
+            this.setAttribute('wedgeover', null);
+        </handler>
+
+        <!--- Find out what wedge the mouse is over, if any. -->
+        <method name="checkWedgeOver">
+            <![CDATA[
+            var pieradius = (this.width < this.height ? this.width * .9 : this.height * .9) / 2;
+            var ctrx = this.width / 2;
+            var ctry = this.height / 2;
+            if(this.legend != null){
+                if(this.legend == 'top'){
+                    ctrx = this.width / 2;
+                    ctry = this.height / 2 + (this.height * .1);
+                    pieradius = pieradius - (this.height * .1);
+                } else if(this.legend == 'bottom'){
+                    ctrx = this.width / 2;
+                    ctry = this.height / 2 - (this.height * .1);
+                    pieradius = pieradius - (this.height * .1);
+                } else if(this.legend == 'left'){
+                    ctrx = this.width / 2 + (this.width * .1);
+                    ctry = this.height / 2;
+                    pieradius = pieradius - (this.width * .05);
+                } else if(this.legend == 'right'){
+                    ctrx = this.width / 2 - (this.width * .1);
+                    ctry = this.height / 2;
+                    pieradius = pieradius - (this.width * .05);
+                }
+            }
+            var mx = ctrx - this.getMouse("x");
+            var my = ctry - this.getMouse("y");
+            var dist = Math.sqrt(mx * mx + my * my);
+
+            //if mouse dist is outside the circle we're no longer over a 
+            //wedge
+            if (dist > pieradius) {
+                if(this.wedgeover != null){
+                    this.wedgeover.onmouseout.sendEvent();
+                }
+                this.setAttribute('wedgeover', null);
+                return;
+            }
+
+            //normalize so 0 is at zeroang degrees and preserve the unit square
+            //in a counterclockwise direction (we render the wedges counterclockwise)
+            var ang = Math.acos(mx/dist);
+            if(my < 0){
+                ang = (2 * Math.PI) - ang;
+            }
+            ang = ((2 * Math.PI) / 2) - ang;
+            if(ang < 0){
+                ang += (2 * Math.PI);
+            }
+            
+            var piecelist = this.subviews;
+
+            //find wedge that contains this angle if any
+            for (var i = 0; i < piecelist.length; i++) {
+                if(piecelist[i].name != 'bgcircle' && piecelist[i].name != 'legend' &&
+                    (piecelist[i] instanceof lz.label != true) &&
+                    typeof piecelist[i].startpercent != 'undefined'){
+                    var startpos = (2 * Math.PI) * piecelist[i].startpercent;
+                    var endpos = startpos + ((2 * Math.PI) * piecelist[i].piecepercent);
+                    if (ang < endpos && ang > startpos) {
+                        if (this.wedgeover != piecelist[i]) {
+                            this.setAttribute('wedgeover', piecelist[i]);
+                            piecelist[i].onmouseover.sendEvent();
+                        }
+                        break;
+                    }
+                }
+            }
+            ]]>
+        </method>
+        
+        <!--- Builds the pie pieces, legend, and background circle. -->
+        <method name="buildPie">
+            <![CDATA[
+            var pieradius = (this.width < this.height ? this.width * .9 : this.height * .9) / 2;
+            var piecenumbers = 0;
+            // Corrects for any null piece values.
+            for(var i = 0; i < this.piecevalues.length; i++){
+                if(this.piecevalues[i] != null){
+                    this.corrvalues[piecenumbers] = this.piecevalues[i];
+                    this.corropac[piecenumbers] = this.opacvalues != null ?
+                        (typeof(this.opacvalues) == 'string' ? this.opacvalues :
+                        (typeof this.opacvalues[i] != 'undefined' ? this.opacvalues[i] : null)) : null;
+                    this.corrcolors[piecenumbers] = this.colorvalues != null ?
+                        (typeof(this.colorvalues) == 'string' ? this.colorvalues :
+                        (typeof this.colorvalues[i] != 'undefined' ? this.colorvalues[i] : null)) : null;
+                    this.corrborder[piecenumbers] = this.bordercolors != null ?
+                        (typeof(this.bordercolors) == 'string' ? this.bordercolors :
+                        (typeof this.bordercolors[i] != 'undefined' ? this.bordercolors[i] : null)) : null;
+                    this.corrlegend[piecenumbers] = this.legendvalues != null ?
+                        (typeof(this.legendvalues) == 'string' ? this.legendvalues :
+                        (typeof this.legendvalues[i] != 'undefined' ? this.legendvalues[i] : null)) : null;
+                    this.corrbwidth[piecenumbers] = this.borderwidths != null ?
+                        (typeof(this.borderwidths) == 'string' ? this.borderwidths :
+                        (typeof this.borderwidths[i] != 'undefined' ? this.borderwidths[i] : null)) : null;
+                    this.corrrad[piecenumbers] = this.radiusvalues != null ?
+                        (typeof(this.radiusvalues) == 'string' ? this.radiusvalues :
+                        (typeof this.radiusvalues[i] != 'undefined' ? this.radiusvalues[i] : 0)) : 0;
+                    this.corrlabel[piecenumbers] = this.labelvalues != null ?
+                        (typeof this.labelvalues[i] != 'undefined' ? this.labelvalues[i] : null) : null;
+                    this.corrlabelcolor[piecenumbers] = this.labelcolors != null ?
+                        (typeof(this.labelcolors) != 'object' ? this.labelcolors :
+                        (typeof this.labelcolors[i] != 'undefined' ? this.labelcolors[i] : null)) : null;
+                    this.corrlabelborder[piecenumbers] = this.labelborders != null ?
+                        (typeof(this.labelborders) == 'string' ? this.labelborders :
+                        (typeof this.labelborders[i] != 'undefined' ? this.labelborders[i] : null)) : null;
+                    this.corrlabelbwidth[piecenumbers] = this.labelbwidth != null ?
+                        (typeof(this.labelbwidth) == 'string' ? this.labelbwidth :
+                        (typeof this.labelbwidth[i] != 'undefined' ? this.labelbwidth[i] : null)) : null;
+                    this.corrlabeltsize[piecenumbers] = this.labeltsize != null ?
+                        (typeof(this.labeltsize) == 'string' ? this.labeltsize :
+                        (typeof this.labeltsize[i] != 'undefined' ? this.labeltsize[i] : 12)) : 12;
+                    this.corrlabeltcolor[piecenumbers] = this.labeltcolor != null ?
+                        (typeof(this.labeltcolor) != 'object' ? this.labeltcolor :
+                        (typeof this.labeltcolor[i] != 'undefined' ? this.labeltcolor[i] : null)) : null;
+                    piecenumbers++;
+                }
+            }
+            var ctrx = this.width / 2;
+            var ctry = this.height / 2;
+            if(this.legend != null){
+                if(this.legend == 'top'){
+                    ctrx = this.width / 2;
+                    ctry = this.height / 2 + (this.height * .1);
+                    pieradius = pieradius - (this.height * .1);
+                } else if(this.legend == 'bottom'){
+                    ctrx = this.width / 2;
+                    ctry = this.height / 2 - (this.height * .1);
+                    pieradius = pieradius - (this.height * .1);
+                } else if(this.legend == 'left'){
+                    ctrx = this.width / 2 + (this.width * .1);
+                    ctry = this.height / 2;
+                    pieradius = pieradius - (this.width * .05);
+                } else if(this.legend == 'right'){
+                    ctrx = this.width / 2 - (this.width * .1);
+                    ctry = this.height / 2;
+                    pieradius = pieradius - (this.width * .05);
+                } else if(this.legend == 'manualtop'){
+                    ctrx = this.width / 2;
+                    ctry = this.width / 2 + this.legendheight + 8;
+                    pieradius = pieradius - (this.legendheight / 2) - 8;
+                } else if(this.legend == 'manualbottom'){
+                    ctrx = this.width / 2;
+                    ctry = this.width / 2 - this.legendheight - 8;
+                    pieradius = pieradius - (this.legendheight / 2) - 8;
+                } else if(this.legend == 'manualleft'){
+                    ctrx = this.width / 2 + this.legendwidth + 8;
+                    ctry = this.width / 2;
+                    pieradius = pieradius - (this.legendwidth / 2) - 8;
+                } else if(this.legend == 'manualright'){
+                    ctrx = this.width / 2 - this.legendwidth - 8;
+                    ctry = this.width / 2;
+                    pieradius = pieradius - (this.legendwidth / 2) - 8;
+                }
+            }
+            if(this.drawbg != null){
+                new lz.backcircle(this, {name:'bgcircle', drawbg:this.drawbg,
+                    drawbgborder:this.drawbgborder, bgborderwidth:this.bgborderwidth,
+                    ctrx:ctrx, ctry:ctry, pieradius:pieradius})
+            }
+            for(var k = 0; k < this.corrvalues.length; k++){
+                var pieceperc = (this.corrvalues[k] / this.pievalue);
+                var totaltonow = 0;
+                var piecestart = 0;
+                if(k > 0){
+                    for(var l = 0; l < k; l++){
+                        totaltonow = totaltonow + Number(this.corrvalues[l]);
+                    }
+                    var piecestart = (totaltonow / this.pievalue);
+                }
+                var adjradius = pieradius + (pieradius * (this.corrrad[k] / 100));
+                new lz.piepiece(this, {centerx:ctrx, centery:ctry, piececolor:this.corrcolors[k],
+                    bordercolor:this.corrborder[k], pieceradius:adjradius, piecepercent:pieceperc, startpercent:piecestart,
+                    borderwidth:this.corrbwidth[k], pieceopacity:this.corropac[k], explode:this.explode, name:'pp'+k,
+                    piecevalue:corrvalues[k]});
+                if(this.corrlabel != null && typeof this.corrlabel[k] != 'undefined' &&
+                    this.corrlabel[k] != null){
+                    var sposit = (2 * Math.PI) * piecestart;
+                    var eposit = sposit + ((2 * Math.PI) * (pieceperc / 2));
+                    var sx = ctrx - (adjradius * .7) * Math.cos(((2 * Math.PI) / 2) - eposit);
+                    var sy = ctry - (adjradius * .7) * Math.sin(eposit);
+                    new lz.label(this, {height:16,
+                        y:sy, x:sx, bgcolor:this.corrlabelcolor[k],
+                        ltext:this.corrlabel[k], labelnumber:k,
+                        ltextsize:(this.expanded ? this.corrlabeltsize[k] : 10),
+                        lborder:this.corrlabelborder[k],
+                        lbwidth:this.corrlabelbwidth[k], ltcolor:this.corrlabeltcolor[k],
+                        charttype:"pie"});
+                }
+            }
+            // Bring labels to the front, since they might've gotten partially
+            // covered by pie slices.
+            for(var j = 0; j <= this.subviews.length; j++){
+                if(this.subviews[j] instanceof lz.label){
+                    this.subviews[j].bringToFront();
+                }
+            }
+            if(this.legend != null){
+                if(this.showlegendminimized == true ||
+                    (this.showlegendminimized == false && this.expanded)){
+                    var litems = this.corrvalues.length;
+                    var ppc = new Array;
+                    var ppccount = 0;
+                    for(var i = 0; i <= this.subviews.length; i++){
+                        if(typeof this.subviews[i] != 'undefined' && this.subviews[i].name != 'bgcircle' &&
+                            (this.subviews[i] instanceof lz.label == false)){
+                            ppc[ppccount] = this.subviews[i].name;
+                            ppccount++;
+                        }
+                    }
+                    new lz.chartlegend(this, {border:this.lborder, borderwidth:this.lborderwidth, backcolor:this.lbgcolor,
+                        hlcolor:this.lhlcolor, itemnums:litems, charttype:'pie', posit:this.legend, piepieces:ppc,
+                        ltitle:this.ltitle, pieradius:pieradius, centerx:ctrx, centery:ctry, piececolors:corrcolors,
+                        legendvalues:this.corrlegend, legendx:this.legendx, legendy:this.legendy,
+                        legendwidth:this.legendwidth, legendheight:this.legendheight,
+                        titleposition:this.legendtitleposition});
+                } else {
+                    var lholder = this.legend;
+                    var lwid = 80;
+                    var lhigh = 16;
+                    var lx = this.legendx;
+                    var ly = this.legendy;
+                    if(this.legend == 'top' || this.legend == 'manualtop'){
+                        lx = (this.width - lwid) / 2;
+                        ly = (ctry - pieradius - lhigh) / 2;
+                        lholder = 'manualtop';
+                    } else if(this.legend == 'bottom' || this.legend == 'manualbottom'){
+                        lx = (this.width - lwid) / 2;
+                        ly = (ctry + pieradius) + (this.height - ctry - pieradius - lhigh) / 2;
+                        lholder = 'manualbottom';
+                    } else if(this.legend == 'left' || this.legend == 'manualleft'){
+                        ly = (this.height - lhigh) / 2;
+                        lx = (ctrx - pieradius - lwid) / 2;
+                        lholder = 'manualleft';
+                    } else if(this.legend == 'right' || this.legend == 'manualright'){
+                        ly = (this.height - lhigh) / 2;
+                        lx = (ctrx + pieradius) + (this.width - ctrx - pieradius - lwid) / 2;
+                        lholder = 'manualright';
+                    }
+                    new lz.chartlegend(this, {border:this.lborder, borderwidth:this.lborderwidth, backcolor:this.lbgcolor,
+                        itemnums:0, charttype:'pie', posit:lholder, ltitle:this.ltitle, pieradius:pieradius,
+                        centerx:ctrx, centery:ctry, legendvalues:this.corrlegend, legendx:lx,
+                        legendy:ly, legendwidth:lwid, legendheight:lhigh, titleposition:this.legendtitleposition})
+                }
+            }
+            ]]>
+        </method>
+        <!--- Destroys the pie pieces and background circle. -->
+        <method name="eatPie">
+            <![CDATA[
+            while(this.subviews.length > 0){
+                var piecesleft = this.subviews.length;
+                for(var i = 0; i <= piecesleft; i++){
+                    if(typeof this.subviews[i] != 'undefined'){
+                        this.subviews[i].destroy();
+                    }
+                }
+            }
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

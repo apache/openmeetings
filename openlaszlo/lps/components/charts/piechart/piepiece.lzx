@@ -1,0 +1,349 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+   <!--- @keyword private 
+   Represents a single pie slice in the chart -->
+    <class name="piepiece" extends="drawview">
+        <attribute name="tooltip" type="string" value=""/> 
+        <attribute name="angle" type="number" value="25"/>
+        <!--- The length of the radius in pixels -->
+        <attribute name="radius" type="number" value="10"/>
+        <!--- The data label of this pie slice -->
+        <attribute name="label" type="string" value="null"/>
+        <!--- The value of the angle, in degrees where the rendering of the piepieces started,
+              default = 0 -->
+        <!-- attribute name="startAngle" type="number" value="0"/-->
+        <!--- The segment of the circle that defines the current pie slice -->
+        <attribute name="arcvalue" type="number" value="10"/>
+        <!--- The y radius of the slice. default = null -->
+        <attribute name="yRadius" type="number" value="${null}"/>
+        <!--- The strokestyle object that is applied to the pie slice border -->
+        <strokestyle name="objStroke"/>
+
+        <!--- Render the pie slice.
+              @keywords private -->
+        <method name="renderCircleSegment" args="x, y, startAngle, arc, radius, yRadius">
+        <![CDATA[
+            /**
+                To control the direction of the curve rendering set the variables 'ay', 'endy'
+                 and 'cy' as follows:
+                 clockwise - Math.sin('+')
+                 counterclockwise - Math.sin('-')
+              */
+            var endx, endy, cx, cy;
+            
+            
+            this.moveTo(x, y);
+
+            // The maximum possible value of an arc is 360 degrees.
+            if( Math.abs(arc) > 360 )
+                arc = 360;
+
+            // Flash renders, at most, segments of arc of 45 degrees to form a circle.
+            var maxArc = 45;
+
+            // Get the number of sub-segments needed to render the arc.
+            var arcSegments = Math.ceil(Math.abs(arc)/maxArc);
+
+            // Value of the angle, in degrees, of each sub-segment to render the arc.
+            var angle = arc/arcSegments;
+
+            // Move the pointer to the start of the curve.
+            var ax = x+Math.cos(-startAngle * Math.PI/180)*radius;
+            var ay = y+Math.sin(-startAngle * Math.PI/180)*radius;
+                this.lineTo(ax, ay);
+
+            var arcMid = 0;
+            var theta = angle;
+
+            for( var i=1; i <= arcSegments; i++ ) {
+                sigma = startAngle + angle*i;
+
+                arcMid = Math.tan(theta/2 * Math.PI/180);
+                // endpoint:
+                endx = radius*Math.cos(sigma*Math.PI/180);
+                endy = radius*Math.sin(-sigma*Math.PI/180);
+
+                // control:
+                // (angle-90 is used to give the correct sign)
+                cx =endx + radius*arcMid*Math.cos((sigma-90)*Math.PI/180);
+                cy =endy + radius*arcMid*Math.sin(-(sigma-90)*Math.PI/180);
+
+                this.quadraticCurveTo(cx+x, cy+y, endx+x, endy+y);
+            }
+
+            this.lineTo(x, y);
+        
+
+        ]]>
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="renderMyCircle" args="x, y, startAngle, arc, radius, yRadius">
+        <![CDATA[
+
+                this.beginPath();
+                
+                this.moveTo(x, y);
+                this.lineWidth = this.objStroke.strokeWidth;
+                this.strokeStyle = this.objStroke.strokeColor;
+            
+                // Flash renders, at most, segments of arc of 45 degrees to form a circle.
+                var maxArc = 45;
+                        
+                // Get the number of sub-segments needed to render the arc.
+                var arcSegments = Math.ceil(Math.abs(arc)/maxArc);
+    
+                // Value of the angle, in degrees, of each sub-segment to render the arc.
+                var angle = arc/arcSegments;
+    
+                // Move the pointer to the start of the curve.
+                ax = x+Math.cos(-startAngle * Math.PI/180)*radius;
+                ay = y+Math.sin(-startAngle * Math.PI/180)*radius;
+                    this.moveTo(ax, ay);
+    
+                var arcMid = 0;
+                var theta = angle;
+
+                for( var i=1; i <= arcSegments; i++ ) {
+                    sigma = startAngle + angle*i;
+
+                    arcMid = Math.tan(theta/2 * Math.PI/180);
+                    // endpoint:
+                    var endx = radius*Math.cos(sigma*Math.PI/180);
+                    var endy = radius*Math.sin(-sigma*Math.PI/180);
+
+                    // control:
+                    // (angle-90 is used to give the correct sign)
+                    var cx =endx + radius*arcMid*Math.cos((sigma-90)*Math.PI/180);
+                    var cy =endy + radius*arcMid*Math.sin(-(sigma-90)*Math.PI/180);
+
+                    this.quadraticCurveTo(cx+x, cy+y, endx+x, endy+y);
+                    }
+    
+                   // close the wedge by drawing a line to the center
+                this.moveTo(x, y);
+                        
+                this.stroke();
+                this.closePath();
+        ]]>
+        </method>       
+        
+        <!--- @keywords private -->
+        <method name="renderCircleLines" args="x, y, startAngle, radius, yRadius, arc">
+        <![CDATA[
+            // Init vars
+            var ax, ay; 
+                                                          
+            // draw a line from the center to the start of the curve
+            ax = x+Math.cos(startAngle/180*Math.PI)*radius;
+            ay = y+Math.sin(-startAngle/180*Math.PI)*yRadius;
+            
+            this.objStroke.bringToFront();
+            this.objStroke.renderStroke(0, 0, ax, ay);            
+            ax = x+Math.cos((startAngle+arc)/180*Math.PI)*radius;
+            ay = y+Math.sin(-(startAngle+arc)/180*Math.PI)*yRadius;           
+            this.objStroke.renderStroke(0, 0, ax, ay);
+
+            
+        ]]>
+        </method>        
+
+        <!--- The method called to render the pie slice 
+        @keyword private -->        
+        <method name="renderWedge">
+        <![CDATA[
+            this.clear();
+            this.beginPath();                                 
+            this.renderCircleSegment(0, 0, this.angle, this.arcvalue, this.radius, null);
+            this.closePath();
+            
+            this.fillStyle = this.style.region.color;
+            this.globalAlpha = this.style.region.opacity;            
+            
+            if (this.style.region.gradient == 'radial') {           
+                var radius = this.radius*1.2;
+                      
+                var mygradient = this.createRadialGradient(-radius, -radius, 0, radius, radius, 0);
+                
+                if (mygradient) {
+                    this.globalAlpha = 0;
+                    mygradient.addColorStop(0, 0xffffff);
+                    this.globalAlpha = 1;
+                    mygradient.addColorStop(1, this.style.region.color);
+                    this.fillStyle = mygradient;
+                }
+            }
+            
+            if (this.style.region.gradient == 'linear') {           
+            
+                var angle = this.angle;
+                var arc = this.arcvalue;
+                var radius = this.radius;
+                
+                var halfAngle, halfRadius, positionX, positionY;
+                
+                halfRadius = radius/1.1;
+                
+                halfAngle = arc/2 + angle;        
+            
+                positionX = halfRadius*Math.cos(halfAngle*Math.PI/180);
+                positionY = halfRadius*Math.sin(-halfAngle*Math.PI/180);
+                                  
+                var mygradient = this.createLinearGradient(positionX, positionY, -positionX*0.05, -positionY*0.05);
+                
+                if (mygradient) {
+                    this.globalAlpha = 0;
+                    mygradient.addColorStop(0, 0xffffff);
+                    this.globalAlpha = 1;
+                    mygradient.addColorStop(1, this.style.region.color);
+                    this.fillStyle = mygradient;
+                }
+            }            
+            
+            this.fill();            
+            
+            if (this.style.line.type == 'solid') {
+                this.beginPath();
+                this.renderOutlineWedge(0);
+                this.renderOutlineWedge(this.style.line.size);                                    
+                this.closePath();
+            
+            }
+            
+            if (this.style.line.type == 'dotted') {
+                this.beginPath();
+                this.objStroke.strokeType = 'dotted';
+                this.objStroke.strokeWidth = this.style.line.size;
+                this.objStroke.strokeColor = this.style.line.color;
+                this.objStroke.dottedLength = 5;
+                this.objStroke.spaceLength = 5;
+                this.renderCircleLines(0,0,this.angle, this.radius, this.radius, this.arcvalue);            
+                this.closePath();
+            
+                var myarc, mystep;
+                myarc=1.5;
+                mystep=3;
+                // render the dotted circle
+                for (var i=this.angle; i<=this.arcvalue+this.angle; i+=mystep) {
+                    this.renderMyCircle(0, 0, i, myarc, this.radius, this.radius);
+                }
+            
+            }            
+            
+            if (this.style.line.type == 'dashed') {
+                this.beginPath();
+                this.objStroke.strokeType = 'dotted';
+                this.objStroke.strokeWidth = this.style.line.size;
+                this.objStroke.strokeColor = this.style.line.color;
+                this.objStroke.dottedLength = 10;
+                this.objStroke.spaceLength = 10;
+                this.renderCircleLines(0,0,this.angle, this.radius, this.radius, this.arcvalue);
+                this.closePath();
+            
+                var myarc, mystep;
+                myarc=3;
+                mystep=7;
+                // render the dotted circle
+                for (var i=this.angle; i<=this.arcvalue+this.angle; i+=mystep) {
+                    this.renderMyCircle(0, 0, i, myarc, this.radius, this.radius);
+                }
+            
+            }                        
+                        
+            this.fillStyle = this.style.line.color;
+            this.globalAlpha = this.style.line.opacity;
+            this.fill();
+                        
+        ]]>
+        </method>
+      <!--- @keyword private -->
+      <method name="renderOutlineWedge" args="offset">
+        var angle, miniRadius, positionX, positionY, startRadius;
+        // cut the angle of the piece to the half
+        var midAngle = arcvalue/2 + this.angle;
+
+        // reduce the radius of the inner piece
+        startRadius = offset / Math.sin(arcvalue/2/180*Math.PI);
+
+        if (!isFinite(startRadius))
+            return;
+    
+        miniRadius = this.radius - startRadius - offset;
+
+        if (miniRadius &lt; 0)
+            return;
+
+        //New positions
+        positionX = Math.cos(midAngle/180*Math.PI)*startRadius;
+        positionY = Math.sin(-midAngle/180*Math.PI)*startRadius;
+
+        this.renderCircleSegment(positionX, positionY, this.angle, this.arcvalue, miniRadius, null);
+
+      </method>
+      <!--- @keyword private -->
+        <method name="renderInnerWedge">        
+
+            this.beginPath();
+            this.renderOutlineWedge(0);
+            this.renderOutlineWedge(7);                                    
+            this.closePath();
+            this.fillStyle = 0x00ff00;
+            this.fill();
+            
+        </method>
+
+        <!--- Calculates the correct position where to render the data label
+              @keywords private -->
+        <method name="renderLabel" args="_datalabel" >
+            <![CDATA[
+                var x = _datalabel.parent.width/2;
+                var y = _datalabel.parent.height/2;                
+                var angle = this.angle;
+                var arc = this.arc;
+                var radius = this.radius;
+                
+                var halfAngle, halfRadius, positionX, positionY;
+                
+                if(!_datalabel.labelOut) {    
+                    halfRadius = radius/1.5;
+                } else {
+                    halfRadius = radius * 1.1;
+                }
+                
+                halfAngle = arc/2 + angle;        
+            
+                positionX = halfRadius*Math.cos(halfAngle*Math.PI/180)+x;
+                positionY = halfRadius*Math.sin(-halfAngle*Math.PI/180)+y;
+
+                if(!_datalabel.labelOut) {
+                    _datalabel.setAttribute('x', positionX - _datalabel.width/2);
+                } else {
+                    if(halfAngle < 90 || halfAngle > 270) {
+                        _datalabel.setAttribute('x', positionX);
+                    } else {
+                        _datalabel.setAttribute('x', positionX - _datalabel.width);
+                    }
+                }
+                _datalabel.setAttribute('y', positionY - _datalabel.height/2);
+                _datalabel.bringToFront();
+            ]]>
+        </method>    
+            
+        <handler name="onmouseover">
+            if(tooltip != null)
+            {
+                parent.parent.datatooltip.show(tooltip);
+            }            
+        </handler>
+        
+        <handler name="onmouseout">
+            parent.parent.datatooltip.hide();
+        </handler>
+        
+    </class>    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

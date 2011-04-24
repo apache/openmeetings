@@ -1,0 +1,417 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+
+<library>
+
+
+    <include href="mediadevice.lzx"/>
+
+
+    <!--
+        Microphone. 
+
+        Usage:
+        @START_CODE
+            <microphone/>
+        @END_CODE
+
+        Declaring a microphone with its default attributes will cause it
+        to be immediately useful, which means that a security dialog will
+        appear allowing the end user to allow or deny access to the microphone.
+
+        To defer the display of the security dialog, start the microphone not capturing:
+        @START_CODE
+            <microphone capturing="false"/>
+        @END_CODE
+    -->
+    <class name="microphone"
+        extends="mediadevice"
+    >
+        <passthrough when="$as3">
+            import flash.media.*;
+        </passthrough>
+
+
+        <!--- Flash movie clip for microphone. 
+              @keywords private --> 
+        <attribute name="_mc" value="null"/>
+
+        <!--- Flash Sound object for _mc to control microphone feedback. 
+              @keywords private --> 
+        <attribute name="_sound" value="null"/>
+
+        <!--- Audio level, 0-100, the amount of sound detected by this microphone.
+              Reset to 0 when there is no audio (no activity or not allowed).
+              @keywords readonly -->
+        <attribute name="level" type="number" value="0"/>
+        <!--- Event sent when microphone level changes. 
+              @keywords private -->
+        <event name="onlevel"/>
+
+        <!--- Silence level, 0-100, the amount of sound required to activate 
+              the microphone.  -->
+        <attribute name="silencelevel" type="number" value="10"/>
+        <!--- Event sent when microphone silence level changes. 
+              @keywords private -->
+        <event name="onsilencelevel"/>
+        <!--- @keywords private -->
+        <setter name="silencelevel" args="level"> <![CDATA[
+            //Debug.write("microphone set silencelevel", this, level, this.isinited, this._dev, this._mc);
+            if (level === this.silencelevel) {
+                return;
+            }
+            this.silencelevel = level;
+            if (this._dev != null) {
+                this._dev.setSilenceLevel(this.silencelevel, this.silencetimeout);
+            }
+            if (this.onsilencelevel.ready) {
+                this.onsilencelevel.sendEvent(level);
+            }
+          ]]>
+        </setter>
+
+        <!--- Silence timeout in ms, the amount of silent time signifying that 
+              silence has actually begun.  -->
+        <attribute name="silencetimeout" type="number" value="-1"/>
+        <!--- Event sent when microphone timeout changes. 
+              @keywords private -->
+        <event name="onsilencetimeout"/>
+        <!--- @keywords private -->
+        <setter name="silencetimeout" args="timeout"> <![CDATA[
+            //Debug.write("microphone set silencetimeout", this, timeout, this.isinited, this._dev, this._mc);
+            if (timeout === this.silencetimeout) {
+                return;
+            }
+            this.silencetimeout = timeout;
+            if (this._dev != null) {
+                this._dev.setSilenceLevel(this.silencelevel, this.silencetimeout);
+            }
+            if (this.onsilencetimeout.ready) {
+                this.onsilencetimeout.sendEvent(timeout);
+            }
+          ]]>
+        </setter>
+
+        <!--- The codec to use, either 'NellyMoser' or 'Speex'.
+              @keywords final  -->
+        <attribute name="codec" type="string" value="NellyMoser"/>
+
+        <!--- The quality of encoded speech quality when using the Speex codec.
+              Possible values are from 0 to 10.
+              @keywords final  -->
+        <attribute name="encodequality" type="number" value="6"/>
+
+        <!--- Number of Speex speech frames transmitted in a packet.
+              @keywords final  -->
+        <attribute name="framesperpacket" type="number" value="6"/>
+
+        <!--- Rate in khz the microphone is using to capture sound, either 5, 8, 11, 22, or 44.
+              @keywords final  -->
+        <attribute name="rate" type="number" value="8"/>
+
+        <!--- The amount the microphone boosts the signal.  -->
+        <attribute name="gain" type="number" value="50"/>
+        <!--- Event sent when microphone gain changes. 
+              @keywords private -->
+        <event name="ongain"/>
+        <!--- @keywords private -->
+        <setter name="gain" args="gain"> <![CDATA[
+            //Debug.write("microphone set gain", this, gain, this.isinited, this._dev, this._mc);
+            if (gain === this.gain) {
+                return;
+            }
+            this.gain = gain;
+            if (this._dev != null) {
+                this._dev.gain = gain;
+            }
+            if (this.ongain.ready) {
+                this.ongain.sendEvent(gain);
+            }
+          ]]>
+        </setter>
+
+        <!--- If true, the microphone will attempt to use echo suppression.  -->
+        <attribute name="echosuppression" type="boolean" value="true"/>
+        <!--- Event sent when microphone echosuppression changes. 
+              @keywords private -->
+        <event name="onechosuppression"/>
+        <!--- @keywords private -->
+        <setter name="echosuppression" args="echosuppression"> <![CDATA[
+            //Debug.write("microphone set echosuppression", this, echosuppression, this.isinited, this._dev, this._mc);
+            if (echosuppression === this.echosuppression) {
+                return;
+            }
+            this.echosuppression = echosuppression;
+            if (this._dev != null) {
+                this._dev.setUseEchoSuppression(echosuppression);
+            }
+            if (this.onechosuppression.ready) {
+                this.onechosuppression.sendEvent(echosuppression);
+            }
+          ]]>
+        </setter>
+
+        <!--- Level delegate, used to track level changes. 
+              @keywords private -->
+        <attribute name="_leveldel" value="$once{new LzDelegate(this, '_updateLevel')}"/>
+
+        <!--- Mediastream to associate with the microphone, for audio recording. -->
+        <attribute name="stream" value="null"/>
+        <!--- Event sent when stream changes. 
+              @keywords private -->
+        <event name="onstream"/>
+        <!--- Associate a mediastream with the microphone.
+          This is called to connect a microphone directly
+          to a mediastream, without an intervening videoview,
+          for audio only recording.
+              @keywords private -->
+        <setter name="stream" args="stream"><![CDATA[
+        //Debug.write("microphone set stream", stream);
+            this.stream = stream;
+            if (stream) {
+                //Debug.write("microphone", this, "set stream", stream);
+                stream.setAttribute('mic', this);
+            }
+          ]]>
+        </setter>
+
+        <!--- Make the microphone.
+              @keywords private -->
+        <method name="_makeDevice"><![CDATA[
+            var deviceindex = this['deviceindex'];
+
+            var dev = null;
+            if ($as3) {
+                if (deviceindex == null) {
+                    dev = flash.media.Microphone.getMicrophone();
+                } else {
+                    dev = flash.media.Microphone.getMicrophone(deviceindex);
+                }
+                // This is done to supress pesky feedback. 
+                dev.soundTransform = this._sound;
+
+                // apply defaults
+                dev.codec = this.codec;
+                dev.encodeQuality = this.encodequality;
+                dev.framesPerPacket = this.framesperpacket;
+                dev.gain = this.gain;
+                dev.rate = this.rate;
+                dev.setUseEchoSuppression(this.echosuppression)
+                dev.setSilenceLevel(this.silencelevel, this.silencetimeout);
+            } else {
+                if (deviceindex == null) {
+                    dev = Microphone.get();
+                } else {
+                    dev = Microphone.get(deviceindex);
+                }
+            }
+
+            this._dev = dev;
+
+            return dev;
+          ]]>
+        </method>
+
+
+        <!--- Set up the microphone. 
+              @keywords private -->
+        <method name="_setupDevice"><![CDATA[
+            var dev = this._dev;
+
+            // ...
+          ]]>
+        </method>
+
+
+        <!--- Start the microphone. -->
+        <method name="startDevice"><![CDATA[
+            //Debug.write("microphone startdevice", this);
+
+            // This is done to supress pesky feedback. 
+            if ($as3) {
+                this._sound = new SoundTransform(0, 0);
+            } else {
+                this._mc = 
+                    _root.createEmptyMovieClip("__LZmicMovieClip", 10000);
+
+                this._sound = 
+                    new Sound(this._mc);
+                this._sound.setVolume(0);
+            }
+
+            super.startDevice();
+
+            // check for the existence of immediateparent.videoview
+            if (lz['videoview'] && immediateparent instanceof lz.videoview) {
+                immediateparent.setAttribute('mic', this);
+            }
+
+            //Debug.write("microphone startDevice setting capturing", this.capturing);
+            this.setAttribute("capturing", this.capturing);
+          ]]>
+        </method>
+
+
+        <!--- Handler for the Flash Microphone onActivity callback. 
+              @keywords private -->
+        <handler name="onactive"><![CDATA[
+            //Debug.write("microphone onactive", this, "onlevel", this.onlevel, "active", this.active);
+            if (this.onlevel.ready) {
+                if (this.active && this.capturing) {
+                    this._leveldel.register(lz.Idle, "onidle");
+                } else {
+                    this._leveldel.unregisterAll();
+                    this.setAttribute("level", 0);
+                }
+            }
+          ]]>
+        </handler>
+
+
+        <!--- Called when the allowed flag changes.
+              @keywords private -->
+        <method name="_updateAllowed"><![CDATA[
+            //Debug.write("microphone _updateAllowed", this, this.allowed, "capturing", this.capturing);
+            super._updateAllowed();
+
+            this.setAttribute("capturing", this.capturing);
+          ]]>
+        </method>
+
+
+        <!--- Setter for capturing attribute. 
+              @keywords private -->
+        <setter name="capturing" args="capturing"> <![CDATA[
+            //Debug.write("microphone _setCapturing", this, capturing, this.isinited, this._dev, this._mc);
+
+            super.setAttribute('capturing', capturing);
+
+            if (!this.isinited) {
+                return;
+            }
+
+            if (this._dev != null) {
+                if ($as3) {
+                    if (capturing) {
+                        this._dev.setLoopBack(true);
+                    } else {
+                        this._dev.setLoopBack(false);
+                    }
+                } else {
+                    if (capturing) {
+                        this._mc.attachAudio(this._dev);
+                    } else {
+                        this._mc.attachAudio(false);
+                    }
+                }
+                this.setAttribute("active", this.active);
+            }
+
+          ]]>
+        </setter>
+
+        <!--- Handler for updating the microphone activity level attribute. 
+              @keywords private -->
+        <method name="_updateLevel" args="ignore = null"><![CDATA[
+            var level = this._dev.activityLevel;
+            if (level < 0) {
+                level = 0;
+            }
+            if (level != this.level) {
+                this.setAttribute("level", level);
+            }
+          ]]>
+        </method>
+
+        <doc>
+            <tag name="shortdesc">
+                <text>A microphone connection to a media server.</text>
+            </tag>
+            <text>
+                <p>The <class>&lt;microphone&gt;</class> element allows you to set up and control a microphone that is connected to a media server. For privacy protection, the <attribute>allowed</attribute> attribute must be set to <attribute>true</attribute> by the user.</p>
+                <p>The following figure shows a microphone control.</p>
+                    <programlisting>
+    &lt;canvas&gt;
+        
+        &lt;microphone id=&quot;m&quot; 
+            capturing=&quot;${controlpanel.capturing.value}&quot;
+        /&gt;
+        
+        &lt;view
+            x=&quot;10&quot; 
+            y=&quot;20&quot; 
+            width=&quot;102&quot; 
+            height=&quot;12&quot; 
+            bgcolor=&quot;black&quot;
+            &gt;
+            &lt;view
+                x=&quot;1&quot; 
+                y=&quot;1&quot; 
+                bgcolor=&quot;yellow&quot; 
+                width=&quot;${m.level}&quot; 
+                height=&quot;10&quot;
+            /&gt;
+        &lt;/view&gt;
+        &lt;view
+            y=&quot;100&quot;
+            &gt;
+            &lt;simplelayout
+                axis=&quot;x&quot; 
+                inset=&quot;10&quot; 
+                spacing=&quot;20&quot;
+            /&gt;
+            &lt;view
+                layout=&quot;axis: y; spacing: 4&quot;
+                &gt;
+                &lt;text
+                    text=&quot;${&apos;deviceindex: &apos; + m.deviceindex}&quot; 
+                    resize=&quot;true&quot;
+                /&gt;
+                &lt;text
+                    text=&quot;${&apos;devicename: &apos; + m.devicename}&quot; 
+                    resize=&quot;true&quot;
+                /&gt;
+                &lt;text
+                    text=&quot;${&apos;capturing: &apos; + m.capturing}&quot;
+                    resize=&quot;true&quot;
+                /&gt;
+                &lt;text
+                    text=&quot;${&apos;allowed: &apos; + m.allowed}&quot;
+                    resize=&quot;true&quot;
+                /&gt;
+                &lt;text
+                    text=&quot;${&apos;level: &apos; + m.level}&quot; 
+                    resize=&quot;true&quot;
+                /&gt;
+            &lt;/view&gt;
+            &lt;view
+                width=&quot;1&quot; 
+                height=&quot;100&quot; 
+                bgcolor=&quot;black&quot;
+            /&gt;
+            &lt;view id=&quot;controlpanel&quot; 
+                layout=&quot;axis: y; spacing: 10&quot;
+                &gt;
+                &lt;checkbox name=&quot;capturing&quot;
+                    text=&quot;Capturing&quot;
+                    value=&quot;false&quot;
+                /&gt;
+                &lt;button
+                    text=&quot;Show Settings&quot;
+                    onclick=&quot;m.showSettings()&quot;
+                /&gt;
+            &lt;/view&gt;
+        &lt;/view&gt;
+                        
+   &lt;/canvas&gt;
+                    </programlisting>
+            </text>
+            </doc>
+
+    </class>
+
+
+</library>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget id="%APPURL%" version="1.0 beta"
+        dockable="yes" floatable="no" network="public"> 
+  <widgetname>%APPTITLE%</widgetname> 
+  <description>OpenLaszlo App deployed as W3C widget</description> 
+  <icon>widget-icon.png</icon>
+  <width>%APPWIDTH%</width> 
+  <height>%APPHEIGHT%</height> 
+  <author>
+    <name>OpenLaszlo Deployer Utility</name> 
+    <organization>OpenLaszlo Project</organization> 
+    <link>http://www.openlaszlo.org</link> 
+    <email>laszlo-users@openlaszlo.org</email>
+  </author>
+  <security>
+    <access>
+      <protocol>http</protocol>
+      <host>www.openlaszlo.org</host>
+    </access>
+  </security>
+  <!-- Disallow browser plugins -->
+  <content plugins="no"/>
+  <license></license>
+</widget>

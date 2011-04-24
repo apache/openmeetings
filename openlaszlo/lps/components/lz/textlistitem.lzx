@@ -1,0 +1,85 @@
+<library>
+
+    <include href="lz/listitem.lzx" />
+    
+    <!-- Textlistitem is a baselist item with a text field. -->
+    <class name="textlistitem" extends="listitem">
+
+        <!--- The x position of the displayed text. -->
+        <attribute name="text_x"    value="4"/>
+
+        <!--- the y position of the text label. default: centered -->
+        <attribute name="text_y"
+            value="${this.height/2 - this._title.height/2}" />
+
+
+        <text name="_title"
+                    x="${classroot.text_x}"
+                    y="${classroot.text_y}"
+                    width="100%"
+              text="${parent.text}" />
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s"><![CDATA[
+            // TODO [20090814 anba] I wonder why 'this.style' 
+            // is used instead of 's'
+            var style = this['style'];
+            if (style != null) {
+                super._applystyle(s);
+                // set text color
+                var textcolor;
+                if (this._enabled) {
+                    if (this.hilited) {
+                        textcolor = style.texthilitecolor;
+                    } else if (this.selected) {
+                        textcolor = style.textselectedcolor;
+                    } else {
+                        textcolor = style.textcolor;
+                    }
+                } else {
+                    textcolor = style.textdisabledcolor;
+                }
+                if (this._title) this._title.setAttribute('fgcolor', textcolor);
+            }
+        ]]></method>
+
+         <!--- @keywords private -->
+         <method name="_showEnabled">  <![CDATA[
+            super._showEnabled();
+             if (_initcomplete) {
+                _applystyle(this.style);
+            }
+         ]]>
+         </method>
+
+         <doc>
+           <tag name="shortdesc"><text>
+               a textlistitem extends listitem and provides text display 
+           </text></tag>
+           <text>
+
+             <p>A <classname>textlistitem</classname> is a
+               <sgmltag class="element" role="lz.listitem">&lt;listitem&gt;</sgmltag> which displays text.  This is the most
+               common form of a <sgmltag class="element" role="lz.listitem">&lt;listitem&gt;</sgmltag>, and is the default
+               listitem for <sgmltag class="element" role="lz.combobox">&lt;combobox&gt;</sgmltag>s,
+               <sgmltag class="element" role="lz.menu">&lt;menu&gt;</sgmltag>s, <sgmltag class="element" role="lz.list">&lt;list&gt;</sgmltag>s, and
+               <sgmltag class="element" role="lz.floatinglist">&lt;floatinglist&gt;</sgmltag>s.
+             </p> 
+
+             <example>
+               &lt;canvas height="100"&gt;
+               &lt;list&gt;
+               &lt;textlistitem text="item 1" value="1" selected="true"/&gt;
+               &lt;textlistitem text="item 2" value="2"/&gt;
+               &lt;/list&gt;
+               &lt;/canvas&gt;
+             </example>
+           </text>
+         </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

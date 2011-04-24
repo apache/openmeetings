@@ -1,0 +1,163 @@
+<library>
+    <include href="base/basebuttonrepeater.lzx" />
+    <include href="base/basescrollbar.lzx" />
+    <include href="utils/layouts/stableborderlayout.lzx"/>
+    <include href="scrollbar_xresources.lzx"/>
+
+    <!-- A scrollbar manipulates the x or y position of a target view that is
+          clipped by its parent, creating a scrolling effect when the user
+          clicks up/down arrows, clicks on the scroll track or drags the
+          thumb. -->
+<class name="hscrollbar" extends="basescrollbar"
+    bgcolor="0x595959"
+    axis="x">
+
+    <!--- If this is defined, it will be used as the scrollbar's background
+          color when it is disabled. If not provided, the scrollbar will use
+          the bgcolor of its closest parent that has a bgcolor defined.  -->
+    <attribute name="disabledbgcolor" value="null"/>
+
+    <handler name="oninit" reference="canvas" >
+        this._showEnabled();
+    </handler>
+    
+    <!--- @keywords private -->
+    <method name="_showEnabled">
+        <![CDATA[
+        if (!_enabled) {
+            var newbgcolor = this.disabledbgcolor;
+            if (newbgcolor == null) {
+                var p = immediateparent;
+                while (p.bgcolor == null && p != canvas) {
+                    p = p.immediateparent;
+                }
+                newbgcolor = p.bgcolor;
+                if (newbgcolor == null) newbgcolor = 0xffffff;
+            }
+            this.setAttribute('bgcolor', newbgcolor);
+        } else {
+            this.setAttribute('bgcolor', 0x595959);
+        }
+        super._showEnabled();
+    ]]>
+    </method>
+
+    <attribute name="height" value="14"/>
+
+    <!-- left arrow -->
+    <view name="leftarrow">
+        <basescrollarrow x="1" y="1"
+            resource="lzscrollbar_xbuttonleft_rsc"
+            direction="-1"/>
+    </view>
+    <view name="scrolltrack" height="12" y="1">
+        <!-- top of the scroll track -->
+        <basescrolltrack name="top"
+            resource="lzscrollbar_xtrack_rsc" stretches="width"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3"
+            direction="-1">
+            <attribute name="width" value="${parent.thumb.x}"/>
+            <attribute name="height" value="${parent.height}"/>
+        </basescrolltrack>
+
+        <!-- thumb -->
+         <basescrollthumb name="thumb" y="0">
+             <view resource="lzscrollbar_xthumbleft_rsc"/>
+             <view resource="lzscrollbar_xthumbmiddle_rsc" stretches="both"/>
+             <view resource="lzscrollbar_xthumbright_rsc"/>
+             <stableborderlayout axis="x"/>
+             <!-- note: stableborderlayout only acts on the first three views -->
+             <view resource="lzscrollbar_xthumbgripper_rsc" y="1"
+                 width="${Math.min(200, parent.width-16)}"
+                 clip="true" align="center"/>
+        </basescrollthumb>
+
+        <!-- bottom of the scroll track -->
+        <basescrolltrack name="bottom"
+            resource="lzscrollbar_xtrack_rsc" stretches="width"
+            overResourceNumber="0"
+            downResourceNumber="2"
+            disabledResourceNumber="3">
+            <attribute name="x" value="${parent.thumb.x+parent.thumb.width}"/>
+            <attribute name="width"
+                value="${parent.width - parent.thumb.x - parent.thumb.width}"/>
+            <attribute name="height" value="${parent.height}"/>
+        </basescrolltrack>
+
+
+    </view>     <!-- scrolltrack -->
+
+    <!-- right arrow -->
+    <view width="14">
+        <basescrollarrow name="rightarrow" y="1"
+            resource="lzscrollbar_xbuttonright_rsc"/>
+    </view>
+    <stableborderlayout axis="x"/>
+
+    <state applied="${parent.othersb}">
+        <view name="patch" x="${parent.width}"
+            bgcolor="${(parent._enabled || parent.othersb._enabled)
+                ? 0xbdbdbd : parent.disabledbgcolor}"
+            width="${parent.height}" height="${parent.height}"/>
+    </state>
+
+    <doc>
+      <tag name="shortdesc"><text>
+          Provides a horizontal scrollbar.
+      </text></tag>
+      <text>
+        <p>A scrollbar manipulates the x or y position of a target view that is clipped by its parent, 
+          creating a scrolling effect when the user clicks up/down arrows, clicks on the scroll track
+          or drags the thumb.
+        </p>
+        <p>This tag creates a horizontal scrollbar.  If you do not specify a
+          <attribute>scrolltarget</attribute> the scrollbar will automatically
+          be aligned to the bottom and size its width to its parent's width.  It
+          is expected that the parent view be smaller than the scrolltarget and
+          set <code>clip=true</code>.  The scrolling effect is produced by moving
+          the scrolltarget while its visible region is clipped by the parent
+          view.</p>
+
+        <p>If you would like the target view to start scrolled, simply set its
+          x position to a negative number.  For example, <code>x=-10</code> will
+          cause the view to be scrolled 10 pixels.</p>
+
+        <note>If you have no vertical scrollbars in your application, using
+          the <tagname>hscrollbar</tagname> tag will make the applications
+          slightly smaller than if you were to use &lt;scrollbar
+          axis="x"&gt;.</note>
+
+        <example title="Simple scrollbar">
+          &lt;canvas height="100"&gt;
+          &lt;view name="main" width="100" height="90" clip="true"&gt;
+          &lt;view name="contents"&gt;
+          &lt;text width="200"  height="70" multiline="true" &gt;
+          Remember not only to say the right thing in the right place,
+          but far more difficult still, to leave unsaid the wrong thing
+          at the tempting moment.
+          -- Benjamin Franklin
+          &lt;/text&gt;
+          &lt;/view&gt;
+          &lt;hscrollbar/&gt;
+          &lt;/view&gt;
+          &lt;/canvas&gt;
+        </example>
+        
+        <p>In the example above, the scrolltarget is the 'contents' view. A
+          scrollbar moves its <attribute>scrolltarget</attribute> along its
+          axis.  The attribute that is controlled by the scrollbar may be
+          specified as the <attribute>scrollattr</attribute>, overriding the
+          default value of <code>x</code> or <code>y</code>.</p>
+
+      </text>
+    </doc>
+
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

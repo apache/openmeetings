@@ -1,0 +1,664 @@
+<library>
+
+    <include href="base/basecomponent.lzx" />
+    <include href="base/basebuttonrepeater.lzx" />
+
+
+    <!--- Contains non-visual aspects of a scrollbar. Subclasses are expected to
+          define this.thumb and this.scrolltrack to reference the views that
+          perform those functions. -->
+    <class name="basescrollbar" extends="basecomponent" focusable="false">
+
+        <!--- The view that is controlled by the scrollbar.
+              @keywords final -->
+        <attribute name="scrolltarget" value="null" type="expression" when="always"/>
+
+        <!--- Axis may be "x" or "y", controls the orientation and default
+              scrollattr
+              @keywords final -->
+        <attribute name="axis" value="y" type="string"/>
+
+        <!--- @keywords private -->
+        <attribute name="sizeAxis" type="string" />
+    
+        <!--- @keywords private -->
+        <attribute name="otherSizeAxis" type="string" />
+    
+        <!--- The attribute of the scrolltarget that is modified by the scrollbar,
+              default: value of axis attribute.
+              @keywords final -->
+        <attribute name="scrollattr" type="string" value=""/>
+
+        <!--- The maximum distance to scroll, default: the height or width
+              of the scrolltarget. -->
+        <attribute name="scrollmax" type="number" value="null" />
+        
+        <!--- @keywords public -->
+        <event name="onscrollmax"/>
+        
+        <!--- The maximum distance to scroll, default: the height or width
+              of the scrollbar.
+              @keywords final -->
+        <attribute name="pagesize" type="number" value="null"/>
+
+        <!--- The amount that the scrolltarget is moved when the user clicks on
+              the scrolltrack or when the step method is called. -->
+        <attribute name="stepsize" value="10"/>
+
+        <!--- True if the scrolltarget is bigger than the containing view
+              therefore the scrollbar is active. The scrollbar appears disabled
+              when scrollable is false. You can make the scrollbar invisible
+              when there is nothing to scroll by setting visible="${scrollable}"
+              @keywords readonly -->
+        <attribute name="scrollable" value="true"/>
+
+        <!--- The view to which the scrollbar should listen for focus 
+            events. If not set, it will be set to the scrolltarget
+            or the immediateparent of the scrollbar,
+            whichever is focusable -->
+        <attribute name="focusview" value="null"/>
+
+        <!--- If true, this scrollbar listens for mousewheel events -->
+        <attribute name="usemousewheel" value="true"/>
+        <setter name="usemousewheel" args="use">
+            if (use == this.usemousewheel) return;
+            this.usemousewheel = use;
+            if (this._mwUpdateDel) this._mwUpdateDel.unregisterAll();
+            if (use) {
+                this._mwUpdateDel = new LzDelegate( this , "mousewheelUpdate",
+                    lz.Keys, "onmousewheeldelta");
+            }
+        </setter>
+
+        <!--- The event that activates the mousewhen when sent from the focusview -->
+        <attribute name="mousewheelevent_on" value="onfocus" type="string"/>
+
+        <!--- The event that deactivates the mousewhen when sent from the focusview -->
+        <attribute name="mousewheelevent_off" value="onblur" type="string"/>
+
+        <!--- If true, the mousewheel is active for the focusview.
+              @keywords read-only -->
+        <attribute name="mousewheelactive" value="false" type="boolean"/>
+
+        <!--- @keywords private -->
+        <event name="onscrollable"/>
+
+        <!--- @keywords private -->
+        <attribute name="_enabled"
+            value="${this.enabled &amp;&amp; this.scrollable &amp;&amp;
+               (this._parentcomponent ? this._parentcomponent._enabled : true)}"/>
+
+        <!--- If scrollmax is not defined and this is true, use the target
+              height or width to determine scrollmax.
+              @keywords private  -->
+        <attribute name="usetargetsize" value="false"/>
+
+        <!--- Reference to the other scrollbar, if there is one.
+              This value is set oninit.
+              @keywords private -->
+        <attribute name="othersb" value="null" />
+
+        <!--- @keywords private -->
+        <attribute name="thumb" value="null" />
+
+        <!--- @keywords private -->
+        <attribute name="_mwActivateDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="_mwDeactivateDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="_mwUpdateDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="clipSizeDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="targetHeightDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="targetPosDel" value="null" />
+        <!--- @keywords private -->
+        <attribute name="heightDel" value="null" />
+
+        <!-- if the scrollbar is vertical and the developer has not set a height
+             then the scrollbar should be its parent's height, see oninit -->
+        <state name="heightConstraint">
+            <attribute name="height"
+                value="${this.othersb &amp;&amp; this.othersb.visible 
+                       ? this.immediateparent.height - this.othersb.height
+                       : this.immediateparent.height}"/>
+        </state>
+
+        <!-- if the scrollbar is horizontal and the developer has not set a width
+             then the scrollbar should be its parent's width, see oninit -->
+        <state name="widthConstraint">
+            <attribute name="width"
+                value="${this.othersb &amp;&amp; this.othersb.visible
+                       ? this.immediateparent.width - this.othersb.width 
+                       : this.immediateparent.width }"/>
+        </state>
+
+        <!---  @keywords private -->
+        <method name="init">
+            <![CDATA[
+            this.sizeAxis = (this.axis == "x") ? "width" : "height"
+            this.otherSizeAxis = (this.axis == "x") ? "height" : "width"
+
+            // if no 'scrolattr' attribute, use 'x' or 'y' from 'axis' attribute
+            if (this.scrollattr == "" ) {
+                this.scrollattr = this.axis;
+            }
+
+
+            var autoalign = false;
+            // if no scrolltarget defined,
+            // let's find one in our parent's subview list
+            if (!this.scrolltarget) {
+                var subcount = immediateparent.subviews.length;
+                for (var i = 0; i < subcount; i++) {
+                   var s = immediateparent.subviews[i];
+                   if (s instanceof lz.view) {
+                      if (! (s instanceof lz.basescrollbar )){
+                        // first non-scrollbar view is the scrolltarget
+                        if (!this.scrolltarget) this.scrolltarget = s;
+                      } else {
+                        // we'll need to make room for the other scrollbar
+                        if (s != this) {
+                            this.setAttribute('othersb',s);
+                        }
+                      }
+                   }
+                }
+                // only auto-align if there developer did not specify a target
+                if (this.axis == 'y') {
+                    this.setAttribute('align', 'right');
+                } else {
+                    this.setAttribute('valign', 'bottom');
+                }
+                autoalign = true;
+            }
+
+            if (!this.focusview) {
+                if (this.scrolltarget && this.scrolltarget['focusable']) {
+                    this.focusview = this.scrolltarget;
+                } else if (this.immediateparent['focusable']) {
+                    this.focusview = this.immediateparent;
+                }
+            }
+            // activate/deactivate when the focusview focuses/blurs
+            if (this.focusview) {
+                this._mwActivateDel = new LzDelegate( this , "activateMouseWheel",
+                    this.focusview, this.mousewheelevent_on);
+                this._mwDeactivateDel = new LzDelegate( this , "deactivateMouseWheel",
+                    this.focusview, this.mousewheelevent_off);
+            }
+
+            // set width or height if not defined for sizeAxis
+            if (this.sizeAxis == 'width') {
+                if (!hassetwidth) {
+                    this.widthConstraint.setAttribute('applied', true);
+                }
+            }
+
+            if (this.sizeAxis == 'height') {
+                if (!hassetheight) {
+                    this.heightConstraint.setAttribute('applied', true);
+                }
+            }
+
+            if (!this.scrolltarget) {
+                   this.setAttribute('enabled', false);
+            } else {
+                this.clipSizeDel = new LzDelegate( this , "scrollbarSizeUpdate",
+                    this.scrolltarget.immediateparent, "on" + this.sizeAxis);
+
+                // if 'scrollmax' is undefined, use target size
+                if (this.scrollmax == null ){
+                    this.usetargetsize = true;
+                    this.targetHeightDel = new LzDelegate( this , "targetSizeUpdate",
+                        this.scrolltarget, "on" + this.sizeAxis);
+                    this.scrollmax = scrolltarget[this.sizeAxis];
+                    if (autoalign && this.othersb) {
+                        this.scrollmax += this[this.otherSizeAxis];
+                    }
+                } else {
+                    this.targetHeightDel = new LzDelegate( this , "scrollbarSizeUpdate",
+                        this, "onscrollmax");
+                }
+
+                var eventname;
+                if (this.scrollattr == 'yscroll') eventname="onscrolly"
+                else eventname = "on" + this.scrollattr;
+                this.targetPosDel = new LzDelegate( this , "targetPosUpdate",
+                    this.scrolltarget, eventname);
+
+                // register for scrolltrack height changes, not for this.height
+                // assumes that scrolltrack height is always a function of this.height
+                this.heightDel = new LzDelegate( this , "scrollbarSizeUpdate",
+                    this.scrolltrack, "on" + this.sizeAxis);
+
+                scrollbarSizeUpdate(null);
+            }
+            super.init();
+
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="destroy" ><![CDATA[
+            this.scrolltarget = null;
+            this.focusview = null;
+            this.othersb = null
+
+            super.destroy();
+        ]]></method>
+
+        <!---  @keywords private -->
+        <method name="activateMouseWheel" args="ignore" >  <![CDATA[
+            this.setAttribute('mousewheelactive', true);
+            ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="deactivateMouseWheel" args="ignore" >  <![CDATA[
+            this.setAttribute('mousewheelactive', false);
+            ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="mousewheelUpdate" args="d"> <![CDATA[
+            if (this.axis != 'y') return;
+            // check if the mouse is over the view
+            if (this.mousewheelactive || (this.scrolltarget && this.scrolltarget.immediateparent && this.scrolltarget.immediateparent.isMouseOver()) ) {
+                this.step(-d);
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="targetSizeUpdate" args="ignore">
+            <![CDATA[
+            if (this.scrolltarget) {
+                var sm = this.scrolltarget[this.sizeAxis];
+                if (this.othersb && this.othersb.visible) {
+                    sm += this[this.otherSizeAxis];
+                }
+                this.setAttribute("scrollmax", sm);
+                this.scrollbarSizeUpdate(null);
+            }
+            ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="scrollbarSizeUpdate" args="ignore">
+        <![CDATA[
+            // should hide thumb if the target view is smaller than the scrollbar
+            // Calendar does not need this feature, so it is unimplemented
+            this.updateThumbSize();    // need to do before thumb.updateY
+
+            if (this.scrolltarget.immediateparent[this.sizeAxis] - this.scrollmax >= 0) {
+                // scrollbar is inactive, thumb invisible
+                return;
+            }
+            var visible_size = this.scrolltarget[this.scrollattr] + this.scrollmax;
+            if (visible_size < this.scrolltarget.immediateparent[this.sizeAxis]) {
+                // if the target view is offset because of the shift in height/width
+                // update the scroll position of the target view
+                var newpos = this.scrolltarget.immediateparent[this.sizeAxis]
+                                - this.scrollmax;
+                this.scrolltarget.setAttribute(this.scrollattr, newpos);
+            }  else {
+                this.updateThumbPos();
+            }
+
+            this.pagesize = this[this.sizeAxis];
+    
+        ]]>
+        </method>
+
+        <!---  @keywords private -->
+        <method name="targetPosUpdate" args="ignore">
+           // when the position of the target view changes then update
+           //  the thumb position, not called when thumb is dragging
+           this.updateThumbPos();
+        </method>
+
+        <!---  @keywords private -->
+        <method name="updateThumbPos">
+        <![CDATA[
+            var new_pos = 0;
+            if (this.scrollmax > 0 && this.scrolltrack && this.scrolltarget)  {
+                new_pos = Math.min(Math.ceil((-this.scrolltarget[this.scrollattr]/this.scrollmax)
+                       *this.scrolltrack[this.sizeAxis]), (this.scrolltrack[this.sizeAxis])-this.thumb[this.sizeAxis]);
+            }
+            this.thumb.setAttribute(this.axis, new_pos);
+        ]]>
+        </method>
+
+        <!--- Subclasses can override to change visual state when the scrollable
+              attribute changes state. 
+              @keywords private -->
+        <method name="_showEnabled">
+                if (!_enabled) this.thumb.setAttribute(sizeAxis, 0);
+                else updateThumbSize();
+                this.thumb.setAttribute('visible', _enabled);
+                if (scrolltarget) this.scrolltarget.setAttribute(scrollattr, 0);
+        </method>
+
+        <!---  @keywords private -->
+        <method name="updateThumbSize">
+            <![CDATA[
+            // disable/enable the scrollbar if necessary
+            if (this.scrollmax <= this.scrolltarget.immediateparent[this.sizeAxis]) {
+                    if (this.scrollable) {
+                        this.setAttribute('scrollable',false);
+                        if (this.othersb) // hint othersb about our disappearance...
+                        this.othersb.targetSizeUpdate(null);
+                    }
+                    return;
+            } else {
+                if (!this.scrollable) {
+                 this.setAttribute('scrollable', true);
+                     if (this.othersb) // hint othersb about our appearance...
+                     this.othersb.targetSizeUpdate(null);
+                }
+           }
+            
+            var newsize = 0;
+            if (this.scrollmax > 0 && this.scrolltrack && this.scrolltarget) {
+                newsize = Math.floor(
+                    (this.scrolltarget.immediateparent[this.sizeAxis]/this.scrollmax)
+                    *this.scrolltrack[this.sizeAxis]);
+            }
+            if (newsize < 14) newsize = 14;
+            thumb.setAttribute(this.sizeAxis, newsize);
+            ]]>
+        </method>
+
+        <!-- Set the scrolltarget position                                  -->
+        <!-- change: change in position, note: positive number scrolls down -->
+        <!--- @keywords private -->
+        <method name="setPosRelative" args="change">
+        <![CDATA[
+            if (!this.scrolltarget) return;
+
+            var newpos = this.scrolltarget[this.scrollattr] - change;
+
+            if (newpos > 0) newpos=0;
+
+            var maxdistance =
+                Math.max(this.scrollmax - this.scrolltarget.immediateparent[this.sizeAxis], 0);
+            if (newpos < -maxdistance) newpos = -maxdistance;
+
+            this.scrolltarget.setAttribute(this.scrollattr, newpos);
+        ]]>
+        </method>
+
+        <!--- Step(1) to move ahead, step(-1) to move back.
+              @param Number n: -1 or 1 -->
+        <method name="step" args="n">
+            this.setPosRelative(n*this.stepsize);
+        </method>
+
+        <!--- Page(1) to page ahead, page(-1) to page back.
+              @param Number n: -1 or 1 -->
+        <method name="page" args="n">
+            this.setPosRelative(n*this.pagesize);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                setTint(this, this.style.basecolor);
+            }
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>Provides non-visual aspects of scrollbar.</text></tag>
+          <text>
+            <p>If you want to create a scrollbar with a custom look, you can use
+            <classname>basescrollbar</classname> along with helper classes
+            <classname>basescrolltrack</classname>,
+            <classname>basescrollthumb</classname>, and
+            <classname>basescrollarrow</classname>. These classes will allow you
+            to change resources, colors, and the position or presence of various
+            elements.
+            </p>
+            
+            
+            <example title="An unconventional scrollbar">
+            &lt;canvas height="120" bgcolor="silver"&gt;
+              &lt;class name="myscrollbar" extends="basescrollbar" width="20"&gt;
+                &lt;view name="scrolltrack" width="100%" options="releasetolayout"&gt;
+                  &lt;basescrolltrack x="5" direction="-1"
+                      width="${parent.width-10}" height="${parent.thumb.y}"
+                      bgcolor="yellow"/&gt;
+                  &lt;basescrollthumb name="thumb" x="1" width="${parent.width-2}"
+                      bgcolor="green" /&gt;
+                  &lt;basescrolltrack x="5" direction="1"
+                      y="${parent.thumb.y+parent.thumb.height}"
+                      width="${parent.width-10}"
+                      height="${parent.height - parent.thumb.y - parent.thumb.height}"
+                      bgcolor="yellow"/&gt;
+                &lt;/view&gt;
+            
+                &lt;basescrollarrow direction="-1"
+                    x="2" bgcolor="yellow" &gt;
+                    &lt;text&gt;up&lt;/text&gt;
+                    &lt;/basescrollarrow&gt;
+            
+                &lt;basescrollarrow direction="1"
+                    x="2" bgcolor="yellow" &gt;
+                  &lt;text&gt;dn&lt;/text&gt;
+                  &lt;/basescrollarrow&gt;
+                &lt;resizelayout spacing="4"/&gt;
+              &lt;/class&gt;
+            
+              &lt;view x="10" y="10" bgcolor="white"
+                    width="200" height="100" clip="true"&gt;
+                &lt;text multiline="true" width="180"&gt;
+                  Man through his scientific genius has been able to draw distance and
+                  save time and space. He has been able to carry highways through the
+                  stratosphere. We read just the other day that a rocket plane went 1900
+                  miles in one hour. Twice as fast as the speed of sound. This is the
+                  new age. Bob Hope has described this new age, this jet age; it is an
+                  age in which planes will be moving so fast that we will have a
+                  non-stop flight from New York to Los Angeles, when you start out you
+                  might develop the hiccups and you will hic in New York and cup in Los
+                  Angeles. This is an age in which it will be possible to leave Tokyo on
+                  a Sunday morning and arrive in Seattle, Washington on the preceding
+                  Saturday night. When your friends meet you at the airport and ask what
+                  time did you leave Tokyo, you will have to say I left tomorrow. That
+                  is this new age.  We live in one world geographically. We face the
+                  great problem of making it one spiritually.
+                  &lt;br/&gt;
+                  Through our scientific means we have made of the world a
+                  neighborhood and now the challenge confronts us through our
+                  moral and spiritual means to make of it a brotherhood. We must
+                  live together, we are not independent we are interdependent. We
+                  are all involved in a single process. Whatever affects one
+                  directly affects all indirectly for we are tied together in a
+                  single progress. We are all linked in the great chain of
+                  humanity.
+                  &lt;br/&gt;
+                  Martin Luther King, Jr.
+                  &lt;br/&gt;
+                  11 August 1956
+                &lt;/text&gt;
+                &lt;myscrollbar/&gt;
+              &lt;/view&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>Scrollbar arrows are optional or may be placed anywhere within the
+            scrollbar.  The thumb and track elements expect to be inside a view
+            named <varname>scrolltrack</varname>.  It may seem odd that the
+            scrolltrack is placed twice, but this allows a more flexible
+            appearance as well as particular behaviors that you may want to
+            trigger differently when the user clicks the track to scroll up or
+            down.</p>
+            
+            <p>For another example of using <classname>basescrollbar</classname>,
+            you can look at lps/components/lz/scrollbar.lzx to see the code for
+            the lz <classname>scrollbar</classname> class.  An easy way to make
+            your own scrollbar is to copy that file and replace resources and
+            modify attributes or views to suit your design goals.
+            </p>
+          </text>
+        </doc>
+    </class>
+
+    <!--- Basescrollthumb expects to be within a basescrollbar (or a subclass).
+          In other words, its "classroot" must be a scrollbar. -->
+    <class name="basescrollthumb" extends="basecomponent"
+           focusable="false" styleable="false" >
+        <!--- @keywords private -->
+        <attribute name="target" value="null" />
+        <!--- @keywords private -->
+        <attribute name="axis" value="" type="string" />
+        <!--- @keywords private -->
+        <attribute name="trackscroll" value="0" type="number" />
+        <!--- @keywords private -->
+        <attribute name="targetscroll" value="0" type="number" />
+        <!--- @keywords private -->
+        <attribute name="dragging" value="false" type="boolean" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this.classroot.thumb = this;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="destroy" ><![CDATA[
+            this.classroot.thumb = null;
+            this.target = null;
+
+            super.destroy();
+        ]]></method>
+
+        <!--- @keywords private -->
+        <handler name="onmousedown" method="startDrag" />
+        <!--- @keywords private -->
+        <handler name="onmouseup" method="stopDrag" />
+
+        <!--- @keywords private -->
+        <method name="startDrag" args="ignore=null"><![CDATA[
+            if (this.dragging) return;
+            this.dragging = true;
+            var croot = this.classroot;
+            // disable targetpos delegate while dragging
+            croot.targetPosDel.disable();
+            // calculate temp var for what doesn't change while dragging
+            var sizeAxis = croot.sizeAxis;
+            this.target = croot.scrolltarget;
+            this.axis = croot.axis;
+            this.trackscroll = this.immediateparent[sizeAxis] - this[sizeAxis];
+            this.targetscroll = croot.scrollmax - this.target.immediateparent[sizeAxis];
+            // apply thumbdrag state
+            this[this.axis + 'thumbdrag'].setAttribute('applied', true);
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="stopDrag" args="ignore=null"><![CDATA[
+            if (! this.dragging) return;
+            this.dragging = false;
+            // remove thumbdrag state
+            this[this.axis + 'thumbdrag'].setAttribute('applied', false);
+            // re-enable targetpos delegate
+            this.classroot.targetPosDel.enable();
+        ]]></method>
+
+        <state name="ythumbdrag">
+            <attribute name="doffset" value="this.getMouse( 'y' )" when="once" />
+            <attribute name="y"
+                value="${this.thumbControl(this.immediateparent.getMouse( 'y' ))}"/>
+        </state>
+
+        <state name="xthumbdrag">
+            <attribute name="doffset" value="this.getMouse( 'x' )" when="once" />
+            <attribute name="x"
+                value="${this.thumbControl(this.immediateparent.getMouse( 'x' ))}"/>
+        </state>
+
+        <!--- @keywords private -->
+        <method name="thumbControl" args="mousepos"><![CDATA[
+            var thumbpos = mousepos - this.doffset;
+            if (thumbpos <= 0) {
+                thumbpos = 0;
+            } else if (thumbpos > this.trackscroll) {
+                thumbpos = this.trackscroll;
+            }
+
+            var pos = Math.round(-thumbpos / this.trackscroll * this.targetscroll);
+            if (pos != this.target[this.classroot.scrollattr]) {
+                this.target.setAttribute(this.classroot.scrollattr, pos);
+            }
+
+            return thumbpos;
+        ]]></method>
+
+        <doc>
+          <tag name="shortdesc"><text>Provides non-visual aspects of a scrollbar thumb.</text></tag>
+          <text>
+            <p>
+                This class must be used with basescrollbar.
+                The thumb automatically scales its height to display the relationship between
+                the target height and the track height.
+            </p>
+          </text>
+        </doc>
+    </class> <!-- basescrollthumb -->
+
+    <!-- Provides non-visual aspects of scrollbar's arrow. -->
+    <class name="basescrollarrow" extends="basebuttonrepeater">
+            <!--- The direction in which the scroll should move. Use -1 to go
+                  back. -->
+            <attribute name="direction" value="1"/>
+            <!--- @keywords private -->
+            <handler name="onmousedown">
+                this.classroot.step(this.direction);
+            </handler>
+            <!--- @keywords private -->
+            <handler name="onmousestilldown">
+                this.classroot.step(this.direction);
+            </handler>
+        <doc>
+          <tag name="shortdesc"><text>Provides non-visual aspects of scrollbar's arrow.</text></tag>
+          <text>
+            <p>
+                 This is a simple helper class to provide scrollbar arrow behavior.  If
+                 the mouse is held down on the arrow, the scrollbar will scroll until the
+                 mouse button is released.
+            </p>
+            
+            <p>  See <xref linkend="lz.basescrollbar"/> for more details. </p>
+          </text>
+        </doc>
+    </class>
+
+    <!-- Provides non-visual aspects of a scrollbar track. -->
+    <class name="basescrolltrack" extends="basebuttonrepeater">
+        <!--- The direction in which the scroll should move. Set to -1 for back,
+             1 for forward. -->
+        <attribute name="direction" value="1"/>
+        <!--- @keywords private -->
+        <handler name="onmousedown">
+            this.classroot.page(this.direction);
+        </handler>
+        <!--- @keywords private -->
+        <handler name="onmousestilldown">
+            this.classroot.page(this.direction);
+        </handler>
+        <doc>
+          <tag name="shortdesc"><text>Provides non-visual aspects of a scrollbar track.</text></tag>
+          <text>
+            <p>
+                This class must be used with basescrollbar.
+                See <xref linkend="lz.basescrollbar"/> for more details.
+            </p>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

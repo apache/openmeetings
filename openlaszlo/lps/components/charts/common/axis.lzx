@@ -1,0 +1,569 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/strokestyle.lzx"/>
+    <include href="../common/label.lzx"/>
+    <include href="../common/tickmarklabel.lzx"/>
+    <include href="extensions/drawview.lzx"/>
+
+     <!--- A abstract class that represents one of the axes of a rectangular chart. In general, axis isn't instantiated directly     
+    @access public
+    -->     
+    <class name="axis" extends="drawview">
+    <!--- Data Column that is used to override the values of Tic Marks labels   -->
+    <attribute name="ticklabelcolumn" value="$once{''}" type="string"/>
+    <!--- Indicates the axis type can be 'linear' or 'categorical' -->
+    <attribute name="type" type="string" />
+    <!--- Indicates the interval of values between the tic marks of the axis -->
+    <attribute name="interval" value="5" />
+    <!--- Indicates the column name associated to the axis -->
+    <attribute name="columnName" type="string" />
+    <!--- @keyword private -->
+    <attribute name="dataSeries" value="[]" />
+    <!--- enable or disable the axis -->
+    <attribute name="axisEnabled" type="boolean" value="true" />
+    <!--- @keyword private -->
+    <attribute name="categoricalArray" value="null" />
+    <!--- @keyword private -->
+    <attribute name="ratioPixel" type="number" />
+    <!--- @keyword private -->
+    <attribute name="scale" type="number" value="1"/>
+    <!--- @keyword private -->
+    <attribute name="offset" type="number" value="0"/>
+    <!--- @keyword private -->
+    <attribute name="tickmarkLabelMaxDecimals" type="number" value="2"/>
+    
+    <!--- Attribute that controls if the labels are vertically repositioned to avoid overlaping -->
+    <attribute name="labelReposEnabled" type="boolean" value="true"/>
+        
+    <!-- Major and Minor tickmarks attributes -->
+    <!--- enable Major Tics Marks -->
+    <attribute name="majorTickEnabled" type="boolean" value="true"/>
+    <!--- enable minor Tics Marks -->
+    <attribute name="minorTickEnabled" type="boolean" value="false"/>
+    <!--- Allows to customize the interval of the Major Tics Marks-->
+    <attribute name="majorInterval" type="number" value="5"/>
+    
+    <!-- Begin Axis title attributes -->
+    <!--- Indicates the placement of the Axis title possible values: 'low','high','default'-->
+    <attribute name="titleLocation" type="string" value="default"/>
+    <!--- Axis title label-->
+    <attribute name="title" type="string"/>
+    <!--- Indicates the placement in X position of the Axis title -->
+    <attribute name="titleX" type="number" value="null"/>
+    <!--- Indicates the placement in Y position of the Axis title -->
+    <attribute name="titleY" type="number" value="null"/>
+    <!--- @keyword private -->
+    <attribute name="titleGap" type="number" value="10"/>
+    <!-- End Axis title attributes -->
+        
+    <!--- Exposes distances where tickmarks are drawn 
+        @keyword private -->
+    <attribute name="tickMarkPositions" value="[]"/>
+
+    <!--- Exposes distances where tickmarks are drawn 
+        @keyword private -->
+    <attribute name="labelTextArray" value="[]"/>
+    
+    <!--- @keyword private -->
+    <attribute name="labelArray" value="[]"/>
+        
+    <!-- Begin Axis Tick Marks Attributes -->
+    <!--- Numerical value that indicates the Minimum value in the axis can be positive or negative value -->
+    <attribute name="minimum" value="0"/>
+    <!--- Numerical value that indicates the Maximum value in the axis can be positive or negative value -->
+    <attribute name="maximum" value="100"/>
+    <!-- Attributes that represent the boundaries of the values that can
+             be rendered. -->
+    <!--- @keyword private -->
+    <attribute name="minimumRender" type="number" value="0"/>
+    <!--- @keyword private -->
+    <attribute name="maximumRender" type="number" value="0"/>
+
+    <!--- @keyword private -->
+    <attribute name="adjustmin" value="false" />
+    <!--- enable the rendering of tic Marks labels -->
+    <attribute name="tickMarksLabelsEnabled" type="boolean" value="true"/>
+    <!--- Indicates the axis title rotation can be 'horizontal' or 'vertical' -->    
+    <attribute name="labelrotation" type="string" value="horizontal"/>
+    <!--- @keyword private -->
+    <viewspool name="_labelspool" parentview="${parent}" viewclass="tickmarklabel"/>
+
+    <!--- Fix the range of the axis to the maximum &amp; minimum   -->
+    <attribute name="fixedRange" value="false" type="boolean"/>
+    
+    <!--- @keyword private -->
+    <view name="tickMarksView"/>
+    <!--- End Axis Tick Marks Attributes-->
+    <!--- @keyword private -->
+    <strokestyle name="objStroke" />
+    <!--- @keyword private -->
+    <label name="titleView" />
+    <!--- Render ticks 
+    @keyword private -->
+    <method name="renderTick"> <![CDATA[        
+            if (type.toUpperCase()=='CATEGORICAL') {
+                renderCategoricalTick();
+            } else if (type.toUpperCase()=='LINEAR') {
+                renderLinearTick();
+            }
+       ]]>
+    </method>  
+    <!--- Method for extensible label rendering 
+        @param string pLabel : a label text -->
+    <method name="processData" args="pLabel">
+        return pLabel;
+    </method>
+
+    <!--- Method to return a pixel position given graph data
+        @param Number pInput : for linear charts a graphicable data.
+        @keyword private
+        -->
+    <method name="getPixelDistance" args="pInput"/>
+        
+    <!--- Returns the distances for where tickmarks will be drawn 
+        @keyword private -->
+    <method name="getTickMarkPositions">
+    <![CDATA[
+        return this.tickMarkPositions;
+    ]]>
+    </method>
+
+    <!--- Actually render tickmarks and tickmark labels
+        @param Number pTickyoff : tickmark offset from the axis
+        @keyword private-->
+    <method name="renderCycle" args="pTickyoff">
+    <![CDATA[
+        
+        if (this.tickMarkPositions!=null && this.tickMarkPositions.length > 0 ) {
+                    
+            for(var i=0;i<this.tickMarkPositions.length;i++)
+            {
+                var distance = this.tickMarkPositions[i];
+
+                if ( this.minorTickEnabled && i>0 && this.majorInterval!=null && this.majorInterval>0 ) {
+                    //get the previous tickmark
+                    var lPrevDistance = this.tickMarkPositions[i-1];
+                    var lMinorDistance = (distance - lPrevDistance)/(this.majorInterval);
+                    for( var j=1; j<(this.majorInterval) ;j++) {
+                        renderTickMark(pTickyoff-this.style.tickminor.length,lPrevDistance+Math.round(lMinorDistance*j), this.style.tickminor);
+                    }
+                }
+            
+                //render the tick mark
+                if ( this.majorTickEnabled ) { 
+                    renderTickMark(pTickyoff,distance,this.style.tickmajor);
+                }
+                
+                //if enabled
+                if(this.tickMarksLabelsEnabled) {
+                    renderTickMarkLabel(this.labelTextArray[i],distance,pTickyoff,i);
+                }
+            }
+        }
+    ]]>
+    </method> 
+    
+    <!--- Init method
+        @keyword private-->
+    <method name="init"> 
+        this.setupDelegate();
+        super.init();
+    </method>
+
+    <!--- setupDelegate
+        @keyword private-->
+    <method name="setupDelegate">
+        this.del = new LzDelegate(this, "setScaleAndOffset");
+        this.del.register(this, "onheight");
+        this.del.register(this, "onminimum");
+        this.del.register(this, "onmaximum");
+    </method>
+
+    <!--- clear
+        @keyword private -->
+    <method name="clear"> 
+        super.clear();
+        objStroke.clear();
+        _labelspool.reclaimAll(); 
+    </method>
+
+    <!--- setAxisTitleAttributes
+        @keyword private -->
+    <method name="setAxisTitleAttributes">
+        this.titleView.setAttribute('style', this.style.label);
+        this.titleView.render(this.title);
+    </method>
+
+    <!--- Render axis title 
+        @keyword private -->
+    <method name="renderTitle">
+    </method>
+    
+    <!---
+        Get the length of the axis.
+        @keyword private -->
+    <method name="getAxisLength"/>
+    
+    <!--- Render categorical tick marks  
+    @keyword private -->
+    <method name="renderCategoricalTick">
+    <![CDATA[
+        //Number of tickmarks
+        
+        //Make sure max and min are integers
+        maximumRender = Math.round(maximumRender);
+        minimumRender = Math.round(minimumRender);
+        
+        var lTickMarks = (maximumRender - minimumRender) + 1;
+ 
+        if(lTickMarks>0){ 
+        
+            var lTickmarkSpace = 0;
+                
+            //determine ratio
+            lTickmarkSpace = getAxisLength() / lTickMarks;
+            
+            //determine offset
+            var tickyoff = 0;
+            if(this.style.tickmajor.position == 'outside') {
+                tickyoff = this.style.tickmajor.length;                
+            } else if(this.style.tickmajor.position == 'across') {
+                tickyoff = (this.style.tickmajor.length/2);
+            }
+                
+            this.labelArray = new Array(lTickMarks);
+                
+            //Setup position array
+            this.tickMarkPositions = new Array(lTickMarks);
+            this.labelTextArray = new Array(lTickMarks);
+                
+            //Fill the distance array
+            var lArrayIndex = 0;
+            
+            for(var i=minimumRender;i<(maximumRender+1);i++)
+            {
+                this.tickMarkPositions[lArrayIndex] = Math.round((lArrayIndex*lTickmarkSpace) + (lTickmarkSpace/2)) ;
+                this.labelTextArray[lArrayIndex] = this.categoricalArray[i];
+                lArrayIndex++;
+            }
+
+            if(this.ticklabelcolumn != ""){
+                useLabelColumns();
+            }
+    
+            //Do the actual render
+            renderCycle(tickyoff);
+            
+            //Reposition labels if enabled
+            if(tickMarksLabelsEnabled && this.labelReposEnabled) {
+                    reposLabels(lTickMarks);
+            }
+                
+        }
+        ]]>
+    </method>
+    <!--- Adjust the minimum value to cero if attribute is true 
+        @keywords private -->
+    <method name="adjustMinimum"> 
+    <![CDATA[        
+        if(minimumRender >= 0 && maximumRender >= 0) {
+            minimumRender = 0;
+        } else if(minimumRender <= 0 && maximumRender <= 0) {
+            maximumRender = 0;
+        } 
+    ]]> 
+    </method>
+    <!--- Calculate an adecuate range to have 5-10 tickmarks 
+        @param Number pRange: range on what to find a good interval
+        @keywords private -->
+    <method name="calculateAutomaticInterval" args="pRange"> <![CDATA[        
+        var lRetValue=1;
+        var lCanonicalInterval = pRange * 0.1;
+
+        if( pRange < 1) {
+            do {
+                lRetValue = lRetValue/10; 
+            }while(lRetValue > lCanonicalInterval);
+        
+            while(lRetValue * 2 < lCanonicalInterval) {
+                lRetValue = lRetValue*2;
+            }
+        } else {
+            do {
+                lRetValue = lRetValue * 10;
+            } while(lRetValue <= lCanonicalInterval);
+            
+            while(lRetValue / 2 > lCanonicalInterval) {
+                lRetValue = lRetValue / 2;
+            }
+        }            
+        return lRetValue;
+    ]]> 
+    </method>
+    <!--- Find the outside border value using the interval 
+            @param Number pNum: nombre to overcome
+            @param Number pInt: interval.
+            @param Boolean pMinMax: true if this value is a maximum.
+            @keywords private -->
+    <method name="findOutsideBorder" args="pNum,pInt,pMinMax"> <![CDATA[
+            var lRetValue = 0;
+
+            if(pMinMax) {
+                //it is a maximum
+                if(pNum >= 0) {
+                    while(lRetValue < pNum){
+                        lRetValue += pInt;
+                    }             
+                } else {
+                    while((lRetValue-pInt) > pNum) {
+                        lRetValue -= pInt;
+                    }
+                }
+            } else {
+                //it is a minimum
+                if(pNum >= 0) {
+                    while((lRetValue+pInt) < pNum){
+                        lRetValue += pInt;
+                    }         
+                } else {
+                    while(lRetValue > pNum){
+                        lRetValue -= pInt;
+                    }     
+                }
+            }
+            return lRetValue;            
+        ]]> </method>
+        
+    <!--- Render a tick mark
+            @param Number pOffset : displacement depending on the position of the tickmark
+            @param Number pPos : actual tickmark position along the axis
+            @param expression pStyle : tickmark style object to use on the render
+            @keywords private -->
+    <method name="renderTickMark" args="pOffset,pPos,pStyle"/>
+    
+    <!--- Set label position
+            @keywords private -->
+    <method name="setLabelPos" args="pLabel,pOffset,pTW,pTH,pPos"/>
+        
+    <!--- Render a tickmark label
+            @keywords private -->
+    <method name="renderTickMarkLabel"
+        args="pLabel,pPos,pOffset,pI">
+        <![CDATA[
+            //create label and set text
+            var lLabel = _labelspool.getView();    
+            var lHeight=0; 
+            var lWidth=0;
+
+            //set the font style            
+            lLabel.style=this.style.tickmajor.label;
+            lLabel.render(processData(pLabel));    
+
+            //Process orientation
+            var lTW = 0;
+            var lTH = 0;
+
+            lTW = lLabel.getTextWidth();
+            lTH = lLabel.getTextHeight();
+            this.setLabelPos(lLabel,pOffset,lTW,lTH,pPos); 
+
+            //add label to array
+            this.labelArray[pI] = lLabel;
+        ]]> 
+        </method>
+    
+    <!--- Check label location and change placement to avoid labels
+            overlaping
+            @keywords private -->
+    <method name="reposLabels" args="pMarks"/>
+            
+   <!--- Calculate automatic outside borders
+            @param Number pMin : minimum data to be rendered
+            @param Number pMax : maximum data to be rendered
+            @keyword private -->
+    <method name="setAutomaticMinMaxRender" args="pMin, pMax">
+            if( !this.fixedRange ) {
+                this.minimum = pMin;
+                this.maximum = pMax;
+            } else {
+                if( typeof( this.minimum ) == "undefined" ) {
+                    this.minimum = pMin;
+                }
+                
+                if( typeof( this.maximum ) == "undefined" ) {
+                    this.maximum = pMax;
+                }
+            }
+
+            //Find graphic data range
+            var lRange = this.maximum - this.minimum;
+
+            
+            //If interval is not defined, calculate one
+            if( this.interval == null ) {
+                this.interval = calculateAutomaticInterval(lRange);
+            }
+            
+            //Find the data ending and starting points of the plot area
+            this.minimumRender = findOutsideBorder(this.minimum,interval,false);
+            this.maximumRender = findOutsideBorder(this.maximum,interval,true);
+        </method>
+
+    <!--- Render linear ticks
+    @keyword private -->
+    <method name="renderLinearTick"> 
+    <![CDATA[
+
+            //First adjust min and max if adjustmin attribute is present
+            if(this.adjustmin) {
+                adjustMinimum();
+            }
+
+            //Determine how many marks we need
+            var lMarks = Math.floor((Math.abs(this.minimumRender-this.maximumRender))/this.interval) + 1;
+            //determine total graph area
+            var lGA = Math.abs(this.minimumRender - this.maximumRender);
+
+            var lRatio = 0;
+            
+            //determine ratio
+            lRatio = (this.getAxisLength() / lGA);
+            
+            //Set the ratioPixel
+            ratioPixel = lRatio * interval;    
+
+            //Array to store the labels
+            this.labelArray = new Array(lMarks);
+                        
+            //determine offset
+            var tickyoff = 0;
+
+            if(this.style.tickmajor.position == 'outside') {
+                tickyoff = this.style.tickmajor.length;                
+            } else if(this.style.tickmajor.position == 'across') {
+                tickyoff = (this.style.tickmajor.length/2);
+            } 
+            
+            //Setup position array
+            this.tickMarkPositions = new Array(lMarks);
+            this.labelTextArray = new Array(lMarks);
+            
+            //Fill the distance array
+            for(var i=0;i<lMarks;i++)
+            {
+                this.tickMarkPositions[i] = Math.round(i*ratioPixel);
+                this.labelTextArray[i] = ( i * this.interval ) + this.minimumRender; 
+                this.labelTextArray[i] = trunDec((( i * this.interval ) + this.minimumRender),this.tickmarkLabelMaxDecimals); 
+            }
+                
+            //Do the actual render
+            renderCycle(tickyoff);
+        
+            //Reposition labels if enabled
+            if(tickMarksLabelsEnabled && this.labelReposEnabled) {
+                reposLabels(lMarks);
+            }
+
+        ]]>
+        </method>
+    <!--- 
+        This method replaces the array labels with an array from a Data Column
+        @keyword private -->    
+    <method name="useLabelColumns">
+        <![CDATA[  
+        //Using useLabelColumns
+        //Perform validations
+        if(this.labelTextArray!=null && dataSeries!=null && dataSeries[0]!=null && dataSeries[0].getDataColumn(this.ticklabelcolumn)!=null && this.labelTextArray.length==dataSeries[0].getDataColumn(this.ticklabelcolumn).values.length) {
+            this.labelTextArray = dataSeries[0].getDataColumn(this.ticklabelcolumn).values;    
+        }
+        ]]> 
+    </method>    
+    <!--- setter for data series 
+          @param expression dataseries: dataSeries to set to the Axis. 
+          @keyword private -->
+    <method name="setDataSeries" args="dataseries"> 
+        this.setAttribute('dataSeries', dataseries); 
+    </method>
+    
+    
+    <!--- setter for scale and offset 
+    @keyword private -->   
+    <method name="setScaleAndOffset">
+    </method>
+
+    <!--- setter for plot area 
+    @keyword private -->   
+    <method name="setPlotArea" args="plotarea"> 
+        this.setAttribute('plotarea', plotarea); 
+    </method>
+    
+    <!--- Render axis 
+        @keyword private -->
+    <method name="renderAxis">
+    </method>
+    
+    <!--- Render method render Axis Title, Axis lines, Tic Marks and TickMarks labels
+        -->
+    <method name="render" > <![CDATA[               
+        this.objStroke.setAttribute('strokeColor', this.style.axisline.color);
+        this.objStroke.setAttribute('strokeType', this.style.axisline.type);
+        this.objStroke.setAttribute('strokeWidth', this.style.axisline.size);
+        this.objStroke.setAttribute('opacity', this.style.axisline.opacity);
+           
+        this.setAttribute('visible', axisEnabled);
+        setAxisTitleAttributes();
+        renderAxis();
+        renderTick();    
+        renderTitle();
+        ]]> 
+    </method>
+
+    <!--- Allow to set the minimumRender and the maximumRender attributes manually 
+    @keyword private -->
+    <method name="setNewMinMaxRenderer" args="pNewMin, pNewMax">
+        this.minimumRender = pNewMin;
+        this.maximumRender = pNewMax;
+    </method>
+
+    <!--- Truncate decimals
+        @param Number pNum: input number
+        @param Number pDec: number of decimals to leave
+         @keyword private -->
+    <method name="trunDec" args="pNum,pDec">
+        <![CDATA[ 
+            var lNum = pNum + "";
+            if (lNum.indexOf('.')!=-1 && pDec>-1) {
+                if ( pDec==0 ) {
+                    return lNum.substring(0,lNum.indexOf('.'));
+                }
+                var lRem = lNum.substring(lNum.indexOf('.')+1,lNum.length);
+                if (lRem.length > pDec)    {
+                    lRem = lRem.substring(0,pDec);
+                }
+                return lNum.substring(0,lNum.indexOf('.'))+"."+lRem;
+            } 
+            return pNum;
+        ]]>  
+    </method>
+    <doc>
+      <tag name="shortdesc"><text>
+          an axis for a chart
+      </text></tag>
+      <text>
+        <warning>This component is of Beta quality and is subject to change.</warning>
+      </text>
+    </doc>
+    
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@ -->

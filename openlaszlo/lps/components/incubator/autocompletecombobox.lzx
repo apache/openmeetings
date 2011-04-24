@@ -1,0 +1,209 @@
+<!---
+      @copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.
+                 Use is subject to license terms.
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+    <resource name="lzedittext_bezel_inner_rsc">
+        <frame src="lz/resources/bezel_inner_dn.swf" />
+        <frame src="lz/resources/outline_dsbl.swf" />
+    </resource>
+    <resource name="lzedittext_bezel_outer_rsc">
+        <frame src="lz/resources/bezel_outer_dn.swf" />
+        <frame src="lz/resources/transparent.swf" />
+    </resource>
+    <resource name="lzcombobox_rgt_rsc">
+        <frame src="lz/resources/combobox/popbtn_rt_up.swf" />
+        <frame src="lz/resources/combobox/popbtn_rt_mo.swf" />
+        <frame src="lz/resources/combobox/popbtn_rt_dn.swf" />
+        <frame src="lz/resources/combobox/popbtn_rt_dsbl.swf" />
+    </resource>
+        
+    <class name="autocompletecombobox">
+        <attribute name="defaulttext" value="Type Here" type="string" />
+        <attribute name="contentpath" type="string"/>
+        
+        <!--- @access private -->
+        <attribute name="__component_contents" value="[]" />
+        
+        <handler name="ondata">
+            // reset any previous bindings
+            this.setAttribute("__component_contents",[]);
+            Debug.write("autocompletecombobox got datapath = ",this.datapath.xpath);
+            Debug.write("The float box : ",myFloatBox);
+            myFloatBox.setAttribute('datapath', this.datapath.xpath);
+        </handler>
+        
+        <method name="showAll">
+            var isShowing = myFloatBox.visible;
+            if(isShowing) {
+                myFloatBox.setAttribute("visible",false);
+            } else {
+            
+                var theDictionary = this.__component_contents;
+                if(typeof item == 'undefined'){
+                    var item = null;
+                }
+                for(item in theDictionary) {
+                    var the_object = theDictionary[item];
+                   
+                    the_object.setAttribute("visible",true);
+                   
+                }
+                 myFloatBox.setAttribute("visible",true);
+            }
+        </method>
+        
+        <simplelayout axis="x" spacing="0"/>
+        <view name="theeditor"  width="${classroot.width - classroot.rgt.width}">
+            <inputtext name="actual" width="100%" text="$once{classroot.defaulttext}">
+                <handler name="onfocus">
+                    Debug.write("focused..");
+                    this.setSelection(0,this.getText().length);
+                </handler>
+                
+                <handler name="onclick">
+                    Debug.write("clicked..");
+                    this.setSelection(0,this.getText().length);
+                </handler>
+                
+                <attribute name="actuallyTyped" value="" type="string" />
+                
+                <handler name="onkeyup" args="k">
+                    <![CDATA[
+                    if(k == 40) {
+                        Debug.write("Down key...");
+                        var currentSelect = classroot.myFloatBox.getSelection();
+                        Debug.write("Current Selection = "+currentSelect);
+                        if(currentSelect == null || currentSelect == undefined) {
+                            classroot.myFloatBox.select(classroot.myFloatBox.getItemAt(0));
+                        } else {
+                            classroot.myFloatBox.selectNext();
+                            if(classroot.myFloatBox.getSelection() == currentSelect) {
+                                // this means that the selectNext did nothing... go to the first
+                                classroot.myFloatBox.select(classroot.myFloatBox.getItemAt(0));
+                            }
+                        }
+                    } else if(k == 8) {
+                        var actualTyped = this.actuallyTyped;
+                        Debug.write("Actual = "+actualTyped);
+                        var oneMinus = actualTyped.substr(0,actualTyped.length-1);
+                        
+                        this.setAttribute("actuallyTyped",oneMinus);
+                        
+                        Debug.write("oneMinus = "+oneMinus);
+                        computeBox(oneMinus);
+                    } else if(k==37 || k==39) {
+                        // I'm not sure if we shoudl do anything here...
+                    } else if(k== 9 || k == 13) {
+                        // tab or enter should complete it...
+                         classroot.myFloatBox.setAttribute("visible",false);
+                         var theInput = this.getText();
+                         this.setAttribute("actuallyTyped",theInput);
+                         this.setSelection(theInput.length,theInput.length);
+                    }
+                    
+                    else if(k > 46) {
+                    
+                        // warning numlock seems to cause a focus here also...
+                        // todo lookup the numlock keycode...
+                    
+                        classroot.myFloatBox.setAttribute("visible",true);
+                        
+                        var theInput = this.getText();
+                        this.setAttribute("actuallyTyped",theInput);
+                        Debug.write( "What was actually typed... "+this.actuallyTyped);
+                        
+                        computeBox(theInput);
+
+                        
+                    }
+                    ]]> 
+                </handler>
+                
+                
+                <method name="computeBox" args="theInput">
+                    <![CDATA[
+                    if(typeof item != 'undefined'){
+                        var item = null;
+                    }
+                    var theDictionary = classroot.__component_contents;
+                        for(item in theDictionary) {
+                            var the_object = theDictionary[item];
+                            if(item.indexOf(theInput) == 0) {
+                                the_object.setAttribute("visible",true);
+                            } else {
+                                the_object.setAttribute("visible",false);
+                            }
+                        }
+                        
+                        
+                        var theFirst = null;
+                        
+                        var numberOfItems = classroot.myFloatBox.getNumItems();
+                        for(var i=0; i<numberOfItems; i++) {
+                            theFirst = classroot.myFloatBox.getItemAt(i);
+                            if(theFirst.visible) break;
+                            theFirst = null;
+                        }
+                        
+                        if(theFirst != null) {
+                            Debug.write("The First Child = ",theFirst);
+                            
+                            var firstChildData = theFirst.data;
+                            this.setAttribute('text', firstChildData);
+                            this.setSelection(theInput.length,firstChildData.length);
+                        } else {
+                             classroot.myFloatBox.setAttribute("visible",false);
+                        }
+                    ]]>
+                </method>
+                
+            </inputtext>
+            
+            <view   name="_outerbezel" 
+                    resource="lzedittext_bezel_outer_rsc"
+                    width="${parent.width-1}" 
+                    height="${parent.height-1}" 
+                    stretches="both"/>
+            <view name="_innerbezel" resource="lzedittext_bezel_inner_rsc"
+                x="1" y="1" width="${parent.width-3}" height="${parent.height-3}" stretches="both"/>
+            <view name="_face"
+                x="2" y="2" width="${parent.width-4}" height="${parent.height-4}"/>
+        </view>
+        <basebutton name="rgt" resource="lzcombobox_rgt_rsc" styleable="true" height="${classroot.theeditor.height}"
+                placement="bkgnd" onclick="classroot.showAll()" stretches="height"/>
+        
+        <floatinglist name="myFloatBox" width="${owner.width}" attach="bottom" datapath="" visible="false">
+            <handler name="oninit">
+                Debug.write("wtf? classroot = ",parent);
+            </handler>
+            
+            <handler name="ondata">
+                Debug.write("floatinglist got data = ",this.data);
+                var childXPath = this.datapath.xpath + "/"+owner.contentpath;
+                this.replicated_textitem.setAttribute('datapath', childXPath);
+            </handler>
+            
+          <textlistitem name="replicated_textitem" datapath="">
+                <handler name="ondata">
+                    parent.owner.__component_contents[this.data] = this;
+                </handler>
+                <handler name="onselect">
+                    Debug.write("onselect ",this.data);
+                    parent.owner.theeditor.actual.setAttribute('text', this.data);
+                    var actualTyped = parent.owner.theeditor.actual.actuallyTyped;
+                    parent.owner.theeditor.actual.setSelection(actualTyped.length,this.data.length);
+                </handler>
+                <handler name="onclick">
+                    Debug.write("onclick ",this.data);
+                    this.parent.setAttribute("visible",false);
+                </handler>
+          </textlistitem>
+
+        </floatinglist>
+    </class>
+
+    
+</library>

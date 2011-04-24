@@ -1,0 +1,36 @@
+<library>
+    
+    <include href="../textstyle.lzx"/>
+
+    <textstyle name="formatbtn_style"
+        basecolor="0xD6D9F6"
+        textcolor="0x27335C" texthilitecolor="0x27335C" 
+        textselectedcolor="0x27335C" textdisabledcolor="0x797B87"
+        font="Arial" fontsize="10">
+        <attribute name="flag0" value="0xD6D9F6"/>
+        <attribute name="flag1" value="0xEAE4B7"/>
+    </textstyle>
+    
+    <textstyle name="sidebarbutton_style" initstage="early"
+        basecolor="0xD6D9F6"
+        textcolor="0x27335C" texthilitecolor="0x27335C" 
+        textselectedcolor="0x27335C" textdisabledcolor="0x797B87"
+        font="Arial" fontsize="10" />
+    
+    <textstyle name="custombutton_style" initstage="early"
+        basecolor="0xD6D9F6"
+        textcolor="0x27335C" texthilitecolor="0x27335C" 
+        textselectedcolor="0x27335C" textdisabledcolor="0x808080"
+        font="Arial" fontsize="10" />
+    
+    <textstyle name="comboboxitem_style"  
+        font="Verdana" fontsize="10" textcolor="0x1a1a1a" 
+        hilitecolor="0xE4DFB7" 
+        selectedcolor="0xE9D990" />
+    
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

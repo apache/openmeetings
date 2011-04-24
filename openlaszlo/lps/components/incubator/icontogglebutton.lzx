@@ -1,0 +1,83 @@
+<library>
+  
+    
+
+   <!--- the icontogglebutton class is a icon button with two states, no text. the resource passed in should
+          have two frames, one for each state.
+        @START_CODE
+        <icontogglebutton iconresource="resourcename"/>
+        @END_CODE
+    -->
+   <class name="icontogglebutton" extends="basebutton" focusable="true" styleable="true"
+          resourceviewcount="3" doesenter="true" style="$once{custombutton_style}" >
+   
+        <!--- icon resource name -->
+        <attribute name="iconresource"   value=""  type="string" />
+        <!--- fine-tune the vertical position of icon -->
+        <attribute name="icony"          value="null"/>
+        <!--- button state (either 0 or 1)  -->
+        <attribute name="statenum"       value="0" setter="setStatenum(statenum)" />
+
+        <!-- use small button assets -->
+        <stableborderlayout axis="x" />
+        <view name="left"   resource="custombutton_small_left_rsc"   />
+        <view name="middle" resource="custombutton_small_middle_rsc" stretches="width"/>
+        <view name="right"  resource="custombutton_small_right_rsc"  />
+        
+        <view name="icon" resource="${classroot.iconresource}" 
+            x="${(parent.width - width)/2}" 
+            y="${classroot.icony != null ? classroot.icony : (parent.height - height)/2}" />
+
+        <!---  @keywords private -->
+        <method name="showOver">
+            super.showOver();
+            this.setFrame(2);
+        </method>
+        <!---  @keywords private -->
+        <method name="showUp">
+            super.showUp();
+            this.setFrame(1);
+        </method>
+        <!---  @keywords private -->
+        <method name="showDown">
+            super.showDown();
+            this.setFrame(3);
+        </method>
+
+         <!---  @keywords private -->
+        <handler name="onclick">
+            this.setStatenum(this.statenum ? 0 : 1);
+        </handler>
+
+        <!---  @keywords private -->
+        <method name="setStatenum" args="s">
+            this.statenum = s;
+            if (!this.isinited) {                                          
+                //catch the case where this.statenum is being initialized during object instantiation
+                return;
+            }            
+            this.icon.setAttribute('frame', s+1);
+        </method>
+
+        <!---  @keywords private -->
+        <method name="setFrame" args="f">
+            this.left.setAttribute('frame', f);
+            this.middle.setAttribute('frame', f);
+            this.right.setAttribute('frame', f);
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                this.setTint(this.left, s.basecolor);
+                this.setTint(this.middle, s.basecolor);
+                this.setTint(this.right, s.basecolor);
+            }
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

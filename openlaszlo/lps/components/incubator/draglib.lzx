@@ -1,0 +1,166 @@
+<!--- @copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.
+                 Use is subject to license terms.
+  -->
+<library>
+  <!---  This should be declared as a child of the thing for which you want to
+        enable dragging.  You will need to define a view (an instance of a
+        subclass of <xref linkend="lz.basedragimage"/>)
+        to define the visual look of the thing while its being dragged.
+        <example executable="false">
+        &lt;class name="dragger" &gt;
+            ...
+            &lt;handler name="onmousedown"&gt;
+                checkdrag.setAttribute('applied', true);
+            &lt;/handler>
+            &lt;handler name="onmouseup"&gt;
+                canvas.dragimage.stopdrag(this);
+                checkdrag.setAttribute('applied', false);
+            &lt;/handler&gt;
+
+            &lt;checkdragstate name="checkdrag" draggername="dragimage"/&gt;
+        &lt;/class&gt;
+        </example>
+
+        The object that you want to accept a drop action, needs to register with
+        lz.Track using the same group as is declared in the dragimage.
+
+        <example executable="false">
+        &lt;class name="droptarget"&gt;
+            ...
+            &lt;method name="init"&gt;
+                super.init();
+                lz.Track.register(this, 'target');
+            &lt;/method&gt;
+
+            &lt;handler name="onmousetrackover"&gt;
+               setAttribute('bgcolor', 0xffff00); // hilite
+            &lt;/handler&gt;
+            &lt;handler name="onmousetrackout"&gt;
+               setAttribute('bgcolor', null); // normal
+            &lt;/handler&gt;
+            &lt;handler name="onmousetrackup"&gt;
+               setAttribute('bgcolor', null); // normal
+               canvas.dragimage.dropcomplete(this);
+               Debug.write('dropped: '+dragimage.source.text);
+            &lt;/handler&gt;
+        &lt;/class>
+        </example>
+        
+        @access public
+  -->
+  <class name="checkdragstate" extends="state">
+    <!--- an instance subclass of basedragimage that defines the
+         visual representation of the item while it is being dragged
+         -->
+    <attribute name="draggername" value="dragimage" type="string"/>
+    
+    <!--- @keywords private -->
+    <attribute name="starty" value="$once{this.y}"/>
+    <!--- @keywords private -->
+    <attribute name="startx" value="$once{this.x}"/>
+    <!--- @keywords private -->
+    <attribute name="ydoffset" value="this.getMouse( 'y' )" when="once" />
+    <!--- @keywords private -->
+    <attribute name="xdoffset" value="this.getMouse( 'x' )" when="once" />
+    <!--- @keywords private -->
+    <attribute name="ydrag"
+               value="${checkDragPos('y', this.immediateparent.getMouse( 'y' ))}"/>
+    <!--- @keywords private -->
+    <attribute name="xdrag"
+               value="${checkDragPos('x', this.immediateparent.getMouse( 'x' ))}"/>
+    <!--- @keywords private -->
+    <attribute name="dragging" value="false"/>
+    <!--- @keywords private -->
+    <attribute name="firsttime" value="true"/>
+    <!--- @keywords private -->
+    <method name="checkDragPos" args="xory, mousepos"><![CDATA[
+      if (this.firsttime) {
+        xdrag = this.x; ydrag = this.y;
+        this.firsttime = false;
+      }
+      var newpos = mousepos - this[xory + 'doffset'];
+      var diff = this[xory + 'drag'] - this['start' + xory];
+      if (Math.abs(diff) > 5 && !this.dragging) {
+        canvas[draggername].startdrag(this, xdoffset, ydoffset);
+        this.dragging = true;
+      }
+      return newpos;
+      ]]></method>
+  </class>
+  
+  
+  <!--- the visual representation of an object being dragged.
+        See <xref linkend="lz.checkdragstate"/> for usage details 
+        @access public
+  -->
+  <class name="basedragimage"  options="ignorelayout"
+         visible="false" >
+    <!--- the group that drop targets will register with -->
+    <attribute name="dropgroup" value="droptarget" type="string"/>
+    <!--- the view where the drag was initiated
+          @keywords read-only -->
+    <attribute name="source" value="null"/>
+    
+    <!--- @keywords private -->
+    <attribute name="startx" value="0" type="number"/>
+    <!--- @keywords private -->
+    <attribute name="starty" value="0" type="number"/>
+    <!--- @keywords private -->
+    <attribute name="dropped" value="false"/>
+    <!--- @keywords private -->
+    <attribute name="xdoffset" value="null"/>
+    <!--- @keywords private -->
+    <attribute name="ydoffset" value="null"/>
+    <!--- @keywords private -->
+    <attribute name="_onstopdel" value="null"/>
+    
+    <!--- called to start the drag action, called by checkdrag -->
+    <method name="startdrag" args="src, xoffset, yoffset">
+      this.startx = src.getAttributeRelative('x', canvas);
+      this.starty = src.getAttributeRelative('y', canvas);
+      this.setAttribute('x', this.startx);
+      this.setAttribute('y', this.starty);
+      this.bringToFront();
+      this.setAttribute('visible', true);
+      this.source = src;
+      this.dropped = false;
+      
+      // set up the offset from the source mouse offset
+      if (this.xdoffset == null) this.xdoffset = xoffset;
+      if (this.ydoffset == null) this.ydoffset = yoffset;
+      ds.setAttribute('applied', true);
+      lz.Track.activate(this.dropgroup);
+    </method>
+    
+    <!--- called to stop the drag action, called by checkdrag.  If this is
+        not over a drop target, it animates back to its origin (failed drop).
+        Otherwise it disappears (successful drop).-->
+    <method name="stopdrag" args="ignore=null">
+      if (dropped) {
+        this.setAttribute('visible', false);
+      } else {
+        var anm = this.animate('x', startx, 200);
+        this.animate('y', starty, 200);
+        if ( !this._onstopdel )  this._onstopdel = new lz.Delegate( this, 'hideme' );
+        this._onstopdel.register( anm, 'onstop' );
+      }
+      ds.setAttribute('applied', false);
+      lz.Track.deactivate(this.dropgroup);
+    </method>
+    <!--- @keywords private -->
+    <method name="hideme" args="ignore=null">
+      setAttribute('visible', false);
+    </method>
+    <!--- @keywords private -->
+    <method name="dropcomplete" args="source">
+      this.dropped = true;
+    </method>
+    <state name="ds">
+      <attribute name="y"
+                 value="${this.immediateparent.getMouse( 'y' ) - this.ydoffset}"/>
+      <attribute name="x"
+                 value="${this.immediateparent.getMouse( 'x' ) - this.xdoffset}" />
+    </state>
+  </class>
+  
+</library>

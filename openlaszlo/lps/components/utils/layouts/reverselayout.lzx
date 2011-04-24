@@ -1,0 +1,146 @@
+<library>
+    <include href="utils/layouts/layout.lzx"/>
+    <!-- Layout that puts things in reverse order and optionally starts at the bottom -->
+    <!-- or right of the parent view                                                  -->
+    <class name="reverselayout" extends="layout" >
+        <!--- The axis in which this layout operates. One of 'x' or 'y'. -->
+        <attribute name="axis" value="y" setter="this.setAxis( axis )" 
+                   type="string" />
+        <!--- @keywords private -->
+        <attribute name="sizeAxis" value="height" type="string" /> 
+        <!--- A pixel amount to inset the last view controlled by the layout-->
+        <attribute name="inset" value="0"/>
+        <!--- When true (the default), then the layout will push the subviews 
+              to the right (or bottom) of the containing view -->
+        <attribute name="end" type="expression" value="true"/>
+        <!--- A pixel amount to use between each view in the layout -->
+        <attribute name="spacing" value="0"
+                   setter="this.spacing = spacing; 
+                          if( this.subviews.length ) this.update()"/>
+    
+        <!--- setter for the axis attribute. The default value is 'y' 
+              @param string a: 'x' oy 'y' -->
+        <method name="setAxis" args="a" >
+            this.axis = a;
+            this.sizeAxis = a == "x" ? "width" : "height"
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this.updateDelegate.register( this.parent, "on" + this.sizeAxis );
+        </method>
+    
+        <!--- @keywords private -->
+        <handler name="onend">
+            this.reset();
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="addSubview" args="newsub">
+            this.updateDelegate.register( newsub,  "on" + this.sizeAxis);
+            this.updateDelegate.register( newsub,  "onvisible" );
+            super.addSubview( newsub );
+            // A new view means resetting everything
+            this.reset();
+        </method>
+
+    <!--- This method is usually called automatically when any of the views
+          controlled by the layout change their size in the layout axis, or
+          their visibility. However it can be called directly to force the
+          layout to update -->
+        <method name="update" args="v=null">
+            <![CDATA[
+            if ( this.locked ) return;
+
+            var parentsize = this.parent[ this.sizeAxis ];
+            if (this.end) {
+                var total = this.inset;
+                var l = this.subviews.length;
+                for(var i=0; i < l; i++) {
+                    var s = this.subviews[i]; 
+                    if ( !s.visible ) continue;
+                    // use computed bounds when necessary
+                    if (s.usegetbounds){
+                        s = s.getBounds();
+                    }
+                    total += s[ this.sizeAxis ] + spacing;
+                }
+               
+                if (total < parentsize) {
+                    total = parentsize;
+                }
+        
+                var c = total - this.inset;
+                for(var i=0; i < l; i++) {
+                    var s = this.subviews[i]; 
+                    if ( !s.visible ) continue;
+                    // use computed bounds when necessary
+                    if (s.usegetbounds){
+                        var bounds = s.getBounds();
+                    } else {
+                        var bounds = s;
+                    }
+                    c -= bounds[ this.sizeAxis ];
+                    if (c) s.setAttribute( this.axis , c );
+                    c -= this.spacing;
+                }
+            } else {
+                
+                var l = this.subviews.length;
+                var c = this.inset;
+        
+                for(var i=l-1; i >= 0; i--) {
+                    var s = this.subviews[i];
+                    if ( !s.visible ) continue;
+                    if ( s[ this.axis ] != c ){
+                        s.setAttribute( this.axis , c );
+                    }
+                    // use computed bounds when necessary
+                    if (s.usegetbounds){
+                        s = s.getBounds();
+                    }
+                    c += this.spacing + s[ this.sizeAxis ];
+               }
+            }
+        ]]></method>
+        
+        <doc>
+        <tag name="shortdesc"><text>A layout for arranging siblings vertically or horizontally in reverse order.</text></tag>
+        <text>
+              <para><classname>reverselayout</classname> is just like <sgmltag class="element" role="lz.simplelayout">&lt;simplelayout&gt;</sgmltag>, 
+              except that the order of the views it keeps is reversed (bottom to top, or right to left).</para>
+              <para><classname>reverselayout</classname> extends <sgmltag class="element" role="LzLayout">&lt;layout&gt;</sgmltag>, and therefore it is responsible 
+              for arranging all of the subviews for the view that it is attached to. The attributes of a view that <classname>reverselayout</classname> 
+              effects are the <literal>x</literal> and <literal>y</literal> values.</para>
+              <example title="Example of reverselayout">
+<![CDATA[<canvas height="60" >
+  <include href="utils/layouts/reverselayout.lzx"/>
+  <view bgcolor="yellow">
+    <reverselayout axis="x" spacing="10"/>
+    <text text="one"/>
+    <text text="two"/>
+    <text text="three"/>
+  </view>
+</canvas>]]>
+                     </example>
+              <example title="Example of reverselayout with end='false'">
+<![CDATA[<canvas height="60">
+  <include href="utils/layouts/reverselayout.lzx"/>
+  <view bgcolor="yellow">
+    <reverselayout axis="x" end="false" spacing="10"/>
+    <text text="one"/>
+    <text text="two"/>
+    <text text="three"/>
+  </view>
+</canvas>]]>
+              </example>
+        </text>
+    </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2006, 2008-2010 Laszlo Systems, Inc.  All Rights Reserved.   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

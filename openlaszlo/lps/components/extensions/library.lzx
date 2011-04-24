@@ -1,0 +1,16 @@
+<!---
+      @topic Extensions
+      @subtopic General
+  -->
+<library>
+  <include href="views/richinputtext.lzx" />
+  <include href="views/LzTextFormat.lzx" />
+  <include href="html.lzx" />
+  <include href="rte.lzx" />
+  <include href="drawview.lzx" />
+  <include href="av/library.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

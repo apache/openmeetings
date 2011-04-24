@@ -1,0 +1,33 @@
+<library>
+
+    <!--- Selection manager used by tree. -->
+    <class name="treeselector" extends="selectionmanager">
+
+        <!--- If multiselect is true, multiple selection is enabled.  When the
+              shift key is down, a range of items is selected.  When the control
+              key is down, any item may be added to the selection. Default is
+              false. -->
+        <attribute name="multiselect" value="false"/>
+
+        <!--- Check if a range is selected.
+              @return Boolean: true if range is being selected, else false. -->
+        <method name="isRangeSelect" args="item">
+            var allowselect = false;
+            if (multiselect) allowselect = super.isRangeSelect(item);
+            return allowselect;
+        </method>
+
+        <!--- Check if selection is multiselect.
+              @return Boolean: true if multiselect is true, else false. -->
+        <method name="isMultiSelect" args="item">
+            var allowselect = false;
+            if (multiselect) allowselect = super.isMultiSelect(item);
+            return allowselect;
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008, 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

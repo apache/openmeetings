@@ -1,0 +1,118 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="label.lzx"/>
+    <include href="datamarker.lzx"/>
+        
+    <!---
+       Represents a value point in the chart
+       @access public
+       -->
+    <class name="valuepoints">     
+        <!--- the x point will be draw -->
+        <attribute name="datax" type="expression" />
+        <!--- the y point will be draw -->
+        <attribute name="datay" type="expression" />
+        <!--- the label will be display next to the line -->
+        <attribute name="label" type="string" value=""/>
+        <!--- the tooltip value will be display when the mouse over the line -->
+        <attribute name="tip" type="string" value=""/>
+
+        <!-- data marker object
+            @keyword private-->    
+        <datamarker name="marker"/>  
+        
+        <!-- view for the label 
+            @keyword private-->    
+        <label name="txt" y="0" x="${parent.parent.style.valuepointstyle.point.width}"/>
+        
+        <!--- Method for extensible label rendering
+        @param string pLabel: a label text
+        -->
+        <method name="processData" args="pLabel">
+            return pLabel;
+        </method>
+        
+        <!--- shows the data tooltip and applied style
+            @keyword private-->
+        <handler name="onmouseover">
+            var ldata;
+            if ( this.tip == '' ){
+                ldata = (this.label!=''?this.label+' : ':'') + this.datax + ','+this.datay ;
+            } else{
+                ldata = this.tip;
+            }
+            parent.datatooltip.style = parent.style.valuepointstyle.tip;
+            parent.datatooltip.show(ldata); 
+        </handler>
+        
+        <!--- hides the data tooltip
+            @keyword private-->
+        <handler name="onmouseout">
+            parent.datatooltip.hide();     
+        </handler>
+
+        <!--- Render 
+            @keyword private-->
+        <method name="render">
+            this.renderValuePoint();
+        </method>
+        
+        <!--- Render value point 
+            @keyword private-->
+        <method name="renderValuePoint">
+        <![CDATA[ 
+            
+            //Calculate points on the graphic
+            var lDistanceX = parent.haxis.getPixelDistance(this.datax);
+            var lDIstanceY = parent.vaxis.getPixelDistance(this.datay);
+                       
+            var lExtraTextDistance = 0;
+            
+            //if label enabled, set styles and calcualte length
+            if (this.label!=null && this.label.length>0) {
+                
+                this.txt.style = parent.style.valuepointstyle.label;
+                this.txt.render(this.processData(this.label));
+                lExtraTextDistance = this.txt.getTextWidth();
+            } else {
+                this.txt.setAttribute('visible',false);
+            }
+            
+            //resize this view
+            this.setAttribute('width', parent.style.valuepointstyle.point.width+lExtraTextDistance);
+            this.setAttribute('height', parent.style.valuepointstyle.point.height);
+            
+            //move to the point and center
+            this.setAttribute('x', parent.plotarea.x + lDistanceX - (parent.style.valuepointstyle.point.width/2));
+            this.setAttribute('y', parent.plotarea.y + (parent.plotarea.height - lDIstanceY) - (parent.style.valuepointstyle.point.height/2));
+            
+            this.marker.clear();
+            this.marker.style = parent.style.valuepointstyle;
+            this.marker.renderValuePoint();
+        ]]>
+        </method>
+        
+        <doc>
+          <tag name="shortdesc"><text>
+              a group of values in a chart
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+</library>    
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

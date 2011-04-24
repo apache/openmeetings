@@ -1,0 +1,51 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+  <!-- Not all files are listed here, since some cannot be included directly without naming conflicts or manual modification. -->
+  <include href="autocompletecombobox.lzx" />
+  <include href="bigcheckbox.lzx" />
+  <include href="borderinput.lzx" />
+  <include href="boxview.lzx" />
+  <include href="closebox.lzx" />
+  <include href="colorpicker.lzx" />
+  <include href="custombutton.lzx" />
+  <include href="draglib.lzx" />
+  <include href="fisheye_lib.lzx" />
+  <include href="gradientview.lzx" />
+  <include href="hsplitpane.lzx" />
+  <include href="minibutton.lzx" />
+  <include href="opttree/opttree.lzx" />
+  <include href="rich-text/richtexteditor.lzx" />
+  <include href="rich-text/richtexttoolbar-class.lzx" />
+  <include href="rich-text/richtexteditarea.lzx" />
+  <include href="rich-text/formatfontface.lzx"/>
+  <include href="rich-text/formatfontcolor.lzx"/>
+  <include href="rich-text/formatbtn.lzx"/>
+  <include href="rich-text/linkdialog.lzx"/>
+  <include href="radioitem.lzx" />
+  <include href="roundrect.lzx"/>
+  <include href="roundrectbutton.lzx"/>
+  <include href="shadowbox.lzx"/>
+  <include href="simpledefaultlist.lzx"/>
+  <include href="stepper.lzx" />
+  <include href="stylishbutton.lzx" />
+  <include href="textstyle.lzx"/>
+  <include href="ulink.lzx" />
+  <include href="uploader/fileupload.lzx" />
+  <include href="uploader/fileuploadlist.lzx" />
+  <include href="uploader/multiplefileupload.lzx" />
+  <include href="validators/basevalidator.lzx" />
+  <include href="validators/validatingForm.lzx"/>
+  <include href="validators/stringvalidator.lzx"/>
+  <include href="validators/emailvalidator.lzx"/>
+  <include href="validators/datevalidator.lzx"/>
+  <include href="validators/numbervalidator.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2010 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+

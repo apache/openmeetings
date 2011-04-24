@@ -1,0 +1,879 @@
+<library>
+    <include href="base/baselistitem.lzx" />
+    <include href="base/baselist.lzx" />
+
+    <!-- =============== -->
+    <!--  BASETAB CLASS  -->
+    <!-- =============== -->
+
+
+
+    <class name="basetab" extends="baselistitem" clickable="true" 
+        focusable="true">
+
+        <!--- The tabpane associated with this tab.
+              @keywords readonly -->
+        <attribute name="tabpane" value="null" type="expression" />
+
+        <!--- The name of this tab. This is constrained to the tabpane's
+              text. 
+              @keywords readonly -->
+        <attribute name="text" value="${this.tabpane.text}" type="text"/>
+
+        <!--- @keywords private -->
+        <method name="handletpdestroy" args="ignore">
+          this.destroy();
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onconstruct">
+            this.tpDestroyDel = new LzDelegate(this, 'handletpdestroy' , 
+                                               this.tabpane, 'ondestroy' );
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="init">
+        <![CDATA[
+            super.init();
+
+            // If I'm selected, tell my parent to select me. Basetabs cannot exist
+            // w/o basetabpanes, so not necessary to check for existence.
+            if (parent instanceof lz.basetabsbar && tabpane.selected) {
+                parent.select(this);
+            }
+
+            // clear out tabpane's selected argument (so as not to confuse)
+            this.tabpane.setAttribute('selected', null);
+        ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="destroy">
+        <![CDATA[
+            if (parent instanceof lz.basetabsbar && parent._initcomplete) {
+                // We need to move selected to another tab
+                if (parent._selector.selected[0] == this) {
+                    if (parent.subviews.length == 1) {
+                        // select no one if this is last
+                        parent._selector.setAttribute('selected', null);
+                    } else {
+                        // set to first tab that isn't me
+                        var myTab = parent.subviews[0];
+                        if (myTab == this) myTab = parent.subviews[1];
+
+                                                myTab.setSelected(true);
+                        parent._selector.setAttribute('selected', [myTab]);
+                    }
+                }
+            }
+            super.destroy();
+        ]]>
+        </method>
+
+        <!--- Used with keyboard navigation. Selects this tab with the space
+              bar.
+              @keywords private -->
+        <method name="doSpaceUp">
+            this.setAttribute( 'selected' , true );
+        </method>
+
+        <!--- Deprecated: this method is unused.
+              @keywords private -->
+        <method name="setText" args="t">
+            this.setAttribute( 'text' , t );
+        </method>
+
+        <!--- Selects and makes this tab's corresponding tabpane visible.
+              @param Boolean s: true if selected, otherwise false. -->
+        <method name="setSelected" args="s">
+        <![CDATA[
+            if (s) {
+                if (this.tabpane['content'] != null) {
+                    this.tabpane.content.completeInstantiation();
+                }
+                this.setAttribute("clickable",false);
+                this.tabpane.setAttribute('visible', true);
+                this.setAttribute ('focusable' , false );
+            } else {
+                this.setAttribute("clickable",true);
+                this.tabpane.setAttribute('visible', false);
+                this.setAttribute ('focusable' , true );
+            }
+            super.setSelected(s);
+        ]]>
+        </method>
+       
+       <doc>
+             <tag name="shortdesc"><text>The base tab class.</text></tag>
+             <text>
+             <para>This class is to be used only in conjunction with
+              basetabs and basetabapane classes. You can pass the name of this class
+              in the 'tabclass' attribute of basetabpane, tabpane, basetabs, and
+              tabs classes. Basetabs uses this class as its default 'tabclass'.</para>
+             <example><![CDATA[
+<canvas height="75">
+  <include href="base"/>
+
+  <class name="aquatab" extends="basetab" 
+         width="40" height="20" bgcolor="aqua">
+    <text>tab</text>
+  </class>
+  <class name="greentab" extends="basetab" 
+         width="40" height="20" bgcolor="green">
+    <text>tab</text>
+  </class>
+
+  <basetabs x="10" y="10" tabclass="aquatab">
+    <basetabpane>
+      <text>one</text>
+    </basetabpane>
+    <basetabpane tabclass="greentab">
+      <text>two</text>
+    </basetabpane>
+    <basetabpane >
+      <text>three</text>
+    </basetabpane>
+  </basetabs>
+</canvas>
+]]>
+             </example>
+                 <p><b>See Also:</b></p>
+                 <ul>
+                     <li>
+                         <sgmltag class="element" role="lz.basetabsbar">&lt;basetabsbar&gt;</sgmltag>, 
+                         <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag>,
+                          and <sgmltag class="element" role="lz.basetabpane">&lt;basetabpane&gt;</sgmltag>
+                     </li>
+                 </ul>            
+             </text>
+             
+       </doc>
+
+    </class> <!-- class basetab -->
+
+    <!-- =================== -->
+    <!--  BASETABSBAR CLASS  -->
+    <!-- =================== -->
+
+    <!--- This class is a container for basetab items. It must be a child of
+          basetabs. The default layout for its subviews is "class: simplelayout;
+          axis: x; spacing: 0". You can pass the name of this class in the
+          'barclass' attribute of tabpane, basetabpane, basetabs, and
+          tabs. Basetabs uses this class as its default 'barclass'. -->
+    <class name="basetabsbar" extends="baselist" itemclassname="basetab" 
+           layout="class: simplelayout; axis: x; spacing: 0">
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            var sel = this.getSelection();
+            if (!sel) {
+                if (subviews[0] != null)
+                    subviews[0].setAttribute('selected', true);
+            }
+        </method>
+
+        <!--- Override select for tabsbar since we want to select the item, not
+              the item's value.
+              @keywords private -->
+        <method name="select" args="item" >
+            if (item == null) return;
+            if (this._initcomplete) {
+                this._selector.select(item);
+                this.setAttribute("value", item );
+                relayerTabs();
+                item.updateDefault();
+            } else {
+                this._initialselection = item;
+            }
+            // turn off doesenter when selected so that default buttons work 
+            this.setAttribute( 'doesenter', false );
+        </method>
+
+        <!--- Relayers all tabs so that they look correct when one is selected.
+              @keywords private -->
+        <method name="relayerTabs">
+        <![CDATA[
+            // Iterate through tabs in order of appearance, sending every tab to
+            // back except for the selected tab, which will be brought to front.
+            for (var i=0; i < this.subviews.length; i++) {
+                var sv = this.subviews[i];
+                if (sv["selected"]) {
+                    sv.bringToFront();
+                } else {
+                    sv.sendToBack();
+                }
+            }
+        ]]>
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>A non-visual container for basetab components.</text></tag>
+          <text>
+            <p>A <classname>basetabsbar</classname> is a non-visual container
+            class that uses a default x-axis <sgmltag class="element" role="lz.simplelayout">&lt;simplelayout&gt;</sgmltag> 
+            to lay out its <sgmltag class="element" role="lz.basetab">&lt;basetab&gt;</sgmltag> 
+            children. <literal>basetabsbar </literal> is contained in a 
+            <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag> component.</p>
+            
+            <example title="custom basetabsbar">
+            &lt;canvas height="75"&gt;
+              &lt;include href="base"/&gt;
+            
+              &lt;class name="aquatab" extends="basetab" 
+                        width="40" height="20" bgcolor="aqua"&gt;
+                &lt;text&gt;tab&lt;/text&gt;
+              &lt;/class&gt;
+            
+              &lt;class name="spacetabsbar" extends="basetabsbar" bgcolor="black" 
+                     layout="class: simplelayout; axis: x; spacing: 4"&gt;
+              &lt;/class&gt;
+            
+              &lt;basetabs x="10" y="10" tabclass="aquatab" barclass="spacetabsbar"&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;one&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;two&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;three&lt;/text&gt;
+                &lt;/basetabpane&gt;
+              &lt;/basetabs&gt;
+            &lt;/canvas&gt;
+            </example>
+              <p><b>See Also:</b></p>
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.basetab">&lt;basetab&gt;</sgmltag>, 
+                      and <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag>
+                  </li>
+              </ul>                       
+          </text>
+        </doc>
+    </class> <!-- class basetabsbar -->
+
+    <!-- ==================== -->
+    <!--  BASETABPANECONTENT  -->
+    <!-- ==================== -->
+    <!--- This is the content of a basetabpane.
+          @keywords private -->
+    <class name="basetabpanecontent"
+           x="${parent.inset_left}" y="${parent.inset_top}">
+
+        <!--- Set this to force a determinePlacement call.
+              @keywords private readonly -->
+        <attribute name="defaultplacement" value="_null_" type="string"/>
+
+        <!--- @keywords private -->
+        <method name="determinePlacement" args="v , p, a">
+            v.parent = this.parent;
+            return this;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            _recalculateContentWidth(null);
+            _recalculateContentHeight(null);
+            this._contentWDel = 
+                new LzDelegate(this, "_recalculateContentWidth", this, "onwidth");
+            this._contentHDel = 
+                new LzDelegate(this, "_recalculateContentHeight", this, "onheight");
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_recalculateContentWidth" args="ignore">
+            parent.parent._calculateContentWidth(this.width, 
+                                                 parent.inset_left, 
+                                                 parent.inset_right, 
+                                                 parent.parent.bordersize);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_recalculateContentHeight" args="ignore">
+            parent.parent._calculateContentHeight(this.height,
+                                                  parent.inset_top,
+                                                  parent.inset_bottom,
+                                                  parent.parent.bordersize);
+        </method>
+    </class> <!-- class basetabpanecontent -->
+
+    <!-- =================== -->
+    <!--  BASETABPANE CLASS  -->
+    <!-- =================== -->
+    <!-- The basetabpane for basetabs. If width and height are not set, all
+          basetabpanes will resize themselves to largest basetabpane or the
+          width of the basetabsbar, whichever is larger. The content of the
+          basetabpane is initstage late. You can override this value by setting
+          initstage late on basetabpane. -->
+    <class name="basetabpane" extends="basecomponent" focusable="false"
+           width="${parent._contentWidth}" height="${parent._contentHeight}"
+           visible="false">
+
+       
+        <!--- If a basetabpane is selected, then it will be shown.
+              Its associated tab will be also be selected. -->
+        <attribute name="selected" value="false" type="boolean" 
+                   setter="_setSelected(selected)" />
+
+        <!--- The tab associated with this basetabpane.
+              @keywords readonly -->
+        <attribute name="tab" value="null" type="expression" />
+        <!--- The tabclass to use to instantiate its associated tab. This
+              overrides the basetabs tabclass. Leave undefined here so that
+              basetabs can have it.
+              @keywords final -->
+        <attribute name="tabclass" type="string" />
+
+        <!--- Top inset for basetabpane in tabs content. Default is basetabs's
+              inset_top. -->
+        <attribute name="inset_top" value="${parent.inset_top}" type="number" />
+        <!--- Right inset for basetabpane in tabs content. Default is basetabs's
+              inset_right. -->
+        <attribute name="inset_right" value="${parent.inset_right}" type="number" />
+        <!--- Bottom inset for basetabpane in tabs content. Default is basetabs's
+              inset_bottom. -->
+        <attribute name="inset_bottom" value="${parent.inset_bottom}" type="number" />
+        <!--- Left inset for basetabpane in tabs content. Default is basetabs's
+              inset_left. -->
+        <attribute name="inset_left" value="${parent.inset_left}" type="number" />
+
+        <!--- Text value for tab. -->
+        <attribute name="text" value="tab" type="text" />
+
+        <!--- DO NOT OVERRIDE THIS VARIABLE.
+              Tell basetabs I want to be placed in basetabscontent
+              defaultplacement flag. See basetabs.determinePlacement().
+              @keywords private -->
+        <attribute name="placement" value="_tabscontent" type="string" />
+
+        <!--- SUBCLASSES OVERRIDING THIS CLASS MUST PAY ATTENTION TO THIS
+              VARIABLE.
+              Number of children to keep in class instead of placing in
+              content. This number is used in the createChildren method and it
+              determines how many are spliced from the beginning of the array.
+              This is something subclasses of tabpane content will have to be
+              mindful of.
+              @keywords private -->
+        <attribute name="_keepchildren" value="0" type="number" />
+
+        <!--- Overrides LzNode.datapath setter
+              @keywords private -->
+        <setter name="datapath" args="dp">
+
+                    if (null != this.datapath) {
+                this.datapath.setXPath(dp);
+            } else {
+                var data_args = { xpath : dp }
+                if (this.visibility != "collapse") {
+                    data_args.datacontrolsvisibility = (this.visibility == "collapse");
+                }
+                new lz.datapath ( this, data_args );
+            }
+        </setter>
+
+
+        <!--- Everything after _keepchildren number will be swallowed by 
+              content.
+              @keywords private -->
+        <method name="createChildren" args="c">
+        <![CDATA[
+            var myChildren = [];
+            if (_keepchildren > 0) {
+                myChildren = c.slice(0, _keepchildren);
+                c.splice(0, _keepchildren);
+            }
+
+            // Intercept basetabpane initstage for its content. Note: createChildren
+            // gets called before init.
+            var istage = "late"
+            if (this['initstage'] != null) {
+                istage = this.initstage;
+            }
+            this.initstage = null;
+            // NOTE [2008-06-20 ptw] This seems fraught with danger.
+            // Components shouldn't be mucking at this level
+            myChildren.push( { 'class': lz.basetabpanecontent, 
+                               attrs: { name: 'content', parent: this, 
+                                        initstage: istage },
+                               children: c } );
+            super.createChildren( myChildren );
+        ]]>
+        </method>
+
+        <!--- Setter for selected attribute.
+              @param Boolean s: true if selected, otherwise false.
+              @keywords private -->
+        <method name="_setSelected" args="s">
+            this.selected = s;
+            if (this.selected != this.tab.selected)
+              this.tab.setAttribute("selected", s);
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>A non-visual tabpane for the basetabs component.</text></tag>
+          <text>
+            <p>A <classname>basetabpane</classname> is the non-visual container
+            for content in <classname>basetabs</classname>. Each
+            <classname>basetabpane</classname> has a corresponding
+            <classname>basetab</classname> created. Normally, you won't want to
+            extend this class. If you want a consistent background across all
+            <classname>basetabpane</classname>s, you can add a background to your
+            <classname>basetabscontent</classname> component. If you want a
+            different background for each <classname>basetabpane</classname>, you
+            could do that in the content placed inside of your
+            <classname>basetabpane</classname>.</p>
+            
+            <p>Be aware that the content of <classname>basetabpane</classname> is
+            <code>initstage="late"</code><!--link-->. You can override this by
+            declaring an <attribute>initstage</attribute> on a specific subclass
+            or instance of <classname>basetabpane</classname>.</p>
+            
+            <programlisting>
+            &lt;basetabpane initstage="normal"&gt;
+              &lt;!-- ..content... --&gt;
+            &lt;/basetabpane&gt;
+            </programlisting>
+
+            <note>The parent of a <tagname>basetabpane</tagname> is
+            <tagname>basetabs</tagname>, but its <em>immediate parent</em> is the
+            default placement of the
+            <classname>basetabscontent</classname>.</note>
+            
+            <example title="parent and immediate parent of basetabpane">
+            &lt;canvas height="140" debug="true"&gt;
+              &lt;debug x="150" y="10"/&gt;
+              
+              &lt;include href="base"/&gt;
+            
+              &lt;class name="aquatab" extends="basetab" width="40" height="20" bgcolor="aqua"&gt;
+                &lt;text&gt;tab&lt;/text&gt;
+              &lt;/class&gt;
+              
+              &lt;class name="borderedtabscontent" extends="basetabscontent" bgcolor="black"&gt;
+                &lt;attribute name="defaultplacement" value="borderedcontent" type="string"/&gt;
+                &lt;view name="borderedcontent"
+                      x="${parent.parent.bordersize}"
+                      y="${parent.parent.bordersize}"
+                      width="${parent.width-(2*parent.parent.bordersize)}"
+                      height="${parent.height-(2*parent.parent.bordersize)}"
+                      clip="true" bgcolor="red"/&gt;
+              &lt;/class&gt;
+            
+              &lt;basetabs x="10" y="10" bordersize="3" 
+                        tabclass="aquatab" 
+                        contentclass="borderedtabscontent"&gt;
+                &lt;basetabpane name="one"&gt;
+                  &lt;handler name="onvisible" args="isvisible"&gt;
+                    if (isvisible) {
+                      Debug.debug("parent: %w", parent);
+                      Debug.debug("immediate parent: %w", immediateparent);
+                    }
+                  &lt;/handler&gt;
+                  &lt;text&gt;one&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;two&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text height="${parent.height}" width="${parent.width}" 
+                        bgcolor="green"&gt;
+                    three
+                  &lt;/text&gt;
+                &lt;/basetabpane&gt;
+              &lt;/basetabs&gt;
+            &lt;/canvas&gt;
+            </example>
+              <p><b>See Also:</b></p>
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.basetab">&lt;basetab&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag>, 
+                      and <sgmltag class="element" role="lz.basetabscontent">&lt;basetabscontent&gt;</sgmltag>
+                  </li>
+              </ul>                       
+          </text>
+        </doc>
+        
+    </class> <!-- class basetabpane -->
+
+
+    <!-- ================= -->
+    <!--  BASETABSCONTENT  -->
+    <!-- ================= -->
+
+   
+    <class name="basetabscontent" extends="basecomponent" focusable="false"
+           height="${parent._contentHeight}" width="${parent._contentWidth}"
+           initstage="immediate">
+
+        <!--- Change the default placement of basetabs to defaultplacement of 
+              tabscontent and create associated tabs.
+              @keywords private -->
+        <method name="determinePlacement" args="v,p,a">
+        <![CDATA[
+
+            if (v instanceof lz.basetabpane) {
+                // reassign parent of view to basetabs
+                v.parent = this.parent;
+                p = this.defaultplacement;
+            }
+            return super.determinePlacement( v , p, a );
+        ]]>
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>The non-visual container for basetabpanes.</text></tag>
+          <text>
+            <p><classname>basetabscontent</classname> is the non-visual container
+            (and immediate parent) of <classname>basetabpane</classname>s. Extend
+            <classname>basetabscontent</classname> to give the content area of
+            your <classname>basetabs</classname> a look, e.g., adding borders to
+            your content. <classname>basetabscontent</classname> is a child of the
+            <classname>basetabs</classname> component.</p>
+              <p><classname>basetabscontent</classname> should be in <classname>basetabs</classname>. If
+                  <attribute>width</attribute> and <attribute>height</attribute> are not set,
+                  <classname>basetabscontent</classname> will stretch to the largest content item. You can
+                  pass the name of this class in the <attribute>contentclass</attribute> attribute of
+                  <classname>basetabs</classname> and <classname>tabs</classname>.
+                  <classname>basetabs</classname> uses this class as its default
+                  <classname>contentclass</classname></p>
+            
+            <example title="custom basetabscontent with borders">
+            &lt;canvas height="75"&gt;
+              &lt;include href="base"/&gt;
+            
+              &lt;class name="aquatab" extends="basetab" 
+                        width="40" height="20" bgcolor="aqua"&gt;
+                &lt;text&gt;tab&lt;/text&gt;
+              &lt;/class&gt;
+            
+              &lt;class name="borderedtabscontent" extends="basetabscontent" 
+                        bgcolor="black"&gt;
+                &lt;attribute name="defaultplacement" value="borderedcontent" 
+                              type="string" /&gt;
+                &lt;view name="borderedcontent"
+                    x="${parent.parent.bordersize}"
+                    y="${parent.parent.bordersize}"
+                    width="${parent.width-(2*parent.parent.bordersize)}"
+                    height="${parent.height-(2*parent.parent.bordersize)}"
+                    clip="true" bgcolor="red"/&gt;
+              &lt;/class&gt;
+              
+              &lt;basetabs x="10" y="10" bordersize="3"
+                           tabclass="aquatab" 
+                           contentclass="borderedtabscontent"&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;one&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;two&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;three&lt;/text&gt;
+                &lt;/basetabpane&gt;
+              &lt;/basetabs&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+              <p><b>See Also:</b></p>
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="../reference/lz.basetabpane">&lt;basetabpane&gt;</sgmltag>
+                      and <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag>
+                  </li>
+              </ul>
+          </text>
+        </doc>
+    </class> <!-- class basetabscontent -->
+
+
+    <!-- ========== -->
+    <!--  BASETABS  -->
+    <!-- ========== -->
+    <!--- The base tabs object. This is the outermost containing component
+          within which there are a basetabsbar and the basetabscontent. -->
+    <class name="basetabs" extends="basecomponent" focusable="false">
+
+        <!--- The size of the border surrounding a basetabpane. -->
+        <attribute name="bordersize" value="0" type="number" />
+        
+        <!-- ================ -->
+        <!--  content insets  -->
+        <!-- ================ -->
+        <!--- The top inset for content appearing within a basetabpane. -->
+        <attribute name="inset_top" value="8" type="number" when="immediately" />
+        <!--- The left inset for content appearing within a basetabpane. -->
+        <attribute name="inset_left" value="8" type="number" />
+        <!--- The bottom inset for content appearing within a basetabpane. -->
+        <attribute name="inset_bottom" value="8" type="number" />
+        <!--- The right inset for content appearing within a basetabpane. -->
+        <attribute name="inset_right" value="8" type="number" />
+
+        <!-- ========== -->
+        <!--  tabclass  -->
+        <!-- ========== -->
+        <!--- Class to instantiate tab items for basetabsbar. Can be
+              overridden by basetabpane.
+              @keywords final -->
+        <attribute name="tabclass" value="basetab" type="string" />
+
+        <!-- =============== -->
+        <!--  tabsbar values  -->
+        <!-- =============== -->
+        <!--- This is a reference to its basetabsbar. 
+              @keywords readonly -->
+        <attribute name="bar" value="null" type="expression" />
+        <!--- Class to instantiate to contain tab items.
+              @keywords final -->
+        <attribute name="barclass" value="basetabsbar" type="string" />
+
+        <!-- ===================== -->
+        <!--  content area values  -->
+        <!-- ==-================== -->
+        <!--- This is a reference to basetab's content area. This is where all
+              basetabpanes in tabs are placed.
+              @keywords readonly -->
+        <attribute name="content" value="null" type="expression" />
+        <!--- Class to instantiate to contain basetabpanes.
+              @keywords final -->
+        <attribute name="contentclass" value="basetabscontent" type="string" />
+
+        <!--- Basetab's layout for its basetabsbar and basetabscontent
+              area. -->
+        <attribute name="layout"
+            value="class: simplelayout; axis: y; spacing: 0"/>
+
+        <!--- The height of the content area. Tabscontent uses this.
+              @keywords private -->
+        <attribute name="_contentHeight" value="0" type="number" />
+        <!--- The width of the content area.  Tabscontent uses this.
+              @keywords private -->
+        <attribute name="_contentWidth" 
+                   value="${Math.max(_maxTabpaneContentWidth, this.bar.width)}"
+                   type="number" />
+        
+        <!--- @keywords private -->
+        <attribute name="_maxTabpaneContentWidth" value="0" type="number" />
+
+        <!--- @keywords private -->
+        <handler name="onconstruct">
+            // Create tabsbar
+            if (this['barclass'] &amp;&amp; lz[this.barclass]) {
+              this.bar = new lz[this.barclass](this, {}, null, true);
+            } else if ($debug) {
+              Debug.error('%s.%s invalid: %s', this, 'barclass', this['barclass']);
+            }
+            if (this.bar == null) {
+                this.bar = new lz.basetabsbar(this, {}, null, true);
+                if ($debug) {
+                  Debug.warn('%s.barclass defaulted to %s', this, this.bar.constructor.tagname);
+                }
+            }
+
+            // Create tabscontent, if it hasn't been already created
+            if (this['contentclass'] &amp;&amp; lz[this.contentclass]) {
+               this.content = new lz[this.contentclass](this, {}, null, true);
+            } else if ($debug) {
+              Debug.error('%s.%s invalid: %s', this, 'contentclass', this['contentclass']);
+            } 
+            if (this.content == null) {
+                this.content = new lz.basetabscontent(this, {}, null, true);
+                if ($debug) {
+                  Debug.warn('%s.contentclass defaulted to %s', this, this.content.constructor.tagname);
+                }
+            }
+        </handler>
+
+
+        <!--- @keywords private -->
+        <method name="determinePlacement" args="v,p,args">
+        <![CDATA[
+
+            // Special flag passed on from basetabpane to tell tabs to place it
+            // in contents defaultplacement. Subclasses should *not* override
+            // this value.
+            if (p == "_tabscontent") {
+
+                // only create new tabs if there's a place to put them
+                var tc = args['tabclass'] || v['tabclass'] || this.tabclass;
+                if (tc && lz[tc]) {
+                    v.tab = new lz[tc](this.bar, { tabpane: v }, null, true);
+                } else if ($debug) {
+                    Debug.error("%s.tabclass invalid: %s", this, tc);
+                }
+
+                return this.content.determinePlacement(v, p, args);
+            }
+
+            return super.determinePlacement(v,p,args);
+        ]]>
+        </method>
+
+
+        <!--- Calculates the max content width.
+              @param Number w: width to check against current max content width.
+              @param Number il: inset left
+              @param Number ir: inset right
+              @param Number b: border size
+              @keywords private -->
+        <method name="_calculateContentWidth" args="w,il,ir,b">
+        <![CDATA[
+            // only deal with this if we don't have a set height
+            if (!hassetwidth) {
+                // this can happen if child view inits before inset values
+                // are set in basetabs.
+                if (il == null) il = this.inset_left;
+                if (ir == null) ir = this.inset_right;
+                if (b == null ) b  = this.bordersize;
+                var checkW  = w+(2*b)+il+ir;
+                if (checkW > this._maxTabpaneContentWidth) {
+                    setAttribute("_maxTabpaneContentWidth", checkW);
+                }
+            } else if (this.width != _contentWidth) {
+                setAttribute("_maxTabpaneContentWidth", this.width);
+                setAttribute("_contentWidth", this.width);
+            }
+        ]]>
+        </method>
+
+        <!--- Calculates the max content height.
+              @param Number h: height to check against current max content height.
+              @param Number it: inset top
+              @param Number ib: inset bottom
+              @param Number b: border size
+              @keywords private -->
+        <method name="_calculateContentHeight" args="h,it,ib,b">
+        <![CDATA[
+            // only deal with this if we don't have a set height
+            if (!hassetheight) {
+                // this can happen if child view can inits before inset values
+                // are set in basetabs.
+                if (it == null) it = this.inset_top;
+                if (ib == null) ib = this.inset_bottom;
+                if (b == null ) b  = this.bordersize;
+                var checkH = h+(2*b)+it+ib;
+                if (checkH > this._contentHeight) {
+                    setAttribute("_contentHeight", checkH);
+                }
+            } else {
+                var myh = this.height - this.bar.height;
+                if (myh != this._contentHeight) {
+                    setAttribute("_contentHeight", myh);
+                }
+            }
+        ]]>
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>A non-visual container for basetabpanes.</text></tag>
+          <text>
+            <p>The <classname>basetabs</classname> component conceptually houses a
+            row of tabs that control the visibility of a stack of
+            <classname>basetabpane</classname>s. When a
+            <classname>basetabpane</classname> is added to the
+            <classname>basetab</classname> component, a corresponding
+            <classname>basetab</classname> is created for that
+            <classname>basetabpane</classname>.</p>
+            
+            <p>Due to the non-visual nature of <classname>basetab</classname>, a
+            visible subclass of <classname>basetab</classname> is used in the next
+            example to demonstrate the correlation between
+            <classname>basetabpane</classname> and <classname>basetab</classname>
+            items.</p>
+            
+            <example title="introduction to basetabs">
+            &lt;canvas height="75"&gt;
+              &lt;include href="base"/&gt;
+            
+              &lt;class name="aquatab" extends="basetab" width="40" height="20" 
+                      bgcolor="aqua"&gt;
+                &lt;text&gt;tab&lt;/text&gt;
+              &lt;/class&gt;
+            
+              &lt;basetabs x="10" y="10" tabclass="aquatab"&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;one&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;two&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;three&lt;/text&gt;
+                &lt;/basetabpane&gt;
+              &lt;/basetabs&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>As can be seen, three <classname>basetab</classname> items have
+            been created for the three <tagname>basetabpane</tagname>s
+            declared.</p>
+            
+            <p>Though the <tagname>basetabpane</tagname> <em>element</em> is the
+            child of a <tagname>basetab</tagname> element, in the runtime view
+            hierarchy instances of <classname>basetabs</classname> are the
+            immediate parents of a <classname>basetabsbar</classname> (where
+            <classname>basetab</classname> components are placed and laid out) and
+            <classname>basetabscontent</classname> (where the
+            <classname>basetabpane</classname> components are placed and laid
+            out).</p>
+            
+            <p>The following diagram illustrates the correlation between
+            <classname>basetabs</classname>, <classname>basetabsbar</classname>
+            (the container for <classname>basetab</classname> items), and
+            <classname>basetabscontent</classname> (the container for
+            <classname>basetabpane</classname>s).</p>
+            
+            <img src="images/basetabs/tabs-diagram.gif" width="416" height="120" />
+            
+            <p>You can change the look and feel of your basetabs by using a
+            different <classname>basetab</classname>,
+            <classname>basetabsbar</classname>, and/or
+            <classname>basetabscontent</classname>.</p>
+            
+            <example title="modifying the basetabs look">
+            &lt;canvas height="75"&gt;
+              &lt;include href="base"/&gt;
+              
+              &lt;class name="mytab" extends="basetab" width="40" height="20" bgcolor="lime"&gt;
+                &lt;text&gt;mytab&lt;/text&gt;
+              &lt;/class&gt;
+              
+              &lt;class name="mytabsbar" extends="basetabsbar" bgcolor="navy"
+                     layout="class: simplelayout; axis: x; spacing: 5"/&gt;
+              
+              &lt;class name="mytabscontent" extends="basetabscontent" bgcolor="silver"/&gt;
+              
+              &lt;basetabs x="10" y="10" tabclass="mytab" barclass="mytabsbar"
+                        contentclass="mytabscontent"&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;one&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;two&lt;/text&gt;
+                &lt;/basetabpane&gt;
+                &lt;basetabpane&gt;
+                  &lt;text&gt;three&lt;/text&gt;
+                &lt;/basetabpane&gt;
+              &lt;/basetabs&gt;
+            &lt;/canvas&gt;
+            </example>
+              <p><b>See Also:</b></p>
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.basetab">&lt;basetab&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.basetabsbar">&lt;basetabsbar&gt;</sgmltag>, 
+                      <sgmltag class="element" role="lz.basetabpane">&lt;basetabpane&gt;</sgmltag>, 
+                      and <sgmltag class="element" role="lz.basetabscontent">&lt;basetabscontent&gt;</sgmltag>
+                  </li>
+              </ul>            
+          </text>
+        </doc>
+    </class> <!-- class basetabs -->
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

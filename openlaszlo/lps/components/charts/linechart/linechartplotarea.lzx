@@ -1,0 +1,157 @@
+<library>    
+    <!--- @keywords private
+     plotarea of linechart -->
+    <class name="linechartplotarea"   extends="virtualdrawview">
+        <!--- @keywords private
+              It is the stroke view that allows to implement stroke type, such as 
+              'solid', 'dotted', or 'dashed'. This has the same dimensions as the plot 
+              area. 'this' refers to the plot area and now has been replaced by 
+              'stylingViewRenderer' -->
+        <strokestyle name="stylingViewRenderer" 
+             width="${parent.width}" 
+             height="${parent.height}"/>
+        <!--- @keywords private -->     
+        <viewlistmanager name="listmanager"/>             
+
+        <!--- Renders the data lines and applies them the style if it was specified
+            @param array xseries: x series of the chart
+            @param array yseries: y series of the chart
+            @param array style: style of the chart
+         -->
+        <method name="renderSeries" args="xseries, yseries, style">
+        <![CDATA[
+            this.stylingViewRenderer.setAttribute( "strokeColor", style.line.color );
+            this.stylingViewRenderer.setAttribute( "strokeWidth", style.line.size );
+            this.stylingViewRenderer.setAttribute( "strokeType", style.line.type );
+            this.stylingViewRenderer.globalAlpha = style.line.opacity;
+
+            if(xseries != null){
+                for(var i = 1; i < xseries.length; i++)
+                {
+                    this.stylingViewRenderer.renderStroke(this.toDeviceX(xseries[i-1]), 
+                                                      this.toDeviceY(yseries[i-1]), 
+                                                      this.toDeviceX(xseries[i]), 
+                                                      this.toDeviceY(yseries[i]));
+                }                               
+                //this.renderCurveSeries(xseries, yseries, style );
+            }
+        ]]>
+        </method>
+        
+        <!--- @keyword private
+            currently not used
+            Renders the data lines and applies them the style if it was specified
+          -->
+        <method name="renderCurveSeries" args="xseries, yseries, style">
+        <![CDATA[
+            
+            this.beginPath();
+            this.moveTo(xseries[0], yseries[0]); 
+            for(var i = 1; i < xseries.length - 1; i++)
+            {                               
+                
+                this.quadraticCurveTo(xseries[i], yseries[i], (xseries[i] + xseries[i + 1]) / 2, (yseries[i] + yseries[i + 1]) / 2);
+            } 
+            this.strokeStyle = 0xff0000;
+            this.lineWidth = 2;
+            this.stroke();
+            this.closePath();    
+                               
+        ]]>
+        </method>
+
+        <!--- render a list of data points(data markers)
+            @param array xseries: x series of the chart
+            @param array yseries: y series of the chart
+            @param array tooltipseries: tooltip series of the chart
+            @param array seriesNum: the series number
+            @param array style: style of the chart
+         -->
+        <method name="renderDataPoints" args="xseries, yseries, tooltipseries, style,seriesNum">
+        <![CDATA[
+             
+            var pointList = listmanager.getList(this, "datapoints", seriesNum); 
+            if(xseries != null){
+                for(var i = 0; i < xseries.length; i++){                    
+                    this.renderDataPoint(xseries[i],yseries[i], tooltipseries[i], style, pointList.getViewAt(i));
+                }
+            }                                
+        ]]>
+        </method>
+        
+        <!--- render a data points(data markers)
+            @param number x: x position
+            @param number y: y position
+            @param string tooltip: data point tooltip value
+            @param pointstyle style: style for the datapoint                
+            @param datapoint point: the data point            
+         -->
+        <method name="renderDataPoint" args="x, y, tooltip, style, point">
+            
+            point.setAttribute('x', x * this._xscale + this._xoffset - (style.point.width/2));
+            point.setAttribute('y', y * this._yscale + this._yoffset - (style.point.height/2));
+
+            point.tooltip = tooltip;
+            if((point["style"] == null) || style.updateNeeded(point))
+            {
+                point.style = style;
+                point.marker.clear();
+                point.marker.style = style;       
+                        
+                point.marker.renderValuePoint();
+                style.markUpdated(point);                
+            }                       
+        </method>
+        
+        
+        <!--- render a list of data labels along the data points
+            @param array xseries: x series of the chart
+            @param array yseries: y series of the chart
+            @param array datalabelseries: series for the data label
+            @param object style: style of the label
+            @param number seriesNum: the series number            
+         -->
+        <method name="renderDataLabels" args="xseries, yseries, datalabelseries, style, seriesNum">
+        <![CDATA[             
+            var labelList = listmanager.getList(this, "datalabel", seriesNum);
+            if(xseries != null){
+                for(var i = 0; i < xseries.length; i++){                    
+                    if(datalabelseries && datalabelseries[i] != "null" && datalabelseries[i] != null && datalabelseries[i] != ''){    
+                        var label = labelList.getViewAt(i);
+                    
+                        if(style.updateNeeded(label))
+                        {
+                            label.setAttribute('style', style.label);
+                            
+                            label.render(datalabelseries[i]);
+                            label.bringToFront(); 
+                            style.markUpdated(label);                        
+                        }
+                        //label.setAttribute('x', lx+label.width>plotarea.width?plotarea.width-label.width-5:lx );
+                        label.setAttribute('x', lx );
+                        label.setAttribute('y', devicey - label.height/2);
+                    }
+                            
+                    var devicex = this.toDeviceX(xseries[i]);
+                    var devicey = this.toDeviceY(yseries[i]);
+                    var lx = devicex + 5;
+                }
+            }
+        ]]>
+        </method>
+        
+        <!--- clear the plotarea -->
+        <method name="clear">
+            super.clear();
+            this.stylingViewRenderer.clear();
+            listmanager.reclaimAll();
+        </method>
+    </class>    
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->

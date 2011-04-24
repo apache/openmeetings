@@ -1,0 +1,409 @@
+<library>
+    
+    <include href="rpc/rpc.lzx" />
+    <include href="rpc/library/soap.js" />
+
+    <class name="soap" extends="rpc">
+
+        <!--- Required attribute that specifies WSDL to read for the SOAP
+              object. The value for wsdl should be an href. -->
+        <attribute name="wsdl" type="string" />
+
+        <!--- The SOAP service to fetch. If not specified, the first service
+              encountered in the WSDL is used. -->
+        <attribute name="service" value="" type="string" />
+
+        <!--- The SOAP port to use. If not specified, the first SOAP port
+              encountered in the WSDL is used. -->
+        <attribute name="port" value="" type="string" />
+
+        <!--- The SOAP header to pass with each request. This can be either a
+              string or a dataset. Default is null. -->
+        <attribute name="requestheaders" value="null" type="expression" />
+
+        <!--- If set, the SOAP response header returned by the last
+              call. The value for this must be a dataset. Default is null. -->
+        <attribute name="responseheaders" value="null" type="expression" />
+
+        <!--- The prototypes that can be used to create objects. 
+              @keywords readonly -->
+        <attribute name="proto" value="null" type="expression" />
+
+        <!--=================================================================-->
+        <!-- public methods                                                  -->
+        <!--=================================================================-->
+
+        <!--- Load the object. If successful, this.proxy is set to an object
+              with remote APIs. -->
+        <method name="load">
+            LzSOAPService.loadObject(this._loadDel,
+                { wsdl: this.wsdl, service: this.service, port: this.port },
+                  this.secure, this.secureport);
+        </method>
+
+        <!--=================================================================-->
+        <!-- private methods                                                 -->
+        <!--=================================================================-->
+
+
+        <!--- @keywords private -->
+        <method name="init">
+          if (canvas.runtime == "dhtml") {
+              Debug.warn("SOAP RPC only partially implemented in the DHTML runtime.");
+          }  
+
+          if (this['wsdl'] == null) {
+              Debug.write('soap error: required wsdl attribute not set');
+              return;
+          }
+          super.init();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setup" args="o">
+            var ok = super._setup(o);
+            if (ok) {
+                var stubinfo = o.stubinfo;
+                this.service = o.stubinfo.service;
+                this.port = o.stubinfo.port;
+                if ( o.stubinfo['proto'] ) {
+                    this.proto = o.stubinfo.proto;
+                }
+
+                for (var k in this.proxy) {
+                    var tpka = this.proxy[k]['args'];
+                    if (tpka == null) {
+                        tpka = this.proxy[k].args = {};
+                    }
+                    tpka.superclass = this;
+                }
+            }
+            return ok;
+        </method>
+
+
+
+       <method name="makeProxyStubFunction" args="fn">
+        <![CDATA[                                                
+           var stubinfo = this.proxyinfo[fn];
+           //"Multiply": function ()
+           //{var args = arguments.callee.args;
+           //                return LzSOAPService.invoke(arguments[1],
+           //   arguments[0],
+           // args.superclass.requestheaders,
+           // {"parts": [["tns:Multiply",
+           // null]],
+           // "opstyle": "document",
+           // "operation": "Multiply",
+           // "port": "MathServiceSoap",
+           // "service": "MathService",
+           // "wsdl": "http://www.dotnetjunkies.com/quickstart/aspplus......./mathservice.asmx?WSDL"},
+           //                                            args.superclass.secure,
+           var stubfunc = function (){
+               var args = arguments.callee.args;
+               return LzSOAPService.invoke(
+                   arguments[1], 
+                   arguments[0],
+                   args.superclass.requestheaders,
+                   stubinfo, false, null);
+           }
+           
+           return stubfunc;
+       ]]>                                                
+       </method>
+
+
+
+        <doc>
+            <tag name="shortdesc"><text>SOAP (Simple Object Access Prototcol)</text></tag>
+            <text>
+                <p>SOAP (Simple Object Access Prototcol) is used to exchange information in a
+                    distributed environment. A typical scenarion involves a SOAP client invoking a
+                    client-side function stub to invoke a SOAP web service operation. The SOAP web
+                    service then returns data to the client, like stock information or the result to
+                    a math function. The <a href="http://www.w3.org/TR/soap/" shape="rect">SOAP
+                        protocol</a> is a work in progress being drafted by the <a
+                        href="http://www.w3.org" shape="rect">W3C</a>. For the latest SOAP
+                    information.</p>
+
+
+                <p>The &lt;soap&gt; element creates a client-side representation of a SOAP
+                service based on a WSDL. The name and wsdl attributes are required.</p>
+                <example>
+    &lt;canvas debug="true" height="530"&gt;
+    
+        &lt;debug x="15" y="15" width="415" height="500" /&gt;
+        
+        &lt;soap name="amazon" 
+            wsdl="http://soap.amazon.com/schemas3/AmazonWebServices.wsdl"&gt;
+        
+            &lt;handler name="onload"&gt;
+                Debug.debug('Amazon soap service loaded');
+                Debug.debug('Compare proxy stubs with WSDL SOAP operations.');
+                Debug.debug('Amazon WSDL at %w', this.wsdl);            
+                Debug.debug('proxy:');
+                Debug.inspect(this.proxy);
+            &lt;/handler&gt;
+            
+            &lt;handler name="onerror" args="error"&gt;
+                Debug.debug('error: %w', error);
+            &lt;/handler&gt;
+        
+        &lt;/soap&gt;
+        
+    &lt;/canvas&gt;
+                </example>
+                    <p>Document style operations use XML (i.e. documents) as paramaters. Document
+                    style operations return an array of <sgmltag class="element" role="LzDataElement">LzDataElement</sgmltag>s, 
+                    though often only a single
+                    <code class="classname">LzDataElement</code> will exist in the array. The XML string (document) parameter
+                    passed into the operation must match the XML schema as defined in the WSDL.</p>
+                <example>
+    &lt;canvas debug="true"&gt;
+    
+        &lt;debug y="30" x="145" width="350" height="300" /&gt;
+        
+        &lt;!-- This SOAP service uses document/literal messages for its
+        operations. Each operation is passed a document as a parameter. --&gt;
+        &lt;soap name="maths" 
+                wsdl="http://www.dotnetjunkies.com/quickstart/aspplus/samples/services/MathService/VB/MathService.asmx?WSDL"&gt;
+        
+            &lt;!-- Method to make a document for SOAP message requests --&gt;
+            &lt;method name="makedoc" args="func, av, bv"&gt;
+                &lt;![CDATA[
+                if (func == null) return;
+                var s =  '&lt;' + func + ' xmlns="' + 'http://tempuri.org/' + '" &gt;' + 
+                    '&lt;A&gt;' + av + '&lt;/A&gt;' + 
+                    '&lt;B&gt;' + bv + '&lt;/B&gt;' + 
+                '&lt;/' + func + '&gt;';
+                Debug.debug("%w", s);
+                return s;
+                ]]&gt;
+            &lt;/method&gt;
+            
+            &lt;handler name="onload"&gt;
+            // make buttons visible once SOAP object is loaded
+                canvas.buttons.setAttribute('visible', true);            
+            &lt;/handler&gt;
+            
+            &lt;handler name="onerror" args="error"&gt;
+                Debug.debug('error: %w', error);
+            &lt;/handler&gt;
+            
+            &lt;handler name="ontimeout" args="error"&gt;
+                Debug.debug('timeout: %w', error);
+            &lt;/handler&gt;
+            
+            &lt;handler name="ondata" args="value"&gt;
+            Debug.debug("%w", value);
+                result.setAttribute('text', value);
+            &lt;/handler&gt;
+            
+            &lt;remotecall funcname="Add"&gt;
+                &lt;param value="${ canvas.maths.makedoc(parent.name, a.text, b.text) }" /&gt;
+            &lt;/remotecall&gt;
+            &lt;remotecall funcname="Subtract"&gt;
+                &lt;param value="${ canvas.maths.makedoc(parent.name, a.text, b.text) }" /&gt;
+            &lt;/remotecall&gt;
+            &lt;remotecall funcname="Multiply"&gt;
+                &lt;param value="${ canvas.maths.makedoc(parent.name, a.text, b.text) }" /&gt;
+            &lt;/remotecall&gt;
+            &lt;remotecall funcname="Divide"&gt;
+                &lt;param value="${ canvas.maths.makedoc(parent.name, a.text, b.text) }" /&gt;
+            &lt;/remotecall&gt;
+        &lt;/soap&gt;
+        
+        &lt;view name="buttons" x="10" y="10" visible="false" layout="spacing: 10" &gt;
+            &lt;text&gt;&lt;b&gt;.NET MathService&lt;/b&gt;&lt;/text&gt;
+            
+            &lt;view layout="axis: x" &gt;&lt;text y="3"&gt;a:&lt;/text&gt;&lt;edittext id="a" text="10"/&gt;&lt;/view&gt;
+            &lt;view layout="axis: x" &gt;&lt;text y="3"&gt;b:&lt;/text&gt;&lt;edittext id="b" text="2" /&gt;&lt;/view&gt;
+            &lt;view layout="axis: x" &gt;&lt;text&gt;result:&lt;/text&gt;&lt;text id="result"/&gt;&lt;/view&gt;
+            
+            &lt;button text="add"      onclick="canvas.maths.Add.invoke()" /&gt;
+            &lt;button text="subtract" onclick="canvas.maths.Subtract.invoke()" /&gt;
+            &lt;button text="multiply" onclick="canvas.maths.Multiply.invoke()" /&gt;
+            &lt;button text="divide"   onclick="canvas.maths.Divide.invoke()" /&gt;
+        
+        &lt;/view&gt;
+        
+    &lt;/canvas&gt;
+                </example>
+                <p>The XML Schema in the WSDL describes how the XML should be structured for
+                    each of the operations. The WSDL below describes how what the schema should look
+                    like for the <code>Add</code> operation.</p>
+                <programlisting>
+    &lt;definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            xmlns:s="http://www.w3.org/2001/XMLSchema"
+            xmlns:s0="http://tempuri.org/"
+            xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+            xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+            xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+            targetNamespace="http://tempuri.org/"
+            xmlns="http://schemas.xmlsoap.org/wsdl/"&gt;
+    
+    &lt;types&gt;
+        &lt;s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/"&gt;
+            &lt;s:element name="Add"&gt;
+                &lt;s:complexType&gt;
+                    &lt;s:sequence&gt;
+                        &lt;s:element minOccurs="1" maxOccurs="1" name="A" type="s:float" /&gt;
+                        &lt;s:element minOccurs="1" maxOccurs="1" name="B" type="s:float" /&gt;
+                    &lt;/s:sequence&gt;
+                &lt;/s:complexType&gt;
+            &lt;/s:element&gt;
+            
+            &lt;s:element name="AddResponse"&gt;
+                &lt;s:complexType&gt;
+                    &lt;s:sequence&gt;
+                        &lt;s:element minOccurs="1" maxOccurs="1" name="AddResult" type="s:float" /&gt;
+                    &lt;/s:sequence&gt;
+                &lt;/s:complexType&gt;
+            &lt;/s:element&gt;
+            
+            &lt;!-- MORE SCHEMA DECLARATION (for Subtract, Multiply, Divide) HERE --&gt;
+        
+        &lt;/s:schema&gt;
+    &lt;/types&gt;
+    
+    &lt;message name="AddSoapIn"&gt;
+        &lt;part name="parameters" element="s0:Add" /&gt;
+    &lt;/message&gt;
+    &lt;message name="AddSoapOut"&gt;
+        &lt;part name="parameters" element="s0:AddResponse" /&gt;
+    &lt;/message&gt;
+    
+    &lt;!-- OTHER MESSAGES (for Subtract, Multiply, Divide) HERE --&gt;
+    
+    &lt;portType name="MathServiceSoap"&gt;
+        &lt;operation name="Add"&gt;
+            &lt;input message="s0:AddSoapIn" /&gt;
+            &lt;output message="s0:AddSoapOut" /&gt;
+        &lt;/operation&gt;
+        &lt;!-- OTHER PORT TYPE OPERATIONS (for Subtract, Multiply, Divide) HERE --&gt;
+    &lt;/portType&gt;
+    
+    &lt;binding name="MathServiceSoap" type="s0:MathServiceSoap"&gt;
+        &lt;soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" /&gt;
+        &lt;operation name="Add"&gt;
+            &lt;soap:operation soapAction="http://tempuri.org/Add" style="document" /&gt;
+            &lt;input&gt;
+                &lt;soap:body use="literal" /&gt;
+            &lt;/input&gt;
+            &lt;output&gt;
+                &lt;soap:body use="literal" /&gt;
+            &lt;/output&gt;
+        &lt;/operation&gt;
+        &lt;!-- OTHER SOAP BINDING OPERATIONS (for Subtract, Multiply, Divide) HERE --&gt;
+    &lt;/binding&gt;
+    
+    &lt;service name="MathService"&gt;
+        &lt;port name="MathServiceSoap" binding="s0:MathServiceSoap"&gt;
+            &lt;soap:address location="http://www.dotnetjunkies.com/quickstart/aspplus/samples/services/MathService/VB/MathService.asmx" /&gt;
+        &lt;/port&gt;
+    &lt;/service&gt;
+    
+    &lt;/definitions&gt;
+                </programlisting>
+                <p>RPC style operations behave just like functions in that, instead of
+                    documents, values are passed in as parameters. Parameters can be of simple data
+                    type (number, boolean), array, or object. The parameter type for the operation
+                    is described in the WSDL's XML schema.</p>
+          <example>
+      &lt;canvas debug="true" height="400" width="530"&gt;
+      
+          &lt;debug x="10" y="190" width="510" height="200" /&gt;
+          
+          &lt;dataset name="googleDset" /&gt;
+          
+          &lt;soap name="google" wsdl="http://api.google.com/GoogleSearch.wsdl"&gt;
+              &lt;handler name="onload"&gt;
+                  Debug.debug('google soap service loaded');
+              &lt;/handler&gt;
+              
+              &lt;handler name="onerror" args="error"&gt;
+                  Debug.debug('error: %w', error);
+              &lt;/handler&gt;
+              
+              &lt;!-- See RPC chapter for details on remotecall and how dataobject is
+              used to data bind to RPC operation results. --&gt; 
+              &lt;remotecall name="search" funcname="doGoogleSearch" 
+                      dataobject="googleDset"&gt;
+              
+                  &lt;param value="'2TKUw4ZQFHJ84ByemZK0EXV0Lj+7xGOx'" /&gt;
+                  &lt;param value="${ s.text }" /&gt;
+                  &lt;param value="1" /&gt;
+                  &lt;param value="10" /&gt;
+                  &lt;param value="true" /&gt;
+                  &lt;param value="''" /&gt;
+                  &lt;param value="true" /&gt;
+                  &lt;param value="''" /&gt;
+                  &lt;param value="''" /&gt;
+                  &lt;param value="''" /&gt;
+                  
+                  &lt;handler name="ondata" args="value"&gt;
+                      Debug.debug('search result: %w\n', value);
+                  &lt;/handler&gt;
+              
+              &lt;/remotecall&gt;
+          &lt;/soap&gt;
+          
+          &lt;view x="10" y="10" layout="spacing: 5" &gt;
+              &lt;view layout="axis: x; spacing: 5"&gt;
+                  &lt;edittext id="s" text="SOAP" /&gt;
+                  &lt;button text="search" 
+                  onclick="Debug.debug('Invoking search...'); google.search.invoke()" /&gt;
+              &lt;/view&gt;
+                  
+              &lt;view width="505" height="140" bgcolor="silver" layout="axis: y" &gt;
+                  &lt;view&gt;
+                      &lt;datapath xpath="googleDset:/resultElements/item" pooling="true" /&gt;
+                      &lt;text width="200" datapath="title/text()" clip="true" /&gt;
+                      &lt;text x="205" width="300" datapath="URL/text()" clip="true" /&gt;
+                  &lt;/view&gt;
+              &lt;/view&gt;
+          
+          &lt;/view&gt;
+      
+      &lt;/canvas&gt;
+          </example>
+                <p>The example demonstrates how a result value, which is actually a JavaScript
+                    object, can be data bound through the dataobject attribute in remotecall. For
+                    more details, see the remotecall section in the <a href="../developers/rpc-soap.html" target="laszlo-dguide" shape="rect">RPC chapter</a> of the <a href="../developers/" target="laszlo-dguide" shape="rect">Developer's Guide</a>. To read about passing complex type
+                    parameters, read the <a href="../developers/rpc-soap.html" target="laszlo-dguide" shape="rect">SOAP chapter</a>.</p>
+                
+                
+                <p><b>See Also:</b></p>
+
+                    <ul>
+                        <li>
+                            <sgmltag class="element" role="lz.rpc">&lt;rpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.javarpc">&lt;javarpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.xmlrpc">&lt;xmlrpc&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <sgmltag class="element" role="lz.remotecall">&lt;remotecall&gt;</sgmltag>
+                        </li>
+                        <li>
+                            <a href="../developers/rpc.html" target="laszlo-dguide" shape="rect">Developer's Guide: RPC</a>
+                        </li>
+                        <li>
+                            <a href="../developers/rpc-soap.html" target="laszlo-dguide" shape="rect">Developer's Guide: SOAP</a>
+                        </li>
+                    </ul>
+                    
+            </text>
+            </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

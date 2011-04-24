@@ -1,0 +1,181 @@
+<canvas title="richtexteditarea-test" bgcolor="0x7C7C8D">
+<include href="lzunit" />
+
+<!-- This file tests the link dialog functionality --> 
+<include href="incubator/stylishbutton.lzx" /> 
+<include href="incubator/shadowbox.lzx"/>
+<include href="incubator/borderinput.lzx"/>
+<include href="incubator/lzcombobox.lzx"/>
+<include href="incubator/textstyle.lzx"/>
+<include href="incubator/baseedittext.lzx" />
+    
+<include href="incubator/rich-text/richtexttoolbar.lzx"/>
+<include href="incubator/rich-text/richtexteditarea.lzx"/>
+<include href="incubator/rich-text/linkdialog.lzx"/>
+<include href="incubator/rich-text/formatbtn.lzx"/>
+<include href="incubator/rich-text/formatfontcolor.lzx"/>
+<include href="incubator/rich-text/formatfontface.lzx"/>
+
+<include href="formatfontsize.lzx" />
+
+<view x="20" y="80" width="${canvas.width-40}" height="${canvas.height-80}">
+    <richtexttoolbar name="toolbar" id="gTB" editor="${grte}" height="30" width="${parent.width-5}" x="2" y="0" bgcolor="0xD4D7E5">
+
+    <formatbtn name="boldbtn" id="gBoldBtn" format="bold" iconname="bold" icony="4" />    
+    <formatbtn name="underlinebtn" id="gUnderlineBtn" format="underline" iconname="underline" />  
+    <formatbtn name="italicbtn" id="gItalicBtn" format="italic" iconname="italic" icony="4" />
+    <formatfontface name="fontfacecb" id="gFontFaceCB" y="${(parent.height-this.height)/2}"/>
+    <formatfontcolor name="fontcolorcb" id="gFontColorCB" y="${(parent.height-this.height)/2}"/>
+    <formatfontsize name="fontsizecb" id="gFontSizeCB" y="${Math.round((parent.height-this.height)/2)}"/>
+    </richtexttoolbar>
+        
+
+    <view width="100%" y="35" height="${parent.height-70}" bgcolor="0xFFFFFF">
+                 <!-- sample text from democracy, an american novel by henry adams, 1880 (in public domain) --> 
+        <richtexteditarea id="grte" name="txt" 
+            height="100%"
+            width="100%"
+            defaultfontname="Verdana" 
+            defaultfontsize="18" 
+            defaultfontcolor="0x336699"
+
+            border="10"  text="For reasons which many persons thought ridiculous, Mrs. Lightfoot Lee decided to pass the winter in Washington. She was in excellent health, but she said that the climate would do her good. In New York she had troops of friends, but she suddenly became eager to see again the very small number of those who lived on the Potomac. It was only to her closest intimates that she honestly acknowledged herself to be tortured by ennui. Since her husband's death, five years before, she had lost her taste for New York society; she had felt no interest in the price of stocks, and very little in the men who dealt in them; she had become serious. What was it all worth, this wilderness of men and women as monotonous as the brown stone houses they lived in? In her despair she had resorted to desperate measures. She had read philosophy in the original German, and the more she read, the more she was disheartened that so much culture should lead to nothing... nothing.">
+                <method name="init">
+                    super.init();
+                    gBoldBtn.setAttribute("editor", this); 
+                    gUnderlineBtn.setAttribute("editor", this); 
+                    gItalicBtn.setAttribute("editor", this); 
+                    gFontFaceCB.setAttribute("editor", this);                         
+                    gFontSizeCB.setAttribute("editor", this);                         
+                    gFontColorCB.setAttribute("editor", this);               
+                </method>           
+            
+        </richtexteditarea>
+    </view> 
+</view>
+
+<TestSuite>
+    <TestCase>
+        <method name="testTextIsPresent"><![CDATA[
+            assertNotNull(grte.getText()); 
+            assertTrue(grte.getText().length > 0); 
+        ]]></method>
+        <method name="testGetFormat">
+            grte.setTextFormat( {font: "Verdana", size: 24, color: "0xAA00FF"}, 0, 40); 
+            grte.setSelection(20,30);
+            var fmt = grte.getTextFormat(21,22);
+            assertNotNull(fmt);
+            assertEquals(fmt.font, "Verdana"); 
+            assertEquals(fmt.size, 24); 
+            assertEquals(fmt.color, 0xAA00FF); 
+        </method>
+        <method name="addTests"> 
+            this.addTest("testTextIsPresent");
+            this.addTest("testGetFormat");
+        </method> 
+    </TestCase>
+
+    <TestCase>
+        <method name="setUp">
+            grte.reset();
+        </method>
+        <method name="testReset">
+            assertTrue(grte.getText().length == 0); 
+            assertFalse(grte.isHTML); 
+        </method>
+
+        <method name="testMakeHTML">
+            assertFalse(grte.isHTML); 
+            grte.setFormatAttribute("bold", true); 
+            assertTrue(grte.isHTML); 
+        </method>
+        <method name="addTests"> 
+            this.addTest("testReset");
+            this.addTest("testMakeHTML");
+        </method> 
+    </TestCase>
+
+<!-- We expect these values for paragraph format, or null: 
+            this.currentformat.leading = 0;
+            this.currentformat.indent = 0;
+            this.currentformat.blockIndent = false;
+            this.currentformat.align = "left";
+            this.currentformat.bullet = false; 
+    
+-->     
+    <TestCase>
+        <method name="setUp">
+            grte.reset();
+            grte.setText("Oop ark org eep means you are fantastic.");                 
+        </method>
+
+        <method name="testNoLeading"><![CDATA[
+            var fmt = grte.getTextFormat(5,10);
+            assertTrue( (!fmt.leading) || (fmt.leading==0));
+        ]]></method>
+        
+        <method name="testNoIndent"><![CDATA[
+            var fmt = grte.getTextFormat(5,10);
+            assertTrue( (fmt.indent == null) || (fmt.indent==0));
+        ]]></method>
+        
+        <method name="testNoBlockIndent"><![CDATA[
+            var fmt = grte.getTextFormat(5,10);
+            assertTrue( (fmt.blockIndent == null) || (!fmt.blockIndent));
+        ]]></method>
+        
+        <method name="testNoAlign"><![CDATA[
+            var fmt = grte.getTextFormat(5,10);
+            assertTrue( (fmt.align == null) || (fmt.align == "left"));
+        ]]></method>
+        <method name="testNoBullet"><![CDATA[
+            var fmt = grte.getTextFormat(5,10);
+            assertTrue( (fmt.bullet == null) || (fmt.bullet == false));
+        ]]></method>        
+        <method name="addTests"> 
+            this.addTest("testNoLeading");
+            this.addTest("testNoIndent");
+            this.addTest("testNoBlockIndent");
+            this.addTest("testNoAlign");
+            this.addTest("testNoBullet");
+        </method> 
+    </TestCase>
+    
+    <TestCase>
+        <method name="setUp">
+            grte.reset();
+            grte.setText("Oop ark org eep means you are fantastic.\nGoo bar bum.\nEep.");                 
+            grte.setSelection(5,10);
+        </method>
+        <method name="testApplyBold">
+            var fmt = grte.getTextFormat(5,10);
+            assertFalse(fmt.bold); 
+            gBoldBtn.doClick(); 
+            fmt = grte.getTextFormat(5,10);
+            assertTrue( fmt.bold ); 
+        </method>
+        <method name="testApplyItalic">
+            var fmt = grte.getTextFormat(12,18);
+            assertFalse(fmt.italic); 
+            grte.setSelection(12,18); 
+            gItalicBtn.doClick();             
+            fmt = grte.getTextFormat(12,18);
+            assertTrue( fmt.italic ); 
+        </method>
+        <method name="addTests"> 
+            this.addTest("testApplyBold");
+            this.addTest("testApplyItalic");
+        </method> 
+    </TestCase>         
+
+    
+
+</TestSuite>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+    * Copyright 2006-2008, 2010 Laszlo Systems, Inc. All Rights Reserved.                    *
+    * Use is subject to license terms.                                            *
+    * X_LZ_COPYRIGHT_END ****************************************************** -->
+    <!-- @LZX_VERSION@                                                         -->
+    

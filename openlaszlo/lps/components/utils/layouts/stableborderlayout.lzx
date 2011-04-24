@@ -1,0 +1,111 @@
+<library>
+<include href="utils/layouts/layout.lzx"/>
+<class name="stableborderlayout" extends="layout" >
+    <!--- The axis in which this layout operates. One of 'x' or 'y'. -->
+    <attribute name="axis" setter="this.setAxis( axis )" type="string" />
+
+    <!--- @keywords private -->
+    <method name="reset" args="e=null">
+        if ( this.locked || (this.subviews &amp;&amp; this.subviews.length &lt; 2 )) { return; }
+        this.subviews[ 1 ].setAttribute(this.axis ,
+                            this.subviews[ 0 ][(this.sizeAxis )] );
+        this.update();
+    </method>
+    
+    <!--- This method is usually only called when the size of the parent 
+          changes. This means that stableborderlayout is not really designed
+          for use in situations where the size of the views controlled by the
+          layout changes after init time. However, this method may be called
+          directly to force the layout to update. 
+          @param Number newsize: size to use to update-->
+    <method name="update" args="newsize=null">
+        if ( this.locked || this.subviews.length &lt; 3 ) { 
+            return; 
+        }
+        if (newsize == null) {
+            var parent = this.immediateparent;
+            if (parent.usegetbounds) {
+                parent = parent.getBounds();
+            }
+            newsize = parent[this.sizeAxis];
+        }
+        this.lock();
+        var middleview = this.subviews[1];
+        var lastview = this.subviews[2];
+        
+        // use computed bounds when necessary
+        var lastviewbounds = lastview.usegetbounds ? lastview.getBounds() : lastview;
+        var middleviewbounds = middleview.usegetbounds ? middleview.getBounds() : middleview;
+        // add/subtract .1 pixel fudge factor to prevent gaps - see LPP-6681
+        lastview.setAttribute( this.axis , newsize - lastviewbounds[this.sizeAxis] - .1);
+        middleview.setAttribute( this.sizeAxis , newsize - lastviewbounds[this.sizeAxis] -
+                                    middleviewbounds[ this.axis ]  + .1);
+        this.locked = false;
+    </method>
+
+    <!--- @keywords private -->
+    <method name="addSubview" args="sd">
+        super.addSubview( sd );
+        if (this.subviews.length == 2 ){
+            // this is the second subview
+            var firstsubview = this.subviews[0];
+            if (firstsubview.usegetbounds) {
+                firstsubview = firstsubview.getBounds();
+            }
+            this.subviews[ 1 ].setAttribute(this.axis, firstsubview[this.sizeAxis] );
+            // sd['hasset'+this.sizeAxis] = true;
+            sd.setAttribute(this.sizeAxis,0);
+        }else if ( this.subviews.length > 2 ){
+            this.update();
+        }
+    </method>
+
+    <!--- @keywords private -->
+    <method name="setAxis" args="a" >
+        this.axis = a;
+        this.sizeAxis = a == "x" ? "width" : "height"
+        if (this.updateDelegate) this.updateDelegate.register( this.immediateparent, 
+                                      "on" + this.sizeAxis ); 
+    </method>
+    
+    <doc>
+        <tag name="shortdesc"><text>Keeps the width of two outer sibling views constant, while stretching the innermost one.</text></tag>
+        <text>
+              <para><classname>stableborderlayout</classname> extends <sgmltag class="element" role="LzLayout">&lt;layout&gt;</sgmltag>, and is therefore 
+              responsible for arranging a set of views. Unlike like most layouts, <classname>stableborderlayout</classname> only manipulates the first three 
+              subviews. All of the other subviews are ignored. <classname>stableborderlayout</classname> is very similar to 
+              <sgmltag class="element" role="lz.simplelayout">&lt;simplelayout&gt;</sgmltag> in that it arranges views vertically or horizontally depending 
+              on the axis specified. The difference is that <classname>stableborderlayout</classname> stretches the second view so that the total combined width 
+              (or height) of these three subviews matches the width (or height) of their parent.</para>
+              <para>The following example demonstrates the differences between <classname>simplelayout</classname> and <classname>stableborderlayout.</classname></para>
+              <example title="simplelayout vs. stableborderlayout">
+<![CDATA[<canvas height="100">
+  <view bgcolor="yellow" width="200">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <simplelayout axis="x" spacing="10"/>
+  </view>
+  
+  <view y="40" bgcolor="yellow" width="200">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <stableborderlayout axis="x"/>
+  </view>
+</canvas>]]>
+              </example>
+              <para>Note that there is no spacing parameter allowed in <classname>stableborderlayout</classname>. Also, notice that each parent 
+              view has a width of 200. In the top view this information is ignored, which is why yellow can be seen extending past the last subview. 
+              In the bottom view no yellow can be seen because it is covered up by the blue and red views. Finally, take note that the second red 
+              view has no width assigned to it, because <classname>stableborderlayout</classname> controls that value directly.</para>
+        </text>
+    </doc>
+
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

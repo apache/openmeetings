@@ -1,0 +1,168 @@
+<library>
+    <include href="base/baselistitem.lzx" />
+
+    <!-- CLASS: basetabelement -->
+    <!-- Basetabelements are children of basetabslider. -->
+    <class name="basetabelement"
+           width="100%"
+           focusable="true" styleable="false"
+           extends="baselistitem"
+           clickable="false" >
+
+        <!--- Content is automatically hidden when tabelement is closed. To
+              override, set this attribute to false. -->
+        <attribute name="hideonclose" value="true" />
+        <!--- This is set to true when a basetabelement begins to open and is
+              set to false when it finishes its close. Default is the inverse of
+              hideonclose. -->
+        <attribute name="contentvisible" value="$once{! hideonclose}" />
+        <!--- When creating tabelements via additem, this is the class that gets
+              created. The default value is the class of the first tabelement or
+              its descendant. -->
+        <attribute name="itemclassname"  value="" type="string"/>
+        <!--- @keywords private -->
+        <attribute name="isopening"      value="0" />
+        <!--- The height the tab will close to. -->
+        <attribute name="minheight" value="22" type="number" />
+        <!--- The height of the header. -->
+        <attribute name="headerheight" value="$once{minheight}" type="number" />
+
+        <!-- TODO [2003-12-01 bret]: special setter to avoid setting height 
+             independent of tabslider -->
+        <!--- The height of the tabelement. -->
+        <attribute name="height"    value="$once{minheight}" />
+        
+        <!-- events -->
+        <!--- Sent at the start of the open animation. -->
+        <event name="onopenstart" />
+        <!--- Sent at the end of the open animation. -->
+        <event name="onopenstop" />
+        <!--- Sent at the start of the close animation. -->
+        <event name="onclosestart" />
+        <!--- Sent at the end of the close animation. -->
+        <event name="onclosestop" />
+        <!--- Can be use in subclasses if the height in the tag is needed.
+              @keywords private -->
+        <attribute name="_originalheight"  value="null" />
+
+        <!--- @keywords private -->
+        <attribute name="dlo"       value="null" />
+        <!--- @keywords private -->
+        <attribute name="dlc"       value="null" />
+
+        <!-- METHODS -->
+
+        <!--- @keywords private -->
+        <handler name="onconstruct">
+            this._originalheight = this.height;
+            if ( this.headerheight ) this.height = this.headerheight;
+            else this.height = this.minheight;
+        </handler>
+
+        <!--- Called to open this tabelement by a certain height.
+              @param Number h: height
+              @param Number d: millisecond delay in open animation 
+              @param boolean withAnimation: if true, open with animation.
+              @keywords private -->
+        <method name="open" args="h,d,withAnimation" >
+            <![CDATA[ 
+            this.setAttribute( "contentvisible" , true );
+            this.isopening += 1;
+            if ( this.onopenstart ) this.onopenstart.sendEvent();
+            if( withAnimation ) {
+               var anm = this.animate( "height", h, d, true );
+               if ( !this.dlo ) this.dlo = new LzDelegate( this, "openned" );
+               this.dlo.register( anm, "onstop" );
+            } else {
+               this.setAttribute( "height", h+this.minheight );
+               this.openned(null);
+            }
+            this.setAttribute ('focusable' , false );
+
+            ]]>
+        </method>
+
+        <!--- Close the tabelement by a certain height.
+              @param Number h: height
+              @param Number d: millisecond delay in open animation 
+              @keywords private
+              -->
+        <method name="close" args="h,d">
+            var anm = this.animate( "height", h, d, true );
+            if ( this.onclosestart ) this.onclosestart.sendEvent();
+            if ( !this.dlc ) this.dlc = new LzDelegate( this,"closed" );
+            this.dlc.register( anm, "onstop" );
+            this.setAttribute( 'focusable' , true );
+        </method>
+
+        <!--- The selection manager associated with a tabslider sends an onselect
+              event to the tabelement that is being opened or closed.
+              @param boolean isSelected: true is this basetabelement is selected. -->
+        <method name="setSelected" args="isSelected" >
+            super.setSelected( isSelected );
+            if ( !parent._initcomplete ) return;
+            if ( isSelected ) {
+                this.open( parent.availableheight, parent.slideduration, true );
+            } else {
+                this.close( -parent.availableheight, parent.slideduration );
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setSelected" args="s">
+            <![CDATA[
+            if (s && !this["selected"]) {
+                super._setSelected(s);
+            }
+            ]]>
+        </method>
+ 
+        <!--- Select this basetabelement if it has the focus and the space bar
+              goes up.
+              @keywords private -->
+        <method name="doSpaceUp">
+            this.setAttribute( 'selected' , true );
+        </method>
+
+        <!--- Called when the tabelement is completely opened. -->
+        <method name="openned" args="ignore">
+            if ( this.onopenstop ) this.onopenstop.sendEvent();
+            this.isopening -= 1;
+            if (this.isopening == 0) {
+                //now we can savely call unregisterAll
+                if (this.dlo) {
+                    this.dlo.unregisterAll();
+                }
+            } 
+        </method>
+
+        <!--- Called when the tabelement is completely closed. -->
+        <method name="closed" args="ignore"> <![CDATA[
+            if ( this.onclosestop ) this.onclosestop.sendEvent();
+
+            // stop listening for close events
+            this.dlc.unregisterAll();
+            if ( this.isopening < 1 && this.hideonclose ) {
+                this.setAttribute( "contentvisible" , false );
+                //need to recheck the default to update the default button
+                this.updateDefault();
+            }
+        ]]></method>
+
+        <doc>
+          <tag name="shortdesc"><text>Base class for the contents of a basetabslider.</text></tag>
+          <text>
+            <p><classname>basetabelement</classname> is the base class for the
+            contents of a <classname>basetabslider</classname>. The
+            <classname>basetabelement</classname> is focusable
+            if it is closed, and not focusable when it is open.</p>
+          </text>
+        </doc>
+    </class> <!-- END: basetabelement -->
+
+ </library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

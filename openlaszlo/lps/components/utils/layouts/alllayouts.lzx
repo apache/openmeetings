@@ -1,0 +1,9 @@
+<!-- This file will be obsoleted, please use: /utrils/layouts/library,lzx -->
+<library>
+    <include href="library.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

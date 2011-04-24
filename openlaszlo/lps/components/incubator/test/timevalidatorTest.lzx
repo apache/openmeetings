@@ -1,0 +1,33 @@
+<canvas>
+    <include href="incubator/validators/validatingform.lzx" />
+    <include href="incubator/validators/timevalidator.lzx" />
+    <include href="incubator/formlayout.lzx" />
+
+    <validatingForm name="myform">
+        <submit name="submit" />
+        
+        <formlayout spacing="10" />
+        
+        <text>time:</text>
+        <timevalidator format="hh:mi:ss">
+            <edittext name="time" />
+        </timevalidator>
+
+        <button name="btnok" text="OK" enabled="false" onclick="setAttribute('text', 'Form Valid!')" />
+
+        <handler name="onerrorcount" args="val">
+        <![CDATA[
+            Debug.write("error changed:" + val);
+            if(0 < val)
+                this.btnok.setAttribute("enabled", false);
+            else
+                this.btnok.setAttribute("enabled", true);
+        ]]>
+        </handler>
+    </validatingForm>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

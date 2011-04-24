@@ -1,0 +1,91 @@
+<library>
+    <include href="utils/layouts/layout.lzx"/>
+    <class name="constantboundslayout" extends="layout">
+
+        <!--- The constant value that is applied to the attribute
+              ( defined in 'axis' as 'x' or 'y' ) of each subview in the layout. --> 
+        <attribute name="value" value="0" type="expression"/>
+        
+        <!--- The axis in which this layout operates either 'x' or 'y'.  -->
+        <attribute name="axis" value="y" type="string"/>
+Arranges a set of views to a constant 'x' or 'y' value with a bounding rect
+        <!--- this method is called by the layout class as each new subview is added
+              to a layout. It is extended here to define which events on a subview
+              will activate the update method of this particular layout
+              @keywords private 
+              @param LzView newsub: The subview to add.  -->
+        <method name="addSubview" args="newsub">
+            this.updateDelegate.register( newsub,  "onx");
+            this.updateDelegate.register( newsub,  "ony");
+            this.updateDelegate.register( newsub,  "onrotation");
+            this.updateDelegate.register( newsub,  "onwidth");
+            this.updateDelegate.register( newsub,  "onheight");
+
+            super.addSubview( newsub );
+            this.update();
+
+        </method>
+
+        <!--- this method is called by the layout class everytime an event (that
+              has been registered with the updatedelegate) is sent by a subview
+              or the layout's parent view. -->
+        <method name="update" args="v=null">
+            <![CDATA[
+            var l = this.subviews.length;
+                
+            for(var i=0; i < l; i++) {
+                var s = this.subviews[i]; 
+                var sb = s.getBounds();
+                if ( s[ this.axis ] != this.value - sb[ this.axis +'offset' ]){ 
+                    s.setAttribute( this.axis , this.value - 
+                                                sb[ this.axis +'offset' ] );
+                }
+            } 
+
+            ]]>
+        </method>
+        <doc>
+              <tag name="shortdesc"><text>Arranges a set of views to a constant 'x' or 'y' value with a bounding rect</text></tag>
+                  <text>
+<p>A <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag> can have an <literal>xoffset</literal> and a <literal>yoffset</literal>. These offsets allow the view to be placed relative to the point (<literal>xoffset</literal>, <literal>yoffset</literal>). (Otherwise the view is placed using the view's top left corner as a reference point.) If a view has an offset, then 
+this will effect how layouts position it relative to other views.</p>
+
+<p>The easiest way to see how constantboundslayout works is to contrast it with <sgmltag class="element" role="lz.constantlayout">&lt;constantlayout&gt;</sgmltag> as shown here.</p>
+
+<p>The example below shows three views, one with an <literal>xoffset</literal> value of five. When using just a <sgmltag class="element" role="lz.constantlayout">&lt;constantlayout&gt;</sgmltag> the yellow view is shifted left five pixels because of its <literal>xoffset</literal>.</p>
+
+<example title="Using constantboundlayout">
+&lt;canvas height=&quot;85&quot;&gt;
+  &lt;view bgcolor=&quot;red&quot; >
+    &lt;view width=&quot;80&quot; height=&quot;80&quot; bgcolor=&quot;yellow&quot; xoffset=&quot;5&quot;/&gt;       
+    &lt;view width=&quot;60&quot; height=&quot;60&quot; bgcolor=&quot;silver&quot;/&gt; 
+    &lt;view width=&quot;40&quot; height=&quot;40&quot; bgcolor=&quot;green&quot;/&gt;           
+    &lt;constantlayout axis=&quot;x&quot; value=&quot;10&quot;/&gt; 
+  &lt;/view &gt;
+&lt;/canvas&gt;
+
+</example>
+
+<p>With a <literal>constantboundslayout</literal> that offset is effectively ignored, meaning only the bounds of the view matters in the layout process. The example below shows all of the subviews now aligned with the use of a <literal>constantboundslayout</literal>.</p>
+
+<example title="Aligning on the vertical axis">
+&lt;canvas height=&quot;85&quot;&gt;
+  &lt;include href=&quot;utils/layouts/constantboundslayout.lzx&quot;/&gt;
+  &lt;view bgcolor=&quot;red&quot;&gt;
+    &lt;view width=&quot;80&quot; height=&quot;80&quot; bgcolor=&quot;yellow&quot; xoffset=&quot;5&quot;/&gt;      
+    &lt;view width=&quot;60&quot; height=&quot;60&quot; bgcolor=&quot;silver&quot;/&gt; 
+    &lt;view width=&quot;40&quot; height=&quot;40&quot; bgcolor=&quot;green&quot;/&gt;           
+    &lt;constantboundslayout axis=&quot;x&quot; value=&quot;10&quot;/&gt;
+  &lt;/view &gt;
+&lt;/canvas&gt;
+
+            </example>
+         </text>
+       </doc>
+       </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,17 @@
+/* J_LZ_COPYRIGHT_BEGIN *******************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* J_LZ_COPYRIGHT_END *********************************************************/
+.element {
+  font-size: 0pt;
+}
+
+.attribute-element > .element,
+.method-element > .element,
+.attribute-element-comment, .method-element-comment,
+.attribute-element-text, .method-element-text,
+pre > .element
+{
+  display: block;
+  font-size: medium;
+}

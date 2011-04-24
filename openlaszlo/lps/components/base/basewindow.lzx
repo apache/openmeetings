@@ -1,0 +1,386 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<library>
+
+<include href="base/basecomponent.lzx" />
+<include href="utils/states/dragstate.lzx"/>
+<include href="utils/states/resizestatemin.lzx"/>
+
+<!--- The basewindow class defines methods, attributes that are used by window
+      subclasses.-->
+<class name="basewindow" extends="basecomponent"  options="ignorelayout"
+       pixellock="true" focusable="false" clickable="true">
+        <!--- Minimum width for the window.
+              @keywords final -->
+        <attribute name="minwidth" value="60"/>
+
+        <!--- Minimum height for the window.
+              @keywords final -->
+        <attribute name="minheight" value="50"/>
+
+        <!--- True if the window is frontmost. Set this
+              attribute to bring the window to the fore of its sibling
+              windows, and bring window focus.
+              @keywords defaultsetter -->
+        <attribute name="haswindowfocus" value="false"
+            setter="setWindowFocus(haswindowfocus)"/>
+
+        <!--- @keywords private -->
+        <event name="onhaswindowfocus"/>
+
+        <!--- The state of the window: 1=selected (frontmost) window,
+              2=not-selected window, 3=dragging, 4=disabled, 5=resizing.
+              @keywords readonly -->
+        <attribute name="state" value="1"/>
+
+        <!--- @keywords private -->
+        <attribute name="defaultbuttongroup" value="true"/>
+
+        <!--- Attribute handles whether window can be dragged or not -->
+        <attribute name="allowdrag"
+           value="true"
+           type="boolean" />
+
+        <state name="_windowDrag">
+            <attribute name="starty" value="$once{this.y}"/>
+            <attribute name="startx" value="$once{this.x}"/>
+            <attribute name="ydoffset" value="this.getMouse( 'y' )" when="once" />
+            <attribute name="xdoffset" value="this.getMouse( 'x' )" when="once" />
+            <!-- Don't call setDragPos() once the drag state has been changed -->
+            <attribute name="y"
+                       value="${this.state != 3 ? setDragPos('y', this.immediateparent.getMouse( 'y' )) : this.immediateparent.getMouse( 'y' ) - this.ydoffset}"/>
+            <attribute name="x"
+                       value="${this.state != 3 ? setDragPos('x', this.immediateparent.getMouse( 'x' )) : this.immediateparent.getMouse( 'x' ) - this.xdoffset}"/>
+        </state>
+
+        <!--- @access private -->
+        <method name="setDragPos" args="xory, mousepos">   <![CDATA[
+            var newpos = mousepos - this[xory + 'doffset'];
+            var diff = this[xory] - this['start' + xory];
+            // Only change the state after we've moved more than 3 pixels
+            if (Math.abs(diff) > 3) {
+                // Note: this number has nothing to do with the number of 
+                // pixels - see documentation above for the state attribute.
+                setAttribute('state', 3);
+            }
+            return newpos;
+            ]]>
+        </method> 
+
+        <!-- resizestatemin uses minwidth and minheight attribute-->
+        <resizestatemin name="_windowResize" resize_min_width="${this.minwidth}" resize_min_height="${this.minheight}" onapply="parent.setAttribute('haswindowfocus', true)"/>
+
+        <!--- @keywords private -->
+        <method name="construct" args="parent,args">
+            super.construct(parent, args);
+
+            var wlist = this.parent.options['windowlist'];
+            if (wlist == null || typeof wlist == "undefined") {
+                wlist = [];
+                this.parent.setOption('windowlist', wlist);
+            }
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="init">
+            // Windows that are datamappped control their own visibility
+            if (this.datapath != null) {
+                this.datapath.setAttribute('datacontrolsvisibility',
+                    this.visibility == "collapse");
+            }
+
+            super.init();
+            this.mousedown_del = new LzDelegate ( this, "_mousedown", this , "onmousedown" );
+            this.mouseup_del = new LzDelegate ( this, "_mouseup", this , "onmouseup" );
+
+            if (this.visible) {
+                var wlist = parent.options['windowlist'];
+                wlist.push(this); // frontmost window for now
+                this.setAttribute('haswindowfocus', true);
+            } 
+        </method>
+
+        <!--- @access private -->
+        <method name="sendInFrontOf" args="v"> <![CDATA[
+            var wlist = parent.options['windowlist'];
+            if (this.visible) {
+                for (var i=0; i < wlist.length; ++i) {
+                    if (wlist[i]==v) {
+                        this._removeFromWindowlist();
+                        wlist.splice(i+1,0,this);
+                        break;
+                    }
+                }
+            }
+            super.sendInFrontOf(v);
+            if (wlist.length > 0) {
+                wlist[wlist.length-1].setAttribute("haswindowfocus",true);
+            }
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="sendBehind" args="v"> <![CDATA[
+            var wlist = parent.options['windowlist'];
+            if (this.visible) {
+                for (var i=0; i < wlist.length; ++i) {
+                    if (wlist[i]==v) {
+                        this._removeFromWindowlist();
+                        wlist.splice(i,0,this);
+                        break;
+                    }
+                }
+            }
+            super.sendBehind(v);
+            if (wlist.length > 0) {
+                wlist[wlist.length-1].setAttribute("haswindowfocus",true);
+            }
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="bringToFront"> <![CDATA[
+            var wlist = parent.options['windowlist'];
+            if (this.visible && wlist.length > 0) {
+                if (wlist[wlist.length-1] != this) {
+                    this._removeFromWindowlist();
+                    wlist.push(this);
+                }
+            }
+            super.bringToFront();
+            if (wlist.length > 0) {
+                wlist[wlist.length-1].setAttribute("haswindowfocus",true);
+            }
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="sendToBack"> <![CDATA[
+            var wlist = parent.options['windowlist'];
+            if (this.visible) {
+                if ( (wlist.length > 0) && wlist[0] != this) {
+                    this._removeFromWindowlist();
+                    wlist.splice(0,0,this);
+                }
+            }
+            super.sendToBack();
+            if (wlist.length > 0) {
+                wlist[wlist.length-1].setAttribute("haswindowfocus",true);
+            }
+            ]]>
+        </method>
+        <!--- Called onmousedown, sets haswindowfocus to true and starts the
+              drag behavior. Subclasses may override to create different
+              behavior.
+              @keywords private -->
+        <method name="_mousedown" args="ignore">
+            this.setAttribute('haswindowfocus', true);
+            this._startDrag();
+        </method>
+
+        <!--- Called onmouseup, stops the drag behavior.  Subclasses may
+              override to create different behavior.
+              @keywords private -->
+        <method name="_mouseup" args="ignore">
+            this._stopDrag();
+        </method>
+
+        <!--- May be called by subclasses to control dragging of the window
+              based on mouse movement. By default this is called onmousedown
+              anywhere on the window. 
+              @keywords private -->
+        <method name="_startDrag">
+       <![CDATA[
+        if (this.allowdrag){
+            this._windowDrag.setAttribute('applied', true);}
+
+       ]]>
+        </method>
+
+        <!--- May be called by subclasses to control dragging of the window
+              based on mouse movement. By default this is called onmouseup
+              anywhere on the window.
+              @keywords private -->
+        <method name="_stopDrag">
+            this._windowDrag.setAttribute('applied', false);
+            setAttribute('state', 1);
+        </method>
+
+        <!--- May be called by subclasses to control resizing of the window
+              based on mouse movement, typically called onmousedown from a
+              resizer control.
+              @keywords private -->
+        <method name="_startResize">
+            this._windowResize.setAttribute('applied', true);
+            setAttribute('state', 5);
+        </method>
+
+       <!--- May be called by subclasses to control resizing of the window based
+             on mouse movement, typically called onmouseup from a resizer
+             control.
+             @keywords private -->
+        <method name="_stopResize">
+            this._windowResize.setAttribute('applied', false);
+            setAttribute('state', 1);
+        </method>
+
+       <!--- remove this window from the windowlist 
+             @keywords private -->
+        <method name="_removeFromWindowlist"> <![CDATA[
+            var wlist = parent.options['windowlist'];
+            for (var i=0; i < wlist.length; i++) {
+                if (wlist[i] == this) {
+                    wlist.splice(i,1);
+                    break;
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- Setter for the visible property that also brings the window to the
+              front.
+              @param Boolean isVisible: whether the window should be made
+              visible. -->
+        <setter name="visible" args="isVisible"> <![CDATA[
+            super.setAttribute('visible', isVisible);
+            if (isVisible) {
+                if (this.isinited) {
+                    //need to add this window to the parent's windowlist
+                    var foundMe = false;
+                    var wlist = parent.options["windowlist"];
+                    var len = wlist.length;
+                    for (var i=0; i < len; ++i) {
+                        if (wlist[i] == this){
+                            foundMe = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!foundMe) {
+                        wlist[len] = this;
+                    }
+                }
+                
+                this.setAttribute('haswindowfocus', true);
+            } else {
+                this._removeFromWindowlist();
+                // remove windowfocus
+                if (this['haswindowfocus']) {
+                     this.setAttribute('haswindowfocus', false);
+                }
+            }
+            ]]>
+        </setter>
+
+        <!--- @keywords private -->
+        <attribute name="mousedel" value="null"/>
+
+        <!--- Brings the window to front when it has the
+              windowfocus and sets the 'state' to 2, the selected state.
+              Subclasses may override to create different behavior
+              @param Boolean windowfocus: whether the window should be selected
+              -->
+        <method name="setWindowFocus" args="windowfocus">
+        <![CDATA[
+            if (this['haswindowfocus'] == windowfocus) return;
+            this.haswindowfocus = windowfocus;
+            if (windowfocus) {
+                this.bringToFront();
+                setAttribute('state', 1);
+                // loop through siblings and disable active window
+                var wlist = parent.options["windowlist"];
+                var len = wlist.length;
+                for (var i=0; i < len; i++) {
+                    var s = wlist[i];
+                    if (s!=this) {
+                       if (s.haswindowfocus) s.setAttribute('haswindowfocus', false);
+                    }
+                }
+                if (!this.mousedel) {
+                    this.mousedel = new LzDelegate(this, '_checkmouse');
+                }
+                this.mousedel.register(lz.GlobalMouse, 'onmousedown');
+            } else {
+                if (this.mousedel) this.mousedel.unregisterAll();
+                setAttribute('state', 2);
+                // make sure there is a frontmost window
+                var siblingfocus = false;
+                var wlist = parent.options["windowlist"];
+                var len = wlist.length;
+                for (var i=0; i < len; i++) {
+                    var s = wlist[i];
+                    if (s['haswindowfocus'] == true) {
+                        siblingfocus=true;
+                        break;
+                    }
+                }
+                if (!siblingfocus && wlist.length > 0) {    // need to select a frontmost window
+                    var wlist = parent.options['windowlist'];
+                    var v = wlist[wlist.length-1];
+                    if (v != null)
+                        v.setAttribute('haswindowfocus', true);
+                }
+            }
+            if (this.onhaswindowfocus) this.onhaswindowfocus.sendEvent(windowfocus);
+
+        ]]>
+        </method>
+
+        <!--- Called onmousedown when this is the frontmost window to see if 
+              the click should bring a different window to the front.
+              @keywords private -->
+        <method name="_checkmouse" args="v"> <![CDATA[
+            if (v == null || v == this) return;
+
+            // check if a modal dialog is frontmost
+            if (lz.ModeManager.hasMode( this )) return;
+
+            var foundwindow = v.searchParents('haswindowfocus');
+            if (foundwindow != null) {
+                foundwindow.setWindowFocus(true);
+            }
+            ]]>
+        </method>
+
+        <!--- Hides the window, same as setAttribute('visible', false). -->
+        <method name="close" args="...ignore">
+            this.setAttribute('visible', false);
+        </method>
+
+        <!--- Shows the window, same as setAttribute('visible', true). -->
+        <method name="open">
+            this.setAttribute('visible',  true );
+        </method>
+
+        <!--- @keywords private -->
+        <setter name="height" args="h">
+           var nh = Math.round(h);
+           super.setAttribute('height', nh);
+        </setter>
+
+        <!--- @keywords private -->
+        <setter name="width" args="w">
+           var nw = Math.round(w);
+           super.setAttribute('width', nw);
+        </setter>
+
+        <doc>
+          <tag name="shortdesc"><text>base window class</text></tag>
+          <text>
+            <p>
+            This abstract class provides useful methods and states for a view that is moveable
+            and resizeable.
+            </p>
+            
+            <seealso>
+            <classname>window windowpanel modaldialog alert</classname>
+            </seealso>
+          </text>
+        </doc>
+    </class>
+
+
+</library>

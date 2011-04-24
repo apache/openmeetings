@@ -1,0 +1,162 @@
+<library>
+<include href="utils/layouts/layout.lzx"/>
+<class name="wrappinglayout" extends="layout" >
+    <!--- The primary axis for wrapping. -->
+    <attribute name="axis" value="x" setter="this.setAxis( axis )"
+               type="string" />
+    <!--- A pixel amount to use between the views controlled by the layout in
+          both axes. By default, both xspacing and yspacing are set to this
+          value. -->
+    <attribute name="spacing" value="1"/>
+    <!--- A pixel amount to offset the first view controlled by the layout in x
+          axis -->
+    <attribute name="xinset" value="0"/>
+    <!--- A pixel amount to offset the first view controlled by the layout in y
+          axis -->
+    <attribute name="yinset" value="0"/>
+    <!--- A pixel amount to use between the views controlled by the layout in
+          the x axis. -->
+    <attribute name="xspacing" value="${this.spacing}" />
+    <!--- A pixel amount to use between the views controlled by the layout in
+          the y axis. -->
+    <attribute name="yspacing" value="${this.spacing}" />
+    <!--- If given, a number of miliseconds to use to animate the views in to
+          place.-->
+    <attribute name="duration"     value="0"/>
+
+    <!--- @keywords private -->
+    <method name="setAxis" args="a" >
+        <!-- CURRENTLY THIS METHOD IS NOT USED -->
+        this.axis = a;
+        this.otherAxis =  a == "x" ? "y" : "x"
+        this.sizeAxis = a == "x" ? "width" : "height"
+        this.otherSizeAxis = a == "x" ? "height" : "width"
+    </method>
+
+    <!--- @keywords private -->
+    <method name="addSubview" args="newsub">
+        this.updateDelegate.register( newsub,  'onwidth');
+        this.updateDelegate.register( newsub,  'onheight');
+        this.updateDelegate.register( newsub,  'onvisible');
+        this.updateDelegate.register( this.immediateparent,  'onwidth');
+        super.addSubview( newsub );
+        this.update();
+   </method>
+
+    <!--- This method is usually called automatically when any of the views
+          controlled by the layout change their size , or when the size of
+          layout's immediateparent changes. However it can be called directly
+          to force the layout to update -->
+    <method name="update" args="ignore=null">
+        <![CDATA[
+        if ( this.locked ) return;
+        var subviews = this.subviews;
+
+        // Only consider views that are visible
+        var l = subviews.length;
+        var visiblesubviews = [];
+        for (var i = 0; i < l; i++ ) {
+            var s = this.subviews[i];
+            if (s.visible) {
+                visiblesubviews.push(s);
+            }
+        }
+
+        var parent = this.immediateparent;
+        if (parent.usegetbounds) {
+            parent = parent.getBounds();
+        }
+        var limit = parent[this.sizeAxis];
+
+        // position along this.axis
+        var pos = this[this.axis + 'inset'];
+        // position along this.otherAxis
+        var otherpos = this[this.otherAxis + 'inset'];
+        // maximum dimension of otherSizeAxis
+        var maxdimension = 0;
+        var space = this[this.axis + 'spacing'];    // spacing in axis dimension
+        var otherspace = this[this.otherAxis + 'spacing'];    // spacing in other axis dimension
+
+        var l = visiblesubviews.length;
+        for (var i = 0; i < l; i++ ) {
+            var s = visiblesubviews[i];
+            s.animate(this.axis, pos, this.duration,false);
+            s.animate(this.otherAxis, otherpos, this.duration,false);
+
+            if (i == l - 1) break;
+
+            // use computed bounds when necessary
+            if (s.usegetbounds) {
+                s = s.getBounds();
+            }
+
+            pos += s[this.sizeAxis] + space;
+            maxdimension = Math.max(maxdimension,s[this.otherSizeAxis]);
+
+            var nextsubview = subviews[i + 1];
+            // use computed bounds when necessary
+            if (nextsubview.usegetbounds) {
+                nextsubview = nextsubview.getBounds();
+            }
+
+            if ((pos + nextsubview[this.sizeAxis] > limit)) { 
+                pos = this[this.axis + 'inset'];
+                otherpos += maxdimension + otherspace;
+                maxdimension = 0;   // Reset the height/width after every row/column                    
+            }
+        }
+        ]]>
+    </method>
+    <!--- @keywords private -->
+    <method name="toString">
+         return 'wrappinglayout for ' + this.immediateparent;
+    </method>
+    
+    <doc>
+        <tag name="shortdesc"><text>A layout for arranging siblings in multiple lines.</text></tag>
+        <text>
+              <para><classname>wrappinglayout</classname> extends <sgmltag class="element" role="LzLayout">&lt;layout&gt;</sgmltag>, and is therefore 
+              responsible for arranging all of the subviews for the view that it is attached to. <classname>wrappinglayout</classname> affects the 
+              position of its sibling views, in rows or columns depending on the axis specified.</para>
+              <para><classname>wrappinglayout</classname> places the first subview at the top-left corner, then the next view will be placed to the right 
+              (if <literal>axis="x"</literal>) or below (if <literal>axis="y"</literal>). The layout continues placing views along the axis until a view 
+              overlaps the width or height of the containing view, then the layout will begin placing views at the next row or column.</para>
+              <example title="Wrapping layout to position identical views">
+<![CDATA[<canvas height="100">
+  <view width="200" bgcolor="silver">
+    <wrappinglayout axis="x" spacing="10"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+  </view>
+</canvas>]]>
+              </example>
+              <para>The following example shows how the layout of views is dynamically recalculated when the size of the container view changes. 
+              The contained views have been given different shapes and colors to make it easier for you to follow how they're rearranged.</para>
+              <example title="Using wrappinglayout with &lt;resizestate&gt;">
+<![CDATA[<canvas height="100">
+  <view width="200" bgcolor="silver" onmousedown="rs.apply()" onmouseup="rs.remove()">
+    <resizestate name="rs"/>
+    <wrappinglayout axis="x" spacing="10"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="10" width="50"/>
+    <view bgcolor="green" height="40" width="50"/>
+    <view bgcolor="yellow" height="20" width="50"/>
+    <view bgcolor="teal" height="30" width="50"/>
+  </view>
+  <text y="${canvas.height-this.height}">
+    Resize the gray view with your mouse to see dynamic layout.
+  </text>
+</canvas>]]>
+              </example>
+        </text>
+    </doc>
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,133 @@
+<library>
+    <include href="lz/button.lzx" />
+    <include href="lz/modaldialog.lzx" />
+    <include href="utils/layouts/simplelayout.lzx"/>
+    <include href="utils/layouts/resizelayout.lzx"/>
+
+   <class name="alert" extends="modaldialog">
+
+        <!--- Alert shows only this button, if button2 isn't set.
+              You may specify a different string to change the text of the
+              button. -->
+        <attribute name="button1" value="OK" type="string"/>
+
+        <!--- If a string is set for this attribute, a second button will be
+              shown to the left of the first with this text. -->
+        <attribute name="button2" value="" type="string"/>
+
+        <!--- After the alert is closed, this is set to true if button1 ("OK")
+              is pressed or false if button2 is pressed. You can check for the
+              result value using the onresult event. -->
+        <attribute name="result" value="null"/>
+
+        <!--- The x position of the button text. -->
+        <attribute name="text_x" value="0" type="number"/>
+        <!--- The y position of the button text. -->
+        <attribute name="text_y" value="0" type="number"/>
+
+        <!--- Minimum width for the alert. Default: 100 for a 1 button alert,
+              170 for a 2 button alert.
+              @keywords final -->
+        <attribute name="minwidth" value="$once{button2 == '' ? 100 : 170}"/>
+
+        <!--- This event is sent when a button is pressed. Use this to check the
+              result value. -->
+        <event name="onresult"/>
+
+        <!--- The max length of a line of text before it wraps. Default: 1/3 of
+              the parent's width - width of window dressing and margin. -->
+        <attribute name="maxtextwidth"
+            value="${Math.round(parent.width/3) - inset_left - inset_right
+                    - content_inset_left - content_inset_right}"/>
+
+        <text name="alerttext" x="${parent.text_x}" y="${parent.text_y}"
+            resize="true" multiline="true">
+            <attribute name="text" type="text" value="${parent.text}"/>
+            <setter name="text" args="t">
+                super.setAttribute('text', t);
+                if (!parent._usecontentwidth) {
+                    this.setAttribute('width', parent.width
+                        - parent.inset_left - parent.inset_right
+                        - parent.content_inset_left - parent.content_inset_right );
+                } else {
+                    var twidth = this.getTextWidth();
+                    if (twidth > parent.maxtextwidth) {
+                        // multiline text looks funny unless its a bit wider
+                        // since there is always extra space on the right
+                        twidth = parent.maxtextwidth;
+                    }
+                    this.setAttribute('width', twidth);
+                }
+                parent.checkMinSize();
+            </setter>
+        </text>
+
+        <!--- Opens the alert window. -->
+        <method name="open" >
+            this.result = null;
+            if ( this.onresult ){
+                this.onresult.sendEvent( null );
+            }
+            super.open();
+        </method>
+
+        <!--- Closes the alert window. This method is used by the alert
+              button(s). If button1 is clicked, close is passed a true value. If
+              button2 is clicked, close is passed a false value.
+              @param Boolean args: a boolean result value.
+              @devnote TODO [20100329 anba]: args shouldn't be a var args -->
+        <method name="close" args="...args">
+            var res = args[0];
+            this.result = res;
+            if ( this.onresult ){
+                this.onresult.sendEvent( res);
+            }
+            super.close();
+        </method>
+
+        <view x="${immediateparent.width > this.width?
+                   immediateparent.width - this.width : 0}"
+            y="${immediateparent.alerttext.height + parent.content_inset_top}">
+            <simplelayout axis="x" spacing="5"/>
+            <button onclick="classroot.close( false )"
+                    text="${classroot.button2}"
+                    visible="${classroot.button2 != '' }">
+            </button>
+            <button isdefault="true" onclick="classroot.close( true )"
+                    text="${classroot.button1}"
+                    visible="${classroot.button1 != '' }"
+                    name="b1">
+            </button>
+        </view>
+        <doc>
+          <tag name="shortdesc"><text>
+              A simple alert.
+          </text></tag>
+          <text>
+              <p>A simple subclass of <tagname>modaldialog</tagname>, <tagname>alert</tagname> provides a modal alert box that displays its text attribute (or content) and an OK button. (If you need to display more than text in an alert, use <tagname>modaldialog</tagname> itself).</p>
+            <example>
+    &lt;canvas height=&quot;140&quot;&gt;
+        &lt;alert name=&quot;myalert&quot;&gt;
+            Danger! Danger, Will Robinson!
+        &lt;/alert&gt;
+        
+        &lt;button onclick=&quot;canvas.myalert.open()&quot;&gt;Show Alert&lt;/button&gt;
+    &lt;/canvas&gt;
+            </example>
+
+<p><b>See also:</b></p>
+              <ul>
+                  <li><p><a href="lz.modaldialog.html"><tagname>modaldialog</tagname></a></p></li>
+              </ul>
+
+          </text>
+        </doc>
+
+    </class>
+ </library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+

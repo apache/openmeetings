@@ -1,0 +1,370 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+    <include href="mediastream.lzx" />
+    <!--
+        Originally written by Sarah Allen, with compiler support by hqm
+        Migrated to 4.1 by Max
+        Support for OL 4.2/SWF9 by Raju Bitter, Max and Sarah
+        Improvements by Lucas Lain and other contributors.
+    -->
+
+<class name="videoview" extends="view" width="160" height="120">
+    <passthrough when="$as3">
+        import flash.media.*;
+        import flash.net.NetConnection;
+        import flash.net.NetStream;                
+    </passthrough>
+    <doc>
+        <tag name="shortdesc"><text>Allows video playback.</text></tag>
+        <text>
+            <p><tagname>videoview</tagname> allows applications to play video from HTTP or RTMP servers.</p> 
+
+            <example><programlisting class="code">
+            &lt;canvas&gt;
+            &lt;videoview url="http://www.archive.org/download//JudgeMediaTestVideoFile_0/video.flv" type="http" autoplay="true" width="320" height="240"/&gt;
+            &lt;/canvas&gt;
+            </programlisting></example>
+        </text>
+    </doc>
+
+    <!--- The url of the video, may be a relative URL, 
+            for example: "http://localhost/myvideo.flv", 
+            or simply "myvideo.flv".
+
+            When type="rtmp", the url is always relative the rtmpconnection.
+            (Use only when you are not explicitly declaring the mediastream.)
+    -->
+    <attribute name="url" value="" type="string"/>
+
+    <!--- Protocol "rtmp" or "http". -->
+    <attribute name="type" value="http" type="string"/>
+
+    <!--- If true, video will start playing as soon as url is set. -->
+    <attribute name="autoplay" value="false"/>
+    
+    <!--- If true, video will start playing as soon as url is set. -->
+    <attribute name="buffertime" value="0"/>
+
+    <!--- Show the frame from this time (in seconds) whenever the url 
+          is set for video playback.
+          Use -1 to show no frame (which will leave the image as it
+          was when switching videos) -->
+    <attribute name="starttime" value="0" type="number"/>
+
+    <!--- If true, Debug.write extra stuff (this may go away). -->
+    <attribute name="debug" value="false"/>
+
+    <!--- The camera object. 
+            @keywords readonly -->
+    <attribute name="cam" value="null"/>
+
+    <!--- The microphone object. 
+            @keywords readonly -->
+    <attribute name="mic" value="null"/>
+
+    <!--- The mediastream object.  A mediastream will be automatically generated if one is not specified at init time. -->
+    <attribute name="stream" value="false" when="once"/>
+
+    <!--- The volume for video playback, a float from 0 to 1. -->
+    <attribute name="playvolume" value="1.0"/>
+
+    <!--- Flash Sound object to control volume of video playback.
+            @keywords private -->
+    <attribute name="_sound" value="null"/>
+
+    <!--- Flag to track if initialization is complete. 
+            @keywords private -->
+    <attribute name="_initcomplete" value="false"/>
+
+    <!--- Delegate to call _setPlayStream when stream starts playing. 
+            @keywords private -->
+    <attribute name="_urldel" value="null"/>
+
+    <!--- @keywords private -->
+    <event name="onurl"/>
+
+    <!---  the "attached" flash NetStream object
+        @keywords private -->
+    <attribute name="_fstream" value="null"/>
+
+    <!--- @keywords private -->
+    <event name="onheight"/>
+
+    <!--- @keywords private -->
+    <event name="onwidth"/>
+
+    <!--- @keywords private -->
+    <event name="ontype"/>
+
+    <!--- @keywords private -->
+    <event name="onplayvolume"/>
+
+    <!--- @keywords private -->
+    <event name="onautoplay"/>
+
+    <!--- @keywords private -->
+    <event name="onmic"/>
+
+    <!--- @keywords private -->
+    <event name="oncam"/>
+
+    <!--- @keywords private -->
+    <event name="onstream"/>
+
+    <!--- @keywords private -->
+    <method name="init"> <![CDATA[
+        super.init();
+        if (this.debug) {
+            if ($debug) Debug.write("videoview %w init: " +
+                "width %d, height %d, stream %w",
+                this, this.width, this.height, this.stream);
+        }
+
+        if (!this.stream) {
+            this.stream = 
+                new lz.mediastream(
+                    this, 
+                    {debug:this.debug, type:this.type, url:this.url, autoplay:this.autoplay, buffertime:this.buffertime }, 
+                    null, 
+                    true);
+            if (this.onstream) this.onstream.sendEvent(this);
+            if ($debug && this.debug) Debug.write("videoview %w init created stream", this.stream);
+        }
+
+        if ($as3) {
+            var width = 320
+            var height = 240
+            if (this.height > 0 && this.height < 1024) height = this.height;
+            if (this.width > 0 && this.width < 1024) width = this.width;
+            var mc = new Video(width, height);
+            this.__LZvideo = this.sprite.addChild(mc);
+        } else {
+            // no other subviews should be allowed (todo: schema)
+            var mc = this.immediateparent.sprite.attachResourceToChildView("__lzvideo", this.sprite);
+            this.sprite.setMovieClip(mc);
+            this.__LZmovieClipRef = mc;
+        }
+
+        var vid = this._getflashvideo();
+        if ($as3) {
+            vid.x = 0;
+            vid.y = 0;
+            vid.width = this.width;
+            vid.height = this.height;
+        } else {
+            vid._x = 0;
+            vid._y = 0;
+            vid._width = this.width;
+            vid._height = this.height;
+        }
+
+        this._urldel = new LzDelegate( this, "_setPlayStream", 
+                                        this.stream, "onplaying")
+        if (this.url) {
+            this._updateStreamUrl();
+        }
+        if (this.stream.playing || this.stream.type == 'http') {
+            // show poster frame now for http streams
+            if (!this.stream.playing && this.starttime != -1) {
+                this.stream.seek(this.starttime);
+            }
+            this._setPlayStream();
+        }
+
+        if (this.cam) {
+            this.stream.setAttribute('cam', this.cam);
+        }
+
+        if (this.mic) {
+            this.stream.setAttribute('mic', this.mic);
+        }
+
+        this._initcomplete = true;
+        
+        // FIXME?
+        // Camera needs to be displayed after _initcomplete = true
+        var cam = this.cam;
+        if (cam && 
+            cam.show) {
+            this.cam.setAttribute("show", true);
+        }
+
+    ]]> </method>
+
+   <!--- called 'onplaying' for stream 
+            @keywords private -->
+    <method name="_setPlayStream" args="ignore=null"> <![CDATA[
+        if ($debug && this.debug) {
+            Debug.write("videoview %w _setPlayStream s=%w fs=%w", 
+                    this, this.stream, this.stream._flashstream);
+        }
+        if (! this.stream._flashstream) return;
+        if (this.stream.mode == 'playing') {
+            this._attachStream(this.stream._flashstream);
+            this.setAttribute("width", this.width);
+            this.setAttribute("height", this.height);
+        }
+        ]]>
+    </method>
+
+    <!--- @keywords private -->
+    <method name="_attachStream" args="fs"> <![CDATA[
+        if (this._fstream == fs) return;
+        else this._fstream = fs;
+
+        if ($debug && this.debug)
+            Debug.write('videoview %w _attachStream fs=%w',this, fs);
+        var vid = this._getflashvideo();
+        if ($as3) {
+            vid.attachNetStream(fs);
+            this._sound = this.stream._flashstream.soundTransform;
+        } else {
+            vid.attachVideo(fs);
+            this.__LZmovieClipRef.attachAudio(fs); // Doing this so we can control volume.
+            this._sound = new Sound(this.__LZmovieClipRef);
+        }
+        this.setAttribute('playvolume', this.playvolume);
+        ]]>
+    </method>
+
+    <!--- @keywords private -->
+    <method name="_getflashvideo">
+        //Debug.write("_getflashvideo()");
+        if ($as3) {
+            return this.__LZvideo;
+        } else {
+            return this.__LZmovieClipRef.__lzvideo;
+        }
+    </method>
+
+    <setter name="width" args="w"> <![CDATA[
+        //if ($debug && this.debug) Debug.write('videoview %w, setwidth w=%w',this, w);
+        this.width = w;
+        if (this._initcomplete) { 
+            var vid = this._getflashvideo();
+            if ($as3) {    
+                vid.width = w;
+            } else {
+                vid._width = w;
+            }
+        }
+        if (this.onwidth) this.onwidth.sendEvent(this.width);
+        ]]>
+    </setter>        
+
+    <setter name="height" args="h"> <![CDATA[
+        //if ($debug && this.debug) Debug.write('videoview %w, setheight h=%w',this, h);
+        this.height = h;
+        if (this._initcomplete) {
+            var vid = this._getflashvideo();
+            if ($as3) {    
+                vid.height = h;
+            } else {
+                vid._height = h;
+            }
+        }
+        if (this.onheight) this.onheight.sendEvent(this.height);
+        ]]>
+    </setter>
+
+    <setter name="playvolume" args="newplayvolume"> <![CDATA[
+        //Debug.write("_setPlayVolume", this, newplayvolume, this._sound);
+        this.playvolume = newplayvolume;
+        if (this.isinited && 
+            (this['_sound'] != null)) {
+            if ($as3) {
+                //Debug.write('setting volume to ', newplayvolume);
+                this._sound.volume = newplayvolume;
+                this.stream._flashstream.soundTransform = this._sound;
+            } else {
+                this._sound.setVolume(newplayvolume * 100.0);
+            }
+        }
+        if (this.onplayvolume) this.onplayvolume.sendEvent(this.playvolume);
+        ]]>
+    </setter>
+
+    <!--- @keywords private -->
+    <method name="_updateStreamUrl"> <![CDATA[
+        //Debug.write("%w _updateStreamUrl %w %w", 
+        //    this, this.url, this.starttime);
+        this.stream.setAttribute("url", this.url);
+
+        ]]>
+    </method>
+
+    <setter name="url" args="newurl"> <![CDATA[
+        //Debug.write("videoview $lzc$set_url", newurl, "old", this['url'], "isinited", this.isinited, "stream", this['stream']);
+
+        this.url = newurl;
+
+        // parse type FIXME: why is this commented out?
+        if (newurl.indexOf('http') != -1) {
+            // this.setAttribute('type', 'http');
+        } else {
+            // this.setAttribute('type', 'rtmp');
+        }
+
+        // setUrl called before init or stream is define, so tip-toe.
+        // _updateStreamUrl called again from init, just in case
+        if (this['stream'] && newurl && newurl != '') {
+            this._updateStreamUrl();
+        }
+
+        if (this.onurl.ready) {
+            this.onurl.sendEvent(newurl);
+        }
+        ]]>
+   </setter>
+
+    <setter name="type" args="newtype">
+        //Debug.write("videoview setType", newtype, "old", this['type'], "isinited", this.isinited, "stream", this['stream']);
+
+        this.type = newtype;
+
+        // _setType called before init or stream is define, so tip-toe.
+        if (this['stream']) {
+            this.stream.setAttribute("type", newtype);
+        }
+        if (this.ontype) this.ontype.sendEvent(this.type);
+     </setter>
+
+    <setter name="autoplay" args="newautoplay">
+        //Debug.write("videoview _setAutoplay", newautoplay, "old", this['autoplay'], "isinited", this.isinited, "stream", this['stream']);
+
+        this.autoplay = newautoplay;
+
+        // _setAutoplay called before init or stream is define, so tip-toe.
+        if (this['stream']) {
+            this.stream.setAttribute("autoplay", this.autoplay);
+        }
+        if (this.onautoplay) this.onautoplay.sendEvent(this.autoplay);
+    </setter>
+
+    <setter name="cam" args="cam">
+        this.cam = cam;
+    
+        if (this['stream']) {
+            this.stream.setAttribute('cam', cam);
+        }
+
+        // if there is a new camera we need to refresh the videoview, which 
+        // is done by the Camera's _setShow method
+        //if (this.cam) this.cam._setShow(this.cam.show);
+
+        if (this.oncam) this.oncam.sendEvent(this.cam);
+    </setter>
+
+    <setter name="mic" args="mic">
+        this.mic = mic;
+
+        if (this['stream']) {
+            this.stream.setAttribute('mic', mic);
+        }
+        if (this.onmic) this.onmic.sendEvent(this.mic);
+    </setter>
+</class>
+</library>

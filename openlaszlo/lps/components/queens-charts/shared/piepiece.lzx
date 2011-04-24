@@ -1,0 +1,189 @@
+<library>
+    <!-- CLASS INDEX:
+        <piepiece/>
+        <backcircle/>
+        -->
+
+    <!--- An individual pie slice, drawn by wholepie, using dimensions
+        and attributes mostly generated from data or attributes on the
+        respective dataseries.  (Of beta quality.) -->
+    <class name="piepiece" extends="drawview" clickable="false" width="${parent.width}" height="${parent.height}">
+        <!--- The color of the piece.  Determined by attributes on dataseries. -->
+        <attribute name="piececolor" type="color" value="$once{null}"/>
+        <!--- The color of the border of the piece.  Determined by attributes
+            on dataseries. -->
+        <attribute name="bordercolor" type="color" value="$once{null}"/>
+        <!--- The width of the border of the piece.  Determined by attributes
+            on dataseries. -->
+        <attribute name="borderwidth" type="number" value="1"/>
+        <!--- The numeric value of the piece. -->
+        <attribute name="piecevalue" type="number" value="0"/>
+        <!--- The radius of the whole pie. -->
+        <attribute name="pieceradius" type="number" value="0"/>
+        <!--- The opacity of the piece.  Determined by attributes on dataseries. -->
+        <attribute name="pieceopacity" type="number" value="1"/>
+        <!--- The x coordinate of the center of the pie. -->
+        <attribute name="centerx" type="number" value="0"/>
+        <!--- The y coordinate of the center of the pie. -->
+        <attribute name="centery" type="number" value="0"/>
+        <!--- @keywords private
+            The percent of the pie this piece takes up. -->
+        <attribute name="piecepercent" type="number" value="0"/>
+        <!--- @keywords private
+            The percentage of sibling pieces to this point.  Determines placement. -->
+        <attribute name="startpercent" type="number" value="0"/>
+        <!--- Whether this piece is moused over or not. -->
+        <attribute name="exploded" type="boolean" value="${parent.wedgeover == this}"/>
+        <!--- Whether to actually move the piece outward when the mouse is over it. -->
+        <attribute name="explode" type="boolean" value="false"/>
+        
+        <!--- @keywords private
+            The original x coordinate of this piece, to be returned to later,
+            if this piece is no longer exploded. -->
+        <attribute name="collapsex" type="number" value="$once{this.x}"/>
+        <!--- @keywords private
+            The original x coordinate of this piece, to be returned to later,
+            if this piece is no longer exploded. -->
+        <attribute name="collapsey" type="number" value="$once{this.y}"/>
+        
+        <handler name="oncontext" method="renderThis"/>
+        
+        <!--- The events that handle explosion of pieces. -->
+        <event name="onexploded"/>
+        <handler name="onexploded">
+            <![CDATA[
+            if(this.explode && this.exploded == true){
+                this.explodeThis();
+            } else {
+                if(this.explode){
+                    this.collapseThis();
+                }
+            }
+            ]]>
+        </handler>
+        
+        <handler name="onmouseover">
+            
+        </handler>
+        <handler name="onmouseout">
+            
+        </handler>
+        <handler name="onclick">
+            
+        </handler>
+        
+        <!--- Draws this piece, per specifications in attributes. -->
+        <method name="renderThis" args="ignore">
+            <![CDATA[
+            if(this.pieceopacity != null && typeof this.pieceopacity != 'undefined'){
+                this.globalAlpha = this.pieceopacity;
+            }
+            if(this.piececolor != null && typeof this.piececolor != 'undefined'){
+                this.fillStyle = this.piececolor;
+            }
+            if(this.bordercolor != null && typeof this.bordercolor != 'undefined'){
+                this.strokeStyle = this.bordercolor;
+            }
+            if(this.borderwidth != null && typeof this.borderwidth != 'undefined'){
+                this.lineWidth = this.borderwidth;
+            }
+            
+            var startpos = (2 * Math.PI) * startpercent;
+            var endpos = startpos + ((2 * Math.PI) * piecepercent);
+            
+            this.beginPath();
+            var sx = this.centerx - this.pieceradius * Math.cos(((2 * Math.PI) / 2) - startpos);
+            var sy = this.centery - this.pieceradius * Math.sin(startpos);
+            this.moveTo(centerx, centery);
+            this.lineTo(sx, sy);
+            this.arc(centerx, centery, this.pieceradius, startpos, endpos, false);
+            this.lineTo(centerx, centery);
+            
+            this.closePath();
+            this.fill();
+            if(this.borderwidth != 0 && this.borderwidth != null){
+                this.stroke();
+            }
+            ]]>
+        </method>
+        <!--- Explodes this piece. -->
+        <method name="explodeThis">
+            <![CDATA[
+            var startpos = (2 * Math.PI) * startpercent;
+            var endpos = startpos + ((2 * Math.PI) * piecepercent);
+            
+            var midpos = (endpos + startpos) / 2;
+            
+            var sx = this.centerx - this.pieceradius * Math.cos(((2 * Math.PI) / 2) - midpos);
+            var sy = this.centery - this.pieceradius * Math.sin(midpos);
+            
+            var ratx = this.centerx - sx;
+            var raty = this.centery - sy;
+            
+            this.setAttribute('x', this.x - (.08 * (ratx)));
+            this.setAttribute('y', this.y - (.08 * (raty)));
+            ]]>
+        </method>
+        <!--- De-explodes this piece. -->
+        <method name="collapseThis">
+            <![CDATA[
+            this.setAttribute('x', this.collapsex);
+            this.setAttribute('y', this.collapsey);
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+    
+    <!--- The background circle of the pie.  Has properties set by attributes on the
+        respective dataseries. -->
+    <class name="backcircle" extends="drawview" width="${parent.width}" height="${parent.height}">
+        <!--- The background color of the circle. -->
+        <attribute name="drawbg" type="color" value="0xCCCCCC"/>
+        <!--- The border color of the circle. -->
+        <attribute name="drawbgborder" type="color" value="0x000000"/>
+        <!--- The width of the circle's border. -->
+        <attribute name="bgborderwidth" type="number" value="1"/>
+        <!--- The radius of the pie. -->
+        <attribute name="pieradius" type="number" value="0"/>
+        <!--- The center x coordinate of the pie. -->
+        <attribute name="ctrx" type="number" value="0"/>
+        <!--- The center y coordinate of the pie. -->
+        <attribute name="ctry" type="number" value="0"/>
+        <handler name="oncontext">
+            if(this.drawbg != null){
+                this.fillStyle = this.drawbg;
+            }
+            if(this.drawbgborder != null){
+                this.strokeStyle = this.drawbgborder;
+            }
+            if(this.bgborderwidth != null){
+                this.lineWidth = this.bgborderwidth;
+            }
+            
+            this.beginPath();
+            this.arc(this.ctrx, this.ctry, this.pieradius, 0, 2 * Math.PI, false);
+            this.fill();
+            this.stroke();
+        </handler>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

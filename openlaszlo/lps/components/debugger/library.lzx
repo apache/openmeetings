@@ -1,0 +1,72 @@
+<library>
+
+  <!---
+     @lzxname debug
+     @keywords private_constructor
+     @access public
+     @topic LZX
+     @subtopic Debugging
+     @devnote NOTE [2008-11-25 ptw] Dummy class to hold documentation for debug tag
+     @devnote TODO [2008-11-26 ptw] Make this the real class!
+  -->
+  <class name="debug">
+    <doc>
+      <tag name="shortdesc"><text>Controlling the Laszlo debugger console window</text></tag>
+      <tag name="lzxname"><text>debug</text></tag>
+      <text>
+       <p>For runtimes that use a view on the application canvas as the debugger console window,
+       the optional <code>&lt;debug /&gt;</code> tag controls the appearance
+       of window.
+       The <code>&lt;debug /&gt;</code> tag does <em>not</em>
+       cause the application to be compiled with debugging mode enabled.</p>
+       <p>
+       When applicable, by default, the debug console will appear as a <code>view</code>
+       sized to fit the lower 1/2 of the canvas.
+       The usual <code>view</code> attributes can be used to override these defaults to size and
+       position the debug console window.  If you need to programmatically
+       control the debugger console window, use the <code>name</code>
+       attribute:</p>
+
+       <example class="program" id="debug-1" title="Controlling the Debug console window">
+<![CDATA[
+<canvas debug="true" height="150" width="100%">
+ <debug name="debugwindow" y="${canvas.height - this.height}" height="80%" />
+ <button name="button">
+   <attribute name="visible" value="${canvas['debugwindow'] != null}" />
+   <attribute name="text"
+     value="${canvas['debugwindow']?((canvas.debugwindow.visible?'hide':'show') + ' debugger'):null}" />
+   <handler name="onclick">
+     canvas.debugwindow.setAttribute('visible', (! canvas.debugwindow.visible));
+   </handler>
+ </button>
+</canvas>
+]]>
+       </example>
+
+       <p>Note the test to verify that the window exists before we try to manipulate it.
+       The <code>&lt;debug /&gt;</code> tag will <em>not</em> create
+       a window in the application canvas for runtimes or IDE's that have an external debugger console,
+       or if remote or developer console debugging
+       is enabled.</p>
+      </text>
+    </doc>
+  </class>
+
+  <!-- the debug eval loader; it's platform-specific -->
+  <switch>
+    <when runtime="swf8">
+      <include href="platform/swf8/eval.lzs"/>
+    </when>
+    <when property="$as3">
+      <include href="platform/swf9/eval.lzs"/>
+    </when>
+  </switch>
+
+  <include href="debugger.lzx"/>
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

@@ -1,0 +1,93 @@
+<library>
+    <include href="base/basegrid.lzx" />   
+    <include href="gridtext.lzx" />   
+    <include href="scrollbar.lzx" />   
+    <!-- simplelayout must be included since the includer doesn't recognzize 
+         use of the layout attribute below -->
+    <include href="utils/layouts/simplelayout.lzx" />   
+
+    <!-- A row-based data display and editing component.-->
+    <class name="grid" extends="basegrid">
+
+        <!--- If false, the grid will never show a horizontal scrollbar,
+              even if the rows are wider than the grid.-->
+        <attribute name="showhscroll" value="true"/>
+        <!--- If false, the grid will never show a vertical scrollbar,
+            even if the rows are wider than the grid.-->
+        <attribute name="showvscroll" value="true"/>
+        <!--- @keywords private -->
+        <attribute name="needshscroll" 
+                   value="${ header.width &lt; header.hcontent.width }"/>
+
+        <!--- @keywords private -->
+        <attribute name="_showHeaderFill" value="${!sizetoheader}"/>
+
+        <!--- The layout of attribute of the grid is set up to control
+              the way that the header columns are situated. Changing this 
+              property changes the header column layout.-->
+        <attribute name="layout" 
+                   value="placement : 'hcontent';axis:'x' ; spacing:-1"/>
+
+        <!--- @keywords private -->
+        <attribute name="_columnclass" value="lz.gridtext" />
+        
+        <!--- @keywords private -->
+        <scrollbar placement="content" name="_scrx" visible="${parent.showvscroll}"/>
+
+        <!--- @keywords private -->
+        <scrollbar name="_scry" axis="x" scrolltarget="classroot.header.hcontent"
+            visible="${ parent.showhscroll &amp;&amp;
+            parent.needshscroll &amp;&amp;
+            parent.sizetoheader == false}"/>
+
+        <!--- @keywords private -->
+        <state applied="${ parent._showHeaderFill }">
+            <button clickable="false" 
+                    placement="header"
+                    x="${ immediateparent.hcontent.width }"
+                    width="${classroot['_scrx'] ?
+                        Math.max(classroot['_scrx'].width, parent.width - this.x) :
+                        parent.width - this.x}"
+                    focusable="false" />
+        </state>
+
+        <!--- @keywords private -->
+        <method name="init">
+            //need to cheat up the content because the button size is too big
+            //b/c of its highlight state
+            mainlayout.setAttribute( 'spacing' , -1);
+            super.init();
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              Presents a grid backed by a datasource.
+          </text></tag>
+          <text>
+            <p>A <classname>grid</classname> is used to present data in a
+              dataset. Although it can be configured using
+              <tagname>gridcolumn</tagname> and <tagname>gridtext</tagname>, by
+              default it will present one editable field for each attribute in
+              the first data node in the grid. If no attributes are found, a column
+              will be presented for the each of the <code>name()</code> and
+              <code>text()</code> fields of the nodes using
+              <classname>gridtext</classname> columns.</p>
+
+            <example>
+              &lt;canvas height="250"&gt;
+              &lt;dataset name="weatherdata" request="true"
+              src="http://www.laszlosystems.com/cgi-pub/weather.cgi?zip=10022"/&gt;
+
+              &lt;grid datapath="weatherdata:/weather" contentdatapath="forecast/day"/&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

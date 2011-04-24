@@ -1,0 +1,114 @@
+<library>
+    
+    <!-- Note: simpleinputtext is deprecated. Please use edittext instead.
+          @keywords deprecated -->
+    <class name="simpleinputtext">
+    
+        <!--- The text for input. -->
+        <attribute name="text"                 value="" type="html"/>
+        <!--- The text opacity. -->
+        <attribute name="textOpacity"          value="1" />
+        <!--- The opacity for the input background. -->
+        <attribute name="bgOpacity"            value="1" />
+        <!--- The opacity for the border on focus. -->
+        <attribute name="focusborderOpacity"   value="1" />
+        <!--- The opacity for the border on blur. -->
+        <attribute name="blurborderOpacity"    value="1" />
+        <!--- The width of the input box. -->
+        <attribute name="width"                value="100" />
+        
+        <!-- VIEWS -->
+        <view name="bkgnd" width="${parent.width}" height="${parent.height}" bgcolor="white" opacity="1"/>
+        <view name="v_border" height="1" bgcolor="black" opacity="1" width="${parent.width}" />
+        <view name="h_border" width="1"  y="1" bgcolor="black" opacity="1" height="${parent.height -1}" />
+
+        <inputtext name="input" x="2" width="$once{parent.width - 4}" > 
+            <attribute name="opacity"     value="parent.textOpacity" when="once"/>
+            <attribute name="text"        value="parent.text" when="once"/>
+            <method name="handleOnFocus" >
+                super.handleOnFocus();
+                this.parent.handleOnFocus();
+            </method>
+            <method name="handleOnBlur" >
+                super.handleOnBlur();
+                this.parent.handleOnBlur();
+            </method>
+            <handler name="onkeyup" args="kc">
+                  if (parent['onkeyup']) parent.onkeyup.sendEvent(kc);
+            </handler>
+            <handler name="onkeydown" args="kc">
+                  if (parent['onkeydown']) parent.onkeydown.sendEvent(kc);
+            </handler>
+        </inputtext>
+        
+        <!--- @keywords private -->
+        <method name="init">
+            <![CDATA[
+            if (!this.hassetheight) {
+                setAttribute('height', this.height + 1);
+            }
+            super.init();
+            ]]>
+        </method>
+
+        <!--- Set the text. 
+              @param String t: text value for input. -->
+        <method name="setText" args="t">
+            this.input.setAttribute('text', t);
+        </method>
+        
+        <!--- Get the text.
+              @return String: input text value. -->
+        <method name="getText" >
+            return this.input.getText();
+        </method>
+        
+        <!--- @keywords private -->
+        <handler name="onfocus" >
+            //this.input.onfocus.sendEvent();
+            lz.Focus.setFocus(this.input);
+        </handler>
+        
+        <!--- @keywords private -->
+        <method name="handleOnFocus" >
+            this.v_border.setAttribute("opacity",this.focusborderOpacity);
+            this.h_border.setAttribute("opacity",this.focusborderOpacity);
+            this.bkgnd.setAttribute("opacity",1);
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="handleOnBlur" >
+            this.v_border.setAttribute("opacity",this.blurborderOpacity);
+            this.h_border.setAttribute("opacity",this.blurborderOpacity);
+            this.bkgnd.setAttribute("opacity",this.bgOpacity);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="applyData" args="d">
+            this.input.setAttribute('text', d );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="updateData" >
+            return this.input.getText();
+        </method>
+        
+        <doc>
+            <tag name="shortdesc"><text>
+                A simple input text field with basic borders.
+            </text></tag>
+            <text>
+                <note>
+                    Note: Simpleinputtext is deprecated. Please use <xref linkend="lz.edittext"/> instead. 
+                </note>
+            </text>
+        </doc>
+
+    </class>
+        
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

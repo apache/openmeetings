@@ -1,0 +1,20 @@
+<!---
+      @topic Components
+      @subtopic Laszlo Components
+  -->
+<library>
+  <include href="combobox.lzx"/>
+  <include href="datacombobox.lzx"/>
+  <include href="listitem.lzx"/>
+  <include href="list.lzx"/>
+  <include href="textlistitem.lzx"/>
+  <include href="button.lzx"/>
+  <include href="checkbox.lzx"/>
+  <include href="tooltip/tooltip.lzx" />
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008, 2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

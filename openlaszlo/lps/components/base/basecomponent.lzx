@@ -1,0 +1,458 @@
+<library>
+    <include href="base/style.lzx"/>
+    <include href="base/componentmanager.lzx"/>
+    <include href="base/basefocusview.lzx"/>
+
+    <!--- A simple text class that provide default font attributes for
+          Laszlo components. -->
+    <class name="statictext" extends="text">
+        <doc>
+            <tag name="shortdesc"><text>
+                Text component that uses the default component font and fontsize.
+            </text></tag>
+            <text>
+                <p>
+                    The <classname>statictext</classname> tag provides a text 
+                    field which has a look and feel to match the lz component 
+                    set, even when the canvas font has been changed. It can 
+                    accept any text attribute. 
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="100" font="conga" layout="axis: y">
+  <font name="conga" src="congab.ttf"/>
+  <include href="base/basecomponent.lzx" />
+  <text>text in app default font (Conga)</text>
+  <statictext>text in component default font</statictext>
+</canvas>
+                    ]]>
+                </example>
+            </text>
+        </doc>
+    </class>
+
+     <!--- an abstract class which all components subclass -->
+    <class name="basecomponent">
+
+        <!--- when false the component should appear as its disabled state and
+              not respond to user events. The component is
+              automatically set to clickable when enabled, and not clickable
+              when disabled.-->
+        <attribute name="enabled" value="true"/>
+
+        <!--- when true, the component can be focused. 
+              @access private -->
+        <attribute name="focusable" value="true" type="boolean" 
+                   setter="_setFocusable(focusable)" />
+
+        <!--- keeps the original focusable value set by user.
+              @access private -->
+        <attribute name="_focusable" value="true" type="boolean" />
+
+        <!--- @access private -->
+        <event name="onfocusable"/>
+
+        <!--- the label or title of the component: instead of using this 
+              attribute text may instead be placed withing the tag, for
+              example: &lt;button&gt;OK&lt;/button&gt; -->
+        <attribute name="text" type="html" value=""/>
+
+        <!--- if set to true, the component manager will call this component
+              with doEnterDown and doEnterUp when the enter key goes up or down
+              if it is focussed. -->
+        <attribute name="doesenter" type="boolean" value="false"
+                   setter="this._setDoesEnter( doesenter )"/>
+
+        <!--- used by the component to determine whether
+              to display its disabled state.  A component is enabled if its
+              "parent component" is enabled and its 'enabled' attribute
+              evaluates to 'true' (its "parent component" is the first
+              component above it in the view hierarchy)
+              @keywords private -->
+        <attribute name="_enabled" 
+                   value="${this.enabled &amp;&amp; (this._parentcomponent ?
+                            this._parentcomponent._enabled : true)}"
+                   setter="this._setEnabled(_enabled)"/>
+
+        <!--- @keywords private readonly -->
+        <attribute name="_parentcomponent" value="null"/>
+
+        <!--- set to true in init method,
+              after subviews have been created and initialized
+              @keywords private -->
+        <attribute name="_initcomplete" value="false"/>
+
+        <!--- If set to true, this component will be the default (and will
+              therefore receive the enter key) if it is nearest to the focussed
+              view, and if that focussed view does not have doesenter set to
+              true. "Nearness" is defined to mean the closest common parent
+              with the focussed view that is not excluded from the mode, and
+              which is visible onscreen.
+              -->
+        <attribute name="isdefault" setter="this._setIsDefault(isdefault)"/>
+
+        <!--- event: when isdefault changes
+              @access private -->
+        <event name="onisdefault"/>
+
+        <!--- set to true when this component will receive enter key events -->
+        <attribute name="hasdefault" value="false" />
+
+        <!--- @access private -->
+        <method name="_setEnabled" args="isEnabled">
+        <![CDATA[
+            this._enabled = isEnabled;
+            var newFocusable = (this._enabled && this._focusable);
+            if (newFocusable != this.focusable) {
+                this.focusable = newFocusable;
+                if (this.onfocusable.ready) this.onfocusable.sendEvent();
+            }
+            if (_initcomplete) _showEnabled();
+            if (this.on_enabled.ready) this.on_enabled.sendEvent();
+        ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="_setFocusable" args="isFocusable">
+            this._focusable = isFocusable;
+            if (this.enabled) {
+                this.focusable = this._focusable;
+                if (this.onfocusable.ready) this.onfocusable.sendEvent();
+            } else {
+                this.focusable = false;
+            }
+        </method>
+
+        <!--- event: when isdefault changes
+              @access private -->
+        <method name="construct" args="parent, args">
+            super.construct(parent, args);
+
+            // initialize internal _parentcomponent attribute
+            var p = this.immediateparent;
+            while (p != canvas) {
+                if (p is lz.basecomponent) {
+                    this._parentcomponent = p;
+                    break;
+                }
+                p = p.immediateparent;
+            }
+        </method>
+
+        <!--- @access private -->
+        <method name="init">  
+            <![CDATA[
+            super.init();
+            this._initcomplete = true;
+            this._mousedownDel = new LzDelegate( this, "_doMousedown", 
+                                                this, "onmousedown");
+
+            if (this.styleable) {
+                _usestyle( );
+            }
+            if (!this['_enabled']) _showEnabled()
+            ]]> 
+        </method>
+
+        <!--- @access private -->
+        <method name="_doMousedown" args="e"> 
+        </method>
+
+        <!--- Called if this component has the focus and the space bar goes 
+              down -->
+        <method name="doSpaceDown" >
+            return false;
+        </method>
+
+        <!--- Called if this component has the focus and the space bar goes 
+              up -->
+        <method name="doSpaceUp" >
+            return false;
+        </method>
+
+        <!--- Called if this component has the focus and the component
+              has doesenter set to true and the enter key goes down -->
+        <method name="doEnterDown" >
+            return false;
+        </method>
+
+        <!--- Called if this component has the focus and the component
+              has doesenter set to true and the enter key goes up -->
+        <method name="doEnterUp" >
+            return false;
+        </method>
+
+        <!--- setter for the isdefault property : changes the look of the
+              button to its default look in the upstate 
+              @access private -->
+        <method name="_setIsDefault" args="def">
+            //avoid undefined property warnings
+            this.isdefault = this[ 'isdefault' ] == true;
+
+            if ( this.isdefault == def ) return;
+
+            if ( def ){
+                lz._componentmanager.service.makeDefault( this );
+            } else {
+                lz._componentmanager.service.unmakeDefault( this );
+            }
+
+            this.isdefault = def;
+            if ( this.onisdefault.ready ){
+                this.onisdefault.sendEvent( def );
+            }
+        </method>
+
+        <!--- @access private -->
+        <method name="_setDoesEnter" args="doe">
+            this.doesenter = doe;
+            if ( lz.Focus.getFocus()  == this ){
+                lz._componentmanager.service.checkDefault( this );
+            }
+        </method>
+
+        <!--- this method can be called to force the default 
+              button to update -->
+        <method name="updateDefault">
+            lz._componentmanager.service.checkDefault( lz.Focus.getFocus() );
+        </method>
+
+        <!---  if null, the style is set to the inherited style from the parent
+               component, if no parent component the style will be the canvas
+               'defaultstyle' attribute -->
+        <attribute name="style" value="null" when="once"
+                   setter="styleable ? setStyle(style) : (this.style = null)"/>
+
+        <!--- whether style should be applied to this component -->
+        <attribute name="styleable" value="true" />
+
+        <!--- @access private -->
+        <attribute name="_style" value="null"/>
+        <!--- @access private -->
+        <event name="onstyle"/>
+
+        <!--- @access private -->
+        <attribute name="_styledel" value="null"/>
+
+        <!--- when we're dependent on someone else's style
+              @access private -->
+        <attribute name="_otherstyledel" value="null"/>
+
+        <!--- Sets this component's style -->
+        <method name="setStyle" args="s"> 
+            <![CDATA[
+            if (!styleable) return;
+
+            // handle anon object, e.g. style="{basecolor:0xddddff}"
+            if (s != null && !s['isstyle']) {
+                var old_style = this._style;
+                if (!old_style) {
+                    if (this._parentcomponent) old_style = this._parentcomponent.style;
+                    else old_style = lz._componentmanager.service.getDefaultStyle();
+                }
+                s = old_style.extend(s);
+            }
+            this._style = s;
+            // set up delegates
+            if ( s == null ) {
+                if (!this._otherstyledel) {
+                    this._otherstyledel = new LzDelegate(this, '_setstyle')
+                } else {
+                    this._otherstyledel.unregisterAll();
+                }
+                // constraint to parent style if there is one
+                if ( this._parentcomponent && this._parentcomponent.styleable) {
+                        this._otherstyledel.register(this._parentcomponent,
+                                                        'onstyle');
+                    s = this._parentcomponent.style;
+                } else {   // constrain to canvas defaultstyle
+                    this._otherstyledel.register(lz._componentmanager.service,
+                                                    'ondefaultstyle');
+                    s = lz._componentmanager.service.getDefaultStyle();
+                }
+            } else if (this._otherstyledel) {
+                this._otherstyledel.unregisterAll();
+                this._otherstyledel = null;
+            }
+            _setstyle(s);
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="_usestyle" args="e=null">  
+            <![CDATA[
+            if (this._initcomplete && this['style'] && this.style.isinited) {
+                // note: in the case of lazy replication or if a component
+                // is new'd from script, the style may have been created
+                // but not inited
+                this._applystyle( this.style );
+            }
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="_setstyle" args="s">  
+            <![CDATA[
+            if (!this._styledel) {
+                this._styledel = new LzDelegate( this, "_usestyle" );
+            } else {
+                _styledel.unregisterAll();
+            }
+            if (s) {
+              _styledel.register( s, 'onstylechanged' );
+            }
+
+            this.style = s;
+            _usestyle();
+            if (this.onstyle.ready) this.onstyle.sendEvent(this.style);
+            ]]>
+        </method>
+
+        <!--- this method applies the style object's attributes to this 
+              component 
+              @access private -->
+        <method name="_applystyle" args="s">
+        </method>
+
+        <!--- colorizes a view, such that 50% gray appears as the given color
+              with shades of color darker and lighter.  This will not tint the
+              background color (unless its a swatchview) but will tint any
+              resources and all subviews.  Only available on some runtimes.
+              @param LzView v: the view to colorize 
+              @param Number color: the color to use for tinting (e.g.
+                   0xddddff) 
+              @param Number brightness: -255 to 255, optional parameter
+                   will lighten or darken everything that is colorized -->
+        <method name="setTint" args="v, color, brightness=0">
+            <![CDATA[
+            if (v.capabilities.colortransform) {
+                if (color != "" && color != null){
+                    var rgb = color;
+                    var red=(rgb >> 16) & 0xFF;
+                    var green=(rgb >> 8) & 0xFF;
+                    var blue=rgb & 0xFF;
+
+                    red += 0x33;
+                    green += 0x33;
+                    blue += 0x33;
+
+                    // these are percentages
+                    red = red/255;
+                    green = green/255;
+                    blue = blue/255;
+
+                    // Can't shade 114% rgb with tintcolor...
+                    v.setAttribute('colortransform', {redMultiplier : red, 
+                                                      greenMultiplier : green, 
+                                                      blueMultiplier : blue, 
+                                                      redOffset : brightness, 
+                                                      greenOffset : brightness, 
+                                                      blueOffset : brightness});
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <event name="on_enabled"/>
+
+        <!--- the value of _enabled is set via a constraint that is dependent
+              on the component's 'enabled' property and whether the parent
+              component is enabled this method allows subclasses to display
+              themselves differently when disabled 
+              @access private -->
+        <method name="_showEnabled">
+        </method>
+
+        <!--- Set `value` according to `type` from a String
+
+              Used to set a typed value from a string representation.
+
+              In this base method, the `value` is the text of the
+              component.  Cf., basevaluecomponent.
+
+              @param String data: the string representation of `value` (according to `type`).
+              @param String type: (optional) the name of the type to use, defaults to `this.type`
+        -->
+        <method name="acceptValue" args="data, type=null">
+          this.setAttribute('text', data);
+        </method>
+
+        <!--- Return `value` according to `type` as a String
+
+              Used to get a string representation of a typed value.
+
+              In this base method, the `value` is the text of the
+              component.  Cf., basevaluecomponent.
+
+              @param String type: (optional) the name of the type to use, defaults to `this.type`
+              @return String: the string representation of `value` (according to `type`)
+        -->
+        <method name="presentValue" args="type=null">
+          return this.text;
+        </method>
+        <!--- TODO: [2008-11-14 ptw] There needs to be a simpler way
+             to declare simple dependencies like this in LZX
+             @access private
+        -->
+        <method name="$lzc$presentValue_dependencies" args="who, self, type=null">
+          return [this, 'text'];
+        </method>
+
+        <!--- when using databinding, this will interpret data supplied to this
+              component as the text for the component 
+              @access private -->
+        <method name="applyData" args="d">
+            this.acceptValue(d);
+        </method>
+
+        <!--- when using databinding, this will update data when the
+              component's value changes (from user interaction or setAttribute)
+              @access private -->
+        <method name="updateData">
+            return this.presentValue();
+        </method>
+
+        <!--- @access private -->
+        <method name="destroy">
+            <![CDATA[
+            // prevent destroyed stylable objects from applying
+            this.styleable = false;
+            // prevent other things from being applied
+            this._initcomplete = false;
+            if (this['isdefault'] && this.isdefault) {
+                lz._componentmanager.service.unmakeDefault( this );
+            } 
+            super.destroy();
+            ]]>
+        </method>
+
+        <!--- @access private -->
+        <method name="toString">
+            <![CDATA[
+            var idstring = "";
+            var namestring = "";
+            var textstring = "";
+            if (this['id'] != null) idstring = "  id="+this.id;
+            if (this['name'] != null) namestring = " named \""+this.name+"\"";
+            if (this['text'] && this.text != "") textstring = "  text="+this.text;
+            return this.constructor.tagname + namestring + idstring + textstring;
+            ]]>
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>an abstract class which all components subclass</text></tag>
+          <text>
+            <p>
+            An abstract base class that handles focus, the text attribute, and style.
+            </p>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

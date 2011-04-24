@@ -1,0 +1,212 @@
+<library>
+<include href="utils/layouts/layout.lzx"/>
+<class name="resizelayout" extends="layout" >
+
+    <!--- The axis in which this layout operates either 'x' or 'y'.  -->
+    <attribute name="axis" setter="this.setAxis( axis )" 
+               value="y"
+               type="string" />
+
+    <!--- A pixel amount to use between each view in the layout -->
+    <attribute name="spacing" value="0" />
+
+    <!--- @keywords private -->
+    <method name="construct" args="view , args" >
+
+        super.construct( view , args );
+        this.resetDelegate = new LzDelegate( this , "reset");
+        this.heldSubs = new Object;
+
+        if ( args[ 'releaseview' ] != null ){
+            this.heldSubs[ view[args.releaseview].getUID() ] = false;
+        }
+
+        if ( args[ 'release' ] != null ){
+            this.heldSubs[ args.release.getUID() ] = false;
+        }
+    </method>
+
+    <!--- setter for the axis attribute. The default value is 'y' 
+          @param string a: 'x' oy 'y' -->
+    <method name="setAxis" args="a" >
+        this.axis = a;
+        this.sizeAxis = a == "x" ? "width" : "height"
+        this.updateDelegate.register( this.immediateparent , "on" + this.sizeAxis);
+    </method>
+
+    <!--- @keywords private -->
+    <method name="addSubview" args="sd" >
+        <![CDATA[
+        super.addSubview( sd );
+        var subview_id = sd.getUID();  // creates a UID if needed
+        if (sd.getOption('releasetolayout')) {
+            sd.setAttribute(this.sizeAxis,0);
+        } else {
+            this.hold( sd ); //subviews are held by default
+        }
+
+        this.resetDelegate.register(  sd , "onvisible" );
+        this.resetDelegate.register( sd , "on" + this.sizeAxis );
+        this.reset();
+        ]]>
+    </method>
+
+    <!--- holding a subview keeps it from being resized when the parent view resizes
+          @param LzView subview: the subview to be held ( not resized ) -->
+    <method name="hold" args="subview" >
+        //right now if a held subview is resized, the layout will
+        //not do the right thing automatically
+        //should register a delegate
+        this.heldSubs[ subview.getUID() ] = true;
+        this.reset();
+    </method>
+
+    <!--- releasing a subview allows the layout to resize it when the parent view stretches
+          @param LzView subview: the subview to be resized -->
+    <method name="release" args="subview">
+        this.heldSubs[ subview.getUID() ] = false;
+        this.reset();
+    </method>
+
+    <!--- @keywords private -->
+    <method name="reset" args="e=null">
+        <![CDATA[
+        if ( this.locked ) { return; }
+        var l = this.subviews.length;
+        this.totalHeld = 0;
+        this.heldAmount = 0;
+        this.lastUnheld  = -1;
+
+        // Only consider views that are visible
+        var inuse = 0;
+        for (var i = 0; i < l; i++ ) {
+            var s = this.subviews[i];
+            if (s.visible) inuse++;
+        }
+
+        // i is the view counter, j = visible view counter
+        var j = 0;
+        for (var i = 0; i < l; i++ ) {
+            var s = this.subviews[i];
+            if ( !s.visible ) continue;
+
+            var hs = (j < inuse-1) ? this.spacing : 0;
+            if ( this.heldSubs[ s.getUID() ] ) {
+                hs += s[(this.sizeAxis)];
+                this.heldAmount += hs;
+                this.totalHeld++;
+            } else {
+                this.lastUnheld = i;
+                this.heldAmount += hs;
+            }
+
+            j++;
+        }
+
+        this.unheldCount = inuse - this.totalHeld ;
+
+        this.update( );
+
+        ]]>
+    </method>
+
+
+    <!--- This method is usually called automatically when any of the views
+          controlled by the layout change their size in the layout axis, or
+          their visibility. However it can be called directly to force the
+          layout to update 
+          @param deprecated e: there are no arguments to this update method-->
+    <method name="update" args="e=null">
+        <![CDATA[
+        if ( this.locked ) { return; }
+        this.lock();
+        var layoutSize = this.immediateparent[(this.sizeAxis)];
+
+        var sizeDifference  = layoutSize - (this.heldAmount );
+        var newElementSize = sizeDifference /this.unheldCount;
+        var l = this.subviews.length;
+        var c = 0;
+
+        for ( var i=0; i < l ; i++) {
+            var s = this.subviews[i];
+            if ( !s.visible ) continue;
+
+            // Set the position
+            s.setAttribute( this.axis , c );
+
+            // IF THE VIEW ALLOWS ITS size TO BE ALTERED THEN SET IT.
+            if ( ! this.heldSubs[ s.getUID() ] ) {
+                s.setAttribute( this.sizeAxis, newElementSize );
+            }
+
+            c += this.spacing + s[( this.sizeAxis )] ;
+
+        }
+        this.locked = false;
+
+        ]]>
+    </method>
+    
+    <doc>
+        <tag name="shortdesc"><text>A layout with fixed and stretchable views.</text></tag>
+        <text>
+              <classname>resizelayout</classname> extends <sgmltag class="element" role="LzLayout">&lt;layout&gt;</sgmltag>, and therefore is responsible 
+              for arranging a set of views. Like simplelayout, <classname>resizelayout</classname> positions a set of views vertically or horizontally 
+              depending on the axis specified. The difference is that <classname>resizelayout</classname> can also stretch views.
+              <example>
+<![CDATA[<canvas height="100">
+  <view bgcolor="yellow" width="200">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" width="50"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <simplelayout axis="x" spacing="10"/>
+  </view>
+  
+  <view y="40" bgcolor="yellow" width="200">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" options="releasetolayout"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <resizelayout axis="x"/>
+  </view>
+</canvas>]]>
+                     </example>
+              <para>This example is similar to the one used in <sgmltag class="element" role="lz.stableborderlayout">&lt;stableborderlayout&gt;</sgmltag>, and is in 
+              fact visually equivalent. This is because <sgmltag class="element" role="lz.stableborderlayout">&lt;stableborderlayout&gt;</sgmltag> is a special case 
+              of <classname>resizelayout</classname> that is optimized for the common occurrence of having two fixed views with one stretchable view between them.</para>
+
+              <para>Unlike <sgmltag class="element" role="lz.stableborderlayout">&lt;stableborderlayout&gt;</sgmltag>, <classname>resizelayout</classname> works 
+              with any number of views. All the views that are controlled by a <classname>resizelayout</classname> are assumed to be fixed size until defined differently. 
+              A view is defined as stretchable using the attribute <literal>options="releasetolayout"</literal>. These views will stretch to fill in the space that is not 
+              taken by the fixed views. The <classname>resizelayout</classname> uses the width (or height) of its view to determine the total amount of space to fill, and 
+              then those subviews are placed and stretched to fill that space. If there is more than one subview that is stretchable, then the available space is split 
+              evenly between those subviews.</para>
+                                                      
+              <para>Then next example demonstrates what happens when two views are stretchable. The difference between the top and bottom views is only the spacing attribute.</para>
+              <example>
+<![CDATA[<canvas height="100">
+  <view bgcolor="yellow" width="300">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" options="releasetolayout"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" options="releasetolayout"/>
+    <resizelayout axis="x"/>
+  </view >
+
+  <view y="40" bgcolor="yellow" width="300">
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" options="releasetolayout"/>
+    <view bgcolor="blue" height="30" width="50"/>
+    <view bgcolor="red" height="30" options="releasetolayout"/>
+    <resizelayout axis="x" spacing="5"/>
+  </view>
+</canvas>]]>
+            </example>
+        </text>
+    </doc>
+</class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

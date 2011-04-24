@@ -1,0 +1,532 @@
+<library>
+    <include href="base/baseformitem.lzx"/>
+    <include href="base/listselector.lzx"/>
+    <include href="base/datalistselector.lzx"/>
+
+    <class name="baselist" extends="baseformitem">
+        <!--- The name of the class for new items that will be created with
+              addItem(). -->
+        <attribute name="itemclassname" value="" type="string"/>
+
+        <!--- The class for new items that will be created with addItem(). 
+              This attribute _must_ be set to a valid class if not using 
+              itemclassname.  See lz/list.lzx and base/basetabslider.lzx 
+              onaddsubview() for examples.
+              @keywords private -->
+        <attribute name="__itemclass" value="null"/>
+
+        <!--- The index of the default selected item, if none is provided via
+              the selected="true" attribute on an item. -->
+        <attribute name="defaultselection" value="null" />
+
+        <!--- If multiselect is true, multiple items may be selected. When the
+              shift key is down, a range of items is selected. When the control
+              key is down, any item may be added to the selection. -->
+        <attribute name="multiselect" value="false" />
+
+        <!--- When true, the first click on a list item selects it and the
+              second click deselects it. -->
+        <attribute name="toggleselected" value="false" />
+
+        <!--- One of "lazy", "resize", "pooling", "none". -->
+        <attribute name="dataoption" value="none" type="string"/>
+
+        <!--- which view has the highlight for keyboard navigation
+              @keywords private -->
+        <attribute name="_hiliteview" value="null"/>
+
+        <!--- a reference to the defaultplacement view
+              @keywords private -->
+        <attribute name="_contentview" value="null"/>
+
+        <!--- subviews are created before this class inits, if select is called
+              before the selectionmanager (_selector) is created then the
+              initial value is stored here
+              @keywords private -->
+        <attribute name="_initialselection" value="null"/>
+
+        <!--- the selector for this list (lz.listselector or lz.datalistselector)
+              @keywords private -->
+        <attribute name="_selector" value="null" />
+
+        <!--- true when a list-item set focus to this list (only available during onfocus)
+              @keywords private -->
+        <attribute name="__focusfromchild" value="false" type="boolean" />
+
+        <!--- This event is triggered whenever the user makes a selection it may
+              used as a script in the tag or as an event method. -->
+        <event name="onselect"/>
+
+        <!--- This event is triggered whenever the itemclassname attribute 
+              changes. -->
+        <event name="onitemclassname"/>
+
+        <!--- @keywords private -->
+        <method name="doEnterDown">
+            <![CDATA[
+            // TODO: [hqm 2006-09] LPP-2819 _hiliteview is null sometimes, why?
+            if ( this._hiliteview is lz.view && this._hiliteview.enabled) {
+                this._hiliteview.setAttribute('selected', true);
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="doEnterUp">
+            return;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init"> <![CDATA[
+            super.init();
+            //assign target if defaultplacement defined
+            if ( this._contentview == null ) {
+                if ( this.defaultplacement != null ){
+                    this._contentview = this.searchSubnodes( "name" , this.defaultplacement );
+                } else {
+                    this._contentview = this;
+                }
+            }
+            if (this.dataoption == "lazy" || this.dataoption == "resize") {
+                this._selector = new lz.datalistselector(this,
+                    {multiselect:this.multiselect, toggle:toggleselected});
+            } else {
+                this._selector = new lz.listselector(this,
+                    {multiselect:this.multiselect, toggle:toggleselected});
+            }
+
+            if (this._initialselection != null) {
+                    this.select(this._initialselection);
+            } else if (this.defaultselection != null) {
+                selectItemAt(defaultselection);
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onfocus" method="_doFocus" />
+        <!--- @keywords private -->
+        <method name="_doFocus" args="ignore">
+            <![CDATA[
+            // the hiliteview is used for keyboard nav hiliting
+                if (this['_selector'] != null) {
+                    var sel = this._selector.getSelection();
+                    if (sel && sel.length > 0) {
+                        if (sel[0] is lz.view) {
+                            this._hiliteview = sel[0];
+                            this._hiliteview.setHilite(true);
+                        }
+                    }
+                }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onblur" method="_doblur" />
+        <!--- @keywords private -->
+        <method name="_doblur" args="ignore">
+        <![CDATA[
+          if (this._hiliteview is lz.view) {
+              this._hiliteview.setHilite(false);
+          }
+          this._hiliteview = null;
+        ]]>
+        </method>
+
+        <!--- Set which view has the hilite.
+              @param LzView v: the view to hilite. -->
+        <method name="setHilite" args="v" >
+        <![CDATA[
+            if (this._selector.allowhilite(v)) {
+                if ( this._hiliteview is lz.view ) this._hiliteview.setHilite(false);
+                this._hiliteview = v;
+                if (v is lz.view ) {
+                    v.setHilite(true);
+                }
+            }
+        ]]>    
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onkeydown" method="_dokeydown" />
+        <!--- @keywords private -->
+        <method name="_dokeydown" args="kc">
+            <![CDATA[
+            /* select item on 'space' key */
+            var s = this._hiliteview;
+
+            if (s == null) {
+                s = getSelection();
+                // [2009-03-05 ptw] If you lost the highlight because
+                // you extended the selection, you want to pick up from
+                // there
+                if (this.multiselect) s = s[s.length - 1];
+            }
+
+            if (this.focusable && kc == 32) {
+               if (s is lz.view && s.enabled) {
+                 s.setAttribute('selected', true);
+                 // [2009-03-05 ptw] Don't lose the hilite because you selected
+                 s.setHilite(true);
+                 this._hiliteview = s;
+               }
+               return;
+            }
+
+            /* handle arrow key navigation
+                37 = left arrow, 38 = up arrow
+                39 = right arrow, 40 = down arrow
+            */
+            if (this.focusable && kc >= 37 && kc <= 40) {
+                this.setAttribute( 'doesenter', true );
+                var next;
+                if (kc == 39  || kc == 40) {
+                    next = _selector.getNextSubview(s);
+                }
+                if (kc == 37  || kc == 38) {
+                    next = _selector.getNextSubview(s, -1);
+                }
+                if ( s is lz.view  ) {
+                    s.setHilite(false);
+                }
+                if (next) {
+                    // If shift is down, extend the selection
+                    if (next.enabled && _selector.isRangeSelect(next)) {
+                      next.setAttribute('selected', true);
+                    }
+                    next.setHilite(true);
+                }
+                this._hiliteview = next;
+             }
+            ]]>
+        </method>
+
+        <!--- Get the value(s) for the list.
+              @return Object: null if no selection, a single value if single
+              select, or an array of values if multiselect. -->
+        <method name="getValue">
+            <![CDATA[
+            return _selector.getValue();
+            ]]>
+        </method>
+
+        <!--- Get text for the list.
+              @return Object: null if no selection, a string if single select,
+              or an array of strings if multiselect.  -->
+       <method name="getText">
+            <![CDATA[
+            if ( _initcomplete ) return _selector.getText();
+            return null;
+            ]]>
+        </method>
+        
+        <!--- Get the selection for the list. Normally this method returns
+              views, but if dataoption="lazy" or dataoption="resize",
+              it will return datapointers.
+              @return Object: null if no selection, an item if single select
+              (default), or an array of items if multiselect.
+              -->
+        <method name="getSelection">
+            if (this._initcomplete) {
+                // return a single value or an array
+                var sel = this._selector.getSelection();
+                if (multiselect) {
+                    // always return an array for multiselect
+                    return sel;
+                } else {
+                    // single select, just return item or null
+                    if (sel.length == 0) {
+                        return null;
+                    } else  {
+                        return sel[0];
+                    }
+                }
+            } else {
+                return this._initialselection;
+            }
+        </method>
+
+        <!--- Move the selection to the next view. This method not available
+              with dataoption="lazy" or dataoption="resize". -->
+        <method name="selectNext">
+            moveSelection(1);
+        </method>
+        
+        <!--- Move the selection to the previous view. This method not
+              available with dataoption="lazy" or dataoption="resize". -->
+        <method name="selectPrev">
+            moveSelection(-1);
+        </method>
+
+        <!--- Move the selection to the next or previous view. This method not
+              available with dataoption="lazy" or dataoption="resize"
+              @param Number dir: -1: move up, 1: move down -->
+        <method name="moveSelection" args="dir"> <![CDATA[
+            if (!dir) dir = 1;
+            var sel = this._selector.getSelection();
+            var next;
+            if (sel.length == 0) {
+                next = this._contentview.subviews[0];
+            } else {
+                var s = sel[0];
+                next = this._selector.getNextSubview(s, dir);
+            }
+            var current_focus = lz.Focus.getFocus();
+            select(next);
+            if (s && current_focus && current_focus.childOf(s)) {
+                lz.Focus.setFocus(next);
+            }          ]]>
+        </method>
+
+
+        <!--- Get the number of items in the list.
+              @return Number: number of items. -->
+        <method name="getNumItems">
+            if (this['_selector'] == null) return 0; // too early
+            return this._selector.getNumItems();
+        </method>
+
+        <!--- Get a particular item by its index. This method is not available
+              with dataoption="lazy" or dataoption="resize"
+              (use the data APIs instead).
+              @param Number index: the index for the item to get.
+              @return Object: the item found, or null, if not. -->
+        <method name="getItemAt" args="index" >
+            if (_contentview.subviews[index]) {
+                return getItem(_contentview.subviews[index].getValue());
+            }
+            return null;
+        </method>
+
+        <!--- Find a particular item by value. This method is not available with
+              dataoption="lazy" or dataoption="resize"
+              (use the data APIs instead).
+              @param Object value: the value for the item to get.
+              @return Object: the item found, or null, if not. -->
+        <method name="getItem" args="value">
+            <![CDATA[
+            // find the item with the requested value
+            if (_contentview != null && _contentview.subviews != null) {
+                for (var i=0; i<_contentview.subviews.length; i++) {
+                    var check = _contentview.subviews[i];
+                    if (check.getValue()==value) {
+                        return check;
+                    }
+                }
+            }
+            return null;
+            ]]>
+        </method>
+
+        <!--- Add an item to the end of the list. This method is not available
+              with dataoption="lazy" or dataoption="resize"
+              (use the data APIs instead).
+              @param String text: the text for the item.
+              @param Object value: the value for the item. -->
+        <method name="addItem" args="text, value=null" >
+            new this.__itemclass(this, {text:text, value:value});
+        </method>
+
+        <setter name="itemclassname" args="tag">
+        <![CDATA[
+            if ($debug) {
+                if (tag && (! lz[tag])) { Debug.error("Invalid itemclassname %s", tag) }
+            }
+            this.itemclassname = tag;
+            this.__itemclass = lz[tag];
+            if (onitemclassname.ready) { this.onitemclassname.sendEvent(tag); }
+        ]]>
+        </setter>
+
+        <!--- Find the first item with the specified value and remove it from
+              the list. This method is not available with dataoption="lazy"
+              or dataoption="resize"
+              (use the data APIs instead).
+              @param Object value: the value of the item to remove. -->
+        <method name="removeItem" args="value" >
+            var item = getItem(value);
+            if ($debug) {
+              if (item == null) {
+                  Debug.error("%s.item not found for %s", this, value);
+              }
+            }
+            _removeitem(item);
+        </method>
+
+        <!--- Find the item at the specified index and remove it from the list.
+              This method is not available with dataoption="lazy"
+              or dataoption="resize"
+              (use data APIs instead).
+              @param Number index: the index of the item to remove. -->
+        <method name="removeItemAt" args="index" >
+            var item = _contentview.subviews[index];
+            _removeitem(item);
+        </method>
+        
+        <!--- Removes all items from the list. -->
+        <method name="removeAllItems" >
+            <![CDATA[
+            // Sometimes a single cycle of the for below won't remove
+            // every subview, so we need to make sure it runs until it
+            // gets them all.
+            while(_contentview.subviews.length != 0){
+                for(var eg = 0; eg < _contentview.subviews.length; eg++){
+                    _removeitem(_contentview.subviews[eg]);
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_removeitem" args="item">
+            if (item) {
+                if (item.selected) this._selector.unselect(item);
+                item.destroy();
+            }
+        </method>
+
+        <!--- Select an item by value. This method is not available with
+              dataoption="lazy" or dataoption="resize".
+              @param Object value: the value of the item to select. -->
+        <method name="selectItem" args="value" >
+            var item = getItem(value);
+            if (item) {
+                select(item);
+            }
+        </method>
+
+        <!--- Select an item by index.
+              @param Number index: the index of the item to select. -->
+        <method name="selectItemAt" args="index" >
+          if (this._selector != null) {
+            var item = this._selector.getItemByIndex(index);
+            select(item);
+          }
+        </method>
+
+        <!--- Clear the current selection. -->
+        <method name="clearSelection" >
+            if ( this._initcomplete ){
+                this._selector.clearSelection();
+            } else {
+                this._initialselection = null;
+                this.defaultselection = null;
+            }
+        </method>
+
+        <!--- Select an item.
+              @param LzView item: the view to select (may be an array
+              when multiselect == true) -->
+        <method name="select" args="item" >
+            <![CDATA[
+            if (item == null) {
+                //noop
+            } else if (this._initcomplete) {
+                this._selector.select(item);
+                if (!this.multiselect) {
+                    this.setAttribute('value', item.getValue() );
+                }
+            } else {
+                if (multiselect) {
+                    if (this._initialselection == null)
+                        this._initialselection = [];
+                    this._initialselection.push(item);
+                } else {
+                     this._initialselection = item;
+                }
+            }
+
+            if ( this._hiliteview is lz.view && this._hiliteview['enabled']) {
+                this._hiliteview.setHilite(false);
+                this._hiliteview = null;
+            }
+            this.setAttribute( 'doesenter', false );
+            if ( this.onselect ) this.onselect.sendEvent(item);
+            ]]>
+        </method>
+
+        <!--- TODO: [2008-10-22 ptw] There probably should be an
+             override of applyData/updateData that worries about the
+             representation of a multiple selection, but that was not
+             there when I updated to use acceptValue/presentValue, and
+             the existing overrides were just a duplicates of the
+             inherited methods, so I removed them. -->
+
+        <doc>
+            <tag name="shortdesc"><text>An abstract class which all list components should subclass.</text></tag>
+          <text>
+            <p>This class is a container for a group of
+            <classname>baselistitem</classname>s.  To use
+            <classname>baselist</classname>, <classname>baselistitem</classname>
+            must be subclassed to provide a visual representation of the list
+            item.  It supports single select by default.  Set
+            <attribute>multiselect</attribute> to true to allow multiple selection
+            (shift-click for a range, control-click for an arbitrary set).</p>
+            
+            <p>Contained list items may be declared inside the list, such as:</p>
+            
+            <example>
+            &lt;canvas height="100"&gt;
+              &lt;baselist layout="axis:y;spacing:2"&gt;
+                &lt;baselistitem height="15" width="25" bgcolor="${selected ? 0xffff00 : 0x0000ff}"/&gt;
+                &lt;baselistitem height="15" width="50" bgcolor="${selected ? 0xffff00 : 0x0000ff}"/&gt;
+                &lt;baselistitem height="15" width="100" bgcolor="${selected ? 0xffff00 : 0x0000ff}"/&gt;
+              &lt;/baselist&gt;
+              &lt;text y="70"&gt;Click bar to select it.&lt;/text&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>or replicated from data: </p>
+            
+            <example>
+            &lt;canvas height="90"&gt;
+             &lt;dataset name="items"&gt;
+                &lt;item&gt;one&lt;/item&gt;
+                &lt;item&gt;two&lt;/item&gt;
+                &lt;item&gt;three&lt;/item&gt;
+              &lt;/dataset&gt;
+            
+              &lt;class name="myitem" extends="baselistitem"
+                     bgcolor="${selected ? 0xffff00 : 0xffffff}"&gt;
+                 &lt;text text="${parent.value}"/&gt;
+              &lt;/class&gt;
+            
+              &lt;baselist layout="axis:y; spacing:2"&gt;
+                &lt;myitem datapath="items:/item/text()"/&gt;
+              &lt;/baselist&gt;
+              &lt;text y="70" &gt;Click on a number to select it.&lt;/text&gt;
+             &lt;/canvas&gt;   
+            </example>
+            
+            <h2>Optimizing Lists</h2>
+            
+            <p>If your lists represent data from a datapath, there are two
+            optimizations that you may want to consider:</p>
+            
+            <dl>
+            
+            <dt>pooling</dt>
+            <dd>If you will be changing the data that is represented by the list
+            after it has been created, you can set
+            <code>dataoption="pooling"</code>.  For more about pooling see the
+            datapath <xref linkend="LzDatapath.__ivars__.pooling"/> attribute
+            and the example in <classname library="lz">list</classname>.</dd>
+            
+            <dt>lazy</dt>
+            <dd>If there are more items in the list than will be visible and all
+            list items are the same size (for example, in a scrolling list or
+            combobox), you should set dataoption="lazy".  For more about lazy
+            replication see the datapath 
+            <xref linkend="LzDatapath.__ivars__.replication"/> attribute,
+            <classname>LzLazyReplicationManager</classname>, and the example in
+            <classname library="lz">list</classname>.</dd>
+            </dl>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

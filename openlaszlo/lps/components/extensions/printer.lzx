@@ -1,0 +1,171 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+
+<library>
+<class name="printer" extends="node">
+    <passthrough when="$as3">
+        import flash.printing.PrintJob;
+        import flash.geom.Rectangle;
+        import flash.printing.PrintJobOptions; 
+    </passthrough>
+    <doc>
+      <tag name="shortdesc"><text>Adds the capability to print.</text></tag>
+      <text>
+        <p><tagname>printer</tagname> is a <sgmltag class="element" role="LzNode">&lt;node&gt;</sgmltag> that gives access to the printer.</p> 
+        
+        <p>The DHTML runtime currently only supports send().</p>
+        
+        <example><programlisting class="code">
+&lt;canvas&gt;
+    &lt;view id="main" x="10" y="10"&gt;
+        
+        &lt;simplelayout axis="y" spacing="10"/&gt;
+        &lt;view&gt;
+            &lt;simplelayout axis="y" spacing="5"/&gt;
+            &lt;button text="draw line from (10,10) to (50, 50)"&gt;
+                &lt;handler name="onclick"&gt;
+                    main.drawLine(drawView, 10, 10, 50, 50);
+                &lt;/handler&gt;
+            &lt;/button&gt;
+            &lt;button text="draw line from (100,100) to (150, -300)"&gt;
+                &lt;handler name="onclick"&gt;
+                    main.drawLine(drawView, 100, 100, 150, -300);
+                &lt;/handler&gt;
+            &lt;/button&gt;
+            &lt;button text="draw line from (70,70) to (70, -20000)"&gt;
+                &lt;handler name="onclick"&gt;
+                     main.drawLine(drawView, 70, 70, 70, -20000);
+                &lt;/handler&gt;
+            &lt;/button&gt;
+            &lt;button text="Print"&gt;
+                &lt;handler name="onclick"&gt;
+                    main.printView();
+                &lt;/handler&gt;
+            &lt;/button&gt;            
+        &lt;/view&gt;
+        
+        &lt;view id="wrapper" width="300" height="200" clip="true" bgcolor="0xCCCCCC"&gt;
+            &lt;drawview id="drawView" width="300" height="200"&gt;                
+            &lt;/drawview&gt;
+        &lt;/view&gt;
+        
+        &lt;method name="drawLine" args="drawview, xFrom, yFrom, xTo, yTo"&gt;
+            drawview.beginPath();
+            drawview.moveTo(xFrom, yFrom);
+            drawview.lineTo(xTo, yTo);
+            
+            drawview.strokeStyle = 0x000000;
+            drawview.lineWidth = 2;
+            
+            drawview.stroke();
+            drawview.closePath()
+        &lt;/method&gt;
+        
+        &lt;printer id="printer"/&gt;
+        &lt;method name="printView"&gt;
+            if(printer.start()){
+                printer.addPage(drawView, 0, 0, drawView.width, drawView.height);
+                printer.send();
+            }
+        &lt;/method&gt;
+        
+    &lt;/view&gt;
+&lt;/canvas&gt;
+        </programlisting></example>
+                
+        <p><classname>printer</classname> extends <sgmltag class="element" role="LzNode">&lt;node&gt;</sgmltag>,
+        which is the fundamental class in LZX.</p>
+      </text>
+    </doc>
+
+    <!---
+      Resets the printer state.
+      @access private 
+    -->
+    <method name="reset">
+        if ($dhtml) {
+            //TODO?
+        } else {
+            this.__printJob = new PrintJob();
+        }
+    </method>
+
+    <!--- Starts a print job.  Not required in DHTML.
+        @return boolean: true if printing is available.
+    --->
+    <method name="start">
+        if ($dhtml) {
+            // the user can always print
+            return true;
+        } else {
+            this.reset();
+            return this.__printJob.start();
+        }
+    </method>
+
+    <!--- Sends the job to the printer. --->
+    <method name="send">
+        if ($dhtml) {
+            window.print();
+        } else {
+            if (! this.__printJob) {
+                return;
+            } else {
+                this.__printJob.send();
+            }
+        }
+    </method>
+
+    <!--- Adds a new page to the print job.  Not available in DHTML.
+          @param LzView view: The view to print from.
+          @param number minX: The top-left x coordinate to start printing from
+          @param number minY: The top-left y coordinate to start printing from
+          @param number maxX: The bottom-right y coordinate to print to
+          @param number maxY: The bottom-right y coordinate to print to
+          @param boolean printasbitmap: If true, the view will be printed as a bitmap
+    --->
+    <method name="addPage" args="view:LzView, minX=null, minY=null, maxX=null, maxY=null, printasbitmap=null">
+        <![CDATA[
+        if ($dhtml) {
+            //TODO?
+            if ($debug) {
+                Debug.warn('%w does not support addPage().  Instead, the entire contents of the web page will print when send() is called.', $runtime);
+            }
+        } else {
+            if (! this.__printJob) return;
+            if (minX == null && minY == null && maxX == null && maxY == null) {
+                var pos = null;
+            } else {
+                // Set missing values to sensible defaults
+                if (minX == null) minX = 0;
+                if (minY == null) minY = 0;
+                if (maxX == null) maxX = view.width;
+                if (maxY == null) maxY = view.heightwidth;
+                if ($as3) {
+                    var pos = new Rectangle(minX, minY, maxX, maxY);
+                } else {
+                    var pos = {xMin: minX, yMin: minY, xMax: maxX, yMax: maxY};
+                }
+            }
+
+            if (printasbitmap == null) {
+                var opts = null;
+            } else {
+                if ($as3) {
+                    // !@#&!@#& as3
+                    var opts = new PrintJobOptions();
+                    opts.printAsBitmap = printasbitmap;
+                } else {
+                    var opts = {printAsBitmap: printasbitmap};
+                }
+            }
+            //Debug.warn('addPage', pos, opts);
+            this.__printJob.addPage(view.getDisplayObject(), pos, opts);
+        }
+        ]]>
+    </method>
+</class>
+</library>

@@ -1,0 +1,282 @@
+<!-- Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved. -->
+<library>
+    <include href="replicator.lzx"/>
+    <!-- A replicator which creates as many clones as are necessary to fill in
+    a masked region, similar to the lazy replication option in OpenLaszlo. Also
+    similar to OL''s lazy replication, the lazyreplicator must have a clipped
+    view as a parent.  Be sure to use a dataselectionmanager instead of a selectionmanager for lazyreplicators.-->
+
+    <class name="lazyreplicator" extends="replicator">
+        <!--- The size of the replicated clone in the replication axis -->
+        <attribute name="replicatedsize" value="null"/>
+        <!-- Mostly copied from LzLazyReplicationManager
+            @keywords private -->
+        <attribute name="clonesoffset" value="0"/>
+        <!-- @keywords private -->
+        <attribute name="__emptyArray" value="null"/>
+        <!-- @keywords private -->
+        <attribute name="clonedel" value="null"/>
+
+        <!-- @keywords private -->
+        <method name="construct" args="p,a">
+            <![CDATA[ 
+            super.construct( p, a );
+
+            // TODO [hqm 2007 09] Lock the parent layout so it can't mess
+            // up our placement of clones.  The implicit lazy
+            // repl. manager only wraps this inside of _adjustVisibleClones
+            // but I want to be sure any parent container layout is really
+            // turned off before any views get instantiated, and stays off
+            // all the time, it can only cause trouble.
+            // 
+            var layouts = this.container.layouts;
+            if (layouts) {
+                for (var i = 0, len = layouts.length; i < len; i++) {
+                    layouts[i].lock();
+                }
+            }
+
+
+            this.__emptyArray = [];
+            this.clonedel = new LzDelegate( this, '__adjustVisibleClones');
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="init">
+            this.clonedel.register( this.mask , "on" + this._sizes[ this.axis ] );
+            this.clonedel.register( this.container , "on" + this.axis );
+            super.init();
+        </method>
+
+        <!-- @keywords private -->
+        <attribute name="_lastNodesLength" value="0"/>
+
+        <!-- @keywords private -->
+        <method name="__adjustVisibleClones" args="ignore=null">
+            <![CDATA[
+            if ( ! this.nodes ) {
+                while ( this.clones.length ) this.poolClone( this.clones.pop() );
+                return;
+            }
+
+            if ( !this.replicatedsize ) this._setSize();
+
+            var sizeAxis = this._sizes[ this.axis ];
+            if ( this.nodes.length != null ){
+                this._lastNodesLength = this.nodes.length;
+            }
+            var s = this._lastNodesLength * this.replicatedsize;
+
+            if ( this.container[ sizeAxis ] != s ){
+                //Debug.write( sizeAxis, s, this.container[ sizeAxis ] );
+                this.container.setAttribute( sizeAxis, s );
+            }
+
+            if (! this.mask) {
+                Debug.warn("%w: cannot find clipping parent", this);
+                return;
+            }
+
+            if (! this.mask[ "hasset" + sizeAxis ] )
+                return;
+
+            //Here's the idea. Coming in, we have an old list of clones that
+            //represents some window into the dataset. Let's say the nodes are
+            //labelled alphabetically so to start, we have
+            //this.clones=[ m , n , o , p ]
+            //When the situation changes, we end up with a situation where we
+            //want the window to be like
+            //this.clones=[ l , m , n , o ]
+
+            //This algorithm moves the old list of clones to a temporary
+            //identifier and then constructs a new array for the clones going
+            //through one by one It keeps an offset, which represents the
+            //difference in position of the old new data windows. In the case
+            //above, the offset would be -2.
+
+            var newstart = Math.floor( -this.container[ this.axis ] /
+                                       this.replicatedsize );
+
+            if ( 0 > newstart  ) newstart = 0;
+
+            var oldptr = 0;
+            var oldlength = this.clones.length;
+            var offset = newstart - this.clonesoffset;
+
+            var remainder = ( newstart * this.replicatedsize ) +
+                this.container[ this.axis ];
+
+            var newlength= Math.ceil(
+                Math.min( (this.mask[ sizeAxis ] - remainder )/this.replicatedsize ,
+                           this.container[ sizeAxis ] /this.replicatedsize ) );
+
+            //newstart is the new absolute lowerbound of the data window
+            //newlength is the new length of the data window
+            if ( newlength + newstart >  this.nodes.length ) {
+                newlength = this.nodes.length - newstart;
+            }
+
+            //no change
+            if ( offset == 0 && newlength == oldlength ) return;
+
+            //_root.lz.Instantiator.enableDataReplicationQueuing( );
+            var oldclones = this.clones;
+            //TODO: instead of allocating a new array, use two arrays and
+            //ping-pong
+            this.clones = this.__emptyArray;
+
+            for ( var i = 0 ; i < newlength; i++ ){
+                //before the new beginning
+                var cl = null;
+                if ( i + offset < 0 ){
+                    //this comes before the old data window
+                    if ( newlength + offset < oldlength  && oldlength > 0){
+                        //pull the clone off the end
+                        cl = oldclones[ --oldlength ];
+                    } else {
+                        cl = this.getClone();
+                    }
+                } else if ( i + offset >= oldlength ){
+                    //this comes after the old data window
+                    if ( oldptr < offset && oldptr < oldlength  ){
+                        //pull the clone off the end
+                        cl = oldclones[ oldptr++ ];
+                    } else {
+                        cl = this.getClone();
+                    }
+                }
+
+                if ( cl ){
+                    this.clones[ i ] = cl;
+                    var val = ( i + newstart ) * this.replicatedsize ;
+                    cl.setAttribute( this.axis , val);
+                    this.unbind( cl );
+                    this.bind( cl, newstart + i );
+                } else {
+                    //otherwise, the oldclone and the newclone match
+                    this.clones[ i ] = oldclones[ i + offset ];
+                }
+            }
+
+            while ( oldptr < offset  && oldptr < oldlength ){
+                var v = oldclones[ oldptr++ ];
+                this.poolClone( v );
+            }
+
+            while ( oldlength > newlength + offset && oldlength > 0 ){
+                var v = oldclones[ --oldlength ];
+                this.poolClone( v );
+            }
+
+            this.clonesoffset = newstart;
+
+            while ( oldclones.length ) oldclones.pop();
+            this.__emptyArray = oldclones;
+
+            //_root.lz.Instantiator.clearDataReplicationQueue( );
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="createChildren" args="c">
+            <![CDATA[
+            this.replicated = c.pop();
+
+            // TODO [hqm 2007 09] I need to set ignorelayout option before
+            // the clone gets instantiated, otherwise it might get placed
+            // by the parent layout during construction, which we don't
+            // want to happen.
+            var attrs;
+            if ('attrs' in this.replicated) {
+                 attrs = this.replicated.attrs;
+            } else {
+                attrs = {};
+                this.replicated.attrs = attrs;
+            }
+
+            if ('options' in attrs) {
+                attrs.options.ignorelayout = true;
+            } else {
+                attrs.options = {ignorelayout: true};
+            }
+
+            //Debug.write( 'replicated', replicated );
+            if ( c.length ) {
+              if ($debug) Debug.warn("%s: only a single child view is replicated", this);
+              this.container.createChildren( c );
+            } else {
+              this.__LZinstantiationDone();
+            }
+            ]]>
+        </method>
+
+        <!-- Overrides replicator.getClone()
+            @keywords private -->
+        <method name="getClone">
+            var cl = super.getClone();
+            cl.setOption( 'ignorelayout', true );
+            return cl;
+        </method>
+
+        <!-- @keywords private -->
+        <method name="_setSize">
+            var c = this.getClone();
+            this.setAttribute( "replicatedsize", c[ this._sizes[ this.axis ] ] );
+            this.poolClone( c );
+        </method>
+
+        <!-- @keywords private -->
+        <method name="getCloneIfVisible" args="n">
+            <![CDATA[
+            var off = Number( n ) - this.clonesoffset;
+            if ( off >= 0 && off < this.clones.length ) return this.clones[ off ];
+            else return null;
+            ]]>
+        </method>
+
+        <!-- @keywords private -->
+        <method name="getCloneForOffset" args="n">
+            this.ensureInView( n );
+            return this.clones[ n-this.clonesoffset];
+        </method>
+
+        <!-- @keywords private -->
+        <method name="getCloneForNode" args="datanode,dontmake = false">
+            <![CDATA[
+            var cl = super.getCloneForNode( datanode ) ||
+                    null;
+            if ( !cl && !dontmake ){
+                //even though we're going to return this to the pool immediately,
+                //use the class API to get a clone
+                cl = this.getClone();
+                this.setData( cl, datanode );
+                this.update( cl, datanode );
+                if (cl.datapath['sel'] != datanode['sel']) {
+                    cl.datapath['sel'] = datanode['sel'] || false;
+                    cl.setSelected(cl.datapath['sel']);
+                }
+                if (cl['applyData']) cl.applyData( datanode );
+                this.poolClone( cl );
+            }
+
+            //cl.setOption( 'ignorelayout', true );
+            return cl;
+            ]]>
+        </method>
+
+        <method name="destroy">
+            <![CDATA[ 
+            var layouts = this.container.layouts;
+            if (layouts) {
+                for (var i = 0, len = layouts.length; i < len; i++) {
+                    layouts[i].unlock();
+                }
+            }
+            super.destroy();
+            ]]>
+        </method>
+    </class>
+
+
+</library>

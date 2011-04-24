@@ -1,0 +1,208 @@
+<library>
+
+    <include href="base/basedatepickerday.lzx"/>
+ 
+    <class name="basedatepickerweek">
+
+        <!--- Name of the day class instance to use.  
+              @keywords public -->
+        <attribute name="dayclass" value="$once{classroot.dayclass}"/>
+
+        
+        <method name="init">
+            <![CDATA[
+            super.init();
+            
+            for( var i = 0 ; i < 7 ; i++ ) {
+                new dayclass(this, { daynum : i } );  
+            } 
+
+            ]]>
+        </method>
+
+        <!--- Set the focus on a day.
+              @param d: The day of the week to focus on. 0 for Sunday, 6 for
+                         Saturday. 
+              @keywords public -->
+        <method name="focusOnDay" args="d"> 
+            this.subviews[d].gotFocus();
+        </method>
+
+
+        <!--- Remove the focus from a day.  
+              @param d: The day of the week to focus on. 0 for Sunday, 6 for
+                         Saturday. 
+              @keywords public --> 
+        <method name="removeFocusFromDay" args="d">
+            this.subviews[d].removeFocus();
+        </method>
+
+        <!--- Answers the question: Is this the first week of the month?
+              @return boolean: True if this is the first week of the month,
+                               otherwise false.
+              @keywords public -->     
+        <method name="isFirstWeek">
+        <![CDATA[
+            var returnValue; 
+            if( subviews[0].disabled || subviews[0].daynum == 1 ) {
+                returnValue = true;
+            } else { 
+                returnValue = false;
+            }
+
+            return returnValue;
+        ]]>
+        </method> 
+
+        <!--- Answers the question: Is this the last week of the month?
+              @return boolean: True if this is the last week of the month,
+                               otherwise false.
+              @keywords public -->     
+        <method name="isLastWeek">
+            var returnValue;
+            if( subviews[6].disabled || subviews[6].daynum ==
+                         parent.getNumberOfDaysInMonth( parent.showingmonth ) ) {
+                returnValue = true;                  
+            } else {
+                returnValue = false;
+            }
+            return returnValue; 
+        </method> 
+
+
+        <!--- Answers the question: Is the given day the first day of the month?
+              @param d: The day of this week to check to see if it is  the first
+                        day of the month. 0 is Sunday, 6 is Saturday.
+              @return boolean: True if the given day is the first day of the
+                               month, otherwise false.
+              @keywords public                    
+        -->
+        <method name="isFirstDayInMonth" args="d">
+        <![CDATA[ 
+            var returnValue;
+            if( subviews[d].daynum == 1 &&
+                !subviews[d].disabled ) {
+                returnValue = true;
+             } else {
+                returnValue = false;
+             } 
+             return returnValue;
+        ]]>
+        </method>
+
+        <!--- Returns the day in this week that is the last day of the month.  
+              @return number: The day of the week that is the last day of the
+              month.  If the last day of the month is not in this week, -1 is
+              returned.  0 for Sunday, 6 for Saturday.  
+              @keywords public                    
+              -->
+        <method name="getLastDayInMonth">
+            var returnValue = -1;
+
+            for( var i = 6 ;  i >= 0 ; i-- ) {
+                if( !this.subviews[i].disabled ) {
+                    returnValue = i;
+                    break;
+                }
+            }
+            return returnValue;
+        </method>
+
+        <!--- Answers the question: Is the given day of the week the last day of
+              the month?
+              @param d: The day of the week to check to see if it is the last day
+                        of the month.  0 for Sunday, 6 for Saturday.
+              @return boolean: true if the given day is the last day of the 
+                               month, otherwise false. 
+              @keywords public;                           
+         -->
+        <method name="isLastDayInMonth" args="d">
+        <![CDATA[
+            var returnValue; 
+
+            if( parent.parent.getNumberOfDaysInMonth( parent.parent.showingmonth ) ==
+
+                subviews[d].daynum &&
+                !subviews[d].disabled ) { 
+                returnValue = true; 
+            } else {
+                returnValue = false; 
+            }
+            return returnValue;
+        ]]>
+        </method> 
+
+        <!--- Returns the day in this week that is the first day of the month.  
+              @return number: The day of the week that is the first day of the
+              month.  If the first day of the month is not in this week, -1 is
+              returned.  0 for Sunday, 6 for Saturday.  
+              @keywords public                    
+              --> 
+        <method name="getFirstDayInMonth">
+        <![CDATA[    
+            var last = -1;
+
+            for( var i = 0 ; i < 7 ; i++ ) { 
+                if( this.subviews[i].daynum == 1 ) {
+                    last = i;
+                }
+            } 
+            
+            return last;
+        ]]>
+        </method> 
+
+        <!--- Sets daynum of each day in this week, starting with the first day
+              of the week.  Also sets the disabled and selectable attributes 
+              for each day as appropriate.
+              @param d: The day of the month to set Sunday(0) to.  Monday(1) 
+                        through Saturday(6) will be set as appropriate.   
+              @param max: The largest daynum that should be set. In other words,
+                          this should be the number of days in this month.
+              @param earlydate: The earliest day of the month that can be 
+                                selected.   
+              @param latedate: The latest day of the month that can be 
+                               selected.   
+              @keywords public --> 
+        <method name="setStartingDay" args="d,max,earlydate,latedate">
+        <![CDATA[ 
+            var cd =  d; 
+
+            for( var i = 0 ; i < subviews.length ; i++ ) { 
+
+                var w = subviews[i]; 
+               
+                var day = cd+i;
+                if( day >= 1 && day <= max ) { 
+                    w.setAttribute('daynum', day ); 
+                    w.setAttribute('disabled', false );
+                } else { 
+                    w.setAttribute('disabled', true );
+                } 
+
+                if( day >= earlydate && day <= latedate ) {
+                    w.setAttribute('selectable', true );
+                } else { 
+                    w.setAttribute('selectable', false );
+                }
+            }
+            ]]>
+        </method> 
+        <doc>
+          <tag name="shortdesc"><text>An abstract class representing a week for use with <classname>basedatepicker</classname></text></tag>
+          <text>
+            <p> 
+               Basedatepickerweek is an abstract class representing a week for use with the 
+               basedatepicker.  See also <xref linkend="lz.basedatepicker"/>
+               and <xref linkend="lz.basedatepickerday"/>
+            
+            </p>
+          </text>
+        </doc>
+    </class> 
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008, 2010 Laszlo Systems, Inc.  All Rights Reserved.        *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

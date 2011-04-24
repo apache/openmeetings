@@ -1,0 +1,116 @@
+<!--- An abstract helper object that handles data activities for opttree-->
+<node name="opttreecontroller">
+    <!--- The root node of the tree -->
+    <attribute name="rootnode"/>
+
+    <!--- The flattended list of nodes that are currently displayed in the 
+          tree. -->
+    <attribute name="nodelist" value="$once{ [] }"/>
+
+    <!--- A datapointer used to run xpath expressions against the opttree's
+          data model -->
+    <datapointer name="dp"/>
+
+    <!--- @keywords private -->
+    <attribute name="changeDel" 
+               value="$once{ new lz.Delegate( this, 'checkDocChange' ) }"/>
+
+    <!--- @keywords private -->
+    <handler name="ondata" reference="parent">
+        //setup listener
+        this.changeDel.unregisterAll();
+
+        var pdata = parent.data;
+        this.setAttribute( "rootnode", pdata );
+        if ( pdata != null ) {
+            this.changeDel.register( pdata.ownerDocument , "onDocumentChange" );
+        }
+
+        this.rebuildList();
+    </handler>
+
+    <!--- This method is called whenever the data in the data structure that
+          backs the opttree changes.
+          @param changepackage chgpkg: An Object of the type sent by 
+                                       onDocumentChange that describes the 
+                                       type of change. -->
+    <method name="checkDocChange" args="chgpkg">
+        this.rebuildList();
+    </method>
+
+    <!--- Rebuilds the flattened list of data that backs the opttree from the
+          hierarchical datastructure -->
+    <attribute name="_running" value="false"/>
+    <method name="rebuildList">
+        if ( _locked || _running ) return;
+        this._running = true;
+        this.nodelist = [ ];
+        var rnode = this.rootnode;
+        if ( rnode != null ) {
+            rnode.setAttr( parent.depthattr , "-1" );
+            this.addNodesToList( rnode );
+        }
+        this.setAttribute( "nodelist" , nodelist );
+        this._running = false;
+    </method>
+
+
+    <!--- Appends nodes and their children (if the node is "open" ) to the 
+          nodelist
+          @param LzDataElement n: The LzDataElement to use as the hierarchical 
+                                  starting point for the collection. -->
+    <method name="addNodesToList" args="n">
+        <![CDATA[ 
+        var chil = getChildNodes( n );
+
+        if ( !chil ) return;
+        var nd = 1 + Number( n.attributes[ parent.depthattr ] );
+
+        for ( var i = 0 ; i < chil.length; i++ ){
+            var c = chil[ i ];
+            if ( !c.attributes[ parent.depthattr ] ||
+                 c.attributes[ parent.depthattr ] != parent.depthattr ){
+                c.setAttr( parent.depthattr, nd.toString() );
+            }
+
+            this.nodelist.push( c );
+            if ( c.attributes[ parent.openattr ] == "true" ){
+                this.addNodesToList( c );
+            }
+        } 
+        ]]>
+    </method>
+
+    <!--- Returns a list of nodes that match the opttree's nodepath. 
+          @param LzDataElement p: The LzDataElement for which to return the
+                                  list of child nodes -->
+    <method name="getChildNodes" args="p">
+        dp.setPointer( p );
+        var c = dp.xpathQuery( parent.nodepath );
+        if ( c == null ){
+            return null;
+        } else if ( ! ( c instanceof Array ) ){
+            c = [ c ];
+        }
+        return c;
+    </method>
+
+    <attribute name="_locked" value="false"/>
+    <attribute name="_lockkey" value="null"/>
+    <method name="lock" args="k">
+        if ( _locked ) return;
+        this._lockkey = k;
+        this._locked = true;
+    </method>
+    <method name="unlock" args="k">
+        if( _lockkey != k ) return;
+        this._locked = false;
+        this._lockkey = null;
+        this.rebuildList();
+    </method>
+</node>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009, 2010 Laszlo Systems, Inc. All Rights Reserved.        *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

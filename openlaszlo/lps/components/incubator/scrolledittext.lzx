@@ -1,0 +1,150 @@
+<library>
+
+    <include href="lz/vscrollbar.lzx"/>
+
+    <!--- Implements visual baseedittext with scrollbar. -->
+    <class name="scrolledittext" extends="baseedittext" 
+           multiline="true" clip="true" height="100">
+
+        <attribute name="border" value="0" />
+        
+        <view name="_face" bgcolor="0xffffff" 
+              width="${parent.width-parent.border*2}" 
+              height="${parent.height-parent.border*2}" 
+              x="${parent.border}" y="${parent.border}"/>
+
+        <_newinternalinputtext name="inp" 
+            x="${parent.border}" 
+            y="${parent.border}" 
+            height="${parent.height - parent.border * 2}" 
+            width="${parent.width - parent.vscrollwidth - parent.border*2}"
+            scrollevents="true">
+            <!-- Supplied by lztext now
+                attribute name="lineheight"
+                       value="${this.getTextHeight()/this.getMaxScroll()}"/-->
+            <attribute name="maxtextheight"
+                       value="${this.lineheight * this.maxscroll}"/>
+            <attribute name="maxheight" 
+                       value="${this.height + this.maxtextheight}"/>
+            <attribute name="pos" value="0" type="number"/>
+            
+            <setter name="pos" args="p">
+                if (this.inited) {
+                    var scroll = 1 - Math.floor(p / this.lineheight);
+                    if (scroll !== this.scroll) {
+                        this.setAttribute('scroll', scroll);
+                        //Debug.info('pos', p, this.scroll)
+                    }
+                    this.pos = p;
+                    if (this.onpos) this.onpos.sendEvent(p);
+                }
+            </setter>
+            
+            <handler name="onscroll" args="IGNORE_THIS_ARG">
+                this.setAttribute('pos', -this.lineheight * (this.scroll - 1));
+            </handler>
+        </_newinternalinputtext>
+
+        <!--- Width to give for scrollbar
+              @keywords private -->
+        <attribute name="vscrollwidth" value="0"/>
+        
+        <method name="setvscrollwidthfromvisibility" args="v">
+            this.setAttribute("vscrollwidth", (v ? this._vs.width : 0));
+        </method>
+        
+<!--
+        <vscrollbar name="_vs" axis="y" scrollattr="pos"
+            scrolltarget="parent.inp"
+            x="${parent.width - this.width - parent.border + 1}" 
+            stepsize="${parent.inp.lineheight}" 
+            scrollmax="${parent.inp.scrollheight}">
+        </vscrollbar>
+-->
+
+        <!--- Name of class to instantiate for vertical scroll bar.
+              @keywords public -->
+        <attribute name="vscrollbarclassname" type="string" value="vscrollbar"/>
+        
+        <!--- Our vertical scrollbar
+              @keywords private -->
+        <attribute name="_vs" value="null"/>
+        
+        <!--- @keywords private -->
+        <method name="ensurevscrollbar">
+            if (this['_vs'] == null) {
+                var classname = this.vscrollbarclassname;
+                if (classname == "") {
+                    classname = "vscrollbar";
+                }
+                if ($debug) {
+                    if (typeof(lz[classname]) == "undefined") {
+                        Debug.warn("scrollbarclassname undefined", this);
+                    }
+                }
+                if(typeof(lz[classname]) != "undefined"){
+                    this._vs = new lz[classname](this, 
+                                                 { axis: "y",
+                                                   scrollattr: "pos",
+                                                   scrollmax: "0",
+                                                   scrolltarget: this.inp});
+                                                   
+                    var xDel = new lz.Delegate(this, 'updateX');
+                    xDel.register(this['_vs'], 'onwidth');
+                    xDel.register(this, 'onwidth');
+                    xDel.register(this, 'onborder');
+                    
+                    new lz.Delegate(this, 'updateScrollMax', this.inp, 'onscrollheight');
+                    new lz.Delegate(this, 'updateStepSize', this.inp, 'onlineheight');
+                    // call once manually
+                    this.updateX();
+                    this.updateStepSize();
+                }
+
+            }
+        </method>
+        
+        <method name="updateX" args="IGNORE_THIS_ARG = null">
+            if(this['_vs']){
+                this._vs.setAttribute("x", this.width - this._vs.width );
+            }
+        </method>
+        
+        <method name="updateStepSize" args="IGNORE_THIS_ARG = null">
+            if(this['_vs']){
+                this._vs.setAttribute("stepsize", this.inp.lineheight);
+            }
+        </method>
+        
+        <method name="updateScrollMax" args="IGNORE_THIS_ARG = null">
+            if(this['_vs']){
+                this._vs.setAttribute("scrollmax", this.inp.scrollheight);
+            }
+        </method>
+        
+        <method name="init">
+            super.init();
+            this.ensurevscrollbar();
+            setvscrollwidthfromvisibility(this['_vs'] ? this._vs.visible : false);
+            this.myDel = new lz.Delegate(this, "setvscrollwidthfromvisibility", this['_vs'], "onvisible");
+        </method>
+
+ <!--- Overrides a parent method which calculates y position for text
+            in a way that doesn't make sense for this class. We just trap the 
+            call and do nothing. This field is positioned in y by the constraint
+            y=${parent.border}
+            Note: although this method is a no-op, it still has to be declared,
+            so the parent class's method does not get called on instances of 
+            this class. 
+        -->
+        <method name="_placeTextY">
+        </method>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

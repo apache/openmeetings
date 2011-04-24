@@ -1,0 +1,319 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2010 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+<library>
+
+<class name="rte" extends="html" scrollbars="false">
+    <doc>
+      <tag name="shortdesc"><text>Adds the capability to edit rich-text pages.</text></tag>
+      <text>
+        <p><tagname>rte</tagname> is a <sgmltag class="element"
+role="html">&lt;html&gt;</sgmltag> that allows editing of rich-text pages.
+The rte component uses the dijit.Editor from the dojo toolkit.</p>
+        
+        <p>For best results in Flash (like the html component), set the wmode attribute to 'transparent' when embedding the application.  See examples/extensions/html-swf.jsp for an example.  See examples/extensions/rte.lzx for an example of embedding <tagname>rte</tagname> in a window.</p>
+        
+        <example><programlisting class="code"> &lt;canvas height="400"&gt;
+    &lt;include href="extensions/rte.lzx"/&gt;
+
+    &lt;rte width="600" height="400"&gt;Initial contents that you can edit.&lt;/rte&gt;
+    &lt;/canvas&gt;
+        </programlisting></example>
+                
+        <p><classname>rte</classname> extends <sgmltag class="element"
+role="html">&lt;html&gt;</sgmltag>.</p>
+      </text>
+    </doc>
+
+ 
+    <!--- The ontext event is generated whenever the rte text content changes. -->
+    <event name="ontext"/>
+
+    <!--- The oneditor event is generated whenever the rte editor is completely loaded. -->
+    <event name="oneditorready"/>
+
+    <!--- dijit.Editor toolbar order. The list of items to show in the editor
+          toolbar. The default is to show all toolbar features.
+          A '|' inserts a separator between blocks of toolbars. 
+          A '||' will force a linebreak in the toolbar.
+          @initarg String
+          @access public
+    -->
+    <attribute name="toolbar_order" type="string" value="undo,redo,|,cut,copy,paste,|,bold,italic,underline,strikethrough,|,insertOrderedList,insertUnorderedList,indent,outdent,|,justifyLeft,justifyRight,justifyCenter,justifyFull,|,foreColor,hiliteColor,|,createLink,unlink,insertImage,|,print,smiley,||,fontName,fontSize"/>
+
+    <!--- Comma-separated list of additional dijit.Editor plugins to load.
+          An empty string (default) will load only the plugins used by default.
+          @initarg String
+          @access public
+    -->
+    <attribute name="extra_plugins" type="string" value=""/>
+
+
+    <!--- root url where Dojo library is loaded. An empty string (default)
+          will load the library from Google. This path must end with a '/'.
+          For example, if you have a local version located at /trunk, 
+          you would specify something like '/trunk/dojo-release-1.5.0/'.
+          @initarg String
+          @access public
+    -->
+    <attribute name="dojo_root" type="string" value=""/>
+
+    <!--- dojo theme to use. Default value is 'tundra'
+          Other values in dojo 1.5 are soria, nihilo, claro
+          @initarg String
+          @access public
+    -->
+    <attribute name="dojo_theme" type="string" value="tundra"/>
+
+    <!--- dojo locale to use. Default value is '' which will use the
+          locale from the browser.
+          @initarg String
+          @access public
+    -->
+    <attribute name="dojo_locale" type="string" value=""/>
+
+    <!--- Dojo library to load (relative to dojo_root). This value is
+          ignored if dojo_root is empty. Default value is 'dojo/dojo.js'.
+          If you want to load an uncompressed version of dojo, specify
+          'dojo/dojo.js.uncompressed.js'
+          @initarg String
+          @access public
+    -->
+    <attribute name="dojo_js" type="string" value="dojo/dojo.js"/>
+
+    <!--- Dojo stylesheet root (relative to dojo_root). This value is
+          ignored if dojo_root is empty. Default value is 'dijit/themes/'
+          @initarg String
+          @access public
+    -->
+    <attribute name="dojo_css" type="string" value="dijit/themes/"/>
+
+    <!--- Location of the html wrapper file used by the editor.
+          An empty string (default) loads the system wrapper file.
+          If a custom wrapper file is used, the path is relative to where
+          the application runs from.
+          @initarg String
+          @access public
+    -->
+    <attribute name="wrapperfile" type="string" value=""/>
+
+
+    <!--- The initial value of the text to edit. The text is updated while
+          the rte is running.
+          @type html
+          @access public
+    -->
+    <attribute name="text" type="html"/>
+
+    <!--- @access private -->
+    <setter name="text" args="t">
+        this.text = t;
+        // This can fire before the object is ready
+        if (this.editorready) {
+          this.callJavascript('lz.rte.manager.setText', null, t);
+        }
+    </setter>
+
+
+    <!---
+        Set the edit text (html). If the rte editor is running, the html in the
+        editor is changed.
+        @param String html: Replaces the edit text with the specified html.
+    -->
+    <method name="setText" args="html">
+        this.$lzc$set_text(html)
+    </method>
+
+    <!--- 
+        Returns the html string displayed in this editor. getText() gets the value from the editor and can contain information that is not yet reflected in the text attribute.
+        @param LzDelegate delegate: An LzDelegate which will be called with the editor contents.
+    -->
+    <method name="getText" args="delegate">
+        this.callJavascript('lz.rte.manager.getText', delegate);
+    </method>
+
+    <!--- If true, the rte editor is ready to receive commands
+          @type Boolean
+          @access public
+          @keywords readonly
+    -->
+    <attribute name="editorready" value="false"/>
+
+    <!---
+        Insert the specified html in the editor.
+        @param String html: html to insert at the insertion point.
+    -->
+    <method name="insertHtml" args="html">
+        this.callJavascript('lz.rte.manager.insertHtml', null, html);
+    </method>
+
+    <!---
+        Execute an editor command. The argument is ignored for commands that
+        do not take an argument. This allows lzx code to emulate an editor
+        plugin.
+        @param String cmd: Command to execute (Example: 'bold')
+        @param String arg: Argument required for certain commands.
+    -->
+    <method name="execCommand" args="cmd, arg=''">
+        this.callJavascript('lz.rte.manager.execCommand', null, cmd, arg);
+    </method>
+
+
+    <!--- @keywords private -->
+    <method name="construct" args="parent, args">  <![CDATA[
+        super.construct( parent, args );
+        this.button_mapping = new LzInheritedHash()
+        ]]>
+    </method>
+
+    <!---
+        Adds a button(or image button) above the rte with the specified
+        text and attributes.
+        @param Object attributes: attributes suitable for the html <input/> tag. If the src attribute is used to point to an image, the path is relative to where the application is loaded from.
+        @param LzDelegate delegate: An LzDelegate which will be called with the user clicks on the text button.
+        @return String: unique button id
+    -->
+    <method name="addButton" args="attributes, delegate">   <![CDATA[
+        // Fix up relative paths. They are specified relative to where the
+        // application is stored but this won't work in the iframe.
+        for (var attr in attributes) {
+            if (attr == 'src') {
+                var src = attributes[attr];
+                if (src.length > 0 && !(src.indexOf('http') > -1 || src.charAt(0) == '/')) {
+                    // Relative path
+                    src = lz.Browser.getLoadURLAsLzURL().path + src;
+                    attributes[attr] = src;
+                }
+            }
+        }
+
+        // Add tooltips if they weren't specified in the attributes.
+        // Depending on browser, the tooltip is 'alt' or 'title'. If both are
+        // missing, use the value of the element
+        var value = null;
+        if ('value' in attributes)
+            value = attributes['value'];
+        if ('alt' in attributes)       
+            value = attributes['alt'];
+        if ('title' in attributes)       
+            value = attributes['title'];
+        if (value) {
+            if (!('alt' in attributes))
+                attributes['alt'] = value;
+            if (!('title' in attributes))
+                attributes['title'] = value;
+        }
+
+        var id = this.callJavascript ('lz.rte.manager.addButton', null, attributes);
+        this.button_mapping[id] = delegate;
+        return id;
+        ]]>
+    </method>
+
+    <!--- @access private -->
+    <handler name="onbuttonclick" args="id">
+        // One of the user buttons was clicked
+        var handler = this.button_mapping[id];
+        if (handler)
+            handler.execute (id);
+    </handler>
+
+    <!--- @access private -->
+    <handler name="onload"><![CDATA[
+        // Change where dojo is found (if necessary)
+        if (this.dojo_root.length > 0) {
+            this.callJavascript('lz.rte.manager.setDojoPath', null, this.dojo_root, this.dojo_js, this.dojo_css);
+        }
+
+        // Set the locale
+        if (this.dojo_locale.length > 0)
+            this.callJavascript('lz.rte.manager.setDojoLocale', null, this.dojo_locale);
+
+        // Set the theme
+        if (this.dojo_theme.length > 0)
+            this.callJavascript('lz.rte.manager.setDojoTheme', null, this.dojo_theme);
+
+        // Set the extra plugins
+        if (this.extra_plugins.length > 0)
+            this.callJavascript('lz.rte.manager.setExtraPlugins', null, this.extra_plugins);
+
+        // Set the plugin list
+        if (this.toolbar_order.length > 0)
+            this.callJavascript('lz.rte.manager.setPlugins', null, this.toolbar_order);
+
+        // Create and start the editor
+        this.callJavascript('lz.rte.manager.create', null, 'rte', this.iframeid);
+        this.callJavascript('lz.rte.manager.rte_start', null, this.text);
+    ]]></handler>
+
+    <!--- @access private -->
+    <event name="on_rte_loaded"/>
+
+    <!--- @access private -->
+    <event name="on_editorready"/>
+
+    <!--- @access private -->
+    <event name="on_text"/>
+
+    <!--- @access private -->
+    <handler name="on_editorready">
+        // The editor is ready. 
+        this.editorready = true;
+
+        // Any settext calls are ignored until this point. Display the current html text.
+        if (this.text)
+            this.setAttribute('text', this.text);
+
+        // Fire any oneditorready events
+        if (this.oneditorready.ready) this.oneditorready.sendEvent(true);
+    </handler>
+
+    <!--- @access private -->
+    <handler name="on_text" args="txt">
+        this.text = txt;
+        if (this.ontext.ready) this.ontext.sendEvent(txt);
+    </handler>
+
+
+    <!--- @access private -->
+    <method name="loadsrc" args="root">
+        var wrapper = root + 'rtewrapper.html';
+        if (this.wrapperfile.length > 0) {
+            wrapper = this.wrapperfile;
+        }
+
+        this.setAttribute('src', wrapper);
+        this.setAttribute('visible', true);
+    </method>
+
+    <!--- @access private -->
+    <handler name="oninit">  <![CDATA[
+        // Get the server root.
+        // Use a callback because the object may not be ready yet
+        var obj = this;
+        lz.Browser.callJS('lz.embed.getServerRoot', function(root) { obj.loadsrc(root);});
+      ]]>
+    </handler>
+        
+
+    <!--- @keywords private -->
+    <method name="destroy_callback" args="txt"><![CDATA[
+        if (txt != this.text)
+            this.ontext.sendEvent(txt);
+
+        if (this['iframeid']) {
+            this.callJavascript('lz.rte.manager.__destroy', null, this.iframeid);
+        }
+
+        super.destroy();
+    ]]></method> 
+
+    <!--- @keywords private -->
+    <method name="destroy" ><![CDATA[
+        this.getText(new LzDelegate(this, 'destroy_callback'));
+    ]]></method> 
+
+</class>
+</library>

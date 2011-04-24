@@ -1,0 +1,704 @@
+<library>
+    <include href="base/basedatepickerweek.lzx"/> 
+    <include href="base/basecomponent.lzx"/> 
+
+    <!-- dataset which contains the string representations of the months -->
+    <dataset name="datepicker_strings_en">
+        <months>
+            <month index="0" full="January" abr="Jan"/>  
+            <month index="1" full="February" abr="Feb"/>  
+            <month index="2" full="March" abr="Mar"/>  
+            <month index="3" full="April" abr="Apr"/>  
+            <month index="4" full="May" abr="May"/>  
+            <month index="5" full="June" abr="Jun"/>  
+            <month index="6" full="July" abr="Jul"/>  
+            <month index="7" full="August" abr="Aug"/>  
+            <month index="8" full="September" abr="Sep"/>  
+            <month index="9" full="October" abr="Oct"/>  
+            <month index="10" full="November" abr="Nov"/>  
+            <month index="11" full="December" abr="Dec"/>  
+        </months>
+    </dataset> 
+
+
+
+
+
+
+    <!--- Abstract class for the datepicker.  The basedatepicker class
+          shows the days of the week in a typical month based layout.  Extend
+          this class to create a full featured UI of a datepicker, or just use
+          the datepicker component.
+    --> 
+    <class name="basedatepicker" 
+           extends="basecomponent">
+
+
+
+        <!--- An array containing the number of days in each month. This is used 
+              by the method getNumberOfDaysInMonth, which also calculates the
+              number of days in February, depending on the year.  
+              @keywords private
+        -->
+        <attribute name="daysinmonth" value="[ 31, 
+                                               28, 
+                                               31, 
+                                               30, 
+                                               31, 
+                                               30,
+                                               31,
+                                               31,
+                                               30,
+                                               31,
+                                               30,
+                                               31 ]"/> 
+
+        <!--- The datepickerday which has been selected. 
+              @keywords public  
+           --> 
+        <attribute name="selecteddatepickerday" value="null"/> 
+
+        <!--- The weekclass to use for this basedatepicker 
+              @keywords public 
+        --> 
+        <attribute name="weekclass" when="once"/> 
+
+        <!--- The dayclass to use for this basedatepicker 
+              @keywords public 
+        --> 
+        <attribute name="dayclass" when="once"/> 
+
+        <!--- The number if pixels from this.x to show the datepicker days 
+              @keywords public 
+        --> 
+        <attribute name="xinset" type="number" value="null"/>
+
+        <!--- The number if pixels from this.y to show the datepicker days 
+              @keywords public 
+        --> 
+        <attribute name="yinset" type="number" value="null"/> 
+
+        <!--- Stores the day that currently has focus
+              _focusDay[0] is the week that contains the focused day
+              _focusDay[1] is the day of the week that contains the focused  
+              @keywords private --> 
+        <attribute name="_focusDay" value="null"/>
+
+        <!--- The month that is currently showing in the datepicker.
+              @keywords public
+        -->
+        <attribute name="showingmonth" type="number" value="null"/>
+
+        <!--- The year that is currently showing in the datepicker.
+              @keywords public
+        --> 
+        <attribute name="showingyear" type="number" value="null"/> 
+
+        <!--- A Date object which represents the month to be shown. 
+              @keywords public 
+        -->
+        <attribute name="showingdate" value="null" type="expression"/> 
+
+        <!--- The latest date that is selectable. 
+              @keywords public -->
+        <attribute name="latestdate" when="once" value="null"/> 
+
+        <!--- The earliest date that is selectable. 
+              @keywords public --> 
+        <attribute name="earliestdate" when="once" value="null"/>
+
+        <!--- The Date that is currently selected.
+              @keywords public -->
+        <attribute name="selecteddate" when="once" value="null"/> 
+
+        <!--- @keywords private -->
+        <attribute name="_basedatepicker_inited" type="boolean" value="false"/>
+
+        <!--- @keywords private -->
+        <attribute name="_ignoreKeyUp" type="boolean" value="false"/> 
+
+        <method name="init">
+            <![CDATA[ 
+            super.init();
+
+            var todaysDate = new Date();
+
+            if( this.showingdate == null ) { 
+                this.showingdate = new Date(); 
+                this.showingdate.setDate(1);
+            } 
+
+            if( this.earliestdate == null ) {
+                this.earliestdate = new Date();
+            }
+
+            if( this.latestdate == null ) {
+                this.latestdate = new Date();
+                this.latestdate.setFullYear(this.latestdate.getFullYear() + 1);
+            }
+
+            if( this.xinset == null ) { 
+                this.xinset = 0;
+            }
+
+            if( this.yinset == null ) { 
+                this.yinset = 0;
+            }
+
+
+            //this.showingmonth = this.showingdate.getMonth();
+            //this.showingyear = this.showingdate.getFullYear(); 
+
+            for( var i = 0 ; i < 6 ; i++ ) {
+                var w = new weekclass(this.content, { dayclass : dayclass } );  
+            } 
+  
+            this.content.bringToFront(); 
+
+            this.setMonthToShow( this.showingdate.getMonth(),
+                                  this.showingdate.getFullYear() );
+            this._basedatepicker_inited = true;
+            ]]>
+        </method>
+
+        <!--- Sets the currently selected basedatepickerday.  If a previous
+              basedatepickerday was selected, it is unselected, and told to 
+              become unselected
+              @keywords public -->
+        <method name="setSelecteddatepickerday" args="d">
+        <![CDATA[ 
+            if( this.selecteddatepickerday != null &&
+                 d != this.selecteddatepickerday ) {
+                this.selecteddatepickerday.setAttribute('selected',false );
+            }
+
+            this.selecteddatepickerday = d;
+
+            //only set a new selected date if it has changed or wasn't yet set
+            var seldate = this.selecteddate;
+            if( seldate == null || 
+                    (seldate.getDate() != d.daynum ||
+                     seldate.getFullYear() != this.showingyear ||
+                     seldate.getMonth() != this.showingmonth) ) { 
+                this.setAttribute('selecteddate', new Date( this.showingyear,
+                                                            this.showingmonth,
+                                                            d.daynum ) );
+            }
+        ]]>
+        </method>
+
+
+        <!--- Sets day number that the first day of the month should have, 
+              and all subsequent days. Days that are less than 1 or are larger
+              than max  will not be selectable or shown.  This method assumes 
+              that this.showingmonth and this.showingyear are current.
+              @param d: The day of the month to start with.  Negative numbers are
+              ok.
+              @param max: The max number of day to show.  This is the number 
+                          of days in the current month.  
+              @keywords public
+        -->
+        <method name="setStartingDay" args="d,max">
+            <![CDATA[ 
+            var cd = 1 - d; 
+            var earlydate = -10; 
+            var latedate = 40; 
+            var selectedDateOfMonth = -100;
+
+            // make sure currently selecteddate is marked as such if needed
+            if( this.selecteddate != null && 
+                this.selecteddate.getMonth() == this.showingmonth &&
+                this.selecteddate.getFullYear() == this.showingyear ) { 
+                selectedDateOfMonth = this.selecteddate.getDate();
+            } else { //if selecteddate isn't in this month, clear
+            if( this.selecteddatepickerday != null) {
+                this.selecteddatepickerday.setAttribute('selected', false );
+            }
+                this.selecteddatepickerday = null;
+            } 
+
+            if( earliestdate.getFullYear() == this.showingyear &&
+                earliestdate.getMonth() == this.showingmonth ) {
+                earlydate = earliestdate.getDate();
+            } else if (
+               (earliestdate.getFullYear() == this.showingyear &&
+                earliestdate.getMonth() < this.showingmonth ) ||
+                earliestdate.getFullYear() < this.showingyear ) {
+                earlydate = 1;
+            } else {
+                earlydate = 40;
+            }
+
+            if ( latestdate.getFullYear() == this.showingyear &&
+                 latestdate.getMonth() == this.showingmonth ) {
+                latedate = latestdate.getDate();
+            } else if (
+               (latestdate.getFullYear() == this.showingyear &&
+                latestdate.getMonth() > this.showingmonth ) ||
+                latestdate.getFullYear() > this.showingyear) {
+                latedate = 40;
+            } else {
+                latedate = -10;
+            }
+
+            for( var i = 0 ; i < content.subviews.length ; i++ ) { 
+                var w = content.subviews[i]; 
+                w.setStartingDay( cd, 
+                                  max, 
+                                  earlydate, 
+                                  latedate ); 
+                //set basepickerday as selected 
+                if( cd <= selectedDateOfMonth && 
+                      (cd + 7) >= selectedDateOfMonth ) {
+                    
+                    var bpd = selectedDateOfMonth - cd; 
+                    if (content && content.subviews && content.subviews[i] && content.subviews[i].subviews && content.subviews[i].subviews[bpd]) {
+                        content.subviews[i].subviews[ bpd ].setAttribute(
+                                                            'selected', true );
+                    }
+                                                      
+                }
+
+                cd+=7;
+            }
+            ]]>
+        </method>
+
+    
+        <!--- Set the month to show in the basedatepicker.  
+              @param newMonth: The month of the year to show
+              @param newYear: The year of the month to show 
+              @keywords public --> 
+        <method name="setMonthToShow" args="newMonth,newYear"> 
+        <![CDATA[ 
+            // if we are trying to show the same month again OR
+            // null args have been passed and the component isn't being inited, 
+            // return 
+            if(  this._basedatepicker_inited && (   
+                     (newYear == null || newMonth == null) || 
+                        ( this.showingmonth == newMonth 
+                            && this.showingyear == newYear )  
+                                                )
+              ) 
+             { 
+                return;
+            } 
+            
+            var newDate = new Date( newYear, newMonth, 1 ); 
+
+            this.showingmonth =  newMonth;  
+            this.showingyear =  newYear ; 
+
+            this.setStartingDay( newDate.getDay(),
+                                 getNumberOfDaysInMonth(newMonth,newYear)); 
+        ]]>        
+        </method> 
+
+ 
+
+        <!--- Returns the number of days in a given month.
+              @param month: The month that you want to get the number of days
+                            for.
+              @param year: The year of the month that you want to get the number
+                           of days for.
+              @keywords public -->
+        <method name="getNumberOfDaysInMonth" args="month,year"> 
+            <![CDATA[ 
+            var returnValue;
+
+            if( month == 1 ) {
+                if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))  {
+                    returnValue = 29;
+                } else {
+                    returnValue = 28;
+                }
+            } else { 
+                returnValue = this.daysinmonth[ month ];
+            } 
+           
+            return returnValue; 
+            ]]>
+        </method> 
+
+        <!--- This method is called when a key goes up from the basedatepicker
+              @param k: The key that went up -->
+        <method name="handleKeyUp" args="k"> 
+            if( !this._ignoreKeyUp ) {  
+               
+                if( k == 13 ) { 
+                    content.subviews[this._focusDay[0]].subviews[this._focusDay[1]].buttonrelease(); 
+                }
+            } else { 
+                this._ignoreKeyUp = false; 
+            }
+        </method>
+
+
+        <!--- This method is called when a key goes down from the basedatepicker
+              @param k: The key that went down --> 
+        <method name="handleKeyDown" args="k"> 
+            
+                    if( k == 37 ) {
+                        this.focusPreviousDay();
+                    } 
+                    else if ( k == 38 ) {
+                        this.focusPreviousWeek();
+                    } 
+                    else if ( k == 39 ) {
+                        this.focusNextDay();
+                    } 
+                    else if ( k == 40 ) {
+                        this.focusNextWeek();
+                    } else if ( k == 13 ) {
+                        this.selectFocusDay();
+                        content.subviews[this._focusDay[0]].subviews[this._focusDay[1]].buttonpush();
+                    }
+           
+        </method> 
+
+        <!--- Notify the first day of the month that it has recieved focus. 
+              @keywords public -->
+        <method name="focusOnFirstDayInMonth">
+            var focusDay =  content.subviews[0].getFirstDayInMonth(); 
+            this.focusOnDay( 0, focusDay );
+          
+            return [ 0, focusDay ];
+        </method>
+
+        <!--- Notify the last day of the month that it has recieved focus. 
+              @keywords public --> 
+        <method name="focusOnLastDayInMonth">
+            var ld = this.getLastDayInMonth();        
+
+            this.focusOnDay( ld[0], ld[1] );
+        </method> 
+
+        <!--- Select the day that has focus
+              @keywords public -->
+        <method name="selectFocusDay">
+            this.content.subviews[ 
+                       this._focusDay[0] ].subviews[ this._focusDay[1]
+                       ].setAttribute('selected', true );
+        </method>
+
+        <!--- Finds out if a given day for a given week is selected.
+              @param week: The week in the month that contains the day to check. 
+                           Valid values are 0-5
+              @param day: The day in the given week to check.  Valid values are
+                          0-6
+              @return boolean: true if the given day is disabled, else false 
+              @keywords public --> 
+        <method name="isDayDisabled" args="week,day">
+            return this.content.subviews[week].subviews[day].disabled;
+        </method>
+
+
+
+
+        <!--- Set the focus on the given day 
+              @param week: The week that contains the day to set focus to. Valid 
+                           values are 0-5 
+              @param day: The day in the given week to set foocus to.  
+                          Valid values are 0-6
+              @keywords public --> 
+        <method name="focusOnDay" args="week,day"> 
+
+            if( this._focusDay != null ) {
+                if( !content.subviews[ week ].subviews[day].selectable ) {
+                    return;
+                } else {
+                    this.removeFocusFromDay( this._focusDay[0], this._focusDay[1] );
+                }
+            } 
+            content.subviews[ week ].focusOnDay(day);
+            this._focusDay = [ week, day ];
+        </method>
+
+        <!--- Remove the focus from a day
+              @param week: The week that contains the day to remove focus from. 
+                           Valid values are 0-5 
+              @param day: The day in the given week to remove foocus from.  
+                          Valid values are 0-6
+              @keywords public --> 
+        <method name="removeFocusFromDay" args="week,day"> 
+            this.content.subviews[ week ].removeFocusFromDay(day);
+        </method>
+
+        <!--- Focus on the day previous to the currently focused day
+              @keywords private -->
+        <method name="focusPreviousDay"> 
+            if( this.content.subviews[ this._focusDay[0] ].isFirstDayInMonth( this._focusDay[1] ) ) { 
+                this.showPreviousMonth();
+                this.focusOnLastDayInMonth(); 
+            } else { 
+                if( this._focusDay[1] == 0 ) { //is this the first 
+                                               //week of the month?  
+                    this.focusOnDay( this._focusDay[0] - 1, 6 ); 
+                } else {
+                    this.focusOnDay( this._focusDay[0], this._focusDay[1] - 1 ); 
+                } 
+            }
+        </method>
+
+        <!--- Focus on the day after the currently focused day
+              @keywords private --> 
+        <method name="focusNextDay"> 
+        <![CDATA[ 
+            if( content.subviews[ this._focusDay[0] ].isLastDayInMonth(this._focusDay[1]) ) {
+                this.showNextMonth();
+                this.focusOnFirstDayInMonth();
+            } else { 
+                if( this._focusDay[1] < 6 ) {
+                    this.focusOnDay( this._focusDay[0], this._focusDay[1] + 1 ); 
+                } else {
+                    this.focusOnDay( this._focusDay[0] + 1, 0 ); 
+                }
+            }
+        ]]> 
+        </method>
+
+        <!--- Focus on the day that is exactly one week from the currently
+              focused day 
+              @keywords private  -->
+        <method name="focusNextWeek"> 
+            if( this.isLastWeekInMonth( this._focusDay[0] ) ) { 
+                this.showNextMonth(); 
+                this.focusOnFirstDayInMonth();
+            }
+            else {
+                if( this.isDayDisabled( this._focusDay[0] + 1 , this._focusDay[1] ) ) {
+                    this.focusOnLastDayInMonth();
+                } else {
+                    this.focusOnDay( this._focusDay[0] + 1, this._focusDay[1]  ); 
+                }
+            }
+        </method>
+
+        <!--- Focus on the day that is exactly one week prior to the currently
+              focused day 
+              @keywords private  --> 
+        <method name="focusPreviousWeek"> 
+
+            if( this._focusDay[0] == 0 ) { 
+                this.showPreviousMonth();
+                this.focusOnLastDayInMonth();
+            } else {
+                if( this.isDayDisabled( this._focusDay[0] - 1, this._focusDay[1] ) ) {
+                    this.focusOnFirstDayInMonth();
+                } else {
+                    this.focusOnDay( this._focusDay[0] - 1, this._focusDay[1]  ); 
+                }
+            }
+        </method>
+
+
+        <!--- Show the next month in the datepicker 
+              @keywords public -->   
+        <method name="showNextMonth"> 
+            if( this.showingmonth == 11 ) { 
+                var newYear = Number(this.showingyear) + 1;
+                this.setMonthToShow( 0, newYear );     
+            } else { 
+                var newMonth = Number( this.showingmonth ) + 1;
+                this.setMonthToShow( newMonth, this.showingyear ); 
+                this.focusOnFirstDayInMonth(); 
+            }
+        </method>
+
+        <!--- Show the previous month in the datepicker 
+              @keywords public -->   
+        <method name="showPreviousMonth">
+
+            if( this.showingmonth == 0 ) { 
+                this.setMonthToShow( 11, this.showingyear - 1 );     
+            } else {
+                this.setMonthToShow( this.showingmonth - 1, this.showingyear ); 
+            } 
+        </method> 
+
+        <!--- Determines if the given week is the last week in the month 
+              @param w: The week to check 
+              @keywords public --> 
+        <method name="isLastWeekInMonth" args="w">
+            var returnValue;
+
+            if( content.subviews[w].subviews[6].disabled ||
+                content.subviews[w].subviews[6].daynum == 
+                this.getNumberOfDaysInMonth( this.showingmonth,
+                                             this.showingyear ) )  {
+                returnValue = true;
+            } else {
+                returnValue = false;
+            }
+            return returnValue;
+        </method>
+        
+
+        <!--- @keywords private --> 
+        <method name="getLastDayInMonth">
+            var returnValue;
+
+            for( var i = 5 ; i >= 0 ; i-- ) {
+                var cur = this.content.subviews[i].getLastDayInMonth();
+                if( cur != -1 ) {
+                    returnValue = [ i, cur ];
+                    break;
+                }
+            }
+
+            return returnValue;
+        </method> 
+
+        <handler name="onshowingmonth"> 
+            this.showingdate.setMonth( this.showingmonth ); 
+        </handler>
+
+        <handler name="onshowingyear"> 
+            this.showingdate.setYear( this.showingyear );
+        </handler> 
+ 
+        <handler name="onkeydown" reference="lz.Keys" args="k">
+            if ( content.hasfocus ) {
+                this.handleKeyDown(k);
+            }
+        </handler>
+
+        <handler name="onkeyup" reference="lz.Keys" args="k">
+            if ( content.hasfocus ) {
+                this.handleKeyUp(k);
+            }
+        </handler> 
+
+        <handler name="onblur" reference="this.content">
+            this.removeFocusFromDay( this._focusDay[0], this._focusDay[1] );
+        </handler> 
+
+        <handler name="onfocus" reference="this.content"> 
+            if( this._focusDay == null ) {
+                this.focusOnFirstDayInMonth();
+            } else {
+                this.focusOnDay( this._focusDay[0], this._focusDay[1] );
+            }
+        </handler> 
+
+        <!-- This is the view which renders the date picker days -->
+        <view name="content"
+              x="${classroot.xinset}"
+              y="${classroot.yinset}"
+              focusable="true">
+            <attribute name="hasfocus" type="boolean" value="false"/> 
+
+            <handler name="onfocus"> 
+                this.hasfocus = true;
+            </handler>
+
+            <handler name="onblur"> 
+                this.hasfocus = false;
+            </handler>
+           
+        </view> 
+        <doc>
+          <tag name="shortdesc"><text>An abstract date picker.</text></tag>
+          <text>
+            <p> 
+                Basedatepicker is an abstract class from which you can build a fully
+                functional month-based datepicker from. When creating an implementation of
+                the basedatepicker, it is expected that certain methods from basedatepicker,
+                basedatepickerday and basedatepickerweek will be overridden to provide full
+                functionality of a datepicker.  For datepicker, these methods include
+                doSpaceUp(), doEnterUp(), and optionally setMonthToShow().  See the source code of
+                datepicker for a more extensive example.  See also <xref linkend="lz.basedatepickerday"/> and <xref linkend="lz.basedatepickerweek"/>
+            
+            </p>
+            <example class="program" id="basedatepicker-1">
+            &lt;canvas height="200"&gt; 
+                &lt;class name="myday" 
+                       extends="basedatepickerday" 
+                       bgcolor="green"
+                       width="20"
+                       height="20"&gt;
+                    &lt;handler name="onclick"&gt; 
+                    &lt;![CDATA[
+                        if( !this.disabled  ) {
+                            this.setAttribute('selected', true);    
+                        } 
+                    ]]&gt;
+                    &lt;/handler&gt;
+            
+                    &lt;text text="${parent.daynum}"
+                          visible="${!parent.disabled}" 
+                          opacity="${parent.selectable ? 1 : .3 }"/&gt;       
+                &lt;/class&gt;
+            
+                &lt;class name="myweek" extends="basedatepickerweek"&gt;
+                    &lt;simplelayout axis="x" spacing="1"/&gt; 
+                &lt;/class&gt; 
+                
+                &lt;class name="mydatepicker" 
+                       extends="basedatepicker" 
+                       weekclass="lz.myweek"
+                       dayclass="lz.myday"
+                       xinset="0"
+                       yinset="0"&gt;
+            
+                    &lt;method name="setMonthToShow" args="month, year"&gt;
+                        super.setMonthToShow(month,year);
+                        this.display.month.datapath.setXPath(
+                        "datepicker_strings_en:/months/month[@index='" + month + "']/@full" );
+                        this.display.year.setAttribute('text', year );
+                    &lt;/method&gt;
+            
+                    &lt;handler name="onselecteddate"&gt;
+                        if( this.selecteddate != null ) {
+                            this.selected.year.setAttribute('text', this.selecteddate.getFullYear() );
+                            this.selected.month.datapath.setXPath(
+                                    "datepicker_strings_en:/months/month[@index='" + 
+                                    this.selecteddate.getMonth() + "']/@full" ); 
+                            this.selected.date.setAttribute('text', this.selecteddate.getDate() );
+                        }
+                    &lt;/handler&gt;
+            
+                    &lt;view options="ignorelayout"&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="S"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="M"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="T"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="W"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="T"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="F"/&gt;
+                        &lt;text width="20" height="20" bgcolor="red" text="S"/&gt;
+                        &lt;simplelayout axis="x" spacing="1"/&gt;
+                    &lt;/view&gt; 
+                    &lt;view&gt; 
+                        &lt;button text="previous" onclick="classroot.showPreviousMonth()"/&gt;
+                        &lt;button text="next" onclick="classroot.showNextMonth()"/&gt;
+                        &lt;simplelayout axis="x"/&gt;
+                    &lt;/view&gt;
+                    &lt;view name="display"&gt;
+                        &lt;text&gt; Showing: &lt;/text&gt;
+                        &lt;text name="month" datapath="." resize="true"/&gt;
+                        &lt;text name="year" resize="true"/&gt;
+                        &lt;simplelayout axis="x" spacing="2"/&gt;
+                    &lt;/view&gt;
+                    &lt;view name="selected"&gt;
+                        &lt;text&gt; Selected: &lt;/text&gt;
+                        &lt;text name="month" datapath="." resize="true"/&gt;
+                        &lt;text name="date" resize="true"/&gt;
+                        &lt;text name="year" resize="true"/&gt;
+                        &lt;simplelayout axis="x" spacing="2"/&gt;
+                    &lt;/view&gt; 
+            
+                    &lt;simplelayout axis="y" placement="content" spacing="1" inset="20"/&gt; 
+                    &lt;simplelayout axis="y"/&gt;
+                &lt;/class&gt; 
+                &lt;mydatepicker/&gt; 
+            &lt;/canvas&gt; 
+            </example>
+          </text>
+        </doc>
+    </class> 
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

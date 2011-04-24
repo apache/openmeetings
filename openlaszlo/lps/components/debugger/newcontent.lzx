@@ -1,0 +1,440 @@
+<!--
+ * newcontent.lzx
+
+ **************************************************************************-->
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2007, 2008, 2009, 2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+<library>
+ <!-- Fixed-height font text scrolling. 
+
+       Operates on text view, contentView
+
+     operations are:
+
+     addText(): append text to content pane
+
+     setLine(n): sets display view so that line n is at top of screen
+ 
+     computeNLines: computes number of visible lines based on content view height and font size.
+     Call this when content view changes height. 
+
+     redisplay(): selects n lines, sets contentView''s text content to the visible lines
+
+     -->
+ <resource name="upBtn_rsc">
+   <frame  src="images/buttons/autoPng/upbtn0001.png"/>
+   <frame  src="images/buttons/autoPng/upbtn0002.png"/>
+   <frame  src="images/buttons/autoPng/upbtn0003.png"/>
+ </resource>
+
+ <resource name="downBtn_rsc">
+   <frame src="images/buttons/autoPng/downbtn0001.png"/>
+   <frame src="images/buttons/autoPng/downbtn0002.png"/>
+   <frame src="images/buttons/autoPng/downbtn0003.png"/>
+ </resource>
+
+ <resource name="leftbtn_rsc">
+   <frame  src="images/buttons/autoPng/leftbtn0001.png"/>
+   <frame  src="images/buttons/autoPng/leftbtn0002.png"/>
+   <frame  src="images/buttons/autoPng/leftbtn0003.png"/>
+ </resource>
+
+ <resource name="rightbtn_rsc">
+   <frame  src="images/buttons/autoPng/rightbtn0001.png"/>
+   <frame  src="images/buttons/autoPng/rightbtn0002.png"/>
+   <frame  src="images/buttons/autoPng/rightbtn0003.png"/>
+ </resource>
+
+
+ <resource name="scrollcorner_rsc">
+   <frame  src="images/scrollcorner.swf"/>
+ </resource>
+
+
+ <resource src="images/scrolldraghorz.swf" name="scrolldraghorz_rsc" />
+ <resource src="images/scrolldragright.swf" name="scrolldragright_rsc" />
+ <resource src="images/scrolldragleft.swf" name="scrolldragleft_rsc" />
+ <resource src="images/scrolldragdimpleshorz.swf" name="scrolldragdimpleshorz_rsc" />
+ <resource src="images/scrollstretchhorz.swf" name="scrollstretchhorz_rsc" />
+
+ <resource name="scrollDragDimples_rsc">
+   <frame src="images/scrolldragdimples.swf" />
+   <frame src="images/scrolldragoverdimples.swf" />
+ </resource>
+
+ <resource name="scrollDragTop_rsc">
+    <frame src="images/scrolldragtop.swf" />
+    <frame src="images/scrolldragovertop.swf" />
+ </resource> 
+
+ <resource name="scrollDrag_rsc">
+   <frame src="images/scrolldrag.swf" />
+   <frame src="images/scrolldragover.swf" />
+  </resource>
+
+ <resource name="scrollDragBottom_rsc">
+   <frame src="images/scrolldragbottom.swf"  />
+   <frame src="images/scrolldragoverbottom.swf" />
+ </resource>
+
+
+
+ <resource src="images/scrollstretch.swf" name="scrollStretch_rsc" />
+ <resource src="images/scrolltop.swf" name="scrollTop_rsc" />
+
+
+ <!-- ////////////////// Horizontal Scrollbar /////////////////////////////// -->
+
+<!-- horizontal drag state, used for horizontal scrollbar thumb -->
+ <class name="_dbg_lzhdrag" extends="state">
+        <attribute name="xdoffset" value="this.getMouse( 'x' )" when="once" />
+        <attribute name="x" 
+                value="${this.immediateparent.getMouse( 'x' ) - this.xdoffset}" />
+ </class>
+
+
+<!-- The horizontal scrollbar for the debugger window -->
+<class name="_dbg_horiz_scrollbar" 
+       onmousedown="this.clickInThumbTrackX(this.getMouse( 'x' ))">
+  <!-- These constants ought to be derived automatically from the resources -->
+  <attribute name="arrowbuttonwidth" value="12" />
+  <attribute name="thumbwidth" value="24" />
+
+  <attribute name="autoscroll" type="expression" value="true" />
+
+  <!-- User clicked in the track that the thumb slides in, we need to decide
+       whether to page left (they clicked left of the thumb) or right (they clicked
+       right of  the thumb) -->
+  <method name="clickInThumbTrackX" args="x"> 
+    if (x > (this.dragger.x + this.dragger.width)) {
+        parent.scrollx(-parent.parent.width); 
+    } else {
+        parent.scrollx(parent.parent.width); 
+    }
+    this.adjustDraggerXpos();
+  </method>
+  
+  <method name="scrollLeft" args="n">
+    parent.scrollx(n)
+    this.adjustDraggerXpos();
+  </method>
+  
+  <method name="scrollRight" args="n">
+    parent.scrollx(-n)
+    this.adjustDraggerXpos();
+  </method>
+
+  
+  <stableborderlayout axis="x" />
+  
+  <basebutton resource="leftbtn_rsc" x="-1" 
+              onclick="parent.scrollLeft(32)" />
+  <view resource="scrollstretchhorz_rsc" height="13" 
+        options="releasetolayout" 
+        stretches="both" />
+  <basebutton resource="rightbtn_rsc" 
+              onclick="parent.scrollRight(32)" />
+  
+  <view name="dragger" width="${parent.thumbwidth}" x="12"
+        onmousedown="this.hdrag.setAttribute('applied', true)"
+        onmouseup="this.hdrag.setAttribute('applied', false)" >
+    
+    <_dbg_lzhdrag name="hdrag" />
+    <stableborderlayout axis="x" />
+    <view name="left" resource="scrolldragleft_rsc" pixellock="true" />
+    <view name="stretch" resource="scrolldraghorz_rsc" 
+          stretches="width" />
+    <view name="right" resource="scrolldragright_rsc" />
+    <view name="dimples"
+          resource="scrolldragdimpleshorz_rsc" options="ignorelayout" 
+          x="6" y="4" />
+    
+    <setter name="x" args="x" > 
+      super.setAttribute('x', Math.max(parent.arrowbuttonwidth-1 , Math.min( x, parent.width - parent.arrowbuttonwidth - 24 )));
+    </setter> 
+    
+    <!-- this gets called every time the x value changes -->
+    <handler name="onx" reference="this"> 
+      if (parent.autoscroll) {
+          this.handleThumbPosX(this.x);
+      }
+    </handler>
+    
+    <method name="handleThumbPosX" args="x" > 
+      var real_scroll_width = (parent.width - (parent.arrowbuttonwidth * 2))  - parent.thumbwidth + 2;
+      // scroll the text window horizontally
+      var hscroll = ((x - parent.arrowbuttonwidth)  / real_scroll_width) * (parent.parent.textpane.width);
+      parent.setAttribute('autoscroll', false);
+      parent.parent.setXScroll(-hscroll);
+      if (!hdrag.applied) { parent.adjustDraggerXpos();  }
+      parent.setAttribute('autoscroll',true);
+    </method> 
+  </view>
+  
+  <method name="adjustDraggerXpos">
+    // disable the constraint between ypos of dragger and text window for a moment
+    this.setAttribute('autoscroll', false);
+    this.dragger.setAttribute('x', this.computeDraggerXPos());
+    this.setAttribute('autoscroll', true);
+  </method>
+  
+  <method name="computeDraggerXPos">
+    // subtract out height of left and right buttons
+    var bw = this.arrowbuttonwidth;
+    var real_scroll_width = (this.width - (bw * 2 + this.thumbwidth)) + 2;
+    var xpos = Math.floor((Math.abs(parent.textpane.x) / (parent.textpane.width)) * real_scroll_width);
+    return (bw -1)  + xpos;
+  </method>
+  
+
+ </class>
+
+<!-- //////////////////////////////////////////////////////////////// -->
+
+
+
+<!-- Vertical drag state for controlling the vertical debugger scrollbar thumb -->
+ <class name="_dbg_lzvdrag" extends="state">
+        <attribute name="ydoffset" value="this.getMouse( 'y' )" when="once" />
+        <attribute name="y" 
+                value="${this.immediateparent.getMouse( 'y' ) - this.ydoffset}" />
+ </class>
+
+<!-- A vertical scrolling text window. This class stores text as an array of single lines,
+     and displays a range of these lines in its text component. This allows arbitrarily long
+     text content to be stored and displayed with a fixed time to scroll and display. 
+-->
+ <class name="_dbg_lztextscroller" clip="true">
+     <!-- If this is true, then automatically adjust the thumb dragger ypos 
+           when we set the text line offset (this.setLine()) -->
+     <attribute name="autoscroll" type="expression" value="true" />
+
+<method name="setWrapLines" args="val">
+        this.textpane.setAttribute("multiline", val);
+        // force update of content
+        this.setAttribute('width', this.width);
+</method>
+
+     <text name="textpane"
+             multiline="false"  
+             selectable="true" 
+             width="${this.multiline ? parent.width - 12 : 4096}"
+             height="${parent.height-11}" clip="true"/>
+            
+     <!-- TODO [hqm 2008-09] sending of the ontextlink event for
+          hyperlinks currently only is implemented in swf9.
+     -->
+     <handler name="ontextlink" args="val:String">
+       // Look for a a string which is "objid=NNNNN"
+       // and use NNNNN as the object ID to display
+       if (val.indexOf("objid=") == 0) {
+           var objid:String = val.substr(6);
+           $modules.lz.Debug.displayObj(Number(objid));
+       }
+     </handler>
+
+     <view name="scrollbar" x="${parent.width-12}" height="${parent.height-11}" bgcolor="#666666"
+              onmousedown="this.clickInThumbTrack(this.getMouse( 'y' ))" >
+
+          <!-- These constants ought to be derived automatically from the resources -->
+          <attribute name="arrowbuttonheight" value="12" />
+          <attribute name="thumbheight" value="24" />
+
+
+          <!-- User clicked in the track that the thumb slides in, we need to decide
+               whether to page up (they clicked above the thumb) or down (they clicked
+               below the thumb) -->
+<method name="clickInThumbTrack" args="y"> 
+              if (y > (this.dragger.y + this.dragger.height)) {
+                 parent.pageDown(); 
+              } else {
+                 parent.pageUp(); 
+              }
+          </method>
+
+        <stableborderlayout axis="y" />
+        <basebutton resource="upBtn_rsc" y="-1" 
+                    onclick="parent.parent.incScroll(-1)" />
+        <view resource="scrollStretch_rsc" 
+              options="releasetolayout" 
+              stretches="height" />
+       <basebutton resource="downBtn_rsc" 
+                   onclick="parent.parent.incScroll(1)" />
+
+       <view name="dragger" height="${parent.thumbheight}" y="12"
+              onmousedown="this.drag.setAttribute('applied', true)"
+              onmouseup="this.drag.setAttribute('applied', false)" 
+              onmouseover="higlight_dragger(2)"
+              onmouseout="higlight_dragger(1)" >
+            <_dbg_lzvdrag name="drag" />
+            <stableborderlayout axis="y" />
+            <view name="top" resource="scrollDragTop_rsc" pixellock="true" />
+            <view name="stretch" resource="scrollDrag_rsc" stretches="height" />
+            <view name="bottom" resource="scrollDragBottom_rsc"  pixellock="true" />
+            <view name="dimples" pixellock="true"
+                   resource="scrollDragDimples_rsc" 
+                   y="6" x="4" />
+
+           <method name="higlight_dragger" args="n">
+              this.stretch.setAttribute('frame', n);
+              this.top.setAttribute('frame', n);
+              this.bottom.setAttribute('frame', n);
+              this.dimples.setAttribute('frame', n)
+           </method>
+
+           <attribute name="_warned" value="false" />
+           <setter name="y" args="y" >
+             var newy = Math.max(parent.arrowbuttonheight-1 , Math.min( y , parent.height - (parent.thumbheight + parent.arrowbuttonheight))); 
+             if ((!this._warned) &amp;&amp; isNaN(newy)) {
+              this._warned = true;
+              Debug.debug("pabh: %w, y: %w, ph: %w, pth: %w",
+                parent.arrowbuttonheight,
+                y,
+                parent.height,
+                parent.thumbheight);
+             } else {
+              super.setAttribute('y', newy);
+             }
+           </setter>
+
+          <!-- this gets called every time the y value changes -->
+          <handler name="ony" reference="this"> 
+              if (parent.parent.autoscroll) {
+                  this.handleThumbPos(this.y);
+              }
+          </handler>
+
+      <!-- force the content pane to scroll to position corresponding to thumb y pos in bar -->
+      <method name="handleThumbPos" args="y" > 
+              <![CDATA[
+                  // scroll the text window
+                     var bh = parent.arrowbuttonheight;
+                     var tpane = classroot.textpane;
+                     var mscroll = tpane.getMaxScroll();
+                     var scroll = tpane.getScroll();
+                     var percent = Math.min(1, Math.max(0, (this.y - bh)  / (parent.height - (bh + bh + parent.thumbheight))));
+                     var line = Math.floor((mscroll-1) * percent) + 1;
+                     this.classroot.setLineNoScroll(line);
+                 ]]>
+           </method> 
+        </view>
+     </view>
+
+    <view name="lower_right_corner" bgcolor="#888888" width="11" height="11"
+      x="${parent.width-11}" y="${parent.height-11}"/>
+
+    <_dbg_horiz_scrollbar name="dhsb" y="${classroot.textpane.height}"  
+                          width="${parent.width - 11}" 
+                          bgcolor="#666666" height="13" />
+
+    <setter name="height" args="h" > 
+       super.setAttribute('height', h);
+       this.updateDisplay();
+    </setter> 
+
+
+<method name="setText" args="str">
+        this.clear();
+        this.addText(str);
+     </method>
+
+<method name="addText" args="str">
+       this.textpane.addText(str);
+       this.updateDisplay();
+     </method>
+
+<method name="clear">
+      this.textpane.clearText();
+      this.setLine(1);
+      this.updateDisplay();
+     </method>
+
+<method name="updateDisplay">
+       // disable the constraint between ypos of dragger and text window for a moment
+       this.setAttribute('autoscroll', false);
+       this.scrollbar.dragger.setAttribute('y', this.computeDraggerYPos());
+       this.setAttribute('autoscroll', true);
+     </method>
+
+
+<method name="setLine" args="n">
+       this.textpane.setAttribute('scroll', n);
+     </method>
+
+<method name="setLineNoScroll" args="n">
+       this.textpane.setAttribute('scroll', n);
+     </method>
+
+<method name="computeVisibleRegion" >
+         // no-op
+     </method>
+
+     <!-- compute what the y pos of the thumb should be based on what text line offset we are
+          displaying now -->
+<method name="computeDraggerYPos">
+       // subtract out height of up and down buttons
+       var bh = this.scrollbar.arrowbuttonheight;
+       var real_scroll_height = (this.scrollbar.height - (bh * 2 + this.scrollbar.thumbheight)) + 2;
+       var tpane = this.textpane;
+       var mscroll = tpane.getMaxScroll();
+       var scroll = tpane.getScroll();
+       var ypos = 0;
+       ypos = Math.floor( ((scroll-1)  / (mscroll-1)) * real_scroll_height);
+       if (isNaN(ypos)) { return 0; }
+       return bh -1  + ypos;
+     </method>
+
+<method name="pageUp" args="n=null">
+         var tpane = this.textpane;
+         tpane.setAttribute('scroll', Math.max(1, tpane.getScroll() - (tpane.getBottomScroll()  - tpane.getScroll())));
+         this.updateDisplay();
+     </method>
+<method name="pageDown" args="n=null">
+         var tpane = this.textpane;
+         tpane.setAttribute('scroll', Math.min(tpane.maxscroll, tpane.getScroll() + (tpane.getBottomScroll()  - tpane.getScroll())));
+         this.updateDisplay();
+     </method>
+
+<method name="incScroll" args="n">
+       var tpane = this.textpane;
+       tpane.setAttribute('scroll', Math.min(tpane.maxscroll, Math.max(1, tpane.getScroll() + n)));
+       this.updateDisplay();
+     </method>
+
+     <!-- incrementally slide the text content area left or right -->
+     <method name="scrollx" args="nx">
+       this.textpane.setAttribute('x', Math.min(0, Math.max(-(this.textpane.width), this.textpane.x + nx)));
+     </method>
+
+     <handler name="onmousewheeldelta" reference="lz.Keys" args="d">
+         // classroot is the debugger window
+         if (classroot.isMouseOver()) {
+             this.incScroll(Math.floor(-d));
+         }
+     </handler>
+
+     <!-- set the x offset of the text output content area -->
+<method name="setXScroll" args="x">
+       this.textpane.setAttribute('x', Math.max (-(this.textpane.width), Math.min( 0, x)));
+     </method>
+
+     <handler name="onmaxscroll" reference="this.textpane">
+       this.setLine(textpane.getMaxScroll());
+       this.updateDisplay();
+     </handler>
+
+<method name="fontheight">
+        return this.textpane.font.height;
+     </method>
+
+<method name="setFontSize" args="size">
+       textpane.setAttribute('fontsize', size);
+     </method>
+
+ </class>
+</library>
+
+         

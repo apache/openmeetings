@@ -1,0 +1,348 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="datatip.lzx"/>
+    <include href="charts/styles/styleparser.lzx"/>
+    <include href="charts/styles/defaultchartstyle.lzx"/>
+    <include href="base/basecomponent.lzx"/>
+    <include href="extensions/drawview.lzx"/>
+    <!---
+        chart is the base class representing a chart. In general,
+        this class is not instantiated directly. A chart contains 
+            at least one dataseries element 
+            at least one axis element 
+        The chart needs to look at its dataseries children and pass 
+        the relevant dataseries to each axis. Relevent dataseries 
+        for the chart must have columns for each of the axes 
+        that the chart cares about.  
+        @access public
+    -->    
+    <class name="chart" extends="basecomponent">
+        <!--- @keywords private -->
+        <datatip name="datatooltip"/>
+        <!--- enable zoom-->
+        <attribute name="zoomEnabled" type="boolean" value="false"/> 
+        <!--- enable data point(data marker) -->
+        <attribute name="dataPointsEnabled" type="boolean" value="false"/>
+        <!--- enable tooltip for data -->
+        <attribute name="datatipEnabled" type="boolean" value="false"/>
+        <!--- data column name of the tooltip -->
+        <attribute name="datatipColumn" type="string" value="" />
+        <!--- data column name of the data label -->
+        <attribute name="datalabelColumn" type="string" value="" />
+        <!--- enable data label -->
+        <attribute name="datalabelEnabled" type="boolean" value="false"/>
+        <!--- @keyword private -->
+        <attribute name="plotarea" type="expression" value="${null}"/>        
+        <!--- enable value lines -->
+        <attribute name="valuelinesenabled" type="boolean" value="true"/>
+        <!--- enable value points -->
+        <attribute name="valuepointsenabled" type="boolean" value="true"/>
+        <!--- enable value region -->
+        <attribute name="valueregionsenabled" type="boolean" value="true"/>        
+        <attribute name="databorderEnabled" type="boolean" value="true" />
+        <!--- @access private -->
+        <attribute name="_datalabelpool" type="string" />
+        <!--- subview have  -->
+        <attribute name="initdone" value="false" type="boolean"/>
+        
+        <!-- Area Margins attributes -->
+        <!--- The blank space bordering the top of the chart area. -->
+        <attribute name="topMargin" type="number" value="10"/>
+        <!--- The blank space bordering the bottom of the chart area. -->
+        <attribute name="bottomMargin" type="number" value="10"/>
+        <!--- The blank space bordering the left side of the chart area. -->
+        <attribute name="leftMargin" type="number" value="10"/>
+        <!--- The blank space bordering the right side of the chart area. -->
+        <attribute name="rightMargin" type="number" value="10"/>
+        <!--- The default blank space bordering the right side of the chart area. -->
+        <attribute name="defaultRightMargin" type="number" value="10"/>
+        <!-- Gaps between components -->
+        <!--- The vertical blank space between components. -->
+        <attribute name="verticalGap" type="number" value="5"/>
+        <!--- The horizontal blank space between components. -->
+        <attribute name="horizontalGap" type="number" value="5"/>
+        <!-- End of Area Margins attributes -->
+
+        <!--- The default style to be applied to the chart. -->
+        <attribute name="defaultstyle" type="expression" value="${defaultchartstyle}"/>
+
+        <!--- @keywords private 
+              Object to render the stroke and the gradient chartBackground-->
+        <drawview name="chartBackground" width="${parent.width}" height="${parent.height}" visible="false"/>
+
+        <!--- @keywords private 
+              Object to render the stroke and the gradient plotareabackground-->
+        <drawview name="plotareabackground"/>
+
+        <handler name="oninitdone">
+            // No style defined.
+            if( this.style.constructor.tagname != "chartstyle" ) {
+                this.style = this.defaultstyle;
+            } else {
+            // Check for a complete style definition.
+                var parser = new lz.styleparser(this, {style:this.style, defaultstyle:this.defaultstyle});
+            this.style = parser.style;
+            }
+        
+            var rootseries = this.getDataSeries();
+            //if(rootseries["datadone"])
+            {
+                this.dataload();                
+            }            
+            new LzDelegate(this,"dataload", rootseries, "ondatadone");                        
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="applyBGStyle" args="s">
+        <![CDATA[
+            this.chartBackground.clear();
+            this.chartBackground.setAttribute( "visible", false );
+
+            this.chartBackground.setAttribute( "lineWidth", s.line.size );
+            this.chartBackground.setAttribute( "strokeStyle", s.line.color );
+            this.chartBackground.globalAlpha = s.line.opacity;
+
+            var lOffset = Math.floor(this.chartBackground.lineWidth / 2);
+
+            this.chartBackground.beginPath();
+            this.chartBackground.lineTo(lOffset, lOffset);
+            this.chartBackground.lineTo(this.width-lOffset, lOffset);
+            this.chartBackground.lineTo(this.width-lOffset, this.height-lOffset);
+            this.chartBackground.lineTo(lOffset, this.height-lOffset);
+            this.chartBackground.lineTo(lOffset, lOffset);
+            this.chartBackground.closePath();
+
+            this.chartBackground.stroke();
+
+            this.chartBackground.setAttribute( "width", this.width );
+            this.chartBackground.setAttribute( "height", this.height );
+
+            if( s.region.gradient != null && s.region.gradient != "none" ) {
+                var g = null;
+
+                if( s.region.gradient == "linear" ) {
+                    g = this.chartBackground.createLinearGradient(0, 0, this.width, this.height);
+                } else if ( s.region.gradient == "radial" ) {
+                    g = this.chartBackground.createRadialGradient(0, 0,
+                                                  .7, this.width, this.height, 0);
+                }
+
+                this.chartBackground.sendToBack();
+
+                if( g != null ) {
+                    this.chartBackground.globalAlpha = 0;
+                    g.addColorStop(0, 0x000000);
+                    this.chartBackground.globalAlpha = 1;
+                    g.addColorStop(1, s.region.color);
+                    this.chartBackground.fillStyle = g;
+                }
+            } else if( s.region.image != null ) {
+                this.chartBackground.setSource( s.region.image );
+                //this.chartBackground.globalAlpha = s.region.opacity;
+                // TODO::The transparency value is being applied to the entire view.
+                // It should be applied only to the image by using globalAlpha (see commented)
+                // line above.
+                this.chartBackground.setAttribute( "opacity", s.region.opacity );
+                this.chartBackground.setAttribute('stretches', both);
+            } else {
+                this.chartBackground.fillStyle = s.region.color;
+                this.chartBackground.globalAlpha = s.region.opacity;
+            }
+
+            lOffset = 2*lOffset;
+
+            this.chartBackground.beginPath();
+            this.chartBackground.lineTo(lOffset, lOffset);
+            this.chartBackground.lineTo(this.width-lOffset, lOffset);
+            this.chartBackground.lineTo(this.width-lOffset, this.height-lOffset);
+            this.chartBackground.lineTo(lOffset, this.height-lOffset);
+            this.chartBackground.lineTo(lOffset, lOffset);
+            this.chartBackground.closePath();
+
+            this.chartBackground.fill();
+            this.chartBackground.setAttribute( "visible", true );
+        ]]>
+        </method>
+
+        <!--- Method that renders the chart. This method is overridden by 
+              class rectangularchart. The class piechart uses it as is. -->
+        <method name="render">
+            this.applyBGStyle( this.style.chartbgstyle );
+            this.renderPlotArea();
+        </method>
+        
+        <!--- @keyword private -->
+        <method name="createLabelViewspool">
+            return new lz.viewspool(this, {parentview:this.plotarea, viewclass:'datalabel'})
+        </method>
+        
+        <!--- @keyword private -->
+        <!-- TBD[ Bret] - what is being drawn here -->
+        <method name="renderPlotArea">
+            this.adjustPlotAreaToLayout();
+
+            //this.plotareabackground.clear();
+
+            // position the plotareabackground view
+            this.plotareabackground.setAttribute( "x", this.plotarea.x );
+            this.plotareabackground.setAttribute( "y", this.plotarea.y );
+            this.plotareabackground.setAttribute( "width", this.plotarea.width );
+            this.plotareabackground.setAttribute( "height", this.plotarea.height );
+
+            // set the styles
+            this.plotareabackground.lineWidth   = this.style.plot.linesize;
+            this.plotareabackground.strokeStyle = this.style.plot.linecolor;
+            this.plotareabackground.fillStyle = this.style.plot.fillcolor;
+            this.plotareabackground.globalAlpha = this.style.plot.opacity;
+
+            // In order to draw within the frame, an 
+            var lOffset = Math.round(this.plotareabackground.lineWidth / 2);
+            var delta = 0;
+            
+            // to fix pixel offset for even linewidths
+            if ( this.plotareabackground.lineWidth%2 == 0 ) delta = 1;
+
+            // Draw rectangular background
+            this.plotareabackground.beginPath();
+            this.plotareabackground.moveTo(lOffset,lOffset);
+            this.plotareabackground.lineTo(this.plotarea.width-lOffset + 1, lOffset);
+            this.plotareabackground.lineTo(this.plotarea.width-lOffset + 1, this.plotarea.height-lOffset + delta );
+            this.plotareabackground.lineTo(lOffset,this.plotarea.height-lOffset + delta);
+            this.plotareabackground.closePath();
+            
+            this.plotareabackground.fill();
+            
+            if(this.style.plot.linesize != 0){
+                this.plotareabackground.stroke();
+            }
+            
+            <?ignore
+            this.plotareabackground.setAttribute( "width", this.plotarea.width );
+            this.plotareabackground.setAttribute( "height", this.plotarea.height );
+
+            lOffset = 0; //2*lOffset;
+
+            this.plotareabackground.beginPath();
+            this.plotareabackground.moveTo(lOffset,lOffset);
+            this.plotareabackground.lineTo(this.plotarea.width-lOffset, lOffset);
+            this.plotareabackground.lineTo(this.plotarea.width-lOffset, this.plotarea.height-lOffset);
+            this.plotareabackground.lineTo(lOffset,this.plotarea.height-lOffset);
+            this.plotareabackground.lineTo(lOffset,lOffset);
+            this.plotareabackground.closePath();
+
+            this.plotareabackground.lineWidth = this.style.plot.linesize;
+            this.plotareabackground.strokeStyle = this.style.plot.linecolor;
+            this.plotareabackground.fillStyle = this.style.plot.fillcolor;
+            this.plotareabackground.globalAlpha = this.style.plot.opacity;
+
+            this.plotareabackground.stroke();
+            this.plotareabackground.fill();
+            ?>
+        </method>
+
+        <!--- @keywords private
+         rerender a chart when new data come in -->
+        <method name="dataload">
+            //FIX ME!!(peter, 6/27/2005) not sure why this.style.plot.parent != this.style
+            //clear cached to reapply all style
+            this.style.plot.parent.markChange();
+             
+            this.render();
+        </method>
+        
+        <!--- return an array of subnodes with the class name
+              @param string className: name of the class -->
+        <method name="getNodesOfClass" args="className">
+        <![CDATA[            
+            var objs = [];                       
+            for (var i = 0; i < this.subnodes.length; i++)
+            {
+                if(this.subnodes[i].constructor.tagname == className)
+                {
+                    objs.push(this.subnodes[i]);
+                }               
+            }
+            return objs;
+        ]]>
+        </method>
+        
+        <!--- return a subnode with the class name
+              @param string className: name of the class -->
+        <method name="getNodeOfClass" args="className">
+        <![CDATA[            
+            var objs = [];                       
+            for (var i = this.subnodes.length - 1; i >= 0; i--)
+            {
+                if((className == "dataseries" || className == "datacolumn") && this.subnodes[i] instanceof lz.dataseries){
+                    return this.subnodes[i];
+                }
+                if(this.subnodes[i].constructor.tagname == className)
+                {
+                    return this.subnodes[i];
+                }               
+            }
+            return null;
+        ]]>
+        </method>
+        
+        <!--- get the dataseries -->
+        <method name="getDataSeries">
+            return this.getNodeOfClass("dataseries");           
+        </method>
+
+        <!--- Adjust the plot area to the dimensions of the chart and other 
+              components -->
+        <method name="adjustPlotAreaToLayout">
+            // Adjust the plot area to the chart area.
+            if( this.plotarea != null ) {
+                var lWidth;
+                var lHeight;
+                var lX;
+                var lY;
+
+                lX = this.leftMargin;
+                lY = this.topMargin;
+                lWidth = this.width - (this.leftMargin + this.rightMargin);
+                lHeight = this.height - (this.topMargin + this.bottomMargin);
+
+                this.plotarea.setAttribute( "width", lWidth );
+                this.plotarea.setAttribute( "height", lHeight );
+                this.plotarea.setAttribute( "x", lX );
+                this.plotarea.setAttribute( "y", lY );
+            }
+        </method>
+        
+        <!-- dummy view to determine of all child views have finished init -->
+        <view visible="false" initstage="late">
+            <method name="init">
+                parent.setAttribute("initdone", true);
+            </method>
+            <view/>
+        </view>
+        <handler name="oninitdone">
+            //Debug.write("initdone: " + this.initdone);
+        </handler>
+        <doc>
+          <tag name="shortdesc"><text>
+              a simple chart
+          </text></tag>
+          <text>
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@                                                       
+   -->

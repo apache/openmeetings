@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Modified version of: http://www.w3.org/TR/2006/WD-widgets-20061109/-->
+<widget id="%APPURL%" version="1.0 beta"
+dockable="[yes|no]" floatable="[yes|no]">
+     <widgetname>%APPTITLE%</widgetname>
+     <description>Describing widget</description>
+     <icon>widget-icon.png</icon>
+     <width>%APPWIDTH%</width> 
+     <height>%APPHEIGHT%</height> 
+     <author>
+             <name></name>
+             <organization>OpenLaszlo Project</organization>
+             <link>http://www.openlaszlo.org</link>
+             <email>laszlo-users@openlaszlo.org</email>
+     </author>
+     <security>
+             <access>
+                     <protocol>http</protocol>
+                     <host>example.com</host>
+                     <port>80</port>
+                     <path>/feed</path>
+             </access>
+     </security>
+     <nocursor/>
+     <update url="http://www.example.com/update.xml"></update>
+</widget>

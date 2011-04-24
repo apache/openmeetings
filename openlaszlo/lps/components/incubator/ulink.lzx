@@ -1,0 +1,67 @@
+<!---
+      @copyright 2005-2008 Laszlo Systems, Inc. All Rights Reserved.
+                 Use is subject to license terms.
+      @topic Incubator
+      @subtopic Components
+  -->
+
+<library>
+    <!--- A class for URL links.
+    
+    This differs from the use of the XHTML &lt;a&gt; attribute, e.g in '&lt;text&gt;&lt;a href="http://openlaszlo.org"&gt;OpenLaszlo.org&lt;/a&gt;lt;/text&gt;', in these ways:
+    - There is a hover effect.  (This defaults to underline.)
+    - There is a hover color.  (This defaults to blue.)
+    - The link content and target can be databound. 
+    
+    <example executable="false">
+      &lt;ulink href="http://openlaszlo.org"&gt;OpenLaszlo.org&lt;/ulink&gt;
+    </example>
+    
+    See ulink-test.lzx for additional examples. -->
+  <class name="ulink">
+    <!--- The color when the link is <em>not</em> being hovered. -->
+    <attribute name="color" type="color" value="blue"/>
+    <!--- The color when the link is hovered. -->
+    <attribute name="hoverColor" type="color" value="blue"/>
+    <!--- A list of tags that are applied to the link when
+    it is hovered.  This is either a list of tag names, e.g. "u"
+    or "u b", or the HTML itself, e.g. "&lt;u&gt;". -->
+    <attribute name="hoverTags" type="string" value="u"/>
+    <!--- The text of the link. -->
+    <attribute name="text" type="html"/>
+    <!--- The URL target. -->
+    <attribute name="href" type="string"/>
+    <!--- Where the target opens.  See lz.Browser.loadURL for
+    a list of values. -->
+    <attribute name="target" type="string" value="_new"/>
+
+    <handler name="onmouseover">
+      label.setAttribute('fgcolor', this.hoverColor);
+      label.setAttribute('text', makeTags(this.hoverTags)+this.text);
+    </handler>
+
+    <handler name="onmouseout">
+      label.setAttribute('fgcolor', this.color);
+      label.setAttribute('text', this.text);
+    </handler>
+
+    <handler name="onclick">
+        if(this.href != null){
+            lz.Browser.loadURL(this.href, this.target);
+        }
+    </handler>
+
+    <method name="makeTags" args="tags"><![CDATA[
+      if (tags.split('<').length > 1) return tags;
+      var s = '';
+      tags = tags.split(' ');
+      for (var i = 0; i < tags.length; i++) {
+        s += '<' + tags[i] + '>';
+      }
+      return s;
+    ]]></method>
+
+    <text name="label" resize="true" fgcolor="${parent.color}"
+          text="${parent.text}"/>
+  </class>
+</library>

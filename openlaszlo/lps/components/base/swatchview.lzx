@@ -1,0 +1,83 @@
+<library>
+
+<!--- swatchview is a simple view that is filled with a single color.
+    Either 'fgcolor' and 'bgcolor' may be used to set the color of the view.
+    By default it fills the space of the parent with white -->
+<class name="swatchview" extends="view" >
+    <!--- @keywords private -->
+    <attribute name="ctransform" value="null"/>
+
+    <!--- this is the color that was set (by setting 'bgcolor' or 'fgcolor' ),
+        bgcolor may be different if setColorTransform has been called
+        @keywords readonly -->
+    <attribute name="color" value="0xffffff"/>
+
+    <!--- @keywords private -->
+    <method name="construct" args="parent, args">  <![CDATA[
+        super.construct( parent, args );
+        // We _do_ support colortransform, independent of the
+        // platform's support
+        this.capabilities = new LzInheritedHash(this.capabilities);
+        this.capabilities.colortransform = true;
+        if ( args['width'] == null ){
+            args['width'] = this.immediateparent.width;
+        }
+        if ( args['height'] == null ){
+            args['height'] = this.immediateparent.height;
+        }
+        if ( args['fgcolor'] == null && args['bgcolor'] == null){
+            args['fgcolor'] = 0xFFFFFF;
+        }
+        ]]>
+    </method>
+
+
+    <!--- setting the fgcolor attribute is equivalent to setting bgcolor
+        @keywords private -->
+
+    <setter name="fgcolor" args="c">
+        this.setAttribute('bgcolor', c);
+    </setter>
+
+    <!--- sets the bgcolor with the color transform applied
+    @param Number c: new bgcolor (e.g. 0xffffff for white)
+    -->
+    <setter name="bgcolor" args="c"> <![CDATA[
+        this.color = c;
+        if (this['ctransform'] != null) {
+            c = LzColorUtils.applyTransform(c, ctransform);
+        }
+        super.setAttribute('bgcolor', c);
+        ]]>
+    </setter>
+
+    <!--- affects the bgcolor, unlike in regular views where only the
+        resource and subviews are affected by the color transform
+        @param Object o: color transform object (see view.setColorTransform for details)
+    -->
+    <setter name="colortransform" args="o">
+        this.ctransform = o;
+        this.setAttribute('bgcolor', this.color);
+    </setter>
+
+    <doc>
+      <tag name="shortdesc"><text>A simple space-filling colored view.</text></tag>
+      <text>
+        <p>
+        A simple view that is filled with a single color.
+        Either 'fgcolor' and 'bgcolor' may be used to set the color of the view.
+        By default it fills the space of the parent with white.
+        </p>
+        <p>
+        Unlike with other views, setColorTransform will affect the bgcolor of the view.
+        </p>
+      </text>
+    </doc>
+</class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

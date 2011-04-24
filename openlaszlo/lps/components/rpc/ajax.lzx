@@ -1,0 +1,299 @@
+<library>
+
+    <class name="XMLHttpRequest" extends="node">
+
+        <!---  Object status integer: 0 Uninitialised The initial value. 1 Open The open() method has been successfully called. 
+              2 Sent The send() method has been successfully called, but no data has yet been received. 3 Receiving Data is being received, 
+              but the data transfer is not yet complete. 4 Loaded The data transfer has been completed. -->
+        <attribute name="readyState" value="0" type="number"/>
+
+        <!-- Event handler for an event that fires at every state change
+             onreadystatechange -->
+        <attribute name="onreadystatechange" value="null" />
+
+        <!-- Flag to say whether to try to parse the response content as XML. -->
+        <attribute name="parsexml" value="true" />
+
+        <!-- Flag to say whether to try to parse the response content as XML. -->
+        <attribute name="proxied" value="$once{canvas.proxied}" />
+
+        <!-- Timeout in msecs -->
+        <attribute name="timeout" value="60000" />
+
+        <!-- @keywords private -->
+        <attribute name="headers" value="null" />
+
+        <!--- String version of data returned from server process -->
+        <attribute name="responseText" value="" type="string"/>
+
+        <!--- DOM-compatible document object of data returned from server process -->
+        <attribute name="responseXML" />
+
+        <!--- Numeric code returned by server, such as 404 for "Not Found" or 200 for "OK" -->
+        <attribute name="status" value="0" type="number" />
+
+        <!--- String message accompanying the status code -->
+        <attribute name="statusText" type="string"  value=""/>
+
+        <!--- @keywords private -->
+        <attribute name="method" type="string" />
+
+        <!--- @keywords private -->
+        <attribute name="dsLoadDel" value="null" />
+        
+        <!--- @keywords private -->
+        <attribute name="url" type="string" />
+        
+        <!--- @keywords private -->
+        <attribute name="async" value="true" type="boolean" />
+
+        <!--- @keywords private -->
+        <attribute name="ondataDelegate" value="null" />
+
+        <!--- @keywords private -->
+        <attribute name="onerrorDelegate" value="null" />
+
+        <!--- @keywords private -->
+        <attribute name="dataRequest" value="null" />
+        
+        <!--=================================================================-->
+        <!-- public methods                                                  -->
+        <!--=================================================================-->
+
+        <!--- Stops the current request -->
+        <method name="abort">
+          canvas.httpdataprovider.abortLoadForRequest( this.dataRequest );
+        </method>
+
+        <!--- Returns complete set of headers (labels and values) as an LzParam -->
+        <method name="getAllResponseHeaders">
+            return this.dataRequest.responseheaders;
+        </method>
+
+        <!--- Returns the string value of a single header label -->
+        <method name="getAllResponseHeader" args="hname:String">
+            // TODO: [20080825 anba] Possibly deprecate and remove, see TODO below in 'getResponseHeader()'
+            Debug.deprecated(this, 'getResponseHeaders', getResponseHeader);
+            return this.getResponseHeader(hname);
+        </method>
+
+        <!--- Returns the string value of a single header label -->
+        <method name="getResponseHeader" args="hname:String">
+            return this.dataRequest.responseheaders[hname];
+        </method>
+
+        <!--- Assigns destination URL, method, and other optional attributes of a pending request -->
+        <method name="open" args="method:String!, url:String!, async:Boolean = true, uname:String = null, password:String = null">
+            <![CDATA[
+            this.dataRequest = new LzHTTPDataRequest(this);
+            this.responseText = "";
+            this.responseXML = null;
+            this.url = url;
+            this.method = method;
+            this.async = async;
+            if ($debug) {
+                if (!async) {
+                    Debug.warn("warning: XMLHttpRequest.open('"+method+"','"+url+"','"+async+"') does not support synchronous mode");
+                }
+            }
+            this.uname = uname;
+            this.password = password;
+            if ($debug) {
+                if (uname != null || password != null) {
+                    Debug.warn("warning: XMLHttpRequest.open() does not support HTTP authentication");
+                }
+            }
+            if ($debug && (method.toLowerCase() != "get") && (method.toLowerCase() != "post") && !$dhtml) {
+                Debug.warn("lz.XMLHttpRequest.open: method '"+method+"' not supported, use GET or POST");
+            }
+            this.setAttribute('readyState', 1); // open
+            if (this.onreadystatechange != null) {
+                this.onreadystatechange(this);
+            }
+            ]]>
+        </method>
+
+        <!--
+           @access private       
+           Called when  data request status changes.
+           If status is 'success', call setData
+        -->
+        <method name="handleResponse" args="dreq">
+           <![CDATA[
+             if (this.dsLoadDel != null) {
+                 this.dsLoadDel.unregisterFrom(dreq.onstatus);
+             }
+             if (dreq.status == LzDataRequest.SUCCESS) {
+                 this.ondataHandler()
+             } else if (dreq.status == LzDataRequest.ERROR) {
+                 this.onerrorHandler();
+             } else if (dreq.status == LzDataRequest.TIMEOUT) {
+                 this.onerrorHandler();
+             }
+           ]]>
+        </method>
+
+
+        <method name="ondataHandler">
+            // Currently raw text response is only available for serverless requests
+            this.responseText = this.dataRequest['rawdata'];
+            this.responseXML = this.dataRequest.xmldata;
+            this.status = 200; // maybe we need something a little more Laszlo-specific?
+            this.statusText = "OK";
+            this.setAttribute('readyState', 4); // 'receiving' (well, received...)
+            if (this.onreadystatechange != null) {
+                this.onreadystatechange(this);
+            }
+        </method>
+
+        <method name="onerrorHandler">
+            <![CDATA[
+            // Currently raw text response is only available for serverless requests
+            this.responseText = "";
+            this.responseXML = null;
+            // If the load was proxied, we can actually dig in the headers and get the
+            // real response.
+            //data source error for http://localhost:8080/lps-dev/test/ajax/echo.jsps: HTTP Status code: 404:Not Found
+            var err = this.dataRequest.error;
+            if (err) {
+                var marker = 'HTTP Status code: ';
+                var ind = err.indexOf(marker);
+                if (ind >= 0) {
+                    var code = err.substring(ind+(marker.length), ind+(marker.length)+3);
+                    this.status = Number(code);
+                    this.statusText = err.substring(ind+4+(marker.length));
+                }
+            } else {
+                // serverless mode gives us basically no info on what happened, so fake it
+                this.status = 500; // 
+                this.statusText =  "Error";
+            }
+
+            this.setAttribute('readyState', 4); // 'receiving' (well, received...)
+            if (this.onreadystatechange != null) {
+                this.onreadystatechange(this);
+            }
+           ]]>
+        </method>
+
+        <!--- Transmits the request, optionally with postable string or DOM object data
+
+         <p>In serverless mode, there's no Flash API to post a raw data string in the POST body.</p>
+
+         <p>Doesn't support "content" arg yet for serverless operation</p>
+
+         -->
+        <method name="send" args="content:*">
+            <![CDATA[
+            if (this.method.toLowerCase() == "get" || this.method.toLowerCase() == "post") {
+                this.setAttribute('readyState', 2); // sent
+                if (this.onreadystatechange != null) {
+                    this.onreadystatechange(this);
+                }
+
+                var dreq = this.dataRequest;
+                dreq.parsexml = this.parsexml;
+                dreq.method = this.method.toUpperCase();
+                dreq.requestheaders = this.headers;
+                dreq.timeout = this.timeout;
+                // Add in LPS Server proxy javarpc-protocol-specific query args
+
+                if (this.proxied) {
+                    dreq.proxied = true;
+                    dreq.proxyurl = canvas.getProxyURL();
+                } 
+                
+                dreq.src = this.url;
+                dreq.postbody = content;
+                dreq.status  = LzDataRequest.READY;
+                dreq.queuerequests      = true;
+                dreq.getresponseheaders = true;
+                dreq.cacheable       =  false;
+                dreq.clientcacheable =  false;
+                dreq.trimwhitespace  =  false;
+                dreq.nsprefix        =  true;
+                
+                // NB: You must set the onstatus event handler *before* issuing request
+                if (this.dsLoadDel == null) {
+                    this.dsLoadDel = new LzDelegate( this , "handleResponse" , dreq, "onstatus");
+                } else {
+                    this.dsLoadDel.register(dreq, "onstatus");
+                }
+                canvas.httpdataprovider.doRequest( dreq );
+            } else if ($debug && !$dhtml) {
+                // Only DHTML runtime currently support DELET or PUT methods
+                Debug.warn("lz.XMLHttpRequest.send: method '"+method+"' not supported, use GET or POST");
+            }
+            ]]>
+        </method>
+
+        <!--- Assigns a label/value pair to the header to be sent with a request -->
+        <method name="setRequestHeader" args="key:String, val:String">
+            if (this.headers == null) {
+                this.headers = new LzParam();
+            }
+            this.headers.setValue(key, val);
+        </method>
+
+        <doc>
+            <tag name="shortdesc"><text>An implementation of XMLHttpRequest (also called "AJAX") for compatibility in SWF runtimes</text></tag>
+            <text>
+                <p>This class implements the XMLHTTPRequest as <a href="http://developer.apple.com/internet/webcontent/xmlhttpreq.html" shape="rect">
+                    specified</a> by the <a href="http://www.whatwg.org/specs/web-apps/current-work/#scripted-http" shape="rect">WHATWG</a> consortium.</p> 
+                <p>In SOLO deployed applications, this class departs from the specification in these ways:</p>
+                <ul>
+                    
+                    <li>Cannot set HTTP headers</li>
+                    
+                    <li>Cannot access response headers</li>
+                    
+                    <li>Cannot send raw POST data</li>
+                    
+                    <li>Cannot send repeated query args in a POST using LoadVars</li>
+                    
+                    <li>Username/password Auth args to send() not supported</li>
+                    
+                </ul>
+
+                <programlisting>
+    &lt;script&gt;
+        function loadXMLDoc(url) {
+            var req = new lz.XMLHttpRequest();
+            req.onreadystatechange = processReqChange;
+            req.open("GET", url, true);
+            req.setRequestHeader('X-Test', 'one');
+            req.setRequestHeader('X-Test', 'two');
+            req.send(null);
+        }
+        
+        function processReqChange(request) {
+            Debug.debug("processReqChange: req.readyState %w", request.readyState);
+            // only if request shows "loaded"
+            if (request.readyState == 4) {
+            // only if "OK"
+        if (request.status == 200) {
+            Debug.debug("arg = %w", request);
+            Debug.debug("request.status: %w", request.status);
+            Debug.debug("request.responseText: %w", request.responseText);
+            Debug.debug("request.responseXML %w:", request.responseXML);
+            Debug.debug("request.getAllResponseaders:",
+            request.getAllResponseHeaders());
+        } else {
+            Debug.debug("There was a problem retrieving the XML data: %w\n",
+            request.statusText);
+               }
+           }
+        }
+    &lt;/script&gt;
+                </programlisting>
+            </text>
+        </doc>
+  
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010, 2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

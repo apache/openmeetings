@@ -1,0 +1,53 @@
+<library>
+    <include href="base/style.lzx"/>
+
+    <class name="whitestyle" extends="style"/>
+
+    <class name="silverstyle" extends="style"
+        canvascolor="silver"
+        basecolor="silver"
+           bgcolor="offwhite"
+        textfieldcolor="offwhite" textcolor="black" texthilitecolor="iceblue1"
+        textselectedcolor="white"  textdisabledcolor="gray50"
+        hilitecolor="gray80" selectedcolor="gray70"
+        bordercolor="gray20" bordersize="1"/> <!--border size broken-->
+
+    <class name="bluestyle" extends="style"
+        canvascolor="grayblue"
+        basecolor="iceblue3"
+        bgcolor="iceblue5"
+        textfieldcolor="offwhite" textcolor="black" texthilitecolor="iceblue1"
+        textselectedcolor="white"  textdisabledcolor="gray50"
+        hilitecolor="iceblue4" selectedcolor="iceblue2"
+        bordercolor="gray30" bordersize="1"/>
+
+    <class name="greenstyle" extends="style"
+        canvascolor="graygreen"
+        basecolor="palegreen2"
+        bgcolor="palegreen5"
+           textfieldcolor="palegreen5" textcolor="black" texthilitecolor="palegreen1"
+        textselectedcolor="gray10"  textdisabledcolor="gray40"
+        hilitecolor="palegreen4" selectedcolor="palegreen3"/>
+
+    <class name="goldstyle" extends="style"
+        canvascolor="sand2"
+        basecolor="sand1"
+        bgcolor="sand4"
+        textfieldcolor="sand3" textcolor="gray10" texthilitecolor="gold1"
+        textselectedcolor="white"  textdisabledcolor="gray40"
+        hilitecolor="gold4" selectedcolor="gold2"/>
+
+      <class name="purplestyle" extends="style"
+          canvascolor="graypurple"
+        basecolor="ltpurple2"
+        bgcolor="iceblue5"
+        textfieldcolor="ltpurple4" textcolor="gray10" texthilitecolor="ltpurple1"
+        textselectedcolor="white"  textdisabledcolor="gray40"
+        hilitecolor="ltpurple3" selectedcolor="ltpurple2"/>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

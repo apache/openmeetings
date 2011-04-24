@@ -1,0 +1,329 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<library>
+
+
+    <include href="mediadevice.lzx"/>
+
+
+    <!--
+        Camera.
+
+        @START_CODE
+            <camera/>
+        @END_CODE
+    -->
+    <class name="camera" 
+        extends="mediadevice"
+    >
+        <passthrough when="$as3">
+            import flash.media.*;
+        </passthrough>
+
+
+        <!--- If true, show camera on immediateparent videoview.  -->
+        <attribute name="show" value="false" setter="this._setShow(show)"/>
+
+        <!--- The width (resolution) that will be captured by the camera. -->
+        <attribute name="width" value="null"/>
+
+        <!--- The height (resolution) that will be captured by the camera. -->
+        <attribute name="height" value="null"/>
+
+        <!--- The number of frames per second that will be captured 
+              by the camera. -->
+        <attribute name="fps" value="null"/>
+
+        <!--- Often several capture modes are available per camera device.
+              These modes will allow capturing at a specific size (width/height)
+              and framerate.  If you specify both fps and width and height for
+              this camera, this attribute will control which capturing mode
+              for the camera device will be used. -->
+        <attribute name="favorsize" value="false"/>
+
+        <!--- Camera bandwidth (in bytes per second). -->
+        <attribute name="bandwidth" value="16384"/>
+
+        <!--- Camera picture quality: a value between 0 and 1, where 1
+              represents the highest quality (no compression). When
+              0 is passed, this indicates to use highest quality that
+              fits into the available bandwidth -->
+        <attribute name="picturequality" value="0"/>
+
+
+        <!--- Event sent when show flag changes. 
+              @keywords private -->
+        <event name="onshow"/>
+
+
+        <method name="destroy"><![CDATA[
+            this._setShow(false);
+            super.destroy();
+          ]]>
+        </method>
+
+
+        <!--- Make the camera. 
+              @keywords private -->
+        <method name="_makeDevice"><![CDATA[
+            var deviceindex = 
+                this['deviceindex'];
+            //Debug.write('setting up camera device', deviceindex);
+
+            var dev = null;
+            if ($as3) {
+                if (deviceindex == null) {
+                    dev = flash.media.Camera.getCamera();
+                } else {
+                    dev = flash.media.Camera.getCamera(deviceindex);
+                }
+            } else {
+                if (deviceindex == null) {
+                    dev = Camera.get();
+                } else {
+                    dev = Camera.get(deviceindex);
+                }
+            }
+            
+            this._dev = dev;
+            if ($debug && this.debug) 
+                Debug.write('%w flash device = %w', this, this._dev);
+            this.setQuality(bandwidth,picturequality);
+
+            return dev;
+          ]]>
+        </method>
+
+
+        <!--- Set up the camera. 
+              @keywords private -->
+        <method name="_setupDevice"><![CDATA[
+            var dev = this._dev;
+            if (this.show) this._setShow(true);
+
+            // TODO: 
+            // Get camera mode and quality attributes that aren't 
+            // declared (value is null). 
+            // Set camera mode and quality from attributes. 
+            // Or should we reset them when we change devices? We
+            // don't want to carry over the size of one camera to
+            // the next one.  For now, only change camera mode or
+            // quality through setQuality and setMode.
+          ]]>
+        </method>
+
+
+        <!--- Start the camera. -->
+        <method name="startDevice"><![CDATA[
+            // Use duck typing to check for the existence of the
+            // _setCam method, instead of checking if the
+            // immediateparent is an instance of videoview, to avoid
+            // loading the videoview class if it's not needed.
+            if (immediateparent['_setCam']) {
+                immediateparent._setCam(this);
+            }
+
+            super.startDevice();
+          ]]>
+        </method>
+
+
+        <!--- Called when the allowed flag changes.
+              @keywords private -->
+        <method name="_updateAllowed"><![CDATA[
+            //Debug.write("camera _updateAllowed", this, lz.mediadevice.allowed, "show", this.show);
+
+            // Call super to send the onallowed event.
+            super._updateAllowed();
+
+            // Update the camera show state, since the camera is 
+            // only shown when both show and allow are true.
+            // This will attach and detatch the camera view as appropriate. 
+            this.setAttribute("show", this.show);
+          ]]>
+        </method>
+
+
+        <!--- Show or hide the camera image on the videoview. 
+              If the show parameter is true, 
+              then the camera is shown, 
+              otherwise it's not shown. 
+              Of course the camera will really only be shown if 
+              it's also allowed by the user. 
+              @access private -->
+        <method name="_setShow" args="show"><![CDATA[
+            if ($debug && this.debug) {
+                Debug.write("%w show=%w", this, show );
+            }
+            this.show = show;
+
+            // Bail if we're not initialized, the device isn't
+            // initialized, or the parent isn't finished initializing
+            // (or isn't a videoview).
+            if ((!this.isinited) ||
+                (!this._dev) ||
+                (!immediateparent['_initcomplete'])) {
+                if (!immediateparent['cam']) immediateparent.cam = this; 
+                return;
+            }
+
+            // Use duck typing to check for the existence of the
+            // _getflashvideo method, instead of checking if the
+            // immediateparent is an instance of videoview, to avoid
+            // loading the videoview class if it's not needed.
+            var vid = 
+                (immediateparent['_getflashvideo'] != undefined)
+                    ? immediateparent._getflashvideo()
+                    : null;
+
+            //Debug.write("vid", vid, "show", show, "allowed", lz.mediadevice.allowed);
+
+            if (vid != null) {
+
+                if ((show == false) ||
+                    (lz.mediadevice._allowedknown &&
+                     (lz.mediadevice.allowed == false))) {
+                    // Hide the video if show is false or (not allowed, and
+                    // this is not the first time).
+
+                    // This is meant to hide the video when allowed
+                    // transitions from true to false, but we don't do
+                    // this if it's the first time (_allowedknown is
+                    // false).
+
+                    //Debug.write("detaching", this, vid);
+                    if ($as3) {
+                        vid.attachCamera(null);
+                    } else {
+                        vid.attachVideo(null);
+                    }
+                    //vid.clear(); // FIXME: this clears the video but makes subsequent attachvideo's not work.
+                } else {
+                    // Try to show the video if show is true.
+                    // This may initiate the security dialog.
+                    // The device will issue an onStatus callback, 
+                    // which sets the new allowed value to
+                    // all mediadevices. 
+                    var dev = this._dev;
+                    if ($debug && this.debug) {
+                        Debug.write("%w attaching flashdevice %w" +
+                                    "to flashvideoobject %w", 
+                                     this, dev, vid);
+                    }
+                    if ($as3) {
+                        vid.attachCamera(dev);
+                    } else {
+                        vid.attachVideo(dev);
+                    }
+
+                    // If this is the first device we've ever seen, 
+                    // then initialize the allowed flag, and set 
+                    // it to all mediadevices. The user might have 
+                    // checked the box to allow all access, and dev.muted
+                    // will initially be false. Or the security dialog 
+                    // may pop up, and dev.muted will initially be true,
+                    // but might change to false later, if the user allows it. 
+                    var devallowed = 
+                        !dev.muted;
+                    if (lz.mediadevice.allowed != devallowed) {
+                        lz.mediadevice._updateAllAllowedStatic(devallowed);
+                    }
+                }
+            }
+
+            if (this.onshow) {
+                this.onshow.sendEvent(show);
+            }
+
+          ]]>
+        </method>
+
+
+        <!--- Get the names of the cameras. Returns an array of strings. 
+              This might take a while to run, since it has to scan the devices. -->
+        <method name="getCameraNames"><![CDATA[
+            if ($as3) {
+                var cam = flash.media.Camera;
+            } else {
+                var cam = Camera;
+            }
+            return cam.names;
+          ]]>
+        </method>
+
+
+        <!--- 
+            setMode(width, height, fps, favorsize) 
+            width, height, fps: number 
+            favorsize: A Boolean value that specifies how to manipulate the 
+            width, height, and frame rate if the camera does not have a native 
+            mode that meets the specified requirements. The default is true, 
+            which means that maintaining capture size is favored; using this 
+            parameter selects the mode that most closely matches width and height 
+            values, even if doing so adversely affects performance by reducing
+            the frame rate. To maximize frame rate at the expense of camera 
+            height and width, pass false for the favorSize parameter. This 
+            parameter is optional. 
+            The parameters are cached in the attributes
+            width, height, fps and favorsize. 
+            TODO: If those attributes are not null, 
+            then call setMode automatically after 
+            initializing camera. 
+            Otherwise read values from camera and set attributes.
+        --> 
+        <method name="setMode" args="width, height, fps, favorsize"><![CDATA[
+            if (favorsize == undefined) {
+                favorsize = true;
+            }
+
+            this.setAttribute("width", width);
+            this.setAttribute("height", height);
+            this.setAttribute("fps", fps);
+            this.setAttribute("favorsize", favorsize);
+
+            if (this._dev) {
+                this._dev.setMode(width, height, fps, favorsize); 
+            }
+          ]]>
+        </method> 
+
+
+        <!--- 
+            setQuality(bandwidth, picturequality"); 
+            bandwidth: in byte per second, default value: 16384
+            picturequality: number from 0 to 1, default value: 0
+            0 means also that picturequality will be changed
+            if bandwidth is concerned.
+            The parameters are cached in the attributes
+            bandwidth and picturequality. 
+            TODO: If those attributes are set, 
+            then call setQuality automatically after 
+            initializing camera. 
+            Otherwise read values from camera and set attributes.
+         --> 
+        <method name="setQuality" args="bandwidth, picturequality"><![CDATA[
+            this.setAttribute("bandwidth", bandwidth);
+            this.setAttribute("picturequality", picturequality);
+            if (this._dev) {
+                this._dev.setQuality(bandwidth, picturequality*100);
+            }
+          ]]>
+        </method>
+
+        <doc>
+            <tag name="shortdesc"><text>A camera object that can be displayed
+            on a video view and/or broadcast to an rtmpserver.</text></tag>
+            <text>
+            <p>In order to use a camera in an LZX application, the <attribute>visible</attribute> and <attribute>allowed</attribute> attributes must be set to <attribute>true</attribute>. The <attribute>visible</attribute> indicates the program's intent and the <attribute>allowed</attribute> attribute indicates the user's permission. To protect privacy, camera operation must be explicitly approved by the user.</p>
+            <programlisting>
+    <![CDATA[<canvas height="100">
+        <camera id="rtc" src="rtmp://localhost/test" autoconnect="false"/>
+        <text text="${rtc.status}"/>
+        <button onclick="rtc.connect()">Click to Connect</button>
+    </canvas>]]></programlisting>
+            </text>
+        </doc>
+    </class>
+</library>

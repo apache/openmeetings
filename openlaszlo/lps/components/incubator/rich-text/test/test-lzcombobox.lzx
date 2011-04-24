@@ -1,0 +1,171 @@
+<canvas>
+    <include href="lzunit" />
+    <include href="incubator/lzcombobox.lzx"/>
+
+    <include href="../colorsquare.lzx"/>
+    
+    <class name="colorswatch" extends="lzcombobox_item">
+        <colorsquare swatchcolor="$path{'@value'}" drawsquare="true" x="6" y="3"/>
+    </class>
+
+     <dataset name="fontcolors">
+         <clr value="0x000000"/>
+         <clr value="0x555555"/>
+         <clr value="0x333399"/>
+         <clr value="0x339999"/>
+         <clr value="0x339966"/>
+         <clr value="0xcccc33"/>
+         <clr value="0xcc9933"/>
+         <clr value="0xcc3300"/>
+         <clr value="0x00CC00"/>         
+     </dataset>
+
+    <whitestyle name="combobox_style" />
+    <whitestyle name="comboboxitem_style" />
+
+     <view y="200">
+         <simplelayout axis="x" spacing="10" /> 
+        <text>hell</text>
+        <lzcombobox id="hell" 
+            width="48"   itemclassname="colorswatch" itemdatapath="fontcolors:/clr"
+             focusable="false"
+             >
+         <!---  @keywords private
+                 Set my initial value to be the editor's default font color.
+                 Register tool with toolbar -->
+             <method name="init">
+                 super.init();
+                 // toolbar.registerTool(this,"color");
+                 this.setValue(0x339966, true);
+                 this.csq.setColor(0x339966);
+             </method>
+         
+            <!--- When the user selects an item from the combo box, 
+                 create an object representing just the change in format.
+                 Give that object to the editor. -->
+             <handler name="onselect"><![CDATA[
+                var color  = this.value; 
+                this.csq.setColor(color);
+                ]]>
+             </handler>
+         
+             <colorsquare x="11" y="3" name="csq" drawsquare="true">
+                     <method name="setColor" args="color">
+                         this.setAttribute('visible',  color != null );
+                         if (this.visible) {
+                            this.setAttribute('swatchcolor', color);
+                         }
+                     </method>
+             </colorsquare>      
+         
+                 
+         </lzcombobox>
+     
+     
+     
+        <!-- In trunk, we put the colors dataset into a state, and applied it in the 
+        lzcombobox's construct method. That gives errors in wafflecone. 
+        Bug LPP-4469 tries to track this issue. [bshine 08.09.2007] --> 
+         <state name="laterState">
+            <dataset name="glitzcolors">
+                <clr value="0x000001"/>
+                <clr value="0x555555"/>
+                <clr value="0x333399"/>
+                <clr value="0x339999"/>
+                <clr value="0x339966"/>
+                <clr value="0xcccc33"/>
+                <clr value="0xcc9933"/>
+                <clr value="0xcc3300"/>
+                <clr value="0x00CC00"/>         
+            </dataset>
+        </state>
+        
+        <dataset name="sweetcolors">
+            <clr value="0x000000"/>
+            <clr value="0x555555"/>
+            <clr value="0x333399"/>
+            <clr value="0x339999"/>
+            <clr value="0x339966"/>
+            <clr value="0xcccc33"/>
+            <clr value="0xcc9933"/>
+            <clr value="0xcc3300"/>
+            <clr value="0x00CC00"/>         
+        </dataset>
+        
+        <state name="odelay" id="odelay">
+            <text>allan</text>            
+            <lzcombobox  id="allan"
+                width="48"   itemclassname="colorswatch" itemdatapath="local:parent.sweetcolors:/clr"
+                focusable="false">
+            </lzcombobox>
+        </state>
+        
+        <text>beijing</text>
+        <lzcombobox id="beijing"
+            width="48"   itemclassname="colorswatch" itemdatapath="local:parent.glitzcolors:/clr"
+            focusable="false">
+                <!---  @keywords private
+                apply state for late instantiation of local data -->
+                <handler name="onconstruct" >
+                    this.parent.laterState.setAttribute('applied', true);
+                </handler>                
+        </lzcombobox>
+        
+    </view>
+
+    
+    
+    <TestSuite>
+        <TestCase>
+            <method name="testSettingIt">
+                Debug.write("testSettingIt"); 
+                //For reasons I can't quite figure out, this will fail if you
+                // try to call these first, but not if you call them after selecting something else.
+                //hell.selectItem(0);
+                //assertEquals(hell.getValue(), 0);
+                hell.selectItem(0xcccc33); 
+                assertEquals(hell.getValue(), 0xcccc33);                
+                hell.selectItem(0x555555); 
+                assertEquals(hell.getValue(), 0x555555);                                
+                hell.selectItem(0x00CC00); 
+                assertEquals(hell.getValue(), 0x00CC00);                 
+                hell.selectItem(0);
+                assertEquals(hell.getValue(), 0);
+            </method>
+            
+            <method name="testDisplayUpdates">
+                Debug.write("testDisplayUpdates"); 
+                hell.selectItem(0);
+                assertNotSame(0x00CC00, hell.getValue());
+                hell.selectItem(0x00CC00); 
+                assertEquals(0x00CC00, hell.getValue()); 
+            </method>
+            
+            <method name="testGetItemIndex">
+                assertEquals(8, hell.getItemIndex(0x00CC00)); 
+                assertEquals(7, hell.getItemIndex(0xcc3300));
+                assertEquals(7, hell.getItemIndex('0xcc3300'));                
+                assertEquals(-1, hell.getItemIndex(27)); 
+            </method>
+            
+            <method name="testStates">
+                Debug.info("about to apply odelay state"); 
+                odelay.setAttribute('applied', true); 
+                Debug.info("done applying odelay state."); 
+                assertEquals(0, allan.getValue());   // [bshine 08.09.2007] This fails! demonstrating LPP-4469
+            </method>
+            
+            <method name="testLateData">
+                assertEquals(1, beijing.getValue());  // [bshine 08.09.2007] This fails, demonstrating LPP-4469
+            </method>
+            <method name="addTests"> 
+                this.addTest("testSettingIt");
+                this.addTest("testDisplayUpdates");
+                this.addTest("testGetItemIndex");
+                this.addTest("testStates");
+                this.addTest("testLateData");
+            </method> 
+        </TestCase>
+    </TestSuite>
+</canvas>
+<!-- Copyright 2007, 2009 Laszlo Systems --> 

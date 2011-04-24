@@ -1,0 +1,13 @@
+<library>
+  <include href="command.lzx"/>
+  <include href="dataselectionmanager.lzx"/>
+  <include href="selectionmanager.lzx"/>
+  <include href="layouts/library.lzx"/>
+  <include href="states/library.lzx"/>
+  <include href="replicator/library.lzx"/>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

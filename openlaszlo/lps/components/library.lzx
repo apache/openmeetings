@@ -1,0 +1,21 @@
+<!-- Used by the doc tools to determine which components to document -->
+<!-- Auto-includes are determined by a separate mechanism, a property list
+     found at WEB-INF/lps/misc/lzx-autoincludes.properties
+  -->
+     
+<library>
+  <include href="av/library.lzx"/>
+  <include href="base/library.lzx" />
+  <include href="utils/library.lzx" />
+  <include href="debugger/library.lzx" />
+  <include href="charts/library.lzx" />
+  <include href="lz/library.lzx" />
+  <include href="lzunit/library.lzx" />
+  <include href="rpc/library.lzx" />
+  <include href="extensions/library.lzx" />
+  <include href="mixins/library.lzx" />
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2007, 2010 Laszlo Systems, Inc.  All Rights Reserved.        *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->

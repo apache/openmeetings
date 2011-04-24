@@ -1,0 +1,722 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<library>
+
+    <include href="base/baseformitem.lzx" />
+    <include href="lz/list.lzx" />
+    <include href="lz/floatinglist.lzx" />
+
+    <!--- A dropdown list of selectable items. Can either be editable or
+          not. -->
+    <class name="basecombobox" extends="baseformitem" focusable="false" width="100">
+        <!--- @keywords private -->
+        <attribute name="defaultplacement"  value="cblist" type="string"/>
+
+        <!-- attributes -->
+        <!--- The value of the combobox. -->
+        <attribute name="value" value="${cblist.value}"/>
+
+        <!--- Indicates whether or not the popup list is showing.  -->
+        <attribute name="isopen"       value="false"  setter="this.setOpen(isopen)" />
+
+        <!--- The border size ( in pixels ) of the popup list.  -->
+        <attribute name="bordersize"   value="1" />
+
+        <!--- The spacing size ( in pixels ) between items in the pop-up list.  -->
+        <attribute name="spacing"   value="0" />
+
+        <!--- The text that appears in the text field when no item is selected. -->
+        <attribute name="defaulttext"  value="" type="string" />
+
+        <!--- The number of the item that is initially selected. This overrides
+              the value defined in the defaulttext attribute -->
+        <attribute name="defaultselection"  value="null" type="number"  setter="this.setDefaultSelection( defaultselection )"/>
+
+        <!--- This event is sent when the default selection is set.  -->
+        <event name="ondefaultselection" />
+
+        <!--- Make the text field of this combobox editable. -->
+        <attribute name="editable"     value="true" setter="this.setEditable(editable)" />
+
+        <!--- The class that is used to create an item in the list. -->
+        <attribute name="itemclassname" setter="this.setItemclassname(itemclassname)"  value="" type="string" />
+
+        <!--- Sets the height of the combobox to show 'n' items. -->
+        <attribute name="shownitems"   value="-1" />
+
+        <!--- @keywords private  -->
+        <attribute name="mousedownintext" value="false"/>
+
+        <!--- @keywords private  -->
+        <attribute name="initcomplete" value="0" />
+
+        <!--- Whether a scrollbar should automatically show up when there are more
+              items than shownitems. -->
+        <attribute name="autoscrollbar" value="true"/>
+
+        <!--- The initial selected item. -->
+        <attribute name="selected" value="null"/>
+
+        <!--- This event is triggered whenever the user makes a selection. It
+              may be used as a script in the combobox tag or as an event method.
+              -->
+        <event name="onselect"/>
+
+        <!--- One of "lazy", "resize", "pooling", "none". -->
+        <attribute name="dataoption" value="none" type="string"/>
+
+        <!--- The vertical offset of the floatinglist attached to this
+              combobox. -->
+        <attribute name="attachoffset" value="-1" type="number"/>
+
+        <!--- the x position of the text. -->
+        <attribute name="text_x" value="2" type="number"/>
+
+        <!--- the y position of the text. -->
+        <attribute name="text_y" value="2" type="number"/>
+
+        <!--- the width the text. -->
+        <attribute name="text_width" value="${this.width - 19}" type="number"/>
+
+        <!--- The minimum width this component is allowed to be.
+              @keywords defaultsetter -->
+        <attribute name="min_width" value="50" type="number" />
+
+        <!--- Since we are not focusable, defer to the inputtext's next selection,
+              so that when floatinglist is tabbed out of, we can provide a next
+              selection since we are it's owner
+              @keywords private -->
+        <method name="getNextSelection">
+            // must ensure the floatinglist is closed so that if it is being tabbed from,
+            // we can change the focus. (focus is normally not allowed to escape from
+            // a modal view).
+            this.setOpen(false);
+            if (!editable) {
+                return lz.Focus.getNext(bkgnd);
+            } else {
+                return lz.Focus.getNext(interior.cbtext);
+            }
+        </method>
+
+        <!--- since we are not focusable, this provides an api for asking what child to send focus
+              to, as is the case when floatinglist is shift-tabbed back to us.
+              @keywords private -->
+        <method name="resolveSelection">
+            // must ensure the floatinglist is closed so that if it is being tabbed from,
+            // we can change the focus. (focus is normally not allowed to escape from
+            // a modal view).
+            this.setOpen(false);
+            if (!editable) {
+                return bkgnd;
+            } else {
+                return interior.cbtext;
+            }
+        </method>
+
+        <view name="bkgnd" width="100%" focusable="false">
+        <!--- subclasses defined the 'look' by placing views here -->
+        </view>
+
+        <view name="interior"
+            x="$once{classroot.text_x}"
+            y="$once{classroot.text_y}"
+            width="${classroot.text_width}"
+             height="${classroot.height - 2*classroot.bordersize - 2}"
+             focusable="false">
+            <!--- @keywords private -->
+            <attribute name="_dsblfield" value="null"/>
+
+            <method name="setupText" >
+                var txt = classroot.cblist.getText();
+                if ( !txt ) {
+                    if ( classroot.defaultselection ) {
+                        if ( classroot.cblist._contentview != null ) {
+                            classroot.cblist.selectItemAt( classroot.defaultselection );
+                            txt = classroot.cblist.getText();
+                        }
+                    } else {
+                        txt = classroot.defaulttext;
+                    }
+                }
+                if (this.cbtext) this.cbtext.setAttribute('text', txt );
+                if (this._dsblfield) this._dsblfield.setAttribute('text', txt );
+                parent._applystyle( parent.style );
+            </method>
+
+            <state name="editable_state" >
+                <view name="editbkgnd" bgcolor="white" width="100%" height="100%" />
+                <inputtext x="2" y="1" name="cbtext" width="$once{parent.width - 4}">
+                    <!-- arrow down and up both popup floatinglist, and pass the key event to it -->
+                    <handler name="onkeydown" args="key">
+                        <![CDATA[
+                        // 38 is up-arrow
+                        // 40 is down-arrow
+                        // 32 is space
+                        // 13 is return
+                        if ((key==38) || (key==40)) {
+                            if (!classroot.isopen) {
+                                classroot.setOpen(true, true); // open, withKey
+                            }
+
+                            // pass the key event on to the floatinglist
+                            classroot.cblist.onkeydown.sendEvent(key);
+                        } else if (key > 31 &&  key != 8) {
+                            // user is entering a value manually - so clear selection
+                            // don't clear selection for non-printing keys like shift/ctrl/etc.
+                            classroot.cblist.clearSelection();
+                        }
+                        ]]>
+                    </handler>
+
+                    <!-- pass up to component level so focus rect will be visible, and subclassers can catch -->
+                    <handler name="onfocus" args="v">
+                         if ( classroot['onfocus'] ) classroot.onfocus.sendEvent(v);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onblur" args="v">
+                         classroot.setAttribute('text', this.getText() );
+                         if ( classroot['onblur'] ) classroot.onblur.sendEvent(v);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onkeyup" args="kc">
+                         if ( classroot['onkeyup'] ) classroot.onkeyup.sendEvent(kc);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onkeydown" args="kc">
+                         if ( classroot['onkeydown'] ) classroot.onkeydown.sendEvent(kc);
+                    </handler>
+
+                    <method name="getFocusRect"  >
+                       return classroot.getFocusRect();
+                    </method>
+
+                </inputtext>
+            </state>
+
+            <state name="non_editable_state" >
+                <text x="2" y="1" name="cbtext" width="${parent.width - 4}"
+                    clickable="true" focusable="true">
+                    <!-- arrow down and up, and spacebar all popup floatinglist, and pass the key event to it -->
+                    <handler name="onkeydown" args="key">
+                        <![CDATA[
+                        // 38 is up-arrow
+                        // 40 is down-arrow
+                        // 32 is space
+                        // 13 is return
+                        if ((key==38) || (key==40) || (key==32)) {
+                            if (!classroot.isopen) {
+                                classroot.setOpen(true, true); // open, withkey
+                            }
+                            if (key!=32) {
+                                // pass the key event on to the floatinglist
+                                classroot.cblist.onkeydown.sendEvent(key);
+                            }
+                        }
+                        ]]>
+                    </handler>
+
+                    <handler name="onmouseup">
+                        classroot.toggle();
+                    </handler>
+
+                    <!-- pass up to component level so focus rect will be visible, and subclassers can catch -->
+                    <handler name="onfocus" args="v">
+                         if ( classroot['onfocus'] ) classroot.onfocus.sendEvent(v);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onblur" args="v">
+                         if ( classroot['onblur'] ) classroot.onblur.sendEvent(v);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onkeyup" args="kc">
+                         if ( classroot['onkeyup'] ) classroot.onkeyup.sendEvent(kc);
+                    </handler>
+                    <!-- pass up to component level so subclassers can catch -->
+                    <handler name="onkeydown" args="kc">
+                         if ( classroot['onkeydown'] ) classroot.onkeydown.sendEvent(kc);
+                    </handler>
+
+                    <method name="getPrevSelection">
+                        return lz.Focus.getPrev(parent);
+                    </method>
+
+                    <method name="getFocusRect"  >
+                       return classroot.getFocusRect();
+                    </method>
+
+                </text>
+            </state>
+
+        </view>
+
+        <floatinglist name="cblist"
+                      width="${owner.width - 1}"
+                      bordersize="${this.owner.bordersize}"
+                      spacing="${this.owner.spacing}"
+                      visible="false"
+                      shownitems="${this.owner.shownitems}"
+                      attach="bottom"
+                      attachoffset="${this.owner.attachoffset}"
+                      multiselect="false"
+                      autoscrollbar="${owner.autoscrollbar}"
+                      defaultselection="${owner.defaultselection ?
+                                          owner.defaultselection : (owner.defaulttext == '' ?
+                                                                    0 : null) }">
+            <!-- create a blank datapath so that it can be assigned a datapointer when combobox is assigned data -->
+               <datapath>
+                   <attribute name="datacontrolsvisibility" value="false" />
+               </datapath>
+
+            <handler name="onconstruct">
+                this.dataoption = owner.dataoption;
+            </handler>
+            <handler name="oninit">
+                <![CDATA[
+                // Clips to the canvas, so it doesn't spill off down into
+                // forever and subsequently look all goofy.
+                if(this.owner.shownitems == -1){
+                    var ih = Math.floor((canvas.height - owner.y) / owner.height);
+                    this.setAttribute('shownitems', ih);
+                }
+                ]]>
+            </handler>
+
+            <handler name="onkeyup" method="_dokeyup" />
+            <method name="_dokeyup" args="kc">
+                if (kc == 27) {  // escape needs to close floating list
+                    this.owner.setOpen(false);
+                }
+            </method>
+        </floatinglist>
+
+
+        <!--- Sets the number of the item that is initially selected. This overrides
+              the value defined in the defaulttext attribute.
+              @param Number ds: the number of items to initally select. -->
+        <method name="setDefaultSelection" args="ds" >
+            this.defaultselection = ds;
+            if ( ds == null ) return;
+            if ( defaulttext != "" ) {
+              if ($debug){
+                Debug.warn("%s.defaultselection (%s) overrides defaulttext (%s)",
+                           this, ds, defaulttext);
+              }
+              this.defaulttext = "";
+            }
+            if ( this.ondefaultselection ) this.ondefaultselection.sendEvent();
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="ondata" args="d">
+            if(d is lz.DataNodeMixin){
+                this.cblist.datapath.setPointer( d );
+            }
+        </handler>
+
+        <!--- @keywords private -->
+        <event name="onitemclassname"/>
+
+        <!--- Sets the type of list items which will be created in floatinglist
+              when necessary.
+              @param String icn: the class name to use to create items with. -->
+        <method name="setItemclassname" args="icn" >
+            this.itemclassname = icn; // before anything is inited capture value
+            if ( this.isinited ) { // view is now inited so check classname with cblist
+
+               if (icn != "") {
+                  // then force this classname as the classname for cblist
+                  cblist.setAttribute('itemclassname',this.itemclassname);
+                } else {
+                  //use the default subview as the classname
+                  this.itemclassname = cblist.itemclassname;
+                }
+            }
+            if (this.onitemclassname) this.onitemclassname.sendEvent();
+        </method>
+
+
+        <!--- @keywords private -->
+        <event name="oneditable"/>
+
+        <!--- @keywords private -->
+        <method name="setEditable" args="isEditable" >
+           this.editable = isEditable;
+           if (this._initcomplete) {
+                if (isEditable) {
+                     this.interior.non_editable_state.setAttribute('applied', false);
+                     this.interior.editable_state.setAttribute('applied', true);
+                } else {
+                     this.interior.editable_state.setAttribute('applied', false);
+                     this.interior.non_editable_state.setAttribute('applied', true);
+                }
+                this._showEnabled();
+                this.interior.setupText();
+                if (this.oneditable) this.oneditable.sendEvent();
+           }
+        </method>
+
+        <!--- @keywords private -->
+        <event name="ontext"/>
+
+        <!--- @keywords private -->
+        <method name="determinePlacement" args="newsub, placement, iargs" >
+            if (placement == 'cblist') 
+                return this.cblist.determinePlacement(newsub, placement, iargs);
+            else 
+                return super.determinePlacement(newsub, placement, iargs);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init" >
+            this._initcomplete = true;
+            // setEditable wants to be called before _applystyle
+            // but after _initcomplete, so it knows it can apply child states
+            this.setEditable(this.editable);
+
+            super.init();
+
+            // reassign classname now that the instance is inited
+            this.setItemclassname(this.itemclassname);
+            cblist.setAttribute('visible', false);
+         </method>
+
+        <!--- @keywords private -->
+        <handler name="onblur" >
+           if ( lz.Focus.getFocus() != this.interior.cbtext )
+                this.setOpen(false);
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="getFocusRect"  >
+           var fx = this.getAttributeRelative('x',canvas);
+           var fy = this.getAttributeRelative('y',canvas);
+           var fw = this.getAttributeRelative('width',canvas);
+           var fh = this.getAttributeRelative('height',canvas);
+           return [fx,fy,fw,fh];
+        </method>
+
+        <!--- Selects a specific item in the list.
+              @param Object item: the item to select. -->
+        <method name="select" args="item" >
+           this.cblist.select(item);
+        </method>
+
+        <!--- @keywords private -->
+        <attribute name="_fixseldel" value="$once{new LzDelegate(this, 'fixSelection')}"/>
+        <!--- @keywords private -->
+        <attribute name="_fixselstart" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="_fixselend" type="number"/>
+        <!--- @keywords private -->
+        <method name="fixSelection" args="ignore">
+            this.interior.cbtext.setSelection(this._fixselstart, this._fixselend);
+        </method>
+
+        <!--- this method listens for the onselect event from the floating list
+              and then resends the onselect event to itself so that developers can easily
+              reference that without knowing the internals of combobox
+              @keywords private -->
+        <handler name="onselect" reference="this.cblist"  args="v" > <![CDATA[
+            this.setOpen(false);
+
+            // anItem has been selected so update the input text field
+            this.selected = v;
+            if (v) this.setText(v.text);
+            if (this.editable && lz.Focus.getFocus() == this.interior.cbtext) {
+                this._fixselstart = 0;
+                this._fixselend = v.text.length;
+                lz.Idle.callOnIdle( _fixseldel );
+
+            }
+
+            // resend the event so that developers can write thier own
+            // onselect methods without having to know the internals of
+            // this class.
+            if ( this.onselect ) this.onselect.sendEvent(v);
+            ]]>
+        </handler>
+
+        <!--- @keywords private -->
+        <method name="passModeEvent" args="eventStr,view" > <![CDATA[
+            // Once a view has been made modal, this method
+            // gets called ONLY when a user clicks on a view 'outside'
+            // the contents of this view, or clicks on a inputtext view anywhere
+            // on the screen even for a subview within this view.
+            if ( eventStr == "onmousedown"  ){
+                // first, we only care about the mousedown event.
+                // if the user has pressed the mouse down on a textfield
+                // within the component, then we will not know this unless
+                // we test it to see if it is a subview of this component.
+
+                if ( view != null ) { // view is a clickable view
+                    // view is not LITERALLY part of the class heirarchy but
+                    // it maybe part of the floatingview of this component, and if so
+                    // then treat it as if it were a child of the class.
+
+                   if ( !view.childOf(this.cblist) ) {
+                        // view is outside of combobox so close the combbobox
+                        this.setOpen(false);
+
+                   } else {
+                        // view is a child of cblist, so don't do anything.
+                   }
+
+                } else {
+                    this.setOpen(false);
+                }
+            }
+            // if we're inside a modal dialog, need to propagate event manually
+            // since floating list is a child of the canvas
+            if (view && view.childOf(this.cblist)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+           // since a combox is not strictly modal, always return
+           // true to pass the event to the object (oustide combobox)
+           // that was clicked on
+           return true;
+        ]]> </method>
+
+        <!--- Toggles the open/close state of the popup list.
+            @param Boolean withkey: (optional) if true this is triggered by
+                  keyboard and focus indicators will be turned on;
+                  if false, this is triggered by mouse action and focus
+                  indicators will be turned off;
+                  if parameter is ommitted no change in focus indicator
+        -->
+        <method name="toggle" args="withkey=null">
+            this.setOpen(!this.isopen, withkey)
+        </method>
+
+        <!--- Sets the open/close state of the popup list.
+              @param Boolean open: true to open the list, else false to
+              close.
+              @param Boolean withkey: (optional) if true this is triggered by
+                    keyboard and focus indicators will be turned on;
+                    if false, this is triggered by mouse action and focus
+                    indicators will be turned off;
+                    if parameter is ommitted no change in focus indicator
+          -->
+        <method name="setOpen" args="open, withkey=null" >
+            if (!this.isinited) {
+                this.isopen = open;
+                return;
+            }
+            if (open) { // open combox
+                if (this.isopen) return; // tends to get called more than once, esp when
+                lz.ModeManager.makeModal( this );
+
+                this.cblist.bringToFront();
+                this.cblist.setAttribute('visible', true);
+                lz.Focus.setFocus(this.cblist, withkey);
+
+                this.isopen = true;
+                if (this['onisopen']) this.onisopen.sendEvent(true);
+            } else { // close combox
+                if (!this['isopen']) return;
+                this.isopen = false;
+
+                lz.ModeManager.release( this );
+                this.cblist.setAttribute('visible', false);
+                if (this['onisopen']) this.onisopen.sendEvent(false);
+                if ( lz.Focus.getFocus() == this.cblist ) {
+                    if (!editable) {
+                        lz.Focus.setFocus(bkgnd, withkey);
+                    } else {
+                        lz.Focus.setFocus(interior.cbtext, withkey);
+                    }
+                }
+            }
+        </method>
+
+        <!--- @keywords private
+            The `value` of a combobox is stored using setText
+        -->
+        <method name="acceptValue" args="data, type=null">
+            this.setText( data );
+        </method>
+
+
+        <!--- Get the value for the combobox.
+              @return Object: the value selected or the value in the text
+              field, if no value was found. -->
+        <method name="getValue">
+           var rv;
+           var ra = this.cblist.getValue(); // an array of values
+           if (ra==null) {
+               rv  = this.interior.cbtext.getText();
+           } else {
+               rv = ra;
+           }
+           return rv;
+        </method>
+
+        <!--- Sets the displayed text. (This isn't an override from LzText)
+              @param String t: the text to display. -->
+        <method name="setText" args="t">
+            this.text = t;
+            this.interior.cbtext.setAttribute('text', t );
+            if (!this._enabled) interior._dsblfield.setAttribute('text', t );
+            if ( this.ontext ) this.ontext.sendEvent( t );
+        </method>
+
+        <!--- Get the displayed text.
+              @return String: the displayed text. -->
+        <method name="getText">
+           return this.interior.cbtext.getText();
+        </method>
+
+        <!--- Returns current selection.
+              @return Object: null if no selection, an item if single select
+              (default), or an array of items if multiselect. -->
+        <method name="getSelection">
+            return this.cblist.getSelection();
+        </method>
+
+        <!--- Add the specified item to list to the end of the list.
+              @param String txt: the text for the item.
+              @param Object val: the value for the item. -->
+        <method name="addItem" args="txt, val=null" >
+            this.cblist.addItem(txt,val);
+        </method>
+
+        <!--- Find a particular item by value. This method is not available with
+              dataoption="lazy" or dataoption="resize" (use data APIs instead).
+              @param Object value: the value for the item to get.
+              @return Object: the item found, or null, if not.
+              -->
+        <method name="getItem" args="value">
+            return this.cblist.getItem(value);
+        </method>
+
+        <!--- Find a particular item by its index. This method not available
+              with dataoption="lazy" or dataoption="resize"
+              (use data APIs instead).
+              @param Number index: the index for the item to get.
+              @return Object: the item found, or null, if not. -->
+        <method name="getItemAt" args="index">
+            return this.cblist.getItemAt(index);
+        </method>
+
+        <!--- Find the first item with the specified value and remove it from
+              the list.
+              @param Object value: the value of the item to remove. -->
+        <method name="removeItem" args="value" >
+            this.cblist.removeItem(value);
+        </method>
+
+        <!--- Remove an item by index (0 based count). This method is not
+            available with dataoption="lazy" or dataoption="resize"
+            (use data APIs instead).
+              @param Number index: the index of the item to remove. -->
+        <method name="removeItemAt" args="index" >
+            this.cblist.removeItemAt(index);
+        </method>
+
+        <!--- Select an item by value. This method is not available with
+              dataoption="lazy" or dataoption="resize".
+              @param Object value: the value of the item to select. -->
+        <method name="selectItem" args="value">
+            this.cblist.selectItem(value);
+        </method>
+
+        <!--- Select an item by index (0 based count).
+              @param Number index: the index of the item to select. -->
+        <method name="selectItemAt" args="index">
+            this.cblist.selectItemAt(index);
+        </method>
+
+        <!--- Clear the current selection in the list and sets the displayed
+            text to an empty string -->
+        <method name="clearSelection" >
+            this.cblist.clearSelection();
+            this.setText("");
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                if (editable) {
+                    interior.editbkgnd.setAttribute("bgcolor", s.textfieldcolor);
+                    interior.cbtext.setAttribute('bgcolor',s.textfieldcolor);
+                } else {
+                    interior.cbtext.setAttribute('bgcolor',null);
+                    interior.cbtext.setAttribute('fgcolor',s.textcolor);
+                }
+                setTint(bkgnd, s.basecolor);
+           }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_showEnabled">
+           interior.cbtext.setAttribute('visible', this._enabled);
+            if (!this._enabled) {
+                if (interior._dsblfield == null) {
+                    var t = new lz.text(interior,
+                        { name: '_dsblfield', x: 2, y: 1,
+                          width:interior.width, height:interior.height,
+                            fgcolor:this['style'] ? this.style.textdisabledcolor : null});
+                } else {
+                   interior._dsblfield.setAttribute('visible', true);
+                }
+                interior._dsblfield.setAttribute('text', this.getText());
+            } else {
+                if (interior._dsblfield) interior._dsblfield.setAttribute('visible', false);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <setter name="width" args="w">
+            super.setAttribute('width', (Math.max(w,this.min_width)));
+        </setter>
+
+        <doc>
+          <tag name="shortdesc"><text>baseclass for a combobox</text></tag>
+          <text>
+            <p>Extend this base class to create a combobox with a custom popup
+            control, and to change the size of the font.</p>
+            
+            <p>The number of items shown in the combobox can be set using the
+            <attribute>shownitems</attribute> attribute.  If there are more items
+            available than are shown, a scrollbar will be created
+            automatically.</p>
+            
+            <p>The list of items in a combobox can be created explicity using the
+            <tagname>textlistitem</tagname> tags with assigned text and value
+            attributes.</p>
+            
+            <example title="custom appearance and font for a combobox">
+            &lt;canvas height="100"&gt;
+              &lt;font name="smallfont" src="verity/verity9.ttf"/&gt;
+            
+              &lt;class name="minicombo" extends="basecombobox" font="smallfont"
+                     bgcolor="0xeaeaea" editable="false" height="14"&gt;
+                &lt;attribute name="text_y" value="-2"/&gt;
+                &lt;view bgcolor="green" x="${parent.width-10}"
+                      y="3" height="8" width="8"
+                      placement="bkgnd" onclick="parent.toggle()" /&gt;
+              &lt;/class&gt;
+            
+              &lt;class name="minilistitem" extends="textlistitem"
+                     font="smallfont" text_y="-2" height="12"/&gt;
+            
+              &lt;minicombo x="20" y="20"  &gt;
+                &lt;minilistitem value="1"&gt;one&lt;/minilistitem&gt;
+                &lt;minilistitem value="2"&gt;two&lt;/minilistitem&gt;
+                &lt;minilistitem value="3"&gt;three&lt;/minilistitem&gt;
+              &lt;/minicombo&gt;
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>For more use cases of <tagname>basecombobox</tagname>, see examples
+                in <a href="lz.combobox.html" target="_self"><code class="tagname">&lt;combobox&gt;</code></a>.</p>
+          </text>
+        </doc>
+    </class>
+
+</library>

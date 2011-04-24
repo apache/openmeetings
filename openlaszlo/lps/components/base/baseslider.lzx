@@ -1,0 +1,341 @@
+<library>
+    <include href="base/basevaluecomponent.lzx"/>
+    <include href="lz/button.lzx"/>
+    <include href="utils/states/dragstate.lzx"/>
+    
+    <!--- The base class for implementing sliders representing a range of
+              values. -->
+    <class name="baseslider" extends="basevaluecomponent" width="200" >
+
+        <attribute name="track"/>
+
+        <!--- The height of the track. -->
+        <attribute name="trackheight" value="8" type="number"/>
+        <!--- The width of the thumb. -->
+        <attribute name="thumbwidth" value="10" type="number"/>
+        <!--- The height of the thumb. -->
+        <attribute name="thumbheight" value="18" type="number"/>
+        
+        <!--- The minimum value. -->
+        <attribute name="minvalue" value="0" type="number" setter="setMinValue(minvalue)"/>
+        <!--- The maximum value. -->
+        <attribute name="maxvalue" value="100" type="number" setter="setMaxValue(maxvalue)"/>
+        
+        <!--- Turns on / off the slider's filled area. -->
+        <attribute name="showfill" value="true"/>
+        
+        <!--- Turns on / off the floating value text when the user
+              drags. -->
+        <attribute name="showvalue" value="true" type="boolean"/>
+        
+        <!--- Turns on / off the bounding range text. -->
+        <attribute name="showrange" value="true" type="boolean"/>
+        
+        <!--- How far to move value when key navigating. -->
+        <attribute name="keystep" value="1" type="number"/>
+        
+        <!--- The border width. This can be set with a style. -->
+        <attribute name="bordersize" value="1" type="number"/>
+        
+        <!--- @keywords private -->
+        <attribute name="value" value="0" setter="setValue(value)"/>
+
+        <!--- @keywords private -->
+        <event name="onvalue"/>
+
+        <event name="onmaxvalue"/>
+        <event name="onminvalue"/>
+        
+        <!--- @keywords private -->
+        <method name="init"><![CDATA[
+            super.init();
+            
+            // Since we didn't handle inconsistent values in the setters in the pre-init case,
+            // do it now.
+            // Choose init() because of oninit() for this because we get predictable 
+            // order of execution with init().
+            if (this.maxvalue < this.minvalue) this.maxvalue = this.minvalue;
+            if (this.value < this.minvalue)    this.value = this.minvalue;
+            if (this.value > this.maxvalue)    this.value = this.maxvalue;
+            
+            // and since we didn't send events in the pre-init case, do those now too
+            if (this['onvalue']) this.onvalue.sendEvent();
+            if (this['onminvalue']) this.onminvalue.sendEvent();
+            if (this['onmaxvalue']) this.onmaxvalue.sendEvent();
+            
+            // since we didn't handle view consistency in the pre-init case, do it now
+            this._adjustThumb();
+        ]]></method>
+        
+        <!--- Get the minimum value of the slider.
+                      @return Number: the minimum value. -->
+        <method name="getMinValue"><![CDATA[
+            //TODO: [20080412 anba] deprecate?
+            if ($debug) {
+                Debug.info("%w.%s() is deprecated.  Use %w[%#w] instead.", this, arguments.callee, this, "minvalue");
+            }
+            return this.minvalue;
+        ]]></method>
+        
+        <!--- Get the maximum value of the slider.
+                      @return Number: the maximum value. -->
+        <method name="getMaxValue"><![CDATA[
+            //TODO: [20080412 anba] deprecate?
+            if ($debug) {
+                Debug.info("%w.%s() is deprecated.  Use %w[%#w] instead.", this, arguments.callee, this, "maxvalue");
+            }
+            return this.maxvalue;
+        ]]></method>
+
+        <!--- Set the minimum value.
+                      @param Number v: the minimum value. -->
+        <method name="setMinValue" args="v"><![CDATA[
+            v = v * 1;
+        
+            if (isNaN(v)) {
+                if ($debug) {
+                    Debug.warn("%w.%s must not be set to %s", this, "minvalue", v);
+                }
+                v = 0;
+            }
+        
+            if (!this._initcomplete) {
+                // bounds check and sendEvent are done in init() override in this case
+                this.minvalue = v;
+            } else {
+                if (this.minvalue == v) return;
+                
+                // ensure no crossover
+                if (this.maxvalue < v) v = this.maxvalue;
+                
+                // doing this before setting the attribute means we assume consistency
+                // on function entry and try to send events only when in a consistent state.
+                if (v > this.value) this.setAttribute("value", v);
+                
+                this.minvalue = v;
+                
+                if (this['onminvalue']) this.onminvalue.sendEvent();
+                
+                this._adjustThumb();
+            }
+        ]]></method>
+
+        <!--- Set the maximum value.
+                      @param Number v: the maximum value. -->
+        <method name="setMaxValue" args="v"><![CDATA[
+            v = v * 1;
+        
+            if (isNaN(v)) {
+                if ($debug) {
+                    Debug.warn("%w.%s must not be set to %s", this, "maxvalue", v);
+                }
+                v = 0;
+            }
+        
+            if (!this._initcomplete) {
+              // bounds check and sendEvent are done in init() override in this case
+              this.maxvalue = v;
+            } else {
+                if (this.maxvalue == v) return;
+                
+                // ensure no crossover
+                if (this.minvalue > v) v = this.minvalue;
+                
+                // doing this before setting the attribute means we assume consistency
+                // on function entry and try to send events only when in a consistent state.
+                if (this.value > v) this.setAttribute("value", v);
+                
+                this.maxvalue = v;
+                
+                if (this['onmaxvalue']) this.onmaxvalue.sendEvent();
+                
+                this._adjustThumb();
+            }
+        ]]></method>
+        
+        <!--- Sets the value for the slider that must be within min and
+                      max.
+                      @param Number v: a number between the minimum and maximum
+                      value for the slider. -->
+        <method name="setValue" args="v"><![CDATA[
+            v = v * 1;
+
+            if (isNaN(v)) {
+                if ($debug) {
+                    Debug.warn("%w.%s must not be set to %s", this, "value", v);
+                }
+                v = 0;
+            }
+
+            if (!this._initcomplete) {
+                // bounds check and sendEvent are done in init() override in this case
+                this.value = v;
+            } else {
+                if (this.value == v) return;
+                
+                // ensure in bounds 
+                if (v < this.minvalue) v = this.minvalue;
+                if (v > this.maxvalue) v = this.maxvalue;
+                
+                this.value = v;
+                
+                if (this['onvalue']) this.onvalue.sendEvent(v);
+                
+                this._adjustThumb();
+            }
+        ]]></method>
+        
+        <!--- Set the value by percentage of range from min to max.
+                      @param Number p: a percentage between the min and
+                      the max. -->
+        <method name="setPercentage" args="p"><![CDATA[
+            var diff = this.minvalue - this.maxvalue;
+            this.setAttribute("value", diff * p + this.minvalue);
+        ]]></method>
+        
+        <!--- Get the percentage of the range selected by the value.
+                      @return Number: the percentage selected. -->
+        <method name="getPercentage"><![CDATA[
+            if ($debug) {
+                if (this.maxvalue - this.minvalue == 0) {
+                    Debug.error("%s.%s can not be computed, range is empty", this, arguments.callee);
+                }
+            }
+            return (this.value - this.minvalue) / (this.maxvalue - this.minvalue);
+        ]]></method>
+        
+        <!--- adjusts the thumb location
+              @keywords private -->
+        <method name="_adjustThumb"><![CDATA[
+            var track = this.track;
+            if (track) {
+                var thumb = track.thumb;
+                thumb.setAttribute("x", thumb._thumbFromValue());
+            }
+        ]]></method>
+        
+        <!--- @keywords private -->
+        <handler name="onkeydown" args="k"><![CDATA[
+            var track = this.track;
+            if (track) {
+                if (k == 37) {
+                    //left arrow
+                    this.setValue(this.value - this.keystep);
+                } else if (k == 39) {
+                    //right arrow
+                    this.setValue(this.value + this.keystep);
+                }
+            }
+        ]]></handler>
+        
+        <!--- @keywords private -->
+        <method name="getFocusRect"><![CDATA[
+            var fx = this.getAttributeRelative('x', canvas);
+            var fy = this.getAttributeRelative('y', canvas) - 4;
+            var fw = this.getAttributeRelative('width', canvas) + 2;
+            var fh = this.getAttributeRelative('height', canvas) + 6;
+            return [fx, fy, fw, fh];
+        ]]></method>
+        <doc>
+          <tag name="shortdesc"><text>A non-visual base class for implementing sliders.</text></tag>
+          <text>
+            <p>
+            Baseslider is a non-visual representation of a slider.
+            </p>
+          </text>
+        </doc>
+    </class><!-- end baseslider class -->
+    
+    <!--- Baseslidertrack expects to be within a baseslider (or its
+          subclass). In other words, its "classroot" should be a slider. -->
+    <class name="baseslidertrack" width="100%" height="${this.classroot.trackheight}" bgcolor="0x333333" >
+        <method name="init"><![CDATA[
+            super.init();
+            this.classroot.track = this;
+        ]]></method>
+    </class>
+    
+    <!--- Basesliderthumb expects to be within a baseslidertrack (or its
+          subclass). In other words, its "classroot" should be a slidertrack. -->
+    <class name="basesliderthumb" extends="button" 
+        width="${this.parent.classroot.thumbwidth}" 
+        height="${this.parent.classroot.thumbheight}"
+        onmousedown="this.thedragstate.setAttribute('applied', true);"
+        onmouseup="this.thedragstate.setAttribute('applied', false);"
+        focusable="false"
+        x="0"
+        y="${(this.parent.height - this.height) / 2}"
+    >
+        
+        <!--- Toggles the floating value text when dragging thumb. -->
+        <attribute name="showvalue" value="${this.parent.parent.showvalue}"/>
+        
+        <!--- @keywords private -->
+        <dragstate name="thedragstate" drag_axis="x">
+            <text name="t"
+                resize="true"
+                x="${(this.classroot.width / 2) - (this.width / 2)}"
+                y="-14"
+                text="${this.parent.parent.parent.presentValue()}"
+                visible="${this.classroot.showvalue}"
+                fgcolor="${this.classroot.style.textcolor}"
+            />
+        </dragstate>
+
+        <!--- compute thumb position from slider value
+              @keywords private -->
+        <method name="_thumbFromValue"><![CDATA[
+            var slider = this.parent.parent;
+            var delta = slider.maxvalue - slider.minvalue;
+            var perc = (delta == 0) ? 0 : (slider.value - slider.minvalue) / delta;
+            var pos = (slider.width - this.width) * perc;
+            return pos;
+        ]]></method>
+        
+        <!--- compute slider value from thumb position
+              @keywords private -->
+        <method name="_valueFromThumb"><![CDATA[
+            var slider = this.parent.parent;
+            var delta = slider.width - this.width;
+            var perc = (delta == 0) ? 0 : (this.x / (slider.width - this.width));
+            var val = Math.round((perc * (slider.maxvalue - slider.minvalue)) + slider.minvalue);
+            return val;
+        ]]></method>
+        
+        <!--- constrain to parents bounds, and adjust slider value when dragged
+              @keywords private -->
+        <setter name="x" args="x"><![CDATA[
+            var boundedx = x;
+            
+            var w = this.width;
+            var pwidth = this.parent.width;
+            if ( x > pwidth - w ) {
+                var constrainX = pwidth - w;
+                boundedx = constrainX;
+            } else {
+                var px = this.parent.x;
+                if (px > x) {
+                    boundedx = px;
+                }
+            }
+            
+            super.setAttribute('x', boundedx);
+            
+            //update slider value
+            var slider = this.parent.parent;
+            if (slider.isinited) {
+                //set after slider is inited, see LPP-5710
+                var thumbVal = this._valueFromThumb();
+                
+                if (thumbVal != slider.value) {
+                    slider.setAttribute("value", thumbVal);
+                }
+            }
+        ]]></setter>
+    </class><!-- end basesliderthumb class -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

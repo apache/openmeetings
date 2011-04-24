@@ -1,0 +1,122 @@
+<!---
+      @topic Incubator
+      @subtopic Rich Text Editor
+  -->
+<library>
+    <!--- 
+        richtexttoolbar
+        A class that acts as the parent controller for the individual format tools
+        [gregor 11.15.05]
+    -->
+    <class name="richtexttoolbar" width="${parent.width}" onmouseover="this.onmouseover" y="4">
+
+        <!--- The reference to the richtexteditor associated with this toolbar. -->
+        <attribute name="editor" value="${null}" />
+        
+        <!--- Fonts can have different names so we provide different options to
+              provide that mapping here.
+              @keywords private -->
+        <attribute name="_fontmap" value="$once{
+            { 'Times New Roman' : 'Times', 
+              'Courier New'     : 'Courier' } }"/>
+
+        <!--- Whether value changes in components should be passed through to the editor
+            @keywords private--> 
+        <attribute name="_passthruchanges" value="true" />
+        
+        <!--- @keywords private
+            array of toolbar's registered tools - each tool will register so 
+            that meta methods can be called on them -->
+        <attribute name="_atools" value="$once{new Array()}" />
+        
+        <!--- Whether to print a lot of debug information 
+            @keywords private-->
+        <attribute name="_debugformat" value="true" /> 
+        
+        <simplelayout axis="x" spacing="5" />
+
+        <view name="padding" width="2" />
+        
+        <!--- @keywords private -->
+        <method name="init">  
+            super.init();
+            // Make the gui components match the editor's currentformat
+            // TODO: set up keyboard commands
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="construct" args="parent, args">
+            super.construct(parent,args);
+        </method>
+        
+        <!--- Ensures that the oncurrentformat method is referencing
+            the editor. -->
+        <handler name="oneditor">
+            if(this['editor']){
+                this.oncurrentformat.reference = this.editor;
+            }
+        </handler>
+        
+        <!--- Handles the updating if the tool's state based on the format passed in.
+            _passthruchanges flag avoids an infinite loop
+            @param textformat fmt: TextFormat object
+            -->
+        <handler name="oncurrentformat" args="fmt">
+            this._passthruchanges = false; 
+            this.matchformat(fmt); 
+            this._passthruchanges = true;             
+        </handler>
+
+        <!--- Update the GUI to match the format passed in 
+            @param textformat spec: TextFormat object-->
+        <method name="matchformat" args="spec"><![CDATA[
+            
+            var cfmt = spec; 
+            var font; 
+            if (cfmt.font != null) {
+                font = this._fontmap[cfmt.font];
+                if (font == null) font = cfmt.font;
+            }
+            
+            // assign the mapped value back to the object so the loop below has the correct data
+            if (font) {
+                cfmt.font =  font ; 
+            } else {
+                cfmt.font = "- -"; 
+            }
+            
+            // 'broadcast' out the setState call with the format value to the registered tools
+            for (var i=0;i < _atools.length;i++){
+                _atools[i].ref.setState(cfmt[_atools[i].fmt]);
+            }
+            ]]>            
+        </method>
+        
+        <!--- Update the GUI to match the format specified in the editor's currentformat -->
+        <method name="matcheditorformat" args="ignore=null">
+            this._passthruchanges = false; 
+            var cfmt = this.editor.currentformat;
+            this.matchformat(cfmt); 
+            this._passthruchanges = true; 
+        </method> 
+
+        <!--- Reset the state of the richtexttoolbar's tools. -->
+        <method name="reset">
+            // 'broadcast' out the reset method call to all registered tools
+            for(var obj in _atools){
+                _atools[obj].ref.reset();
+            }
+        </method>
+        
+        <!--- add tool into the richtexttoolbar's tools array . -->
+        <method name="registerTool" args="myref,myfmt">
+            _atools.push({ref:myref,fmt:myfmt});
+        </method>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->

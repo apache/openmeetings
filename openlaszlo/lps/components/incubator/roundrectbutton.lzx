@@ -1,0 +1,115 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<library>
+
+<include href="incubator/roundrect.lzx" />
+
+<!--- 
+A class for making nice-looking, styleable buttons with gradients, without any art assets.
+
+See test/test-roundrectbutton.lzx for several examples of how to use this component. 
+
+The component attributes are only used for initialization. They are not live constraints.
+Currently the best way to change them at runtime is to apply a &lt;style&gt;. 
+-->
+<class name="roundrectbutton" extends="basecomponent" styleable="true">
+
+    <attribute name="downStartColor" type="color" value="0xFFFFFF" />
+    <attribute name="downStopColor" type="color" value="0xCCCCCC" />
+
+    <attribute name="upStartColor" type="color" value="0xcccccc" />
+    <attribute name="upStopColor" type="color" value="0x999999" />
+
+    <attribute name="overStartColor" type="color" value="0x999999" />
+    <attribute name="overStopColor" type="color" value="0x777777" />
+
+    <roundrect name="_rr" width="100%" height="100%">
+        <attribute name="borderRadius" value="15"/>
+        <attribute name="borderColor" type="color" value="0x999999"/>
+        <attribute name="borderWidth" value="1" />
+        <attribute name="backgroundStartColor" type="color" value="$once{parent.upStartColor}"/>
+        <attribute name="backgroundStopColor" type="color" value="$once{parent.upStopColor}"/>
+        <attribute name="boxShadowX" value="0"/>    
+        <attribute name="boxShadowY" value="2"/>        
+        <attribute name="boxShadowColor" value="0xb3b3b3"/>       
+    </roundrect>
+    
+
+    <text name="_label" 
+         clickable="false"
+         resize="true"
+         align="center" valign="middle"
+         text="${classroot.text}"
+     />     
+
+    <handler name="onmouseover">
+        _rr.setAttribute("backgroundStartColor", this.overStartColor);
+        _rr.setAttribute("backgroundStopColor", this.overStopColor);        
+        _rr.drawStructure(); 
+    </handler>
+
+    <!--- @keywords private -->
+    <method name="_applystyle" args="s">
+        // Change the color for the up, down, over states
+        this.setAttribute("downStartColor", s.basecolor)
+        this.setAttribute("downStopColor", s.bgcolor)
+
+        this.setAttribute("overStartColor", 0xFFFFFF)
+        this.setAttribute("overStopColor", s.basecolor)
+
+        this.setAttribute("upStartColor", s.hilitecolor)
+        this.setAttribute("upStopColor", s.basecolor)
+
+        // Change the color attributes on the inner roundrect
+        this._rr.setAttribute("backgroundStartColor", this.upStartColor);
+        this._rr.setAttribute("backgroundStopColor", this.upStopColor);
+        
+        this._rr.setAttribute("bordercolor", s.bordercolor)
+        this._rr.setAttribute("borderwidth", s.bordersize)
+
+        // Redraw the inner roundrect
+        _rr.drawStructure(); 
+    </method>
+
+    <handler name="onmouseup">
+        _rr.setAttribute("backgroundStartColor", this.overStartColor);
+        _rr.setAttribute("backgroundStopColor", this.overStopColor);        
+        _rr.drawStructure(); 
+    </handler>
+    
+    
+    <handler name="onmouseout">
+        _rr.setAttribute("backgroundStartColor", this.upStartColor);
+        _rr.setAttribute("backgroundStopColor", this.upStopColor);        
+        _rr.drawStructure(); 
+    </handler>
+        
+    <handler name="onmousedown">
+        _rr.setAttribute("backgroundStartColor", this.downStartColor);
+        _rr.setAttribute("backgroundStopColor", this.downStopColor);        
+        _rr.drawStructure();        
+    </handler>
+    
+    <handler name="onwidth">
+        if (!this['_rr']) return;     // ignore these events if the roundrect 
+                                      // itself hasn't been built yet
+        _rr.setAttribute('width', this.width);
+        _rr.drawStructure();
+    </handler>
+    
+    <handler name="onheight">
+        if (!this['_rr']) return;     // ignore these events if the roundrect 
+                                      // itself hasn't been built yet
+        _rr.setAttribute('height', this.height);
+        _rr.drawStructure();
+    </handler>
+    
+    
+    
+</class>
+
+</library>
+                                                                                            

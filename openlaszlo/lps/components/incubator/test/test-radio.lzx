@@ -1,0 +1,7 @@
+<canvas>
+<include href="incubator/lzradio_resources.lzx" />
+<include href="incubator/lzradio.lzx" />
+
+<lzradiobutton />
+
+</canvas>

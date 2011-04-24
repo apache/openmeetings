@@ -1,0 +1,295 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <!-- CLASS INDEX:
+        <label/>
+        <ticklabel/>
+        -->
+    
+    <!--- Labels for data elements in a chart.  Uses data from the datapath
+        specified in the 'label' attribute on each dataseries.
+        (Of beta quality.) -->
+    <class name="label" extends="drawview" width="${this.realtext.width + 4}"
+        height="${this.realtext.height + 4}"
+        visible="${this.datalink != null ? this.datalink.dataenabled : true}">
+        <!--- The text of this label. -->
+        <attribute name="ltext" type="color" value="$once{null}"/>
+        <!--- The text size of this label. -->
+        <attribute name="ltextsize" type="number" value="10"/>
+        <!--- The color of the border of this label. -->
+        <attribute name="lborder" type="color" value="#000000"/>
+        <!--- The width of the border of this label. -->
+        <attribute name="lbwidth" type="number" value="1"/>
+        <!--- The color of the text of this label. -->
+        <attribute name="ltcolor" type="color" value="#000000"/>
+        <!--- The original x value for this label. -->
+        <attribute name="rvalx" type="number" value="0"/>
+        <!--- The original y value for this label. -->
+        <attribute name="rvaly" type="number" value="0"/>
+        <!--- Whether to initially fade this label in. -->
+        <attribute name="fadein" type="boolean" value="false"/>
+        <!--- @keywords private
+            If labeling the bases of bars in a barchart, this is the bar
+            associated with this label. -->
+        <attribute name="datalink" value="$once{null}"/>
+        <!--- @keywords private
+            The draw axis of the parent chart. -->
+        <attribute name="drawaxis" type="string" value="x"/>
+        <!--- @keywords private
+            This label's number within the set. -->
+        <attribute name="labelnumber" type="number" value="0"/>
+        <!--- @keywords private
+            The set to which this label belongs. -->
+        <attribute name="labelset" type="number" value="0"/>
+        <!--- @keywords private
+            The type of chart on which this label is drawn. -->
+        <attribute name="charttype" type="string" value="line"/>
+        <!--- @keywords private
+            The bar with which this label is associated. -->
+        <attribute name="barlink" value="${parent['bar'+this.labelset+this.labelnumber]}"/>
+        
+        <handler name="oncontext" method="initLabel"/>
+        <handler name="onmouseover" method="bringToFront"/>
+        
+        <method name="initLabel" args="ignore">
+            <![CDATA[
+            if(this.charttype == "bar"){
+                if(this.drawaxis == 'x'){
+                    var d = [this.barlink, "x"];
+                    this.applyConstraintMethod("__constraintBarX_x", d);
+                    
+                    var dd = [this.barlink, "y"];
+                    this.applyConstraintMethod("__constraintBarX_y", dd);
+                    
+                    if(this.fadein == true){
+                        this.fader.doStart();
+                    }
+                } else {
+                    var d = [this.barlink, "x"];
+                    this.applyConstraintMethod("__constraintBarY_x", d);
+                    
+                    var dd = [this.barlink, "y"];
+                    this.applyConstraintMethod("__constraintBarY_y", dd);
+                    
+                    if(this.fadein == true && parent.anicomplete == false){
+                        this.fader.doStart();
+                    }
+                }
+            } else if(this.charttype == "line"){
+                var d = [parent.classroot, "altscaler"];
+                this.applyConstraintMethod("__constraintLine_x", d);
+                
+                var dd = [parent.classroot, "scaler"];
+                this.applyConstraintMethod("__constraintLine_y", dd);
+            } else if(this.charttype == "pie"){
+                this.setAttribute('x', this.x - this.width / 2);
+                this.setAttribute('y', this.y - this.height / 2);
+            }
+            ]]>
+        </method>
+        
+        <method name="__constraintBarX_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", this.barlink.x + (this.barlink.width / 2) -
+                (this.width / 2));
+        ]]></method>
+        
+        <method name="__constraintBarX_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", this.barlink.y - this.height - 4);
+        ]]></method>
+        
+        <method name="__constraintBarY_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", (Math.abs(parent.classroot.minimum) * parent.classroot.altscaler) +
+                this.barlink.width + 4);
+        ]]></method>
+        
+        <method name="__constraintBarY_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", this.barlink.y + ((this.barlink.height - this.height) / 2));
+        ]]></method>
+        
+        <method name="__constraintLine_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", parent.classroot.altscaler * this.rvalx +
+                parent.classroot.altzero);
+        ]]></method>
+        
+        <method name="__constraintLine_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", parent.classroot.dataclip.datapane.height -
+                (parent.classroot.scaler * this.rvaly) -
+                (parent.classroot.minimum * parent.classroot.scaler * -1) - this.height - 3);
+        ]]></method>
+
+        <method name="renderBorder">
+            <![CDATA[
+            this.strokeStyle = this.lborder;
+            this.lineWidth = this.lbwidth;
+            this.beginPath();
+            this.moveTo(0,0);
+            this.lineTo((this.width - 1), 0);
+            this.lineTo((this.width - 1), (this.height - 1));
+            this.lineTo(0, (this.height - 1));
+            this.lineTo(0,0);
+            this.stroke();
+            ]]>
+        </method>
+        
+        <text name="realtext" resize="true" text="${parent.ltext}"
+            fontsize="${parent.ltextsize}" x="${(parent.width - this.width) / 2}"
+            fgcolor="${parent.ltcolor}" y="${(parent.height - this.height) / 2 - 1}">
+            <handler name="ontext">
+                <![CDATA[
+                if(this.sprite.width != 0 && this.sprite.width != 4){
+                    parent.setAttribute('width', this.sprite.width + 4);
+                    if(parent.context){
+                        parent.renderBorder();
+                    }
+                }
+                ]]>
+            </handler>
+        </text>
+        
+        <animator name="fader" attribute="opacity" from="0" to="1" duration="5000"
+            start="false"/>
+            
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+    
+    <!--- Labels along the tick axes. Either incremental, or, in a barchart,
+        determined by specified data. -->
+    <class name="ticklabel" extends="view" width="${this.realtext.width}"
+        visible="${this.datalink != null ? this.datalink.dataenabled : true}"
+        height="${this.realtext.height}">
+        <!--- The text of this label. -->
+        <attribute name="ltext" type="string" value="0"/>
+        <!--- The color of this label's text. -->
+        <attribute name="ltcolor" type="color" value="#000000"/>
+        <!--- The size of the text for this label. -->
+        <attribute name="ltextsize" type="number" value="10"/>
+        <!--- @keywords private
+            If labeling the bases of bars in a barchart, this is the bar
+            associated with this label. -->
+        <attribute name="datalink" value="$once{null}"/>
+        <!--- @keywords private
+            The length of the ticks associated with these labels. -->
+        <attribute name="ticklength" type="number" value="0"/>
+        <!--- @keywords private
+            Which axis these ticks belong to. -->
+        <attribute name="tickaxis" type="string" value="y"/>
+        <!--- @keywords private
+            Which label this is, within the set. -->
+        <attribute name="labelnumber" type="number" value="$once{null}"/>
+        <!--- @keywords private
+            Which set of labels this label belongs to. -->
+        <attribute name="labelset" type="number" value="$once{null}"/>
+        <!--- @keywords private
+            The number of sibling labels, to determine positioning. -->
+        <attribute name="numlabels" type="number" value="0"/>
+        <!--- @keywords private
+            The offset of this label, if ticks are staggered. -->
+        <attribute name="loffset" type="number" value="0"/>
+        <!--- @keywords private
+            The type of chart associated with this label. -->
+        <attribute name="charttype" type="string" value="line"/>
+        <!--- XX To be implemented: The rotation of this particular label. -->
+        <attribute name="labelangle" type="number" value="$once{null}"/>
+        
+        <handler name="oninit" method="initLabel"/>
+        
+        <method name="initLabel" args="ignore">
+            <![CDATA[
+            if(this.tickaxis == 'x'){
+                var barlink = parent.classroot.parent.dataclip.datapane['bar'+this.labelset+
+                    this.labelnumber];
+                if(this.labelset != null){
+                    var d = [barlink, "x"];
+                    this.applyConstraintMethod("__constraintTickXLabel_x", d);
+                    this.setAttribute('y', this.y + this.ticklength + this.loffset);
+                } else {
+                    // Really only needed to compensate for this little issue with the
+                    // barchart directional switch.
+                    if(this.charttype == 'bar'){
+                        var cm = "__constraintTickXNoLabelBar_x";
+                    } else {
+                        var cm = "__constraintTickXNoLabel_x";
+                    }
+                    var d = [parent, "width"];
+                    this.applyConstraintMethod(cm, d);
+                }
+            } else {
+                var barlink = parent.classroot.parent.dataclip.datapane['bar'+this.labelset+
+                    this.labelnumber];
+                if(this.labelset != null){
+                    var d = [barlink, "y"];
+                    this.applyConstraintMethod("__constraintTickYLabel_y", d);
+                    this.setAttribute('x', this.x - this.width - this.ticklength - this.loffset);
+                } else {
+                    this.setAttribute('x', parent.width - this.width - this.ticklength - 4);
+                    var d = [parent, "height"];
+                    this.applyConstraintMethod("__constraintTickYNoLabel_y", d);
+                }
+            }
+            if(this.labelangle != null){
+                this.realtext.setAttribute('rotation', this.labelangle);
+            }
+            ]]>
+        </method>
+        
+        <method name="__constraintTickXLabel_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", barlink.x + (barlink.width / 2) -
+                (this.width / 2));
+        ]]></method>
+        
+        <method name="__constraintTickXNoLabelBar_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", ((parent.width / this.numlabels) *
+                (this.labelnumber)) - (this.width / 2) -
+                ((parent.classroot.parent.minimum % parent.classroot.parent.hgridspacing) *
+                parent.classroot.parent.altscaler));
+        ]]></method>
+        
+        <method name="__constraintTickXNoLabel_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", ((parent.width / this.numlabels) *
+                (this.labelnumber)) - (this.width / 2) -
+                ((parent.classroot.parent.altminimum % parent.classroot.parent.vgridspacing) *
+                parent.classroot.parent.altscaler));
+        ]]></method>
+        
+        <method name="__constraintTickYLabel_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", barlink.y + ((barlink.height - this.height) / 2));
+        ]]></method>
+        
+        <method name="__constraintTickYNoLabel_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", parent.height - ((parent.height / this.numlabels) *
+                this.labelnumber) - ((parent.classroot.parent.minimum %
+                parent.classroot.parent.hgridspacing) * parent.classroot.parent.scaler * -1) -
+                (this.height / 2));
+        ]]></method>
+        
+        <text name="realtext" resize="true" text="${parent.ltext}"
+            fontsize="${parent.ltextsize}" x="${(parent.width - this.width) / 2}"
+            fgcolor="${parent.ltcolor}" y="${(parent.height - this.height) / 2}">
+            <handler name="ontext">
+                <![CDATA[
+                if(this.sprite.width != 0 && this.sprite.width != 4){
+                    parent.setAttribute('width', this.sprite.width);
+                }
+                ]]>
+            </handler>
+        </text>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart, linechart, or piechart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

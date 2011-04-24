@@ -1,0 +1,79 @@
+<canvas title="richtexteditarea-test" bgcolor="0x7C7C8D">
+
+
+<!-- This file tests the link dialog functionality --> 
+<include href="incubator/stylishbutton.lzx" /> 
+<include href="incubator/shadowbox.lzx"/>
+<include href="incubator/borderinput.lzx"/>
+<include href="incubator/lzcombobox.lzx"/>
+<include href="incubator/textstyle.lzx"/>
+<include href="incubator/baseedittext.lzx" />
+    
+<include href="incubator/rich-text/richtexttoolbar.lzx"/>
+<include href="incubator/rich-text/richtexteditarea.lzx"/>
+<include href="incubator/rich-text/linkdialog.lzx"/>
+<include href="incubator/rich-text/formatbtn.lzx"/>
+<include href="incubator/rich-text/formatfontcolor.lzx"/>
+<include href="incubator/rich-text/formatfontface.lzx"/>
+
+<include href="formatfontsize.lzx" />
+
+<view x="20" y="80" width="${canvas.width-40}" height="${canvas.height-80}">
+    <richtexttoolbar name="toolbar" id="gTB" editor="${grte}" height="30" width="${parent.width-5}" x="2" y="0" bgcolor="0xD4D7E5">
+
+        <method name="setEditor" args="ed">
+            Debug.info("setEditor called on richtexttoolbar (the view)" ); 
+            this.setAttribute("editor", ed); 
+            this.boldbtn.setAttribute("editor", ed); 
+            this.underlinebtn.setAttribute("editor", ed); 
+            this.italicbtn.setAttribute("editor", ed); 
+            this.fontfacecb.setAttribute("editor", ed);                         
+            this.fontsizecb.setAttribute("editor", ed);                         
+            this.fontcolorcb.setAttribute("editor", ed);               
+            // this.linkbtn.setAttribute("editor", ed);                                        
+        
+            // Set up delegate to watch for when the editor's format changes
+            this.del = new lz.Delegate(this, "matcheditorformat"); 
+            this.del.register( ed, "oncurrentformat" ); 
+        </method>   
+    
+        <formatbtn name="boldbtn" id="gBoldBtn" format="bold" iconname="bold" icony="4" />    
+        <formatbtn name="underlinebtn" id="gUnderlineBtn" format="underline" iconname="underline" />  
+        <formatbtn name="italicbtn" id="gItalicBtn" format="italic" iconname="italic" icony="4" />
+        <formatfontface name="fontfacecb" y="${(parent.height-this.height)/2}"/>
+        <formatfontcolor name="fontcolorcb" y="${(parent.height-this.height)/2}"/>
+        <formatfontsize name="fontsizecb" y="${Math.round((parent.height-this.height)/2)}"/>
+
+    
+    </richtexttoolbar>
+        
+
+    <view width="100%" y="35" height="${parent.height-70}" bgcolor="0xFFFFFF">
+                
+        <richtexteditarea id="grte" name="txt" 
+            height="400"
+            width="400"
+            defaultfontname="Verdana" 
+            defaultfontsize="18" 
+            defaultfontcolor="0x339999"
+            multiline="true"
+            border="10" >
+                <method name="init">
+                    super.init();
+                    gTB.setEditor(this); 
+                    this.setToolbar(gTB); 
+                    this.setText("Once in a while, you get caught in the fire. Once in a while, you're idle. Deep in my heart, I believe in the fundamental goodness of children. Adults, I'm not so sure about."); 
+                </method>           
+
+        </richtexteditarea>
+    </view> 
+</view>
+
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+    * Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.                    *
+    * Use is subject to license terms.                                            *
+    * X_LZ_COPYRIGHT_END ****************************************************** -->
+    <!-- @LZX_VERSION@                                                         -->
+    

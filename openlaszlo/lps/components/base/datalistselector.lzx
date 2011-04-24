@@ -1,0 +1,289 @@
+<library>
+    <include href="utils/dataselectionmanager.lzx"/>
+    <!-- note: when changing code in this class, please reveiw listselector
+        which must match these APIs and shares some code with this class -->
+
+    <!--- a helper class that wraps the dataselectionmanager in some
+        higher level APIs, used by baselist -->
+   <class name="datalistselector" extends="dataselectionmanager">
+        <!--- If multiselect is true, multiple selection is enabled.
+        When the shift key is down, a range of items is selected.
+        When the control key is down, any item may be added to the
+        selection.
+             Default: false -->
+       <attribute name="multiselect" value="false" type="boolean"/>
+       <!--- @keywords private -->
+       <attribute name="_forcemulti" value="false" type="boolean"/>
+
+       <!-- already defined in LzNode -->
+       <!--<attribute name="cloneManager" value="null"/>-->
+
+       <method name="isRangeSelect" args="item" override="true"><![CDATA[
+           return this.multiselect && super.isRangeSelect(item);
+       ]]></method>
+
+       <method name="isMultiSelect" args="item" override="true"><![CDATA[
+           return this._forcemulti || (this.multiselect && super.isMultiSelect(item));
+       ]]></method>
+
+       <method name="select" args="item" override="true"><![CDATA[
+           if (this.multiselect && item is Array) {
+                this._forcemulti = true;
+                for (var i=0; i < item.length; i++) {
+                   super.select(item[i]);
+                }
+                this._forcemulti = false;
+           } else {
+               super.select(item);
+           }
+       ]]></method>
+
+        <!---
+            if no selection, return null
+            if there is a single selection, just return the value
+            else return an array of values
+        -->
+        <method name="getValue">
+            <![CDATA[
+            var selection = this.getSelection();
+            if (selection.length == 0) return null;
+
+            var valdp = this.immediateparent.subviews[0]._valuedatapath;
+            if (!valdp) valdp = this.immediateparent.subviews[0]._textdatapath;
+            if (!valdp) valdp = 'text()';
+                // immediateparent.subviews[0].cloneManager.xpath
+            if ( selection.length == 1  && !multiselect) {
+                return selection[0].xpathQuery(valdp);
+            } else {
+                var valueArray = [];
+                for (var i = 0; i < selection.length; i++) {
+                    valueArray[i] = selection[i].xpathQuery(valdp);
+                }
+                return valueArray;
+            }
+            ]]>
+        </method>
+        
+         <!---
+            if no selection, return null
+            if there is a single selection, just return the value
+            else return an array of values
+        -->       
+        <method name="getText">
+            <![CDATA[
+            var selection = this.getSelection();
+            if (selection.length == 0) return null;
+
+            var textdp = this.immediateparent.subviews[0]._textdatapath;
+            if (!textdp) textdp = 'text()';
+            if ( selection.length == 1  && !multiselect) {
+                return selection[0].xpathQuery( textdp );
+            } else {
+                var textArray = [];
+                for (var i = 0; i < selection.length; i++) {
+                    textArray[i] = selection[i].xpathQuery(textdp);
+                }
+                return textArray;
+            }
+            ]]>
+        </method>
+        
+        <!--- returns the number of items in the list. When
+            data has not yet been set, will return zero -->
+        <method name="getNumItems">
+            <![CDATA[
+            if (!this.cloneManager) {
+                var svs = immediateparent.subviews;
+                if (svs == null || svs.length == 0) {
+                    return 0;
+                } else {
+                    this.cloneManager = svs[0].cloneManager
+                }
+            }
+            if(this.cloneManager != null){
+                if (!this.cloneManager['nodes']){
+                    return 0;
+                } else {
+                    return this.cloneManager.nodes.length;
+                }
+            } else if(svs[0].data) {
+                return 1;
+            } else {
+                return 0;
+            }
+            ]]>
+        </method>
+
+       <!--- @keywords private
+          get the next subview starting at the view "s"
+          return null if subview is last and dir == 1
+          return null if subview is firts and dir == -1
+       -->
+       <method name="getNextSubview" args="s, dir=1"> <![CDATA[
+            var clonelist = immediateparent.subviews[0].cloneManager['clones'];
+            if (s == null) {
+                var index = ((dir == -1) && (parent.shownitems != -1)) ?
+                    (parent.shownitems - 1)  : 0;
+                return clonelist[index];
+            }
+            var found_index = findIndex(s);
+            if (found_index == -1) return null; // should never happen
+
+            var nodelist = immediateparent.subviews[0].cloneManager.nodes;
+
+            if (!dir) dir = 1;
+            found_index += dir;
+            if (found_index == -1) found_index = 0;
+            if (found_index == nodelist.length) found_index = nodelist.length -1;
+
+            _ensureItemInViewByIndex(found_index);
+            var found_element = nodelist[found_index];
+
+            var svs = immediateparent.subviews;
+            for (var i=0; i < svs.length; i++) {
+                if (svs[i].datapath.p == found_element) {
+                    // found the view!
+                    return svs[i];
+                }
+            }
+       ]]>
+       </method>
+       <method name="findIndex" args="s">  <![CDATA[
+            if ( ! immediateparent.subviews[0].cloneManager ) {
+                if (s instanceof lz.view) {
+                    return (immediateparent.subviews[0] == s ? 0 : -1);
+                } else {
+                    return (immediateparent.subviews[0].datapath.p == s.p ? 0 : -1);
+                }
+            } 
+            
+            var target_element;
+            if (s instanceof lz.view) {
+                target_element = s.datapath.p;
+            } else {
+                target_element = s.p;
+            }
+
+            var nodelist = immediateparent.subviews[0].cloneManager.nodes;
+            var found_index = -1;
+            if (nodelist != null) {
+                for (var i=0; i < nodelist.length; i++) {
+                    if (nodelist[i] == target_element) {
+                        found_index = i;
+                        break;
+                    }
+                }
+            }
+            return found_index;
+            ]]>
+       </method>
+       <method name="ensureItemInView" args="item">
+           if (!item) return;
+           var index = findIndex(item);
+           if (index != -1) _ensureItemInViewByIndex(index);
+       </method>
+
+       <method name="_ensureItemInViewByIndex" args="index">  <![CDATA[
+            var ip = this.immediateparent;
+            var svs = ip.subviews;
+            if (!svs || svs.length == 0) { return; }
+            var itemheight = svs[0].height;
+            var itemy = index * itemheight;
+            var spacing = 0;
+            if ( index > 0 ){
+                var cloneman = svs[0].cloneManager;
+                if (parent['spacing'] ) {
+                    spacing = parent.spacing;
+                } else if ( cloneman && cloneman['spacing'] ){
+                    spacing = cloneman.spacing;
+                }
+                itemy += (spacing * (index-1));
+            }
+            var changed = false;
+            var clipheight = ip.parent.height;
+            var ipY = ip.y;
+           if ( (itemy + itemheight) > clipheight - ipY ) {
+               var diff = clipheight - ipY - (itemy + itemheight + spacing);
+               var newY = Math.max((clipheight - ip.height), ipY + diff);
+               ip.setAttribute("y", newY);
+               changed = true;
+           }
+           // check for selection above interior
+           else if ( (ipY * -1) > itemy ) {
+               var diff = (ipY*-1) - itemy - spacing;
+               var newY = Math.min(0, (ipY + diff));
+               ip.setAttribute("y", newY);
+               changed = true;
+           }
+           if (changed) {
+                this._updatefromscrolling = true;
+           }
+           ]]>
+       </method>
+
+        <method name="getItemByIndex" args="index">
+            <![CDATA[ 
+            var svs = immediateparent.subviews;
+            if (!svs || svs.length == 0) return null;
+            this._ensureItemInViewByIndex( index );
+            var cl = svs[0].cloneManager;
+            if (cl == null) {
+                return ( index == 0 ? svs[0] : undefined );
+            }
+            var pos = cl.clones[0].datapath.xpathQuery( 'position()' ) - 1;
+            return cl.clones[ index - pos ];
+            ]]>
+        </method>
+
+        <method name="getItemByData" args="data">
+            <![CDATA[ 
+                return data ? getItemByIndex( this.getItemIndexByData( data ) ) : null;
+            ]]>
+        </method>
+
+        <method name="getItemIndexByData" args="data">
+            <![CDATA[ 
+            if (data) {
+                var svs = immediateparent.subviews;
+                if (svs[0].cloneManager) {
+                    var nodes = svs[0].cloneManager['nodes'];
+                    if( nodes != null ) {
+                        for ( var i = 0; i< nodes.length; i++ ){
+                            if ( nodes[ i ] == data ){
+                                return i;
+                            }
+                        }
+                    }
+                } else if( svs[0].datapath.p == data ) {
+                    return 0;
+                }
+            }
+            return null;
+            ]]>
+       </method>
+
+       <!--- @keywords private -->
+       <attribute name="_updatefromscrolling" value="false"/>
+       <!--- called by baselist to see if it should allow a setHilite,
+            we need to prevent the mouseout/over from changing the
+            hilite in the case where the mouse is over a different item
+            from the one which is hilited and we are scrolling -->
+       <method name="allowhilite" args="v">
+           if (this._updatefromscrolling) {
+               if (v != null) this._updatefromscrolling = false;
+               return false;
+           }
+           return true;
+       </method>
+        <doc>
+          <tag name="shortdesc"><text></text></tag>
+          <text>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

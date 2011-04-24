@@ -1,0 +1,68 @@
+<lps-configuration>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+    <!-- Global default options -->
+    <option name="content-encoding-user-agent" >
+        <deny>
+            <!-- Deny Netscape 4.* -->
+            <pattern>Mozilla/4\.[0-9]+ \[\w+\]</pattern>
+            <!-- Deny IE 4.x -->
+            <pattern>MSIE 4\.[0-9]+.*</pattern>
+            <!-- Deny PocketPC IE -->
+            <pattern>Mozilla/2\.0 .*</pattern>
+        </deny>
+    </option>
+
+    <option name="connection-user-agent" >
+        <deny>
+            <!-- Deny Safari -->
+            <pattern>Safari</pattern>
+        </deny>
+    </option>
+
+    <!-- Path is relative to webapp -->
+    <application path="/path2your/dataimage2.lzx">
+        <option name="proxy-security-urls">
+            <allow>
+                <!-- Regular expression for urls we will proxy -->
+                <pattern>http://.*\.laszlosystems\.com/.*</pattern>
+                <pattern>file:logo.*</pattern>
+            </allow>
+        </option> 
+    </application>
+
+    <!-- =========================================== -->
+    <!-- LPS log4j configuration                     -->
+    <!-- See http://jakarta.apache.org/log4j/docs/.  -->
+    <!-- =========================================== -->
+    <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j">
+
+        <appender name="lps" class="org.apache.log4j.RollingFileAppender">
+
+            <param name="File" value="/var/log/lps.log" />
+
+            <param name="MaxFileSize" value="10MB" />
+            <param name="MaxBackupIndex" value="5" />
+
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern" 
+                       value="%d{dd MMM yyyy HH:mm:ss} (%x) %-5p %-20c{2} - %m%n"/>
+            </layout>	    
+        </appender>
+    	
+        <logger name="org.openlaszlo" additivity="false">
+            <priority value="info" />
+            <appender-ref ref="lps" />
+        </logger>
+
+        <logger name="org.apache.axis" additivity="false">
+            <priority value="warn" />
+            <appender-ref ref="lps" />
+        </logger>
+
+    </log4j:configuration>
+
+</lps-configuration>

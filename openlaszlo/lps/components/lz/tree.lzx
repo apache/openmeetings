@@ -1,0 +1,238 @@
+<library>
+    <include href="base/basetree.lzx" />
+
+    <!--- Arrow expander resource:
+          frame 1 (right arrow), frame 2 (down arrow), frame 3 (transparent) -->
+    <resource name="lztree_arrow_rsc">
+        <frame src="resources/tree/arrow_closed.swf"/>
+        <frame src="resources/tree/arrow_opened.swf"/>
+        <frame src="resources/tree/arrow_transparent.swf"/>
+    </resource>
+
+    <!--- Plus and minus expander resource:
+          frame 1 (plus), frame 2 (minus), frame 3 (transparent) -->
+    <resource name="lztree_plusminus_rsc">
+        <frame src="resources/tree/plus_icon.swf"/>
+        <frame src="resources/tree/minus_icon.swf"/>
+        <frame src="resources/tree/plusminus_transparent.swf"/>
+    </resource>
+
+    <!--- Folder/file icon resource:
+          frame 1 (open folder), frame 2 (closed folder), frame 3 (file) -->
+    <resource name="lztree_folder_rsc">
+        <frame src="resources/tree/folder_closed.png"/>
+        <frame src="resources/tree/folder_opened.png"/>
+        <frame src="resources/tree/document.swf"/>
+    </resource>
+
+    <!-- A tree controller component. A tree's node is comprised of an expander
+          resource, an icon resource, and a label. The default layout of a
+          tree's child views is "class: simplelayout; axis: y; spacing: 5". -->
+    <class name="tree" extends="basetree" xindent="27" yindent="25" 
+           layout="spacing: 5">
+           
+        <!--- The resource for the expanding icon:
+              frame 1 (closed), frame 2 (opened), frame 3 (leaf).
+              Default is lztree_arrow_rsc defined in lz/tree.lzx.
+              @keywords final -->
+        <attribute name="expander" value="lztree_arrow_rsc" type="string" />
+
+        <!--- The resource for the item icon:
+              frame 1 (closed), frame 2 (opened), frame 3 (leaf) 
+              Default is lztree_folder_rsc defined in lz/tree.lzx.
+              @keywords final -->
+        <attribute name="icon" value="lztree_folder_rsc" type="string" />
+
+        <!--- Double-clicking on the icon or text triggers this event. -->
+        <event name="onactivate" />
+
+        <!--- Clicking on the icon or text triggers this event. -->
+        <event name="onclick" />
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+        <![CDATA[
+            if (this.style != null && this['treeitem'] != null) {
+                treeitem.text.setAttribute('fgcolor',s.textcolor);
+                if (treeitem.expander != null) {
+                    setTint(treeitem.expander.expander, s.basecolor);
+                }
+                if (treeitem.icon != null) {
+                    setTint(treeitem.icon.icon, s.basecolor);
+                }
+            }
+        ]]>
+        </method>
+
+        <!--- Focus the tree and toggle open, if this tree is not a leaf and is
+              not being multiselected. -->
+        <method name="toggleOpenAndFocus">
+        <![CDATA[
+            this.changeFocus(null);
+            this.setAttribute('selected', true);
+            if (! this.isleaf) {
+                if (! lz.Keys.isKeyDown("control") &&
+                    ! lz.Keys.isKeyDown("shift")) {
+                        this.setAttribute("open", ! this.open);
+                }
+            }
+        ]]>
+        </method>
+
+        <!-- The item for tree.  -->
+        <view name="treeitem" placement="item" layout="axis: x; spacing: 5">
+            <!-- Do this to get around resource and frame (constrained) onclick 
+                 view problem. (b 3466) -->
+            <view name="expander">
+                <handler name="onclick">
+                    if (! classroot.isleaf) {
+                        classroot.setAttribute("open", ! classroot.open);
+                    }
+                </handler>
+                <view name="expander"
+                      resource="$once{classroot.expander}"  
+                      frame="${classroot.isleaf ? 3
+                             :(classroot.open ? 2 : 1)}" />
+            </view>
+            <view name="icon">
+                <handler name="onclick">
+                    classroot.toggleOpenAndFocus()
+                    if (classroot.onclick) classroot.onclick.sendEvent();
+                </handler>
+                <handler name="ondblclick">
+                <![CDATA[
+                    if (classroot.onactivate) {
+                        classroot.onactivate.sendEvent();
+                    }
+                ]]>
+                </handler>
+                <view name="icon" 
+                      resource="$once{classroot.icon}"
+                      frame="${classroot.isleaf ? 3
+                             :(classroot.open ? 2 : 1)}" />
+            </view>
+            <text name="text" text="${classroot.text}" resize="true"
+                  bgcolor="${classroot.selected &amp;&amp; classroot.style
+                           ? classroot.style['selectedcolor']
+                           : (classroot.focused &amp;&amp; classroot.style
+                              ? classroot.style['hilitecolor']
+                              : classroot.parent.bgcolor)}" >
+                <handler name="onclick">
+                    classroot.toggleOpenAndFocus()
+                    if (classroot.onclick) classroot.onclick.sendEvent();
+                </handler>
+                <handler name="ondblclick">
+                <![CDATA[
+                    if (classroot.onactivate) {
+                        classroot.onactivate.sendEvent();
+                    }
+                ]]>
+                </handler>
+            </text>
+        </view>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              A tree control.
+          </text></tag>
+          <text>
+
+            <p>A <classname>tree</classname> provides a hierarchical view of
+              data. Each node is represented by an <dfn>expander resource</dfn>, an
+              <dfn>icon resource</dfn>, and a <dfn>label</dfn>. A tree can be
+              specified lexically or through data replication
+              <!--link-->.</p>
+
+              <p>
+                  When the <classname>tree</classname> expands recursively, the datapath must be
+                  a relative reference to the dataset. If an absolute
+                  refrence is used, the same nodes would be selected over
+                  and over forever, resulting in and endless loop.
+                  
+                  For example, this will hang in an endless loop: 
+                  
+                  <programlisting>
+                      &lt;dataset name="navdata"&gt;
+                      &lt;navmenu&gt;
+                      &lt;section /&gt;
+                      &lt;/navmenu&gt;
+                      &lt;/dataset&gt;
+                      
+                      
+                      &lt;view x="10" y="10" layout="axis: x; spacing: 10"&gt;
+                      &lt;tree width="160" height="20" datapath="navdata:/navmenu" /&gt;
+                      &lt;/view&gt;
+                  </programlisting>
+                  
+                  It needs to be rewritten to have a relative datapath in the recursively expanding
+                  tree node. 
+                  
+                  <programlisting>
+                      &lt;tree width="160" height="20" datapath="navdata:/navmenu"&gt;
+                      &lt;tree width="160" height="20" datapath="*" /&gt;
+                      &lt;/tree&gt;
+                  </programlisting>
+              </p>
+
+            <p>Each resource, if specified, should have three states. The expander resource
+              should have an open (frame 1), closed (frame 2), and transparent (frame 3)
+              state. The icon resource should have similar frames. See the default resources
+              in tree as an example.</p>
+
+            <example title="A lexical tree and a data replicated tree">
+              &lt;canvas height="250"&gt;
+              &lt;include href="lz/tree.lzx"/&gt;
+
+              &lt;dataset name="ancestors"&gt;
+              &lt;hobbit name="Frodo"&gt;
+              &lt;hobbit name="Drogo"&gt;
+              &lt;hobbit name="Fosco" grandparent="true"/&gt;
+              &lt;hobbit name="Bolger, Ruby" grandparent="true"/&gt;
+              &lt;/hobbit&gt;
+              &lt;hobbit name="Brandybuck, Primula"&gt;
+              &lt;hobbit name="Brandybuck, Gorbadoc" grandparent="true"/&gt;
+              &lt;hobbit name="Took, Mirabella" grandparent="true"/&gt;
+              &lt;/hobbit&gt;
+              &lt;/hobbit&gt;
+              &lt;/dataset&gt;
+
+              &lt;view x="20" y="20" layout="axis: x; spacing: 10"&gt;
+              &lt;!-- declared tree --&gt;
+              &lt;view width="200" height="200"&gt;
+              &lt;tree open="true" text="valuemeal"&gt;
+              &lt;tree text="fries" isleaf="true"/&gt;
+              &lt;tree open="true" text="drink"&gt;
+              &lt;tree text="cola" isleaf="true"/&gt;
+              &lt;/tree&gt;
+              &lt;tree open="true" text="burger"&gt;
+              &lt;tree text="patty" isleaf="true"/&gt;
+              &lt;tree text="lettuce" isleaf="true"/&gt;
+              &lt;tree text="onions" isleaf="true"/&gt;
+              &lt;tree text="buns" isleaf="true"/&gt;
+              &lt;/tree&gt;
+              &lt;/tree&gt;
+              &lt;/view&gt;
+              
+              &lt;!-- data replicated tree --&gt;
+              &lt;view width="200" height="200"&gt;
+              &lt;tree datapath="ancestors:/" icon="null" showroot="false"&gt;
+              &lt;tree datapath="*" icon="null" text="$path{'@name'}" 
+              isleaf="$path{'@grandparent'}"/&gt;
+              &lt;/tree&gt;
+              &lt;/view&gt;
+              &lt;/view&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <seealso>
+              <classes>basetree</classes>
+            </seealso>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

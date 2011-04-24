@@ -1,0 +1,496 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+
+
+<library>
+  <switch>
+    <when runtime="dhtml">
+    </when>
+    <otherwise>
+<script src="rpc/library/json.js"/>
+<script when="immediate">
+// proxy object for browser lz.embed.iframemanager
+lz.embed.iframemanager = new LzInheritedHash();
+lz.embed.iframemanager.owners = new LzInheritedHash();
+// true when iframemanager.js is loaded
+// called when iframemanager.js is loaded and an iframe has been created
+lz.embed.iframemanager.__setiframeid = function(id) {
+    // Called after iframemanager loads and is ready
+    var view = lz.embed.iframemanager.owners[id];
+    //Debug.warn('__createcallback', lz.embed.iframemanager.owners, id, view)
+    if (view) {
+        view.__setiframeid(id); 
+    }
+}
+lz.embed.iframemanager.create = function(owner, name, scrollbars) {
+    var callback = function(id) {
+        lz.embed.iframemanager.owners[id] = owner;
+        //Debug.warn('create', id);
+    }
+    return lz.Browser.callJS('lz.embed.iframemanager.create', callback, canvas.id, name, scrollbars);
+}
+lz.embed.iframemanager.setPosition = function(id, x, y, width, height, v, z) {
+    // pass false callback arg to avoid queueing calls
+    lz.Browser.callJS('lz.embed.iframemanager.setPosition', false, id, x, y, width, height, v, z);
+}
+lz.embed.iframemanager.setSrc = function(id, src, history) {
+    lz.Browser.callJS('lz.embed.iframemanager.setSrc', null, id, src, history);
+}
+lz.embed.iframemanager.setVisible = function(id, v) {
+    lz.Browser.callJS('lz.embed.iframemanager.setVisible', null, id, v);
+}
+lz.embed.iframemanager.bringToFront = function(id, z) {
+    lz.Browser.callJS('lz.embed.iframemanager.bringToFront', null, id, z);
+}
+lz.embed.iframemanager.sendToBack = function(id, z) {
+    lz.Browser.callJS('lz.embed.iframemanager.sendToBack', null, id, z);
+}
+lz.embed.iframemanager.scrollBy = function(id, x, y) {
+    lz.Browser.callJS('lz.embed.iframemanager.scrollBy', null, id, x, y);
+}
+lz.embed.iframemanager.setStyle = function(id, elementid, property, value) {
+    lz.Browser.callJS('lz.embed.iframemanager.setStyle', null, id, elementid, property, value);
+}
+lz.embed.iframemanager.__iframecallback = function(id, name, value=null, callbackid=null) {
+    if (value != null) {
+        value = JSON.parse(value) || value;
+    }
+    //Debug.warn('__iframecallback', id, name, value, callbackid);
+    if (name === '__lzcallback') {
+        // callRPC callback
+        var callback = lz.embed.iframemanager.__callbacks[callbackid];
+        if (callback) {
+            callback(value);
+            lz.embed.iframemanager.__callbacks[callbackid] = null;
+        }
+        return;
+    }
+
+    // receives calls from the iframe
+    var view = lz.embed.iframemanager.owners[id];
+    if (view) view.__iframecallback(name, value);
+}
+lz.embed.iframemanager.__destroy = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.__destroy', null, id);
+}
+lz.embed.iframemanager.callJavascript = function(id, methodName, callbackDel, args) {
+    var callback = null;
+    if (callbackDel) callback = function(retVal) {
+                                    callbackDel.execute(retVal);
+                                };
+    // Return the value obtained if it is available immediately.
+    return lz.Browser.callJS('lz.embed.iframemanager.callJavascript', callback, id, methodName, null, args);
+}
+
+lz.embed.iframemanager.__callbacks = [];
+lz.embed.iframemanager.callRPC = function(id, methodName, callback, args) {
+    var callbackid = null;
+    if (callback) {
+        callbackid = lz.embed.iframemanager.__callbacks.length;
+        lz.embed.iframemanager.__callbacks[callbackid] = callback;
+    }   
+    //Debug.info('callRPC', callbackid, id, methodName, null, args);
+    // Use the callback id to capture the return value
+    lz.Browser.callJS('lz.embed.iframemanager.callRPC', null, id, methodName, callbackid, args);
+}
+
+lz.embed.iframemanager.setSendMouseEvents = function(id, send) {
+    lz.Browser.callJS('lz.embed.iframemanager.setSendMouseEvents', null, id, send);
+}
+
+lz.embed.iframemanager.setShowNativeContextMenu = function(id, show, showwarning) {
+    <![CDATA[
+    if ($debug) {
+        if (showwarning) {
+            Debug.warn("The shownativecontextmenu attribute won't work in runtimes other than dhtml.");
+        }
+    }
+    ]]>
+}
+
+lz.embed.iframemanager.storeSelection = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.storeSelection', null, id);
+}
+
+lz.embed.iframemanager.restoreSelection = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.restoreSelection', null, id);
+}
+
+lz.embed.iframemanager.setHTML = function(id, html) {
+    lz.Browser.callJS('lz.embed.iframemanager.setHTML', null, id, html);
+}
+lz.embed.iframemanager.__getRPCMethods = function(id) {
+    lz.Browser.callJS('lz.embed.iframemanager.__getRPCMethods', null, id);
+}
+</script>
+</otherwise>
+</switch>
+
+<class name="html" extends="view">
+    <doc>
+      <tag name="shortdesc"><text>Adds the capability to display HTML pages.</text></tag>
+      <text>
+        <p><tagname>html</tagname> is a <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag> that displays HTML pages.</p> 
+        
+        <p>For best results in Flash, set the wmode attribute to 'transparent' when embedding the application.  See examples/extensions/html-swf.jsp for an example.  See examples/extensions/html.lzx for an example of embedding <tagname>html</tagname> in a window.</p>
+        
+        <example><programlisting class="code">
+&lt;canvas&gt; 
+    &lt;view y="50" width="100%" height="300" bgcolor="blue" onmousedown="res.apply()" onmouseup="res.remove()"&gt;
+        &lt;resizestate name="res"/&gt;
+        &lt;dragstate name="drg"/&gt;
+        &lt;text width="100%" bgcolor="gray" onmousedown="parent.drg.apply()" onmouseup="parent.drg.remove()"&gt;Drag here&lt;/text&gt;
+        &lt;html id="ht" src="http://google.com/" x="15" y="15" width="${parent.width - 30}" height="${parent.height - 30}"/&gt;
+    &lt;/view&gt;
+&lt;/canvas&gt;
+        </programlisting></example>
+                
+        <p><classname>html</classname> extends <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag>,
+        which is the fundamental visual class of LZX. Note that child views aren't supported.</p>
+      </text>
+    </doc>
+
+    <!--- If true, the html tag will have scrollbars.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="scrollbars" type="boolean" value="true"/>
+    <!--- If true, the html tag is currently loading
+          @type Boolean
+          @access public
+          @keywords readonly
+    -->
+    <attribute name="loading" type="boolean" value="false"/>
+    <!--- If true, the html tag is ready to receive commands
+          @type Boolean
+          @access public
+          @keywords readonly
+    -->
+    <attribute name="ready" value="false"/>
+    <!--- If true, the html tag will set browser history.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="history" value="true"/>
+    <!--- The minimum height of the iframe: embedded swfs won't load with a size less than 1
+          @type Number
+          @access public
+    -->
+    <attribute name="minimumheight" type="number" value="0"/>
+    <!--- The minimum width of the iframe: embedded swfs won't load with a size less than 1
+          @type Number
+          @access public
+    -->
+    <attribute name="minimumwidth" type="number" value="0"/>
+    <!--- If true, attempt to listen for mouse events on the iframe.  Cross-domain security restrictions apply, so if the content loaded in the iframe is from a different domain, mouse events won't be sent.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="mouseevents" type="boolean" value="true"/>
+    <setter name="mouseevents" args="send">
+    <![CDATA[
+        this.mouseevents = send;
+        if (this.iframeid) {
+            lz.embed.iframemanager.setSendMouseEvents(this.iframeid, send);
+        } else {
+            this.__mouseevents = send;
+        }
+        if (this['onmouseevents'] && this.onmouseevents.ready) this.onmouseevents.sendEvent(send);
+    ]]>
+    </setter>
+    <!--- If true, show native context menus in the iframe.  Otherwise, show OpenLaszlo context menus.  Note that this only works in DHTML because it's not possible to programatically display a context menu in Flash.
+          @type Boolean
+          @access public
+    -->
+    <attribute name="shownativecontextmenu" type="boolean" value="true"/>
+    <setter name="shownativecontextmenu" args="show">
+    <![CDATA[
+        this.shownativecontextmenu = show;
+        if (this.iframeid) {
+            lz.embed.iframemanager.setShowNativeContextMenu(this.iframeid, show, true);
+        } else {
+            this.__shownativecontextmenu = show;
+        }
+        if (this['onshownativecontextmenu'] && this.onshownativecontextmenu.ready) this.onshownativecontextmenu.sendEvent(show);
+    ]]>
+    </setter>
+    <attribute name="iframeid" value="null"/>
+    <!--- Sets the view to listen to for x/y/width/height change events.  Defaults to this.parent.
+          @type LzView
+          @access public
+    -->
+    <attribute name="target" value="$once{this.parent}"/>
+    <!--- Sets the name/target of the html iframe.
+          @type String
+          @access public
+    -->
+    <attribute name="framename" value="" type="string"/>
+    <attribute name="focusable" value="true" type="boolean"/>
+    <event name="onload"/>
+    <event name="onready"/>
+    <event name="ontarget"/>
+    <setter name="target" args="t">
+        if (t == null) return;
+        this.target = t;
+        if (this['_posdel']) {
+            this._posdel.unregisterAll();
+        } else {
+            this._posdel = new LzDelegate(this, '__updatepos'); 
+        }
+        if (t != this) {
+            this._posdel.register(this, 'onwidth');
+            this._posdel.register(this, 'onheight');
+        }
+        this._posdel.register(this.target, 'onwidth');
+        this._posdel.register(this.target, 'onheight');
+        if ($dhtml) {
+            // x and y are implicit
+        } else {
+            this._posdel.register(this.target, 'onx');
+            this._posdel.register(this.target, 'ony');
+        }
+        //Debug.write(t);
+        this.__updatepos();
+        if (this.ontarget.ready) this.ontarget.sendEvent(t);
+    </setter>
+    <!--- The HTML that the iframe starts out containing.
+          @type String
+          @access public
+    -->
+    <attribute name="html" type="html" value=""/>
+    <setter name="html" args="t"><![CDATA[
+        this.html = t;
+        if (this.iframeid) {
+            lz.embed.iframemanager.setHTML(this.iframeid, t);
+        }
+    ]]></setter>
+
+    <!--- Sets the visibility of the html tag
+          @type Boolean
+          @access public
+    -->
+    <attribute name="visible" type="boolean" value="true"/>
+    <setter name="visible" args="v">
+        this.visible = v;
+        if (this.iframeid) lz.embed.iframemanager.setVisible(this.iframeid, v);
+        if (this.onvisible.ready) this.onvisible.sendEvent(v);
+    </setter>
+
+    <!--- Sets the URL the html tag should load
+          @type String
+          @access public
+    -->
+    <attribute name="src" type="text"/>
+    <event name="onsrc"/>
+    <setter name="src" args="s">
+        this.src = s;
+        this.setAttribute('loading', true);
+        if (this.iframeid) {
+            lz.embed.iframemanager.setSrc(this.iframeid, s, this.history);
+        } else {
+            this.__srcset = s;
+        }
+        if (this.onsrc.ready) this.onsrc.sendEvent(s);
+    </setter>
+    <!--- Contains a list of method names available to call with callRPC().
+          @type Array
+          @access public
+    -->
+    <attribute name="rpcmethods" value="null"/>
+
+    <!--- @access private -->
+    <method name="init">
+        this.rpcmethods = [];
+        super.init();
+        if ($dhtml) {
+            lz.embed.iframemanager.create(this, this.framename, this.scrollbars, this.sprite.__LZdiv, 0, canvas);
+        } else {
+            lz.embed.iframemanager.create(this, this.framename, this.scrollbars);
+        }
+    </method>
+
+    <!--- @access private -->
+    <method name="__updatepos" args="ignore=null">
+        if (! this.iframeid) return;
+
+        if ($dhtml) {
+            // pass in null x/y to skip positioning
+            var x = null;
+            var y = null;
+            var z = this.sprite.getZ();
+        } else {
+            var x = this.getAttributeRelative("x", canvas);
+            var y = this.getAttributeRelative("y", canvas);
+            var z = this.target.sprite.getZ();
+        }
+        var width = Math.max(this.width, this.minimumwidth);
+        var height = Math.max(this.height, this.minimumheight);
+        lz.embed.iframemanager.setPosition(this.iframeid, x, y, width, height, this.visible, z);
+    </method>
+    <!--- @access private -->
+    <method name="__setiframeid" args="id">
+        //Debug.write('__setiframeid', id, this)
+        this.iframeid = id;
+        if (this['__srcset']) {
+            lz.embed.iframemanager.setSrc(id, this.__srcset, this.history);
+            delete this.__srcset;
+        }
+        this.__updatepos();
+        if ($dhtml) {
+            this.setAttribute('clickable', true);
+        }
+        if (this['__mouseevents']) lz.embed.iframemanager.setSendMouseEvents(id, this.__mouseevents);
+        if (this['__shownativecontextmenu']) lz.embed.iframemanager.setShowNativeContextMenu(id, this.__shownativecontextmenu);
+
+        this.setAttribute('ready', true);
+    </method>
+    <!--- @access private -->
+    <method name="__iframecallback" args="name, value"><![CDATA[
+        // Called once when the initial javascript: src loads, and whenever 
+        // another src is set/done loading.
+        if (name === 'load') {
+            // Special handling for load events.  If the src is still null, we
+            // know we can safely call setHTML()
+            if (this['src'] == null) {
+                // set to the initial html
+                if (this.html) {
+                    lz.embed.iframemanager.setHTML(this.iframeid, this.html);
+                }
+                // skip onload event
+                return;
+            }
+            // Filter out extra onload calls, see LPP-9251
+            if (this.loading == false) return;
+            this.setAttribute('loading', false);
+            this.__updatepos();
+            // Ask for RPC methods
+            lz.embed.iframemanager.__getRPCMethods(this.iframeid);
+        } else if (name === '__mouseevent') {
+            // Delegate mouse events
+            this.__handleMouseEvent(value);
+            return;
+        } else if (name === '__rpcmethods') {
+            //Debug.warn('__rpcmethods', value);
+            this.setAttribute('rpcmethods', value);
+            return
+        }
+        // send an event for the callback
+        var evt = this['on' + name];
+        //Debug.warn('__iframecallback', name, value, evt);
+        if (evt && evt.ready) evt.sendEvent(value);
+    ]]></method>
+    <method name="bringToFront">
+        super.bringToFront();
+        if (! this.iframeid) {
+            return;
+        }
+        if ($dhtml) {
+            lz.embed.iframemanager.setZ(this.iframeid, this.sprite.getZ());
+        } else {
+            var z = this.target.sprite.getZ();
+            lz.embed.iframemanager.bringToFront(this.iframeid, z);
+        }
+    </method>
+    <method name="sendToBack">
+        super.sendToBack();
+        if (! this.iframeid) {
+            return;
+        }
+        if ($dhtml) {
+            lz.embed.iframemanager.setZ(this.iframeid, this.sprite.getZ());
+        } else {
+            var z = this.target.sprite.getZ();
+            lz.embed.iframemanager.sendToBack(this.iframeid, z);
+        }
+    </method>
+
+    <method name="setStyle" args="element, property, value">
+        if (this.iframeid) lz.embed.iframemanager.setStyle(this.iframeid, element, property, value);
+    </method>
+
+    <!---
+      Scrolls the html tag to a specific position.
+      @param Number x: x position to scroll to
+      @param Number y: y position to scroll to
+    -->
+    <method name="scrollBy" args="x, y">
+        if (this.iframeid) lz.embed.iframemanager.scrollBy(this.iframeid, x, y);
+    </method>
+    <!---
+      Calls a method in the the loaded page.
+      @param String methodName: The name of the method to call
+      @param LzDelegate callbackDel: An optional LzDelegate which will be called with the return value from the method call.
+      @param ...args: Optional arguments to pass to the method.
+      @return *: returns the value if it can immediately be returned.
+    -->
+    <method name="callJavascript" args="methodName, callbackDel = null, ...args">
+        return lz.embed.iframemanager.callJavascript(this.iframeid, methodName, callbackDel, args);
+    </method>
+    <!---
+      Calls a method in the the loaded page using pmrpc/jsonp with message passing.  This can be used to call methods across iframes loaded from different domains.  You must to register javascript functions for callback in the iframe with pmrpc for them to be available.
+      
+      If the HTML loaded into your <html/> component includes lps/includes/iframestub.js, you can send events into the parent OL <html/> object with the browser Javascript method lz.sendEvent(name, value). 
+
+      Please note that pmrpc requires IE 8 and above.  See See http://code.google.com/p/pmrpc/ for more details about pmrpc.
+      
+      @param String methodName: The name of the method to call
+      @param Function callback: An optional function which will be called with the return value from the method call.
+      @param ...args: Optional arguments to pass to the method.
+      @return *: returns the value if it can immediately be returned.
+    -->
+    <method name="callRPC" args="methodName, callback = null, ...args">
+        return lz.embed.iframemanager.callRPC(this.iframeid, methodName, callback, args);
+    </method>
+
+    <!---
+      Restores a selection in the iframe.  Currently only works in IE 7.
+    -->
+    <method name="restoreSelection">
+        lz.embed.iframemanager.restoreSelection(this.iframeid);
+    </method>
+    <!---
+      Stores a selection from the iframe, to be restored later by restoreSelection().  Currently only works in IE 7.
+    -->
+    <method name="storeSelection">
+        lz.embed.iframemanager.storeSelection(this.iframeid);
+    </method>
+    <!--- @keywords private -->
+    <method name="destroy">
+        if (this.iframeid) {
+            lz.embed.iframemanager.__destroy(this.iframeid);
+            delete this.iframeid;
+            this.iframeid = null;
+        }
+        super.destroy();
+    </method>
+    <!--- @access private -->
+    <method name="__handleMouseEvent" args="eventname">
+        if ($dhtml) {
+            // currently handled by iframemanager.js
+        } else {
+            //Flash
+            LzMouseKernel.handleMouseEvent(this, eventname);
+        }
+    </method>
+    <!--- @access private -->
+    <method name="addSubview" args="s">
+        if ($debug) {
+            Debug.warn('Child views are unsupported for %w.', this);
+        }
+        super.addSubview(s);
+    </method>
+    <switch>
+        <when runtime="dhtml">
+        <!--- @access private -->
+        <handler name="onmouseover">
+            <![CDATA[
+            if (! this.iframeid) return;
+            LzMouseKernel.disableMouseTemporarily();
+            ]]>
+        </handler>
+        </when>
+    </switch>
+</class>
+</library>

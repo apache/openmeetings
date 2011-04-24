@@ -1,0 +1,203 @@
+<library>
+
+<resource name="tooltip_ptr_rsc" >
+    <frame src="resources/tooltip_pointer_up.png" />
+    <frame src="resources/tooltip_pointer_dn.png" />
+</resource>
+
+<!--
+    @devnote When the tooltip view gets a tooltip assigned to it, it
+    notes the mouse position and starts a timer.  When the timer goes
+    off, if the mouse has not moved, display the tooltip.  If the
+    mouse is still within the tooltip's parent, retry.  Otherwise
+    stop.
+
+    @access private
+-->
+<view name="tooltipview" options="ignorelayout"  id="tp"
+      bgcolor="0x252525"
+      width="${tiptext.width + 6}" height="17"
+      visible="false">
+
+    <!-- shadow left -->
+    <view bgcolor="black" opacity=".3"
+          x="${parent.width}" y="2"
+          width="2" height="15" />
+
+    <!-- shadow bottom -->
+    <view bgcolor="black" opacity=".3"
+          x="2" y="${parent.height}"
+          width="100%" height="2" />
+
+    <!-- interior color -->
+    <view bgcolor="0xFAFECD" x="1" y="1"
+          width="${parent.width - 2}"
+          height="${parent.height - 2}" />
+
+    <!-- the arrow that points to the control -->
+    <view name="pointer" resource="tooltip_ptr_rsc" />
+
+    <!--
+        tooltip text
+        @access private
+    -->
+    <text x="3" name="tiptext" fgcolor="0x1D1D1D" fontsize="10" resize="true">test</text>
+
+    <!--- @access private -->
+    <attribute name="checkdel" value="null"/>
+    <!--- @access private -->
+    <attribute name="outdel" value="null"/>
+    <!--- @access private -->
+    <attribute name="clickdel" value="null"/>
+    <!--- @access private -->
+    <attribute name="lastmousex" value="0"/>
+    <!--- @access private -->
+    <attribute name="lastmousey" value="0"/>
+
+    <!--- @access private -->
+    <attribute name="tooltip" value="null" />
+    <!---
+        sets the tooltip that will be displayed
+        @access private
+    -->
+    <setter name="tooltip" args="tt">
+        if ( !isinited ) return;
+        this.tooltip = tt;
+        if (tt) {
+          this.lastmousex = canvas.getMouse('x');
+          this.lastmousey = canvas.getMouse('y');
+          if (!this.checkdel) this.checkdel = new lz.Delegate(this, "checkTip");
+          // Come back in 500ms to see if the mouse is still in the same place
+          lz.Timer.resetTimer(this.checkdel, 500);
+        }
+    </setter>
+
+    <!---
+        If the mouse rests in the tip's parent, show the tip
+        @access private
+    -->
+    <method name="checkTip" args="ignore"><![CDATA[
+        var tt = this.tooltip;
+        if (tt) {
+          var newmousex = canvas.getMouse('x');
+          var newmousey = canvas.getMouse('y');
+          // See if the mouse has not moved
+          if ((this.lastmousex == newmousex) &&
+              (this.lastmousey == newmousey)) {
+            // It has not, show the tooltip
+            this.showTip();
+          } else {
+            // If the mouse is still in the tooltip parent view,
+            // try again later, otherwise, just stop
+            var ttp = tt.parent;
+            if (ttp.containsPt(ttp.getMouse('x'), ttp.getMouse('y'))) {
+              this.lastmousex = newmousex;
+              this.lastmousey = newmousey;
+              lz.Timer.resetTimer(this.checkdel, 500);
+            }
+          }
+        }
+    ]]></method>
+
+    <!---
+        If the mouse moves out of the tip's parent, hide the tip
+        @access private
+    -->
+    <method name="checkOut" args="ignore"><![CDATA[
+        var tt = this.tooltip;
+        if (tt) {
+          var ttp = tt.parent;
+          if (ttp.containsPt(ttp.getMouse('x'), ttp.getMouse('y'))) {
+            return;
+          }
+          this.hideTip();
+        }
+    ]]></method>
+
+    <!--- @access private -->
+    <method name="hideTip" args="ignore=null">
+        // Cancel any mousein event handler
+        if (this.checkdel) { this.checkdel.unregisterAll(); }
+        // Hide the tip
+        this.setAttribute('visible', false );
+        // Remove these handlers, they have done their job
+        if (this.outdel) { this.outdel.unregisterAll(); }
+        if (this.clickdel) { this.clickdel.unregisterAll(); }
+    </method>
+
+    <!--- @access private -->
+    <method name="showTip"> <![CDATA[
+        var tt = this.tooltip;
+        var ttp = tt.parent;
+
+        // Set up to hide...
+        if (! this.outdel) { this.outdel = new lz.Delegate(this, "checkOut"); }
+        this.outdel.register(lz.GlobalMouse, "onmousemove");
+        if (! this.clickdel) { this.clickdel = new lz.Delegate(this, "hideTip"); }
+        this.clickdel.register(ttp, "onclick");
+
+        tiptext.setAttribute('text', tt.text);
+
+        var tipx = canvas.width;
+        if ( tt.tipalign == 'right' ) {
+            tipx = ttp.getAttributeRelative( 'x', canvas ) + ttp.width;
+        }
+
+        tipx = Math.min(tipx - this.width - 10, this.lastmousex - 5);
+
+        var yoff = tt.yoffset;
+        var tipy = this.lastmousey + yoff;
+        var pointerontop;
+        switch (tt.tipvalign) {
+          case "above":
+            tipy = this.lastmousey - yoff;
+            pointerontop = false;
+            break;
+
+          case "below":
+            tipy = this.lastmousey + yoff;
+            pointerontop = true;
+            break;
+
+
+          default:
+            if (tipy > canvas.height - (yoff + 5)) {
+                tipy = this.lastmousey - yoff;
+                pointerontop = false;
+            } else {
+                tipy = this.lastmousey + yoff;
+                pointerontop = true;
+            }
+
+        }
+
+        this.setAttribute('x', tipx );
+        this.setAttribute('y', tipy );
+        this.setPointerX( this.lastmousex, pointerontop );
+        this.bringToFront( );
+        this.setAttribute('visible',  true );
+    ]]></method>
+
+    <!--- @access private -->
+    <method name="setPointerX" args="mx, isontop ">
+        var nx = Math.min( mx - x, width - 12)
+        var tp = this.pointer;
+        tp.setAttribute('x', nx );
+
+        if ( isontop ) {
+            tp.setAttribute( 'frame', 1 );
+            tp.setAttribute('y', 1 - tp.height);
+        } else {
+            tp.setAttribute( 'frame', 2 );
+            tp.setAttribute('y', height - 1);
+        }
+    </method>
+
+</view>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

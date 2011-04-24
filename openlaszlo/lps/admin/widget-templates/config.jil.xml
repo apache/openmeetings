@@ -1,0 +1,22 @@
+<widget  xmlns="http://www.w3.org/ns/widgets"
+          xmlns:JIL="http://www.jil.org/ns/widgets1.2"
+         xmlns:its="http://www.w3.org/2005/11/its"
+         id="%APPURL%"
+         version="1.0"
+         height="%APPHEIGHT%"
+         width="%APPWIDTH%"> 
+    <JIL:access network="true" localfs="true" remote_scripts="true"/> 
+    <JIL:billing required="false"/> 
+    <icon src="widget-icon.png"/> 
+    <content src="index.html"/> 
+    <feature name="http://jil.org/jil/api/1.1/widget"/> 
+    <feature name="http://jil.org/jil/api/1.1/device"/> 
+    <feature name="http://jil.org/jil/api/1.1/devicestateinfo"/> 
+    <feature name="http://jil.org/jil/api/1.1/accelerometerinfo"/> 
+    <feature name="http://jil.org/jil/api/1.1/positioninfo"/> 
+    <feature name="http://jil.org/jil/api/1.1.5/applicationtypes"/> 
+    <name>%APPTITLE%</name> 
+    <description>Example OpenLaszlo app running as W3C widget</description> 
+    <license  href="http://www.opensource.org/licenses/mit-license.php">MIT</license> 
+    <author  email="laszlo-user@openlaszlo.org">Raju Bitter</author> 
+</widget>

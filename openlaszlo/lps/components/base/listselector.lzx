@@ -1,0 +1,178 @@
+<library>
+    <include href="utils/selectionmanager.lzx"/>
+    <!-- note: when changing code in this class, please reveiw datalistselector
+        which must match these APIs and shares some code with this class -->
+
+    <!--- a helper class that wraps the selectionmanager in some
+        higher level APIs, used by baselist -->
+    <class name="listselector" extends="selectionmanager">
+        <!--- If multiselect is true, multiple selection is enabled.
+        When the shift key is down, a range of items is selected.
+        When the control key is down, any item may be added to the
+        selection.
+             Default: false -->
+        <attribute name="multiselect" value="false" type="boolean"/>
+        <!--- @keywords private -->
+        <attribute name="_forcemulti" value="false" type="boolean"/>
+
+        <method name="isRangeSelect" args="item" override="true"><![CDATA[
+            return this.multiselect && super.isRangeSelect(item);
+        ]]></method>
+
+        <method name="isMultiSelect" args="item" override="true"><![CDATA[
+            return this._forcemulti || (this.multiselect && super.isMultiSelect(item));
+        ]]></method>
+
+        <method name="select" args="item" override="true"><![CDATA[
+            if (this.multiselect && item is Array) {
+                this._forcemulti = true;
+                for (var i=0; i < item.length; i++) {
+                   super.select(item[i]);
+                }
+                this._forcemulti = false;
+           } else {
+               super.select(item);
+           }
+        ]]></method>
+
+        <!---
+            if no selection, return null<br/>
+            if multiselect, return an array of values<br/>
+            otherwise, just return the value
+        -->
+        <method name="getValue">
+            <![CDATA[
+            var selection = this.getSelection();
+            if (selection.length == 0) return null;
+
+            if ( selection.length == 1 && !multiselect) {
+                return selection[0].getValue();
+            }
+
+            var valueArray = [];
+            for (var i = 0; i < selection.length; i++) {
+                valueArray[i] = selection[i].getValue();
+            }
+            return valueArray;
+            ]]>
+        </method>
+
+        <!---
+            if no selection, return null<br/>
+            if multiselect, return an array of values<br/>
+            otherwise, just return the value
+        -->
+        <method name="getText">
+            <![CDATA[
+            var selection = this.getSelection();
+            if (selection.length == 0) return null;
+
+            if ( selection.length == 1 && !multiselect) {
+                return selection[0].text; //should be getText() ?
+            }
+
+            var textArray = [];
+            for (var i = 0; i < selection.length; i++) {
+                textArray[i] = selection[i].text; //should be getText() ?
+            }
+            return textArray;
+            ]]>
+        </method>
+
+        <!--- returns the number of items in the list -->
+        <method name="getNumItems">
+            if (!this.immediateparent.subviews) return 0;
+            return this.immediateparent.subviews.length;
+        </method>
+
+        <!--- @keywords private
+           get the next subview starting at the view "s"
+        -->
+        <method name="getNextSubview" args="s, dir=1">
+            <![CDATA[
+            // only works for toggle
+            if (typeof(dir) == "undefined") dir = 1;
+            var svs = this.immediateparent.subviews;
+
+            // check for nothing selected case
+            if (!s) {
+                if (dir>0) {
+                    return svs[0];
+                } else {
+                    return svs[svs.length-1];
+                }
+            }
+
+            var next;
+            var len = svs.length;
+            for ( var i = 0; i < len; i++ ){
+                var temp = svs[i];
+                if (temp == s) { // found view "s"
+                    var next_index = i + dir;
+                    if (next_index < 0) {
+                       next = svs[0];
+                    } else if (next_index >= len) {
+                       next = svs[len-1];
+                    } else {
+                       next = svs[next_index];
+                    }
+                    break;
+                }
+            }
+            ensureItemInView(next);
+            return next;
+            ]]>
+        </method>
+
+        <method name="ensureItemInView" args="sel">
+            // check for selection below interior
+            if (!sel) {
+                return;
+            }
+            // immediateparent is the list's defaultplacement view
+            var clipview = immediateparent.parent;
+            var changed = false;
+            if ( (sel.y+sel.height) > clipview.height - immediateparent.y ) {
+                var diff = clipview.height - immediateparent.y - (sel.y+sel.height);
+                var newY = Math.max((clipview.height - immediateparent.height),
+                                        immediateparent.y+diff);
+                immediateparent.setAttribute("y",newY);
+                changed = true;
+            } else
+            // check for selection above interior
+            if ( (immediateparent.y*-1) > sel.y ) {
+                var diff = (immediateparent.y*-1)-sel.y;
+                var newY = Math.min(0, (immediateparent.y+diff));
+                immediateparent.setAttribute("y",newY);
+                changed = true;
+            }
+            if (changed) {
+                 this._updatefromscrolling = true;
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <attribute name="_updatefromscrolling" value="false"/>
+        <!--- called by baselist to see if it should allow a setHilite,
+             we need to prevent the mouseout/over from changing the
+             hilite in the case where the mouse is over a different item
+             from the one which is hilited and we are scrolling -->
+        <method name="allowhilite" args="v">
+            if (this._updatefromscrolling) {
+                if (v != null) this._updatefromscrolling = false;
+                return false;
+            }
+            return true;
+        </method>
+
+        <method name="getItemByIndex" args="index">
+            return this.parent._contentview.subviews[index];
+        </method>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2004, 2008, 2009-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,669 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+<library>
+    <include href="base/baseformitem.lzx" />
+    <include href="base/basedatacombobox_item.lzx" />
+
+    <class name="basedatacombobox" extends="baseformitem">
+
+        <!--- Datapath to items in list. -->
+        <attribute name="itemdatapath" value="null" type="string"/>
+
+        <!--- Datapath to text to display for items in list. 
+              See caveat.-->
+        <attribute name="textdatapath" value="text()" type="string"/>
+
+        <!--- Datapath to value for items in list. See caveat.-->
+        <attribute name="valuedatapath" value="@value" type="string"/>
+
+        <!--- The name of the class for items in the floating list. -->
+        <attribute name="itemclassname" value="" type="string"/>
+        
+        <!-- The name of the class for the floating list.
+             This value must be set by subclasses of basedatacombobox.
+             @keywords private -->
+        <attribute name="menuclassname" value="" type="string"/>
+        
+        <!--- When true, the 1st item is selected oninit. -->
+        <attribute name="selectfirst" value="true"/>
+
+        <!--- If set, this will always be displayed instead of selected item
+              text. Behaves like a menu button. Also see defaulttext. -->
+        <attribute name="statictext" value="$once{null}" type="string"/>
+
+        <!--- Default text to display before a selection is made. No default
+              item is selected if defaulttext is set. Defaulttext is replaced
+              with selected item's text. -->
+        <attribute name="defaulttext"  value="$once{null}" type="string" />
+
+        <!--- The value of the selected item. -->
+        <attribute name="value" value="null" setter="this.doSetValue(value, false, false)" />
+
+        <!--- Datapointer to selected item. 
+              @keywords readonly -->
+        <attribute name="selected" value="null"/>
+
+        <!--- Sets the height to the number of items to show in combobox
+              popup list. Must be greater than 0. -->
+        <attribute name="shownitems" value="4" />
+
+        <!--- Indicates whether or not the popup list is showing.  -->
+        <attribute name="isopen" value="false" setter="this.setOpen(isopen)" />
+
+        <!--- Width of popup list, defaults to width of combobox view. During
+              setup, the width of the floating list view might not yet be set,
+              so this returns the expected width. -->
+        <attribute name="listwidth" value="null" />
+
+        <!--- If true, the combobox will behave like a menu. "value" is
+              ignored, and items will not remain selected. Selecting an
+              item generates an onselect event -->
+        <attribute name="ismenu" value="false"/>
+
+        <!--- Where the floatinglist should attach to its owner. Possible
+              values: bottom, top, left, right.  In the event of a canvas
+              out-of-bounds, the floating list will attach in a visible
+              location. -->
+        <attribute name="listattach" value="bottom" type="string"/>    
+
+        <!--- Event sent when an item is selected. Sends selected item. -->
+        <event name="onselected"/>
+
+        <!--- Event sent when an item is selected. Sends selected item. -->
+        <event name="onselect"/>
+
+     
+        <!--- The text label within the subclass.
+              This value must be set by subclasses of basedatacombobox.
+              @keywords private -->
+        <attribute name="_cbtext" value="null" />
+
+        <!--- The floating list.
+              @keywords private -->
+        <attribute name="_cblist" value="null"/>
+
+        <!--- If set, it represents the index of what should be selected in the
+              floating list.
+              @keywords private -->
+        <attribute name="_selectedIndex" value="-1"/>
+
+        <!--- Select delegate.
+              @keywords private -->
+        <attribute name="_selectdel" value="null"/>
+
+        <!--- Data delegate.
+              @keywords private -->
+        <attribute name="_datacatchdel" value="null" />
+
+        <!--- Called when combobox opens or closes -->
+        <event name="onisopen"/>
+        
+        <!--- @keywords private -->
+        <method name="init"><![CDATA[
+            super.init();
+            if ( this.value == null && this.defaulttext != null ) {
+                this._cbtext.setAttribute('text', this.defaulttext);
+            } else {
+                this._updateSelectionOnData();
+            }
+
+            if ( this.statictext != null ) {
+                this._cbtext.setAttribute('text', this.statictext );
+            }
+        ]]></method>
+        
+        <!--- This catches the initial ondata, since there is no datapath
+              set for a basedatacombobox, and itemdatapath won't receive
+              an ondata event.  This fixes an issue with 'p is null' on
+              an init call to an xpathQuery(), which subsequently fixes
+              an issue where selectfirst="true" wasn't working for remote
+              data.
+              @keywords private -->
+        <method name="_updateSelectionOnData" args="ignore=null" ><![CDATA[
+            var dp = new lz.datapointer(this);
+
+            var arr = dp.xpathQuery(this.itemdatapath);
+            if (arr != null) {
+                if (this._datacatchdel != null) {
+                    this._datacatchdel.unregisterAll();
+                }
+
+                if (this.value == null && this.selectfirst) {
+                    // set first to be the initvalue
+                    this._updateSelectionByIndex(0, false, true);
+                } else {
+                    if (this._selectedIndex != -1) {
+                        //fix for LPP-5549
+                        this._updateSelectionByIndex(this._selectedIndex, true, false);
+                    }
+                }
+            } else {
+                if (this._datacatchdel == null) {
+                    //FIXME: [20080412 anba] look for dataset, 
+                    //does fail when there is ":/" in a predicate, but it used all over the place, 
+                    //we should provide a general solution!
+                    var itmpath = this.itemdatapath;
+                    var iof = itmpath.indexOf( ":/" );
+                    if (iof > -1) {
+                        var dset = dp.xpathQuery( itmpath.substring(0, iof + 2) );
+                        if (dset != null) {
+                            this._datacatchdel = new LzDelegate(this, "_updateSelectionOnData", dset, "ondata");
+                        }
+                    }
+                }
+            }
+            dp.destroy();
+        ]]></method>
+
+        <!--- @keywords private -->
+        <handler name="ondata"><![CDATA[
+            this._teardowncblist();
+            if (this.value == null && this.selectfirst) {
+                // set first to be the initvalue
+                this._updateSelectionByIndex(0, false, true);
+            }
+        ]]></handler>
+
+        <!--- Setter to set baseformitem to changed. Should be called by
+              subclasses whenever a value is set. The first time this is called,
+              the changed value is not set since it assumes subclasses are
+              setting their initial value. 
+              This also updates the selected value in the combobox to reflect
+              the new value (in case it was changed).
+              @param Boolean isChanged: true if changed, else false. -->
+        <method name="doSetChanged" args="isChanged"><![CDATA[
+            super.setChanged( isChanged );
+            // Be sure to update the selection, because value might have been
+            // changed programmatically
+            if (this.changed) {
+                this._updateSelectionByIndex(this.getItemIndex( this['value'] ), true, false);
+            }
+        ]]></method>
+
+        <!--- Updates the combobox text and 'selected' attribute. Called when an
+              item is selected.
+              @param Number index: index of data item.
+              @param Boolean dontSetValue: used by setValue() not to set
+              value. Avoids circular logic.
+              @param Boolean isinitvalue: used by init() to set value as an init
+              value.
+              @keywords private -->
+        <method name="_updateSelectionByIndex" 
+                args="index,dontSetValue,isinitvalue"><![CDATA[
+            var dp = new lz.datapointer(this);
+
+            var nodes = dp.xpathQuery(this.itemdatapath);
+            if (! (nodes instanceof Array)) nodes = [nodes];
+            dp.setPointer(nodes[index]);
+
+            var dpValid = dp.isValid();
+            if (dpValid) {
+                var t = dp.xpathQuery(this.textdatapath);
+            } else {
+                var t = null;
+            }
+            // if t is null, use default text (if it exists)
+            if( ( t == null || t.length == 0 ) && (this.defaulttext && this.defaulttext.length > 0) )
+               t = this.defaulttext;
+
+            if ( this._cbtext && (this.statictext == null) ) {
+                this._cbtext.setAttribute('text', t);
+            }
+
+            if (this.selected == null || dp['p'] !== this.selected['p']) {
+                if (! (dontSetValue || this.ismenu)) {
+                    if (dpValid) {
+                        var v = dp.xpathQuery(this.valuedatapath);
+                    } else {
+                        var v = null;
+                    }
+                    this.doSetValue(v, true, true);
+                }
+                this.setAttribute('text', t);
+
+                if (this.ismenu) {
+                    //FIXME: [20080412 anba] datapointer leaks memory, but we cannot destroy 
+                    //it because it is passed to the "onselect"/"onselected" event!
+
+                    // Clear the selection
+                    this._selectedIndex = -1;
+                    if (this['_cblist'] && this._cblist['_selector']) {
+                        this._cblist._selector.clearSelection();
+                    }
+                } else {
+                    if (this.selected != null) {
+                        this.selected.destroy();
+                    }
+                    this.selected = dp;
+                }
+
+                if ( this['onselected'] ) this.onselected.sendEvent(dp);
+                if ( this['onselect'] )   this.onselect.sendEvent(dp);
+            } else {
+                dp.destroy();
+            }
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="_setupcblist" args="force"><![CDATA[
+            if (this._cblist == null) {
+                if (this.itemclassname == "") {
+                    this.itemclassname = "basedatacombobox_item";
+                }
+
+                var icn = this.itemclassname;
+                if (!(icn && lz[icn])) {
+                    if ($debug) {
+                        Debug.error("%s.itemclassname invalid: %s", this, icn);
+                    }
+                    return;
+                }
+
+                var flcn = this.menuclassname;
+                if (!(flcn && lz[flcn])) {
+                    if ($debug) {
+                        Debug.error("%s.menuclassname invalid: %s", this, flcn);
+                    }
+                    return;
+                }
+
+                var cblist = new lz[flcn](this,
+                                              { visible:false,
+                                                attach: this.listattach,
+                                                attachoffset: -2,
+                                                itemclassname: icn
+                                              });
+
+                // add in a white view to reduce the visual effect of the
+                // list items appearing as they are created
+                var tmp = new lz[icn](cblist, { name:'item' });
+                new lz.datapath(tmp, { pooling: true });
+
+                this._cblist = cblist;
+
+                // Make sure we deselect if we're acting like a menu
+                if (this.ismenu) {
+                    cblist._selector.clearSelection();
+                }
+
+                var w = ( this.listwidth != null ? this.listwidth : this.width );
+                cblist.setAttribute('width', w);
+                cblist.setAttachTarget(this);
+                cblist.setAttribute('shownitems', this.shownitems);
+
+                var itd = this.itemdatapath;
+                if (itd.indexOf( "local:" ) == 0) {
+                  itd = "local:" + "parent.owner." + itd.substring( 6 );
+                }
+
+                cblist.item.setAttribute('datapath', itd);
+
+                cblist.setAttribute('attach', this.listattach);
+                if (this._selectdel == null) {
+                    this._selectdel = new LzDelegate( this, "_flistselect" );
+                }
+                this._selectdel.register(cblist, 'onselect');
+            }
+
+            if (! this.ismenu) {
+                // Set the item for _cblist
+                var item = this._getItemAt(this._selectedIndex);
+                this._cblist.select(item);
+            }
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="_teardowncblist"><![CDATA[
+            if (this._selectdel != null) {
+                this._selectdel.unregisterAll();
+                this._selectdel = null;
+            }
+            if (this._cblist != null) {
+                var cbl = this._cblist;
+                this._cblist = null;
+                cbl.setAttribute("visible", false);
+                cbl.destroy();
+            }
+        ]]></method>
+
+        <!--- Toggles the open/close state of the popup list. -->
+        <method name="toggle"><![CDATA[
+            this.setAttribute("isopen", !this.isopen)
+        ]]></method>
+
+        <!--- Sets the open/close state of the popup list.
+              @param Boolean open: true to open the list, else false to close.
+              -->
+        <method name="setOpen" args="open" ><![CDATA[
+            if (!this._initcomplete) {
+                this.isopen = open;
+            } else {
+                if (open) { // open combox
+                    if (this.isopen) return; // tends to get called more than once
+
+                    lz.ModeManager.makeModal( this );
+
+                    this._setupcblist(false);
+
+                    this._cblist.bringToFront();
+                    this._cblist.setAttribute('visible', true);
+
+                    lz.Focus.setFocus( this._cblist, false );
+
+                    this.isopen = true;
+                    if (this['onisopen']) this.onisopen.sendEvent(true);
+                } else { // close combox
+                    if (!this.isopen) return;
+                    lz.ModeManager.release( this );
+                    if (!this['isopen']) return;
+
+                    this._cblist.setAttribute("visible", false);
+                    this.isopen = false;
+                    if (this['onisopen']) this.onisopen.sendEvent(false);
+                    if ( lz.Focus.getFocus() === this._cblist ) {
+                        if ( this.focusable ) {
+                            lz.Focus.setFocus( this, false );
+                        } 
+                    }
+                }
+            }
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="passModeEvent" args="eventStr,view" ><![CDATA[
+            // Once a view has been made modal, this method
+            // gets called ONLY when a user clicks on a view 'outside'
+            // the contents of this view, or clicks on a inputtext view anywhere
+            // on the screen even for a subview within this view.
+            if ( eventStr == "onmousedown"  ){
+                // first, we only care about the mousedown event.
+                // if the user has pressed the mouse down on a textfield
+                // within the component, then we will not know this unless
+                // we test it to see if it is a subview of this component.
+
+                if ( view != null ) { // view is a clickable view
+                    // view is not LITERALLY part of the class hierarchy but
+                    // it maybe part of the floatingview of this component, and if so
+                    // then treat it as if it were a child of the class.
+
+                   if ( !view.childOf(this._cblist) ) {
+                        // view is outside of combobox so close the combbobox
+                        this.setAttribute("isopen", false);
+                   } else {
+                        // view is a child of _cblist, so don't do anything.
+                   }
+                } else {
+                    this.setAttribute("isopen", false);
+                }
+            }
+            // if we're inside a modal dialog, need to propagate event manually
+            // since floating list is a child of the canvas
+            if (view && view.childOf(this._cblist)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            // since a combox is not strictly modal, always return
+            // true to pass the event to the object (oustide combobox)
+            // that was clicked on
+            return true;
+        ]]></method>
+
+        <!--- This method listens for the onselect event from the floating list
+              and then calls setValue, which indirectly sends an onselect event
+              to the datacombobox.
+              @keywords private -->
+        <method name="_flistselect" args="item" ><![CDATA[
+            // Just return if item is undefined. baselist will do this sometimes
+            if ( typeof item == "undefined" ) {
+                return;
+            }
+            // Clear selection and return if there is no item selected.
+            if ( item == null ) {
+                this._cblist._selector.clearSelection();
+                return;
+            }
+
+            if ( item.isinited ) {
+                if ($debug) {
+                    if (item.value == null) {
+                        Debug.warn("null item value in _flistselect");
+                    }
+                }
+                this.doSetValue(item.value, false, false);
+                if ( item && this.statictext == null ) this._cbtext.setAttribute('text', item.text);
+            }
+
+            this.setAttribute("isopen", false);
+        ]]></method>
+
+        <!--- Find a particular item by its index. This routine only works when the
+              _cblist is attached and data mapped.
+              @param Number index: the index for the item to get.
+              @return Object: the item found, or null, if not.
+              @keywords private -->
+        <method name="_getItemAt" args="index"><![CDATA[
+            var item = null;
+            var sel = this._cblist._selector;
+            if (sel is lz.datalistselector) {
+                sel._ensureItemInViewByIndex( index );
+            }
+            var svs = sel.immediateparent.subviews;
+            if (svs) {
+                var sv = svs[0];
+                if (sv) {
+                    var cl = sv.cloneManager;
+                    if (cl && cl['clones']) {
+                        var pos = cl.clones[0].datapath.xpathQuery( 'position()' ) - 1;
+                        item = cl.clones[ index - pos ];
+                    } else {
+                        item = sv;
+                    }
+                }
+            }
+            return item;
+        ]]></method>
+
+        <!--- Select an item by value.
+              @param Object value: the value of the item to select. -->
+        <method name="selectItem" args="value"><![CDATA[
+            var i = this.getItemIndex(value);
+            if (i != -1) this._updateSelectionByIndex(i, false, false);
+        ]]></method>
+
+        <!--- Get item's index by value. Returns
+              @param Object value: the value of the item to select. -->
+        <method name="getItemIndex" args="value"><![CDATA[
+            var index = -1;
+            var dp = new lz.datapointer(this);
+            var nodes = dp.xpathQuery(this.itemdatapath);
+            if (nodes != null) {
+                if (! (nodes instanceof Array)) nodes = [nodes];
+                for (var i = 0; i < nodes.length; i++) {
+                    dp.setPointer(nodes[i]);
+                    var test_value = dp.xpathQuery(this.valuedatapath);
+                    if (test_value == value) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+            dp.destroy();
+            return index;
+        ]]></method>
+
+        <!--- Select an item by index.
+              @param Number index: the index of the item to select. -->
+        <method name="selectItemAt" args="index" ><![CDATA[
+            this._updateSelectionByIndex(index, false, false);
+            this._setupcblist(false);
+        ]]></method>
+
+        <!--- @access private -->
+        <method name="setValue" args="v, isinitvalue=null" override="true"><![CDATA[
+            this.doSetValue(v, isinitvalue, false);
+        ]]></method>
+
+        <!--- Set value of combobox.
+              @param String|Number value: value to set.
+              @param Boolean isinitvalue: true if value is an init value. 
+              @param Boolean ignoreselection: if true, selection won't be updated -->
+        <method name="doSetValue" args="value, isinitvalue, ignoreselection"><![CDATA[
+            if (this['value'] != value) {
+                var i = this.getItemIndex(value);
+                this._selectedIndex = i;
+
+                if (! this.ismenu) { // Ignore value if we're a menu
+                    super.setValue(value, isinitvalue);
+                }
+
+                if ( i != -1 && !ignoreselection) {
+                    this._updateSelectionByIndex(i, true, false);
+                }
+            }
+        ]]></method>
+
+        <!--- Override getValue because we don't want to return this.text
+              if this.value is null (this.text may be the defaulttext) -->
+        <method name="getValue"><![CDATA[
+            return ( this.value == null ? '' : this.value );
+        ]]></method>        
+
+        <!--- Arrow down and up, and spacebar all popup floatinglist.-->
+        <handler name="onkeydown" method="_dokeydown"/>
+        
+        <!--- @keywords private -->
+        <method name="_dokeydown" args="key"><![CDATA[
+            // 38: up-arrow, 40: down-arrow, 32: space, 13: return, 27: escape
+            if ( (key==38) || (key==40) || (key==32) ) {
+                if ( ! this.isopen ) this.setAttribute("isopen", true);
+            }
+        ]]></method>
+
+        <!--- Since we are not focusable, defer to the datacombobox's next selection,
+              so that when floatinglist is tabbed out of, we can provide a next
+              selection since we are it's owner
+              @keywords private -->
+        <method name="getNextSelection"><![CDATA[
+            // must ensure the floatinglist is closed so that if it is being tabbed from,
+            // we can change the focus. (focus is normally not allowed to escape from
+            // a modal view).
+            this.setAttribute("isopen", false);
+            return lz.Focus.getNext(this);
+        ]]></method>
+
+        <!--- since we are not focusable, this provides an api for asking what child to send focus
+              to, as is the case when floatinglist is shift-tabbed back to us.
+              @keywords private -->
+        <method name="resolveSelection"><![CDATA[
+            // must ensure the floatinglist is closed so that if it is being tabbed from,
+            // we can change the focus. (focus is normally not allowed to escape from
+            // a modal view).
+            this.setAttribute("isopen", false);
+            return this;
+        ]]></method>
+
+        <!-- ============================================================ -->
+        <!-- focus kludge for combobox                                    -->
+        <!-- ============================================================ -->
+
+        <!--- The equivalent for onfocus for combobox. -->
+        <event name="oncombofocus" />
+        <!--- The equivalent for onblur for combobox. -->
+        <event name="oncomboblur" />
+        
+        <!--- @keywords private -->
+        <handler name="onfocus"><![CDATA[
+            // lz.Focus.lastfocus is the blurred view
+            if ( lz.Focus.lastfocus !== this._cblist || 
+                 (this._cblist != null && this._cblist.attachtarget !== this) ) {
+                if (this.oncombofocus) {
+                    this.oncombofocus.sendEvent(lz.Focus.lastfocus);
+                }
+            }
+        ]]></handler>
+        
+        <!--- @keywords private -->
+        <handler name="onblur" args="focusview"><![CDATA[
+            if (focusview != null && focusview !== this._cblist) {
+                if (this.oncomboblur) {
+                    this.oncomboblur.sendEvent(focusview);
+                }
+                // destroy floating list when we lose focus
+                if (this._cblist != null && 
+                    lz.Focus.lastfocus !== this) {
+                    this._teardowncblist();
+                }
+            }
+        ]]></handler>
+
+        <doc>
+          <tag name="shortdesc"><text>baseclass for a datacombobox</text></tag>
+          <text>
+              An abstract class to create dropdown lists of selectable items. Define
+              the look in a subclass. Also, a basedatacombobox_text must be declared in
+              the subclass. 
+              
+              <example><![CDATA[
+<canvas height="150">
+     <include href="lz/floatinglist.lzx" />
+     
+     <dataset name="items">
+          <item value="item0">item 0</item>
+          <item value="item1">item 1</item>
+          <item value="item2">item 2</item>
+          <item value="item3">item 3</item>
+          <item value="item4">item 4</item>
+          <item value="item5">item 5</item>
+          <item value="item6">item 6</item>
+          <item value="item7">item 7</item>
+          <item value="item8">item 8</item>
+          <item value="item9">item 9</item>
+          <item value="item10">item 10</item>
+          <item value="item11">item 11</item>
+     </dataset>
+     
+     <class name="simplecombobox" extends="basedatacombobox" width="100">
+          <attribute name="_cbtext" value="$once{this._text}"/>
+          <attribute name="menuclassname" value="floatinglist" type="string"/>
+          <view width="100%" height="20" focusable="false" bgcolor="#CCCCCC">
+               <handler name="onclick">
+                    lz.Focus.setFocus(this,false); 
+                    classroot.toggle()
+               </handler>
+               <handler name="onmouseout">
+                    this.setAttribute('bgcolor', 0xCCCCCC);
+               </handler>
+               <handler name="onmouseup">
+                    this.setAttribute('bgcolor', 0xCCCCCC);
+               </handler>
+               <handler name="onmouseover">
+                    this.setAttribute('bgcolor', 0xEEEEEE);
+               </handler>
+               <handler name="onmousedown">
+                    this.setAttribute('bgcolor', 0xAAAAAA);
+               </handler>
+          </view>
+          <text name="_text" width="${ parent.width - 19 }" x="7" />
+     </class>
+
+     <simplecombobox id="cbox1" width="130" shownitems="6" defaulttext="Choose One..." itemdatapath="items:/item"/>
+</canvas>
+]]>
+              
+              </example>
+    
+               ** Caveat: Combobox items will not update if the attributes
+                that are mapped to textdatapath or valuedatapath change.
+                To force the changes to update, call 
+                <code> node.parentNode.replaceChild(node.cloneNode(true), node) </code>
+                where node is the dataelement of the list item. Don't forget 
+                to reset the seleciton on the list, as well.
+          </text>
+        </doc>
+    </class>
+</library>

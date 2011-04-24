@@ -1,0 +1,23 @@
+#! /bin/bash -f
+#
+# lzenv - script to set up laszlo env vars
+#
+# * P_LZ_COPYRIGHT_BEGIN ******************************************************
+# * Copyright 2001-2005, 2008 Laszlo Systems, Inc.  All Rights Reserved.            *
+# * Use is subject to license terms.                                          *
+# * P_LZ_COPYRIGHT_END ********************************************************
+
+if [ "${OS}" == Windows_NT ];  then
+    LZCP=${LPS_HOME}\\WEB-INF\\lps\\server\\build;
+    LZCP="${LZCP}"`/usr/bin/find  "${LPS_HOME}\\3rd-party\\jars\\dev" -maxdepth 1 -name "*.jar"  | tr '\n' ';'`
+    LZCP="${LZCP}"`/usr/bin/find  "${LPS_HOME}\\WEB-INF\\lib" -maxdepth 1 -name "*.jar" | tr '\n' ';'`
+    LZCP="${LZCP}$ANT_HOME\\lib\\junit.jar;${LPS_HOME}\\WEB-INF\\classes"
+else
+    LZCP="${LPS_HOME}"/WEB-INF/lps/server/build:
+    LZCP="${LZCP}"`/usr/bin/find "${LPS_HOME}/3rd-party/jars/dev" -name "*.jar"  | tr '\n' ':'`
+    LZCP="${LZCP}"`/usr/bin/find "${LPS_HOME}/WEB-INF/lib"  -name "*.jar" | tr '\n' ':'`
+    LZCP="${LZCP}$ANT_HOME/lib/junit.jar:${LPS_HOME}/WEB-INF/classes"
+fi
+
+export LZCP="${LZCP}"
+

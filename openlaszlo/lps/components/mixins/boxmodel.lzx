@@ -1,0 +1,92 @@
+<!---
+    @copyright Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.
+               Use is subject to license terms.
+
+    @access public
+    @topic LFC
+    @subtopic Views
+  -->
+<library>
+<mixin name="boxmodel">
+    <doc>
+      <tag name="shortdesc"><text>A mixin that adds CSS2 box model support to view.</text></tag>
+      <text>
+        <p>The <tagname>boxmodel</tagname> mixin adds CSS2 box model support to <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag></p>
+
+        <p><tagname>boxmodel</tagname> implements a subset of the CSS2 box model spec
+        <a href="http://www.w3.org/TR/CSS2/box.html">http://www.w3.org/TR/CSS2/box.html</a>
+        </p>
+        <example title="Simple view with boxmodel" query-parameters="lzr=swf10"><programlisting><![CDATA[
+<canvas>
+    <include href="mixins/boxmodel.lzx"/>
+    <view with="boxmodel" bgcolor="yellow" margin="20" borderwidth="2" padding="5">
+        <text>text</text>
+    </view>
+</canvas>
+        ]]></programlisting></example>
+
+        <p><classname>boxmodel</classname> is a mixin intended for use with <sgmltag class="element" role="LzView">&lt;view&gt;</sgmltag> and its subclasses.
+        </p>
+      </text>
+    </doc>
+
+    <!--- @access private -->
+    <method name="construct" args="p, a">
+        super.construct(p,a);
+
+        // set these lz.view.setCSS() knows how to process these attributes
+        var style = this.__styleinfo;
+        style.margin = {capability: 'css2boxmodel', isdimension: true, affectsoffset: true}
+        style.borderWidth = {capability: 'css2boxmodel', isdimension: true, affectsoffset: true} 
+        style.borderColor = {capability: 'css2boxmodel'} 
+        style.padding = {capability: 'css2boxmodel', isdimension: true, affectsoffset: true}
+    </method>
+
+    <!--- The margin of the view, in pixels -->
+    <attribute name="margin" type="number" value="0" style="margin"/>
+    <event name="onmargin"/>
+    <setter name="margin" args="margin">
+        if (this.margin != margin) {
+            this.margin = margin;
+            this.__widthoffset = this.__heightoffset = (margin * 2) + (this.borderwidth * 2) + (this.padding * 2);
+            this.setCSS('margin', margin);
+        }
+        if (this.onmargin.ready) this.onmargin.sendEvent(margin);
+    </setter>
+
+    <!--- The borderwidth of the view, in pixels -->
+    <attribute name="borderwidth" type="number" value="0" style="border-width"/>
+    <event name="onborderwidth"/>
+    <setter name="borderwidth" args="borderwidth">
+        if (this.borderwidth != borderwidth) {
+            this.borderwidth = borderwidth;
+            this.__widthoffset = this.__heightoffset = (this.margin * 2) + (borderwidth * 2) + (this.padding * 2);
+            this.setCSS('borderWidth', borderwidth);
+        }
+        if (this.onborderwidth.ready) this.onborderwidth.sendEvent(borderwidth);
+    </setter>
+
+    <!--- The bordercolor of the view -->
+    <attribute name="bordercolor" type="color" value="black" style="border-color"/>
+    <event name="onbordercolor"/>
+    <setter name="bordercolor" args="bordercolor">
+        if (this.bordercolor != bordercolor) {
+            this.bordercolor = bordercolor;
+            this.setCSS('borderColor', LzColorUtils.torgb(bordercolor));
+        }
+        if (this.onbordercolor.ready) this.onbordercolor.sendEvent(bordercolor);
+    </setter>
+
+    <!--- The padding of the view, in pixels-->
+    <attribute name="padding" type="number" value="0" style="padding"/>
+    <event name="onpadding"/>
+    <setter name="padding" args="padding">
+        if (this.padding != padding) {
+            this.padding = padding;
+            this.__widthoffset = this.__heightoffset = (this.margin * 2) + (this.borderwidth * 2) + (padding * 2);
+            this.setCSS('padding', padding);
+        }
+        if (this.onpadding.ready) this.onpadding.sendEvent(padding);
+    </setter>
+</mixin>
+</library>

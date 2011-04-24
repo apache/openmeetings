@@ -1,0 +1,54 @@
+<canvas title="linkdialog driver" height="400" bgcolor="0x7C7C8D">
+
+<!-- This file tests the link dialog functionality --> 
+<include href="incubator/stylishbutton.lzx" /> 
+<include href="incubator/shadowbox.lzx"/>
+<include href="incubator/borderinput.lzx"/>
+<include href="incubator/lzcombobox.lzx"/>
+<include href="incubator/textstyle.lzx"/>
+<include href="incubator/baseedittext.lzx" />
+<include href="incubator/tooltip/tooltipview.lzx" />
+    
+<include href="incubator/rich-text/richtexttoolbar.lzx"/>
+<include href="incubator/rich-text/richtexteditarea.lzx"/>
+<include href="incubator/rich-text/linkdialog.lzx"/>
+<include href="incubator/rich-text/formatbtn.lzx"/>
+
+<view x="20" y="80" width="${canvas.width-40}" height="${canvas.height-80}">
+    <!-- A very boring toolbar which only contains a link button --> 
+    <richtexttoolbar name="toolbar" editor="${grte}" height="30" width="${parent.width-5}" x="2" y="0" bgcolor="0xD4D7E5">
+        <formatbtn name="linkbtn" id="linkbtn" format="link" iconname="link" icony="3" y="2">
+        link
+            <method name="doClick" args="ignore=null">
+                editor.linkpanel.show();
+            </method>
+        </formatbtn>
+    </richtexttoolbar>
+        
+   
+    <linkdialog id="ldlg" name="linkpanel" />
+
+    <view width="100%" y="35" height="${parent.height-70}" bgcolor="0xFFFFFF">
+                 <!-- sample text from democracy, an american novel by henry adams, 1880 (in public domain) --> 
+        <richtexteditarea id="grte" name="txt" 
+            height="100%"
+            width="600"
+            defaultfontname="Verdana" 
+            defaultfontsize="18" 
+            defaultfontcolor="0x336699"
+
+            border="10"  text="For reasons which many persons thought ridiculous, Mrs. Lightfoot Lee decided to pass the winter in Washington. She was in excellent health, but she said that the climate would do her good. In New York she had troops of friends, but she suddenly became eager to see again the very small number of those who lived on the Potomac. It was only to her closest intimates that she honestly acknowledged herself to be tortured by ennui. Since her husband's death, five years before, she had lost her taste for New York society; she had felt no interest in the price of stocks, and very little in the men who dealt in them; she had become serious. What was it all worth, this wilderness of men and women as monotonous as the brown stone houses they lived in? In her despair she had resorted to desperate measures. She had read philosophy in the original German, and the more she read, the more she was disheartened that so much culture should lead to nothing... nothing.">
+            <handler name="oninit">
+                this.setLinkPanel(ldlg);
+            </handler>
+        </richtexteditarea>
+    </view> 
+</view>
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2009, 2010 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->
+    

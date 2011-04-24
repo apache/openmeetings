@@ -1,0 +1,202 @@
+<library>
+    <include href="lz/basefloatinglist.lzx" /> 
+
+    <!-- resources used for floatinglist -->
+    
+    <resource name="shadowTR">
+        <frame src="resources/floatinglist/pop_shadow_flush_top_rt.swf" />
+        <frame src="resources/floatinglist/pop_shadow_corner_top_rt.swf" />
+        <frame src="resources/floatinglist/pop_shadow_oval_top_rt.swf" />
+    </resource>
+    
+    <resource name="shadowMR" src="resources/floatinglist/pop_shadow_mid_rt.swf" />
+    
+    <resource name="shadowBL" src="resources/floatinglist/pop_shadow_bot_lft.swf" />
+    <resource name="shadowBM" src="resources/floatinglist/pop_shadow_bot_mid.swf" />
+    <resource name="shadowBR" src="resources/floatinglist/pop_shadow_bot_rt.swf" />
+        
+    <resource name="menucap_lft">
+        <frame src="resources/floatinglist/topmenu_lft.swf" />
+        <frame src="resources/floatinglist/botmenu_lft.swf" />
+    </resource>
+
+    <resource name="menucap_mid">
+        <frame src="resources/floatinglist/topmenu_mid.swf" />
+        <frame src="resources/floatinglist/botmenu_mid.swf" />
+    </resource>
+
+    <resource name="menucap_rt">
+        <frame src="resources/floatinglist/topmenu_rt.swf" />
+        <frame src="resources/floatinglist/botmenu_rt.swf" />
+    </resource>     
+        
+    <!--- The shadows width and height are set to the width and height of the view
+          it is trying to apply a shadow to.
+          @keywords private -->
+    <class name="_floatshadow" 
+        oninit="this.setCornerResourceNumber(cornerresourcenumber)" >
+        <!-- number of pixels pulled in from right and bottom sides -->
+        <attribute name="inset" value="10" />
+        <attribute name="offsety" value="10" />
+        <attribute name="shadowsize" value="5" />
+        
+        <attribute name="bottomvisible" value="true" setter="this.setBottomVisible( bottomvisible )" />
+        <event name="onbottomvisible" />
+                        
+        <attribute name="cornerresourcenumber" 
+                   value="0" setter="this.setCornerResourceNumber(cornerresourcenumber)" />
+        <event name="oncornerresourcenumber" />
+            
+        <view name="right" y="${classroot.offsety}" 
+              x="${parent.width - classroot.inset}" 
+              height="${parent.height - classroot.offsety}" >
+            <view name="top" resource="shadowTR" />
+            <view resource="shadowMR" stretches="height"/>
+            <view height="0" />
+            <stableborderlayout axis="y" />
+        </view>
+            
+        <view name="bottom" visible="${parent.bottomvisible}" y="${parent.height}" width="${parent.width + parent.right.width - classroot.inset }" >
+            <view resource="shadowBL"/>
+            <view resource="shadowBM" stretches="width"/>
+            <view resource="shadowBR"/>
+            <stableborderlayout axis="x" />
+        </view>
+            
+        <method name="setBottomVisible" args="bv" >
+            this.bottomvisible = bv;
+            if ( onbottomvisible ) this.onbottomvisible.sendEvent( bv );
+            this.setCornerResourceNumber(this.cornerresourcenumber);
+        </method>
+            
+        <method name="setCornerResourceNumber" args="crn" >
+            if ( !this.bottomvisible ) {
+                this.cornerresourcenumber = 3;
+            } else {
+                // this.cornerresourcenumber = crn;
+                this.cornerresourcenumber = 2;
+            }
+            if ( !isinited ) return;                        
+            this.right.top.setAttribute('frame', this.cornerresourcenumber );
+            if ( oncornerresourcenumber ) this.oncornerresourcenumber.sendEvent();
+        </method>   
+    </class>
+    
+    <!-- A list which floats above other components on the canvas.  The
+          floatinglist may be attached to a view, in which case the
+          attachlocation attribute may be used to specify where the attachment
+          occurs. -->
+    <class name="floatinglist" extends="basefloatinglist">
+
+        <!--- @keywords private -->
+        <attribute name="border_bottom"  value="${this._currentattachy == 'bottom' ? 0 : this.bordersize}" />
+        <!--- @keywords private -->
+        <attribute name="border_top"  value="${this._currentattachy == 'top' ? 0 : this.bordersize}" />
+
+        <!--- @keywords private -->
+        <attribute name="shadowcrn"     value="0" />
+
+        <!--- The shadow offset in the y coordinate space. 
+              @keywords private -->
+        <attribute name="shadowoffsety" value="${this._currentattachy == 'bottom' ? 3:-9}" />
+
+        <!-- initially this view will cover the contents of the list.
+             this is rectified oninit by sending this.sendToBack()
+             -->
+        <view name="bkgnd" ignoreplacement="true"
+              width="100%" height="100%"  >
+            <_floatshadow name="shdw" 
+                    bottomvisible="${classroot._currentattachy != 'top'}"
+                    offsety="${classroot.shadowoffsety}" 
+                    cornerresourcenumber="${classroot.shadowcrn}"
+                    width="100%" height="100%" opacity=".6" />
+            <view name="borderview" 
+                  width="100%" 
+                  height="100%" 
+                  bgcolor="0x808080" />
+        </view>
+
+        <view name="menucap" y="${parent._currentattachy == 'top'? -height + 1:parent.height }"
+              width="${classroot.width}" 
+              ignoreplacement="true" 
+              oninit="this.setAttribute('frame', 1)">
+            <view resource="menucap_lft"/>
+            <view resource="menucap_mid" stretches="width"/>
+            <view resource="menucap_rt"/>
+            <stableborderlayout axis="x" />
+            <setter name="frame" args="r"> <![CDATA[
+                var L = this.subviews.length;
+                for ( var i = 0; i < L; i++ ) {
+                    this.subviews[i].setAttribute('frame', r);
+                } 
+             ]]> </setter>
+            <setter name="y" args="y"> <![CDATA[
+                super.setAttribute('y', y);
+                if ( y < 0 ) {
+                    this.setAttribute('frame', 1);
+                } else {
+                    this.setAttribute('frame', 2);
+                }
+             ]]> </setter>
+        </view>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (this.style != null) {
+                setTint(this.menucap, s.basecolor);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            this.bkgnd.sendToBack();
+            this.bringToFront();
+        </method>
+        
+        <!--- @keywords private -->
+        <setter name="bgcolor" args="c" >
+            if ( !isinited ) return;
+            this.bkgnd.borderview.setAttribute('bgcolor', c);
+        </setter>
+
+        <!--- @keywords private -->
+        <method name="getMenuCapHeight">
+          return menucap.height;
+        </method>
+        <doc>
+          <tag name="shortdesc"><text>
+              a floatinglist appears above other components 
+          </text></tag>
+          <text>
+            <p>The <tagname>floatinglist</tagname> tag provides a list that floats
+              on top of the canvas.  It includes an attachment API for popping-up
+              relative to a target. This attachment API guarantees visibility on the
+              canvas, such that if the floatinglist intersects the canvas bounds,
+              the attach location will change to a more visible location.</p>
+
+            <example>
+              &lt;canvas height="100"&gt;
+              &lt;button x="10" y="10" text="owner"&gt;
+              &lt;floatinglist width="80" attach="right"&gt;
+              &lt;textlistitem text="one"/&gt;
+              &lt;textlistitem text="two"/&gt;
+              &lt;/floatinglist&gt;
+              &lt;/button&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <seealso>
+              <component-design id="floatinglist" title="Floating List"/>
+            </seealso>
+          </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

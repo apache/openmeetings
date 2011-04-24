@@ -1,0 +1,159 @@
+<library>
+
+    <include href="base/basecombobox.lzx" />
+
+    <!-- resources -->
+    <resource name="lzcombobox_lft_rsc">
+        <frame src="resources/combobox/combobox_lft_up.swf" />
+        <frame src="resources/combobox/popup_lft_up.swf" />
+        <frame src="resources/combobox/combobox_lft_dsbl.swf" />
+        <frame src="resources/combobox/popup_lft_dsbl.swf" />
+    </resource>
+
+    <resource name="lzcombobox_mid_rsc">
+        <frame src="resources/combobox/combobox_mid_up.swf" />
+        <frame src="resources/combobox/popup_mid_up.swf" />
+        <frame src="resources/combobox/combobox_mid_dsbl.swf" />
+        <frame src="resources/combobox/popup_mid_dsbl.swf" />
+    </resource>
+
+    <resource name="lzcombobox_rgt_rsc">
+        <frame src="resources/combobox/popbtn_rt_up.swf" />
+        <frame src="resources/combobox/popbtn_rt_mo.swf" />
+        <frame src="resources/combobox/popbtn_rt_dn.swf" />
+        <frame src="resources/combobox/popbtn_rt_dsbl.swf" />
+    </resource>
+
+
+    <!-- A dropdown list of selectable items. Can either be editable or
+          not. -->
+    <class name="combobox" extends="basecombobox">
+            <view name="lft" resource="lzcombobox_lft_rsc" placement="bkgnd"/>
+        <view name="mid" resource="lzcombobox_mid_rsc" stretches="width" placement="bkgnd"/>
+        <basebutton name="rgt" resource="lzcombobox_rgt_rsc" styleable="true"
+                placement="bkgnd" onclick="classroot.toggle(false)" />
+        <stableborderlayout axis="x" placement="bkgnd"/>
+               <!--- @keywords private -->
+        <method name="_showEnabled">
+           super._showEnabled();
+           if (_enabled) {
+                if (!editable) {
+                    this.bkgnd.lft.setAttribute('frame', 2 );
+                    this.bkgnd.mid.setAttribute('frame', 2 );
+                } else {
+                    this.bkgnd.lft.setAttribute('frame', 1 );
+                    this.bkgnd.mid.setAttribute('frame', 1 );
+                }
+            } else {
+                if (!editable) {
+                    this.bkgnd.lft.setAttribute('frame', 4 );
+                    this.bkgnd.mid.setAttribute('frame', 4 );
+                } else {
+                    this.bkgnd.lft.setAttribute('frame', 3 );
+                    this.bkgnd.mid.setAttribute('frame', 3 );
+                }
+            }
+        </method>
+ <doc>
+          <tag name="shortdesc"><text>
+              combobox displays a dropdown list of selectable items.
+          </text></tag>
+          <text>
+            <p>A <classname>combobox</classname> is a common UI element for
+              displaying a pop-up list associated with a text field. The selected
+              text of the combobox is displayed within the text field.  This field
+              is an <sgmltag class="element" role="LzInputText">&lt;inputtext&gt;</sgmltag> field if the
+              <attribute>editable</attribute> of the combobox is <code>true</code>
+                (the default), or a static <sgmltag class="element" role="LzText">&lt;text&gt;</sgmltag> field if it
+              is <code>false</code>.</p>
+
+            <p>The number of items shown in the combobox can be set using the
+              <attribute>shownitems</attribute> attribute.  If there are more items
+              available than are shown, a scrollbar will be created
+              automatically.</p>
+
+            <p>The list of items in a combobox can be created explicity using the
+                <sgmltag class="element" role="lz.textlistitem">&lt;textlistitem&gt;</sgmltag> tag with assigned
+              <attribute>text</attribute> and <attribute>value</attribute>
+              attributes.</p>
+
+            <example>
+              &lt;canvas height="100"&gt;
+              &lt;combobox id="cbox" x="5" y="5" width="130" editable="false"&gt;
+              &lt;textlistitem text="Dark Blue"  value="0x000055"/&gt;
+              &lt;textlistitem text="Turquoise"  value="0x66dddd"/&gt;
+              &lt;textlistitem text="Light Blue" value="0xaaddff"/&gt;
+              &lt;/combobox&gt;
+              &lt;view x="150" y="5" width="20" height="20"
+              bgcolor="${cbox.value}"/&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <p><br/></p>
+            <p>
+              A combobox can also be populated by assigning a
+              <attribute>datapath</attribute> to a <tagname>textlistitem</tagname>.
+              Also the number of items shown can be set with the
+              <attribute>shownitems</attribute> attribute.
+            </p>
+
+            <example>
+              &lt;canvas height="130"&gt;
+              &lt;dataset name="items"&gt;
+              &lt;item value="item1"&gt;item one&lt;/item&gt;
+              &lt;item value="item2"&gt;item two&lt;/item&gt;
+              &lt;item value="item3"&gt;item three&lt;/item&gt;
+              &lt;item value="item4"&gt;item four&lt;/item&gt;
+              &lt;/dataset&gt;
+
+              &lt;combobox x="5" y="5"
+              width="130"  
+              shownitems="3"
+              defaulttext="choose one..."  &gt;
+              &lt;textlistitem datapath="items:/item" text="$path{'text()'}"
+              value="$path{'@value'}"/&gt;
+              &lt;/combobox&gt;
+              &lt;/canvas&gt;
+            </example>
+
+            <p>Finally, a combox can also have custom items in its list by tending
+                the <sgmltag class="element" role="lz.listitem">&lt;listitem&gt;</sgmltag> class. An example of this is shown
+              below:</p>
+
+            <example>
+              &lt;canvas height="130"&gt;
+              &lt;class name="mylistitem" extends="listitem" width="100%" height="20" &gt;
+              &lt;attribute name="text" value="" type="string"/&gt;
+              &lt;!-- place a red square in the left hand side of mylistitem --&gt;
+              &lt;view bgcolor="red" width="10" height="10" x="5" y="5"/&gt;
+              &lt;!-- constrain the text to the text attribute of listitem --&gt;
+              &lt;text x="20" text="${classroot.text}" fgcolor="0x4B4B4B"&gt;
+              &lt;/text&gt;
+              &lt;/class&gt;
+
+              &lt;dataset name="items"&gt;
+              &lt;item value="item1"&gt;item one&lt;/item&gt;
+              &lt;item value="item2"&gt;item two&lt;/item&gt;
+              &lt;item value="item3"&gt;item three&lt;/item&gt;
+              &lt;item value="item4"&gt;item four&lt;/item&gt;
+              &lt;/dataset&gt;
+
+              &lt;combobox x="5" y="5"
+              width="130" editable="false"&gt;
+              &lt;mylistitem datapath="items:/item" text="$path{'text()'}"
+              value="$path{'@value'}"/&gt;
+              &lt;/combobox&gt;
+              &lt;/canvas&gt;
+            </example>
+
+          </text>
+        </doc>
+
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,49 @@
+<canvas width="1100" height="900">
+    <debug y="500" height="300" width="500"/>
+
+    <include href="data.lzx"/>
+    <include href="incubator/opttree/opttree.lzx"/>
+    <include href="treenode.lzx"/>
+
+    <handler name="oninit">
+        gDataMan.loadAdditionalTreeData( dsTreeData.getFirstChild() );
+    </handler>
+
+    <window title="fast tree" width="300" height="400" resizable="true">
+        <simplelayout spacing="10"/>
+        <view>
+            <simplelayout axis="x"/>
+            <text fontstyle="bold">Selection</text>
+            <text text="${ parent.dispay( gOptTree.selection  ) }"
+                  resize="true" />
+
+            <method name="dispay" args="dn">
+                if ( !dn ) return "";
+                var s = "";
+                var rn = dsTreeData.getFirstChild();
+                while ( dn != rn ){
+                    s = ":" + dn.attributes.name + s;
+                    dn = dn.parentNode;
+                }
+                return s;
+            </method>
+        </view>
+
+        <view height="${ immediateparent.height - y }" width="100%" clip="true">
+            <opttree id="gOptTree" datapath="dsTreeData:/root"
+                     nodepath="*" nodeclass="treenode">
+                <attribute name="selection" value="null" />
+                <method name="select" args="el" override="true"><![CDATA[
+                    super.select(el);
+                    this.setAttribute("selection", el && el.datapath.p);
+                ]]></method>
+            </opttree>
+            <scrollbar/>
+        </view>
+    </window>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008-2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

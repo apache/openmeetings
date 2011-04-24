@@ -1,0 +1,79 @@
+<!-- X_LZ_COPYRIGHT_BEGIN ************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                       *
+* X_LZ_COPYRIGHT_END ************************************************** -->
+
+<library>
+
+
+    <resource name="light_rsc">
+        <frame src="resources/red-orb.swf"/>
+        <frame src="resources/yellow-orb.swf"/>
+        <frame src="resources/green-orb.swf"/>
+    </resource>
+
+
+    <class name="rtmpstatus" 
+           resource="light_rsc" 
+           width="16" 
+           height="16" 
+           stretches="both"
+           >
+
+        <!--- rtmpconnection to monitor -->
+        <attribute name="rtmpc" value="null" />
+
+        <attribute name="_updateStageDelegate" value="null"/>
+
+        <handler name="oninit" args="ignore"><![CDATA[
+        // This class should have an rtmp attribute to use a particular 
+        // rtmpconnection, but default to the global one, and it should
+        // also clean up properly.
+        if (! this.rtmpc) {
+            if (lz.rtmpconnection.connections) this.setAttribute('rtmpc', lz.rtmpconnection.connections._default);
+            if (this.rtmpc == null) {
+                if ($debug) Debug.warn("rtmpconnection not found for %w", this);
+            }
+        }
+        ]]>
+        </handler>
+
+        <setter name="rtmpc" args="conn = null">
+            this.rtmpc = conn;
+            if (this._updateStageDelegate) this._updateStageDelegate.unregisterAll();
+            if (conn = null) return;
+            this._updateStageDelegate = 
+                new LzDelegate(this, "_updateStage", this.rtmpc, "onstage");
+        </setter>
+
+        <!--- @access private -->
+        <method name="_updateStage" args="ignore"><![CDATA[
+            this.setAttribute('frame', this.rtmpc.stage + 1);
+        ]]>
+        </method>
+        <doc>
+            <tag name="shortdesc">
+                <text>An indicator "light" that shows status of connection to a media server.</text>
+            </tag>
+            <text>
+                <p>
+                    This element causes a small indicator "light" to show the status of the connection:</p>
+                    <itemizedlist>
+                    <listitem><para>red: no connection</para></listitem>
+                    <listitem><para>green: working connection</para></listitem>
+                    </itemizedlist>
+                <p>The following example shows a trivial rtmpstatus example.</p>
+                <example class="program">
+&lt;canvas height=&quot;40&quot;&gt;
+    &lt;simplelayout spacing=&quot;5&quot;/&gt;
+    &lt;text text=&quot;The indicator light is red because there is no rtmp connection.&quot;/&gt;
+    &lt;rtmpstatus/&gt;
+&lt;/canvas&gt;
+                </example>
+            </text>
+            </doc>
+
+    </class>
+
+
+</library>

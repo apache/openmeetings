@@ -1,0 +1,206 @@
+<library>
+
+    <include href="base/basedatacombobox.lzx" />
+    <include href="lz/plainfloatinglist.lzx" />
+    <include href="styledtext.lzx"/>
+
+    <stylesheet>
+        lzcombobox{
+            leftresource: "lzcombobox_left_rsc";
+            middleresource: "lzcombobox_middle_rsc";
+            rightresource: "lzcombobox_right_rsc";
+        }
+    </stylesheet>
+
+    <!--- Class used as the default item class in lzcombobox. See lzcombobox's
+          itemclassname attribute. -->
+    <class name="lzcombobox_item" extends="basedatacombobox_item" 
+           width="${null}">
+
+        <!-- white background to hide the superclass text -->
+        <view name="bg" width="${parent.width}" height="${parent.height}" 
+              bgcolor="#ffffff" />
+
+        <!-- selection/highlight background -->
+        <view name="hilite" resource="lzcombobox_item_hilite_rsc" width="${parent.width}"
+              stretches="width" visible="false"/>
+
+        <!-- copy text over background -->
+        <styledtext name="textview" text="${parent.text}" width="${parent.width}" x="3" y="1"
+                    style="$once{parent.style}" />
+        
+        <!--- modified hilite/select behavior from listitem component -->
+        <!--- @keywords private -->
+        <method name="setHilite" args="ishilited" >
+            super.setHilite(ishilited);
+            if (this._initcomplete) _doApplystyle();
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="setSelected" args="isSelected" >
+            super.setSelected(isSelected);
+            if (this._initcomplete) _doApplystyle();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_doApplystyle">
+            if (selected) {
+                this.hilite.setAttribute("visible", true);
+                this.hilite.setAttribute('frame', 2);
+                this.setTint(this.hilite, this.style.selectedcolor);
+            }
+            else if ( hilited ) {
+                this.hilite.setAttribute("visible", true);
+                this.hilite.setAttribute('frame', 1);
+                this.setTint(this.hilite, this.style.hilitecolor);
+            }
+            else {
+                this.hilite.setAttribute("visible", false);
+            }
+        </method>
+    </class>
+
+    <!--- Subclass of basedatacombobox with laszlo mail look. See basedatacombobox for
+          details. Usage:
+          <code>
+          <dataset name="dsHours">
+              <item value="1">1</item>
+              <item value="2">2</item>
+              <item value="3">3</item>
+              <item value="4">4</item>
+              <item value="5">5</item>
+              <item value="6">6</item>
+              <item value="7">7</item>
+              <item value="8">8</item>
+              <item value="9">9</item>
+              <item value="10">10</item>
+              <item value="11">11</item>
+              <item value="12">12</item>
+          </dataset>
+
+          <lzcombobox width="50" shownitems="3" itemdatapath="dsHours:/item">
+              <handler name="onselect" args="dptr">
+                  Debug.write('value:', this.value);
+                  Debug.write('datapointer:', dptr);
+              </handler>
+          </lzcombobox>
+          </code>
+    -->
+    <class name="lzcombobox" extends="basedatacombobox" width="100" >
+        <!--- The name of the class for items in the floating list. -->
+        <attribute name="itemclassname" value="lzcombobox_item" type="string"/>
+        
+        <!--- The name of the class for the floating list.
+             @keywords private -->
+        <attribute name="menuclassname" value="plainfloatinglist" type="string"/>
+
+        <!-- Placement of x-axis combobox text. -->
+        <attribute name="textx" value="8" />
+
+        <!-- Placement of y-axis combobox text. -->
+        <attribute name="texty" value="0" />
+
+        <!--- Property _cbtext must be set by subclasses.
+              @keywords private -->
+        <attribute name="_cbtext" value="$once{this._text}" />
+
+        <!--- tooltip text, if any -->
+        <attribute name="tooltip" value="" type="text" />
+
+        <view name="bkgnd" width="100%" clickable="${parent._enabled}">
+            <attribute name="frnum" value="1"/>
+            <handler name="onclick">
+                classroot.toggle()
+                if (parent['onclick']) parent.onclick.sendEvent();
+            </handler>
+            <handler name="onmouseout">
+                this.showState(1);
+                if (parent['onmouseout']) parent.onmouseout.sendEvent();
+            </handler>
+            <handler name="onmouseup">
+                this.showState(1);
+                if (parent['onmouseup']) parent.onmouseup.sendEvent();
+            </handler>
+            <handler name="onmouseover">
+                this.showState(2);
+                if (parent['onmouseover']) parent.onmouseover.sendEvent();
+            </handler>
+            <handler name="onmousedown">
+                this.showState(3);
+                if (parent['onmousedown']) parent.onmousedown.sendEvent();
+            </handler>
+            <view name="lft" resource="$style{'leftresource'}" />
+            <view name="mid" resource="$style{'middleresource'}" stretches="width"/>
+            <view name="rgt" resource="$style{'rightresource'}" />
+            <stableborderlayout axis="x" />
+
+            <view name="arr" resource="lzcombobox_downarrow_icon_rsc" options="ignorelayout" 
+                  x="${ parent.rgt.x - this.width + 2 }" y="1" />
+
+            <tooltip text="${classroot.tooltip}"/>
+            
+            <!--- @keywords private -->
+            <handler name="onisopen" reference="parent">
+                this.showState(this.frnum);
+            </handler>
+        
+            <!-- Sets appearance of combobox by switching frame number of
+                 resource, depending on mouse state, whether list is open, and
+                 which direction the list is in.  It is supposed to show a
+                 squared-off corner on the side that the list appears. -->
+            <method name="showState" args="baseframe"><![CDATA[
+                var leftframe = baseframe;
+                var rightframe = baseframe;
+                
+                // if not disabled and the list is open
+                if (baseframe < 4 && parent.isopen)
+                {
+                    leftframe += 4;                    
+                    // if list displays towards the top, switch the resources to the next set
+                    if (parent._cblist.attach == "top")
+                        leftframe += 3;
+                        
+                    // the right resource changes only if the list is wider than the combo box itself
+                    rightframe = (parent.listwidth > parent.width - this.rgt.width) ? leftframe : baseframe;
+                }  
+                this.setAttribute('frnum', baseframe);
+                this.lft.setAttribute('frame', leftframe);
+                this.mid.setAttribute('frame', baseframe);
+                this.rgt.setAttribute('frame', rightframe);
+            ]]></method>
+        </view>
+
+        <text name="_text" x="${parent.textx}" y="${parent.texty}" width="${parent.width - 19}">
+            <handler name="oninit">
+                if(parent['style'] != null){
+                    if(parent.style['font']){
+                        this.setAttribute('font', parent.style.font);
+                    }
+                    if(parent.style['fontsize']){
+                        this.setAttribute('fontsize', parent.style.fontsize);
+                    }
+                    if(parent.style['fgcolor']){
+                        this.setAttribute('fgcolor', parent.style.fgcolor);
+                    }
+                }
+            </handler>
+        </text>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                if (s['basecolor']) {
+                    this.setTint(this.bkgnd.lft, s.basecolor);
+                    this.setTint(this.bkgnd.mid, s.basecolor);
+                    this.setTint(this.bkgnd.rgt, s.basecolor);
+                }
+            }
+        </method>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009, 2010 Laszlo Systems, Inc.  All Rights Reserved.                   *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

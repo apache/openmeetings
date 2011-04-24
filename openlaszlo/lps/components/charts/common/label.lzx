@@ -1,0 +1,152 @@
+<!---
+    @access public
+    @topic Components
+    @subtopic Charts
+  -->
+<library>
+    <include href="../styles/chartstyle.lzx"/>
+    <include href="extensions/drawview.lzx"/>
+    <!-- Begin Data Label Class -->
+     <!---
+      An abstract class that applies all features label.
+      @access public
+      -->     
+    <class name="label" extends="drawview">
+
+        <!--- @keyword private -->
+        <attribute name="enableCache" value="true" type="boolean"/>
+        <!--- the style will be applied
+            @keyword private-->
+        <attribute name="style" type="string" value="null"/>
+        <!--- @keyword private -->
+        <text name="textContent" resize="true" bgcolor="0x000000"/>
+        
+        <!--- Get the text width 
+            @return the current text width -->
+        <method name="getTextWidth">
+            return textContent.getTextWidth();
+        </method>
+        <!--- Get the text
+            @return the current text  -->
+        <method name="getText">
+            return textContent.getText();
+        </method>
+
+        <!--- Get the text height 
+            @return the current text height -->
+        <method name="getTextHeight">
+            return textContent.getTextHeight();
+        </method>
+        
+        
+        <!--- Setter for attribute 
+            @param string txt: text to be updated
+            -->
+        <method name="render" args="txt">
+        <![CDATA[ 
+            this.textContent.setAttribute('text', txt);  
+                                  
+            if(style.updateNeeded(this) || !enableCache)
+            {           
+                this.clear();
+                           
+                if (style.opacity != null) {
+                    this.setAttribute('opacity', style.opacity);
+                }
+
+                //set the font style
+                this.textContent.setAttribute('fontsize', style.fontsize);
+                this.textContent.setAttribute('height', style.fontsize+6);
+                this.textContent.setAttribute('fgcolor', style.fontcolor);
+                this.textContent.setAttribute('font', style.fontname);
+                
+                if (style.fillcolor!=null && style.fillcolor!='null') {
+                    this.textContent.setAttribute('bgcolor', style.fillcolor);
+                } else {
+                    this.textContent.setAttribute('bgcolor', null);
+                }
+                
+                this.setAttribute('lineWidth', style.linesize);
+                
+                if (style.linecolor!=null) {
+                    this.setAttribute('strokeStyle', style.linecolor);
+                }            
+                
+                if (this.embeddedFont(style.fontname)) {
+                    this.applyRotation(style.fontangle, style.fontname);                                    
+                }
+                            
+                this.setAttribute('visible', true);
+                this.bringToFront();
+            }            
+                
+            if( style.linesize!=null && style.linesize>0 ) {            
+                this.textContent.setAttribute('x', Math.ceil(style.linesize/2));
+                this.textContent.setAttribute('y', 0);
+                this.setAttribute('height', textContent.height+Math.ceil(style.linesize/2));
+                this.setAttribute('width', textContent.width+style.linesize);
+                this.border();
+            }
+
+            style.markUpdated(this); 
+        ]]>
+        </method>
+        <!--- @keywords private -->
+        <method name="border">
+        <![CDATA[ 
+            if( style.linesize!=null && style.linesize>0 ) {            
+                var lStartX = Math.ceil(this.lineWidth/2);
+                var lStartY = Math.ceil(this.lineWidth/2);
+
+                this.draw(0, -lStartY, this.width, -lStartY);
+                this.draw(this.width, -lStartY, this.width, this.height);
+                this.draw(this.width, this.height, 0, this.height);
+                this.draw(0, this.height, 0, -lStartY);
+            }
+        ]]>
+        </method>
+        <!--- render the line
+            @param Number aBeginPosX: The start x position
+            @param Number aBeginPosY: The satrt y position
+            @param Number aEndPosX: The end x position
+            @param Number aEndPosY: The end y position
+            @keywords private -->
+        <method name="draw" args="aBeginPosX, aBeginPosY, aEndPosX, aEndPosY">
+            this.beginPath();
+            this.moveTo(aBeginPosX, aBeginPosY);
+            this.lineTo(aEndPosX, aEndPosY);
+            this.stroke();
+            this.closePath();                    
+        </method>
+        <!--- @keywords private -->
+        <method name="applyRotation" args="pAngle, pfontName">
+            if (this.embeddedFont(pfontName)) {
+                this.setAttribute('rotation', pAngle);
+            }
+        </method>        
+        <!--- @keywords private -->
+        <method name="embeddedFont" args="str" >
+            if (typeof(LzFontManager) == "undefined")
+                return false;
+            return LzFontManager['fonts'] != null ?  LzFontManager.fonts[ str ] != null:false;
+        </method>         
+        <doc>
+          <tag name="shortdesc"><text>
+              a label for a chart
+          </text></tag>
+          <text>
+
+            <warning>This component is of Beta quality and is subject to change.</warning>
+          </text>
+        </doc>
+
+    </class>
+<!-- End Vertical Axis Class -->
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              
+* Use is subject to license terms.                                            
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@ -->

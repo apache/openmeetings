@@ -1,0 +1,24 @@
+<!---
+      @topic Incubator
+      @subtopic Components
+  -->
+<library>
+    <!-- close box resource -->
+    <resource name="closebox_rsc" >
+        <frame src="resources/button/closebox/close_btn_up.gif" />
+        <frame src="resources/button/closebox/close_btn_mo.gif" />
+        <frame src="resources/button/closebox/close_btn_dn.gif" />
+    </resource>
+   
+    <!--- the closebox class has its own resource -->
+    <!-- TODO [dchung, 06.09.05] doesn't seem to pick up the tint properly, 
+            tried setTint in _applystyle() and init() -->
+    <class name="closebox" extends="basebutton"
+        resource="closebox_rsc" />
+ 
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

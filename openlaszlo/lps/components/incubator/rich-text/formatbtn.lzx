@@ -1,0 +1,106 @@
+<!---
+      @topic Incubator
+      @subtopic Rich Text Editor
+  -->
+<library>
+    
+    <!-- dependencies  -->
+    <include href="../stylishbutton.lzx" />
+    
+    <!--- class for use of <xref linkend="lz.richtexttoolbar" /> buttons  -->
+    <class name="formatbtn" extends="stylishbutton" width="26" 
+           focusable="false" style="formatbtn_style">
+        <!--- the format type that the button will control -->
+        <attribute name="format" type="string" />
+        <!--- active state boolean -->
+        <attribute name="isactive" value="false" setter="this.setActive(isactive)"/>
+        <!--- a reference to the toolbar parent -->
+        <attribute name="toolbar" value="$once{this.parent}" />
+        <!--- a reference to toolbar's editor -->
+        <attribute name="editor" value="$once{this.parent.editor}" />
+
+        <!--- the tint for when the button is active. 
+            when inactive, use "tint" attribute. --> 
+        <attribute name="activecolor" value="0xEAE4B7"/>
+                
+        <!--- Text to show in tooltip when this is active -->
+        <attribute name="activetooltiptext" value="" type="string" />
+
+        <!--- Text to show in tooltip when this is inactive -->
+        <attribute name="inactivetooltiptext" value="" type="string" /> 
+        
+        <!--- Special tooltip which changes its text depending on whether the
+            formatbtn is active. -->
+        <tooltip name="tooltip" text="standin only">
+            <method name="showTip">
+                this.text = (parent.isactive ?  parent.activetooltiptext : parent.inactivetooltiptext); 
+                super.showTip();
+            </method>
+        </tooltip> 
+        
+        <method name="init">
+            super.init();
+            toolbar.registerTool(this,format);
+        </method>
+        
+        <!--- setActive
+                Method to set the active state of the button
+            @parameter bool isactive: true for active  - false for inactive
+            @keywords private -->
+        <method name="setActive" args="isactive"> 
+            this.isactive = isactive;
+            if (this.isinited) {
+                var color = ( this.isactive ? this.activecolor : this.tint ); 
+                if (this['left'])   this.setTint(this.left,   color); 
+                if (this['middle']) this.setTint(this.middle, color);
+                if (this['right'])  this.setTint(this.right,  color);
+        }
+        </method>
+       
+     <!--- 
+            Called when the user clicks the button. Asks the editor to apply the 
+            format.
+            @keywords private -->
+
+        <handler name="onclick" method="doClick"/>
+        <method name="doClick" args="ignore=null">
+
+            // toggle it
+            this.setActive(!this.isactive);
+            if (this.toolbar._passthruchanges) {
+                this.editor.setFormatAttribute(this.format, this.isactive);
+            }            
+            
+        // Restore the selection immediately. 
+        // Unlike the combo boxes, buttons aren't focusable, so we can just 
+        // restore the selection in the same frame. No need for a delegate [ben 9.21.05]
+           this.editor._restoreSelection();
+        </method>
+
+        <!--- @keywords private -->
+        <handler name="onmouseover">          
+            this.editor.saveSelectionRegion();            
+        </handler>
+
+        <method name="getValue">
+            return isactive;
+        </method>
+        
+        <!--- method broadcast out by the toolbar for clearing tool's state -->
+        <method name="reset">
+            setActive(false);
+        </method>
+        <!--- method broadcast out by the toolbar for setting tool's state -->
+        <method name="setState" args="state">
+            setActive(state == 1);
+        </method>
+        
+    </class>
+
+
+</library> 
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006-2010 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

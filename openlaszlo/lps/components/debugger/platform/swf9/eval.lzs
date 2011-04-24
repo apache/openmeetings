@@ -1,0 +1,76 @@
+<library>
+<script when="immediate">
+<![CDATA[
+
+{
+#pragma "debug=false"
+#pragma "debugSWF9=false"
+#pragma "debugBacktrace=false"
+
+public class LzDebugEvalLoader {
+    #passthrough (toplevel:true) {
+    import flash.display.Loader;
+    import flash.events.Event;
+    import flash.events.IOErrorEvent;
+    import flash.events.TextEvent;
+    import flash.net.URLRequest;
+    import flash.system.ApplicationDomain;
+    import flash.system.LoaderContext;
+    import flash.text.TextField;
+    }#
+
+    var loader:Loader;
+
+    public function LzDebugEvalLoader (view) {
+        this.loader = new Loader();
+        loader.contentLoaderInfo.addEventListener(Event.INIT, debugEvalListener);
+        loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, evalServerError);
+    }
+
+    public function doEval(expr:String, seq:int=0) {
+      var appfile:String = lz.Browser.getBaseURL().toString();
+      var url:String = appfile + "?lzr=" + $runtime + "&lz_load=false&lzt=eval&lz_script="
+      + encodeURIComponent(expr);
+
+      this.loader.load(new URLRequest(url),
+                         new LoaderContext(false,
+                                           new ApplicationDomain(ApplicationDomain.currentDomain)));
+    }
+
+    public function debugEvalListener (e:Event):void {
+        e.target.loader.unload();
+    }
+
+    public function evalServerError (e:Event):void {
+        e.target.loader.unload();
+        Debug.warn('Debugger cannot contact LPS server, switching to SOLO mode.');
+        if (Debug.console is LzDebuggerWindowConsoleBridge) {
+            Debug.console.window.setAttribute('solo_mode', true);
+        }
+    }
+
+    public function addTextLinkCallback(lztext:LzText):void {
+        var textfield:TextField = (lztext.sprite cast LzTextSprite).textfield;
+        textfield.addEventListener(TextEvent.LINK, textLinkCallback);
+    }
+
+    public function textLinkCallback (e:TextEvent):void {
+        var obj:String = e.text;
+        if (obj.indexOf("objid=") == 0) {
+            var objid = obj.substr(6);
+            // trace('textLinkCallback object id = ', objid);
+            Debug.displayObj(Number(objid));
+        }
+    }
+
+}
+} // end #pragma block
+
+]]>
+</script>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

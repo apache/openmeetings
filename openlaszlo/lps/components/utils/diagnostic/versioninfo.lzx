@@ -1,0 +1,25 @@
+<library>
+  <!-- FIXME: [2006-08-16 ptw] I should be able to say resize="true" and have -->
+  <!-- this be the width of the longest line -->
+  <!-- Display version info -->
+  <class name="versioninfo"
+         extends="text"
+         multiline="true"
+         width="${canvas.width}"
+         visible="true"
+         options="ignorelayout"
+         text="${LzCanvas.versionInfoString()}"
+         y="${canvas.height - this.height}"
+         >
+    <handler name="oninit" reference="canvas">
+      this.bringToFront();
+    </handler>
+    <handler name="onclick">
+        this.setAttribute('visible', false);
+    </handler>
+  </class>
+</library>
+
+<!-- Copyright 2008 Laszlo Systems, Inc.  All Rights Reserved. -->
+<!-- Use is subject to license terms. -->
+

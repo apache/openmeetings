@@ -1,0 +1,49 @@
+<!---
+      @topic Components
+      @subtopic Laszlo Components
+  -->
+<library>
+  <include href="focusoverlay.lzx"/>
+  <include href="simpletext.lzx"/>
+  <include href="tabslider.lzx"/>
+  <include href="tabelement.lzx"/>
+  <include href="combobox.lzx"/>
+  <include href="datacombobox.lzx"/>
+  <include href="listitem.lzx"/>
+  <include href="list.lzx"/>
+  <include href="textlistitem.lzx"/>
+  <include href="basefloatinglist.lzx"/>
+  <include href="floatinglist.lzx"/>
+  <include href="plainfloatinglist.lzx"/>
+  <include href="menu.lzx"/>
+
+  <include href="button.lzx"/>
+  <include href="checkbox.lzx"/>
+  <include href="radio.lzx"/>
+  <include href="form.lzx"/>
+  <include href="edittext.lzx"/>
+
+  <include href="slider.lzx"/>
+  <include href="scrollbar.lzx"/>
+  <include href="hscrollbar.lzx"/>
+  <include href="vscrollbar.lzx"/>
+  <include href="window.lzx"/>
+  <include href="modaldialog.lzx"/>  
+  <include href="alert.lzx"/>    
+  <include href="windowpanel.lzx"/>
+
+  <include href="tabs.lzx"/>
+  <include href="tree.lzx"/>
+  <include href="grid.lzx"/>
+  <include href="gridcolumn.lzx"/>
+  <include href="gridtext.lzx"/>
+  <include href="datepicker.lzx"/>
+
+  <include href="tooltip/tooltip.lzx" />
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008, 2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

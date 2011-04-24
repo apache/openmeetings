@@ -1,0 +1,78 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007, 2008, 2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<canvas debug="true">
+<include href="incubator/uploader/fileuploadlist.lzx"/>
+<window name="main" title="File Upload Test" x="5" y="5" width="610" height="450">
+
+            <view name="upview">
+                <hbox spacing="15"/>
+                <simplelayout axis="y" spacing="10"/>
+        
+                <!-- fileuploadlists -->
+        
+                <fileuploadlist name="fl1" maxsize="5000">
+                    <handler name="ontext" reference="this.txtFile">
+                        parent.upload.checkupload();
+                    </handler>
+                </fileuploadlist>
+                <fileuploadlist name="fl2" maxsize="10000">
+                    <handler name="ontext" reference="this.txtFile">
+                        parent.upload.checkupload();
+                    </handler>
+                </fileuploadlist>
+                <fileuploadlist name="fl3">
+                    <handler name="ontext" reference="this.txtFile">
+                        parent.upload.checkupload();
+                    </handler>
+                </fileuploadlist>
+                <fileuploadlist name="fl4">
+                    <handler name="ontext" reference="this.txtFile">
+                        parent.upload.checkupload();
+                    </handler>
+                </fileuploadlist>
+                <fileuploadlist name="fl5">
+                    <handler name="ontext" reference="this.txtFile">
+                        parent.upload.checkupload();
+                    </handler>
+                </fileuploadlist>
+                    
+        
+                <!-- Button for uploading files -->
+        
+                <button name="upload" text="Upload" x="430" enabled="false">
+                    <handler name="onclick"><![CDATA[
+                        for(var i=0; i<main.upview.subnodes.length;i++ ){
+                            if(main.upview.subnodes[i] instanceof lz.fileuploadlist && main.upview.subnodes[i].selected==true){
+                                main.upview.subnodes[i].myFileUpload.upload('upload.jsp');
+                            }
+                        }
+                    ]]>    
+                    </handler>
+                    <method name="checkupload"><![CDATA[
+                       this.setAttribute('enabled',false);
+                       for(var i=0; i<main.upview.subnodes.length;i++ ){
+                            if(main.upview.subnodes[i] instanceof lz.fileuploadlist){
+                                if(main.upview.subnodes[i].myFileUpload.uploadenable==true){
+                                    this.setAttribute('enabled',true);
+                                }
+                            }
+                        }
+                    ]]>    
+                    </method>
+                </button>
+        
+        
+                <!-- Text for displaying message -->
+        
+                <text name="txtMsg" x="10" width="500" multiline="true"
+                          text="${parent.fl1.myFileUpload.msg + '\n' 
+                                 +parent.fl2.myFileUpload.msg + '\n'
+                                 +parent.fl3.myFileUpload.msg + '\n'
+                                 +parent.fl4.myFileUpload.msg + '\n'
+                                 +parent.fl5.myFileUpload.msg + '\n'}"/>
+            </view>
+</window>    
+
+</canvas>

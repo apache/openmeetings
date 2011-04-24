@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+	<title>OpenLaszlo 4.9.0 Release Notes</title> 
+<!-- Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.  Use is subject to license terms. -->
+<style type="text/css">
+      body, th, td {
+          font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+          font-size : 12px;
+          line-height : 18px;
+          margin-left : 25px;
+          margin-right : 25px;
+          color: #333333;
+      }
+      h1, h2, h3, h4 {
+          font-weight : bold;
+          margin-top : 20px;
+      }
+      h1 {
+          font-size : 20px;
+      }
+      h2 {
+          font-size : 18px;
+          margin-bottom: 20px;
+      }
+      h3 {
+          font-size : 14px;
+      }
+      h4 {
+          font-size: 12px;
+      }
+      dt
+      {
+        font-weight: bold;
+      }
+      dd {
+        margin-left: 1em;
+      }
+      pre.code
+      {
+      	font-family: monospace;
+      }
+
+</style> 
+</head>
+<body class="release-notes">
+<hr>
+<h1>Release Notes for OpenLaszlo 4.9.0</h1> 
+<hr>
+
+  <p>OpenLaszlo 4.9.0 is a significant release along the path to
+    Openlaszlo 5.0, which is the upcoming release with the newly
+    redesigned components. OpenLaszlo 4.9.0 contains over 160 bug
+    fixes and implements the infrastructure to support the new components.
+    It also provides new features for creating and deploying mobile
+    applications. To see the complete list of fixes, refer to the <a
+	  href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?version=10770&styleName=Html&projectId=10020&Create=Create"
+	  target="_blank">JIRA 4.9
+      Release notes</a> for details. Important notes, issues, and improvements
+  can be found in paragraphs that start like this: <b>Release Note:...</b>.</p>
+
+  <p>We suggest that you refer to the <a href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?projectId=10020&styleName=Html&version=10750" target="_blank">Release Notes for OpenLaszlo
+4.8.1</a>, which was the release preceding OpenLaszlo
+4.9.0.  Release notes for the previous minor release can be
+found at <a href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?projectId=10020&styleName=Html&version=10741" target="_blank">Release Notes for OpenLaszlo
+4.8.0</a>
+  </p>
+
+  
+<h2>OpenLaszlo Credits</h2> <p>
+OpenLaszlo continues to be grateful for the significant contributions
+by Andr&#xE9; Bargull, whose numerous bug fixes and exacting techical
+reviews make OpenLaszlo more robust. We also want to thank Ono Keiji, Jaco Botha, Alexander
+Pakhunov, Chen Ding, Clint Dickson, Gioacchino Mazzurco, John
+Olmstead, Justin Hunt, Pasqualino 'Titto' Assini, Raju Bitter, and
+Rami Ojares, who took the time to isolate and report
+important bugs for us to address in this release. Thank you!
+We would also like to thank
+the entire OpenLaszlo community for your support in so many ways, like
+submitting bug fixes, helping users on the OpenLaszlo forums, and participating in discussions to help make OpenLaszlo a better platform. 
+</p>
+
+
+<h2>Operating System, Browser, Runtime Compatibility</h2> 
+<p>
+	We have a broad specification that we support browsers that
+  obey DOM 2 and CSS 2.1 for DHTML and SWF8, SWF9, and SWF10. We are
+  also actively tracking HTML5 and mobile/touch browsers. These
+  are some of the active operating systems/browser/runtime platforms on which
+  we and the community are using this release: 
+</p>
+  <table border="1" cellpadding="4">
+    <tr>
+      <td>OS</td>
+      <td>IE7</td>
+      <td>IE 8</td>
+      <td>Firefox 3.6</td>
+      <td>Safari 4</td>
+      <td>Opera 10.62</td>
+      <td>Chrome 6</td>
+      <td>SWF8 - SWF10</td>
+      <td>DHTML</td>
+    </tr>
+    <tr>
+      <td>Windows XP</td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td></td>
+      <td></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+    </tr>
+    <tr>
+      <td>Windows 7</td>
+      <td></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td align="center"></td>
+      <td align="center">X<sup>1</sup></td>
+      <td align="center"></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+    </tr>
+    <tr>
+      <td>Linux 2.6 kernel</td>
+      <td></td>
+      <td></td>
+      <td align="center">X</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+    </tr>
+    <tr>
+      <td>Mac OS X</td>
+      <td></td>
+      <td></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td></td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+      <td align="center">X</td>
+    </tr>
+  </table>
+<p><sup>1</sup>SWF10 only</p>
+<p>
+	Please note that although we have also done some testing with
+Windows Vista, OpenLaszlo 4.9.0 has not been fully qualified against that operating system at this time. Please see <a href="#windowsvista"> <i>Running OpenLaszlo Server on Windows Vista</i> </a> for more information. 
+</p>
+<h2>Migrating your Applications to OpenLaszlo 4.9.0</h2> 
+<p>
+	For those of you who have already upgraded your applications to OpenLaszlo 4.2 or higher, no further work is needed. You should just start using OpenLaszlo 4.9.0. 
+</p>
+<p>
+	To migrate your 4.0.X or 4.1.1 applications, we strongly suggest that you refer to this wiki page: <a href="http://wiki.openlaszlo.org/Runtime_Differences#Upgrading_to_OpenLaszlo_4.2" target="_blank">Runtime_Differences</a>. This page discusses the changes required by SWF9 and also provides a methodology for upgrading your application. It is very important that you run the automated conversion scripts in the recommended order, should you choose to take advantage of them. To review the changes in incremental releases, please refer to the <a href="http://www.openlaszlo.org/archive" target="_blank">OpenLaszlo Archive</a> 
+</p>
+<h2>Bugs Fixed in OpenLaszlo 4.9.0</h2> 
+<p>
+	The 4.9.0 release includes over 160 bug fixes since OpenLaszlo
+4.8.1; we have provided links to our JIRA bug tracking system where you can view the details: 
+</p>
+<ul>
+  <li>
+    <a
+      href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?version=10770&styleName=Html&projectId=10020&Create=Create"
+      target="_blank">Fixed bugs in 4.9.0</a>
+  </li>
+  <li>
+    <a
+      href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?projectId=10020&styleName=Html&version=10750"
+      target="_blank">Fixed bugs in 4.8.1</a>
+  </li>
+  <li>
+  <a
+  href="http://jira.openlaszlo.org/jira/secure/ReleaseNote.jspa?projectId=10020&amp;styleName=Html&amp;version=10741"
+  target="_blank">Fixed bugs in 4.8.0</a>
+  </li>
+  <li>
+  <a
+  href="http://jira.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11080"
+  target="_blank">Fixed bugs in 4.7.3</a>
+  </li>
+	<li>
+<a
+  href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11070"
+  target="_blank">Fixed
+  bugs in 4.7.2</a>
+</li>
+<li>
+  <a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11060" target="_blank">Fixed bugs in 4.7.1</a> 
+	</li>
+  <li>
+		<a href="http://www.openlaszlo.org/jira/secure/IssueNavigator.jspa?mode=hide&amp;requestId=11050" target="_blank">Fixed bugs in 4.7.0</a> 
+	</li>
+</ul>
+
+<h3>Workaround for Input Text Unexpected Behavior with onfocus Handler</h3> 
+<p>
+	In some cases, the onfocus event fires too early, causing unexpected input text characters to be selected as it does in this example: 
+</p>
+<pre class="code">
+  &lt;canvas layout="axis: y"&gt;
+    &lt;inputtext text="abcd" width="100" bgcolor="0xcccccc"/&gt;
+    &lt;inputtext text="abcd" width="100" bgcolor="0xffcccc" onfocus="this.setSelection(0, 1)"/&gt;
+   &lt;/canvas&gt;
+</pre> 
+<p>
+	To work around this issue, you can create a cover view that handles initial clicks, as shown here for the above example: 
+</p>
+<pre class="code">
+  &lt;canvas layout="axis: y"&gt;
+    &lt;inputtext text="abcd" width="100" bgcolor="0xcccccc"/&gt;
+    &lt;view bgcolor="0xffcccc"&gt; &lt;inputtext name="field" text="abcd" width="100"&gt;
+      &lt;handler name="onfocus"&lt;
+        parent.cover.setVisible(false);
+        this.setSelection(0, this.getText().length);
+      &lt;/handler&gt;
+      &lt;handler name="onblur"&gt;
+        parent.cover.setVisible(true);
+      &lt;/handler&gt;
+      &lt;/inputtext&gt;
+      &lt;view name="cover" width="100%" height="100%" onclick="LzFocus.setFocus(parent.field)" /&gt;
+    &lt;/view&gt;
+  &lt;/canvas&gt;
+</pre> <h3>Deprecation Notice: Attribute Values on Data Element Will Be Coerced to String in a Future OpenLaszlo Release</h3> 
+<p>
+	Currently, if you set an attribute value for a data element, the value is stored as it is set. This will no longer be true in future OpenLaszlo releases, where the value will be coerced to a String value. If you need to set non-String values for data elements, you should use the <code>setUserData</code> method as shown in this example where <code>node</code> is an <code>LzDataElement</code>: 
+	<br>
+	<code style="white-space: pre;"> node1.setUserData('key1', val1); assertEquals(val1, node1.getUserData('key1'), 'getUserData key1') </code> 
+</p>
+
+<hr>
+<p>
+	OpenLaszlo 4.9.0 Production branches/4.9@17752 (17752) 2010-10-22T15:20:34Z 
+</p>
+<!-- Dear Editor, Please do NOT insert a Unicode copyright symbol below.  It will get eaten by the intermediate processors and not display correctly in browsers.  Hence the &#xA9;, which is proper XML for the copyright character -->
+<p>
+	Copyright &#xA9; 2002-2010 Laszlo Systems, Inc. All Rights Reserved. Unauthorized use, duplication or distribution is strictly prohibited. This is the proprietary information of Laszlo Systems, Inc. Use is subject to license terms. 
+</p>
+<hr>
+</body>
+</html>

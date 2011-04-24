@@ -1,0 +1,175 @@
+<library>
+    <include href="gridcolumn.lzx" />   
+    <include href="lz/edittext.lzx" />
+
+    <class name="gridtext" extends="gridcolumn">
+        <!--- The datapath attribute for a grid text is used for the text that
+              is displayed in the rows. -->
+        <attribute name="datapath" 
+                   setter="this.setAttribute( 'rowdp', datapath )"/>
+        <!--- Type of content's alignment.
+              Possible values are: left, center, right -->
+        <attribute name="textalign" type="string" value="left"/>
+        <!--- Whether one is able to select the text.  (Only applies
+            if the grid isn't editable, because when it's editable,
+            the text is automatically selectable.) -->
+        <attribute name="selectable" type="boolean" value="false"/>
+
+        <!--- @keywords private -->
+        <attribute name="rowdp" value="" type="string"/>
+        <!--- If set to false, the field will not be editable. -->
+        <attribute name="editable" value="true" type="boolean"/>
+        <!--- @keywords private -->
+        <attribute name="_textcolor" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="_texthilitecolor" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="_textselectedcolor" value="null"/>
+        
+        <!--- @keywords private -->
+        <method name="_inferSortpath">
+            return this.rowdp;
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            super._applystyle( s );
+            this.setAttribute( '_textcolor' , s.textcolor );
+            this.setAttribute( '_texthilitecolor' , s.texthilitecolor );
+            this.setAttribute( '_textselectedcolor' , s.textselectedcolor );
+        </method>
+
+
+        <view height="24" clickable='${parent.editable}'
+              onmouseover="immediateparent.domouseover()"
+              onmouseout="immediateparent.domouseout()"
+              y="${immediateparent.height/2 - height/2}" 
+              clip="true" >
+            <attribute name="editing" value="false"/>
+            <attribute name="focusable" value="${!editing &amp;&amp; 
+                                                  parent.editable}"/>
+
+            <attribute name="editbox" value="null" type="node" />
+
+            <method name="init">
+                if ( parent.editable ){
+                    this.editDel = new LzDelegate( this, 'startEditing' );
+                    this.editDel.register( this , 'onmousedown' );
+                    this.editDel.register( this , 'onfocus' );
+                }
+                super.init();
+            </method>
+
+            <method name="startEditing" args="ignore" >
+                immediateparent.select();
+                this.setAttribute( 'editing' , true );
+                lz.Focus.setFocus( editbox );
+            </method>
+
+            <text visible="${!parent.editing}" width="${parent.width}" 
+                  resize="false"
+                  y="${ parent.height /2 - this.height/2}"
+                  fgcolor="${ parent.immediateparent.selected ? 
+                                    classroot._textselectedcolor:
+                                    (parent.immediateparent.highlighted ?
+                                                classroot._texthilitecolor:
+                                                classroot._textcolor)}"
+                  datapath="$once{parent.parent.rowdp}">
+
+                <handler name="oninit">
+                <![CDATA[
+                    this.setAttribute('selectable', classroot.selectable);
+                ]]>
+                </handler>
+
+                <handler name="ontext" method="_setCalcX" />
+                <handler name="onwidth" method="_setCalcX" />
+
+                <method name="_setCalcX" args="ignore"><![CDATA[
+                        if (classroot.textalign == "center") {
+                            var x = ((this.width /2) - (this.getTextWidth() /2));
+                            if (x < 0) x = 0;
+                            this.setAttribute("x", x);
+                        } else if (classroot.textalign == "right") {
+                            var x = ((this.width) - (this.getTextWidth() + 10));
+                            if (x < 0) x = 0;
+                            this.setAttribute("x", x);
+                        } else {
+                            this.setAttribute("x", 0);
+                        }
+                ]]></method>
+
+            </text>
+
+            <state pooling="true" applied="${parent.editing}" 
+                   onremove="parent.editbox.datapath.updateData()">
+                <edittext datapath="$once{parent.parent.rowdp}" 
+                          name="editbox" width="${parent.width}" visibility="visible" >
+                    <method name="init">
+                        this.globalMouseDel = new LzDelegate( this, 
+                                                              "checkMouse" );
+                        super.init();
+                    </method>
+                    <method name="applyData" args="d">
+                        //because of the monkeying with init that this
+                        //componentdoes, the data for this thing can sometimes
+                        //get set before it's ready for it
+                        if ( !this._initcomplete ) {
+                            this.setAttribute('text', d );
+                        } else {
+                            super.applyData(d);
+                        }
+                    </method>
+                    <handler name="onfocus">
+                        this.globalMouseDel.register( lz.GlobalMouse, 
+                                                      "onmousedown" );
+                    </handler>
+                    <handler name="onblur">
+                        parent.setAttribute( 'editing' , false );
+                    </handler>
+                    <method name="checkMouse" args="who">
+                        if ( !this.containsPt( this.getMouse( 'x' ) , 
+                                              this.getMouse( 'y' ) ) ){
+                            parent.setAttribute( 'editing' ,false );
+                        }
+                    </method>
+                    <handler name="onkeyup" args="k">
+                        if ( k == 13 ){
+                            parent.setAttribute( "editing" , false );
+                            lz.Focus.setFocus(parent.immediateparent.ownerGrid);
+                        }
+                    </handler>
+                </edittext>
+            </state>
+        </view>
+        <doc>
+          <tag name="shortdesc"><text>
+              Declares a text column in a grid.
+          </text></tag>
+          <text>
+            <p>The <classname>gridtext</classname> class can be used to present
+              editable column data. This is the default class used by
+              <classname>grid</classname> when it infers columns.</p>
+
+            <example>
+              &lt;canvas height="250"&gt;
+              &lt;dataset name="contacts" request="true"
+              src="http:resources/contactsdata.xml"/&gt;
+
+              &lt;grid datapath="contacts:/resultset"&gt;
+              &lt;gridtext editable="false" datapath="@id" datatype="number"&gt;ID
+              &lt;/gridtext&gt;
+              &lt;gridtext datapath="@displayname" width="200"&gt; Name
+              &lt;/gridtext&gt;
+              &lt;/grid&gt;
+              &lt;/canvas&gt;
+            </example>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

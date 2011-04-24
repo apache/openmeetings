@@ -1,0 +1,2357 @@
+<?xml version="1.0" encoding="UTF-8"?><grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:lza="http://www.laszlosystems.com/annotations/1.0" ns="http://www.laszlosystems.com/2003/05/lzx" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  
+  <define name="booleanLiteral">
+    <data type="boolean"/>
+  </define>
+  <define name="colorLiteral">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="numberLiteral">
+    <data type="double"/>
+  </define>
+  <define name="sizeLiteral">
+    <data type="double">
+      <param name="minInclusive">0</param>
+    </data>
+  </define>
+  <define name="inheritableBooleanLiteral">
+    <choice>
+      <ref name="booleanLiteral"/>
+      <value>inherit</value>
+    </choice>
+  </define>
+  <define name="constraint">
+    <data type="string">
+      <param name="pattern">$(style|path|immediately|once|always)?\{.*\}</param>
+    </data>
+  </define>
+  
+  <define name="boolean">
+    <choice>
+      <ref name="booleanLiteral"/>
+      <ref name="constraint"/>
+    </choice>
+  </define>
+  <define name="booleanOrNull">
+    <choice>
+      <ref name="boolean"/>
+      <value>null</value>
+    </choice>
+  </define>
+  <define name="color">
+    <choice>
+      <ref name="colorLiteral"/>
+      <ref name="constraint"/>
+    </choice>
+  </define>
+  <define name="script">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="expression">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="reference">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="number">
+    <choice>
+      <ref name="numberLiteral"/>
+      <ref name="constraint"/>
+    </choice>
+  </define>
+  <define name="size">
+    <choice>
+      <ref name="sizeLiteral"/>
+      <ref name="constraint"/>
+    </choice>
+  </define>
+  <define name="numberExpression">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="sizeExpression">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="css">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <define name="opacity">
+    <choice>
+      <data type="double">
+        <param name="minInclusive">0.0</param>
+        <param name="maxInclusive">1.0</param>
+      </data>
+      <ref name="constraint"/>
+    </choice>
+  </define>
+  <define name="percentage">
+    <data type="string">
+      <param name="pattern">(\d+(.\d?)|.\d+)%</param>
+    </data>
+  </define>
+  
+  <start>
+    <choice>
+      <ref name="canvas"/>
+      <ref name="viewElement"/>
+      <ref name="library"/>
+    </choice>
+  </start>
+  <define name="canvas">
+    <element name="canvas">
+      <interleave>
+        <optional>
+          <ref name="idAttribute"/>
+        </optional>
+        <optional>
+          <ref name="oninitAttribute"/>
+        </optional>
+        <optional>
+          <attribute name="width" a:defaultValue="500">
+            
+            <choice>
+              <ref name="sizeLiteral"/>
+              <ref name="percentage"/>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="height" a:defaultValue="400">
+            
+            <choice>
+              <ref name="sizeLiteral"/>
+              <ref name="percentage"/>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="bgcolor" a:defaultValue="white">
+            
+            <ref name="colorLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="title" a:defaultValue="OpenLaszlo Application">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="font" a:defaultValue="lztahoe8">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fontsize" a:defaultValue="8">
+            
+            <ref name="size"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fontstyle" a:defaultValue="">
+            
+            <choice>
+              <value>bold</value>
+              <value>italic</value>
+              <value>bold italic</value>
+              <value>plain</value>
+              <value/>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="layout">
+            <ref name="css"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="validate" a:defaultValue="true">
+            
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="proxied" a:defaultValue="inherit">
+            <ref name="inheritableBooleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="debug" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="backtrace" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="maxtextwidth">
+            
+            <ref name="sizeLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="maxtextheight">
+            
+            <ref name="sizeLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dataloadtimeout">
+            <ref name="numberExpression"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="medialoadtimeout">
+            <ref name="numberExpression"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="libraries" a:defaultValue="">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="embedfonts" a:defaultValue="true">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <ref name="connection"/>
+        </optional>
+        <optional>
+          <ref name="splash"/>
+        </optional>
+        <ref name="datapathChildren"/>
+        <ref name="toplevelElements"/>
+        <optional>
+          <attribute name="version" a:defaultValue="1.1">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="accessible" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="library">
+    <element name="library">
+      <choice>
+        <attribute name="href">
+          <data type="anyURI"/>
+        </attribute>
+        <interleave>
+          <optional>
+            <attribute name="includes">
+              <data type="string" datatypeLibrary=""/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="proxied" a:defaultValue="inherit">
+              <choice>
+                <ref name="booleanLiteral"/>
+                <value>inherit</value>
+              </choice>
+            </attribute>
+          </optional>
+          <interleave>
+            <ref name="toplevelElements"/>
+            <optional>
+              <attribute name="validate" a:defaultValue="true">
+                <ref name="booleanLiteral"/>
+              </attribute>
+            </optional>
+            <zeroOrMore>
+              <ref name="datapointer"/>
+            </zeroOrMore>
+          </interleave>
+        </interleave>
+      </choice>
+    </element>
+  </define>
+  <define name="toplevelElements">
+    <interleave>
+      <zeroOrMore>
+        <choice>
+          <ref name="viewElement"/>
+          <ref name="scriptElement"/>
+          <ref name="styleSheetElement"/>
+          <ref name="asset"/>
+          <ref name="font"/>
+        </choice>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="datarequest"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="datasource"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="connectiondatasource"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="dataset"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="debugger"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="command"/>
+      </zeroOrMore>
+      <ref name="objectElements"/>
+      <zeroOrMore>
+        <ref name="class"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="interface"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="trait"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="includeElement"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="importElement"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="library"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="layout"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="security"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="toplevelSwitch"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <define name="debugger">
+    <element name="debug">
+      <interleave>
+        <ref name="viewAttributes"/>
+        <optional>
+          <attribute name="showInternalProperties">
+            <ref name="boolean"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="includeElement">
+    <element name="include">
+      <interleave>
+        <attribute name="href">
+          <data type="anyURI"/>
+        </attribute>
+        <optional>
+          <attribute name="type" a:defaultValue="xml">
+            <choice>
+              <value>text</value>
+              <value>xml</value>
+            </choice>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="toplevelSwitch">
+    <element name="switch">
+      <interleave>
+        <zeroOrMore>
+          <element name="when">
+            <interleave>
+              <optional>
+                <attribute name="runtime">
+                  <data type="string"/>
+                </attribute>
+              </optional>
+              <ref name="toplevelElements"/>
+            </interleave>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <element name="otherwise">
+            <ref name="toplevelElements"/>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  
+  <define name="idAttribute">
+    <attribute name="id">
+      <data type="ID"/>
+    </attribute>
+  </define>
+  <define name="srcAttribute">
+    <attribute name="src">
+      
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+  <define name="nameAttribute">
+    <attribute name="name">
+      
+      <data type="token" datatypeLibrary=""/>
+    </attribute>
+  </define>
+  <define name="oninitAttribute">
+    <attribute name="oninit">
+      
+      <ref name="script"/>
+    </attribute>
+  </define>
+  <define name="initstageAttribute">
+    <attribute name="initstage" a:defaultValue="normal">
+      <choice>
+        <value>early</value>
+        <value>normal</value>
+        <value>late</value>
+        <value>immediate</value>
+        <value>defer</value>
+      </choice>
+    </attribute>
+  </define>
+  <define name="datapathAttribute">
+    <attribute name="datapath">
+      <data type="string" datatypeLibrary=""/>
+    </attribute>
+  </define>
+  <define name="placementAttribute">
+    <attribute name="placement">
+      <data type="string" datatypeLibrary=""/>
+    </attribute>
+  </define>
+  <define name="classAttribute">
+    <attribute name="class">
+      
+      <data type="token" datatypeLibrary=""/>
+    </attribute>
+  </define>
+  <define name="ignoreplacementAttribute">
+    <attribute name="ignoreplacement">
+      <ref name="boolean"/>
+    </attribute>
+  </define>
+  <define name="objectAttributes">
+    <optional>
+      <ref name="idAttribute"/>
+    </optional>
+    <optional>
+      <ref name="nameAttribute"/>
+    </optional>
+    <optional>
+      <ref name="classAttribute"/>
+    </optional>
+    <optional>
+      <ref name="oninitAttribute"/>
+    </optional>
+    <optional>
+      <ref name="datapathAttribute"/>
+    </optional>
+    <optional>
+      <ref name="placementAttribute"/>
+    </optional>
+    <optional>
+      <ref name="ignoreplacementAttribute"/>
+    </optional>
+    <optional>
+      <ref name="initstageAttribute"/>
+    </optional>
+  </define>
+  <define name="viewAttributes">
+    <ref name="nodeAttributes"/>
+    <optional>
+      <attribute name="opacity" a:defaultValue="1.0">
+        <ref name="opacity"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="bgcolor">
+        <ref name="color"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="cursor">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="clickable">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="clickregion">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="focustrap">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="focusable">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="frame" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="fgcolor">
+        <ref name="color"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="font">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="fontstyle">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="fontsize">
+        <ref name="size"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="resource">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="source">
+        <ref name="expression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="clip" a:defaultValue="false">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="align" a:defaultValue="left">
+        <choice>
+          <value>left</value>
+          <value>center</value>
+          <value>right</value>
+          <ref name="constraint"/>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="valign" a:defaultValue="top">
+        <choice>
+          <value>top</value>
+          <value>middle</value>
+          <value>bottom</value>
+          <ref name="constraint"/>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="layout">
+        <ref name="css"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="pixellock" a:defaultValue="false">
+        <ref name="booleanLiteral"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="rotation" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="xoffset" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="yoffset" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="play" a:defaultValue="true">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      
+      <attribute name="selectiontype">
+        <choice>
+          <value>none</value>
+          <value>single</value>
+          <value>toggle</value>
+          <value>multi</value>
+          <value>range</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="stretches">
+        <choice>
+          <value>width</value>
+          <value>height</value>
+          <value>both</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="visible" a:defaultValue="true">
+        <ref name="booleanOrNull"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="visibility" a:defaultValue="visible">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="width">
+        <ref name="sizeExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="height">
+        <ref name="sizeExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="textwidth">
+        <ref name="sizeExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="textheight">
+        <ref name="sizeExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="x" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="y" a:defaultValue="0">
+        <ref name="numberExpression"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="aaname">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="aaactive">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="aadescription">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="aatabindex">
+        <ref name="number"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="aasilent">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="showhandcursor">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="options">
+        <ref name="css"/>
+      </attribute>
+    </optional>
+    <ref name="eventAttributes"/>
+  </define>
+  <define name="eventAttributes">
+    <optional>
+      <attribute name="onclick">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="ondblclick">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onmousedown">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onmouseup">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onmouseover">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onmouseout">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onfocus">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onblur">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onkeydown">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onkeyup">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="onselect">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="ondata">
+        <ref name="script"/>
+      </attribute>
+    </optional>
+  </define>
+  
+  <define name="viewContent">
+    <interleave>
+      <ref name="viewAttributes"/>
+      <ref name="viewContentElements"/>
+    </interleave>
+  </define>
+  <define name="viewContentElements">
+    <ref name="nodeElements"/>
+  </define>
+  <define name="viewContentElements" combine="interleave">
+    <interleave>
+      <zeroOrMore>
+        <ref name="includeElement"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="viewElement"/>
+      </zeroOrMore>
+      <optional>
+        <element name="dataselectionmanager">
+          <interleave>
+            <optional>
+              <ref name="idAttribute"/>
+            </optional>
+            <optional>
+              <ref name="nameAttribute"/>
+            </optional>
+            <optional>
+              <attribute name="toggle">
+                <ref name="boolean"/>
+              </attribute>
+            </optional>
+            <optional>
+              <ref name="oninitAttribute"/>
+            </optional>
+            <ref name="objectElements"/>
+          </interleave>
+        </element>
+      </optional>
+      <zeroOrMore>
+        <element name="selectionmanager">
+          <interleave>
+            <optional>
+              <ref name="idAttribute"/>
+            </optional>
+            <optional>
+              <ref name="nameAttribute"/>
+            </optional>
+            <optional>
+              <attribute name="toggle">
+                <ref name="boolean"/>
+              </attribute>
+            </optional>
+            <optional>
+              <ref name="oninitAttribute"/>
+            </optional>
+            <ref name="objectElements"/>
+          </interleave>
+        </element>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="layout"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <define name="viewContentElements" combine="interleave">
+    <zeroOrMore>
+      <ref name="command"/>
+    </zeroOrMore>
+  </define>
+  <define name="command">
+    <element name="command">
+      <optional>
+        <ref name="idAttribute"/>
+      </optional>
+      <optional>
+        <ref name="nameAttribute"/>
+      </optional>
+      <optional>
+        <attribute name="onselect">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="active">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="key">
+          <ref name="expression"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="oninitAttribute"/>
+      </optional>
+      <ref name="objectElements"/>
+    </element>
+  </define>
+  <define name="animator">
+    <element name="animator">
+      <ref name="animatorContent"/>
+    </element>
+  </define>
+  <define name="animatorgroup">
+    <element name="animatorgroup">
+      <interleave>
+        <optional>
+          <attribute name="process" a:defaultValue="sequential">
+            <choice>
+              <value>sequential</value>
+              <value>simultaneous</value>
+            </choice>
+          </attribute>
+        </optional>
+        <ref name="animatorContent"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="animatorContent">
+    <interleave>
+      <ref name="objectAttributes"/>
+      <ref name="objectElements"/>
+      <optional>
+        <attribute name="attribute">
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="start" a:defaultValue="true">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="from">
+          <ref name="number"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="to">
+          <ref name="number"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="duration">
+          <choice>
+            <data type="float">
+              <param name="minInclusive">0</param>
+            </data>
+            <ref name="constraint"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="indirect" a:since="1.1" a:defaultValue="false">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="relative" a:defaultValue="false">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="motion" a:defaultValue="easeboth">
+          <choice>
+            <value>linear</value>
+            <value>easein</value>
+            <value>easeout</value>
+            <value>easeboth</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="onstart">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="onstop">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="repeat">
+          <ref name="expression"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="paused" a:defaultValue="false">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="target">
+          <ref name="reference"/>
+        </attribute>
+      </optional>
+    </interleave>
+  </define>
+  
+  <define name="viewElement">
+    <choice>
+      <element name="view">
+        <ref name="viewContent"/>
+      </element>
+      <element name="text">
+        <interleave>
+          <ref name="viewContent"/>
+          <ref name="textAttributes"/>
+          <optional>
+            <attribute name="embedfonts">
+              <ref name="boolean"/>
+            </attribute>
+          </optional>
+          <choice>
+            <attribute name="text">
+              <data type="string"/>
+            </attribute>
+            <zeroOrMore>
+              <ref name="htmlText"/>
+            </zeroOrMore>
+          </choice>
+        </interleave>
+      </element>
+      <element name="inputtext">
+        <interleave>
+          <ref name="viewContent"/>
+          <ref name="textAttributes"/>
+          <optional>
+            <attribute name="embedfonts">
+              <ref name="boolean"/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="resizable">
+              <ref name="boolean"/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="password" a:defaultValue="false">
+              
+              <ref name="boolean"/>
+            </attribute>
+          </optional>
+          <choice>
+            <attribute name="text">
+              <data type="string"/>
+            </attribute>
+            <optional>
+              <text/>
+            </optional>
+          </choice>
+        </interleave>
+      </element>
+    </choice>
+  </define>
+  <define name="textAttributes">
+    <interleave>
+      <optional>
+        <attribute name="multiline" a:defaultValue="false">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="resize" a:defaultValue="false">
+          <ref name="booleanLiteral"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="selectable" a:defaultValue="false">
+          <ref name="booleanLiteral"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="maxlength" a:defaultValue="null">
+          <ref name="numberExpression"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pattern">
+          <data type="string" datatypeLibrary=""/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="label">
+          <data type="string" datatypeLibrary=""/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="antiAliasType" a:defaultValue="advanced">
+          <choice>
+            <value>normal</value>
+            <value>advanced</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="gridFit" a:defaultValue="subpixel">
+          <choice>
+            <value>none</value>
+            <value>pixel</value>
+            <value>subpixel</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="sharpness" a:defaultValue="0">
+          <ref name="numberExpression"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="thickness" a:defaultValue="0">
+          <ref name="numberExpression"/>
+        </attribute>
+      </optional>
+    </interleave>
+  </define>
+  <define name="textContent">
+    <choice>
+      <attribute name="text">
+        <data type="string"/>
+      </attribute>
+      <optional>
+        <text/>
+      </optional>
+    </choice>
+  </define>
+  <define name="htmlContent">
+    <choice>
+      <attribute name="text">
+        <data type="string"/>
+      </attribute>
+      <optional>
+        <ref name="htmlText"/>
+      </optional>
+    </choice>
+  </define>
+  <define name="htmlText">
+    <zeroOrMore>
+      <choice>
+        <text/>
+        <element name="pre">
+          <ref name="htmlText"/>
+        </element>
+        <element name="a">
+          <interleave>
+            <attribute name="href">
+              
+              <data type="anyURI"/>
+            </attribute>
+            <optional>
+              <attribute name="target">
+                
+                <choice>
+                  <value>_blank</value>
+                  <value>_parent</value>
+                  <value>_self</value>
+                  <value>_top</value>
+                  <data type="string">
+                    <param name="pattern">[a-zA-Z][a-zA-Z0-9\-_:.]*</param>
+                  </data>
+                </choice>
+              </attribute>
+            </optional>
+            <ref name="htmlText"/>
+          </interleave>
+        </element>
+        <element name="b">
+          <ref name="htmlText"/>
+        </element>
+        <element name="li">
+          <ref name="htmlText"/>
+        </element>
+        <element name="img">
+          <interleave>
+            <optional>
+              <attribute name="src">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="align">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="width">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="height">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="hspace">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="vspace">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+          </interleave>
+        </element>
+        <element name="font">
+          <interleave>
+            <optional>
+              
+              <attribute name="face">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              
+              <attribute name="size">
+                <ref name="sizeLiteral"/>
+              </attribute>
+            </optional>
+            <optional>
+              
+              <attribute name="color">
+                <ref name="colorLiteral"/>
+              </attribute>
+            </optional>
+            <ref name="htmlText"/>
+          </interleave>
+        </element>
+        <element name="i">
+          <ref name="htmlText"/>
+        </element>
+        <element name="p">
+          <ref name="htmlText"/>
+        </element>
+        <element name="br">
+          <empty/>
+        </element>
+        <element name="u">
+          <ref name="htmlText"/>
+        </element>
+      </choice>
+    </zeroOrMore>
+  </define>
+  
+  <define name="asset">
+    <element name="audio">
+      <interleave>
+        <ref name="srcAttribute"/>
+        <optional>
+          <ref name="idAttribute"/>
+        </optional>
+        <ref name="nameAttribute"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="asset" combine="choice">
+    <ref name="resource"/>
+  </define>
+  <define name="resource">
+    <element name="resource">
+      <interleave>
+        <ref name="nameAttribute"/>
+        <choice>
+          <ref name="srcAttribute"/>
+          <zeroOrMore>
+            <element name="frame">
+              <interleave>
+                <optional>
+                  <ref name="nameAttribute"/>
+                </optional>
+                <ref name="srcAttribute"/>
+              </interleave>
+            </element>
+          </zeroOrMore>
+        </choice>
+      </interleave>
+    </element>
+  </define>
+  
+  <define name="datasource">
+    <element name="datasource">
+      <interleave>
+        <optional>
+          <ref name="idAttribute"/>
+        </optional>
+        <optional>
+          <ref name="nameAttribute"/>
+        </optional>
+        <optional>
+          <attribute name="timeout">
+            <ref name="number"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="secure" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="proxied" a:defaultValue="inherit">
+            <choice>
+              <ref name="booleanLiteral"/>
+              <value>inherit</value>
+            </choice>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <element name="dataset">
+            
+            <interleave>
+              <ref name="datasetAttributes"/>
+              <ref name="anyXML"/>
+            </interleave>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <ref name="oninitAttribute"/>
+        </optional>
+        <ref name="objectElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="connectiondatasource">
+    <element name="connectiondatasource">
+      
+      <interleave>
+        <optional>
+          <ref name="idAttribute"/>
+        </optional>
+        <optional>
+          <ref name="nameAttribute"/>
+        </optional>
+        <optional>
+          <attribute name="onconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="oninit">
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ondata">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onerror">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ontimeout">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ondisconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onuserdisconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <element name="dataset">
+            
+            <ref name="datasetAttributes"/>
+          </element>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="method"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="agent">
+    <element name="agent">
+      <attribute name="url">
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </element>
+  </define>
+  <define name="connection">
+    <element name="connection">
+      <interleave>
+        <optional>
+          <attribute name="heartbeat">
+            
+            <data type="integer"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="timeout">
+            <ref name="number"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="secure">
+            
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="secureport">
+            
+            <data type="integer"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="receiveuserdisconnect" a:defaultValue="false">
+            
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="group">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="authenticator">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="authparam">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ondata">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onerror">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ontimeout">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ondisconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onuserdisconnect">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <ref name="agent"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="method"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="handler"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="dataset">
+    <element name="dataset">
+      <interleave>
+        <ref name="datasetAttributes"/>
+        <ref name="anyXML"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="datasetAttributes">
+    <interleave>
+      <ref name="objectAttributes"/>
+      <optional>
+        <attribute name="nsprefix">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="acceptencodings">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="timeout">
+          
+          <ref name="number"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="proxied" a:defaultValue="inherit">
+          
+          <choice>
+            <ref name="booleanLiteral"/>
+            <value>inherit</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="src">
+          
+          <choice>
+            <data type="anyURI"/>
+            <ref name="constraint"/>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="request">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="autorequest">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="queuerequests">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="querystring">
+          
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="type">
+          
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="datafromchild">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="endpoint">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="namespace">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="method">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="secure" a:defaultValue="false">
+          
+          <ref name="booleanLiteral"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="secureport" a:defaultValue="443">
+          
+          <data type="integer">
+            <param name="minInclusive">0</param>
+          </data>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="getresponseheaders" a:defaultValue="true">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="trimwhitespace" a:defaultValue="false">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cacheable" a:defaultValue="false">
+          
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="ondata">
+          
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="onerror">
+          
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="ontimeout">
+          
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="querytype">
+          
+          <choice>
+            <value>get</value>
+            <value>post</value>
+            <value>GET</value>
+            <value>POST</value>
+            <value>put</value>
+            <value>PUT</value>
+            <value>delete</value>
+            <value>DELETE</value>
+          </choice>
+        </attribute>
+      </optional>
+    </interleave>
+  </define>
+  <define name="anyXML">
+    <mixed>
+      <zeroOrMore>
+        <element>
+          <anyName/>
+          <interleave>
+            <zeroOrMore>
+              <attribute>
+                <anyName/>
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </zeroOrMore>
+            <ref name="anyXML"/>
+          </interleave>
+        </element>
+      </zeroOrMore>
+    </mixed>
+  </define>
+  <define name="dataptrAttributes">
+    <interleave>
+      <optional>
+        <attribute name="ondata">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="onerror">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="ontimeout">
+          <ref name="script"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="rerunxpath">
+          <ref name="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="xpath">
+          <data type="string" datatypeLibrary=""/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="spacing" a:defaultValue="0">
+          
+          <ref name="size"/>
+        </attribute>
+      </optional>
+    </interleave>
+  </define>
+  <define name="datapointer">
+    <element name="datapointer">
+      <interleave>
+        <ref name="objectAttributes"/>
+        <ref name="dataptrAttributes"/>
+        <optional>
+          <attribute name="p">
+            <ref name="expression"/>
+          </attribute>
+        </optional>
+        <ref name="objectElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="datapath">
+    <element name="datapath">
+      <interleave>
+        <ref name="objectAttributes"/>
+        <ref name="dataptrAttributes"/>
+        <optional>
+          <attribute name="pooling" a:since="1.1" a:defaultValue="false">
+            
+            <ref name="boolean"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="axis">
+            <choice>
+              <value>x</value>
+              <value>y</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="sortpath">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="sortorder">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="replication">
+            <choice>
+              <value>normal</value>
+              <value>lazy</value>
+              <value>resize</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="p">
+            <ref name="expression"/>
+          </attribute>
+        </optional>
+        <ref name="objectElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="datapathChildren">
+    <interleave>
+      <optional>
+        <ref name="datapath"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="datapointer"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  
+  <define name="deviceAttribute">
+    <optional>
+      <attribute name="device">
+        <ref name="boolean"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="font">
+    <element name="font">
+      <interleave>
+        <ref name="nameAttribute"/>
+        <optional>
+          <ref name="deviceAttribute"/>
+        </optional>
+        <optional>
+          <choice>
+            <interleave>
+              <ref name="srcAttribute"/>
+              <optional>
+                <ref name="styleAttribute"/>
+              </optional>
+              <zeroOrMore>
+                <ref name="faceElement"/>
+              </zeroOrMore>
+            </interleave>
+            <oneOrMore>
+              <ref name="faceElement"/>
+            </oneOrMore>
+          </choice>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="faceElement">
+    <element name="face">
+      
+      <interleave>
+        <optional>
+          <ref name="styleAttribute"/>
+        </optional>
+        <ref name="srcAttribute"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="styleAttribute">
+    <attribute name="style">
+      
+      <choice>
+        <value>bold</value>
+        <value>italic</value>
+        <value>bold italic</value>
+        <value>italic bold</value>
+        <value>plain</value>
+      </choice>
+    </attribute>
+  </define>
+  
+  
+  <define name="objectElements">
+    <interleave>
+      <zeroOrMore>
+        <ref name="method"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="handler"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="event"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="attributeElement"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="state"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="node"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="animator"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="animatorgroup"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <define name="attributeElement">
+    <element name="attribute">
+      <interleave>
+        <attribute name="name">
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+        <optional>
+          <attribute name="style">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <interleave>
+            <optional>
+              <attribute name="value">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <optional>
+              <group>
+                <attribute name="when" a:defaultValue="immediately">
+                  <choice>
+                    <value>immediately</value>
+                    <value>once</value>
+                    <value>always</value>
+                  </choice>
+                </attribute>
+              </group>
+            </optional>
+          </interleave>
+        </optional>
+        <optional>
+          <attribute name="type" a:defaultValue="expression">
+            <choice>
+              <value>boolean</value>
+              <value>color</value>
+              <value>expression</value>
+              <value>number</value>
+              <value>size</value>
+              <value>string</value>
+              <value>text</value>
+              <value>html</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="required" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="setter">
+            <ref name="script"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="class">
+    <element name="class">
+      <interleave>
+        <attribute name="name">
+          
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+        <optional>
+          <attribute name="extends" a:defaultValue="view">
+            
+            <data type="token" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="with">
+            
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <attribute>
+            
+            <anyName>
+              <except>
+                <name ns="">name</name>
+                <name ns="">extends</name>
+                <name ns="">with</name>
+              </except>
+            </anyName>
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </zeroOrMore>
+        <optional>
+          <ref name="docElement"/>
+        </optional>
+        <ref name="viewContentElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="interface">
+    <element name="interface">
+      <interleave>
+        <attribute name="name">
+          
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+        <optional>
+          <attribute name="extends" a:defaultValue="view">
+            
+            <data type="token" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <attribute>
+            
+            <anyName>
+              <except>
+                <name ns="">name</name>
+                <name ns="">extends</name>
+                <name ns="">traits</name>
+              </except>
+            </anyName>
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </zeroOrMore>
+        <optional>
+          <ref name="docElement"/>
+        </optional>
+        <ref name="viewContentElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="docElement">
+    <element name="doc">
+      
+      <ref name="any"/>
+    </element>
+  </define>
+  <define name="any">
+    <zeroOrMore>
+      <choice>
+        <text/>
+        <element>
+          <anyName/>
+          <zeroOrMore>
+            <attribute>
+              <anyName/>
+            </attribute>
+          </zeroOrMore>
+          <ref name="any"/>
+        </element>
+      </choice>
+    </zeroOrMore>
+  </define>
+  <define name="trait">
+    <element name="trait">
+      <interleave>
+        <attribute name="name">
+          
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+        <zeroOrMore>
+          <attribute>
+            
+            <anyName>
+              <except>
+                <name ns="">name</name>
+              </except>
+            </anyName>
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </zeroOrMore>
+        <ref name="viewContentElements"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="handler">
+    <element name="handler">
+      <interleave>
+        <ref name="nameAttribute"/>
+        <optional>
+          <attribute name="reference" a:defaultValue="this">
+            <ref name="reference"/>
+          </attribute>
+        </optional>
+        <choice>
+          <interleave>
+            <optional>
+              <attribute name="args" a:defaultValue="">
+                <data type="string" datatypeLibrary=""/>
+              </attribute>
+            </optional>
+            <text/>
+          </interleave>
+          <attribute name="method">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </choice>
+      </interleave>
+    </element>
+  </define>
+  <define name="event">
+    <element name="event">
+      <ref name="nameAttribute"/>
+    </element>
+  </define>
+  <define name="method">
+    <element name="method">
+      <interleave>
+        <choice>
+          <ref name="nameAttribute"/>
+          <interleave>
+            <optional>
+              <ref name="nameAttribute"/>
+            </optional>
+            <attribute name="event">
+              <data type="string" datatypeLibrary=""/>
+            </attribute>
+            <optional>
+              <attribute name="reference" a:defaultValue="this">
+                <ref name="reference"/>
+              </attribute>
+            </optional>
+          </interleave>
+        </choice>
+        <optional>
+          <attribute name="args" a:defaultValue="">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <text/>
+      </interleave>
+    </element>
+  </define>
+  <define name="importElement">
+    <element name="import">
+      <interleave>
+        <ref name="viewContent"/>
+        <attribute name="href">
+          
+          <data type="anyURI"/>
+        </attribute>
+        <attribute name="stage">
+          <choice>
+            <value>late</value>
+            <value>defer</value>
+          </choice>
+        </attribute>
+        <optional>
+          <attribute name="onload">
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="proxied" a:defaultValue="inherit">
+            <choice>
+              <ref name="booleanLiteral"/>
+              <value>inherit</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onerror">
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ontimeout">
+            <ref name="script"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="state">
+    <element name="state">
+      <interleave>
+        <ref name="viewContent"/>
+        <optional>
+          <attribute name="apply">
+            <ref name="boolean"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="pooling" a:since="1.1" a:defaultValue="false">
+            
+            <ref name="boolean"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onapply">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="onremove">
+            
+            <ref name="script"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="nodeAttributes">
+    <ref name="objectAttributes"/>
+    <optional>
+      <attribute name="defaultplacement">
+        
+        <data type="string" datatypeLibrary=""/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="nodeElements">
+    <interleave>
+      <ref name="objectElements"/>
+      <ref name="datapathChildren"/>
+      <zeroOrMore>
+        <element name="data">
+          <interleave>
+            <ref name="datasetAttributes"/>
+            <ref name="anyXML"/>
+          </interleave>
+        </element>
+      </zeroOrMore>
+      <zeroOrMore>
+        <element name="dataset">
+          <interleave>
+            <ref name="datasetAttributes"/>
+            <ref name="anyXML"/>
+          </interleave>
+        </element>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <define name="nodeContent">
+    <interleave>
+      <ref name="nodeAttributes"/>
+      <ref name="nodeElements"/>
+    </interleave>
+  </define>
+  <define name="node">
+    <element name="node">
+      <ref name="nodeContent"/>
+    </element>
+  </define>
+  <define name="datarequest">
+    <element name="datarequest">
+      <ref name="nodeContent"/>
+    </element>
+  </define>
+  <define name="layout">
+    <element name="layout">
+      <interleave>
+        <ref name="nodeContent"/>
+        <optional>
+          <attribute name="locked">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  
+  <define name="splash">
+    <element name="splash">
+      <interleave>
+        <optional>
+          <attribute name="hideafterinit">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="persistent" a:defaultValue="false">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <zeroOrMore>
+          <element name="view">
+            <interleave>
+              <optional>
+                <attribute name="name">
+                  <data type="token" datatypeLibrary=""/>
+                </attribute>
+              </optional>
+              <attribute name="resource">
+                <data type="anyURI"/>
+              </attribute>
+              <optional>
+                <attribute name="ratio">
+                  <data type="string"/>
+                </attribute>
+              </optional>
+              <optional>
+                <attribute name="x" a:defaultValue="0">
+                  <ref name="numberLiteral"/>
+                </attribute>
+              </optional>
+              <optional>
+                <attribute name="y" a:defaultValue="0">
+                  <ref name="numberLiteral"/>
+                </attribute>
+              </optional>
+              <optional>
+                <attribute name="center" a:defaultValue="false">
+                  <ref name="booleanLiteral"/>
+                </attribute>
+              </optional>
+            </interleave>
+          </element>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="scriptElement">
+    <element name="script">
+      <interleave>
+        <optional>
+          <attribute name="type" a:defaultValue="Javascript">
+            
+            <data type="string"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="when" a:defaultValue="normal">
+            <choice>
+              <value>normal</value>
+              <value>immediate</value>
+            </choice>
+          </attribute>
+        </optional>
+        <choice>
+          <attribute name="src">
+            <data type="anyURI"/>
+          </attribute>
+          <optional>
+            <text/>
+          </optional>
+        </choice>
+      </interleave>
+    </element>
+  </define>
+  <define name="styleSheetElement">
+    <element name="stylesheet">
+      <choice>
+        <attribute name="src">
+          
+          <data type="anyURI"/>
+        </attribute>
+        <optional>
+          <text/>
+        </optional>
+      </choice>
+    </element>
+  </define>
+  <define name="preloadresource">
+    <element name="preloadresource">
+      <interleave>
+        <optional>
+          <attribute name="name">
+            <data type="token" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ratio">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <attribute name="synctoload">
+          <ref name="booleanLiteral"/>
+        </attribute>
+        <attribute name="hideafterinit">
+          <ref name="booleanLiteral"/>
+        </attribute>
+        <attribute name="center">
+          <ref name="booleanLiteral"/>
+        </attribute>
+        <optional>
+          <attribute name="synchronized">
+            <ref name="booleanLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lastframe">
+            <ref name="numberLiteral"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="resource">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="resourcename">
+            <data type="string" datatypeLibrary=""/>
+          </attribute>
+        </optional>
+        <ref name="viewAttributes"/>
+      </interleave>
+    </element>
+  </define>
+  
+  <define name="pattern">
+    <element name="pattern">
+      <text/>
+    </element>
+  </define>
+  <define name="allow">
+    <element name="allow">
+      <zeroOrMore>
+        <ref name="pattern"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="deny">
+    <element name="deny">
+      <zeroOrMore>
+        <ref name="pattern"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="security">
+    <element name="security">
+      <interleave>
+        <optional>
+          <ref name="allow"/>
+        </optional>
+        <optional>
+          <ref name="deny"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+</grammar>

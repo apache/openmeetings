@@ -1,0 +1,79 @@
+<library>
+<!--- @keyword private
+This class complete the chart style class in case the developer has not defined the chart styles -->
+    <class name="styleparser">
+        <!--- Test if the current style's node has children -->
+        <attribute name="haschildren" value="false"/>
+        <!--- Test if the current style's node has no more children -->
+        <attribute name="isleaf" value="false"/>
+        <!--- The user's defined style. -->
+        <attribute name="style" type="expression" value="${null}"/>
+        <!--- The dafault defined style. -->
+        <attribute name="defaultstyle" type="expression" value="${null}"/>
+        <!--- @keywords private -->
+        <attribute name="increment" type="number" value="0"/>
+        <!--- @keyword private-->
+        <method name="init">
+            super.init();
+            this.recursive();
+        </method>
+
+         <!--- @keyword private-->         
+        <method name="recursive">
+        <![CDATA[
+            if( this.defaultstyle != null && 
+                this.defaultstyle.subnodes != null &&
+                this.defaultstyle.subnodes.length > 0 ) {
+
+               for(this.increment = 0; this.increment < this.defaultstyle.subnodes.length; this.increment++ )
+                   this.readChildrenNode();
+            } else {
+               this.setAttribute( 'isleaf' , true );
+            } 
+
+            this.increment = 0;
+        ]]>
+        </method>
+        <!--- @keyword private-->
+        <method name="readChildrenNode" >
+        <![CDATA[
+            if( this.style.constructor.tagname == this.defaultstyle.constructor.tagname ) {
+                lParser = new lz.styleparser(this, {defaultstyle:this.defaultstyle.subnodes[this.increment], style:this.style});
+            } else if( this.style[this.defaultstyle.name] ) {
+                lParser = new lz.styleparser(this, {defaultstyle:this.defaultstyle.subnodes[this.increment], style:this.style[this.defaultstyle.name]});
+            }
+            else {
+                this.style[this.defaultstyle.name] = this.defaultstyle;
+                this.style.subnodes.push(this.defaultstyle);
+                this.style.subviews.push(this.defaultstyle);
+                lParser = new lz.styleparser(this, {defaultstyle:this.defaultstyle.subnodes[this.increment], style:this.style[this.defaultstyle.subnodes[this.increment].name]});
+            }
+        ]]>
+        </method>
+        <handler name="onisleaf" method="readLeafNode" />
+        <!--- @keyword private-->
+        <method name="readLeafNode" args="ignore">
+        if( this.style != null )
+            if( this.style.constructor.tagname == this.defaultstyle.constructor.tagname ) {
+                // continue;
+            } else if( this.style[this.defaultstyle.name] ) {
+                // continue;
+            }
+            else {
+                this.style[this.defaultstyle.name] = this.defaultstyle;
+                this.style.subnodes.push(this.defaultstyle);
+                this.style.subviews.push(this.defaultstyle);
+            }
+        </method>
+    </class>
+
+</library>
+
+<!-- * X_LZ_COPYRIGHT_BEGIN 
+***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END 
+****************************************************** -->
+<!-- @LZX_VERSION@  -->
+

@@ -1,0 +1,229 @@
+<library>
+    <include href="lz/focusoverlay.lzx"/>
+<!-- style.lzx is not included here, even thought it is required.
+    lz._componentmanager needs style to be defined before it is used, but style
+    has script in it that needs lz._componentmanager, so don't include it here.
+    Instead, style is always included before component manager is used.  -->
+
+    <!-- This class handles global issues for components. It's more efficient
+         to factor this as a service than to write all of this logic in 
+         basecomponent. However, all of its relevant methods are proxied by 
+         basecomponent or style. -->
+
+    <class name="_componentmanager" extends="node">
+        <!--- Name of the class to use for the focus overlay 
+              @keywords private -->
+        <attribute name="focusclass" value="focusoverlay" type="string"/>
+        <!--- List of components that want to be notified when enter is 
+              pressed nearby
+              @keywords private -->
+        <attribute name="keyhandlers" value="null"/>
+        <!--- Last component to receive space down call
+              @keywords private -->
+        <attribute name="lastsdown" value="null"/>
+        <!--- Last component to receive enter down call
+              @keywords private -->
+        <attribute name="lastedown" value="null"/>
+        <!--- List of defaults that want to be notified when enter is 
+              pressed nearby
+              @keywords private -->
+        <attribute name="defaults" value="null"/>
+        <!--- @keywords private -->
+        <attribute name="currentdefault" value="null"/>
+
+        <!--- @keywords private : the default style for components
+                use get/setDefaultStyle instead of accessing attr directly-->
+        <attribute name="defaultstyle" value="null" />
+        <!--- @keywords private  -->
+        <event name="ondefaultstyle"/>
+
+
+        <!--- @keywords private  -->
+        <method name="init">
+            // create focus indicator if necessary
+            var fclass = this.focusclass;
+
+            if ( typeof ( canvas.focusclass ) != 'undefined' ){
+                fclass = canvas.focusclass;
+            } 
+                
+            if ( fclass != null ){
+                canvas.__focus = new lz[ fclass ](canvas);
+                canvas.__focus.reset();
+            }
+            super.init();
+        </method>
+
+        <!--- @keywords private -->
+        <attribute name="_lastkeydown" value="0"/>
+        <!--- @keywords private -->
+        <attribute name="upkeydel" value="null"/>
+        <handler name="onkeydown" reference="lz.Keys" method="dispatchKeyDown" />
+        <method name="dispatchKeyDown" args="key">
+            <![CDATA[
+            var callupdel = false;
+            if ( key == 32 ){
+                this.lastsdown = null;
+                var foc = lz.Focus.getFocus();
+                if ( foc instanceof lz.basecomponent ){
+                    foc.doSpaceDown();
+                    this.lastsdown = foc;
+                }
+                callupdel = true;
+            } else if ( key == 13 && this.currentdefault ){
+                this.lastedown = this.currentdefault;
+                this.currentdefault.doEnterDown();
+                callupdel = true;
+            }
+            if (callupdel) {
+                if (!this.upkeydel) this.upkeydel = new LzDelegate(this, 'dispatchKeyTimer');
+                this._lastkeydown = key;
+                lz.Timer.addTimer( this.upkeydel, 50 );
+            }
+            ]]>
+        </method>
+
+        <method name="dispatchKeyTimer" args="ignore" >
+            <![CDATA[
+            if ( this._lastkeydown == 32 && this.lastsdown != null ){
+                this.lastsdown.doSpaceUp();
+                this.lastsdown = null;
+            } else if ( this._lastkeydown == 13 && this.currentdefault &&
+                        this.currentdefault == this.lastedown ){
+                this.currentdefault.doEnterUp();
+            }
+            ]]>
+        </method>
+
+        <method name="findClosestDefault" args="who">
+            <![CDATA[ 
+            if ( !this.defaults ){
+                return null;
+            }
+            var lastpar = null;
+            var lastbut = null;
+
+            var buts = this.defaults;
+            who = who || canvas;
+            var mode = lz.ModeManager.getModalView();
+            for ( var i = 0 ; i < buts.length ; i++ ){
+                var tbut = buts[ i ];
+
+                if ( mode && !tbut.childOf( mode ) ){
+                    continue;
+                }
+
+                var par = this.findCommonParent( tbut , who );
+                if ( par && ( !lastpar || par.nodeLevel > lastpar.nodeLevel )){
+                    lastpar = par;
+                    lastbut = tbut;
+                } 
+            }
+            return lastbut;
+            ]]>
+        </method>
+
+        <method name="findCommonParent" args="v1, v2">
+            while ( v1.nodeLevel > v2.nodeLevel ){
+                v1 = v1.immediateparent;
+                if ( !v1.visible ) return null;
+            }
+
+            while ( v2.nodeLevel > v1.nodeLevel ){
+                v2 = v2.immediateparent;
+                if ( !v2.visible ) return null;
+            }
+
+            while ( v1 != v2 ){
+                v1 = v1.immediateparent;
+                v2 = v2.immediateparent;
+                if ( !v1.visible || !v2.visible ) return null;
+            }
+
+            return v1;
+        </method>
+
+        <method name="makeDefault" args="who">
+            <![CDATA[  
+            if ( !this.defaults ) this.defaults = [];
+            this.defaults.push( who );
+            this.checkDefault( lz.Focus.getFocus() );
+            ]]>
+        </method>
+
+        <method name="unmakeDefault" args="who">
+            <![CDATA[  
+            if ( !this.defaults ) return;
+            for ( var i = 0; i < this.defaults.length; i++ ){
+                if ( this.defaults[ i ] == who ) {
+                    this.defaults.splice( i , 1 );
+                    this.checkDefault( lz.Focus.getFocus() );
+                    return;
+                }
+            }
+            ]]>
+        </method>
+
+        <handler name="onfocus" method="checkDefault" reference="lz.Focus"/>
+        <method name="checkDefault" args="who">
+            <![CDATA[ 
+
+            if ( ! ( who instanceof lz.basecomponent ) ||
+                 ! who.doesenter ){
+
+                if ( ( who instanceof lz.inputtext )  &&
+                       who.multiline ){
+                    who = null;
+                } else {
+                    who = this.findClosestDefault( who );
+                }
+            }
+
+            if ( who == this.currentdefault ) return;
+
+            if ( this.currentdefault ){
+                this.currentdefault.setAttribute( "hasdefault", false );
+            }
+
+            this.currentdefault = who;
+
+            if ( who ){
+                who.setAttribute( "hasdefault", true );
+            }
+            ]]>
+        </method>
+
+        <handler name="onmode" args="who=null" reference="lz.ModeManager">
+            //if the mode changes, and the focussed view is in the mode
+            //it'll clear it (and change the focus) 
+            //however, if the focussed view was already null, the lz.Focus
+            //will not notify us of a focus change (because it hasn't)
+            if ( lz.Focus.getFocus() == null ){
+                this.checkDefault( null );
+            }
+        </handler>
+
+        <method name="setDefaultStyle" args="def">
+            this.defaultstyle = def;
+            if (this.ondefaultstyle) this.ondefaultstyle.sendEvent(def);
+        </method>
+
+        <method name="getDefaultStyle">
+            if (this.defaultstyle == null) {
+                this.defaultstyle = new lz.style(canvas, {isdefault:true});
+            }
+            return this.defaultstyle
+        </method>
+        <doc>
+          <tag name="shortdesc"><text></text></tag>
+          <text>
+          </text>
+        </doc>
+    </class>
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

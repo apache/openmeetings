@@ -1,0 +1,292 @@
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2007-2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                          -->
+
+<!--
+This file defines the <roundrect> class, which is a class for rendering content
+inside of rounded rectangles with an optional gradient background.
+
+See the roundrect-test.lzx file for an example of how to use this component.
+
+The interface to this component is very DWIMish.  It tries to arrange its
+defaults so that it doesn't take many attribute settings to get something
+reasonable.  (For example, the box shadow overwrites the content area if
+there's no background, so the background defaults to white when there's a box
+shadow unless you've specified one.)  For finer control, you'll need to specify
+more attributes, or use this code as a starting point for your own component.
+
+The component attributes are only used for initialization.  They are not live
+constraints (the appearance of the component will not update if they are changed
+after the component has been initialized).  However, the component draw method
+is available as a separate method.  If you set up a listener on these attributes
+that calls this method when they are changed, then you can animate the attributes
+and otherwise use them to modify the appearance of the component after it has
+been initialized.
+
+The attribute names are based on the property names in the CSS3 Border and
+Background module, at http://www.w3.org/TR/2005/WD-css3-background-20050216/.
+They have been converted to camelCase for consistency with the other components,
+and for easier scripting.
+
+Also see the gradientview incubator component.  The gradientview allows each
+border to be set to a different color, at the expense of applying rounded
+corners to them.
+ -->
+
+<library>
+    <class name="roundrect" extends="drawview" defaultplacement="content"
+         width="100" height="100">
+        
+        <!--- The margin between the outside view and the content view -->
+        <attribute name="inset" value="5" type="size"
+            setter="setInset(inset);" />
+        <attribute name="oninset" value="null" />
+        <attribute name="insetleft" value="${null}" type="size"
+            setter="setInsetLeft(insetleft);" />
+        <attribute name="oninsetleft" value="null" />
+        <attribute name="insetright" value="${null}" type="size"
+            setter="setInsetRight(insetright);" />
+        <attribute name="oninsetright" value="null" />
+        <attribute name="insettop" value="${null}" type="size"
+            setter="setInsetTop(insettop);" />
+        <attribute name="oninsettop" value="null" />
+        <attribute name="insetbottom" value="${null}" type="size"
+            setter="setInsetBottom(insetbottom);" />
+        <attribute name="oninsetbottom" value="null" />
+
+        <method name="setInset" args="v">
+            <![CDATA[
+            this.insetleft = v;
+            this.insetright = v;
+            this.insettop = v;
+            this.insetbottom = v;
+            if ( this.context ) this.drawStructure();
+            if ( oninset ) this.oninset.sendEvent();
+            ]]>
+        </method>
+
+        <method name="setInsetLeft" args="v">
+            <![CDATA[
+            if ( v ) this.insetleft = v;
+            if ( this.context ) this.drawStructure();
+            if ( oninsetleft ) this.oninsetleft.sendEvent();
+            ]]>
+        </method>
+
+        <method name="setInsetRight" args="v">
+            <![CDATA[
+            if ( v ) this.insetright = v;
+            if ( this.context ) this.drawStructure();
+            if ( oninsetright ) this.oninsetright.sendEvent();
+            ]]>
+        </method>
+
+        <method name="setInsetTop" args="v">
+            <![CDATA[
+            if ( v ) this.insettop = v;
+            if ( this.context ) this.drawStructure();
+            if ( oninsettop ) this.oninsettop.sendEvent();
+            ]]>
+        </method>
+
+        <method name="setInsetBottom" args="v">
+            <![CDATA[
+            if ( v ) this.insetbottom = v;
+            if ( this.context ) this.drawStructure();
+            if ( oninsetbottom ) this.oninsetbottom.sendEvent();
+            ]]>
+        </method>
+
+        <!-- If the parent view is resized, then redraw yourself -->
+        <handler name="onwidth">
+            <![CDATA[
+            if ( this.context ) this.drawStructure();
+            ]]>
+        </handler>
+        
+        <handler name="onheight">
+            <![CDATA[
+            if ( this.context ) this.drawStructure();
+            ]]>
+        </handler>
+        
+        <!--- The width of the border.  If this is zero, no frame is drawn. -->
+        <attribute name="borderWidth" value="1"/>
+        <!--- The rounding radius of the border corners.  Because the default
+            join type is a round join, even a radius of zero will product some
+            rounding. -->
+        <attribute name="borderRadius" value="5"/>
+        <!--- The border color -->
+        <attribute name="borderColor" type="color" value="black"/>
+        <!--- The border opacity -->
+        <attribute name="borderOpacity" value="1"/>
+        <!--- The background start color.  This is the color that is drawn at
+            the top or left of the view, depending on the value of
+            backgroundGradientOrientation.  If this and the backround stop color
+            are specified, a gradient background is drawn in the direction specified
+            by backgroundGradientOrientation.  If only one of the background start
+            and stop color are specified, a gradient of the same color that fades to
+            transparent at the unspecified end is drawn.  If a box shadow is drawn,
+            the background defaults to white.  Specify a start and stop opacity to
+            suppress this behavior. -->
+        <attribute name="backgroundStartColor" type="color" value="$once{null}"/>
+        <!--- The background stop color.  This is the color that is drawn at the
+            bottom or right of the view, depending on the value of
+            backgroundGradientOrientation.  See the documentation for
+            backgroundStartColor for additional documentation. -->
+        <attribute name="backgroundStopColor" type="color" value="$once{null}"/>
+        <!--- The background start opacity.  This defaults to one (opaque) unless the
+            start color is not specified and the stop color is, in which case it
+            defaults to zero (fully transparent). -->
+        <attribute name="backgroundStartOpacity" value="1"/>
+        <!--- The background stop opacity.  This defaults to one (opaque) unless the
+            stop color is not specified and the start color is, in which case it
+            defaults to zero (fully transparent). -->
+        <attribute name="backgroundStopOpacity" value="1"/>
+        <!--- The background gradient orientation.  One of 'vertical' (the default)
+            and 'horizontal'. -->
+        <attribute name="backgroundGradientOrientation" type="string" value="vertical"/>
+        <!--- The x offset of the box shadow.  The box shadow is not drawn by default.
+            Specify a boxShadowColor in order to draw it. -->
+        <attribute name="boxShadowX" value="5"/>
+        <!--- The x offset of the box shadow.  The box shadow is not drawn by default.
+            Specify a boxShadowColor in order to draw it. -->
+        <attribute name="boxShadowY" value="5"/>
+        <!--- The box shadow color.  If this is specified, a box shadow is drawn.-->
+        <attribute name="boxShadowColor" type="color" value="$once{null}"/>
+        <!--- The box shadow opacity. -->
+        <attribute name="boxShadowOpacity" value="0.5"/>
+    
+        <handler name="oninit">
+            <![CDATA[
+            if ( this.context ) this.drawStructure();
+            ]]>
+        </handler>
+
+        <handler name="oncontext">
+            <![CDATA[
+            this.drawStructure();
+            this._cache = null;
+            ]]>
+        </handler>
+
+        <method name="drawStructure">
+            <![CDATA[
+            if (! this.context) return;
+            if (! this['_cache']) {
+                this._cache = {
+                    borderWidth: this.borderWidth
+                    ,borderRadius: this.borderRadius
+                    ,borderColor: this.borderColor
+                    ,borderOpacity: this.borderOpacity
+                    ,backgroundStartColor: this.backgroundStartColor
+                    ,backgroundStopColor: this.backgroundStopColor
+                    ,backgroundGradientOrientation: this.backgroundGradientOrientation
+                    ,backgroundStartOpacity: this.backgroundStartOpacity
+                    ,backgroundStopOpacity: this.backgroundStopOpacity
+                    ,boxShadowColor: this.boxShadowColor
+                    ,boxShadowOpacity: this.boxShadowOpacity
+                    ,boxShadowX: this.boxShadowX
+                    ,boxShadowY: this.boxShadowY
+                    ,insetleft: this.insetleft
+                    ,insettop: this.insettop
+                    ,insetright: this.insetright
+                    ,insetbottom: this.insetbottom
+                    ,inset: this['inset']
+                    ,height: this.height
+                    ,width: this.width
+                };
+            } else {
+                var dirty = false;
+                var c = this._cache;
+                for (var i in c) {
+                    if (c[i] != this[i]) {
+                        c[i] = this[i];
+                        dirty = true;
+                        break;
+                    }
+                }
+                if (dirty == false) return;
+            }
+
+            var w = this.borderWidth;
+            var r = this.borderRadius;
+            var x = w/2;
+            var y = w/2;
+            var c0 = this.backgroundStartColor;
+            var c1 = this.backgroundStopColor;
+    
+            this.clear();
+
+            // Adjust the margins and offsets in the content area,
+            // in case insets changed
+            if(typeof this.content != 'undefined'){
+                this.content.reset();
+            }
+
+            // Draw the drop-shadow
+            if (w != 0 && this.boxShadowColor != null &&
+                this.boxShadowOpacity != 0) {
+                var sx = this.boxShadowX;
+                var sy = this.boxShadowY;
+                this.beginPath();
+                this.rect(sx+x, sy+y, this.width-w, this.height-w, r);
+                this.fillStyle = this.boxShadowColor;
+                this.globalAlpha = this.boxShadowOpacity;
+                this.lineWidth = this.borderWidth;
+                this.fill();
+                if (c0 == null && c1 == null)
+                    c0 = c1 = 0xffffff;
+            }
+    
+            // Create the frame for the border and the background
+            this.beginPath();
+            this.rect(x, y, this.width-w, this.height-w, r);
+    
+            // Draw the background
+            if (c0 != null || c1 != null) {
+                var g = this.backgroundGradientOrientation == 'vertical'
+                    ? this.createLinearGradient(0, w/2, 0, this.height-w)
+                    : this.createLinearGradient(w/2, 0, this.width-w, 0);
+                var a0 = this.backgroundStartOpacity;
+                var a1 = this.backgroundStopOpacity;
+                if (c0 == null) {
+                    c0 = c1;
+                    a0 = 0;
+                }
+                if (c1 == null) {
+                    c1 = c0;
+                    a1 = 0;
+                }
+                this.globalAlpha = a0;
+                g.addColorStop(0, c0);
+                this.globalAlpha = a1;
+                g.addColorStop(1, c1);
+                this.fillStyle = g;
+                this.fill();
+            }
+    
+            this.strokeStyle = this.borderColor;
+            this.lineWidth = this.borderWidth;
+            this.globalAlpha = this.borderOpacity;
+            this.stroke();
+            ]]>
+        </method>
+        
+        <view name="content" x="0" y="0" width="$once{parent.width}"
+            height="$once{parent.height}">
+        <method name="reset">
+                <![CDATA[
+                this.setAttribute( "x", parent.insetleft );
+                this.setAttribute( "y", parent.insettop );
+                this.setAttribute( "width", parent.width - parent.insetleft -
+                    parent.insetright - 1 );
+                this.setAttribute( "height", parent.height - parent.insettop -
+                    parent.insetbottom - 1 );
+                 ]]>
+            </method>
+        </view>
+    </class>
+</library>

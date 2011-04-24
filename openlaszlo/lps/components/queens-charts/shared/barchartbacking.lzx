@@ -1,0 +1,476 @@
+<library>
+    <include href="basechartbacking.lzx"/>
+    <class name="chartbacking" extends="basechartbacking">
+        <!--- The background grid for the chart.  This outside view clips the inner
+            view, to prevent it from being drawn out of bounds when the chart is
+            zoomed in on.  (Of beta quality.) -->
+        <view name="bgridclip" width="${parent.width}" height="${parent.height}"
+            clip="true">
+            <!--- The drawview responsible for drawing all the background lines and
+                bands and things. -->
+            <drawview name="backinggrid" width="${classroot.parent.dataclip.datapane.width}"
+                height="${classroot.parent.dataclip.datapane.height}"
+                x="${classroot.parent.dataclip.datapane.x}"
+                y="${classroot.parent.dataclip.datapane.y}">
+                <attribute name="drawready" type="boolean" value="false"/>
+                <handler name="oncontext">
+                    this.setAttribute('drawready', true);
+                </handler>
+                <handler name="onwidth">
+                    if(classroot.parent.datadrawn){
+                        classroot.clearGrid();
+                        classroot.renderAll();
+                    }
+                </handler>
+                <handler name="onheight">
+                    if(classroot.parent.datadrawn){
+                        classroot.clearGrid();
+                        classroot.renderAll();
+                    }
+                </handler>
+            </drawview>
+            <!--- The drawview responsible for drawing the line at zero. -->
+            <drawview name="zerodrawer" x="${parent.backinggrid.x}"
+                y="${parent.backinggrid.y}" width="${parent.width}"
+                height="${parent.height}">
+                <attribute name="drawready" type="boolean" value="false"/>
+                <handler name="oncontext">
+                    this.setAttribute('drawready', true);
+                </handler>
+            </drawview>
+        </view>
+
+        <!--- Renders the other direction. -->
+        <method name="renderAltGrid">
+            <![CDATA[
+            if(this.bgridclip.backinggrid.drawready == true){
+                if((parent.vgridbands && parent.drawaxis == 'x') ||
+                    (parent.hgridbands && parent.drawaxis == 'y')){
+                    this.renderVertBands();
+                }
+                if((parent.vgridlines && parent.drawaxis == 'x') ||
+                    (parent.hgridlines && parent.drawaxis == 'y')){
+                    this.renderVertLines();
+                }
+                if(parent.belowzero != null){
+                    this.renderBelowZero();
+                }
+            }
+            if(this.vtickclip.vtickdrawer.drawready == true){
+                if(parent.vtick){
+                    this.renderVTicks();
+                }
+            }
+            if(parent.vticklabel){
+                this.renderVTickLabels();
+            }
+            if(this.bgridclip.zerodrawer.drawready == true){
+                if(parent.drawzero != null){
+                    this.renderZero();
+                }
+            }
+            ]]>
+        </method>
+
+        <!--- Draws the horizontal grid bands. -->
+        <method name="renderHorizBands">
+            <![CDATA[
+            if(this.hlinesdrawn != true){
+                if(parent.drawaxis == 'x'){
+                    var offsetter = parent.scaler *
+                        (parent.maximum % parent.hgridspacing);
+                    var bandnum = (this.bgridclip.backinggrid.height /
+                        (parent.hgridspacing * parent.scaler)) / 2;
+                    var bandywidth = parent.hgridspacing * parent.scaler;
+                    var bandy = parent.hgridwidth;
+                    var gridwidth = parent.scaledaltmax - parent.scaledaltmin;
+                    for(var i = 0; i < bandnum; i++){
+                        this.renderRect(this.bgridclip.backinggrid, bandy,
+                            offsetter + (i * bandywidth * 2), gridwidth,
+                            offsetter + bandywidth + (i * bandywidth * 2),
+                            parent.hgridbands, parent.hbopacity);
+                    }
+                }
+            }
+            this.setAttribute('hbarsdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws the horizontal grid lines. -->
+        <method name="renderHorizLines">
+            <![CDATA[
+            if(this.hlinesdrawn != true){
+                if(parent.drawaxis == 'x'){
+                    var offsetter = parent.scaler * (parent.maximum % parent.hgridspacing);
+                    var linenum = this.bgridclip.backinggrid.height /
+                        (parent.hgridspacing * parent.scaler);
+                    var gridwidth = (parent.scaledmax - parent.scaledmin);
+                    for(var i = 0; i < linenum; i++){
+                        this.bgridclip.backinggrid.globalAlpha = .8;
+                        this.bgridclip.backinggrid.strokeStyle = parent.hgridlines;
+                        this.bgridclip.backinggrid.lineWidth = parent.hgridwidth;
+                        this.bgridclip.backinggrid.beginPath();
+                        this.bgridclip.backinggrid.moveTo(0,
+                            offsetter + ((i * parent.hgridspacing) * parent.scaler));
+                        this.bgridclip.backinggrid.lineTo(this.bgridclip.backinggrid.width,
+                            offsetter + ((i * parent.hgridspacing) * parent.scaler));
+                        this.bgridclip.backinggrid.stroke();
+                    }
+                }
+            }
+            this.setAttribute('hlinesdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws the vertical grid bands. -->
+        <method name="renderVertBands">
+            <![CDATA[
+            if(this.vbandsdrawn != true){
+                if(parent.drawaxis == 'y'){
+                    var offsetter = parent.altscaler * (parent.minimum % parent.hgridspacing);
+                    var gridwidth = (parent.scaledaltmax - parent.scaledaltmin);
+                    var linenum = (gridwidth /
+                        (parent.hgridspacing * parent.altscaler)) / 2;
+                    for(var i = 0; i <= linenum; i++){
+                        var vbarsetter = i * parent.hgridspacing * parent.altscaler * 2;
+                        var vbandwidth = parent.hgridspacing * parent.altscaler;
+                        this.renderRect(this.bgridclip.backinggrid, vbarsetter - offsetter,
+                            0, vbarsetter + vbandwidth - offsetter,
+                            this.bgridclip.backinggrid.height,
+                            parent.hgridbands, parent.hbopacity);
+                    }
+                }
+            }
+            this.setAttribute('vbandsdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws the vertical grid lines. -->
+        <method name="renderVertLines">
+            <![CDATA[
+            if(this.vlinesdrawn != true){
+                if(parent.drawaxis == 'y'){
+                    var offsetter = parent.altscaler * (parent.minimum % parent.hgridspacing);
+                    var gridwidth = (parent.scaledaltmax - parent.scaledaltmin);
+                    var linenum = gridwidth /
+                        (parent.hgridspacing * parent.altscaler);
+                    for(var i = 0; i < linenum; i++){
+                        this.bgridclip.backinggrid.globalAlpha = .8;
+                        this.bgridclip.backinggrid.strokeStyle = parent.hgridlines;
+                        this.bgridclip.backinggrid.lineWidth = parent.hgridwidth;
+                        this.bgridclip.backinggrid.beginPath();
+                        this.bgridclip.backinggrid.moveTo(
+                            ((i * parent.hgridspacing) * parent.altscaler) - offsetter, 0);
+                        this.bgridclip.backinggrid.lineTo(
+                            ((i * parent.hgridspacing) * parent.altscaler - offsetter),
+                            this.bgridclip.backinggrid.height);
+                        this.bgridclip.backinggrid.stroke();
+                    }
+                }
+            }
+            this.setAttribute('vlinesdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws vertical ticks. -->
+        <method name="renderVTicks">
+            <![CDATA[
+            if(this.vticksdrawn != true){
+                if(parent.drawaxis == 'x'){
+                    var offsetter = parent.altscaler *
+                        (parent.altminimum % parent.vgridspacing);
+                    var gridwidth = (parent.scaledaltmax - parent.scaledaltmin);
+                    var barwidth = (gridwidth /
+                        parent.numbars) - parent.barspace;
+                    var linenum = gridwidth / (barwidth + parent.barspace);
+                    var tickset = 1;
+                    for(var i = 1; i <= linenum; i++){
+                        var vunit = i * (barwidth + parent.barspace);
+                        var vlinesetter = i * (barwidth + parent.barspace);
+                        this.vtickclip.vtickdrawer.globalAlpha = 1;
+                        this.vtickclip.vtickdrawer.strokeStyle = parent.vtick;
+                        this.vtickclip.vtickdrawer.lineWidth = parent.vtickwidth;
+                        this.vtickclip.vtickdrawer.beginPath();
+                        this.vtickclip.vtickdrawer.moveTo(vlinesetter - (barwidth / 2),
+                            this.height);
+                        this.vtickclip.vtickdrawer.lineTo(vlinesetter - (barwidth / 2),
+                            this.height + (parent.vticklength * tickset));
+                        this.vtickclip.vtickdrawer.stroke();
+                        if(parent.staggerticks == true){
+                            if(parent.seriesnumber > 1){
+                                if(tickset == parent.seriesnumber){
+                                    tickset = 1;
+                                } else {
+                                    tickset++;
+                                }
+                            } else {
+                                if(tickset == 1){
+                                    tickset = 2;
+                                } else {
+                                    tickset = 1;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    var linenum = this.bgridclip.backinggrid.width /
+                        (parent.hgridspacing * parent.altscaler);
+                    for(var i = 0; i <= linenum; i++){
+                        this.vtickclip.vtickdrawer.globalAlpha = 1;
+                        this.vtickclip.vtickdrawer.strokeStyle = parent.htick;
+                        this.vtickclip.vtickdrawer.lineWidth = parent.htickwidth;
+                        this.vtickclip.vtickdrawer.beginPath();
+                        var offsetter = 0;
+                        var maxoffset = (parent.minimum % parent.hgridspacing) *
+                            (parent.altscaler * -1);
+                        if(parent.minimum < 0){
+                            offsetter = Math.abs(parent.minimum % parent.hgridspacing);
+                        }
+                        this.vtickclip.vtickdrawer.moveTo(maxoffset + ((i * parent.hgridspacing) * parent.altscaler),
+                            this.height);
+                        this.vtickclip.vtickdrawer.lineTo(maxoffset + ((i * parent.hgridspacing) * parent.altscaler),
+                            this.height + parent.vticklength);
+                        this.vtickclip.vtickdrawer.stroke();
+                    }
+                }
+            }
+            this.setAttribute('vticksdrawn', true);
+            ]]>
+        </method>
+        <!--- Generates labels for vertical ticks. -->
+        <method name="renderVTickLabels">
+            <![CDATA[
+            if(this.vticklabelsdrawn != true){
+                if(parent.drawaxis == 'y'){
+                    if(parent.vticklabel){
+                        var linenum = this.bgridclip.backinggrid.width /
+                            (parent.hgridspacing * parent.altscaler);
+                        var gridwidth = (parent.scaledaltmax - parent.scaledaltmin);
+                        var barwidth = (gridwidth /
+                            parent.numbars) - parent.barspace;
+                        for(var i = 0; i <= linenum; i++){
+                            var offsetter = 0;
+                            var maxoffset = (parent.minimum % parent.hgridspacing) *
+                                parent.altscaler;
+                            if(parent.minimum < 0){
+                                offsetter = Math.abs(parent.minimum % parent.hgridspacing);
+                            } else {
+                                offsetter = Math.abs(parent.minimum % parent.hgridspacing) * -1;
+                            }
+                            new lz.ticklabel(this.vtickclip.vtickpane,
+                                {y:this.height + parent.vticklength + 2,
+                                x:maxoffset, charttype:'bar',
+                                ltext:parent.minimum + (parent.hgridspacing * i) + offsetter,
+                                ltextsize:parent.hticklabelsize, ltcolor:parent.hticklabel,
+                                ticklength:parent.hticklength, tickaxis:"x",
+                                numlabels:linenum, labelnumber:i});
+                        }
+                    }
+                } else {
+                    
+                }
+            }
+            this.setAttribute('vticklabelsdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws horizontal ticks. -->
+        <method name="renderHTicks">
+            <![CDATA[
+            if(this.hticksdrawn != true){
+                if(parent.drawaxis == 'x'){
+                    var linenum = this.bgridclip.backinggrid.height /
+                        (parent.hgridspacing * parent.scaler);
+                    for(var i = 0; i <= linenum; i++){
+                        htickclip.htickdrawer.globalAlpha = 1;
+                        htickclip.htickdrawer.strokeStyle = parent.htick;
+                        htickclip.htickdrawer.lineWidth = parent.htickwidth;
+                        htickclip.htickdrawer.beginPath();
+                        var offsetter = 0;
+                        var maxoffset = (parent.maximum % parent.hgridspacing) *
+                            parent.scaler;
+                        if(parent.minimum < 0){
+                            offsetter = Math.abs(parent.minimum % parent.hgridspacing);
+                        }
+                        htickclip.htickdrawer.moveTo(htickclip.width,
+                            maxoffset + ((i * parent.hgridspacing) * parent.scaler));
+                        htickclip.htickdrawer.lineTo(htickclip.width - parent.hticklength,
+                            maxoffset + ((i * parent.hgridspacing) * parent.scaler));
+                        htickclip.htickdrawer.stroke();
+                    }
+                } else {
+                    var offsetter = parent.altscaler *
+                        (parent.altminimum % parent.vgridspacing);
+                    var gridwidth = (parent.scaledmax - parent.scaledmin);
+                    var barwidth = (gridwidth /
+                        parent.numbars) - parent.barspace;
+                    var linenum = gridwidth / (barwidth + parent.barspace);
+                    var tickset = 1;
+                    for(var i = 1; i <= linenum; i++){
+                        var vunit = (barwidth + parent.barspace);
+                        var vlinesetter = i * vunit;
+                        this.htickclip.htickdrawer.globalAlpha = 1;
+                        this.htickclip.htickdrawer.strokeStyle = parent.vtick;
+                        this.htickclip.htickdrawer.lineWidth = parent.vtickwidth;
+                        this.htickclip.htickdrawer.beginPath();
+                        this.htickclip.htickdrawer.moveTo(htickclip.width, vlinesetter - (vunit / 2));
+                        this.htickclip.htickdrawer.lineTo(htickclip.width - (parent.vticklength * tickset),
+                            vlinesetter - (vunit / 2));
+                        this.htickclip.htickdrawer.stroke();
+                        if(parent.staggerticks == true){
+                            if(parent.seriesnumber > 1){
+                                if(tickset == parent.seriesnumber){
+                                    tickset = 1;
+                                } else {
+                                    tickset++;
+                                }
+                            } else {
+                                if(tickset == 1){
+                                    tickset = 2;
+                                } else {
+                                    tickset = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            this.setAttribute('hticksdrawn', true);
+            ]]>
+        </method>
+        <!--- Generates labels for horizontal ticks. -->
+        <method name="renderHTickLabels">
+            <![CDATA[
+            if(this.hticklabelsdrawn != true){
+                if(parent.hticklabel){
+                    if(parent.drawaxis == 'x'){
+                        var linenum = this.bgridclip.backinggrid.height /
+                            (parent.hgridspacing * parent.scaler);
+                        for(var i = 0; i <= linenum + 1; i++){
+                            var offsetter = 0;
+                            var maxoffset = (parent.minimum % parent.hgridspacing) *
+                                parent.scaler;
+                            if(parent.minimum < 0){
+                                offsetter = Math.abs(parent.minimum % parent.hgridspacing);
+                            } else {
+                                offsetter = Math.abs(parent.minimum % parent.hgridspacing) * -1;
+                            }
+                            new lz.ticklabel(this.htickclip.htickpane,
+                                {x:this.htickclip.width,
+                                y:this.height + maxoffset,
+                                ltext:parent.minimum + (parent.hgridspacing * i) + offsetter,
+                                ltextsize:parent.hticklabelsize, ltcolor:parent.hticklabel,
+                                ticklength:parent.hticklength, tickaxis:"y",
+                                numlabels:linenum, labelnumber:i});
+                        }
+                    } else {
+                        
+                    }
+                }
+            }
+            this.setAttribute('hticklabelsdrawn', true);
+            ]]>
+        </method>
+        <!--- Draws the line along the edge of the vertical axis. -->
+        <method name="renderVaxis">
+            <![CDATA[
+            if(parent.drawaxis == 'x'){
+                this.borderdrawer.globalAlpha = 1;
+                this.borderdrawer.strokeStyle = parent.vaxis;
+                this.borderdrawer.lineWidth = parent.vaxiswidth;
+                this.borderdrawer.beginPath();
+                this.borderdrawer.moveTo(0, 0);
+                this.borderdrawer.lineTo(0, this.height);
+                this.borderdrawer.stroke();
+            } else {
+                this.borderdrawer.globalAlpha = 1;
+                this.borderdrawer.strokeStyle = parent.vaxis;
+                this.borderdrawer.lineWidth = parent.vaxiswidth;
+                this.borderdrawer.beginPath();
+                this.borderdrawer.moveTo(0, this.height);
+                this.borderdrawer.lineTo(this.width, this.height);
+                this.borderdrawer.stroke();
+            }
+            ]]>
+        </method>
+        <!--- Draws the line along the edge of the horizontal axis. -->
+        <method name="renderHaxis">
+            <![CDATA[
+            if(parent.drawaxis == 'x'){
+                this.borderdrawer.globalAlpha = 1;
+                this.borderdrawer.strokeStyle = parent.haxis;
+                this.borderdrawer.lineWidth = parent.haxiswidth;
+                this.borderdrawer.beginPath();
+                this.borderdrawer.moveTo(0, this.height);
+                this.borderdrawer.lineTo(this.width, this.height);
+                this.borderdrawer.stroke();
+            } else {
+                this.borderdrawer.globalAlpha = 1;
+                this.borderdrawer.strokeStyle = parent.haxis;
+                this.borderdrawer.lineWidth = parent.haxiswidth;
+                this.borderdrawer.beginPath();
+                this.borderdrawer.moveTo(0, 0);
+                this.borderdrawer.lineTo(0, this.height);
+                this.borderdrawer.stroke();
+            }
+            ]]>
+        </method>
+        <!--- Draws the area below zero. -->
+        <method name="renderBelowZero">
+            <![CDATA[
+            if(this.belowzerodrawn != true){
+                if(parent.drawaxis == 'x'){
+                    var gridwidth = this.bgridclip.backinggrid.width;
+                    var findzero = Math.abs(parent.minimum) * parent.scaler;
+                    this.renderRect(this.bgridclip.backinggrid, 0,
+                        this.bgridclip.backinggrid.height - findzero,
+                        gridwidth, this.bgridclip.backinggrid.height,
+                        parent.belowzero, parent.belowzeroopacity);
+                    this.bgridclip.backinggrid.fill();
+                } else {
+                    var gridheight = this.bgridclip.backinggrid.height;
+                    var findzero = Math.abs(parent.minimum) * parent.altscaler;
+                    this.renderRect(this.bgridclip.backinggrid, 0, 0,
+                        findzero, gridheight,
+                        parent.belowzero, parent.belowzeroopacity);
+                    this.bgridclip.backinggrid.fill();
+                }
+            }
+            this.setAttribute('belowzerodrawn', true);
+            ]]>
+        </method>
+        <!--- Draws the line at zero. -->
+        <method name="renderZero">
+            <![CDATA[
+            if(this.zerodrawn != true){
+                this.bgridclip.zerodrawer.globalAlpha = .8;
+                this.bgridclip.zerodrawer.strokeStyle = parent.drawzero;
+                this.bgridclip.zerodrawer.lineWidth = parent.zerowidth;
+                this.bgridclip.zerodrawer.beginPath();
+                this.bgridclip.zerodrawer.stroke();
+                if(parent.drawaxis == 'x'){
+                    var findzero = Math.abs(parent.minimum) * parent.scaler;
+                    this.bgridclip.zerodrawer.moveTo(0,
+                        this.bgridclip.backinggrid.height - findzero);
+                    this.bgridclip.zerodrawer.lineTo(this.bgridclip.backinggrid.width,
+                        this.bgridclip.backinggrid.height - findzero);
+                } else {
+                    var findzero = Math.abs(parent.minimum) * parent.altscaler;
+                    this.bgridclip.zerodrawer.moveTo(findzero, 0);
+                    this.bgridclip.zerodrawer.lineTo(findzero, this.bgridclip.backinggrid.height);
+                }
+                this.bgridclip.zerodrawer.stroke();
+            }
+            this.setAttribute('zerodrawn', true);
+            ]]>
+        </method>
+        
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

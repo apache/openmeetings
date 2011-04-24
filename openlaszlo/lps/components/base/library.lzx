@@ -1,0 +1,47 @@
+<!---
+      @topic Components
+      @subtopic Base Components
+  -->
+<library>
+    <include href="baseform.lzx"/>
+    <include href="submit.lzx"/>
+    <include href="basebutton.lzx"/>
+    <include href="basebuttonrepeater.lzx"/>
+    <include href="multistatebutton.lzx"/>
+    <include href="style.lzx"/>
+    <include href="basecomponent.lzx"/>
+    <include href="basecombobox.lzx"/>
+    <include href="basedatacombobox.lzx"/>
+    <include href="basedatepicker.lzx"/>
+    <include href="basedatepickerday.lzx"/>
+    <include href="basedatepickerweek.lzx"/>
+    <include href="baseedittext.lzx"/>
+    <include href="basegridcolumn.lzx"/>
+    <include href="basevaluecomponent.lzx"/>
+    <include href="baseformitem.lzx"/>
+    <include href="baselist.lzx"/>
+    <include href="basetrackgroup.lzx"/>
+    <include href="baseslider.lzx"/>
+    <include href="basescrollbar.lzx"/>
+    <include href="basewindow.lzx"/>
+    <include href="basetabs.lzx"/>
+    <include href="basetabslider.lzx"/>
+    <include href="basetabelement.lzx"/>
+    <include href="baselistitem.lzx"/>
+    <include href="basetree.lzx"/>
+    <include href="swatchview.lzx"/>
+    <include href="basegrid.lzx"/>
+    <include href="basefocusview.lzx"/>
+
+    <include href="vbox.lzx"/>
+    <include href="hbox.lzx"/>
+    <include href="image.lzx"/>
+
+
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008,2010 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

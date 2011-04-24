@@ -1,0 +1,69 @@
+<library>
+    <include href="extensions/drawview.lzx"/>
+    <!-- colorsquare
+        class for use richtexttoolbar color swatch picker
+        when it constructs --> 
+        
+    <class name="colorsquare" extends="drawview">
+        <!--- color of the swatch - default set to black -->
+        <attribute name="swatchcolor" type="color" value="black"/>
+        <!--- default set to false - whether to draw the swatch -->
+        <attribute name="drawsquare" value="false"/>
+        <!--- @keywords private -->
+        <handler name="oninit">
+            this.redraw();
+        </handler>
+        
+        <!--- @keywords private -->
+        <handler name="oncontext">
+            this.redraw();
+        </handler>
+
+        <!--- update handler -->
+        <handler name="onswatchcolor">
+            this.redraw();
+        </handler>
+
+        <!--- draw and color the swatch -->
+        <method name="redraw"><![CDATA[          
+            if(this.context){
+                this.clear();
+                if(this.drawsquare == true){
+                    this.linewidth=0;
+                    this.beginPath();
+                    this.fillStyle = 0x333333;
+                    this.moveTo(1,1);
+                    this.lineTo(15,1);
+                    this.lineTo(15,11);
+                    this.lineTo(1,11);
+                    this.lineTo(1,1);
+                    this.fill();
+        
+                    this.beginPath();
+                    this.fillStyle = 0xFFFFFF;
+                    this.moveTo(0,0);
+                    this.lineTo(14,0);
+                    this.lineTo(14,10);
+                    this.lineTo(0,10);
+                    this.lineTo(0,0);
+                    this.fill();
+                    
+                    this.beginPath();
+                    this.fillStyle = parseInt(swatchcolor);
+                    this.moveTo(1,1);
+                    this.lineTo(13,1);
+                    this.lineTo(13,9);
+                    this.lineTo(1,9);
+                    this.lineTo(1,1);
+                    this.fill();
+               }
+           }
+        ]]>
+        </method>
+    </class>    
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2005-2009 Laszlo Systems, Inc. All Rights Reserved.               *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

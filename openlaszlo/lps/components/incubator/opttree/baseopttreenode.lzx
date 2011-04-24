@@ -1,0 +1,62 @@
+<library>
+    <class name="baseopttreenode">
+        <!--- @keywords private -->
+        <attribute name="dopen" value="$path{ parent.openattrpath }" type="boolean"/>
+        <!--- A boolean value representing whether or not this node
+              is open. -->
+        <attribute name="open" value="${ dopen }"/>
+
+        <!--- @keywords private -->
+        <attribute name="ddepth" value="$path{ parent.depthattrpath }" type="number"/>
+        <!--- A 0-based depth number that indicates the depth of this
+              element in the tree. -->
+        <attribute name="depth" value="${ ddepth }"/>
+
+        <!--- If true, this element is selected -->
+        <attribute name="highlight" value="null"/>
+
+        <!--- The amount, in pixels, to indent each element of the tree.-->
+        <attribute name="indent" value="10"/>
+
+        <!--- @keywords private -->
+        <attribute name="x" value="${ depth * indent }"/>
+
+        <datapath replication="lazy"/>
+
+        <attribute name="startdragdel" value="null"/>
+        <attribute name="dragging" value="false"/>
+
+        <handler name="onmousedown">
+            if ( !this.startdragdel ){
+                this.startdragdel = new lz.Delegate( this, 'startDrag' );
+            }
+            lz.Timer.resetTimer( startdragdel, startdragdelay);
+            this._ix = this.getMouse( 'x' );
+            this._iy = this.getMouse( 'y' );
+        </handler>
+
+        <attribute name="startdragdelay" value="800"/>
+
+        <method name="startDrag" args="ignore=null">
+            this.setAttribute( "dragging", true );
+            parent.beginDrag( this , this._ix, this._iy );
+        </method>
+
+        <handler name="onmouseup">
+            lz.Timer.removeTimer( startdragdel );
+            if ( dragging ){
+                parent.endDrag( this );
+                this.setAttribute( "dragging", false );
+            }
+        </handler>
+
+        <method name="checkChildren" >
+            // abstract method
+        </method>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,552 @@
+<library>
+
+    <include href="base/basetabs.lzx" />
+    <include href="base/basecomponent.lzx" />
+    <include href="base/swatchview.lzx" />
+    <include href="utils/layouts/stableborderlayout.lzx"/>
+    <include href="utils/layouts/simplelayout.lzx"/>
+
+
+    <!--- Left resource for tab. Frame 1 (disabled), frame 2 (deselected),
+          frame 3 (mouse over), frame 4 (selected).  -->
+    <resource name="tab_L_rsc">
+        <frame src="resources/tab/tab_disable_lft.swf" />
+        <frame src="resources/tab/tab_dslct_lft.swf"/>
+        <frame src="resources/tab/tab_mo_lft.swf" />
+        <frame src="resources/tab/tab_slct_lft.swf" />
+    </resource>
+    <!--- Middle resource for tab. Frame 1 (disabled), frame 2 (deselected),
+          frame 3 (mouse over), frame 4 (selected).  -->
+    <resource name="tab_M_rsc">
+        <frame src="resources/tab/tab_disable_mid.swf" />
+        <frame src="resources/tab/tab_dslct_mid.swf" />
+        <frame src="resources/tab/tab_mo_mid.swf" />
+        <frame src="resources/tab/tab_slct_mid.swf" />
+    </resource>
+    <!--- Right resource for tab. Frame 1 (disabled), frame 2 (deselected),
+          frame 3 (mouse over), frame 4 (selected).  -->
+    <resource name="tab_R_rsc">
+        <frame src="resources/tab/tab_disable_rt.swf" />
+        <frame src="resources/tab/tab_dslct_rt.swf" />
+        <frame src="resources/tab/tab_mo_rt.swf" />
+        <frame src="resources/tab/tab_slct_rt.swf" />
+    </resource>
+
+    <!-- ====== -->
+    <!--  TABS  -->
+    <!-- ====== -->
+
+    <!-- The default tab used by tabsbar. This class isn't meant to be used
+          standalone. You can pass the name of this class in the 'tabclass'
+          attribute of basetabpane, tabpane, basetabs, and tabs classes. Tabs
+          uses this class as its default 'tabclass'. -->
+    <class name="tab" extends="basetab">
+        <!--- Text padding. -->
+        <attribute name="padding" value="20" />
+
+        <!--- @keywords private -->
+        <attribute name="tabstate" value="2" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="MIN_TEXT_BORDER" value="2" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="titleshift" value="${this.tabstate == 4 ? 4 : 0}" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="width" value="${tabview.labeltext.getTextWidth() + 2*padding}" />
+
+        <view name="tabview" width="100%" >
+            <stableborderlayout axis="x"/>
+            <view name="left" resource="tab_L_rsc">
+                <attribute name="frame" value="${classroot.tabstate}"/>
+            </view>
+            <view name="middle" resource="tab_M_rsc" stretches="width">
+                <attribute name="frame" value="${classroot.tabstate}"/>
+            </view>
+            <view name="right" resource="tab_R_rsc">
+                <attribute name="frame" value="${classroot.tabstate}"/>
+            </view>
+
+            <statictext name="labeltext"
+                    x="${parent.parent.width/2 - this.width/2}"
+                    y="${parent.parent.height/2-(this.height/2) - parent.parent.titleshift +4}"
+                    text="${parent.parent.text}"
+                    resize="true" >
+            </statictext>
+        </view>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            tabview.labeltext.setAttribute('fgcolor',s.textcolor);
+            setTint(tabview.left, s.basecolor);
+            setTint(tabview.middle, s.basecolor);
+            setTint(tabview.right, s.basecolor);
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_showEnabled">
+            setAttribute('tabstate', this._enabled ? 2 : 1);
+        </method>
+        <!--- @keywords private -->
+        <handler name="onmouseover">
+            setAttribute('tabstate', 3);
+        </handler>
+        <!--- @keywords private -->
+        <handler name="onmouseout">
+            if (!this["selected"]) {
+                setAttribute('tabstate',2);
+            }
+        </handler>
+        <!--- @keywords private -->
+        <method name="setSelected" args="s">
+            <![CDATA[
+                if (s) {
+                   setAttribute('tabstate', 4);
+                   setAttribute("y", 1);
+                } else {
+                    setAttribute('tabstate', 2);
+                    setAttribute("y",0);
+                }
+
+                super.setSelected(s);
+            ]]>
+        </method>
+        <!--- @keywords private -->
+        <method name="setHilite" args="dohilite">
+            tabview.labeltext.setAttribute('fgcolor',
+                dohilite ? style.texthilitecolor : style.textcolor);
+        </method>
+
+        <doc>
+            <tag name="shortdesc"><text>
+                The lz tab is used by tabs.
+            </text></tag>
+            <text>
+                <p>
+                    A <classname>tab</classname> is an LZ tab within <sgmltag class="element" role="lz.basetabsbar">&lt;basetabsbar&gt;</sgmltag>
+                    or any object that extends this (such as <sgmltag class="element" role="lz.tabsbar">&lt;tabsbar&gt;</sgmltag>).
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="100">
+  <include href="lz" />
+
+  <basetabs x="10" y="10" tabclass="tab">
+    <basetabpane text="one">
+      <text>one</text>
+    </basetabpane>
+    <basetabpane text="two">
+      <text>two</text>
+    </basetabpane>
+  </basetabs>
+</canvas>
+                    ]]>
+                </example>
+                <seealso>
+                    <classes>tabsbar tabpane tabs basetab</classes>
+                </seealso>
+            </text>
+        </doc>
+    </class> <!-- class tab -->
+
+    <!-- ============== -->
+    <!--  TABSBAR CLASS -->
+    <!-- ============== -->
+
+    <!-- The default tab bar created by tabpane. This class is dependent on
+          tabs (or any subclass of basetabs) and shouldn't be used by
+          itself. The default layout for its subviews is "class: simplelayout;
+          axis: x; spacing: -15". You can pass the name of this class in the
+          'barclass' attribute of tabpane, basetabpane, basetabs, and tabs. Tabs
+          uses this class as its default 'barclass'. -->
+    <class name="tabsbar" extends="basetabsbar" itemclassname="tab"
+        x="-5" clip="true"
+        layout="class: simplelayout; axis: x; spacing: -15">
+        <!-- x="-5" to account for corner shadow of the asset -->
+
+        <!--- Spacing between tab items. -->
+        <attribute name="spacing" value="0" type="number" 
+                   setter="_setTabSpacing(spacing)" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            bringToFront();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setTabSpacing" args="s">
+        <![CDATA[
+            if (! _initcomplete) return;
+            for (var i=0; i < subnodes.length; i++) {
+                var sn = subnodes[i];
+                if (sn instanceof  lz.simplelayout) {
+                    sn.setAttribute('spacing', s);
+                }
+            }
+        ]]>
+        </method>
+        <doc>
+            <tag name="shortdesc"><text>
+                The lz tabsbar class for laying out tab items.
+            </text></tag>
+            <text>
+                <p>
+                    A <classname>tabsbar</classname> is a container that uses 
+                    a default x-axis <xref linkend="lz.simplelayout"/> with a 
+                    spacing of -15 to lay out its tab children (which have 
+                    extra spacing on each side) so they overlap.
+                </p>
+                <p>
+                    This it the default tab bar created by tabpane. This class 
+                    is dependent on tabs (or any subclass of basetabs) and 
+                    shouldn't be used by itself. The default layout for its 
+                    subviews is "class: simplelayout; axis: x; spacing: -15". 
+                    You can pass the name of this class in the 'barclass' 
+                    attribute of tabpane, basetabpane, basetabs, and tabs. 
+                    Tabs uses this class as its default 'barclass'. 
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="100">
+  <include href="lz"/>
+
+  <simplelayout axis="x" spacing="10"/>
+
+  <view layout="class: simplelayout; axis: y; spacing: 5"
+        bgcolor="red">
+    <text>basetabs barclass=basetabsbar</text>
+    <basetabs y="10" tabclass="tab" barclass="basetabsbar">
+      <basetabpane text="one">
+        <text>one</text>
+      </basetabpane>
+      <basetabpane text="two">
+        <text>two</text>
+      </basetabpane>
+      <basetabpane text="three">
+        <text>three</text>
+      </basetabpane>
+    </basetabs>
+  </view>
+
+  <view layout="class: simplelayout; axis: y; spacing: 5"
+        bgcolor="yellow">
+    <text>basetabs barclass=tabsbar</text>
+    <basetabs y="10" tabclass="tab" barclass="tabsbar">
+      <basetabpane text="one">
+        <text>one</text>
+      </basetabpane>
+      <basetabpane text="two">
+        <text>two</text>
+      </basetabpane>
+      <basetabpane text="three">
+        <text>three</text>
+      </basetabpane>
+    </basetabs>
+  </view>
+</canvas>
+                    ]]>
+                </example>
+                <seealso>
+                    <classes>tab tabs basetabsbar</classes>
+                </seealso>
+            </text>
+        </doc>
+    </class> <!-- class tabsbar -->
+
+
+    <!-- ========= -->
+    <!--  TABPANE  -->
+    <!-- ========= -->
+
+    <!-- Tabpanes are children of the tabs component. Each tabpane has a
+          corresponding tab. If width and height are not set, all tabpanes will
+          resize themselves to largest tabpane or the width of the tabsbar,
+          whichever is larger. The content of the tabpane is initstage late. You
+          can override this value by setting initstage late on tabpane. -->
+    <class name="tabpane" extends="basetabpane" bgcolor="0xd9d9d9">
+
+        <!--- Width of the tab associated with this tabpane. If not set, the tab
+              will resize itself to fit. -->
+        <attribute name="tabwidth" value="-1" type="number" />
+
+        <!--- Keep our background swatchview from getting swallowed into
+              content. This number is used in the createChildren method and it
+              determines how many are spliced from the beginning of the array.
+              @keywords private -->
+        <attribute name="_keepchildren" value="1" type="number" />
+
+        <!-- Basetabpane places first view of extending subclass in the class
+             and not in the basetabpanecomponent. This may not make it possible
+             to extend from tabpane. -->
+        <swatchview name="background" width="100%" height="100%" 
+                    bgcolor="${parent.bgcolor}" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+            // Set width attribute of associated tab if tabwidth is defined
+            if (this.tabwidth > -1) {
+                this.tab.setAttribute('width', this.tabwidth);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s"><![CDATA[
+            if (this.style != null) {
+                setTint(background, s.basecolor);
+            }
+        ]]></method>
+        <doc>
+            <tag name="shortdesc"><text>
+                A tabpane houses content to be shown within a tabs component when its 
+                correlated tab is selected.
+            </text></tag>
+            <text>
+                <p>
+                    <classname>tabpane</classname> is the visual container for content in 
+                    <xref linkend="lz.basetabs"/>. The difference between this class and 
+                    <xref linkend="lz.basetabpane"/> is that <classname>tabpane</classname>
+                    has a background <xref linkend="lz.swatchview"/> that is set by whatever
+                    the default style is.
+                </p>
+                <p>
+                    Note that the content of tabpane is <code>initstage="late"</code>.
+                    You can override this by explicitly setting your <attribute>initstage</attribute>
+                    preference on tabpane.
+                </p>
+                <programlisting>
+<![CDATA[<tabpane initstage="normal">
+  <!-- ...content... -->
+  </tabpane>
+</tabpane>]]>
+                </programlisting>
+                <p>
+                    For every <tagname>tabpane</tagname> declared, a corresponding 
+                    <xref linkend="lz.tab"/> is created.
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="150" >
+  <include href="base"/>
+
+  <simplelayout axis="y" spacing="5"/>
+  <text x="10" multiline="true" width="200">
+      First two are tabpanes, the last one is a basetabpane
+  </text>
+  <basetabs x="10" tabclass="tab" bgcolor="green">
+    <tabpane>
+      <text>one</text>
+    </tabpane>
+    <tabpane>
+      <text>two</text>
+    </tabpane>
+    <basetabpane>
+      <text>three</text>
+    </basetabpane>
+  </basetabs>
+</canvas>
+                    ]]>
+                </example>
+            </text>
+        </doc>
+    </class> <!-- class tabpane -->
+
+
+    <!-- ============= -->
+    <!--  TABSCONTENT  -->
+    <!-- ============= -->
+
+    <!-- This is the class used by tabs to place tabpanes. Visually, it
+          contains a border. The size of the border is constrained by its
+          parent's (tabs) bordersize attribute value. You can pass the name of
+          this class in the 'contentclass' attribute of basetabs and tabs. Tabs
+          uses this class as its default 'contentclass'. -->
+    <class name="tabscontent" extends="basetabscontent" bgcolor="0x4c4c4c">
+        <!--- @keywords private -->
+        <attribute name="defaultplacement" value="borderedcontent" type="string" />
+        <view name="borderedcontent"
+            x="${parent.parent.bordersize}"
+            y="${parent.parent.bordersize}"
+            width="${parent.width-(2*parent.parent.bordersize)}"
+            height="${parent.height-(2*parent.parent.bordersize)}"
+            clip="true" />
+        <doc>
+            <tag name="shortdesc"><text>
+                The tabs content container for tabpanes.
+            </text></tag>
+            <text>
+                <p>
+                    <classname>tabscontent</classname> houses a stack of 
+                    <xref linkend="lz.tabpane"/>s for <xref linkend="lz.tabs"/>, 
+                    which has a visual border and uses the default style's 
+                    background color. When a <classname>tabspane</classname> 
+                    is added to a <classname>tabs</classname>, its content 
+                    are actually placed in <classname>tabscontent</classname>.
+                </p>
+                <p>
+                    Said another way, <classname>tabscontent</classname> is the 
+                    class used by tabs to place tabpanes. Visually, it contains 
+                    a border. The size of the border is constrained by its parent's 
+                    (tabs) bordersize attribute value. You can pass the name of 
+                    this class in the 'contentclass' attribute of basetabs and 
+                    tabs. Tabs uses this class as its default 'contentclass'. 
+                </p>
+                <example>
+                    <![CDATA[
+<canvas height="100">
+  <include href="lz"/>
+  <simplelayout axis="x" spacing="10"/>
+  
+  <view layout="class: simplelayout; axis: y; spacing: 5"
+        bgcolor="red">
+    <text>contentclass=basetabscontent</text>
+    <basetabs y="10" bordersize="5"
+              tabclass="tab" contentclass="basetabscontent">
+      <basetabpane text="one" bgcolor="teal">
+        <text>one</text>
+      </basetabpane>
+      <basetabpane text="two" bgcolor="green">
+        <text>two</text>
+      </basetabpane>
+      <basetabpane text="three" bgcolor="blue">
+        <text>three</text>
+      </basetabpane>
+    </basetabs>
+  </view>
+
+  <view layout="class: simplelayout; axis: y; spacing: 5"
+        bgcolor="yellow">
+    <text>contentclass=tabscontent</text>
+    <basetabs y="10" bordersize="5"
+              tabclass="tab" contentclass="tabscontent">
+      <basetabpane text="one" bgcolor="teal">
+        <text>one</text>
+      </basetabpane>
+      <basetabpane text="two" bgcolor="green">
+        <text>two</text>
+      </basetabpane>
+      <basetabpane text="three" bgcolor="blue">
+        <text>three</text>
+      </basetabpane>
+    </basetabs>
+  </view>
+</canvas>
+                    ]]>
+                </example>
+                <seealso>
+                    <classes>tabs tabpane basetabscontent</classes>
+                </seealso>
+            </text>
+        </doc>
+    </class> <!-- class tabscontent -->
+
+    <!-- ====== -->
+    <!--  TABS  -->
+    <!-- ====== -->
+    <!-- Tabs is a component which takes one or more tabpanes and provides a
+          tab for each one to switch between them. -->
+    <class name="tabs" extends="basetabs" clip="true">
+
+        <!--- Align the set of tabs within the dimensions of the "tabs"
+             container ("left", "center", "right"). -->
+        <attribute name="tabalign" value="left" type="string" 
+                   setter="_setTabAlign(tabalign)"/>
+        <!--- Spacing between the tabs. Defaults to -15 so tabs overlap. -->
+        <attribute name="tabspacing" value="-15" type="number" 
+                   setter="_setTabSpacing(tabspacing)"/>
+        <!--- Content's border size (see tabscontent). -->
+        <attribute name="bordersize" value="1" type="number" />
+        <!--- Class to use for tab items in tabsbar.
+              @keywords final -->
+        <attribute name="tabclass" value="tab" type="string" />
+        <!--- Class to use for tabs bar.
+              @keywords final -->
+        <attribute name="barclass" value="tabsbar" type="string" />
+        <!--- Class to use for tabs content area.
+              @keywords final -->
+        <attribute name="contentclass" value="tabscontent" type="string" />
+        <!--- Layout to use between tabsbar and tabscontent. -->
+        <attribute name="layout"
+            value="class: simplelayout; axis: y; spacing: -2" />
+
+        <!--- @keywords private -->
+        <method name="init">
+            super.init();
+
+            // This also calls _setTabAlign()
+            this._setTabSpacing(this.tabspacing);
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_setTabAlign" args="align">
+            this.tabalign = align;
+            if (! _initcomplete) return;
+            if (align == "center") {
+                this.bar.setAttribute('x', Math.floor(this.width/2 - this.bar.width/2));
+            } else if (align == "right") {
+                this.bar.setAttribute('x', this.width - this.bar.width + 7);
+            } else { // left
+                this.bar.setAttribute('x', -5);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_setTabSpacing" args="s">
+            this.tabspacing = s;
+            if (! _initcomplete) return;
+            this.bar.setAttribute('spacing', s);
+            this._setTabAlign(tabalign);
+        </method>
+
+        <doc>
+          <tag name="shortdesc"><text>
+              The tabs class takes tabpanes, and provides a tab for each one.
+          </text></tag>
+          <text>
+            <p>The <classname>tabs</classname> component contains a row of
+              <classname>tabs</classname> that control the visibility of a stack of
+              <sgmltag class="element" role="lz.tabpane">&lt;tabpane&gt;</sgmltag>s. When a <sgmltag class="element" role="lz.tabpane">&lt;tabpane&gt;</sgmltag>
+              is added to a <classname>tabs</classname> component, a corresponding
+              tab is created for that <sgmltag class="element" role="lz.tabpane">&lt;tabpane&gt;</sgmltag>. The text which shows up in the tab is
+              derived from the <attribute>text</attribute> attribute of the
+              <sgmltag class="element" role="lz.tabpane">&lt;tabpane&gt;</sgmltag>.</p>
+
+            <p>The <classname>tabs</classname> component will be sized
+              automatically to the largest <classname>tabpane</classname>, unless an
+              explicit <attribute>height</attribute> or <attribute>width</attribute>
+              is specified within the <tagname>tabs</tagname> tag.</p>
+
+            <example>
+              &lt;canvas height="100"&gt;
+              &lt;tabs&gt;
+              &lt;tabpane text="one"&gt;
+              &lt;button&gt;press one&lt;/button&gt;
+              &lt;/tabpane&gt;
+              &lt;tabpane text="two"&gt;
+              &lt;button&gt;press two&lt;/button&gt;
+              &lt;/tabpane&gt;
+              &lt;/tabs&gt;
+              &lt;/canvas&gt;
+            </example>
+
+              
+            <p><b>See Also:</b></p>
+
+              <ul>
+                  <li>
+                      <sgmltag class="element" role="lz.tab">&lt;tab&gt;</sgmltag>, <sgmltag class="element" role="lz.tabsbar">&lt;tabsbar&gt;</sgmltag>,
+                      <sgmltag class="element" role="lz.tabpane">&lt;tabpane&gt;</sgmltag>, <sgmltag class="element" role="lz.tabscontent">&lt;tabscontent&gt;</sgmltag>, and 
+                      <sgmltag class="element" role="lz.basetabs">&lt;basetabs&gt;</sgmltag>
+                  </li>
+    
+              </ul>
+          </text>
+        </doc>
+
+    </class> <!-- class tabs -->
+
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,68 @@
+<!--
+********************************************************
+* [[formvalidatorTest]]
+* 2005/12/21 ver.2.0.0
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp 
+********************************************************
+-->
+
+<canvas width="640">
+    <include href="incubator/validators" />
+    <include href="incubator/formlayout.lzx" />
+    
+    <validatingForm name="myform" width="100%">
+        <submit name="submit" />
+        
+        <simplelayout axis="y" spacing="10" />
+        
+        <text>name(5~20 chars):</text>
+        <stringvalidator id="sv1" required="true" minLength="5" maxLength="20">
+            <edittext name="nametext" />
+        </stringvalidator>
+
+        <text>address(5~20 chars + trim):</text>
+        <stringvalidator required="true" minLength="5" maxLength="20" trim="true">
+            <edittext name="address" />
+        </stringvalidator>
+        
+        <text>E-mail:</text>
+        <emailvalidator required="true">
+            <edittext name="email" />
+        </emailvalidator>
+        
+        <text>birthday(mm/dd/yyyy):</text>
+        <datevalidator format="mm/dd/yyyy">
+            <edittext name="birthday" />
+        </datevalidator>
+        
+        <text>birthday2(yyyy/mm/dd):</text>
+        <datevalidator format="yyyy/mm/dd">
+            <edittext name="birthday2" />
+        </datevalidator>
+        
+        <text>number(-10 ~ 100):</text>
+        <numbervalidator domain="int" minvalue="-10" maxvalue="100">
+            <edittext name="number" />
+        </numbervalidator>
+        
+        <button name="btnok" text="OK" enabled="false" onclick="setAttribute('text', 'Form Valid!')" />
+
+        <handler name="onerrorcount" args="val">
+        <![CDATA[
+            Debug.write("error changed:" + val);
+            if(0 < val)
+                this.btnok.setAttribute("enabled", false);
+            else
+                this.btnok.setAttribute("enabled", true);
+        ]]>
+        </handler>
+    </validatingForm>
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

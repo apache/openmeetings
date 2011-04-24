@@ -1,0 +1,42 @@
+<library>
+    <!--- A text subclass which allows use of text styles
+        @START_CODE
+            <styledtext text="hello" style="mytextstyle" />
+        @END_CODE
+    -->
+    <class name="styledtext" extends="text">
+        <!--- should be an object of type "textstyle" -->
+        <attribute name="style" value="null" when="once" />
+        
+        <!---  @keywords private -->
+        <method name="init">
+            <![CDATA[
+                super.init();
+                if (this.style != null)
+                    this._applystyle(this.style);
+            ]]>
+        </method>
+        
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            if (s != null) {
+                if(s['textcolor']){
+                    this.setAttribute("fgcolor", s.textcolor);
+                }
+                if(s['font']){
+                    this.setAttribute("font", s.font);
+                }
+                if(s['fontsize']){
+                    this.setAttribute("fontsize", s.fontsize);
+                }
+                if ( s['fontstyle'] ) this.setAttribute( "fontstyle", s.fontstyle );
+            }
+        </method>
+    </class>
+        
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2009 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,189 @@
+<library>
+    <!--- A bar, used in barchart.  (Of beta quality.) -->
+    <class name="databar" visible="${this.datalink.dataenabled}">
+        <!--- @keywords private
+            The dataset to which this bar is linked. -->
+        <attribute name="datalink" value="$once{null}"/>
+        <!--- If true, will display additional information about data
+            in a popup when the cursor is placed over a bar.
+            (Tooltip to be developed in a future version.) -->
+        <attribute name="tooltip" type="boolean" value="false"/>
+        <!--- Animation style for when bars appear. -->
+        <attribute name="animationinit" type="string" value=""/>
+        <!--- @keywords private
+            The real height of the bar, to be used for animations. -->
+        <attribute name="realheight" type="number" value="$once{this.height}"/>
+        <!--- @keywords private
+            The real width of the bar, to be used for animations. -->
+        <attribute name="realwidth" type="number" value="$once{this.width}"/>
+        <!--- @keywords private
+            The real y coordinate of the bar, to be used for animations. -->
+        <attribute name="realy" type="number" value="0"/>
+        <!--- @keywords private
+            The real x coordinate of the bar, to be used for animations. -->
+        <attribute name="realx" type="number" value="0"/>
+        <!--- The image to be loaded over the bar, if any. -->
+        <attribute name="dataresource" type="string" value=""/>
+        <!--- The chart's direction.  (Set here as well for easier reference.) -->
+        <attribute name="drawaxis" type="string" value="x"/>
+        <!--- The number of sibling bars. -->
+        <attribute name="siblingbars" type="number" value="0"/>
+        <!--- The space between bars. -->
+        <attribute name="barspace" type="number" value="0"/>
+        <!--- This bar's number in its series. -->
+        <attribute name="barnumber" type="number" value="0"/>
+        <!--- This bar's group's set number. -->
+        <attribute name="barset" type="number" value="0"/>
+        <!--- Total number of bar sets. -->
+        <attribute name="totalsets" type="number" value="0"/>
+        <!--- Numerical value of bar. -->
+        <attribute name="bvalue" type="number" value="0"/>
+
+        <handler name="onmouseover">
+            if(this.tooltip){
+                
+            }
+        </handler>
+        <handler name="oninit" method="initBar"/>
+        
+        <!--- Sets constraints, positioning, animation, et cetera. -->
+        <method name="initBar" args="ignore">
+            <![CDATA[
+            // Constrains width and positioning to the size and scale of
+            // the bar view.
+            if(this.drawaxis == 'x'){
+                var d = [parent, "width"];
+                this.applyConstraintMethod("__constraintAxisX_width", d);
+
+                var dd = [this, "width"];
+                this.applyConstraintMethod("__constraintAxisX_x", dd);
+
+                var ddd = [parent.classroot, "scaler"];
+                this.applyConstraintMethod("__constraintAxisX_height",  ddd);
+
+                var h = [parent, "height"];
+                this.applyConstraintMethod("__constraintAxisX_y", h);
+            } else {
+                var d = [parent, "height"];
+                this.applyConstraintMethod("__constraintAxisY_height", d);
+
+                var dd = [this, "height"];
+                this.applyConstraintMethod("__constraintAxisY_y", dd);
+
+                var ddd = [parent.classroot, "altscaler"];
+                this.applyConstraintMethod("__constraintAxisY_width", ddd);
+
+                var h = [parent, "width"];
+                this.applyConstraintMethod("__constraintAxisY_x", h);
+            }
+            // Sends bars behind labels.
+            this.sendBehind(parent.subnodes[2]);
+            if(this.dataresource){
+                this.setSource(this.dataresource);
+            }
+            this.setAttribute('realx', this.x);
+            this.setAttribute('realy', this.y);
+            // Performs animation if set.
+            if(this.animationinit && !parent.anicomplete){
+                if(animationinit == "fadein"){
+                    this.fadein.doStart();
+                }
+                if(animationinit == "growdown"){
+                    this.growdown.doStart();
+                }
+                if(animationinit == "unblink"){
+                    this.unblink.doStart();
+                }
+                if(animationinit == "rain"){
+                    this.rain.doStart();
+                }
+                if(animationinit == "slideover"){
+                    this.slideover.doStart();
+                }
+            }
+            ]]>
+        </method>
+        
+        <method name="__constraintAxisX_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", ((this.barnumber * this.totalsets) *
+                (this.width + this.barspace)) + ((this.width + this.barspace) *
+                this.barset));
+        ]]></method>
+        
+        <method name="__constraintAxisX_y" args="ignore" ><![CDATA[
+            if(this.bvalue < 0){
+                this.setAttribute("y", parent.height - (Math.abs(parent.classroot.minimum) * parent.classroot.scaler));
+            } else {
+                this.setAttribute("y", parent.height - (Math.abs(parent.classroot.minimum) * parent.classroot.scaler) -
+                    this.height - (parent.classroot.zerowidth / 2));
+            }
+        ]]></method>
+        
+        <method name="__constraintAxisX_width" args="ignore" ><![CDATA[
+            this.setAttribute("width",
+                (parent.width / this.siblingbars) - this.barspace);
+        ]]></method>
+        
+        <method name="__constraintAxisX_height" args="ignore" ><![CDATA[
+            this.setAttribute("height", Math.abs(this.bvalue) * parent.classroot.scaler);
+        ]]></method>
+        
+        <method name="__constraintAxisY_x" args="ignore" ><![CDATA[
+            this.setAttribute("x", (Math.abs(parent.classroot.minimum) * parent.classroot.altscaler) -
+                (parent.classroot.zerowidth / 2) - (this.bvalue < 0 ? this.width : 0));
+        ]]></method>
+        
+        <method name="__constraintAxisY_y" args="ignore" ><![CDATA[
+            this.setAttribute("y", ((this.barnumber * this.totalsets) *
+                (this.height + this.barspace)) + ((this.height + this.barspace) *
+                this.barset));
+        ]]></method>
+        
+        <method name="__constraintAxisY_width" args="ignore" ><![CDATA[
+            this.setAttribute("width", Math.abs(this.bvalue) * parent.classroot.altscaler);
+        ]]></method>
+        
+        <method name="__constraintAxisY_height" args="ignore" ><![CDATA[
+            this.setAttribute("height",
+                (parent.height / this.siblingbars) - this.barspace);
+        ]]></method>
+
+        <!--- Animations for bars.  Can easily be extended in the future to include
+            different animations for a greater range of visual awesomeness. -->
+        <!--- Fades the bars in. -->
+        <animator name="fadein" attribute="opacity" from="0" to="1" duration="5000"
+            start="false"/>
+        <!--- Starts at the top of the bar and grows down to zero. -->
+        <animator name="growdown" attribute="${parent.drawaxis == 'x' ? 'height' :
+            'width'}" from="0" to="${parent.drawaxis == 'x' ? parent.realheight :
+            parent.realwidth}"
+            duration="5000" start="false"/>
+        <!--- Width of the bar starts at zero and expands to full width. -->
+        <animator name="unblink" attribute="${parent.drawaxis == 'x' ? 'width' :
+            'height'}" from="0" to="${parent.drawaxis == 'x' ? parent.realwidth :
+            parent.realheight}" duration="5000" start="false"/>
+        <!--- Bars rain down from random heights, landing at zero. -->
+        <animator name="rain" attribute="${parent.drawaxis == 'x' ? 'y' : 'x'}"
+            from="${Math.random(1, 10) * 100}"
+            to="${parent.drawaxis == 'x' ? parent.realy : parent.realx}"
+            duration="${Math.random(1, 10) * 10000}" start="false"/>
+        <!--- Bars slide into the plot area from the left of the screen if drawaxis
+            is x, or from the top of the screen if drawaxis is y. -->
+        <animator name="slideover" attribute="${parent.drawaxis == 'x' ? 'x' : 'y'}"
+            from="-100" to="${parent.drawaxis == 'x' ? parent.realx : parent.realy}"
+            duration="5000" start="false"/>
+            
+        <doc>
+            <tag name="shortdesc">
+                <text>
+                    (See barchart for an example.)
+                </text>
+            </tag>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2008 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

@@ -1,0 +1,269 @@
+<library>
+    <class name="basegridcolumn" extends="basecomponent">
+
+        <!--- By default, the text of this element is the column's datapath.-->
+        <attribute name="text" type="text" 
+                   value="$once{ this.datapath? this.datapath.xpath : '' }"/>
+
+        <!--- The minimum width for this column. This is relevant if the column
+              can be resized. -->
+        <attribute name="minwidth" value="10" type="number"/>
+        <!--- @keywords private -->
+        <attribute name="_contentsPackage" value="null"/>
+        <!--- The current width of the column. -->
+        <attribute name="colwidth" value="${this.width}"/>
+            
+        <!--- If true, the next sort will be ascending, otherwise it will
+              be descending.-->
+        <attribute name="ascendsort" value="true" />
+
+        <!--- @keywords private -->
+        <attribute name="defaultplacement" type="string" value="content"/>
+        <!--- @keywords private -->
+        <attribute name="placement" value="hcontent" />
+
+        <!--- An xpath expression to use to determine the sort key for this
+              column. By default, this is the column's datapath's xpath. -->
+        <attribute name="sortpath" value="" type="string"/>
+
+        <!--- Either "number" or "string". If "string", then dictionary sort
+              is used. If "number", then types are coerced to a number before
+              sorting. -->
+        <attribute name="datatype" value="string" type="string"/>
+
+        <!--- An optional method. If defined, this method will be used when 
+              the column is sorted when ascendsort is set to true. This method
+              should have the comparator signature. It should accept to string
+              argument and return 1, 0 , or -1, indicating that the two
+              arguments are in order, equivalent, or out of order,
+              respectively. -->
+        <attribute name="ascendComparator" value="null" />
+
+        <!--- An optional method. If defined, this method will be used when 
+              the column is sorted when ascendsort is set to false. This method
+              should have the comparator signature. It should accept to string
+              argument and return 1, 0 , or -1, indicating that the two
+              arguments are in order, equivalent, or out of order,
+              respectively. -->
+        <attribute name="descendComparator" value="null" />
+
+        <!--- Set by <code>doSort()</code> method. If true, then this is the current
+              sort column.
+              @keywords readonly -->
+        <attribute name="hasSort" value="false" type="boolean"/>
+        <!--- @keywords private -->
+        <attribute name="focusable" value="false" />
+        <!--- @keywords private -->
+        <attribute name="_lineColor" value="black" type="color"/>
+        <!--- @keywords private -->
+        <method name="_applystyle" args="s">
+            this.setAttribute( '_lineColor' , s.bordercolor );
+        </method>
+
+        <!--- @keywords private -->
+        <method name="determinePlacement" args="v, p, args">
+            if ( p == "content" ){
+                if ( !_contentsPackage ){
+                    this._contentsPackage = [];
+                }
+
+                var a = {};
+                //need to make a new object here, to make sure that we're not
+                //(later) assigning to the class attribute
+                for ( var k in v._instanceAttrs ){
+                    a[ k ] = v._instanceAttrs[ k ];
+                }
+
+                var o = { 'class':  v.constructor, attrs: a };
+
+                if ( typeof( v._instanceChildren ) != "undefined" ){
+                    o.children = v._instanceChildren;
+                }
+                this._contentsPackage.push( o );
+                                        
+                //sadly, we really don't need this
+                v.destroy();
+                return this;
+            } else if ( p == "header" ){
+                return this;
+            } else if ( p == "gridcontent" ){
+                return parent.content;
+            } else {
+                return super.determinePlacement(v, p, args);
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_getCellForColumn">
+            if ( !this._contentsPackage ) return null;
+            
+            var fupdCellBounds = function(ignore=null) {
+                //'this' points to the grid cell
+                this.setAttribute('x', this.ownerColumn.x );
+                this.setAttribute('width', this.ownerColumn.colwidth );
+            };
+            
+            var contentspkg = this._contentsPackage;
+            if ( contentspkg.length == 1 ) {
+                var o = contentspkg[ 0 ];
+                var cellargs = o.attrs;
+                cellargs.ownerColumn = this;
+                cellargs._updateCellBounds = fupdCellBounds;
+                return o;
+            } else {
+                //there's more than one subview, so we need to pack them up
+                return { 'class':  lz.view,
+                         attrs:    {ownerColumn: this, _updateCellBounds: fupdCellBounds},
+                         children: contentspkg };
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_inferSortpath">
+            <![CDATA[ 
+            if ( !_contentsPackage ) return "";
+
+            for ( var i = 0; i < _contentsPackage.length; i++ ){
+                var attrs = _contentsPackage[ i ].attrs; 
+                if ( attrs[ 'datapath' ]  != null ){
+                    return attrs.datapath;
+                }
+            }
+            return "";
+
+            ]]>
+        </method>
+
+        <!--- Sorts the grid on the current column using the column's sortpath
+              and ascendsort arguments. -->
+        <method name="doSort"><![CDATA[
+            if ( this.sortpath == "" ) return;
+            var repl = this.parent._getReplicator();
+            if (repl != null && repl is LzReplicationManager) {
+                repl.setOrder( this.sortpath , this._getSortorderArg() );
+            }
+            this.setAttribute( "ascendsort" , !this.ascendsort );
+            this.parent._setSortCol( this );
+        ]]></method>
+
+        <!--- @keywords private -->
+        <method name="init">
+            if ( this.sortpath == "" ){
+                this.setAttribute( 'sortpath' , this._inferSortpath() );
+            }
+            super.init();
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_getSortorderArg">
+            if ( this.ascendsort ){
+                if ( this.ascendComparator ){
+                    // Debug.write( this.ascendComparator);
+                    return this.ascendComparator;
+                } else if ( this.datatype == "number" ){
+                    return this._numericAscendingSort;
+                } else {
+                    return "ascending";
+                }
+            } else {
+                if ( this.descendComparator ){
+                    return this.descendComparator;
+                } else if ( this.datatype == "number" ){
+                    return this._numericDescendingSort;
+                } else {
+                    return "descending";
+                }
+            }
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_numericAscendingSort" args="a,b">
+            <![CDATA[  
+            var x = Number( a );
+            var y = Number( b );
+
+            //if a variable is NaN, then it won't equal itself
+            var xisnum = x == x;
+            var yisnum = y == y;
+
+            if ( xisnum == yisnum ){
+                if ( !xisnum ){
+                    x = a;
+                    y = b;
+                }
+                if ( x < y ){
+                    return 1;
+                } else if ( x == y ){
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else if ( xisnum ){
+                return 1;
+            } else {
+                return -1;
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <method name="_numericDescendingSort" args="a,b">
+            <![CDATA[  
+            var x = Number( a );
+            var y = Number( b );
+
+            //if a variable is NaN, then it won't equal itself
+            var xisnum = x == x;
+            var yisnum = y == y;
+
+            if ( xisnum == yisnum ){
+                if ( !xisnum ){
+                    x = a;
+                    y = b;
+                }
+                if ( x > y ){
+                    return 1;
+                } else if ( x == y ){
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else if ( yisnum ){
+                return 1;
+            } else {
+                return -1;
+            }
+            ]]>
+        </method>
+
+        <!--- @keywords private -->
+        <state applied="${parent.parent.showvlines}">
+            <view bgcolor="${parent._lineColor}" width="1" 
+                  x="${parent.x + parent.colwidth + parent.immediateparent.x}" 
+                  height="${immediateparent.height}"
+                  placement="gridcontent"
+                  oninit="this.sendInFrontOf( immediateparent.rowparent )"
+                  options="ignorelayout"/>
+        </state>
+
+        <doc>
+          <tag name="shortdesc"><text>An abstract column in a grid.</text></tag>
+          <text>
+            <p><classname>basegridcolumn</classname> can be used in
+            <classname>basegrid</classname>s or <classname>grid</classname>s to
+            customize the look of both the column header and the row contents for
+            that column. In cases where a standard column header look is desired,
+            but the contents may vary, use <classname>gridcolumn</classname>.</p>
+            
+            <p>The placement of "header" can be used to place nodes in the header
+            of the grid, and the default placement for the class will place things
+            in the row. See the example in <classname>basegrid</classname>.</p>
+          </text>
+        </doc>
+    </class>
+</library>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2001-2009 Laszlo Systems, Inc.  All Rights Reserved.              *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

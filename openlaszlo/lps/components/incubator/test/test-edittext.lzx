@@ -1,0 +1,71 @@
+<canvas debug="true" width="1000" height="500">
+
+    <debug x="160" y="0" height="600" width="500" />
+
+    <include href="incubator/lzedittext.lzx" />
+    <include href="incubator/scrolledittext.lzx" />
+    <include href="lz/vscrollbar.lzx" />
+    <include href="incubator/newvscrollbar.lzx" />
+
+    <constantlayout axis="x" value="40" />
+    <simplelayout spacing="10" inset="20" />
+
+    <dataset name="mydset">
+        <value text="datapath text test" />
+    </dataset>
+
+    <dataset name="mydset2">
+        <value text="datapath text test datapath text test datapath text test datapath text testdatapath text test datapath text test" />
+    </dataset>
+
+    <lzedittext id="et1" pattern="[0-9]*" maxlength="2" width="35">
+        <handler name="onchanged">
+            Debug.write('onchanged', this, this.changed);
+        </handler>
+    </lzedittext>
+
+    <lzedittext id="et2">
+        <handler name="onvalue">
+            Debug.write('onvalue', this, this.value);
+        </handler>
+        <handler name="onchanged">
+            Debug.write('onchanged', this, this.changed);
+        </handler>
+    </lzedittext>
+
+    <lzedittext id="et3" password="true">
+        <handler name="onchanged">
+            Debug.write('onchanged', this, this.changed);
+        </handler>
+    </lzedittext>
+
+    <lzedittext id="et4" datapath="mydset:/value/@text">
+        <handler name="onvalue">
+            Debug.write('onvalue', this, this.value);
+        </handler>
+        <handler name="onchanged">
+            Debug.write('onchanged', this, this.changed);
+        </handler>
+    </lzedittext>
+
+    <text>multiline lzedittext</text>
+    <lzedittext id="et5" multiline="true" width="100" height="75"/>
+
+    <text>scrolledittext</text>
+    <style name="scrollbar_style" basecolor="0xDDDEEB"  />
+    <scrolledittext id="et6"  datapath="mydset2:/value/@text"
+                    width="100" height="75" 
+                    bgcolor="black" border="1" />
+
+    <text>scrolledittext (new lz.vscrollbar)</text>
+    <scrolledittext id="et7" datapath="mydset2:/value/@text"
+                    width="100" height="75" 
+                    bgcolor="black" border="1" 
+                    vscrollbarclassname="newvscrollbar" />
+
+</canvas>
+<!-- * X_LZ_COPYRIGHT_BEGIN ***************************************************
+* Copyright 2006, 2008 Laszlo Systems, Inc. All Rights Reserved.                    *
+* Use is subject to license terms.                                            *
+* X_LZ_COPYRIGHT_END ****************************************************** -->
+<!-- @LZX_VERSION@                                                         -->

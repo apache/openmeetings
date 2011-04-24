@@ -1,0 +1,134 @@
+<library>
+<!---
+   
+    @copyright Copyright 2001-2010 Laszlo Systems, Inc.  All Rights Reserved.
+               Use is subject to license terms.
+   
+    @affects lzcommand
+    @access public
+    @topic LFC
+    @subtopic Views
+    @devnote A command is an object that sends an event in response to keyboard input.
+  -->
+
+<class name="command" extends="node">
+    <doc>
+        <tag name="shortdesc"><text>An element that sends events in response to keyboard input.</text></tag>
+        <text>
+            <example class="program" id="command-1">
+            &lt;canvas height="130" debug="true"&gt;
+            &lt;command onselect="Debug.debug('the enter key was pressed');" 
+                        key="['Enter']" /&gt;
+            
+            &lt;/canvas&gt;
+            </example>
+            
+            <p>Sample applications that use the <tagname>command</tagname> tag:</p>
+            <ul>
+                <li> <a href="${demos}weather/weather.lzx">Weather</a></li>
+            
+            </ul>
+            Also, see <link linkend="LzKeysService.LzKeys">lz.KeysService.LzKeys</link>.
+        </text>
+    </doc>
+
+<!---
+    true if the command is currently active.
+    The default is <i>true</i>.
+    @type Boolean
+  -->
+<attribute name="active" type="boolean" value="true"/>
+
+<!--- array of keys (strings) that, when pressed together,
+    cause the onselect event of the command to be sent. For example:
+    setAttribute('key', ['a', 'shift'])
+    @type [String]
+  -->
+<attribute name="keys" value="null"/>
+
+<!---
+  WTF?  See LPP-4982, LPP-7814
+  Necessary to add "key" to the schema
+  @access private
+-->
+<attribute name="key"/>
+
+<!--- @access private -->
+<setter name="key" args="k">
+    var oldKeys = this.keys;
+    if (oldKeys) {
+      lz.Keys.removeKeyComboCall(this, oldKeys);
+    }
+    // WTF?  See LPP-4982, LPP-7814
+    this.keys = k;
+    if (k) {
+      lz.Keys.callOnKeyCombo( this , k );
+    }
+</setter>
+
+<!--- @access private -->
+<method name="destroy">
+    var oldKeys = this.keys;
+    if (oldKeys) {
+      lz.Keys.removeKeyComboCall(this, oldKeys);
+    }
+    super.destroy();
+</method>
+
+<!---
+    If the command is active, this event is sent
+    when the keys array are pressed simultaneously.
+    @lzxtype event
+  -->
+<event name="onselect"/>
+
+<!---
+    This registers the given key array so that the command is executed when the
+    key array is pressed.
+    @param [String] k: An array of keys, given as strings. 
+    @deprecated Use setAttribute('key', ...) instead.
+  -->
+<method name="setKeys" args="k">
+    if ($debug) Debug.deprecated(this, arguments.callee, this.setAttribute);
+    this.$lzc$set_key(k);
+</method>
+
+<!---
+    Sends the command's onselect event.
+    @param any d: this optional parameter is passed to the onselect event
+  -->
+<method name="execute" args="d">
+    if ( this.active ){
+        if (this.onselect.ready) this.onselect.sendEvent( d );
+    }
+</method>
+
+<!---
+ * Mapping from key names to display strings used by keysToString
+ * @type Dictionary
+ * @keywords read-only
+ -->
+<attribute name="DisplayKeys" allocation="class" value="{control:'Ctrl', shift:'Shift', alt:'Alt'}"/>
+
+<!---
+    This is a utility method that returns a string that describes the key 
+    combination that causes this command to be invoked.
+    
+    @return String: A string containing the key combination that causes this
+    command to be invoked.
+  -->
+<method name="keysToString"><![CDATA[
+  function map (a, f) {
+    var len = a.length;
+    var ret = new Array(len);
+    for (var i = 0; i < len; ++i) {
+      ret[i] = f(a[i]);
+    }
+    return ret;
+  }
+
+  var dk = lz.command.DisplayKeys;
+  return map(this.keys || [], function (k) { return (dk[k] || k) }).join("+");
+]]></method>
+</class>
+</library>

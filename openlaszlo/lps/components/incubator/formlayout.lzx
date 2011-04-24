@@ -1,0 +1,124 @@
+<!--
+********************************************************
+* [[validators/validatingForm]]
+* 2005/11/06 ver.1.0.
+* togawa manabu
+* web:http://laszlo.jp
+* mail:webmaster@laszlo.jp
+********************************************************
+-->
+<library>
+<class name="formlayout" extends="layout" >
+    <!--- The axis in which this layout operates. One of 'x' or 'y'. -->
+    <attribute name="axis" value="y" setter="this.setAxis( axis )" 
+               type="string" />    
+    
+    <!--- A pixel amount to inset the first view controlled by the layout-->
+    <attribute name="inset" value="0"
+        setter="this.inset = inset;
+               if( this.subviews.length ) this.update();
+               if (this['oninset']) this.oninset.sendEvent(this.inset)"/>
+
+    <!--- A pixel amount to use between each view in the layout -->
+    <attribute name="spacing" value="0"
+               setter="this.spacing = spacing;
+                      if( this.subviews.length ) this.update();
+                      if (this['onspacing']) this.onspacing.sendEvent(this.spacing)"/>
+
+    <!-- align. it is able to set right or left. default=left -->
+    <attribute name="align" type="string" value="left" setter="this.align = align; 
+                        if( this.subviews.length ) this.update()"/>
+    
+    <!-- @keywords private -->
+    <attribute name="maxwidth" value="0" />
+    
+    <!-- @keywords private -->
+    <attribute name="counter" value="0" />
+
+    <!-- @keywords private -->
+    <method name="setMaxwidth" args="width">
+        if ( this.maxwidth &lt; width )
+            this.maxwidth=width;
+    </method>
+
+    <!--- @keywords private -->
+    <method name="setAxis" args="a" >
+        this.axis = a;
+        this.sizeAxis = a == "x" ? "width" : "height"
+    </method>
+
+    <!--- @keywords private -->
+    <method name="addSubview" args="newsub">
+        this.updateDelegate.register( newsub,  "on" + this.sizeAxis);
+        this.updateDelegate.register( newsub,  "onvisible" );
+        //this is an optimization to avoid calling update in the simple case
+        //where a single subview was just added
+        if ( ! this.locked &amp;&amp; this.subviews.length ){
+            var s= this.subviews[ this.subviews.length-1 ];
+            var p =  s[ this.axis ] + s[ this.sizeAxis ] + this.spacing;
+            newsub.setAttribute( this.axis , p  ) ;
+        }
+
+        this.counter += 1;
+        if( this.counter % 2 == 1 )
+            setMaxwidth(newsub["width"]);
+
+        super.addSubview( newsub );
+    </method>
+
+    <!--- This method is usually called automatically when any of the views
+          controlled by the layout change their size in the layout axis, or
+          their visibility. However it can be called directly to force the
+          layout to update -->
+    <method name="update" args="v=null">
+        <![CDATA[
+        if ( this.locked ) return;
+        var l = this.subviews.length;
+        var c = this.inset;
+        var height = 0;
+
+        for(var i=0; i < l; i++) {
+            var s = this.subviews[i]; 
+            if ( !s.visible ) continue;
+            
+            //edittext
+            if( i % 2 == 1 ){
+                var x = this.maxwidth + (this.spacing * 2);
+                if ( s[ "x" ] != x ){
+                    s.setAttribute( "x" , x );
+                }
+            
+                if ( s[ "y" ] != c ){
+                    s.setAttribute( "y" , c);
+                }
+
+                if( height < s["height"] ) height = s["height"];
+                c += this.spacing + height;
+            
+            //title
+            }else{
+                if( this.align == "right" )
+                    var x = this.maxwidth - s[ "width" ] + this.spacing;
+                else
+                    var x = this.spacing;
+
+                if ( s[ "x" ] != x ){
+                    s.setAttribute( "x" , x );
+                }
+
+                if ( s[ "y" ] != c ){
+                    s.setAttribute( "y" , c );
+                }
+                
+                height=s[ "height" ];
+            }
+        }
+        ]]>
+    </method>
+</class>
+</library>
+<!-- * formlayout.lzx  ***************************************************
+* Copyright 2005, 2008 Laszlo-Japan. togawa manabu  All Rights Reserved.        *
+* Use is subject to license terms.                                        *
+* ************************************************************************ -->
+<!-- @LZX_VERSION@                                                         -->
