@@ -27,5 +27,7 @@
     <property name="isClosed" type="boolean" column="is_closed"/>
     <property name="redirectURL" type="string" column="redirect_url"/>
     <property name="ownerId" type="long" column="owner_id"/>
+    <property name="waitForRecording" type="boolean" column="wait_for_recording"/>
+    <property name="allowRecording" type="boolean" column="allow_recording"/>
   </class>
 </hibernate-mapping>

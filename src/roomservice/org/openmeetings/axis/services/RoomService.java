@@ -632,7 +632,8 @@ public class RoomService {
 	                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
 	                                                        numberOfPartizipants, ispublic, null,
 	                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-	                                                    	externalRoomId, externalRoomType, true, false, false, "");
+	                                                    	externalRoomId, externalRoomType, true, false, false, "",
+	                                                    	false, true);
 				} else {
 					roomId = room.getRooms_id();
 				}
@@ -784,7 +785,8 @@ public class RoomService {
 			return Roommanagement.getInstance().addExternalRoom(user_level, name,
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, true, false, false, "");
+					null, null, externalRoomType, true, false, false, "",
+					false, true);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -803,7 +805,29 @@ public class RoomService {
 			return Roommanagement.getInstance().addExternalRoom(user_level, name,
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "");
+					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+					false, true);
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+		}
+		return new Long(-1);
+	}
+	
+	public Long addRoomWithModerationAndRecordingFlags(String SID, String name,
+			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
+			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
+			Boolean allowUserQuestions, Boolean isAudioOnly, 
+			Boolean waitForRecording, Boolean allowRecording) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			return Roommanagement.getInstance().addExternalRoom(user_level, name,
+					roomtypes_id, comment, numberOfPartizipants, ispublic,
+					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+					waitForRecording, allowRecording);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -1244,7 +1268,8 @@ public class RoomService {
 						false, //allowUserQuestions
 						false, //isAudioOnly
 						false, //isClosed
-						redirectURL);
+						redirectURL,
+						false, true);
 		    	
 		    	if (rooms_id <= 0) {
 		    		return rooms_id;

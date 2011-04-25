@@ -962,7 +962,9 @@ public class Roommanagement {
                         Boolean allowUserQuestions,
                         Boolean isAudioOnly,
                         Boolean isClosed,
-                        String redirectURL){
+                        String redirectURL,
+                        Boolean waitForRecording,
+                        Boolean allowRecording){
 
                 log.debug("addExternalRoom");
 
@@ -993,6 +995,9 @@ public class Roommanagement {
 								
 								r.setIsClosed(isClosed);
 								r.setRedirectURL(redirectURL);
+								
+								r.setWaitForRecording(waitForRecording);
+								r.setAllowRecording(allowRecording);
 
                                 Object idf = HibernateUtil.createSession();
                                 Session session = HibernateUtil.getSession();

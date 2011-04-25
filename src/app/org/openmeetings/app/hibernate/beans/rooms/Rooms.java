@@ -70,6 +70,8 @@ public class Rooms {
 	private String redirectURL;
 	
 	private Long ownerId; //Those are the rooms from the myrooms section
+	private Boolean waitForRecording; //Show warning that user has to start recording
+	private Boolean allowRecording; //Show or show not the recording option in a conference room
     
     /**
      * @hibernate.property
@@ -527,6 +529,32 @@ public class Rooms {
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
+	
+	/**
+     * @hibernate.property
+     *  column="wait_for_recording"
+     *  type="boolean"
+     */
+	public Boolean getWaitForRecording() {
+		return waitForRecording;
+	}
+	public void setWaitForRecording(Boolean waitForRecording) {
+		this.waitForRecording = waitForRecording;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="allow_recording"
+     *  type="boolean"
+     */
+	public Boolean getAllowRecording() {
+		return allowRecording;
+	}
+	public void setAllowRecording(Boolean allowRecording) {
+		this.allowRecording = allowRecording;
+	}
+	
+	
 	
     
 }
