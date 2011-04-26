@@ -7,6 +7,6 @@
     <include href="fixedFileExplorerWhiteBoard.lzx" />
     <include href="fixedFileExplorerWhiteboardPanel.lzx" />
     <include href="whiteboardMiniButton.lzx" />
-    <include href="whiteboardBarmenu.lzx" />
+    <include href="whiteboardBarMenu.lzx" />
 
 </library>
