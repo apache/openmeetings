@@ -4022,4 +4022,10 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1314" name="whiteboard load WML">
     <value>Load to whiteboard</value>
   </string>
+  <string id="1315" name="recording flag">
+    <value>Recording is not yet started</value>
+  </string>
+  <string id="1316" name="recording flag">
+    <value>Start Recording</value>
+  </string>
 </language>
