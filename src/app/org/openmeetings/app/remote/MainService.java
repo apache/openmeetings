@@ -468,6 +468,9 @@ public class MainService implements IPendingServiceCallback {
 				Sessionmanagement.getInstance().updateUser(SID, currentClient.getUser_id());
 			}
 			
+			currentClient.setAllowRecording(soapLogin.getAllowRecording());
+			this.clientListManager.updateClientByStreamId(streamId, currentClient);
+			
 			if (loginReturn == null) {
 				
 				log.debug("loginReturn IS NULL for SID: "+soapLogin.getSessionHash());

@@ -148,6 +148,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 	
 	public Long organization_id = 0L;
 	public Long user_id = null;
+	public Boolean allowRecording = true;
 	
 	public boolean startRecording = false;
 	public boolean stopRecording = false;
@@ -205,7 +206,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 		try {
 			instance = new ScreenShareRTMPT();
 	
-			if (args.length == 8) {
+			if (args.length == 9) {
 				
 				
 				instance.host = args[0];
@@ -220,6 +221,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 
                 instance.defaultQualityScreensharing = Integer.parseInt(args[6]);
                 instance.user_id =  Long.parseLong(args[7]);
+                instance.allowRecording =  Boolean.parseBoolean(args[8]);
 				
 				if (labelTexts.length() > 0) {
 					String[] textArray = labelTexts.split(";");
@@ -375,35 +377,39 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 			contentPane.add(textAreaHeaderRecordingDescr);
 			textAreaHeaderRecordingDescr.setBounds(10, 360, 480, 54);
 			
-			//*****
-			//Start Button Recording
-			startButtonRecording = new JButton( this.label871, start_btn );
-			startButtonRecording.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					startRecording = true;
-					startStreaming = false;
-					captureScreenStart();
-				}
-			});
-			startButtonRecording.setBounds(30, 420, 200, 32);
-			t.add(startButtonRecording);
+			if (instance.allowRecording) {
 			
-			//*****
-			//Stop Button Recording
-			stopButtonRecording = new JButton( this.label872, stop_btn );
-			stopButtonRecording.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					stopRecording = true;
-					stopStreaming = false;
-					captureScreenStop();
-				}
-			});
-			stopButtonRecording.setBounds(290, 420, 200, 32);
-			stopButtonRecording.setEnabled(false);
-			t.add(stopButtonRecording);
-			
+				//*****
+				//Start Button Recording
+				startButtonRecording = new JButton( this.label871, start_btn );
+				startButtonRecording.addActionListener( new ActionListener(){
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						startRecording = true;
+						startStreaming = false;
+						captureScreenStart();
+					}
+				});
+				startButtonRecording.setBounds(30, 420, 200, 32);
+				t.add(startButtonRecording);
+				
+				//*****
+				//Stop Button Recording
+				stopButtonRecording = new JButton( this.label872, stop_btn );
+				stopButtonRecording.addActionListener( new ActionListener(){
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						stopRecording = true;
+						stopStreaming = false;
+						captureScreenStop();
+					}
+				});
+				stopButtonRecording.setBounds(290, 420, 200, 32);
+				stopButtonRecording.setEnabled(false);
+				t.add(stopButtonRecording);
+				
+			}
+				
 			//*****
 			//Text Warning
 			textWarningArea = new JLabel();

@@ -304,6 +304,13 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 								return null;
 							}
 							ctx.put("port", port);
+							
+							String allowRecording = httpServletRequest.getParameter("allowRecording");
+							if (allowRecording == null) {
+								new Exception("allowRecording is empty: ");
+								return null;
+							}
+							ctx.put("allowRecording", allowRecording);
 						    
 						}
 						else
