@@ -357,6 +357,8 @@
 					
 					//Somehow this leads to a bug in the implementation of the secure User Login
 					canvas.setAttribute('user_id',value.user_id);
+					
+					canvas.setAttribute('allowRecording',value.allowRecording);
                     
                     canvas.setAttribute('firstName',value.firstname);
                     canvas.setAttribute('lastName',value.lastname);
