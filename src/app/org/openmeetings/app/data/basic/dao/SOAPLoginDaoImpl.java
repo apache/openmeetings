@@ -35,7 +35,8 @@ public class SOAPLoginDaoImpl {
 	public String addSOAPLogin(String sessionHash, Long room_id, 
 				boolean becomemoderator, boolean showAudioVideoTest,
 				boolean allowSameURLMultipleTimes, Long recording_id,
-				boolean showNickNameDialog, String landingZone) {
+				boolean showNickNameDialog, String landingZone, 
+				boolean allowRecording) {
 		try {
 			
 			String thistime = "TIME_"+(new Date().getTime());
@@ -58,6 +59,7 @@ public class SOAPLoginDaoImpl {
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);
 			soapLogin.setShowNickNameDialog(showNickNameDialog);
 			soapLogin.setLandingZone(landingZone);
+			soapLogin.setAllowRecording(allowRecording);
 
 			Long soapLoginId = (Long) session.save(soapLogin);
 
