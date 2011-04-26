@@ -150,6 +150,8 @@ public class RoomClient {
     
     //Session values for handling the Interviwe Room Type
     private Integer interviewPodId = null;
+    
+    private Boolean allowRecording = true;
 	
 	/*
 	 * Zombie Flag
@@ -693,5 +695,14 @@ public class RoomClient {
 	public void setCanRemote(Boolean canRemote) {
 		this.canRemote = canRemote;
 	}
+
+	public Boolean getAllowRecording() {
+		return allowRecording;
+	}
+
+	public void setAllowRecording(Boolean allowRecording) {
+		this.allowRecording = allowRecording;
+	}
+	
 	
 }

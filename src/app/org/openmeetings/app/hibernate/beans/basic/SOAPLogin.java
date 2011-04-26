@@ -23,6 +23,7 @@ public class SOAPLogin {
 	private String clientURL;
 	private Long roomRecordingId;
 	private String landingZone;
+	private Boolean allowRecording;
 	
 	/**
      * 
@@ -191,6 +192,18 @@ public class SOAPLogin {
 	}
 	public void setLandingZone(String landingZone) {
 		this.landingZone = landingZone;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="allow_recording"
+     *  type="boolean"
+     */
+	public Boolean getAllowRecording() {
+		return allowRecording;
+	}
+	public void setAllowRecording(Boolean allowRecording) {
+		this.allowRecording = allowRecording;
 	}
 	
 }
