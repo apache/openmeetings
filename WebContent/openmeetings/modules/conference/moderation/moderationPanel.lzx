@@ -95,6 +95,7 @@
                 +'&sid='+canvas.sessionId
                 +'&red5httpport='+canvas.red5httpport
                 +'&connectionType='+canvas.thishib.protocollName
+                +'&allowRecording='+canvas.allowRecording
                 +'&port='+canvas.thishib.protocollPort
                 +'&publicSID='+canvas.publicSID
                 +'&httpRootKey='+canvas.httpRootKey

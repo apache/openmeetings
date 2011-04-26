@@ -129,6 +129,7 @@
                     +canvas.httpRootKey+'ScreenRequestHandler?'
                     +'rtmphostlocal='+canvas.rtmphostlocal
                     +'&room='+hib.currentroomid
+                    +'&allowRecording='+canvas.allowRecording
                     +'&domain='+hib.conferencedomain
                     +'&sid='+canvas.sessionId
                     +'&red5httpport='+canvas.red5httpport;

@@ -183,6 +183,7 @@ setNewSource
                 +canvas.httpRootKey+'ScreenRequestHandler?'
                 +'rtmphostlocal='+canvas.rtmphostlocal
                 +'&httpRootKey='+canvas.httpRootKey
+                +'&allowRecording='+canvas.allowRecording
                 +'&room='+hib.currentroomid
                 +'&domain='+hib.conferencedomain
                 +'&sid='+canvas.sessionId

@@ -130,18 +130,36 @@
     
     
     <method name="checkForApplyScreen">
-            <![CDATA[
-                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                    +canvas.httpRootKey+'ScreenRequestHandler?'
-                    +'rtmphostlocal='+canvas.rtmphostlocal
-                    +'&room='+hib.currentroomid
-                    +'&domain='+hib.conferencedomain
-                    +'&sid='+canvas.sessionId
-                    +'&red5httpport='+canvas.red5httpport;
+        <![CDATA[
+            var organisation_id = 1;
+        
+            if ($debug) Debug.write(hib.userobject); 
+            if ($debug) Debug.write(hib.currentdomainObj); 
+            
+            if (hib.currentdomainObj != null) {
+                organisation_id = hib.currentdomainObj.organisation_id
+            }
+        
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                +canvas.httpRootKey+'ScreenRequestHandler?'
+                +'rtmphostlocal='+canvas.rtmphostlocal
+                +'&room='+hib.currentroomid
+                +'&domain='+hib.conferencedomain
+                +'&organization_id='+organisation_id
+                +'&sid='+canvas.sessionId
+                +'&red5httpport='+canvas.red5httpport
+                +'&connectionType='+canvas.thishib.protocollName
+                +'&allowRecording='+canvas.allowRecording
+                +'&port='+canvas.thishib.protocollPort
+                +'&publicSID='+canvas.publicSID
+                +'&httpRootKey='+canvas.httpRootKey
+                +'&languageAsString='+hib.userlang
+                +'&record='+record;
 
-                //Debug.write(downloadurl); 
-                lz.Browser.loadURL(downloadurl,'_blank');    
-            ]]>        
+            if ($debug) Debug.write(downloadurl); 
+            lz.Browser.loadURL(downloadurl,'_blank');  
+
+        ]]>        
     </method> 
     
     <handler name="onmousedown" >
