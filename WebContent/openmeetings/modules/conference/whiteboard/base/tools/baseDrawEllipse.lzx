@@ -13,7 +13,7 @@
     <attribute name="currentellipsestrokeFillDis" value="1" type="number" />
     <attribute name="currentellipselineWidth" value="4" />
     <attribute name="currentellipseOpacity" value="1" type="number" />
-      
+  
     <!-- ################
     Ellipse
      -->
@@ -46,6 +46,13 @@
                 y = this.endy;
                 height = Math.abs(height);
             }
+            
+            if(this.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            } 
             
             this.currentlayer = new lz.drawViewNew(this,{
                 name:tmpName,x:x,y:y,width:width,height:height,

@@ -91,29 +91,50 @@
             if (this.basetempactionobjectList[eg][2]>maxy) maxy=this.basetempactionobjectList[eg][2];
             if (this.basetempactionobjectList[eg][4]>maxy) maxy=this.basetempactionobjectList[eg][4];
         }
+        
+        for (var eg=0;eg<this.basetempactionobjectList.length;eg++){
+        	
+        	this.basetempactionobjectList[eg][1]-=minx;
+        	this.basetempactionobjectList[eg][2]-=miny;
+        	this.basetempactionobjectList[eg][3]-=minx;
+        	this.basetempactionobjectList[eg][4]-=miny
+        	
+        }
+        
         var width = maxx-minx;
         var height = maxy-miny;
-        ////Debug.write("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+        if ($debug) Debug.write("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
         
-        this.currentlayer = new lz.drawViewNew(this,{
+        if(this.isSnapToGrid){ 
+        	
+        	xgrid = Math.round((minx-1)/this.gridWidth)*this.gridWidth;
+		    ygrid = Math.round((miny-1)/this.gridWidth)*this.gridWidth;
+        	
+        	this.currentlayer = new lz.drawViewNew(this,{
+            name:tempName,x:xgrid,y:ygrid,width:width,height:height,
+            opacity:this.currentlayerOpacity});
+        }else{
+        	this.currentlayer = new lz.drawViewNew(this,{
             name:tempName,x:minx-1,y:miny-1,width:width,height:height,
             opacity:this.currentlayerOpacity});
+        }
+        
+        
         this.currentlayer.fillstyle = '0x000000';
         this.currentlayer.lineWidth = this.currentlayerlineWidth;
         this.currentlayer.strokeStyle = this.currentlayerstroke;
         
         for (var eg=0;eg<this.basetempactionobjectList.length;eg++) 
-            this.drawline(this.basetempactionobjectList[eg][1]-minx,this.basetempactionobjectList[eg][2]-miny,this.basetempactionobjectList[eg][3]-minx,this.basetempactionobjectList[eg][4]-miny)
+            this.drawline(this.basetempactionobjectList[eg][1],this.basetempactionobjectList[eg][2],this.basetempactionobjectList[eg][3],this.basetempactionobjectList[eg][4]);
             
         //this.currentlayer.setAttribute('stretches','both');
         
         //Add Layer to global Layer     
         this.layers.push(this.currentlayer);        
-
-        ]]>
         
         this.registerFinal(this.getSWFDocumentStatus(),
                 this.getZIndex());
+        ]]>
     </method>    
 
     <method name="registerFinal" args="swfObj,zIndex">
@@ -132,6 +153,7 @@
         actionObject[11] = currentlayer.width;//-3
         actionObject[12] = currentlayer.height;//-2
         actionObject[13] = this.currentlayer.name;//-1
+        if ($debug) Debug.write("registerFinal :: ",actionObject);
         this.baseactionobjectList.push(actionObject);       
         this.onsharedMessage('draw',actionObject);
     </method>      
@@ -154,7 +176,7 @@
         this.currentlayer.strokeStyle = lastActionObject[4];
         
         for (var eg=0;eg<lastActionObject[1].length;eg++) 
-            this.drawline(lastActionObject[1][eg][1]-this.currentlayer.x,lastActionObject[1][eg][2]-this.currentlayer.y,lastActionObject[1][eg][3]-this.currentlayer.x,lastActionObject[1][eg][4]-this.currentlayer.y);
+            this.drawline(lastActionObject[1][eg][1],lastActionObject[1][eg][2],lastActionObject[1][eg][3],lastActionObject[1][eg][4]);
         
         //this.currentlayer.setAttribute('stretches','both');
         this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);

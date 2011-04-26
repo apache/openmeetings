@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="baseDraw" extends="drawview" cachebitmap="false" >
-	<!--  clickable="true" -->
+<class name="baseDraw" extends="view" >
+
 	<attribute name="currentlayer" value="null" />
 	<attribute name="layers" value="null" />
 	
@@ -28,6 +28,12 @@
   	<attribute name="counter" value="0" type="number" />
   	
   	<event name="onupdateScale" />
+  	
+  	<attribute name="isSnapToGrid" type="boolean" value="false"/>
+	<attribute name="gridWidth" value="24" type="number" />
+	
+	<attribute name="copyObject" value="null"/>
+	<attribute name="selectedObjects" value="null"/>
 
   	<method name="getCounter">
 		//Debug.write("### getCounter :",this.counter);
@@ -110,6 +116,14 @@
 		this.baseredoactionobjectList = new Array();
 	</handler>
 	
+	<!--
+	<handler name="onkeydown" reference="lz.Keys" args="k">
+		if ($debug) Debug.write("onkeydown ",k,this,lz.Keys);
+	</handler>
+	<handler name="onkeyup" reference="lz.Keys" args="k">
+		if ($debug) Debug.debug("key %w %s", k, "up");
+    </handler>
+     -->
 	<!--
         if (this.boundingref!=null) this.boundingref.removeIt();
         while (this.subviews.length > 0) {
@@ -219,34 +233,34 @@
     </method>        
 	
 	<method name="clearRemote">
-		<![CDATA[
-		
-			if (this.boundingref!=null) this.boundingref.removeIt();
-			while (this.subviews.length > 0) {
-				this.subviews[0].destroy();
-			}
-			while (this.basdrawredoView.subviews.length > 0) {
-				this.basdrawredoView.subviews[0].destroy();
-			}	
-			
-			this.setAttribute("x",0);
-			this.setAttribute("y",0);
-			
-			this.getDisplayObject()._xscale = 100;
-    		this.getDisplayObject()._yscale = 100;
-    		
-    		this.onupdateScale.sendEvent(null);
-    		
-    		parent.parent.zoombox.setWhiteboardValues(true,100);
-			
-			this.layers = new Array();
-			this.redolayers = new Array();
-			this.baseactionobjectList = new Array();
-			this.baseredoactionobjectList = new Array();	
-			this.checkStepLayers();	
-			this.clearDocumentsBar();
-		]]>
-	</method>
+        <![CDATA[
+        
+            if (this.boundingref!=null) this.boundingref.removeIt();
+            while (this.subviews.length > 1) {
+                this.subviews[1].destroy();
+            }
+            while (this.basdrawredoView.subviews.length > 1) {
+                this.basdrawredoView.subviews[1].destroy();
+            }   
+            
+            this.setAttribute("x",0);
+            this.setAttribute("y",0);
+            
+            this.getDisplayObject()._xscale = 100;
+            this.getDisplayObject()._yscale = 100;
+            
+            this.onupdateScale.sendEvent(null);
+            
+            parent.parent.zoombox.setWhiteboardValues(true,100);
+            
+            this.layers = new Array();
+            this.redolayers = new Array();
+            this.baseactionobjectList = new Array();
+            this.baseredoactionobjectList = new Array();    
+            this.checkStepLayers(); 
+            this.clearDocumentsBar();
+        ]]>
+    </method>
 	
 	<method name="doAction" args="modi">
 		if (modi=='saveobj'){
@@ -263,33 +277,97 @@
 	</method>
 	
 	<method name="setModus" args="modi">
-		//check if previous modi has been txt, which might not be saved to the board yet
-        var previousModus = this.drawmodus;
-		if ($debug) Debug.write("setModus: ",modi);
-		if (this.drawmodus=='letter'){
-			if (this.letterObjectIsActive){
-				if ($debug) Debug.write("setModus:drawtoArray",modi);
-				this.currentletterObj.drawtoArray();
-			}
-		}
-		this.setAttribute('drawmodus',modi);
-		if (modi=='plainSlide'){
-			this.clearSlideOnly();
-			this.setAttribute('drawmodus',previousModus);
-		} else if (modi=='plain'){
-			this.clearAll();
-            //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
-            this.setAttribute('drawmodus',previousModus);
-		} else if (modi=='hand' || modi=='letter' 
-			|| modi=='paint' || modi=='line' || modi=='uline' 
-			|| modi=='rectangle' || modi=='ellipse' || modi=='drawarrow'){
-			if (this.boundingref!=null) this.boundingref.removeIt();
-		}
-		if (modi=='rectangle') {
-			//Open Up Recording
-			
-		}
+		<![CDATA[
+		  
+		    if ($debug) Debug.write("setModus AAA: ",this.baseactionobjectList);
+		
+    		//check if previous modi has been txt, which might not be saved to the board yet
+            var previousModus = this.drawmodus;
+    		if ($debug) Debug.write("setModus: ",modi);
+    		if (this.drawmodus=='letter'){
+    			if (this.letterObjectIsActive){
+    				if ($debug) Debug.write("setModus:drawtoArray",modi);
+    				this.currentletterObj.drawtoArray();
+    			}
+    		}
+    		
+    		if (modi != 'print' && modi != 'plain') {
+    		    this.setAttribute('drawmodus',modi);
+    		} else if (modi == 'print') {
+    			var my_pj = new PrintJob();
+                var myResult = my_pj.start();
+                
+                if ($debug) Debug.write("myResult ",myResult);
+                
+                if (myResult) {
+                	
+                	var mc = this.getDisplayObject();
+                	
+                	// boolean to track whether addPage succeeded, change this to a counter
+                    // if more than one call to addPage is possible
+                    var pageAdded:Boolean = false;
+                
+                    // check the user's printer orientation setting
+                    // and add appropriate print area to print job
+                    if (my_pj.orientation == "portrait") {
+                        // Here, the printArea measurements are appropriate for an 8.5" x 11"
+                        // portrait page.
+                        pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:600,yMin:0,yMax:800});
+                    } else {
+                        // my_pj.orientation is "landscape".
+                        // Now, the printArea measurements are appropriate for an 11" x 8.5"
+                        // landscape page.
+                        pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:750,yMin:0,yMax:600});
+                    }
+                
+                    // send pages from the spooler to the printer
+                    if (pageAdded) {
+                        my_pj.send(); 
+                    }
+
+                	
+                	//if ($debug) Debug.write("mc ",mc);
+                	//if ($debug) Debug.write("mc.name ",mc._name);
+                	
+                    //myResult = my_pj.addPage(mc, null, {printAsBitmap:true}, 1);
+                    //my_pj.send();
+                    delete my_pj;
+                }
+    		}
+    		
+    		if (modi=='plainSlide'){
+    			this.clearSlideOnly();
+    			this.setAttribute('drawmodus',previousModus);
+    		} else if (modi=='plainConfirm'){
+                new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                           labelid:1326,labeliderror:1327,
+                                           refObj:this,showCheckBox:false});
+                //this.clearAll();
+                //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
+                this.setAttribute('drawmodus',previousModus);
+            } else if (modi=='plain'){
+                this.clearAll();
+                //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
+                this.setAttribute('drawmodus',previousModus);
+            } else if (modi=='hand' || modi=='letter' || modi=='triangle' 
+    			|| modi=='paint' || modi=='line' || modi=='uline' || modi=='clipart' 
+    			|| modi=='rectangle' || modi=='ellipse' || modi=='drawarrow'){
+    			if (this.boundingref!=null) this.boundingref.removeIt();
+    		}
+    		if (modi=='rectangle') {
+    			//Open Up Recording
+    			
+    		}
+		]]>
 	</method>
+	
+	<method name="sendConfirmation" args="yesno" >
+        this.clearAll();
+    </method>
+    
+    <method name="sendNoConfirmation" args="ref">
+    	//Do nothing
+    </method>
 	
 	<method name="getModusItems" args="modi">
 		<![CDATA[
@@ -341,6 +419,7 @@
     
 	<method name="deleteItemByNameSync" args="objName">
     	<![CDATA[
+    	    if ($debug) Debug.write("deleteItemByNameSync :: ",objName);
     		this[objName].destroy();
     		if (this.boundingref!=null) this.boundingref.removeIt();
     		var pos = -1;
@@ -373,8 +452,9 @@
     		}
     		
     		if (pos!=-1) this.baseactionobjectList.splice(pos, 1);
-    		//Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
-    		//Debug.write("this.layers.length: ",this.layers.length);
+    		
+    		//if ($debug) Debug.write("this.baseactionobjectList.length: ",this.baseactionobjectList.length);
+    		//if ($debug) Debug.write("this.layers.length: ",this.layers.length);
     		
     		if ($debug) Debug.warn("deleteItemByName :: ",objName);
     		
@@ -397,11 +477,22 @@
 		//		//Debug.write("Found Object in Layer: ",this.layers[eg]);
 		//	}
 		//}
+		
+		var tx = objRef.x;
+        var ty = objRef.y;
+        
+        if(this.isSnapToGrid){   
+            
+            tx = Math.round(tx/this.gridWidth)*this.gridWidth;
+            ty = Math.round(ty/this.gridWidth)*this.gridWidth;
+            
+        }
+		
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
 			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==objName) {
 				//Debug.write("Found Object: ",this.baseactionobjectList[eg]);
-				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] = objRef.x;
-				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] = objRef.y;
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] = tx;
+				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] = ty;
 				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3] = objRef.width;
 				this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] = objRef.height;
 				var newA = this.baseactionobjectList[eg];
@@ -509,42 +600,34 @@
 		}	
 		//this.setAttribute('drawmodus',this.getAttribute('drawmodus'));				
 	</method>
-	
-	<method name="onmouseoverMethod" >
-		//if ($debug) Debug.write("onmouseoverMethod ",this.isDragging);
-		if (this.drawmodus=="drag"){
-			lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
-		}
-	</method>
-	
-	<method name="onmouseoutMethod" >
-        lz.Cursor.unlock();
-    </method>
              
 	<method name="onmousedownMethod" >
+		<![CDATA[
 		if ($debug) Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
+		
+		
+		if(this.selectedObjects.length > 0){
+			for (var eg=0;eg<this.selectedObjects.length;eg++){
+					
+				var  objectToUpdate = this.getObjectByName(this.selectedObjects[eg][this.selectedObjects[eg].length-1]);
+	            objectToUpdate.setAttribute('opacity', 1);
+				
+			}
+		}
+		
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
+			
 			if (this.letterObjectIsActive){
 				this.currentletterObj.drawtoArray();
 				this.setModusWithUpdate("hand");
-				//bool = true;
-			}	
+				//bool = true;				
+			}
 			
 			if(this.drawmodus=="drag"){
-				if ($debug) Debug.write("x1 ",this.x);
-				if ($debug) Debug.write("y1 ",this.y);
-				var tx1 = this.x;
-				var ty1 = this.y;
 				this.isDragging = true;
 				this.dragger.apply();
-				var tx1 = this.x;
-				var ty1 = this.y;
-				this.setAttribute("x",tx1);
-				this.setAttribute("y",ty1);
-				if ($debug) Debug.write("x2 ",this.x);
-				if ($debug) Debug.write("y2 ",this.y);
 			} else if(this.drawmodus=="hand"){
-				this.doSetHandBodus();
+				this.doSetHandBodus();				
 			} else if(this.drawmodus=="paint"){
 				this.startPaint();
 				mousetracker_del.register(lz.Idle,'onidle');
@@ -574,12 +657,38 @@
 				this.starty = currentlayer.getMouse('y'); 				
 	            mousetracker_del.register(lz.Idle,'onidle');
 	        } else if (this.drawmodus == 'letter') {
-				this.startLetter();
+                this.startLetter();
+                this.startx = currentlayer.getMouse('x');
+                this.starty = currentlayer.getMouse('y');               
+                mousetracker_del.register(lz.Idle,'onidle');
+            } else if (this.drawmodus == 'clipart') {
+            	this.startDrawClipArt(null);
+                this.startx = currentlayer.getMouse('x');
+                this.starty = currentlayer.getMouse('y');  
+                mousetracker_del.register(lz.Idle,'onidle');
+            } else if (this.drawmodus == 'triangle') {
+				this.startTriangle(null);
 	  	 		this.startx = currentlayer.getMouse('x');
 				this.starty = currentlayer.getMouse('y'); 				
 	            mousetracker_del.register(lz.Idle,'onidle');
+	        }else if (this.drawmodus == 'paste') {
+				//this.startSelect(null);
+	  	 		var paste_x = parent.getMouse('x');
+				var paste_y = parent.getMouse('y'); 				
+	            //mousetracker_del.register(lz.Idle,'onidle');
+	            this.paste(paste_x, paste_y);
+	            
+	            //this.setModus("hand");
+				
+	            if ($debug) Debug.write("paste mouse down ",this);
+	            //if ($debug) Debug.write("onmousedownMethod Unkown Modus ",this.drawmodus);
+	        } else {
+	        	if ($debug) Debug.write("onmousedownMethod Unkown Modus ",this.drawmodus);
 	        }
+            
+            
         }
+        ]]>
 	</method>
 
 	<method name="onmouseupMethod" >
@@ -588,12 +697,9 @@
 	        if (canvas.ismoderator || canvas.isAllowedToDraw) {
 				//var bool = false;
 				
-				if(this.drawmodus=="drag"){
+	        	if(this.drawmodus=="drag"){
 	        		this.isDragging = false;
 	        		this.dragger.remove();
-	        		
-	        		if ($debug) Debug.write("x3 ",this.x);
-					if ($debug) Debug.write("y3 ",this.y);
 	        		
 	        		this.setAttribute("x",Math.round(this.x));
 	        		this.setAttribute("y",Math.round(this.y));
@@ -604,9 +710,6 @@
 		    		tArray[2] = this.y;
 		    		
 		    		this.onsharedMessage('moveMap',tArray);
-		    		
-		    		if ($debug) Debug.write("x4 ",this.x);
-					if ($debug) Debug.write("y4 ",this.y);
 	        		
 	        	} else if(this.drawmodus=="paint"){
 					this.endPaint();
@@ -641,7 +744,23 @@
 		        } else if (this.drawmodus == 'pointerWhiteboard') {
                     if ($debug) Debug.write("pointerWhiteboard set New Point ");
                     this.endPointerWhiteBoard();
-                }
+                } else if(this.drawmodus=="clipart"){
+                    this.endDrawClipArt();
+                    mousetracker_del.unregisterAll();
+                } else if (this.drawmodus == 'triangle') {
+					this.endTriangle();
+		        	mousetracker_del.unregisterAll();
+		        } else if (this.drawmodus == 'hand') {
+					this.endSelect();
+		        	mousetracker_del.unregisterAll();
+		        }else if (this.drawmodus == 'paste') {
+					//this.setModus("hand");
+					//this.setAttribute('drawmodus','hand');
+					//if ($debug) Debug.write("onmouseupMethod paste ",this.drawmodus);
+		        } else {
+		        	if ($debug) Debug.write("onmouseupMethod Unkown Modus ",this.drawmodus);
+		        }
+	                
 		        ////Debug.write("onmouseup: ",this.letterObjectIsActive,this.currentletterObj);	        
 				this.checkStepLayers();
 	        } else {
@@ -711,6 +830,14 @@
 			this.endx = this.mx;
 			this.endy = this.my;
 			this.drawrectangle (this.startx, this.starty, this.mx, this.my);
+		} else if (this.drawmodus == 'triangle') {
+	    	var oid_name = this.currentlayer.name;
+	    	this.currentlayer.destroy();
+	    	this.startTriangle(oid_name);
+			// stretchy rect mode
+			this.endx = this.mx;
+			this.endy = this.my;
+			this.drawtriangle (this.startx, this.starty, this.mx, this.my);
 		} else if (this.drawmodus == 'ellipse') {
 			var oid_name = this.currentlayer.name;
 	    	this.currentlayer.destroy();
@@ -727,7 +854,30 @@
 			this.endx = this.mx;
 			this.endy = this.my;
 			this.drawletterBoundingBox (this.startx, this.starty, this.mx, this.my);			
-		}	
+		} else if (this.drawmodus=="clipart"){ 
+            //var oid_name = this.currentlayer.name;
+            //this.currentlayer.destroy();
+            this.trackDrawClipArt();
+            this.endx = this.mx;
+            this.endy = this.my;
+        } else if (this.drawmodus == 'copy') {
+	    	var oid_name = this.currentlayer.name;
+	    	this.currentlayer.destroy();
+	    	this.startSelect(oid_name);
+			// stretchy rect mode
+			this.endx = this.mx;
+			this.endy = this.my;
+			this.drawrectangle (this.startx, this.starty, this.mx, this.my);
+        }else if (this.drawmodus == 'hand') {
+	    	var oid_name = this.currentlayer.name;
+	    	this.currentlayer.destroy();
+	    	this.startSelect(oid_name);
+			// stretchy rect mode
+			this.endx = this.mx;
+			this.endy = this.my;
+			this.drawrectangle (this.startx, this.starty, this.mx, this.my);
+        }
+		
     	]]>
     </method>
 	
@@ -750,6 +900,12 @@
 			this.doShowObjectBounds(objList[objList.length-1][objList[objList.length-1].length-1]);
 			//new lz.chooseDrawAreaObjectWindow(canvas,{x:300,y:200,refObj:this,listV:objList});
 		} else {
+			this.startSelect(null);
+  	 		this.startx = currentlayer.getMouse('x');
+			this.starty = currentlayer.getMouse('y'); 				
+            mousetracker_del.register(lz.Idle,'onidle');
+            if ($debug) Debug.write("this.startSelect ",this);
+	            
 			this.setModus("hand");
 		}
 		]]>
@@ -795,6 +951,47 @@
     	}
     ]]>
     </method>   
+    
+    <method name="reselectShowObjectBounds" args="val">
+    <![CDATA[
+        if (val !=null && val!=''){
+            this.ObjectByName = this.getObjectByName(val);
+            //FIXME: Set Corrent Value to Document Toolbar or use another var
+               
+            
+            //if ($debug) Debug.write("this.ObjectByName ",val,this.ObjectByName);
+                
+            var x = this.ObjectByName.x;
+            var y = this.ObjectByName.y;
+            //if ($debug) Debug.write("doShowObjectBounds: ",x,y);
+            var width = this.ObjectByName.width;
+            var height = this.ObjectByName.height;
+            if (this.boundingref!=null)this.boundingref.removeIt();
+            this.boundingref = new lz.boundingBoxAll(this.parent.parent._drawareaMask._drawarea,{
+                                whiteboardRef:this,
+                                objRef:this.ObjectByName,
+                                x:x-200,y:y-200,
+                                width:width+400,height:height+400,
+                                canBeDragged:true,canBeResized:false,
+                                ex:x,ey:y,ewidth:width,eheight:height,
+                                boundingDoUpdateOnInit:false
+                            });
+            this.setAttribute('boundingIsActive',true);
+        
+            //if (!boundingDoUpdateOnInit) {
+            //    this.boundingref._inner._inner.setAttribute('width',this.ObjectByName._swfView.width);
+            //    this.boundingref._inner._inner.setAttribute('height',this.ObjectByName._swfView.height);
+            //    if ($debug) Debug.write("NEW WIDTH AND HEIGHT OF SWF ",this.ObjectByName._swfView.width,this.ObjectByName._swfView.height);
+            //    this.boundingref._inner.setAttribute('visible',true);
+            //    parent.parent.changeMenu(2,true);
+            //    this.doUpdateDocumentToolBar();
+            //} else {
+            //    parent.parent.changeMenu(1,true);
+            //}
+             
+        }
+    ]]>
+    </method>   
 	
 	<method name="updateObjectBounds">
 		if (this.boundingref!=null) this.boundingref.resetValues();
@@ -807,23 +1004,35 @@
 	<method name="getObjectInBounds" args="x,y">
 		<![CDATA[
 		var tempList = new Array();
-		////Debug.write("getObjectInBounds this.baseactionobjectList1: ",x,y,this.baseactionobjectList);
+		if ($debug) Debug.write("getObjectInBounds this.baseactionobjectList1: ",x,y,this.baseactionobjectList);
+		
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+			
+			
+			//if ($debug) Debug.write("c1 ",this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5],"<",x);
+            //if ($debug) Debug.write("c2 ",(this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]),">",x);
+            //if ($debug) Debug.write("c3 ",this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4],"<",y);
+            //if ($debug) Debug.write("c4 ",( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] ),">",y);
+        
+			
 			if ( ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]<x 
 				&& ( (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]) >=x ) ) 
 				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<y 
 				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] )>y  ) ) {
-				
-				if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7] == null) {
-    				tempList.push(this.baseactionobjectList[eg]);
-		        } else {
-		        	var swfObject = this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7];
-		        	
-		        	if ($debug) Debug.write("getObjectInBounds :: swfObject ",swfObject.isVisible);
-		        	
-		        	if(swfObject.isVisible) {
-	        	        tempList.push(this.baseactionobjectList[eg]);
-		        	}
+					
+				if (this.baseactionobjectList[eg][0] != "mindMapNode"
+				        && this.baseactionobjectList[eg][0] != "mindMapCenter")	{
+    				if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7] == null) {
+        				tempList.push(this.baseactionobjectList[eg]);
+    		        } else {
+    		        	var swfObject = this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-7];
+    		        	
+    		        	if ($debug) Debug.write("getObjectInBounds :: swfObject ",swfObject.isVisible);
+    		        	
+    		        	if(swfObject.isVisible) {
+    	        	        tempList.push(this.baseactionobjectList[eg]);
+    		        	}
+    		        }
 		        }
 				////Debug.write("found obj: ",this.baseactionobjectList[eg]);
 			}
@@ -839,6 +1048,8 @@
 			return this.subviews.length-1;
 		]]>
 	</method>
+	
+	
 	
 	<!-- ##################
 		SharedModus
@@ -875,12 +1086,21 @@
 				this.addSWFToLayerHistorySynced(lastactionObject,this);
 			} else if(actionObject[0]=='rectangle'){
 				this.drawrectangleToHistory(lastactionObject,this);
+			} else if(actionObject[0]=='triangle'){
+				this.drawtriangleToHistory(lastactionObject,this);
 			} else if(actionObject[0]=='ellipse'){
 				this.drawellipseToHistory(lastactionObject,this);
 			} else if(actionObject[0]=='pointerWhiteBoard'){
                 this.drawPointerToHistory(lastactionObject,this);
+            } else if(actionObject[0]=='flv'){
+                this.drawFlvToHistory(lastactionObject,this);
+            } else if(actionObject[0]=='mindMapCenter'){
+                this.drawMindMapCenterToHistory(lastactionObject,this);
+            } else if(actionObject[0]=='mindMapNode'){
+                this.drawMindMapNodeToHistory(lastactionObject,this);
+            } else if(actionObject[0]=='clipart'){
+                this.drawClipArtToHistory(lastactionObject,this);
             }
-            
 			//set counter to maximum otherwise trouble in naming conventions
 			//the 6th array index count from the end of each object is always the counter of the
 			//object
@@ -895,13 +1115,75 @@
 				if (this.onwmlLoaderSend) this.onwmlLoaderSend.sendEvent(actionObject[0]);
 			}
          
+        } else if(action=='clear'){
+            
+            this.clearRemote();
+            
         } else if(action=='clearSlide'){
-        	
-        	this.clearSlideRemote(actionObject);
+            
+            this.clearSlideRemote(actionObject);
+            
+        } else if(action=='moveMap'){
 			
-		} else if(action=='clear'){
+			this.setAttribute("x",actionObject[1]);
+			this.setAttribute("y",actionObject[2]);
 			
-			this.clearRemote();
+		} else if(action=='flv'){
+			
+			this.playFLVRemote(actionObject);
+			
+		} else if(action=='addBrainStorming'){
+            
+            this.brainStormingIdeasGathering(actionObject);
+        
+        } else if(action=='addBrainStormingIdeaPhase2'){
+            
+        	//Adding Idea in Phase 2
+            this.addIdeaToPhase2(actionObject);
+        
+        } else if(action=='deleteBrainStorming'){
+			
+			this.brainStormingClose(actionObject);
+			
+		} else if(action=='updateBrainStormingPhase'){
+            
+            this.brainStormingPhase2(actionObject);
+            
+        } else if(action=='updateBrainStormingPhase'){
+            
+            this.brainStormingPhase2(actionObject);
+            
+        } else if(action=='updatePrioBrainStormingIdea'){
+            
+            this.updatePrioBrainStormingIdea(actionObject);
+        
+        } else if(action=='updateTextBrainStormingIdeaColor'){
+            
+            this.updateTextBrainStormingIdeaColor(actionObject);
+        
+        } else if(action=='updateBrainStormingGroupName'){
+            
+            this.updateBrainStormingGroupName(actionObject);
+            
+        } else if(action=='deleteBrainStormingGroup'){
+            
+            this.deleteBrainStormingGroup(actionObject);
+			
+		} else if(action=='deleteBrainStormingIdea'){
+            
+            this.deleteBrainStormingIdea(actionObject);
+			
+		} else if(action=='addBrainStormingGroup'){
+            
+            this.addNewGroupRemote(actionObject,false);
+            
+		} else if(action=='updateGroupBrainStormingIdea'){
+            
+			if (actionObject[3] == "") {
+                this.moveIdeaToResultListRemote(actionObject);
+			} else {
+                this.moveIdeaToGroupRemote(actionObject);
+			}
 			
 		} else if(action=='delete' || action=='undo'){
 			
@@ -911,31 +1193,64 @@
 		} else if(action=='size'){
 			
 			var lastactionObject = actionObject;	
-			var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
 			
-			if ($debug) Debug.write("Set Size for Object ",obj);
-			obj.setAttribute('x',lastactionObject[lastactionObject.length-5]);
-			obj.setAttribute('y',lastactionObject[lastactionObject.length-4]);
-			obj.setAttribute('width',lastactionObject[lastactionObject.length-3]);
-			obj.setAttribute('height',lastactionObject[lastactionObject.length-2]);
+			if (lastactionObject[0] == "clipart") {
+				
+				var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
+                obj.destroy();
+                
+                this.drawClipArtToHistory(lastactionObject,this);
+                
+                for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+                    if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==lastactionObject[lastactionObject.length-1]) {
+                        
+                        //if ($debug) Debug.write("Found Object 1: ",this.baseactionobjectList[eg]);
+                        
+                        this.baseactionobjectList[eg] = lastactionObject;
+                        
+                        break;
+                    }
+                }   
+                
+                if (this.boundingIsActive) {
+                    this.reselectShowObjectBounds(lastactionObject[lastactionObject.length-1]);
+                }
+				
+			} else {
 			
-			this.updateBaseObjectByName(lastactionObject[lastactionObject.length-1],
-			                         lastactionObject[lastactionObject.length-5],
-			                         lastactionObject[lastactionObject.length-4],
-			                         lastactionObject[lastactionObject.length-3],
-			                         lastactionObject[lastactionObject.length-2]);
-			                         
-			//if ($debug) Debug.write("BaseObject List ?? ",this.baseactionobjectList);
-			
-            if (this.boundingIsActive) {
-            	this.boundingref.sendRemoteUpdate(obj)
-            }
+    			var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
+    			
+    			if ($debug) Debug.write("Set Size for Object ",obj);
+    			obj.setAttribute('x',lastactionObject[lastactionObject.length-5]);
+    			obj.setAttribute('y',lastactionObject[lastactionObject.length-4]);
+    			obj.setAttribute('width',lastactionObject[lastactionObject.length-3]);
+    			obj.setAttribute('height',lastactionObject[lastactionObject.length-2]);
+    			
+    			this.updateBaseObjectByName(lastactionObject[lastactionObject.length-1],
+    			                         lastactionObject[lastactionObject.length-5],
+    			                         lastactionObject[lastactionObject.length-4],
+    			                         lastactionObject[lastactionObject.length-3],
+    			                         lastactionObject[lastactionObject.length-2]);
+    			                         
+    			//if ($debug) Debug.write("BaseObject List ?? ",this.baseactionobjectList);
+    			
+                if (this.boundingIsActive) {
+                	this.boundingref.sendRemoteUpdate(obj)
+                }
+            
+			}
 			                         
 		} else if (action=="loadwml"){
 			//Debug.write(actionObject,actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
 			this.remoteWmlLoader(actionObject["wmlfileName"],actionObject["wmlroom"],actionObject["wmldomain"]);
 		} else if (action=="editText"){
             this.editTextByHistory(actionObject,this);
+		}else if (action=="editTextMindMapFontColor") {
+            this.editTextMindMapFontColor(actionObject,this);
+        } else if (action=="editTextMindMapColor"){
+            this.editTextMindMapColor(actionObject,this);   
+        } else if (action=="editTextMindMapNode"){
+            this.editTextMindMapNode(actionObject,this);
         } else if (action=="sendItemToFront"){
             this.bringItemToFrontByName(actionObject[1]);
         } else if (action=="initgetVars"){
@@ -950,13 +1265,6 @@
 			}
 		} else if (action=="swf"){
 			this.remoteObjectUpdate(actionObject);	
-		} else if (action=="moveMap") {
-			this.setAttribute("x",actionObject[1]);
-			this.setAttribute("y",actionObject[2]);	
-		} else if(action=='whiteboardObj'){
-            this.doUpdateFullFitAndZoomRemote(actionObject,this);
-        } else {
-			if ($debug) Debug.warn("Unkown action type :: ",action);
 		}
 		]]>
 	</method>
@@ -1228,7 +1536,7 @@
         ]]>
     </method>
 
-    <dragstate name="dragger" />
+    <dragstate name="dragger"/>
     
 </class>
 

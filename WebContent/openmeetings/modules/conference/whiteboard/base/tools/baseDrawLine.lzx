@@ -7,7 +7,7 @@
     <attribute name="currentlinestroke" value="0xFF6600" />
     <attribute name="currentlinelineWidth" value="2" type="number" />   
     <attribute name="currentlineOpacity" value="1" type="number" />
-    
+        
     <!-- ###########################
     Line
      -->
@@ -65,13 +65,28 @@
 	        var x2 = this.endx-minx+(this.currentlinelineWidth/2);
 	        var y2 = this.endy-miny+(this.currentlinelineWidth/2);
 	
-	        this.currentlayer = new lz.drawViewNew(this,{
-	            name:tempName,x:(minx-1-(this.currentlinelineWidth/2)),
-	            y:(miny-1-(this.currentlinelineWidth/2)),
+	        if(this.isSnapToGrid){        		
+	    			        	   
+	            xgrid = Math.round((minx-1-(this.currentlinelineWidth/2))/this.gridWidth)*this.gridWidth;
+		    	ygrid = Math.round((miny-1-(this.currentlinelineWidth/2))/this.gridWidth)*this.gridWidth;
+		    	
+		    	this.currentlayer = new lz.drawViewNew(this,{
+	            name:tempName,
+	            x:xgrid,
+	            y:ygrid,
 	            width:(width+this.currentlinelineWidth),
 	            height:(height+this.currentlinelineWidth),
 	            opacity:this.currentlineOpacity});
-	            
+            
+            }else{
+	        
+		        this.currentlayer = new lz.drawViewNew(this,{
+		            name:tempName,x:(minx-1-(this.currentlinelineWidth/2)),
+		            y:(miny-1-(this.currentlinelineWidth/2)),
+		            width:(width+this.currentlinelineWidth),
+		            height:(height+this.currentlinelineWidth),
+		            opacity:this.currentlineOpacity});
+            }   
 	        //this.currentlayer.fillstyle = '0x000000';
 	        this.currentlayer.lineWidth = this.currentlinelineWidth;
 	        this.currentlayer.strokeStyle = this.currentlinestroke;

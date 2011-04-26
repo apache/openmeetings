@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="baseDrawRect" extends="baseDrawArrow" >
+<class name="baseDrawRect" extends="baseDrawSelect" >
     
     <!--  
         for drawing rectangles the variable 
@@ -12,7 +12,7 @@
     <attribute name="currentrectanglestrokeFill" value="0xFFFF33" />
     <attribute name="currentrectanglestrokeFillDis" value="1" type="number" />
     <attribute name="currentrectangleineWidth" value="4" type="number" />
-    <attribute name="currentrectangleOpacity" value="1" type="number" /> 
+    <attribute name="currentrectangleOpacity" value="1" type="number" />
       
     <!-- ###########################
         Rectangle
@@ -32,7 +32,8 @@
     </method>  
 
     <method name="endRect">
-        <![CDATA[
+        <![CDATA[        
+        
             ////Debug.write(" this.startx, this.starty , this.endx, this.endy ",this.startx, this.starty , this.endx, this.endy);
             var tmpName = this.currentlayer.name;
             this.currentlayer.destroy();
@@ -48,6 +49,13 @@
                 y = this.endy;
                 height = Math.abs(height);
             }
+            
+            if(this.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/this.gridWidth)*this.gridWidth;
+		    	y = Math.round(y/this.gridWidth)*this.gridWidth;
+            
+            } 
             
             this.currentlayer = new lz.drawViewNew(this,{
                 name:tmpName,x:x,y:y,width:width,height:height,

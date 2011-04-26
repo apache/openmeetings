@@ -4,9 +4,12 @@
 	<include href="baseDrawPaint.lzx" />
     <include href="baseDrawLine.lzx" />
     <include href="baseDrawULine.lzx" />
+    <include href="baseDrawClipArt.lzx" />
     <include href="baseDrawArrow.lzx" />
     <include href="baseDrawRect.lzx" />
     <include href="baseDrawEllipse.lzx" />
     <include href="baseDrawPointer.lzx" />
+    <include href="baseDrawTriangle.lzx" />
+    <include href="baseDrawSelect.lzx" />
 
 </library>

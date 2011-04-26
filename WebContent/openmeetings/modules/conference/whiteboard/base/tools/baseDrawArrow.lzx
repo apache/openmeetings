@@ -67,7 +67,8 @@
 	        
 	        //if ($debug) Debug.write("minx,miny,width,height: ",minx,miny,width,height);
             //if ($debug) Debug.write("endDrawarrowline",this.startx,this.starty,this.endx,this.endy);
-            
+            	                
+	        
             if (minx == this.startx) {
                 var x1 = 0;
                 var x2 = width;
@@ -82,7 +83,19 @@
                 var y1 = height;
                 var y2 = 0;
             }
-	
+            
+            if(this.isSnapToGrid){        	
+	        	minx = Math.round(minx/this.gridWidth)*this.gridWidth;
+			    miny = Math.round(miny/this.gridWidth)*this.gridWidth;
+			    
+			    //x1 = Math.round(x1/this.gridWidth)*this.gridWidth;
+			    //y1 = Math.round(y1/this.gridWidth)*this.gridWidth;
+			    
+			    //x2 = Math.round(x2/this.gridWidth)*this.gridWidth;
+			    //y2 = Math.round(y2/this.gridWidth)*this.gridWidth;
+	        		        	
+        	}
+			                        
 	        this.currentlayer = new lz.drawViewNew(this,{
 	            name:tempName,x:minx,y:miny,width:width,height:height,
 	            opacity:this.currentdrawarrowOpacity});
