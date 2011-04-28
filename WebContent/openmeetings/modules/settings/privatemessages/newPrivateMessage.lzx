@@ -325,8 +325,8 @@
 	
 	<customEdittext name="_subject" y="84" x="80" width="$once{ parent.width-82 }" />
 
-	<customScrollEdittext name="_richText" y="108" clip="true"
-		width="$once{ parent.width }" height="$once{ parent.height-225 }">
+	<customScrollEdittext name="_richText" y="108" clip="true" x="1"
+		width="$once{ parent.width-2 }" height="$once{ parent.height-225 }">
 		
 	</customScrollEdittext> 	
 	
