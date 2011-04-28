@@ -340,7 +340,7 @@
     			this.setAttribute('drawmodus',previousModus);
     		} else if (modi=='plainConfirm'){
                 new lz.confirmationSingle(canvas.main_content._content.inner,{
-                                           labelid:1326,labeliderror:1327,
+                                           labelid:1326,labeliderror:1340,
                                            refObj:this,showCheckBox:false});
                 //this.clearAll();
                 //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);

@@ -485,7 +485,12 @@
                 new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:roomObj});
                 //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
                  
-            }   
+            } else if (roomTypeId==5){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.customRoomModule,roomObj:roomObj});
+                //new lz[canvas.eventRoomModule](canvas.main_content._content.inner,{roomobj:roomObj});
+                 
+            } 
         }
     </method>
     

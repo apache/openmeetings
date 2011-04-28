@@ -78,6 +78,12 @@ these properties can be overwritten by config.xml -->
 <attribute name="restrictedRoomModule" value="restrictedConferenceRoom" type="string" />
 
 <!-- #############################################
+    Custom Room
+ -->
+
+<attribute name="customRoomModule" value="flexibleCustomRoom" type="string" />
+
+<!-- #############################################
     Event Room
     
     Room Layouts: interviewConferenceRoom

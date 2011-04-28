@@ -130,6 +130,8 @@
                 this.roomClassName = canvas.restrictedRoomModule;
             } else if (this.roomType == 4) {
                 this.roomClassName = canvas.interviewRoomModule;
+            } else if (this.roomType == 5) {
+                this.roomClassName = canvas.customRoomModule;
             } else {
 				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
 			}
