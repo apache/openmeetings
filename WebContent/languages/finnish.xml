@@ -3953,4 +3953,115 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1316" name="recording flag">
     <value>Start Recording</value>
   </string>
+  <string id="1317" name="shape">
+    <value>Arrow</value>
+  </string>
+  <string id="1318" name="shape">
+    <value>Circle</value>
+  </string>
+  <string id="1319" name="shape">
+    <value>Line</value>
+  </string>
+  <string id="1320" name="shape">
+    <value>Square</value>
+  </string>
+  <string id="1321" name="shape">
+    <value>Triangle</value>
+  </string>
+  <string id="1322" name="icon">
+    <value>Text/Note</value>
+  </string>
+  <string id="1323" name="icon">
+    <value>Cliparts</value>
+  </string>
+  <string id="1324" name="icon">
+    <value>Draw Free</value>
+  </string>
+  <string id="1325" name="icon">
+    <value>Select/Move</value>
+  </string>
+  <string id="1326" name="icon">
+    <value>Draw Shape</value>
+  </string>
+  <string id="1327" name="icon">
+    <value>Cut/Move</value>
+  </string>
+  <string id="1328" name="icon">
+    <value>Zoom In/Out</value>
+  </string>
+  <string id="1329" name="icon">
+    <value>Print</value>
+  </string>
+  <string id="1330" name="icon">
+    <value>Undo</value>
+  </string>
+  <string id="1331" name="icon">
+    <value>Trash</value>
+  </string>
+  <string id="1332" name="icon">
+    <value>Add Grid</value>
+  </string>
+  <string id="1333" name="icon">
+    <value>Share File</value>
+  </string>
+  <string id="1334" name="icon submenu">
+    <value>Select Shape</value>
+  </string>
+  <string id="1335" name="icon submenu">
+    <value>Select Clipart</value>
+  </string>
+  <string id="1336" name="submenu">
+    <value>Copy</value>
+  </string>
+  <string id="1337" name="submenu">
+    <value>Cut</value>
+  </string>
+  <string id="1338" name="submenu">
+    <value>Paste</value>
+  </string>
+  <string id="1339" name="submenu">
+    <value>Delete</value>
+  </string>
+  <string id="1340" name="submenu">
+    <value>Do you really want to delete the complete content on the whiteboard?</value>
+  </string>
+  <string id="1341" name="submenu">
+    <value>Load directly to whiteboard</value>
+  </string>
+    <string id="1342" name="attendees">
+    <value>Attendees</value>
+  </string>
+  <string id="1343" name="atendee manager">
+    <value>Attendee Manager</value>
+  </string>
+  <string id="1344" name="atendee manager">
+    <value>Present</value>
+  </string>
+  <string id="1345" name="atendee manager">
+    <value>Remote Controll</value>
+  </string>
+  <string id="1346" name="atendee manager">
+    <value>Eject</value>
+  </string>
+  <string id="1347" name="chat">
+    <value>Chat</value>
+  </string>
+  <string id="1348" name="invite attendee">
+    <value>Invite Attendees</value>
+  </string>
+  <string id="1349" name="invite attendee">
+    <value>By Email</value>
+  </string>
+  <string id="1350" name="invite attendee">
+    <value>User is moderator</value>
+  </string>
+  <string id="1351" name="invite attendee">
+    <value>User has webcam switched on</value>
+  </string>
+  <string id="1352" name="fill_option">
+    <value>Deactivate shape fill</value>
+  </string>
+  <string id="1353" name="fill_option">
+    <value>Activate shape fill</value>
+  </string>
 </language>
