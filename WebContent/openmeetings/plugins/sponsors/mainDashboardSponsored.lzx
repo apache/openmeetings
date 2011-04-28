@@ -4,18 +4,6 @@
 <!---  modules:dashboard -->
 <class name="mainDashboardSponsored" extends="baseContentView">	
 	
-    <!--
-	<labelText fontstyle="bold" y="10" labelid="128" x="10" />
-	
-	<simpleLabelButton text="Issue Tracker Dev Test" x="10" y="40">
-		<handler name="onclick">
-			var obj = new Array();
-			obj["action"] = "issuetracker";
-			loadContent(obj,null,null);
-		</handler>
-	</simpleLabelButton>
-    -->
-   
     <handler name="oninit">
         //this.getRssFeeds.doCall();
     </handler>

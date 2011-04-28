@@ -170,7 +170,7 @@
 				
 				if ($debug) Debug.write("-- tAString.length ",tAString.length);
 				
-				for (var i=0;i<tAString.length-1;i++) {
+				for (var i=0; i<tAString.length-1; i++) {
 					if (i!=0) {
 						nString += ", ";
 					}
@@ -252,7 +252,7 @@
 				if ($debug) Debug.write("startSearch :: ",tString);
 				var tResultA = new Array();
 				
-				for (var i=0;i<canvas.userContacts.length;i++) {
+				for (var i=0; i<canvas.userContacts.length; i++) {
 					
 					if (canvas.userContacts[i].contact.firstname.startsWith(tString) 
 						|| canvas.userContacts[i].contact.lastname.startsWith(tString) 
@@ -324,11 +324,11 @@
 	<labelText name="_labelSubject" x="2" labelid="1211" y="86"/>
 	
 	<customEdittext name="_subject" y="84" x="80" width="$once{ parent.width-82 }" />
+
+	<customScrollEdittext name="_richText" y="108" clip="true"
+		width="$once{ parent.width }" height="$once{ parent.height-225 }">
 		
-	<richtexteditor name="_richText" y="108" clip="true"
-					width="$once{ parent.width }" height="$once{ parent.height-202 }">
-		
-	</richtexteditor> 	
+	</customScrollEdittext> 	
 	
 	<labelCheckbox name="_bookRoom" labelid="1218"
 				   width="270" y="$once{ parent.height-120 }" x="4">

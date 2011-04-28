@@ -36,9 +36,7 @@
               
     <resource name="user_contact_calendar_system_undo_rsc" 
               src="resources/system-undo.png" />   
-    
-    <include href="incubator/rich-text/richtexteditor.lzx"/>
-    
+   
     <include href="privatemessages/" />
     <include href="usercontacts/" />
     <include href="searchuserprofile/" />
@@ -46,6 +44,5 @@
     <include href="viewUserProfile.lzx" />
     <include href="userSettings.lzx" />
     <include href="editUserProfile.lzx" />
-    
 
 </library>

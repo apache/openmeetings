@@ -17,13 +17,6 @@
   <include href="hsplitpane.lzx" />
   <include href="minibutton.lzx" />
   <include href="opttree/opttree.lzx" />
-  <include href="rich-text/richtexteditor.lzx" />
-  <include href="rich-text/richtexttoolbar-class.lzx" />
-  <include href="rich-text/richtexteditarea.lzx" />
-  <include href="rich-text/formatfontface.lzx"/>
-  <include href="rich-text/formatfontcolor.lzx"/>
-  <include href="rich-text/formatbtn.lzx"/>
-  <include href="rich-text/linkdialog.lzx"/>
   <include href="radioitem.lzx" />
   <include href="roundrect.lzx"/>
   <include href="roundrectbutton.lzx"/>
