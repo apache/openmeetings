@@ -35,8 +35,8 @@ public class FileExplorerItem {
 	private String previewImage;
 	
 	private String wmlFilePath;
-	private Boolean isStoredWmlFile;
-
+    private Boolean isStoredWmlFile;
+    private Boolean isChart;
 		
 	/**
 	 *
@@ -279,4 +279,15 @@ public class FileExplorerItem {
 		this.isStoredWmlFile = isStoredWmlFile;
 	}
 	
+    /**
+     * @hibernate.property
+     *  column="is_chart"
+     *  type="boolean"
+     */
+    public Boolean getIsChart() {
+        return isChart;
+    }
+    public void setIsChart(Boolean isChart) {
+        this.isChart = isChart;
+    }
 }

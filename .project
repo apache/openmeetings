@@ -33,4 +33,15 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1306674669997</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.svn</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

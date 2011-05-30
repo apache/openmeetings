@@ -10,14 +10,7 @@
 			
 			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
 							 onselect="parent.parent.parent.editFolderName()" />
-			
-			<!--			 
-			<contextmenuitem name="_openDocument"
-				             caption="$once{ canvas.getLabelName(716) }" 
-							 separatorbefore="true"
-                             onselect="parent.parent.parent.loadDocument()" />
-             -->
-                              				 
+			             				 
             <contextmenuitem caption="$once{ canvas.getLabelName(708) }" 
             				 separatorbefore="true"
             				 onselect="parent.parent.parent.addFile()" />

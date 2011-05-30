@@ -126,7 +126,6 @@
     	this.selectItem(itemObj);
     	
     	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName);
-    	
     </method>
     
     <!--
@@ -172,7 +171,7 @@
             homeIcon._folderIcon.setAttribute("frame",2);
             
             //Home area
-            for (var i=0;i<roomObject.userHome.length;i++) {
+            for (var i=0; i<roomObject.userHome.length; i++) {
                 var fileExplorerItem = roomObject.userHome[i];
                 if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
                 if (fileExplorerItem.isFolder) {
@@ -213,7 +212,7 @@
                                             fileIcon:'file_explorer_video_rsc',
                                             refObjListRoot:this
                                         });
-                }else if (fileExplorerItem.isStoredWmlFile) { 
+                } else if (fileExplorerItem.isStoredWmlFile) { 
                 	new lz.wmlFileExplorerItem(homeIcon.content,{
                                             isFolder:false,
                                             fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
@@ -222,6 +221,15 @@
                                             isWmlFile: true,
                                             refObjListRoot:this                	
             							});
+                } else if (fileExplorerItem.isChart) { 
+                  new lz.wmlFileExplorerItem(homeIcon.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileIcon:'file_explorer_chart_rsc',
+                                            isChart:true,
+                                            refObjListRoot:this                 
+                          });
 
             	}
             }
@@ -240,7 +248,7 @@
             roomHome._folderIcon.setAttribute("frame",2);
             
             //Public area
-            for (var i=0;i<roomObject.roomHome.length;i++) {
+            for (var i=0; i<roomObject.roomHome.length; i++) {
                 var fileExplorerItem = roomObject.roomHome[i];
                 if ($debug) Debug.write("fileExplorerItem.fileExplorerItemId, ",fileExplorerItem.fileExplorerItemId);
                 if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
@@ -282,7 +290,7 @@
                                             fileIcon:'file_explorer_video_rsc',
                                             refObjListRoot:this
                                         });
-                }else if (fileExplorerItem.isStoredWmlFile) { 
+                } else if (fileExplorerItem.isStoredWmlFile) { 
                 	new lz.wmlFileExplorerItem(roomHome.content,{
                                             isFolder:false,
                                             fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
@@ -291,6 +299,15 @@
                                             isWmlFile: true,
                                             refObjListRoot:this                	
             							});
+                } else if (fileExplorerItem.isChart) { 
+                  new lz.wmlFileExplorerItem(roomHome.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileIcon:'file_explorer_chart_rsc',
+                                            isChart:true,
+                                            refObjListRoot:this                 
+                          });
            		}
             }
         ]]>

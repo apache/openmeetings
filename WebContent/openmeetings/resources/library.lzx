@@ -38,8 +38,6 @@
 <resource name="edit_add_rsc" src="plus_icon.png" />
 <resource name="reload_rsc" src="reload_page.png" /> 
 
-<resource name="xoffice_rsc" src="x-office-presentation.png" />
-<resource name="xoffice22_rsc" src="x-office-presentation22.png" />
 <resource name="refresh_file_rsc" src="kaboodleloop.png" />
 
 <resource name="close_btn_rsc">

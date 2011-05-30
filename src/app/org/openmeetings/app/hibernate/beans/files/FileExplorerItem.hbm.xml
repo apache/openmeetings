@@ -25,5 +25,6 @@
     <property name="previewImage" type="string" column="preview_image"/>
     <property name="wmlFilePath" type="string" column="wml_file_path"/>
     <property name="isStoredWmlFile" type="boolean" column="is_stored_wml_file"/>
+    <property name="isChart" type="boolean" column="is_chart"/>
   </class>
 </hibernate-mapping>

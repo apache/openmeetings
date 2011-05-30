@@ -6,20 +6,27 @@
     <property name="templates.src.dir" value="${basedir}/src/templates"/>
     <property name="test.src.dir" value="${basedir}/src/test"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
-    <property name="main.out.dir" value="${basedir}/temp"/>
+    <property name="main.out.dir" value="${basedir}/bin"/>
 	
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
 	
 	<!-- screen.src.dir -->
-	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />	
-    
+	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
+	
+	<!-- hudson config -->
+	<property environment="env"/>
+
+	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
+	<property name="build.svn.hudson" value="${env.SVN_REVISION}" />
+	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
+	
     <!-- Axis2 Services -->
     <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
     <property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
     <property name="userservice.src.dir" value="${basedir}/src/userservice"/>
     
-    <property name="classes.dir" value="${basedir}/temp"/>
+    <property name="classes.dir" value="${basedir}/bin"/>
     
     <property name="dist.dir" value="dist"/>
     
@@ -34,10 +41,25 @@
 
     <!-- libraries -->
     <property name="project.lib" value="./lib"/>
-
-	 <!-- Hibernate -->
-    <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
 	
+	<!-- LPS Properties -->
+	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/red5/webapps/${project.distname}/" />
+	<property name="laszlo.home" value="${basedir}/openlaszlo"/>
+	<property name="laszlo.src.dir" value="${basedir}/WebContent/${project.distname}"/>
+	<property name="laszlo.debug" value="false"/>
+	<property name="laszlo.proxied" value = "solo"/>
+
+	<path id = "laszlo.lib">
+		<!-- swf8 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
+			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar"/>
+		<!-- swf10 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
+			fxgutils.jar"/>
+	</path>
+
+    <!-- Hibernate -->
+    <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
     <!-- Log4j -->
     <property name="log4j.lib" value="${project.lib}/log4j" />
     <!-- xDoclet -->
@@ -68,10 +90,7 @@
 	
 	<!-- screenshare.lib -->
     <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
-    
-	<!-- screenshare.lib -->
-    <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
-    	
+	
     <!-- compile classpath -->
     <path id="compile.classpath">
         <fileset dir="${log4j.lib}" includes="*.jar"/>
@@ -96,6 +115,25 @@
 	<!-- screenshare classpath -->
 	<path id="screenshare.classpath">
         <fileset dir="${screenshare.lib}" includes="*.jar"/>
+    </path>
+
+    <!-- xDoclet classpath -->
+    <path id="xdoclet.classpath">
+        <fileset dir="${xdoclet.lib}" includes="*.jar"/>
+        <fileset dir="${hibernate.lib}" includes="*.jar"/>
+        <fileset dir="${database.lib}" includes="*.jar" />
+        <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
+        <fileset dir="${log4j.lib}" includes="*.jar"/>
+    </path>
+
+    <!-- Schema export classpath -->
+    <path id="schema.export.classpath">
+        <fileset dir="${log4j.lib}" includes="*.jar" />
+        <fileset dir="${hibernate.lib}" includes="*.jar" />
+        <fileset dir="${jakarta.common.lib}" includes="*.jar" />
+        <fileset dir="${database.lib}" includes="*.jar" />
+        <fileset dir="${project.lib}" includes="*.jar" />
+        <pathelement path="${main.out.dir}"/>
     </path>
 
     <!-- start of xdoclet2 -->
@@ -129,13 +167,11 @@
             <pathelement location="${xdoclet2.lib.dir}/lib/commons-jexl-1.0.jar"/>
             <pathelement location="${xdoclet2.lib.dir}/lib/picocontainer-1.0.jar"/>
         </path>
-
         <taskdef
             name="xdoclet2"
             classname="org.xdoclet.ant.XDocletTask"
             classpathref="xdoclet2.task.classpath"
             />
-
     </target>
 
     <target name="remove" depends="xdoclet2" >
@@ -171,13 +207,24 @@
         </xdoclet2>
     </target>
     
-    
     <!-- end of xdoclet 2 -->
 
     <!-- build webapp -->
 
     <target name="dist" description="binary distribution of OpenMeetings"
+        depends="cleanForBinary, jar, compile.laszlo.main, signWebStartJars">
+        
+    </target>
+	
+	<!-- compiles the sources without the laszlo client -->
+	<target name="dist-test" description="binary distribution of OpenMeetings"
         depends="cleanForBinary, jar, signWebStartJars">
+        
+    </target>
+	
+	<!-- compiles the sources only with laszlo debug client -->
+	<target name="dist-debug" description="binary distribution of OpenMeetings"
+        depends="cleanForBinary, jar, compile.laszlo.main.debug, signWebStartJars">
         
     </target>
 
@@ -202,23 +249,27 @@
     </target>
 -->
 
-	<target name="prepare">
-        <mkdir dir="${main.out.dir}"/>
-		<mkdir dir="${screen.out.dir}" />
-	</target>
-	
-    <!-- Check timestamp on files
+    <!-- Check timestamp on files -->
     <target name="prepare">
-        <mkdir dir="${dist.dir}"/>
+    	<mkdir dir="${screen.out.dir}" />
+        <mkdir dir="${dist.dir}" />
         <copy todir="${dist.dir}" filtering="true">
-            <fileset dir="webapp">
+            <fileset dir="server">
                 <exclude name="**/*.fla"/>
-                <exclude name="**/*.gif"/>
             </fileset>
-        </copy> 
-        <copy todir="${dist.dir}/openmeetings/WEB-INF/lib">
+        </copy>
+
+        <chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh"/>
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/screen" perm="755" includes="**/*.sh"/>
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/jod" perm="755" includes="**/*.sh"/>
+        
+        <copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib">
             <fileset dir="${axis2.lib}">
             </fileset>
+            <!--
+            <fileset dir="${slf4j.lib}">
+            </fileset>
+             -->
             <fileset dir="${velocity.lib}">
             </fileset>
             <fileset dir="${batik.lib}">
@@ -237,12 +288,26 @@
             </fileset>  
             <fileset dir="${jmf.lib}" includes="*.jar"/>
         </copy>
+
+        <chmod dir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
+
+    	<!-- add language files from .war version -->
+    	<copy todir="${dist.dir}/red5/webapps/${project.distname}/languages">
+    		<fileset dir="WebContent/languages">
+    		</fileset>
+    	</copy>
+    	<copy todir="${dist.dir}/red5/webapps/${project.distname}/conf">
+    		<fileset dir="WebContent/conf">
+    		</fileset>
+    	</copy>
         <tstamp/>
     </target>
-     -->
+
 
     <!-- Copy any resource or configuration files -->
     <target name="resources">
+    	
+    	<!-- Main Applications -->
         <copy todir="${main.out.dir}" includeEmptyDirs="yes">
             <fileset dir="${main.src.dir}">
                 <patternset>
@@ -263,7 +328,8 @@
                     <include name="**/*.vm"/>
                     <exclude name="hibernate.properties"/>
                 </patternset>
-            </fileset>          
+            </fileset>  
+        	
             <fileset dir="${templates.src.dir}">
                 <patternset>
                     <include name="**/*.conf"/>
@@ -287,23 +353,27 @@
         </copy>
     	
     </target>
-    
 
     <!-- Compile JAR -->
     <target name="jar" description="Make Archive" depends="compile">
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
-        <manifestclasspath property="jar.classpath" jarfile="openmeetings.jar">
+        <manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
             <classpath refid="compile.classpath"/>
         </manifestclasspath>
-    	
-    	<!-- Not needed for the Moment
-        <jar destfile="${dist.dir}/${project.distname}/WEB-INF/lib/openmeetings.jar">
+    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+            <classpath refid="screenshare.classpath"/>
+        </manifestclasspath>
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
             <fileset dir="${classes.dir}">
                 <include name="**"/>
                 <exclude name="**/test/**"/>
+            	<exclude name="**/axis/**"/>
                 <exclude name="**/webstart/**"/>
+            	<!-- For now we include this into the main JAR
+            	<exclude name="**/server/**"/>
+            	 -->
             	<exclude name="**/client/**"/>
                 <exclude name="**/*.png"/>
                 <exclude name="**/*.vm"/>
@@ -316,7 +386,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>  
-        <jar destfile="${dist.dir}/${project.distname}/WEB-INF/lib/openmeetings-templates.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}-templates.jar">
             <fileset dir="${classes.dir}">
                 <include name="**"/>
                 <exclude name="**/org/**"/>
@@ -330,8 +400,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>  
-         -->
-        <jar destfile="${basedir}/WebContent/screen/screenviewer.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/screenviewer.jar">
             <fileset dir="${classes.dir}">
                 <include name="**/webstart/**"/>
                 <include name="**/*png"/>
@@ -342,7 +411,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
-    	<jar destfile="${basedir}/WebContent/screen/openmeetings-client.jar">
+    	<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/${project.distname}-client.jar">
             <fileset dir="${classes.dir}">
             	<include name="log4j.properties" />
                 <include name="**/client/**"/>
@@ -354,7 +423,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
-        <jar destfile="${basedir}/WebContent/screen/viewer.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/viewer.jar">
             <fileset dir="${classes.dir}">
                 <include name="**/jrdesktop/**"/>
                 <include name="**/*png"/>
@@ -365,7 +434,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
-        <jar destfile="${basedir}/WebContent/screen/rtpviewer.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpviewer.jar">
             <fileset dir="${classes.dir}">
             	<include name="log4j.properties" />
                 <include name="**/de/**"/>
@@ -377,7 +446,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>  
-        <jar destfile="${basedir}/WebContent/WEB-INF/services/FileService.aar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/FileService.aar">
             <fileset dir="${fileservice.src.dir}/">
                 <include name="META-INF/**"/>
             </fileset>
@@ -385,15 +454,19 @@
                 <include name="org/openmeetings/axis/services/FileService.class"/>
             </fileset>
         </jar>  
-        <jar destfile="${basedir}/WebContent/WEB-INF/services/RoomService.aar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/RoomService.aar">
             <fileset dir="${roomservice.src.dir}/">
                 <include name="META-INF/**"/>
             </fileset>
             <fileset dir="${classes.dir}">
+            	<include name="org/openmeetings/axis/services/RoomUser.class"/>
+            	<include name="org/openmeetings/axis/services/RoomReturn.class"/>
                 <include name="org/openmeetings/axis/services/RoomService.class"/>
+            	<include name="org/openmeetings/axis/services/RoomCountBean.class"/>
+            	<include name="org/openmeetings/axis/services/FLVRecordingReturn.class"/>
             </fileset>
         </jar>  
-        <jar destfile="${basedir}/WebContent/WEB-INF/services/UserService.aar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/UserService.aar">
             <fileset dir="${userservice.src.dir}/">
                 <include name="META-INF/**"/>
             </fileset>
@@ -401,7 +474,7 @@
                 <include name="org/openmeetings/axis/services/UserService.class"/>
             </fileset>
         </jar>
-        <jar destfile="${basedir}/WebContent/screen/rtpapplet.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpapplet.jar">
             <fileset dir="${classes.dir}">
                 <include name="**/applet/**"/>
                 
@@ -412,9 +485,8 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>
-    	
     	<!-- Screen Share -->
-        <jar destfile="${basedir}/WebContent/red5-screenshare/red5-screenshare.jar">
+        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare/red5-screenshare.jar">
             <fileset dir="${screen.out.dir}">
                 <include name="**/**"/>
             </fileset>
@@ -446,22 +518,54 @@
             lazy="false"
             >
           <path>
-            <fileset dir="${basedir}/WebContent/screen" >
+            <fileset dir="${dist.dir}/red5/webapps/${project.distname}/screen" >
                  <include name="**/*.jar" />
                 
             </fileset>
-          	<fileset dir="${basedir}/WebContent/red5-screenshare" >
+          	<fileset dir="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare" >
                  <include name="**/*.jar" />
                 
             </fileset>
           </path>
         </signjar>  
     </target>
+	
+	<target name = "compile.laszlo.main" depends="compile.laszlo.main.debug">
+	    <java classname = "org.openlaszlo.compiler.Main" fork = "true"
+	        newenvironment="true"
+	        failonerror="true"
+	        dir = "${laszlo.src.dir}"
+	        classpathref="laszlo.lib"
+	       >
+	        <jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
+	        <jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
+	        <jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
+	        <jvmarg value = "-Xms1024M"/>
+	        <jvmarg value = "-Xmx1024M"/>
+	        <arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn main.lzx" />
+	    </java>
+	</target>
+	
+	<target name = "compile.laszlo.main.debug">
+	    <java classname = "org.openlaszlo.compiler.Main" fork = "true"
+	        newenvironment="true"
+	        failonerror="true"
+	        dir = "${laszlo.src.dir}"
+	        classpathref="laszlo.lib"
+	       >
+	        <jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
+	        <jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
+	        <jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
+	        <jvmarg value = "-Xms1024M"/>
+	        <jvmarg value = "-Xmx1024M"/>
+	        <arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn maindebug.lzx" />
+	    </java>
+	</target>
         
     <!-- Normal build of application
-    compiler="org.eclipse.jdt.core.JDTCompilerAdapter" depends="prepare, resources" -->
+    compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
     <target name="compile" depends="prepare, resources">
-        <echo message="${main.out.dir}"></echo>
+        <echo message="Compile main to ${main.out.dir}"></echo>
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
         </javac>
@@ -485,7 +589,8 @@
         </javac>
         <javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
-        </javac>
+        </javac> 
+    	<echo message="Compile screen share to ${screen.out.dir}"></echo>
     	<!-- compile screen share -->
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
             <classpath refid="screenshare.classpath"/>
@@ -500,6 +605,12 @@
 	    	   <test name="org.openmeetings.server.TestSocket" />
 	    </junit>
 	</target>
+	
+	<target name="hudson" depends="dist">
+		<mkdir dir="${build.target}${build.number.hudson}"/>
+		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip"
+		       basedir="${dist.dir}/red5" />
+	</target>
 
     <!-- Build of junit tests
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter"
@@ -513,20 +624,21 @@
     <!-- Remove classes directory for clean build -->
     <target name="clean" depends="cleanForBinary" 
         description="Prepare for clean build">
-        <delete file="${main.out.dir}/**/*.hbm.xml"/>
+    	<delete dir="${main.out.dir}"/>
+    	<delete dir="${dist.dir}"/>
         <!--mkdir dir="${main.out.dir}"/-->
     </target>
     
     <target name="cleanForBinary" description="Clean For Binary">
         <delete dir="${dist.dir}"/>
-        <delete dir="${main.out.dir}"/>
     	<delete dir="${screen.out.dir}"/>
+        <delete dir="${main.out.dir}"/>
         <delete file="filetest.keystore" />
     </target>
 
 
     <!-- Build entire project -->
-    <target name="build project" depends="clean, compile, hibernate"/>
+    <target name="build project" depends="clean, prepare, compile, hibernate"/>
 
     
 

@@ -185,6 +185,9 @@
 		this.refObjListRoot.loadWmlFile(this);
 	</method>
 
+	<method name="loadChart">
+		this.refObjListRoot.loadChart(this);
+	</method>
 	
 	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
 		<![CDATA[
@@ -305,8 +308,8 @@
         <![CDATA[
             this.clearContent();
             
-            //Folder area
-            for (var i=0;i<roomHome.length;i++) {
+            // Folder area
+            for (var i=0; i<roomHome.length; i++) {
                 var fileExplorerItem = roomHome[i];
                 if (fileExplorerItem.isFolder) {
                     new lz.folderFileExplorerItem(this.content,{
@@ -346,13 +349,21 @@
                                             fileIcon:'file_explorer_image_rsc',
                                             refObjListRoot:this.refObjListRoot
                                         });
-                }else if (fileExplorerItem.isStoredWmlFile) { 
+                } else if (fileExplorerItem.isStoredWmlFile) { 
                 	new lz.wmlFileExplorerItem(this.content,{
                                             isFolder:false,
                                             fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
                                             fileName:fileExplorerItem.fileName,
                                             fileIcon:'file_explorer_wml_rsc',
                                             isWmlFile: true,
+                                            refObjListRoot:this.refObjListRoot                	
+            							});
+                } else if (fileExplorerItem.isChart) { 
+                	new lz.chartFileExplorerItem(this.content,{
+                                            isFolder:false,
+                                            fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
+                                            fileName:fileExplorerItem.fileName,
+                                            fileIcon:'file_explorer_chart_rsc',
                                             refObjListRoot:this.refObjListRoot                	
             							});
 

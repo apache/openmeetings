@@ -2970,7 +2970,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	public synchronized void sendMessageWithClientByPublicSID(Object message, String publicSID) {
 		try {
 			//ApplicationContext appCtx = getContext().getApplicationContext();
-			
 			IScope globalScope = getContext().getGlobalScope();
 			
 			IScope webAppKeyScope = globalScope.getScope(ScopeApplicationAdapter.webAppRootKey);
