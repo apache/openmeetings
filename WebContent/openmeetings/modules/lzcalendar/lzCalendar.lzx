@@ -138,21 +138,44 @@
                 }
             } ]]>
         </method>
-        <labelText name="sunday" labelid="466" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - this.width)/2.0}" />
-        <labelText name="monday" labelid="460" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - this.width)/2.0}" />
-        <labelText name="tuesday" labelid="461" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - this.width)/2.0}" />
-        <labelText name="wednesday" labelid="462" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - this.width)/2.0}" />
-        <labelText name="thursday" labelid="463" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - this.width)/2.0}" />
-        <labelText name="friday" labelid="464" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - this.width)/2.0}" />
-        <labelText name="saturday" labelid="465" fontsize="10" fgcolor="0xEEF0EB"
-        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - this.width)/2.0}" />
-
+             
+        // If monday is designed as the first day in the week in the config file 'config.xml'
+        <state applied="${canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()') == 1}">
+	        	
+		        <labelText name="sunday" labelid="466" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - this.width)/2.0}" />
+		        <labelText name="monday" labelid="460" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - this.width)/2.0}" />
+		        <labelText name="tuesday" labelid="461" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - this.width)/2.0}" />
+		        <labelText name="wednesday" labelid="462" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - this.width)/2.0}" />
+		        <labelText name="thursday" labelid="463" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - this.width)/2.0}" />
+		        <labelText name="friday" labelid="464" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - this.width)/2.0}" />
+		        <labelText name="saturday" labelid="465" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - this.width)/2.0}" />
+	</state>
+	// If sunday is designed as the first day in the week in the config file 'config.xml'
+	<state applied="${canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()') == 0}">
+			
+			<labelText name="sunday" labelid="466" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell1.x + (parent.parent.parent.parent.calgrid.cell1.width - this.width)/2.0}" />
+		        <labelText name="monday" labelid="460" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell2.x + (parent.parent.parent.parent.calgrid.cell2.width - this.width)/2.0}" />
+		        <labelText name="tuesday" labelid="461" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell3.x + (parent.parent.parent.parent.calgrid.cell3.width - this.width)/2.0}" />
+		        <labelText name="wednesday" labelid="462" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell4.x + (parent.parent.parent.parent.calgrid.cell4.width - this.width)/2.0}" />
+		        <labelText name="thursday" labelid="463" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell5.x + (parent.parent.parent.parent.calgrid.cell5.width - this.width)/2.0}" />
+		        <labelText name="friday" labelid="464" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell6.x + (parent.parent.parent.parent.calgrid.cell6.width - this.width)/2.0}" />
+		        <labelText name="saturday" labelid="465" fontsize="10" fgcolor="0xEEF0EB"
+		        		 x="${parent.parent.parent.parent.calgrid.cell7.x + (parent.parent.parent.parent.calgrid.cell7.width - this.width)/2.0}" />
+			
+	</state>
 
     </view>
     <view name="line" bgcolor="$once { canvas.baseMousecolorizer }" height="1" y="25"
@@ -171,7 +194,7 @@
 								canvas.getLabelName(475),canvas.getLabelName(476),
 								canvas.getLabelName(477),canvas.getLabelName(478),
 								canvas.getLabelName(479),canvas.getLabelName(480)];
-		
+		state.apply();
 		this.toppanel.slideInTopPanel.doStart();
 	</handler>
 	
@@ -596,13 +619,14 @@
                   dtend.setMinutes(0);
                   dtend.setSeconds(0);
                   dtend.setMilliseconds(0);
-
+                  
                   var dayview = this.subviews[k];
                   dayview.setDate(dtstart, dtend);
 
                   //Debug.write("dtstart:  "+dtstart.getDate());
-
-                  if (firstDay=="" && dtstart.getDate()==tNow.getDate())
+                  
+                  // We need to compare the day and the month of the current date with today (tNow) to point the good day in the calendar
+                  if (firstDay=="" && dtstart.getDate()==tNow.getDate() && dtstart.getMonth()==tNow.getMonth())
                       firstDay=dayview;
 
                   if ($debug) Debug.write( "k, DATE, subview =" + k + "," + dtstart.toString() + "," + dayview);
@@ -676,13 +700,33 @@
               // SET THE DATE TO THE FIRST OF THE MONTH
               this.startdate.setMonth(this.month,1);
               this.startdate.setFullYear(this.year);
+              
+              // If sunday is designed as the first day in the week in the config file 'config.xml'
 
               // Find the first sunday of that week which contains
               // the first of the specified month
               // NOTE: 86400000 milliseconds represents one day
-              this.startdate.setTime( this.startdate.getTime() -
-                                      86400000*this.startdate.getDay());
-
+              
+               if (canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()') == 0) { 
+               this.startdate.setTime( this.startdate.getTime() -
+	                                      86400000*this.startdate.getDay());
+               } else {
+               
+              // If monday is designed as the first day in the week in the config file 'config.xml'
+              // We have to make the same process, but with monday	
+              // Find the first monday of that week which contains
+              // the first of the specified month
+              
+              
+              //If the first of the month is a sunday, the start date begins 6 days before.
+	              if (this.startdate.getDay() == 0) {
+	              	this.startdate.setTime( this.startdate.getTime() -
+	                                      86400000*(this.startdate.getDay() + 6)); 
+	              } else {
+	              	this.startdate.setTime( this.startdate.getTime() -
+	                                      86400000*(this.startdate.getDay()-1));        
+	              }                                 
+				}
               // Zero the time for that day
               this.startdate.setHours(0,0,0,0);
 
