@@ -236,7 +236,8 @@ public class GenerateSWF {
 			String originalFolder, String destinationFolder, String fileNamePure) {
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] { getPathToSwfTools() + "pdf2swf" + execExt,
-				"-s","insertstop", //Insert Stop command into every frame
+				"-s","insertstop", // insert Stop command into every frame
+				"-i", // change draw order to reduce pdf complexity
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
 
