@@ -243,7 +243,7 @@ public class WhiteboardManagement {
 	
 	public void addWhiteBoardObjectById(Long room_id, Map whiteboardObj, Long whiteBoardId) {
 		try {
-			log.debug("addWhiteBoardObject: ",whiteboardObj);
+			log.debug("addWhiteBoardObjectById: ",whiteboardObj);
 			
 			//log.debug("whiteboardObj 0: Event: "+whiteboardObj.get(0));
 			//log.debug("whiteboardObj 1: Event: "+whiteboardObj.get(1));

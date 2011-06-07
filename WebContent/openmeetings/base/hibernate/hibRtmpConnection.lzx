@@ -1498,7 +1498,11 @@
 						//canvas._drawarea.sendCompleteImageSync(value.client);
 					    //Debug.write("syncinitLoader sendVarsToMessageWithClient: ",value.message[2]);
 						if (value.client.streamid!=canvas.streamid) canvas._drawarea.remoteSyncLoader();
-					}
+					} else if (value.message[1][0]=='isSnapToGrid'){
+                        canvas._drawarea.setAttribute('isSnapToGrid', value.message[1][1]);
+                        //Debug.write("syncinitLoader sendVarsToMessageWithClient: ",value.message[2]);
+                        //if (value.client.streamid!=canvas.streamid) canvas._drawarea.remoteSyncLoader();
+                    }
                 } else if (value.message[0]=='updateDrawStatus'){
                 	canvas.setDrawAllowStatus(value.message[1]);
                     canvas.setAttribute("drawAllowStatus",value.message[1]);

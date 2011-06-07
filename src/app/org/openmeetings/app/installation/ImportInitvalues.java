@@ -456,6 +456,9 @@ public class ImportInitvalues {
 		long interview_Id = Roommanagement.getInstance().addRoomType("interview");
 		log.debug("interview_Id: " + interview_Id);
 		
+		long custom_Id = Roommanagement.getInstance().addRoomType("custom");
+		log.debug("custom_Id: " + custom_Id);
+		
 		Roommanagement.getInstance().addRoom(3, "public Interview Room", interview_Id,
 				"", new Long(16), true, null, false, false, null, false, null, true, 
 				false, false, "", "", "", null);

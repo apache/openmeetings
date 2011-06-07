@@ -11,7 +11,7 @@
 	<method name="loadObjectList" args="whiteBoardObject">
 		<![CDATA[
 		
-			if ($debug) Debug.write("loadObjectList :1: ",whiteBoardObject,whiteBoardObject.fullFit,whiteBoardObject.zoom);
+			if ($debug) Debug.info("loadObjectList :1: ",whiteBoardObject,whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
 			parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
@@ -71,6 +71,9 @@
 			//for (var i=0;i<this.loadingObjectList.length;i++){
 			//	if ($debug) Debug.write("i this.loadingObjectList[i] ",i,this.loadingObjectList[i]);
 			//}
+			
+			if ($debug) Debug.write("Number of Whiteboard Objects ",this.loadingObjectList.length);
+			
 			if (this.loadingObjectList != null && this.loadingObjectList.length != 0){
 				this.startNewSyncprocess.doCall();
 			}
