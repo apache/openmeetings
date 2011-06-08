@@ -10,18 +10,21 @@
 			
 			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
 							 onselect="parent.parent.parent.editFolderName()" />
-			             				 
+			
+			<!--             				 
             <contextmenuitem caption="$once{ canvas.getLabelName(708) }" 
             				 separatorbefore="true"
             				 onselect="parent.parent.parent.addFile()" />
             				 
             <contextmenuitem caption="$once{ canvas.getLabelName(709) }" 
             				 onselect="parent.parent.parent.addFolder()" />
-            				 
+             -->
+             				 
             <contextmenuitem caption="$once{ canvas.getLabelName(710) }" 
             				 onselect="parent.parent.parent.deleteFile(719)" />
-            				 
-			 <contextmenuitem caption="$once{ canvas.getLabelName(1314) }" 
+            	
+            			 
+			<contextmenuitem caption="$once{ canvas.getLabelName(1314) }" 
 							 onselect="parent.parent.parent.loadWmlFile()" />
             				 
         </contextmenu>
