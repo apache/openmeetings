@@ -126,7 +126,7 @@
                 this.setAttribute('frame',2);
                 new lz.confirmationSingle(canvas,{
                            refObj:this,
-                           labeliderror:1161,
+                           labeliderror:1313,
                            showCheckBox:false
                         });
             </handler>

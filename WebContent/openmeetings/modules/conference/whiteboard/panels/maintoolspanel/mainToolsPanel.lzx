@@ -3,7 +3,7 @@
 	
 <class name="verticalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="y" spacing="2" />
-	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plain" modi="plainConfirm" labelid="69" resourceItem="plain" setSelectionToItem="false" />
 	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
 	<!--
 	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />
@@ -37,7 +37,7 @@
 
 <class name="horizontalMenuIconBar" extends="view" y="22" x="4" clickable="true">
 	<simplelayout axis="x" spacing="2" />
-	<mainToolsPanelItem name="plain" modi="plain" labelid="69" resourceItem="plain" setSelectionToItem="false" />
+	<mainToolsPanelItem name="plain" modi="plainConfirm" labelid="69" resourceItem="plain" setSelectionToItem="false" />
 	<mainToolsPanelItem name="plainSlide" modi="plainSlide" labelid="1005" resourceItem="plainSlides" setSelectionToItem="false" />
 	<!--
 	<mainToolsPanelItem name="drag" modi="drag" labelid="1113" resourceItem="arrow_draw_panel_tool_cursor" />

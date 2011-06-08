@@ -600,6 +600,14 @@
 		}	
 		//this.setAttribute('drawmodus',this.getAttribute('drawmodus'));				
 	</method>
+	
+	<method name="onmouseoverMethod">
+		
+	</method>
+	
+	<method name="onmouseoutMethod">
+        
+    </method>
              
 	<method name="onmousedownMethod" >
 		<![CDATA[
