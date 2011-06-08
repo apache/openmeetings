@@ -33,7 +33,7 @@ public class LibraryDocumentConverter {
 	
 	private static final String fileExt = ".wml";
 	
-	private static final String wmlFolderName = "stored/";
+	private static final String wmlFolderName = "stored" + File.separatorChar;
 
 	private static LibraryDocumentConverter instance;
 

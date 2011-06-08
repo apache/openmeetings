@@ -33,6 +33,8 @@ import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.StoredFile;
+import org.openmeetings.utils.crypt.MD5;
+import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -699,13 +701,14 @@ public class ConferenceLibrary {
 
                 String roomName = room_id.toString();
                 String current_dir = ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + roomName + File.separatorChar;
+                        + File.separatorChar + "upload" + File.separatorChar;
 
                 log.debug("### this is my working directory: " + current_dir);
+                
+                String localFileName = MD5.do_checksum(new Date().toString())+".wml";
 
                 String wmlPath = LibraryDocumentConverter.getInstance()
-                        .writeToLocalFolder(current_dir, fileName, tObject);
+                        .writeToLocalFolder(current_dir, localFileName, tObject);
 
                 // String wmlPath = current_dir + File.separatorChar+fileName
                 // +".xml";
@@ -714,35 +717,37 @@ public class ConferenceLibrary {
                         .add(fileName, "", 0L, null, room_id, users_id, false, // isFolder
                                 false, // isImage
                                 false, // isPresentation
-                                wmlPath, // WML Path
+                                localFileName, // WML localFileName
                                 true, // isStoredWML file
                                 true);
 
                 return fileExplorerId;
             }
         } catch (Exception err) {
-            log.error("[saveAsImage] ", err);
+            log.error("[saveAsObject] ", err);
         }
         return -1L;
     }
 
-    public ArrayList loadWmlObject(String SID, Long room_id, String fileName) {
+    public ArrayList loadWmlObject(String SID, Long room_id, Long fileExplorerItemId) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
             Long user_level = Usermanagement.getInstance().getUserLevelByID(
                     users_id);
+            
             if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
                 String roomName = room_id.toString();
                 String current_dir = ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + roomName + File.separatorChar;
+                        + File.separatorChar + "upload" + File.separatorChar;
                 log.debug("### this is my working directory: " + current_dir);
+                
+                FileExplorerItem fileExplorerItem = FileExplorerItemDaoImpl.getInstance().getFileExplorerItemsById(fileExplorerItemId);
 
                 return LibraryWmlLoader.getInstance().loadWmlFile(current_dir,
-                        fileName);
+                		fileExplorerItem.getWmlFilePath());
             }
         } catch (Exception err) {
-            log.error("[saveAsImage] ", err);
+            log.error("[loadWmlObject] ", err);
         }
         return null;
     }

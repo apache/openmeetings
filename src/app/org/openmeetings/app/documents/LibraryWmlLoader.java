@@ -40,7 +40,7 @@ public class LibraryWmlLoader {
 	public ArrayList loadWmlFile(String filePath, String fileName){
 		try {
 			LinkedHashMap lMap = new LinkedHashMap();
-			String filepathComplete = filePath+wmlFolderName+fileName+fileExt;
+			String filepathComplete = filePath+wmlFolderName+fileName;
 			
 			log.error("filepathComplete: "+filepathComplete);
 			

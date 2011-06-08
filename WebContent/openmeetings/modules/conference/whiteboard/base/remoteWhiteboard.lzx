@@ -133,8 +133,8 @@
     
     <method name="prepareLoadWMLFile" args="itemObj">
         if ($debug) Debug.write("loadWMLFile: ",itemObj);
-        var Itemfilename = itemObj.fileName;
-        this.loadWMLFile.setAttribute('filename', Itemfilename);
+        
+        this.loadWMLFile.setAttribute('fileExplorerItemId', itemObj.fileExplorerItemId);
                                         
         this.loadWMLFile.doCall();
     </method>
@@ -142,10 +142,10 @@
     
     <netRemoteCallHib name="loadWMLFile" funcname="fileservice.loadWmlObject"
         remotecontext="$once{ canvas.thishib }" >
-        <attribute name="filename" type="string" value=""/>
+        <attribute name="fileExplorerItemId" type="number" value="0"/>
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam> 
-        <netparam><method name="getValue">return parent.filename;</method></netparam> 
+        <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
