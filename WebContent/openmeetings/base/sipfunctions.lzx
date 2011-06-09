@@ -13,6 +13,16 @@ flash.external.ExternalInterface.addCallback("sipStatusMessage", null, sipStatus
 flash.external.ExternalInterface.addCallback("sipLoginSuccess", null, sipLoginSuccess);
 flash.external.ExternalInterface.addCallback("sipLoginFail", null, sipLoginFail);
 
+
+flash.external.ExternalInterface.addCallback("callbackgetAppletStatus", null, callbackgetAppletStatus);
+flash.external.ExternalInterface.addCallback("callbackLoginSipUser", null, callbackLoginSipUser);
+flash.external.ExternalInterface.addCallback("callbackregister", null, callbackregister);
+flash.external.ExternalInterface.addCallback("callbackDTMFButton", null, callbackDTMFButton);
+flash.external.ExternalInterface.addCallback("preCustomStartCallByCallToCallBack", null, preCustomStartCallByCallToCallBack);
+flash.external.ExternalInterface.addCallback("preCustomStartCallBack", null, preCustomStartCallBack);
+flash.external.ExternalInterface.addCallback("startCallCallBack", null, startCallCallBack);
+
+
 function sipStatusMessage(msg) {
 	
 	if ($debug) Debug.write("sipStatusMessage :: ",msg);
@@ -64,9 +74,11 @@ function sipIsEnabled(){
 
 function getAppletStatus() {
     
-    if ($debug) Debug.write("initializeSIPApplet :: ");
+    if ($debug) Debug.write("initializeSIPApplet :: flash.external.ExternalInterface (getAppletStatus) ");
     
-    lz.Browser.callJS("getAppletStatus",callbackgetAppletStatus);
+    flash.external.ExternalInterface.call("getAppletStatus")
+    
+    //lz.Browser.callJS("getAppletStatus",callbackgetAppletStatus);
     
 }
 
@@ -88,7 +100,9 @@ function loginSipUser(userSipData,regObject) {
 	
 	returnObject = regObject;
 	
-    lz.Browser.callJS("omCustomRegister",callbackLoginSipUser,userSipData.username,userSipData.userpass,userSipData.authId);
+	flash.external.ExternalInterface.call("omCustomRegister",userSipData.username,userSipData.userpass,userSipData.authId);
+	
+    //lz.Browser.callJS("omCustomRegister",callbackLoginSipUser,userSipData.username,userSipData.userpass,userSipData.authId);
 	
 }
 
@@ -102,7 +116,9 @@ function registerSIPUser(userSipData) {
     
     if ($debug) Debug.write("loginSipUser :: ");
     
-    lz.Browser.callJS("register",callbackregister);
+    flash.external.ExternalInterface.call("register");
+    
+    //lz.Browser.callJS("register",callbackregister);
     
 }
 
@@ -113,7 +129,9 @@ function callDTMFButton(returnObjectDialerRef,number) {
     
     if ($debug) Debug.write("callDTMFButton :1: ",number);
     
-    lz.Browser.callJS("DTMFButton",callbackDTMFButton,number);
+    flash.external.ExternalInterface.call("DTMFButton",number);
+    
+    //lz.Browser.callJS("DTMFButton",callbackDTMFButton,number);
     
 }
 
@@ -128,7 +146,10 @@ function callbackDTMFButton(returnValue) {
 function preCustomStartCallByCallTo(sipNumber) {
 	
 	//preCustomStartCall(); startCall();
-    lz.Browser.callJS("preCustomStartCallByCallTo",preCustomStartCallByCallToCallBack,sipNumber);
+	
+	flash.external.ExternalInterface.call("preCustomStartCallByCallTo",sipNumber);
+    
+    //lz.Browser.callJS("preCustomStartCallByCallTo",preCustomStartCallByCallToCallBack,sipNumber);
     
 }
 
@@ -144,7 +165,10 @@ function preCustomStartCallByCallToCallBack(returnValue) {
 function preCustomStartCall() {
     
     //preCustomStartCall(); startCall();
-    lz.Browser.callJS("preCustomStartCall",preCustomStartCallBack);
+    
+	flash.external.ExternalInterface.call("preCustomStartCall");
+    
+    //lz.Browser.callJS("preCustomStartCall",preCustomStartCallBack);
     
 }
 
@@ -160,7 +184,10 @@ function preCustomStartCallBack(returnValue) {
 function startCall() {
     
     //preCustomStartCall(); startCall();
-    lz.Browser.callJS("startCall",startCallCallBack);
+    
+	flash.external.ExternalInterface.call("startCall");
+    
+    //lz.Browser.callJS("startCall",startCallCallBack);
     
 }
 
