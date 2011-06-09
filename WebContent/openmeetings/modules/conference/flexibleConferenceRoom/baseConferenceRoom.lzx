@@ -72,7 +72,7 @@
                 	
                 	preCustomStartCallByCallTo(canvas.currentRoomObject.sipNumber);
                 	
-                	new lz.debugPinCode(canvas);
+                	//new lz.debugPinCode(canvas);
                 	
                 	//for (var i=0;i<numberAsString.length;i++) {
                 	//	var charString = numberAsString.charAt(i);
