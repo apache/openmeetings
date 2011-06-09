@@ -79,7 +79,6 @@
     <import resource="red5-services/errorservice.service.xml"/>  
     <import resource="red5-services/pollservice.service.xml"/>  
     <import resource="red5-services/xmlcrm.service.xml"/>  
-    <import resource="red5-services/issueservice.service.xml"/>  
     <import resource="red5-services/languageservice.service.xml"/>  
     <import resource="red5-services/chatservice.service.xml"/>  
     <import resource="red5-services/streamservice.service.xml"/>  
