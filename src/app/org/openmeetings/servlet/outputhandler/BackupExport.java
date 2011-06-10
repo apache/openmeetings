@@ -858,7 +858,7 @@ public class BackupExport extends HttpServlet {
 		for (Iterator<FileExplorerItem> it = fileExplorerItems.iterator();it.hasNext();) {
 			FileExplorerItem fileExplorerItem = it.next();
 			
-			Element fileExplorerItemElement = fileExplorerItemsElement.addElement("flvrecording");
+			Element fileExplorerItemElement = fileExplorerItemsElement.addElement("fileExplorerItem");
 			
 			fileExplorerItemElement.addElement("fileExplorerItemId").setText(""+fileExplorerItem.getFileExplorerItemId());
 			fileExplorerItemElement.addElement("fileName").setText(""+fileExplorerItem.getFileName());

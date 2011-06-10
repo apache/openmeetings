@@ -78,6 +78,28 @@ public class FileExplorerItemDaoImpl {
         }
         return null;
     }
+    
+    public Long addFileExplorerItem(FileExplorerItem fileItem) {
+        try {
+
+            Object idf = HibernateUtil.createSession();
+
+            Session session = HibernateUtil.getSession();
+            Transaction tx = session.beginTransaction();
+
+            Long fileItemId = (Long) session.save(fileItem);
+
+            tx.commit();
+            HibernateUtil.closeSession(idf);
+
+            return fileItemId;
+        } catch (HibernateException ex) {
+            log.error("[addFileExplorerItem]", ex);
+        } catch (Exception ex2) {
+            log.error("[addFileExplorerItem]", ex2);
+        }
+        return null;
+    }
 
     public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(
             Long room_id, Long ownerId) {

@@ -40,6 +40,7 @@ import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
+import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
@@ -61,6 +62,7 @@ import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
@@ -467,6 +469,19 @@ public class BackupImport extends HttpServlet {
 						//throw new Exception ("meetingmembersListFile missing");
 					} else {
 						this.importUserContacts(userContactsFile);
+					}
+					
+					/* #####################
+					 * Import File-Explorer Items
+					 * 
+					 */
+					String fileExplorerListXML = completeName + File.separatorChar + "fileExplorerItems.xml";
+					File fileExplorerListFile = new File(fileExplorerListXML);
+					if (!fileExplorerListFile.exists()) {
+						log.debug("fileExplorerListFile missing");
+						//throw new Exception ("meetingmembersListFile missing");
+					} else {
+						this.importFileExplorerItems(fileExplorerListFile);
 					}
 					
 					this.deleteDirectory(f);
@@ -1575,6 +1590,99 @@ public class BackupImport extends HttpServlet {
 			
 		} catch (Exception err) {
 			log.error("[getRoomListByXML]",err);
+		}
+		return null;
+	}
+	
+	
+	private void importFileExplorerItems(File fileExplorerItemsListFile) throws Exception {
+		
+		List<FileExplorerItem> fileExplorerItems = this.getFileExplorerItems(fileExplorerItemsListFile);
+		
+		for (FileExplorerItem fileExplorerItem : fileExplorerItems) {
+			
+			FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
+			
+		}
+		
+	}
+	
+	private List<FileExplorerItem> getFileExplorerItems(File fileExplorerItemsListFile) {
+		try {
+
+			List<FileExplorerItem> fileExplorerItemsList = new LinkedList<FileExplorerItem>();
+			
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(fileExplorerItemsListFile);
+			
+			Element root = document.getRootElement();
+			
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+				
+	        	Element itemObject =  i.next();
+	        	
+	        	if (itemObject.getName().equals("fileExplorerItems")) {
+	        		
+	        		for (Iterator<Element> innerIter = itemObject.elementIterator( "fileExplorerItem" ); innerIter.hasNext(); ) {
+	        			
+	        			Element fileExplorerItemObj = innerIter.next();
+	        			
+	        			Long fileExplorerItemId = importLongType(fileExplorerItemObj.element("fileExplorerItemId").getText());
+	        			String fileName = fileExplorerItemObj.element("fileName").getText();
+	        			String fileHash = fileExplorerItemObj.element("fileHash").getText();
+	        			Long parentFileExplorerItemId = importLongType(fileExplorerItemObj.element("parentFileExplorerItemId").getText());
+	        			Long room_id = importLongType(fileExplorerItemObj.element("room_id").getText());
+	        			Long ownerId = importLongType(fileExplorerItemObj.element("ownerId").getText());
+	        			Boolean isFolder = importBooleanType(fileExplorerItemObj.element("isFolder").getText());
+	        			Boolean isImage = importBooleanType(fileExplorerItemObj.element("isImage").getText());
+	        			Boolean isPresentation = importBooleanType(fileExplorerItemObj.element("isPresentation").getText());
+	        			Boolean isVideo = importBooleanType(fileExplorerItemObj.element("isVideo").getText());
+	        			Long insertedBy = importLongType(fileExplorerItemObj.element("insertedBy").getText());
+	        			Date inserted = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("inserted").getText());
+	        			Date updated = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("updated").getText());
+	        			String deleted = fileExplorerItemObj.element("deleted").getText();
+	        			Long fileSize = importLongType(fileExplorerItemObj.element("fileSize").getText());
+	        			Integer flvWidth = importIntegerType(fileExplorerItemObj.element("flvWidth").getText());
+	        			Integer flvHeight = importIntegerType(fileExplorerItemObj.element("flvHeight").getText());
+	        			String previewImage = fileExplorerItemObj.element("previewImage").getText();
+	        			String wmlFilePath = fileExplorerItemObj.element("wmlFilePath").getText();
+	        			Boolean isStoredWmlFile = importBooleanType(fileExplorerItemObj.element("isStoredWmlFile").getText());
+	        			Boolean isChart = importBooleanType(fileExplorerItemObj.element("isChart").getText());
+	        			
+	        			FileExplorerItem fileExplorerItem = new FileExplorerItem();
+	        			fileExplorerItem.setFileExplorerItemId(fileExplorerItemId);
+	        			fileExplorerItem.setFileName(fileName);
+	        			fileExplorerItem.setFileHash(fileHash);
+	        			fileExplorerItem.setParentFileExplorerItemId(parentFileExplorerItemId);
+	        			fileExplorerItem.setRoom_id(room_id);
+	        			fileExplorerItem.setOwnerId(ownerId);
+	        			fileExplorerItem.setIsFolder(isFolder);
+	        			fileExplorerItem.setIsImage(isImage);
+	        			fileExplorerItem.setIsPresentation(isPresentation);
+	        			fileExplorerItem.setIsVideo(isVideo);
+	        			fileExplorerItem.setInsertedBy(insertedBy);
+	        			fileExplorerItem.setInserted(inserted);
+	        			fileExplorerItem.setUpdated(updated);
+	        			fileExplorerItem.setDeleted(deleted);
+	        			fileExplorerItem.setFileSize(fileSize);
+	        			fileExplorerItem.setFlvWidth(flvWidth);
+	        			fileExplorerItem.setFlvHeight(flvHeight);
+	        			fileExplorerItem.setPreviewImage(previewImage);
+	        			fileExplorerItem.setWmlFilePath(wmlFilePath);
+	        			fileExplorerItem.setIsStoredWmlFile(isStoredWmlFile);
+	        			fileExplorerItem.setIsChart(isChart);
+	        			
+	        			fileExplorerItemsList.add(fileExplorerItem);
+	        			
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        return fileExplorerItemsList;
+			
+		} catch (Exception err) {
+			log.error("[getFileExplorerItems]",err);
 		}
 		return null;
 	}
