@@ -423,6 +423,13 @@ public class BackupExport extends HttpServlet {
 					out.flush();
 					out.close();
 					
+					File backupFile = new File(full_path);
+					
+					if (backupFile.exists()) {
+						//log.debug("DELETE :1: "+backupFile.getAbsolutePath());
+						backupFile.delete();
+					}
+					
 					this.deleteDirectory(backup_dirFile);
 
 				}
@@ -437,6 +444,9 @@ public class BackupExport extends HttpServlet {
 	}
 
 	public boolean deleteDirectory(File path) throws IOException {
+		
+		//log.debug("deleteDirectory :: "+path);
+		
 		if (path.exists()) {
 			File[] files = path.listFiles();
 			for (int i = 0; i < files.length; i++) {
@@ -447,6 +457,9 @@ public class BackupExport extends HttpServlet {
 				}
 			}
 		}
+		
+		//log.debug("DELETE :3: "+path.getAbsolutePath());
+		
 		return (path.delete());
 	}
 
@@ -1249,6 +1262,8 @@ public class BackupExport extends HttpServlet {
 		XMLWriter writer = new XMLWriter(out, outformat);
 		writer.write(doc);
 		writer.flush();
+		writer.close();
+		out.close();
 	}
 
 
