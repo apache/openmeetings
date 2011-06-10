@@ -421,7 +421,7 @@
         <labelCheckbox name="isClosed" width="270" y="760" x="130" fontsize="11" />
         
     <!-- 1100:Exit URL -->
-    <labelText labelid="193" width="200" y="790" resize="false" x="2"/>
+    <labelText labelid="1100" width="200" y="790" resize="false" x="2"/>
         <customEdittext name="redirectURL" y="790" x="120" width="270" text="" />    
       
     <!-- termination Description -->          
