@@ -6,12 +6,12 @@
 
 function getBrowserInfo() {
 	//alert(navigator.userAgent);
-	return navigator.userAgent;
+	document.getElementById("lzapp").getBrowserInfoCallback(navigator.userAgent);
 }
 
 function getBrowserLang() {
 	//alert(navigator.userAgent);
-	return navigator.language;
+	document.getElementById("lzapp").getBrowserLangCallback(navigator.language);
 }
 
 function redirectToUrl(url) {
@@ -27,5 +27,6 @@ function getTimeZoneOffset(){
             var temp = jan1.toGMTString();
             var jan2 = new Date(temp.substring(0, temp.lastIndexOf(" ")-1));
             var std_time_offset = (jan1 - jan2) / (1000 * 60 * 60);
-	return std_time_offset;
+            
+    document.getElementById("lzapp").getTimeZoneOffsetCallback(std_time_offset);
 }
