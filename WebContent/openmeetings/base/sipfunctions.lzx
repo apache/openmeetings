@@ -76,7 +76,7 @@ function getAppletStatus() {
     
     if ($debug) Debug.write("initializeSIPApplet :: flash.external.ExternalInterface (getAppletStatus) ");
     
-    flash.external.ExternalInterface.call("getAppletStatus")
+    flash.external.ExternalInterface.call("getAppletStatus");
     
     //lz.Browser.callJS("getAppletStatus",callbackgetAppletStatus);
     

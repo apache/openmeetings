@@ -14,7 +14,8 @@
     <include href="tabbar/" />
 -->
 	<!-- for main.lzx -->
-    <include href="functions.lzx" />	
+	<include href="externalJavaScript.lzx" />
+    <include href="functions.lzx" />
     <include href="sipfunctions.lzx" />	
 	<include href="mainAttributes.lzx" /> 
 	<include href="mainDatasets.lzx" /> 

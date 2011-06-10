@@ -13,22 +13,18 @@
             var pressEnter = new LzDelegate(this, "register");
             lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
             
-             var t = this;
-            
-            function getTimeZoneOffsetCallback(returnValue) {
-                            
-                if ($debug) Debug.write("getTimeZoneOffsetCallback ",returnValue);
-                
-                var std_time_offset = Number(returnValue);
-                
-                t.setOffset(std_time_offset);
-                
-            }
-            
-            lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
+            getTimeZoneOffset(this);
             
         ]]>
     </handler>
+    
+    <method name="callback" args="returnValue">
+    	if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
+                
+        var std_time_offset = Number(returnValue);
+        
+        this.setOffset(std_time_offset);
+    </method>
     
     <method name="setOffset" args="std_time_offset">
         <![CDATA[

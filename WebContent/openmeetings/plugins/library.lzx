@@ -3,6 +3,9 @@
 
     <!-- Add the Folder and Entry for your Plugin here -->
 
+    <!--
+    <include href="livewall/"/>
+     -->
 	<include href="fileexplorer/"/>
     <include href="sponsors/"/>
     <include href="conference/"/>

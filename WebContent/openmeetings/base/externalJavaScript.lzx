@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<script>
+<![CDATA[
+
+	flash.external.ExternalInterface.addCallback("redirectToUrlCallback", null, redirectToUrlCallback);
+	flash.external.ExternalInterface.addCallback("getTimeZoneOffsetCallback", null, getTimeZoneOffsetCallback);
+
+	var redirectToUrlReturnObject = null;
+	var timeZoneOffsetReturnObject = null;
+	
+	function redirectToUrl(url, returnObject) {
+		
+		redirectToUrlReturnObject = returnObject;
+		
+		flash.external.ExternalInterface.call("getAppletStatus", url);
+		
+		//lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
+	}
+	
+	function redirectToUrlCallback(returnValue) {
+		if ($debug) Debug.write("redirectToUrlCallback ",returnValue);
+		if (redirectToUrlReturnObject != null) {
+			redirectToUrlReturnObject.callback(returnValue);
+		}
+	}
+
+	
+	function getTimeZoneOffset(returnObject) {
+		
+		timeZoneOffsetReturnObject = returnObject;
+		
+		flash.external.ExternalInterface.call("getTimeZoneOffset");
+		
+		//lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
+	}
+	
+	function getTimeZoneOffsetCallback(returnValue) {
+		if ($debug) Debug.write("getTimeZoneOffsetCallback ",returnValue);
+		if (timeZoneOffsetReturnObject != null) {
+			timeZoneOffsetReturnObject.callback(returnValue);
+		}
+	}
+
+]]>
+</script>
+
+</library>

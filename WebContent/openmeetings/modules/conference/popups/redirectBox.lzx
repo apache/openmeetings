@@ -37,14 +37,8 @@
 	    		
 	    	} else {
 	    		
-	    		function callback(returnValue) {
-	                    	
-	            	if ($debug) Debug.write("callback ",returnValue);
-	            	
-	            }
-	               
 	            if ($debug) Debug.write("this.redirectURL ",this.redirectURL);
-	            lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
+	            redirectToUrl(this.redirectURL, null);
 	    	}
     	]]>
     </method>
