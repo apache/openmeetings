@@ -232,6 +232,32 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
+    public List<FileExplorerItem> getFileExplorerItems() {
+        log.debug(".getFileExplorerItemsById() started");
+
+        try {
+
+            String hql = "SELECT c FROM FileExplorerItem c ";
+
+            Object idf = HibernateUtil.createSession();
+            Session session = HibernateUtil.getSession();
+            Transaction tx = session.beginTransaction();
+            Query query = session.createQuery(hql);
+
+            List<FileExplorerItem> fileExplorerList = query.list();
+            
+            tx.commit();
+            HibernateUtil.closeSession(idf);
+
+            return fileExplorerList;
+        } catch (HibernateException ex) {
+            log.error("[getFileExplorerItemsById]: ", ex);
+        } catch (Exception ex2) {
+            log.error("[getFileExplorerItemsById]: ", ex2);
+        }
+        return null;
+    }    
+
     /**
      * @param fileExplorerItemId
      */
