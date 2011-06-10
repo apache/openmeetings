@@ -14,7 +14,7 @@
 		
 		redirectToUrlReturnObject = returnObject;
 		
-		flash.external.ExternalInterface.call("getAppletStatus", url);
+		flash.external.ExternalInterface.call("redirectToUrl", url);
 		
 		//lz.Browser.callJS("redirectToUrl",callback,this.redirectURL);
 	}
