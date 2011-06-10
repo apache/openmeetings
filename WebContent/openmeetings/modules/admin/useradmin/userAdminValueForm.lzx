@@ -50,7 +50,7 @@
                 
             }
             
-            lz.Browser.callJS("getTimeZoneOffset",getTimeZoneOffsetCallback);
+            getTimeZoneOffset(this);
             
             this._organisationslist.clearList();
             this.generateSipUserData.setValue(false);
@@ -64,6 +64,14 @@
 			
         ]]>
 	</handler>
+	
+	<method name="callback" args="returnValue">
+        if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
+                
+        var std_time_offset = Number(returnValue);
+        
+        this.setOffset(std_time_offset);
+    </method>
 	
 	<method name="setOffset" args="std_time_offset">
 		<![CDATA[

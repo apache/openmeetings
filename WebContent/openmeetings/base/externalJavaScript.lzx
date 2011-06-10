@@ -4,11 +4,18 @@
 <script>
 <![CDATA[
 
+
 	flash.external.ExternalInterface.addCallback("redirectToUrlCallback", null, redirectToUrlCallback);
 	flash.external.ExternalInterface.addCallback("getTimeZoneOffsetCallback", null, getTimeZoneOffsetCallback);
+    flash.external.ExternalInterface.addCallback("getBrowserInfoCallback", null, getBrowserInfoCallback);
+    flash.external.ExternalInterface.addCallback("getBrowserLangCallback", null, getBrowserLangCallback);
 
+	
 	var redirectToUrlReturnObject = null;
 	var timeZoneOffsetReturnObject = null;
+	var browserInfoReturnObject = null;
+	var browserLangReturnObject = null;
+	
 	
 	function redirectToUrl(url, returnObject) {
 		
@@ -42,6 +49,41 @@
 			timeZoneOffsetReturnObject.callback(returnValue);
 		}
 	}
+	
+	
+	function getBrowserInfo(returnObject) {
+        
+        browserInfoReturnObject = returnObject;
+        
+        flash.external.ExternalInterface.call("getBrowserInfo");
+        
+        //lz.Browser.callJS("getBrowserInfo",callback);
+    }
+    
+    function getBrowserInfoCallback(returnValue) {
+        if ($debug) Debug.write("getBrowserInfoCallback ",returnValue);
+        if (browserInfoReturnObject != null) {
+            browserInfoReturnObject.callback(returnValue);
+        }
+    }
+    
+    
+    function getBrowserLang(returnObject) {
+        
+        browserLangReturnObject = returnObject;
+        
+        flash.external.ExternalInterface.call("getBrowserLang");
+        
+        //lz.Browser.callJS("getBrowserLang",callback);
+    }
+    
+    function getBrowserLangCallback(returnValue) {
+        if ($debug) Debug.write("getBrowserLangCallback ",returnValue);
+        if (browserLangReturnObject != null) {
+            browserLangReturnObject.callback(returnValue);
+        }
+    }
+	
 
 ]]>
 </script>

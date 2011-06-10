@@ -64,22 +64,8 @@
                 if (false && os.indexOf("Win") >= 0) {
                 
                     if ($debug) Debug.write("os :: version isWindows check for Firefox Bug ",os,version);
-                    var t = this;
                     
-                    function callback(returnValue) {
-                    	
-                    	if ($debug) Debug.write("callback ",returnValue);
-                    	
-                    	if (returnValue.indexOf("Firefox") >= 0) {
-                        	//We have to use parent in this context because it is called as
-                            //callback Object
-                            t.setAttribute("y",160);
-                            
-                            new lz.labelerrorPopup(canvas,{y:0,errorlabelid:750});
-                    	}
-                    }
-                    
-                    lz.Browser.callJS("getBrowserInfo",callback);
+                    getBrowserLang(this);
                 
                 }
                 
@@ -107,6 +93,21 @@
                 
             ]]>
         </handler>
+        
+        <method name="callback" args="returnValue">
+        	<![CDATA[
+        	
+        	    if ($debug) Debug.write("getBrowserInfo callback ",returnValue);
+                        
+                if (returnValue.indexOf("Firefox") >= 0) {
+                    
+                    this.setAttribute("y",160);
+                    
+                    new lz.labelerrorPopup(canvas,{y:0,errorlabelid:750});
+                }
+        	
+        	]]>
+        </method>
         
         <method name="newBrowserURL" args="newURL">
         	this._navigation._inner.browser.navigation.url.setAttribute("text",newURL);

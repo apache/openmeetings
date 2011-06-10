@@ -1037,7 +1037,7 @@
                         
                     }
                     
-                    lz.Browser.callJS("getBrowserLang",callback);
+                    lz.Browser. callJS("getBrowserLang",callback);
             		
             		
             		//var t = lz.Browser;
