@@ -52,6 +52,9 @@
         this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
         this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
     
+        this.startx = this.currentlayer.getMouse('x');
+        this.starty = this.currentlayer.getMouse('y');   
+        
         //Set previous to null
         this.prevx = null;
         this.prevy = null;  
@@ -103,7 +106,45 @@
         
         var width = maxx-minx;
         var height = maxy-miny;
-        if ($debug) Debug.write("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+        //if ($debug) Debug.info("## 1 ## NEW x,y ",minx,miny," width,height: ",width,height);
+        
+        if (width < 2 && height < 2) {
+        	
+        	//if ($debug) Debug.info("Add minimum size of Painting Line");
+        	
+        	if (this.basetempactionobjectList.length > 0) {
+        		
+            	var lastPoint = this.basetempactionobjectList[this.basetempactionobjectList.length-1];
+            	
+            	var actionObject = new Array();
+                actionObject[0] = 'point';
+                actionObject[1] = lastPoint[3];
+                actionObject[2] = lastPoint[4];
+                actionObject[3] = lastPoint[3]+2;
+                actionObject[4] = lastPoint[4]+2;
+                this.basetempactionobjectList.push(actionObject);
+            
+        	} else {
+        		
+        		//if ($debug) Debug.info("## 2 ## CURRENT width,height ",this.width,this.height);
+        		
+        		minx = this.startx;
+        		miny = this.starty;
+        		
+        		var actionObject = new Array();
+                actionObject[0] = 'point';
+                actionObject[1] = 0;
+                actionObject[2] = 0;
+                actionObject[3] = 2;
+                actionObject[4] = 2;
+                this.basetempactionobjectList.push(actionObject);
+                
+                width = 2;
+                height = 2;
+        		
+        	}
+        	
+        }
         
         if(this.isSnapToGrid){ 
         	
@@ -111,12 +152,12 @@
 		    ygrid = Math.round((miny-1)/this.gridWidth)*this.gridWidth;
         	
         	this.currentlayer = new lz.drawViewNew(this,{
-            name:tempName,x:xgrid,y:ygrid,width:width,height:height,
-            opacity:this.currentlayerOpacity});
+                                    name:tempName,x:xgrid,y:ygrid,width:width,height:height,
+                                    opacity:this.currentlayerOpacity});
         }else{
         	this.currentlayer = new lz.drawViewNew(this,{
-            name:tempName,x:minx-1,y:miny-1,width:width,height:height,
-            opacity:this.currentlayerOpacity});
+                                    name:tempName,x:minx-1,y:miny-1,width:width,height:height,
+                                    opacity:this.currentlayerOpacity});
         }
         
         

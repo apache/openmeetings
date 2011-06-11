@@ -215,7 +215,7 @@
             parent.setAttribute("bgcolor",0xFFFFFF);
         </handler>   
     	
-    	<remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" 
+    	<remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" height="${parent.height}" width="${parent.height}"
                           restricted="$once{ parent.parent.restricted }" >
     		
     		<attribute name="sendUpdate" value="true" type="boolean"/>
