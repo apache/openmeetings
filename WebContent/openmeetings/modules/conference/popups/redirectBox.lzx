@@ -3,7 +3,7 @@
 	
 <class name="redirectBox" extends="labelExplorerBox" labelid="50"
 	   valign="middle" align="center"
-	   docking="true" resizeable="false" closable="true" width="260" height="140">
+	   docking="true" resizeable="false" closable="false" width="260" height="140">
     
     <attribute name="timerDel" value="null" />
     <attribute name="maxTime" value="5000" type="number" />
