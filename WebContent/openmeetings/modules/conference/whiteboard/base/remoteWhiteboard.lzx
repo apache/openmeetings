@@ -80,7 +80,7 @@
 		]]>
 	</method>
 	
-	<method name="loadSvedObjectList" args="objList">
+	<method name="loadSavedObjectList" args="objList">
         <![CDATA[
             
             var tempArray = new Array();            
@@ -135,7 +135,9 @@
         if ($debug) Debug.write("loadWMLFile: ",itemObj);
         
         this.loadWMLFile.setAttribute('fileExplorerItemId', itemObj.fileExplorerItemId);
-                                        
+                  
+        if ($debug) Debug.write("prepareLoadWMLFile 1: ",parent.parent.whiteboardId);
+        
         this.loadWMLFile.doCall();
     </method>
     
@@ -146,16 +148,22 @@
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam> 
         <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam> 
+        <netparam><method name="getValue">return parent.parent.parent.parent.whiteboardId;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("loadWMLFile: ",value);
-                canvas._drawarea.clearAll();
-                parent.loadSvedObjectList(value);
+                //canvas._drawarea.clearAll();
+                //parent.loadSavedObjectList(value);
                 
             ]]>
         </handler>   
     </netRemoteCallHib> 
+    
+    <method name="loadWmlToWhiteboardById" args="roomItems">
+    	this.clearRemote();
+    	this.loadSavedObjectList(roomItems);
+    </method>
 	
     <netRemoteCallHib name="startNewSyncprocess" funcname="whiteboardservice.startNewSyncprocess"
         remotecontext="$once{ canvas.thishib }" >

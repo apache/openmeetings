@@ -93,8 +93,8 @@
         
     </view>
     
-    <fileExplorer name="_files" y="36" width="$once{ parent.width-12 }"
-               height="${ parent.height-36 }" visibility="hidden" />
+    <fileExplorer name="_files" y="16" width="$once{ parent.width-12 }"
+               height="${ parent.height-16 }" visibility="hidden" />
     
     <restrictedUserList name="_videocontainer" y="36" 
 			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 

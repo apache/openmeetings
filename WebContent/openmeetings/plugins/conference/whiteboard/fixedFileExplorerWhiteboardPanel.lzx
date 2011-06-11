@@ -208,6 +208,16 @@
     	}
     </method>
     
+    <method name="loadWmlToWhiteboardById" args="obj">
+        if ($debug) Debug.write("loadWmlToWhiteboardById :: ",obj);
+        for (var eg in this.subviews) {
+            if (obj.id == this.subviews[eg].whiteboardId) {
+                this.subviews[eg]._drawareaMask._drawarea.loadWmlToWhiteboardById(obj.roomitems);
+                return;
+            }
+        }
+    </method>
+    
     <method name="activateWhiteboard" args="obj">
     	if ($debug) Debug.write("activateWhiteboard :: ",obj);
     	for (var eg in this._bar.subviews) {

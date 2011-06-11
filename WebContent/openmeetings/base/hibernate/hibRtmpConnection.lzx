@@ -1081,6 +1081,16 @@
             </handler>   
         </netRemoteCallHib> 
         
+        <netRemoteCallHib name="loadWmlToWhiteboardById" funcname="loadWmlToWhiteboardById">
+            <handler name="ondata" args="value">
+                <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
+                    canvas._drawarea.parent.parent.parent.loadWmlToWhiteboardById(value);
+                ]]>
+            </handler>   
+        </netRemoteCallHib>
+        
         <!--
             Adds this User to the List of current Moderators
          -->

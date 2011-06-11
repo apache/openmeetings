@@ -8,13 +8,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import org.openmeetings.app.conference.files.FileExplorerObject;
+import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.files.FilesObject;
@@ -38,6 +44,9 @@ import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
+import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 
 /**
@@ -45,7 +54,7 @@ import org.slf4j.Logger;
  * @author swagner
  * 
  */
-public class ConferenceLibrary {
+public class ConferenceLibrary implements IPendingServiceCallback {
 
     private static final Logger log = Red5LoggerFactory.getLogger(
             ConferenceLibrary.class, ScopeApplicationAdapter.webAppRootKey);
@@ -729,13 +738,21 @@ public class ConferenceLibrary {
         return -1L;
     }
 
-    public ArrayList loadWmlObject(String SID, Long room_id, Long fileExplorerItemId) {
+    public void loadWmlObject(String SID, Long room_id, Long fileExplorerItemId, Long whiteboardId) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
             Long user_level = Usermanagement.getInstance().getUserLevelByID(
                     users_id);
             
             if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+            	
+            	IConnection current = Red5.getConnectionLocal();
+    			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+    			
+    			if (currentClient == null) {
+    				return;
+    			}
+            	
                 String roomName = room_id.toString();
                 String current_dir = ScopeApplicationAdapter.webAppPath
                         + File.separatorChar + "upload" + File.separatorChar;
@@ -743,13 +760,57 @@ public class ConferenceLibrary {
                 
                 FileExplorerItem fileExplorerItem = FileExplorerItemDaoImpl.getInstance().getFileExplorerItemsById(fileExplorerItemId);
 
-                return LibraryWmlLoader.getInstance().loadWmlFile(current_dir,
-                		fileExplorerItem.getWmlFilePath());
+                ArrayList roomItems = LibraryWmlLoader.getInstance().loadWmlFile(current_dir,
+                										fileExplorerItem.getWmlFilePath());
+                
+                Map whiteboardObjClear = new HashMap();
+                whiteboardObjClear.put(2, "clear");
+                whiteboardObjClear.put(3, null);
+    			
+    			WhiteboardManagement.getInstance().addWhiteBoardObjectById(room_id, whiteboardObjClear, whiteboardId);
+    			
+                
+                for (int k=0;k<roomItems.size();k++) {
+                	
+                	ArrayList actionObject = (ArrayList) roomItems.get(k);
+                	
+                	Map whiteboardObj = new HashMap();
+                	whiteboardObj.put(2, "draw");
+                	whiteboardObj.put(3, actionObject);
+        			
+        			WhiteboardManagement.getInstance().addWhiteBoardObjectById(room_id, whiteboardObj, whiteboardId);
+        			
+                }
+                
+                
+                Map<String,Object> sendObject = new HashMap<String,Object>();
+    			sendObject.put("id", whiteboardId);
+    			sendObject.put("roomitems", roomItems);
+    			
+    			//Notify all Clients of that Scope (Room)
+    			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+    			for (Set<IConnection> conset : conCollection) {
+    				for (IConnection conn : conset) {
+    					if (conn != null) {
+    						if (conn instanceof IServiceCapableConnection) {
+    							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+    							if ((rcl == null) || (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())) {
+    	    						continue;
+    	    					} else {
+    								//log.debug("*..*idremote: " + rcl.getStreamid());
+    								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
+									((IServiceCapableConnection) conn).invoke("loadWmlToWhiteboardById", new Object[] { sendObject },this);
+    									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
+    							}
+    						}
+    					}						
+    				}
+    			}
+                
             }
         } catch (Exception err) {
             log.error("[loadWmlObject] ", err);
         }
-        return null;
     }
 
     public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
@@ -1091,5 +1152,10 @@ public class ConferenceLibrary {
             log.error("[copyfile]", e);
         }
     }
+
+	public void resultReceived(IPendingServiceCall arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -254,9 +254,13 @@ public class WhiteboardManagement {
 			
 			//Date dateOfEvent = (Date) whiteboardObj.get(1);
 			String action = whiteboardObj.get(2).toString();	
-			List actionObject = (List) whiteboardObj.get(3);
 			
 			log.debug("action: "+action);
+			log.debug("actionObject: "+whiteboardObj.get(3));
+			
+			List actionObject = (List) whiteboardObj.get(3);
+			
+			
 			
 			if (action.equals("moveMap")){
 				WhiteboardObject whiteboardObject = WhiteBoardObjectListManagerById.getInstance().getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id, whiteBoardId);

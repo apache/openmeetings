@@ -9,7 +9,8 @@
     
     <!-- Class for Methods which can be invoked by the client -->
     <bean id="fileservice.service" 
-        class="org.openmeetings.app.remote.ConferenceLibrary" 
-        />
+        class="org.openmeetings.app.remote.ConferenceLibrary" >
+    	<property name="clientListManager" ref="openmeetings.ClientListManager" />
+    </bean>
                     
 </beans>
