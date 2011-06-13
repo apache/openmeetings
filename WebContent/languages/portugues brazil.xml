@@ -4074,4 +4074,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1354" name="icon">
     <value>Snap to Grid</value>
   </string>
+  <string id="1355" name="allow_recording">
+    <value>Allow recording</value>
+  </string>
+  <string id="1356" name="wait_for_recording">
+    <value>Wait for recording</value>
+  </string>
 </language>
