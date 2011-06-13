@@ -2,7 +2,7 @@
 <library>
  
  <class name="uploadWindowExplorer" extends="labelExplorerBox" labelid="304"
-    docking="true" closable="true" width="264" x="200" height="220">
+    docking="true" closable="true" width="264" x="200" height="230">
     
     <handler name="oninit">
     	lz.ModeManager.makeModal(this);
@@ -118,13 +118,14 @@
             }
         </method>
 
-		<method name="onProgress" args="fr, bytesLoaded, bytesTotal"><![CDATA[
-			this.parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
-			if (Math.round(bytesLoaded * 100 / bytesTotal)==100){
-				this.parent.progressBar.setAttribute('visible',false);
-				this.parent.progress2.setAttribute('visible',true);
-			}
-		]]>
+		<method name="onProgress" args="fr, bytesLoaded, bytesTotal">
+			<![CDATA[
+    			this.parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+    			if (Math.round(bytesLoaded * 100 / bytesTotal)==100){
+    				this.parent.progressBar.setAttribute('visibility','hidden');
+    				this.parent.progress2.startShowing();
+    			}
+    		]]>
 		</method>
     
 	    <method name="onHTTPError" args="fr, httpError">
@@ -158,14 +159,14 @@
 	<labelText x="10" fontsize="11" y="60" width="250" name="txtFile" multiline="true" 
 			   resize="false" fgcolor="0x666666" />
 
-	<simpleLabelButton fontsize="11" name="browse" x="10" y="80" labelid="596" width="250" height="20">
+	<simpleLabelButton fontsize="11" name="browse" x="10" y="100" labelid="596" width="250" height="20">
 		<handler name="onclick">
 			parent.myFileUpload.browse();
 		</handler>
 	</simpleLabelButton>
 
     <!-- moduleName=videoconf1'; -->
-	<simpleLabelButton name="upload" x="10" y="100" labelid="593" width="250" enabled="false" height="20">
+	<simpleLabelButton name="upload" x="10" y="120" labelid="593" width="250" enabled="false" height="20">
 		<handler name="onclick">
 			<![CDATA[
 			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+ parent.servletName +'?' +
@@ -182,10 +183,42 @@
 		</handler>
 	</simpleLabelButton>
     
-    <labelText labelid="592" name="progress2" visible="false" x="10" y="140" 
-    		   width="250" multiline="true" />
+    <!--
+    <labelText labelid="592" name="progress2" visibility="hidden" x="10" y="140" 
+    		   width="250" multiline="true">
+    	
+    </labelText>
+     -->
+    <view name="progress2" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
+        <attribute name="isStarted" value="false" type="boolean" />
+        <method name="startShowing">
+        	if (!this.isStarted) {
+        		this.isStarted = true;
+        		this.status._hide.doStart();
+        		this.setAttribute("visibility","visible");
+        	} else {
+        		return;
+        	}
+        </method>
+        <view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
+        <view name="status" x="1" y="1" height="8" width="248" bgcolor="#D6DEEF">
+        	
+        	<animator name="_hide" attribute="opacity" to="0" from="1" duration="1000" start="false">
+        		<handler name="onstop">
+        			parent._show.doStart();
+        		</handler>
+        	</animator>
+        	<animator name="_show" attribute="opacity" to="1" from="0" duration="1000" start="false">
+                <handler name="onstop">
+                    parent._show.doStart();
+                </handler>
+            </animator>
+        </view>
+        <labelText name="percent" align="center" resize="true" y="-18" fontstyle="bold" 
+            fontsize="10" fgcolor="#555555" labelid="592"/>
+    </view>
     		   
-	<view name="progressBar" x="10" y="138" width="250" visible="false" height="10" bgcolor="#C6CEDF">
+	<view name="progressBar" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
 		<view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
 		<view name="status" x="1" y="1" height="8" bgcolor="#D6DEEF"/>
 		<method name="setValue" args="value">
@@ -199,10 +232,10 @@
 			fontsize="10" fgcolor="#555555" />
 	</view>
 	
-	<labelCheckbox name="_loadToWhiteboard" x="4" y="174" fontsize="11" 
+	<labelCheckbox name="_loadToWhiteboard" x="4" y="184" fontsize="11" 
 				   labelid="1312" value="true" />
 	
-	<simpleLabelButton name="_close" x="100" y="194" labelid="595" width="160" height="20">
+	<simpleLabelButton name="_close" x="100" y="204" labelid="595" width="160" height="20">
 		<handler name="onclick">
 			if ($debug) Debug.write("this.parent: ",this.parent);
 			this.parent.close();
