@@ -3,6 +3,14 @@
 	
 <class name="whiteBoardTextField" extends="text" >
 	<attribute name="typeOfObject" value="text" type="string" />
+	<method name="setTextEncoded" args="tString">
+		<![CDATA[
+    		tString = tString.replace("<","&#60;");
+            tString = tString.replace(">","&#62;");
+    		
+    		this.setAttribute("text",tString);
+		]]>
+	</method>
 </class>
 
 <class name="baseDrawLetter" extends="baseDrawObject">
@@ -112,6 +120,7 @@
 		if ($debug) Debug.write("drawTextFieldByName ",txtName,textforfield,width,x,y);
 		//this.checkForChanges(txtName,textforfield,width,x,y,height);
 		this.edittextLetterObject.setAttribute('text',textforfield);
+		this.edittextLetterObject.setTextEncoded(textforfield);
 		this.edittextLetterObject.setAttribute('width',width);
 		this.edittextLetterObject.setAttribute('height',height);
 		this.edittextLetterObject.setAttribute('visible',true);
@@ -209,6 +218,7 @@
 		var editObj = this.getObjectByName(actionObject[actionObject.length-1]);
 		//Debug.write("editTextByHistory: ",editObj,actionObject,actionObject.length);
 		editObj.setAttribute('text',actionObject[1]);
+		editObj.setTextEncoded(actionObject[1]);
 		editObj.setAttribute('width',actionObject[actionObject.length-3]);
 		editObj.setAttribute('height',actionObject[actionObject.length-2]);
 		editObj.setAttribute('fontsize',actionObject[3]);
@@ -236,6 +246,7 @@
 	
 	<method name="newTextField" args="obj,naming,textforfield,width,height,x,y,fontsize,fgcolor,fontstyle">
 		this.currentlayer = new lz.whiteBoardTextField(obj,{name:naming,x:x,y:y,height:height,multiline:true,width:width,text:textforfield,fontsize:fontsize,fgcolor:fgcolor,fontstyle:fontstyle});
+		this.currentlayer.setTextEncoded(textforfield);
 		//Add Layer to global Layer  	
 	    return this.currentlayer;
 	</method>
