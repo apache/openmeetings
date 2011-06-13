@@ -29,6 +29,7 @@
   	
   	<event name="onupdateScale" />
   	
+  	<attribute name="showGrid" type="boolean" value="false"/>
   	<attribute name="isSnapToGrid" type="boolean" value="false"/>
 	<attribute name="gridWidth" value="24" type="number" />
 	
@@ -236,8 +237,8 @@
         <![CDATA[
         
             if (this.boundingref!=null) this.boundingref.removeIt();
-            while (this.subviews.length > 0) {
-                this.subviews[0].destroy();
+            while (this.subviews.length > 1) {
+                this.subviews[1].destroy();
             }
             while (this.basdrawredoView.subviews.length > 0) {
                 this.basdrawredoView.subviews[0].destroy();

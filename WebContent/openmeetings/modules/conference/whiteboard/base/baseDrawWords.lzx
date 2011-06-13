@@ -54,6 +54,14 @@
             if ($debug) Debug.write("this.refObj.y ",this.refObj.y);
 			if ($debug) Debug.write("this.x-this.refObj.x-this.refObj.parent.x ",y);
 			var x = ( this.getAttributeRelative('x',this.refObj)-this.refObj.x+1 );
+			
+			if(canvas._drawarea.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+		    	y = Math.round(y/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+            
+            } 
+			
         	this.refObj.drawTextField(this._textview._textview.getText(),
                     this._textview._textview.width,
                     this._textview._textview.height,x,y);
@@ -65,6 +73,13 @@
 			if ($debug) Debug.write("this.x-this.refObj.x-this.refObj.parent.x ",y);
 			var x = (this.getAttributeRelative('x',this.refObj)-this.refObj.x+1);
             
+			if(canvas._drawarea.isSnapToGrid){        		
+	    			        	   
+	            x = Math.round(x/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+		    	y = Math.round(y/canvas._drawarea.gridWidth)*canvas._drawarea.gridWidth;
+            
+            } 
+			
         	this.refObj.setTextFieldByName(this.initTextName,
                 this._textview._textview.getText(),
                 this._textview._textview.width,
@@ -72,6 +87,9 @@
                 
         } else {
 			if ($debug) Debug.write("text smaller then 0",this._textview._textview.getText());
+			
+			if ($debug) Debug.write("this.gridWidth",canvas._drawarea.gridWidth);
+			if ($debug) Debug.write("this.isSnapToGrid",canvas._drawarea.isSnapToGrid);
 		}
         this.giveup();
 		]]>

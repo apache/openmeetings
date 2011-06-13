@@ -20,7 +20,7 @@
 	</method>
  -->	
 	<method name="removeIt">
-		//Debug.write("removeIt +**********",this.isinited);
+		if ($debug) Debug.write("removeIt +**********",this.isinited);
 		this.whiteboardRef.setAttribute('boundingIsActive',false);
 		if (this.rs) this.rs.remove();
 		if (this.dragger) this.dragger.remove();
@@ -172,13 +172,29 @@
     
     <handler name="onx">
     	if(this.doHandlerUpdates){
-    		this.objRef.setAttribute('x',this.getAttributeRelative('x',objRef));
+    		
+    		var tx = this.getAttributeRelative('x',objRef);
+        
+            if(this.objRef.parent.isSnapToGrid){   
+                tx = Math.round(tx/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth;
+                this.setAttribute("x",Math.round(this.x/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
+            }
+    		
+    		this.objRef.setAttribute('x',tx);
     	}
     </handler>
     
     <handler name="ony">
     	if(this.doHandlerUpdates){
-    		this.objRef.setAttribute('y',this.getAttributeRelative('y',objRef));
+    		
+            var ty = this.getAttributeRelative('y',objRef);
+        
+            if(this.objRef.parent.isSnapToGrid){   
+                ty = Math.round(ty/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth;
+                this.setAttribute("y",Math.round(this.y/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
+            }
+            
+    		this.objRef.setAttribute('y',ty);
     	}
     </handler>
 	
