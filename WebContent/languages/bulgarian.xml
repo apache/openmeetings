@@ -3948,7 +3948,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Load to whiteboard</value>
   </string>
   <string id="1315" name="recording flag">
-    <value>Recording is not yet started</value>
+    <value>Do not forget start recording! One user per room always needs to start it to have the recording afterwards.</value>
   </string>
   <string id="1316" name="recording flag">
     <value>Start Recording</value>
