@@ -450,8 +450,8 @@
     <labelText labelid="1355" width="200" y="860" resize="false" x="2"/>  
         <labelCheckbox name="waitForRecording" width="270" y="860" x="130" fontsize="11" />
  
-    <labelText labelid="1356" width="200" y="880" resize="false" x="2"/>  
-        <labelCheckbox name="allowRecording" width="270" y="880" x="130" fontsize="11" />
+    <labelText labelid="1356" width="200" y="880" resize="false" x="2" visibility="hidden" />  
+        <labelCheckbox name="allowRecording" width="270" y="880" x="130" fontsize="11" visibility="hidden" />
  
                                   
     <!-- RoomClient List Right Side -->
