@@ -361,6 +361,12 @@
                 return parent.parent.panelArea._mainToolsPanel;
             </method>
             
+            <view name="_grid" x="-2" y="-2" height="${parent.height}" width="${parent.height}" 
+                  visibility="${ (parent.showGrid) ? 'visible' : 'hidden'}">
+            	<!-- resource="_grid" -->
+            
+            </view>
+            
         </remoteWhiteboard>   
     	
     </view>
