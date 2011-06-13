@@ -4139,4 +4139,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1353" name="fill_option">
     <value>Activate shape fill</value>
   </string>
+  <string id="1354" name="icon">
+    <value>Snap to Grid</value>
+  </string>
 </language>

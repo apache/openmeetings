@@ -4000,7 +4000,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Trash</value>
   </string>
   <string id="1332" name="icon">
-    <value>Add Grid</value>
+    <value>Show Grid</value>
   </string>
   <string id="1333" name="icon">
     <value>Share File</value>
@@ -4064,5 +4064,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1353" name="fill_option">
     <value>Activate shape fill</value>
+  </string>
+  <string id="1354" name="icon">
+    <value>Snap to Grid</value>
   </string>
 </language>
