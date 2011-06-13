@@ -461,37 +461,53 @@ public class ImportInitvalues {
 		
 		Roommanagement.getInstance().addRoom(3, "public Interview Room", interview_Id,
 				"", new Long(16), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "", null);
+				false, false, "", "", "", null,
+    			null,
+				null);
 		
 		Roommanagement.getInstance().addRoom(3, "public Conference Room", conference_Id,
 				"", new Long(32), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "", null);
+				false, false, "", "", "", null,
+    			null,
+				null);
 
 		Roommanagement.getInstance().addRoom(3, "public Video Only Room", conference_Id,
 				"", new Long(32), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "", null);
+				false, false, "", "", "", null,
+    			null,
+				null);
 
 		Roommanagement.getInstance().addRoom(3,
 				"public Video And Whiteboard Room", conference_Id, "", new Long(32), true,
-				null, false, false, null, false, null, true, false, false, "", "", "", null);
+				null, false, false, null, false, null, true, false, false, "", "", "", null,
+    			null,
+				null);
 
 		Roommanagement.getInstance().addRoom(3, "public Restricted Room", restricted_Id,
 				"", new Long(100), true, null, false, false, null, false, null, true, 
-				false, false, "", "", "", null);
+				false, false, "", "", "", null,
+    			null,
+				null);
 		
 		long room2 = Roommanagement.getInstance().addRoom(3,
 				"private Conference Room", conference_Id, "", new Long(32), false, null,
-				false, false, null, false, null, true, false, false, "", "", "", null);
+				false, false, null, false, null, true, false, false, "", "", "", null,
+    			null,
+				null);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room2, 1);
 
 		Roommanagement.getInstance().addRoom(3, 
 				"public Audience Room", audience_Id, "", new Long(32), true, null, 
-				false, false, null, false, null, true, false, false, "", "", "", null);
+				false, false, null, false, null, true, false, false, "", "", "", null,
+    			null,
+				null);
 
 		long room4 = Roommanagement.getInstance().addRoom(3,
 				"private Audience Room", audience_Id, "", new Long(32), false, null, 
-				false, false, null, false, null, true, false, false, "", "", "", null);
+				false, false, null, false, null, true, false, false, "", "", "", null,
+    			null,
+				null);
 		
 		Roommanagement.getInstance().addRoomToOrganisation(3, room4, 1);
 

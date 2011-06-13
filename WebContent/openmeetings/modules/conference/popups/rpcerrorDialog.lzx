@@ -37,7 +37,9 @@
 
 	<handler name="oninit">
 		lz.ModeManager.makeModal(this);
-		this.getErrorByCode.doCall();
+		if (errorid != 0) {
+			this.getErrorByCode.doCall();
+		}
 	</handler>
     <handler name="onclose">
         lz.ModeManager.release(this);

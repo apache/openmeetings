@@ -820,7 +820,9 @@ public class Roommanagement {
 			String redirectURL,
 			String sipNumber,
 			String conferencePin,
-			Long ownerId){
+			Long ownerId,
+			Boolean waitForRecording,
+			Boolean allowRecording){
 		
 		log.debug("addRoom");
 		
@@ -852,6 +854,9 @@ public class Roommanagement {
 				r.setSipNumber(sipNumber);
 				r.setConferencePin(conferencePin);
 				r.setOwnerId(ownerId);
+				
+				r.setWaitForRecording(waitForRecording);
+				r.setAllowRecording(allowRecording);
 				
 				//handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = OpenXGHttpClient.getInstance().openSIPgCreateConference();
@@ -1441,7 +1446,9 @@ public class Roommanagement {
 			String redirectURL,
 			String sipNumber,
 			String conferencePin,
-			Long ownerId){
+			Long ownerId,
+			Boolean waitForRecording,
+			Boolean allowRecording){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1469,6 +1476,9 @@ public class Roommanagement {
 				r.setSipNumber(sipNumber);
 				r.setConferencePin(conferencePin);
 				r.setOwnerId(ownerId);
+				
+				r.setWaitForRecording(waitForRecording);
+				r.setAllowRecording(allowRecording);
 				
 				Object idf = HibernateUtil.createSession();
 				Session session = HibernateUtil.getSession();
@@ -1827,7 +1837,9 @@ public class Roommanagement {
 							        			"", //redirectURL
 							        			"", //sipNumber
 							        			"", //conferencePin
-							        			ownerId
+							        			ownerId,
+							        			null,
+							    				null
 						        			);
 				
 				if (rooms_id != null) {

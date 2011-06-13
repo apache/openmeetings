@@ -197,7 +197,7 @@ public class MethodGateway  extends HttpServlet {
 			        Long returnVal =  Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 									numberOfPartizipants, ispublic, null, 
 									false, false, null, false, null, true, false, false, ""
-									, "", "", null);
+									, "", "", null, null, null);
 					
 					XStream xStream = new XStream(new XppDriver());
 					xStream.setMode(XStream.NO_REFERENCES);

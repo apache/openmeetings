@@ -162,6 +162,8 @@ public class AppointmentLogic {
 				"", 				// redirectURL
 				"", 				// sipNumber
 				"",					// conferencePIN
+				null,				// ownerID
+				null,
 				null);				// ownerID
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);

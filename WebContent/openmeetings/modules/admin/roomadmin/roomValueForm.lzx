@@ -38,6 +38,8 @@
         this.redirectURL.setAttribute("text","");
         this._listRoomModerators.clearList();
         this.ownerId.setAttribute("text","0");
+        this.waitForRecording.setValue(false);
+        this.allowRecording.setValue(false);
 	</handler>
 	
     <handler name="ondelete" >
@@ -135,6 +137,17 @@
                 this.ownerId.setAttribute("text","0");
             }
             
+            if (obj.waitForRecording != null && obj.waitForRecording){
+            	this.waitForRecording.setValue(true);
+            } else {
+            	this.waitForRecording.setValue(false);
+            }
+            
+            if (obj.allowRecording != null && obj.allowRecording){
+                this.allowRecording.setValue(true);
+            } else {
+                this.allowRecording.setValue(false);
+            }
             
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
@@ -216,6 +229,9 @@
             
             this.sendObject["sipNumber"] = parent.sipNumber.getText();
             this.sendObject["conferencePin"] =  parent.conferencePin.getText();
+            
+            this.sendObject["waitForRecording"] = parent.waitForRecording.getValue();
+            this.sendObject["allowRecording"] = parent.allowRecording.getValue();
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -430,6 +446,12 @@
     <labelText labelid="1102" x="24" y="820"  fontstyle="italic"
                multiline="true" width="370" /> 
                 
+    <!-- isClosed -->          
+    <labelText labelid="1355" width="200" y="860" resize="false" x="2"/>  
+        <labelCheckbox name="waitForRecording" width="270" y="860" x="130" fontsize="11" />
+ 
+    <labelText labelid="1356" width="200" y="880" resize="false" x="2"/>  
+        <labelCheckbox name="allowRecording" width="270" y="880" x="130" fontsize="11" />
  
                                   
     <!-- RoomClient List Right Side -->

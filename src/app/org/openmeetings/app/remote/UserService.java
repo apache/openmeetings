@@ -809,7 +809,9 @@ public class UserService {
  		   				"", 				// redirectURL
  		   				"", 				// sipNumber
  		   				"",					// conferencePIN
- 		   				null);				// ownerId
+ 		   				null,				// ownerId
+	        			null,
+	    				null);				
  		    		
  		    		room = Roommanagement.getInstance().getRoomById(room_id);
  		    		
