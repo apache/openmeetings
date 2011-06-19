@@ -164,7 +164,9 @@ public class AppointmentLogic {
 				"",					// conferencePIN
 				null,				// ownerID
 				null,
-				null);				// ownerID
+				null, 
+				false				// 
+				);				
 		
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);

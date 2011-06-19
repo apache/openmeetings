@@ -506,7 +506,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							false, false, null
-							, false, null, true, false, false, "", "", "", null, null, null);
+							, false, null, true, false, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -527,7 +527,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							true, false, false, "", "", "", null, null, null);
+							true, false, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ",err);
 		}
@@ -567,7 +567,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							allowUserQuestions, false, false, "", "", "", null, null, null);
+							allowUserQuestions, false, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ",err);
 		}
@@ -590,7 +590,7 @@ public class RoomService {
 			return Roommanagement.getInstance().addRoom(user_level, name, roomtypes_id, comment, 
 							numberOfPartizipants, ispublic, null, 
 							appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-							allowUserQuestions, isAudioOnly, false, "", "", "", null, null, null);
+							allowUserQuestions, isAudioOnly, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ",err);
 			throw new AxisFault(err.getMessage());
@@ -633,7 +633,7 @@ public class RoomService {
 	                                                        numberOfPartizipants, ispublic, null,
 	                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
 	                                                    	externalRoomId, externalRoomType, true, false, false, "",
-	                                                    	false, true);
+	                                                    	false, true, false);
 				} else {
 					roomId = room.getRooms_id();
 				}
@@ -698,7 +698,7 @@ public class RoomService {
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
 			return Roommanagement.getInstance().updateRoom(user_level, rooms_id, roomtypes_id, name, ispublic, 
 					comment, numberOfPartizipants, null, appointment, false, null, false,
-					null,true,false, false, "", "", "", null, null, null);
+					null,true,false, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -721,7 +721,7 @@ public class RoomService {
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
 					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false, 
-					false, "", "", "", null, null, null);
+					false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ",err);
 		}
@@ -745,7 +745,7 @@ public class RoomService {
 			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
 					name, ispublic, comment, numberOfPartizipants, null, 
 					appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null,allowUserQuestions,false, false, "", "", "", null, null, null);
+					null,allowUserQuestions,false, false, "", "", "", null, null, null, false);
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ",err);
 		}
@@ -786,7 +786,7 @@ public class RoomService {
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
 					null, null, externalRoomType, true, false, false, "",
-					false, true);
+					false, true, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -806,7 +806,7 @@ public class RoomService {
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
 					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
-					false, true);
+					false, true, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -827,7 +827,29 @@ public class RoomService {
 					roomtypes_id, comment, numberOfPartizipants, ispublic,
 					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
 					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
-					waitForRecording, allowRecording);
+					waitForRecording, allowRecording, false);
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+		}
+		return new Long(-1);
+	}
+	
+	public Long addRoomWithModerationExternalTypeAndTopBarOption(String SID, String name,
+			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
+			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
+			Boolean allowUserQuestions, Boolean isAudioOnly,
+			Boolean waitForRecording, Boolean allowRecording,
+			Boolean hideTopBar) {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+			return Roommanagement.getInstance().addExternalRoom(user_level, name,
+					roomtypes_id, comment, numberOfPartizipants, ispublic,
+					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+					waitForRecording, allowRecording, hideTopBar);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -1269,7 +1291,9 @@ public class RoomService {
 						false, //isAudioOnly
 						false, //isClosed
 						redirectURL,
-						false, true);
+						false, 
+						true,
+						false);
 		    	
 		    	if (rooms_id <= 0) {
 		    		return rooms_id;

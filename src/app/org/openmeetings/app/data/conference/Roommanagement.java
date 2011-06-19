@@ -822,7 +822,8 @@ public class Roommanagement {
 			String conferencePin,
 			Long ownerId,
 			Boolean waitForRecording,
-			Boolean allowRecording){
+			Boolean allowRecording,
+			Boolean hideTopBar){
 		
 		log.debug("addRoom");
 		
@@ -845,6 +846,7 @@ public class Roommanagement {
 				r.setDemoTime(demoTime);
 				
 				r.setIsModeratedRoom(isModeratedRoom);
+				r.setHideTopBar(hideTopBar);
 				
 				r.setDeleted("false");
 				
@@ -969,7 +971,8 @@ public class Roommanagement {
                         Boolean isClosed,
                         String redirectURL,
                         Boolean waitForRecording,
-                        Boolean allowRecording){
+                        Boolean allowRecording,
+                        Boolean hideTopBar){
 
                 log.debug("addExternalRoom");
 
@@ -1432,7 +1435,7 @@ public class Roommanagement {
 	 * @param ispublic
 	 * @param comment
 	 * @return
-	 */
+	 */ 
 	public Long updateRoom(long user_level, long rooms_id, long roomtypes_id, String name,
 			boolean ispublic, String comment, Long numberOfPartizipants, List organisations,
 			Boolean appointment,
@@ -1448,7 +1451,8 @@ public class Roommanagement {
 			String conferencePin,
 			Long ownerId,
 			Boolean waitForRecording,
-			Boolean allowRecording){
+			Boolean allowRecording,
+			Boolean hideTopBar){
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
@@ -1469,6 +1473,7 @@ public class Roommanagement {
 				r.setAppointment(appointment);
 				
 				r.setIsModeratedRoom(isModeratedRoom);
+				r.setHideTopBar(hideTopBar);
 				
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
@@ -1839,7 +1844,8 @@ public class Roommanagement {
 							        			"", //conferencePin
 							        			ownerId,
 							        			null,
-							    				null
+							    				null,
+							    				false
 						        			);
 				
 				if (rooms_id != null) {

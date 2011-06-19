@@ -73,6 +73,8 @@ public class Rooms {
 	private Boolean waitForRecording; //Show warning that user has to start recording
 	private Boolean allowRecording; //Show or show not the recording option in a conference room
     
+	private Boolean hideTopBar = false;
+	
     /**
      * @hibernate.property
      *  column="comment_field"
@@ -554,7 +556,17 @@ public class Rooms {
 		this.allowRecording = allowRecording;
 	}
 	
-	
+	/**
+     * @hibernate.property
+     *  column="hide_top_bar"
+     *  type="boolean"
+     */
+	public Boolean getHideTopBar() {
+		return hideTopBar;
+	}
+	public void setHideTopBar(Boolean hideTopBar) {
+		this.hideTopBar = hideTopBar;
+	}
 	
     
 }

@@ -10,3 +10,10 @@ ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetin
 ffmpeg -i C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\INTERVIEW_12\image%20d.png -r 25 -vcodec flv -qmax 1 -qmin 1 C:\workspaces\workspace_openmeetings\ROOT\dist\red5\webapps\openmeetings\streams\1\COMPLETE_INTERVIEW_12.flv
 
 
+
+http://localhost:5080/openmeetings/ScreenRequestHandler?rtmphostlocal=localhost&room=2&domain=public&organization_id=1&sid=4f35f0749b6c8d9541d16ea61fc763de&red5httpport=5080&connectionType=rtmp&port=1935&publicSID=6bdea20c314e1b48e4da999ea9e16d80&httpRootKey=/openmeetings/&languageAsString=1&record=no 
+
+
+http://localhost:5080/openmeetings/ScreenRequestHandler?rtmphostlocal=localhost&room=6&domain=1&organization_id=1&sid=4f35f0749b6c8d9541d16ea61fc763de&red5httpport=5080&connectionType=rtmp&allowRecording=true&port=1935&publicSID=6bdea20c314e1b48e4da999ea9e16d80&httpRootKey=/openmeetings/&languageAsString=1&record=no 
+
+

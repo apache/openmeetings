@@ -543,7 +543,8 @@ public class ConferenceService {
 	        			argObjectMap.get("conferencePin").toString(),
 	        			Long.valueOf(argObjectMap.get("ownerId").toString()).longValue(),
 	        			Boolean.valueOf(argObjectMap.get("waitForRecording").toString()),
-	        			Boolean.valueOf(argObjectMap.get("allowRecording").toString()));
+	        			Boolean.valueOf(argObjectMap.get("allowRecording").toString()),
+	        			Boolean.valueOf(argObjectMap.get("hideTopBar").toString()));
 	        } else if (rooms_id>0){
 	        	return Roommanagement.getInstance().updateRoom(User_level, rooms_id, 
 	        			Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue(), 
@@ -563,7 +564,8 @@ public class ConferenceService {
 	        			argObjectMap.get("conferencePin").toString(),
 	        			Long.valueOf(argObjectMap.get("ownerId").toString()).longValue(),
 	        			Boolean.valueOf(argObjectMap.get("waitForRecording").toString()),
-	        			Boolean.valueOf(argObjectMap.get("allowRecording").toString()));
+	        			Boolean.valueOf(argObjectMap.get("allowRecording").toString()),
+	        			Boolean.valueOf(argObjectMap.get("hideTopBar").toString()));
 	        }
 	        
 		} catch (Exception e){

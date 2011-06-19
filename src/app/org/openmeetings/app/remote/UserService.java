@@ -811,7 +811,9 @@ public class UserService {
  		   				"",					// conferencePIN
  		   				null,				// ownerId
 	        			null,
-	    				null);				
+	    				null,
+	    				false
+	    				);				
  		    		
  		    		room = Roommanagement.getInstance().getRoomById(room_id);
  		    		
