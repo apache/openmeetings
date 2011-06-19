@@ -5,8 +5,14 @@
 	<attribute name="typeOfObject" value="text" type="string" />
 	<method name="setTextEncoded" args="tString">
 		<![CDATA[
-    		tString = tString.replace("<","&#60;");
-            tString = tString.replace(">","&#62;");
+		
+		    while (tString.indexOf("<") > 0) {
+		    	tString = tString.replace("<","&#60;");
+		    }
+    		
+		    while (tString.indexOf(">") > 0) {
+                tString = tString.replace(">","&#62;");
+		    }
     		
     		this.setAttribute("text",tString);
 		]]>

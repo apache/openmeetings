@@ -40,6 +40,7 @@
         this.ownerId.setAttribute("text","0");
         this.waitForRecording.setValue(false);
         this.allowRecording.setValue(false);
+        this.hideTopBar.setValue(false);
 	</handler>
 	
     <handler name="ondelete" >
@@ -149,6 +150,12 @@
                 this.allowRecording.setValue(false);
             }
             
+            if (obj.hideTopBar != null && obj.hideTopBar){
+                this.hideTopBar.setValue(true);
+            } else {
+                this.hideTopBar.setValue(false);
+            }
+            
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
     </method>
@@ -232,6 +239,8 @@
             
             this.sendObject["waitForRecording"] = parent.waitForRecording.getValue();
             this.sendObject["allowRecording"] = parent.allowRecording.getValue();
+            
+            this.sendObject["hideTopBar"] = parent.hideTopBar.getValue();
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -453,13 +462,16 @@
     <labelText labelid="1356" width="200" y="880" resize="false" x="2" visibility="hidden" />  
         <labelCheckbox name="allowRecording" width="270" y="880" x="130" fontsize="11" visibility="hidden" />
  
+    <labelText labelid="1357" width="200" y="900" resize="false" x="2" />  
+        <labelCheckbox name="hideTopBar" width="270" y="900" x="130" fontsize="11" />
+ 
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 
-               x="398" fontstyle="bold" />   
+                x="398" fontstyle="bold" />   
     
     <simpleTurnOverList name="_turnoverlist" width="300" mainBgColor="0xFFFFFF"
-                        height="200" y="40" x="400">
+                height="200" y="40" x="400">
 
         <handler name="oninit">
             this.addHeaderItem(588,30);

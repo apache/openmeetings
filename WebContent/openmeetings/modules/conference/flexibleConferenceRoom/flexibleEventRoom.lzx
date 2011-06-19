@@ -4,15 +4,23 @@
 <class name="flexibleEventRoom" extends="baseConferenceRoom">
 
     <handler name="oninit">
-        new lz.conferenceMenubar(canvas._conferencemenu);
+        if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
+            new lz.conferenceMenubar(canvas._conferencemenu);
+            canvas._conferencemenu.setAttribute('visibility','visible');
+        } else {
+            canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeight',0);
+            canvas.setAttribute('naviHeightDelta',0);
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+            canvas._mainbgcontentNavi.setAttribute('visibility','hidden');
+        }
         
-        new lz.moderationPanel(canvas._conferencemenu,{
+        new lz.moderationPanel(canvas._moderatormenu,{
                     name:'_moderationPanel',align:'right',
                     allowUserQuestions:this.roomobj.allowUserQuestions
                 });          
         
         //,{x:this.roomobj.moderationPanelXPosition}
-        canvas._conferencemenu.setAttribute('visibility','visible');
 		
         if(roomobj.appointment){
         	new lz.appointmentNotificationPopUp(canvas.conferenceView,{ 

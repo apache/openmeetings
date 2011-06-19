@@ -4148,4 +4148,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1356" name="wait_for_recording">
     <value>Wait for recording</value>
   </string>
+  <string id="1357" name="hide_top_bar">
+    <value>Hide topbar</value>
+  </string>
 </language>

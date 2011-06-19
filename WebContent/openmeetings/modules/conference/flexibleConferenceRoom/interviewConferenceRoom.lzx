@@ -4,10 +4,17 @@
 <class name="interviewConferenceRoom" extends="baseConferenceRoom">
 
     <handler name="oninit">
-        new lz.interviewConferenceMenubar(canvas._conferencemenu);
+    	
+    	if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
+            new lz.interviewConferenceMenubar(canvas._conferencemenu);
+            canvas._conferencemenu.setAttribute('visibility','visible');
+        } else {
+            canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeight',0);
+            canvas.setAttribute('naviHeightDelta',0);
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+        }
         
-        canvas._conferencemenu.setAttribute('visibility','visible');
-		
         if ($debug) Debug.write("this.roomobj ",this.roomobj);
         
         if(this.roomobj.appointment){

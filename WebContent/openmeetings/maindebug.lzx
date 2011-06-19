@@ -134,9 +134,21 @@
             while (this.subviews.length > 0) {
                 this.subviews[0].destroy();
             }
+            parent._moderatormenu.removeAll();
         ]]>
     </method>
-</view>   
+</view> 
+
+<view name="_moderatormenu" y="0" x="0" width="100%" height="20">
+	<method name="removeAll">
+        <![CDATA[
+            if($debug) Debug.write("main.lzx/_moderatormenu.removeAll(): ");
+            while (this.subviews.length > 0) {
+                this.subviews[0].destroy();
+            }
+        ]]>
+    </method>
+</view>  
     
 <!-- View for "Loading" -->
 <view name="_loadingAll" visible="false" opacity="0.5" 
