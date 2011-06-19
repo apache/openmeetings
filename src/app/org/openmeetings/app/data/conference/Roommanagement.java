@@ -957,7 +957,7 @@ public class Roommanagement {
          * @param ispublic
          * @return id of (the newly created) room or NULL
          */
-        public Long addExternalRoom(long user_level,String name, long roomtypes_id, String comment, Long numberOfPartizipants,
+        public Long addExternalRoom(String name, long roomtypes_id, String comment, Long numberOfPartizipants,
                         boolean ispublic, List organisations,
                         Boolean appointment,
                         Boolean isDemoRoom,
@@ -977,56 +977,54 @@ public class Roommanagement {
                 log.debug("addExternalRoom");
 
                 try {
-                        if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
-                                Rooms r = new Rooms();
-                                r.setName(name);
-                                r.setComment(comment);
-                                r.setStarttime(new Date());
-                                r.setNumberOfPartizipants(numberOfPartizipants);
-                                r.setRoomtype(this.getRoomTypesById(roomtypes_id));
-                                r.setIspublic(ispublic);
-                                
-                                r.setAllowUserQuestions(allowUserQuestions);
-                                r.setIsAudioOnly(isAudioOnly);
+                    Rooms r = new Rooms();
+                    r.setName(name);
+                    r.setComment(comment);
+                    r.setStarttime(new Date());
+                    r.setNumberOfPartizipants(numberOfPartizipants);
+                    r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+                    r.setIspublic(ispublic);
+                    
+                    r.setAllowUserQuestions(allowUserQuestions);
+                    r.setIsAudioOnly(isAudioOnly);
 
-                                r.setAppointment(appointment);
+                    r.setAppointment(appointment);
 
-                                r.setIsDemoRoom(isDemoRoom);
-                                r.setDemoTime(demoTime);
+                    r.setIsDemoRoom(isDemoRoom);
+                    r.setDemoTime(demoTime);
 
-                                r.setIsModeratedRoom(isModeratedRoom);
+                    r.setIsModeratedRoom(isModeratedRoom);
 
-                                r.setDeleted("false");
+                    r.setDeleted("false");
 
-								r.setExternalRoomId(externalRoomId);
-								r.setExternalRoomType(externalRoomType);
-								
-								r.setIsClosed(isClosed);
-								r.setRedirectURL(redirectURL);
-								
-								r.setWaitForRecording(waitForRecording);
-								r.setAllowRecording(allowRecording);
+					r.setExternalRoomId(externalRoomId);
+					r.setExternalRoomType(externalRoomType);
+					
+					r.setIsClosed(isClosed);
+					r.setRedirectURL(redirectURL);
+					
+					r.setWaitForRecording(waitForRecording);
+					r.setAllowRecording(allowRecording);
 
-                                Object idf = HibernateUtil.createSession();
-                                Session session = HibernateUtil.getSession();
-                                Transaction tx = session.beginTransaction();
-                                long returnId = (Long) session.save(r);
+                    Object idf = HibernateUtil.createSession();
+                    Session session = HibernateUtil.getSession();
+                    Transaction tx = session.beginTransaction();
+                    long returnId = (Long) session.save(r);
 
-                                session.flush();
-                                tx.commit();
-                                HibernateUtil.closeSession(idf);
+                    session.flush();
+                    tx.commit();
+                    HibernateUtil.closeSession(idf);
 
-                                if (organisations!=null){
-                                        Long t = this.updateRoomOrganisations(organisations, r);
-                                        if (t==null) return null;
-                                }
+                    if (organisations!=null){
+                            Long t = this.updateRoomOrganisations(organisations, r);
+                            if (t==null) return null;
+                    }
 
-                                if (roomModerators!=null) {
-                                        RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
-                                }
+                    if (roomModerators!=null) {
+                            RoomModeratorsDaoImpl.getInstance().addRoomModeratorByUserList(roomModerators, r.getRooms_id());
+                    }
 
-                                return returnId;
-                        }
+                    return returnId;
                 } catch (HibernateException ex) {
                         log.error("[addExternalRoom] ", ex);
                 } catch (Exception ex2) {
@@ -1454,60 +1452,97 @@ public class Roommanagement {
 			Boolean allowRecording,
 			Boolean hideTopBar){
 		try {
+			
 			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
-				Rooms r = this.getRoomById(rooms_id);
-				r.setComment(comment);
 				
-				r.setIspublic(ispublic);
-				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setName(name);
-				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
-				r.setUpdatetime(new Date());
-				r.setAllowUserQuestions(allowUserQuestions);
-				r.setIsAudioOnly(isAudioOnly);
-
-				r.setIsDemoRoom(isDemoRoom);
-				r.setDemoTime(demoTime);
+				return this.updateRoomInternal(rooms_id, roomtypes_id, name, ispublic, 
+						comment, numberOfPartizipants, organisations, appointment, 
+						isDemoRoom, demoTime, isModeratedRoom, roomModerators, 
+						allowUserQuestions, isAudioOnly, isClosed, redirectURL, 
+						sipNumber, conferencePin, ownerId, waitForRecording, 
+						allowRecording, hideTopBar);
 				
-				r.setAppointment(appointment);
-				
-				r.setIsModeratedRoom(isModeratedRoom);
-				r.setHideTopBar(hideTopBar);
-				
-				r.setIsClosed(isClosed);
-				r.setRedirectURL(redirectURL);
-
-				r.setSipNumber(sipNumber);
-				r.setConferencePin(conferencePin);
-				r.setOwnerId(ownerId);
-				
-				r.setWaitForRecording(waitForRecording);
-				r.setAllowRecording(allowRecording);
-				
-				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(r);
-				
-				session.flush();
-				session.clear();
-				
-				session.refresh(r);
-				
-				tx.commit();
-				HibernateUtil.closeSession(idf);
-				
-				if (organisations!=null){
-					Long t = this.updateRoomOrganisations(organisations, r);
-					if (t==null) return null;
-				}
-				if (roomModerators!=null) {
-					RoomModeratorsDaoImpl.getInstance().updateRoomModeratorByUserList(roomModerators,r.getRooms_id());
-				}
-				
-				return r.getRooms_id();
 			}
+			
+		} catch (HibernateException ex) {
+			log.error("[updateRoom] ", ex);
+		} catch (Exception ex2) {
+			log.error("[updateRoom] ", ex2);
+		}
+		return null;
+	}
+	
+	public Long updateRoomInternal(long rooms_id, long roomtypes_id, String name,
+			boolean ispublic, String comment, Long numberOfPartizipants, List organisations,
+			Boolean appointment,
+			Boolean isDemoRoom,
+			Integer demoTime,
+			Boolean isModeratedRoom,
+			List roomModerators,
+			Boolean allowUserQuestions,
+			Boolean isAudioOnly,
+			Boolean isClosed,
+			String redirectURL,
+			String sipNumber,
+			String conferencePin,
+			Long ownerId,
+			Boolean waitForRecording,
+			Boolean allowRecording,
+			Boolean hideTopBar){
+		try {
+			log.debug("*** updateRoom numberOfPartizipants: "+numberOfPartizipants);
+			Rooms r = this.getRoomById(rooms_id);
+			r.setComment(comment);
+			
+			r.setIspublic(ispublic);
+			r.setNumberOfPartizipants(numberOfPartizipants);
+			r.setName(name);
+			r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+			r.setUpdatetime(new Date());
+			r.setAllowUserQuestions(allowUserQuestions);
+			r.setIsAudioOnly(isAudioOnly);
+
+			r.setIsDemoRoom(isDemoRoom);
+			r.setDemoTime(demoTime);
+			
+			r.setAppointment(appointment);
+			
+			r.setIsModeratedRoom(isModeratedRoom);
+			r.setHideTopBar(hideTopBar);
+			
+			r.setIsClosed(isClosed);
+			r.setRedirectURL(redirectURL);
+
+			r.setSipNumber(sipNumber);
+			r.setConferencePin(conferencePin);
+			r.setOwnerId(ownerId);
+			
+			r.setWaitForRecording(waitForRecording);
+			r.setAllowRecording(allowRecording);
+			
+			Object idf = HibernateUtil.createSession();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
+			session.update(r);
+			
+			session.flush();
+			session.clear();
+			
+			session.refresh(r);
+			
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			if (organisations!=null){
+				Long t = this.updateRoomOrganisations(organisations, r);
+				if (t==null) return null;
+			}
+			if (roomModerators!=null) {
+				RoomModeratorsDaoImpl.getInstance().updateRoomModeratorByUserList(roomModerators,r.getRooms_id());
+			}
+			
+			return r.getRooms_id();
 		} catch (HibernateException ex) {
 			log.error("[updateRoom] ", ex);
 		} catch (Exception ex2) {

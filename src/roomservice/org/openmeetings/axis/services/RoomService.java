@@ -624,20 +624,24 @@ public class RoomService {
 						Long externalRoomId, 
 						String externalRoomType ) throws AxisFault {
             try {
-				Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
-				Long roomId = null;
-				if (room == null) {
-					Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	                		Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-	                        	roomId = Roommanagement.getInstance().addExternalRoom(user_level, name, roomtypes_id, comment,
-	                                                        numberOfPartizipants, ispublic, null,
-	                                                        appointment, isDemoRoom, demoTime, isModeratedRoom, null,
-	                                                    	externalRoomId, externalRoomType, true, false, false, "",
-	                                                    	false, true, false);
-				} else {
-					roomId = room.getRooms_id();
-				}
-				return roomId;
+            	Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+            	Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+            	if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+					Rooms room = ConferenceService.getInstance().getRoomByExternalId(SID, externalRoomId, externalRoomType, roomtypes_id);
+					Long roomId = null;
+					if (room == null) {
+                    	roomId = Roommanagement.getInstance().addExternalRoom(name, roomtypes_id, comment,
+                                                    numberOfPartizipants, ispublic, null,
+                                                    appointment, isDemoRoom, demoTime, isModeratedRoom, null,
+                                                	externalRoomId, externalRoomType, true, false, false, "",
+                                                	false, true, false);
+					} else {
+						roomId = room.getRooms_id();
+					}
+					return roomId;
+            	}
+            	
+            	return -26L;
             } catch (Exception err) {
                 log.error("[addRoomWithModeration] ",err);
                 throw new AxisFault(err.getMessage());
@@ -696,9 +700,11 @@ public class RoomService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-			return Roommanagement.getInstance().updateRoom(user_level, rooms_id, roomtypes_id, name, ispublic, 
-					comment, numberOfPartizipants, null, appointment, false, null, false,
-					null,true,false, false, "", "", "", null, null, null, false);
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().updateRoomInternal(rooms_id, roomtypes_id, name, ispublic, 
+						comment, numberOfPartizipants, null, appointment, false, null, false,
+						null,true,false, false, "", "", "", null, null, null, false);
+	        }
 		} catch (Exception err) {
 			log.error("[addRoom] ",err);
 		}
@@ -718,10 +724,12 @@ public class RoomService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
-					name, ispublic, comment, numberOfPartizipants, null, 
-					appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false, 
-					false, "", "", "", null, null, null, false);
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+	        	return Roommanagement.getInstance().updateRoomInternal(room_id, roomtypes_id, 
+						name, ispublic, comment, numberOfPartizipants, null, 
+						appointment, isDemoRoom, demoTime, isModeratedRoom,null,true,false, 
+						false, "", "", "", null, null, null, false);
+	        }
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ",err);
 		}
@@ -742,10 +750,12 @@ public class RoomService {
 		try {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
-			return Roommanagement.getInstance().updateRoom(user_level, room_id, roomtypes_id, 
-					name, ispublic, comment, numberOfPartizipants, null, 
-					appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null,allowUserQuestions,false, false, "", "", "", null, null, null, false);
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().updateRoomInternal(room_id, roomtypes_id, 
+						name, ispublic, comment, numberOfPartizipants, null, 
+						appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null,allowUserQuestions,false, false, "", "", "", null, null, null, false);
+	        }
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ",err);
 		}
@@ -782,11 +792,13 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
-			return Roommanagement.getInstance().addExternalRoom(user_level, name,
-					roomtypes_id, comment, numberOfPartizipants, ispublic,
-					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, true, false, false, "",
-					false, true, false);
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().addExternalRoom(name,
+						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, null, externalRoomType, true, false, false, "",
+						false, true, false);
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -802,11 +814,13 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
-			return Roommanagement.getInstance().addExternalRoom(user_level, name,
-					roomtypes_id, comment, numberOfPartizipants, ispublic,
-					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
-					false, true, false);
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().addExternalRoom(name,
+						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+						false, true, false);
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -823,11 +837,15 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
-			return Roommanagement.getInstance().addExternalRoom(user_level, name,
-					roomtypes_id, comment, numberOfPartizipants, ispublic,
-					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
-					waitForRecording, allowRecording, false);
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().addExternalRoom(name,
+						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+						waitForRecording, allowRecording, false);
+			} else {
+				return -26L;
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -845,11 +863,13 @@ public class RoomService {
 			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
 			Long user_level = Usermanagement.getInstance().getUserLevelByID(
 					users_id);
-			return Roommanagement.getInstance().addExternalRoom(user_level, name,
-					roomtypes_id, comment, numberOfPartizipants, ispublic,
-					null, appointment, isDemoRoom, demoTime, isModeratedRoom,
-					null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
-					waitForRecording, allowRecording, hideTopBar);
+			if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+				return Roommanagement.getInstance().addExternalRoom(name,
+						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, null, externalRoomType, allowUserQuestions, isAudioOnly, false, "",
+						waitForRecording, allowRecording, hideTopBar);
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -1283,7 +1303,7 @@ public class RoomService {
 		    	log.info("validFromDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
 		    	log.info("validToDate: "+CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 				
-		    	Long rooms_id =  Roommanagement.getInstance().addExternalRoom(user_level, name,
+		    	Long rooms_id =  Roommanagement.getInstance().addExternalRoom(name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						null, appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, 
