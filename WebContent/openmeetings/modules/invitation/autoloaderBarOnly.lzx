@@ -104,7 +104,7 @@
         <netparam><method name="getValue">return canvas.lastName;</method></netparam>      
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("setUsername: ",value);
+            if ($debug) Debug.write("setUsername: value, ",canvas.thishib.currentInvitation.room.roomtype.roomtypes_id);
             clearStageContent();		
             parent.close();
 			if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==1){
@@ -120,6 +120,10 @@
 				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
 				
 			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==4){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.interviewRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+                
+            } else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==5){
                 
                 new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.customRoomModule,roomObj:canvas.thishib.currentInvitation.room});
                 
