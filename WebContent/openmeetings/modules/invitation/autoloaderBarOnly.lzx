@@ -118,7 +118,12 @@
 			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==3){
 				
 				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.restrictedRoomModule,roomObj:canvas.thishib.currentInvitation.room});
-			}                 
+				
+			} else if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==4){
+                
+                new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.customRoomModule,roomObj:canvas.thishib.currentInvitation.room});
+                
+            }                 
         </handler>  
     </netRemoteCallHib>     
           

@@ -13,8 +13,10 @@
 		
 			if ($debug) Debug.info("loadObjectList :1: ",whiteBoardObject,whiteBoardObject.fullFit,whiteBoardObject.zoom);
 		
-			parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
-		
+			if (parent.parent["zoombox"]) {
+			    parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
+			}
+			
 			this.setAttribute("x",whiteBoardObject.x);
 			this.setAttribute("y",whiteBoardObject.y);	
 			
