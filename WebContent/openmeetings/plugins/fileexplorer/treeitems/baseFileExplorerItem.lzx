@@ -226,7 +226,9 @@
             this.singleClickStarted = false;
             lz.Timer.removeTimer( this.singleClickDelegate );
             
-            if (this.isWmlFile){
+            if (this.isVideo) {
+            	this.playVideo();
+            } else if (this.isWmlFile){
 				this.loadWmlFile();
 			} else if (this.isFolder) {
                 this.doSingleClick(null);
@@ -346,7 +348,7 @@
                                             fileName:fileExplorerItem.fileName,
                                             fileHash:fileExplorerItem.fileHash,
                                             isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_image_rsc',
+                                            fileIcon:'file_explorer_video_rsc',
                                             refObjListRoot:this.refObjListRoot
                                         });
                 } else if (fileExplorerItem.isStoredWmlFile) { 

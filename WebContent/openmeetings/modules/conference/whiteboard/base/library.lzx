@@ -14,6 +14,7 @@
 	<include href="baseDrawImage.lzx" />
 	<include href="baseDrawSave.lzx" />
 	<include href="baseDrawWords.lzx" />
+	<include href="whiteboardVideoPlayer.lzx" />
 	<include href="remoteWhiteboard.lzx" />
     
     <class name="whiteBoardPointer" extends="view"

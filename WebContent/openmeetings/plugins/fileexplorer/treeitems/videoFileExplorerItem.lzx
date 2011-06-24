@@ -29,7 +29,7 @@
 	<text name="_fileName" x="36" text="${ parent.fileName }" fontsize="10" resize="true" y="1">
 		<contextmenu>
 			
-			<contextmenuitem caption="$once{ canvas.getLabelName(1074) }" 
+			<contextmenuitem caption="$once{ canvas.getLabelName(1358) }" 
 							 onselect="parent.parent.parent.playVideo()" />
 			
 			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 

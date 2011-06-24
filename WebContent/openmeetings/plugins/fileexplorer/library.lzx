@@ -25,7 +25,8 @@
         <frame src="resources/folder_blue.png" />
         <frame src="resources/folder_blue_open.png" />
     </resource>
-    	
+    
+    <resource name="file_explorer_video_rsc" src="resources/video.png" />	
     <resource name="file_explorer_add_file_rsc" src="resources/viewmag_plus.png" />
     <resource name="file_explorer_add_folder_rsc" src="resources/folder_new.png" />
     <resource name="file_explorer_reload_rsc" src="resources/reload.png" />

@@ -711,6 +711,114 @@
             }	
 		]]>
     </method>
+    
+    
+    
+    
+    
+    <method name="playVideoSynced" args="fileExplorerItemId,fileName">
+        <![CDATA[
+        
+            if ($debug) Debug.write("playVideoSynced : ",fileExplorerItemId);
+        
+            var tName = 'flv'+this.getCounter();
+            
+            this.currentlayer = new lz.whiteboardVideoPlayer(this,{
+                                            name:tName,
+                                            fileExplorerItemId:fileExplorerItemId,
+                                            title:fileName,
+                                            sendInit:true
+                                        });
+                                        
+            this.layers.push(this.currentlayer);  
+        ]]>
+    </method>
+    
+    <method name="sendNewVideoRemote" args="refObj">
+        <![CDATA[
+        
+            if ($debug) Debug.write("sendNewVideoRemote : ",refObj.fileExplorerItemId,refObj.title);
+        
+            this.flvregisterFinal(refObj.name,refObj.x,refObj.y,refObj.width,refObj.height,
+                                                refObj.fileExplorerItemId,refObj.title,false,this.getZIndex());
+                        
+            
+        ]]>
+    </method>
+    
+    <method name="flvregisterFinal" args="newName,x,y,width,height,fileExplorerItemId,fileName,isPlaying,zIndex">
+        var actionObject = new Array();
+        actionObject[0] = 'flv';
+        actionObject[1] = fileExplorerItemId;
+        actionObject[2] = fileName;
+        actionObject[3] = isPlaying;  
+        actionObject[4] = zIndex;//-8
+        actionObject[5] = null;//-7
+        actionObject[6] = this.counter;//-6
+        actionObject[7] = x;//-5
+        actionObject[8] = y;//-4
+        actionObject[9] = width;//-3
+        actionObject[10] = height;//-2
+        actionObject[11] = newName;//-1
+        this.baseactionobjectList.push(actionObject);       
+        this.onsharedMessage('draw',actionObject);
+    </method>     
+    
+    <method name="drawFlvToHistory" args="lastActionObject,parentView">
+        <![CDATA[
+        
+            if ($debug) Debug.write("drawFlvToHistory PLAY :: ",lastActionObject[3]);
+        
+            this.currentlayer = new lz.whiteboardVideoPlayer(this,{
+                                            name:lastActionObject[lastActionObject.length-1],
+                                            fileExplorerItemId:lastActionObject[1],
+                                            title:lastActionObject[2],
+                                            x:lastActionObject[lastActionObject.length-5],
+                                            y:lastActionObject[lastActionObject.length-4],
+                                            width:lastActionObject[lastActionObject.length-3],
+                                            height:lastActionObject[lastActionObject.length-2]
+                                        });
+               
+            if (lastActionObject[3]) {
+                this.currentlayer.playRemote();
+            }
+                                        
+            this.layers.push(this.currentlayer);  
+            
+        ]]>
+    </method>
+    
+    <method name="playFLV" args="refObj,play">
+        <![CDATA[
+            
+            for (var eg=0;eg<this.baseactionobjectList.length;eg++){
+                if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==refObj.name) {
+                    ////Debug.write("Found Object: ",this.baseactionobjectList[eg]);
+                    
+                    this.baseactionobjectList[eg][3] = play;
+                    
+                    if ($debug) Debug.write("playFLV :: ",this.baseactionobjectList[eg]);
+                    this.onsharedMessage('flv',this.baseactionobjectList[eg]);
+                    
+                    break;
+                }
+            }
+            
+        ]]>
+    </method>
+    
+    <method name="playFLVRemote" args="actionObject">
+
+        var tObj = this.getObjectByName(actionObject[actionObject.length-1]);
+        
+        if (actionObject[3]) {
+            tObj.playRemote();
+        }
+        if (!actionObject[3]) {
+            tObj.stopRemote();
+        }
+
+    </method>
 
 </class>
 

@@ -4083,4 +4083,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1357" name="hide_top_bar">
     <value>Hide topbar</value>
   </string>
+  <string id="1358" name="fileExplorer">
+    <value>Play video</value>
+  </string>
 </language>
