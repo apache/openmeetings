@@ -3008,7 +3008,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									if (rcl.getPublicSID().equals(publicSID)){
 										//log.debug("IS EQUAL ");
 										((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain",new Object[] { message }, this);
-										log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"+message);
+										log.debug("newMessageByRoomAndDomain RPC:newMessageByRoomAndDomain"+message);
 									}
 								}
 							}

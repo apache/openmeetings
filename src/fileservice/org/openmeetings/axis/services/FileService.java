@@ -22,6 +22,7 @@ public class FileService {
 	 * this Method does not work yet,
 	 * as the Result has to be rewritten in Objects instead
 	 * of a LinekdHashMap
+	 * @deprecated
 	 * @param SID
 	 * @param moduleName
 	 * @param parentFolder
@@ -48,6 +49,15 @@ public class FileService {
 		return null;
 	}
 	
+	/**
+	 * @deprecated
+	 * @param SID
+	 * @param fileName
+	 * @param moduleName
+	 * @param parentFolder
+	 * @param room_id
+	 * @return
+	 */
 	public Boolean deleteFile(String SID, String fileName, String moduleName, String parentFolder, Long room_id){
 		try {
 			return ConferenceLibrary.getInstance().deleteFile(SID, fileName, moduleName, parentFolder, room_id);
@@ -56,6 +66,8 @@ public class FileService {
 		}
 		return null;
 	}
+	
+	//public addFile(String SID, String url, Long parentFolderId, )
 	
 	public TestObject getTestObject(){
 		TestObject textO = new TestObject();

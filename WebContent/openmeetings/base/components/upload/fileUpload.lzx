@@ -73,6 +73,11 @@
 				allTypes.push(imageTypes);
 				
 				imageTypes = new Object();
+                imageTypes.extension = "*.avi; *.mov; *.flv; *.mp4";
+                imageTypes.description = "Videos";
+                allTypes.push(imageTypes);
+				
+				imageTypes = new Object();
 				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";				
 				imageTypes.description = "Pictures";
 				allTypes.push(imageTypes);

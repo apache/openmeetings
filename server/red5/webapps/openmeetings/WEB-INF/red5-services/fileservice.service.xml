@@ -11,5 +11,22 @@
     <bean id="fileservice.service" 
         class="org.openmeetings.app.remote.ConferenceLibrary"> 
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
-    </bean>               
+    </bean>  
+    
+    <bean id="openmeetings.FileProcessor"
+          class="org.openmeetings.app.data.file.FileProcessor">
+        <property name="flvExplorerConverter" ref="openmeetings.FlvExplorerConverter" />
+    </bean>
+    
+    <bean id="openmeetings.FlvExplorerConverter"
+        class="org.openmeetings.app.data.flvrecord.converter.FlvExplorerConverter">
+        <property name="fileExplorerItemDaoImpl" ref="openmeetings.FileExplorerItemDaoImpl" />
+        <property name="configurationmanagement" ref="openmeetings.Configurationmanagement" />
+        <property name="flvRecordingLogDaoImpl" ref="openmeetings.FlvRecordingLogDaoImpl" />
+    </bean>     
+    
+    <bean id="openmeetings.FileExplorerItemDaoImpl"
+        class="org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl">
+    </bean>
+                 
 </beans>
