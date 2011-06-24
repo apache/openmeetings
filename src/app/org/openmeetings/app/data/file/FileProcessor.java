@@ -113,7 +113,9 @@ public class FileProcessor {
         // add outputfolders for profiles
         // if it is a presenation it will be copied to another place
         if (!(canBeConverted || isPdf || isImage || isVideo || isAsIs)) {
-            return null;
+        	returnAttributes.put("error","The file type cannot be converted");
+        	returnAttributes.put("exitValue",-1);
+            return returnError;
         }
 
         if (isAsIs) {
