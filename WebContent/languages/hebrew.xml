@@ -244,7 +244,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Arrow</value>
   </string>
   <string id="80" name="deletechosen">
-    <value>Delete chosen Item</value>
+    <value>Delete</value>
   </string>
   <string id="81" name="appliymod">
     <value>Apply for moderation</value>
