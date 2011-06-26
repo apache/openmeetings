@@ -46,6 +46,18 @@ public class FileService {
 	 * 
 	 * Import file from external source
 	 * 
+	 * to upload a file to a room-drive you specify:
+	 * externalUserId, user if of openmeetings user for which we upload the file
+	 * room_id = openmeetings room id
+	 * isOwner = 0
+	 * parentFolderId = 0
+	 * 
+	 * to upload a file to a private-drive you specify:
+	 * externalUserId, user if of openmeetings user for which we upload the file
+	 * room_id = openmeetings room id
+	 * isOwner = 1
+	 * parentFolderId = -2
+	 * 
 	 * @param SID
 	 * @param externalUserId the external user id => If the file should goto a private section of any user, this number needs to be set
 	 * @param externalFileId the external file-type to identify the file later
@@ -124,6 +136,18 @@ public class FileService {
 	/**
 	 * 
 	 * Import file from external source
+	 * 
+	 * to upload a file to a room-drive you specify:
+	 * internalUserId, user if of openmeetings user for which we upload the file
+	 * room_id = openmeetings room id
+	 * isOwner = 0
+	 * parentFolderId = 0
+	 * 
+	 * to upload a file to a private-drive you specify:
+	 * internalUserId, user if of openmeetings user for which we upload the file
+	 * room_id = openmeetings room id
+	 * isOwner = 1
+	 * parentFolderId = -2
 	 * 
 	 * @param SID
 	 * @param internalUserId the openmeetings user id => If the file should goto a private section of any user, this number needs to be set
