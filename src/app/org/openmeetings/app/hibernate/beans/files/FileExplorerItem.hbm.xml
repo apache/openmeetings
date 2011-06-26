@@ -26,5 +26,7 @@
     <property name="wmlFilePath" type="string" column="wml_file_path"/>
     <property name="isStoredWmlFile" type="boolean" column="is_stored_wml_file"/>
     <property name="isChart" type="boolean" column="is_chart"/>
+    <property name="externalFileId" type="long" column="external_file_id"/>
+    <property name="externalType" type="string" column="external_type"/>
   </class>
 </hibernate-mapping>

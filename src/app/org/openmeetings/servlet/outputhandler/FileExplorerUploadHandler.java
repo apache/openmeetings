@@ -75,7 +75,9 @@ public class FileExplorerUploadHandler extends UploadHandler {
         
         FileProcessor fileProcessor = (FileProcessor) context.getBean("openmeetings.FileProcessor");
         
-        HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(userId, room_id_to_Store, isOwner, is, parentFolderId, fileSystemName, current_dir, hs);
+        HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(userId, room_id_to_Store, 
+        		isOwner, is, parentFolderId, fileSystemName, current_dir, hs,
+        		0L, ""); //externalFilesId, externalType
         
         HashMap<String, Object> returnAttributes = returnError.get("returnAttributes");
         

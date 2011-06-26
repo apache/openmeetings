@@ -72,7 +72,10 @@ public class FileProcessor {
 		
 	}
 	
-	public HashMap<String, HashMap<String, Object>> processFile(Long userId, Long room_id, boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, String current_dir, Map<String, Object> hs) throws Exception {
+	public HashMap<String, HashMap<String, Object>> processFile(Long userId, Long room_id, 
+			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
+			String current_dir, Map<String, Object> hs, Long externalFileId, 
+			String externalType) throws Exception {
 		
 		HashMap<String, HashMap<String, Object>> returnError = new HashMap<String, HashMap<String, Object>>();
 		
@@ -177,7 +180,8 @@ public class FileProcessor {
         Long fileExplorerItemId = FileExplorerItemDaoImpl.getInstance().add(
                 fileSystemName, fileHashName, // The Hashname of the file
                 parentFolderId, ownerId, room_id, userId, false, // isFolder
-                isImage, isPresentation, "", false, isChart);
+                isImage, isPresentation, "", false, isChart, 
+                externalFileId, externalType);
         log.debug("fileExplorerItemId: " + fileExplorerItemId);
         
         

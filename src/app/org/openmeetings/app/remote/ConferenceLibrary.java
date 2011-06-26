@@ -728,7 +728,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                                 false, // isPresentation
                                 localFileName, // WML localFileName
                                 true, // isStoredWML file
-                                true);
+                                true, 0L, "");
 
                 return fileExplorerId;
             }
@@ -945,7 +945,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                             "", // WML Path
                             false, // isStoredWML file
                             false // isXmlFile
-                            );
+                            , 0L, "");
                 } else {
                     return FileExplorerItemDaoImpl.getInstance().add(fileName,
                             "", parentFileExplorerItemId, null, room_id,
@@ -955,7 +955,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                             "", // WML Paht
                             false, // isStoredWML file
                             false // isXmlFile
-                            );
+                            , 0L, "");
                 }
             }
         } catch (Exception err) {

@@ -37,6 +37,9 @@ public class FileExplorerItem {
 	private String wmlFilePath;
     private Boolean isStoredWmlFile;
     private Boolean isChart;
+    
+    private Long externalFileId; 
+    private String externalType;
 		
 	/**
 	 *
@@ -290,4 +293,29 @@ public class FileExplorerItem {
     public void setIsChart(Boolean isChart) {
         this.isChart = isChart;
     }
+    
+    /**
+     * @hibernate.property
+     *  column="external_file_id"
+     *  type="long"
+     */
+	public Long getExternalFileId() {
+		return externalFileId;
+	}
+	public void setExternalFileId(Long externalFileId) {
+		this.externalFileId = externalFileId;
+	}
+	
+	/**
+     * @hibernate.property
+     *  column="external_type"
+     *  type="string"
+     */
+	public String getExternalType() {
+		return externalType;
+	}
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
+	}
+    
 }

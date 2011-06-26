@@ -47,8 +47,8 @@ public class FileService {
 	 * 
 	 * @param SID
 	 * @param externalUserId
-	 * @param externalUserType
 	 * @param externalFileId
+	 * @param externalType
 	 * @param room_id
 	 * @param isOwner
 	 * @param path
@@ -57,8 +57,8 @@ public class FileService {
 	 * @return
 	 * @throws AxisFault
 	 */
-	public FileImportError[] importFile(String SID, Long externalUserId, String externalUserType, 
-					String externalFileId, Long room_id, boolean isOwner, String path, 
+	public FileImportError[] importFile(String SID, Long externalUserId, Long externalFileId, 
+					String externalType, Long room_id, boolean isOwner, String path, 
 					Long parentFolderId, String fileSystemName) throws AxisFault{
 		try {
 		
@@ -76,12 +76,12 @@ public class FileService {
 		        URLConnection uc = url.openConnection();
 		        InputStream inputstream = new BufferedInputStream(uc.getInputStream());
 		        
-		        Users externalUser = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalUserType);
+		        Users externalUser = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalType);
 		        
 		        LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
 		        
-				HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(externalUser.getExternalUserId(), room_id, isOwner, inputstream, parentFolderId, fileSystemName, current_dir, hs);
+				HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(externalUser.getExternalUserId(), room_id, isOwner, inputstream, parentFolderId, fileSystemName, current_dir, hs, externalFileId, externalType);
 		
 				HashMap<String, Object> returnAttributes = returnError.get("returnAttributes");
 		        
@@ -103,10 +103,10 @@ public class FileService {
 					HashMap<String, Object> returnAttribute = returnError.get(iter.next());
 					
 					fileImportErrors[i] = new FileImportError();
-					fileImportErrors[i].setCommand(returnAttribute.get("command").toString());
-					fileImportErrors[i].setError(returnAttribute.get("error").toString());
-					fileImportErrors[i].setExitValue(Integer.valueOf(returnAttribute.get("exitValue").toString()).intValue());
-					fileImportErrors[i].setProcess(returnAttribute.get("process").toString());
+					fileImportErrors[i].setCommand((returnAttribute.get("command")!=null) ? returnAttribute.get("command").toString() : "");
+					fileImportErrors[i].setError((returnAttribute.get("error")!=null) ? returnAttribute.get("error").toString() : "");
+					fileImportErrors[i].setExitValue((returnAttribute.get("exitValue")!=null) ? Integer.valueOf(returnAttribute.get("exitValue").toString()).intValue() : 0);
+					fileImportErrors[i].setProcess((returnAttribute.get("process")!=null) ? returnAttribute.get("process").toString() : "");
 					
 					i++;
 				}

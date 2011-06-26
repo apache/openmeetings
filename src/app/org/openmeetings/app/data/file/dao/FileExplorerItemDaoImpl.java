@@ -39,7 +39,8 @@ public class FileExplorerItemDaoImpl {
             Long parentFileExplorerItemId, Long ownerId, Long room_id,
             Long insertedBy, Boolean isFolder, Boolean isImage,
             Boolean isPresentation, String wmlFilePath,
-            Boolean isStoredWmlFile, Boolean isChart) {
+            Boolean isStoredWmlFile, Boolean isChart,
+            Long externalFileId, String externalType) {
         log.debug(".add(): adding file " + fileName);
         try {
             FileExplorerItem fileItem = new FileExplorerItem();
@@ -58,6 +59,8 @@ public class FileExplorerItemDaoImpl {
             fileItem.setWmlFilePath(wmlFilePath);
             fileItem.setIsStoredWmlFile(isStoredWmlFile);
             fileItem.setIsChart(isChart);
+            fileItem.setExternalFileId(externalFileId);
+            fileItem.setExternalType(externalType);
 
             Object idf = HibernateUtil.createSession();
 
