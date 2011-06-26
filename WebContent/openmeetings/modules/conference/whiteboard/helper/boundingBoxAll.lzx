@@ -10,9 +10,50 @@
     
     this is the selection Box for all Whiteboard Objects
  -->
+ 
+<class name="boundingBoxAllRotationMarger" extends="view" 
+	   width="24" height="24" resource="bounding_item_rsc">
+	
+	<attribute name="dragStarted" value="false" type="boolean"/>
+	
+	<handler name="onmouseover">
+        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+    </handler>
+    <handler name="onmouseout">
+        lz.Cursor.unlock();
+    </handler>
     
-<class name="boundingBoxAll" extends="view" 
-        >
+    <handler name="onx" args="x">
+    	this.doMoveDragPoint();
+    </handler>
+    <handler name="ony" args="y">
+        this.doMoveDragPoint();
+    </handler>
+    
+    <method name="doMoveDragPoint">
+    	if (!this.dragStarted) {
+    		return;
+    	}
+    	parent.doMoveDragPoint(this.x+12,this.y+12);
+    </method>
+    
+    <handler name="onmousedown">
+    	this.dragStarted = true;
+    	parent.doStartDragPoint();
+        this.dragger.apply();
+    </handler>
+    <handler name="onmouseup">
+    	this.dragStarted = false;
+        this.dragger.remove();
+        parent.endDrawClipArtDrag();
+        lz.Cursor.unlock();
+    </handler>
+    
+    <dragstate name="dragger" />  
+    
+</class> 
+    
+<class name="boundingBoxAll" extends="view" >
     
 <!-- 
 	<method name="removeIt">
@@ -20,7 +61,7 @@
 	</method>
  -->	
 	<method name="removeIt">
-		if ($debug) Debug.write("removeIt +**********",this.isinited);
+		//Debug.write("removeIt +**********",this.isinited);
 		this.whiteboardRef.setAttribute('boundingIsActive',false);
 		if (this.rs) this.rs.remove();
 		if (this.dragger) this.dragger.remove();
@@ -106,13 +147,36 @@
 				
 			} else if (this.objRef.name.indexOf('swf') >= 0) {
                 this.setAttribute("innerInsetScrollbars",16);
+            } else if (this.objRef.name.indexOf('clipart') >= 0) {
+            	this.canBeResized = false;
+            	
+            	new lz.boundingBoxAllRotationMarger(this,{
+                    	       x:this.objRef.clipart.clipArtEndx-12,
+                    	       y:this.objRef.clipart.clipArtEndy-12
+                        	});
+            	
             }
+            
             
             this.whiteboardRef.parent.parent._propertyPanel.loadPanelByBoundingBox(this.whiteboardRef,this.objRef);
             
 			this.doUpdateAction();
 		]]>
 	</handler>
+	
+	<method name="doStartDragPoint">
+		this.whiteboardRef.setStartPoint(this.objRef.clipart.x+this.x,this.objRef.clipart.y+this.y);
+	</method>
+	
+	<method name="doMoveDragPoint" args="x,y">
+		this.whiteboardRef.trackDrawClipArtDraw(this.x+x,this.y+y,this.objRef.clipart);
+	</method>
+	
+	<method name="endDrawClipArtDrag">
+        this.whiteboardRef.endDrawClipArtDrag(this.objRef);
+        this.whiteboardRef.reselectShowObjectBounds(this.objRef.name);
+    </method>
+	
 	
 	<!--
 	   Do update the Selection-Box, in case another Moderator or User has moved the Object
@@ -171,22 +235,22 @@
     </handler>
     
     <handler name="onx">
-    	if(this.doHandlerUpdates){
-    		
-    		var tx = this.getAttributeRelative('x',objRef);
+        if(this.doHandlerUpdates){
+            
+            var tx = this.getAttributeRelative('x',objRef);
         
             if(this.objRef.parent.isSnapToGrid){   
                 tx = Math.round(tx/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth;
                 this.setAttribute("x",Math.round(this.x/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
             }
-    		
-    		this.objRef.setAttribute('x',tx);
-    	}
+            
+            this.objRef.setAttribute('x',tx);
+        }
     </handler>
     
     <handler name="ony">
-    	if(this.doHandlerUpdates){
-    		
+        if(this.doHandlerUpdates){
+            
             var ty = this.getAttributeRelative('y',objRef);
         
             if(this.objRef.parent.isSnapToGrid){   
@@ -194,8 +258,8 @@
                 this.setAttribute("y",Math.round(this.y/this.objRef.parent.gridWidth)*this.objRef.parent.gridWidth)
             }
             
-    		this.objRef.setAttribute('y',ty);
-    	}
+            this.objRef.setAttribute('y',ty);
+        }
     </handler>
 	
 	<method name="setStartValues">
@@ -270,7 +334,6 @@
 	        if (this.objRef.typeOfObject == 'swf'){
 	            if (canvas.ismoderator || canvas.isAllowedToDraw) {
                     //if ($debug) Debug.write("-- setCurrentMouseWheelObject --",this.objRef._scrollstv);
-                    //FIXME: This is disabled for now
                     //setCurrentMouseWheelObject(this.objRef._scrollstv);
                 }
 	        }
@@ -340,7 +403,8 @@
 					x="${ parent.width-this.width-parent.innerInsetScrollbars }" >
 		<handler name="onclick">
 			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
-			parent.__LZRemoveItem(null);
+			//this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
+			parent.__LZRemoveItem(this.parent.objRef);
 		</handler>
 	</baseChooseIcon>	    
     
@@ -392,16 +456,17 @@
     </view>
      -->
     
-	<view resource="_boundingBoxPointerTL" x="0" y="0" />
-	<view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
-	<view name="_gripperResize" visibility="visible" 
-		resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
-		onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
-		<labelTooltip labelid="252" />
-	</view>
-	<view name="_gripperNoResize" visibility="hidden" 
-		resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
-	<view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
+    <view resource="_boundingBoxPointerTL" x="0" y="0" />
+    <view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
+    <view name="_gripperResize" visibility="visible" 
+        resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
+        onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
+        <labelTooltip labelid="252" />
+    </view>
+    <view name="_gripperNoResize" visibility="hidden" 
+        resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
+    <view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
+    
     
 </class>
 

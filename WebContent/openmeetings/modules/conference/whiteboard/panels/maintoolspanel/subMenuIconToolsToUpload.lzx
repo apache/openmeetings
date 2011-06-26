@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="miniIconSmybolExtraIcons" extends="view" width="22" height="22">
+	
+	<attribute name="modi" value="" type="string"/>
+	
+	<handler name="onclick">
+		parent.parent.parent.sendNewIcon(this);
+	</handler>
+	
+	<handler name="ondblclick">
+		parent.parent.parent.sendNewIcon(this);
+		parent.parent.parent.chooseSelect();
+	</handler>
+	
+	<labelTooltip text="$once{ parent.modi }" />
+	
+</class>
+	
+<class name="subMenuIconToolsToUpload" extends="guiPresenter" labelid="1335" isdragable="false" 
+    minimizable="false" maximizable="false" fullToolBar="true" 
+    resizeable="false" width="280" height="200" >
+	
+	<attribute name="currentSelected" value="null" />
+	<attribute name="refToolbar" value="null" />
+	
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
+	
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <!--- @keywords private -->
+    <method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+           if ( eventStr == "onmousedown"  ){
+               if ( view != null ) {
+                  if ( !view.childOf(this) ) {
+                       this.close();
+                  }
+               } else {
+                   this.close();
+               }
+           }
+           if (view && view.childOf(this)) {
+               if (view[ eventStr ]) {
+                   view[ eventStr ].sendEvent( view );
+               }
+               return false;
+           }
+          return true;
+       ]]> 
+    </method>  
+    
+    <method name="sendNewIcon" args="refObj">
+    	if ($debug) Debug.write("sendNewIcon :: ",refObj.modi);
+    	this.currentSelected = refObj;
+    	
+    	var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+                                        +'public/cliparts/thumb/'+refObj.modi;
+    	
+        if ($debug) Debug.write("this.refToolbar :: ",this.refToolbar);        
+                                        
+    	this.refToolbar._rscIcon.setSource(imageurl);
+    	
+    	this.refToolbar.parent.parent.parent.setSelection(this.refToolbar);
+    	
+    	canvas._drawarea.currentClipArtRessourceName = refObj.modi;
+    	
+    	this.close();
+    </method>
+    
+    <method name="chooseSelect">
+    	if ($debug) Debug.write("chooseSelect :: ",this.currentSelected);
+    	this.close();
+    </method>
+    
+    <view resource="sub_menu_top_grip_colored_rsc" y="-14">
+    	<!--
+    	<handler name="oninit">
+                <![CDATA[
+                    this.setTintRGB(canvas.basebgcolorizer,0);
+                ]]>
+            </handler>
+            <method name="setTintRGB" args="color, brightness">
+                <![CDATA[
+                    if (color != "" && color != null){
+    
+                        var rgb = color;
+                        var red = (rgb >> 16) & 0xFF;
+                        var green = (rgb >> 8) & 0xFF;
+                        var blue = rgb & 0xFF;
+            
+                        this.setColorTransform( { ra : red, ga : green, ba : blue,
+                                                    rb : 0, gb : 0, bb : 0 } );
+                                                    
+                    }
+                ]]>
+            </method>  
+             --> 
+            <!--
+    	<handler name="oninit">
+    		this.setTint(canvas.basebgcolorizer); //this, 
+    	</handler>
+    	 -->
+    </view>
+    
+    <view y="22" width="$once{ parent.width }" clip="true" showhandcursor="false"
+    	  height="$once{ parent.height - 23 }" clickable="true">
+    	
+    	<view width="$once{ parent.width-14 }">
+    		
+    		<handler name="oninit">
+    			this.getClipArtIcons.doCall();
+    		</handler>
+    		
+    		<!--
+    		getClipArtIcons()
+    		 -->
+            <netRemoteCallHib name="getClipArtIcons" funcname="whiteboardservice.getClipArtIcons"
+                remotecontext="$once{ canvas.thishib }" >
+                <handler name="ondata" args="value">
+                    <![CDATA[
+                        //The onResult-Handler will be called be the rtmpconnection
+                        //if ($debug) Debug.write("############## getClipArtIcons : ",value);
+                        parent.loadIconThumbs(value);
+                    ]]>
+                </handler>   
+            </netRemoteCallHib> 
+            
+            <method name="loadIconThumbs" args="list">
+            	<![CDATA[
+            	
+                    var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+                                        +'public/cliparts/thumb/';
+                    
+                    //if ($debug) Debug.write("imageurl :: ",imageurl);            	
+                        	
+                    for (var i=0;i<list.length;i++) {
+                    	
+                    	//if ($debug) Debug.write("list[i].indexOf() ",list[i],list[i].indexOf("."));
+                    	
+                    	if (list[i].indexOf(".") > 1 ) {
+                    	
+                            var iconresourceName = imageurl + list[i];
+                          
+                            new lz.miniIconSmybolExtraIcons(this,{
+                                          modi:list[i],
+                                          resource:iconresourceName
+                                      });
+                                  
+                    	}
+                      
+                    }
+                
+                ]]>
+            </method>    		 
+    			
+    		<wrappinglayout axis="x" spacing="2" xinset="2"></wrappinglayout>
+    		
+    	</view> 
+    	
+    	<vscrollbar />
+    </view>
+    
+    <!--
+    <simpleLabelButton labelid="1072" width="150" x="4" y="$once{ parent.height-22 }">
+        <handler name="onclick">
+            if ($debug) Debug.write("Upload More");
+        </handler>
+    </simpleLabelButton>  
+    
+    <simpleLabelButton labelid="1073" width="120" x="158" y="$once{ parent.height-22 }">
+        <handler name="onclick">
+            if ($debug) Debug.write("Upload More");
+            parent.chooseSelect();
+        </handler>
+    </simpleLabelButton>  
+     -->
+	
+</class>
+	
+</library>

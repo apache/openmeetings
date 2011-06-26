@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+	<resource name="bounding_item_rsc" src="resources/bounding_item.png" />
 
     <include href="dragView.lzx" />
     <include href="boundingBoxAll.lzx" />

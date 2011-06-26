@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+	
+    <resource name="sub_menu_tools_panel_rsc" src="resources/sub_menu.png" />
+    <resource name="sub_menu_top_grip_colored_rsc" src="resources/sub_menu_top_grip.swf" />	
+	
 	<include href="mainToolsPanelItem.lzx" />  
 	<include href="mainToolsPanel.lzx" />  
+	<include href="subMenuIconToolsToUpload.lzx" />
+	
 </library>
