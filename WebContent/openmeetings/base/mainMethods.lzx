@@ -333,7 +333,17 @@
                 } else if (stringSub=='checkPollVoted') {
                     this.checkHasVoted.doCall();
                 } else if (stringSub=='importFile') {
-                    new lz.uploadWindow(canvas.main_content._content.inner,{x:60,uploadmodule:canvas.uploadmoduleimg,isOnlyImage:true});
+                    //new lz.uploadWindow(canvas.main_content._content.inner,{x:60,uploadmodule:canvas.uploadmoduleimg,isOnlyImage:true});
+                    
+                	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                            x:60,uploadmodule:canvas.uploadmoduleimg,
+                            parentFolderId:0,
+                            isOwner:false,
+                            fileExplorerRef:null,
+                            isOnlyImage:true,
+                            servletName:'FileExplorerUploadHandler'
+                        });
+                	
                 } else if (stringSub=='applyForMod') {
                     if ($debug) Debug.info("Apply For Mod through doActionmenu");
                     //new lz.applyForModeration(canvas.main_content._content.inner);
