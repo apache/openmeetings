@@ -15,8 +15,11 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
@@ -194,6 +197,188 @@ public class UserService {
 			}
 		} catch (Exception err) {
 			log.error("setUserObject", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * Adds a user with an externalUserId and type, but checks if the user/type 
+	 * does already exist
+	 * 
+	 * @param SID
+	 * @param username
+	 * @param userpass
+	 * @param lastname
+	 * @param firstname
+	 * @param email
+	 * @param additionalname
+	 * @param street
+	 * @param zip
+	 * @param fax
+	 * @param states_id
+	 * @param town
+	 * @param language_id
+	 * @param baseURL
+	 * @param jNameTimeZone
+	 * @param externalUserId
+	 * @param externalUserType
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long addNewUserWithExternalType(String SID, String username, String userpass,
+			String lastname, String firstname, String email,
+			String additionalname, String street, String zip, String fax,
+			long states_id, String town, long language_id, String baseURL,
+			String jNameTimeZone, Long externalUserId, String externalUserType)
+			throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+
+				Users testUser = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalUserType);
+				
+				if (testUser != null) {
+					throw new Exception("User does already exist!");
+				}
+				
+				//This will send no email to the users
+	    		Long user_id = Usermanagement.getInstance().registerUserNoEmail(
+		    			username, userpass, 
+		    			lastname, firstname, email, 
+		    			new Date(), street, additionalname, 
+		    			fax, zip, 
+		    			states_id, 
+		    			town, 
+		    			language_id, 
+		    			"",
+		    			true, //generate SIP Data if the config is enabled
+		    			jNameTimeZone);
+
+				if (user_id < 0) {
+					return user_id;
+				}
+
+				Users user = Usermanagement.getInstance().getUserById(user_id);
+
+				// activate the User
+				user.setStatus(1);
+				user.setUpdatetime(new Date());
+				user.setExternalUserId(externalUserId);
+				user.setExternalUserType(externalUserType);
+
+				Usermanagement.getInstance().updateUser(user);
+
+				return user_id;
+
+			} else {
+				return new Long(-26);
+			}
+			
+		} catch (Exception err) {
+			log.error("addNewUserWithExternalType", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * delete a user by its id
+	 * 
+	 * @param SID
+	 * @param userId
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long deleteUserById(String SID, Long userId) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+				
+				// Setting user deleted
+				UsersDaoImpl.getInstance().deleteUserID(userId);
+
+				Users user = Usermanagement.getInstance()
+						.checkAdmingetUserById(user_level, userId);
+
+				// Updating address
+				Adresses ad = user.getAdresses();
+
+				if (ad != null) {
+					ad.setDeleted("true");
+
+					Addressmanagement.getInstance().updateAdress(ad);
+					log.debug("deleteUserId : Address updated");
+
+					
+				}
+
+				return userId;
+				
+			} else {
+				return new Long(-26);
+			}
+			
+		} catch (Exception err) {
+			log.error("deleteUserById", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * delete a user by its external user id and type
+	 * 
+	 * @param SID
+	 * @param externalUserId
+	 * @param externalUserType
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long deleteUserByExternalUserIdAndType(String SID, Long externalUserId, String externalUserType) throws AxisFault {
+		try {
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long user_level = Usermanagement.getInstance().getUserLevelByID(
+					users_id);
+	
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+				
+				Users userExternal = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalUserType);
+				
+				Long userId = userExternal.getUser_id();
+				
+				// Setting user deleted
+				UsersDaoImpl.getInstance().deleteUserID(userId);
+
+				Users user = Usermanagement.getInstance()
+						.checkAdmingetUserById(user_level, userId);
+
+				// Updating address
+				Adresses ad = user.getAdresses();
+
+				if (ad != null) {
+					ad.setDeleted("true");
+
+					Addressmanagement.getInstance().updateAdress(ad);
+					log.debug("deleteUserId : Address updated");
+
+					
+				}
+
+				return userId;
+				
+			} else {
+				return new Long(-26);
+			}
+			
+		} catch (Exception err) {
+			log.error("deleteUserById", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}

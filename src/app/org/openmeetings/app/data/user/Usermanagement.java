@@ -921,6 +921,48 @@ public class Usermanagement {
 		}
 		return null;
 	}
+	
+	public Long registerUserNoEmail(String login, String Userpass, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long states_id,
+			String town, long language_id, String phone, 
+			boolean generateSipUserData, String jNameTimeZone) {
+		try {
+			// Checks if FrontEndUsers can register
+			if (Configurationmanagement.getInstance().getConfKey(3,"allow_frontend_register").getConf_value().equals("1")) {
+				
+				Boolean sendConfirmation = false;
+				Boolean sendWelcomeMessage = false;
+				String baseURL = "";
+				
+				//TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
+				
+				Long user_id = this.registerUserInit(3, 1, 0, 1, login, Userpass,lastname, firstname, email, age, 
+										street, additionalname,fax, zip, states_id, town, 
+										language_id, sendWelcomeMessage, new LinkedList(), phone, baseURL, 
+										sendConfirmation,"","","", generateSipUserData, jNameTimeZone, false,
+										"",
+										"",
+										false,
+										true);
+				
+				// Get the default organisation_id of registered users
+				if (user_id>0){
+					long organisation_id = Long.valueOf(Configurationmanagement.getInstance().getConfKey(3,"default_domain_id").getConf_value()).longValue();
+					Organisationmanagement.getInstance().addUserToOrganisation(user_id,organisation_id, user_id, "");
+				}
+				
+				if (sendConfirmation) {
+					return new Long(-40);
+				}
+				
+				return user_id;
+			}
+		} catch (Exception e) {
+			log.error("[registerUserNoEmail]",e);
+		}
+		return null;
+	}
 
 	/**
 	 * Adds a user including his adress-data,auth-date,mail-data
@@ -969,13 +1011,17 @@ public class Usermanagement {
 				if (checkName && checkEmail) {
 					
 					String hash = ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-					String link = baseURL+"activateUser?u="+hash;
 					
+					//Check if there are any emails to be send
 					if (sendWelcomeMessage && email.length()!=0) {
+						
+						String link = baseURL+"activateUser?u="+hash;
+						
 						//We need to pass the baseURL to check if this is really set to be send
 						String sendMail = Emailmanagement.getInstance().sendMail(login, Userpass, email, link, sendConfirmation);
 						if (!sendMail.equals("success")) return new Long(-19);
-					}						
+					}			
+					
 					Long address_id = Addressmanagement.getInstance().saveAddress(street, zip, town, states_id, additionalname, "",fax, phone, email);
 					if (address_id==null) {
 						return new Long(-22);
