@@ -225,6 +225,193 @@ public class FileService {
 	}
 	
 	/**
+	 * 
+	 * to add a folder to the private drive, set parentFileExplorerItemId = 0
+	 * and isOwner to 1/true and externalUserId/externalUserType to a valid user
+	 * 
+	 * @param SID
+	 * @param externalUserId
+	 * @param externalUserType
+	 * @param parentFileExplorerItemId
+	 * @param fileName
+	 * @param room_id
+	 * @param isOwner
+	 * @param externalFilesid
+	 * @param externalType
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long addFolderByExternalUserIdAndType(String SID, Long externalUserId, String externalUserType, 
+			Long parentFileExplorerItemId, String fileName, Long room_id, Boolean isOwner,
+			Long externalFilesid, String externalType) throws AxisFault{
+		try {
+		
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
+	        	
+	        	Users userExternal = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalUserType);
+				
+				Long userId = userExternal.getUser_id();
+	        	
+	        	log.debug("addFolder " + parentFileExplorerItemId);
+
+	        	if (parentFileExplorerItemId == 0 && isOwner) {
+                    // users_id (OwnerID) => only set if its directly root in
+                    // Owner Directory,
+                    // other Folders and Files maybe are also in a Home
+                    // directory
+                    // but just because their parent is
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, users_id, room_id,
+                            userId, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Path
+                            false, // isStoredWML file
+                            false, // isXmlFile
+                            externalFilesid, externalType);
+                } else {
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, null, room_id,
+                            userId, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Path
+                            false, // isStoredWML file
+                            false, // isXmlFile
+                            externalFilesid, externalType);
+                }
+	        }
+	        
+		} catch (Exception err) {
+			log.error("[addFolderByExternalUserIdAndType]",err);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * to add a folder to the private drive, set parentFileExplorerItemId = 0
+	 * and isOwner to 1/true and userId to a valid user
+	 * 
+	 * @param SID
+	 * @param userId
+	 * @param parentFileExplorerItemId
+	 * @param fileName
+	 * @param room_id
+	 * @param isOwner
+	 * @param externalFilesid
+	 * @param externalType
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long addFolderByUserId(String SID, Long userId, 
+			Long parentFileExplorerItemId, String fileName, Long room_id, Boolean isOwner,
+			Long externalFilesid, String externalType) throws AxisFault{
+		try {
+		
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
+	        	
+	        	log.debug("addFolder " + parentFileExplorerItemId);
+
+                if (parentFileExplorerItemId == 0 && isOwner) {
+                    // users_id (OwnerID) => only set if its directly root in
+                    // Owner Directory,
+                    // other Folders and Files maybe are also in a Home
+                    // directory
+                    // but just because their parent is
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, users_id, room_id,
+                            userId, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Path
+                            false, // isStoredWML file
+                            false, // isXmlFile
+                            externalFilesid, externalType);
+                } else {
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, null, room_id,
+                            userId, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Path
+                            false, // isStoredWML file
+                            false, // isXmlFile
+                            externalFilesid, externalType);
+                }
+	        }
+	        
+		} catch (Exception err) {
+			log.error("[addFolderByUserId]",err);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * deletes a file by its external Id and type
+	 * 
+	 * @param SID
+	 * @param externalFilesid
+	 * @param externalType
+	 * @return
+	 */
+	public Long deleteFileOrFolderByExternalIdAndType(String SID, Long externalFilesid, String externalType){
+		
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
+	        	
+	        	FileExplorerItemDaoImpl.getInstance().deleteFileExplorerItemByExternalIdAndType(
+	        			externalFilesid, externalType);
+	        	
+	        }
+		
+		} catch (Exception err) {
+			log.error("[deleteFileOrFolderByExternalIdAndType]",err);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * deletes files or folders based on it id
+	 * 
+	 * @param SID
+	 * @param fileExplorerItemId
+	 * @return
+	 */
+	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId){
+		
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
+	        	
+	        	FileExplorerItemDaoImpl.getInstance().deleteFileExplorerItem(
+                        fileExplorerItemId);
+	        	
+	        }
+		
+		} catch (Exception err) {
+			log.error("[deleteFileOrFolder]",err);
+		}
+		return null;
+	}
+	
+	
+	/**
 	 * this Method does not work yet,
 	 * as the Result has to be rewritten in Objects instead
 	 * of a LinekdHashMap

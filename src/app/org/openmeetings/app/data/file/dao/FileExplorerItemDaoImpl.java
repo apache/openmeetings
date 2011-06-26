@@ -256,6 +256,36 @@ public class FileExplorerItemDaoImpl {
         }
         return null;
     }
+    
+    public FileExplorerItem getFileExplorerItemsByExternalIdAndType(Long externalFileId, String externalType) {
+        log.debug(".getFileExplorerItemsByExternalIdAndType() started");
+
+        try {
+
+            String hql = "SELECT c FROM FileExplorerItem c "
+                    + "WHERE c.externalFileId = :externalFileId " +
+            		"AND c.externalType LIKE :externalType";
+
+            Object idf = HibernateUtil.createSession();
+            Session session = HibernateUtil.getSession();
+            Transaction tx = session.beginTransaction();
+            Query query = session.createQuery(hql);
+            query.setLong("externalFileId", externalFileId);
+            query.setString("externalType", externalType);
+
+            FileExplorerItem fileExplorerList = (FileExplorerItem) query
+                    .uniqueResult();
+            tx.commit();
+            HibernateUtil.closeSession(idf);
+
+            return fileExplorerList;
+        } catch (HibernateException ex) {
+            log.error("[getFileExplorerItemsByExternalIdAndType]: ", ex);
+        } catch (Exception ex2) {
+            log.error("[getFileExplorerItemsByExternalIdAndType]: ", ex2);
+        }
+        return null;
+    }
 
     public List<FileExplorerItem> getFileExplorerItems() {
         log.debug(".getFileExplorerItemsById() started");
@@ -309,6 +339,36 @@ public class FileExplorerItemDaoImpl {
             log.error("[deleteFileExplorerItem]: ", ex);
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItem]: ", ex2);
+        }
+    }
+    
+    public void deleteFileExplorerItemByExternalIdAndType(Long externalFilesid, String externalType) {
+        log.debug(".deleteFileExplorerItemByExternalIdAndType() started");
+
+        try {
+
+            FileExplorerItem fId = this
+                    .getFileExplorerItemsByExternalIdAndType(externalFilesid, externalType);
+
+            if (fId == null) {
+            	throw new Exception("externalFilesid: "+externalFilesid+" and externalType: "+externalType+" Not found");
+            }
+            
+            fId.setDeleted("true");
+            fId.setUpdated(new Date());
+
+            Object idf = HibernateUtil.createSession();
+            Session session = HibernateUtil.getSession();
+            Transaction tx = session.beginTransaction();
+            session.update(fId);
+            session.flush();
+            tx.commit();
+            HibernateUtil.closeSession(idf);
+
+        } catch (HibernateException ex) {
+            log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex);
+        } catch (Exception ex2) {
+            log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
         }
     }
 
