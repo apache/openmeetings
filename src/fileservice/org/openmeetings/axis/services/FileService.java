@@ -43,17 +43,18 @@ public class FileService {
 	}
 	
 	/**
-	 * Method to upload a File to a Conference Room via SOAP
+	 * 
+	 * Import file from external source
 	 * 
 	 * @param SID
-	 * @param externalUserId
-	 * @param externalFileId
-	 * @param externalType
-	 * @param room_id
-	 * @param isOwner
-	 * @param path
-	 * @param parentFolderId
-	 * @param fileSystemName
+	 * @param externalUserId the external user id => If the file should goto a private section of any user, this number needs to be set
+	 * @param externalFileId the external file-type to identify the file later
+	 * @param externalType the name of the external system
+	 * @param room_id the room Id, if the file goes to the private folder of an user, you can set a random number here
+	 * @param isOwner specify a 1/true AND parentFolderId==-2 to make the file goto the private section
+	 * @param path http-path where we can grab the file from, the file has to be accessible from the OpenMeetings server
+	 * @param parentFolderId specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
+	 * @param fileSystemName the filename => Important WITH file extension!
 	 * @return
 	 * @throws AxisFault
 	 */
@@ -81,7 +82,86 @@ public class FileService {
 		        LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
 		        
-				HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(externalUser.getExternalUserId(), room_id, isOwner, inputstream, parentFolderId, fileSystemName, current_dir, hs, externalFileId, externalType);
+				HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(externalUser.getUser_id(), room_id, isOwner, inputstream, parentFolderId, fileSystemName, current_dir, hs, externalFileId, externalType);
+		
+				HashMap<String, Object> returnAttributes = returnError.get("returnAttributes");
+		        
+		        // Flash cannot read the response of an upload
+		        // httpServletResponse.getWriter().print(returnError);
+		        hs.put("message", "library");
+		        hs.put("action", "newFile");
+		        hs.put("fileExplorerItem", FileExplorerItemDaoImpl.getInstance()
+		                .getFileExplorerItemsById(Long.parseLong(returnAttributes.get("fileExplorerItemId").toString())));
+		        hs.put("error", returnError);
+		        hs.put("fileName", returnAttributes.get("completeName"));
+				
+		        FileImportError[] fileImportErrors = new FileImportError[returnError.size()];
+		        
+		        int i = 0;
+				//Axis need Objects or array of objects, Map won't work
+				for (Iterator<String> iter = returnError.keySet().iterator();iter.hasNext();) {
+					
+					HashMap<String, Object> returnAttribute = returnError.get(iter.next());
+					
+					fileImportErrors[i] = new FileImportError();
+					fileImportErrors[i].setCommand((returnAttribute.get("command")!=null) ? returnAttribute.get("command").toString() : "");
+					fileImportErrors[i].setError((returnAttribute.get("error")!=null) ? returnAttribute.get("error").toString() : "");
+					fileImportErrors[i].setExitValue((returnAttribute.get("exitValue")!=null) ? Integer.valueOf(returnAttribute.get("exitValue").toString()).intValue() : 0);
+					fileImportErrors[i].setProcess((returnAttribute.get("process")!=null) ? returnAttribute.get("process").toString() : "");
+					
+					i++;
+				}
+				
+				return fileImportErrors;
+				
+	        }
+		} catch (Exception err) {
+			log.error("[importFile]",err);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * Import file from external source
+	 * 
+	 * @param SID
+	 * @param internalUserId the openmeetings user id => If the file should goto a private section of any user, this number needs to be set
+	 * @param externalFileId the external file-type to identify the file later
+	 * @param externalType the name of the external system
+	 * @param room_id the room Id, if the file goes to the private folder of an user, you can set a random number here
+	 * @param isOwner specify a 1/true AND parentFolderId==-2 to make the file goto the private section
+	 * @param path http-path where we can grab the file from, the file has to be accessible from the OpenMeetings server
+	 * @param parentFolderId specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
+	 * @param fileSystemName the filename => Important WITH file extension!
+	 * @return
+	 * @throws AxisFault
+	 */
+	public FileImportError[] importFileByInternalUserId(String SID, Long internalUserId, Long externalFileId, 
+					String externalType, Long room_id, boolean isOwner, String path, 
+					Long parentFolderId, String fileSystemName) throws AxisFault{
+		try {
+		
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
+	        	
+				String current_dir = getServletContext().getRealPath("/");
+				
+				ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		        FileProcessor fileProcessor = (FileProcessor) context.getBean("openmeetings.FileProcessor");
+				
+		        URL url = new URL(path);
+		        URLConnection uc = url.openConnection();
+		        InputStream inputstream = new BufferedInputStream(uc.getInputStream());
+		        
+		        Users internalUser = Usermanagement.getInstance().getUserById(internalUserId);
+		        
+		        LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
+				hs.put("user", internalUser);
+		        
+				HashMap<String, HashMap<String, Object>> returnError = fileProcessor.processFile(internalUser.getUser_id(), room_id, isOwner, inputstream, parentFolderId, fileSystemName, current_dir, hs, externalFileId, externalType);
 		
 				HashMap<String, Object> returnAttributes = returnError.get("returnAttributes");
 		        
