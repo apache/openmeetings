@@ -241,7 +241,7 @@ public class FileService {
 	 * @return
 	 * @throws AxisFault
 	 */
-	public Long addFolderByExternalUserIdAndType(String SID, Long externalUserId, String externalUserType, 
+	public Long addFolderByExternalUserIdAndType(String SID, Long externalUserId, 
 			Long parentFileExplorerItemId, String fileName, Long room_id, Boolean isOwner,
 			Long externalFilesid, String externalType) throws AxisFault{
 		try {
@@ -251,7 +251,7 @@ public class FileService {
 			
 	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(User_level)){
 	        	
-	        	Users userExternal = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalUserType);
+	        	Users userExternal = Usermanagement.getInstance().getUserByExternalIdAndType(externalUserId, externalType);
 				
 				Long userId = userExternal.getUser_id();
 	        	
