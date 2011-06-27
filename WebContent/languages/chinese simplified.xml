@@ -856,7 +856,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>http://groups.google.com/group/openmeetings-user</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
-    <value>录音插件下载</value>
+    <value>软件问题反馈</value>
   </string>
   <string id="285" name="dashboard_rsslistitemlinktext">
     <value>更多</value>
@@ -1075,7 +1075,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>标签号</value>
   </string>
   <string id="357" name="languageseditor">
-    <value>您只删除了标签而没删除字段，因为字段可能被其它标签所使用。You did only delete the Label NOT the Field! You cannot delete the Field, it may has Labels in other Languages.</value>
+    <value>您只删除了标签而没删除字段，因为字段可能被其它标签所使用。</value>
   </string>
   <string id="358" name="languageseditor">
     <value>无效的标签号，FieldLanguagesvalues_Id在数据库中缺失.</value>
@@ -1600,7 +1600,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>到:</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
-    <value>邀请参加维博融智的讨论</value>
+    <value>邀请参加Openmeetings的讨论</value>
   </string>
   <string id="533" name="invitation_error">
     <value>没有此邀请码对应的有效邀请</value>
@@ -2416,7 +2416,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>与会者</value>
   </string>
   <string id="804" name="dashboard">
-    <value>维博融智系统是一个以文字或者视频会议的方式用于远程决策过程的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划。</value>
+    <value>本远程视频会议系统是一个用来召开远程视频会议、培训演讲、审查文件的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划</value>
   </string>
   <string id="805" name="dashboard">
     <value>预约会议</value>
@@ -3253,37 +3253,37 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>想远程控制</value>
   </string>
   <string id="1083" name="user list">
-    <value>User is Moderator, he can do anything! [Remote Desktop Control]</value>
+    <value>用户是主持人，他可以操控任何功能! [远程桌面控制]</value>
   </string>
   <string id="1084" name="user list">
-    <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
+    <value>允许/禁止使用远程桌面控制的屏幕 (在屏幕共享时)</value>
   </string>
   <string id="1085" name="right click screen share">
-    <value>1) Your PC to remote PC: To copy and paste text from your clipboard into the remote controlled screen, click on the screen, then right click in the text field and choose "Insert" from the context (right click) menu.&lt;br/&gt;&lt;br/&gt;2) From remote PC to your PC: To copy text from the remote PC to your PC's clipboard, highlight the text with the mouse on the remote screen, then right-click on the remote screen and choose &lt;i&gt;Copy highlighted text&lt;/i&gt;</value>
+    <value>1) 从您的计算机到远程计算机：从本机的剪切板拷贝和粘贴到远程控制计算机中，首先在屏幕上点一下，然后在文本框中右键点击，选择“插入”。2）从远程计算机到您的计算机：从远程计算机拷贝文本到您的计算机中，首先高亮选择远程计算机的文本，然后右键点击屏幕选择拷贝高亮文本即可。</value>
   </string>
   <string id="1086" name="right click screen share">
-    <value>Copy and Paste text from your PC to remote PC and vice-versa.</value>
+    <value>在您的计算和远程计算机间拷贝和粘贴文本</value>
   </string>
   <string id="1087" name="right click screen share">
-    <value>Copy highlighted text</value>
+    <value>拷贝高亮文本</value>
   </string>
   <string id="1088" name="right click screen share">
-    <value>How to copy n paste</value>
+    <value>如何拷贝和粘贴</value>
   </string>
   <string id="1089" name="screen-sharer-quality">
-    <value>Quality of the ScreenShare:</value>
+    <value>共享屏幕的质量:</value>
   </string>
   <string id="1090" name="screen-sharer-quality">
-    <value>Very high Quality</value>
+    <value>超高清晰</value>
   </string>
   <string id="1091" name="screen-sharer-quality">
-    <value>High Quality</value>
+    <value>高清晰</value>
   </string>
   <string id="1092" name="screen-sharer-quality">
-    <value>Medium Quality</value>
+    <value>一般清晰</value>
   </string>
   <string id="1093" name="screen-sharer-quality">
-    <value>Low Quality</value>
+    <value>低清晰度</value>
   </string>
   <string id="1094" name="keyboard-input">
     <value>en_US</value>
@@ -3292,13 +3292,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>de_DE</value>
   </string>
   <string id="1096" name="keyboard-input">
-    <value>Keyboard:</value>
+    <value>键盘:</value>
   </string>
   <string id="1097" name="keyboard-input">
-    <value>Close Webinar!</value>
+    <value>关闭网络会议!</value>
   </string>
   <string id="1098" name="keyboard-input">
-    <value>The Webinar is already closed, you will be redirected to some interesting offerings in</value>
+    <value>会议已经关闭，您将重定向到其它网址</value>
   </string>
   <string id="1099" name="room config">
     <value>关闭会议室</value>
@@ -3352,7 +3352,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>配置文件名称</value>
   </string>
   <string id="1116" name="ldap config">
-    <value>如果您勾选了“增加域选项”，则在登录界面中将出现“域”选择下拉框选项。这项功能在LDAP目录服务的配置中是非常有用的。如：如果用户使用heqf@mail.com作为ldap目录服务的登录名，则在用户名中只需要输入heqf，而域选项则选择mail.com</value>
+    <value>如果您勾选了“增加域选项”，则在登录界面中将出现“域”选择下拉框选项。这项功能在LDAP目录服务的配置中是非常有用的。如：如果用户使用hans@localhost.com作为ldap目录服务的登录名，则在用户名中只需要输入hans，而域选项则选择localhost.com</value>
   </string>
   <string id="1117" name="ldap config">
     <value>在用户名后加入域名</value>
@@ -3436,7 +3436,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>时区</value>
   </string>
   <string id="1144" name="appointment notification">
-    <value>事件详情</value>
+    <value>事件详情/value>
   </string>
   <string id="1145" name="appointment notification">
     <value>姓名</value>
@@ -3628,7 +3628,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>新的邮件</value>
   </string>
   <string id="1208" name="private message">
-    <value>给所有发送新消息</value>
+    <value>给所有联系人发送新消息</value>
   </string>
   <string id="1209" name="private message">
     <value>撰写新消息</value>
@@ -3670,10 +3670,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>在会议请求消息中增加其他内容，该请求事件会添加到所有的参会人员的日历中</value>
   </string>
   <string id="1222" name="private message">
-    <value>收到的信息</value>
+    <value>收件箱</value>
   </string>
   <string id="1223" name="private message">
-    <value>发出的消息</value>
+    <value>发送箱</value>
   </string>
   <string id="1224" name="private message">
     <value>回收站</value>
@@ -3895,7 +3895,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>成为成员的时间</value>
   </string>
   <string id="1297" name="direct login message">
-    <value>You've logged with your Facebook account. You should update your profile with the correct email. Otherwise you will not receive invitations and private messages from other users.</value>
+    <value>您已经使用Facebook账号登录，您需要使用正确的邮箱地址更新您的资料，如果邮箱不正确，您将不能从其他联系人中收到邀请。</value>
   </string>
   <string id="1298" name="direct login message header">
     <value>消息</value>
@@ -4074,10 +4074,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1356" name="wait_for_recording">
     <value>等待录制</value>
   </string>
-  <string id="1357" name="hide_top_bar">
-    <value>Hide topbar</value>
+  <string id="1357" name="hide_top_bar"> 
+    <value>掩藏顶栏</value> 
   </string>
   <string id="1358" name="fileExplorer">
-    <value>Play video</value>
-  </string>
+    <value>播放视频</value>
+  </string> 
 </language>
