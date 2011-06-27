@@ -219,7 +219,6 @@ public class UserService {
 	 * @param states_id
 	 * @param town
 	 * @param language_id
-	 * @param baseURL
 	 * @param jNameTimeZone
 	 * @param externalUserId
 	 * @param externalUserType
@@ -229,7 +228,7 @@ public class UserService {
 	public Long addNewUserWithExternalType(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL,
+			long states_id, String town, long language_id,
 			String jNameTimeZone, Long externalUserId, String externalUserType)
 			throws AxisFault {
 		try {
