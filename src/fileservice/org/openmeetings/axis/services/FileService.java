@@ -409,6 +409,12 @@ public class FileService {
 		}
 		return null;
 	}
+   
+   public String[] getImportFileExtensions() throws AxisFault {
+     
+     
+     return null;
+   }
 	
 	
 	/**
