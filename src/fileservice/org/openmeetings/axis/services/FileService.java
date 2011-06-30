@@ -257,7 +257,7 @@ public class FileService {
 	        	
 	        	log.debug("addFolder " + parentFileExplorerItemId);
 
-	        	if (parentFileExplorerItemId == 0 && isOwner) {
+	        	if (parentFileExplorerItemId == -2 && isOwner) {
                     // users_id (OwnerID) => only set if its directly root in
                     // Owner Directory,
                     // other Folders and Files maybe are also in a Home
