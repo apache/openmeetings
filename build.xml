@@ -452,6 +452,7 @@
             </fileset>
             <fileset dir="${classes.dir}">
                 <include name="org/openmeetings/axis/services/FileService.class"/>
+            	<include name="org/openmeetings/axis/services/FileImportError.class"/>
             </fileset>
         </jar>  
         <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/RoomService.aar">
