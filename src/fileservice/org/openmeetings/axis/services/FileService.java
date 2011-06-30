@@ -326,7 +326,7 @@ public class FileService {
                     // directory
                     // but just because their parent is
                     return FileExplorerItemDaoImpl.getInstance().add(fileName,
-                            "", parentFileExplorerItemId, users_id, room_id,
+                            "", parentFileExplorerItemId, userId, room_id,
                             userId, true, // isFolder
                             false, // isImage
                             false, // isPresentation
