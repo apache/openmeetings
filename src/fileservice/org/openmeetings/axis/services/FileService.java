@@ -242,7 +242,7 @@ public class FileService {
 	 * @throws AxisFault
 	 */
 	public Long addFolderByExternalUserIdAndType(String SID, Long externalUserId, 
-			Long parentFileExplorerItemId, String fileName, Long room_id, Boolean isOwner,
+			Long parentFileExplorerItemId, String folderName, Long room_id, Boolean isOwner,
 			Long externalFilesid, String externalType) throws AxisFault{
 		try {
 		
@@ -263,7 +263,7 @@ public class FileService {
                     // other Folders and Files maybe are also in a Home
                     // directory
                     // but just because their parent is
-                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                    return FileExplorerItemDaoImpl.getInstance().add(folderName,
                             "", parentFileExplorerItemId, userId, room_id,
                             userId, true, // isFolder
                             false, // isImage
@@ -273,7 +273,7 @@ public class FileService {
                             false, // isXmlFile
                             externalFilesid, externalType);
                 } else {
-                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                    return FileExplorerItemDaoImpl.getInstance().add(folderName,
                             "", parentFileExplorerItemId, null, room_id,
                             userId, true, // isFolder
                             false, // isImage
@@ -308,7 +308,7 @@ public class FileService {
 	 * @throws AxisFault
 	 */
 	public Long addFolderByUserId(String SID, Long userId, 
-			Long parentFileExplorerItemId, String fileName, Long room_id, Boolean isOwner,
+			Long parentFileExplorerItemId, String folderName, Long room_id, Boolean isOwner,
 			Long externalFilesid, String externalType) throws AxisFault{
 		try {
 		
@@ -319,13 +319,13 @@ public class FileService {
 	        	
 	        	log.debug("addFolder " + parentFileExplorerItemId);
 
-                if (parentFileExplorerItemId == 0 && isOwner) {
+                if (parentFileExplorerItemId == -2 && isOwner) {
                     // users_id (OwnerID) => only set if its directly root in
                     // Owner Directory,
                     // other Folders and Files maybe are also in a Home
                     // directory
                     // but just because their parent is
-                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                    return FileExplorerItemDaoImpl.getInstance().add(folderName,
                             "", parentFileExplorerItemId, userId, room_id,
                             userId, true, // isFolder
                             false, // isImage
@@ -335,7 +335,7 @@ public class FileService {
                             false, // isXmlFile
                             externalFilesid, externalType);
                 } else {
-                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                    return FileExplorerItemDaoImpl.getInstance().add(folderName,
                             "", parentFileExplorerItemId, null, room_id,
                             userId, true, // isFolder
                             false, // isImage
