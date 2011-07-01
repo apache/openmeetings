@@ -210,7 +210,7 @@ public class ImportInitvalues {
 			String default_lang_id, String swf_path, String im_path,
 			String url_feed, String url_feed2,
 			String sendEmailAtRegister, String sendEmailWithVerficationCode,
-			String default_export_font, String ldap_auth_path, String screen_viewer,
+			String default_export_font, String screen_viewer,
 			String ffmpeg_path, String sox_path, String sip_enable, String sip_realm,
 			String sip_port,
 			String sip_proxyname,
@@ -237,10 +237,6 @@ public class ImportInitvalues {
 						crypt_ClassName,
 						null,
 						"This Class is used for Authentification-Crypting. Be carefull what you do here! If you change it while running previous Pass of users will not be workign anymore! for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
-		//"1"
-		//Not needed anymore, see the LDAP Configuration in the Administration section
-//		Configurationmanagement.getInstance().addConfByKey(3,
-//				"ldap_config_path", ldap_auth_path, null, "Absolute Path to a Ldap Configration File(see example config)");
 		
 		Configurationmanagement.getInstance().addConfByKey(3,
 				"screen_viewer", screen_viewer, null, "ScreenViewer Type(0==standard, 1== jrdesktop)");

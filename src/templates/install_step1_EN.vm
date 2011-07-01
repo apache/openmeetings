@@ -286,24 +286,6 @@ function checkEmail()
         
     </fieldset>
     
-    <fieldset id="LdapConf">
-    
-		<legend>Authentication Type</legend>    
-		<li>
-        <label for="ldap_config_path">LDAP Config</label>
-    	<input name="ldap_config_path" id="ldap_config_path" size="27" 
-    		type="text" 
-    		title="Enter the absolute path to a valid ldap config (see om_ldap.cfg within installation directory)"
-    		value="" />  	
-		</li>
-    	<p><i>
-	    	Entering a path pointing to a valid LDAP Configuration File activates LDAP Authentification.<BR/>
-	    	Keep empty, if you want to keep the standard auth method.<BR/>
-	    	Admin users are always authenticated against local database, other user have to enter a valid LDAP password.
-    	</i></p>
-        
-    </fieldset>
-    
     <fieldset id="ScreenViewer">
     
 		<legend>Screen Viewer</legend>    

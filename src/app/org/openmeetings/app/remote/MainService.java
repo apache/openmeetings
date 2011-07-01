@@ -282,12 +282,7 @@ public class MainService implements IPendingServiceCallback {
      */ 
     public Object loginUser(String SID, String usernameOrEmail, String Userpass, Boolean storePermanent, Long language_id, Long ldapConfigId){
     	
-    	// Check, whether LDAP - Login is required(Configuration has key ldap_config_path
     	boolean withLdap = false;
-    	
-//    	if(LdapLoginManagement.getInstance().isLdapConfigured()){
-//    		withLdap = true;
-//    	}
     	
     	if (ldapConfigId > 0) {
     		withLdap = true;

@@ -86,6 +86,8 @@
 	<attribute name="hasprevious" value="false" type="boolean" />
 	<attribute name="hasenext" value="false" type="boolean" />
 	
+	<attribute name="doClearAll" value="false" type="boolean" />
+	<attribute name="doClearSlide" value="false" type="boolean" />
 	
 	<!-- For the dragging resizeing there is a bounding box -->
 	<attribute name="boundingIsActive" value="false" type="boolean" />
@@ -337,11 +339,18 @@
     		}
     		
     		if (modi=='plainSlide'){
-    			this.clearSlideOnly();
+    			this.doClearSlide = true;
+                this.doClearAll = false;
+    			new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                           labelid:1339,labeliderror:1359,
+                                           refObj:this,showCheckBox:false});
+    			
     			this.setAttribute('drawmodus',previousModus);
     		} else if (modi=='plainConfirm'){
+    			this.doClearSlide = false;
+    			this.doClearAll = true;
                 new lz.confirmationSingle(canvas.main_content._content.inner,{
-                                           labelid:1326,labeliderror:1340,
+                                           labelid:1339,labeliderror:1340,
                                            refObj:this,showCheckBox:false});
                 //this.clearAll();
                 //if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
@@ -363,7 +372,11 @@
 	</method>
 	
 	<method name="sendConfirmation" args="yesno" >
-        this.clearAll();
+		if (this.doClearSlide) {
+			this.clearSlideOnly();
+		} else if (this.doClearAll) {
+            this.clearAll();
+        }
     </method>
     
     <method name="sendNoConfirmation" args="ref">

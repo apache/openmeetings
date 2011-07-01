@@ -4154,4 +4154,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1358" name="fileExplorer">
     <value>Play video</value>
   </string>
+  <string id="1359" name="submenu">
+    <value>Do you really want to delete the content on the current slide?</value>
+  </string>
 </language>
