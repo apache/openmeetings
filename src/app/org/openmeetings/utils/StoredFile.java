@@ -43,6 +43,29 @@ public class StoredFile {
         this.name = name;
         this.ext = ext;
     }
+    
+    public static String[] getExtensions(){
+    	
+    	Set<String> extensions = new HashSet<String>();
+    	extensions.addAll(convertExtensions);
+    	extensions.addAll(pdfExtensions);
+    	extensions.addAll(imageExtensions);
+    	extensions.addAll(chartExtensions);
+    	extensions.addAll(videoExtensions);
+    	extensions.addAll(asIsExtensions);
+    	
+    	Object[] returnObj = extensions.toArray();
+    	
+    	String[] returnStr = new String[returnObj.length];
+    	
+    	int i=0;
+    	for (Object obj : returnObj) {
+    		returnStr[i] = obj.toString();
+    		i++;
+    	}
+    	
+    	return returnStr;
+    }
 
     public boolean isConvertable() {
         return convertExtensions.contains(ext);

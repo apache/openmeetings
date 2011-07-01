@@ -28,6 +28,7 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.ConferenceLibrary;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.StoredFile;
 
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLStreamException;
@@ -410,11 +411,16 @@ public class FileService {
 		return null;
 	}
    
-   public String[] getImportFileExtensions() throws AxisFault {
-     
-     
-     return null;
-   }
+	public String[] getImportFileExtensions() throws AxisFault {
+		try {
+			
+			return StoredFile.getExtensions();
+		
+		} catch (Exception err) {
+			log.error("[getImportFileExtensions]",err);
+		}
+		return null;
+	}
 	
 	
 	/**
