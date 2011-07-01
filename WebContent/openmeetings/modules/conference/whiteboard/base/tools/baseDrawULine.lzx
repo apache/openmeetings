@@ -60,10 +60,10 @@
             var width = maxx-minx;
             var height = maxy-miny;
             
-            var x1 = this.startx-minx+(this.currentlinelineWidth/2);
-            var y1 = this.starty-miny+(this.currentlinelineWidth/2);
-            var x2 = this.endx-minx+(this.currentlinelineWidth/2);
-            var y2 = this.endy-miny+(this.currentlinelineWidth/2);
+            var x1 = this.startx-minx+(this.currentulinelineWidth/2);
+            var y1 = this.starty-miny+(this.currentulinelineWidth/2);
+            var x2 = this.endx-minx+(this.currentulinelineWidth/2);
+            var y2 = this.endy-miny+(this.currentulinelineWidth/2);
             
             //Debug.write("minx,miny,width,height: ",minx,miny,width,height);
             
