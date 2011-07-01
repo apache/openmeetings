@@ -29,7 +29,7 @@
 <!--
     this is the Base Container for all Whiteboard Objects
  -->
-<class name="drawViewNew" extends="drawview" cachebitmap="false" x="-1" y="-1" >
+<class name="drawViewNew" extends="drawview" cachebitmap="false" x="0" y="0" >
 	
 	<attribute name="typeOfObject" value="paint" type="string" />
 

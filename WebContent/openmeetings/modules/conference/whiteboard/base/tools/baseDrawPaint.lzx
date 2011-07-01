@@ -48,6 +48,7 @@
         //Debug.write("startPaint ",this.startx,this.starty);
         this.currentlayer = new lz.drawViewNew(this,{
             name:'paint'+this.getCounter(),width:this.width+2,height:this.height+2,
+            x:-1,y:-1,
             opacity:this.currentlayerOpacity});
         this.drawlineOnObject(this.currentlayer,-1,-1,0,0);
         this.drawlineOnObject(this.currentlayer,this.width,this.height,this.width+1,this.height+1);
