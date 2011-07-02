@@ -19,5 +19,6 @@
     <property name="clientURL" type="string" column="client_url"/>
     <property name="roomRecordingId" type="long" column="room_recording_id"/>
     <property name="landingZone" type="string" column="landing_zone"/>
+    <property name="allowRecording" type="boolean" column="allow_recording"/>
   </class>
 </hibernate-mapping>
