@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.openmeetings.app.conference.files.FileExplorerObject;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -27,6 +26,7 @@ import org.openmeetings.app.data.basic.files.FilesObject;
 import org.openmeetings.app.data.basic.files.FoldersObject;
 import org.openmeetings.app.data.basic.files.LiberaryObject;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
+import org.openmeetings.app.data.file.dto.FileExplorerObject;
 import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.documents.CreateLibraryPresentation;

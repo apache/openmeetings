@@ -1,4 +1,4 @@
-package org.openmeetings.app.conference.files;
+package org.openmeetings.app.data.file.dto;
 
 import java.util.List;
 
