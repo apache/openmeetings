@@ -1,6 +1,7 @@
 package org.openmeetings.axis.services;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,8 +24,10 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.files.*;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
+import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.documents.LoadLibraryPresentation;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.remote.ConferenceLibrary;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -363,7 +366,7 @@ public class FileService {
 	 * @param externalType
 	 * @return
 	 */
-	public Long deleteFileOrFolderByExternalIdAndType(String SID, Long externalFilesid, String externalType){
+	public Long deleteFileOrFolderByExternalIdAndType(String SID, Long externalFilesid, String externalType) throws AxisFault {
 		
 		try {
 			
@@ -391,7 +394,7 @@ public class FileService {
 	 * @param fileExplorerItemId
 	 * @return
 	 */
-	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId){
+	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId) throws AxisFault {
 		
 		try {
 			
@@ -420,6 +423,46 @@ public class FileService {
 			log.error("[getImportFileExtensions]",err);
 		}
 		return null;
+	}
+	
+	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
+			String parentFolder) throws AxisFault {
+
+	    try {
+	
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(
+	                users_id);
+	
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+	
+	            String current_dir = ScopeApplicationAdapter.webAppPath
+	                    + File.separatorChar + "upload";
+	            String working_dir = current_dir + File.separatorChar + "files"
+	            		+ File.separatorChar+ parentFolder;
+	            log.debug("############# working_dir : " + working_dir);
+	
+	            File file = new File(working_dir + File.separatorChar + "library.xml");
+	
+	            if (!file.exists()) {
+	            	throw new Exception("library.xml does not exist "+working_dir + File.separatorChar + "library.xml");
+	            }
+	            
+	            return LoadLibraryPresentation.getInstance()
+	                                    .parseLibraryFileToObject(
+	                                            file.getAbsolutePath());
+	           
+	        } else {
+	        	
+	            throw new Exception("not Authenticated");
+	            
+	        }
+	
+	    } catch (Exception e) {
+	        log.error("[getListOfFilesByAbsolutePath]", e);
+	        return null;
+	    }
+	
 	}
 	
 	

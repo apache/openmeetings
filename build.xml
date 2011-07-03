@@ -452,6 +452,10 @@
                 <include name="META-INF/**"/>
             </fileset>
             <fileset dir="${classes.dir}">
+            	<include name="org/openmeetings/app/data/file/dto/LibraryPresentation.class"/>
+            	<include name="org/openmeetings/app/data/file/dto/LibraryPresenationThumbs.class"/>
+            	<include name="org/openmeetings/app/data/file/dto/LibraryPresentationFile.class"/>
+            	<include name="org/openmeetings/app/data/file/dto/LibraryPresentationThumb.class"/>
                 <include name="org/openmeetings/axis/services/FileService.class"/>
             	<include name="org/openmeetings/axis/services/FileImportError.class"/>
             </fileset>
