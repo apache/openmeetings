@@ -10,66 +10,54 @@
 	
 	<attribute name="miniButton" value="null" />
 	
-	<attribute name="uploadmoduleimgfolder" value="" type="string" />
-	
 	<handler name="oninit">
-		this.addFolderSequence(this.documentObj.fileHash);
+		this.addFolderSequence();
 		if ($debug) Debug.write("presentationPreview 1 ",this.width);
 		if ($debug) Debug.write("presentationPreview 2 ",this.height);
 		this.miniButton = this.refObjList._documentsTabs.addItem(this);
 	</handler>
 	
-	<method name="addFolderSequence" args="foldername">
+	<method name="addFolderSequence">
         <![CDATA[
-        if ($debug) Debug.write("foldername ",foldername);
-        this.uploadmoduleimgfolder = '/';
-        this.uploadmoduleimgfolder += foldername;
-        canvas.uploadmoduleimgfolder = this.uploadmoduleimgfolder;
-        this.getListOfFilesExplorer.doCall();
+        if ($debug) Debug.write("foldername ",this.documentObj.fileHash);
+        canvas.uploadmoduleimgfolder = '/'+this.documentObj.fileHash;
+        this.getPresentationPreviewFileExplorer.doCall();
         ]]>
     </method>
     
-    <netRemoteCallHib name="getListOfFilesExplorer" funcname="fileservice.getListOfFilesExplorer" 
+    <netRemoteCallHib name="getPresentationPreviewFileExplorer" funcname="fileservice.getPresentationPreviewFileExplorer" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId; </method></netparam>
-        <netparam><method name="getValue">return '';</method></netparam>
-        <netparam><method name="getValue">return parent.parent.uploadmoduleimgfolder;</method></netparam>
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>         
+        <netparam><method name="getValue">return parent.parent.documentObj.fileHash;</method></netparam>
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getListOfFiles -1-: ",value);
-            if ($debug) Debug.write("getListOfFiles -2-: ","");
-            if ($debug) Debug.write("getListOfFiles -3-: ",parent.uploadmoduleimgfolder);
+            if ($debug) Debug.write("getPresentationPreviewFileExplorer -1-: ",value);
+            if ($debug) Debug.write("getPresentationPreviewFileExplorer -3-: ",parent.documentObj.fileHash);
             parent.renderItems(value);
         </handler>
     </netRemoteCallHib>     
     
-    <method name="renderItems" args="filesObj" >
+    <method name="renderItems" args="presentationObject" >
         if ($debug) Debug.write("this: ",this);
-        if ($debug) Debug.write("filesObj: ",filesObj);
+        if ($debug) Debug.write("presentationObject: ",presentationObject);
         <![CDATA[
-            var value = filesObj;
-            if (value['presentationObject']==null){
-                if ($debug) Debug.warn("This should not happen value['presentationObject'] IS NULL");
+            
+            if ($debug) Debug.write("presentationObject: ",presentationObject);
+        
+            if (typeof(presentationObject.pdfDocument)=="undefined"){
+                //Is PDF only
+                //Debug.write("Is PDF only");
+                this._imageslistdraw.addListpresentationFilePDF(presentationObject.originalDocument,presentationObject.swfDocument);
             } else {
-            
-                if ($debug) Debug.write("value.presentationObject: ",value.presentationObject);
-            
-                if (typeof(value.presentationObject.pdfDocument)=="undefined"){
-                    //Is PDF only
-                    //Debug.write("Is PDF only");
-                    this._imageslistdraw.addListpresentationFilePDF(value.presentationObject.originalDocument,value.presentationObject.swfDocument);
-                } else {
-                    //Is original Document + PDF-Document
-                    //Debug.write("Is original Document + PDF-Document");
-                    this._imageslistdraw.addListpresentationFileOrig(value.presentationObject.originalDocument,value.presentationObject.pdfDocument,value.presentationObject.swfDocument);
-                }
-            
-                for (var eg=0;eg<value.presentationObject.thumbs.thumbs.length;eg++){
-                    ////Debug.write(value.presentationObject.thumbs.thumbs[eg].filename);
-                    this._imageslistdraw.addPresentationThumb(value.presentationObject.thumbs.thumbs[eg].filename,(eg+1));
-                }
-            
+                //Is original Document + PDF-Document
+                //Debug.write("Is original Document + PDF-Document");
+                this._imageslistdraw.addListpresentationFileOrig(presentationObject.originalDocument,presentationObject.pdfDocument,presentationObject.swfDocument);
             }
+        
+            for (var eg=0;eg<presentationObject.thumbs.thumbs.length;eg++){
+                ////Debug.write(presentationObject.thumbs.thumbs[eg].filename);
+                this._imageslistdraw.addPresentationThumb(presentationObject.thumbs.thumbs[eg].filename,(eg+1));
+            }
+        
         ]]>   
     </method> 
     

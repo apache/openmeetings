@@ -27,6 +27,7 @@ import org.openmeetings.app.data.basic.files.FilesObject;
 import org.openmeetings.app.data.basic.files.FoldersObject;
 import org.openmeetings.app.data.basic.files.LiberaryObject;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
+import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.documents.CreateLibraryPresentation;
 import org.openmeetings.app.documents.LibraryChartLoader;
@@ -40,7 +41,6 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.crypt.MD5;
-import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -86,16 +86,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
     private ConferenceLibrary() {
     }
 
-    public LinkedHashMap<String, Object> getListOfFilesExplorer(String SID,
-            String moduleName, String parentFolder, Long room_id) {
-
-        LinkedHashMap<String, Object> returnMap = new LinkedHashMap<String, Object>();
+    public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
+    			String parentFolder) {
 
         try {
-
-            LinkedList<LinkedList<String>> filesMap = new LinkedList<LinkedList<String>>();
-            LinkedList<LinkedList<String>> foldersMap = new LinkedList<LinkedList<String>>();
-            LinkedHashMap<String, LinkedHashMap> presentationObject = null;
 
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
             Long user_level = Usermanagement.getInstance().getUserLevelByID(
@@ -105,125 +99,30 @@ public class ConferenceLibrary implements IPendingServiceCallback {
             log.debug("#############user_level : " + user_level);
 
             if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-                String roomName = room_id.toString();
 
                 String current_dir = ScopeApplicationAdapter.webAppPath
                         + File.separatorChar + "upload";
                 String working_dir = current_dir + File.separatorChar + "files"
-                        + parentFolder;
-                log.debug("#############working_dir : " + working_dir);
+                		+ File.separatorChar+ parentFolder;
+                log.debug("############# working_dir : " + working_dir);
 
-                File dir = new File(working_dir);
+                File file = new File(working_dir + File.separatorChar + "library.xml");
 
-                long dirSize = this.getDirSize(dir);
-
-                // First get all Directories of this Folder
-                FilenameFilter ff = new FilenameFilter() {
-                    public boolean accept(File b, String name) {
-                        String absPath = b.getAbsolutePath()
-                                + File.separatorChar + name;
-                        File f = new File(absPath);
-                        return f.isDirectory();
-                    }
-                };
-
-                String[] allfolders = dir.list(ff);
-                if (allfolders != null) {
-                    for (int i = 0; i < allfolders.length; i++) {
-                        File file = new File(working_dir + File.separatorChar
-                                + allfolders[i]);
-                        Date lastModifiedDate = new Date(file.lastModified());
-                        String lastModified = formatDate(lastModifiedDate);
-                        String fileName = allfolders[i];
-                        log.debug("Found Folders, foldername: " + fileName);
-                        LinkedList<String> fileInfo = new LinkedList<String>();
-                        fileInfo.add("");
-                        fileInfo.add("");
-                        fileInfo.add(fileName);
-                        fileInfo.add(lastModified);
-                        foldersMap.add(fileInfo);
-                    }
+                if (!file.exists()) {
+                	throw new Exception("library.xml does not exist "+working_dir + File.separatorChar + "library.xml");
                 }
-
-                // Second get all Files of this Folder
-                FilenameFilter ff2 = new FilenameFilter() {
-                    public boolean accept(File b, String name) {
-                        String absPath = b.getAbsolutePath()
-                                + File.separatorChar + name;
-                        File f = new File(absPath);
-                        return f.isFile();
-                    }
-                };
-
-                String[] allfiles = dir.list(ff2);
-                if (allfiles != null) {
-                    for (int i = 0; i < allfiles.length; i++) {
-                        File file = new File(working_dir + File.separatorChar
-                                + allfiles[i]);
-
-                        log.debug("working_dir+File.separatorChar+allfiles[i]: "
-                                + working_dir
-                                + File.separatorChar
-                                + allfiles[i]);
-                        if (allfiles[i].startsWith("_thumb_")) {
-                            // log.error("Found Thumbs: "+allfiles[i]);
-                        } else {
-                            String lastModified = formatDate(new Date(
-                                    file.lastModified()));
-                            String fileName = allfiles[i];
-                            String fileBytes = new Long(file.length())
-                                    .toString();
-
-                            LinkedList<String> fileInfo = new LinkedList<String>();
-
-                            String fileNamePure = fileName.substring(0,
-                                    fileName.length() - 4);
-                            String fileNameExt = fileName.substring(
-                                    fileName.length() - 4, fileName.length());
-                            String isimage = "y";
-                            StoredFile storedFile = new StoredFile(
-                                    fileNamePure, fileNameExt.toLowerCase());
-                            if (storedFile.isPresentation())
-                                isimage = "n";
-                            log.debug("Found File, fileName: " + fileName);
-                            fileInfo.add(fileName);
-                            fileInfo.add(fileNamePure);
-                            fileInfo.add(fileNameExt);
-                            fileInfo.add(lastModified);
-                            fileInfo.add(fileBytes);
-                            fileInfo.add(isimage);
-                            filesMap.add(fileInfo);
-
-                            if (fileName
-                                    .equals(CreateLibraryPresentation.libraryFileName)) {
-                                presentationObject = LoadLibraryPresentation
-                                        .getInstance()
+                
+                return LoadLibraryPresentation.getInstance()
                                         .parseLibraryFileToObject(
                                                 file.getAbsolutePath());
-                            }
-
-                        }
-                    }
-                }
-
-                returnMap.put("presentationObject", presentationObject);
-                returnMap.put("folders", foldersMap);
-                returnMap.put("files", filesMap);
-                returnMap.put("dirSize", dirSize);
-                returnMap.put("error", "");
-
-                return returnMap;
+               
             } else {
-                log.error("not Authentificated");
-                returnMap.put("error", "not authenificated");
-                return returnMap;
+                throw new Exception("not Authenticated");
             }
 
         } catch (Exception e) {
             log.error("[getListOfFilesByAbsolutePath]", e);
-            e.printStackTrace();
-            returnMap.put("error", e.getMessage());
-            return returnMap;
+            return null;
         }
 
     }
@@ -308,10 +207,17 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return size;
     }
 
+    /**
+     * @deprecated
+     * @param SID
+     * @param moduleName
+     * @param parentFolder
+     * @return
+     */
     public LinkedHashMap<String, Object> getListOfFilesPlugin(String SID,
             String moduleName, String parentFolder) {
 
-        LinkedHashMap<String, Object> returnMap = new LinkedHashMap<String, Object>();
+        /*LinkedHashMap<String, Object> returnMap = new LinkedHashMap<String, Object>();
 
         try {
 
@@ -444,7 +350,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
             e.printStackTrace();
             returnMap.put("error", e.getMessage());
             return returnMap;
-        }
+        }*/
+    	
+    	return null;
 
     }
 
