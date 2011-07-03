@@ -10,21 +10,21 @@ import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
  */
 public class FileExplorerObject {
 
-	private List<FileExplorerItem> userHome;
-	private List<FileExplorerItem> roomHome;
+	private FileExplorerItem[] userHome;
+	private FileExplorerItem[] roomHome;
 	private Long userHomeSize;
 	private Long roomHomeSize;
 	
-	public List<FileExplorerItem> getUserHome() {
+	public FileExplorerItem[] getUserHome() {
 		return userHome;
 	}
-	public void setUserHome(List<FileExplorerItem> userHome) {
+	public void setUserHome(FileExplorerItem[] userHome) {
 		this.userHome = userHome;
 	}
-	public List<FileExplorerItem> getRoomHome() {
+	public FileExplorerItem[] getRoomHome() {
 		return roomHome;
 	}
-	public void setRoomHome(List<FileExplorerItem> roomHome) {
+	public void setRoomHome(FileExplorerItem[] roomHome) {
 		this.roomHome = roomHome;
 	}
 	public Long getUserHomeSize() {

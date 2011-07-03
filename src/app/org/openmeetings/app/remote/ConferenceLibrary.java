@@ -169,7 +169,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
             FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
                     fileExplorerItem);
 
-            List<FileExplorerItem> childElements = FileExplorerItemDaoImpl
+            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
                     .getInstance().getFileExplorerItemsByParent(
                             fileExplorerItem.getFileExplorerItemId());
 
@@ -277,6 +277,16 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return null;
     }
 
+    /**
+     * 
+     * Save an Object to the library and returns the file-explorer Id
+     * 
+     * @param SID
+     * @param room_id
+     * @param fileName
+     * @param tObjectRef
+     * @return
+     */
     public Long saveAsObject(String SID, Long room_id, String fileName,
             Object tObjectRef) {
         try {
@@ -324,6 +334,15 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return -1L;
     }
 
+    /**
+     * 
+     * Loads a Object from the library into the whiteboard of all participant of the current room
+     * 
+     * @param SID
+     * @param room_id
+     * @param fileExplorerItemId
+     * @param whiteboardId
+     */
     public void loadWmlObject(String SID, Long room_id, Long fileExplorerItemId, Long whiteboardId) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -399,6 +418,15 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         }
     }
 
+    /**
+     * 
+     * Loads a chart object
+     * 
+     * @param SID
+     * @param room_id
+     * @param fileName
+     * @return
+     */
     public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -415,11 +443,19 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                         fileName);
             }
         } catch (Exception err) {
-            log.error("[saveAsImage] ", err);
+            log.error("[loadChartObject] ", err);
         }
         return null;
     }
 
+    /**
+     * 
+     * Load all objects of a conference room
+     * 
+     * @param SID
+     * @param room_id
+     * @return
+     */
     public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -432,7 +468,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                 FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
                 // Home File List
-                List<FileExplorerItem> fList = FileExplorerItemDaoImpl
+                FileExplorerItem[] fList = FileExplorerItemDaoImpl
                         .getInstance()
                         .getFileExplorerItemsByOwner(users_id, 0L);
 
@@ -449,7 +485,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                 fileExplorerObject.setUserHomeSize(homeFileSize);
 
                 // Public File List
-                List<FileExplorerItem> rList = FileExplorerItemDaoImpl
+                FileExplorerItem[] rList = FileExplorerItemDaoImpl
                         .getInstance().getFileExplorerItemsByRoom(room_id, 0L);
 
                 long roomFileSize = 0;
@@ -473,7 +509,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return null;
     }
 
-    public List<FileExplorerItem> getFileExplorerByParent(String SID,
+    public FileExplorerItem[] getFileExplorerByParent(String SID,
             Long parentFileExplorerItemId, Long room_id, Boolean isOwner) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -638,7 +674,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
             FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
                     fileExplorerItem);
 
-            List<FileExplorerItem> childElements = FileExplorerItemDaoImpl
+            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
                     .getInstance().getFileExplorerItemsByParent(
                             fileExplorerItem.getFileExplorerItemId());
 

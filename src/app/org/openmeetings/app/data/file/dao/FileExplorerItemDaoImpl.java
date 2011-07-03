@@ -134,7 +134,7 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
-    public List<FileExplorerItem> getFileExplorerItemsByRoom(Long room_id,
+    public FileExplorerItem[] getFileExplorerItemsByRoom(Long room_id,
             Long parentFileExplorerItemId) {
         log.debug(".getFileExplorerItemsByRoom() started");
         try {
@@ -154,7 +154,7 @@ public class FileExplorerItemDaoImpl {
             query.setLong("room_id", room_id);
             query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
 
-            List<FileExplorerItem> fileExplorerList = query.list();
+            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
             tx.commit();
             HibernateUtil.closeSession(idf);
 
@@ -167,7 +167,7 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
-    public List<FileExplorerItem> getFileExplorerItemsByOwner(Long ownerId,
+    public FileExplorerItem[] getFileExplorerItemsByOwner(Long ownerId,
             Long parentFileExplorerItemId) {
         log.debug(".getFileExplorerItemsByOwner() started");
         try {
@@ -186,7 +186,7 @@ public class FileExplorerItemDaoImpl {
             query.setLong("ownerId", ownerId);
             query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
 
-            List<FileExplorerItem> fileExplorerList = query.list();
+            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
             tx.commit();
             HibernateUtil.closeSession(idf);
 
@@ -199,7 +199,7 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
-    public List<FileExplorerItem> getFileExplorerItemsByParent(
+    public FileExplorerItem[] getFileExplorerItemsByParent(
             Long parentFileExplorerItemId) {
         log.debug(".getFileExplorerItemsByParent() started");
         try {
@@ -216,7 +216,7 @@ public class FileExplorerItemDaoImpl {
             query.setString("deleted", "true");
             query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
 
-            List<FileExplorerItem> fileExplorerList = query.list();
+            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
             tx.commit();
             HibernateUtil.closeSession(idf);
 

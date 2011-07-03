@@ -465,58 +465,6 @@ public class FileService {
 	
 	}
 	
-	
-	/**
-	 * this Method does not work yet,
-	 * as the Result has to be rewritten in Objects instead
-	 * of a LinekdHashMap
-	 * @deprecated
-	 * @param SID
-	 * @param moduleName
-	 * @param parentFolder
-	 * @param room
-	 * @param domain
-	 * @return
-	 */
-	public LiberaryObject getListOfFiles(String SID, String moduleName,
-			String parentFolder, Long room_id ) {
-		try {
-			log.debug("#############current_dir : "+"");			
-			
-			log.debug("#############SID : "+SID);
-	        log.debug("#############moduleName : "+moduleName);
-	        log.debug("#############parentFolder : "+parentFolder);
-	        log.debug("#############room_id : "+room_id);
-	        
-	        return ConferenceLibrary.getInstance().getListOfFilesObjectByAbsolutePath(SID, moduleName, parentFolder, room_id);
-		
-	        
-		} catch (Exception err) {
-			log.error("[getListOfFiles]",err);
-		}
-		return null;
-	}
-	
-	/**
-	 * @deprecated
-	 * @param SID
-	 * @param fileName
-	 * @param moduleName
-	 * @param parentFolder
-	 * @param room_id
-	 * @return
-	 */
-	public Boolean deleteFile(String SID, String fileName, String moduleName, String parentFolder, Long room_id){
-		try {
-			return ConferenceLibrary.getInstance().deleteFile(SID, fileName, moduleName, parentFolder, room_id);
-		} catch (Exception err) {
-			log.error("[deleteFile]",err);
-		}
-		return null;
-	}
-	
-	//public addFile(String SID, String url, Long parentFolderId, )
-	
 	public TestObject getTestObject(){
 		TestObject textO = new TestObject();
 		textO.setList1(new LinkedList<String>());
