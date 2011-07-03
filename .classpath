@@ -9,6 +9,7 @@
 	<classpathentry kind="src" path="src/fileservice"/>
 	<classpathentry kind="src" path="src/screenviewer"/>
 	<classpathentry kind="src" path="src/templates"/>
+	<classpathentry kind="src" path="src/server"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/screen/kunststoff.jar"/>

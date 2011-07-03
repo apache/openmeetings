@@ -5,6 +5,7 @@
     <property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
     <property name="templates.src.dir" value="${basedir}/src/templates"/>
     <property name="test.src.dir" value="${basedir}/src/test"/>
+	<property name="server.src.dir" value="${basedir}/src/server"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
@@ -567,9 +568,16 @@
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
     <target name="compile" depends="prepare, resources">
         <echo message="Compile main to ${main.out.dir}"></echo>
+    	<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" >
+            <src path="${server.src.dir}" />
+    		<src path="${main.src.dir}" />
+    		<classpath refid="compile.classpath"/>
+        </javac>
+    	<!--
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
         </javac>
+         -->
         <javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}" >
             <classpath refid="compile.classpath"/>
         </javac>
