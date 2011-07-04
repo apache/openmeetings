@@ -384,8 +384,8 @@
             this.sendUpdate = false;
             this.scrollview.setAttribute("x",parent._drawareaMask._drawarea.x);
             this.scrollview.setAttribute("y",parent._drawareaMask._drawarea.y);
-            this.scrollview.setAttribute("height",rHeight);
-            this.scrollview.setAttribute("width",rWidth);
+            this.scrollview.setAttribute("height", Math.max(rHeight, parent._drawareaMask._drawarea.getDisplayObject()._height));
+            this.scrollview.setAttribute("width", Math.max(rWidth, parent._drawareaMask._drawarea.getDisplayObject()._width));
             this.sendUpdate = true;
         </method>
         
