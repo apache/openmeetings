@@ -1,7 +1,5 @@
 package org.openmeetings.app.data.file.dto;
 
-import java.util.List;
-
 import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
 
 /**

@@ -457,6 +457,8 @@
             	<include name="org/openmeetings/app/data/file/dto/LibraryPresentationFile.class"/>
             	<include name="org/openmeetings/app/data/file/dto/LibraryPresentationThumb.class"/>
                 <include name="org/openmeetings/axis/services/FileService.class"/>
+            	<include name="org/openmeetings/app/data/file/dto/FileExplorerObject.class" />
+            	<include name="org/openmeetings/app/hibernate/beans/files/FileExplorerItem.class" />
             	<include name="org/openmeetings/axis/services/FileImportError.class"/>
             </fileset>
         </jar>  

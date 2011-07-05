@@ -25,6 +25,7 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.files.FilesObject;
 import org.openmeetings.app.data.basic.files.FoldersObject;
 import org.openmeetings.app.data.basic.files.LiberaryObject;
+import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.file.dto.FileExplorerObject;
 import org.openmeetings.app.data.file.dto.LibraryPresentation;
@@ -127,94 +128,17 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
     }
 
-    private long getSizeOfDirectoryAndSubs(FileExplorerItem fileExplorerItem) {
-        try {
+    
 
-            long fileSize = 0;
-
-            if (fileExplorerItem.getIsImage()) {
-
-                File tFile = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar
-                        + fileExplorerItem.getFileHash());
-                if (tFile.exists()) {
-                    fileSize += tFile.length();
-                }
-
-                File thumbFile = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar + "_thumb_"
-                        + fileExplorerItem.getFileHash());
-                if (thumbFile.exists()) {
-                    fileSize += thumbFile.length();
-                }
-
-            }
-
-            if (fileExplorerItem.getIsPresentation()) {
-
-                File tFolder = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar
-                        + fileExplorerItem.getFileHash());
-
-                if (tFolder.exists()) {
-                    fileSize += this.getDirSize(tFolder);
-                }
-
-            }
-
-            log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
-            FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
-                    fileExplorerItem);
-
-            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
-                    .getInstance().getFileExplorerItemsByParent(
-                            fileExplorerItem.getFileExplorerItemId());
-
-            for (FileExplorerItem childExplorerItem : childElements) {
-
-                fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
-
-            }
-
-            return fileSize;
-
-        } catch (Exception err) {
-            log.error("[getSizeOfDirectoryAndSubs] ", err);
-        }
-        return 0;
-    }
-
-    private long getDirSize(File dir) {
-        long size = 0;
-        if (dir.isFile()) {
-            size = dir.length();
-        } else {
-            File[] subFiles = dir.listFiles();
-
-            for (File file : subFiles) {
-                if (file.isFile()) {
-                    size += file.length();
-                } else {
-                    size += this.getDirSize(file);
-                }
-
-            }
-        }
-
-        return size;
-    }
-
-    private String formatDate(Date date) {
-        SimpleDateFormat formatter;
-        String pattern = "dd/MM/yy H:mm:ss";
-        Locale locale = new Locale("en", "US");
-        formatter = new SimpleDateFormat(pattern, locale);
-        return formatter.format(date);
-    }
-
+    /**
+     * @deprecated
+     * @param SID
+     * @param fileName
+     * @param moduleName
+     * @param parentFolder
+     * @param room_id
+     * @return
+     */
     public Boolean deleteFile(String SID, String fileName, String moduleName,
             String parentFolder, Long room_id) {
         try {
@@ -268,6 +192,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return false;
     }
 
+    /**
+     * @deprecated
+     * @param t
+     * @return
+     */
     public String saveAsImage(Object t) {
         try {
             log.error("saveAsImage" + t);
@@ -477,7 +406,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                 for (FileExplorerItem homeChildExplorerItem : fList) {
                     log.debug("FileExplorerItem fList "
                             + homeChildExplorerItem.getFileName());
-                    homeFileSize += this
+                    homeFileSize += FileUtils.getInstance()
                             .getSizeOfDirectoryAndSubs(homeChildExplorerItem);
                 }
 
@@ -493,7 +422,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                 for (FileExplorerItem homeChildExplorerItem : rList) {
                     log.debug("FileExplorerItem rList "
                             + homeChildExplorerItem.getFileName());
-                    roomFileSize += this
+                    roomFileSize += FileUtils.getInstance()
                             .getSizeOfDirectoryAndSubs(homeChildExplorerItem);
                 }
 
@@ -646,12 +575,12 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
                 if (moveToHome) {
                     // set this file and all subfiles and folders the ownerId
-                    this.setFileToOwnerOrRoomByParent(fileExplorerItem,
+                	FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem,
                             users_id, null);
 
                 } else {
                     // set this file and all subfiles and folders the room_id
-                    this.setFileToOwnerOrRoomByParent(fileExplorerItem, null,
+                	FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem, null,
                             room_id);
 
                 }
@@ -663,32 +592,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return null;
     }
 
-    private void setFileToOwnerOrRoomByParent(
-            FileExplorerItem fileExplorerItem, Long users_id, Long room_id) {
-        try {
-
-            fileExplorerItem.setOwnerId(users_id);
-            fileExplorerItem.setRoom_id(room_id);
-
-            log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
-            FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
-                    fileExplorerItem);
-
-            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
-                    .getInstance().getFileExplorerItemsByParent(
-                            fileExplorerItem.getFileExplorerItemId());
-
-            for (FileExplorerItem childExplorerItem : childElements) {
-
-                this.setFileToOwnerOrRoomByParent(childExplorerItem, users_id,
-                        room_id);
-
-            }
-
-        } catch (Exception err) {
-            log.error("[setFileToOwnerOrRoomByParent] ", err);
-        }
-    }
+   
 
     public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
         try {
@@ -737,7 +641,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
                     if (outputFullFlvFile.exists()) {
 
                         if (!targetFullFlvFile.exists()) {
-                            this.copyFile(outputFullFlv, targetFullFlv);
+                        	FileUtils.getInstance().copyFile(outputFullFlv, targetFullFlv);
                         }
 
                     }
@@ -753,27 +657,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         return -1L;
     }
 
-    private void copyFile(String sourceFile, String targetFile) {
-        try {
-            File f1 = new File(sourceFile);
-            File f2 = new File(targetFile);
-            InputStream in = new FileInputStream(f1);
-
-            // For Overwrite the file.
-            OutputStream out = new FileOutputStream(f2);
-
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-            System.out.println("File copied.");
-        } catch (Exception e) {
-            log.error("[copyfile]", e);
-        }
-    }
+    
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
