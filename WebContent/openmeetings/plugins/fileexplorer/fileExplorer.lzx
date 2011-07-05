@@ -127,12 +127,15 @@
     </method>
     
     <method name="loadFiles">
-        this.getFileExplorerByRoom.doCall();
+    	<![CDATA[
+            this.getFileExplorerByRoom.doCall();
+        ]]>
     </method>
     
-    <!--
+    
+    <!-- -->
         public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id)
-     -->
+    
     <netRemoteCallHib name="getFileExplorerByRoom" funcname="fileservice.getFileExplorerByRoom" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -142,6 +145,7 @@
             parent.parseRootItems(value);
         </handler>
     </netRemoteCallHib>  
+    
     
     <!--
         Parse Items and generate Output
