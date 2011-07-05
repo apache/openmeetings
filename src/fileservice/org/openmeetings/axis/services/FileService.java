@@ -524,7 +524,68 @@ public class FileService {
 	        }
 	        
 	    } catch (Exception e) {
-	        log.error("[getListOfFilesByAbsolutePath]", e);
+	        log.error("[getFileExplorerByRoom]", e);
+	        return null;
+	    }	        
+	}
+	
+	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long room_id) throws AxisFault {
+
+	    try {
+	
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(
+	        		users_id);
+	
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+	        	
+	        	log.debug("room_id " + room_id);
+
+                FileExplorerObject fileExplorerObject = new FileExplorerObject();
+
+                // Home File List
+                FileExplorerItem[] fList = FileExplorerItemDaoImpl
+                        .getInstance()
+                        .getFileExplorerItemsByOwner(users_id, 0L);
+
+                long homeFileSize = 0;
+
+                for (FileExplorerItem homeChildExplorerItem : fList) {
+                    log.debug("FileExplorerItem fList "
+                            + homeChildExplorerItem.getFileName());
+                    homeFileSize += FileUtils.getInstance()
+                            .getSizeOfDirectoryAndSubs(homeChildExplorerItem);
+                }
+
+                fileExplorerObject.setUserHome(fList);
+                fileExplorerObject.setUserHomeSize(homeFileSize);
+
+                // Public File List
+                FileExplorerItem[] rList = FileExplorerItemDaoImpl
+                        .getInstance().getFileExplorerItemsByRoom(room_id, 0L);
+
+                long roomFileSize = 0;
+
+                for (FileExplorerItem homeChildExplorerItem : rList) {
+                    log.debug("FileExplorerItem rList "
+                            + homeChildExplorerItem.getFileName());
+                    roomFileSize += FileUtils.getInstance()
+                            .getSizeOfDirectoryAndSubs(homeChildExplorerItem);
+                }
+
+                fileExplorerObject.setRoomHome(rList);
+                fileExplorerObject.setRoomHomeSize(roomFileSize);
+
+                return fileExplorerObject;
+	        	
+	        } else {
+	        	
+	            throw new Exception("not Authenticated");
+	            
+	        }
+	        
+	    } catch (Exception e) {
+	        log.error("[getFileExplorerByRoomSelf]", e);
 	        return null;
 	    }	        
 	}
@@ -566,6 +627,43 @@ public class FileService {
         return null;
     }
 	
+	public FileExplorerItem[] getFileExplorerByParentSelf(String SID,
+            Long parentFileExplorerItemId, Long room_id, Boolean isOwner) throws AxisFault {
+		
+		try {
+			
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(
+	        		users_id);
+	
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+                log.debug("parentFileExplorerItemId "
+                        + parentFileExplorerItemId);
+
+                if (parentFileExplorerItemId == 0) {
+                    if (isOwner) {
+                        return FileExplorerItemDaoImpl.getInstance()
+                                .getFileExplorerItemsByOwner(users_id,
+                                        parentFileExplorerItemId);
+                    } else {
+                        return FileExplorerItemDaoImpl.getInstance()
+                                .getFileExplorerItemsByRoom(room_id,
+                                        parentFileExplorerItemId);
+                    }
+                } else {
+                    return FileExplorerItemDaoImpl.getInstance()
+                            .getFileExplorerItemsByParent(
+                                    parentFileExplorerItemId);
+                }
+
+            }
+        } catch (Exception err) {
+            log.error("[getFileExplorerByParentSelf] ", err);
+        }
+        return null;
+    }
+	
 	public Long updateFileOrFolderName(String SID, Long fileExplorerItemId,
             String fileName) throws AxisFault {
         		
@@ -585,6 +683,38 @@ public class FileService {
             }
         } catch (Exception err) {
             log.error("[updateFileOrFolderName] ", err);
+        }
+        return null;
+    }
+	
+	public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
+            String fileName) throws AxisFault {
+        		
+		try {
+			
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(
+	        		users_id);
+	
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+	        	//TODO: check if this user is allowed to change this file
+	        	/*
+	        	FileExplorerItem fileExItem = FileExplorerItemDaoImpl.getInstance().getFileExplorerItemsById(fileExplorerItemId);
+	        	
+	        	if (fileExItem.getOwnerId() != null && !fileExItem.getOwnerId().equals(users_id)) {
+	        		throw new Exception("This user is not the owner of the file and not allowed to edit its name");
+	        	}
+	        	*/
+	        	
+                log.debug("deleteFileOrFolder " + fileExplorerItemId);
+
+                FileExplorerItemDaoImpl.getInstance().updateFileOrFolderName(
+                        fileExplorerItemId, fileName);
+
+            }
+        } catch (Exception err) {
+            log.error("[updateFileOrFolderNameSelf] ", err);
         }
         return null;
     }
@@ -615,6 +745,47 @@ public class FileService {
                     // set this file and all subfiles and folders the ownerId
                 	FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem,
                 			owner_id, null);
+
+                } else {
+                    // set this file and all subfiles and folders the room_id
+                	FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem, null,
+                            room_id);
+
+                }
+
+            }
+        } catch (Exception err) {
+            log.error("[moveFile] ", err);
+        }
+        return null;
+    }
+	
+	public Long moveFileSelf(String SID, Long fileExplorerItemId,
+            Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
+            Boolean moveToHome) throws AxisFault {
+        		
+		try {
+			
+	        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long user_level = Usermanagement.getInstance().getUserLevelByID(
+	        		users_id);
+	
+	        if (AuthLevelmanagement.getInstance().checkWebServiceLevel(user_level)) {
+
+                log.debug("deleteFileOrFolder " + fileExplorerItemId);
+
+                FileExplorerItemDaoImpl.getInstance().moveFile(
+                        fileExplorerItemId, newParentFileExplorerItemId,
+                        room_id, isOwner, users_id);
+
+                FileExplorerItem fileExplorerItem = FileExplorerItemDaoImpl
+                        .getInstance().getFileExplorerItemsById(
+                                fileExplorerItemId);
+
+                if (moveToHome) {
+                    // set this file and all subfiles and folders the ownerId
+                	FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem,
+                			users_id, null);
 
                 } else {
                     // set this file and all subfiles and folders the room_id

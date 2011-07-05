@@ -57,7 +57,7 @@
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return hib.currentdomainObj.organisation_id;</method></netparam>
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
+            if ($debug) Debug.write("getFLVExplorerByRoom: ",value);
             parent.parseRootItems(value);
         </handler>
     </netRemoteCallHib>  

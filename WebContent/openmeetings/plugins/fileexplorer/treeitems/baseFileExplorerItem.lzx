@@ -301,7 +301,7 @@
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>  
         <netparam><method name="getValue">return parent.parent.isOwner;</method></netparam>         
         <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
+            if ($debug) Debug.write("getFileExplorerByParent: ",value);
             parent.renderFilesAndFolders(value);
         </handler>
     </netRemoteCallHib>  

@@ -18,19 +18,17 @@
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
     </handler>
     
-    <method name="loadFiles">
-    	this.getFileExplorerByRoom.doCall();
-    </method>
+    
     
     <handler name="onvisible">
         //This is thrown whenever an uploaded Document has completed
         if (this._selected == null) {
-            this.getFileExplorerByRoom.doCall();
+            this.loadFiles();
         } else {
         	if (this._selected.isFolder) {
             	this._selected.refresh();
         	} else {
-        		this.getFileExplorerByRoom.doCall();
+        		this.loadFiles();
         	}
         }
     </handler>
@@ -126,6 +124,10 @@
     	this.selectItem(itemObj);
     	
     	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName);
+    </method>
+    
+    <method name="loadFiles">
+        this.getFileExplorerByRoom.doCall();
     </method>
     
     <!--
@@ -371,7 +373,7 @@
                             resourceN="file_explorer_reload_rsc" >
             <handler name="onclick">
                 if ($debug) Debug.write("Refresh Folder");
-                parent.parent.getFileExplorerByRoom.doCall();
+                parent.parent.loadFiles();
             </handler>
         </baseChooseIconView>
         <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
