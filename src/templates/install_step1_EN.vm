@@ -195,15 +195,15 @@ function checkEmail()
 	    </li><li>
 	    <label for="configreferer">Mail-Referer (system_email_addr)</label>
     	<input name="configreferer" id="configreferer" size="27" 
-    		title="Enter a Referer" type="text" /><br />
+    		title="Enter a Referer" type="text" value="noreply@localhost" /><br />
     	</li><li>
         <label for="configsmtp">SMTP-Server (smtp_server)</label>
     	<input name="configsmtp" id="configsmtp" size="27" 
-    		title="Enter a SMTP-Server" type="text" /><br/>
+    		title="Enter a SMTP-Server" type="text" value="localhost" /><br/>
     	</li><li>
     	<label for="configsmtp">SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)</label>
     	<input name="configsmtpport" id="configsmtpport" size="27" 
-    		title="Enter a SMTP-Server.Port normally 25" type="text" /><br/>
+    		title="Enter a SMTP-Server.Port normally 25" type="text" value="25" /><br/>
     	</li><li>
     	<label for="configmailuser">SMTP-Username (email_userpass)</label>
     	<input name="configmailuser" id="configmailuser" size="27" 
