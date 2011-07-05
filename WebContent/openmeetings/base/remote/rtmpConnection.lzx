@@ -22,9 +22,10 @@
             
             var ok = this._nc.connect(src == "null" ? null : src);
             if (this.debug) {
-            	Debug.write("Ok:",ok);
+            	Debug.write("*** debug ***");
             }
             
+            //canvas.currentNC is the reference to the NetConnection that is used in the NetStream
             canvas.currentNC = this._nc;
             
             this._nc.onStatus = function(info){
