@@ -128,14 +128,173 @@
     
     <method name="loadFiles">
     	<![CDATA[
-            this.getFileExplorerByRoom.doCall();
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&room_id='+hib.currentroomid;
+            
+            this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest ",downloadurl);
+            this.getFileExplorerByRoomSelf.doRequest();
         ]]>
     </method>
     
+    <dataset name="getFileExplorerByRoomSelf" type="http" >
+    	<handler name="ondata" args="d">
+    		<![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                parent.parseRootItems(parent.parseRootToRoomObject(d));
+            ]]>
+    	</handler>
+    </dataset>
     
-    <!-- 
+    <method name="parseParentToRoomObject" args="dObj">
+        <![CDATA[
+            
+            var filesObject = new Array();
+            
+            var tFiles = dObj.childNodes[0].childNodes;
+            
+            if ($debug) Debug.write("parseParentToRoomObject tFiles ",tFiles);
+            
+            for (var i=0;i<tFiles.length;i++) {
+                
+                filesObject.push(this.parseToFileObj(tFiles[i].childNodes));
+                
+            }
+        
+            return filesObject;
+        ]]>
+    </method>
+    
+    <method name="parseRootToRoomObject" args="dObj">
+        <![CDATA[
+            
+            var roomObject = new Object();
+            
+            roomObject.userHome = new Array();
+            roomObject.roomHome = new Array();
+            roomObject.userHomeSize = 0;
+            roomObject.roomHomeSize = 0;
+            
+            var tFiles = dObj.childNodes[0].childNodes[0].childNodes;
+            
+            //if ($debug) Debug.write("tFiles ",tFiles);
+            
+            for (var i=0;i<tFiles.length;i++) {
+                
+                //if ($debug) Debug.write("nodeName",tFiles[i].nodeName);
+                
+                if (tFiles[i].nodeName == "userHomeSize") {
+                    if ($debug) Debug.write("roomHomeSize",tFiles[i].childNodes[0].data);
+                    roomObject.userHomeSize = Number(tFiles[i].childNodes[0].data);
+                } else if (tFiles[i].nodeName == "roomHomeSize") {
+                    if ($debug) Debug.write("roomHomeSize",tFiles[i].childNodes[0].data);
+                    roomObject.roomHomeSize = Number(tFiles[i].childNodes[0].data);
+                } else if (tFiles[i].nodeName == "roomHome") {
+                    roomObject.roomHome.push(this.parseToFileObj(tFiles[i].childNodes));
+                } else if (tFiles[i].nodeName == "userHome") {
+                    roomObject.userHome.push(this.parseToFileObj(tFiles[i].childNodes));
+                }
+                
+            }
+        
+            return roomObject;
+        ]]>
+    </method>
+    
+    <method name="parseToFileObj" args="dObj">
+        <![CDATA[
+        
+            var tFileObj = new Object();
+        
+            var type = "string";
+            
+            for (var i=0;i<dObj.length;i++) {
+                
+                type = "string";
+            
+                switch (dObj[i].nodeName){
+                    case "externalFileId":
+                        type = "int";
+                        break;
+                    case "fileExplorerItemId":
+                        type = "int";
+                        break;
+                    case "fileSize":
+                        type = "int";
+                        break;
+                    case "flvHeight":
+                        type = "int";
+                        break;
+                    case "flvWidth":
+                        type = "int";
+                        break;
+                    case "insertedBy":
+                        type = "int";
+                        break;
+                    case "isChart":
+                        type = "boolean";
+                        break;
+                    case "isFolder":
+                        type = "boolean";
+                        break;
+                    case "isImage":
+                        type = "boolean";
+                        break;
+                    case "isPresentation":
+                        type = "boolean";
+                        break;
+                    case "isStoredWmlFile":
+                        type = "boolean";
+                        break;
+                    case "isVideo":
+                        type = "boolean";
+                        break;
+                    case "ownerId":
+                        type = "int";
+                        break;
+                    case "parentFileExplorerItemId":
+                        type = "int";
+                        break;
+                    case "room_id":
+                        type = "int";
+                        break;
+                    default:
+                        break;
+                }
+                
+                //if ($debug) Debug.write("Obj attr ",dObj[i].nodeName,type);
+                
+                if (dObj[i].childNodes.length > 0) {
+                    switch (type) {
+                        case "int":
+                            tFileObj[dObj[i].nodeName] = Number(dObj[i].childNodes[0].data);
+                            break;
+                        case "boolean":
+                            tFileObj[dObj[i].nodeName] = (dObj[i].childNodes[0].data == "true") ? true : false;
+                            break;
+                        default:
+                            tFileObj[dObj[i].nodeName] = dObj[i].childNodes[0].data;
+                            break;
+                    }
+                } else {
+                    tFileObj[dObj[i].nodeName] = null;
+                }
+                
+                //if ($debug) Debug.write("Obj attr ",dObj[i].nodeName,tFileObj[dObj[i].nodeName]);
+                
+            }
+        
+            return tFileObj;
+            
+        ]]>
+    </method>
+    
+    <!--
         public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id)
-     -->
+    
     <netRemoteCallHib name="getFileExplorerByRoom" funcname="fileservice.getFileExplorerByRoom" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -145,7 +304,7 @@
             parent.parseRootItems(value);
         </handler>
     </netRemoteCallHib>  
-    
+     -->
     
     <!--
         Parse Items and generate Output
@@ -179,7 +338,7 @@
             //Home area
             for (var i=0; i<roomObject.userHome.length; i++) {
                 var fileExplorerItem = roomObject.userHome[i];
-                if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
+                //if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
                 if (fileExplorerItem.isFolder) {
                     new lz.folderFileExplorerItem(homeIcon.content,{
                                             fileExplorerItemId:fileExplorerItem.fileExplorerItemId,
@@ -256,8 +415,8 @@
             //Public area
             for (var i=0; i<roomObject.roomHome.length; i++) {
                 var fileExplorerItem = roomObject.roomHome[i];
-                if ($debug) Debug.write("fileExplorerItem.fileExplorerItemId, ",fileExplorerItem.fileExplorerItemId);
-                if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
+                //if ($debug) Debug.write("fileExplorerItem.fileExplorerItemId, ",fileExplorerItem.fileExplorerItemId);
+                //if ($debug) Debug.write("fileExplorerItem, ",fileExplorerItem);
                 if (fileExplorerItem.isFolder) {
                     new lz.folderFileExplorerItem(roomHome.content,{
                                             fileName:fileExplorerItem.fileName,

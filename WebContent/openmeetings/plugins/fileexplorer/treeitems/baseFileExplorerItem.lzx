@@ -50,7 +50,7 @@
     		this.icon_folder_pre.setAttribute("frame",2);
     		this.content.setAttribute("visibility","visible");
 			this._folderIcon.setAttribute("frame",2);
-		    this.getFileExplorerByParent.doCall();
+		    this.loadFiles();
 		}
 	</method>
 	
@@ -289,11 +289,38 @@
             }
         ]]>
     </method>
-	
+    
+    <method name="loadFiles">
+    	<![CDATA[
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/getFileExplorerByParentSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&parentFileExplorerItemId='+this.fileExplorerItemId
+                            +'&room_id='+hib.currentroomid
+                            +'&isOwner='+this.isOwner;
+            
+            this.getFileExplorerByParentSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("getFileExplorerByParentSelf doRequest ",downloadurl);
+            this.getFileExplorerByParentSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="getFileExplorerByParentSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                parent.renderFilesAndFolders(canvas.currentFileExplorer.parseParentToRoomObject(d));
+            ]]>
+        </handler>
+    </dataset>
+    
+    <!--
+        parent.parseRootItems(canvas.currentFileExplorer.parseToRoomObject(d));
+	 -->
 	<!--
 	   public List<FileExplorerItem> getFileExplorerByParent(String SID, Long parentFileExplorerItemId, 
 	               Long room_id, Boolean isOwner) {
-     -->
 	<netRemoteCallHib name="getFileExplorerByParent" funcname="fileservice.getFileExplorerByParent" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -304,7 +331,8 @@
             if ($debug) Debug.write("getFileExplorerByParent: ",value);
             parent.renderFilesAndFolders(value);
         </handler>
-    </netRemoteCallHib>  
+    </netRemoteCallHib> 
+     --> 
     
     <method name="renderFilesAndFolders" args="roomHome">
         <![CDATA[
