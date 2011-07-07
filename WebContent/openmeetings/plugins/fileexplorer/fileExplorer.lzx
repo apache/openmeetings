@@ -86,12 +86,14 @@
     
     <method name="addFolder">
         if (this._selected == null) {
+        	if ($debug) Debug.write("addFolder ::1 ",this._selected);
             this._filearea._contentarea.subviews[0].addFolder();
         } else {
             if (this._selected.isFolder) {
+            	if ($debug) Debug.write("-1 this._selected.isFolder ",this._selected);
                 this._selected.addFolder();
             } else {
-            	if ($debug) Debug.write("this._selected ",this._selected);
+            	if ($debug) Debug.write("-2 !this._selected.isFolder ",this._selected);
                 this._selected.parent.parent.addFolder();
             }
         }
