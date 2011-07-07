@@ -128,84 +128,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
     }
 
-    
-
-    /**
-     * @deprecated
-     * @param SID
-     * @param fileName
-     * @param moduleName
-     * @param parentFolder
-     * @param room_id
-     * @return
-     */
-    public Boolean deleteFile(String SID, String fileName, String moduleName,
-            String parentFolder, Long room_id) {
-        try {
-            Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-            Long user_level = Usermanagement.getInstance().getUserLevelByID(
-                    users_id);
-            if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-
-                String current_dir = ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload";
-                String roomName = room_id.toString();
-                String working_dir = current_dir + File.separatorChar
-                        + roomName + parentFolder;
-                log.debug("working_dir+fileName: " + working_dir
-                        + File.separatorChar + fileName);
-                File dir = new File(working_dir + File.separatorChar + fileName);
-
-                File thumb = new File(working_dir + File.separatorChar
-                        + "_thumb_" + fileName);
-                if (thumb.exists())
-                    thumb.delete();
-
-                boolean returnVal = dir.delete();
-                log.debug("delete file: " + working_dir + File.separatorChar
-                        + fileName);
-
-                // Iterate through the Files if it is a directory
-                if (!returnVal && dir.isDirectory()) {
-                    String[] listOfFiles = dir.list();
-                    for (int i = 0; i < listOfFiles.length; i++) {
-                        log.debug("Deleting recursive: " + working_dir
-                                + File.separatorChar + fileName
-                                + File.separatorChar + listOfFiles[i]);
-                        File d2 = new File(working_dir + File.separatorChar
-                                + fileName + File.separatorChar
-                                + listOfFiles[i]);
-                        d2.delete();
-                        File thumb2 = new File(working_dir + File.separatorChar
-                                + fileName + File.separatorChar + "_thumb_"
-                                + listOfFiles[i]);
-                        if (thumb2.exists())
-                            thumb2.delete();
-                    }
-                    dir.delete();
-                }
-                return returnVal;
-            }
-        } catch (Exception e) {
-            log.error("[deleteFile]: ", e);
-        }
-        return false;
-    }
-
-    /**
-     * @deprecated
-     * @param t
-     * @return
-     */
-    public String saveAsImage(Object t) {
-        try {
-            log.error("saveAsImage" + t);
-        } catch (Exception err) {
-            log.error("[saveAsImage] ", err);
-        }
-        return null;
-    }
-
     /**
      * 
      * Save an Object to the library and returns the file-explorer Id
@@ -384,7 +306,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
      * @param SID
      * @param room_id
      * @return
-     */
+     
     public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id) {
         try {
             Long users_id = Sessionmanagement.getInstance().checkSession(SID);
@@ -591,7 +513,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
         }
         return null;
     }
-
+	*/
    
 
     public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {

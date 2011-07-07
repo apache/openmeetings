@@ -18,9 +18,9 @@
 		lz.ModeManager.release(this);
 		if ($debug) Debug.write("Store and Destroy ",this.parentFileExplorerItemId);
 		if (this.isNew) {
-		    this.addFolder.doCall();
+		    this.addFolder();
 		} else {
-			this.updateFileOrFolderName.doCall();
+			this.updateFileOrFolderName();
 		}
 	</handler>
 	
@@ -32,6 +32,40 @@
 		]]>
 	</handler>
 	
+	<!--
+	public Long addFolderSelf(String SID, Long parentFileExplorerItemId,
+            String fileName, Long room_id, Boolean isOwner)
+     -->
+	
+	<method name="addFolder">
+        <![CDATA[
+            if ($debug) Debug.write("moveFile HTTP 1: ");
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/addFolderSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&parentFileExplorerItemId='+this.parentFileExplorerItemId
+                            +'&fileName='+this.text
+                            +'&room_id='+hib.currentroomid
+                            +'&isOwner='+this.isOwner;
+            
+            this.addFolderSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("addFolderSelf doRequest ",downloadurl);
+            this.addFolderSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="addFolderSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                if ($debug) Debug.write("addFolderSelf: ",d);
+                parent.completed();
+            ]]>
+        </handler>
+    </dataset>
+	
+	<!--
 	<netRemoteCallHib name="addFolder" funcname="fileservice.addFolder" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -44,7 +78,39 @@
             parent.completed(value);
         </handler>
     </netRemoteCallHib>  
+     -->
 	
+	<!--
+    public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
+            String fileName)
+     -->
+    <method name="updateFileOrFolderName">
+        <![CDATA[
+            if ($debug) Debug.write("moveFile HTTP 1: ");
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/updateFileOrFolderNameSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&fileExplorerItemId='+this.fileExplorerItemId
+                            +'&fileName='+this.text;
+            
+            this.updateFileOrFolderNameSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("updateFileOrFolderNameSelf doRequest ",downloadurl);
+            this.updateFileOrFolderNameSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="updateFileOrFolderNameSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                if ($debug) Debug.write("updateFileOrFolderNameSelf: ",d);
+                parent.completedRename();
+            ]]>
+        </handler>
+    </dataset>
+    
+	<!--
 	<netRemoteCallHib name="updateFileOrFolderName" funcname="fileservice.updateFileOrFolderName" 
         remotecontext="$once{ canvas.thishib }" >   
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -55,9 +121,10 @@
             parent.completedRename();
         </handler>
     </netRemoteCallHib>
+     -->
     
-	<method name="completed" args="fileExplorerItemId">
-		this.refObj.fileExplorerItemId = fileExplorerItemId;
+	<method name="completed">
+		//this.refObj.fileExplorerItemId = fileExplorerItemId;
 		this.refObj.setAttribute("fileName",this.getText());
 		this.refObj.parent.parent.doOpen();
 		this.destroy();

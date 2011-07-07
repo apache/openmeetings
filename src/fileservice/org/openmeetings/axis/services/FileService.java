@@ -362,6 +362,60 @@ public class FileService {
 	
 	/**
 	 * 
+	 * Add a folder by the current user - similar to RTMP Call
+	 * 
+	 * @param SID
+	 * @param parentFileExplorerItemId
+	 * @param fileName
+	 * @param room_id
+	 * @param isOwner
+	 * @return
+	 */
+	public Long addFolderSelf(String SID, Long parentFileExplorerItemId,
+            String fileName, Long room_id, Boolean isOwner) throws AxisFault {
+		try {
+            Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+            Long user_level = Usermanagement.getInstance().getUserLevelByID(
+                    users_id);
+            if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+
+                log.debug("addFolder " + parentFileExplorerItemId);
+
+                if (parentFileExplorerItemId == 0 && isOwner) {
+                    // users_id (OwnerID) => only set if its directly root in
+                    // Owner Directory,
+                    // other Folders and Files maybe are also in a Home
+                    // directory
+                    // but just because their parent is
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, users_id, room_id,
+                            users_id, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Path
+                            false, // isStoredWML file
+                            false // isXmlFile
+                            , 0L, "");
+                } else {
+                    return FileExplorerItemDaoImpl.getInstance().add(fileName,
+                            "", parentFileExplorerItemId, null, room_id,
+                            users_id, true, // isFolder
+                            false, // isImage
+                            false, // isPresentation
+                            "", // WML Paht
+                            false, // isStoredWML file
+                            false // isXmlFile
+                            , 0L, "");
+                }
+            }
+        } catch (Exception err) {
+            log.error("[getFileExplorerByParent] ", err);
+        }
+        return null;
+	}
+	
+	/**
+	 * 
 	 * deletes a file by its external Id and type
 	 * 
 	 * @param SID

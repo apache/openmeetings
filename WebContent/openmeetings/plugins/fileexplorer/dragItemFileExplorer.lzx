@@ -12,6 +12,9 @@
 	<attribute name="alreadySent" value="false" type="boolean" />
 	
 	<attribute name="fileExplorerItemId" value="0" type="number" />
+	<attribute name="newParentFileExplorerItemId" value="0" type="number" />
+    <attribute name="isOwner" value="false" type="boolean" />
+    <attribute name="moveToHome" value="false" type="boolean" />
 	
 	<handler name="oninit">
 		lz.Track.activate(canvas.currentImagesListdraw.currentTrackGroupName);
@@ -76,16 +79,16 @@
     		} else if (this.overItem.isFolder){
     			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileExplorerItemId);
     			if ($debug) Debug.write("MOVE TO PARENT",this.overItem.fileExplorerItemId);
-    			this.moveFile.fileExplorerItemId = this.refObj.fileExplorerItemId;
-    			this.moveFile.newParentFileExplorerItemId = this.overItem.fileExplorerItemId;
+    			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
+    			this.newParentFileExplorerItemId = this.overItem.fileExplorerItemId;
     			if (this.overItem.fileExplorerItemId == 0) {
-    			    this.moveFile.isOwner = this.overItem.isOwner;
+    			    this.isOwner = this.overItem.isOwner;
     			}
     			
     			//check if this is a home folder or not
     			var checkForOwer = this.overItem.checkForIsOwner();
     			if ($debug) Debug.write("checkForOwer ::",checkForOwer);
-    			this.moveFile.moveToHome = checkForOwer;
+    			this.moveToHome = checkForOwer;
     			
     			//check that the file is not moved inside itself
     			if (this.overItem.checkForIsChild(this.refObj.fileExplorerItemId)) {
@@ -94,7 +97,7 @@
     				return;
     			}
     			
-    			this.moveFile.doCall();
+    			this.moveFile();
     		} else {
     			if ($debug) Debug.warn("Drag to whiteboard !!! ");
     			if (this.refObj.isPresentation) {
@@ -159,13 +162,49 @@
     </netRemoteCallHib> 
      -->
     
+    <!--
+    public Long moveFileSelf(String SID, Long fileExplorerItemId,
+            Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
+            Boolean moveToHome)
+     -->
+     
+    <method name="moveFile">
+        <![CDATA[
+            if ($debug) Debug.write("moveFile HTTP 1: ");
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/moveFileSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&fileExplorerItemId='+this.fileExplorerItemId
+                            +'&newParentFileExplorerItemId='+this.newParentFileExplorerItemId
+                            +'&room_id='+hib.currentroomid
+                            +'&isOwner='+this.isOwner
+                            +'&moveToHome='+this.moveToHome;
+            
+            this.moveFileSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("moveFileSelf doRequest ",downloadurl);
+            this.moveFileSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="moveFileSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                if ($debug) Debug.write("moveFileSelf: ",d);
+                parent.overItem.doOpen();
+                parent.refObj.parent.parent.doOpen();
+                parent.destroy();
+            ]]>
+        </handler>
+    </dataset>
+    
+    <!--
     <netRemoteCallHib name="moveFile" funcname="fileservice.moveFile" 
         remotecontext="$once{ canvas.thishib }" > 
         
         <attribute name="fileExplorerItemId" value="0" type="number" />
-        <attribute name="newParentFileExplorerItemId" value="0" type="number" />
-        <attribute name="isOwner" value="false" type="boolean" />
-        <attribute name="moveToHome" value="false" type="boolean" />
+        
         
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam>
@@ -180,7 +219,8 @@
             parent.refObj.parent.parent.doOpen();
             parent.destroy();
         </handler>
-    </netRemoteCallHib>     
+    </netRemoteCallHib>   
+     -->  
    
 	<view name="_dragFileSymbol" x="10" y="10"
 		resource="$once{ parent.dragItemResource }" />
