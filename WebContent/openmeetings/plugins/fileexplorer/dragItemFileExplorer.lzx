@@ -11,6 +11,8 @@
 	
 	<attribute name="alreadySent" value="false" type="boolean" />
 	
+	<attribute name="fileExplorerItemId" value="0" type="number" />
+	
 	<handler name="oninit">
 		lz.Track.activate(canvas.currentImagesListdraw.currentTrackGroupName);
 		canvas.currentImagesListdraw.currentDragItem = this;
@@ -64,7 +66,7 @@
     		
     		if (this.overItem.isTrashCan) {
     			if ($debug) Debug.write("SEND TO GARBAGE");
-    			this.deleteFileOrFolder.fileExplorerItemId = this.refObj.fileExplorerItemId;
+    			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
     			new lz.confirmationSingle(canvas,{
             			   refObj:this,
             			   labelid:710,
@@ -112,17 +114,41 @@
     
     <method name="sendConfirmation" args="bool,askAgain">
     	if (bool) {
-    		this.deleteFileOrFolder.doCall();
+    		this.deleteFileOrFolder();
     	} else {
     		this.destroy();
     	}
     </method>
     
+    <method name="deleteFileOrFolder">
+        <![CDATA[
+            if ($debug) Debug.write("deleteFileOrFolder HTTP 2: ");
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/deleteFileOrFolderSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&fileExplorerItemId='+this.fileExplorerItemId;
+            
+            this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
+            this.deleteFileOrFolderSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="deleteFileOrFolderSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                if ($debug) Debug.write("deleteFileOrFolder: ",d);
+                parent.refObj.parent.parent.doOpen();
+                parent.destroy();
+            ]]>
+        </handler>
+    </dataset>
+    
+    <!--
     <netRemoteCallHib name="deleteFileOrFolder" funcname="fileservice.deleteFileOrFolder" 
         remotecontext="$once{ canvas.thishib }" > 
-        
-        <attribute name="fileExplorerItemId" value="0" type="number" />
-        
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <netparam><method name="getValue">return parent.fileExplorerItemId;</method></netparam>
         <handler name="ondata" args="value">    
@@ -131,6 +157,7 @@
             parent.destroy();
         </handler>
     </netRemoteCallHib> 
+     -->
     
     <netRemoteCallHib name="moveFile" funcname="fileservice.moveFile" 
         remotecontext="$once{ canvas.thishib }" > 

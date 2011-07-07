@@ -416,6 +416,36 @@ public class FileService {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * deletes files or folders based on it id
+	 * 
+	 * @param SID
+	 * @param fileExplorerItemId
+	 * @return
+	 */
+	public Long deleteFileOrFolderSelf(String SID, Long fileExplorerItemId) throws AxisFault {
+		
+		try {
+			
+			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+	        Long User_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			
+	        if (AuthLevelmanagement.getInstance().checkUserLevel(User_level)){
+	        	
+	        	//TODO: Check if user has access or not to the file
+	        	
+	        	FileExplorerItemDaoImpl.getInstance().deleteFileExplorerItem(
+                        fileExplorerItemId);
+	        	
+	        }
+		
+		} catch (Exception err) {
+			log.error("[deleteFileOrFolder]",err);
+		}
+		return null;
+	}
    
 	public String[] getImportFileExtensions() throws AxisFault {
 		try {

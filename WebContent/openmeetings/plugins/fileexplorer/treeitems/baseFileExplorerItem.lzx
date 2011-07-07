@@ -113,10 +113,38 @@
     
     <method name="sendConfirmation" args="bool,askAgain">
         if (bool) {
-            this.deleteFileOrFolder.doCall();
+            this.deleteFileOrFolder();
         }
     </method>
     
+    <method name="deleteFileOrFolder">
+        <![CDATA[
+            if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
+            //this.getFileExplorerByRoom.doCall();
+            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                            +canvas.httpRootKey+'services/FileService/deleteFileOrFolderSelf?'
+                            +'SID='+canvas.sessionId
+                            +'&fileExplorerItemId='+this.fileExplorerItemId;
+            
+            this.deleteFileOrFolderSelf.setAttribute("src",downloadurl);
+            if ($debug) Debug.write("deleteFileOrFolderSelf doRequest ",downloadurl);
+            this.deleteFileOrFolderSelf.doRequest();
+        ]]>
+    </method>
+    
+    <dataset name="deleteFileOrFolderSelf" type="http" >
+        <handler name="ondata" args="d">
+            <![CDATA[
+                //if ($debug) Debug.write("ondata ",d);
+                if ($debug) Debug.write("deleteFileOrFolder: ",d);
+                parent.parent.parent.doOpen();
+                parent.refObjListRoot._selected = null;
+                parent.refObjListRoot.parentFolderId = -2;
+            ]]>
+        </handler>
+    </dataset>
+    
+    <!--
     <netRemoteCallHib name="deleteFileOrFolder" funcname="fileservice.deleteFileOrFolder" 
         remotecontext="$once{ canvas.thishib }" > 
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -128,6 +156,7 @@
             parent.refObjListRoot.parentFolderId = -2;
         </handler>
     </netRemoteCallHib> 
+     -->
     
 	<method name="doSingleClick" args="itemObj">
 		this.singleClickStarted = false;
