@@ -180,17 +180,19 @@
 		if (this.isFolder) {
 			if ($debug) Debug.write("NEW this.fileExplorerItemId INTO ",this);
 			if ($debug) Debug.write("NEW this.fileExplorerItemId ",this.fileExplorerItemId);
-			this.icon_folder_pre.setAttribute("frame",2);
-            this.content.setAttribute("visibility","visible");
-            this._folderIcon.setAttribute("frame",2);
-    		var t = new lz.folderFileExplorerItem(this.content,{
-    			            isOwner:this.isOwner,
-    			            isFolder:true,
-                		    fileIcon:'icon_folder_rsc',
-                            refObjListRoot:this.refObjListRoot,
-                		    fileName:canvas.getLabelName(712)
-                		});
-            t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+			if (this["icon_folder_pre"]) {
+    			this.icon_folder_pre.setAttribute("frame",2);
+                this.content.setAttribute("visibility","visible");
+                this._folderIcon.setAttribute("frame",2);
+        		var t = new lz.folderFileExplorerItem(this.content,{
+        			            isOwner:this.isOwner,
+        			            isFolder:true,
+                    		    fileIcon:'icon_folder_rsc',
+                                refObjListRoot:this.refObjListRoot,
+                    		    fileName:canvas.getLabelName(712)
+                    		});
+                t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+			}
 		}
 	</method>
 	
