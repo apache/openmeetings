@@ -12,7 +12,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/screenviewer"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/templates"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/red5-screenshare"/>
-<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/red5-screenshare"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>
