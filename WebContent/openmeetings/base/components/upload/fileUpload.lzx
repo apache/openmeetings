@@ -64,7 +64,7 @@
 
 				var imageTypes = new Object();
 				imageTypes.description = "Allowed Files";
-				imageTypes.extension = "*.txt; *.pcd; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.jpg; *.jpeg; *.gif; *.png; *.ppt; *.pptx; *.odp; *.odt; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.pdf";
+				imageTypes.extension = "*.txt; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf; *.avi; *.mov; *.flv; *.mp4; *.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";
 				allTypes.push(imageTypes); 
 				
 				imageTypes = new Object();
@@ -78,7 +78,7 @@
                 allTypes.push(imageTypes);
 				
 				imageTypes = new Object();
-				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";				
+				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";
 				imageTypes.description = "Pictures";
 				allTypes.push(imageTypes);
 
