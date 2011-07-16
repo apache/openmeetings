@@ -1,32 +1,45 @@
 package org.openmeetings.app.hibernate.beans.lang;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="fieldlanguagesvalues"
- *
- */
-public class Fieldlanguagesvalues {
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "fieldlanguagesvalues")
+public class Fieldlanguagesvalues implements Serializable {
+
+	private static final long serialVersionUID = 1965055047163639210L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="fieldlanguagesvalues_id")
 	private Long fieldlanguagesvalues_id;
+	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	@Column(name="language_id")
 	private Long language_id;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Lob
+	@Column(name="value")
 	private String value;
 	
 	public Fieldlanguagesvalues() {
 		super();
 	}
 	
-    /**
-     *  
-     * @hibernate.id
-     *  column="fieldlanguagesvalues_id"
-     *  generator-class="increment"
-     */ 
 	public Long getFieldlanguagesvalues_id() {
 		return fieldlanguagesvalues_id;
 	}
@@ -34,11 +47,6 @@ public class Fieldlanguagesvalues {
 		this.fieldlanguagesvalues_id = fieldlanguagesvalues_id;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -46,11 +54,6 @@ public class Fieldlanguagesvalues {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -58,11 +61,6 @@ public class Fieldlanguagesvalues {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -70,12 +68,6 @@ public class Fieldlanguagesvalues {
 		this.deleted = deleted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="fieldvalues_id"
-     *  not-null="true"
-     *  type="long"
-     */
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}
@@ -83,12 +75,6 @@ public class Fieldlanguagesvalues {
 		this.fieldvalues_id = fieldvalues_id;
 	}
 
-    /**
-     * @hibernate.property
-     *  not-null="true"
-     *  column="language_id"
-     *  type="long"
-     */
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -96,11 +82,6 @@ public class Fieldlanguagesvalues {
 		this.language_id = language_id;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="value"
-     *  type="text"
-     */
 	public String getValue() {
 		return value;
 	}

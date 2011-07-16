@@ -3,10 +3,9 @@ package org.openmeetings.app.data.basic.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -41,10 +40,12 @@ public class OmTimeZoneDaoImpl {
 			omTimeZone.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long omTimeZoneId = (Long) session.save(omTimeZone);
+			omTimeZone = session.merge(omTimeZone);
+			Long omTimeZoneId = omTimeZone.getOmtimezoneId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -63,10 +64,11 @@ public class OmTimeZoneDaoImpl {
 					"ORDER BY sl.orderId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			List<OmTimeZone> sList = query.list();
+			List<OmTimeZone> sList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -76,8 +78,6 @@ public class OmTimeZoneDaoImpl {
 			
 			return sList;
 			
-		} catch (HibernateException ex) {
-			log.error("[getOmTimeZones]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getOmTimeZones]: ",ex2);
 		}
@@ -89,11 +89,12 @@ public class OmTimeZoneDaoImpl {
 			String hql = "select sl from OmTimeZone as sl " +
 							"WHERE sl.jname LIKE :jname";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("jname", jname);
-			List<OmTimeZone> sList = query.list();
+			query.setParameter("jname", jname);
+			List<OmTimeZone> sList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -101,8 +102,6 @@ public class OmTimeZoneDaoImpl {
 				return sList.get(0);
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getOmTimeZone]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getOmTimeZone]: ",ex2);
 		}
@@ -114,11 +113,12 @@ public class OmTimeZoneDaoImpl {
 			String hql = "select sl from OmTimeZone as sl " +
 							"WHERE sl.omtimezoneId = :omtimezoneId";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("omtimezoneId", omtimezoneId);
-			List<OmTimeZone> sList = query.list();
+			query.setParameter("omtimezoneId", omtimezoneId);
+			List<OmTimeZone> sList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -126,8 +126,6 @@ public class OmTimeZoneDaoImpl {
 				return sList.get(0);
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getOmTimeZoneById]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getOmTimeZoneById]: ",ex2);
 		}

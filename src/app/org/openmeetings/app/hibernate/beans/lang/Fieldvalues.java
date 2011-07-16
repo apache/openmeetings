@@ -1,35 +1,52 @@
 package org.openmeetings.app.hibernate.beans.lang;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-/**
- * 
- * @hibernate.class table="fieldvalues"
- *
- */
-public class Fieldvalues {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
+
+
+@Entity
+@Table(name = "fieldvalues")
+public class Fieldvalues implements Serializable {
+
+	
+	private static final long serialVersionUID = -3439614511218028085L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="fieldvalues_id")
+	private Set<Fieldlanguagesvalues> fieldlanguagesvalues;
 	
-	private Set fieldlanguagesvalues;
-	
+	@Transient
 	private Fieldlanguagesvalues fieldlanguagesvalue;
 	
-    public Fieldvalues() {
+	public Fieldvalues() {
 		super();
 	}
-
-    /**
-     * 
-     * @hibernate.id
-     *  column="fieldvalues_id"
-     *  generator-class="increment"
-     */ 
+	
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}
@@ -37,11 +54,6 @@ public class Fieldvalues {
 		this.fieldvalues_id = fieldvalues_id;
 	}	
 
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
 	public String getName() {
 		return name;
 	}
@@ -49,11 +61,6 @@ public class Fieldvalues {
 		this.name = name;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -61,11 +68,6 @@ public class Fieldvalues {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -73,11 +75,6 @@ public class Fieldvalues {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -85,21 +82,10 @@ public class Fieldvalues {
 		this.deleted = deleted;
 	}
 
-    /**
-     * @hibernate.set 
-     * table = "fieldlanguagesvalues" 
-     * inverse = "true" 
-     * cascade = "none"
-     * lazy = "false"
-     * @hibernate.one-to-many 
-     * class = "org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues"
-     * @hibernate.key 
-     * column = "fieldvalues_id"
-     */	
-	public Set getFieldlanguagesvalues() {
+	public Set<Fieldlanguagesvalues> getFieldlanguagesvalues() {
 		return fieldlanguagesvalues;
 	}
-	public void setFieldlanguagesvalues(Set fieldlanguagesvalues) {
+	public void setFieldlanguagesvalues(Set<Fieldlanguagesvalues> fieldlanguagesvalues) {
 		this.fieldlanguagesvalues = fieldlanguagesvalues;
 	}
 

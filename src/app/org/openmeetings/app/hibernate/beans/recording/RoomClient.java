@@ -1,36 +1,57 @@
 package org.openmeetings.app.hibernate.beans.recording;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 
- * @hibernate.class table="roomclient"
- * lazy="false"
- *
- */
-public class RoomClient {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+
+
+@Entity
+@Table(name = "roomclient")
+public class RoomClient implements Serializable {
 	   
+	private static final long serialVersionUID = 1831858089607111565L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="roomclient_id")
 	private Long roomClientId = null;
 	
 	/*
 	 * login name
 	 */
+	@Column(name="username")
 	private String username = "";
 	
 	/*
 	 * a unique id
 	 */
+	@Column(name="streamid")
 	private String streamid = "";
 	
+	@Column(name="scope")
 	private String scope = "";
 	
+	@Transient
 	private int vWidth = 0;
+	@Transient
 	private int vHeight = 0;
+	@Transient
 	private int vX = 0;
+	@Transient
 	private int vY = 0;
 	
+	@Transient
 	private String streamPublishName = "";
 	
 	/*
@@ -43,6 +64,7 @@ public class RoomClient {
 	 * as every instance of the RoomClient is send to all connected users
 	 * 
 	 */
+	@Column(name="public_sid")
 	private String publicSID = "";
 	
 	/*
@@ -51,46 +73,61 @@ public class RoomClient {
 	 * sharing its video/audio
 	 * 
 	 */
+	@Column(name="is_mod")
 	private Boolean isMod = false;
+	@Transient
 	private Boolean isSuperModerator = false;
+	@Column(name="canDraw")
 	private Boolean canDraw = false;
+	@Transient
 	private Boolean canShare = false;
+	@Transient
 	private Boolean canRemote = false;
+	@Column(name="connected_since")
 	private Date connectedSince;
+	@Column(name="formated_date")
 	private String formatedDate;
 	
+	@Transient
 	private Boolean isScreenClient = false;
 	
 	/*
 	 * the color of the user, only needed in 4x4 Conference, in these rooms each user has its own
 	 * color 
 	 */
+	@Column(name="usercolor")
 	private String usercolor;
 	/*
 	 * no longer needed since broadCastId is now the new unique id
 	 * 
 	 * @deprecated
 	 */
+	@Column(name="userpos")
 	private Integer userpos;
 	/*
 	 * client IP
 	 */
+	@Column(name="userip")
 	private String userip;
 	/*
 	 * client Port
 	 */
+	@Column(name="userport")
 	private int userport;
 	/*
 	 * current room idd while conferencing
 	 */
+	@Column(name="room_id")
 	private Long room_id;
 	
+	@Column(name="room_enter")
 	private Date roomEnter = null;
 	
 	/*
 	 * this is the id this user is currently using to broadcast a stream
 	 * default value is -2 cause otherwise this can due to disconnect
 	 */
+	@Column(name="broadcast_id")
 	private long broadCastID = -2;
 	
 	/*
@@ -99,20 +136,30 @@ public class RoomClient {
 	 * might be null or 0 even if somebody is already in a conference room
 	 * 
 	 */
+	@Column(name="user_id")
 	private Long user_id = null;
+	@Column(name="firstname")
 	private String firstname = "";
+	@Column(name="lastname")
 	private String lastname = "";
+	@Column(name="mail")
 	private String mail;
+	@Column(name="last_login")
 	private String lastLogin;
+	@Column(name="official_code")
 	private String official_code;
+	@Column(name="picture_uri")
 	private String picture_uri;
+	@Column(name="language")
 	private String language = "";
 	
 	/*
 	 * these vars are necessary to send notifications from the chatroom of a 
 	 * conference to outside of the conference room
 	 */
+	@Column(name="is_chat_notification")
 	private Boolean isChatNotification = false;
+	@Column(name="chat_user_room_id")
 	private Long chatUserRoomId = null;
 	
 	/*
@@ -122,40 +169,57 @@ public class RoomClient {
 	 * v - video only
 	 * n - no av only static Image
 	 */
+	@Column(name="avsettings")
 	private String avsettings = "";
 	
+	@Column(name="swfurl")
 	private String swfurl;
+	@Column(name="is_recording")
 	private Boolean isRecording = false;
+	@Column(name="room_recording_name")
 	private String roomRecordingName;
 	
+	@Transient
 	private Long flvRecordingId;
+	@Transient
 	private Long flvRecordingMetaDataId;
+	@Transient
 	private Long organization_id;
+	@Transient
 	boolean startRecording = false;
+	@Transient
 	boolean startStreaming = false;
 	
+	@Transient
 	private Boolean screenPublishStarted;
 	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
 	 * Only interesting in the Event Modus
 	 */
+	@Column(name="isBroadcasting")
 	private Boolean isBroadcasting = false;
 	
 	 //Vars to simulate external Users
+	@Transient
     private Long externalUserId;
+	@Transient
     private String externalUserType;
     
+	@Transient
     private List<String> sharerSIDs = new LinkedList<String>();
     
     //Session values for handling the Interviwe Room Type
+	@Transient
     private Integer interviewPodId = null;
     
+	@Transient
     private Boolean allowRecording = true;
 	
 	/*
 	 * Zombie Flag
 	 */
+	@Column(name="zombieCheckFlag")
 	private Boolean zombieCheckFlag = false;
 	
 	public RoomClient() {
@@ -212,11 +276,6 @@ public class RoomClient {
 		this.isMod = isMod;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="username"
-     *  type="string"
-     */
 	public String getUsername() {
 		return username;
 	}
@@ -224,11 +283,6 @@ public class RoomClient {
 		this.username = username;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="streamid"
-     *  type="string"
-     */
 	public String getStreamid() {
 		return streamid;
 	}
@@ -236,11 +290,6 @@ public class RoomClient {
 		this.streamid = streamid;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="scope"
-     *  type="string"
-     */
 	public String getScope() {
 		return scope;
 	}
@@ -248,11 +297,6 @@ public class RoomClient {
 		this.scope = scope;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="formated_date"
-     *  type="string"
-     */
 	public String getFormatedDate() {
 		return formatedDate;
 	}
@@ -260,11 +304,6 @@ public class RoomClient {
 		this.formatedDate = formatedDate;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="usercolor"
-     *  type="string"
-     */
 	public String getUsercolor() {
 		return usercolor;
 	}
@@ -272,11 +311,6 @@ public class RoomClient {
 		this.usercolor = usercolor;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="userpos"
-     *  type="int"
-     */
 	public Integer getUserpos() {
 		return userpos;
 	}
@@ -284,11 +318,6 @@ public class RoomClient {
 		this.userpos = userpos;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="userip"
-     *  type="string"
-     */
 	public String getUserip() {
 		return userip;
 	}
@@ -296,11 +325,6 @@ public class RoomClient {
 		this.userip = userip;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="swfurl"
-     *  type="string"
-     */
 	public String getSwfurl() {
 		return swfurl;
 	}
@@ -308,11 +332,6 @@ public class RoomClient {
 		this.swfurl = swfurl;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="userport"
-     *  type="int"
-     */
 	public int getUserport() {
 		return userport;
 	}
@@ -320,11 +339,6 @@ public class RoomClient {
 		this.userport = userport;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="firstname"
-     *  type="string"
-     */
 	public String getFirstname() {
 		return firstname;
 	}
@@ -332,11 +346,6 @@ public class RoomClient {
 		this.firstname = firstname;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="language"
-     *  type="string"
-     */
 	public String getLanguage() {
 		return language;
 	}
@@ -344,11 +353,6 @@ public class RoomClient {
 		this.language = language;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="last_login"
-     *  type="string"
-     */
 	public String getLastLogin() {
 		return lastLogin;
 	}
@@ -356,11 +360,6 @@ public class RoomClient {
 		this.lastLogin = lastLogin;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="lastname"
-     *  type="string"
-     */
 	public String getLastname() {
 		return lastname;
 	}
@@ -368,11 +367,6 @@ public class RoomClient {
 		this.lastname = lastname;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="mail"
-     *  type="string"
-     */
 	public String getMail() {
 		return mail;
 	}
@@ -380,11 +374,6 @@ public class RoomClient {
 		this.mail = mail;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="official_code"
-     *  type="string"
-     */
 	public String getOfficial_code() {
 		return official_code;
 	}
@@ -392,11 +381,6 @@ public class RoomClient {
 		this.official_code = official_code;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="picture_uri"
-     *  type="string"
-     */
 	public String getPicture_uri() {
 		return picture_uri;
 	}
@@ -404,11 +388,6 @@ public class RoomClient {
 		this.picture_uri = picture_uri;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -416,11 +395,6 @@ public class RoomClient {
 		this.user_id = user_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="room_id"
-     *  type="long"
-     */
 	public Long getRoom_id() {
 		return room_id;
 	}
@@ -428,11 +402,6 @@ public class RoomClient {
 		this.room_id = room_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="room_enter"
-     *  type="java.util.Date"
-     */
 	public Date getRoomEnter() {
 		return roomEnter;
 	}
@@ -440,11 +409,6 @@ public class RoomClient {
 		this.roomEnter = roomEnter;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="is_chat_notification"
-     *  type="boolean"
-     */
 	public Boolean getIsChatNotification() {
 		return isChatNotification;
 	}
@@ -452,11 +416,6 @@ public class RoomClient {
 		this.isChatNotification = isChatNotification;
 	} 
 
-	/**
-     * @hibernate.property
-     *  column="chat_user_room_id"
-     *  type="long"
-     */
 	public Long getChatUserRoomId() {
 		return chatUserRoomId;
 	}
@@ -464,11 +423,6 @@ public class RoomClient {
 		this.chatUserRoomId = chatUserRoomId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="is_recording"
-     *  type="boolean"
-     */
 	public Boolean getIsRecording() {
 		return isRecording;
 	}
@@ -476,11 +430,6 @@ public class RoomClient {
 		this.isRecording = isRecording;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="room_recording_name"
-     *  type="string"
-     */
 	public String getRoomRecordingName() {
 		return roomRecordingName;
 	}
@@ -488,11 +437,6 @@ public class RoomClient {
 		this.roomRecordingName = roomRecordingName;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="avsettings"
-     *  type="string"
-     */
 	public String getAvsettings() {
 		return avsettings;
 	}
@@ -500,11 +444,6 @@ public class RoomClient {
 		this.avsettings = avsettings;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="broadcast_id"
-     *  type="long"
-     */
 	public long getBroadCastID() {
 		return broadCastID;
 	}
@@ -512,11 +451,6 @@ public class RoomClient {
 		this.broadCastID = broadCastID;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="public_sid"
-     *  type="string"
-     */
 	public String getPublicSID() {
 		return publicSID;
 	}
@@ -524,11 +458,6 @@ public class RoomClient {
 		this.publicSID = publicSID;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="zombieCheckFlag"
-     *  type="boolean"
-     */
 	public Boolean getZombieCheckFlag() {
 		return zombieCheckFlag;
 	}
@@ -536,11 +465,6 @@ public class RoomClient {
 		this.zombieCheckFlag = zombieCheckFlag;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="canDraw"
-     *  type="boolean"
-     */
 	public Boolean getCanDraw() {
 		return canDraw;
 	}
@@ -548,11 +472,6 @@ public class RoomClient {
 		this.canDraw = canDraw;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="isBroadcasting"
-     *  type="boolean"
-     */
 	public Boolean getIsBroadcasting() {
 		return isBroadcasting;
 	}

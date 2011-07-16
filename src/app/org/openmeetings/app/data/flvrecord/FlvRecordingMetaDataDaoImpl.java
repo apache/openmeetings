@@ -3,10 +3,10 @@ package org.openmeetings.app.data.flvrecord;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -34,19 +34,22 @@ public class FlvRecordingMetaDataDaoImpl {
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingMetaDataId", flvRecordingMetaDataId);
+			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
 			
-			FlvRecordingMetaData flvRecordingMetaData = (FlvRecordingMetaData) query.uniqueResult();
+			FlvRecordingMetaData flvRecordingMetaData = null;
+			try {
+				flvRecordingMetaData = (FlvRecordingMetaData) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaData;
 			
-		} catch (HibernateException ex) {
-			log.error("[getFlvRecordingMetaDataById]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataById]: ",ex2);
 		}
@@ -58,23 +61,22 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			String hql = "SELECT c FROM FlvRecordingMetaData c " +
 					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
-					"AND c.deleted != :deleted ";
+					"AND c.deleted <> :deleted ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingId", flvRecordingId);
-			query.setString("deleted", "true");
+			query.setParameter("flvRecordingId", flvRecordingId);
+			query.setParameter("deleted", "true");
 			
-			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.list();
+			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaDatas;
 			
-		} catch (HibernateException ex) {
-			log.error("[getFlvRecordingMetaDataByRecording]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataByRecording]: ",ex2);
 		}
@@ -93,19 +95,18 @@ public class FlvRecordingMetaDataDaoImpl {
 					")";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingId", flvRecordingId);
+			query.setParameter("flvRecordingId", flvRecordingId);
 			
-			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.list();
+			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaDatas;
 			
-		} catch (HibernateException ex) {
-			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ",ex2);
 		}
@@ -120,12 +121,13 @@ public class FlvRecordingMetaDataDaoImpl {
 					"AND c.isScreenData = true";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingId", flvRecordingId);
+			query.setParameter("flvRecordingId", flvRecordingId);
 			
-			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.list();
+			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -134,8 +136,6 @@ public class FlvRecordingMetaDataDaoImpl {
 				return flvRecordingMetaDatas.get(0);
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getFlvRecordingMetaDataScreenFlvByRecording]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataScreenFlvByRecording]: ",ex2);
 		}
@@ -166,18 +166,18 @@ public class FlvRecordingMetaDataDaoImpl {
 			flvRecordingMetaData.setInteriewPodId(interiewPodId);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long flvRecordingMetaDataId = (Long) session.save(flvRecordingMetaData);
+			flvRecordingMetaData = session.merge(flvRecordingMetaData);
+			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaDataId;
 			
-		} catch (HibernateException ex) {
-			log.error("[addFlvRecordingMetaData]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addFlvRecordingMetaData]: ",ex2);
 		}
@@ -188,18 +188,18 @@ public class FlvRecordingMetaDataDaoImpl {
 		try {
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
-			Long flvRecordingMetaDataId = (Long) session.save(flvRecordingMetaData);
+			flvRecordingMetaData = session.merge(flvRecordingMetaData);
+			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return flvRecordingMetaDataId;
 
-		} catch (HibernateException ex) {
-			log.error("[addFlvRecordingMetaDataObj]: ", ex);
 		} catch (Exception ex2) {
 			log.error("[addFlvRecordingMetaDataObj]: ", ex2);
 		}
@@ -221,8 +221,6 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			return flvRecordingMetaDataId;
 			
-		} catch (HibernateException ex) {
-			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex2);
 		}
@@ -241,8 +239,6 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			return flvRecordingMetaDataId;
 			
-		} catch (HibernateException ex) {
-			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex2);
 		}
@@ -253,16 +249,21 @@ public class FlvRecordingMetaDataDaoImpl {
 		try { 
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(flvRecordingMetaData);
+			if (flvRecordingMetaData.getFlvRecordingMetaDataId() == 0) {
+				session.persist(flvRecordingMetaData);
+			    } else {
+			    	if (!session.contains(flvRecordingMetaData)) {
+			    		session.merge(flvRecordingMetaData);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[updateFlvRecordingMetaData]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFlvRecordingMetaData]: ",ex2);
 		}

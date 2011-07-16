@@ -1,38 +1,78 @@
 package org.openmeetings.app.hibernate.beans.flvrecord;
 
+import java.io.Serializable;
 import java.util.Date;
 
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 /**
  * 
  * @hibernate.class table="flvrecording_metadata"
  * lazy="false"
  *
  */
-public class FlvRecordingMetaData {
+@Entity
+@Table(name = "flvrecording_metadata")
+public class FlvRecordingMetaData implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8444176152324513716L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="flvrecording_metadata_id")
 	private long flvRecordingMetaDataId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="flvrecording_id", nullable=true)
 	private FlvRecording flvRecording;
 	
+	@Column(name="record_start")
 	private Date recordStart;
+	@Column(name="record_end")
 	private Date recordEnd;
+	@Column(name="stream_name")
 	private String streamName;
 	
+	@Column(name="free_text_user_name")
 	private String freeTextUserName;
+	@Column(name="is_audio_only")
 	private Boolean isAudioOnly;
+	@Column(name="is_video_only")
 	private Boolean isVideoOnly;
+	@Column(name="is_screen_data")
 	private Boolean isScreenData;
 
+	@Column(name="inserted_by")
 	private Long insertedBy;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
+	@Column(name="deleted")
 	private String deleted;
 	
+	@Column(name="wav_audio_data")
 	private String wavAudioData;
+	@Column(name="full_wav_audio_data")
 	private String fullWavAudioData;
 	
+	@Column(name="audio_is_valid")
 	private Boolean audioIsValid;
 	
+	@Column(name="interiew_pod_id")
 	private Integer interiewPodId;
+	@Column(name="initial_gap_seconds")
 	private Integer initialGapSeconds;
 	
 	/**

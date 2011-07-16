@@ -1,36 +1,46 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="configuration"
- *
- */
-public class Configuration {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "configuration")
+public class Configuration implements Serializable {
 	
+	private static final long serialVersionUID = -6129473946508963339L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="configuration_id")
 	private Long configuration_id;
+	@Column(name="conf_key")
 	private String conf_key;
+	@Column(name="conf_value")
 	private String conf_value;	
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="comment_field")
 	private String comment;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="user_id")
 	private Long user_id;
-	
+
+	@Transient
 	private Users users;
 	
-	public Configuration() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-    
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */  
     public String getComment() {
         return comment;
     }
@@ -38,11 +48,6 @@ public class Configuration {
         this.comment = comment;
     }
     
-    /**
-     * @hibernate.property
-     *  column="conf_key"
-     *  type="string"
-     */     
     public String getConf_key() {
         return conf_key;
     }
@@ -50,11 +55,6 @@ public class Configuration {
         this.conf_key = conf_key;
     }
     
-    /**
-     * @hibernate.property
-     *  column="conf_value"
-     *  type="string"
-     */     
     public String getConf_value() {
         return conf_value;
     }
@@ -62,12 +62,6 @@ public class Configuration {
         this.conf_value = conf_value;
     }
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="configuration_id"
-     *  generator-class="increment"
-     */     
     public Long getConfiguration_id() {
         return configuration_id;
     }
@@ -75,11 +69,6 @@ public class Configuration {
         this.configuration_id = configuration_id;
     }
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -87,11 +76,6 @@ public class Configuration {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -99,11 +83,6 @@ public class Configuration {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -111,11 +90,6 @@ public class Configuration {
 		this.deleted = deleted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */	
     public Long getUser_id() {
 		return user_id;
 	}
@@ -124,21 +98,12 @@ public class Configuration {
 		this.user_id = user_id;
 	}
 
-	//    /**
-//     * @hibernate.many-to-one
-//     *  cascade="none"
-//     *  column="user_id"
-//     *  lazy="false"
-//     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-//     *  not-null="false"
-//     *  outer-join="true"
-//     */     
-    public Users getUsers() {
-        return users;
-    }
-    public void setUsers(Users users) {
-        this.users = users;
-    }
+ public Users getUsers() {
+     return users;
+ }
+ public void setUsers(Users users) {
+     this.users = users;
+ }
 
 	
 }

@@ -10,13 +10,15 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Order;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.beans.rooms.*;
@@ -65,14 +67,15 @@ public class Roommanagement {
 			rtype.setStarttime(new Date());
 			rtype.setDeleted("false");
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long returnId = (Long) session.save(rtype);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			rtype = session.merge(rtype);
+			session.flush();
+			long returnId = rtype.getRoomtypes_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return returnId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomType] ",ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomType] ",ex2);
 		}
@@ -83,14 +86,14 @@ public class Roommanagement {
 		try {
 			room.setStarttime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long returnId = (Long) session.save(room);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			room = session.merge(room);
+			long returnId = room.getRooms_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return returnId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomType] ",ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomType] ",ex2);
 		}
@@ -105,17 +108,16 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Query query = session.createQuery("select c from RoomTypes as c where c.deleted != :deleted");
-				query.setString("deleted", "true");
-				List<RoomTypes> ll = query.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				Query query = session.createQuery("select c from RoomTypes as c where c.deleted <> :deleted");
+				query.setParameter("deleted", "true");
+				List<RoomTypes> ll = query.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getAllRoomTypes] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getAllRoomTypes] ", ex2);
 		}
@@ -130,19 +132,18 @@ public class Roommanagement {
 	public RoomTypes getRoomTypesById(long roomtypes_id){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted != :deleted");
-			query.setLong("roomtypes_id",roomtypes_id);
-			query.setString("deleted", "true");
-			List ll = query.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted");
+			query.setParameter("roomtypes_id",roomtypes_id);
+			query.setParameter("deleted", "true");
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (ll.size()>0){
 				return (RoomTypes) ll.get(0);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomTypesById] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomTypesById] ", ex2);
 		}
@@ -204,16 +205,17 @@ public class Roommanagement {
 				return null;
 			}
 			
-			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted != :deleted";
+			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted <> :deleted";
 			Rooms room = null;
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("rooms_id", rooms_id);
-			query.setString("deleted", "true");
-			List ll = query.list();
+			query.setParameter("rooms_id", rooms_id);
+			query.setParameter("deleted", "true");
+			List ll = query.getResultList();
 			if (ll.size()>0){
 				room = (Rooms) ll.get(0);
 				session.flush();
@@ -229,8 +231,6 @@ public class Roommanagement {
 			else{
 				log.error("Could not find room " + rooms_id);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomById] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomById] ", ex2);
 		}
@@ -247,16 +247,17 @@ public class Roommanagement {
                 try {
                         String hql = "select c from Rooms as c JOIN c.roomtype as rt " + 
 					"where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType " + 
-					"AND rt.roomtypes_id = :roomtypes_id AND c.deleted != :deleted";
+					"AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted";
                         Object idf = HibernateUtil.createSession();
-                        Session session = HibernateUtil.getSession();
-                        Transaction tx = session.beginTransaction();
+                        EntityManager session = HibernateUtil.getSession();
+                        EntityTransaction tx = session.getTransaction();
+                        tx.begin();
                         Query query = session.createQuery(hql);
-                        query.setLong("externalRoomId", externalRoomId);
-			query.setString("externalRoomType", externalRoomType);
-			query.setLong("roomtypes_id", roomtypes_id);
-                        query.setString("deleted", "true");
-                        List ll = query.list();
+                        query.setParameter("externalRoomId", externalRoomId);
+                        query.setParameter("externalRoomType", externalRoomType);
+                        query.setParameter("roomtypes_id", roomtypes_id);
+                        query.setParameter("deleted", "true");
+                        List ll = query.getResultList();
                         tx.commit();
                         HibernateUtil.closeSession(idf);
                         if (ll.size()>0){
@@ -265,8 +266,6 @@ public class Roommanagement {
                         else{
                                 log.error("Could not find room " + externalRoomId);
                         }
-                } catch (HibernateException ex) {
-                        log.error("[getRoomByExternalId] ", ex);
                 } catch (Exception ex2) {
                         log.error("[getRoomByExternalId] ", ex2);
                 }
@@ -297,8 +296,6 @@ public class Roommanagement {
 				sResult.setResult(this.getRoomsInternatlByHQL(start, max, orderby, asc, search));
 				return sResult;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
@@ -329,8 +326,6 @@ public class Roommanagement {
 				sResult.setResult(rooms);
 				return sResult;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
@@ -358,8 +353,6 @@ public class Roommanagement {
 				return rooms;
 				
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
@@ -387,8 +380,6 @@ public class Roommanagement {
 				return rooms;
 				
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
@@ -398,7 +389,7 @@ public class Roommanagement {
 	public Long selectMaxFromRooms(String search){
 		try {
 			String hql = "select count(c.rooms_id) from Rooms c " +
-						"where c.deleted != 'true' " +
+						"where c.deleted <> 'true' " +
 						"AND c.name LIKE :search ";
 			
 			if (search.length() == 0) {
@@ -409,17 +400,16 @@ public class Roommanagement {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setString("search", search);
-			List ll = query.list();
+			query.setParameter("search", search);
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.debug("err"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromRooms] ", ex2);
 		}
@@ -438,20 +428,27 @@ public class Roommanagement {
 	public List<Rooms> getRoomsInternatl(int start, int max, String orderby, boolean asc){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms.class);
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			crit.add(Restrictions.ne("deleted", "true"));
-			if (asc) crit.addOrder(Order.asc(orderby));
-			else crit.addOrder(Order.desc(orderby));
-			List<Rooms> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
+			Root<Rooms> c = cq.from(Rooms.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			cq.distinct(asc);
+			if (asc){
+				cq.orderBy(cb.asc(c.get(orderby)));
+			} else {
+				cq.orderBy(cb.desc(c.get(orderby)));
+			}
+			TypedQuery<Rooms> q = session.createQuery(cq);
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<Rooms> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRooms ] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms ] ", ex2);
 		}
@@ -471,7 +468,7 @@ public class Roommanagement {
 		try {
 			
 			String hql = "select c from Rooms c " +
-					"where c.deleted != 'true' " +
+					"where c.deleted <> 'true' " +
 					"AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
@@ -489,27 +486,19 @@ public class Roommanagement {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			
-//			Criteria crit = session.createCriteria(Rooms.class);
-//			crit.setFirstResult(start);
-//			crit.setMaxResults(max);
-//			crit.add(Restrictions.ne("deleted", "true"));
-//			if (asc) crit.addOrder(Order.asc(orderby));
-//			else crit.addOrder(Order.desc(orderby));
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql); 
-			query.setString("search", search);
+			query.setParameter("search", search);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			
-			List<Rooms> ll = query.list();
+			List<Rooms> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRooms ] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms ] ", ex2);
 		}
@@ -519,16 +508,19 @@ public class Roommanagement {
 	public List<Rooms> getAllRooms(){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms.class);
-			crit.add(Restrictions.ne("deleted", "true"));
-			List<Rooms> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
+			Root<Rooms> c = cq.from(Rooms.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			TypedQuery<Rooms> q = session.createQuery(cq);
+			List<Rooms> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRooms]", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms]", ex2);
 		}
@@ -538,21 +530,28 @@ public class Roommanagement {
 	public List<Rooms> getRoomsInternatlbyType(int start, int max, String orderby, boolean asc, String externalRoomType){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms.class);
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			crit.add(Restrictions.eq("externalRoomType", externalRoomType));
-			crit.add(Restrictions.ne("deleted", "true"));
-			if (asc) crit.addOrder(Order.asc(orderby));
-			else crit.addOrder(Order.desc(orderby));
-			List<Rooms> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
+			Root<Rooms> c = cq.from(Rooms.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate subCondition = cb.equal(c.get("externalRoomType"), externalRoomType);
+			cq.where(condition, subCondition);
+			cq.distinct(asc);
+			if (asc){
+				cq.orderBy(cb.asc(c.get(orderby)));
+			} else {
+				cq.orderBy(cb.desc(c.get(orderby)));
+			}
+			TypedQuery<Rooms> q = session.createQuery(cq);
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<Rooms> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRooms ] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRooms ] ", ex2);
 		}
@@ -563,19 +562,21 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Rooms_Organisation.class);
-				crit.add(Restrictions.ne("deleted", "true"));
-				Criteria subcrit = crit.createCriteria("room");
-				subcrit.add(Restrictions.eq("rooms_id", rooms_id));
-				List<Rooms_Organisation> ll = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				String hql = "select c from Rooms_Organisation as c " +
+				"where c.room.rooms_id = :rooms_id " +
+				"AND c.deleted <> :deleted";
+				Query q = session.createQuery(hql);
+				
+				q.setParameter("rooms_id", rooms_id);
+				q.setParameter("deleted", "true");
+				List<Rooms_Organisation> ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationsByRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationsByRoom] ", ex2);
 		}
@@ -594,32 +595,25 @@ public class Roommanagement {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				log.error("### getPublicRooms: create Query "+roomtypes_id);
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class);
-//				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
-//				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
-//				crit.add(Restrictions.eq("ispublic", true));
-//				crit.add(Restrictions.ne("deleted", "true"));			
-//				List ll = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				String queryString = "SELECT r from Rooms r " +
 						"JOIN r.roomtype as rt " +
 						"WHERE " +
 						"r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id";
 				Query q = session.createQuery(queryString);
 				//
-				q.setBoolean("ispublic", true);
-				q.setString("deleted", "false");
-				q.setLong("roomtypes_id", new Long(roomtypes_id));
+				q.setParameter("ispublic", true);
+				q.setParameter("deleted", "false");
+				q.setParameter("roomtypes_id", new Long(roomtypes_id));
 				
-				List ll = q.list();
+				List ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.error("### getPublicRooms: size Room List "+ll.size());
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -644,7 +638,7 @@ public class Roommanagement {
 				if (i != 0) {
 					queryString += " OR ";
 				}
-				queryString += " rooms_id = " + room_id;
+				queryString += " r.rooms_id = " + room_id;
 				i++;
 			}
 			
@@ -653,12 +647,13 @@ public class Roommanagement {
 			log.error("### getPublicRooms: create Query "+queryString);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query q = session.createQuery(queryString);
 			
-			List ll = q.list();
+			List ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -667,8 +662,6 @@ public class Roommanagement {
 			return ll;
 			
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByIds] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByIds] ", ex2);
 		}
@@ -679,39 +672,29 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				
 				session.flush();
-				session.clear();
-				
-//				Criteria crit = session.createCriteria(Rooms.class, ScopeApplicationAdapter.webAppRootKey);
-//				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
-//				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
-//				crit.add(Restrictions.eq("ispublic", true));
-//				crit.add(Restrictions.ne("deleted", "true"));			
-//				List ll = crit.list();
 				
 				String queryString = "SELECT r from Rooms r " +
 						"WHERE " +
-						"r.ispublic = :ispublic and r.deleted != :deleted " +
+						"r.ispublic = :ispublic and r.deleted <> :deleted " +
 						"ORDER BY r.name ASC";
 				
 				Query q = session.createQuery(queryString);
 				
-				q.setBoolean("ispublic", true);
-				q.setString("deleted", "true");
+				q.setParameter("ispublic", true);
+				q.setParameter("deleted", "true");
 				
-				List<Rooms> ll = q.list();
+				List<Rooms> ll = q.getResultList();
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.error("### getPublicRooms: size Room List "+ll.size());
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getPublicRoomsWithoutType] ", ex);
-			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
 			ex2.printStackTrace();
@@ -729,8 +712,9 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				
 				String queryString = "SELECT r from Rooms r " +
 						"JOIN r.roomtype as rt " +
@@ -738,17 +722,15 @@ public class Roommanagement {
 						"r.deleted=:deleted and r.appointment=:appointed";
 				Query q = session.createQuery(queryString);
 				//
-				q.setBoolean("appointed", true);
-				q.setString("deleted", "false");
+				q.setParameter("appointed", true);
+				q.setParameter("deleted", "false");
 				
-				List ll = q.list();
+				List ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getAppointedMeetings] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointedMeetings] ", ex2);
 		}
@@ -768,31 +750,24 @@ public class Roommanagement {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				//log.error("### getPublicRooms: create Query "+roomtypes_id);
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-//				Criteria crit = session.createCriteria(Rooms.class);
-//				Criteria subcriteriaRoomType = crit.createCriteria("roomtype");
-//				subcriteriaRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
-//				crit.add(Restrictions.eq("ispublic", true));
-//				crit.add(Restrictions.ne("deleted", "true"));			
-//				List ll = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				String queryString = "SELECT r from Rooms r " +
 						"JOIN r.roomtype as rt " +
 						"WHERE " +
 						"r.ispublic=:ispublic and r.deleted=:deleted";
 				Query q = session.createQuery(queryString);
 				//
-				q.setBoolean("ispublic", true);
-				q.setString("deleted", "false");
+				q.setParameter("ispublic", true);
+				q.setParameter("deleted", "false");
 				
-				List ll = q.list();
+				List ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.error("### getPublicRooms: size Room List "+ll.size());
 				return ll;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -869,11 +844,12 @@ public class Roommanagement {
 				}
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long returnId = (Long) session.save(r);
-				
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				r = session.merge(r);
 				session.flush();
+				long returnId = r.getRooms_id();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -888,8 +864,6 @@ public class Roommanagement {
 				
 				return returnId;
 			}
-		} catch (HibernateException ex) {
-			log.error("[addRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[addRoom] ", ex2);
 		}
@@ -927,9 +901,11 @@ public class Roommanagement {
 				
 				r.setDeleted("false");
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long returnId = (Long) session.save(r);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				r = session.merge(r);
+				long returnId = r.getRooms_id();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -941,8 +917,6 @@ public class Roommanagement {
 				
 				return returnId;
 			}
-		} catch (HibernateException ex) {
-			log.error("[addRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[addRoom] ", ex2);
 		}
@@ -1007,11 +981,13 @@ public class Roommanagement {
 					r.setAllowRecording(allowRecording);
 
                     Object idf = HibernateUtil.createSession();
-                    Session session = HibernateUtil.getSession();
-                    Transaction tx = session.beginTransaction();
-                    long returnId = (Long) session.save(r);
+                    EntityManager session = HibernateUtil.getSession();
+                    EntityTransaction tx = session.getTransaction();
+                    tx.begin();
+                    r = session.merge(r);
 
                     session.flush();
+                    long returnId = r.getRooms_id();
                     tx.commit();
                     HibernateUtil.closeSession(idf);
 
@@ -1025,8 +1001,6 @@ public class Roommanagement {
                     }
 
                     return returnId;
-                } catch (HibernateException ex) {
-                        log.error("[addExternalRoom] ", ex);
                 } catch (Exception ex2) {
                         log.error("[addExternalRoom] ", ex2);
                 }
@@ -1051,15 +1025,16 @@ public class Roommanagement {
 				rOrganisation.setDeleted("false");
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long returnId = (Long) session.save(rOrganisation);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				rOrganisation = session.merge(rOrganisation);
+				session.flush();
+				long returnId = rOrganisation.getRooms_organisation_id();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return returnId;
 			}
-		} catch (HibernateException ex) {
-			log.error("[addRoomToOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomToOrganisation] ", ex2);
 		}
@@ -1072,15 +1047,15 @@ public class Roommanagement {
 			rOrganisation.setStarttime(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long returnId = (Long) session.save(rOrganisation);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			rOrganisation = session.merge(rOrganisation);
+			long returnId = rOrganisation.getRooms_organisation_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return returnId;
 				
-		} catch (HibernateException ex) {
-			log.error("[addRoomOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomOrganisation] ", ex2);
 		}
@@ -1095,20 +1070,23 @@ public class Roommanagement {
 	public Rooms_Organisation getRoomsOrganisationById(long rooms_organisation_id){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			crit.add(Restrictions.eq("rooms_organisation_id", rooms_organisation_id));
-			List ll = crit.list();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms_Organisation> cq = cb.createQuery(Rooms_Organisation.class);
+			Root<Rooms_Organisation> c = cq.from(Rooms_Organisation.class);
+			Predicate condition = cb.equal(c.get("rooms_organisation_id"), rooms_organisation_id);
+			cq.where(condition);
+			TypedQuery<Rooms_Organisation> q = session.createQuery(cq);
+			List<Rooms_Organisation> ll = q.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (ll.size()>0){
 				return (Rooms_Organisation)ll.get(0);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1126,17 +1104,19 @@ public class Roommanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				String hql = "select c from Rooms_Organisation as c " +
+				"where c.room.roomtypes_id = :roomtypes_id " +
+				"AND c.organisation.organisation_id = :organisation_id " +
+				"AND c.deleted <> :deleted";
+				Query q = session.createQuery(hql);
 				
-				Criteria crit = session.createCriteria(Rooms_Organisation.class);
-				Criteria subcrit = crit.createCriteria("organisation");
-				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-				Criteria subcritRoom = crit.createCriteria("room");
-				Criteria subCritRoomType = subcritRoom.createCriteria("roomtype");
-				subCritRoomType.add(Restrictions.eq("roomtypes_id", roomtypes_id));
-				crit.add(Restrictions.eq("deleted", "false"));
-				List ll = crit.list();
+				q.setParameter("roomtypes_id", roomtypes_id);
+				q.setParameter("organisation_id", organisation_id);
+				q.setParameter("deleted", "true");
+				List<Rooms_Organisation> ll = q.getResultList();
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
@@ -1145,8 +1125,6 @@ public class Roommanagement {
 			} else {
 				log.error("[notauthentificated] "+ user_level);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1165,29 +1143,23 @@ public class Roommanagement {
 				
 				String hql = "SELECT c FROM Rooms_Organisation c " +
 						"WHERE c.organisation.organisation_id = :organisation_id " +
-						"AND c.deleted != :deleted AND c.room.deleted != :deleted " +
-						"AND c.organisation.deleted != :deleted " +
+						"AND c.deleted <> :deleted AND c.room.deleted <> :deleted " +
+						"AND c.organisation.deleted <> :deleted " +
 						"ORDER BY c.room.name ASC";
 				
-				Session session = HibernateUtil.getSession();
+				EntityManager session = HibernateUtil.getSession();
 				
-				Transaction tx = session.beginTransaction();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				
 				session.flush();
-				session.clear();
 				
 				Query query = session.createQuery(hql);
 				
-				query.setLong("organisation_id", organisation_id);
-				query.setString("deleted", "true");
+				query.setParameter("organisation_id", organisation_id);
+				query.setParameter("deleted", "true");
 				
-				List<Rooms_Organisation> ll = query.list();
-				
-//				Criteria crit = session.createCriteria(Rooms_Organisation.class);
-//				Criteria subcrit = crit.createCriteria("organisation");
-//				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-//				crit.add(Restrictions.ne("deleted", "true"));
-//				List<Rooms_Organisation> ll = crit.list();
+				List<Rooms_Organisation> ll = query.getResultList();
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
@@ -1196,9 +1168,6 @@ public class Roommanagement {
 			} else {
 				log.error("[notauthentificated] "+ user_level);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getPublicRoomsWithoutType] ", ex);
-			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
 			ex2.printStackTrace();
@@ -1216,8 +1185,6 @@ public class Roommanagement {
 				sResult.setResult(this.getRoomsOrganisationByOrganisationId(organisation_id, start, max, orderby, asc));
 				return sResult;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1228,19 +1195,21 @@ public class Roommanagement {
 		try {
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			Criteria subcrit = crit.createCriteria("organisation");
-			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-			crit.add(Restrictions.ne("deleted", "true"));
-			List ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			String hql = "select c from Rooms_Organisation as c " +
+			"where c.organisation.organisation_id = :organisation_id " +
+			"AND c.deleted <> :deleted";
+			Query q = session.createQuery(hql);
+			
+			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("deleted", "true");
+			List<Rooms_Organisation> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return ll.size();			
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromRooms] ", ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromRooms] ", ex2);
 		}
@@ -1259,23 +1228,35 @@ public class Roommanagement {
 	private List getRoomsOrganisationByOrganisationId(long organisation_id, int start, int max, String orderby, boolean asc){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			String hql = "select c from Rooms_Organisation as c " +
+			"where c.organisation.organisation_id = :organisation_id " +
+			"AND c.deleted <> :deleted";
+			if (orderby.startsWith("c.")){
+				hql += "ORDER BY "+orderby;
+			} else {
+				hql += "ORDER BY " + "c." + orderby;
+			}
+			if (asc) {
+				hql += " ASC";
+			} else {
+				hql += " DESC";
+			}
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			Criteria subcrit = crit.createCriteria("organisation");
-			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-			crit.add(Restrictions.ne("deleted", "true"));
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			List ll = crit.list();
+			Query q = session.createQuery(hql);
+			
+			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("deleted", "true");
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<Rooms_Organisation> ll = q.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1285,24 +1266,25 @@ public class Roommanagement {
 	private Rooms_Organisation getRoomsOrganisationByOrganisationIdAndRoomId(long organisation_id, long rooms_id){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			String hql = "select c from Rooms_Organisation as c " +
+			"where c.room.rooms_id = :rooms_id " +
+			"AND c.organisation.organisation_id = :organisation_id " +
+			"AND c.deleted <> :deleted";
+			Query q = session.createQuery(hql);
 			
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			Criteria subcrit = crit.createCriteria("organisation");
-			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-			Criteria subcrit2 = crit.createCriteria("room");
-			subcrit2.add(Restrictions.eq("rooms_id", rooms_id));				
-			crit.add(Restrictions.ne("deleted", "true"));
-			List ll = crit.list();
+			q.setParameter("rooms_id", rooms_id);
+			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("deleted", "true");
+			List<Rooms_Organisation> ll = q.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (ll.size()>0){
 				return (Rooms_Organisation)ll.get(0);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomsOrganisationByOrganisationIdAndRoomId] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsOrganisationByOrganisationIdAndRoomId] ", ex2);
 		}
@@ -1317,18 +1299,20 @@ public class Roommanagement {
 	public List getRoomsOrganisationByRoomsId(long rooms_id){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			Criteria subcrit = crit.createCriteria("room");
-			subcrit.add(Restrictions.eq("rooms_id", rooms_id));
-			crit.add(Restrictions.ne("deleted", "true"));
-			List ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			String hql = "select c from Rooms_Organisation as c " +
+			"where c.room.rooms_id = :rooms_id " +
+			"AND c.deleted <> :deleted";
+			Query q = session.createQuery(hql);
+			
+			q.setParameter("rooms_id", rooms_id);
+			q.setParameter("deleted", "true");
+			List<Rooms_Organisation> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1338,15 +1322,17 @@ public class Roommanagement {
 	public List<Rooms_Organisation> getRoomsOrganisations(){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Rooms_Organisation.class);
-			List<Rooms_Organisation> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms_Organisation> cq = cb.createQuery(Rooms_Organisation.class);
+			Root<Rooms_Organisation> c = cq.from(Rooms_Organisation.class);
+			TypedQuery<Rooms_Organisation> q = session.createQuery(cq);
+			List<Rooms_Organisation> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getRoomsByOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -1377,8 +1363,6 @@ public class Roommanagement {
 				}
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[checkUserOrgRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[checkUserOrgRoom] ", ex2);
 		}
@@ -1410,15 +1394,20 @@ public class Roommanagement {
 					r.setRoomtype(this.getRoomTypesById(roomtypes_id));
 					r.setUpdatetime(new Date());
 					Object idf = HibernateUtil.createSession();
-					Session session = HibernateUtil.getSession();
-					Transaction tx = session.beginTransaction();
-					session.update(r);
+					EntityManager session = HibernateUtil.getSession();
+					EntityTransaction tx = session.getTransaction();
+					tx.begin();
+					if (r.getRooms_id() == null) {
+						session.persist(r);
+					    } else {
+					    	if (!session.contains(r)) {
+					    		session.merge(r);
+					    }
+					}
 					tx.commit();
 					HibernateUtil.closeSession(idf);
 				}
 			}
-		} catch (HibernateException ex) {
-			log.error("[updateRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoom] ", ex2);
 		}
@@ -1465,8 +1454,6 @@ public class Roommanagement {
 				
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[updateRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoom] ", ex2);
 		}
@@ -1522,12 +1509,18 @@ public class Roommanagement {
 			r.setAllowRecording(allowRecording);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(r);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (r.getRooms_id() == null) {
+				session.persist(r);
+			    } else {
+			    	if (!session.contains(r)) {
+			    		r = session.merge(r);
+			    }
+			}
 			
 			session.flush();
-			session.clear();
 			
 			session.refresh(r);
 			
@@ -1543,8 +1536,6 @@ public class Roommanagement {
 			}
 			
 			return r.getRooms_id();
-		} catch (HibernateException ex) {
-			log.error("[updateRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoom] ", ex2);
 		}
@@ -1580,9 +1571,16 @@ public class Roommanagement {
 				r.setIsModeratedRoom(isModeratedRoom);
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(r);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (r.getRooms_id() == null) {
+					session.persist(r);
+				    } else {
+				    	if (!session.contains(r)) {
+				    		session.merge(r);
+				    }
+				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -1594,8 +1592,6 @@ public class Roommanagement {
 				
 				return r.getRooms_id();
 			}
-		} catch (HibernateException ex) {
-			log.error("[updateRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoom] ", ex2);
 		}
@@ -1662,8 +1658,6 @@ public class Roommanagement {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
 				return this.deleteRoom(this.getRoomById(rooms_id));
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteRoomById] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomById] ", ex2);
 		}
@@ -1680,14 +1674,19 @@ public class Roommanagement {
 			r.setDeleted("true");
 			r.setUpdatetime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(r);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (r.getRooms_id() == null) {
+				session.persist(r);
+			    } else {
+			    	if (!session.contains(r)) {
+			    		session.merge(r);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return r.getRooms_id();
-		} catch (HibernateException ex) {
-			log.error("[deleteRoomsOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomsOrganisation] ", ex2);
 		}
@@ -1705,8 +1704,6 @@ public class Roommanagement {
 				Rooms_Organisation rOrg = (Rooms_Organisation) it.next();
 				this.deleteRoomsOrganisation(rOrg);
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteAllRoomsOrganisationOfRoom] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteAllRoomsOrganisationOfRoom] ", ex2);
 		}
@@ -1723,8 +1720,6 @@ public class Roommanagement {
 				Rooms_Organisation rOrg = (Rooms_Organisation) it.next();
 				this.deleteRoomsOrganisation(rOrg);
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteAllRoomsOfOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteAllRoomsOfOrganisation] ", ex2);
 		}
@@ -1738,8 +1733,6 @@ public class Roommanagement {
 		try {
 			Rooms_Organisation rOrg = this.getRoomsOrganisationById(rooms_organisation_id);
 			return this.deleteRoomsOrganisation(rOrg);
-		} catch (HibernateException ex) {
-			log.error("[deleteRoomsOrganisationByID] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomsOrganisationByID] ", ex2);
 		}
@@ -1750,8 +1743,6 @@ public class Roommanagement {
 		try {
 			Rooms_Organisation rOrganisation = this.getRoomsOrganisationByOrganisationIdAndRoomId(organisation_id, rooms_id);
 			return this.deleteRoomsOrganisation(rOrganisation);
-		} catch (HibernateException ex) {
-			log.error("[deleteRoomFromOrganisationByRoomAndOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomFromOrganisationByRoomAndOrganisation] ", ex2);
 		}
@@ -1767,14 +1758,19 @@ public class Roommanagement {
 			rOrg.setDeleted("true");
 			rOrg.setUpdatetime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(rOrg);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (rOrg.getRooms_organisation_id() == null) {
+				session.persist(rOrg);
+			    } else {
+			    	if (!session.contains(rOrg)) {
+			    		session.merge(rOrg);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return rOrg.getRooms_organisation_id();
-		} catch (HibernateException ex) {
-			log.error("[deleteRoomsOrganisation] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomsOrganisation] ", ex2);
 		}
@@ -1791,9 +1787,16 @@ public class Roommanagement {
 		
 		try{
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(room);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (room.getRooms_id() == null) {
+				session.persist(room);
+			    } else {
+			    	if (!session.contains(room)) {
+			    		session.merge(room);
+			    }
+			}
 			session.flush();
 			session.refresh(room);
 			tx.commit();
@@ -1834,18 +1837,19 @@ public class Roommanagement {
 			String hql = "select c from Rooms as c " +
 					"where c.ownerId = :ownerId " +
 					"AND c.roomtype.roomtypes_id = :roomtypesId " +
-					"AND c.deleted != :deleted";
-			
+					"AND c.deleted <> :deleted";
+					
 			Rooms room = null;
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("ownerId", ownerId);
-			query.setLong("roomtypesId", roomtypesId);
-			query.setString("deleted", "true");
-			List ll = query.list();
+			query.setParameter("ownerId", ownerId);
+			query.setParameter("roomtypesId", roomtypesId);
+			query.setParameter("deleted", "true");
+			List ll = query.getResultList();
 			if (ll.size()>0){
 				room = (Rooms) ll.get(0);
 				session.flush();
@@ -1887,8 +1891,6 @@ public class Roommanagement {
 					return this.getRoomById(rooms_id);
 				}
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRoomByOwnerAndTypeId] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomByOwnerAndTypeId] ", ex2);
 		}

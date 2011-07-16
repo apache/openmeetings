@@ -1,29 +1,27 @@
 package org.openmeetings.app.data.basic;
 
-import java.util.Iterator;
 import java.util.Date;
 import java.util.List;
 import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.Configuration;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.mappings.CastMapToObject;
 
 public class Configurationmanagement {
@@ -48,13 +46,14 @@ public class Configurationmanagement {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				Configuration configuration = null;
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				Query query = session.createQuery("select c from Configuration as c where c.conf_key = :conf_key and c.deleted = :deleted");
-				query.setString("conf_key", CONF_KEY);
-				query.setString("deleted", "false");
+				query.setParameter("conf_key", CONF_KEY);
+				query.setParameter("deleted", "false");
 				
-				List<Configuration> configs = query.list();
+				List<Configuration> configs = query.getResultList();
 				
 				if (configs != null && configs.size() > 0) {
 					configuration = (Configuration) configs.get(0);
@@ -66,8 +65,6 @@ public class Configurationmanagement {
 			} else {
 				log.error("[getAllConf] Permission denied "+user_level);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: " ,ex2);
 		}		
@@ -80,12 +77,16 @@ public class Configurationmanagement {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 				Configuration configuration = null;
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				Query query = session.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id");
-				query.setLong("configuration_id", configuration_id);
+				query.setParameter("configuration_id", configuration_id);
 				query.setMaxResults(1);
-				configuration = (Configuration) query.uniqueResult();
+		        try {
+					configuration = (Configuration) query.getSingleResult();
+		        } catch (NoResultException e) {
+		        }
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.debug("getConfByConfigurationId4: "+configuration);
@@ -97,8 +98,6 @@ public class Configurationmanagement {
 			} else {
 				log.error("[getConfByConfigurationId] Permission denied "+user_level);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getConfByConfigurationId]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[getConfByConfigurationId]: " ,ex2);
 		}		
@@ -116,8 +115,6 @@ public class Configurationmanagement {
 			} else {
 				log.error("[getAllConf] Permission denied "+user_level);
 			}
-		} catch (HibernateException ex) {
-			log.error("[getAllConf]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[getAllConf]: " ,ex2);
 		}		
@@ -127,20 +124,27 @@ public class Configurationmanagement {
 	public List<Configuration> getConfigurations(int start, int max, String orderby, boolean asc) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Configuration.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("deleted", "false"));
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			if (asc) crit.addOrder(Order.asc(orderby));
-			else crit.addOrder(Order.desc(orderby));
-			List ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Configuration> cq = cb.createQuery(Configuration.class);
+			Root<Configuration> c = cq.from(Configuration.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			cq.distinct(asc);
+			if (asc){
+				cq.orderBy(cb.asc(c.get(orderby)));
+			} else {
+				cq.orderBy(cb.desc(c.get(orderby)));
+			}
+			TypedQuery<Configuration> q = session.createQuery(cq);
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<Configuration> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);		
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getConfigurations]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getConfigurations]" ,ex2);
 		}
@@ -157,16 +161,15 @@ public class Configurationmanagement {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'"); 
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.debug("selectMaxFromConfigurations"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromConfigurations] ",ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromConfigurations] ",ex2);
 		}
@@ -186,17 +189,15 @@ public class Configurationmanagement {
 			if (USER_ID!=null) configuration.setUser_id(USER_ID);
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.save(configuration);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				configuration = session.merge(configuration);
 				session.flush();
-				session.clear();
 				session.refresh(configuration);
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				ret = "Erfolgreich";
-			} catch (HibernateException ex) {
-				log.error("[addConfByKey]: " ,ex);
 			} catch (Exception ex2) {
 				log.error("[addConfByKey]: " ,ex2);
 			}
@@ -212,6 +213,7 @@ public class Configurationmanagement {
 				Configuration conf = (Configuration) CastMapToObject.getInstance().castByGivenObject(values, Configuration.class);
 				if (conf.getConfiguration_id().equals(null) || conf.getConfiguration_id() == 0 ){
 					log.info("add new Configuration");
+					conf.setConfiguration_id(null);
 					conf.setStarttime(new Date());
 					conf.setDeleted("false");
 					return this.addConfig(conf);
@@ -230,8 +232,6 @@ public class Configurationmanagement {
 				log.error("[saveOrUpdateConfByConfigurationId] Error: Permission denied");
 				return new Long(-100);
 			}				
-		} catch (HibernateException ex) {
-			log.error("[updateConfByUID]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: " ,ex2);
 		}
@@ -241,14 +241,14 @@ public class Configurationmanagement {
 	public Long addConfig(Configuration conf){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long configuration_id = (Long) session.save(conf);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			conf = session.merge(conf);
+			Long configuration_id = conf.getConfiguration_id(); 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return configuration_id;
-		} catch (HibernateException ex) {
-			log.error("[updateConfByUID]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: " ,ex2);
 		}
@@ -258,14 +258,19 @@ public class Configurationmanagement {
 	public Long updateConfig(Configuration conf){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(conf);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (conf.getConfiguration_id() == null) {
+				session.persist(conf);
+			    } else {
+			    	if (!session.contains(conf)) {
+			    		conf = session.merge(conf);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return conf.getConfiguration_id();
-		} catch (HibernateException ex) {
-			log.error("[updateConfByUID]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: " ,ex2);
 		}
@@ -294,8 +299,6 @@ public class Configurationmanagement {
 				log.error("Error: Permission denied");
 				return new Long(-100);
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteConfByUID]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[deleteConfByUID]: " ,ex2);
 		}		

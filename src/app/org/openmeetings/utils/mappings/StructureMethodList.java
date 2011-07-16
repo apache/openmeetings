@@ -38,45 +38,51 @@ public class StructureMethodList {
 				//log.error("fieldTypeClass Name " + fieldTypeClass.getName() );
 				String capitalizedFieldName = StringUtils.capitalize(fieldName);
 				String setterPre = "set";
-				Method method = targetClass.getMethod(setterPre + capitalizedFieldName, fieldTypeClass);
 				
-				String methodName = method.getName();
-				
-				Class[] paramTypes = method.getParameterTypes();
-				//log.error("parseClassToMethodList methodName: "+methodName);
-				if (methodName.startsWith("set")) {
-					//Found setter get Attribute name
-					if (returnMap.get(fieldName)!=null) {
-						LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
-						methodListMap.put("setter", methodName);
-						methodListMap.put("setterParamTypes", paramTypes);
-					} else {
-						LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
-						methodListMap.put("setter", methodName);
-						returnMap.put(fieldName, methodListMap);
-						methodListMap.put("setterParamTypes", paramTypes);
-					}
-				} else if (methodName.startsWith("is")) {
-					//Found setter(boolean) get Attribute name
-					if (returnMap.get(fieldName)!=null) {
-						LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
-						methodListMap.put("getter", methodName);
-					} else {
-						LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
-						methodListMap.put("getter", methodName);
-						returnMap.put(fieldName, methodListMap);
-					}
-				} else if (methodName.startsWith("get")) {
-					//Found setter(boolean) get Attribute name
-					if (returnMap.get(fieldName)!=null) {
-						LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
-						methodListMap.put("getter", methodName);
-					} else {
-						LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
-						methodListMap.put("getter", methodName);
-						returnMap.put(fieldName, methodListMap);
+				for (Method method : targetClass.getMethods()) {
+					// check that method is declared in current class. 
+					if(method.getName().equals(setterPre + capitalizedFieldName)){
+						String methodName = method.getName();
+						
+						Class[] paramTypes = method.getParameterTypes();
+						//log.error("parseClassToMethodList methodName: "+methodName);
+						if (methodName.startsWith("set")) {
+							//Found setter get Attribute name
+							if (returnMap.get(fieldName)!=null) {
+								LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
+								methodListMap.put("setter", methodName);
+								methodListMap.put("setterParamTypes", paramTypes);
+							} else {
+								LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
+								methodListMap.put("setter", methodName);
+								returnMap.put(fieldName, methodListMap);
+								methodListMap.put("setterParamTypes", paramTypes);
+							}
+						} else if (methodName.startsWith("is")) {
+							//Found setter(boolean) get Attribute name
+							if (returnMap.get(fieldName)!=null) {
+								LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
+								methodListMap.put("getter", methodName);
+							} else {
+								LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
+								methodListMap.put("getter", methodName);
+								returnMap.put(fieldName, methodListMap);
+							}
+						} else if (methodName.startsWith("get")) {
+							//Found setter(boolean) get Attribute name
+							if (returnMap.get(fieldName)!=null) {
+								LinkedHashMap<String,Object> methodListMap = returnMap.get(fieldName);
+								methodListMap.put("getter", methodName);
+							} else {
+								LinkedHashMap<String,Object> methodListMap = new LinkedHashMap<String,Object>();
+								methodListMap.put("getter", methodName);
+								returnMap.put(fieldName, methodListMap);
+							}
+						}
+						break;
 					}
 				}
+				
 				
 			}			
 			

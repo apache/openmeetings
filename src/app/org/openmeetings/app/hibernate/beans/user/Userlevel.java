@@ -1,20 +1,33 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="userlevel"
- * lazy="false"
- *
- */
-public class Userlevel {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "userlevel")
+public class Userlevel implements Serializable {
 	
+	private static final long serialVersionUID = -1779037202328443340L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="level_id")
 	private Long level_id;
+	@Column(name="description")
 	private String description;
+	@Column(name="statuscode")
 	private Integer statuscode;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
 	
 	public Userlevel() {
@@ -22,11 +35,6 @@ public class Userlevel {
 		// TODO Auto-generated constructor stub
 	}
 
-    /**
-     * @hibernate.property
-     *  column="description"
-     *  type="string"
-     */ 
 	public String getDescription() {
 		return description;
 	}
@@ -34,12 +42,6 @@ public class Userlevel {
 		this.description = description;
 	}
 
-    /**
-     * 
-     * @hibernate.id
-     *  column="level_id"
-     *  generator-class="increment"
-     */  
 	public Long getLevel_id() {
 		return level_id;
 	}
@@ -48,11 +50,6 @@ public class Userlevel {
 	}
     
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -60,11 +57,6 @@ public class Userlevel {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -72,11 +64,6 @@ public class Userlevel {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -84,11 +71,6 @@ public class Userlevel {
 		this.deleted = deleted;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="statuscode"
-     *  type="int"
-     */  
 	public Integer getStatuscode() {
 		return statuscode;
 	}

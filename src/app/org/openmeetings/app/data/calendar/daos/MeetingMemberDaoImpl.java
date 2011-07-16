@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
@@ -37,23 +38,26 @@ public class MeetingMemberDaoImpl {
 			log.debug("getMeetingMemberById: "+ meetingMemberId);
 			
 			String hql = "select app from MeetingMember app " +
-					"WHERE app.deleted != :deleted " +
+					"WHERE app.deleted <> :deleted " +
 					"AND app.meetingMemberId = :meetingMemberId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setBoolean("deleted", true);
-			query.setLong("meetingMemberId",meetingMemberId);
+			query.setParameter("deleted", true);
+			query.setParameter("meetingMemberId",meetingMemberId);
 			
-			MeetingMember meetingMember = (MeetingMember) query.uniqueResult();
+			MeetingMember meetingMember = null;
+			try {
+				meetingMember = (MeetingMember) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return meetingMember;
-		} catch (HibernateException ex) {
-			log.error("[getMeetingMemberById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getMeetingMemberById]: " , ex2);
 		}
@@ -65,17 +69,16 @@ public class MeetingMemberDaoImpl {
 			String hql = "select app from MeetingMember app";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			List<MeetingMember> meetingMembers = query.list();
+			List<MeetingMember> meetingMembers = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return meetingMembers;
-		} catch (HibernateException ex) {
-			log.error("[getMeetingMembers]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getMeetingMembers]: " , ex2);
 		}
@@ -87,23 +90,22 @@ public class MeetingMemberDaoImpl {
 			log.debug("getMeetingMemberByAppointmentId: "+ appointmentId);
 			
 			String hql = "select app from MeetingMember app " +
-					"WHERE app.deleted != :deleted " +
-					"AND app.appointment = :appointmentId";
+					"WHERE app.deleted <> :deleted " +
+					"AND app.appointment.appointmentId = :appointmentId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setBoolean("deleted", true);
-			query.setLong("appointmentId",appointmentId);
+			query.setParameter("deleted", true);
+			query.setParameter("appointmentId",appointmentId);
 			
-			List<MeetingMember> listmeetingMember = query.list();
+			List<MeetingMember> listmeetingMember = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return listmeetingMember;
-		} catch (HibernateException ex) {
-			log.error("[getMeetingMemberByAppointmentId]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getMeetingMemberByAppointmentId]: " , ex2);
 		}
@@ -134,15 +136,16 @@ public class MeetingMemberDaoImpl {
 			//"AND (a.terminstatus != 4 AND a.terminstatus != 5)";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setDate("starttime", starttime);
-			query.setDate("endtime", endtime);
-			query.setLong("userid",userId);
+			query.setParameter("deleted", "true");
+			query.setParameter("starttime", starttime);
+			query.setParameter("endtime", endtime);
+			query.setParameter("userid",userId);
 			
-			List<MeetingMember> listAppoints = query.list();
+			List<MeetingMember> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -164,14 +167,20 @@ public class MeetingMemberDaoImpl {
 		if (meetingMember.getMeetingMemberId() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(meetingMember);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (meetingMember.getMeetingMemberId() == null) {
+					session.persist(meetingMember);
+				    } else {
+				    	if (!session.contains(meetingMember)) {
+				    		meetingMember = session.merge(meetingMember);
+				    }
+				}
+				session.flush();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return meetingMember;
-			} catch (HibernateException ex) {
-				log.error("[updateMeetingMember] ",ex);
 			} catch (Exception ex2) {
 				log.error("[updateMeetingMember] ",ex2);
 			}
@@ -209,17 +218,23 @@ public class MeetingMemberDaoImpl {
 			
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(gm);
+			if (gm.getMeetingMemberId() == null) {
+				session.persist(gm);
+			    } else {
+			    	if (!session.contains(gm)) {
+			    		gm = session.merge(gm);
+			    }
+			}
 
+			session.flush();
 			tx.commit();
+			meetingMemberId = gm.getMeetingMemberId();
 			HibernateUtil.closeSession(idf);
-			
 			return meetingMemberId;
-		} catch (HibernateException ex) {
-			log.error("[updateMeetingMember]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateMeetingMember]: ",ex2);
 		}
@@ -249,17 +264,18 @@ public class MeetingMemberDaoImpl {
 			gm.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 						
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long group_member_id = (Long)session.save(gm);
-
+			gm = session.merge(gm);
+			session.flush();
+			Long group_member_id = gm.getMeetingMemberId();
+			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return group_member_id;
-		} catch (HibernateException ex) {
-			log.error("[addMeetingMember]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addMeetingMember]: ",ex2);
 		}
@@ -270,17 +286,18 @@ public class MeetingMemberDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long group_member_id = (Long)session.save(gm);
+			gm = session.merge(gm);
+			session.flush();
+			Long group_member_id = gm.getMeetingMemberId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return group_member_id;
-		} catch (HibernateException ex) {
-			log.error("[addMeetingMember]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addMeetingMember]: ",ex2);
 		}
@@ -304,15 +321,20 @@ public class MeetingMemberDaoImpl {
 			gm.setDeleted(true);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(gm);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (gm.getMeetingMemberId() == null) {
+				session.persist(gm);
+			    } else {
+			    	if (!session.contains(gm)) {
+			    		session.merge(gm);
+			    }
+			}
 						
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return meetingMemberId;
-		} catch (HibernateException ex) {
-			log.error("[deleteMeetingMember]: ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteMeetingMember]: ", ex2);
 		}

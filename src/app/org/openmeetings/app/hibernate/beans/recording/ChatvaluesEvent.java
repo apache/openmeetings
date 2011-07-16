@@ -1,27 +1,48 @@
 package org.openmeetings.app.hibernate.beans.recording;
 
-/**
- * 
- * @hibernate.class table="recording_chatvaluesevent"
- *
- */
-public class ChatvaluesEvent {
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+
+
+@Entity
+@Table(name = "recording_chatvaluesevent")
+public class ChatvaluesEvent implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3651904977310257437L;
 	//see WhiteboardEvent for Documentation, Comments
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="recording_chatvaluesevent_id")
 	private Long chatvaluesEventId;
+	@Column(name="starttime")
 	private Long starttime;
+	@Lob
+	@Column(name="action")
 	private String action;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="roomrecording_id", updatable=true, insertable=true)
 	private RoomRecording roomRecording;
 	
 	//this is only Filled if send to client
+	@Transient
 	private Object actionObj;
 
-	/**
-     * 
-     * @hibernate.id
-     *  column="recording_chatvaluesevent_id"
-     *  generator-class="increment"
-     */
 	public Long getChatvaluesEventId() {
 		return chatvaluesEventId;
 	}
@@ -29,11 +50,6 @@ public class ChatvaluesEvent {
 		this.chatvaluesEventId = chatvaluesEventId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="long"
-     */
 	public Long getStarttime() {
 		return starttime;
 	}
@@ -41,11 +57,6 @@ public class ChatvaluesEvent {
 		this.starttime = starttime;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="action"
-     *  type="text"
-     */
 	public String getAction() {
 		return action;
 	}
@@ -53,15 +64,6 @@ public class ChatvaluesEvent {
 		this.action = action;
 	}
 
-	/**
-	 * @hibernate.many-to-one
-	 * column = "roomrecording_id"
-	 * class = "org.openmeetings.app.hibernate.beans.recording.RoomRecording"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="no-proxy"
-     */
 	public RoomRecording getRoomRecording() {
 		return roomRecording;
 	}

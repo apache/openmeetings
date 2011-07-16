@@ -1,28 +1,40 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="om_timezone"
- *
- */
-public class OmTimeZone {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "om_timezone")
+public class OmTimeZone implements Serializable {
 	
+	private static final long serialVersionUID = 6521571695782900198L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="om_timezone_id")
 	private Long omtimezoneId;
+	@Column(name="jname")
 	private String jname;
+	@Column(name="label")
 	private String label;
+	@Column(name="ical")
 	private String ical;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="order_id")
 	public Integer orderId;
+	@Transient
 	public String frontEndLabel;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="om_timezone_id"
-     *  generator-class="increment"
-     */
 	public Long getOmtimezoneId() {
 		return omtimezoneId;
 	}
@@ -30,11 +42,6 @@ public class OmTimeZone {
 		this.omtimezoneId = omtimezoneId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="jname"
-     *  type="string"
-     */
 	public String getJname() {
 		return jname;
 	}
@@ -42,11 +49,6 @@ public class OmTimeZone {
 		this.jname = jname;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="label"
-     *  type="string"
-     */
 	public String getLabel() {
 		return label;
 	}
@@ -54,11 +56,6 @@ public class OmTimeZone {
 		this.label = label;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="ical"
-     *  type="string"
-     */
 	public String getIcal() {
 		return ical;
 	}
@@ -66,11 +63,6 @@ public class OmTimeZone {
 		this.ical = ical;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */
 	public Date getInserted() {
 		return inserted;
 	}
@@ -79,11 +71,6 @@ public class OmTimeZone {
 		this.inserted = inserted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="order_id"
-     *  type="int"
-     */
 	public Integer getOrderId() {
 		return orderId;
 	}

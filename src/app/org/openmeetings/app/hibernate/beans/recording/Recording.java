@@ -1,45 +1,75 @@
 package org.openmeetings.app.hibernate.beans.recording;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.LinkedHashMap;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="recording"
- * lazy="false"
- *
- */
-public class Recording {
+@Entity
+@Table(name = "recording")
+public class Recording implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5069803825408408918L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="recording_id")
 	private Long recording_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="duration")
 	private Long duration;	
+	@Lob
+	@Column(name="xmlString")
 	private String xmlString;
+	@Column(name="comment_field")
 	private String comment;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="rooms")
 	private Rooms rooms;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="roomrecordingId")
 	private RoomRecording roomRecording;
 	
+	@Transient
 	private String starttimeAsString;
 	//this ID is not mapped as it can be null (Invited Users)
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="recordedby")
 	private Users recordedby = null;
 	
+	@Column(name="whiteboardconverted")
 	private Boolean whiteBoardConverted;
 
 	//set through Logic not through Hibernate
+	@Transient
 	private RecordingConversionJob recordingConversionJob;
 	
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
 	public String getComment() {
 		return comment;
 	}
@@ -47,11 +77,6 @@ public class Recording {
 		this.comment = comment;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */	
 	public String getName() {
 		return name;
 	}
@@ -59,12 +84,6 @@ public class Recording {
 		this.name = name;
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="recording_id"
-     *  generator-class="increment"
-     */ 
     public Long getRecording_id() {
 		return recording_id;
 	}
@@ -72,15 +91,6 @@ public class Recording {
 		this.recording_id = recording_id;
 	}
     
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="rooms"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Rooms getRooms() {
 		return rooms;
 	}
@@ -88,11 +98,6 @@ public class Recording {
 		this.rooms = rooms;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -100,11 +105,6 @@ public class Recording {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -112,11 +112,6 @@ public class Recording {
 		this.updatetime = updatetime;
 	}	
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -124,11 +119,6 @@ public class Recording {
 		this.deleted = deleted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="duration"
-     *  type="long"
-     */		
 	public Long getDuration() {
 		return duration;
 	}
@@ -136,11 +126,6 @@ public class Recording {
 		this.duration = duration;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="xmlString"
-     *  type="text"
-     */		
 	public String getXmlString() {
 		return xmlString;
 	}
@@ -148,15 +133,6 @@ public class Recording {
 		this.xmlString = xmlString;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="roomrecordingId"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.recording.RoomRecording"
-     *  not-null="false"
-     *  outer-join="true"
-     */	
 	public RoomRecording getRoomRecording() {
 		return roomRecording;
 	}
@@ -171,15 +147,6 @@ public class Recording {
 		this.starttimeAsString = starttimeAsString;
 	}
 	
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="recordedby"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */		
 	public Users getRecordedby() {
 		return recordedby;
 	}
@@ -187,11 +154,6 @@ public class Recording {
 		this.recordedby = recordedby;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="whiteboardconverted"
-     *  type="boolean"
-     */
 	public Boolean getWhiteBoardConverted() {
 		return whiteBoardConverted;
 	}

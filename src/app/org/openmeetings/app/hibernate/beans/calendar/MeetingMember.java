@@ -1,48 +1,73 @@
 package org.openmeetings.app.hibernate.beans.calendar;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.invitation.Invitations;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="meeting_members"
- * lazy="false"
- *
- */
 
-public class MeetingMember {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "meeting_members")
+public class MeetingMember implements Serializable {
 	
+	private static final long serialVersionUID = -3864571325368787524L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="meeting_member_id")
 	private Long meetingMemberId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id", nullable=true)
 	private Users userid;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="appointment_id", nullable=true)
 	private Appointment appointment;
+	@Column(name="firstname")
 	private String firstname;
+	@Column(name="lastname")
 	private String lastname;
+	@Column(name="member_status")
 	private String memberStatus; // internal, external.
+	@Column(name="appointment_status")
 	private String appointmentStatus; //status of the appointment denial, acceptance, wait. 
+	@Column(name="email")
 	private String email;
 			
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private Boolean deleted;
+	@Column(name="comment_field")
 	private String comment;
+	@Column(name="invitor")
 	private Boolean invitor;
 	
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="invitation", nullable=true, insertable=false)
 	private Invitations invitation;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="omtimezoneId", nullable=true, insertable=false)
 	private OmTimeZone omTimeZone;
 	
+	@Column(name="is_connected_event")
 	private Boolean isConnectedEvent;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="meeting_member_id"
-     *  generator-class="increment"
-     */  
 	public Long getMeetingMemberId() {
 		return meetingMemberId;
 	}
@@ -50,15 +75,6 @@ public class MeetingMember {
 		this.meetingMemberId = groupMemberId;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getUserid() {
 		return userid;
 	}
@@ -66,11 +82,6 @@ public class MeetingMember {
 		this.userid = userid;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="email"
-     *  type="string"
-     */ 
 	public String getEmail() {
 		return email;
 	}
@@ -78,11 +89,6 @@ public class MeetingMember {
 		this.email = email;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="firstname"
-     *  type="string"
-     */ 
 	public String getFirstname() {
 		return firstname;
 	}
@@ -90,11 +96,6 @@ public class MeetingMember {
 		this.firstname = firstname;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="lastname"
-     *  type="string"
-     */ 
 	public String getLastname() {
 		return lastname;
 	}
@@ -102,11 +103,6 @@ public class MeetingMember {
 		this.lastname = lastname;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="member_status"
-     *  type="string"
-     */ 
 	public String getMemberStatus() {
 		return memberStatus;
 	}
@@ -114,11 +110,6 @@ public class MeetingMember {
 		this.memberStatus = memberStatus;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="appointment_status"
-     *  type="string"
-     */ 
    public String getAppointmentStatus() {
 		return appointmentStatus;
 	}
@@ -127,15 +118,6 @@ public class MeetingMember {
 	}
 	
 	
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="appointment_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.calendar.Appointment"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Appointment getAppointment() {
 		return appointment;
 	}
@@ -144,27 +126,12 @@ public class MeetingMember {
 	}
 	
 	
-	/**
-	 * 
-	 * @hibernate.many-to-one
-	 * cascade="none"
-	 * column="invitation"
-	 * lazy="false"
-	 * class="org.openmeetings.app.hibernate.beans.invitation.Invitations"
-	 * not-null="false"
-	 * outer-join="true"
-	 */
 	public Invitations getInvitation() {
 		return invitation;
 	}
 	public void setInvitation(Invitations invitation) {
 		this.invitation = invitation;
 	}
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */ 
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -172,11 +139,6 @@ public class MeetingMember {
 		this.starttime = starttime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */ 
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -184,11 +146,6 @@ public class MeetingMember {
 		this.updatetime = updatetime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="boolean"
-     */ 
 	public Boolean getDeleted() {
 		return deleted;
 	}
@@ -196,11 +153,6 @@ public class MeetingMember {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
 	public String getComment() {
 		return comment;
 	}
@@ -208,11 +160,6 @@ public class MeetingMember {
 		this.comment = comment;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="invitor"
-     *  type="boolean"
-     */ 
 	public Boolean getInvitor() {
 		return invitor;
 	}
@@ -220,15 +167,6 @@ public class MeetingMember {
 		this.invitor = invitor;
 	}
 
-	/**
-	 * @hibernate.many-to-one
-	 * column = "omtimezoneId"
-	 * class = "org.openmeetings.app.hibernate.beans.basic.OmTimeZone"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */
 	public OmTimeZone getOmTimeZone() {
 		return omTimeZone;
 	}
@@ -236,11 +174,6 @@ public class MeetingMember {
 		this.omTimeZone = omTimeZone;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_connected_event"
-     *  type="boolean"
-     */ 
 	public Boolean getIsConnectedEvent() {
 		return isConnectedEvent;
 	}

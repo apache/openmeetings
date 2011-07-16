@@ -2,10 +2,11 @@ package org.openmeetings.app.data.record.dao;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.RoomRecording;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -35,18 +36,21 @@ public class RoomRecordingDaoImpl {
 					"WHERE r.roomrecordingId = :roomrecordingId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("roomrecordingId",roomrecordingId);
+			query.setParameter("roomrecordingId",roomrecordingId);
 			
-			RoomRecording roomRecording = (RoomRecording) query.uniqueResult();
+			RoomRecording roomRecording = null;
+			try {
+				roomRecording = (RoomRecording) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomRecording;
-		} catch (HibernateException ex) {
-			log.error("[getRoomRecordingById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomRecordingById]: " , ex2);
 		}
@@ -71,15 +75,15 @@ public class RoomRecordingDaoImpl {
 			log.debug("roomRecording.getStartedby().getRoomClientId(): "+roomRecording.getStartedby().getRoomClientId());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long roomRecordingId = (Long) session.save(roomRecording);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			roomRecording = session.merge(roomRecording);
+			Long roomRecordingId = roomRecording.getRoomrecordingId();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomRecordingId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomRecording]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomRecording]: " , ex2);
 		}
@@ -90,15 +94,20 @@ public class RoomRecordingDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(roomRecording);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (roomRecording.getRoomrecordingId() == null) {
+				session.persist(roomRecording);
+			    } else {
+			    	if (!session.contains(roomRecording)) {
+			    		session.merge(roomRecording);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[updateRoomRecording]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoomRecording]: " , ex2);
 		}

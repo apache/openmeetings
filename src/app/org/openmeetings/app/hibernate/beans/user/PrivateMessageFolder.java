@@ -1,27 +1,35 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="private_messages_folder"
- * lazy="false"
- *
- */
-public class PrivateMessageFolder {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "private_messages_folder")
+public class PrivateMessageFolder implements Serializable {
 	
+	private static final long serialVersionUID = 3689814412815025816L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="private_message_folder_id")
 	private long privateMessageFolderId;
+	@Column(name="folder_name")
 	private String folderName;
+	@Column(name="user_id")
 	private Long userId;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="private_message_folder_id"
-     *  generator-class="increment"
-     */
 	public long getPrivateMessageFolderId() {
 		return privateMessageFolderId;
 	}
@@ -29,11 +37,6 @@ public class PrivateMessageFolder {
 		this.privateMessageFolderId = privateMessageFolderId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="folder_name"
-     *  type="string"
-     */
 	public String getFolderName() {
 		return folderName;
 	}
@@ -41,11 +44,6 @@ public class PrivateMessageFolder {
 		this.folderName = folderName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */
 	public Long getUserId() {
 		return userId;
 	}
@@ -53,11 +51,6 @@ public class PrivateMessageFolder {
 		this.userId = userId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -65,11 +58,6 @@ public class PrivateMessageFolder {
 		this.inserted = inserted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */
 	public Date getUpdated() {
 		return updated;
 	}

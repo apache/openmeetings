@@ -1,33 +1,47 @@
 package org.openmeetings.app.hibernate.beans.calendar;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="appointmentcategory"
- * lazy="false"
- *
- */
 
-public class AppointmentCategory {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "appointmentcategory")
+public class AppointmentCategory implements Serializable {
 	
+	private static final long serialVersionUID = 595713649933692774L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="category_id")
 	private Long categoryId;
+	@Column(name="name")
 	private String name;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id", nullable=true)
 	private Users user;
 	
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="comment_field")
 	private String comment;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="category_id"
-     *  generator-class="increment"
-     */  
 	public Long getCategoryId() {
 		return categoryId;
 	}
@@ -35,11 +49,6 @@ public class AppointmentCategory {
 		this.categoryId = categoryId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */	
 	public String getName() {
 		return name;
 	}
@@ -47,15 +56,6 @@ public class AppointmentCategory {
 		this.name = name;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getUser() {
 		return user;
 	}
@@ -63,11 +63,6 @@ public class AppointmentCategory {
 		this.user = user;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */    
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -75,11 +70,6 @@ public class AppointmentCategory {
 		this.starttime = starttime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */    
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -87,11 +77,6 @@ public class AppointmentCategory {
 		this.updatetime = updatetime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */    
 	public String getDeleted() {
 		return deleted;
 	}
@@ -99,11 +84,6 @@ public class AppointmentCategory {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */    
 	public String getComment() {
 		return comment;
 	}

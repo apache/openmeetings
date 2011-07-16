@@ -1,45 +1,75 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 
-/**
- * 
- * @hibernate.class table="private_messages"
- * lazy="false"
- *
- */
-public class PrivateMessages {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "private_messages")
+public class PrivateMessages implements Serializable {
 	
+	private static final long serialVersionUID = 7541117437029707792L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="private_message_id")
 	private long privateMessageId;
+	@Column(name="subject")
 	private String subject;
+	@Lob
+	@Column(name="message")
 	private String message;
 	
+	@Column(name="inserted")
 	private Date inserted;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="from_id")
 	private Users from;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="to_id")
 	private Users to;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="owner_id")
 	private Users owner;
 	
+		
+	@Column(name="booked_room")
 	private Boolean bookedRoom;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="rooms_id")
 	private Rooms room;
 	
+	@Column(name="is_read")
 	private Boolean isRead;
 	
+	@Column(name="is_trash")
 	private Boolean isTrash;
 	
+	@Column(name="parent_message_id")
 	private Long parentMessage;
+	@Column(name="private_message_folder_id")
 	private Long privateMessageFolderId;
 	
+	@Column(name="is_contact_request")
 	private Boolean isContactRequest;
+	@Column(name="user_contact_id")
 	private Long userContactId;
 
-	/**
-     * 
-     * @hibernate.id
-     *  column="private_message_id"
-     *  generator-class="increment"
-     */
 	public long getPrivateMessageId() {
 		return privateMessageId;
 	}
@@ -47,11 +77,6 @@ public class PrivateMessages {
 		this.privateMessageId = privateMessageId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="subject"
-     *  type="string"
-     */ 
 	public String getSubject() {
 		return subject;
 	}
@@ -59,11 +84,6 @@ public class PrivateMessages {
 		this.subject = subject;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="message"
-     *  type="text"
-     */ 
 	public String getMessage() {
 		return message;
 	}
@@ -71,11 +91,6 @@ public class PrivateMessages {
 		this.message = message;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */
 	public Date getInserted() {
 		return inserted;
 	}
@@ -83,15 +98,6 @@ public class PrivateMessages {
 		this.inserted = inserted;
 	}
 
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="from_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getFrom() {
 		return from;
 	}
@@ -99,15 +105,6 @@ public class PrivateMessages {
 		this.from = from;
 	}
 
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="to_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getTo() {
 		return to;
 	}
@@ -115,15 +112,6 @@ public class PrivateMessages {
 		this.to = to;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="owner_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */
 	public Users getOwner() {
 		return owner;
 	}
@@ -131,11 +119,6 @@ public class PrivateMessages {
 		this.owner = owner;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="booked_room"
-     *  type="boolean"
-     */
 	public Boolean getBookedRoom() {
 		return bookedRoom;
 	}
@@ -143,15 +126,6 @@ public class PrivateMessages {
 		this.bookedRoom = bookedRoom;
 	}
 
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="rooms_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-     *  not-null="false"
-     *  outer-join="true"
-     */
 	public Rooms getRoom() {
 		return room;
 	}
@@ -159,11 +133,6 @@ public class PrivateMessages {
 		this.room = room;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="parent_message_id"
-     *  type="long"
-     */
 	public Long getParentMessage() {
 		return parentMessage;
 	}
@@ -171,11 +140,6 @@ public class PrivateMessages {
 		this.parentMessage = parentMessage;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_trash"
-     *  type="boolean"
-     */
 	public Boolean getIsTrash() {
 		return isTrash;
 	}
@@ -183,11 +147,6 @@ public class PrivateMessages {
 		this.isTrash = isTrash;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="private_message_folder_id"
-     *  type="long"
-     */
 	public Long getPrivateMessageFolderId() {
 		return privateMessageFolderId;
 	}
@@ -195,11 +154,6 @@ public class PrivateMessages {
 		this.privateMessageFolderId = privateMessageFolderId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_read"
-     *  type="boolean"
-     */
 	public Boolean getIsRead() {
 		return isRead;
 	}
@@ -207,11 +161,6 @@ public class PrivateMessages {
 		this.isRead = isRead;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_contact_request"
-     *  type="boolean"
-     */
 	public Boolean getIsContactRequest() {
 		return isContactRequest;
 	}
@@ -219,11 +168,6 @@ public class PrivateMessages {
 		this.isContactRequest = isContactRequest;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="user_contact_id"
-     *  type="long"
-     */
 	public Long getUserContactId() {
 		return userContactId;
 	}

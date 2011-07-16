@@ -1,66 +1,117 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 
-/**
- * 
- * @hibernate.class table="users"
- * lazy="false"
- *
- */
-public class Users {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "users")
+public class Users implements Serializable {
 	
+
+	private static final long serialVersionUID = -2265479712596674065L;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Column(name="user_id")
 	private Long user_id;
+	@Column(name="age")
 	private Date age;
+	@Column(name="availible")
 	private Integer availible;
+	@Column(name="firstname")
 	private String firstname;
+	@Column(name="lastlogin")
 	private Date lastlogin;
+	@Column(name="lastname")
 	private String lastname;
+	@Column(name="lasttrans")
 	private Long lasttrans;
+	@Column(name="level_id")
 	private Long level_id;
+	@Column(name="login")
 	private String login;
+	@Column(name="password")
 	private String password;
+	@Column(name="regdate")
 	private Date regdate;
+	@Column(name="status")
 	private Integer status;
+	@Column(name="title_id")
 	private Integer title_id;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="pictureuri")
 	private String pictureuri;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="language_id")
 	private Long language_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="adresses_id", insertable=true, updatable=true)
 	private Adresses adresses;
+	@Column(name="resethash")
 	private String resethash;
+	@Column(name="activatehash")
 	private String activatehash;
 	
+	@Transient
 	private Userlevel userlevel;
 
+	@Transient
 	private Userdata rechnungsaddressen;
+	@Transient
 	private Userdata lieferadressen;
     private Usergroups[] usergroups; 
-    
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
     private Set<Organisation_Users> organisation_users;
     
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="userSipDataId", insertable=true, updatable=true)
     private UserSipData userSipData;
     
     //Vars to simulate external Users
+	@Column(name="externalUserId")
     private Long externalUserId;
+	@Column(name="externalUserType")
     private String externalUserType;
     
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="omtimezoneId", insertable=true, updatable=true)
     private OmTimeZone omTimeZone; //In UTC +/- hours
     
+	@Transient
     private Sessiondata sessionData;
+	@Column(name="forceTimeZoneCheck")
     private Boolean forceTimeZoneCheck;
     
+	@Column(name="user_offers")
     private String userOffers;
+	@Column(name="user_searchs")
     private String userSearchs;
+	@Column(name="show_contact_data")
     private Boolean showContactData;
+	@Column(name="show_contact_data_to_contacts")
     private Boolean showContactDataToContacts;
     
 	public Users() {
@@ -68,12 +119,6 @@ public class Users {
 		// TODO Auto-generated constructor stub
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="user_id"
-     *  generator-class="increment"
-     */ 	
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -81,15 +126,6 @@ public class Users {
 		this.user_id = user_id;
 	}	
 
-    /**
-	 * @hibernate.many-to-one
-	 * column = "adresses_id"
-	 * class = "org.openmeetings.app.hibernate.beans.adresses.Adresses"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */		
 	public Adresses getAdresses() {
 		return adresses;
 	}
@@ -97,11 +133,6 @@ public class Users {
 		this.adresses = adresses;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="age"
-     *  type="java.util.Date"
-     */  
 	public Date getAge() {
 		return age;
 	}
@@ -111,11 +142,6 @@ public class Users {
 		this.age = age;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="availible"
-     *  type="int"
-     */  
 	public Integer getAvailible() {
 		return availible;
 	}
@@ -123,11 +149,6 @@ public class Users {
 		this.availible = availible;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="firstname"
-     *  type="string"
-     */ 	
 	public String getFirstname() {
 		return firstname;
 	}
@@ -135,11 +156,6 @@ public class Users {
 		this.firstname = firstname;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="lastlogin"
-     *  type="java.util.Date"
-     */ 
 	public Date getLastlogin() {
 		return lastlogin;
 	}
@@ -147,11 +163,6 @@ public class Users {
 		this.lastlogin = lastlogin;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="lastname"
-     *  type="string"
-     */ 
 	public String getLastname() {
 		return lastname;
 	}
@@ -159,11 +170,6 @@ public class Users {
 		this.lastname = lastname;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="lasttrans"
-     *  type="long"
-     */ 
 	public Long getLasttrans() {
 		return lasttrans;
 	}
@@ -171,11 +177,6 @@ public class Users {
 		this.lasttrans = lasttrans;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="level_id"
-     *  type="long"
-     */ 
 	public Long getLevel_id() {
 		return level_id;
 	}
@@ -190,11 +191,6 @@ public class Users {
 		this.lieferadressen = lieferadressen;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="login"
-     *  type="string"
-     */ 
 	public String getLogin() {
 		return login;
 	}
@@ -202,11 +198,6 @@ public class Users {
 		this.login = login;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="password"
-     *  type="string"
-     */ 	
 	public String getPassword() {
 		return password;
 	}
@@ -221,11 +212,6 @@ public class Users {
 		this.rechnungsaddressen = rechnungsaddressen;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="regdate"
-     *  type="java.util.Date"
-     */ 
 	public Date getRegdate() {
 		return regdate;
 	}
@@ -233,11 +219,6 @@ public class Users {
 		this.regdate = regdate;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="status"
-     *  type="int"
-     */ 
 	public Integer getStatus() {
 		return status;
 	}
@@ -245,11 +226,6 @@ public class Users {
 		this.status = status;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="title_id"
-     *  type="int"
-     */
 	public Integer getTitle_id() {
 		return title_id;
 	}
@@ -272,11 +248,6 @@ public class Users {
 	}    
     
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -284,11 +255,6 @@ public class Users {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -296,11 +262,6 @@ public class Users {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -308,11 +269,6 @@ public class Users {
 		this.deleted = deleted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="pictureuri"
-     *  type="string"
-     */	
 	public String getPictureuri() {
 		return pictureuri;
 	}
@@ -320,11 +276,6 @@ public class Users {
 		this.pictureuri = pictureuri;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="language_id"
-     *  type="long"
-     */	
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -333,18 +284,6 @@ public class Users {
 	}
 		
 
-    /**
-     * @hibernate.set 
-     * table = "organisation_users" 
-     * inverse = "true" 
-     * where ="deleted = 'false'"
-     * lazy = "false"
-     * cascade = "none"
-     * @hibernate.one-to-many 
-     * class = "org.openmeetings.app.hibernate.beans.domain.Organisation_Users"
-     * @hibernate.key 
-     * column = "user_id"
-     */	
 	public Set<Organisation_Users> getOrganisation_users() {
 		return organisation_users;
 	}
@@ -352,11 +291,6 @@ public class Users {
 		this.organisation_users = organisation_users;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="resethash"
-     *  type="string"
-     */	
 	public String getResethash() {
 		return resethash;
 	}
@@ -364,11 +298,6 @@ public class Users {
 		this.resethash = resethash;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="activatehash"
-     *  type="string"
-     */
 	public String getActivatehash() {
 		return activatehash;
 	}
@@ -376,11 +305,6 @@ public class Users {
 		this.activatehash = activatehash;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="externalUserId"
-     *  type="long"
-     */
 	public Long getExternalUserId() {
 		return externalUserId;
 	}
@@ -388,11 +312,6 @@ public class Users {
 		this.externalUserId = externalUserId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="externalUserType"
-     *  type="string"
-     */
 	public String getExternalUserType() {
 		return externalUserType;
 	}
@@ -408,15 +327,6 @@ public class Users {
 		this.sessionData = sessionData;
 	}
 
-    /**
-	 * @hibernate.many-to-one
-	 * column = "userSipDataId"
-	 * class = "org.openmeetings.app.hibernate.beans.user.UserSipData"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */	
 	public UserSipData getUserSipData() {
 		return userSipData;
 	}
@@ -424,15 +334,6 @@ public class Users {
 		this.userSipData = userSipData;
 	}
 
-	/**
-	 * @hibernate.many-to-one
-	 * column = "omtimezoneId"
-	 * class = "org.openmeetings.app.hibernate.beans.basic.OmTimeZone"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */
 	public OmTimeZone getOmTimeZone() {
 		return omTimeZone;
 	}
@@ -440,11 +341,6 @@ public class Users {
 		this.omTimeZone = omTimeZone;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="forceTimeZoneCheck"
-     *  type="boolean"
-     */
 	public Boolean getForceTimeZoneCheck() {
 		return forceTimeZoneCheck;
 	}
@@ -452,11 +348,6 @@ public class Users {
 		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="user_offers"
-     *  type="string"
-     */
 	public String getUserOffers() {
 		return userOffers;
 	}
@@ -464,11 +355,6 @@ public class Users {
 		this.userOffers = userOffers;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="user_searchs"
-     *  type="string"
-     */
 	public String getUserSearchs() {
 		return userSearchs;
 	}
@@ -476,11 +362,6 @@ public class Users {
 		this.userSearchs = userSearchs;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="show_contact_data"
-     *  type="boolean"
-     */
 	public Boolean getShowContactData() {
 		return showContactData;
 	}
@@ -488,18 +369,12 @@ public class Users {
 		this.showContactData = showContactData;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="show_contact_data_to_contacts"
-     *  type="boolean"
-     */
 	public Boolean getShowContactDataToContacts() {
 		return showContactDataToContacts;
 	}
 	public void setShowContactDataToContacts(Boolean showContactDataToContacts) {
 		this.showContactDataToContacts = showContactDataToContacts;
 	}
-	
 	
 	
 }

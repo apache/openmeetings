@@ -1,35 +1,44 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 
-/**
- * 
- * @hibernate.class table="salutations"
- * lazy="false"
- *
- */
-public class Salutations {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "salutations")
+public class Salutations implements Serializable {
 	
+	private static final long serialVersionUID = -5806449519074435223L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="salutations_id")
 	private Long salutations_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
-	private Fieldlanguagesvalues label;
-	
+	@Transient
+	private Fieldlanguagesvalues label;	
 	public Salutations() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
 	public String getName() {
 		return name;
 	}
@@ -37,12 +46,6 @@ public class Salutations {
 		this.name = name;
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="salutations_id"
-     *  generator-class="increment"
-     */  
 	public Long getSalutations_id() {
 		return salutations_id;
 	}
@@ -51,11 +54,6 @@ public class Salutations {
 	}
 
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -63,11 +61,6 @@ public class Salutations {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -75,11 +68,6 @@ public class Salutations {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -87,11 +75,6 @@ public class Salutations {
 		this.deleted = deleted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="fieldvalues_id"
-     *  type="long"
-     */
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}

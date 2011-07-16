@@ -1,32 +1,60 @@
 package org.openmeetings.app.hibernate.beans.rooms;
 
+import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 
-/**
- * 
- * @hibernate.class table="rooms"
- * lazy="false"
- *
- */
-public class Rooms {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "rooms")
+public class Rooms implements Serializable {
 	
+	private static final long serialVersionUID = -2860312283159251568L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="rooms_id")
 	private Long rooms_id;
+	@Column(name="name")
 	private String name;
+	@Lob //@Basic(fetch=FetchType.LAZY)
+	@Column(name="comment_field")
 	private String comment;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn (name="roomtypes_id")
 	private RoomTypes roomtype;
+	@Column(name = "starttime")
 	private Date starttime;
+	@Column(name = "updatetime")
 	private Date updatetime;
+	@Column(name = "deleted")
 	private String deleted;
+	@Column(name = "ispublic")
 	private Boolean ispublic;
+	@Column(name = "numberOfPartizipants")
 	private Long numberOfPartizipants = new Long(4);
 	
+	@Column(name = "appointMent")
 	private Boolean appointment;
 
 	//Vars to simulate external Rooms
+	@Column(name = "externalRoomId")
 	private Long externalRoomId;
+	@Column(name = "externalRoomType")
 	private String externalRoomType;
 	
 	/**
@@ -51,35 +79,44 @@ public class Rooms {
 //	private Integer filesPanelHeight = new Integer(310);
 //	private Integer filesPanelWidth = new Integer(290);	
 	
+	@Transient
 	private List<RoomClient> currentusers;
 	
+	@Column(name = "isdemoroom")
 	private Boolean isDemoRoom;
+	@Column(name = "demo_time")
 	private Integer demoTime; //In Seconds
 	
 	//If this is true all participants of a meeting have to wait for the moderator to come into the room
+	@Column(name = "ismoderatedroom")
 	private Boolean isModeratedRoom;
 	
+	@Column(name = "allow_user_questions")
 	private Boolean allowUserQuestions;
 	
+	@Column(name = "sip_number")
 	private String sipNumber;
+	@Column(name = "conference_pin")
 	private String conferencePin;
 	
+	@Column(name = "is_audio_only")
 	private Boolean isAudioOnly;
 	
+	@Column(name = "is_closed")
 	private Boolean isClosed;
+	@Column(name = "redirect_url")
 	private String redirectURL;
 	
+	@Column(name = "owner_id")
 	private Long ownerId; //Those are the rooms from the myrooms section
+	@Column(name = "wait_for_recording")
 	private Boolean waitForRecording; //Show warning that user has to start recording
+	@Column(name = "allow_recording")
 	private Boolean allowRecording; //Show or show not the recording option in a conference room
     
+	@Column(name = "hide_top_bar")
 	private Boolean hideTopBar = false;
-	
-    /**
-     * @hibernate.property
-     *  column="comment_field"
-     *  type="text"
-     */ 
+    
 	public String getComment() {
 		return comment;
 	}
@@ -87,11 +124,6 @@ public class Rooms {
 		this.comment = comment;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */	
 	public String getName() {
 		return name;
 	}
@@ -99,12 +131,6 @@ public class Rooms {
 		this.name = name;
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="rooms_id"
-     *  generator-class="increment"
-     */ 
 	public Long getRooms_id() {
 		return rooms_id;
 	}
@@ -112,15 +138,6 @@ public class Rooms {
 		this.rooms_id = rooms_id;
 	}
     
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="roomtypes_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.RoomTypes"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public RoomTypes getRoomtype() {
 		return roomtype;
 	}
@@ -128,11 +145,6 @@ public class Rooms {
 		this.roomtype = roomtype;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -140,11 +152,6 @@ public class Rooms {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -152,11 +159,6 @@ public class Rooms {
 		this.updatetime = updatetime;
 	}	
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -164,11 +166,6 @@ public class Rooms {
 		this.deleted = deleted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="ispublic"
-     *  type="boolean"
-     */	
 	public Boolean getIspublic() {
 		return ispublic;
 	}
@@ -183,11 +180,6 @@ public class Rooms {
 		this.currentusers = currentusers;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="numberOfPartizipants"
-     *  type="long"
-     */	
 	public Long getNumberOfPartizipants() {
 		return numberOfPartizipants;
 	}
@@ -196,191 +188,6 @@ public class Rooms {
 	}
 	
 	
-//	/**
-//     * @hibernate.property
-//     *  column="videopodwidth"
-//     *  type="integer"
-//     */		
-//	public Integer getVideoPodWidth() {
-//		return videoPodWidth;
-//	}
-//	public void setVideoPodWidth(Integer videoPodWidth) {
-//		this.videoPodWidth = videoPodWidth;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="videopodheight"
-//     *  type="integer"
-//     */		
-//	public Integer getVideoPodHeight() {
-//		return videoPodHeight;
-//	}
-//	public void setVideoPodHeight(Integer videoPodHeight) {
-//		this.videoPodHeight = videoPodHeight;
-//	}	
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="videopodxposition"
-//     *  type="integer"
-//     */			
-//	public Integer getVideoPodXPosition() {
-//		return videoPodXPosition;
-//	}
-//	public void setVideoPodXPosition(Integer videoPodXPosition) {
-//		this.videoPodXPosition = videoPodXPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="videopodyposition"
-//     *  type="integer"
-//     */			
-//	public Integer getVideoPodYPosition() {
-//		return videoPodYPosition;
-//	}
-//	public void setVideoPodYPosition(Integer videoPodYPosition) {
-//		this.videoPodYPosition = videoPodYPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="moderationpanelxposition"
-//     *  type="integer"
-//     */		
-//	public Integer getModerationPanelXPosition() {
-//		return moderationPanelXPosition;
-//	}
-//	public void setModerationPanelXPosition(Integer moderationPanelXPosition) {
-//		this.moderationPanelXPosition = moderationPanelXPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="showwhiteboard"
-//     *  type="boolean"
-//     */		
-//	public Boolean getShowWhiteBoard() {
-//		return showWhiteBoard;
-//	}
-//	public void setShowWhiteBoard(Boolean showWhiteBoard) {
-//		this.showWhiteBoard = showWhiteBoard;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="whiteboardpanelxposition"
-//     *  type="integer"
-//     */		
-//	public Integer getWhiteBoardPanelXPosition() {
-//		return whiteBoardPanelXPosition;
-//	}
-//	public void setWhiteBoardPanelXPosition(Integer whiteBoardPanelXPosition) {
-//		this.whiteBoardPanelXPosition = whiteBoardPanelXPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="whiteboardpanelyposition"
-//     *  type="integer"
-//     */		
-//	public Integer getWhiteBoardPanelYPosition() {
-//		return whiteBoardPanelYPosition;
-//	}
-//	public void setWhiteBoardPanelYPosition(Integer whiteBoardPanelYPosition) {
-//		this.whiteBoardPanelYPosition = whiteBoardPanelYPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="whiteboardpanelheight"
-//     *  type="integer"
-//     */		
-//	public Integer getWhiteBoardPanelHeight() {
-//		return whiteBoardPanelHeight;
-//	}
-//	public void setWhiteBoardPanelHeight(Integer whiteBoardPanelHeight) {
-//		this.whiteBoardPanelHeight = whiteBoardPanelHeight;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="whiteboardpanelwidth"
-//     *  type="integer"
-//     */		
-//	public Integer getWhiteBoardPanelWidth() {
-//		return whiteBoardPanelWidth;
-//	}
-//	public void setWhiteBoardPanelWidth(Integer whiteBoardPanelWidth) {
-//		this.whiteBoardPanelWidth = whiteBoardPanelWidth;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="showfilespanel"
-//     *  type="boolean"
-//     */			
-//	public Boolean getShowFilesPanel() {
-//		return showFilesPanel;
-//	}
-//	public void setShowFilesPanel(Boolean showFilesPanel) {
-//		this.showFilesPanel = showFilesPanel;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="filespanelxposition"
-//     *  type="integer"
-//     */		
-//	public Integer getFilesPanelXPosition() {
-//		return filesPanelXPosition;
-//	}
-//	public void setFilesPanelXPosition(Integer filesPanelXPosition) {
-//		this.filesPanelXPosition = filesPanelXPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="filespanelyposition"
-//     *  type="integer"
-//     */		
-//	public Integer getFilesPanelYPosition() {
-//		return filesPanelYPosition;
-//	}
-//	public void setFilesPanelYPosition(Integer filesPanelYPosition) {
-//		this.filesPanelYPosition = filesPanelYPosition;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="filespanelheight"
-//     *  type="integer"
-//     */		
-//	public Integer getFilesPanelHeight() {
-//		return filesPanelHeight;
-//	}
-//	public void setFilesPanelHeight(Integer filesPanelHeight) {
-//		this.filesPanelHeight = filesPanelHeight;
-//	}
-//	
-//	/**
-//     * @hibernate.property
-//     *  column="filespanelwidth"
-//     *  type="integer"
-//     */	
-//	public Integer getFilesPanelWidth() {
-//		return filesPanelWidth;
-//	}
-//	public void setFilesPanelWidth(Integer filesPanelWidth) {
-//		this.filesPanelWidth = filesPanelWidth;
-//	}
-//	
-	/**
-     * @hibernate.property
-     *  column="appointMent"
-     *  type="boolean"
-     */	
 	public Boolean getAppointment() {
 		return appointment;
 	}
@@ -388,11 +195,6 @@ public class Rooms {
 		this.appointment = appointment;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="isdemoroom"
-     *  type="boolean"
-     */	
 	public Boolean getIsDemoRoom() {
 		return isDemoRoom;
 	}
@@ -400,11 +202,6 @@ public class Rooms {
 		this.isDemoRoom = isDemoRoom;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="demo_time"
-     *  type="integer"
-     */
 	public Integer getDemoTime() {
 		return demoTime;
 	}
@@ -412,11 +209,6 @@ public class Rooms {
 		this.demoTime = demoTime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="ismoderatedroom"
-     *  type="boolean"
-     */	
 	public Boolean getIsModeratedRoom() {
 		return isModeratedRoom;
 	}
@@ -424,11 +216,6 @@ public class Rooms {
 		this.isModeratedRoom = isModeratedRoom;
 	}
 
-    /**
- 	 * @hibernate.property
-     *  column="externalRoomId"
-     *  type="long"
-     */
     public Long getExternalRoomId() {
             return externalRoomId;
     }
@@ -436,11 +223,6 @@ public class Rooms {
             this.externalRoomId = externalRoomId;
     }
 
-    /**
-     * @hibernate.property
-     *  column="externalRoomType"
-     *  type="string"
-     */
     public String getExternalRoomType() {
             return externalRoomType;
     }
@@ -448,11 +230,6 @@ public class Rooms {
             this.externalRoomType = externalRoomType;
     }
 	
-	/**
-     * @hibernate.property
-     *  column="allow_user_questions"
-     *  type="boolean"
-     */    
 	public Boolean getAllowUserQuestions() {
 		return allowUserQuestions;
 	}
@@ -460,11 +237,6 @@ public class Rooms {
 		this.allowUserQuestions = allowUserQuestions;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="sip_number"
-     *  type="string"
-     */ 	
 	public String getSipNumber() {
 		return sipNumber;
 	}
@@ -472,11 +244,6 @@ public class Rooms {
 		this.sipNumber = sipNumber;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="conference_pin"
-     *  type="string"
-     */ 	
 	public String getConferencePin() {
 		return conferencePin;
 	}
@@ -484,11 +251,6 @@ public class Rooms {
 		this.conferencePin = conferencePin;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_audio_only"
-     *  type="boolean"
-     */
 	public Boolean getIsAudioOnly() {
 		return isAudioOnly;
 	}
@@ -496,11 +258,6 @@ public class Rooms {
 		this.isAudioOnly = isAudioOnly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_closed"
-     *  type="boolean"
-     */
 	public Boolean getIsClosed() {
 		return isClosed;
 	}
@@ -508,11 +265,6 @@ public class Rooms {
 		this.isClosed = isClosed;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="redirect_url"
-     *  type="string"
-     */	
 	public String getRedirectURL() {
 		return redirectURL;
 	}
@@ -520,11 +272,6 @@ public class Rooms {
 		this.redirectURL = redirectURL;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="owner_id"
-     *  type="long"
-     */
 	public Long getOwnerId() {
 		return ownerId;
 	}
@@ -532,11 +279,6 @@ public class Rooms {
 		this.ownerId = ownerId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="wait_for_recording"
-     *  type="boolean"
-     */
 	public Boolean getWaitForRecording() {
 		return waitForRecording;
 	}
@@ -544,29 +286,20 @@ public class Rooms {
 		this.waitForRecording = waitForRecording;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="allow_recording"
-     *  type="boolean"
-     */
 	public Boolean getAllowRecording() {
 		return allowRecording;
 	}
 	public void setAllowRecording(Boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
-	
-	/**
-     * @hibernate.property
-     *  column="hide_top_bar"
-     *  type="boolean"
-     */
+
 	public Boolean getHideTopBar() {
 		return hideTopBar;
 	}
 	public void setHideTopBar(Boolean hideTopBar) {
 		this.hideTopBar = hideTopBar;
 	}
+	
 	
     
 }

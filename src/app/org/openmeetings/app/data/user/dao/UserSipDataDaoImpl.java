@@ -2,10 +2,10 @@ package org.openmeetings.app.data.user.dao;
 
 import java.util.Date;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.user.UserSipData;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -39,17 +39,20 @@ public class UserSipDataDaoImpl {
 			String hql = "select c from UserSipData as c where c.userSipDataId = :userSipDataId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("userSipDataId", userSipDataId);
-			UserSipData userSipData = (UserSipData) query.uniqueResult();
+			query.setParameter("userSipDataId", userSipDataId);
+			UserSipData userSipData = null;
+			try {
+				userSipData = (UserSipData) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return userSipData;
-		} catch (HibernateException ex) {
-			log.error("getUserSipDataById",ex);
 		} catch (Exception ex2) {
 			log.error("getUserSipDataById",ex2);
 		}
@@ -66,15 +69,15 @@ public class UserSipDataDaoImpl {
 			userSipData.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long userSipDataId = (Long) session.save(userSipData);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			userSipData = session.merge(userSipData);
+			Long userSipDataId = userSipData.getUserSipDataId();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return userSipDataId;
-		} catch (HibernateException ex) {
-			log.error("[addUserSipData] ",ex);
 		} catch (Exception ex2) {
 			log.error("[addUserSipData] ",ex2);
 		}
@@ -91,15 +94,20 @@ public class UserSipDataDaoImpl {
 			userSipData.setUpdated(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(userSipData);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (userSipData.getUserSipDataId() == 0) {
+				session.persist(userSipData);
+			    } else {
+			    	if (!session.contains(userSipData)) {
+			    		session.merge(userSipData);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return userSipData.getUserSipDataId();
-		} catch (HibernateException ex) {
-			log.error("[updateUserSipData] ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateUserSipData] ",ex2);
 		}

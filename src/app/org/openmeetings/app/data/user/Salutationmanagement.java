@@ -6,15 +6,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.Criteria;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.openmeetings.app.hibernate.beans.user.Salutations;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
-import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 
 /**
@@ -45,19 +47,19 @@ public class Salutationmanagement {
 	public Long addUserSalutation(String titelname, long fieldvalues_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Salutations ti = new Salutations();
 			ti.setName(titelname);
 			ti.setDeleted("false");
 			ti.setFieldvalues_id(fieldvalues_id);
 			ti.setStarttime(new Date());
-			Long salutations_id = (Long)session.save(ti);
+			ti = session.merge(ti);
+			Long salutations_id = ti.getSalutations_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return salutations_id;
-		} catch (HibernateException ex) {
-			log.error("[addUserSalutation]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addUserSalutation]" ,ex2);
 		}
@@ -69,13 +71,18 @@ public class Salutationmanagement {
 	 * @param user_level
 	 * @return
 	 */
-	public List getUserSalutations(long language_id){
+	public List<Salutations> getUserSalutations(long language_id){
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Salutations.class, ScopeApplicationAdapter.webAppRootKey);
-			List ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Salutations> cq = cb.createQuery(Salutations.class);
+			Root<Salutations> from = cq.from(Salutations.class);
+			CriteriaQuery<Salutations> select = cq.select(from);
+			TypedQuery<Salutations> q = session.createQuery(select);
+			List<Salutations> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			for (Iterator it4 = ll.iterator(); it4.hasNext();) {
@@ -85,8 +92,6 @@ public class Salutationmanagement {
 			
 			
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[addUserSalutation]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addUserSalutation]" ,ex2);
 		}

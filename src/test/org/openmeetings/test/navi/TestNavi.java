@@ -38,7 +38,7 @@ public class TestNavi extends TestCase {
             for (Iterator it2 = ll.iterator(); it2.hasNext();) {
                 Naviglobal navigl = (Naviglobal) it2.next();
                 System.out.println(navigl.getLabel().getValue());
-                Set s = navigl.getMainnavi();
+                List s = navigl.getMainnavi();
 
                 for (Iterator it3 = s.iterator(); it3.hasNext();) {
                     Navimain navim = (Navimain) it3.next();

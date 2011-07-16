@@ -3,10 +3,12 @@ package org.openmeetings.app.data.user.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.openmeetings.app.data.user.Usermanagement;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
 import org.openmeetings.app.hibernate.beans.user.Users;
@@ -52,10 +54,12 @@ public class PrivateMessagesDaoImpl {
 			privateMessage.setUserContactId(userContactId);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long privateMessageId = (Long) session.save(privateMessage);
+			privateMessage = session.merge(privateMessage);
+			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -71,10 +75,12 @@ public class PrivateMessagesDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long privateMessageId = (Long) session.save(privateMessage);
+			privateMessage = session.merge(privateMessage);
+			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -92,11 +98,12 @@ public class PrivateMessagesDaoImpl {
 			String hql = "select c from PrivateMessages c ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
 			
-			List<PrivateMessages> privateMessages = query.list();
+			List<PrivateMessages> privateMessages = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -115,12 +122,17 @@ public class PrivateMessagesDaoImpl {
 						"where c.privateMessageId = :privateMessageId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("privateMessageId", privateMessageId);
+			query.setParameter("privateMessageId", privateMessageId);
 			
-			PrivateMessages privateMessage = (PrivateMessages) query.uniqueResult();
+			PrivateMessages privateMessage = null;
+			try {
+				privateMessage = (PrivateMessages) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -136,10 +148,17 @@ public class PrivateMessagesDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(privateMessage);
+			if (privateMessage.getPrivateMessageFolderId() == null) {
+				session.persist(privateMessage);
+			    } else {
+			    	if (!session.contains(privateMessage)) {
+			    		session.merge(privateMessage);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -160,25 +179,26 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
+			query.setParameter("toUserId", toUserId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
-			List ll = query.list();
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -202,12 +222,12 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -220,18 +240,19 @@ public class PrivateMessagesDaoImpl {
 			}
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
-			query.setBoolean("isTrash", false);
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("toUserId", toUserId);
+			query.setParameter("isTrash", false);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.list();
+			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -254,26 +275,27 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
-			query.setBoolean("isTrash", false);
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("toUserId", toUserId);
+			query.setParameter("isTrash", false);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -295,12 +317,12 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -313,16 +335,17 @@ public class PrivateMessagesDaoImpl {
 			}
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
-			query.setLong("user_id", user_id);
+			query.setParameter("user_id", user_id);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.list();
+			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -342,24 +365,25 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("user_id", user_id);
+			query.setParameter("user_id", user_id);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -383,12 +407,12 @@ public class PrivateMessagesDaoImpl {
 			
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -401,17 +425,18 @@ public class PrivateMessagesDaoImpl {
 			}
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("toUserId", toUserId);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.list();
+			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -433,25 +458,26 @@ public class PrivateMessagesDaoImpl {
 
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
+			query.setParameter("toUserId", toUserId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
-			List ll = query.list();
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -474,12 +500,12 @@ public class PrivateMessagesDaoImpl {
 
 			if (search.length() != 0) {
 				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE lower(:search) ";
-				hql += "OR lower(c.message) LIKE lower(:search) ";
-				hql += "OR lower(c.from.firstname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.lastname) LIKE lower(:search) ";
-				hql += "OR lower(c.from.login) LIKE lower(:search) ";
-				hql += "OR lower(c.from.adresses.email) LIKE lower(:search) ";
+				hql += "lower(c.subject) LIKE :search ";
+				hql += "OR lower(c.message) LIKE :search ";
+				hql += "OR lower(c.from.firstname) LIKE :search ";
+				hql += "OR lower(c.from.lastname) LIKE :search ";
+				hql += "OR lower(c.from.login) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -496,18 +522,19 @@ public class PrivateMessagesDaoImpl {
 			log.debug("privateMessageFolderId "+privateMessageFolderId);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("toUserId", toUserId);
-			query.setBoolean("isTrash", false);
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("toUserId", toUserId);
+			query.setParameter("isTrash", false);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
-				query.setString("search", "%"+search+"%");
+				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.list();
+			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -527,12 +554,13 @@ public class PrivateMessagesDaoImpl {
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setBoolean("isTrash", isTrash);
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
-			query.setParameterList("privateMessageIds", privateMessageIds);
+			query.setParameter("isTrash", isTrash);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
 			
 			//Refresh the Entities in the Cache as Hibernate will not do it!
@@ -541,9 +569,13 @@ public class PrivateMessagesDaoImpl {
 								"where c.privateMessageId = :privateMessageId ";
 	
 				Query querySel = session.createQuery(hqlSel); 
-				querySel.setLong("privateMessageId", privateMessageId);
+				querySel.setParameter("privateMessageId", privateMessageId);
 				
-				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				PrivateMessages privateMessages = null;
+				try {
+					privateMessages = (PrivateMessages) querySel.getSingleResult();
+			    } catch (NoResultException ex) {
+			    }
 				
 				if (privateMessages != null) {
 					session.refresh(privateMessages);
@@ -577,11 +609,12 @@ public class PrivateMessagesDaoImpl {
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setBoolean("isRead", isRead);
-			query.setParameterList("privateMessageIds", privateMessageIds);
+			query.setParameter("isRead", isRead);
+			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
 			
 			//Refresh the Entities in the Cache as Hibernate will not do it!
@@ -590,9 +623,13 @@ public class PrivateMessagesDaoImpl {
 								"where c.privateMessageId = :privateMessageId ";
 	
 				Query querySel = session.createQuery(hqlSel); 
-				querySel.setLong("privateMessageId", privateMessageId);
+				querySel.setParameter("privateMessageId", privateMessageId);
 				
-				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				PrivateMessages privateMessages = null;
+				try {
+					privateMessages = (PrivateMessages) querySel.getSingleResult();
+			    } catch (NoResultException ex) {
+			    }
 				
 				if (privateMessages != null) {
 					session.refresh(privateMessages);
@@ -616,11 +653,12 @@ public class PrivateMessagesDaoImpl {
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("privateMessageFolderId", privateMessageFolderId);
-			query.setParameterList("privateMessageIds", privateMessageIds);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
+			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
 			
 			//Refresh the Entities in the Cache as Hibernate will not do it!
@@ -629,9 +667,13 @@ public class PrivateMessagesDaoImpl {
 								"where c.privateMessageId = :privateMessageId ";
 	
 				Query querySel = session.createQuery(hqlSel); 
-				querySel.setLong("privateMessageId", privateMessageId);
+				querySel.setParameter("privateMessageId", privateMessageId);
 				
-				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
+				PrivateMessages privateMessages = null;
+				try {
+					privateMessages = (PrivateMessages) querySel.getSingleResult();
+			    } catch (NoResultException ex) {
+			    }
 				
 				if (privateMessages != null) {
 					session.refresh(privateMessages);
@@ -654,10 +696,11 @@ public class PrivateMessagesDaoImpl {
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setParameterList("privateMessageIds", privateMessageIds);
+			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
 			
 //			//Refresh the Entities in the Cache as Hibernate will not do it!
@@ -666,7 +709,7 @@ public class PrivateMessagesDaoImpl {
 //								"where c.privateMessageId = :privateMessageId ";
 //	
 //				Query querySel = session.createQuery(hqlSel); 
-//				querySel.setLong("privateMessageId", privateMessageId);
+//				querySel.setParameter("privateMessageId", privateMessageId);
 //				
 //				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
 //				
@@ -692,11 +735,12 @@ public class PrivateMessagesDaoImpl {
 			
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("roomId", roomId);
-			List<PrivateMessages> ll = query.list();
+			query.setParameter("roomId", roomId);
+			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			

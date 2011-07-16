@@ -3,17 +3,18 @@ package org.openmeetings.app.data.user;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -38,7 +39,6 @@ import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.openmeetings.app.templates.ResetPasswordTemplate;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.openmeetings.utils.mail.MailHandler;
-import org.openmeetings.utils.mappings.CastMapToObject;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.utils.ObjectMap;
 import org.slf4j.Logger;
@@ -84,21 +84,28 @@ public class Usermanagement {
 				
 				//get all users
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-				crit.add(Restrictions.eq("deleted", "false"));
-				if (asc) crit.addOrder(Order.asc(orderby));
-				else crit.addOrder(Order.desc(orderby));
-				crit.setMaxResults(max);
-				crit.setFirstResult(start);
-				sresult.setResult(crit.list());
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+				Root<Users> c = cq.from(Users.class);
+				Predicate condition = cb.equal(c.get("deleted"), "false");
+				cq.where(condition);
+				cq.distinct(asc);
+				if (asc){
+					cq.orderBy(cb.asc(c.get(orderby)));
+				} else {
+					cq.orderBy(cb.desc(c.get(orderby)));
+				}
+				TypedQuery<Users> q = session.createQuery(cq);
+				q.setFirstResult(start);
+				q.setMaxResults(max);
+				List<Users> ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return sresult;				
 			}
-		} catch (HibernateException ex) {
-			log.error("[getUsersList] "+ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersList] "+ex2);
 		}
@@ -131,18 +138,18 @@ public class Usermanagement {
 						hql +=	" OR ";
 					}
 					hql +=	"( " +
-								"lower(u.lastname) LIKE lower('%"+searchItems[i]+"%') " +
-								"OR lower(u.firstname) LIKE lower('%"+searchItems[i]+"%') " +
-								"OR lower(u.login) LIKE lower('%"+searchItems[i]+"%') " +
-								"OR lower(u.adresses.email) LIKE lower('%"+searchItems[i]+"%') " +
-								//"OR lower(u.titel) LIKE lower('%"+searchItems[i]+"%') " +
-								//"OR lower(u.email) LIKE lower('%"+searchItems[i]+"%') " +
-								//"OR lower(u.firma) LIKE lower('%"+searchItems[i]+"%') " +
+								"lower(u.lastname) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
+								"OR lower(u.firstname) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") +  "' " +
+								"OR lower(u.login) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
+								"OR lower(u.adresses.email) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
 							") ";
 									
 				}
 	
-				hql += " ) ORDER BY "+orderby;
+				hql += " ) ";
+				if (orderby != null && orderby.length() > 0){
+					hql += "ORDER BY " + orderby;
+				}
 				
 				if (asc) {
 					hql += " ASC ";
@@ -153,17 +160,18 @@ public class Usermanagement {
 				log.debug("Show HQL: "+hql);
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				Query query = session.createQuery(hql);
-				//query.setLong("macomUserId", userId);
+				//query.setParameter("macomUserId", userId);
 				
 				//query
 				//if (asc) ((Criteria) query).addOrder(Order.asc(orderby));
 				//else ((Criteria) query).addOrder(Order.desc(orderby));
 				query.setFirstResult(start);
 				query.setMaxResults(max);			
-				List<Users> ll = query.list();
+				List<Users> ll = query.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -171,9 +179,6 @@ public class Usermanagement {
 		
 				return sresult;		
 
-		} catch (HibernateException ex) {
-			log.error("[getAllUserByRange] ",ex);
-			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getAllUserByRange] ",ex2);
 			ex2.printStackTrace();
@@ -214,21 +219,22 @@ public class Usermanagement {
 	public Object loginUser(String SID, String userOrEmail, String userpass, RoomClient currentClient, 
 			Boolean storePermanent, Long language_id) {
 		try {
-			
+			log.debug("Login user SID : " +SID + " Stored Permanent :" + storePermanent); 
 			String hql = "SELECT c from Users AS c " +
 					"WHERE " +
 					"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
-					"AND c.deleted != :deleted";
+					"AND c.deleted <> :deleted";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql);
-			query.setString("userOrEmail", userOrEmail);
-			query.setString("deleted", "true");
+			query.setParameter("userOrEmail", userOrEmail);
+			query.setParameter("deleted", "true");
 			
-			List<Users> ll = query.list();
+			List<Users> ll = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -277,8 +283,6 @@ public class Usermanagement {
 				}
 			}
 		
-		} catch (HibernateException ex) {
-			log.error("[loginUser]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[loginUser]: ",ex2);
 		}
@@ -289,18 +293,17 @@ public class Usermanagement {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.flush();
+			us = session.merge(us);
 			session.refresh(us);
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return us;
-		} catch (HibernateException ex) {
-			log.error("[loginUser]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[loginUser]: ",ex2);
 		}
@@ -327,8 +330,6 @@ public class Usermanagement {
 				
 			}
 		
-		} catch (HibernateException ex) {
-			log.error("[loginUserByRemoteHash]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[loginUserByRemoteHash]: ",ex2);
 		}
@@ -344,13 +345,18 @@ public class Usermanagement {
 		try {
 			us.setLastlogin(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(us);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (us.getUser_id() == null) {
+				session.persist(us);
+			    } else {
+			    	if (!session.contains(us)) {
+			    		session.merge(us);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("updateLastLogin",ex);
 		} catch (Exception ex2) {
 			log.error("updateLastLogin",ex2);
 		}
@@ -368,21 +374,31 @@ public class Usermanagement {
 		if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-				crit.add(Restrictions.ilike(searchcriteria, "%" + searchstring + "%"));
-				if (asc) crit.addOrder(Order.asc(orderby));
-				else crit.addOrder(Order.desc(orderby));
-				crit.add(Restrictions.ne("deleted", "true"));
-				crit.setMaxResults(max);
-				crit.setFirstResult(start);
-				List contactsZ = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+				Root<Users> c = cq.from(Users.class);
+				Expression<String> literal = cb.literal((String) "%" + searchstring + "%");
+				//crit.add(Restrictions.ilike(searchcriteria, "%" + searchstring + "%"));
+				Path<String> path = c.get(searchcriteria);
+				Predicate predicate = cb.like(path, literal);
+				Predicate condition = cb.notEqual(c.get("deleted"), "true");
+				cq.where(condition, predicate);
+				cq.distinct(asc);
+				if (asc){
+					cq.orderBy(cb.asc(c.get(orderby)));
+				} else {
+					cq.orderBy(cb.desc(c.get(orderby)));
+				}
+				TypedQuery<Users> q = session.createQuery(cq);
+				q.setFirstResult(start);
+				q.setMaxResults(max);
+				List<Users> contactsZ = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return contactsZ;
-			} catch (HibernateException ex) {
-				log.error("searchUser",ex);
 			} catch (Exception ex2) {
 				log.error("searchUser",ex2);
 			}
@@ -394,17 +410,16 @@ public class Usermanagement {
 		if (user_id.longValue() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND deleted != :deleted");
-				query.setLong("user_id", user_id.longValue());
-				query.setString("deleted", "true");
-				List ll = query.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted");
+				query.setParameter("user_id", user_id.longValue());
+				query.setParameter("deleted", "true");
+				List ll = query.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return ll;
-			} catch (HibernateException ex) {
-				log.error("getUserdataDashBoard",ex);
 			} catch (Exception ex2) {
 				log.error("getUserdataDashBoard",ex2);
 			}
@@ -417,17 +432,16 @@ public class Usermanagement {
 		if (USER_ID.longValue() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND deleted != :deleted");
-				query.setLong("user_id", USER_ID.longValue());
-				query.setString("data_key", DATA_KEY);
-				query.setString("deleted", "true");
-				userdata = query.list().size();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
+				query.setParameter("user_id", USER_ID.longValue());
+				query.setParameter("data_key", DATA_KEY);
+				query.setParameter("deleted", "true");
+				userdata = query.getResultList().size();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
-			} catch (HibernateException ex) {
-				log.error("getUserdataNoByKey",ex);
 			} catch (Exception ex2) {
 				log.error("getUserdataNoByKey",ex2);
 			}
@@ -442,19 +456,18 @@ public class Usermanagement {
 		if (user_id.longValue() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND deleted != :deleted");
-				query.setLong("user_id", user_id.longValue());
-				query.setString("data_key", DATA_KEY);
-				query.setString("deleted", "true");
-				for (Iterator it2 = query.iterate(); it2.hasNext();) {
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
+				query.setParameter("user_id", user_id.longValue());
+				query.setParameter("data_key", DATA_KEY);
+				query.setParameter("deleted", "true");
+				for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 					userdata = (Userdata) it2.next();
 				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
-			} catch (HibernateException ex) {
-				log.error("getUserdataByKey",ex);
 			} catch (Exception ex2) {
 				log.error("getUserdataByKey",ex2);
 			}
@@ -582,10 +595,17 @@ public class Usermanagement {
 					
 					//log.info("USER " + us.getLastname());
 					Object idf = HibernateUtil.createSession();
-					Session session = HibernateUtil.getSession();
-					Transaction tx = session.beginTransaction();
+					EntityManager session = HibernateUtil.getSession();
+					EntityTransaction tx = session.getTransaction();
+					tx.begin();
 
-					session.update(us);
+					if (us.getUser_id() == null) {
+						session.persist(us);
+					    } else {
+					    	if (!session.contains(us)) {
+					    		session.merge(us);
+					    }
+					}
 					
 					tx.commit();
 					HibernateUtil.closeSession(idf);
@@ -599,8 +619,6 @@ public class Usermanagement {
 						return new Long(-17);
 					}
 				}
-			} catch (HibernateException ex) {
-				log.error("[updateUser]",ex);
 			} catch (Exception ex2) {
 				log.error("[updateUser]",ex2);
 			}
@@ -616,19 +634,18 @@ public class Usermanagement {
 		String res = "Fehler beim Update";
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			String hqlUpdate = "update userdata set DATA_KEY= :DATA_KEY, USER_ID = :USER_ID, DATA = :DATA, updatetime = :updatetime, comment = :Comment where DATA_ID= :DATA_ID";
-			int updatedEntities = session.createQuery(hqlUpdate).setString(
-					"DATA_KEY", DATA_KEY).setLong("USER_ID", USER_ID)
-					.setString("DATA", DATA).setLong("updatetime",new Long(-1))
-					.setString("Comment", Comment).setInteger("DATA_ID",
-							DATA_ID).executeUpdate();
+			int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+                    "DATA_KEY", DATA_KEY).setParameter("USER_ID", USER_ID)
+					.setParameter("DATA", DATA).setParameter("updatetime", new Long(-1))
+					.setParameter("Comment", Comment).setParameter("DATA_ID",
+                            DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("updateUserdata",ex);
 		} catch (Exception ex2) {
 			log.error("updateUserdata",ex2);
 		}
@@ -640,20 +657,19 @@ public class Usermanagement {
 		String res = "Fehler beim Update";
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			String hqlUpdate = "update Userdata set data = :data, updatetime = :updatetime, "
 					+ "comment = :comment where user_id= :user_id AND data_key = :data_key";
-			int updatedEntities = session.createQuery(hqlUpdate).setString(
-					"data", DATA).setLong("updatetime",
-					new Long(-1)).setString(
-					"comment", Comment).setLong("user_id", USER_ID.longValue())
-					.setString("data_key", DATA_KEY).executeUpdate();
+			int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+                    "data", DATA).setParameter("updatetime",
+                    new Long(-1)).setParameter(
+                    "comment", Comment).setParameter("user_id", USER_ID.longValue())
+					.setParameter("data_key", DATA_KEY).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("updateUserdataByKey",ex);
 		} catch (Exception ex2) {
 			log.error("updateUserdataByKey",ex2);
 		}
@@ -664,15 +680,14 @@ public class Usermanagement {
 		String res = "Fehler beim deleteUserdata";
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			String hqlUpdate = "delete userdata where DATA_ID= :DATA_ID";
-			int updatedEntities = session.createQuery(hqlUpdate).setInteger("DATA_ID", DATA_ID).executeUpdate();
+			int updatedEntities = session.createQuery(hqlUpdate).setParameter("DATA_ID", DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("deleteUserdata",ex);
 		} catch (Exception ex2) {
 			log.error("deleteUserdata",ex2);
 		}
@@ -683,17 +698,16 @@ public class Usermanagement {
 		String res = "Fehler beim deleteUserdataByUserAndKey";
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			String hqlUpdate = "delete userdata where users_id= :users_id AND DATA_KEY = :DATA_KEY";
-			int updatedEntities = session.createQuery(hqlUpdate).setInteger(
-					"users_id", users_id).setString("DATA_KEY", DATA_KEY)
+			int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+                    "users_id", users_id).setParameter("DATA_KEY", DATA_KEY)
 					.executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("deleteUserdataByUserAndKey",ex);
 		} catch (Exception ex2) {
 			log.error("deleteUserdataByUserAndKey",ex2);
 		}
@@ -713,17 +727,15 @@ public class Usermanagement {
 		userdata.setDeleted("false");
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.save(userdata);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			userdata = session.merge(userdata);
 			session.flush();
-			session.clear();
 			session.refresh(userdata);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			ret = "success";
-		} catch (HibernateException ex) {
-			log.error("addUserdata",ex);
 		} catch (Exception ex2) {
 			log.error("addUserdata",ex2);
 		}
@@ -734,18 +746,17 @@ public class Usermanagement {
 		Userlevel userlevel = new Userlevel();
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Userlevel as c where c.level_id = :level_id AND deleted != :deleted");
-			query.setLong("level_id", level_id.longValue());
-			query.setString("deleted", "true");
-			for (Iterator it2 = query.iterate(); it2.hasNext();) {
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted");
+			query.setParameter("level_id", level_id.longValue());
+			query.setParameter("deleted", "true");
+			for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 				userlevel = (Userlevel) it2.next();
 			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("[getUserLevel]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getUserLevel]" ,ex2);
 		}
@@ -770,12 +781,18 @@ public class Usermanagement {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Query query = session.createQuery("select c from Users as c where c.user_id = :user_id AND deleted <> 'true'");
-			query.setLong("user_id", user_id);
-			Users us = (Users) query.uniqueResult();
+			Query query = session.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
+			query.setParameter("user_id", user_id);
+	        Users us = null;
+	        try {
+	            us = (Users)query.getSingleResult();
+	        } catch (NoResultException e) {
+	            //u=null}
+	        }
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -785,8 +802,6 @@ public class Usermanagement {
 			} else {
 				return -1L;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getUserLevelByID]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getUserLevelByID]" ,ex2);
 		}
@@ -803,12 +818,18 @@ public class Usermanagement {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Query query = session.createQuery("select c from Users as c where c.user_id = :user_id AND deleted <> 'true'");
-			query.setLong("user_id", user_id);
-			Users us = (Users) query.uniqueResult();
+			Query query = session.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
+			query.setParameter("user_id", user_id);
+	        Users us = null;
+	        try {
+	            us = (Users)query.getSingleResult();
+	        } catch (NoResultException e) {
+	            //u=null}
+	        }
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -839,8 +860,6 @@ public class Usermanagement {
 			} else {
 				return -1L;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getUserLevelByID]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getUserLevelByID]" ,ex2);
 		}
@@ -1011,17 +1030,13 @@ public class Usermanagement {
 				if (checkName && checkEmail) {
 					
 					String hash = ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+					String link = baseURL+"activateUser?u="+hash;
 					
-					//Check if there are any emails to be send
 					if (sendWelcomeMessage && email.length()!=0) {
-						
-						String link = baseURL+"activateUser?u="+hash;
-						
 						//We need to pass the baseURL to check if this is really set to be send
 						String sendMail = Emailmanagement.getInstance().sendMail(login, Userpass, email, link, sendConfirmation);
 						if (!sendMail.equals("success")) return new Long(-19);
-					}			
-					
+					}						
 					Long address_id = Addressmanagement.getInstance().saveAddress(street, zip, town, states_id, additionalname, "",fax, phone, email);
 					if (address_id==null) {
 						return new Long(-22);
@@ -1032,11 +1047,12 @@ public class Usermanagement {
 						status = 0;
 					}
 					
-					Long user_id = this.addUser(level_id, availible, status,firstname, login, lastname, language_id, 
+					Long user_id = addUser(level_id, availible, status,firstname, login, lastname, language_id, 
 									Userpass,address_id, age, hash, 
 									sip_user, sip_pass, sip_auth, generateSipUserData, jName_timezone, 
 									forceTimeZoneCheck, 
 									userOffers, userSearchs, showContactData, showContactDataToContacts);
+					log.debug("Added user-Id " + user_id);
 					if (user_id==null) {
 						return new Long(-111);
 					}
@@ -1151,16 +1167,17 @@ public class Usermanagement {
 			users.setDeleted("false");
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long user_id = (Long) session.save(users);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			users = session.merge(users);
+			session.flush();
+			Long user_id = users.getUser_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return user_id;
 
-		} catch (HibernateException ex) {
-			log.error("[registerUser]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[registerUser]" ,ex2);
 		}
@@ -1174,18 +1191,19 @@ public class Usermanagement {
 			String hql = "select c from Users as c " +
 					"where c.externalUserId = :externalUserId " +
 					"AND c.externalUserType LIKE :externalUserType " +
-					"AND deleted != :deleted";
+					"AND c.deleted <> :deleted";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql);
-			query.setLong("externalUserId", externalUserId);
-			query.setString("externalUserType", externalUserType);
-			query.setString("deleted","true");
+			query.setParameter("externalUserId", externalUserId);
+			query.setParameter("externalUserType", externalUserType);
+			query.setParameter("deleted", "true");
 			
-			List<Users> users = query.list();
+			List<Users> users = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -1194,8 +1212,6 @@ public class Usermanagement {
 				return users.get(0);
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getUserByExternalIdAndType]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getUserByExternalIdAndType]" ,ex2);
 		}
@@ -1268,16 +1284,16 @@ public class Usermanagement {
 			users.setDeleted("false");
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long user_id = (Long) session.save(users);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			session.merge(users);
+			long user_id = users.getUser_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return user_id;
 
-		} catch (HibernateException ex) {
-			log.error("[registerUser]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[registerUser]" ,ex2);
 		}
@@ -1287,14 +1303,14 @@ public class Usermanagement {
 	public Long addUser(Users usr) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long user_id = (Long) session.save(usr);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			usr = session.merge(usr);
+			Long user_id = usr.getUser_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return user_id;
-		} catch (HibernateException ex) {
-			log.error("[addUser]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addUser]" ,ex2);
 		}
@@ -1314,9 +1330,11 @@ public class Usermanagement {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long user_id = (Long) session.save(usr);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			usr = session.merge(usr);
+			Long user_id = usr.getUser_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -1332,8 +1350,6 @@ public class Usermanagement {
 			return user_id;
 			
 			
-		} catch (HibernateException ex) {
-			log.error("[addUserBackup]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addUserBackup]" ,ex2);
 		}
@@ -1343,18 +1359,17 @@ public class Usermanagement {
 	public void addUserLevel(String description, int myStatus) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Userlevel uslevel = new Userlevel();
 			uslevel.setStarttime(new Date());
 			uslevel.setDescription(description);
 			uslevel.setStatuscode(new Integer(myStatus));
 			uslevel.setDeleted("false");
-			session.save(uslevel);
+			session.merge(uslevel);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("[addUserLevel]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]" ,ex2);
 		}
@@ -1419,7 +1434,7 @@ public class Usermanagement {
 					savedUser.setForceTimeZoneCheck(false);
 					savedUser.getAdresses().setStates(Statemanagement.getInstance().getStateById(Long.parseLong(values.get("state_id").toString())));
 					
-					//Addressmanagement.getInstance().updateAdress(savedUser.getAdresses());
+					Addressmanagement.getInstance().updateAdress(savedUser.getAdresses());
 					savedUser.setShowContactData(Boolean.valueOf(values.get("showContactData").toString()));
 					savedUser.setShowContactDataToContacts(Boolean.valueOf(values.get("showContactDataToContacts").toString()));
 					savedUser.setUserOffers(values.get("userOffers").toString());
@@ -1428,10 +1443,17 @@ public class Usermanagement {
 					//savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
 					
 					Object idf = HibernateUtil.createSession();
-					Session session = HibernateUtil.getSession();
-					Transaction tx = session.beginTransaction();
+					EntityManager session = HibernateUtil.getSession();
+					EntityTransaction tx = session.getTransaction();
+					tx.begin();
 
-					session.update(savedUser);
+					if (savedUser.getUser_id() == null) {
+						session.persist(savedUser);
+					    } else {
+					    	if (!session.contains(savedUser)) {
+					    		session.merge(savedUser);
+					    }
+					}
 					session.flush();
 					
 					tx.commit();
@@ -1527,16 +1549,29 @@ public class Usermanagement {
 		}
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		
-		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-		crit.add(Restrictions.eq("user_id", id));
-		crit.add(Restrictions.eq("deleted", "false"));
-		//crit.add(Restrictions.eq("status", 1));
-		Users u = (Users)crit.uniqueResult();
-		
-		tx.commit();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+		Root<Users> c = cq.from(Users.class);
+		Predicate condition = cb.equal(c.get("deleted"), "false");
+		Predicate subCondition = cb.equal(c.get("user_id"), id);
+		cq.where(condition,subCondition);
+		TypedQuery<Users> q = session.createQuery(cq);
+        Users u = null;
+        try {
+            u = (Users)q.getSingleResult();
+            tx.commit();
+        } catch (NoResultException e) {
+        	tx.rollback();
+            //u=null}
+        }
+        catch (NonUniqueResultException ex){
+        	tx.rollback();
+        }
+
 		HibernateUtil.closeSession(idf);
 		
 		return u;
@@ -1547,13 +1582,22 @@ public class Usermanagement {
 		log.debug("Usermanagement.getUserById");
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		
-		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-		crit.add(Restrictions.eq("user_id", id));
-		//crit.add(Restrictions.eq("status", 1));
-		Users u = (Users)crit.uniqueResult();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+		Root<Users> c = cq.from(Users.class);
+		Predicate condition = cb.equal(c.get("user_id"), id);
+		cq.where(condition);
+		TypedQuery<Users> q = session.createQuery(cq);
+        Users u = null;
+        try {
+            u = (Users)q.getSingleResult();
+        } catch (NoResultException e) {
+            //u=null}
+        }
 		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
@@ -1572,14 +1616,23 @@ public class Usermanagement {
 		log.debug("Usermanagement.getUserByLogin : " + login);
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		
-		Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-		crit.add(Restrictions.eq("login", login));
-		crit.add(Restrictions.eq("deleted", "false"));
-		//crit.add(Restrictions.eq("status", 1));
-		Users u = (Users)crit.uniqueResult();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+		Root<Users> c = cq.from(Users.class);
+		Predicate condition = cb.equal(c.get("deleted"), "false");
+		Predicate subCondition = cb.equal(c.get("login"), login);
+		cq.where(condition,subCondition);
+		TypedQuery<Users> q = session.createQuery(cq);
+        Users u = null;
+        try {
+            u = (Users)q.getSingleResult();
+        } catch (NoResultException e) {
+            //u=null}
+        }
 		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
@@ -1599,21 +1652,24 @@ public class Usermanagement {
 		
 		String hql = "SELECT c from Users AS c " +
 				"WHERE " +
-				"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  )" +
+				"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
 				"AND c.externalUserId IS NULL " +
-				"AND c.deleted != :deleted";
+				"AND c.deleted <> :deleted";
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		
 		session.flush();
 		
 		Query query = session.createQuery(hql);
-		query.setString("userOrEmail", userOrEmail);
-		query.setString("deleted", "true");
+		query.setParameter("userOrEmail", userOrEmail);
+		query.setParameter("deleted", "true");
 		
-		List<Users> ll = query.list();
+		List<Users> ll = query.getResultList();
+		tx.commit();
+		HibernateUtil.closeSession(idf);
 		
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have either same login or Email ");
@@ -1628,22 +1684,25 @@ public class Usermanagement {
 	}
 	
 	public Users getUserByEmail(String userOrEmail) throws Exception{
-		log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
+		log.debug("Usermanagement.getUserByEmail : " + userOrEmail);
 		
 		String hql = "SELECT c from Users AS c " +
 				"WHERE " +
 				"c.adresses.email LIKE :userOrEmail";
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		
 		session.flush();
 		
 		Query query = session.createQuery(hql);
-		query.setString("userOrEmail", userOrEmail);
+		query.setParameter("userOrEmail", userOrEmail);
 		
-		List<Users> ll = query.list();
+		List<Users> ll = query.getResultList();
+		tx.commit();
+		HibernateUtil.closeSession(idf);
 		
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have same Email ");
@@ -1777,17 +1836,23 @@ public class Usermanagement {
         try {
             String hql = "SELECT u FROM Users as u " +
                             " where u.activatehash = :activatehash" +
-                            " AND deleted != :deleted";
+                            " AND c.deleted <> :deleted";
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
+            EntityManager session = HibernateUtil.getSession();
+            EntityTransaction tx = session.getTransaction();
+			tx.begin();
             Query query = session.createQuery(hql);
-            query.setString("activatehash", hash);
-            query.setString("deleted", "true");
-            Users us = (Users) query.uniqueResult();
+            query.setParameter("activatehash", hash);
+            query.setParameter("deleted", "true");
+            Users u = null;
+            try {
+                u = (Users)query.getSingleResult();
+            } catch (NoResultException e) {
+                //u=null}
+            }
             tx.commit();
             HibernateUtil.closeSession(idf);
-            return us;
+            return u;
 	    } catch (Exception e) {
 	            log.error("[getUserByActivationHash]",e);
 	    }
@@ -1799,13 +1864,18 @@ public class Usermanagement {
         if (user.getUser_id() > 0) {
             try {
                 Object idf = HibernateUtil.createSession();
-                Session session = HibernateUtil.getSession();
-                Transaction tx = session.beginTransaction();
-                session.update(user);
+                EntityManager session = HibernateUtil.getSession();
+                EntityTransaction tx = session.getTransaction();
+                tx.begin();
+				if (user.getUser_id() == null) {
+					session.persist(user);
+				    } else {
+				    	if (!session.contains(user)) {
+				    		session.merge(user);
+				    }
+				}
                 tx.commit();
                 HibernateUtil.closeSession(idf);
-            } catch (HibernateException ex) {
-                    log.error("[updateUser] ",ex);
             } catch (Exception ex2) {
                     log.error("[updateUser] ",ex2);
             }
@@ -1831,12 +1901,16 @@ public class Usermanagement {
 				String hql = "select c from Users c " +
 							"where c.deleted = 'false' " +
 							"AND (" +
-							"lower(c.login) LIKE lower(:search) " +
-							"OR lower(c.firstname) LIKE lower(:search) " +
-							"OR lower(c.lastname) LIKE lower(:search) " +
+							"lower(c.login) LIKE :search " +
+							"OR lower(c.firstname) LIKE :search " +
+							"OR lower(c.lastname) LIKE :search " +
 							")";
 							
-				hql += " ORDER BY " + orderby;
+				if (orderby.startsWith("c.")){
+					hql += "ORDER BY "+orderby;
+				} else {
+					hql += "ORDER BY " + "c." + orderby;
+				}
 				
 				if (asc) {
 					hql += " ASC";
@@ -1849,6 +1923,7 @@ public class Usermanagement {
 				} else {
 					search = "%" + search + "%";
 				}
+				log.debug("getUsersList search: "+ search);
 				
 				SearchResult sresult = new SearchResult();
 				sresult.setObjectName(Users.class.getName());
@@ -1856,29 +1931,22 @@ public class Usermanagement {
 				
 				//get all users
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				session.flush();
 				
 				Query query = session.createQuery(hql); 
-				query.setString("search", search);
+				query.setParameter("search", StringUtils.lowerCase(search));
 				query.setMaxResults(max);
 				query.setFirstResult(start);
 				
-//				Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-//				crit.add(Restrictions.eq("deleted", "false"));
-//				if (asc) crit.addOrder(Order.asc(orderby));
-//				else crit.addOrder(Order.desc(orderby));
-//				crit.setMaxResults(max);
-//				crit.setFirstResult(start);
-				
-				sresult.setResult(query.list());
+				sresult.setResult(query.getResultList());
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
 				return sresult;				
 			}
-		} catch (HibernateException ex) {
-			log.error("[getUsersList] "+ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersList] "+ex2);
 		}
@@ -1897,19 +1965,19 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 						
@@ -1918,15 +1986,15 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 									")";
 							
@@ -1935,15 +2003,15 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 							
@@ -1952,11 +2020,11 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 							
@@ -1965,11 +2033,11 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 									")";
 							
@@ -1978,7 +2046,7 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-											"lower(c.userOffers) LIKE lower(:userOffers) " +
+											"lower(c.userOffers) LIKE :userOffers " +
 										")" +
 									")";
 							
@@ -1987,7 +2055,7 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-											"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											"lower(c.userSearchs) LIKE :userSearchs " +
 										")" +
 										")";
 							
@@ -2017,43 +2085,44 @@ public class Usermanagement {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql); 
 			
 			if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userOffers", userOffers);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 			
 			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userOffers", userOffers);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 				
 			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("userOffers", userOffers);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			} else if (searchTxt.length() != 0) {
 				
-				query.setString("search", searchTxt);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
 				
 			} else if (userOffers.length() != 0) {
 
-				query.setString("userOffers", userOffers);
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 				
 			} else if (userSearchs.length() != 0) {
 
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			}
 			
@@ -2061,15 +2130,13 @@ public class Usermanagement {
 			query.setMaxResults(max);
 			query.setFirstResult(start);
 			
-			List<Users> userList = query.list();
+			List<Users> userList = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return userList;	
 			
-		} catch (HibernateException ex) {
-			log.error("[getUsersList] ",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersList] ",ex2);
 		}
@@ -2089,19 +2156,19 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 						
@@ -2110,15 +2177,15 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search) " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 									")";
 							
@@ -2127,15 +2194,15 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 							
@@ -2144,11 +2211,11 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 											"(" +
-												"lower(c.userOffers) LIKE lower(:userOffers) " +
+												"lower(c.userOffers) LIKE :userOffers " +
 											")" +
 										"AND" +
 											"(" +
-												"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+												"lower(c.userSearchs) LIKE :userSearchs " +
 											")" +
 									")";
 							
@@ -2157,11 +2224,11 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-												"lower(c.login) LIKE lower(:search) " +
-												"OR lower(c.firstname) LIKE lower(:search) " +
-												"OR lower(c.lastname) LIKE lower(:search) " +
-												"OR lower(c.adresses.email) LIKE lower(:search) " +
-												"OR lower(c.adresses.town) LIKE lower(:search) " +
+												"lower(c.login) LIKE :search " +
+												"OR lower(c.firstname) LIKE :search " +
+												"OR lower(c.lastname) LIKE :search " +
+												"OR lower(c.adresses.email) LIKE :search " +
+												"OR lower(c.adresses.town) LIKE :search " +
 											")" +
 									")";
 							
@@ -2170,7 +2237,7 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-											"lower(c.userOffers) LIKE lower(:userOffers) " +
+											"lower(c.userOffers) LIKE :userOffers " +
 										")" +
 									")";
 							
@@ -2179,7 +2246,7 @@ public class Usermanagement {
 							hql += "AND " +
 									"(" +
 										"(" +
-											"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+											"lower(c.userSearchs) LIKE :userSearchs " +
 										")" +
 										")";
 							
@@ -2201,56 +2268,55 @@ public class Usermanagement {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql); 
 			
 			if (searchTxt.length() != 0 && userOffers.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userOffers", userOffers);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 			
 			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userOffers", userOffers);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 				
 			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("search", searchTxt);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
 				
-				query.setString("userOffers", userOffers);
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			} else if (searchTxt.length() != 0) {
 				
-				query.setString("search", searchTxt);
+				query.setParameter("search", StringUtils.lowerCase(searchTxt));
 				
 			} else if (userOffers.length() != 0) {
 
-				query.setString("userOffers", userOffers);
+				query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 				
 			} else if (userSearchs.length() != 0) {
 
-				query.setString("userSearchs", userSearchs);
+				query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 				
 			}
 			
 			
-			List userList = query.list();
+			List userList = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return (Long) userList.get(0);	
 			
-		} catch (HibernateException ex) {
-			log.error("[getUsersList] ",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersList] ",ex2);
 		}
@@ -2268,19 +2334,19 @@ public class Usermanagement {
 						"AND " +
 						"(" +
 								"(" +
-									"lower(c.login) LIKE lower(:search) " +
-									"OR lower(c.firstname) LIKE lower(:search) " +
-									"OR lower(c.lastname) LIKE lower(:search) " +
-									"OR lower(c.adresses.email) LIKE lower(:search) " +
-									"OR lower(c.adresses.town) LIKE lower(:search) " +
+									"lower(c.login) LIKE :search " +
+									"OR lower(c.firstname) LIKE :search " +
+									"OR lower(c.lastname) LIKE :search " +
+									"OR lower(c.adresses.email) LIKE :search " +
+									"OR lower(c.adresses.town) LIKE :search " +
 								")" +
 							"OR" +
 								"(" +
-									"lower(c.userOffers) LIKE lower(:userOffers) " +
+									"lower(c.userOffers) LIKE :userOffers " +
 								")" +
 							"OR" +
 								"(" +
-									"lower(c.userSearchs) LIKE lower(:userSearchs) " +
+									"lower(c.userSearchs) LIKE :userSearchs " +
 								")" +
 						")";
 						
@@ -2304,22 +2370,21 @@ public class Usermanagement {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql); 
-			query.setString("search", searchTxt);
-			query.setString("userOffers", userOffers);
-			query.setString("userSearchs", userSearchs);
+			query.setParameter("search", StringUtils.lowerCase(searchTxt));
+			query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
+			query.setParameter("userSearchs", StringUtils.lowerCase(userSearchs));
 			
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return (Long) ll.get(0);		
 			
-		} catch (HibernateException ex) {
-			log.error("[searchMaxUserProfile] "+ex);
 		} catch (Exception ex2) {
 			log.error("[searchMaxUserProfile] "+ex2);
 		}

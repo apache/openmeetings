@@ -1,37 +1,51 @@
 package org.openmeetings.app.hibernate.beans.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="organisation_users"
- * lazy="false"
- *
- */
-public class Organisation_Users {
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+
+@Entity
+@Table(name = "organisation_users")
+public class Organisation_Users implements Serializable {
+
+	private static final long serialVersionUID = 7206870465903375817L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="organisation_users_id")
 	private Long organisation_users_id;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="organisation_id")
 	private Organisation organisation;
+	
+    @Column(name="user_id")
 	private Long user_id;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="is_moderator")
 	private Boolean isModerator;
+	@Column(name="comment_field")
 	private String comment;
+	
 
-	public Organisation_Users() {
-		super();
-	}
-
-    /**
-	 * @hibernate.many-to-one
-	 * column = "organisation_id"
-	 * class = "org.openmeetings.app.hibernate.beans.domain.Organisation"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */	    
 	public Organisation getOrganisation() {
 		return organisation;
 	}
@@ -39,12 +53,6 @@ public class Organisation_Users {
 		this.organisation = organisation;
 	}
 	   
-    /**
-     * 
-     * @hibernate.id
-     *  column="organisation_users_id"
-     *  generator-class="increment"
-     */  
 	public Long getOrganisation_users_id() {
 		return organisation_users_id;
 	}
@@ -52,11 +60,6 @@ public class Organisation_Users {
 		this.organisation_users_id = organisation_users_id;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */ 
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -64,12 +67,6 @@ public class Organisation_Users {
 		this.user_id = user_id;
 	}
 
-
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -77,11 +74,6 @@ public class Organisation_Users {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -89,11 +81,6 @@ public class Organisation_Users {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -102,11 +89,6 @@ public class Organisation_Users {
 	}
 	
 
-    /**
-     * @hibernate.property
-     *  column="comment_field"
-     *  type="string"
-     */ 	
     public String getComment() {
 		return comment;
 	}
@@ -114,11 +96,7 @@ public class Organisation_Users {
 		this.comment = comment;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="is_moderator"
-     *  type="string"
-     */	
+	
 	public Boolean getIsModerator() {
 		return isModerator;
 	}

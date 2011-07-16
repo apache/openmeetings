@@ -1,34 +1,54 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="ldapconfig"
- *
- */
-public class LdapConfig {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "ldapconfig")
+public class LdapConfig implements Serializable {
 	
+	private static final long serialVersionUID = 2839158519803993035L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="ldapconfig_id")
 	public long ldapConfigId;
+	@Column(name="name")
 	public String name;
+	@Column(name="config_file_name")
 	public String configFileName;
+	@Column(name="add_domain_to_user_name")
 	public Boolean addDomainToUserName;
+	@Column(name="domain")
 	public String domain;
+	@Column(name="is_active")
 	public Boolean isActive;
+	@Column(name="inserted")
 	public Date inserted;
+	@Column(name="updated")
 	public Date updated;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="insertedby_id", updatable=true, insertable=true)
 	public Users insertedby;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="updatedby_id", updatable=true, insertable=true)
 	public Users updatedby;
+	@Column(name="deleted")
 	private String deleted;
 	
-    /**
-     * 
-     * @hibernate.id
-     *  column="ldapconfig_id"
-     *  generator-class="increment"
-     */ 	
 	public long getLdapConfigId() {
 		return ldapConfigId;
 	}
@@ -36,11 +56,6 @@ public class LdapConfig {
 		this.ldapConfigId = ldapConfigId;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */ 
 	public String getName() {
 		return name;
 	}
@@ -48,11 +63,6 @@ public class LdapConfig {
 		this.name = name;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="config_file_name"
-     *  type="string"
-     */ 	
 	public String getConfigFileName() {
 		return configFileName;
 	}
@@ -60,11 +70,6 @@ public class LdapConfig {
 		this.configFileName = configFileName;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="add_domain_to_user_name"
-     *  type="boolean"
-     */ 	
 	public Boolean getAddDomainToUserName() {
 		return addDomainToUserName;
 	}
@@ -72,11 +77,6 @@ public class LdapConfig {
 		this.addDomainToUserName = addDomainToUserName;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="domain"
-     *  type="string"
-     */ 	
 	public String getDomain() {
 		return domain;
 	}
@@ -84,11 +84,6 @@ public class LdapConfig {
 		this.domain = domain;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="is_active"
-     *  type="boolean"
-     */ 	
 	public Boolean getIsActive() {
 		return isActive;
 	}
@@ -96,11 +91,6 @@ public class LdapConfig {
 		this.isActive = isActive;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 	
 	public Date getInserted() {
 		return inserted;
 	}
@@ -108,11 +98,6 @@ public class LdapConfig {
 		this.inserted = inserted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */	
 	public Date getUpdated() {
 		return updated;
 	}
@@ -120,15 +105,6 @@ public class LdapConfig {
 		this.updated = updated;
 	}
 	
-    /**
-	 * @hibernate.many-to-one
-	 * column = "insertedby_id"
-	 * class = "org.openmeetings.app.hibernate.beans.user.Users"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */		
 	public Users getInsertedby() {
 		return insertedby;
 	}
@@ -136,15 +112,6 @@ public class LdapConfig {
 		this.insertedby = insertedby;
 	}
 	
-    /**
-	 * @hibernate.many-to-one
-	 * column = "updatedby_id"
-	 * class = "org.openmeetings.app.hibernate.beans.user.Users"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */		
 	public Users getUpdatedby() {
 		return updatedby;
 	}
@@ -152,11 +119,6 @@ public class LdapConfig {
 		this.updatedby = updatedby;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}

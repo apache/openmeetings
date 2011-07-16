@@ -12,22 +12,17 @@ import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
-//import org.slf4j.Logger;
-import org.apache.log4j.Level;
 import org.slf4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.red5.logging.Red5LoggerFactory;
-//import org.slf4j.Logger;
-//import org.red5.logging.Red5LoggerFactory;
-//import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-//import org.slf4j.Logger;
-//import org.red5.logging.Red5LoggerFactory;
+import org.red5.logging.Red5LoggerFactory;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 /**
  * 
@@ -78,18 +73,17 @@ public class Sessionmanagement {
 			sessiondata.setUser_id(null);
 		
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			session.flush();
-			session.save(sessiondata);
+			sessiondata = session.merge(sessiondata);
 			session.flush();
 			session.refresh(sessiondata);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return sessiondata;
-		} catch (HibernateException ex) {
-			log.error("[startsession]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[startsession]: " ,ex2);
 		}
@@ -99,30 +93,34 @@ public class Sessionmanagement {
 	
 	public Sessiondata getSessionByHash(String SID) {
 		try {
-			//log.debug("updateUser User: "+USER_ID+" || "+SID);
+			log.debug("updateUser User SID: "+SID);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			session.flush();
-			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("session_id", SID));
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
+			Root<Sessiondata> c = cq.from(Sessiondata.class);
+			Predicate condition = cb.equal(c.get("session_id"), SID);
+			cq.where(condition);
 
-			List fullList = crit.list();
+			TypedQuery<Sessiondata> q = session.createQuery(cq);
+
+			List<Sessiondata> fullList = q.getResultList();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 			if (fullList.size() == 0){
 				log.error("Could not find session to update: "+SID);
 				return null;
 			} else {
 				//log.error("Found session to update: "+SID);
 			}
-			tx.commit();
-			HibernateUtil.closeSession(idf);
 			
 			Sessiondata sd = (Sessiondata) fullList.get(0);
 			
 			return sd;
-		} catch (HibernateException ex) {
-			log.error("[updateUser]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUser]: " ,ex2);
 		}
@@ -138,11 +136,11 @@ public class Sessionmanagement {
 //		try {
 //			//log.debug("checkSession User: || "+SID);
 //			Object idf = HibernateUtil.createSession();
-//			Session session = HibernateUtil.getSession();
-//			Transaction tx = session.beginTransaction();
+//			EntityManager session = HibernateUtil.getSession();
+//			EntityTransaction tx = session.getTransaction();
 //			
 //			//session.flush();
-//			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
+//			CriteriaBuilder crit = session.getCriteriaBuilder();
 //			crit.add(Restrictions.eq("session_id", SID));
 //
 //			List<Sessiondata> sessions = crit.list();
@@ -183,14 +181,15 @@ public class Sessionmanagement {
 			
 			//log.debug("checkSession User: || "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			//session.flush();
 			Query query = session.createQuery(hql);
-			query.setString("session_id", SID);
+			query.setParameter("session_id", SID);
 			
-			List<Sessiondata> sessions = query.list();
+			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -214,8 +213,6 @@ public class Sessionmanagement {
 			} else {
 				return sessiondata.getUser_id();
 			}			
-		} catch (HibernateException ex) {
-			log.error("[checkSession]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[checkSession]: " ,ex2);
 		}
@@ -237,14 +234,15 @@ public class Sessionmanagement {
 	
 			//log.debug("checkSession User: || "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			//session.flush();
 			Query query = session.createQuery(hql);
-			query.setString("session_id", SID);
+			query.setParameter("session_id", SID);
 
-			List<Sessiondata> sessions = query.list();
+			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -261,20 +259,23 @@ public class Sessionmanagement {
 			
 			idf = HibernateUtil.createSession();
 			session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			tx = session.getTransaction();
+			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			//session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
-			//session.flush();
-			session.update(sessiondata);
-			//session.flush();
+			if (sessiondata.getId() == null) {
+				session.persist(sessiondata);
+			    } else {
+			    	if (!session.contains(sessiondata)) {
+			    		session.merge(sessiondata);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
-		} catch (HibernateException ex) {
-			log.error("[updateUser]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUser]: " ,ex2);
 		}
@@ -290,14 +291,15 @@ public class Sessionmanagement {
 	
 			//log.debug("checkSession User: || "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			//session.flush();
+			session.flush();
 			Query query = session.createQuery(hql);
-			query.setString("session_id", SID);
+			query.setParameter("session_id", SID);
 
-			List<Sessiondata> sessions = query.list();
+			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -314,7 +316,8 @@ public class Sessionmanagement {
 			
 			idf = HibernateUtil.createSession();
 			session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			tx = session.getTransaction();
+			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			//session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
@@ -322,16 +325,19 @@ public class Sessionmanagement {
 				sessiondata.setStorePermanent(storePermanent);
 			}
 			sessiondata.setLanguage_id(language_id);
-			//session.flush();
-			session.update(sessiondata);
-			//session.flush();
+			if (sessiondata.getId() == null) {
+				session.persist(sessiondata);
+			    } else {
+			    	if (!session.contains(sessiondata)) {
+			    		session.merge(sessiondata);
+			    }
+			}
+			session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
-		} catch (HibernateException ex) {
-			log.error("[updateUser]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUser]: " ,ex2);
 		}
@@ -347,14 +353,15 @@ public class Sessionmanagement {
 	
 			//log.debug("checkSession User: || "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			//session.flush();
+			session.flush();
 			Query query = session.createQuery(hql);
-			query.setString("session_id", SID);
+			query.setParameter("session_id", SID);
 
-			List<Sessiondata> sessions = query.list();
+			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -371,20 +378,24 @@ public class Sessionmanagement {
 			
 			idf = HibernateUtil.createSession();
 			session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			tx = session.getTransaction();
+			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			//session.refresh(sd);
 			sessiondata.setOrganization_id(organization_id);
-			//session.flush();
-			session.update(sessiondata);
-			//session.flush();
+			if (sessiondata.getId() == null) {
+				session.persist(sessiondata);
+			    } else {
+			    	if (!session.contains(sessiondata)) {
+			    		session.merge(sessiondata);
+			    }
+			}
+			session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
-		} catch (HibernateException ex) {
-			log.error("[updateUser]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUser]: " ,ex2);
 		}
@@ -401,14 +412,15 @@ public class Sessionmanagement {
 	
 			//log.debug("checkSession User: || "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			//session.flush();
+			session.flush();
 			Query query = session.createQuery(hql);
-			query.setString("session_id", SID);
+			query.setParameter("session_id", SID);
 
-			List<Sessiondata> sessions = query.list();
+			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -425,20 +437,24 @@ public class Sessionmanagement {
 			
 			idf = HibernateUtil.createSession();
 			session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			tx = session.getTransaction();
+			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			//session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
-			//session.flush();
-			session.update(sessiondata);
-			//session.flush();
+			if (sessiondata.getId() == null) {
+				session.persist(sessiondata);
+			    } else {
+			    	if (!session.contains(sessiondata)) {
+			    		session.merge(sessiondata);
+			    }
+			}
+			session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
-		} catch (HibernateException ex) {
-			log.error("[updateUser]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUser]: " ,ex2);
 		}
@@ -447,44 +463,54 @@ public class Sessionmanagement {
 	
 	public Boolean updateUserRemoteSession(String SID, String sessionXml) {
 		try {
-			//log.debug("updateUser User: "+USER_ID+" || "+SID);
+			log.debug("updateUser User SID: "+SID);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			session.flush();
-			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("session_id", SID));
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
+			Root<Sessiondata> c = cq.from(Sessiondata.class);
+			Predicate condition = cb.equal(c.get("session_id"), SID);
+			cq.where(condition);
 
-			List fullList = crit.list();
+			TypedQuery<Sessiondata> q = session.createQuery(cq);
+			List<Sessiondata> fullList = q.getResultList();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
 			if (fullList.size() == 0){
 				log.error("Could not find session to update: "+SID);
 				return false;
 			} else {
 				//log.error("Found session to update: "+SID);
 			}
-			tx.commit();
-			HibernateUtil.closeSession(idf);
-			
 			Sessiondata sd = (Sessiondata) fullList.get(0);
 			//log.debug("Found session to update: "+sd.getSession_id()+ " userId: "+USER_ID);
 			
 			idf = HibernateUtil.createSession();
 			session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			tx = session.getTransaction();
+			tx.begin();
 			sd.setRefresh_time(new Date());
 			session.refresh(sd);
 			sd.setSessionXml(sessionXml);
 			session.flush();
-			session.update(sd);
+			if (sd.getId() == null) {
+				session.persist(sd);
+			    } else {
+			    	if (!session.contains(sd)) {
+			    		session.merge(sd);
+			    }
+			}
 			session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
-		} catch (HibernateException ex) {
-			log.error("[updateUserRemoteSession]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updateUserRemoteSession]: " ,ex2);
 		}
@@ -499,11 +525,18 @@ public class Sessionmanagement {
 		try {
 			//log.debug("****** updatesession: "+SID);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("session_id", SID));
-			List fullList = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
+			Root<Sessiondata> c = cq.from(Sessiondata.class);
+			Predicate condition = cb.equal(c.get("session_id"), SID);
+			cq.where(condition);
+
+			TypedQuery<Sessiondata> q = session.createQuery(cq);
+
+			List<Sessiondata> fullList = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);			
 			if (fullList.size() == 0) {
@@ -516,16 +549,21 @@ public class Sessionmanagement {
 				sd.setRefresh_time(new Date());
 				
 				Object idf2 = HibernateUtil.createSession();
-				Session session2 = HibernateUtil.getSession();
-				Transaction tx2 = session2.beginTransaction();				
-				session2.update(sd);
+				EntityManager session2 = HibernateUtil.getSession();
+				EntityTransaction tx2 = session2.getTransaction();
+				tx2.begin();
+				if (sd.getId() == null) {
+					session2.persist(sd);
+				    } else {
+				    	if (!session2.contains(sd)) {
+				    		session2.merge(sd);
+				    }
+				}
 				session2.flush();
 				tx2.commit();
 				HibernateUtil.closeSession(idf2);	
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[updatesession]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[updatesession]: " ,ex2);
 		}
@@ -538,16 +576,6 @@ public class Sessionmanagement {
 	 */
 	private List<Sessiondata> getSessionToDelete(Date refresh_time){
 		try {
-			//log.debug("****** sessionToDelete: "+date);
-//			Object idf = HibernateUtil.createSession();
-//			Session session = HibernateUtil.getSession();
-//			Transaction tx = session.beginTransaction();
-//			Criteria crit = session.createCriteria(Sessiondata.class, ScopeApplicationAdapter.webAppRootKey);
-//			crit.add(Restrictions.lt("refresh_time", date));
-//			List fullList = crit.list();
-//			tx.commit();
-//			HibernateUtil.closeSession(idf);
-//			return fullList;
 			
 			String hql = "Select c from Sessiondata c " +
 							"WHERE c.refresh_time < :refresh_time " +
@@ -558,11 +586,12 @@ public class Sessionmanagement {
 							")";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setDate("refresh_time", refresh_time);
-			List<Sessiondata> fullList = query.list();
+			query.setParameter("refresh_time", refresh_time);
+			List<Sessiondata> fullList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -570,8 +599,6 @@ public class Sessionmanagement {
 			
 			return fullList;			
 			
-		} catch (HibernateException ex) {
-			log.error("[getSessionToDelete]: " ,ex);
 		} catch (Exception ex2) {
 			log.error("[getSessionToDelete]: " ,ex2);
 		}
@@ -584,23 +611,23 @@ public class Sessionmanagement {
 	 */
 	public void clearSessionTable(){
 		try {
-			//log.debug("****** clearSessionTable: ");
+			log.debug("****** clearSessionTable: ");
 			Calendar rightNow = Calendar.getInstance();
 			rightNow.setTimeInMillis(rightNow.getTimeInMillis()-1800000);
 		    List l = this.getSessionToDelete(rightNow.getTime());
-		    //log.debug("clearSessionTable: "+l.size());
+		    log.debug("clearSessionTable: "+l.size());
+            Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 		    for (Iterator it = l.iterator();it.hasNext();){
-				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
 				Sessiondata sData = (Sessiondata) it.next();
-				session.delete(sData);
-				tx.commit();
-				HibernateUtil.closeSession(idf);
+				sData = session.find(Sessiondata.class, sData.getId());
+				session.remove(sData);
 		    }
+            tx.commit();
+			HibernateUtil.closeSession(idf);
 		    
-		} catch (HibernateException ex) {
-			log.error("clearSessionTable",ex);
 		} catch (Exception err) {
 			log.error("clearSessionTable",err);
 		}
@@ -632,14 +659,14 @@ public class Sessionmanagement {
 				Sessiondata sData = this.getSessionByHash(SID);
 
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.delete(sData);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				sData = session.find(Sessiondata.class, sData.getId());
+				session.remove(sData);
 				HibernateUtil.closeSession(idf);
 			}
 
-		} catch (HibernateException ex) {
-			log.error("clearSessionByRoomId", ex);
 		} catch (Exception err) {
 			log.error("clearSessionByRoomId", err);
 		}

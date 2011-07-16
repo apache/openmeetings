@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.adresses.Adresses;
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -46,8 +47,9 @@ public class Addressmanagement {
 			States st = Statemanagement.getInstance().getStateById(states_id);
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Adresses adr = new Adresses();
 			adr.setAdditionalname(additionalname);
@@ -61,7 +63,8 @@ public class Addressmanagement {
 			adr.setPhone(phone);
 			adr.setEmail(email);
 
-			Long id = (Long) session.save(adr);
+			adr = session.merge(adr);
+			Long id = adr.getAdresses_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -69,8 +72,6 @@ public class Addressmanagement {
 			log.debug("added id " + id);
 
 			return id;
-		} catch (HibernateException ex) {
-			log.error("saveAddress",ex);
 		} catch (Exception ex2) {
 			log.error("saveAddress",ex2);
 		}
@@ -81,10 +82,12 @@ public class Addressmanagement {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
-			Long id = (Long) session.save(adr);
+			adr = session.merge(adr);
+			Long id = adr.getAdresses_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -92,8 +95,6 @@ public class Addressmanagement {
 			log.debug("added id " + id);
 
 			return id;
-		} catch (HibernateException ex) {
-			log.error("saveAddress",ex);
 		} catch (Exception ex2) {
 			log.error("saveAddress",ex2);
 		}
@@ -109,16 +110,19 @@ public class Addressmanagement {
 		try {
 			String hql = "select c from Adresses as c where c.adresses_id = :adresses_id";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("adresses_id", adresses_id);
-			Adresses addr = (Adresses) query.uniqueResult();
+			query.setParameter("adresses_id", new Long(adresses_id));
+			Adresses addr = null;
+			try {
+				addr = (Adresses) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return addr;
-		} catch (HibernateException ex) {
-			log.error("getAdressbyId",ex);
 		} catch (Exception ex2) {
 			log.error("getAdressbyId",ex2);
 		}
@@ -135,15 +139,16 @@ public class Addressmanagement {
 		
 		String hql = "select c from Adresses as c " +
 				"where c.email LIKE :email";
-				//"and c.deleted != :deleted";
+				//"and c.deleted <> :deleted";
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+			tx.begin();
 		Query query = session.createQuery(hql);
-		query.setString("email", email);
-		//query.setString("deleted", "true");
+		query.setParameter("email", email);
+		//query.setParameter("deleted", "true");
 		
-		List<Adresses> addr = query.list();
+		List<Adresses> addr = query.getResultList();
 		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
@@ -177,8 +182,9 @@ public class Addressmanagement {
 			Adresses adr = this.getAdressbyId(adresses_id);
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			adr.setAdditionalname(additionalname);
 			adr.setComment(comment);
@@ -191,14 +197,18 @@ public class Addressmanagement {
 			adr.setPhone(phone);
 			adr.setEmail(email);
 
-			session.update(adr);
+			if (adr.getAdresses_id() == null) {
+				session.persist(adr);
+			    } else {
+			    	if (!session.contains(adr)) {
+			    		session.merge(adr);
+			    }
+			}
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return adr;
-		} catch (HibernateException ex) {
-			log.error("updateAdress",ex);
 		} catch (Exception ex2) {
 			log.error("updateAdress",ex2);
 		}
@@ -216,18 +226,23 @@ public class Addressmanagement {
 		try {
 				
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
-			session.update(addr);
+			if (addr.getAdresses_id() == null) {
+				session.persist(addr);
+			    } else {
+			    	if (!session.contains(addr)) {
+			    		session.merge(addr);
+			    }
+			}
 			
 			tx.commit();
 				
 			HibernateUtil.closeSession(idf);
 
 			return addr;
-		} catch (HibernateException ex) {
-			log.error("updateAdress",ex);
 		} catch (Exception ex2) {
 			log.error("updateAdress",ex2);
 		}

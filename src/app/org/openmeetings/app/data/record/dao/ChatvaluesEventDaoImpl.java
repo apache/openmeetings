@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.ChatvaluesEvent;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -36,18 +35,17 @@ public class ChatvaluesEventDaoImpl {
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("roomrecordingId", roomrecordingId);
-			List<ChatvaluesEvent> ll = query.list();
+			query.setParameter("roomrecordingId", roomrecordingId);
+			List<ChatvaluesEvent> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 	
-		} catch (HibernateException ex) {
-			log.error("[getChatvaluesEventByRoomRecordingId]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getChatvaluesEventByRoomRecordingId]: " , ex2);
 		}
@@ -59,17 +57,17 @@ public class ChatvaluesEventDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long chatvaluesEventId = (Long) session.save(chatvaluesEvent);
+			chatvaluesEvent = session.merge(chatvaluesEvent);
+			Long chatvaluesEventId = chatvaluesEvent.getChatvaluesEventId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return chatvaluesEventId;
-		} catch (HibernateException ex) {
-			log.error("[addChatvaluesEvent]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addChatvaluesEvent]: " , ex2);
 		}

@@ -3,12 +3,18 @@ package org.openmeetings.app.data.user.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -42,14 +48,19 @@ public class UsersDaoImpl {
 		if (user_id != null && user_id > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+			tx.begin();
 				Query query = session.createQuery("select c from Users as c where c.user_id = :user_id");
-				query.setLong("user_id", user_id);
+				query.setParameter("user_id", user_id);
 				
 				session.flush();
 				
-				Users users = (Users) query.uniqueResult();
+				Users users = null;
+				try {
+					users = (Users) query.getSingleResult();
+			    } catch (NoResultException ex) {
+			    }
 				session.refresh(users);
 				
 				tx.commit();
@@ -61,8 +72,6 @@ public class UsersDaoImpl {
 				return users;
 				// TODO: Add Usergroups to user
 				// users.setUsergroups(ResHandler.getGroupmanagement().getUserGroups(user_id));
-			} catch (HibernateException ex) {
-				log.error("getUser",ex);
 			} catch (Exception ex2) {
 				log.error("getUser",ex2);
 			}
@@ -76,13 +85,19 @@ public class UsersDaoImpl {
 		if (user.getUser_id() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(user);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				session.flush();
+				if (user.getUser_id() == null) {
+					session.persist(user);
+				    } else {
+				    	if (!session.contains(user)) {
+				    		session.merge(user);
+				    }
+				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
-			} catch (HibernateException ex) {
-				log.error("[updateUser] ",ex);
 			} catch (Exception ex2) {
 				log.error("[updateUser] ",ex2);
 			}
@@ -103,9 +118,16 @@ public class UsersDaoImpl {
 				// Long(USER_ID));
 
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(us);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (us.getUser_id() == null) {
+					session.persist(us);
+				    } else {
+				    	if (!session.contains(us)) {
+				    		session.merge(us);
+				    }
+				}
 				tx.commit();
 				
 				HibernateUtil.closeSession(idf);
@@ -120,8 +142,6 @@ public class UsersDaoImpl {
 				// ResHandler.getContactmanagement().deleteUserContact(USER_ID);
 
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteUserID]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[deleteUserID]" ,ex2);
 		}
@@ -137,16 +157,15 @@ public class UsersDaoImpl {
 		try {
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select count(c.user_id) from Users c where c.deleted = 'false'"); 
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromUsers] "+ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] "+ex2);
 		}
@@ -158,19 +177,21 @@ public class UsersDaoImpl {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Users.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("deleted", "false"));
-
-			List<Users> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+			Root<Users> c = cq.from(Users.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			TypedQuery<Users> q = session.createQuery(cq);
+			List<Users> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;				
 
-		} catch (HibernateException ex) {
-			log.error("[getAllUsers] "+ex);
 		} catch (Exception ex2) {
 			log.error("[getAllUsers] "+ex2);
 		}
@@ -182,18 +203,21 @@ public class UsersDaoImpl {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Users.class);
-
-			List<Users> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
+			Root<Users> c = cq.from(Users.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			TypedQuery<Users> q = session.createQuery(cq);
+			List<Users> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;				
 
-		} catch (HibernateException ex) {
-			log.error("[getAllUsers] "+ex);
 		} catch (Exception ex2) {
 			log.error("[getAllUsers] "+ex2);
 		}
@@ -209,7 +233,7 @@ public class UsersDaoImpl {
 			log.debug("getUserContactsBySearch: "+ search);
 			//log.debug("getUserContactsBySearch: "+ userId);
 			
-			String hql = 	"select count(u) from  Users u "+					
+			String hql = 	"select count(u.user_id) from  Users u "+					
 							"WHERE u.deleted = 'false' ";
 							
 			
@@ -219,14 +243,10 @@ public class UsersDaoImpl {
 					hql +=	" OR ";
 				}
 				hql +=	"( " +
-							"lower(u.lastname) LIKE lower('%"+searchItems[i]+"%') " +
-							"OR lower(u.firstname) LIKE lower('%"+searchItems[i]+"%') " +
-							"OR lower(u.login) LIKE lower('%"+searchItems[i]+"%') " +
-							"OR lower(u.adresses.email) LIKE lower('%"+searchItems[i]+"%') " +
-							//"OR lower(u.username) LIKE lower('%"+searchItems[i]+"%') " +
-							//"OR lower(u.titel) LIKE lower('%"+searchItems[i]+"%') " +
-							//"OR lower(u.email) LIKE lower('%"+searchItems[i]+"%') " +
-							//"OR lower(u.firma) LIKE lower('%"+searchItems[i]+"%') " +
+							"lower(u.lastname) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
+							"OR lower(u.firstname) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
+							"OR lower(u.login) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
+							"OR lower(u.adresses.email) LIKE '" + StringUtils.lowerCase("%"+searchItems[i]+"%") + "' " +
 						") ";
 								
 			}
@@ -235,17 +255,18 @@ public class UsersDaoImpl {
 			log.debug("Show HQL: "+hql);						
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
 			//log.debug("id: "+folderId);
 			
-			//query.setLong("macomUserId", userId);
-			//query.setLong("messageFolder", folderId);
+			//query.setParameter("macomUserId", userId);
+			//query.setParameter("messageFolder", folderId);
 			//query
 						
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -254,8 +275,6 @@ public class UsersDaoImpl {
 			Long i = (Long)ll.get(0);
 			
 			return new Long(i);
-		} catch (HibernateException ex) {
-			log.error("[getAllUserMax]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAllUserMax]: " + ex2);
 		}
@@ -270,20 +289,19 @@ public class UsersDaoImpl {
 	public boolean checkUserLogin(String DataValue) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Users as c where c.login = :DataValue AND deleted != :deleted");
-			query.setString("DataValue", DataValue);
-			query.setString("deleted", "true");
-			int count = query.list().size();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted");
+			query.setParameter("DataValue", DataValue);
+			query.setParameter("deleted", "true");
+			int count = query.getResultList().size();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (count != 0) {
 				return false;
 			}			
-		} catch (HibernateException ex) {
-			log.error("[checkUserData]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[checkUserData]" ,ex2);
 		}
@@ -295,14 +313,19 @@ public class UsersDaoImpl {
 		try {
 			String hql = "SELECT u FROM Users as u " +
 					" where u.login = :login" +
-					" AND deleted != :deleted";
+					" AND u.deleted <> :deleted";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("login", login);
-			query.setString("deleted", "true");
-			Users us = (Users) query.uniqueResult();
+			query.setParameter("login", login);
+			query.setParameter("deleted", "true");
+			Users us = null;
+			try {
+				us = (Users) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return us;			
@@ -316,14 +339,19 @@ public class UsersDaoImpl {
 		try {
 			String hql = "SELECT u FROM Users as u " +
 					" where u.adresses.adresses_id = :adresses_id" +
-					" AND deleted != :deleted";
+					" AND u.deleted <> :deleted";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("adresses_id", adresses_id);
-			query.setString("deleted", "true");
-			Users us = (Users) query.uniqueResult();
+			query.setParameter("adresses_id", adresses_id);
+			query.setParameter("deleted", "true");
+			Users us = null;
+			try {
+				us = (Users) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return us;			
@@ -338,14 +366,19 @@ public class UsersDaoImpl {
 			if (hash.length()==0) return new Long(-5);
 			String hql = "SELECT u FROM Users as u " +
 					" where u.resethash = :resethash" +
-					" AND deleted != :deleted";
+					" AND u.deleted <> :deleted";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("resethash", hash);
-			query.setString("deleted", "true");
-			Users us = (Users) query.uniqueResult();
+			query.setParameter("resethash", hash);
+			query.setParameter("deleted", "true");
+			Users us = null;
+			try {
+				us = (Users) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (us!=null) {
@@ -387,24 +420,23 @@ public class UsersDaoImpl {
 			String hql = "select count(c.user_id) from Users c " +
 					"where c.deleted = 'false' " +
 					"AND (" +
-					"lower(c.login) LIKE lower(:search) " +
-					"OR lower(c.firstname) LIKE lower(:search) " +
-					"OR lower(c.lastname) LIKE lower(:search) " +
+					"lower(c.login) LIKE :search " +
+					"OR lower(c.firstname) LIKE :search " +
+					"OR lower(c.lastname) LIKE :search " +
 					")";
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setString("search", search);
-			List ll = query.list();
+			query.setParameter("search", StringUtils.lowerCase(search));
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromUsers] "+ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] "+ex2);
 		}

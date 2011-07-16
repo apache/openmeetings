@@ -1,33 +1,44 @@
 package org.openmeetings.app.hibernate.beans.rooms;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.domain.Organisation;
 
-/**
- * 
- * @hibernate.class table="rooms_organisation"
- * lazy="false"
- *
- */
-public class Rooms_Organisation {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "rooms_organisation")
+public class Rooms_Organisation implements Serializable {
 	
+	private static final long serialVersionUID = 4153935045968138984L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="rooms_organisation_id")
 	private Long rooms_organisation_id;
+	@ManyToOne(fetch = FetchType.EAGER) 
+	@JoinColumn(name="rooms_id", nullable=true)
 	private Rooms room;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="organisation_id", nullable=true)
 	private Organisation organisation;
+	@Column(name = "starttime")
 	private Date starttime;
+	@Column(name = "updatetime")
 	private Date updatetime;
+	@Column(name = "deleted")
 	private String deleted;
-	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="organisation_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.domain.Organisation"
-     *  not-null="false"
-     *  outer-join="true"
-     */		
+
     public Organisation getOrganisation() {
 		return organisation;
 	}
@@ -35,15 +46,6 @@ public class Rooms_Organisation {
 		this.organisation = organisation;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="rooms_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-     *  not-null="false"
-     *  outer-join="true"
-     */	
 	public Rooms getRoom() {
 		return room;
 	}
@@ -51,12 +53,6 @@ public class Rooms_Organisation {
 		this.room = room;
 	}
 
-    /**
-     * 
-     * @hibernate.id
-     *  column="rooms_organisation_id"
-     *  generator-class="increment"
-     */  
 	public Long getRooms_organisation_id() {
 		return rooms_organisation_id;
 	}
@@ -64,11 +60,6 @@ public class Rooms_Organisation {
 		this.rooms_organisation_id = rooms_organisation_id;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -76,11 +67,6 @@ public class Rooms_Organisation {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -88,15 +74,11 @@ public class Rooms_Organisation {
 		this.updatetime = updatetime;
 	}	
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
+
 }

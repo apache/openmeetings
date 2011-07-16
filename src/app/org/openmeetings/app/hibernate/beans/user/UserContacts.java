@@ -1,30 +1,46 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="user_contacts"
- * lazy="false"
- *
- */
-public class UserContacts {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user_contacts")
+public class UserContacts implements Serializable {
 	
+	private static final long serialVersionUID = 2391405538978996206L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="user_contact_id")
 	private long userContactId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
 	private Users contact;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="owner_id")
 	private Users owner;
+	@Column(name="pending")
 	private Boolean pending;
+	@Column(name="hash")
 	private String hash;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
+	@Column(name="share_calendar")
 	private Boolean shareCalendar;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="user_contact_id"
-     *  generator-class="increment"
-     */
 	public long getUserContactId() {
 		return userContactId;
 	}
@@ -32,15 +48,6 @@ public class UserContacts {
 		this.userContactId = userContactId;
 	}
 	
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 	
 	public Users getContact() {
 		return contact;
 	}
@@ -48,15 +55,6 @@ public class UserContacts {
 		this.contact = contact;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="owner_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getOwner() {
 		return owner;
 	}
@@ -64,11 +62,6 @@ public class UserContacts {
 		this.owner = owner;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="pending"
-     *  type="boolean"
-     */
 	public Boolean getPending() {
 		return pending;
 	}
@@ -76,11 +69,6 @@ public class UserContacts {
 		this.pending = pending;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -88,11 +76,6 @@ public class UserContacts {
 		this.inserted = inserted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */
 	public Date getUpdated() {
 		return updated;
 	}
@@ -100,11 +83,6 @@ public class UserContacts {
 		this.updated = updated;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="hash"
-     *  type="string"
-     */	
 	public String getHash() {
 		return hash;
 	}
@@ -112,11 +90,6 @@ public class UserContacts {
 		this.hash = hash;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="share_calendar"
-     *  type="boolean"
-     */
 	public Boolean getShareCalendar() {
 		return shareCalendar;
 	}

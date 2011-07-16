@@ -1,52 +1,82 @@
 package org.openmeetings.app.hibernate.beans.files;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="fileexploreritem"
- * lazy="false"
- *
- */
-public class FileExplorerItem {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "fileexploreritem")
+public class FileExplorerItem implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 242843782142620566L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="fileexploreritem_id")
 	private long fileExplorerItemId;
+	@Column(name="filename")
 	private String fileName;
+	@Column(name="filehash")
 	private String fileHash;
+	@Column(name="parent_fileexploreritem_id")
 	private Long parentFileExplorerItemId;
+	@Column(name="room_id")
 	private Long room_id;
+	@Column(name="owner_id")
 	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	//maybe are also in a Home directory but just because their parent is
 	
+	@Column(name="is_folder")
 	private Boolean isFolder;
+	@Column(name="is_image")
 	private Boolean isImage;
+	@Column(name="is_presentation")
 	private Boolean isPresentation;
+	@Column(name="is_video")
 	private Boolean isVideo;
 	
+	@Column(name="inserted_by")
 	private Long insertedBy;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
+	@Column(name="deleted")
 	private String deleted;
 	
+	@Column(name="filesize")
 	private Long fileSize;
 	
+	@Column(name="flv_width")
 	private Integer flvWidth;
+	@Column(name="flv_height")
 	private Integer flvHeight;
+	@Column(name="preview_image")
 	private String previewImage;
 	
+	@Column(name="wml_file_path")
 	private String wmlFilePath;
-    private Boolean isStoredWmlFile;
+	@Column(name="is_stored_wml_file")
+	private Boolean isStoredWmlFile;
+	@Column(name="is_chart")
     private Boolean isChart;
     
+	@Column(name="external_file_id")
     private Long externalFileId; 
+	@Column(name="external_type")
     private String externalType;
+
 		
-	/**
-	 *
-	 * @hibernate.id
-	 *  column="fileexploreritem_id"
-	 *  generator-class="increment"
-	 */
 	public long getFileExplorerItemId() {
 		return fileExplorerItemId;
 	}
@@ -54,11 +84,6 @@ public class FileExplorerItem {
 		this.fileExplorerItemId = fileExplorerItemId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="filename"
-     *  type="string"
-     */
 	public String getFileName() {
 		return fileName;
 	}
@@ -66,11 +91,6 @@ public class FileExplorerItem {
 		this.fileName = fileName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="filehash"
-     *  type="string"
-     */
 	public String getFileHash() {
 		return fileHash;
 	}
@@ -78,11 +98,6 @@ public class FileExplorerItem {
 		this.fileHash = fileHash;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="parent_fileexploreritem_id"
-     *  type="long"
-     */
 	public Long getParentFileExplorerItemId() {
 		return parentFileExplorerItemId;
 	}
@@ -90,11 +105,6 @@ public class FileExplorerItem {
 		this.parentFileExplorerItemId = parentFileExplorerItemId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="owner_id"
-     *  type="long"
-     */
 	public Long getOwnerId() {
 		return ownerId;
 	}
@@ -102,11 +112,6 @@ public class FileExplorerItem {
 		this.ownerId = ownerId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="room_id"
-     *  type="long"
-     */
 	public Long getRoom_id() {
 		return room_id;
 	}
@@ -114,11 +119,6 @@ public class FileExplorerItem {
 		this.room_id = room_id;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_folder"
-     *  type="boolean"
-     */
 	public Boolean getIsFolder() {
 		return isFolder;
 	}
@@ -126,11 +126,6 @@ public class FileExplorerItem {
 		this.isFolder = isFolder;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_image"
-     *  type="boolean"
-     */
 	public Boolean getIsImage() {
 		return isImage;
 	}
@@ -138,11 +133,6 @@ public class FileExplorerItem {
 		this.isImage = isImage;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_video"
-     *  type="boolean"
-     */
 	public Boolean getIsVideo() {
 		return isVideo;
 	}
@@ -150,11 +140,6 @@ public class FileExplorerItem {
 		this.isVideo = isVideo;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_presentation"
-     *  type="boolean"
-     */
 	public Boolean getIsPresentation() {
 		return isPresentation;
 	}
@@ -162,11 +147,6 @@ public class FileExplorerItem {
 		this.isPresentation = isPresentation;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted_by"
-     *  type="long"
-     */
 	public Long getInsertedBy() {
 		return insertedBy;
 	}
@@ -174,11 +154,6 @@ public class FileExplorerItem {
 		this.insertedBy = insertedBy;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -186,11 +161,6 @@ public class FileExplorerItem {
 		this.inserted = inserted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */  
 	public String getDeleted() {
 		return deleted;
 	}
@@ -198,11 +168,6 @@ public class FileExplorerItem {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */ 
 	public Date getUpdated() {
 		return updated;
 	}
@@ -210,11 +175,6 @@ public class FileExplorerItem {
 		this.updated = updated;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="filesize"
-     *  type="long"
-     */ 
 	public Long getFileSize() {
 		return fileSize;
 	}
@@ -222,11 +182,6 @@ public class FileExplorerItem {
 		this.fileSize = fileSize;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="flv_width"
-     *  type="int"
-     */ 
 	public Integer getFlvWidth() {
 		return flvWidth;
 	}
@@ -234,11 +189,6 @@ public class FileExplorerItem {
 		this.flvWidth = flvWidth;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="flv_height"
-     *  type="int"
-     */
 	public Integer getFlvHeight() {
 		return flvHeight;
 	}
@@ -246,11 +196,6 @@ public class FileExplorerItem {
 		this.flvHeight = flvHeight;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="preview_image"
-     *  type="string"
-     */	
 	public String getPreviewImage() {
 		return previewImage;
 	}	
@@ -258,11 +203,6 @@ public class FileExplorerItem {
 		this.previewImage = previewImage;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="wml_file_path"
-     *  type="string"
-     */
 	public String getWmlFilePath() {
 		return wmlFilePath;
 	}
@@ -270,35 +210,20 @@ public class FileExplorerItem {
 		this.wmlFilePath = wmlFilePath;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_stored_wml_file"
-     *  type="boolean"
-     */
 	public Boolean getIsStoredWmlFile() {
 		return isStoredWmlFile;
 	}
 	public void setIsStoredWmlFile(Boolean isStoredWmlFile) {
 		this.isStoredWmlFile = isStoredWmlFile;
 	}
-	
-    /**
-     * @hibernate.property
-     *  column="is_chart"
-     *  type="boolean"
-     */
-    public Boolean getIsChart() {
+
+	public Boolean getIsChart() {
         return isChart;
     }
     public void setIsChart(Boolean isChart) {
         this.isChart = isChart;
     }
     
-    /**
-     * @hibernate.property
-     *  column="external_file_id"
-     *  type="long"
-     */
 	public Long getExternalFileId() {
 		return externalFileId;
 	}
@@ -306,16 +231,11 @@ public class FileExplorerItem {
 		this.externalFileId = externalFileId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="external_type"
-     *  type="string"
-     */
 	public String getExternalType() {
 		return externalType;
 	}
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
-    
+	
 }

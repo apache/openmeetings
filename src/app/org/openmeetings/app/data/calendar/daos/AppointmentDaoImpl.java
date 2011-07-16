@@ -1,36 +1,35 @@
 package org.openmeetings.app.data.calendar.daos;
 
-import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
-import org.openmeetings.app.data.basic.Configurationmanagement;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
-import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -68,18 +67,19 @@ public class AppointmentDaoImpl {
 		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
 		
 		String hql = "select a from Appointment a " +
-					"WHERE a.deleted != :deleted " +
+					"WHERE a.deleted <> :deleted " +
 					"AND a.room.rooms_id = :room_id ";
 		
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+			tx.begin();
 		Query query = session.createQuery(hql);
-		query.setString("deleted", "true");
-		query.setLong("room_id",room_id);
+		query.setParameter("deleted", "true");
+		query.setParameter("room_id",room_id);
 		
 		
-		List<Appointment> appoint = query.list();
+		List<Appointment> appoint = query.getResultList();
 		
 		tx.commit();
 		HibernateUtil.closeSession(idf);
@@ -96,24 +96,28 @@ public class AppointmentDaoImpl {
 		try {
 			
 			String hql = "select a from Appointment a " +
-					"WHERE a.deleted != :deleted " +
+					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentId = :appointmentId ";
 					
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("appointmentId",appointmentId);
+			query.setParameter("deleted", "true");
+			query.setParameter("appointmentId",appointmentId);
 			
 			
-			Appointment appoint = (Appointment) query.uniqueResult();
+			Appointment appoint = null;
+			try{
+				appoint = (Appointment) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
+		    session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appoint;
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentById]: " , ex2);
 		}
@@ -127,19 +131,22 @@ public class AppointmentDaoImpl {
 					"WHERE a.appointmentId = :appointmentId ";
 					
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("appointmentId",appointmentId);
+			query.setParameter("appointmentId",appointmentId);
 			
 			
-			Appointment appoint = (Appointment) query.uniqueResult();
+			Appointment appoint = null;
+			try{
+				appoint = (Appointment) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appoint;
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentById]: " , ex2);
 		}
@@ -150,15 +157,16 @@ public class AppointmentDaoImpl {
 		try {
 			
 			String hql = "select a from Appointment a " +
-					"WHERE a.deleted != :deleted ";
+					"WHERE a.deleted <> :deleted ";
 					
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
+			query.setParameter("deleted", "true");
 			
-			List<Appointment> appointList = query.list();
+			List<Appointment> appointList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -170,8 +178,6 @@ public class AppointmentDaoImpl {
 			
 			return appointList;
 			
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentById]: " , ex2);
 		}
@@ -249,17 +255,18 @@ public class AppointmentDaoImpl {
 			ap.setIsConnectedEvent(isConnectedEvent);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long appointment_id = (Long)session.save(ap);
+			ap = session.merge(ap);
+			session.flush();
+			Long appointment_id = ap.getAppointmentId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appointment_id;
-		} catch (HibernateException ex) {
-			log.error("[addAppointment]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addAppointment]: ",ex2);
 		}
@@ -272,17 +279,18 @@ public class AppointmentDaoImpl {
 			ap.setStarttime(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long appointment_id = (Long)session.save(ap);
+			ap = session.merge(ap);
+			session.flush();
+			Long appointment_id = ap.getAppointmentId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appointment_id;
-		} catch (HibernateException ex) {
-			log.error("[addAppointmentObj]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addAppointmentObj]: ",ex2);
 		}
@@ -295,14 +303,19 @@ public class AppointmentDaoImpl {
 		if (appointment.getAppointmentId() > 0) {
 			try {
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(appointment);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (appointment.getAppointmentId() == null) {
+					session.persist(appointment);
+				    } else {
+				    	if (!session.contains(appointment)) {
+				    		session.merge(appointment);
+				    }
+				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return appointment.getAppointmentId();
-			} catch (HibernateException ex) {
-				log.error("[updateAppointment] ",ex);
 			} catch (Exception ex2) {
 				log.error("[updateAppointment] ",ex2);
 			}
@@ -319,11 +332,12 @@ public class AppointmentDaoImpl {
 							"WHERE a.room.rooms_id = :roomId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("roomId", roomId);
-			List<Appointment> ll = query.list();
+			query.setParameter("roomId", roomId);
+			List<Appointment> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -345,8 +359,9 @@ public class AppointmentDaoImpl {
 			List<Appointment> appointments = this.getAppointmentsByRoomId(ap.getRoom().getRooms_id());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			for (Appointment appointment : appointments) {
 				
@@ -355,7 +370,13 @@ public class AppointmentDaoImpl {
 					ap.setAppointmentStarttime(appointmentstart);
 				 	ap.setAppointmentEndtime(appointmentend);
 					ap.setUpdatetime(new Date());
-					session.update(ap);
+					if (ap.getAppointmentId() == null) {
+						session.persist(ap);
+					    } else {
+					    	if (!session.contains(ap)) {
+					    		session.merge(ap);
+					    }
+					}
 					
 				}
 				
@@ -394,8 +415,9 @@ public class AppointmentDaoImpl {
 			log.debug("updateConnectedEvents 3 "+appointments.size());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			for (Appointment appointment : appointments) {
 				
@@ -425,7 +447,13 @@ public class AppointmentDaoImpl {
 					//ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
 					appointment.setAppointmentCategory(appointmentCategory);
 					
-					session.update(appointment);
+					if (appointment.getAppointmentId() == null) {
+						session.persist(appointment);
+					    } else {
+					    	if (!session.contains(appointment)) {
+					    		session.merge(appointment);
+					    }
+					}
 
 				}
 				
@@ -512,10 +540,17 @@ public class AppointmentDaoImpl {
 			ap.setAppointmentCategory(appointmentCategory);
 						
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(ap);
+			if (ap.getAppointmentId() == null) {
+				session.persist(ap);
+			    } else {
+			    	if (!session.contains(ap)) {
+			    		session.merge(ap);
+			    }
+			}
 
 			tx.commit();
 		    HibernateUtil.closeSession(idf);
@@ -609,8 +644,6 @@ public class AppointmentDaoImpl {
 		    }
 		    
 		    return appointmentId;
-		} catch (HibernateException ex) {
-			log.error("[updateAppointment]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateAppointment]: ",ex2);
 		}
@@ -651,10 +684,17 @@ public class AppointmentDaoImpl {
 			ap.setUpdatetime(new Date());
 						
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(ap);
+			if (ap.getAppointmentId() == null) {
+				session.persist(ap);
+			    } else {
+			    	if (!session.contains(ap)) {
+			    		session.merge(ap);
+			    }
+			}
 
 			tx.commit();
 		    HibernateUtil.closeSession(idf);
@@ -675,8 +715,6 @@ public class AppointmentDaoImpl {
 		    }
 		    
 		    return appointmentId;
-		} catch (HibernateException ex) {
-			log.error("[updateAppointmentByTime]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateAppointmentByTime]: ",ex2);
 		}
@@ -695,15 +733,20 @@ public class AppointmentDaoImpl {
 			app.setDeleted("true");
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(app);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (app.getAppointmentId() == null) {
+				session.persist(app);
+			    } else {
+			    	if (!session.contains(app)) {
+			    		session.merge(app);
+			    }
+			}
 						
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return appointmentId;
-		} catch (HibernateException ex) {
-			log.error("[deleteAppointement]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[deleteAppointement]: " + ex2);
 		}
@@ -726,7 +769,7 @@ public class AppointmentDaoImpl {
 			endtime.setMinutes(59);
 			
 			String hql = "select a from Appointment a " +					
-			"WHERE a.deleted != :deleted  " +
+			"WHERE a.deleted <> :deleted  " +
 			"AND "+
 			"( " +
 					"(a.appointmentStarttime BETWEEN :starttime AND :endtime) "+
@@ -737,21 +780,22 @@ public class AppointmentDaoImpl {
 			") "+
 			"AND " +
 			"( " +
-					"a.userId = :userId "+
+					"a.userId.user_id = :userId "+
 			")";
 			
 			//"AND (a.terminstatus != 4 AND a.terminstatus != 5)";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setDate("starttime", starttime);
-			query.setDate("endtime", endtime);
-			query.setLong("userId",userId);
+			query.setParameter("deleted", "true");
+			query.setParameter("starttime", starttime);
+			query.setParameter("endtime", endtime);
+			query.setParameter("userId",userId);
 			
-			List<Appointment> listAppoints = query.list();
+			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -763,8 +807,6 @@ public class AppointmentDaoImpl {
 			}
 			
 			return listAppoints;
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentsByRange]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentsByRange]: " + ex2);
 		}
@@ -775,23 +817,22 @@ public class AppointmentDaoImpl {
 		try {
 			
 			String hql = "select a from Appointments a " +
-					"WHERE a.deleted != :deleted " +
+					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentCategory.categoryId = :categoryId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("categoryId", categoryId);
+			query.setParameter("deleted", "true");
+			query.setParameter("categoryId", categoryId);
 			
-			List<Appointment> listAppoints = query.list();
+			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return listAppoints;
-		} catch (HibernateException ex) {
-			log.error("[getAppointements]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointements]: " + ex2);
 		}
@@ -802,19 +843,21 @@ public class AppointmentDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Appointment.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("deleted", "false"));
-			Criteria subcrit = crit.createCriteria("appointmentCategory");
-			subcrit.add(Restrictions.eq("categoryId", cat_id));
-			List<Appointment> listAppoints = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
+			Root<Appointment> c = cq.from(Appointment.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate subCondition = cb.equal(c.get("categoryId"), cat_id);
+			cq.where(condition, subCondition);
+			TypedQuery<Appointment> q = session.createQuery(cq);
+			List<Appointment> listAppoints = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return listAppoints;
-		} catch (HibernateException ex) {
-			log.error("[getAppointements]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointements]: " + ex2);
 		}
@@ -826,23 +869,26 @@ public class AppointmentDaoImpl {
 		try {
 						
 			String hql = "select a from Appointment a " +
-					"WHERE a.deleted != :deleted " +					
+					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentStarttime > :appointmentStarttime ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");			
-			query.setDate("appointmentStarttime", appointmentStarttime);
+			query.setParameter("deleted", "true");			
+			query.setParameter("appointmentStarttime", appointmentStarttime);
 			
-			Appointment appoint = (Appointment) query.uniqueResult();
+			Appointment appoint = null;
+			try{
+				appoint = (Appointment) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appoint;
-		} catch (HibernateException ex) {
-			log.error("[getNextAppointmentById]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getNextAppointmentById]: " + ex2);
 		}
@@ -853,23 +899,22 @@ public class AppointmentDaoImpl {
 		try {
 			
 			String hql = "select a from Appointment a " +
-					"WHERE a.deleted != :deleted " +
+					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentName LIKE :appointmentName";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setString("appointmentName", name );
+			query.setParameter("deleted", "true");
+			query.setParameter("appointmentName", name );
 			
-			List<Appointment> listAppoints = query.list();
+			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return listAppoints;
-		} catch (HibernateException ex) {
-			log.error("[searchAppointmentsByName]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[searchAppointmentsByName]: " + ex2);
 		}
@@ -887,9 +932,9 @@ public class AppointmentDaoImpl {
 		
 		String hql = "SELECT app from MeetingMember mm " + 
 		"JOIN mm.appointment as app " + 
-		"WHERE mm.userid= :userId " + 
-		"AND mm.deleted!= :mm_deleted " + 
-		"AND app.deleted!= :app_deleted "+
+		"WHERE mm.userid.user_id= :userId " + 
+		"AND mm.deleted <> :mm_deleted " +
+		"AND app.deleted <> :app_deleted "+
 		"AND  " +
 		"app.appointmentStarttime between :starttime " + 
 		"AND " + 
@@ -915,31 +960,33 @@ public class AppointmentDaoImpl {
 		System.out.println("StartTime : " + startDate);
 		System.out.println("EndTime : " + endDate);
 		
-		
+		EntityTransaction tx = null;
 		try{
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		tx = session.getTransaction();
+		tx.begin();
 		
 		session.flush();
 		Query query = session.createQuery(hql);
 		
-		query.setBoolean("mm_deleted", true);
-		query.setString("app_deleted", "true");
-		query.setLong("userId", userId);
+		query.setParameter("mm_deleted", true);
+		query.setParameter("app_deleted", "true");
+		query.setParameter("userId", userId);
 		
 		
-		query.setTimestamp("starttime", startStamp);
-		query.setTimestamp("endtime", stopStamp);
+		query.setParameter("starttime", startStamp);
+		query.setParameter("endtime", stopStamp);
 		
 		
-		List<Appointment> listAppoints = query.list();
+		List<Appointment> listAppoints = query.getResultList();
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		
 		return listAppoints;
 		}catch(Exception e){
 			log.error("Error in getTodaysAppoitmentsbyRangeAndMember : " + e.getMessage());
+			tx.rollback();
 			return null;
 		}
 	}
@@ -958,8 +1005,8 @@ public class AppointmentDaoImpl {
 			
 			String hql = "SELECT app from MeetingMember mm " + 
 						"JOIN mm.appointment as app " + 
-						"WHERE mm.deleted!= :mm_deleted " + 
-						"AND app.deleted!= :app_deleted "+
+						"WHERE mm.deleted <> :mm_deleted " +
+						"AND app.deleted <> :app_deleted "+
 						"AND  " +
 						"app.appointmentStarttime between :starttime " + 
 						"AND " + 
@@ -984,18 +1031,19 @@ public class AppointmentDaoImpl {
 			//System.out.println("EndTime : " + endDate);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			query.setBoolean("mm_deleted", true);
-			query.setString("app_deleted", "true");
+			query.setParameter("mm_deleted", true);
+			query.setParameter("app_deleted", "true");
 			
-			query.setTimestamp("starttime", startStamp);
-			query.setTimestamp("endtime", stopStamp);
+			query.setParameter("starttime", startStamp);
+			query.setParameter("endtime", stopStamp);
 			
 			
-			List<Appointment> listAppoints = query.list();
+			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -1013,21 +1061,22 @@ public class AppointmentDaoImpl {
 		    //log.debug("getAppointmentByRoomId");	
 			
 			String hql = "select a from Appointment a " +
-								"WHERE a.deleted != :deleted " +
+								"WHERE a.deleted <> :deleted " +
 								"AND a.userId.user_id = :user_id " +
 								"AND a.room.rooms_id = :rooms_id ";
 			
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			query.setString("deleted", "true");
-			query.setLong("user_id", user_id);
-			query.setLong("rooms_id", rooms_id);
+			query.setParameter("deleted", "true");
+			query.setParameter("user_id", user_id);
+			query.setParameter("rooms_id", rooms_id);
 			
-			List<Appointment> listAppoints = query.list();
+			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			

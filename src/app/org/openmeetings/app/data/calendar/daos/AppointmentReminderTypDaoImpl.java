@@ -5,15 +5,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.data.user.Usermanagement;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -40,23 +37,26 @@ public class AppointmentReminderTypDaoImpl {
 			log.debug("AppointmentReminderTypById: "+ typId);
 			
 			String hql = "select app from AppointmentReminderTyps app " +
-					"WHERE app.deleted != :deleted " +
+					"WHERE app.deleted <> :deleted " +
 					"AND app.typId = :typId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("typId",typId);
+			query.setParameter("deleted", "true");
+			query.setParameter("typId",typId);
 			
-			AppointmentReminderTyps appointmentReminderTyps = (AppointmentReminderTyps) query.uniqueResult();
+			AppointmentReminderTyps appointmentReminderTyps = null;
+			try {
+				appointmentReminderTyps = (AppointmentReminderTyps) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appointmentReminderTyps;
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentReminderTypsById]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentReminderTypsById]: " + ex2);
 		}
@@ -73,16 +73,21 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setUpdatetime(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(ac);
+			if (ac.getTypId() == null) {
+				session.persist(ac);
+			    } else {
+			    	if (!session.contains(ac)) {
+			    		session.merge(ac);
+			    }
+			}
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return typId;
-		} catch (HibernateException ex) {
-			log.error("[updateAppointmentReminderTyps]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateAppointmentReminderTyps]: ",ex2);
 		}
@@ -102,17 +107,17 @@ public class AppointmentReminderTypDaoImpl {
 			
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long category_id = (Long)session.save(ac);
+			ac = session.merge(ac);
+			Long category_id = ac.getTypId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return category_id;
-		} catch (HibernateException ex) {
-			log.error("[addAppointmentReminderTyps]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addAppointmentReminderTyps]: ",ex2);
 		}
@@ -134,15 +139,20 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setDeleted("true");
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(ac);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (ac.getTypId() == null) {
+				session.persist(ac);
+			    } else {
+			    	if (!session.contains(ac)) {
+			    		session.merge(ac);
+			    }
+			}
 						
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return typId;
-		} catch (HibernateException ex) {
-			log.error("[deleteAppointmentReminderTyp]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[deleteAppointmentReminderTyp]: " + ex2);
 		}
@@ -155,22 +165,21 @@ public class AppointmentReminderTypDaoImpl {
 		try {
 			
 			String hql = "select a from AppointmentReminderTyps a " +
-					"WHERE a.deleted != :deleted ";
+					"WHERE a.deleted <> :deleted ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
+			query.setParameter("deleted", "true");
 			
 				
-			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.list();
+			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return listAppointmentReminderTyp;
-		} catch (HibernateException ex) {
-			log.error("[getAppointmentReminderTypList]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getAppointmentReminderTypList]: " + ex2);
 		}

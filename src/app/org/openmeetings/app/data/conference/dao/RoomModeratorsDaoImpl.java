@@ -6,14 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
-import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
 import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -49,14 +47,14 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setDeleted("false");
 			rModerator.setRoomId(roomId);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long rModeratorId = (Long) session.save(rModerator);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			rModerator = session.merge(rModerator);
+			long rModeratorId = rModerator.getRoomModeratorsId();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return rModeratorId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomModeratorByUserId] ",ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomModeratorByUserId] ",ex2);
 		}
@@ -67,14 +65,14 @@ public class RoomModeratorsDaoImpl {
 		try {
 			rModerator.setStarttime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long rModeratorId = (Long) session.save(rModerator);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			rModerator = session.merge(rModerator);
+			long rModeratorId = rModerator.getRoomModeratorsId();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return rModeratorId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomModeratorByUserId] ",ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomModeratorByUserId] ",ex2);
 		}
@@ -90,21 +88,24 @@ public class RoomModeratorsDaoImpl {
 			String hql = "select c from RoomModerators as c where c.roomModeratorsId = :roomModeratorsId";
 		
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			query.setLong("roomModeratorsId", roomModeratorsId);
+			query.setParameter("roomModeratorsId", roomModeratorsId);
 			
-			RoomModerators roomModerators = (RoomModerators) query.uniqueResult();
+			RoomModerators roomModerators = null;
+			try {
+				roomModerators = (RoomModerators) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomModerators;
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomModeratorById] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorById] ", ex2);
 		}
@@ -115,26 +116,24 @@ public class RoomModeratorsDaoImpl {
 		try {
 			
 			String hql = "select c from RoomModerators as c " +
-					"where c.roomId = :roomId AND c.deleted != :deleted";
+					"where c.roomId = :roomId AND c.deleted <> :deleted";
 		
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			query.setString("deleted", "true");
-			query.setLong("roomId", roomId);
+			query.setParameter("deleted", "true");
+			query.setParameter("roomId", roomId);
 			
-			List<RoomModerators> roomModerators = query.list();
+			List<RoomModerators> roomModerators = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomModerators;
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomModeratorByRoomId] ", ex);
-			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByRoomId] ", ex2);
 			ex2.printStackTrace();
@@ -147,28 +146,26 @@ public class RoomModeratorsDaoImpl {
 			
 			String hql = "select c from RoomModerators as c " +
 					"where c.roomId = :roomId " +
-					"AND c.deleted != :deleted " +
+					"AND c.deleted <> :deleted " +
 					"AND c.user.user_id = :user_id";
 		
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
 			
-			query.setString("deleted", "true");
-			query.setLong("roomId", roomId);
-			query.setLong("user_id", user_id);
+			query.setParameter("deleted", "true");
+			query.setParameter("roomId", roomId);
+			query.setParameter("user_id", user_id);
 			
-			List<RoomModerators> roomModerators = query.list();
+			List<RoomModerators> roomModerators = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomModerators;
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomModeratorByUserAndRoomId] ", ex);
-			ex.printStackTrace();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByUserAndRoomId] ", ex2);
 			ex2.printStackTrace();
@@ -193,14 +190,19 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setDeleted("true");
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(rModerator);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (rModerator.getRoomModeratorsId() == 0) {
+				session.persist(rModerator);
+			    } else {
+			    	if (!session.contains(rModerator)) {
+			    		session.merge(rModerator);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[removeRoomModeratorByUserId] ",ex);
 		} catch (Exception ex2) {
 			log.error("[removeRoomModeratorByUserId] ",ex2);
 		}
@@ -218,14 +220,19 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setUpdatetime(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(rModerator);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (rModerator.getRoomModeratorsId() == 0) {
+				session.persist(rModerator);
+			    } else {
+			    	if (!session.contains(rModerator)) {
+			    		session.merge(rModerator);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[updateRoomModeratorByUserId] ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateRoomModeratorByUserId] ",ex2);
 		}

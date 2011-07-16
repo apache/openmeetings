@@ -1,43 +1,71 @@
 package org.openmeetings.app.hibernate.beans.recording;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 
-/**
- * 
- * @hibernate.class table="roomrecording"
- * lazy="false"
- *
- */
-public class RoomRecording {
+@Entity
+@Table(name = "roomrecording")
+public class RoomRecording implements Serializable {
 
+	private static final long serialVersionUID = 1528422565551476163L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="roomrecording_id")
 	private Long roomrecordingId;
+	@Column(name="conferencetype")
 	private String conferenceType;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="room_setup")
 	private Rooms room_setup;
+	@Column(name="roomrecordingstablestring")
 	private String roomRecordingsTableString;
+	@Column(name="comment_field")
 	private String comment;
+	@Transient
 	private Object initwhiteboardvars;
+	@Lob
+	@Column(name="initwhiteboardvars_in_xml")
 	private String initwhiteboardvarsInXml;
+	@Column(name="recordingname")
 	private String recordingName;
+	@Column(name="starttime")
 	private Date starttime;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="startedby_roomclient_id", insertable=true, updatable=true)
 	private RoomClient startedby;
+	@Transient
 	private List<RecordingClient> roomClients;
+	@Transient
 	private List<RoomStream> roomStreams;
+	@Transient
 	private List<WhiteBoardEvent> whiteboard;
+	@Transient
 	private List<ChatvaluesEvent> chatvalues;
+	@Column(name="endtime")
 	private Date endtime;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="enduser_roomclient_id", insertable=true, updatable=true)
 	private RoomClient enduser;
+	@Column(name="recordname")
 	private String recordname;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="roomrecording_id"
-     *  generator-class="increment"
-     */
 	public Long getRoomrecordingId() {
 		return roomrecordingId;
 	}
@@ -45,11 +73,6 @@ public class RoomRecording {
 		this.roomrecordingId = roomrecordingId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="conferencetype"
-     *  type="string"
-     */	
 	public String getConferenceType() {
 		return conferenceType;
 	}
@@ -57,15 +80,6 @@ public class RoomRecording {
 		this.conferenceType = conferenceType;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="room_setup"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-     *  not-null="false"
-     *  outer-join="true"
-     */
 	public Rooms getRoom_setup() {
 		return room_setup;
 	}
@@ -73,11 +87,6 @@ public class RoomRecording {
 		this.room_setup = room_setup;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="roomrecordingstablestring"
-     *  type="string"
-     */
 	public String getRoomRecordingsTableString() {
 		return roomRecordingsTableString;
 	}
@@ -85,11 +94,6 @@ public class RoomRecording {
 		this.roomRecordingsTableString = roomRecordingsTableString;
 	}
 	
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */
 	public String getComment() {
 		return comment;
 	}
@@ -104,11 +108,6 @@ public class RoomRecording {
 		this.initwhiteboardvars = initwhiteboardvars;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="initwhiteboardvars_in_xml"
-     *  type="text"
-     */
 	public String getInitwhiteboardvarsInXml() {
 		return initwhiteboardvarsInXml;
 	}
@@ -116,11 +115,6 @@ public class RoomRecording {
 		this.initwhiteboardvarsInXml = initwhiteboardvarsInXml;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="recordingname"
-     *  type="string"
-     */
 	public String getRecordingName() {
 		return recordingName;
 	}
@@ -128,11 +122,6 @@ public class RoomRecording {
 		this.recordingName = recordingName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -140,15 +129,6 @@ public class RoomRecording {
 		this.starttime = starttime;
 	}
 	
-	/**
-	 * @hibernate.many-to-one
-	 * column = "startedby_roomclient_id"
-	 * class = "org.openmeetings.app.hibernate.beans.recording.RoomClient"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */
 	public RoomClient getStartedby() {
 		return startedby;
 	}
@@ -184,11 +164,6 @@ public class RoomRecording {
 		this.chatvalues = chatvalues;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="endtime"
-     *  type="java.util.Date"
-     */
 	public Date getEndtime() {
 		return endtime;
 	}
@@ -196,15 +171,6 @@ public class RoomRecording {
 		this.endtime = endtime;
 	}
 	
-    /**
-	 * @hibernate.many-to-one
-	 * column = "enduser_roomclient_id"
-	 * class = "org.openmeetings.app.hibernate.beans.recording.RoomClient"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */	
 	public RoomClient getEnduser() {
 		return enduser;
 	}
@@ -212,11 +178,6 @@ public class RoomRecording {
 		this.enduser = enduser;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="recordname"
-     *  type="string"
-     */
 	public String getRecordname() {
 		return recordname;
 	}

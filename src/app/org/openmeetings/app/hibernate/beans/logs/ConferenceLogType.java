@@ -1,25 +1,37 @@
 package org.openmeetings.app.hibernate.beans.logs;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="conferencelogtype"
- *
- */
-public class ConferenceLogType {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+
+
+@Entity
+@Table(name = "conferencelogtype")
+public class ConferenceLogType implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4388958579350356294L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="conferencelogtype_id")
 	private long conferenceLogTypeId;
+	@Column(name="eventtype")
 	private String eventType;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="insertedby")
 	private long insertedby;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="conferencelogtype_id"
-     *  generator-class="increment"
-     */ 
 	public long getConferenceLogTypeId() {
 		return conferenceLogTypeId;
 	}
@@ -27,11 +39,6 @@ public class ConferenceLogType {
 		this.conferenceLogTypeId = conferenceLogTypeId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="eventtype"
-     *  type="string"
-     */
 	public String getEventType() {
 		return eventType;
 	}
@@ -39,11 +46,6 @@ public class ConferenceLogType {
 		this.eventType = eventType;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -51,11 +53,6 @@ public class ConferenceLogType {
 		this.inserted = inserted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="insertedby"
-     *  type="long"
-     */ 
 	public long getInsertedby() {
 		return insertedby;
 	}

@@ -2,59 +2,93 @@ package org.openmeetings.app.hibernate.beans.calendar;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="appointments"
- * lazy="false"
- *
- */
 
-public class Appointment {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "appointments")
+public class Appointment implements Serializable {
 	
-
+	private static final long serialVersionUID = 2016808778885761525L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="appointment_id")
 	private Long appointmentId;
+	@Column(name="appointmentname")
 	private String appointmentName;
+	@Column(name="location")
 	private String appointmentLocation;
+	@Column(name="appointment_starttime")
 	private Date appointmentStarttime;
+	@Column(name="appointment_endtime")
 	private Date appointmentEndtime;
+	@Column(name="description")
 	private String appointmentDescription;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="category_id", nullable=true)
 	private AppointmentCategory appointmentCategory; 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id", nullable=true)
 	private Users userId;
 	
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="comment_field")
 	private String comment;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="remind_id", nullable=true)
 	private AppointmentReminderTyps remind;
 	
+	@Column(name="isdaily")
 	private Boolean isDaily;
+	@Column(name="isweekly")
 	private Boolean isWeekly;
+	@Column(name="ismonthly")
 	private Boolean isMonthly;
+	@Column(name="isyearly")
 	private Boolean isYearly;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="room_id", nullable=true)
 	private Rooms room;
 	
+	@Column(name="icalId")
 	private String icalId;
 	
+	@Transient
 	private List<MeetingMember> meetingMember;
+	@Column(name="language_id")
 	private Long language_id;
+	@Column(name="is_password_protected")
 	private Boolean isPasswordProtected;
+	@Column(name="password")
 	private String password;
 	
+	@Column(name="is_connected_event")
 	private Boolean isConnectedEvent;
 
-	/**
-     * 
-     * @hibernate.id
-     *  column="appointment_id"
-     *  generator-class="increment"
-     */  
 	public Long getAppointmentId() {
 		return appointmentId;
 	}
@@ -62,37 +96,18 @@ public class Appointment {
 		this.appointmentId = appointmentId;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getUserId() {
 		return userId;
 	}
 	public void setUserId(Users userId) {
 		this.userId = userId;
 	}
-	/**
-     * @hibernate.property
-     *  column="appointmentname"
-     *  type="string"
-     */ 
 	public String getAppointmentName() {
 		return appointmentName;
 	}
 	public void setAppointmentName(String appointmentName) {
 		this.appointmentName = appointmentName;
 	}
-	/**
-     * @hibernate.property
-     *  column="location"
-     *  type="string"
-     */ 
 	public String getAppointmentLocation() {
 		return appointmentLocation;
 	}
@@ -104,11 +119,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="appointment_starttime"
-     *  type="java.util.Date"
-     */ 
 	public Date getAppointmentStarttime() {
 		return appointmentStarttime;
 	}
@@ -120,11 +130,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="appointment_endtime"
-     *  type="java.util.Date"
-     */ 
 	public Date getAppointmentEndtime() {
 		return appointmentEndtime;
 	}
@@ -136,11 +141,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="description"
-     *  type="string"
-     */ 
 	public String getAppointmentDescription() {
 		return appointmentDescription;
 	}
@@ -152,15 +152,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="category_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public AppointmentCategory getAppointmentCategory() {
 		return appointmentCategory;
 	}
@@ -171,26 +162,12 @@ public class Appointment {
 		this.appointmentCategory = appointmentCategory;
 	}
 
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="remind_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	 public AppointmentReminderTyps getRemind() {
 		return remind;
 	}
 	public void setRemind(AppointmentReminderTyps remind) {
 		this.remind = remind;
 	}
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -202,11 +179,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -218,11 +190,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -234,11 +201,6 @@ public class Appointment {
 	}
 
 
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
 	public String getComment() {
 		return comment;
 	}
@@ -249,11 +211,6 @@ public class Appointment {
 		this.comment = comment;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="isweekly"
-     *  type="boolean"
-     */ 
 	public Boolean getIsWeekly() {
 		return isWeekly;
 	}
@@ -261,11 +218,6 @@ public class Appointment {
 		this.isWeekly = isWeekly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="ismonthly"
-     *  type="boolean"
-     */ 
 	public Boolean getIsMonthly() {
 		return isMonthly;
 	}
@@ -273,11 +225,6 @@ public class Appointment {
 		this.isMonthly = isMonthly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="isyearly"
-     *  type="boolean"
-     */ 
 	public Boolean getIsYearly() {
 		return isYearly;
 	}
@@ -285,11 +232,6 @@ public class Appointment {
 		this.isYearly = isYearly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="isdaily"
-     *  type="boolean"
-     */ 
 	public Boolean getIsDaily() {
 		return isDaily;
 	}
@@ -303,15 +245,6 @@ public class Appointment {
 		this.meetingMember = meetingMember;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="room_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Rooms getRoom() {
 		return room;
 	}
@@ -319,11 +252,6 @@ public class Appointment {
 		this.room = room;
 	}
 	
-	/**
-	 * @hibernate.property
-	 * column="icalId"
-	 * type="string"
-	 */
 	public String getIcalId() {
 		return icalId;
 	}
@@ -331,11 +259,6 @@ public class Appointment {
 		this.icalId = icalId;
 	}
 	
-	/**
-	 * @hibernate.property
-	 * column="language_id"
-	 * type="long"
-	 */
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -343,11 +266,6 @@ public class Appointment {
 		language_id = languageId;
 	}
 	
-	/**
-	 * @hibernate.property
-	 * column="is_password_protected"
-	 * type="boolean"
-	 */
 	public Boolean getIsPasswordProtected() {
 		return isPasswordProtected;
 	}
@@ -355,11 +273,6 @@ public class Appointment {
 		this.isPasswordProtected = isPasswordProtected;
 	}
 	
-	/**
-	 * @hibernate.property
-	 * column="password"
-	 * type="string"
-	 */
 	public String getPassword() {
 		return password;
 	}
@@ -367,11 +280,6 @@ public class Appointment {
 		this.password = password;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_connected_event"
-     *  type="boolean"
-     */ 
 	public Boolean getIsConnectedEvent() {
 		return isConnectedEvent;
 	}

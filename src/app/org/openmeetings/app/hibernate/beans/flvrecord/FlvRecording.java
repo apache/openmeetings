@@ -1,71 +1,108 @@
 package org.openmeetings.app.hibernate.beans.flvrecord;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="flvrecording"
- * lazy="false"
- *
- */
-public class FlvRecording {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "flvrecording")
+public class FlvRecording implements Serializable {
 	
+	private static final long serialVersionUID = -2234874663310617072L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="flvrecording_id")
 	private long flvRecordingId;
 	
+	@Column(name="filename")
 	private String fileName;
+	@Column(name="alternate_download")
 	private String alternateDownload;
+	@Column(name="filehash")
 	private String fileHash;
+	@Column(name="comment_field")
 	private String comment;
 	
+	@Column(name="parent_fileexploreritem_id")
 	private Long parentFileExplorerItemId;
+	@Column(name="room_id")
 	private Long room_id;
+	@Column(name="owner_id")
 	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	//maybe are also in a Home directory but just because their parent is
 	
+	@Column(name="is_folder")
 	private Boolean isFolder;
+	@Column(name="is_image")
 	private Boolean isImage;
+	@Column(name="is_presentation")
 	private Boolean isPresentation;
+	@Column(name="is_recording")
 	private Boolean isRecording;
 	
+	@Column(name="record_start")
 	private Date recordStart;
+	@Column(name="record_end")
 	private Date recordEnd;
 	
+	@Column(name="inserted_by")
 	private Long insertedBy;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
+	@Column(name="deleted")
 	private String deleted;
 	
+	@Column(name="width")
 	private Integer width;
+	@Column(name="height")
 	private Integer height;
 	
+	@Column(name="flv_width")
 	private Integer flvWidth;
+	@Column(name="flv_height")
 	private Integer flvHeight;
+	@Column(name="preview_image")
 	private String previewImage;
 	
+	@Column(name="filesize")
 	private Long fileSize;
 	
+	@Column(name="recorder_stream_id")
 	private String recorderStreamId;
+	@Column(name="organization_id")
 	private Long organization_id;
 	
+	@Column(name="is_interview")
 	private Boolean isInterview;
+	@Column(name="progress_post_processing")
 	private Integer progressPostProcessing;
 	
 	//Not Mapped
+	@Transient
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
+	@Transient
 	private Users creator;
+	@Transient
 	private Rooms room;
+	@Transient
 	private List<FlvRecordingLog> flvRecordingLog;
 	
-	/**
-	 *
-	 * @hibernate.id
-	 *  column="flvrecording_id"
-	 *  generator-class="increment"
-	 */
 	public long getFlvRecordingId() {
 		return flvRecordingId;
 	}
@@ -73,11 +110,6 @@ public class FlvRecording {
 		this.flvRecordingId = flvRecordingId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="filename"
-     *  type="string"
-     */
 	public String getFileName() {
 		return fileName;
 	}
@@ -85,11 +117,6 @@ public class FlvRecording {
 		this.fileName = fileName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="comment_field"
-     *  type="string"
-     */
 	public String getComment() {
 		return comment;
 	}
@@ -97,11 +124,6 @@ public class FlvRecording {
 		this.comment = comment;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="filehash"
-     *  type="string"
-     */
 	public String getFileHash() {
 		return fileHash;
 	}
@@ -109,11 +131,6 @@ public class FlvRecording {
 		this.fileHash = fileHash;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="parent_fileexploreritem_id"
-     *  type="long"
-     */
 	public Long getParentFileExplorerItemId() {
 		return parentFileExplorerItemId;
 	}
@@ -121,11 +138,6 @@ public class FlvRecording {
 		this.parentFileExplorerItemId = parentFileExplorerItemId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="room_id"
-     *  type="long"
-     */
 	public Long getRoom_id() {
 		return room_id;
 	}
@@ -133,11 +145,6 @@ public class FlvRecording {
 		this.room_id = room_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="owner_id"
-     *  type="long"
-     */
 	public Long getOwnerId() {
 		return ownerId;
 	}
@@ -145,11 +152,6 @@ public class FlvRecording {
 		this.ownerId = ownerId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="is_folder"
-     *  type="boolean"
-     */
 	public Boolean getIsFolder() {
 		return isFolder;
 	}
@@ -157,11 +159,6 @@ public class FlvRecording {
 		this.isFolder = isFolder;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_image"
-     *  type="boolean"
-     */
 	public Boolean getIsImage() {
 		return isImage;
 	}
@@ -169,11 +166,6 @@ public class FlvRecording {
 		this.isImage = isImage;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_presentation"
-     *  type="boolean"
-     */
 	public Boolean getIsPresentation() {
 		return isPresentation;
 	}
@@ -181,11 +173,6 @@ public class FlvRecording {
 		this.isPresentation = isPresentation;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="is_recording"
-     *  type="boolean"
-     */
 	public Boolean getIsRecording() {
 		return isRecording;
 	}
@@ -193,11 +180,6 @@ public class FlvRecording {
 		this.isRecording = isRecording;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted_by"
-     *  type="long"
-     */
 	public Long getInsertedBy() {
 		return insertedBy;
 	}
@@ -205,11 +187,6 @@ public class FlvRecording {
 		this.insertedBy = insertedBy;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -217,11 +194,6 @@ public class FlvRecording {
 		this.inserted = inserted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */  
 	public String getDeleted() {
 		return deleted;
 	}
@@ -229,11 +201,6 @@ public class FlvRecording {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */ 
 	public Date getUpdated() {
 		return updated;
 	}
@@ -241,11 +208,6 @@ public class FlvRecording {
 		this.updated = updated;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="filesize"
-     *  type="long"
-     */ 
 	public Long getFileSize() {
 		return fileSize;
 	}
@@ -253,11 +215,6 @@ public class FlvRecording {
 		this.fileSize = fileSize;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="record_start"
-     *  type="java.util.Date"
-     */
 	public Date getRecordStart() {
 		return recordStart;
 	}
@@ -265,11 +222,6 @@ public class FlvRecording {
 		this.recordStart = recordStart;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="record_end"
-     *  type="java.util.Date"
-     */
 	public Date getRecordEnd() {
 		return recordEnd;
 	}
@@ -277,11 +229,6 @@ public class FlvRecording {
 		this.recordEnd = recordEnd;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="recorder_stream_id"
-     *  type="string"
-     */
 	public String getRecorderStreamId() {
 		return recorderStreamId;
 	}
@@ -289,11 +236,6 @@ public class FlvRecording {
 		this.recorderStreamId = recorderStreamId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="organization_id"
-     *  type="long"
-     */
 	public Long getOrganization_id() {
 		return organization_id;
 	}
@@ -323,11 +265,6 @@ public class FlvRecording {
 		this.room = room;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="width"
-     *  type="int"
-     */
 	public Integer getWidth() {
 		return width;
 	}
@@ -335,11 +272,6 @@ public class FlvRecording {
 		this.width = width;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="height"
-     *  type="int"
-     */
 	public Integer getHeight() {
 		return height;
 	}
@@ -347,11 +279,6 @@ public class FlvRecording {
 		this.height = height;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="flv_width"
-     *  type="int"
-     */
 	public Integer getFlvWidth() {
 		return flvWidth;
 	}
@@ -359,11 +286,6 @@ public class FlvRecording {
 		this.flvWidth = flvWidth;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="flv_height"
-     *  type="int"
-     */
 	public Integer getFlvHeight() {
 		return flvHeight;
 	}
@@ -371,11 +293,6 @@ public class FlvRecording {
 		this.flvHeight = flvHeight;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="preview_image"
-     *  type="string"
-     */
 	public String getPreviewImage() {
 		return previewImage;
 	}
@@ -383,11 +300,6 @@ public class FlvRecording {
 		this.previewImage = previewImage;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="alternate_download"
-     *  type="string"
-     */	
 	public String getAlternateDownload() {
 		return alternateDownload;
 	}
@@ -402,11 +314,6 @@ public class FlvRecording {
 		this.flvRecordingLog = flvRecordingLog;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_interview"
-     *  type="boolean"
-     */	
 	public Boolean getIsInterview() {
 		return isInterview;
 	}
@@ -414,11 +321,6 @@ public class FlvRecording {
 		this.isInterview = isInterview;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="progress_post_processing"
-     *  type="int"
-     */	
 	public Integer getProgressPostProcessing() {
 		return progressPostProcessing;
 	}

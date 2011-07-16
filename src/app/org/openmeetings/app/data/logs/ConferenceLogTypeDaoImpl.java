@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.logs.ConferenceLogType;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -38,17 +37,18 @@ public class ConferenceLogTypeDaoImpl {
 			confLogType.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long appointment_id = (Long)session.save(confLogType);
+			confLogType = session.merge(confLogType);
+			session.flush();
+			Long appointment_id = confLogType.getConferenceLogTypeId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return appointment_id;
-		} catch (HibernateException ex) {
-			log.error("[addConferenceLogType]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addConferenceLogType]: ",ex2);
 		}
@@ -63,15 +63,15 @@ public class ConferenceLogTypeDaoImpl {
 					
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("eventType",eventType);
+			query.setParameter("eventType",eventType);
 			
 			//Seems like this does throw an error sometimes cause it does not return a unique Result
-			//ConferenceLogType confLogType = (ConferenceLogType) query.uniqueResult();
-			List<ConferenceLogType> confLogTypes = query.list();
-			
+			//ConferenceLogType confLogType = (ConferenceLogType) query.getSingleResult();
+			List<ConferenceLogType> confLogTypes = query.getResultList();
 			ConferenceLogType confLogType = null;
 			if (confLogTypes != null && confLogTypes.size() > 0) {
 				confLogType = confLogTypes.get(0);
@@ -80,8 +80,6 @@ public class ConferenceLogTypeDaoImpl {
 			HibernateUtil.closeSession(idf);
 			
 			return confLogType;
-		} catch (HibernateException ex) {
-			log.error("[getConferenceLogTypeByEventName]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getConferenceLogTypeByEventName]: " + ex2);
 		}

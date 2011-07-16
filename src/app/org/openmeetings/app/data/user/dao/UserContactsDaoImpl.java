@@ -3,9 +3,10 @@ package org.openmeetings.app.data.user.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.hibernate.beans.user.UserContacts;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -40,10 +41,12 @@ public class UserContactsDaoImpl {
 			userContact.setHash(hash);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long userContactId = (Long) session.save(userContact);
+			userContact = session.merge(userContact);
+			Long userContactId = userContact.getUserContactId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -61,10 +64,12 @@ public class UserContactsDaoImpl {
 			userContact.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long userContactId = (Long) session.save(userContact);
+			userContact = session.merge(userContact);
+			Long userContactId = userContact.getUserContactId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -82,11 +87,12 @@ public class UserContactsDaoImpl {
 			String hql = "delete from UserContacts where userContactId = :userContactId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql);
-	        query.setLong("userContactId",userContactId);
+	        query.setParameter("userContactId",userContactId);
 	        int rowCount = query.executeUpdate();
 			
 			tx.commit();
@@ -105,11 +111,12 @@ public class UserContactsDaoImpl {
 			String hql = "delete from UserContacts where owner.user_id = :ownerId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql);
-	        query.setLong("ownerId",ownerId);
+	        query.setParameter("ownerId",ownerId);
 	        int rowCount = query.executeUpdate();
 			
 			tx.commit();
@@ -129,12 +136,13 @@ public class UserContactsDaoImpl {
 							"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("user_id", user_id);
-			query.setLong("ownerId", ownerId);
-			List ll = query.list();
+			query.setParameter("user_id", user_id);
+			query.setParameter("ownerId", ownerId);
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -155,11 +163,12 @@ public class UserContactsDaoImpl {
 							"where c.hash like :hash ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setString("hash", hash);
-			List<UserContacts> ll = query.list();
+			query.setParameter("hash", hash);
+			List<UserContacts> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -180,15 +189,16 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.owner.user_id = :ownerId " +
 							"AND c.pending = :pending " +
-							"AND c.contact.deleted != 'true'";
+							"AND c.contact.deleted <> 'true'";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("ownerId", ownerId);
-			query.setBoolean("pending", pending);
-			List<UserContacts> ll = query.list();
+			query.setParameter("ownerId", ownerId);
+			query.setParameter("pending", pending);
+			List<UserContacts> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -206,15 +216,16 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.contact.user_id = :contactId " +
 							"AND c.shareCalendar = :shareCalendar " +
-							"AND c.contact.deleted != 'true'";
+							"AND c.contact.deleted <> 'true'";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("contactId", contactId);
-			query.setBoolean("shareCalendar", shareCalendar);
-			List<UserContacts> ll = query.list();
+			query.setParameter("contactId", contactId);
+			query.setParameter("shareCalendar", shareCalendar);
+			List<UserContacts> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -232,15 +243,16 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.contact.user_id = :user_id " +
 							"AND c.pending = :pending " +
-							"AND c.contact.deleted != 'true'";
+							"AND c.contact.deleted <> 'true'";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("user_id", user_id);
-			query.setBoolean("pending", pending);
-			List<UserContacts> ll = query.list();
+			query.setParameter("user_id", user_id);
+			query.setParameter("pending", pending);
+			List<UserContacts> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -259,11 +271,16 @@ public class UserContactsDaoImpl {
 							"where c.userContactId = :userContactId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			query.setLong("userContactId", userContactId);
-			UserContacts userContacts = (UserContacts) query.uniqueResult();
+			query.setParameter("userContactId", userContactId);
+			UserContacts userContacts = null;
+			try {
+				userContacts = (UserContacts) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -281,10 +298,11 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql); 
-			List<UserContacts> userContacts = query.list();
+			List<UserContacts> userContacts = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -308,9 +326,16 @@ public class UserContactsDaoImpl {
 			userContacts.setUpdated(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(userContacts);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (userContacts.getUserContactId() == 0) {
+				session.persist(userContacts);
+			    } else {
+			    	if (!session.contains(userContacts)) {
+			    		session.merge(userContacts);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -327,9 +352,16 @@ public class UserContactsDaoImpl {
 			userContacts.setUpdated(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(userContacts);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (userContacts.getUserContactId() == 0) {
+				session.persist(userContacts);
+			    } else {
+			    	if (!session.contains(userContacts)) {
+			    		session.merge(userContacts);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			

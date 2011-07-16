@@ -1,38 +1,61 @@
 package org.openmeetings.app.hibernate.beans.logs;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="conferencelog"
- *
- */
-public class ConferenceLog {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+
+@Entity
+@Table(name = "conferencelog")
+public class ConferenceLog implements Serializable {
 	
 	
+	private static final long serialVersionUID = 147341496943518159L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="conferencelog_id")
 	private long conferenceLogId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="conferencelogtype_id", updatable=true, insertable=true)
 	private ConferenceLogType conferenceLogType;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="insertedby")
 	private long insertedby;
 	
 	//NULL means its a Guest/Invited User
+	@Column(name="user_id")
 	private Long userId;
+	@Column(name="external_user_id")
 	private Long externalUserId;
+	@Column(name="external_user_type")
 	private String externalUserType;
+	@Column(name="streamid")
 	private String streamid;
+	@Column(name="room_id")
 	private Long room_id;
+	@Column(name="userip")
 	private String userip;
+	@Column(name="scopename")
 	private String scopeName;
+	@Column(name="email")
 	private String email;
+	@Column(name="firstname")
 	private String firstname;
+	@Column(name="lastname")
 	private String lastname;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="conferencelog_id"
-     *  generator-class="increment"
-     */ 
 	public long getConferenceLogId() {
 		return conferenceLogId;
 	}
@@ -40,15 +63,6 @@ public class ConferenceLog {
 		this.conferenceLogId = conferenceLogId;
 	}
 	
-	/**
-	 * @hibernate.many-to-one
-	 * column = "conferencelogtype_id"
-	 * class = "org.openmeetings.app.hibernate.beans.logs.ConferenceLogType"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */
 	public ConferenceLogType getConferenceLogType() {
 		return conferenceLogType;
 	}
@@ -56,11 +70,6 @@ public class ConferenceLog {
 		this.conferenceLogType = conferenceLogType;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -68,11 +77,6 @@ public class ConferenceLog {
 		this.inserted = inserted;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="insertedby"
-     *  type="long"
-     */
 	public long getInsertedby() {
 		return insertedby;
 	}
@@ -80,11 +84,6 @@ public class ConferenceLog {
 		this.insertedby = insertedby;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */
 	public Long getUserId() {
 		return userId;
 	}
@@ -92,11 +91,6 @@ public class ConferenceLog {
 		this.userId = userId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="streamid"
-     *  type="string"
-     */
 	public String getStreamid() {
 		return streamid;
 	}
@@ -104,11 +98,6 @@ public class ConferenceLog {
 		this.streamid = streamid;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="room_id"
-     *  type="long"
-     */
 	public Long getRoom_id() {
 		return room_id;
 	}
@@ -116,11 +105,6 @@ public class ConferenceLog {
 		this.room_id = room_id;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="userip"
-     *  type="string"
-     */
 	public String getUserip() {
 		return userip;
 	}
@@ -128,11 +112,6 @@ public class ConferenceLog {
 		this.userip = userip;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="scopename"
-     *  type="string"
-     */
 	public String getScopeName() {
 		return scopeName;
 	}
@@ -140,11 +119,6 @@ public class ConferenceLog {
 		this.scopeName = scopeName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="external_user_id"
-     *  type="long"
-     */
 	public Long getExternalUserId() {
 		return externalUserId;
 	}
@@ -152,11 +126,6 @@ public class ConferenceLog {
 		this.externalUserId = externalUserId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="external_user_type"
-     *  type="string"
-     */
 	public String getExternalUserType() {
 		return externalUserType;
 	}
@@ -164,11 +133,6 @@ public class ConferenceLog {
 		this.externalUserType = externalUserType;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="email"
-     *  type="string"
-     */
 	public String getEmail() {
 		return email;
 	}
@@ -176,11 +140,6 @@ public class ConferenceLog {
 		this.email = email;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="firstname"
-     *  type="string"
-     */
 	public String getFirstname() {
 		return firstname;
 	}
@@ -188,11 +147,6 @@ public class ConferenceLog {
 		this.firstname = firstname;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="lastname"
-     *  type="string"
-     */
 	public String getLastname() {
 		return lastname;
 	}

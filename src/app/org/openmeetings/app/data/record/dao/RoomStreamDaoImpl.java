@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.RoomStream;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -36,18 +35,17 @@ public class RoomStreamDaoImpl {
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("roomrecordingId", roomrecordingId);
-			List<RoomStream> ll = query.list();
+			query.setParameter("roomrecordingId", roomrecordingId);
+			List<RoomStream> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRoomStreamsByRoomRecordingId]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomStreamsByRoomRecordingId]: " , ex2);
 		}
@@ -63,17 +61,17 @@ public class RoomStreamDaoImpl {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long roomStreamId = (Long) session.save(roomStream);
+			roomStream = session.merge(roomStream);
+			Long roomStreamId = roomStream.getRoomStreamId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomStreamId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomStream]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomStream]: " , ex2);
 		}

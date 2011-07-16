@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingLog;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -33,21 +31,20 @@ public class FlvRecordingLogDaoImpl {
 	
 	public List<FlvRecordingLog> getFLVRecordingLogByRecordingId(Long flvRecordingId){
 		try {
-			String hql = "select c from FlvRecordingLog as c where flvRecording.flvRecordingId = :flvRecordingId";
+			String hql = "select c from FlvRecordingLog as c where c.flvRecording.flvRecordingId = :flvRecordingId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingId", flvRecordingId);
-			List<FlvRecordingLog> flvRecordingList = query.list();
+			query.setParameter("flvRecordingId", flvRecordingId);
+			List<FlvRecordingLog> flvRecordingList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingList;
 			
-		} catch (HibernateException ex) {
-			log.error("[getFLVRecordingLogByRecordingId] ", ex);
 		} catch (Exception ex2) {
 			log.error("[getFLVRecordingLogByRecordingId] ", ex2);
 		}
@@ -59,16 +56,16 @@ public class FlvRecordingLogDaoImpl {
 			List<FlvRecordingLog> flvRecordingLogs = this.getFLVRecordingLogByRecordingId(flvRecordingId);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
-				session.delete(flvRecordingLog);
+				flvRecordingLog = session.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
+				session.remove(flvRecordingLog);
 			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[deleteFLVRecordingLogByRecordingId] ", ex);
 		} catch (Exception ex2) {
 			log.error("[deleteFLVRecordingLogByRecordingId] ", ex2);
 		}
@@ -96,17 +93,17 @@ public class FlvRecordingLogDaoImpl {
 			flvRecordingLog.setMsgType(msgType);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long flvRecordingLogId = (Long) session.save(flvRecordingLog);
+			flvRecordingLog = session.merge(flvRecordingLog);
+			Long flvRecordingLogId = flvRecordingLog.getFlvRecordingLogId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingLogId;
-		} catch (HibernateException ex) {
-			log.error("[addFLVRecordingLog]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addFLVRecordingLog]: ",ex2);
 		}

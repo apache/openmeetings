@@ -11,10 +11,11 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.InvitationTemplate;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
@@ -137,9 +138,12 @@ public class Invitationmanagement {
 				invitation.setAppointmentId(appointmentId);
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long invitationId = (Long) session.save(invitation);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				invitation = session.merge(invitation);
+				session.flush();
+				long invitationId = invitation.getInvitations_id();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -157,8 +161,6 @@ public class Invitationmanagement {
 				}
 				
 			}
-		} catch (HibernateException ex) {
-			log.error("[addInvitationLink] ",ex);
 		} catch (Exception err){
 			log.error("addInvitationLink",err);
 		}
@@ -479,9 +481,12 @@ public class Invitationmanagement {
 				invitation.setAppointmentId(appointmentId);
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long invitationId = (Long) session.save(invitation);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				invitation = session.merge(invitation);
+				session.flush();
+				long invitationId = invitation.getInvitations_id();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
@@ -493,10 +498,8 @@ public class Invitationmanagement {
 					return invitationId;
 				}
 			}
-		} catch (HibernateException ex) {
-			log.error("[addInvitationLink] "+ex);
 		} catch (Exception err){
-			log.error("addInvitationLink",err);
+			log.error("addInvitationIcalLink",err);
 		}
 		return null;
 	}	
@@ -832,17 +835,23 @@ public class Invitationmanagement {
 		
 		try{
 			String hql = "select invi from Invitations invi " +
-			"WHERE invi.deleted != :deleted " +
+			"WHERE invi.deleted <> :deleted " +
 			"AND invi.invitations_id = :invid";
 	
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("invid",invId);
+			query.setParameter("deleted", "true");
+			query.setParameter("invid",invId);
 	
-			Invitations inv = (Invitations) query.uniqueResult();
+			Invitations inv = null;
+			try {
+				inv = (Invitations) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
+		    session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 	
@@ -859,17 +868,23 @@ public class Invitationmanagement {
 		
 		try{
 			String hql = "select invi from Invitations invi " +
-						"WHERE invi.deleted != :deleted " +
+						"WHERE invi.deleted <> :deleted " +
 						"AND invi.invitations_id = :invid";
 				
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("invid",invId);
+			query.setParameter("deleted", "true");
+			query.setParameter("invid",invId);
 	
-			Invitations inv = (Invitations) query.uniqueResult();
+			Invitations inv = null;
+			try {
+				inv = (Invitations) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
+		    session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 	
@@ -892,12 +907,17 @@ public class Invitationmanagement {
 					"where c.hash LIKE :hashCode " +
 					"AND c.deleted = :deleted";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("hashCode", hashCode);
-			query.setString("deleted", "false");
-			Invitations invitation = (Invitations) query.uniqueResult();
+			query.setParameter("hashCode", hashCode);
+			query.setParameter("deleted", "false");
+			Invitations invitation = null;
+			try {
+				invitation = (Invitations) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -952,8 +972,6 @@ public class Invitationmanagement {
 				}
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getInvitationByHashCode] ",ex);
 		} catch (Exception err) {
 			log.error("[getInvitationByHashCode]",err);
 		}
@@ -968,13 +986,18 @@ public class Invitationmanagement {
 		try {
 			invitation.setUpdatetime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(invitation);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (invitation.getInvitations_id() == null) {
+				session.persist(invitation);
+			    } else {
+			    	if (!session.contains(invitation)) {
+			    		session.merge(invitation);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);		
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromUsers] ",ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ",ex2);
 		}
@@ -1020,18 +1043,25 @@ public class Invitationmanagement {
 							"WHERE a.appointmentId = :appointmentId  ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("appointmentId",appointmentId);
+			query.setParameter("appointmentId",appointmentId);
 			
-			List<Invitations> listInvitations = query.list();
+			List<Invitations> listInvitations = query.getResultList();
 			
 			
 			for (Invitations inv : listInvitations) {
 				inv.setValidFrom(gmtTimeStartShifted);
 				inv.setValidTo(appointmentend);
-				session.update(inv);
+				if (inv.getInvitations_id() == null) {
+					session.persist(inv);
+				    } else {
+				    	if (!session.contains(inv)) {
+				    		session.merge(inv);
+				    }
+				}
 			}
 			
 			tx.commit();

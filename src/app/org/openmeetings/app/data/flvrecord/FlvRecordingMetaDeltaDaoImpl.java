@@ -2,10 +2,9 @@ package org.openmeetings.app.data.flvrecord;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -37,18 +36,17 @@ public class FlvRecordingMetaDeltaDaoImpl {
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("flvRecordingMetaDataId", flvRecordingMetaDataId);
+			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
 			
-			List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = query.list();
+			List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaDeltas;
-		} catch (HibernateException ex) {
-			log.error("[getFlvRecordingMetaDeltaByMetaId]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDeltaByMetaId]: ",ex2);
 		}
@@ -61,10 +59,12 @@ public class FlvRecordingMetaDeltaDaoImpl {
 		try { 
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long flvRecordingMetaDeltaId = (Long) session.save(flvRecordingMetaDelta);
+			flvRecordingMetaDelta = session.merge(flvRecordingMetaDelta);
+			Long flvRecordingMetaDeltaId = flvRecordingMetaDelta.getFlvRecordingMetaDeltaId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -72,8 +72,6 @@ public class FlvRecordingMetaDeltaDaoImpl {
 			log.debug("flvRecordingMetaDeltaId "+flvRecordingMetaDeltaId);
 			
 			return flvRecordingMetaDeltaId;
-		} catch (HibernateException ex) {
-			log.error("[addFlvRecordingMetaDelta]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addFlvRecordingMetaDelta]: ",ex2);
 		}
@@ -84,17 +82,22 @@ public class FlvRecordingMetaDeltaDaoImpl {
 		try { 
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(flvRecordingMetaDelta);
+			if (flvRecordingMetaDelta.getFlvRecordingMetaDataId() == 0) {
+				session.persist(flvRecordingMetaDelta);
+			    } else {
+			    	if (!session.contains(flvRecordingMetaDelta)) {
+			    		session.merge(flvRecordingMetaDelta);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return flvRecordingMetaDelta.getFlvRecordingMetaDataId();
-		} catch (HibernateException ex) {
-			log.error("[updateFlvRecordingMetaDelta]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFlvRecordingMetaDelta]: ",ex2);
 		}

@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import org.openmeetings.app.hibernate.beans.adresses.States;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -39,15 +38,17 @@ public class Statemanagement {
 	public Long addState(String statename) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			States st = new States();
 			st.setName(statename);
 			st.setStarttime(new Date());
 			st.setDeleted("false");
 
-			Long id = (Long) session.save(st);
+			st = session.merge(st);
+			Long id = st.getState_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -55,8 +56,6 @@ public class Statemanagement {
 			log.debug("added id " + id);
 
 			return id;
-		} catch (HibernateException ex) {
-			log.error("addState",ex);
 		} catch (Exception ex2) {
 			log.error("addState",ex2);
 		}
@@ -71,20 +70,19 @@ public class Statemanagement {
 	public States getStateById(long state_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session
-					.createQuery("select c from States as c where c.state_id = :state_id AND deleted != :deleted");
-			query.setLong("state_id", state_id);
-			query.setString("deleted", "true");
-			List ll = query.list();
+					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted");
+			query.setParameter("state_id", state_id);
+			query.setParameter("deleted", "true");
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (ll.size() > 0) {
 				return (States) ll.get(0);
 			}
-		} catch (HibernateException ex) {
-			log.error("getStateById",ex);
 		} catch (Exception ex2) {
 			log.error("getStateById",ex2);
 		}
@@ -98,17 +96,16 @@ public class Statemanagement {
 	public List<States> getStates() {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session
-					.createQuery("select c from States as c where deleted != :deleted");
-			query.setString("deleted", "true");
-			List<States> ll = query.list();
+					.createQuery("select c from States as c where c.deleted <> :deleted");
+			query.setParameter("deleted", "true");
+			List<States> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("getStates",ex);
 		} catch (Exception ex2) {
 			log.error("getStates",ex2);
 		}

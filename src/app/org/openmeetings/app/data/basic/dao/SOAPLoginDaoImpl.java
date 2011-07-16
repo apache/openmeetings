@@ -4,10 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.SOAPLogin;
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
@@ -44,8 +43,9 @@ public class SOAPLoginDaoImpl {
 			String hash = ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(thistime);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
@@ -61,7 +61,8 @@ public class SOAPLoginDaoImpl {
 			soapLogin.setLandingZone(landingZone);
 			soapLogin.setAllowRecording(allowRecording);
 
-			Long soapLoginId = (Long) session.save(soapLogin);
+			soapLogin = session.merge(soapLogin);
+			Long soapLoginId = soapLogin.getSoapLoginId(); 
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -72,8 +73,6 @@ public class SOAPLoginDaoImpl {
 				throw new Exception("Could not store SOAPLogin");
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[addSOAPLogin]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addSOAPLogin]: ",ex2);
 		}
@@ -86,11 +85,12 @@ public class SOAPLoginDaoImpl {
 			String hql = "select sl from SOAPLogin as sl " +
 							"WHERE sl.hash LIKE :hash";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("hash", hash);
-			List<SOAPLogin> sList = query.list();
+			query.setParameter("hash", hash);
+			List<SOAPLogin> sList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -103,8 +103,6 @@ public class SOAPLoginDaoImpl {
 			}
 			
 			
-		} catch (HibernateException ex) {
-			log.error("[getSOAPLoginByHash]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getSOAPLoginByHash]: ",ex2);
 		}
@@ -115,16 +113,21 @@ public class SOAPLoginDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.update(soapLogin);
+			if (soapLogin.getSoapLoginId() == 0) {
+				session.persist(soapLogin);
+			    } else {
+			    	if (!session.contains(soapLogin)) {
+			    		session.merge(soapLogin);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[updateSOAPLogin]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateSOAPLogin]: ",ex2);
 		}

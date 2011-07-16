@@ -1,36 +1,56 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="soaplogin"
- *
- */
-public class SOAPLogin {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "soaplogin")
+public class SOAPLogin implements Serializable {
 	
+	private static final long serialVersionUID = 5101010700038221434L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="soapLoginId")
 	private long soapLoginId;
+	@Column(name="hash")
 	private String hash;
+	@Column(name="room_id")
 	private Long room_id;
+	@Column(name="session_hash")
 	private String sessionHash;
+	@Column(name="created")
 	private Date created;
+	@Column(name="used")
 	private Boolean used;
+	@Column(name="use_date")
 	private Date useDate;
+	@Column(name="becomemoderator")
 	private Boolean becomemoderator;
+	@Column(name="showaudiovideotest")
 	private Boolean showAudioVideoTest;
+	@Column(name="allow_same_url_multiple_times")
 	private Boolean allowSameURLMultipleTimes;
+	@Column(name="show_nick_name_dialog")
 	private Boolean showNickNameDialog;
+	@Column(name="client_url")
 	private String clientURL;
+	@Column(name="room_recording_id")
 	private Long roomRecordingId;
+	@Column(name="landing_zone")
 	private String landingZone;
+	@Transient
 	private Boolean allowRecording;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="soapLoginId"
-     *  generator-class="increment"
-     */
 	public long getSoapLoginId() {
 		return soapLoginId;
 	}
@@ -38,11 +58,6 @@ public class SOAPLogin {
 		this.soapLoginId = soapLoginId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="hash"
-     *  type="string"
-     */
 	public String getHash() {
 		return hash;
 	}
@@ -50,11 +65,6 @@ public class SOAPLogin {
 		this.hash = hash;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="room_id"
-     *  type="long"
-     */ 
 	public Long getRoom_id() {
 		return room_id;
 	}
@@ -62,11 +72,6 @@ public class SOAPLogin {
 		this.room_id = room_id;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="session_hash"
-     *  type="string"
-     */
 	public String getSessionHash() {
 		return sessionHash;
 	}
@@ -74,11 +79,6 @@ public class SOAPLogin {
 		this.sessionHash = sessionHash;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="created"
-     *  type="java.util.Date"
-     */
 	public Date getCreated() {
 		return created;
 	}
@@ -86,11 +86,6 @@ public class SOAPLogin {
 		this.created = created;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="used"
-     *  type="boolean"
-     */
 	public Boolean getUsed() {
 		return used;
 	}
@@ -98,11 +93,6 @@ public class SOAPLogin {
 		this.used = used;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="use_date"
-     *  type="java.util.Date"
-     */
 	public Date getUseDate() {
 		return useDate;
 	}
@@ -110,11 +100,6 @@ public class SOAPLogin {
 		this.useDate = useDate;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="becomemoderator"
-     *  type="boolean"
-     */
 	public Boolean getBecomemoderator() {
 		return becomemoderator;
 	}
@@ -122,11 +107,6 @@ public class SOAPLogin {
 		this.becomemoderator = becomemoderator;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="showaudiovideotest"
-     *  type="boolean"
-     */
 	public Boolean getShowAudioVideoTest() {
 		return showAudioVideoTest;
 	}
@@ -134,11 +114,6 @@ public class SOAPLogin {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="allow_same_url_multiple_times"
-     *  type="boolean"
-     */
 	public Boolean getAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
@@ -146,11 +121,6 @@ public class SOAPLogin {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="show_nick_name_dialog"
-     *  type="boolean"
-     */
 	public Boolean getShowNickNameDialog() {
 		return showNickNameDialog;
 	}
@@ -158,11 +128,6 @@ public class SOAPLogin {
 		this.showNickNameDialog = showNickNameDialog;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="client_url"
-     *  type="string"
-     */
 	public String getClientURL() {
 		return clientURL;
 	}
@@ -170,11 +135,6 @@ public class SOAPLogin {
 		this.clientURL = clientURL;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="room_recording_id"
-     *  type="long"
-     */ 	
 	public Long getRoomRecordingId() {
 		return roomRecordingId;
 	}
@@ -182,11 +142,6 @@ public class SOAPLogin {
 		this.roomRecordingId = roomRecordingId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="landing_zone"
-     *  type="string"
-     */
 	public String getLandingZone() {
 		return landingZone;
 	}
@@ -194,11 +149,6 @@ public class SOAPLogin {
 		this.landingZone = landingZone;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="allow_recording"
-     *  type="boolean"
-     */
 	public Boolean getAllowRecording() {
 		return allowRecording;
 	}

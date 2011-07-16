@@ -9,13 +9,16 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
@@ -52,12 +55,17 @@ public class Fieldmanagment {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id AND f.fieldvalues_id = :fieldvalues_id");
-			query.setLong("fieldvalues_id", fieldvalues_id);
-			query.setLong("language_id", language_id);
-			Fieldlanguagesvalues flv = (Fieldlanguagesvalues) query.uniqueResult();
+			query.setParameter("fieldvalues_id", fieldvalues_id);
+			query.setParameter("language_id", language_id);
+			Fieldlanguagesvalues flv = null;
+			try {
+				flv = (Fieldlanguagesvalues) query.getSingleResult();
+	        } catch (NoResultException ex) {
+	        }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
@@ -93,8 +101,6 @@ public class Fieldmanagment {
 				return flv;
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getFieldByIdAndLanguage]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getFieldByIdAndLanguage]: " , ex2);
 		}
@@ -104,21 +110,22 @@ public class Fieldmanagment {
 	public Fieldlanguagesvalues getFieldByIdAndLanguage(Long fieldvalues_id, Long language_id) {
 		try {
 			
-			String hql = "select f from Fieldlanguagesvalues f " +
+			String hql = "select f from Fieldlanguagesvalues as f " +
 							"WHERE f.language_id = :language_id " +
 							"AND f.fieldvalues_id = :fieldvalues_id";
 			
 			Fieldlanguagesvalues flv = null;
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			Query query = session.createQuery(hql);
 			
-			query.setLong("fieldvalues_id", fieldvalues_id);
-			query.setLong("language_id", language_id);
-			List<Fieldlanguagesvalues> fList = query.list();
+			query.setParameter("fieldvalues_id", fieldvalues_id);
+			query.setParameter("language_id", language_id);
+			List<Fieldlanguagesvalues> fList = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -128,8 +135,6 @@ public class Fieldmanagment {
 			}
 			
 			return flv;
-		} catch (HibernateException ex) {
-			log.error("[getFieldByIdAndLanguage]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getFieldByIdAndLanguage]: " , ex2);
 		}
@@ -144,15 +149,15 @@ public class Fieldmanagment {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.delete(flv);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			flv = session.find(Fieldlanguagesvalues.class, fieldlanguagesvalues_id);
+			session.remove(flv);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return new Long(-28);
-		} catch (HibernateException ex) {
-			log.error("[getFieldByIdAndLanguage]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getFieldByIdAndLanguage]: " , ex2);
 		}
@@ -162,18 +167,17 @@ public class Fieldmanagment {
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Query query = session.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id ");
-			query.setLong("language_id", language_id);
-			List<Fieldlanguagesvalues> returnList = query.list();
+			query.setParameter("language_id", language_id);
+			List<Fieldlanguagesvalues> returnList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
 			return returnList;
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: " + ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: " + ex2);
 		}
@@ -183,22 +187,33 @@ public class Fieldmanagment {
 	public List<Map> getLabelsByLanguage(Long language_id, int start, int max) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			String sql = "select new Map(f.fieldvalues_id as id, f.value as value) from Fieldlanguagesvalues f " +
+			String sql = "select f from Fieldlanguagesvalues as f " +
 					"WHERE f.language_id = :language_id " +
 					"AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
 
 			Query query = session.createQuery(sql);
-			query.setLong("language_id", language_id);
-			query.setLong("start", start);
-			query.setLong("max", start+max);
+			query.setParameter("language_id", language_id);
+			query.setParameter("start", new Long(start));
+			query.setParameter("max", new Long(start+max));
 			
-			List<Map> returnList = query.list();
+			List results = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-			
+			List<Map> returnList = new LinkedList<Map>();
+			if(results.size()!=0){
+				Iterator<Fieldlanguagesvalues> flIterator=results.iterator();
+				while(flIterator.hasNext()){
+					Fieldlanguagesvalues fl = flIterator.next();
+					Map map = new HashMap();
+					map.put("id", fl.getFieldvalues_id());
+					map.put("value", fl.getValue());
+					returnList.add(map);
+				}
+			}
 			FieldLanguage fieldLanguage = FieldLanguageDaoImpl.getInstance().getFieldLanguageById(language_id);
 			
 			log.debug("Getting Labels for Language " + fieldLanguage.getName());
@@ -240,10 +255,9 @@ public class Fieldmanagment {
 			}
 			
 			
-		} catch (HibernateException ex) {
-			log.error("[getLabelsByLanguage]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getLabelsByLanguage]: " , ex2);
+			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -251,8 +265,9 @@ public class Fieldmanagment {
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id, int start, int max) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 			String sql = "select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id " +
 					"AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
@@ -262,11 +277,11 @@ public class Fieldmanagment {
 //			log.debug("getAllFieldsByLanguage max: "+max);
 
 			Query query = session.createQuery(sql);
-			query.setLong("language_id", language_id);
-			query.setLong("start", start);
-			query.setLong("max", start+max);
+			query.setParameter("language_id", language_id);
+			query.setParameter("start", start);
+			query.setParameter("max", start+max);
 			
-			List<Fieldlanguagesvalues> returnList = query.list();
+			List<Fieldlanguagesvalues> returnList = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 //			
@@ -316,8 +331,6 @@ public class Fieldmanagment {
 			}
 			
 			
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: " , ex2);
 		}
@@ -328,8 +341,9 @@ public class Fieldmanagment {
 			Long language_id, String fieldvalue) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
 			flv.setStarttime(new Date());
@@ -338,14 +352,15 @@ public class Fieldmanagment {
 			flv.setFieldvalues_id(field_id);
 			flv.setDeleted("false");
 
-			Long fieldlanguagesvaluesId = (Long) session.save(flv);
-
+			flv = session.merge(flv);
+			session.flush();
+			Long fieldlanguagesvaluesId = flv.getFieldlanguagesvalues_id();
+			
 			tx.commit();
+
 			HibernateUtil.closeSession(idf);
 			
 			return fieldlanguagesvaluesId;
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ",ex2);
 		}
@@ -355,16 +370,21 @@ public class Fieldmanagment {
 	public void updateFieldValueByFieldAndLanguage(Fieldlanguagesvalues flv) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
-			session.update(flv);
+			if (flv.getFieldlanguagesvalues_id() == null) {
+				session.persist(flv);
+			    } else {
+			    	if (!session.contains(flv)) {
+			    		session.merge(flv);
+			    }
+			}
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 
-		} catch (HibernateException ex) {
-			log.error("[updateFieldValueByFieldAndLanguage]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFieldValueByFieldAndLanguage]: ",ex2);
 		}
@@ -374,22 +394,22 @@ public class Fieldmanagment {
 	public Long addField(String fieldName) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Fieldvalues fl = new Fieldvalues();
 			fl.setStarttime(new Date());
 			fl.setName(fieldName);
 			fl.setDeleted("false");
 
-			Long fieldId = (Long)session.save(fl);
+			fl = session.merge(fl);
+			Long fieldId = fl.getFieldvalues_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return fieldId;
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ",ex2);
 		}
@@ -399,8 +419,9 @@ public class Fieldmanagment {
 	public Long addFieldById(String fieldName, Long fieldvalues_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Fieldvalues fl = new Fieldvalues();
 			fl.setFieldvalues_id(fieldvalues_id);
@@ -408,14 +429,13 @@ public class Fieldmanagment {
 			fl.setName(fieldName);
 			fl.setDeleted("false");
 
-			Long fieldId = (Long)session.save(fl);
+			fl = session.merge(fl);
+			Long fieldId = fl.getFieldvalues_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return fieldId;
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ",ex2);
 		}
@@ -470,8 +490,6 @@ public class Fieldmanagment {
 				this.updateFieldLanguagesLabel(flv);
 			}
 			return fieldvalues_id;
-		} catch (HibernateException ex) {
-			log.error("[updateFieldLanguagesLabel]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFieldLanguagesLabel]: ",ex2);
 		}
@@ -490,8 +508,6 @@ public class Fieldmanagment {
 			}
 			this.addFieldValueByFieldAndLanguage(fieldvalues_id, language_id, value);
 			return fieldvalues_id;
-		} catch (HibernateException ex) {
-			log.error("[updateFieldLanguagesLabel]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFieldLanguagesLabel]: ",ex2);
 		}
@@ -507,8 +523,6 @@ public class Fieldmanagment {
 			} else {
 				return new Long(-1);
 			}
-		} catch (HibernateException ex) {
-			log.error("[updateFieldLanguagesLabel]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateFieldLanguagesLabel]: ",ex2);
 		}
@@ -522,8 +536,6 @@ public class Fieldmanagment {
 			sresult.setRecords(this.selectMaxFromFieldsValues());
 			sresult.setResult(this.getMixedFieldValuesList(start, max, orderby, asc, language_id));
 			return sresult;
-		} catch (HibernateException ex) {
-			log.error("[getFieldsByLanguage]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getFieldsByLanguage]: ",ex2);
 		}
@@ -532,10 +544,11 @@ public class Fieldmanagment {
 
 	private Long selectMaxFromFieldsValues() throws Exception{
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		Query query = session.createQuery("select max(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'"); 
-		List ll = query.list();
+		List ll = query.getResultList();
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		//log.error((Long)ll.get(0));
@@ -553,11 +566,16 @@ public class Fieldmanagment {
 	
 	private List<Fieldvalues> getFieldsValues() throws Exception {
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class, ScopeApplicationAdapter.webAppRootKey);
-		crit.add(Restrictions.eq("deleted", "false"));
-		List<Fieldvalues> ll = crit.list();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Fieldvalues> cq = cb.createQuery(Fieldvalues.class);
+		Root<Fieldvalues> c = cq.from(Fieldvalues.class);
+		Predicate condition = cb.equal(c.get("deleted"), "false");
+		cq.where(condition);
+		TypedQuery<Fieldvalues> q = session.createQuery(cq);
+		List<Fieldvalues> ll = q.getResultList();
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		return ll;
@@ -565,15 +583,24 @@ public class Fieldmanagment {
 	
 	private List<Fieldvalues> getFieldsValues(int start ,int max, String orderby, boolean asc) throws Exception {
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(Fieldvalues.class, ScopeApplicationAdapter.webAppRootKey);
-		crit.add(Restrictions.eq("deleted", "false"));
-		crit.setFirstResult(start);
-		crit.setMaxResults(max);
-		if (asc) crit.addOrder(Order.asc(orderby));
-		else crit.addOrder(Order.desc(orderby));
-		List<Fieldvalues> ll = crit.list();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Fieldvalues> cq = cb.createQuery(Fieldvalues.class);
+		Root<Fieldvalues> c = cq.from(Fieldvalues.class);
+		Predicate condition = cb.equal(c.get("deleted"), "false");
+		cq.where(condition);
+		cq.distinct(asc);
+		if (asc){
+			cq.orderBy(cb.asc(c.get(orderby)));
+		} else {
+			cq.orderBy(cb.desc(c.get(orderby)));
+		}
+		TypedQuery<Fieldvalues> q = session.createQuery(cq);
+		q.setFirstResult(start);
+		q.setMaxResults(max);
+		List<Fieldvalues> ll = q.getResultList();
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		return ll;
@@ -582,11 +609,16 @@ public class Fieldmanagment {
 	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) throws Exception {
 		String hql = "select f from Fieldvalues f WHERE f.fieldvalues_id = :fieldvalues_id ";
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		Query query = session.createQuery(hql);
-		query.setLong("fieldvalues_id", fieldvalues_id);
-		Fieldvalues fv = (Fieldvalues) query.uniqueResult();
+		query.setParameter("fieldvalues_id", fieldvalues_id);
+		Fieldvalues fv = null;
+		try {
+			fv = (Fieldvalues) query.getSingleResult();
+	    } catch (NoResultException ex) {
+	    }
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		return fv;
@@ -595,11 +627,16 @@ public class Fieldmanagment {
 	private Fieldlanguagesvalues getFieldlanguagesvaluesById(Long fieldlanguagesvalues_id) throws Exception {
 		String hql = "select f from Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :fieldlanguagesvalues_id ";
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
 		Query query = session.createQuery(hql);
-		query.setLong("fieldlanguagesvalues_id", fieldlanguagesvalues_id);
-		Fieldlanguagesvalues flv = (Fieldlanguagesvalues) query.uniqueResult();
+		query.setParameter("fieldlanguagesvalues_id", fieldlanguagesvalues_id);
+		Fieldlanguagesvalues flv = null;
+		try {
+			flv = (Fieldlanguagesvalues) query.getSingleResult();
+	    } catch (NoResultException ex) {
+	    }
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 		return flv;
@@ -607,18 +644,32 @@ public class Fieldmanagment {
 	
 	private void updateField(Fieldvalues fv) throws Exception {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(fv);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fv.getFieldvalues_id() == null) {
+				session.persist(fv);
+			    } else {
+			    	if (!session.contains(fv)) {
+			    		session.merge(fv);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 	}
 	
 	private void updateFieldLanguagesLabel(Fieldlanguagesvalues flv) throws Exception {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(flv);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (flv.getFieldlanguagesvalues_id() == null) {
+				session.persist(flv);
+			    } else {
+			    	if (!session.contains(flv)) {
+			    		session.merge(flv);
+			    }
+			}
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 	}	

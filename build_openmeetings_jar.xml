@@ -5,6 +5,7 @@
     <property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
     <property name="templates.src.dir" value="${basedir}/src/templates"/>
     <property name="test.src.dir" value="${basedir}/src/test"/>
+	<property name="server.src.dir" value="${basedir}/src/server"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
     <property name="main.out.dir" value="${basedir}/bin"/>
 	
@@ -36,14 +37,11 @@
     <!-- Distribution properties -->
     <property name="project.distname" value="openmeetings"/>
 
-    <!-- Hibernate Properties -->
-    <property file="${conf.dir}/hibernate.properties" />
-
     <!-- libraries -->
     <property name="project.lib" value="./lib"/>
 	
-    <!-- Hibernate -->
-    <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
+    <!-- Open JPA -->
+    <property name="openjpa.lib" value="${project.lib}/openjpa"/>
     <!-- Log4j -->
     <property name="log4j.lib" value="${project.lib}/log4j" />
     <!-- xDoclet -->
@@ -78,7 +76,7 @@
     <!-- compile classpath -->
     <path id="compile.classpath">
         <fileset dir="${log4j.lib}" includes="*.jar"/>
-        <fileset dir="${hibernate.lib}" includes="*.jar"/>
+        <fileset dir="${openjpa.lib}" includes="*.jar"/>
         <fileset dir="${project.lib}" includes="*.jar"/>
         <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
         <fileset dir="${red5.lib}" includes="*.jar"/>
@@ -116,7 +114,6 @@
             	<exclude name="**/client/**"/>
                 <exclude name="**/*.png"/>
                 <exclude name="**/*.vm"/>
-                <exclude name="hibernate.cfg.xml"/>
                 <exclude name="log4j.properties"/>
             </fileset>
             <manifest>
@@ -131,7 +128,6 @@
                 <exclude name="**/org/**"/>
                 <exclude name="**/*.png"/>
                 <exclude name="**/*.properties"/>
-                <exclude name="hibernate.cfg.xml"/>
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
@@ -146,8 +142,30 @@
     <target name="compile">
         <echo message="Compile main to ${main.out.dir}"></echo>
     	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
+            <src path="${server.src.dir}" />
+    		<src path="${main.src.dir}" />
             <classpath refid="compile.classpath"/>
         </javac>
+    </target>
+
+	<path id="jpa.enhancement.classpath">
+	    <pathelement path="${classes.dir}"/>
+	    <!-- lib contains all of the jars that came with the OpenJPA binary download -->
+	    <fileset dir="${openjpa.lib}" includes="*.jar" />
+	</path>
+	
+    <!-- define the openjpac task -->
+    <taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+        <classpath refid="jpa.enhancement.classpath"/>
+    </taskdef>
+        
+	<target name="enhance" depends="compile">
+        <!-- invoke the enhancer -->
+		<openjpac>
+        	<classpath refid="jpa.enhancement.classpath"/>
+			<config propertiesFile="src/META-INF/persistence.xml"/>
+        </openjpac> 
+        <echo message="Enhancing complete."/>
     </target>
 	
 

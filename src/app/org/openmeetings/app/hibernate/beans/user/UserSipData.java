@@ -1,28 +1,37 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="user_sip_data"
- * lazy="false"
- *
- */
-public class UserSipData {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user_sip_data")
+public class UserSipData implements Serializable {
 	
+	private static final long serialVersionUID = 3438146320304686554L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="user_sip_data_id")
 	private long userSipDataId;
+	@Column(name="username")
 	private String username;
+	@Column(name="userpass")
 	private String userpass;
+	@Column(name="authId")
 	private String authId;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="updated")
 	private Date updated;
 	
-    /**
-     * 
-     * @hibernate.id
-     *  column="user_sip_data_id"
-     *  generator-class="increment"
-     */
 	public long getUserSipDataId() {
 		return userSipDataId;
 	}
@@ -30,11 +39,6 @@ public class UserSipData {
 		this.userSipDataId = userSipDataId;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="username"
-     *  type="string"
-     */  
 	public String getUsername() {
 		return username;
 	}
@@ -42,11 +46,6 @@ public class UserSipData {
 		this.username = username;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="userpass"
-     *  type="string"
-     */ 	
 	public String getUserpass() {
 		return userpass;
 	}
@@ -54,11 +53,6 @@ public class UserSipData {
 		this.userpass = userpass;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="authId"
-     *  type="string"
-     */ 	
 	public String getAuthId() {
 		return authId;
 	}
@@ -66,11 +60,6 @@ public class UserSipData {
 		this.authId = authId;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 	
 	public Date getInserted() {
 		return inserted;
 	}
@@ -78,11 +67,6 @@ public class UserSipData {
 		this.inserted = inserted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */	
 	public Date getUpdated() {
 		return updated;
 	}

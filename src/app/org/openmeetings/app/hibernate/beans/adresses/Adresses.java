@@ -1,42 +1,61 @@
 package org.openmeetings.app.hibernate.beans.adresses;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
-/**
- * 
- * @hibernate.class table="adresses"
- * lazy="false"
- *
- */
 
-public class Adresses {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "adresses")
+public class Adresses implements Serializable {
     
+	private static final long serialVersionUID = 1387576041912128161L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="adresses_id")
     private Long adresses_id;
+	@Column(name="additionalname")
     private String additionalname;
+	@Column(name="comment_field")
     private String comment;
+	@Column(name="fax")
     private String fax;
+	@Column(name="starttime")
     private Date starttime;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="state_id")
     private States states;
+	@Column(name="street")
     private String street;  
+	@Column(name="town")
     private String town;     
+	@Column(name="updatetime")
     private Date updatetime;
+	@Column(name="zip")
     private String zip;
+	@Column(name="deleted")
     private String deleted;
     
+	@Column(name="email")
     private String email;
+	@Column(name="phone")
     private String phone;
-    
     
     public Adresses() {
         // TODO Auto-generated constructor stub
     }
 
-    /**
-     * @hibernate.property
-     *  column="additionalname"
-     *  type="string"
-     */ 
     public String getAdditionalname() {
         return additionalname;
     }
@@ -44,12 +63,6 @@ public class Adresses {
         this.additionalname = additionalname;
     }
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="adresses_id"
-     *  generator-class="increment"
-     */      
     public Long getAdresses_id() {
         return adresses_id;
     }
@@ -57,11 +70,6 @@ public class Adresses {
         this.adresses_id = adresses_id;
     }
     
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */     
     public String getComment() {
         return comment;
     }
@@ -69,11 +77,6 @@ public class Adresses {
         this.comment = comment;
     }
     
-    /**
-     * @hibernate.property
-     *  column="fax"
-     *  type="string"
-     */       
     public String getFax() {
         return fax;
     }
@@ -81,11 +84,6 @@ public class Adresses {
         this.fax = fax;
     }
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */      
     public Date getStarttime() {
         return starttime;
     }
@@ -93,15 +91,6 @@ public class Adresses {
         this.starttime = starttime;
     }
     
-    /**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="state_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.adresses.States"
-     *  not-null="false"
-     *  outer-join="true"
-     */   
     public States getStates() {
         return states;
     }
@@ -109,11 +98,6 @@ public class Adresses {
         this.states = states;
     }
     
-    /**
-     * @hibernate.property
-     *  column="street"
-     *  type="string"
-     */       
     public String getStreet() {
         return street;
     }
@@ -121,11 +105,6 @@ public class Adresses {
         this.street = street;
     }
     
-    /**
-     * @hibernate.property
-     *  column="town"
-     *  type="string"
-     */        
     public String getTown() {
         return town;
     }
@@ -133,11 +112,6 @@ public class Adresses {
         this.town = town;
     }
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */       
     public Date getUpdatetime() {
         return updatetime;
     }
@@ -145,11 +119,6 @@ public class Adresses {
         this.updatetime = updatetime;
     }
     
-    /**
-     * @hibernate.property
-     *  column="zip"
-     *  type="string"
-     */        
     public String getZip() {
         return zip;
     }
@@ -157,11 +126,6 @@ public class Adresses {
         this.zip = zip;
     }
     
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -169,11 +133,6 @@ public class Adresses {
 		this.deleted = deleted;
 	}
 
-	 /**
-     * @hibernate.property
-     *  column="email"
-     *  type="string"
-     */	
 	public String getEmail() {
 		return email;
 	}
@@ -182,11 +141,6 @@ public class Adresses {
 		this.email = email;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="phone"
-     *  type="string"
-     */	
 	public String getPhone() {
 		return phone;
 	}
@@ -194,7 +148,6 @@ public class Adresses {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
     
 
 

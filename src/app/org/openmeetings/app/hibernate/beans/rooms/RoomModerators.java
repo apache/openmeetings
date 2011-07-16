@@ -1,31 +1,46 @@
 package org.openmeetings.app.hibernate.beans.rooms;
 
+import java.io.Serializable;
 import java.util.Date;
+
 
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="rooms_moderator"
- * lazy="false"
- *
- */
-public class RoomModerators {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "rooms_moderator")
+public class RoomModerators implements Serializable {
 	
+	private static final long serialVersionUID = 5407758673591515018L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="room_moderators_id")
 	private long roomModeratorsId;
+	@Column(name = "roomId")
 	private Long roomId;
+	@Column(name="is_supermoderator")
 	private Boolean isSuperModerator;
+	@ManyToOne(fetch = FetchType.EAGER) 
+	@JoinColumn (name="user_id")
 	private Users user;
+	@Column(name = "starttime")
 	private Date starttime;
+	@Column(name = "updatetime")
 	private Date updatetime;
+	@Column(name = "deleted")
 	private String deleted;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="room_moderators_id"
-     *  generator-class="increment"
-     */ 
 	public long getRoomModeratorsId() {
 		return roomModeratorsId;
 	}
@@ -33,11 +48,6 @@ public class RoomModerators {
 		this.roomModeratorsId = roomModeratorsId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_supermoderator"
-     *  type="boolean"
-     */
 	public Boolean getIsSuperModerator() {
 		return isSuperModerator;
 	}
@@ -45,15 +55,7 @@ public class RoomModerators {
 		this.isSuperModerator = isSuperModerator;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
+	
 	public Users getUser() {
 		return user;
 	}
@@ -61,11 +63,6 @@ public class RoomModerators {
 		this.user = user;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -73,11 +70,6 @@ public class RoomModerators {
 		this.starttime = starttime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -85,11 +77,6 @@ public class RoomModerators {
 		this.updatetime = updatetime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */
 	public String getDeleted() {
 		return deleted;
 	}
@@ -97,11 +84,6 @@ public class RoomModerators {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="roomId"
-     *  type="long"
-     */
 	public Long getRoomId() {
 		return roomId;
 	}

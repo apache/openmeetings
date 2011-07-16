@@ -5,10 +5,10 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 
 import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
@@ -39,8 +39,9 @@ public class FieldLanguageDaoImpl {
 	public Long addLanguage(String langName, Boolean langRtl) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			FieldLanguage fl = new FieldLanguage();
 			fl.setStarttime(new Date());
@@ -48,14 +49,14 @@ public class FieldLanguageDaoImpl {
 			fl.setName(langName);
 			fl.setRtl(langRtl);
 
-			Long languages_id = (Long)session.save(fl);
+			fl = session.merge(fl);
+			session.flush();
+			Long languages_id = fl.getLanguage_id();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return languages_id;
-		} catch (HibernateException ex) {
-			log.error("[addLanguage]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addLanguage]: ",ex2);
 		}
@@ -66,15 +67,14 @@ public class FieldLanguageDaoImpl {
 	public void emptyFieldLanguage() {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
 //			 TODO delete hql query doesn't work, must be repared
 			session.createQuery("delete from FieldLanguage");
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-		} catch (HibernateException ex) {
-			log.error("[getConfKey]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ",ex2);
 		}
@@ -88,8 +88,6 @@ public class FieldLanguageDaoImpl {
 			fl.setDeleted(deleted);
 			this.updateLanguage(fl);
 			return language_id;
-		} catch (HibernateException ex) {
-			log.error("[updateLanguage]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateLanguage]: ",ex2);
 		}
@@ -99,9 +97,16 @@ public class FieldLanguageDaoImpl {
 	
 	private void updateLanguage(FieldLanguage fl) throws Exception {
 		Object idf = HibernateUtil.createSession();
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
-		session.update(fl);
+		EntityManager session = HibernateUtil.getSession();
+		EntityTransaction tx = session.getTransaction();
+		tx.begin();
+		if (fl.getLanguage_id() == null) {
+			session.persist(fl);
+		    } else {
+		    	if (!session.contains(fl)) {
+		    		session.merge(fl);
+		    }
+		}
 		tx.commit();
 		HibernateUtil.closeSession(idf);
 	}	
@@ -110,20 +115,23 @@ public class FieldLanguageDaoImpl {
 	public FieldLanguage getFieldLanguageById(Long language_id) {
 		try {
 			String hql = "select c from FieldLanguage as c " +
-					"WHERE c.deleted != :deleted " +
+					"WHERE c.deleted <> :deleted " +
 					"AND c.language_id = :language_id";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			query.setLong("language_id", language_id);
-			FieldLanguage fl = (FieldLanguage) query.uniqueResult();
+			query.setParameter("deleted", "true");
+			query.setParameter("language_id", language_id);
+			FieldLanguage fl = null;
+			try {
+				fl = (FieldLanguage) query.getSingleResult();
+	        } catch (NoResultException ex) {
+	        }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return fl;
-		} catch (HibernateException ex) {
-			log.error("[getLanguageById]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getLanguageById]: ",ex2);
 		}
@@ -133,18 +141,17 @@ public class FieldLanguageDaoImpl {
 	public List<FieldLanguage> getLanguages() {
 		try {
 			String hql = "select c from FieldLanguage as c " +
-					"WHERE c.deleted != :deleted ";
+					"WHERE c.deleted <> :deleted ";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("deleted", "true");
-			List<FieldLanguage> ll = query.list();
+			query.setParameter("deleted", "true");
+			List<FieldLanguage> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getLanguages]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getLanguages]: ",ex2);
 		}

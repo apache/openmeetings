@@ -12,15 +12,13 @@ import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.ProjectionList;
+
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -75,19 +73,20 @@ public class Organisationmanagement {
 	public Long addOrganisation(String orgname, long user_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Organisation org = new Organisation();
 			org.setName(orgname);
-			org.setInsertedby(user_id);
+			org.setInsertedby(new Long(user_id));
 			org.setDeleted("false");
 			org.setStarttime(new Date());
-			long id = (Long) session.save(org);
+			org = session.merge(org);
+			session.flush();
+			long id = org.getOrganisation_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return id;
-		} catch (HibernateException ex) {
-			log.error("[addOrganisation]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addOrganisation]" ,ex2);
 		}
@@ -97,15 +96,16 @@ public class Organisationmanagement {
 	public Long addOrganisationObj(Organisation org) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			org.setStarttime(new Date());
-			long id = (Long) session.save(org);
+			org = session.merge(org);
+			session.flush();
+			long id = org.getOrganisation_id();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return id;
-		} catch (HibernateException ex) {
-			log.error("[addOrganisationObj]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[addOrganisationObj]" ,ex2);
 		}
@@ -131,8 +131,6 @@ public class Organisationmanagement {
 			} else {
 				log.error("[getOrganisations] noPremission");
 			}
-		} catch (HibernateException ex) {
-			log.error("[getOrganisations]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisations]" ,ex2);
 		}
@@ -147,20 +145,27 @@ public class Organisationmanagement {
 	public List<Organisation> getOrganisations(int start ,int max, String orderby, boolean asc) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("deleted", "false"));
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			if (asc) crit.addOrder(Order.asc(orderby));
-			else crit.addOrder(Order.desc(orderby));
-			List<Organisation> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Organisation> cq = cb.createQuery(Organisation.class);
+			Root<Organisation> c = cq.from(Organisation.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			cq.distinct(asc);
+			if (asc){
+				cq.orderBy(cb.asc(c.get(orderby)));
+			} else {
+				cq.orderBy(cb.desc(c.get(orderby)));
+			}
+			TypedQuery<Organisation> q = session.createQuery(cq);
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<Organisation> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getOrganisations]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisations]" ,ex2);
 		}
@@ -171,18 +176,22 @@ public class Organisationmanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Organisation.class, ScopeApplicationAdapter.webAppRootKey);
-				List<Organisation> ll = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<Organisation> cq = cb.createQuery(Organisation.class);
+				Root<Organisation> c = cq.from(Organisation.class);
+				Predicate condition = cb.equal(c.get("deleted"), "false");
+				cq.where(condition);
+				TypedQuery<Organisation> q = session.createQuery(cq);
+				List<Organisation> ll = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return ll;
 			} else {
 				log.error("[getOrganisations] noPremission");
 			}			
-		} catch (HibernateException ex) {
-			log.error("[getOrganisations]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisations]" ,ex2);
 		}
@@ -198,16 +207,15 @@ public class Organisationmanagement {
 		try {
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select max(c.organisation_id) from Organisation c where c.deleted = 'false'"); 
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.debug("selectMaxFromOrganisations"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromUsers] ",ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ",ex2);
 		}
@@ -231,15 +239,21 @@ public class Organisationmanagement {
 			org.setUpdatedby(users_id);
 			org.setUpdatetime(new Date());
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(org);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (org.getOrganisation_id() == null) {
+				session.persist(org);
+			    } else {
+			    	if (!session.contains(org)) {
+			    		session.merge(org);
+			    }
+			}
+			session.flush();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return org.getOrganisation_id();
-		} catch (HibernateException hex){
-			log.error("updateOrganisation",hex);
 		} catch (Exception err){
 			log.error("updateOrganisation",err);
 		}
@@ -343,8 +357,6 @@ public class Organisationmanagement {
 			} else {
 				log.error("[getOrganisationById] authorization required");
 			}
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationById]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
 		}
@@ -359,17 +371,21 @@ public class Organisationmanagement {
 	public Organisation getOrganisationById(long organisation_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id AND deleted != :deleted");
-			query.setLong("organisation_id", organisation_id);
-			query.setString("deleted", "true");
-			Organisation o = (Organisation) query.uniqueResult();
-			tx.commit();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id AND c.deleted <> :deleted");
+			query.setParameter("organisation_id", organisation_id);
+			query.setParameter("deleted", "true");
+            Organisation o = null;
+            try {
+                o = (Organisation) query.getSingleResult();
+            } catch (NoResultException e) {
+                //o = null;
+            }
+            tx.commit();
 			HibernateUtil.closeSession(idf);
 			return o;
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationById]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
 		}
@@ -379,16 +395,20 @@ public class Organisationmanagement {
 	public Organisation getOrganisationByIdBackup(long organisation_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
-			query.setLong("organisation_id", organisation_id);
-			Organisation o = (Organisation) query.uniqueResult();
+			query.setParameter("organisation_id", organisation_id);
+            Organisation o = null;
+            try {
+                o = (Organisation) query.getSingleResult();
+            } catch (NoResultException e) {
+                //o = null;
+            }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return o;
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationById]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
 		}
@@ -398,16 +418,20 @@ public class Organisationmanagement {
 	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
-			query.setLong("organisation_id", organisation_id);
-			Organisation o = (Organisation) query.uniqueResult();
+			query.setParameter("organisation_id", organisation_id);
+            Organisation o = null;
+            try {
+                o = (Organisation) query.getSingleResult();
+            } catch (NoResultException e) {
+                //o = null;
+            }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return o;
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationByIdAndDeleted]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationByIdAndDeleted]",ex2);
 		}
@@ -419,8 +443,6 @@ public class Organisationmanagement {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
 				return this.deleteOrganisation(organisation_id, updatedby);
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[deleteOrganisation]",ex2);
 		}
@@ -442,16 +464,21 @@ public class Organisationmanagement {
 				org.setUpdatedby(updatedby);
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(org);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (org.getOrganisation_id() == null) {
+					session.persist(org);
+				    } else {
+				    	if (!session.contains(org)) {
+				    		session.merge(org);
+				    }
+				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				
 				return org.getOrganisation_id();
 
-		} catch (HibernateException ex) {
-			log.error("[deleteOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[deleteOrganisation]",ex2);
 		}
@@ -470,20 +497,23 @@ public class Organisationmanagement {
 		try {
 			if (this.getOrganisation_UserByUserAndOrganisation(user_id, organisation_id)==null) {
 				Organisation org = this.getOrganisationById(organisation_id);
-				log.error("org: " + org.getName());
+				log.debug("org: " + org.getName());
+			
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
 				Organisation_Users orgUser = new Organisation_Users();
 				orgUser.setOrganisation(org);
 				orgUser.setUser_id(user_id);
 				orgUser.setDeleted("false");
 				orgUser.setStarttime(new Date());
 				orgUser.setComment(comment);
-				long id = (Long) session.save(orgUser);
-				
+				orgUser = session.merge(orgUser);
 				//We need this flush
 				session.flush();
+				long id = orgUser.getOrganisation_users_id();
+				
 				
 				tx.commit();
 				HibernateUtil.closeSession(idf);
@@ -491,8 +521,6 @@ public class Organisationmanagement {
 			} else {
 				return -35L;
 			}
-		} catch (HibernateException ex) {
-			log.error("[addUserToOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[addUserToOrganisation]",ex2);
 		}
@@ -502,19 +530,18 @@ public class Organisationmanagement {
 	public Long addOrganisationUserObj(Organisation_Users orgUser) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			orgUser.setStarttime(new Date());
-			long id = (Long) session.save(orgUser);
-			
+			orgUser = session.merge(orgUser);
 			//We need this flush
 			session.flush();
+			long id = orgUser.getOrganisation_users_id();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return id;
-		} catch (HibernateException ex) {
-			log.error("[addUserToOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[addUserToOrganisation]",ex2);
 		}
@@ -524,26 +551,23 @@ public class Organisationmanagement {
 	public Organisation_Users getOrganisation_UserByUserAndOrganisation(long user_id, long organisation_id){
 		try {
 			
-			log.error("getOrganisation_UserByUserAndOrganisation "+user_id+ "  "+organisation_id);
+			log.debug("getOrganisation_UserByUserAndOrganisation "+user_id+ "  "+organisation_id);
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
-			crit.add(Restrictions.eq("deleted", "false"));
-			crit.add(Restrictions.eq("user_id", user_id));
-			Criteria subCrit = crit.createCriteria("organisation");
-			subCrit.add(Restrictions.eq("organisation_id", organisation_id));
-			List ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query q = session.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id AND c.user_id = :user_id");
+			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("user_id", user_id);
+			List<Organisation_Users> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
-			log.error("getOrganisation_UserByUserAndOrganisation: "+ll.size());
+			log.debug("getOrganisation_UserByUserAndOrganisation: "+ll.size());
 			if (ll.size()>0){
 				return (Organisation_Users) ll.get(0);
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[getOrganisation_UserByUserAndOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisation_UserByUserAndOrganisation]",ex2);
 		}
@@ -562,17 +586,22 @@ public class Organisationmanagement {
 				orgUser.setUpdatetime(new Date());
 				
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				session.update(orgUser);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				if (orgUser.getOrganisation_users_id() == null) {
+					session.persist(orgUser);
+				    } else {
+				    	if (!session.contains(orgUser)) {
+				    		session.merge(orgUser);
+				    }
+				}
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				return orgUser.getOrganisation_users_id();
 			} else { 
 				log.error("[deleteUserFromOrganisation] authorization required");
 			}
-		} catch (HibernateException ex) {
-			log.error("[deleteuserFromOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[deleteuserFromOrganisation]",ex2);
 		}
@@ -588,8 +617,6 @@ public class Organisationmanagement {
 				if (orguser.getOrganisation().getOrganisation_id()==organisation_id)
 					return true;
 			}
-		} catch (HibernateException ex) {
-			log.error("[checkUserContainsOrganisation]",ex);
 		} catch (Exception ex2) {
 			log.error("[checkUserContainsOrganisation]",ex2);
 		}
@@ -605,8 +632,6 @@ public class Organisationmanagement {
 			sResult.setResult(this.getUsersByOrganisationId(organisation_id, start, max, orderby, asc));
 			return sResult;
 				
-		} catch (HibernateException ex) {
-			log.error("[getUsersSearchResultByOrganisationId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersSearchResultByOrganisationId]",ex2);
 		}
@@ -616,20 +641,19 @@ public class Organisationmanagement {
 	private Long selectMaxUsersByOrganisationId(long organisation_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 
 			Query query = session.createQuery("select c.organisation_users_id from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id");
-			query.setLong("organisation_id", organisation_id);
+			query.setParameter("organisation_id", organisation_id);
 			
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.debug("selectMaxUsersByOrganisationId"+ll.size());
 			return new Long(ll.size());	
 			
-		} catch (HibernateException ex) {
-			log.error("[getUsersByOrganisationId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersByOrganisationId]",ex2);
 		}
@@ -650,34 +674,45 @@ public class Organisationmanagement {
 		try {
 				//get all users
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
-				Criteria subcrit = crit.createCriteria("organisation");
-				subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-				crit.add(Restrictions.ne("deleted", "true"));
-				crit.setMaxResults(max);
-				crit.setFirstResult(start);
-				List userOrg = crit.list();
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+				tx.begin();
+				String hql = "select c from Organisation_Users c " +
+							"where c.deleted = 'false' " +
+							"AND c.organisation.organisation_id = :organisation_id ";
+				if (orderby.startsWith("c.")){
+					hql += "ORDER BY "+orderby;
+				} else {
+					hql += "ORDER BY " + "c." + orderby;
+				}
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
+				
+				Query q = session.createQuery(hql);
+				q.setParameter("organisation_id", organisation_id);
+				q.setFirstResult(start);
+				q.setMaxResults(max);
+				List<Organisation_Users> userOrg = q.getResultList();
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				List<Users> userL = new LinkedList<Users>();
-				for (Iterator it = userOrg.iterator();it.hasNext();){
+				for (Iterator<Organisation_Users> it = userOrg.iterator();it.hasNext();){
 					Organisation_Users us = (Organisation_Users) it.next();
 					
 					//Only add this single Organization add this point cause
 					//cause all the other are not needed at this point
 					Users user = UsersDaoImpl.getInstance().getUser(us.getUser_id());
 					
-					user.setOrganisation_users(new HashSet());
+					user.setOrganisation_users(new HashSet<Organisation_Users>());
 					user.getOrganisation_users().add(us);
 					
 					userL.add(user);
 				}
 				//Collections.sort(userL,new UsersFirstnameComperator());
 				return userL;
-		} catch (HibernateException ex) {
-			log.error("[getUsersByOrganisationId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersByOrganisationId]",ex2);
 		}
@@ -694,13 +729,12 @@ public class Organisationmanagement {
 
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
-			Criteria subcrit = crit.createCriteria("organisation");
-			subcrit.add(Restrictions.eq("organisation_id", organisation_id));
-			crit.add(Restrictions.ne("deleted", "true"));
-			List<Organisation_Users> userOrg = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query q = session.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id");
+			q.setParameter("organisation_id", organisation_id);
+			List<Organisation_Users> userOrg = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			List<Users> userL = new LinkedList<Users>();
@@ -711,8 +745,6 @@ public class Organisationmanagement {
 			Collections.sort(userL,new UsersLoginComperator());
 			return userL;
 			
-		} catch (HibernateException ex) {
-			log.error("[getUsersByOrganisationId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getUsersByOrganisationId]",ex2);
 		}
@@ -743,34 +775,30 @@ public class Organisationmanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
 					Object idf = HibernateUtil.createSession();
-					Session session = HibernateUtil.getSession();
-					Transaction tx = session.beginTransaction();
-					Criteria crit = session.createCriteria(Organisation_Users.class, ScopeApplicationAdapter.webAppRootKey);
-					
-			        ProjectionList projections = Projections.projectionList();
-			        projections.add(Projections.groupProperty("organisation.organisation_id"));
-			        crit.setProjection(projections);
-			        
-					crit.add(Restrictions.eq("user_id", user_id));
-					crit.setMaxResults(max);
-					crit.setFirstResult(start);
-					crit.add(Restrictions.ne("deleted", "true"));
-			        
-					List userOrgIds = crit.list();
+					EntityManager session = HibernateUtil.getSession();
+					EntityTransaction tx = session.getTransaction();
+					tx.begin();
+					String hql = "select c from Organisation_Users c " +
+								"where c.deleted = 'false' " +
+								"AND c.user_id = :user_id " +
+								"GROUP BY c.organisation.organisation_id";
+					Query q = session.createQuery(hql);
+					q.setParameter("user_id", user_id);
+					q.setFirstResult(start);
+					q.setMaxResults(max);
+					List<Organisation_Users> userOrgIds = q.getResultList();
 					tx.commit();
 					HibernateUtil.closeSession(idf);
 					
 					LinkedList<Organisation> userOrg = new LinkedList<Organisation>();
 					
-					for (Iterator it = userOrgIds.iterator();it.hasNext();){
-						Long org_id = (Long) it.next();
+					for (Iterator<Organisation_Users> it = userOrgIds.iterator();it.hasNext();){
+						Long org_id = (Long) it.next().getOrganisation().getOrganisation_id();
 						userOrg.add(this.getOrganisationById(org_id));
 					}
 
 					return userOrg;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getOrganisationsByUserId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationsByUserId]",ex2);
 		}
@@ -816,8 +844,6 @@ public class Organisationmanagement {
 				
 				return returnList;
 			}
-		} catch (HibernateException ex) {
-			log.error("[getRestOrganisationsByUserId]",ex);
 		} catch (Exception ex2) {
 			log.error("[getRestOrganisationsByUserId]",ex2);
 		}

@@ -3,10 +3,10 @@ package org.openmeetings.app.data.file.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -62,20 +62,18 @@ public class FileExplorerItemDaoImpl {
             fileItem.setExternalFileId(externalFileId);
             fileItem.setExternalType(externalType);
 
-            Object idf = HibernateUtil.createSession();
-
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-
-            Long fileItemId = (Long) session.save(fileItem);
-
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			
+			fileItem = session.merge(fileItem);
+			Long fileItemId = fileItem.getFileExplorerItemId();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             log.debug(".add(): file " + fileName + " added as " + fileItemId);
             return fileItemId;
-        } catch (HibernateException ex) {
-            log.error(".add(): ", ex);
         } catch (Exception ex2) {
             log.error(".add(): ", ex2);
         }
@@ -85,19 +83,17 @@ public class FileExplorerItemDaoImpl {
     public Long addFileExplorerItem(FileExplorerItem fileItem) {
         try {
 
-            Object idf = HibernateUtil.createSession();
-
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-
-            Long fileItemId = (Long) session.save(fileItem);
-
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			
+			fileItem = session.merge(fileItem);
+			Long fileItemId = fileItem.getFileExplorerItemId();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             return fileItemId;
-        } catch (HibernateException ex) {
-            log.error("[addFileExplorerItem]", ex);
         } catch (Exception ex2) {
             log.error("[addFileExplorerItem]", ex2);
         }
@@ -109,25 +105,24 @@ public class FileExplorerItemDaoImpl {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
             String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted != :deleted "
+                    + "WHERE c.deleted <> :deleted "
                     + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setString("deleted", "true");
-            query.setLong("room_id", room_id);
-            query.setLong("ownerId", ownerId);
-
-            List<FileExplorerItem> fileExplorerList = query.list();
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("deleted", "true");
+			query.setParameter("room_id",room_id);
+			query.setParameter("ownerId",ownerId);
+			
+			List<FileExplorerItem> fileExplorerList = query.getResultList();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerItemsByRoomAndOwner]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerItemsByRoomAndOwner]: ", ex2);
         }
@@ -139,28 +134,27 @@ public class FileExplorerItemDaoImpl {
         log.debug(".getFileExplorerItemsByRoom() started");
         try {
 
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted != :deleted "
-                    + "AND c.room_id = :room_id "
-                    + "AND c.ownerId IS NULL "
-                    + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-                    + "ORDER BY c.isFolder DESC, c.fileName ";
-
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setString("deleted", "true");
-            query.setLong("room_id", room_id);
-            query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
-
-            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
-            tx.commit();
-            HibernateUtil.closeSession(idf);
-
-            return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerRootItemsByRoom]: ", ex);
+			String hql = "SELECT c FROM FileExplorerItem c " +
+					"WHERE c.deleted <> :deleted " +
+					"AND c.room_id = :room_id " +
+					"AND c.ownerId IS NULL " +
+					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
+					"ORDER BY c.isFolder DESC, c.fileName ";
+			
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("deleted", "true");
+			query.setParameter("room_id",room_id);
+			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			
+	        FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
+			return fileExplorerList;
         } catch (Exception ex2) {
             log.error("[getFileExplorerRootItemsByRoom]: ", ex2);
         }
@@ -173,26 +167,26 @@ public class FileExplorerItemDaoImpl {
         try {
 
             String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted != :deleted "
+                    + "WHERE c.deleted <> :deleted "
                     + "AND c.ownerId = :ownerId "
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setString("deleted", "true");
-            query.setLong("ownerId", ownerId);
-            query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
-
-            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("deleted", "true");
+			query.setParameter("ownerId",ownerId);
+			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			
+            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerRootItemsByOwner]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerRootItemsByOwner]: ", ex2);
         }
@@ -205,24 +199,23 @@ public class FileExplorerItemDaoImpl {
         try {
 
             String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted != :deleted "
+                    + "WHERE c.deleted <> :deleted "
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setString("deleted", "true");
-            query.setLong("parentFileExplorerItemId", parentFileExplorerItemId);
-
-            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.list().toArray(new FileExplorerItem[0]);
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("deleted", "true");
+			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			
+            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerRootItemsByOwner]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerRootItemsByOwner]: ", ex2);
         }
@@ -237,20 +230,22 @@ public class FileExplorerItemDaoImpl {
             String hql = "SELECT c FROM FileExplorerItem c "
                     + "WHERE c.fileExplorerItemId = :fileExplorerItemId";
 
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setLong("fileExplorerItemId", fileExplorerItemId);
-
-            FileExplorerItem fileExplorerList = (FileExplorerItem) query
-                    .uniqueResult();
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("fileExplorerItemId", fileExplorerItemId);
+			
+			FileExplorerItem fileExplorerList = null;
+			try {
+				fileExplorerList = (FileExplorerItem) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerItemsById]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerItemsById]: ", ex2);
         }
@@ -267,20 +262,22 @@ public class FileExplorerItemDaoImpl {
             		"AND c.externalType LIKE :externalType";
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
-            query.setLong("externalFileId", externalFileId);
-            query.setString("externalType", externalType);
-
-            FileExplorerItem fileExplorerList = (FileExplorerItem) query
-                    .uniqueResult();
-            tx.commit();
-            HibernateUtil.closeSession(idf);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
+			query.setParameter("externalFileId", externalFileId);
+			query.setParameter("externalType", externalType);
+			
+			FileExplorerItem fileExplorerList = null;
+			try {
+				fileExplorerList = (FileExplorerItem) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
+			tx.commit();
+			HibernateUtil.closeSession(idf);
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerItemsByExternalIdAndType]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerItemsByExternalIdAndType]: ", ex2);
         }
@@ -295,18 +292,17 @@ public class FileExplorerItemDaoImpl {
             String hql = "SELECT c FROM FileExplorerItem c ";
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery(hql);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery(hql);
 
-            List<FileExplorerItem> fileExplorerList = query.list();
+            List<FileExplorerItem> fileExplorerList = query.getResultList();
             
             tx.commit();
             HibernateUtil.closeSession(idf);
 
             return fileExplorerList;
-        } catch (HibernateException ex) {
-            log.error("[getFileExplorerItemsById]: ", ex);
         } catch (Exception ex2) {
             log.error("[getFileExplorerItemsById]: ", ex2);
         }
@@ -327,16 +323,21 @@ public class FileExplorerItemDaoImpl {
             fId.setDeleted("true");
             fId.setUpdated(new Date());
 
-            Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            session.update(fId);
-            session.flush();
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fId.getFileExplorerItemId() == 0) {
+				session.persist(fId);
+			    } else {
+			    	if (!session.contains(fId)) {
+			    		session.merge(fId);
+			    }
+			}
+			session.flush();
             tx.commit();
             HibernateUtil.closeSession(idf);
 
-        } catch (HibernateException ex) {
-            log.error("[deleteFileExplorerItem]: ", ex);
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItem]: ", ex2);
         }
@@ -358,15 +359,20 @@ public class FileExplorerItemDaoImpl {
             fId.setUpdated(new Date());
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            session.update(fId);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fId.getFileExplorerItemId() == 0) {
+				session.persist(fId);
+			    } else {
+			    	if (!session.contains(fId)) {
+			    		session.merge(fId);
+			    }
+			}
             session.flush();
             tx.commit();
             HibernateUtil.closeSession(idf);
 
-        } catch (HibernateException ex) {
-            log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex);
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
         }
@@ -388,15 +394,20 @@ public class FileExplorerItemDaoImpl {
             fId.setUpdated(new Date());
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            session.update(fId);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fId.getFileExplorerItemId() == 0) {
+				session.persist(fId);
+			    } else {
+			    	if (!session.contains(fId)) {
+			    		session.merge(fId);
+			    }
+			}
             session.flush();
             tx.commit();
             HibernateUtil.closeSession(idf);
 
-        } catch (HibernateException ex) {
-            log.error("[updateFileOrFolderName]: ", ex);
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
         }
@@ -408,15 +419,20 @@ public class FileExplorerItemDaoImpl {
             // fId.setUpdated(new Date());
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            session.update(fId);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fId.getFileExplorerItemId() == 0) {
+				session.persist(fId);
+			    } else {
+			    	if (!session.contains(fId)) {
+			    		session.merge(fId);
+			    }
+			}
             session.flush();
             tx.commit();
             HibernateUtil.closeSession(idf);
 
-        } catch (HibernateException ex) {
-            log.error("[updateFileOrFolder]: ", ex);
         } catch (Exception ex2) {
             log.error("[updateFileOrFolder]: ", ex2);
         }
@@ -454,15 +470,20 @@ public class FileExplorerItemDaoImpl {
             fId.setUpdated(new Date());
 
             Object idf = HibernateUtil.createSession();
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();
-            session.update(fId);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (fId.getFileExplorerItemId() == 0) {
+				session.persist(fId);
+			    } else {
+			    	if (!session.contains(fId)) {
+			    		session.merge(fId);
+			    }
+			}
             session.flush();
             tx.commit();
             HibernateUtil.closeSession(idf);
 
-        } catch (HibernateException ex) {
-            log.error("[updateFileOrFolderName]: ", ex);
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
         }

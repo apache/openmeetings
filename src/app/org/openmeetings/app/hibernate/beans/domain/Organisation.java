@@ -1,34 +1,43 @@
 package org.openmeetings.app.hibernate.beans.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="organisation"
- * lazy="false"
- *
- */
-public class Organisation {
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "organisation")
+public class Organisation implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 99123580264065654L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="organisation_id")
 	private Long organisation_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="insertedby")
 	private Long insertedby;
+	@Column(name="updatedby")
 	private Long updatedby;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
 	
-	
-	public Organisation() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
-    /**
-     * @hibernate.property
-     *  column="insertedby"
-     *  type="long"
-     */
 	public Long getInsertedby() {
 		return insertedby;
 	}
@@ -36,11 +45,6 @@ public class Organisation {
 		this.insertedby = insertedby;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
 	public String getName() {
 		return name;
 	}
@@ -48,12 +52,6 @@ public class Organisation {
 		this.name = name;
 	}
 
-    /**
-     * 
-     * @hibernate.id
-     *  column="organisation_id"
-     *  generator-class="increment"
-     */ 
 	public Long getOrganisation_id() {
 		return organisation_id;
 	}
@@ -61,11 +59,6 @@ public class Organisation {
 		this.organisation_id = organisation_id;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="updatedby"
-     *  type="long"
-     */
 	public Long getUpdatedby() {
 		return updatedby;
 	}
@@ -74,11 +67,6 @@ public class Organisation {
 	}	
 	
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -86,11 +74,6 @@ public class Organisation {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -98,11 +81,6 @@ public class Organisation {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}

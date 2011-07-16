@@ -1,33 +1,48 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="sessiondata"
- *
- */
-public class Sessiondata {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "sessiondata")
+public class Sessiondata implements Serializable {
+	private static final long serialVersionUID = 1928177917452866750L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="id")
 	private Long id;
+	@Column(name="user_id")
 	private Long user_id;
+	@Column(name="session_id")
 	private String session_id;
+	@Column(name="starttermin_time")
 	private Date starttermin_time;
+	@Column(name="refresh_time")
 	private Date refresh_time;
+	@Lob
+	@Column(name="sessionXml")
 	private String sessionXml;
+	@Column(name="storePermanent")
 	private Boolean storePermanent;
+	@Column(name="language_id")
 	private Long language_id;
+	@Column(name="organization_id")
 	private Long organization_id;
 	public Sessiondata() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="id"
-     *  generator-class="increment"
-     */     
     public Long getId() {
         return id;
     }
@@ -35,11 +50,6 @@ public class Sessiondata {
         this.id = id;
     }
     
-    /**
-     * @hibernate.property
-     *  column="refresh_time"
-     *  type="java.util.Date"
-     */     
     public Date getRefresh_time() {
         return refresh_time;
     }
@@ -47,11 +57,6 @@ public class Sessiondata {
         this.refresh_time = refresh_time;
     }
     
-    /**
-     * @hibernate.property
-     *  column="session_id"
-     *  type="string"
-     */     
     public String getSession_id() {
         return session_id;
     }
@@ -59,11 +64,6 @@ public class Sessiondata {
         this.session_id = session_id;
     }
     
-    /**
-     * @hibernate.property
-     *  column="starttermin_time"
-     *  type="java.util.Date"
-     */     
     public Date getStarttermin_time() {
         return starttermin_time;
     }
@@ -71,11 +71,6 @@ public class Sessiondata {
         this.starttermin_time = starttermin_time;
     }
     
-    /**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */      
     public Long getUser_id() {
         return user_id;
     }
@@ -83,11 +78,6 @@ public class Sessiondata {
         this.user_id = user_id;
     }
 
-    /**
-     * @hibernate.property
-     *  column="sessionXml"
-     *  type="text"
-     */ 
 	public String getSessionXml() {
 		return sessionXml;
 	}
@@ -95,11 +85,6 @@ public class Sessiondata {
 		this.sessionXml = sessionXml;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="storePermanent"
-     *  type="boolean"
-     */ 
 	public Boolean getStorePermanent() {
 		return storePermanent;
 	}
@@ -107,11 +92,6 @@ public class Sessiondata {
 		this.storePermanent = storePermanent;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="language_id"
-     *  type="long"
-     */ 
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -119,11 +99,6 @@ public class Sessiondata {
 		this.language_id = language_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="organization_id"
-     *  type="long"
-     */
 	public Long getOrganization_id() {
 		return organization_id;
 	}

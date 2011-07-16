@@ -2,10 +2,9 @@ package org.openmeetings.app.data.user;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -48,12 +47,13 @@ public class Emailmanagement {
 	public Emails getEmailById(long mail_id) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Emails as c where c.mail_id = :mail_id AND deleted != :deleted");
-			query.setLong("mail_id", mail_id);
-			query.setString("deleted", "true");
-			List ll = query.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from Emails as c where c.mail_id = :mail_id AND deleted <> :deleted");
+			query.setParameter("mail_id", mail_id);
+			query.setParameter("deleted", "true");
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			if (ll.size() > 0) {
@@ -72,12 +72,13 @@ public class Emailmanagement {
 	public List getemails(Long USER_ID) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session
 					.createQuery("select c from emails as c where c.USER_ID = :USER_ID");
-			query.setLong("USER_ID", USER_ID.longValue());
-			List lt = query.list();
+			query.setParameter("USER_ID", USER_ID.longValue());
+			List lt = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return lt;
@@ -96,11 +97,12 @@ public class Emailmanagement {
 			String hql = "select c from Adresses_Emails as c " +
 					" where c.mail.email = :email ";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("email", email);
-			Adresses_Emails e = (Adresses_Emails) query.uniqueResult();
+			query.setParameter("email", email);
+			Adresses_Emails e = (Adresses_Emails) query.getSingleResult();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return e;
@@ -129,12 +131,13 @@ public class Emailmanagement {
 			String hql = "select c from Adresses_Emails as c " +
 					" where c.adresses_id = :address ";
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("address", address);
+			query.setParameter("address", address);
 			
-			Adresses_Emails e = (Adresses_Emails) query.uniqueResult();
+			Adresses_Emails e = (Adresses_Emails) query.getSingleResult();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return e;
@@ -160,10 +163,11 @@ public class Emailmanagement {
 		
 		try{
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			session.saveOrUpdate(mail);		
+			session.mergeOrUpdate(mail);		
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 		}catch(Exception e){ 
@@ -179,12 +183,13 @@ public class Emailmanagement {
 	public List getemailsCon(int CONTACT_ID) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session
 					.createQuery("select c from emails as c where c.CONTACT_ID = :CONTACT_ID");
-			query.setInteger("CONTACT_ID", CONTACT_ID);
-			List lt = query.list();
+			query.setParameter("CONTACT_ID", CONTACT_ID);
+			List lt = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			return lt;
@@ -220,9 +225,10 @@ public class Emailmanagement {
 				addr_emails.setDeleted("false");
 
 				Object idf = HibernateUtil.createSession();
-				Session session = HibernateUtil.getSession();
-				Transaction tx = session.beginTransaction();
-				long addr_emails_id = (Long) session.save(addr_emails);
+				EntityManager session = HibernateUtil.getSession();
+				EntityTransaction tx = session.getTransaction();
+			tx.begin();
+				long addr_emails_id = (Long) session.merge(addr_emails);
 				tx.commit();
 				HibernateUtil.closeSession(idf);
 				log.error("registerEmail addr_emails: " + addr_emails_id);
@@ -256,9 +262,10 @@ public class Emailmanagement {
 			emails.setDeleted("false");
 
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			long email_id = (Long) session.save(emails);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			long email_id = (Long) session.merge(emails);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.error("registerEmail id: " + email_id);
@@ -330,9 +337,10 @@ public class Emailmanagement {
 		//		emails.setStartdate(time);
 		//		emails.setUpdatedate(time);
 		//        try {   
-		//            Object idf = HibernateUtil.createSession(); 			Session session = HibernateUtil.getSession();
-		//            Transaction tx = session.beginTransaction();
-		//            session.save(emails);
+		//            Object idf = HibernateUtil.createSession(); 			EntityManager session = HibernateUtil.getSession();
+		//            EntityTransaction tx = session.getTransaction();
+		//	tx.begin();
+		//            session.merge(emails);
 		//            session.flush();   
 		//            session.clear();
 		//            session.refresh(emails);
@@ -356,9 +364,10 @@ public class Emailmanagement {
 		try {
 			Emails mail = this.getEmailById(mail_id);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.delete(mail);			
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			session.remove(mail);			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 		} catch (HibernateException ex) {
@@ -375,10 +384,11 @@ public class Emailmanagement {
 		String result = "Fehler im Bestellvorgang";
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			String hqlDelete = "delete emails where USER_ID = :USER_ID";
-			int deletedEntities = session.createQuery(hqlDelete).setInteger(
+			int deletedEntities = session.createQuery(hqlDelete).setParameter(
 					"USER_ID", USER_ID).executeUpdate();
 			//session.flush(); 
 
@@ -402,23 +412,22 @@ public class Emailmanagement {
 	public boolean checkUserEMail(String email) {
 		try {
 			if (email.length()==0) return true;
-			log.error("checkUserMail: " + email);
+			log.debug("checkUserMail: " + email);
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted != :deleted");
-			query.setString("email", email);
-			query.setString("deleted", "true");
-			int count = query.list().size();
-			log.error("size: " + count);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			Query query = session.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted <> :deleted");
+			query.setParameter("email", email);
+			query.setParameter("deleted", "true");
+			int count = query.getResultList().size();
+			log.debug("size: " + count);
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			if (count > 0) {
 				return false;
 			}			
-		} catch (HibernateException ex) {
-			log.error("checkUserEMail: " ,ex);
 		} catch (Exception ex2) {
 			log.error("checkUserEMail: " ,ex2);
 		}
@@ -439,9 +448,10 @@ public class Emailmanagement {
 			mail.setEmail(email);
 			mail.setUpdatetime(new Date());
             Object idf = HibernateUtil.createSession(); 			
-            Session session = HibernateUtil.getSession();
-            Transaction tx = session.beginTransaction();        
-            session.update(mail);
+            EntityManager session = HibernateUtil.getSession();
+            EntityTransaction tx = session.getTransaction();
+			tx.begin();        
+            session.persist(mail);
             tx.commit();
             HibernateUtil.closeSession(idf);
             return mail;
@@ -458,14 +468,15 @@ public class Emailmanagement {
 	public String updateContactEmail(int MAIL_ID, int Contact_ID, String email) {
 		String res = "Fehler beim Update";
 		try {
-			//            Object idf = HibernateUtil.createSession(); 			Session session = HibernateUtil.getSession();
-			//            Transaction tx = session.beginTransaction();        
+			//            Object idf = HibernateUtil.createSession(); 			EntityManager session = HibernateUtil.getSession();
+			//            EntityTransaction tx = session.getTransaction();
+			//			  tx.begin();        
 			//            String hqlUpdate = "update emails set email= :email, CONTACT_ID = :CONTACT_ID, updatedate = :updatedate where MAIL_ID= :MAIL_ID";
 			//            int updatedEntities = session.createQuery( hqlUpdate )
-			//                                .setString("email",email)
-			//                                .setInteger( "CONTACT_ID", Contact_ID )
-			//                                .setLong( "updatedate", CalenderI.getTimeStampMili() )
-			//                                .setInteger( "MAIL_ID", MAIL_ID )
+			//                                .setParameter("email",email)
+			//                                .setParameter( "CONTACT_ID", Contact_ID )
+			//                                .setParameter( "updatedate", CalenderI.getTimeStampMili() )
+			//                                .setParameter( "MAIL_ID", MAIL_ID )
 			//                                .executeUpdate();
 			//            res = "Success"+updatedEntities;
 			//            tx.commit();

@@ -1,22 +1,39 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="userdata"
- * lazy="false"
- *
- */
-public class Userdata {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "userdata")
+public class Userdata implements Serializable {
 	
+	private static final long serialVersionUID = 8365799229794940172L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="data_id")
     private Long data_id;
+	@Column(name="user_id")
     private Long user_id;    
+	@Column(name="data_key")
     private String data_key;
+	@Column(name="data")
     private String data;
-    private Date starttime;
-    private Date updatetime;
+	@Column(name = "starttime")
+	private Date starttime;
+	@Column(name = "updatetime")
+	private Date updatetime;
+	@Column(name = "comment_field")
     private String comment;
+	@Column(name = "deleted")
     private String deleted;
 
 	public Userdata() {
@@ -24,11 +41,6 @@ public class Userdata {
 		// TODO Auto-generated constructor stub
 	}
 
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
 	public String getComment() {
 		return comment;
 	}
@@ -36,11 +48,6 @@ public class Userdata {
 		this.comment = comment;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="data"
-     *  type="string"
-     */ 
 	public String getData() {
 		return data;
 	}
@@ -48,11 +55,6 @@ public class Userdata {
 		this.data = data;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="data_key"
-     *  type="string"
-     */ 
 	public String getData_key() {
 		return data_key;
 	}
@@ -60,12 +62,6 @@ public class Userdata {
 		this.data_key = data_key;
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="data_id"
-     *  generator-class="increment"
-     */
 	public Long getData_id() {
 		return data_id;
 	}
@@ -74,11 +70,6 @@ public class Userdata {
 	}
 
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -86,11 +77,6 @@ public class Userdata {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -98,11 +84,6 @@ public class Userdata {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -110,11 +91,6 @@ public class Userdata {
 		this.deleted = deleted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */ 
 	public Long getUser_id() {
 		return user_id;
 	}

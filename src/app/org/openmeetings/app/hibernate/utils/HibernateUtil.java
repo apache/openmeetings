@@ -1,11 +1,11 @@
 package org.openmeetings.app.hibernate.utils;
 
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.*;
-import org.hibernate.cfg.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
@@ -14,9 +14,9 @@ public class HibernateUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(HibernateUtil.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/** Read the configuration, will share across threads**/
-	  private static SessionFactory sessionFactory;
+	  private static EntityManagerFactory sessionFactory;
 	  /** the per thread session **/
-	  private static final ThreadLocal<Session> currentSession = new ThreadLocal<Session>();
+	  private static final ThreadLocal<EntityManager> currentSession = new ThreadLocal<EntityManager>();
 	  /** The constants for describing the ownerships **/
 	  private static final Owner trueOwner = new Owner(true);
 	  private static final Owner fakeOwner = new Owner(false); 
@@ -28,15 +28,12 @@ public class HibernateUtil {
 	   * it actually opens a session
 	   */
 	  public static Object createSession() throws Exception{
-	    Session session = (Session)currentSession.get();  
-	    //System.out.println(session);
-	    if(session == null){
-	      //System.out.println("No Session Found - Create and give the identity");
-	      session = getSessionFactory().openSession(); 
-	      currentSession.set(session);
+		  EntityManager em = (EntityManager)currentSession.get();  
+	    if(em == null){
+	      em = getSessionFactory().createEntityManager(); 
+	      currentSession.set(em);
 	      return trueOwner;
 	    }
-	    //System.out.println("Session Found - Give a Fake identity");
 	    return fakeOwner;
 	  }
 	  /**
@@ -47,10 +44,9 @@ public class HibernateUtil {
 	  public synchronized static void closeSession(Object ownership) throws Exception{
 	    if(((Owner)ownership).identity){
 	      //System.out.println("Identity is accepted. Now closing the session");
-	      Session session = (Session)currentSession.get();
-	      session.flush();
-	      session.close();
-	      currentSession.set(null);
+	    	EntityManager em = (EntityManager)currentSession.get();
+		    em.close();
+		    currentSession.set(null);
 	    }else {
 	       //System.out.println("Identity is rejected. Ignoring the request");
 	    }
@@ -58,30 +54,19 @@ public class HibernateUtil {
 	  /**
 	   * returns the current session
 	   */
-	  public synchronized static Session getSession() throws HibernateException{
-	    return (Session)currentSession.get();
+	  public synchronized static EntityManager getSession(){ 
+	  	return (EntityManager)currentSession.get();
 	  } 
 	  
 	  /** 
 	   * Creating a session factory , if not already loaded
 	   */
-	  private synchronized static SessionFactory getSessionFactory() {
+	  private synchronized static EntityManagerFactory getSessionFactory() {
 		try {
 			if (sessionFactory == null) {
-				if (isLife){
-					String current_dir = ScopeApplicationAdapter.webAppPath+File.separatorChar+
-												ScopeApplicationAdapter.configDirName+File.separatorChar+"hibernate.cfg.xml";
-					
-					System.out.println("Configuring hibernate From "+current_dir);
-					
-					sessionFactory = new Configuration().configure(new File(current_dir)).buildSessionFactory();
-				} else {
-					sessionFactory = new Configuration().configure().buildSessionFactory();
-				}
+	            sessionFactory = Persistence.createEntityManagerFactory(ScopeApplicationAdapter.webAppRootKey);
 			}
 			return sessionFactory;
-		} catch (HibernateException e) {
-			log.error("getSessionFactory",e);
 		} catch (Exception err) {
 			log.error("getSessionFactory",err);
 		}

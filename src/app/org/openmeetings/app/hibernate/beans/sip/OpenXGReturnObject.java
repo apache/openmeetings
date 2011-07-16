@@ -1,29 +1,41 @@
 package org.openmeetings.app.hibernate.beans.sip;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="open_xg_return_object"
- * lazy="false"
- *
- */
-public class OpenXGReturnObject {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "open_xg_return_object")
+public class OpenXGReturnObject implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5240675684036197687L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="open_xg_return_object_id")
 	private Long openXGReturnObjectId;
+	@Column(name="method_name")
 	private String methodName;
+	@Column(name="inserted")
 	private Date inserted;
+	@Column(name="status_code")
 	private String status_code;
+	@Column(name="status_string")
 	private String status_string;
+	@Column(name="conference_number")
 	private String conferenceNumber;
+	@Column(name="conference_pin")
 	private String conferencePin;
 	
-    /**
-     * 
-     * @hibernate.id
-     *  column="open_xg_return_object_id"
-     *  generator-class="increment"
-     */  
 	public Long getOpenXGReturnObjectId() {
 		return openXGReturnObjectId;
 	}
@@ -31,11 +43,6 @@ public class OpenXGReturnObject {
 		this.openXGReturnObjectId = openXGReturnObjectId;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="method_name"
-     *  type="string"
-     */
 	public String getMethodName() {
 		return methodName;
 	}
@@ -43,11 +50,6 @@ public class OpenXGReturnObject {
 		this.methodName = methodName;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */
 	public Date getInserted() {
 		return inserted;
 	}
@@ -55,11 +57,6 @@ public class OpenXGReturnObject {
 		this.inserted = inserted;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="status_code"
-     *  type="string"
-     */	
 	public String getStatus_code() {
 		return status_code;
 	}
@@ -67,11 +64,6 @@ public class OpenXGReturnObject {
 		status_code = statusCode;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="status_string"
-     *  type="string"
-     */	
 	public String getStatus_string() {
 		return status_string;
 	}
@@ -79,11 +71,6 @@ public class OpenXGReturnObject {
 		status_string = statusString;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="conference_number"
-     *  type="string"
-     */	
 	public String getConferenceNumber() {
 		return conferenceNumber;
 	}
@@ -91,11 +78,6 @@ public class OpenXGReturnObject {
 		this.conferenceNumber = conferenceNumber;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="conference_pin"
-     *  type="string"
-     */
 	public String getConferencePin() {
 		return conferencePin;
 	}

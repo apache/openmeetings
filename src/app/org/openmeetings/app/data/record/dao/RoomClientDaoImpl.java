@@ -2,10 +2,11 @@ package org.openmeetings.app.data.record.dao;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -62,21 +63,24 @@ public class RoomClientDaoImpl {
 			log.debug("hql: "+hql);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setString("publicSID",publicSID);
+			query.setParameter("publicSID",publicSID);
 			
-			log.debug("Number OF Records: "+query.list().size());
+			log.debug("Number OF Records: "+query.getResultList().size());
 			
-			RoomClient roomClient = (RoomClient) query.uniqueResult();
+			RoomClient roomClient = null;
+			try {
+				roomClient = (RoomClient) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomClient;
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomClientByPublicSID]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomClientByPublicSID]: " , ex2);
 		}
@@ -91,19 +95,22 @@ public class RoomClientDaoImpl {
 					"WHERE r.roomClientId = :roomClientId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("roomClientId",roomClientId);
+			query.setParameter("roomClientId",roomClientId);
 			
-			RoomClient roomClient = (RoomClient) query.uniqueResult();
+			RoomClient roomClient = null;
+			try {
+				roomClient = (RoomClient) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomClient;
 			
-		} catch (HibernateException ex) {
-			log.error("[getRoomClientById]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRoomClientById]: " , ex2);
 		}
@@ -114,16 +121,16 @@ public class RoomClientDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Long roomClientId = (Long) session.save(roomClient);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			roomClient = session.merge(roomClient);
+			Long roomClientId = roomClient.getRoomClientId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return roomClientId;
-		} catch (HibernateException ex) {
-			log.error("[addRoomClient]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addRoomClient]: " , ex2);
 		}

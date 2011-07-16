@@ -4,9 +4,8 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.logs.ConferenceLog;
 import org.openmeetings.app.hibernate.beans.logs.ConferenceLogType;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -56,17 +55,18 @@ public class ConferenceLogDaoImpl {
 			confLog.setEmail(email);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long confLogId = (Long)session.save(confLog);
+			confLog = session.merge(confLog);
+			session.flush();
+			Long confLogId = confLog.getConferenceLogId();
 
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return confLogId;
-		} catch (HibernateException ex) {
-			log.error("[addConferenceLog]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addConferenceLog]: ",ex2);
 		}

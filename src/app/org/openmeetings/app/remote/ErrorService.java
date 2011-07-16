@@ -2,10 +2,6 @@ package org.openmeetings.app.remote;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -13,7 +9,6 @@ import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**

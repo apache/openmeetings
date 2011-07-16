@@ -1,29 +1,44 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
 
-/**
- * 
- * @hibernate.class table="errortypes"
- *
- */
-public class ErrorType {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "errortypes")
+public class ErrorType implements Serializable {
 	 
-	private Long errortype_id;
-	private Long fieldvalues_id;
-	private Fieldvalues fieldvalues;
-	private Date starttime;
-	private Date updatetime;
-	private String deleted;
+	private static final long serialVersionUID = 8014699369591094542L;
+
+	@Id
 	
-    /**
-     * 
-     * @hibernate.id
-     *  column="errortype_id"
-     *  generator-class="increment"
-     */ 
+	@Column(name="errortype_id")
+	private Long errortype_id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="fieldvalues_id", updatable=false, insertable=false)
+	private Fieldvalues fieldvalues;
+
+	@Column(name="starttime")
+	private Date starttime;
+	@Column(name="updatetime")
+	private Date updatetime;
+	@Column(name="deleted")
+	private String deleted;
+
+	@Column(name="fieldvalues_id")
+	private Long fieldvalues_id;
+	
 	public Long getErrortype_id() {
 		return errortype_id;
 	}
@@ -31,11 +46,6 @@ public class ErrorType {
 		this.errortype_id = errortype_id;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -43,11 +53,6 @@ public class ErrorType {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -55,11 +60,6 @@ public class ErrorType {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -67,15 +67,6 @@ public class ErrorType {
 		this.deleted = deleted;
 	}
 
-    /**
-	 * @hibernate.many-to-one
-	 * column = "fieldvalues_id"
-	 * class = "org.openmeetings.app.hibernate.beans.lang.Fieldvalues"
-	 * insert="false"
-	 * update="false"
-	 * outer-join="true"
-	 * lazy="false"
-     */	
 	public Fieldvalues getFieldvalues() {
 		return fieldvalues;
 	}
@@ -83,11 +74,6 @@ public class ErrorType {
 		this.fieldvalues = fieldvalues;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="fieldvalues_id"
-     *  type="long"
-     */  
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}

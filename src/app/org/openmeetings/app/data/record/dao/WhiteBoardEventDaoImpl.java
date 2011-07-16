@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.WhiteBoardEvent;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -37,21 +36,20 @@ public class WhiteBoardEventDaoImpl {
 					"AND wbe.roomRecording.roomrecordingId = :roomrecordingId";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("startTime", startTime);
-			query.setLong("endTime", endTime);
-			query.setLong("roomrecordingId", roomrecordingId);
-			List<WhiteBoardEvent> ll = query.list();
+			query.setParameter("startTime", startTime);
+			query.setParameter("endTime", endTime);
+			query.setParameter("roomrecordingId", roomrecordingId);
+			List<WhiteBoardEvent> ll = query.getResultList();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 			
-		} catch (HibernateException ex) {
-			log.error("[getWhiteboardEventsInRange]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getWhiteboardEventsInRange]: " , ex2);
 		}
@@ -62,17 +60,17 @@ public class WhiteBoardEventDaoImpl {
 		try {
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long whiteBoardEventId = (Long) session.save(whiteBoardEvent);
+			whiteBoardEvent = session.merge(whiteBoardEvent);
+			Long whiteBoardEventId = whiteBoardEvent.getWhiteBoardEventId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return whiteBoardEventId;
-		} catch (HibernateException ex) {
-			log.error("[addWhiteBoardEvent]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addWhiteBoardEvent]: " , ex2);
 		}

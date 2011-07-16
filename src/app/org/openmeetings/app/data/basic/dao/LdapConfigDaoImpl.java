@@ -3,13 +3,17 @@ package org.openmeetings.app.data.basic.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
@@ -53,10 +57,12 @@ public class LdapConfigDaoImpl {
 			log.debug("addLdapConfig :2: "+insertedby);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 	
-			Long ldapConfigId = (Long) session.save(ldapConfig);
+			ldapConfig = session.merge(ldapConfig);
+			Long ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -67,8 +73,6 @@ public class LdapConfigDaoImpl {
 				throw new Exception("Could not store SOAPLogin");
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[addLdapConfig]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addLdapConfig]: ",ex2);
 		}
@@ -83,10 +87,12 @@ public class LdapConfigDaoImpl {
 			ldapConfig.setInserted(new Date());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 	
-			Long ldapConfigId = (Long) session.save(ldapConfig);
+			ldapConfig = session.merge(ldapConfig);
+			Long ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
 			HibernateUtil.closeSession(idf);
@@ -97,8 +103,6 @@ public class LdapConfigDaoImpl {
 				throw new Exception("Could not store SOAPLogin");
 			}
 			
-		} catch (HibernateException ex) {
-			log.error("[addLdapConfig]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[addLdapConfig]: ",ex2);
 		}
@@ -130,18 +134,18 @@ public class LdapConfigDaoImpl {
 			log.debug("updateLdapConfig :2: "+updatedby);
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 	
-			session.update(ldapConfig);
+			ldapConfig = session.merge(ldapConfig);
+			ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ldapConfigId;
 			
-		} catch (HibernateException ex) {
-			log.error("[updateLdapConfig]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[updateLdapConfig]: ",ex2);
 		}
@@ -156,23 +160,25 @@ public class LdapConfigDaoImpl {
 				       	"AND c.deleted LIKE :deleted";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 	
 			Query query = session.createQuery(hql);
-			query.setLong("ldapConfigId", ldapConfigId);
-			query.setString("deleted", "false");
+			query.setParameter("ldapConfigId", ldapConfigId);
+			query.setParameter("deleted", "false");
 	
-			
-			LdapConfig ldapConfig = (LdapConfig) query.uniqueResult();
+			LdapConfig ldapConfig = null;
+			try {
+				ldapConfig = (LdapConfig) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ldapConfig;
 			
-		} catch (HibernateException ex) {
-			log.error("[getLdapConfigById]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[getLdapConfigById]: ",ex2);
 		}
@@ -182,20 +188,27 @@ public class LdapConfigDaoImpl {
 	public List<LdapConfig> getLdapConfigs(int start, int max, String orderby, boolean asc) {
 		try {
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(LdapConfig.class);
-			crit.add(Restrictions.eq("deleted", "false"));
-			crit.setFirstResult(start);
-			crit.setMaxResults(max);
-			if (asc) crit.addOrder(Order.asc(orderby));
-			else crit.addOrder(Order.desc(orderby));
-			List<LdapConfig> ll = crit.list();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LdapConfig> cq = cb.createQuery(LdapConfig.class);
+			Root<LdapConfig> c = cq.from(LdapConfig.class);
+			Predicate condition = cb.equal(c.get("deleted"), "false");
+			cq.where(condition);
+			cq.distinct(asc);
+			if (asc){
+				cq.orderBy(cb.asc(c.get(orderby)));
+			} else {
+				cq.orderBy(cb.desc(c.get(orderby)));
+			}
+			TypedQuery<LdapConfig> q = session.createQuery(cq);
+			q.setFirstResult(start);
+			q.setMaxResults(max);
+			List<LdapConfig> ll = q.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);		
 			return ll;
-		} catch (HibernateException ex) {
-			log.error("[getLdapConfigs]" ,ex);
 		} catch (Exception ex2) {
 			log.error("[getLdapConfigs]" ,ex2);
 		}
@@ -207,16 +220,15 @@ public class LdapConfigDaoImpl {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'"); 
-			List ll = query.list();
+			List ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			log.debug("selectMaxFromLdapConfig"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
-		} catch (HibernateException ex) {
-			log.error("[selectMaxFromLdapConfig] ",ex);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromLdapConfig] ",ex2);
 		}
@@ -233,18 +245,18 @@ public class LdapConfigDaoImpl {
 			}
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 	
-			session.delete(ldapConfig);
+			ldapConfig = session.find(LdapConfig.class, ldapConfig.getLdapConfigId());
+			session.remove(ldapConfig);
 	
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ldapConfigId;
 			
-		} catch (HibernateException ex) {
-			log.error("[deleteLdapConfigById]: ",ex);
 		} catch (Exception ex2) {
 			log.error("[deleteLdapConfigById]: ",ex2);
 		}
@@ -261,17 +273,16 @@ public class LdapConfigDaoImpl {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setBoolean("isActive", true);
-			List<LdapConfig> ll = query.list();
+			query.setParameter("isActive", true);
+			List<LdapConfig> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;				
-		} catch (HibernateException ex) {
-			log.error("[getActiveLdapConfigs] ",ex);
 		} catch (Exception ex2) {
 			log.error("[getActiveLdapConfigs] ",ex2);
 		}
@@ -287,16 +298,15 @@ public class LdapConfigDaoImpl {
 			
 			//get all users
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			List<LdapConfig> ll = query.list();
+			List<LdapConfig> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;				
-		} catch (HibernateException ex) {
-			log.error("[getActiveLdapConfigs] ",ex);
 		} catch (Exception ex2) {
 			log.error("[getActiveLdapConfigs] ",ex2);
 		}

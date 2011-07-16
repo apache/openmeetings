@@ -1,31 +1,58 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
+import java.io.Serializable;
 import java.util.Date;
-
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 
-/**
- * 
- * @hibernate.class table="navisub"
- *
- */
-public class Navisub {
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "navisub")
+public class Navisub implements Serializable {
     
+	private static final long serialVersionUID = 2257909240280960011L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="sub_id")
     private Long sub_id;
+	@Column(name="name")
     private String name;
+	@Column(name="icon")
     private String icon;
+	@Column(name="isleaf")
     private Boolean isleaf;
+	@Column(name="isopen")
     private Boolean isopen;
+	@Column(name="action")
     private String action;
+	@Column(name="updatetime")
     private Date updatetime;
+	@Column(name="starttime")
     private Date starttime;
+	@Column(name="comment_field")
     private String comment;
+	@Column(name="naviorder")
     private Integer naviorder;
+	@Column(name="level_id")
     private Long level_id;
+	@Column(name="main_id")
     private Long main_id;
+	@Column(name="deleted")
     private String deleted;
+	@Column(name="fieldvalues_id")
     private Long fieldvalues_id;
+	@Column(name="tooltip_fieldvalues_id")
+	@Transient
     private Fieldlanguagesvalues label;
+	@Transient
     private Fieldlanguagesvalues tooltip;
 	private Long tooltip_fieldvalues_id;
     
@@ -40,11 +67,6 @@ public class Navisub {
 	public Navisub() {
 	}
 
-	/**
-     * @hibernate.property
-     *  column="main_id"
-     *  type="long"
-     */ 
 	public Long getMain_id() {
 		return main_id;
 	}
@@ -52,11 +74,6 @@ public class Navisub {
 		this.main_id = main_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="level_id"
-     *  type="long"
-     */ 
 	public Long getLevel_id() {
 		return level_id;
 	}
@@ -64,11 +81,6 @@ public class Navisub {
 		this.level_id = level_id;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="action"
-     *  type="string"
-     */ 
     public String getAction() {
         return action;
     }
@@ -76,11 +88,6 @@ public class Navisub {
         this.action = action;
     }
     
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
     public String getComment() {
         return comment;
     }
@@ -88,12 +95,6 @@ public class Navisub {
         this.comment = comment;
     }
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="sub_id"
-     *  generator-class="increment"
-     */ 
     public Long getSub_id() {
         return sub_id;
     }
@@ -101,11 +102,6 @@ public class Navisub {
         this.sub_id = sub_id;
     }
     
-    /**
-     * @hibernate.property
-     *  column="icon"
-     *  type="string"
-     */ 
     public String getIcon() {
         return icon;
     }
@@ -113,11 +109,6 @@ public class Navisub {
         this.icon = icon;
     }
     
-    /**
-     * @hibernate.property
-     *  column="isleaf"
-     *  type="boolean"
-     */ 
     public Boolean getIsleaf() {
         return isleaf;
     }
@@ -125,11 +116,6 @@ public class Navisub {
         this.isleaf = isleaf;
     }
     
-    /**
-     * @hibernate.property
-     *  column="isopen"
-     *  type="boolean"
-     */ 
     public Boolean getIsopen() {
         return isopen;
     }
@@ -137,11 +123,6 @@ public class Navisub {
         this.isopen = isopen;
     }
     
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
     public String getName() {
         return name;
     }
@@ -149,11 +130,6 @@ public class Navisub {
         this.name = name;
     }
     
-    /**
-     * @hibernate.property
-     *  column="naviorder"
-     *  type="int"
-     */
     
     public Integer getNaviorder() {
 		return naviorder;
@@ -162,11 +138,6 @@ public class Navisub {
 		this.naviorder = naviorder;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -174,11 +145,6 @@ public class Navisub {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -186,11 +152,6 @@ public class Navisub {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -198,11 +159,6 @@ public class Navisub {
 		this.deleted = deleted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="fieldvalues_id"
-     *  type="long"
-     */
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}
@@ -210,11 +166,6 @@ public class Navisub {
 		this.fieldvalues_id = fieldvalues_id;
 	}	
 
-	/**
-     * @hibernate.property
-     *  column="tooltip_fieldvalues_id"
-     *  type="long"
-     */
 	public Long getTooltip_fieldvalues_id() {
 		return tooltip_fieldvalues_id;
 	}

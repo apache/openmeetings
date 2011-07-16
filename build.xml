@@ -37,9 +37,6 @@
     <!-- Distribution properties -->
     <property name="project.distname" value="openmeetings"/>
 
-    <!-- Hibernate Properties -->
-    <property file="${conf.dir}/hibernate.properties" />
-
     <!-- libraries -->
     <property name="project.lib" value="./lib"/>
 	
@@ -59,8 +56,8 @@
 			fxgutils.jar"/>
 	</path>
 
-    <!-- Hibernate -->
-    <property name="hibernate.lib" value="${project.lib}/hibernate_36"/>
+    <!-- Open JPA -->
+    <property name="openjpa.lib" value="${project.lib}/openjpa"/>
     <!-- Log4j -->
     <property name="log4j.lib" value="${project.lib}/log4j" />
     <!-- xDoclet -->
@@ -95,7 +92,7 @@
     <!-- compile classpath -->
     <path id="compile.classpath">
         <fileset dir="${log4j.lib}" includes="*.jar"/>
-        <fileset dir="${hibernate.lib}" includes="*.jar"/>
+        <fileset dir="${openjpa.lib}" includes="*.jar"/>
         <fileset dir="${project.lib}" includes="*.jar"/>
         <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
         <fileset dir="${red5.lib}" includes="*.jar"/>
@@ -121,7 +118,7 @@
     <!-- xDoclet classpath -->
     <path id="xdoclet.classpath">
         <fileset dir="${xdoclet.lib}" includes="*.jar"/>
-        <fileset dir="${hibernate.lib}" includes="*.jar"/>
+        <fileset dir="${openjpa.lib}" includes="*.jar"/>
         <fileset dir="${database.lib}" includes="*.jar" />
         <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
         <fileset dir="${log4j.lib}" includes="*.jar"/>
@@ -130,7 +127,7 @@
     <!-- Schema export classpath -->
     <path id="schema.export.classpath">
         <fileset dir="${log4j.lib}" includes="*.jar" />
-        <fileset dir="${hibernate.lib}" includes="*.jar" />
+        <fileset dir="${openjpa.lib}" includes="*.jar"/>
         <fileset dir="${jakarta.common.lib}" includes="*.jar" />
         <fileset dir="${database.lib}" includes="*.jar" />
         <fileset dir="${project.lib}" includes="*.jar" />
@@ -183,37 +180,12 @@
         </delete>
     </target>
     
-    <target name="hibernate" depends="remove">
-        <xdoclet2>
-            <!-- defines the file handled by xdoclet2 -->
-            <fileset dir="${basedir}/src/app">
-                <include name="**/*.java"/>
-            </fileset>
-
-            <!-- defines the processing of a plugin -->
-            <component
-                classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
-                destdir="${basedir}/src/app"
-                version="3.0"
-                />
-            <component
-                classname="org.xdoclet.plugin.hibernate.HibernateConfigPlugin"
-                destdir="${basedir}/src/app" version="3.0"
-                dialect="${hibernate.dialect}"
-                jdbcdriver="${hibernate.connection.driver_class}"
-                jdbcurl="${hibernate.connection.url}"
-                jdbcusername="${hibernate.connection.username}"
-                jdbcpassword="${hibernate.connection.password}"
-                showsql="true" hbm2ddlauto="update"/>
-        </xdoclet2>
-    </target>
-    
     <!-- end of xdoclet 2 -->
 
     <!-- build webapp -->
 
     <target name="dist" description="binary distribution of OpenMeetings"
-        depends="cleanForBinary, jar, compile.laszlo.main, signWebStartJars">
+        depends="cleanForBinary, jar, compile.laszlo.main, enhance, signWebStartJars">
         
     </target>
 	
@@ -229,26 +201,6 @@
         
     </target>
 
-    <!-- Export SQL schema using mapping files and hibernate configuration -->
-<!--    <target name="Export SQL Schema" depends="Generate Mappings">
-    <target name="Export SQL Schema" depends="Generate Mappings">-->
-<!--
-        <taskdef name="schemaexport" classname="org.hibernate.tool.hbm2ddl.SchemaExportTask">
-            <classpath refid="schema.export.classpath" />
-        </taskdef>
-
-        <schemaexport
-            properties="${main.src.dir}/hibernate.properties"
-            quiet="false"
-            text="false"
-            drop="false"
-            delimiter=";"
-            output="${main.out.dir}/installation.sql">
-            <fileset dir="${main.out.dir}" includes="**/*.hbm.xml"/>
-        </schemaexport>
-
-    </target>
--->
 
     <!-- Check timestamp on files -->
     <target name="prepare">
@@ -275,7 +227,7 @@
             </fileset>
             <fileset dir="${batik.lib}">
             </fileset>
-            <fileset dir="${hibernate.lib}">
+            <fileset dir="${openjpa.lib}">
             </fileset>  
             <fileset dir="${upload.lib}">
             </fileset>  
@@ -288,6 +240,10 @@
             <fileset dir="${java2swf.lib}">
             </fileset>  
             <fileset dir="${jmf.lib}" includes="*.jar"/>
+        </copy>
+        <copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/classes/META-INF">
+    		<fileset file="src/META-INF/persistence.xml">
+    		</fileset>
         </copy>
 
         <chmod dir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
@@ -317,7 +273,6 @@
                     <include name="**/*.xml"/>
                     <include name="**/*.png"/>
                     <include name="**/*.vm"/>
-                    <exclude name="hibernate.properties"/>
                 </patternset>
             </fileset>
             <fileset dir="${webstart.src.dir}">
@@ -327,7 +282,6 @@
                     <include name="**/*.xml"/>
                     <include name="**/*.png"/>
                     <include name="**/*.vm"/>
-                    <exclude name="hibernate.properties"/>
                 </patternset>
             </fileset>  
         	
@@ -338,7 +292,6 @@
                     <include name="**/*.xml"/>
                     <include name="**/*.png"/>
                     <include name="**/*.vm"/>
-                    <exclude name="hibernate.properties"/>
                 </patternset>
             </fileset>          
         </copy>
@@ -356,7 +309,7 @@
     </target>
 
     <!-- Compile JAR -->
-    <target name="jar" description="Make Archive" depends="compile">
+    <target name="jar" description="Make Archive" depends="enhance">
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
@@ -378,7 +331,6 @@
             	<exclude name="**/client/**"/>
                 <exclude name="**/*.png"/>
                 <exclude name="**/*.vm"/>
-                <exclude name="hibernate.cfg.xml"/>
                 <exclude name="log4j.properties"/>
             </fileset>
             <manifest>
@@ -393,7 +345,6 @@
                 <exclude name="**/org/**"/>
                 <exclude name="**/*.png"/>
                 <exclude name="**/*.properties"/>
-                <exclude name="hibernate.cfg.xml"/>
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
@@ -646,9 +597,28 @@
         <delete file="filetest.keystore" />
     </target>
 
+	<path id="jpa.enhancement.classpath">
+	    <pathelement path="${classes.dir}"/>
+	    <!-- lib contains all of the jars that came with the OpenJPA binary download -->
+	    <fileset dir="${openjpa.lib}" includes="*.jar" />
+	</path>
+	
+    <!-- define the openjpac task -->
+    <taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+        <classpath refid="jpa.enhancement.classpath"/>
+    </taskdef>
+        
+	<target name="enhance" depends="compile">
+        <!-- invoke the enhancer -->
+		<openjpac>
+        	<classpath refid="jpa.enhancement.classpath"/>
+			<config propertiesFile="src/META-INF/persistence.xml"/>
+        </openjpac> 
+        <echo message="Enhancing complete."/>
+    </target>
 
     <!-- Build entire project -->
-    <target name="build project" depends="clean, prepare, compile, hibernate"/>
+    <target name="build project" depends="clean, prepare, compile"/>
 
     
 

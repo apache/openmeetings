@@ -1,50 +1,83 @@
 package org.openmeetings.app.hibernate.beans.invitation;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
 import org.openmeetings.app.hibernate.beans.rooms.Rooms;
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="invitations"
- * lazy="false"
- *
- */
-public class Invitations {
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+@Entity
+@Table(name = "invitations")
+public class Invitations implements Serializable {
+
+	private static final long serialVersionUID = 1153321347974705506L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="invitations_id")
 	private Long invitations_id;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="invitedBy", nullable=true)
 	private Users invitedBy;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="roomid", nullable=true)
 	private Rooms room;
 	
 	//the hash for the link
+	@Column(name="hash")
 	private String hash;
+	@Column(name="invitedname")
 	private String invitedname;
+	@Column(name="invitedEMail")
 	private String invitedEMail;
+	@Column(name="ispasswordprotected")
 	private Boolean isPasswordProtected;
+	@Column(name="invitationpass")
 	private String invitationpass;
 	
 	//this is necessary as a room can be shared between multiple domains
 	//is eithter *public* or an organisation_ID
+	@Column(name="conferencedomain")
 	private String conferencedomain;
 	
 	//Invitations by Time are only valid between the validFrom validTo TimeStamp
+	@Column(name="isValidByTime")
 	private Boolean isValidByTime = false;
+	@Column(name="validFrom")
 	private Date validFrom;
+	@Column(name="validTo")
 	private Date validTo;
 	//An invitation which is canBeUsedOnlyOneTime = true can be only used one-time
+	@Column(name="canBeUsedOnlyOneTime")
 	private Boolean canBeUsedOnlyOneTime = false;
+	@Column(name="invitationWasUsed")
 	private Boolean invitationWasUsed = false;
 	
+	@Column(name="appointment_id")
 	private Long appointmentId;
 	
 	// BaseuRL defined at creation of InvitationLink - used for chronological reminders on serverside (updates)
+	@Column(name="baseUrl")
 	private String baseUrl;
 	
 	public Invitations() {
@@ -53,12 +86,6 @@ public class Invitations {
 	}
 
 	
-	/**
-	 *
-	 * @hibernate.id
-	 *  column="invitations_id"
-	 *  generator-class="increment"
-	 */
 	public Long getInvitations_id() {
 		return invitations_id;
 	}
@@ -66,15 +93,6 @@ public class Invitations {
 		this.invitations_id = invitations_id;
 	}
 
-	/**
-	 * @hibernate.many-to-one
-	 *  cascade="none"
-	 *  column="roomid"
-	 *  lazy="false"
-	 *  class="org.openmeetings.app.hibernate.beans.rooms.Rooms"
-	 *  not-null="false"
-	 *  outer-join="true"
-	 */
 	public Rooms getRoom() {
 		return room;
 	}
@@ -83,15 +101,6 @@ public class Invitations {
 	}
 
 
-	/**
-	 * @hibernate.many-to-one
-	 *  cascade="none"
-	 *  column="invitedBy"
-	 *  lazy="false"
-	 *  class="org.openmeetings.app.hibernate.beans.user.Users"
-	 *  not-null="false"
-	 *  outer-join="true"
-	 */
 	public Users getInvitedBy() {
 		return invitedBy;
 	}
@@ -99,11 +108,6 @@ public class Invitations {
 		this.invitedBy = invitedBy;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */ 	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -111,11 +115,6 @@ public class Invitations {
 		this.starttime = starttime;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -123,11 +122,6 @@ public class Invitations {
 		this.updatetime = updatetime;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */  
 	public String getDeleted() {
 		return deleted;
 	}
@@ -136,11 +130,6 @@ public class Invitations {
 	}
 
 
-    /**
-     * @hibernate.property
-     *  column="hash"
-     *  type="string"
-     */ 
 	public String getHash() {
 		return hash;
 	}
@@ -148,11 +137,6 @@ public class Invitations {
 		this.hash = hash;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="invitedname"
-     *  type="string"
-     */ 
 	public String getInvitedname() {
 		return invitedname;
 	}
@@ -160,11 +144,6 @@ public class Invitations {
 		this.invitedname = invitedname;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="invitedEMail"
-     *  type="string"
-     */ 
 	public String getInvitedEMail() {
 		return invitedEMail;
 	}
@@ -172,11 +151,6 @@ public class Invitations {
 		this.invitedEMail = invitedEMail;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="ispasswordprotected"
-     *  type="boolean"
-     */ 
     public Boolean getIsPasswordProtected() {
 		return isPasswordProtected;
 	}
@@ -185,11 +159,6 @@ public class Invitations {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="invitationpass"
-     *  type="string"
-     */ 
 	public String getInvitationpass() {
 		return invitationpass;
 	}
@@ -198,11 +167,6 @@ public class Invitations {
 	}
 
 	
-	/**
-     * @hibernate.property
-     *  column="conferencedomain"
-     *  type="string"
-     */ 
     public String getConferencedomain() {
 		return conferencedomain;
 	}
@@ -211,11 +175,6 @@ public class Invitations {
 	}
 
 
-	/**
-     * @hibernate.property
-     *  column="validFrom"
-     *  type="java.util.Date"
-     */
 	public Date getValidFrom() {
 		return validFrom;
 	}
@@ -223,11 +182,6 @@ public class Invitations {
 		this.validFrom = validFrom;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="validTo"
-     *  type="java.util.Date"
-     */
 	public Date getValidTo() {
 		return validTo;
 	}
@@ -235,11 +189,6 @@ public class Invitations {
 		this.validTo = validTo;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="canBeUsedOnlyOneTime"
-     *  type="boolean"
-     */	
 	public Boolean getCanBeUsedOnlyOneTime() {
 		return canBeUsedOnlyOneTime;
 	}
@@ -247,11 +196,6 @@ public class Invitations {
 		this.canBeUsedOnlyOneTime = canBeUsedOnlyOneTime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="invitationWasUsed"
-     *  type="boolean"
-     */	
 	public Boolean getInvitationWasUsed() {
 		return invitationWasUsed;
 	}
@@ -259,11 +203,6 @@ public class Invitations {
 		this.invitationWasUsed = invitationWasUsed;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="isValidByTime"
-     *  type="boolean"
-     */	
 	public Boolean getIsValidByTime() {
 		return isValidByTime;
 	}
@@ -271,11 +210,6 @@ public class Invitations {
 		this.isValidByTime = isValidByTime;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="baseUrl"
-     *  type="string"
-     */	
 	public String getBaseUrl() {
 		return baseUrl;
 	}
@@ -283,11 +217,6 @@ public class Invitations {
 		this.baseUrl = baseUrl;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="appointment_id"
-     *  type="long"
-     */
 	public Long getAppointmentId() {
 		return appointmentId;
 	}

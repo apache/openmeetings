@@ -1,6 +1,5 @@
 package org.openmeetings.test.userdata;
 
-import org.hibernate.Session;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.hibernate.beans.user.Users;

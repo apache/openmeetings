@@ -1,31 +1,40 @@
 package org.openmeetings.app.hibernate.beans.lang;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="fieldlanguage"
- *
- */
-public class FieldLanguage {
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name = "fieldlanguage")
+public class FieldLanguage implements Serializable {
+
+	private static final long serialVersionUID = 3501643212388395425L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="language_id")
 	private Long language_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
+	@Column(name="rtl")
 	private Boolean rtl;
 	
     public FieldLanguage() {
 		super();
 	}
 
-    /**
-     * 
-     * @hibernate.id
-     *  column="language_id"
-     *  generator-class="increment"
-     */ 
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -33,11 +42,6 @@ public class FieldLanguage {
 		this.language_id = language_id;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
 	public String getName() {
 		return name;
 	}
@@ -45,11 +49,6 @@ public class FieldLanguage {
 		this.name = name;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -57,11 +56,6 @@ public class FieldLanguage {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -69,11 +63,6 @@ public class FieldLanguage {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -81,11 +70,6 @@ public class FieldLanguage {
 		this.deleted = deleted;
 	}
 
-	/**
-     * @hibernate.property
-     * column="rtl" 
-     * type="boolean"
-     */	
 	public Boolean getRtl() {
 		return rtl;
 	}

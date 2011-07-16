@@ -1,32 +1,68 @@
 package org.openmeetings.app.hibernate.beans.basic;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Date;
+
 import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 
-/**
- * 
- * @hibernate.class table="naviglobal"
- *
- */
-public class Naviglobal {
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "naviglobal")
+public class Naviglobal implements Serializable {
     
+	private static final long serialVersionUID = 515828033813767719L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="global_id")
 	private Long global_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="icon")
 	private String icon;
+	@Column(name="isleaf")
 	private Boolean isleaf;
+	@Column(name="isopen")
 	private Boolean isopen;
+	@Column(name="action")
 	private String action;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="comment_field")
 	private String comment;
+	@Column(name="naviorder")
 	private Integer naviorder;
+	@Column(name="level_id")
 	private Long level_id;
+	@Column(name="deleted")
 	private String deleted;  
+	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	@Column(name="tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
-    private Set mainnavi;
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="global_id")
+	@OrderBy("naviorder")
+    private List<Navimain> mainnavi;
+	@Transient
     private Fieldlanguagesvalues label;
+	@Transient
     private Fieldlanguagesvalues tooltip;
 
     public Naviglobal() {
@@ -34,11 +70,6 @@ public class Naviglobal {
 		// TODO Auto-generated constructor stub
 	}
     
-	/**
-     * @hibernate.property
-     *  column="action"
-     *  type="string"
-     */ 
     public String getAction() {
         return action;
     }
@@ -46,11 +77,6 @@ public class Naviglobal {
         this.action = action;
     }
     
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
     public String getComment() {
         return comment;
     }
@@ -58,12 +84,6 @@ public class Naviglobal {
         this.comment = comment;
     }
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="global_id"
-     *  generator-class="increment"
-     */ 
     public Long getGlobal_id() {
         return global_id;
     }
@@ -71,11 +91,6 @@ public class Naviglobal {
         this.global_id = global_id;
     }
     
-    /**
-     * @hibernate.property
-     *  column="icon"
-     *  type="string"
-     */ 
     public String getIcon() {
         return icon;
     }
@@ -83,11 +98,6 @@ public class Naviglobal {
         this.icon = icon;
     }
     
-    /**
-     * @hibernate.property
-     *  column="isleaf"
-     *  type="boolean"
-     */ 
     public Boolean getIsleaf() {
         return isleaf;
     }
@@ -95,11 +105,6 @@ public class Naviglobal {
         this.isleaf = isleaf;
     }
     
-    /**
-     * @hibernate.property
-     *  column="isopen"
-     *  type="boolean"
-     */ 
     public Boolean getIsopen() {
         return isopen;
     }
@@ -108,11 +113,6 @@ public class Naviglobal {
     }
     
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -120,11 +120,6 @@ public class Naviglobal {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -132,11 +127,6 @@ public class Naviglobal {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -144,11 +134,6 @@ public class Naviglobal {
 		this.deleted = deleted;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */
     public String getName() {
         return name;
     }
@@ -156,11 +141,6 @@ public class Naviglobal {
         this.name = name;
     }
     
-    /**
-     * @hibernate.property
-     *  column="naviorder"
-     *  type="int"
-     */
 	public Integer getNaviorder() {
 		return naviorder;
 	}
@@ -168,11 +148,6 @@ public class Naviglobal {
 		this.naviorder = naviorder;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="level_id"
-     *  type="long"
-     */
     public Long getLevel_id() {
         return level_id;
     }
@@ -180,31 +155,13 @@ public class Naviglobal {
         this.level_id = level_id;
     }
     
-    /**
-     * @hibernate.set 
-     * table = "navimain" 
-     * inverse = "true" 
-     * cascade = "all"
-     * where = "deleted='false'"
-     * order-by = "naviorder"
-     * lazy="false"
-     * @hibernate.one-to-many 
-     * class = "org.openmeetings.app.hibernate.beans.basic.Navimain"
-     * @hibernate.key 
-     * column = "global_id"
-     */
-    public Set getMainnavi() {
+    public List<Navimain> getMainnavi() {
         return mainnavi;
     }
-    public void setMainnavi(Set mainnavi) {
+    public void setMainnavi(List<Navimain> mainnavi) {
         this.mainnavi = mainnavi;
     }
 
-    /**
-     * @hibernate.property
-     *  column="fieldvalues_id"
-     *  type="long"
-     */
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}
@@ -219,11 +176,6 @@ public class Naviglobal {
 		this.label = label;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="tooltip_fieldvalues_id"
-     *  type="long"
-     */
 	public Long getTooltip_fieldvalues_id() {
 		return tooltip_fieldvalues_id;
 	}

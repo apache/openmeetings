@@ -1,30 +1,49 @@
 package org.openmeetings.app.hibernate.beans.recording;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="recording_roomstream"
- *
- */
-public class RoomStream {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+
+@Entity
+@Table(name = "recording_roomstream")
+public class RoomStream implements Serializable {
 	
+	private static final long serialVersionUID = -5168450841189553968L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="recording_roomstream_id")
 	private Long roomStreamId;
+	@Column(name="streamname")
 	private String streamName;
+	@Column(name="streamstart")
 	private Boolean streamstart;
+	@Column(name="avset")
 	private Boolean avset;
+	@Column(name="remoteaddress")
 	private String remoteAdress;
+	@Column(name="startdate")
 	private Date startdate;
+	@Column(name="starttime")
 	private Long starttime;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="rcl", insertable=true, updatable=true)
 	private RoomClient rcl;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="roomrecording_id", insertable=true, updatable=true)
 	private RoomRecording roomRecording;
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="recording_roomstream_id"
-     *  generator-class="increment"
-     */
 	public Long getRoomStreamId() {
 		return roomStreamId;
 	}
@@ -32,11 +51,6 @@ public class RoomStream {
 		this.roomStreamId = roomStreamId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="streamname"
-     *  type="string"
-     */
 	public String getStreamName() {
 		return streamName;
 	}
@@ -44,11 +58,6 @@ public class RoomStream {
 		this.streamName = streamName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="streamstart"
-     *  type="boolean"
-     */
 	public Boolean getStreamstart() {
 		return streamstart;
 	}
@@ -56,11 +65,6 @@ public class RoomStream {
 		this.streamstart = streamstart;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="avset"
-     *  type="boolean"
-     */
 	public Boolean getAvset() {
 		return avset;
 	}
@@ -68,11 +72,6 @@ public class RoomStream {
 		this.avset = avset;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="remoteaddress"
-     *  type="string"
-     */
 	public String getRemoteAdress() {
 		return remoteAdress;
 	}
@@ -80,11 +79,6 @@ public class RoomStream {
 		this.remoteAdress = remoteAdress;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="startdate"
-     *  type="java.util.Date"
-     */
 	public Date getStartdate() {
 		return startdate;
 	}
@@ -92,11 +86,6 @@ public class RoomStream {
 		this.startdate = startdate;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="long"
-     */
 	public Long getStarttime() {
 		return starttime;
 	}
@@ -104,15 +93,6 @@ public class RoomStream {
 		this.starttime = starttime;
 	}
 	
-	/**
-	 * @hibernate.many-to-one
-	 * column = "rcl"
-	 * class = "org.openmeetings.app.hibernate.beans.recording.RoomClient"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="false"
-     */
 	public RoomClient getRcl() {
 		return rcl;
 	}
@@ -120,15 +100,6 @@ public class RoomStream {
 		this.rcl = rcl;
 	}
 	
-	/**
-	 * @hibernate.many-to-one
-	 * column = "roomrecording_id"
-	 * class = "org.openmeetings.app.hibernate.beans.recording.RoomRecording"
-	 * insert="true"
-	 * update="true"
-	 * outer-join="true"
-	 * lazy="no-proxy"
-     */
 	public RoomRecording getRoomRecording() {
 		return roomRecording;
 	}

@@ -1,6 +1,15 @@
 package org.openmeetings.app.hibernate.beans.user;
 
+import java.io.Serializable;
 import java.util.Date;
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * 
@@ -8,29 +17,34 @@ import java.util.Date;
  * lazy="false"
  *
  */
-public class Users_Usergroups {
+@Entity
+@Table(name = "users_usergroups")
+public class Users_Usergroups implements Serializable {
 	
+	private static final long serialVersionUID = 1006320698442560046L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="users_usergroups_id")
 	private Long users_usergroups_id;
+	@Column(name = "comment_field")
 	private String comment;
+	@Column(name = "starttime")
 	private Date starttime;
+	@Column(name = "updatetime")
 	private Date updatetime;
+	@Column(name="user_id")
 	private Long user_id;
+	@Column(name="usergroup_id")
 	private Long usergroup_id;
+	@Column(name = "deleted")
 	private String deleted;
-
-	//Todo: Auto many-to-one
-	private Usergroups usergroups;
 	
 	public Users_Usergroups() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
     
-    /**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */ 
 	public String getComment() {
 		return comment;
 	}
@@ -38,12 +52,6 @@ public class Users_Usergroups {
 		this.comment = comment;
 	}
     
-    /**
-     * 
-     * @hibernate.id
-     *  column="users_usergroups_id"
-     *  generator-class="increment"
-     */   
 	public Long getUsers_usergroups_id() {
 		return users_usergroups_id;
 	}
@@ -52,11 +60,6 @@ public class Users_Usergroups {
 	}
     
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -64,11 +67,6 @@ public class Users_Usergroups {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -76,11 +74,6 @@ public class Users_Usergroups {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}
@@ -88,11 +81,6 @@ public class Users_Usergroups {
 		this.deleted = deleted;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="user_id"
-     *  type="long"
-     */
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -100,23 +88,11 @@ public class Users_Usergroups {
 		this.user_id = user_id;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="usergroup_id"
-     *  type="long"
-     */
 	public Long getUsergroup_id() {
 		return usergroup_id;
 	}
 	public void setUsergroup_id(Long usergroup_id) {
 		this.usergroup_id = usergroup_id;
-	}
-
-	public Usergroups getUsergroups() {
-		return usergroups;
-	}
-	public void setUsergroups(Usergroups usergroups) {
-		this.usergroups = usergroups;
 	}
 	
 }

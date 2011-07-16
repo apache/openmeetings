@@ -1,18 +1,34 @@
 package org.openmeetings.app.hibernate.beans.adresses;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 
- * @hibernate.class table="states"
- *
- */
-public class States {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+
+@Entity
+@Table(name = "states")
+public class States implements Serializable {
 	
-	private Long state_id;
+	private static final long serialVersionUID = -1629546369219451403L;
+	@Id
+	@GeneratedValue
+    
+	@Column(name="state_id")
+ 	private Long state_id;
+	@Column(name="name")
 	private String name;
+	@Column(name="starttime")
 	private Date starttime;
+	@Column(name="updatetime")
 	private Date updatetime;
+	@Column(name="deleted")
 	private String deleted;
 
 	public States() {
@@ -32,12 +48,6 @@ public class States {
 		this.name = name;
 	}
 
-    /**
-     * 
-     * @hibernate.id
-     *  column="state_id"
-     *  generator-class="increment"
-     */ 	
 	public Long getState_id() {
 		return state_id;
 	}
@@ -45,11 +55,6 @@ public class States {
 		this.state_id = state_id;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */  	
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -57,11 +62,6 @@ public class States {
 		this.starttime = starttime;
 	}
     
-    /**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */  	
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -69,11 +69,6 @@ public class States {
 		this.updatetime = updatetime;
 	}
 	
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */	
 	public String getDeleted() {
 		return deleted;
 	}

@@ -1,33 +1,50 @@
 package org.openmeetings.app.hibernate.beans.calendar;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.hibernate.beans.user.Users;
 
-/**
- * 
- * @hibernate.class table="appointmentremindertyps"
- * lazy="false"
- *
- */
 
-public class AppointmentReminderTyps {
-	
-	private Long typId;
-	private String name;
-	private Users user;
-	
-	private Date starttime;
-	private Date updatetime;
-	private String deleted;
-	private String comment;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "appointmentremindertyps")
+public class AppointmentReminderTyps implements Serializable {
 	
 	/**
-     * 
-     * @hibernate.id
-     *  column="typ_id"
-     *  generator-class="increment"
-     */  
+	 * 
+	 */
+	private static final long serialVersionUID = -6543593995706839669L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Column(name="typ_id")
+	private Long typId;
+	@Column(name="name")
+	private String name;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id", nullable=true)
+	private Users user;
+	
+	@Column(name="starttime")
+	private Date starttime;
+	@Column(name="updatetime")
+	private Date updatetime;
+	@Column(name="deleted")
+	private String deleted;
+	@Column(name="comment_field")
+	private String comment;
+	
 	public Long getTypId() {
 		return typId;
 	}
@@ -35,11 +52,6 @@ public class AppointmentReminderTyps {
 		this.typId = typId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */	
 	public String getName() {
 		return name;
 	}
@@ -47,15 +59,6 @@ public class AppointmentReminderTyps {
 		this.name = name;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="user_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.user.Users"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public Users getUser() {
 		return user;
 	}
@@ -63,11 +66,6 @@ public class AppointmentReminderTyps {
 		this.user = user;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="starttime"
-     *  type="java.util.Date"
-     */    
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -75,11 +73,6 @@ public class AppointmentReminderTyps {
 		this.starttime = starttime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updatetime"
-     *  type="java.util.Date"
-     */    
 	public Date getUpdatetime() {
 		return updatetime;
 	}
@@ -87,11 +80,6 @@ public class AppointmentReminderTyps {
 		this.updatetime = updatetime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */    
 	public String getDeleted() {
 		return deleted;
 	}
@@ -99,11 +87,6 @@ public class AppointmentReminderTyps {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-*  column="comment_field"
-     *  type="string"
-     */    
 	public String getComment() {
 		return comment;
 	}

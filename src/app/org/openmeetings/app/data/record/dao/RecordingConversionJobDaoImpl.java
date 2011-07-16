@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.openmeetings.app.hibernate.beans.recording.RecordingConversionJob;
 import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -36,17 +37,17 @@ public class RecordingConversionJobDaoImpl {
 			log.debug("[addRecordingConversionJob] Recording_id "+recordingConversionJob.getRecording().getRecording_id());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			
-			Long recordingConversionJobId = (Long) session.save(recordingConversionJob);
+			recordingConversionJob = session.merge(recordingConversionJob);
+			Long recordingConversionJobId = recordingConversionJob.getRecordingConversionJobId();
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return recordingConversionJobId;
-		} catch (HibernateException ex) {
-			log.error("[addRecordingConversionJob]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[addRecordingConversionJob]: " , ex2);
 		}
@@ -60,18 +61,21 @@ public class RecordingConversionJobDaoImpl {
 						"where c.recordingConversionJobId = :recordingConversionJobId ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("recordingConversionJobId", recordingConversionJobId);
-			RecordingConversionJob recordingConversionJob = (RecordingConversionJob) query.uniqueResult();
+			query.setParameter("recordingConversionJobId", recordingConversionJobId);
+			RecordingConversionJob recordingConversionJob = null;
+			try {
+				recordingConversionJob = (RecordingConversionJob) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return recordingConversionJob;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRecordingConversionJobsByRecordingConversionJobsId]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRecordingConversionJobsByRecordingConversionJobsId]: " , ex2);
 		}
@@ -85,18 +89,21 @@ public class RecordingConversionJobDaoImpl {
 						"where c.recording.recording_id = :recording_id ";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			query.setLong("recording_id", recording_id);
-			RecordingConversionJob recordingConversionJob = (RecordingConversionJob) query.uniqueResult();
+			query.setParameter("recording_id", recording_id);
+			RecordingConversionJob recordingConversionJob = null;
+			try {
+				recordingConversionJob = (RecordingConversionJob) query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return recordingConversionJob;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRecordingConversionJobsByRecording]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRecordingConversionJobsByRecording]: " , ex2);
 		}
@@ -118,17 +125,16 @@ public class RecordingConversionJobDaoImpl {
 						"AND c.startedPngConverted IS NULL";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			List<RecordingConversionJob> ll = query.list();
+			List<RecordingConversionJob> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRecordingConversionJobs]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRecordingConversionJobs]: " , ex2);
 		}
@@ -149,17 +155,16 @@ public class RecordingConversionJobDaoImpl {
 						"AND c.endPngConverted IS NULL";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			List<RecordingConversionJob> ll = query.list();
+			List<RecordingConversionJob> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRecordingConversionJobs]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRecordingConversionJobs]: " , ex2);
 		}
@@ -175,17 +180,16 @@ public class RecordingConversionJobDaoImpl {
 						"AND c.endSWFConverted IS NULL";
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
 			Query query = session.createQuery(hql);
-			List<RecordingConversionJob> ll = query.list();
+			List<RecordingConversionJob> ll = query.getResultList();
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
 			return ll;
 	
-		} catch (HibernateException ex) {
-			log.error("[getRecordingConversionJobs]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[getRecordingConversionJobs]: " , ex2);
 		}
@@ -198,15 +202,20 @@ public class RecordingConversionJobDaoImpl {
 			log.debug("updateRecordingConversionJobs: "+recordingConversionJob.getRecordingConversionJobId());
 			
 			Object idf = HibernateUtil.createSession();
-			Session session = HibernateUtil.getSession();
-			Transaction tx = session.beginTransaction();
-			session.update(recordingConversionJob);
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			if (recordingConversionJob.getRecordingConversionJobId() == 0) {
+				session.persist(recordingConversionJob);
+			    } else {
+			    	if (!session.contains(recordingConversionJob)) {
+			    		session.merge(recordingConversionJob);
+			    }
+			}
 			
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-		} catch (HibernateException ex) {
-			log.error("[updateRecordingConversionJobs]: " , ex);
 		} catch (Exception ex2) {
 			log.error("[updateRecordingConversionJobs]: " , ex2);
 		}
