@@ -54,7 +54,7 @@ public class Invitations implements Serializable {
 	private String invitationpass;
 
 	// this is necessary as a room can be shared between multiple domains
-	// is eithter *public* or an organisation_ID
+	// is either *public* or an organisation_ID
 	@Column(name = "conferencedomain")
 	private String conferencedomain;
 
