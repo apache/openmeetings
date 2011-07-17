@@ -522,7 +522,26 @@ public class Roommanagement {
 			HibernateUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
-			log.error("[getRooms]", ex2);
+			log.error("[getAllRooms]", ex2);
+		}
+		return null;
+	}
+	
+	public List<Rooms> getBackupRooms(){
+		try {
+			Object idf = HibernateUtil.createSession();
+			EntityManager session = HibernateUtil.getSession();
+			EntityTransaction tx = session.getTransaction();
+			tx.begin();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
+			TypedQuery<Rooms> q = session.createQuery(cq);
+			List<Rooms> ll = q.getResultList();
+			tx.commit();
+			HibernateUtil.closeSession(idf);
+			return ll;
+		} catch (Exception ex2) {
+			log.error("[getBackupRooms]", ex2);
 		}
 		return null;
 	}

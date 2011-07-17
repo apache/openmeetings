@@ -11,20 +11,34 @@
     <labelText fontsize="10" y="24"
 	     x="30" width="500" labelid="1065" multiline="true" />
 	
+	<labelCheckbox x="10" y="100" fontsize="11"
+        name="_includeFileOption" text="Include uploaded files and recordings in backup" >
+        <handler name="oninit">
+            this.setValue(true);
+        </handler>
+    </labelCheckbox>  
+	
 	<!-- System Import -->
-    <simpleLabelButton text="System Import" x="30" y="100" width="200">
+    <simpleLabelButton text="System Import" x="30" y="140" width="200">
 	    <handler name="onclick">
 	        new lz.backupImportWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
 	    </handler>
     </simpleLabelButton> 
     
     <!-- System Backup -->
-    <simpleLabelButton text="System Backup" x="232" y="100" width="200">
+    <simpleLabelButton text="System Backup" x="232" y="140" width="200">
         <handler name="onclick">
             <![CDATA[
                 var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                         +canvas.httpRootKey+'BackupExport?moduleName=backup'
                         +'&sid='+canvas.sessionId;
+                
+                if (parent._includeFileOption.getValue()) {
+                	exporturl += "&includeFileOption=yes";
+                } else {
+                	exporturl += "&includeFileOption=no";
+                }
+                        
                 if($debug) Debug.write("BACKUP/exporturl "+exporturl);
                 lz.Browser.loadURL(exporturl,"_parent");
             ]]>

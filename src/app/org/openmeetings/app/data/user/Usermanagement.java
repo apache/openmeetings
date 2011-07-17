@@ -1338,15 +1338,6 @@ public class Usermanagement {
 			tx.commit();
 			HibernateUtil.closeSession(idf);
 			
-			
-			for (Iterator<Organisation_Users> orgUserIterator = usr.getOrganisation_users().iterator();orgUserIterator.hasNext();) {
-				
-				Organisation_Users organisationUsers = orgUserIterator.next();
-				
-				Organisationmanagement.getInstance().addOrganisationUserObj(organisationUsers);
-				
-			}
-			
 			return user_id;
 			
 			

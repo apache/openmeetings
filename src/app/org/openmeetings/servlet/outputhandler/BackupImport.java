@@ -572,27 +572,12 @@ public class BackupImport extends HttpServlet {
 	
 	private void importUsers(File userFile) throws Exception {
 		
-		List<Users> userList = this.getUsersByXML(userFile);
-		
-		for (Users us : userList) {
-			
-			Users storedUser = Usermanagement.getInstance().getUserById(us.getUser_id());
-			
-			if (storedUser == null) {
-				
-				us.setStarttime(new Date());
-				Usermanagement.getInstance().addUserBackup(us);
-				
-			}
-			
-		}
+		this.getUsersByXML(userFile);
 		
 	}
 	
-	private List<Users> getUsersByXML (File userFile) {
+	private void getUsersByXML (File userFile) {
 		try {
-			
-			List<Users> userList = new LinkedList<Users>();
 			
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(userFile);
@@ -618,6 +603,58 @@ public class BackupImport extends HttpServlet {
 	        			us.setLogin(itemUsers.element("login").getText());
 	        			us.setPassword(itemUsers.element("pass").getText());
 	        			us.setDeleted(itemUsers.element("deleted").getText());
+	        			
+	        			if (itemUsers.element("activatehash") != null) {
+	        				us.setActivatehash(itemUsers.element("activatehash").getText());
+	        			} else {
+	        				us.setActivatehash("");
+	        			}
+	        			if (itemUsers.element("externalUserType") != null) {
+	        				us.setExternalUserType(itemUsers.element("externalUserType").getText());
+	        			} else {
+	        				us.setExternalUserType("");
+	        			}
+	        			if (itemUsers.element("externalUserId") != null) {
+	        				us.setExternalUserId(importLongType(itemUsers.element("externalUserId").getText()));
+	        			} else {
+	        				us.setExternalUserId(null);
+	        			}
+	        			if (itemUsers.element("resethash") != null) {
+	        				us.setResethash(itemUsers.element("resethash").getText());
+	        			} else {
+	        				us.setResethash(null);
+	        			}
+	        			if (itemUsers.element("userOffers") != null) {
+	        				us.setUserOffers(itemUsers.element("userOffers").getText());
+	        			} else {
+	        				us.setUserOffers("");
+	        			}
+	        			if (itemUsers.element("userSearchs") != null) {
+	        				us.setUserSearchs(itemUsers.element("userSearchs").getText());
+	        			} else {
+	        				us.setUserSearchs("");
+	        			}
+	        			if (itemUsers.element("forceTimeZoneCheck") != null) {
+	        				us.setForceTimeZoneCheck(importBooleanType(itemUsers.element("forceTimeZoneCheck").getText()));
+	        			} else {
+	        				us.setForceTimeZoneCheck(null);
+	        			}
+	        			if (itemUsers.element("lasttrans") != null) {
+	        				us.setLasttrans(importLongType(itemUsers.element("lasttrans").getText()));
+	        			} else {
+	        				us.setLasttrans(null);
+	        			}
+	        			if (itemUsers.element("showContactData") != null) {
+	        				us.setShowContactData(importBooleanType(itemUsers.element("showContactData").getText()));
+	        			} else {
+	        				us.setShowContactData(null);
+	        			}
+	        			if (itemUsers.element("showContactDataToContacts") != null) {
+	        				us.setShowContactDataToContacts(importBooleanType(itemUsers.element("showContactDataToContacts").getText()));
+	        			} else {
+	        				us.setShowContactDataToContacts(null);
+	        			}
+	        			
 	        			
 	        			us.setPictureuri(itemUsers.element("pictureuri").getText());
 	        			if (itemUsers.element("language_id").getText().length()>0)
@@ -701,7 +738,7 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			us.setAdresses(adr);
 	        			
-	        			us.setOrganisation_users(new HashSet<Organisation_Users>());
+	        			HashSet<Organisation_Users> orgUsers = new HashSet<Organisation_Users>();
 	        			
 	        			for (Iterator<Element> organisationsIterator = itemUsers.elementIterator( "organisations" ); organisationsIterator.hasNext(); ) {
 	        				
@@ -725,25 +762,41 @@ public class BackupImport extends HttpServlet {
 		        				orgUser.setStarttime(new Date());
 		        				orgUser.setDeleted(deleted);
 		        				
-		        				us.getOrganisation_users().add(orgUser);
+		        				orgUsers.add(orgUser);
 		        				
 	        				}
 	        				
 	        			}
 	        			
-	        			userList.add(us);
+	        			Users storedUser = Usermanagement.getInstance().getUserById(us.getUser_id());
+	        			
+	        			if (storedUser == null) {
+	        				
+	        				log.debug("Add User ID "+us.getUser_id());
+	        				us.setUser_id(null);
+	        				us.setStarttime(new Date());
+	        				Long actualNewUserId = Usermanagement.getInstance().addUserBackup(us);
+	        				
+	        				for (Iterator<Organisation_Users> orgUserIterator = orgUsers.iterator();orgUserIterator.hasNext();) {
+	        					
+	        					Organisation_Users organisationUsers = orgUserIterator.next();
+	        					
+	        					organisationUsers.setUser_id(actualNewUserId);
+	        					
+	        					Organisationmanagement.getInstance().addOrganisationUserObj(organisationUsers);
+	        					
+	        				}
+	        				
+	        			}
 	        			
 	        		}
 	        		
 	        	}
 	        }
 	        
-	        return userList;
-			
 		} catch (Exception err) {
 			log.error("[getUsersByXML]",err);
 		}
-		return null;
 	}
 	
 
@@ -1106,6 +1159,7 @@ public class BackupImport extends HttpServlet {
 			Organisation orgStored = Organisationmanagement.getInstance().getOrganisationByIdAndDeleted(org.getOrganisation_id());
 			
 			if (orgStored == null) {
+				org.setOrganisation_id(null);
 				Organisationmanagement.getInstance().addOrganisationObj(org);
 			}
 			
@@ -1161,6 +1215,10 @@ public class BackupImport extends HttpServlet {
 		List<MeetingMember> meetingmembersList = this.getMeetingmembersListByXML(meetingmembersListFile);
 		
 		for (MeetingMember ma : meetingmembersList) {
+			
+			//We need to reset this as openJPA reject to store them otherwise
+			ma.setMeetingMemberId(null);
+			
 			MeetingMemberDaoImpl.getInstance().addMeetingMemberByObject(ma);
 		}
 		
@@ -1296,6 +1354,9 @@ public class BackupImport extends HttpServlet {
 			
 			if (appointmentStored == null) {
 				
+				//We need to reset this as openJPA reject to store them otherwise
+				appointment.setAppointmentId(null);
+				
 				AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
 				
 			}
@@ -1391,6 +1452,9 @@ public class BackupImport extends HttpServlet {
 			
 			if (roomsOrganisationStored == null) {
 				
+				//We need to reset this as openJPA reject to store them otherwise
+				rooms_Organisation.setRooms_organisation_id(null);
+				
 				Roommanagement.getInstance().addRoomOrganisation(rooms_Organisation);
 				
 			}
@@ -1445,43 +1509,16 @@ public class BackupImport extends HttpServlet {
 
 	private void importRooms(File roomFile) throws Exception {
 		
-		Map<String,List> returnObject = this.getRoomListByXML(roomFile);
-		
-		List<Rooms> roomList = returnObject.get("roomList");
-		List<RoomModerators> roomModeratorList = returnObject.get("roomModeratorList");
-		
-		for (Rooms rooms : roomList) {
-			
-			Rooms roomStored = Roommanagement.getInstance().getRoomById(rooms.getRooms_id());
-			
-			if (roomStored == null) {
-				Roommanagement.getInstance().addRoom(rooms);
-			}
-			
-		}
-		
-		for (RoomModerators roomModerators : roomModeratorList) {
-			
-			List<RoomModerators> roomModeratorsStored = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByUserAndRoomId(roomModerators.getRoomId(), roomModerators.getUser().getUser_id());
-			
-			if (roomModeratorsStored == null || roomModeratorsStored.size() == 0) {
-				
-				RoomModeratorsDaoImpl.getInstance().addRoomModeratorByObj(roomModerators);
-				
-			}
-			
-		}
-		
-		
+		this.getRoomListByXML(roomFile);
 		
 	}
 	
-	private Map<String,List> getRoomListByXML(File roomFile) {
+	private void getRoomListByXML(File roomFile) {
 		try {
 			
-			List<Rooms> roomList = new LinkedList<Rooms>();
+			//List<Rooms> roomList = new LinkedList<Rooms>();
 			
-			List<RoomModerators> roomModeratorList = new LinkedList<RoomModerators>();
+			//List<RoomModerators> roomModeratorList = new LinkedList<RoomModerators>();
 			
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(roomFile);
@@ -1513,14 +1550,34 @@ public class BackupImport extends HttpServlet {
 	        			String sipNumber = roomObject.element("sipNumber").getText();
 	        			String conferencePin = roomObject.element("conferencePin").getText();
 	        			
+	        			Long ownerId = null;
+	        			if (roomObject.element("ownerid") != null) {
+	        				ownerId = importLongType(roomObject.element("ownerid").getText());
+	        			}
+	        			
 	        			Boolean ispublic = false;
 	        			if (roomObject.element("ispublic") != null) {
 	        				ispublic = importBooleanType(roomObject.element("ispublic").getText());
 	        			}
 	        			
+	        			Boolean waitForRecording = false;
+	        			if (roomObject.element("waitForRecording") != null) {
+	        				waitForRecording = importBooleanType(roomObject.element("waitForRecording").getText());
+	        			}
+
+	        			Boolean hideTopBar = false;
+	        			if (roomObject.element("hideTopBar") != null) {
+	        				hideTopBar = importBooleanType(roomObject.element("hideTopBar").getText());
+	        			}
+	        			
 	        			Boolean isClosed = false;
 	        			if (roomObject.element("isClosed") != null) {
 	        				isClosed = importBooleanType(roomObject.element("isClosed").getText());
+	        			}
+	        			
+	        			Boolean allowRecording = false;
+	        			if (roomObject.element("allowRecording") != null) {
+	        				allowRecording = importBooleanType(roomObject.element("allowRecording").getText());
 	        			}
 	        			
 	        			String redirectURL = "";
@@ -1530,6 +1587,7 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Rooms room = new Rooms();
 	        			room.setRooms_id(rooms_id);
+	        			room.setOwnerId(ownerId);
 	        			room.setName(name);
 	        			room.setDeleted(deleted);
 	        			room.setComment(comment);
@@ -1548,9 +1606,18 @@ public class BackupImport extends HttpServlet {
 	        			room.setIspublic(ispublic);
 	        			room.setIsClosed(isClosed);
 	        			room.setRedirectURL(redirectURL);
+	        			room.setWaitForRecording(waitForRecording);
+	        			room.setHideTopBar(hideTopBar);
+	        			room.setAllowRecording(allowRecording);
 	        			
+	        			Rooms roomStored = Roommanagement.getInstance().getRoomById(room.getRooms_id());
 	        			
-	        			roomList.add(room);
+	        			if (roomStored == null) {
+	        				//We need to reset this as openJPA reject to store them otherwise
+	        				room.setRooms_id(null);
+	        				
+	        				Roommanagement.getInstance().addRoom(room);
+	        			}
 	        			
 	        			for (Iterator<Element> iterMods = roomObject.elementIterator( "room_moderators" ); iterMods.hasNext(); ) {
 	        				
@@ -1570,8 +1637,13 @@ public class BackupImport extends HttpServlet {
 	        					roomModerators.setUser(Usermanagement.getInstance().getUserById(user_id));
 	        					roomModerators.setIsSuperModerator(is_supermoderator);
 	        					
-	        					roomModeratorList.add(roomModerators);
+	        					List<RoomModerators> roomModeratorsStored = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByUserAndRoomId(roomModerators.getRoomId(), roomModerators.getUser().getUser_id());
 	        					
+	        					if (roomModeratorsStored == null || roomModeratorsStored.size() == 0) {
+	        						
+	        						RoomModeratorsDaoImpl.getInstance().addRoomModeratorByObj(roomModerators);
+	        						
+	        					}
 	        				}
 	        				
 	        			}
@@ -1581,17 +1653,9 @@ public class BackupImport extends HttpServlet {
 	        	}
 			}
 			
-			Map<String,List> returnObject = new HashMap<String,List>();
-			
-			returnObject.put("roomList",roomList);
-			returnObject.put("roomModeratorList", roomModeratorList);
-			
-			return returnObject;
-			
 		} catch (Exception err) {
 			log.error("[getRoomListByXML]",err);
 		}
-		return null;
 	}
 	
 	
@@ -1600,6 +1664,9 @@ public class BackupImport extends HttpServlet {
 		List<FileExplorerItem> fileExplorerItems = this.getFileExplorerItems(fileExplorerItemsListFile);
 		
 		for (FileExplorerItem fileExplorerItem : fileExplorerItems) {
+			
+			//We need to reset this as openJPA reject to store them otherwise
+			fileExplorerItem.setFileExplorerItemId(0);
 			
 			FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
 			

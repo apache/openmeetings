@@ -30,6 +30,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
@@ -95,8 +96,13 @@ public class BackupExport extends HttpServlet {
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);
 
-			if (user_level!=null && user_level > 0) {
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 			//if (true) {
+				
+				String includeFileOption = httpServletRequest.getParameter("includeFileOption");
+				if (includeFileOption == null) {
+					includeFileOption = "yes";
+				}
 				
 				String moduleName = httpServletRequest.getParameter("moduleName");
 				if (moduleName == null) {
@@ -156,8 +162,6 @@ public class BackupExport extends HttpServlet {
 					
 					List<Users> uList = UsersDaoImpl.getInstance().getAllUsersDeleted();
 					
-					log.debug("Number of Users to be deleted "+uList);
-					
 					if (uList != null) {
 						
 						log.debug("Number of Users to be deleted "+uList.size());
@@ -176,7 +180,7 @@ public class BackupExport extends HttpServlet {
 					/* #####################
 					 * Backup Room
 					 */
-					List<Rooms> roomList = Roommanagement.getInstance().getAllRooms();
+					List<Rooms> roomList = Roommanagement.getInstance().getBackupRooms();
 					
 					if (roomList != null) {
 						Document doc = this.createRoomsDocument(roomList);
@@ -336,51 +340,53 @@ public class BackupExport extends HttpServlet {
 						this.serializetoXML(fos, "UTF-8", doc);
 					}
 					
+					if (includeFileOption.equals("yes")) {
 					
-					/* #####################
-					 * Backup Room Files
-					 */
-					File targetDir = new File(backup_dir + File.separatorChar + "roomFiles");
-					
-					if (!targetDir.exists()) {
-						targetDir.mkdir();
-					}
-					
-					File sourceDir = new File(current_dir + "upload" + File.separatorChar);
-					
-					File[] files = sourceDir.listFiles();
-					for (File file : files) {
-						if (file.isDirectory()) {
-							
-							if (!file.getName().equals("backup") && !file.getName().equals("import")) {
+						/* #####################
+						 * Backup Room Files
+						 */
+						File targetDir = new File(backup_dir + File.separatorChar + "roomFiles");
+						
+						if (!targetDir.exists()) {
+							targetDir.mkdir();
+						}
+						
+						File sourceDir = new File(current_dir + "upload" + File.separatorChar);
+						
+						File[] files = sourceDir.listFiles();
+						for (File file : files) {
+							if (file.isDirectory()) {
 								
-								targetDir = new File(backup_dir + File.separatorChar 
-														+ "roomFiles" + File.separatorChar + file.getName());
-								
-								log.debug("### "+file.getName());
-								
-								copyDirectory(file,targetDir);
+								if (!file.getName().equals("backup") && !file.getName().equals("import")) {
+									
+									targetDir = new File(backup_dir + File.separatorChar 
+															+ "roomFiles" + File.separatorChar + file.getName());
+									
+									log.debug("### "+file.getName());
+									
+									copyDirectory(file,targetDir);
+									
+								}
 								
 							}
-							
 						}
+					
+						/* #####################
+						 * Backup Recording Files
+						 */
+						File targetDirRec = new File(backup_dir + File.separatorChar + "recordingFiles");
+						
+						if (!targetDirRec.exists()) {
+							targetDirRec.mkdir();
+						}
+						
+						
+						File sourceDirRec = new File(current_dir + "streams" + File.separatorChar 
+												+ "hibernate" + File.separatorChar);
+						
+						copyDirectory(sourceDirRec,targetDirRec);
+					
 					}
-					
-					/* #####################
-					 * Backup Recording Files
-					 */
-					File targetDirRec = new File(backup_dir + File.separatorChar + "recordingFiles");
-					
-					if (!targetDirRec.exists()) {
-						targetDirRec.mkdir();
-					}
-					
-					
-					File sourceDirRec = new File(current_dir + "streams" + File.separatorChar 
-											+ "hibernate" + File.separatorChar);
-					
-					copyDirectory(sourceDirRec,targetDirRec);
-					
 					
 					String full_path = backup_file + ".zip";
 					
@@ -713,6 +719,26 @@ public class BackupExport extends HttpServlet {
 				room.addElement("roomtypeId").setText(""+r.getRoomtype().getRoomtypes_id());
 			} else {
 				room.addElement("roomtypeId").setText(""+0);
+			}
+			if (r.getOwnerId() != null) {
+				room.addElement("ownerid").setText(""+r.getOwnerId());
+			} else {
+				room.addElement("ownerid").setText("");
+			}
+			if (r.getWaitForRecording() != null) {
+				room.addElement("waitForRecording").setText(""+r.getWaitForRecording());
+			} else {
+				room.addElement("waitForRecording").setText("");
+			}
+			if (r.getHideTopBar() != null) {
+				room.addElement("hideTopBar").setText(""+r.getHideTopBar());
+			} else {
+				room.addElement("hideTopBar").setText("");
+			}
+			if (r.getAllowRecording() != null) {
+				room.addElement("allowRecording").setText(""+r.getAllowRecording());
+			} else {
+				room.addElement("allowRecording").setText("");
 			}
 			room.addElement("isDemoRoom").setText(""+r.getIsDemoRoom());
 			room.addElement("demoTime").setText(""+r.getDemoTime());
@@ -1161,12 +1187,75 @@ public class BackupExport extends HttpServlet {
 			user.addElement("user_id").setText(""+u.getUser_id());
 			user.addElement("deleted").setText(""+u.getDeleted());
 			user.addElement("age").setText(""+CalendarPatterns.getDateByMiliSeconds(u.getAge()));
-			user.addElement("availible").setText(""+u.getAvailible().toString());
+			if (u.getAvailible() != null) {
+				user.addElement("availible").setText(""+u.getAvailible().toString());
+			} else {
+				user.addElement("availible").setText("0");
+			}
 			user.addElement("deleted").setText(""+u.getDeleted());
 			user.addElement("firstname").setText(""+u.getFirstname());
 			user.addElement("lastname").setText(""+u.getLastname());
 			user.addElement("login").setText(""+u.getLogin());
 			user.addElement("pass").setText(""+u.getPassword());
+			
+			if (u.getActivatehash()!= null) {
+				user.addElement("activatehash").setText(""+u.getActivatehash());
+			} else {
+				user.addElement("activatehash").setText("");
+			}
+			if (u.getExternalUserType() != null) {
+				user.addElement("externalUserType").setText(""+u.getExternalUserType());
+			} else {
+				user.addElement("externalUserType").setText("");
+			}
+			
+			if (u.getExternalUserId() != null) {
+				user.addElement("externalUserId").setText(""+u.getExternalUserId());
+			} else {
+				user.addElement("externalUserId").setText("");
+			}
+			
+			if (u.getResethash() != null) {
+				user.addElement("resethash").setText(""+u.getResethash());
+			} else {
+				user.addElement("resethash").setText("");
+			}
+			
+			if (u.getUserOffers() != null) {
+				user.addElement("userOffers").setText(""+u.getUserOffers());
+			} else {
+				user.addElement("userOffers").setText("");
+			}
+			
+			if (u.getUserSearchs() != null) {
+				user.addElement("userSearchs").setText(""+u.getUserSearchs());
+			} else {
+				user.addElement("userSearchs").setText("");
+			}
+			
+			if (u.getForceTimeZoneCheck() != null) {
+				user.addElement("forceTimeZoneCheck").setText(""+u.getForceTimeZoneCheck());
+			} else {
+				user.addElement("ForceTimeZoneCheck").setText("");
+			}
+			
+			if (u.getLasttrans() != null) {
+				user.addElement("lasttrans").setText(""+u.getLasttrans());
+			} else {
+				user.addElement("lasttrans").setText("");
+			}
+
+			if (u.getShowContactData() != null) {
+				user.addElement("showContactData").setText(""+u.getShowContactData());
+			} else {
+				user.addElement("showContactData").setText("");
+			}
+
+			if (u.getShowContactDataToContacts() != null) {
+				user.addElement("showContactDataToContacts").setText(""+u.getShowContactDataToContacts());
+			} else {
+				user.addElement("showContactDataToContacts").setText("");
+			}			
 			
 			String pictureuri = u.getPictureuri();
 			if (pictureuri != null) user.addElement("pictureuri").setText(pictureuri);
@@ -1175,13 +1264,25 @@ public class BackupExport extends HttpServlet {
 			if ( u.getLanguage_id() != null ) user.addElement("language_id").setText(u.getLanguage_id().toString());
 			else user.addElement("language_id").setText("");
 				
-			user.addElement("status").setText(""+u.getStatus().toString());
+			if (u.getStatus() != null) {
+				user.addElement("status").setText(""+u.getStatus().toString());
+			} else {
+				user.addElement("status").setText("0");
+			}
 			user.addElement("regdate").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate()));
-			user.addElement("title_id").setText(""+u.getTitle_id().toString());
-			user.addElement("level_id").setText(""+u.getLevel_id().toString());
+			
+			if (u.getTitle_id() != null) {
+				user.addElement("title_id").setText(""+u.getTitle_id().toString());
+				user.addElement("level_id").setText(""+u.getLevel_id().toString());
+			} else {
+				user.addElement("title_id").setText("1");
+				user.addElement("level_id").setText("1");
+			}
 			
 			if (u.getOmTimeZone() != null) {
 				user.addElement("omTimeZone").setText(""+u.getOmTimeZone().getJname());
+			} else {
+				user.addElement("omTimeZone").setText("");
 			}
 			
 			if (u.getAdresses() != null) {
@@ -1206,7 +1307,8 @@ public class BackupExport extends HttpServlet {
 			} else {
 				user.addElement("additionalname").setText("");
 				user.addElement("comment").setText("");
-				//A User can not have a deleted Adress, you cannot delete the Adress of an User
+				//A User can not have a deleted address, you cannot delete the address of an User without deleting the user
+				//only SOAP users might have a null
 				//String deleted = u.getAdresses().getDeleted()
 				//Phone Number not done yet
 				user.addElement("fax").setText("");
@@ -1214,10 +1316,9 @@ public class BackupExport extends HttpServlet {
 				user.addElement("street").setText("");
 				user.addElement("town").setText("");
 				user.addElement("zip").setText("");
+				user.addElement("mail").setText("");
+				user.addElement("phone").setText("");
 				
-				// Email and Phone
-				user.addElement("mail").setText(""+u.getAdresses().getEmail());
-				user.addElement("phone").setText(""+u.getAdresses().getPhone());
 			}
 			
 			if (u.getUserSipData() != null) {
