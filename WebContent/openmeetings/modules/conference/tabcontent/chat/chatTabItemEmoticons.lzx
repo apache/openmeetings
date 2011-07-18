@@ -17,7 +17,9 @@
 	<handler name="oninit">
 		<![CDATA[
 		
-		    if (this.picture_uri.startsWith("http")) {
+		    if ($debug) Debug.write("this.picture_uri :: ",this.picture_uri);
+		
+		    if (this.picture_uri != null && this.picture_uri.startsWith("http")) {
                 
                 var downloadurl = this.picture_uri;  
                 
@@ -172,7 +174,7 @@
 							t += items[i][1];
 						} else {
 							if (t.length!=0){
-								var tempString = calcLineWidthByTextField(this.width, t,this.fontsize,this.fontname);
+								var tempString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
 								var x = tempString[tempString.length-1]["lineWidth"];
 								var y = (tempString.length-1)*(getLineHeight()+parent.leading-1);
 							}else {
@@ -191,7 +193,7 @@
 						}
 					}
 					//Debug.write("TTTT: ",t);"Verdana"
-					var tString = calcLineWidthByTextField(this.width, t,this.fontsize,this.fontname);
+					var tString = calcLineWidthByTextField(this.width, t,this.fontsize,this.font);
 					
 					for (var k = 0;k<tString.length;k++){
 						this.setAttribute('text',this.getText()+textObject[k]["text"]+"\r");
