@@ -27,15 +27,21 @@
     
 	<method name="applySizeToVid">
 		var vid = this._getflashvideo();
-		vid._width = this.width;
-        vid._height = this.height;
+		if (vid) {
+    		vid._width = this.width;
+            vid._height = this.height;
+		} else {
+			if ($debug) Debug.warn("applySizeToVid IS NULL ",this.width,this.height);
+		}
 	</method>
     
     <handler name="onwidth" args="w">
-         this.applySizeToVid();
+    	if ($debug) Debug.info("onwidth ",this.width,this.height);
+        this.applySizeToVid();
     </handler> 
     
     <handler name="onheight" args="h">
+    	if ($debug) Debug.info("onheight ",this.width,this.height);
         this.applySizeToVid();
     </handler>
     

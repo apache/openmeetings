@@ -39,6 +39,8 @@
     
     <attribute name="hidebyAudioOnly" value="false" type="boolean" />
     
+    <attribute name="custom" value="false" type="boolean" />
+    
     <attribute name="initH" value="40" type="number" />
     <attribute name="initW" value="40" type="number" />
 	
@@ -67,6 +69,19 @@
             	this._resizeview.setAttribute("visibility","hidden");
             	return;
             }
+            
+            if (this.custom) {
+                this._toolbar._showusercontext.setAttribute("visibility","hidden");
+                this._toolbar._minimize.setAttribute("visibility","hidden");
+                this._resizeview.setAttribute("visibility","hidden");
+                this._toolbar.setAttribute("visibility","hidden");
+                this._resizeview.setAttribute("visibility","hidden");
+                this._loudness.setAttribute("visibility","hidden");
+                this._innertop.setAttribute("visibility","hidden");
+                
+                //return;
+            }
+            
             var prop1 = [this, "width"];
             var prop2 = [this, "height"];
             this.applyConstraintMethod("setItemContraints", prop1);
@@ -84,6 +99,10 @@
 		<![CDATA[
 		
 		    if (this.isInterview) {
+                return;
+            }
+            
+            if (this.custom) {
                 return;
             }
             
@@ -106,7 +125,11 @@
 		
             if (this.isInterview) {
                 return;
-            }		
+            }	
+            
+            if (this.custom) {
+                return;
+            }
 		
 			var bounds = this.getBounds();
 			var parentBounds = canvas.getBounds();
@@ -167,6 +190,10 @@
             return;
         }   
         
+        if (this.custom) {
+                return;
+        }
+        
         if (bool) {
             this.isResizing = true;
             this.rs.apply();
@@ -213,6 +240,10 @@
         if (this.isInterview) {
             return;
         }    	
+        
+        if (this.custom) {
+            return;
+        }
     	
         this.bringToFront();
         parent.bringToFront();
