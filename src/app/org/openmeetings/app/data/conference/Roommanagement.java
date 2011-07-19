@@ -998,6 +998,8 @@ public class Roommanagement {
 					
 					r.setWaitForRecording(waitForRecording);
 					r.setAllowRecording(allowRecording);
+					
+					r.setHideTopBar(hideTopBar);
 
                     Object idf = HibernateUtil.createSession();
                     EntityManager session = HibernateUtil.getSession();
