@@ -23,6 +23,7 @@
         <attribute name="fadeDelegate" value="null" />
         <labelText x="20" text="$once{ parent.userName }" />
         <handler name="oninit">
+            this.play();
             this.fadeDelegate = new LzDelegate( this, "fadeText" );
             lz.Timer.addTimer( this.fadeDelegate, 5000 );
         </handler>
