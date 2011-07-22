@@ -82,7 +82,17 @@ import org.slf4j.Logger;
 public class BackupImport extends HttpServlet {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, ScopeApplicationAdapter.webAppRootKey);
-	 
+
+	private HashMap<Long, Long> usersMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> organisationsMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> appointmentsMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> roomsMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> messageFoldersMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> userContactsMap = new HashMap <Long, Long>();
+	private HashMap<Long, Long> fileExplorerItemsMap = new HashMap <Long, Long>();
+
+	private enum Maps {USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS, FILEEXPLORERITEMS}; 
+
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -776,6 +786,7 @@ public class BackupImport extends HttpServlet {
 	        				us.setUser_id(null);
 	        				us.setStarttime(new Date());
 	        				Long actualNewUserId = Usermanagement.getInstance().addUserBackup(us);
+		        			usersMap.put(us.getUser_id(), actualNewUserId);
 	        				
 	        				for (Iterator<Organisation_Users> orgUserIterator = orgUsers.iterator();orgUserIterator.hasNext();) {
 	        					
@@ -854,12 +865,12 @@ public class BackupImport extends HttpServlet {
 	        			Integer flvWidth = importIntegerType(flvObject.element("flvWidth").getText());
 	        			Integer height = importIntegerType(flvObject.element("height").getText());
 	        			Integer width = importIntegerType(flvObject.element("width").getText());
-	        			Long insertedBy = importLongType(flvObject.element("insertedBy").getText());
-	        			Long organization_id = importLongType(flvObject.element("organization_id").getText());
-	        			Long ownerId = importLongType(flvObject.element("ownerId").getText());
-	        			Long parentFileExplorerItemId = importLongType(flvObject.element("parentFileExplorerItemId").getText());
+	        			Long insertedBy = getNewId(importLongType(flvObject.element("insertedBy").getText()), Maps.USERS);
+	        			Long organization_id = getNewId(importLongType(flvObject.element("organization_id").getText()), Maps.ORGANISATIONS);
+	        			Long ownerId = getNewId(importLongType(flvObject.element("ownerId").getText()), Maps.USERS);
+	        			Long parentFileExplorerItemId = getNewId(importLongType(flvObject.element("parentFileExplorerItemId").getText()), Maps.FILEEXPLORERITEMS);
 	        			Integer progressPostProcessing = importIntegerType(flvObject.element("progressPostProcessing").getText());
-	        			Long room_id = importLongType(flvObject.element("room_id").getText());
+	        			Long room_id = getNewId(importLongType(flvObject.element("room_id").getText()), Maps.ROOMS);
 	        			Date inserted = CalendarPatterns.parseDateWithHour(flvObject.element("inserted").getText());
 	        			Boolean isFolder = importBooleanType(flvObject.element("isFolder").getText());
 	        			Boolean isImage = importBooleanType(flvObject.element("isImage").getText());
@@ -966,9 +977,14 @@ public class BackupImport extends HttpServlet {
 		List<PrivateMessageFolder> privateMessageFolders = this.getPrivateMessageFoldersByXML(privateMessageFoldersFile);
 		
 		for (PrivateMessageFolder privateMessageFolder : privateMessageFolders) {
-
-			PrivateMessageFolderDaoImpl.getInstance().addPrivateMessageFolderObj(privateMessageFolder);
 			
+			Long folderId = privateMessageFolder.getPrivateMessageFolderId();
+			PrivateMessageFolder storedFolder = PrivateMessageFolderDaoImpl.getInstance().getPrivateMessageFolderById(folderId);
+			if (storedFolder == null){
+    			privateMessageFolder.setPrivateMessageFolderId(0);
+				Long newFolderId = PrivateMessageFolderDaoImpl.getInstance().addPrivateMessageFolderObj(privateMessageFolder);
+				messageFoldersMap.put(folderId, newFolderId);
+			}
 		}
 		
 	}
@@ -993,11 +1009,13 @@ public class BackupImport extends HttpServlet {
 	        			Element pmfObject = innerIter.next();
 	        			
 	        			String folderName = pmfObject.element("folderName").getText();
-	        			Long userId = importLongType(pmfObject.element("userId").getText());
+	        			Long userId = getNewId(importLongType(pmfObject.element("userId").getText()), Maps.USERS);
+	        			Long privateMessageFolderId = importLongType(pmfObject.element("privateMessageFolderId").getText());
 	        			
 	        			PrivateMessageFolder privateMessageFolder = new PrivateMessageFolder();
 	        			privateMessageFolder.setFolderName(folderName);
 	        			privateMessageFolder.setUserId(userId);
+	        			privateMessageFolder.setPrivateMessageFolderId(privateMessageFolderId);
 	        			
 	        			pmfList.add(privateMessageFolder);
 	        			
@@ -1048,18 +1066,18 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			String message = pmObject.element("message").getText();
 	        			String subject = pmObject.element("subject").getText();
-	        			Long privateMessageFolderId = importLongType(pmObject.element("privateMessageFolderId").getText());
-	        			Long userContactId = importLongType(pmObject.element("userContactId").getText());
+	        			Long privateMessageFolderId = getNewId(importLongType(pmObject.element("privateMessageFolderId").getText()), Maps.MESSAGEFOLDERS);
+	        			Long userContactId = getNewId(importLongType(pmObject.element("userContactId").getText()), Maps.USERCONTACTS);
 	        			Long parentMessage = importLongType(pmObject.element("parentMessage").getText());
 	        			Boolean bookedRoom = importBooleanType(pmObject.element("bookedRoom").getText());
-	        			Users from = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("from").getText()));
-	        			Users to = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("to").getText()));
+	        			Users from = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("from").getText()), Maps.USERS));
+	        			Users to = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("to").getText()), Maps.USERS));
 	        			Date inserted = CalendarPatterns.parseDateWithHour(pmObject.element("inserted").getText());
 	        			Boolean isContactRequest = importBooleanType(pmObject.element("isContactRequest").getText());
 	        			Boolean isRead = importBooleanType(pmObject.element("isRead").getText());
 	        			Boolean isTrash = importBooleanType(pmObject.element("isTrash").getText());
-	        			Users owner = Usermanagement.getInstance().getUserById(importLongType(pmObject.element("owner").getText()));
-	        			Rooms room = Roommanagement.getInstance().getRoomById(importLongType(pmObject.element("room").getText()));
+	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("owner").getText()), Maps.USERS));
+	        			Rooms room = Roommanagement.getInstance().getRoomById(getNewId(importLongType(pmObject.element("room").getText()), Maps.ROOMS));
 	        			
 	        			PrivateMessages pm = new PrivateMessages();
 	        			pm.setMessage(message);
@@ -1098,9 +1116,14 @@ public class BackupImport extends HttpServlet {
 		List<UserContacts> ucList = this.getUserContactsByXML(userContactsFile);
 		
 		for (UserContacts uc : ucList) {
+			Long userContactId = uc.getUserContactId();
+			UserContacts storedUC = UserContactsDaoImpl.getInstance().getUserContacts(userContactId);
 			
-			UserContactsDaoImpl.getInstance().addUserContactObj(uc);
-			
+			if (storedUC == null){
+				uc.setUserContactId(0);
+				Long newId = UserContactsDaoImpl.getInstance().addUserContactObj(uc);
+				this.userContactsMap.put(userContactId, newId);
+			}
 		}
 	}
 
@@ -1123,10 +1146,11 @@ public class BackupImport extends HttpServlet {
 	        			Element usercontact = innerIter.next();
 	        			
 	        			String hash = usercontact.element("hash").getText();
-	        			Users contact = Usermanagement.getInstance().getUserById(importLongType(usercontact.element("contact").getText()));
-	        			Users owner = Usermanagement.getInstance().getUserById(importLongType(usercontact.element("owner").getText()));
+	        			Users contact = Usermanagement.getInstance().getUserById(getNewId(importLongType(usercontact.element("contact").getText()), Maps.USERS));
+	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(usercontact.element("owner").getText()), Maps.USERS));
 	        			Boolean pending = importBooleanType(usercontact.element("pending").getText());
 	        			Boolean shareCalendar = importBooleanType(usercontact.element("shareCalendar").getText());
+	        			Long userContactId = importLongType(usercontact.element("userContactId").getText());
 	        			
 	        			UserContacts userContacts = new UserContacts();
 	        			userContacts.setHash(hash);
@@ -1134,6 +1158,7 @@ public class BackupImport extends HttpServlet {
 	        			userContacts.setOwner(owner);
 	        			userContacts.setPending(pending);
 	        			userContacts.setShareCalendar(shareCalendar);
+	        			userContacts.setUserContactId(userContactId);
 	        			
 	        			ucList.add(userContacts);
 	        			
@@ -1156,11 +1181,13 @@ public class BackupImport extends HttpServlet {
 		List<Organisation> orgList = this.getOrganisationsByXML(orgFile);
 		
 		for (Organisation org : orgList) {
-			Organisation orgStored = Organisationmanagement.getInstance().getOrganisationByIdAndDeleted(org.getOrganisation_id());
+			Long orgId = org.getOrganisation_id();
+			Organisation orgStored = Organisationmanagement.getInstance().getOrganisationByIdAndDeleted(orgId);
 			
 			if (orgStored == null) {
 				org.setOrganisation_id(null);
-				Organisationmanagement.getInstance().addOrganisationObj(org);
+				Long newOrgID = Organisationmanagement.getInstance().addOrganisationObj(org);
+				organisationsMap.put(orgId, newOrgID);
 			}
 			
 		}
@@ -1243,8 +1270,8 @@ public class BackupImport extends HttpServlet {
 	        			Element appointmentsObject = innerIter.next();
 	        			
 	        			Long meetingMemberId = importLongType(appointmentsObject.element("meetingMemberId").getText());
-	        			Long userid = importLongType(appointmentsObject.element("userid").getText());
-	        			Long appointment = importLongType(appointmentsObject.element("appointment").getText());
+	        			Long userid = getNewId(importLongType(appointmentsObject.element("userid").getText()), Maps.USERS);
+	        			Long appointment = getNewId(importLongType(appointmentsObject.element("appointment").getText()), Maps.APPOINTMENTS);
 	        			String firstname = appointmentsObject.element("firstname").getText();
 	        			String lastname = appointmentsObject.element("lastname").getText();
 	        			String memberStatus = appointmentsObject.element("memberStatus").getText();
@@ -1349,16 +1376,16 @@ public class BackupImport extends HttpServlet {
 		List<Appointment> appointmentList = this.getAppointmentListByXML(appointementListFile);
 		
 		for (Appointment appointment : appointmentList) {
-			
-			Appointment appointmentStored = AppointmentDaoImpl.getInstance().getAppointmentById(appointment.getAppointmentId());
+			Long appId = appointment.getAppointmentId();
+			Appointment appointmentStored = AppointmentDaoImpl.getInstance().getAppointmentById(appId);
 			
 			if (appointmentStored == null) {
 				
 				//We need to reset this as openJPA reject to store them otherwise
 				appointment.setAppointmentId(null);
 				
-				AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
-				
+				Long newAppId =  AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
+				appointmentsMap.put(appId, newAppId);
 			}
 			
 		}
@@ -1399,11 +1426,12 @@ public class BackupImport extends HttpServlet {
 	        			Boolean isWeekly = importBooleanType(appointmentsObject.element("isWeekly").getText());
 	        			Boolean isMonthly = importBooleanType(appointmentsObject.element("isMonthly").getText());
 	        			Boolean isYearly = importBooleanType(appointmentsObject.element("isYearly").getText());
-	        			Long room_id = importLongType(appointmentsObject.element("room_id").getText());
+	        			Long room_id = getNewId(importLongType(appointmentsObject.element("room_id").getText()), Maps.ROOMS);
 	        			String icalId = appointmentsObject.element("icalId").getText();
 	        			Long language_id = importLongType(appointmentsObject.element("language_id").getText());
 	        			Boolean isPasswordProtected = importBooleanType(appointmentsObject.element("isPasswordProtected").getText());
 	        			String password = appointmentsObject.element("password").getText();
+	        			Long users_id = getNewId(importLongType(appointmentsObject.element("users_id").getText()), Maps.USERS);
 	        			
 	        			
 	        			Appointment app = new Appointment();
@@ -1426,6 +1454,7 @@ public class BackupImport extends HttpServlet {
 	        			app.setLanguage_id(language_id);
 	        			app.setIsPasswordProtected(isPasswordProtected);
 	        			app.setPassword(password);
+	        			app.setUserId(Usermanagement.getInstance().getUserById(users_id));
 	        			
 	        			appointmentList.add(app);
 	        			
@@ -1482,8 +1511,8 @@ public class BackupImport extends HttpServlet {
 	        			Element orgRoomObject = innerIter.next();
 	        			
 	        			Long rooms_organisation_id = importLongType(orgRoomObject.element("rooms_organisation_id").getText());
-	        			Long organisation_id = importLongType(orgRoomObject.element("organisation_id").getText());
-	        			Long rooms_id = importLongType(orgRoomObject.element("rooms_id").getText());
+	        			Long organisation_id = getNewId(importLongType(orgRoomObject.element("organisation_id").getText()), Maps.ORGANISATIONS);
+	        			Long rooms_id = getNewId(importLongType(orgRoomObject.element("rooms_id").getText()), Maps.ROOMS);
 	        			String deleted = orgRoomObject.element("deleted").getText();
 	        			
 	        			Rooms_Organisation rooms_Organisation = new Rooms_Organisation();
@@ -1552,7 +1581,7 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Long ownerId = null;
 	        			if (roomObject.element("ownerid") != null) {
-	        				ownerId = importLongType(roomObject.element("ownerid").getText());
+	        				ownerId = getNewId(importLongType(roomObject.element("ownerid").getText()), Maps.USERS);
 	        			}
 	        			
 	        			Boolean ispublic = false;
@@ -1610,13 +1639,15 @@ public class BackupImport extends HttpServlet {
 	        			room.setHideTopBar(hideTopBar);
 	        			room.setAllowRecording(allowRecording);
 	        			
-	        			Rooms roomStored = Roommanagement.getInstance().getRoomById(room.getRooms_id());
+	        			Long roomId = room.getRooms_id();
+	        			Rooms roomStored = Roommanagement.getInstance().getRoomById(roomId);
 	        			
 	        			if (roomStored == null) {
 	        				//We need to reset this as openJPA reject to store them otherwise
 	        				room.setRooms_id(null);
 	        				
-	        				Roommanagement.getInstance().addRoom(room);
+	        				Long newRoomId = Roommanagement.getInstance().addRoom(room);
+	        				roomsMap.put(roomId, newRoomId);
 	        			}
 	        			
 	        			for (Iterator<Element> iterMods = roomObject.elementIterator( "room_moderators" ); iterMods.hasNext(); ) {
@@ -1629,11 +1660,11 @@ public class BackupImport extends HttpServlet {
 	        					
 	        					RoomModerators roomModerators = new RoomModerators();
 	        					
-	        					Long user_id = importLongType(room_moderator.element("user_id").getText());
+	        					Long user_id = getNewId(importLongType(room_moderator.element("user_id").getText()), Maps.USERS);
 	        					Boolean is_supermoderator = importBooleanType(room_moderator.element("is_supermoderator").getText());
 	        					
 	        					roomModerators.setDeleted("false");
-	        					roomModerators.setRoomId(rooms_id);
+	        					roomModerators.setRoomId(getNewId(rooms_id, Maps.ROOMS));
 	        					roomModerators.setUser(Usermanagement.getInstance().getUserById(user_id));
 	        					roomModerators.setIsSuperModerator(is_supermoderator);
 	        					
@@ -1666,9 +1697,13 @@ public class BackupImport extends HttpServlet {
 		for (FileExplorerItem fileExplorerItem : fileExplorerItems) {
 			
 			//We need to reset this as openJPA reject to store them otherwise
-			fileExplorerItem.setFileExplorerItemId(0);
-			
-			FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
+			long itemId = fileExplorerItem.getFileExplorerItemId();
+			FileExplorerItem storedItem = FileExplorerItemDaoImpl.getInstance().getFileExplorerItemsById(itemId);
+			if (storedItem == null){
+				fileExplorerItem.setFileExplorerItemId(0);
+				long newItemId = FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
+				fileExplorerItemsMap.put(itemId, newItemId);
+			}
 			
 		}
 		
@@ -1698,13 +1733,13 @@ public class BackupImport extends HttpServlet {
 	        			String fileName = fileExplorerItemObj.element("fileName").getText();
 	        			String fileHash = fileExplorerItemObj.element("fileHash").getText();
 	        			Long parentFileExplorerItemId = importLongType(fileExplorerItemObj.element("parentFileExplorerItemId").getText());
-	        			Long room_id = importLongType(fileExplorerItemObj.element("room_id").getText());
-	        			Long ownerId = importLongType(fileExplorerItemObj.element("ownerId").getText());
+	        			Long room_id = getNewId(importLongType(fileExplorerItemObj.element("room_id").getText()), Maps.ROOMS);
+	        			Long ownerId = getNewId(importLongType(fileExplorerItemObj.element("ownerId").getText()), Maps.USERS);
 	        			Boolean isFolder = importBooleanType(fileExplorerItemObj.element("isFolder").getText());
 	        			Boolean isImage = importBooleanType(fileExplorerItemObj.element("isImage").getText());
 	        			Boolean isPresentation = importBooleanType(fileExplorerItemObj.element("isPresentation").getText());
 	        			Boolean isVideo = importBooleanType(fileExplorerItemObj.element("isVideo").getText());
-	        			Long insertedBy = importLongType(fileExplorerItemObj.element("insertedBy").getText());
+	        			Long insertedBy = getNewId(importLongType(fileExplorerItemObj.element("insertedBy").getText()), Maps.USERS);
 	        			Date inserted = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("inserted").getText());
 	        			Date updated = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("updated").getText());
 	        			String deleted = fileExplorerItemObj.element("deleted").getText();
@@ -1783,6 +1818,43 @@ public class BackupImport extends HttpServlet {
 		return Boolean.valueOf(value).booleanValue();
 		
 	}
+
 	
+	private Long getNewId(Long oldId, Maps map){
+		Long newId = oldId;
+		switch (map) {
+		case USERS: 
+			if (usersMap.get(oldId) != null)
+				newId =  usersMap.get(oldId);
+			break;
+		case ORGANISATIONS:
+			if (organisationsMap.get(oldId) != null)
+				newId = organisationsMap.get(oldId);
+			break;
+		case APPOINTMENTS:
+			if (appointmentsMap.get(oldId) != null)
+				newId = appointmentsMap.get(oldId);
+			break;
+		case ROOMS:
+			if (roomsMap.get(oldId) != null)
+				newId = roomsMap.get(oldId);
+			break;
+		case MESSAGEFOLDERS:
+			if (messageFoldersMap.get(oldId) != null)
+				newId = messageFoldersMap.get(oldId);
+			break;
+		case USERCONTACTS:
+			if (userContactsMap.get(oldId) != null)
+				newId = userContactsMap.get(oldId);
+			break;
+		case FILEEXPLORERITEMS:
+			if (fileExplorerItemsMap.get(oldId) != null)
+				newId = fileExplorerItemsMap.get(oldId);
+			break;
+		default:
+			break;
+		}
+		return newId;
+	}
 	
 }
