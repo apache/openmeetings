@@ -7,8 +7,8 @@ import org.red5.logging.Red5LoggerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.openmeetings.app.hibernate.beans.recording.WhiteBoardEvent;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.recording.WhiteBoardEvent;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class WhiteBoardEventDaoImpl {

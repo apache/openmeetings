@@ -15,8 +15,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.basic.LdapConfig;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

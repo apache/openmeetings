@@ -1,6 +1,6 @@
 package org.openmeetings.app.remote;
 
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 /**
  * 

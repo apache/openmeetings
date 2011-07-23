@@ -1,7 +1,7 @@
 package org.openmeetings.test.dao;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class AppointmentReminderTypDaoImplTest extends AbstractTestCase {

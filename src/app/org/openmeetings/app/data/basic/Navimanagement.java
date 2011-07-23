@@ -14,11 +14,11 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import org.openmeetings.app.hibernate.beans.basic.Naviglobal;
-import org.openmeetings.app.hibernate.beans.basic.Navimain;
-import org.openmeetings.app.hibernate.beans.basic.Navisub;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.basic.Naviglobal;
+import org.openmeetings.app.persistence.beans.basic.Navimain;
+import org.openmeetings.app.persistence.beans.basic.Navisub;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Navimanagement {

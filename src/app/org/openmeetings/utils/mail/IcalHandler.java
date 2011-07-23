@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
-import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

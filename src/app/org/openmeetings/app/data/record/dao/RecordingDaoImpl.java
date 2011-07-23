@@ -10,10 +10,10 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.conference.Roommanagement;
-import org.openmeetings.app.hibernate.beans.recording.Recording;
-import org.openmeetings.app.hibernate.beans.recording.RoomRecording;
-import org.openmeetings.app.hibernate.beans.user.Users;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.recording.Recording;
+import org.openmeetings.app.persistence.beans.recording.RoomRecording;
+import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RecordingDaoImpl {

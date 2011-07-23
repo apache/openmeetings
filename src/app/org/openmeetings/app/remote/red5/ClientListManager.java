@@ -9,7 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 
 public class ClientListManager {

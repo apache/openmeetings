@@ -1,6 +1,6 @@
 package org.openmeetings.app.data.file.dto;
 
-import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
+import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 
 /**
  * @author sebastianwagner

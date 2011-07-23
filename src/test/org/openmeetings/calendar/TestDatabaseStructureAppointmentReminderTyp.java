@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 
 
 public class TestDatabaseStructureAppointmentReminderTyp extends TestCase {

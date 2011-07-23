@@ -1,6 +1,6 @@
 package org.openmeetings.app.data.basic.rooms;
 
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
 
 public class RoomsList {
 	

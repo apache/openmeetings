@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.MainService;
 import org.openmeetings.app.remote.UserService;
 

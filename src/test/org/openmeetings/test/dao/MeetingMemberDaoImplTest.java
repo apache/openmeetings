@@ -6,9 +6,9 @@ import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class MeetingMemberDaoImplTest extends AbstractTestCase {

@@ -20,10 +20,10 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**

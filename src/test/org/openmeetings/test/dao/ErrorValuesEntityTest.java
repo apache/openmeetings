@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.persistence.EntityTransaction;
 
-import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
+import org.openmeetings.app.persistence.beans.basic.ErrorValues;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class ErrorValuesEntityTest extends AbstractTestCase {

@@ -7,8 +7,8 @@ import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.basic.ErrorManagement;
-import org.openmeetings.app.hibernate.beans.basic.ErrorValues;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.basic.ErrorValues;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**

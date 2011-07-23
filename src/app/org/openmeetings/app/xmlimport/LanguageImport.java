@@ -11,9 +11,9 @@ import org.dom4j.io.SAXReader;
 
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
-import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
-import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 

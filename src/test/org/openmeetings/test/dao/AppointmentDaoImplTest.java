@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 

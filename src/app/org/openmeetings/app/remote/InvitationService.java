@@ -13,9 +13,9 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.basic.Configuration;
-import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
-import org.openmeetings.app.hibernate.beans.invitation.Invitations;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 

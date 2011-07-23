@@ -14,7 +14,7 @@ import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 

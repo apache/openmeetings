@@ -2,7 +2,7 @@ package org.openmeetings.test.dao;
 
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class UsersDaoImplTest extends AbstractTestCase {

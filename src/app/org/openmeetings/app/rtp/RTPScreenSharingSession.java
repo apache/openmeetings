@@ -1,9 +1,9 @@
 package org.openmeetings.app.rtp;
 
 import java.util.HashMap;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
 /**
  * represents a ScreenSharingSession within Conference
  * @author o.becherer

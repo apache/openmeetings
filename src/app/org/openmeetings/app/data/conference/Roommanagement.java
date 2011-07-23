@@ -20,18 +20,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
-import org.openmeetings.app.hibernate.beans.rooms.*;
-import org.openmeetings.app.hibernate.beans.sip.OpenXGReturnObject;
-import org.openmeetings.app.hibernate.beans.user.*;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.rooms.*;
+import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
+import org.openmeetings.app.persistence.beans.user.*;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 

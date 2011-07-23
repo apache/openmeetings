@@ -10,9 +10,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.openmeetings.app.hibernate.beans.adresses.Adresses;
-import org.openmeetings.app.hibernate.beans.adresses.States;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.adresses.Adresses;
+import org.openmeetings.app.persistence.beans.adresses.States;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Addressmanagement {

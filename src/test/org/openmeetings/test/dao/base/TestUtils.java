@@ -11,8 +11,8 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 import junit.framework.Assert;
 

@@ -13,9 +13,9 @@ import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentCategoryDaoImpl {

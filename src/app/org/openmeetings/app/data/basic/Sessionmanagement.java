@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Date;
 import java.util.Calendar;
 
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;

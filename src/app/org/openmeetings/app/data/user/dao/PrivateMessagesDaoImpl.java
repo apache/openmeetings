@@ -9,10 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
-import org.openmeetings.app.hibernate.beans.user.PrivateMessages;
-import org.openmeetings.app.hibernate.beans.user.Users;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.PrivateMessages;
+import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

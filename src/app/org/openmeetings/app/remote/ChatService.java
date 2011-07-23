@@ -18,7 +18,7 @@ import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.EmoticonsManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;

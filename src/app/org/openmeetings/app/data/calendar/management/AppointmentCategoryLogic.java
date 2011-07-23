@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;

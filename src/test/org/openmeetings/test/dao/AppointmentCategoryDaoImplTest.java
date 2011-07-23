@@ -1,7 +1,7 @@
 package org.openmeetings.test.dao;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class AppointmentCategoryDaoImplTest extends AbstractTestCase {

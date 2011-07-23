@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
 import org.red5.io.IStreamableFileService;

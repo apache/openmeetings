@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
-import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
 import org.openmeetings.app.installation.ImportInitvalues;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Install extends VelocityViewServlet {

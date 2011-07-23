@@ -2,7 +2,7 @@ package org.openmeetings.app.data.flvrecord.beans;
 
 import java.util.List;
 
-import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 
 public class FLVRecorderObject {
 

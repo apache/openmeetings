@@ -11,7 +11,7 @@ import org.apache.mina.core.buffer.IoBuffer;
 //import org.openmeetings.app.data.flvrecord.FlvRecordingHelperDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 //import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingHelper;
-import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingMetaDelta;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.IStreamableFile;

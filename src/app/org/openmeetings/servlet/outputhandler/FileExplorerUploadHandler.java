@@ -17,7 +17,7 @@ import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
-import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
+import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.crypt.MD5;

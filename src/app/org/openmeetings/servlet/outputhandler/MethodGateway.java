@@ -14,9 +14,9 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.basic.RemoteSessionObject;
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
 import org.openmeetings.app.methodgateway.MethodGatewayResponse;
+import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.remote.MainService;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 

@@ -2,7 +2,7 @@ package org.openmeetings.test.userdata;
 
 import junit.framework.TestCase;
 
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.remote.MainService;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 

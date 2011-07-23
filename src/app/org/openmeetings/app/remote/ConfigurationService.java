@@ -6,7 +6,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
 
 /**
  * 

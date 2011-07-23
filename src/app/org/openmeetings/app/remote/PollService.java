@@ -17,7 +17,7 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.openmeetings.app.conference.videobeans.RoomPoll;
 import org.openmeetings.app.conference.videobeans.RoomPollAnswers;
 import org.openmeetings.app.conference.videobeans.PollType;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 

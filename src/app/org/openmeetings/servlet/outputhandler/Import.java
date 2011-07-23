@@ -24,10 +24,10 @@ import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.persistence.beans.user.*;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.xmlimport.LanguageImport;
 import org.openmeetings.app.xmlimport.UserImport;
-import org.openmeetings.app.hibernate.beans.user.*;
 import org.openmeetings.utils.math.CalendarPatterns;
 
 public class Import extends HttpServlet {

@@ -3,7 +3,7 @@ package org.openmeetings.test.adresses;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openmeetings.app.data.user.Emailmanagement;
-import org.openmeetings.app.hibernate.beans.adresses.Adresses;
+import org.openmeetings.app.persistence.beans.adresses.Adresses;
 
 import junit.framework.TestCase;
 

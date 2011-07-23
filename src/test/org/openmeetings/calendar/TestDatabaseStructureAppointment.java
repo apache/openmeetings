@@ -22,7 +22,7 @@ import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.remote.CalendarService;
 
 

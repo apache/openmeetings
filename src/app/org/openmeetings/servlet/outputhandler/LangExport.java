@@ -23,9 +23,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
-import org.openmeetings.app.hibernate.beans.lang.FieldLanguage;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
+import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 

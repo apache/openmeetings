@@ -3,7 +3,7 @@ package org.openmeetings.app.conference.videobeans;
 import java.util.List;
 import java.util.Date;
 
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
 
 public class RoomPoll {
 	

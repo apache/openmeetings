@@ -8,7 +8,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentCategoryService {

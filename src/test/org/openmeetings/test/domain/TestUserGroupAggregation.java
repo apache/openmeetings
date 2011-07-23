@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openmeetings.app.data.user.Organisationmanagement;
-import org.openmeetings.app.hibernate.beans.domain.Organisation;;
+import org.openmeetings.app.persistence.beans.domain.Organisation;
 
 public class TestUserGroupAggregation extends TestCase {
 	

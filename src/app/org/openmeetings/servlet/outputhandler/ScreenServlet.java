@@ -31,12 +31,12 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.basic.Configuration;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
 import org.openmeetings.utils.image.ImageUtility;
 import org.openmeetings.utils.image.ZipUtility;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 
+import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 

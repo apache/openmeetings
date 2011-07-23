@@ -11,9 +11,9 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.rooms.RoomModerators;
-import org.openmeetings.app.hibernate.beans.user.Users;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
+import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

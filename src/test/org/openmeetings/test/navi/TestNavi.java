@@ -4,11 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.basic.*;
+import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.MainService;
-import org.openmeetings.app.hibernate.beans.basic.*;
-import org.openmeetings.app.hibernate.beans.domain.Organisation_Users;
 import junit.framework.TestCase;
 
 public class TestNavi extends TestCase {

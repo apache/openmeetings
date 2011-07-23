@@ -2,9 +2,9 @@ package org.openmeetings.app.data.conference;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.FeedbackTemplate;
 import org.openmeetings.utils.mail.MailHandler;

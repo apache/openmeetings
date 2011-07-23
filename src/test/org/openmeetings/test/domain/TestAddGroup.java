@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 
 import junit.framework.TestCase;

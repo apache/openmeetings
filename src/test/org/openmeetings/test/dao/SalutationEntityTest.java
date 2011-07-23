@@ -6,8 +6,8 @@ import java.util.Date;
 import javax.persistence.EntityTransaction;
 
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
-import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
-import org.openmeetings.app.hibernate.beans.user.Salutations;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
+import org.openmeetings.app.persistence.beans.user.Salutations;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 

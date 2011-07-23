@@ -15,11 +15,11 @@ import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
-import org.openmeetings.app.hibernate.beans.rooms.RoomTypes;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
+import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class CalendarService {

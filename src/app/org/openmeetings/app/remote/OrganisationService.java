@@ -10,7 +10,7 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
-import org.openmeetings.app.hibernate.beans.domain.Organisation;
+import org.openmeetings.app.persistence.beans.domain.Organisation;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**

@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.openmeetings.app.hibernate.beans.logs.ConferenceLog;
-import org.openmeetings.app.hibernate.beans.logs.ConferenceLogType;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.logs.ConferenceLog;
+import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ConferenceLogDaoImpl {

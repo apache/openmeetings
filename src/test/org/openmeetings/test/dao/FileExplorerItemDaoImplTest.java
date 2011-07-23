@@ -8,9 +8,9 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
-import org.openmeetings.app.hibernate.beans.files.FileExplorerItem;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class FileExplorerItemDaoImplTest extends AbstractTestCase {

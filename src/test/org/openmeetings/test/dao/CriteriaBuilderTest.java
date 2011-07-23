@@ -13,7 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.openmeetings.app.hibernate.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
 
 
 public class CriteriaBuilderTest extends AbstractTestCase {

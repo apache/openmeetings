@@ -7,7 +7,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openmeetings.app.data.conference.Roommanagement;
-import org.openmeetings.app.hibernate.beans.rooms.*;
+import org.openmeetings.app.persistence.beans.rooms.*;
 
 public class GetRoomByOrganisations extends TestCase {
 	

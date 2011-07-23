@@ -1,7 +1,7 @@
 package org.openmeetings.test.userdata;
 
-import org.openmeetings.app.hibernate.beans.basic.Sessiondata;
-import org.openmeetings.app.hibernate.beans.user.Users;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.MainService;
 
 import junit.framework.TestCase;

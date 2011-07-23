@@ -2,7 +2,7 @@ package org.openmeetings.axis.services;
 
 import java.util.Date;
 
-import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 
 
 public class FLVRecordingReturn {

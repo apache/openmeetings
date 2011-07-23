@@ -25,14 +25,14 @@ import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentCategory;
-import org.openmeetings.app.hibernate.beans.calendar.AppointmentReminderTyps;
-import org.openmeetings.app.hibernate.beans.calendar.MeetingMember;
-import org.openmeetings.app.hibernate.beans.rooms.Rooms;
-import org.openmeetings.app.hibernate.beans.user.Users;
-import org.openmeetings.app.hibernate.utils.HibernateUtil;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
+import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.persistence.utils.HibernateUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentDaoImpl {

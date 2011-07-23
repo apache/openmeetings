@@ -1,7 +1,7 @@
 package org.openmeetings.test.dao;
 
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
-import org.openmeetings.app.hibernate.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 

@@ -4,8 +4,8 @@ import java.util.Date;
 
 import javax.persistence.EntityTransaction;
 
-import org.openmeetings.app.hibernate.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.hibernate.beans.lang.Fieldvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 import org.openmeetings.test.dao.base.AbstractTestCase;
 
 public class FieldvaluesEntityTest extends AbstractTestCase {

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.remote.CalendarService;
 
 

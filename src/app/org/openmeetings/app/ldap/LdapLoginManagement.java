@@ -14,12 +14,12 @@ import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.hibernate.beans.adresses.States;
-import org.openmeetings.app.hibernate.beans.basic.Configuration;
-import org.openmeetings.app.hibernate.beans.basic.LdapConfig;
-import org.openmeetings.app.hibernate.beans.recording.RoomClient;
-import org.openmeetings.app.hibernate.beans.user.Users;
 import org.openmeetings.app.ldap.config.ConfigReader;
+import org.openmeetings.app.persistence.beans.adresses.States;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.LdapConfig;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import org.red5.logging.Red5LoggerFactory;
