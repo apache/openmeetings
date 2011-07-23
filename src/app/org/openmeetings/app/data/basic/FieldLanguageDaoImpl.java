@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
@@ -38,8 +38,8 @@ public class FieldLanguageDaoImpl {
 
 	public Long addLanguage(String langName, Boolean langRtl) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -54,7 +54,7 @@ public class FieldLanguageDaoImpl {
 			Long languages_id = fl.getLanguage_id();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return languages_id;
 		} catch (Exception ex2) {
@@ -66,15 +66,15 @@ public class FieldLanguageDaoImpl {
  
 	public void emptyFieldLanguage() {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
 //			 TODO delete hql query doesn't work, must be repared
 			session.createQuery("delete from FieldLanguage");
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ",ex2);
 		}
@@ -96,8 +96,8 @@ public class FieldLanguageDaoImpl {
 
 	
 	private void updateLanguage(FieldLanguage fl) throws Exception {
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		if (fl.getLanguage_id() == null) {
@@ -108,7 +108,7 @@ public class FieldLanguageDaoImpl {
 		    }
 		}
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 	}	
 
 
@@ -117,8 +117,8 @@ public class FieldLanguageDaoImpl {
 			String hql = "select c from FieldLanguage as c " +
 					"WHERE c.deleted <> :deleted " +
 					"AND c.language_id = :language_id";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -130,7 +130,7 @@ public class FieldLanguageDaoImpl {
 	        } catch (NoResultException ex) {
 	        }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return fl;
 		} catch (Exception ex2) {
 			log.error("[getLanguageById]: ",ex2);
@@ -142,15 +142,15 @@ public class FieldLanguageDaoImpl {
 		try {
 			String hql = "select c from FieldLanguage as c " +
 					"WHERE c.deleted <> :deleted ";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("deleted", "true");
 			List<FieldLanguage> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getLanguages]: ",ex2);

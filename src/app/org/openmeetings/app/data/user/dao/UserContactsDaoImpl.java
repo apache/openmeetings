@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -40,8 +40,8 @@ public class UserContactsDaoImpl {
 			userContact.setPending(pending);
 			userContact.setHash(hash);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -49,7 +49,7 @@ public class UserContactsDaoImpl {
 			Long userContactId = userContact.getUserContactId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userContactId;			
 		} catch (Exception e) {
@@ -63,8 +63,8 @@ public class UserContactsDaoImpl {
 			
 			userContact.setInserted(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -72,7 +72,7 @@ public class UserContactsDaoImpl {
 			Long userContactId = userContact.getUserContactId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userContactId;			
 		} catch (Exception e) {
@@ -86,8 +86,8 @@ public class UserContactsDaoImpl {
 			
 			String hql = "delete from UserContacts where userContactId = :userContactId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -96,7 +96,7 @@ public class UserContactsDaoImpl {
 	        int rowCount = query.executeUpdate();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return rowCount;			
 		} catch (Exception e) {
@@ -110,8 +110,8 @@ public class UserContactsDaoImpl {
 			
 			String hql = "delete from UserContacts where owner.user_id = :ownerId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -120,7 +120,7 @@ public class UserContactsDaoImpl {
 	        int rowCount = query.executeUpdate();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return rowCount;			
 		} catch (Exception e) {
@@ -135,8 +135,8 @@ public class UserContactsDaoImpl {
 			String hql = "select count(c.userContactId) from UserContacts c " +
 							"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -144,7 +144,7 @@ public class UserContactsDaoImpl {
 			query.setParameter("ownerId", ownerId);
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			log.info("checkUserContacts"+(Long)ll.get(0));
 			
@@ -162,15 +162,15 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.hash like :hash ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			query.setParameter("hash", hash);
 			List<UserContacts> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -191,8 +191,8 @@ public class UserContactsDaoImpl {
 							"AND c.pending = :pending " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -200,7 +200,7 @@ public class UserContactsDaoImpl {
 			query.setParameter("pending", pending);
 			List<UserContacts> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -218,8 +218,8 @@ public class UserContactsDaoImpl {
 							"AND c.shareCalendar = :shareCalendar " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -227,7 +227,7 @@ public class UserContactsDaoImpl {
 			query.setParameter("shareCalendar", shareCalendar);
 			List<UserContacts> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -245,8 +245,8 @@ public class UserContactsDaoImpl {
 							"AND c.pending = :pending " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -254,7 +254,7 @@ public class UserContactsDaoImpl {
 			query.setParameter("pending", pending);
 			List<UserContacts> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -270,8 +270,8 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.userContactId = :userContactId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -282,7 +282,7 @@ public class UserContactsDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userContacts;
 			
@@ -297,14 +297,14 @@ public class UserContactsDaoImpl {
 			
 			String hql = "select c from UserContacts c ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			List<UserContacts> userContacts = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userContacts;
 			
@@ -325,8 +325,8 @@ public class UserContactsDaoImpl {
 			userContacts.setPending(pending);
 			userContacts.setUpdated(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (userContacts.getUserContactId() == 0) {
@@ -337,7 +337,7 @@ public class UserContactsDaoImpl {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userContactId;
 			
@@ -351,8 +351,8 @@ public class UserContactsDaoImpl {
 		try {
 			userContacts.setUpdated(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (userContacts.getUserContactId() == 0) {
@@ -363,7 +363,7 @@ public class UserContactsDaoImpl {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception e) {
 			log.error("[updateContact]",e);

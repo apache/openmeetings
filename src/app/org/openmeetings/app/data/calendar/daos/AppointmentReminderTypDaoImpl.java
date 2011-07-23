@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentReminderTypDaoImpl {
@@ -40,8 +40,8 @@ public class AppointmentReminderTypDaoImpl {
 					"WHERE app.deleted <> :deleted " +
 					"AND app.typId = :typId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -54,7 +54,7 @@ public class AppointmentReminderTypDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appointmentReminderTyps;
 		} catch (Exception ex2) {
@@ -72,8 +72,8 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -86,7 +86,7 @@ public class AppointmentReminderTypDaoImpl {
 			}
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return typId;
 		} catch (Exception ex2) {
 			log.error("[updateAppointmentReminderTyps]: ",ex2);
@@ -106,8 +106,8 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setComment(comment);
 			
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -115,7 +115,7 @@ public class AppointmentReminderTypDaoImpl {
 			Long category_id = ac.getTypId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return category_id;
 		} catch (Exception ex2) {
@@ -138,8 +138,8 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setUpdatetime(new Date());
 			ac.setDeleted("true");
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (ac.getTypId() == null) {
@@ -151,7 +151,7 @@ public class AppointmentReminderTypDaoImpl {
 			}
 						
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return typId;
 		} catch (Exception ex2) {
 			log.error("[deleteAppointmentReminderTyp]: " + ex2);
@@ -167,8 +167,8 @@ public class AppointmentReminderTypDaoImpl {
 			String hql = "select a from AppointmentReminderTyps a " +
 					"WHERE a.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -177,7 +177,7 @@ public class AppointmentReminderTypDaoImpl {
 				
 			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {

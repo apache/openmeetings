@@ -10,7 +10,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.RegisterUserTemplate;
 
@@ -413,8 +413,8 @@ public class Emailmanagement {
 		try {
 			if (email.length()==0) return true;
 			log.debug("checkUserMail: " + email);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted <> :deleted");
@@ -423,7 +423,7 @@ public class Emailmanagement {
 			int count = query.getResultList().size();
 			log.debug("size: " + count);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (count > 0) {
 				return false;

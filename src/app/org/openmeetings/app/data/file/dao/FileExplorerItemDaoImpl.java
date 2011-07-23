@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -62,15 +62,15 @@ public class FileExplorerItemDaoImpl {
             fileItem.setExternalFileId(externalFileId);
             fileItem.setExternalType(externalType);
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
 			fileItem = session.merge(fileItem);
 			Long fileItemId = fileItem.getFileExplorerItemId();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             log.debug(".add(): file " + fileName + " added as " + fileItemId);
             return fileItemId;
@@ -83,15 +83,15 @@ public class FileExplorerItemDaoImpl {
     public Long addFileExplorerItem(FileExplorerItem fileItem) {
         try {
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
 			fileItem = session.merge(fileItem);
 			Long fileItemId = fileItem.getFileExplorerItemId();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             return fileItemId;
         } catch (Exception ex2) {
@@ -109,8 +109,8 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -120,7 +120,7 @@ public class FileExplorerItemDaoImpl {
 			
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -141,8 +141,8 @@ public class FileExplorerItemDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -152,7 +152,7 @@ public class FileExplorerItemDaoImpl {
 			
 	        FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return fileExplorerList;
         } catch (Exception ex2) {
@@ -172,8 +172,8 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -183,7 +183,7 @@ public class FileExplorerItemDaoImpl {
 			
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 
             return fileExplorerList;
@@ -203,8 +203,8 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -213,7 +213,7 @@ public class FileExplorerItemDaoImpl {
 			
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -230,8 +230,8 @@ public class FileExplorerItemDaoImpl {
             String hql = "SELECT c FROM FileExplorerItem c "
                     + "WHERE c.fileExplorerItemId = :fileExplorerItemId";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -243,7 +243,7 @@ public class FileExplorerItemDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -261,8 +261,8 @@ public class FileExplorerItemDaoImpl {
                     + "WHERE c.externalFileId = :externalFileId " +
             		"AND c.externalType LIKE :externalType";
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -275,7 +275,7 @@ public class FileExplorerItemDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -291,8 +291,8 @@ public class FileExplorerItemDaoImpl {
 
             String hql = "SELECT c FROM FileExplorerItem c ";
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -300,7 +300,7 @@ public class FileExplorerItemDaoImpl {
             List<FileExplorerItem> fileExplorerList = query.getResultList();
             
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -323,8 +323,8 @@ public class FileExplorerItemDaoImpl {
             fId.setDeleted("true");
             fId.setUpdated(new Date());
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
@@ -336,7 +336,7 @@ public class FileExplorerItemDaoImpl {
 			}
 			session.flush();
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItem]: ", ex2);
@@ -358,8 +358,8 @@ public class FileExplorerItemDaoImpl {
             fId.setDeleted("true");
             fId.setUpdated(new Date());
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
@@ -371,7 +371,7 @@ public class FileExplorerItemDaoImpl {
 			}
             session.flush();
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
@@ -393,8 +393,8 @@ public class FileExplorerItemDaoImpl {
             fId.setFileName(fileName);
             fId.setUpdated(new Date());
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
@@ -406,7 +406,7 @@ public class FileExplorerItemDaoImpl {
 			}
             session.flush();
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
@@ -418,8 +418,8 @@ public class FileExplorerItemDaoImpl {
         try {
             // fId.setUpdated(new Date());
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
@@ -431,7 +431,7 @@ public class FileExplorerItemDaoImpl {
 			}
             session.flush();
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
         } catch (Exception ex2) {
             log.error("[updateFileOrFolder]: ", ex2);
@@ -469,8 +469,8 @@ public class FileExplorerItemDaoImpl {
 
             fId.setUpdated(new Date());
 
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
@@ -482,7 +482,7 @@ public class FileExplorerItemDaoImpl {
 			}
             session.flush();
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
 
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);

@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.recording.RecordingClient;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RecordingClientDaoImpl {
@@ -35,8 +35,8 @@ public class RecordingClientDaoImpl {
 			String hql = "select r from RecordingClient r " +
 					"WHERE r.roomRecordingId = :roomRecordingId ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -44,7 +44,7 @@ public class RecordingClientDaoImpl {
 			
 			List<RecordingClient> recordingClients = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return recordingClients;
 			
@@ -62,8 +62,8 @@ public class RecordingClientDaoImpl {
 				recordingClient.setRcl(RoomClientDaoImpl.getInstance().getAndAddRoomClientByPublicSID(recordingClient.getRcl()));
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -74,7 +74,7 @@ public class RecordingClientDaoImpl {
 			session.refresh(recordingClient);
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return recordingClientId;
 		} catch (Exception ex2) {

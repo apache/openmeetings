@@ -16,7 +16,7 @@ import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -56,8 +56,8 @@ public class LdapConfigDaoImpl {
 			
 			log.debug("addLdapConfig :2: "+insertedby);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -65,7 +65,7 @@ public class LdapConfigDaoImpl {
 			Long ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -86,8 +86,8 @@ public class LdapConfigDaoImpl {
 			ldapConfig.setDeleted("false");
 			ldapConfig.setInserted(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -95,7 +95,7 @@ public class LdapConfigDaoImpl {
 			Long ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -133,8 +133,8 @@ public class LdapConfigDaoImpl {
 			
 			log.debug("updateLdapConfig :2: "+updatedby);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -142,7 +142,7 @@ public class LdapConfigDaoImpl {
 			ldapConfigId = ldapConfig.getLdapConfigId();
 	
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ldapConfigId;
 			
@@ -159,8 +159,8 @@ public class LdapConfigDaoImpl {
 				       	"WHERE c.ldapConfigId = :ldapConfigId " +
 				       	"AND c.deleted LIKE :deleted";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -175,7 +175,7 @@ public class LdapConfigDaoImpl {
 		    }
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ldapConfig;
 			
@@ -187,8 +187,8 @@ public class LdapConfigDaoImpl {
 	
 	public List<LdapConfig> getLdapConfigs(int start, int max, String orderby, boolean asc) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -207,7 +207,7 @@ public class LdapConfigDaoImpl {
 			q.setMaxResults(max);
 			List<LdapConfig> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);		
+			PersistenceSessionUtil.closeSession(idf);		
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getLdapConfigs]" ,ex2);
@@ -219,14 +219,14 @@ public class LdapConfigDaoImpl {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'"); 
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.debug("selectMaxFromLdapConfig"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
@@ -244,8 +244,8 @@ public class LdapConfigDaoImpl {
 				return null;
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -253,7 +253,7 @@ public class LdapConfigDaoImpl {
 			session.remove(ldapConfig);
 	
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ldapConfigId;
 			
@@ -272,15 +272,15 @@ public class LdapConfigDaoImpl {
 					"AND c.isActive = :isActive ";
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("isActive", true);
 			List<LdapConfig> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;				
 		} catch (Exception ex2) {
@@ -297,14 +297,14 @@ public class LdapConfigDaoImpl {
 					"where c.deleted LIKE 'false' ";
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			List<LdapConfig> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;				
 		} catch (Exception ex2) {

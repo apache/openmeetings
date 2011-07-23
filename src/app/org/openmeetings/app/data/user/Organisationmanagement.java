@@ -25,7 +25,7 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
@@ -72,8 +72,8 @@ public class Organisationmanagement {
 	 */
 	public Long addOrganisation(String orgname, long user_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Organisation org = new Organisation();
@@ -85,7 +85,7 @@ public class Organisationmanagement {
 			session.flush();
 			long id = org.getOrganisation_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return id;
 		} catch (Exception ex2) {
 			log.error("[addOrganisation]" ,ex2);
@@ -95,8 +95,8 @@ public class Organisationmanagement {
 	
 	public Long addOrganisationObj(Organisation org) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			org.setStarttime(new Date());
@@ -104,7 +104,7 @@ public class Organisationmanagement {
 			session.flush();
 			long id = org.getOrganisation_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return id;
 		} catch (Exception ex2) {
 			log.error("[addOrganisationObj]" ,ex2);
@@ -144,8 +144,8 @@ public class Organisationmanagement {
 	 */
 	public List<Organisation> getOrganisations(int start ,int max, String orderby, boolean asc) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -164,7 +164,7 @@ public class Organisationmanagement {
 			q.setMaxResults(max);
 			List<Organisation> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getOrganisations]" ,ex2);
@@ -175,8 +175,8 @@ public class Organisationmanagement {
 	public List<Organisation> getOrganisations(Long user_level) {
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -187,7 +187,7 @@ public class Organisationmanagement {
 				TypedQuery<Organisation> q = session.createQuery(cq);
 				List<Organisation> ll = q.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return ll;
 			} else {
 				log.error("[getOrganisations] noPremission");
@@ -206,14 +206,14 @@ public class Organisationmanagement {
 	private Long selectMaxFromOrganisations(){
 		try {
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select max(c.organisation_id) from Organisation c where c.deleted = 'false'"); 
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.debug("selectMaxFromOrganisations"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
@@ -238,8 +238,8 @@ public class Organisationmanagement {
 			org.setName(orgname);
 			org.setUpdatedby(users_id);
 			org.setUpdatetime(new Date());
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (org.getOrganisation_id() == null) {
@@ -251,7 +251,7 @@ public class Organisationmanagement {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return org.getOrganisation_id();
 		} catch (Exception err){
@@ -370,8 +370,8 @@ public class Organisationmanagement {
 	 */
 	public Organisation getOrganisationById(long organisation_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id AND c.deleted <> :deleted");
@@ -384,7 +384,7 @@ public class Organisationmanagement {
                 //o = null;
             }
             tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return o;
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
@@ -394,8 +394,8 @@ public class Organisationmanagement {
 	
 	public Organisation getOrganisationByIdBackup(long organisation_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
@@ -407,7 +407,7 @@ public class Organisationmanagement {
                 //o = null;
             }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return o;
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]",ex2);
@@ -417,8 +417,8 @@ public class Organisationmanagement {
 	
 	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
@@ -430,7 +430,7 @@ public class Organisationmanagement {
                 //o = null;
             }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return o;
 		} catch (Exception ex2) {
 			log.error("[getOrganisationByIdAndDeleted]",ex2);
@@ -463,8 +463,8 @@ public class Organisationmanagement {
 				org.setDeleted("true");
 				org.setUpdatedby(updatedby);
 				
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				if (org.getOrganisation_id() == null) {
@@ -475,7 +475,7 @@ public class Organisationmanagement {
 				    }
 				}
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				
 				return org.getOrganisation_id();
 
@@ -499,8 +499,8 @@ public class Organisationmanagement {
 				Organisation org = this.getOrganisationById(organisation_id);
 				log.debug("org: " + org.getName());
 			
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Organisation_Users orgUser = new Organisation_Users();
@@ -516,7 +516,7 @@ public class Organisationmanagement {
 				
 				
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return id;
 			} else {
 				return -35L;
@@ -529,8 +529,8 @@ public class Organisationmanagement {
 	
 	public Long addOrganisationUserObj(Organisation_Users orgUser) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			orgUser.setStarttime(new Date());
@@ -540,7 +540,7 @@ public class Organisationmanagement {
 			long id = orgUser.getOrganisation_users_id();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return id;
 		} catch (Exception ex2) {
 			log.error("[addUserToOrganisation]",ex2);
@@ -553,8 +553,8 @@ public class Organisationmanagement {
 			
 			log.debug("getOrganisation_UserByUserAndOrganisation "+user_id+ "  "+organisation_id);
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query q = session.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id AND c.user_id = :user_id");
@@ -562,7 +562,7 @@ public class Organisationmanagement {
 			q.setParameter("user_id", user_id);
 			List<Organisation_Users> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.debug("getOrganisation_UserByUserAndOrganisation: "+ll.size());
 			if (ll.size()>0){
 				return (Organisation_Users) ll.get(0);
@@ -585,8 +585,8 @@ public class Organisationmanagement {
 				orgUser.setDeleted("true");
 				orgUser.setUpdatetime(new Date());
 				
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				if (orgUser.getOrganisation_users_id() == null) {
@@ -597,7 +597,7 @@ public class Organisationmanagement {
 				    }
 				}
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return orgUser.getOrganisation_users_id();
 			} else { 
 				log.error("[deleteUserFromOrganisation] authorization required");
@@ -640,8 +640,8 @@ public class Organisationmanagement {
 	
 	private Long selectMaxUsersByOrganisationId(long organisation_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -650,7 +650,7 @@ public class Organisationmanagement {
 			
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.debug("selectMaxUsersByOrganisationId"+ll.size());
 			return new Long(ll.size());	
 			
@@ -673,8 +673,8 @@ public class Organisationmanagement {
 	public List getUsersByOrganisationId(long organisation_id, int start, int max, String orderby, boolean asc){
 		try {
 				//get all users
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				String hql = "select c from Organisation_Users c " +
@@ -697,7 +697,7 @@ public class Organisationmanagement {
 				q.setMaxResults(max);
 				List<Organisation_Users> userOrg = q.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				List<Users> userL = new LinkedList<Users>();
 				for (Iterator<Organisation_Users> it = userOrg.iterator();it.hasNext();){
 					Organisation_Users us = (Organisation_Users) it.next();
@@ -728,15 +728,15 @@ public class Organisationmanagement {
 		try {
 
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query q = session.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id");
 			q.setParameter("organisation_id", organisation_id);
 			List<Organisation_Users> userOrg = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			List<Users> userL = new LinkedList<Users>();
 			for (Iterator<Organisation_Users> it = userOrg.iterator();it.hasNext();){
 				Organisation_Users us = it.next();
@@ -774,8 +774,8 @@ public class Organisationmanagement {
 	public List getOrganisationsByUserId(long user_level, long user_id, int start, int max, String orderby, boolean asc){
 		try {
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)){
-					Object idf = HibernateUtil.createSession();
-					EntityManager session = HibernateUtil.getSession();
+					Object idf = PersistenceSessionUtil.createSession();
+					EntityManager session = PersistenceSessionUtil.getSession();
 					EntityTransaction tx = session.getTransaction();
 					tx.begin();
 					String hql = "select c from Organisation_Users c " +
@@ -788,7 +788,7 @@ public class Organisationmanagement {
 					q.setMaxResults(max);
 					List<Organisation_Users> userOrgIds = q.getResultList();
 					tx.commit();
-					HibernateUtil.closeSession(idf);
+					PersistenceSessionUtil.closeSession(idf);
 					
 					LinkedList<Organisation> userOrg = new LinkedList<Organisation>();
 					

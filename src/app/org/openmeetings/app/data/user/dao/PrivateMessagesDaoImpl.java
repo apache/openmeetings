@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -53,8 +53,8 @@ public class PrivateMessagesDaoImpl {
 			privateMessage.setIsContactRequest(isContactRequest);
 			privateMessage.setUserContactId(userContactId);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -62,7 +62,7 @@ public class PrivateMessagesDaoImpl {
 			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageId;			
 		} catch (Exception e) {
@@ -74,8 +74,8 @@ public class PrivateMessagesDaoImpl {
 	public Long addPrivateMessageObj(PrivateMessages privateMessage) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -83,7 +83,7 @@ public class PrivateMessagesDaoImpl {
 			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageId;			
 		} catch (Exception e) {
@@ -97,15 +97,15 @@ public class PrivateMessagesDaoImpl {
 			
 			String hql = "select c from PrivateMessages c ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			
 			List<PrivateMessages> privateMessages = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessages;
 			
@@ -121,8 +121,8 @@ public class PrivateMessagesDaoImpl {
 			String hql = "select c from PrivateMessages c " +
 						"where c.privateMessageId = :privateMessageId ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -134,7 +134,7 @@ public class PrivateMessagesDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessage;
 			
@@ -147,8 +147,8 @@ public class PrivateMessagesDaoImpl {
 	public void updatePrivateMessages(PrivateMessages privateMessage) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -161,7 +161,7 @@ public class PrivateMessagesDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception e) {
 			log.error("[updatePrivateMessages]",e);
@@ -188,8 +188,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -200,7 +200,7 @@ public class PrivateMessagesDaoImpl {
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -239,8 +239,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -254,7 +254,7 @@ public class PrivateMessagesDaoImpl {
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -284,8 +284,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -297,7 +297,7 @@ public class PrivateMessagesDaoImpl {
 			}
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -334,8 +334,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -347,7 +347,7 @@ public class PrivateMessagesDaoImpl {
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -374,8 +374,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -385,7 +385,7 @@ public class PrivateMessagesDaoImpl {
 			}
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -424,8 +424,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -438,7 +438,7 @@ public class PrivateMessagesDaoImpl {
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -467,8 +467,8 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -479,7 +479,7 @@ public class PrivateMessagesDaoImpl {
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -521,8 +521,8 @@ public class PrivateMessagesDaoImpl {
 			
 			log.debug("privateMessageFolderId "+privateMessageFolderId);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -536,7 +536,7 @@ public class PrivateMessagesDaoImpl {
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -553,8 +553,8 @@ public class PrivateMessagesDaoImpl {
 						"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -584,7 +584,7 @@ public class PrivateMessagesDaoImpl {
 			
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			
 			
@@ -608,8 +608,8 @@ public class PrivateMessagesDaoImpl {
 						"SET c.isRead = :isRead " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -637,7 +637,7 @@ public class PrivateMessagesDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -652,8 +652,8 @@ public class PrivateMessagesDaoImpl {
 						"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -681,7 +681,7 @@ public class PrivateMessagesDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -695,8 +695,8 @@ public class PrivateMessagesDaoImpl {
 			String hql = "DELETE PrivateMessages c " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -719,7 +719,7 @@ public class PrivateMessagesDaoImpl {
 //			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -734,15 +734,15 @@ public class PrivateMessagesDaoImpl {
 						"where c.room.rooms_id = :roomId ";
 			
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			query.setParameter("roomId", roomId);
 			List<PrivateMessages> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {

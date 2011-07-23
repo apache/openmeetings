@@ -10,7 +10,7 @@ import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.SOAPLogin;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -42,8 +42,8 @@ public class SOAPLoginDaoImpl {
 			
 			String hash = ManageCryptStyle.getInstance().getInstanceOfCrypt().createPassPhrase(thistime);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -65,7 +65,7 @@ public class SOAPLoginDaoImpl {
 			Long soapLoginId = soapLogin.getSoapLoginId(); 
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (soapLoginId > 0) {
 				return hash;
@@ -84,15 +84,15 @@ public class SOAPLoginDaoImpl {
 		try {
 			String hql = "select sl from SOAPLogin as sl " +
 							"WHERE sl.hash LIKE :hash";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("hash", hash);
 			List<SOAPLogin> sList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (sList.size() > 1) {
 				throw new Exception ("there are more then one SOAPLogin with identical hash! "+hash);
@@ -112,8 +112,8 @@ public class SOAPLoginDaoImpl {
 	public void updateSOAPLogin(SOAPLogin soapLogin) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -126,7 +126,7 @@ public class SOAPLoginDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateSOAPLogin]: ",ex2);

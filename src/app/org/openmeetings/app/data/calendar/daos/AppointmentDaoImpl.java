@@ -32,7 +32,7 @@ import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentDaoImpl {
@@ -70,8 +70,8 @@ public class AppointmentDaoImpl {
 					"WHERE a.deleted <> :deleted " +
 					"AND a.room.rooms_id = :room_id ";
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 			tx.begin();
 		Query query = session.createQuery(hql);
@@ -82,7 +82,7 @@ public class AppointmentDaoImpl {
 		List<Appointment> appoint = query.getResultList();
 		
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		if (appoint.size() > 0) {
 			return appoint.get(0);
@@ -99,8 +99,8 @@ public class AppointmentDaoImpl {
 					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentId = :appointmentId ";
 					
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -115,7 +115,7 @@ public class AppointmentDaoImpl {
 		    }
 		    session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appoint;
 		} catch (Exception ex2) {
@@ -130,8 +130,8 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a " +
 					"WHERE a.appointmentId = :appointmentId ";
 					
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -144,7 +144,7 @@ public class AppointmentDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appoint;
 		} catch (Exception ex2) {
@@ -159,8 +159,8 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a " +
 					"WHERE a.deleted <> :deleted ";
 					
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -168,7 +168,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> appointList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			for (Appointment appointment : appointList) {
 			
@@ -254,8 +254,8 @@ public class AppointmentDaoImpl {
 			ap.setRoom(room);
 			ap.setIsConnectedEvent(isConnectedEvent);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -264,7 +264,7 @@ public class AppointmentDaoImpl {
 			Long appointment_id = ap.getAppointmentId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appointment_id;
 		} catch (Exception ex2) {
@@ -278,8 +278,8 @@ public class AppointmentDaoImpl {
 			
 			ap.setStarttime(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -288,7 +288,7 @@ public class AppointmentDaoImpl {
 			Long appointment_id = ap.getAppointmentId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appointment_id;
 		} catch (Exception ex2) {
@@ -302,8 +302,8 @@ public class AppointmentDaoImpl {
 	public Long updateAppointment(Appointment appointment) {
 		if (appointment.getAppointmentId() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				if (appointment.getAppointmentId() == null) {
@@ -314,7 +314,7 @@ public class AppointmentDaoImpl {
 				    }
 				}
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return appointment.getAppointmentId();
 			} catch (Exception ex2) {
 				log.error("[updateAppointment] ",ex2);
@@ -331,15 +331,15 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a " +
 							"WHERE a.room.rooms_id = :roomId ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			query.setParameter("roomId", roomId);
 			List<Appointment> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -358,8 +358,8 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> appointments = this.getAppointmentsByRoomId(ap.getRoom().getRooms_id());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -383,7 +383,7 @@ public class AppointmentDaoImpl {
 			}
 			
 			tx.commit();
-		    HibernateUtil.closeSession(idf);
+		    PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception err) {
 			log.error("[updateConnectedEvents]",err);
@@ -414,8 +414,8 @@ public class AppointmentDaoImpl {
 			
 			log.debug("updateConnectedEvents 3 "+appointments.size());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -460,7 +460,7 @@ public class AppointmentDaoImpl {
 			}
 			
 			tx.commit();
-		    HibernateUtil.closeSession(idf);
+		    PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception err) {
 			log.error("[updateConnectedEvents]",err);
@@ -539,8 +539,8 @@ public class AppointmentDaoImpl {
 			//ap.setUserId(UsersDaoImpl.getInstance().getUser(userId));
 			ap.setAppointmentCategory(appointmentCategory);
 						
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -553,7 +553,7 @@ public class AppointmentDaoImpl {
 			}
 
 			tx.commit();
-		    HibernateUtil.closeSession(idf);
+		    PersistenceSessionUtil.closeSession(idf);
 		    
 		    // Adding Invitor as Meetingmember
 			Users user = Usermanagement.getInstance().getUserById(users_id); 
@@ -683,8 +683,8 @@ public class AppointmentDaoImpl {
 		 	ap.setAppointmentEndtime(appointmentend);
 			ap.setUpdatetime(new Date());
 						
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -697,7 +697,7 @@ public class AppointmentDaoImpl {
 			}
 
 			tx.commit();
-		    HibernateUtil.closeSession(idf);
+		    PersistenceSessionUtil.closeSession(idf);
 		    
 		    
 		    List<MeetingMember> meetingsRemoteMembers = MeetingMemberDaoImpl.getInstance().getMeetingMemberByAppointmentId(ap.getAppointmentId());
@@ -732,8 +732,8 @@ public class AppointmentDaoImpl {
 			app.setUpdatetime(new Date());
 			app.setDeleted("true");
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (app.getAppointmentId() == null) {
@@ -745,7 +745,7 @@ public class AppointmentDaoImpl {
 			}
 						
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return appointmentId;
 		} catch (Exception ex2) {
 			log.error("[deleteAppointement]: " + ex2);
@@ -785,8 +785,8 @@ public class AppointmentDaoImpl {
 			
 			//"AND (a.terminstatus != 4 AND a.terminstatus != 5)";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -797,7 +797,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			for (Appointment appointment : listAppoints) {
 				log.debug(""+appointment);
@@ -820,8 +820,8 @@ public class AppointmentDaoImpl {
 					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentCategory.categoryId = :categoryId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -830,7 +830,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppoints;
 		} catch (Exception ex2) {
@@ -842,8 +842,8 @@ public class AppointmentDaoImpl {
 	public List<Appointment> getAppointmentsByCritAndCat(Long cat_id) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -855,7 +855,7 @@ public class AppointmentDaoImpl {
 			TypedQuery<Appointment> q = session.createQuery(cq);
 			List<Appointment> listAppoints = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppoints;
 		} catch (Exception ex2) {
@@ -872,8 +872,8 @@ public class AppointmentDaoImpl {
 					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentStarttime > :appointmentStarttime ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -886,7 +886,7 @@ public class AppointmentDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appoint;
 		} catch (Exception ex2) {
@@ -902,8 +902,8 @@ public class AppointmentDaoImpl {
 					"WHERE a.deleted <> :deleted " +
 					"AND a.appointmentName LIKE :appointmentName";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -912,7 +912,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppoints;
 		} catch (Exception ex2) {
@@ -962,8 +962,8 @@ public class AppointmentDaoImpl {
 		
 		EntityTransaction tx = null;
 		try{
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		tx = session.getTransaction();
 		tx.begin();
 		
@@ -981,7 +981,7 @@ public class AppointmentDaoImpl {
 		
 		List<Appointment> listAppoints = query.getResultList();
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		return listAppoints;
 		}catch(Exception e){
@@ -1030,8 +1030,8 @@ public class AppointmentDaoImpl {
 			//System.out.println("StartTime : " + startDate);
 			//System.out.println("EndTime : " + endDate);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -1045,7 +1045,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppoints;
 		}catch(Exception e){
@@ -1066,8 +1066,8 @@ public class AppointmentDaoImpl {
 								"AND a.room.rooms_id = :rooms_id ";
 			
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -1078,7 +1078,7 @@ public class AppointmentDaoImpl {
 			
 			List<Appointment> listAppoints = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (listAppoints.size() > 0) {
 				return listAppoints.get(0);

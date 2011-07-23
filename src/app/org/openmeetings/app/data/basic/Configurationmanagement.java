@@ -20,7 +20,7 @@ import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.mappings.CastMapToObject;
 
@@ -45,8 +45,8 @@ public class Configurationmanagement {
 		try {
 			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				Configuration configuration = null;
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery("select c from Configuration as c where c.conf_key = :conf_key and c.deleted = :deleted");
@@ -60,7 +60,7 @@ public class Configurationmanagement {
 				}
 				
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return configuration;
 			} else {
 				log.error("[getAllConf] Permission denied "+user_level);
@@ -76,8 +76,8 @@ public class Configurationmanagement {
 			log.debug("getConfByConfigurationId1: user_level "+user_level);
 			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 				Configuration configuration = null;
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id");
@@ -88,7 +88,7 @@ public class Configurationmanagement {
 		        } catch (NoResultException e) {
 		        }
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				log.debug("getConfByConfigurationId4: "+configuration);
 				
 				if (configuration!=null && configuration.getUser_id()!=null) {
@@ -123,8 +123,8 @@ public class Configurationmanagement {
 	
 	public List<Configuration> getConfigurations(int start, int max, String orderby, boolean asc) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -143,7 +143,7 @@ public class Configurationmanagement {
 			q.setMaxResults(max);
 			List<Configuration> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);		
+			PersistenceSessionUtil.closeSession(idf);		
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getConfigurations]" ,ex2);
@@ -160,14 +160,14 @@ public class Configurationmanagement {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'"); 
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.debug("selectMaxFromConfigurations"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
@@ -188,15 +188,15 @@ public class Configurationmanagement {
 			configuration.setComment(comment);
 			if (USER_ID!=null) configuration.setUser_id(USER_ID);
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				configuration = session.merge(configuration);
 				session.flush();
 				session.refresh(configuration);
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				ret = "Erfolgreich";
 			} catch (Exception ex2) {
 				log.error("[addConfByKey]: " ,ex2);
@@ -240,14 +240,14 @@ public class Configurationmanagement {
 
 	public Long addConfig(Configuration conf){
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			conf = session.merge(conf);
 			Long configuration_id = conf.getConfiguration_id(); 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return configuration_id;
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: " ,ex2);
@@ -257,8 +257,8 @@ public class Configurationmanagement {
 	
 	public Long updateConfig(Configuration conf){
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (conf.getConfiguration_id() == null) {
@@ -269,7 +269,7 @@ public class Configurationmanagement {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return conf.getConfiguration_id();
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: " ,ex2);

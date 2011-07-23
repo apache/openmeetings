@@ -9,7 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ConferenceLogTypeDaoImpl {
@@ -36,8 +36,8 @@ public class ConferenceLogTypeDaoImpl {
 			confLogType.setEventType(eventType);
 			confLogType.setInserted(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -46,7 +46,7 @@ public class ConferenceLogTypeDaoImpl {
 			Long appointment_id = confLogType.getConferenceLogTypeId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appointment_id;
 		} catch (Exception ex2) {
@@ -62,8 +62,8 @@ public class ConferenceLogTypeDaoImpl {
 					"WHERE a.eventType = :eventType ";
 					
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -77,7 +77,7 @@ public class ConferenceLogTypeDaoImpl {
 				confLogType = confLogTypes.get(0);
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return confLogType;
 		} catch (Exception ex2) {

@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -37,8 +37,8 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.flvRecordingId = :flvRecordingId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -53,7 +53,7 @@ public class FlvRecordingDaoImpl {
 			session.refresh(flvRecording);
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecording;
 		} catch (Exception ex2) {
@@ -68,8 +68,8 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 							"WHERE c.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -78,7 +78,7 @@ public class FlvRecordingDaoImpl {
 			List<FlvRecording> flvRecordings = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordings;
 		} catch (Exception ex2) {
@@ -99,8 +99,8 @@ public class FlvRecordingDaoImpl {
 					"AND u.externalUserId = :externalUserId " +
 					"AND c.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -110,7 +110,7 @@ public class FlvRecordingDaoImpl {
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 						
 			log.debug("getFlvRecordingByExternalRoomType :: "+flvRecordingList.size());
 			
@@ -132,8 +132,8 @@ public class FlvRecordingDaoImpl {
 					"AND c.insertedBy LIKE :insertedBy " +
 					"AND c.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -144,7 +144,7 @@ public class FlvRecordingDaoImpl {
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 						
 			log.debug("getFlvRecordingByExternalRoomType :: "+flvRecordingList.size());
 			
@@ -160,8 +160,8 @@ public class FlvRecordingDaoImpl {
 			
 			String hql = "SELECT c FROM FlvRecording c ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -169,7 +169,7 @@ public class FlvRecordingDaoImpl {
 			List<FlvRecording> flvRecordings = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordings;
 		} catch (Exception ex2) {
@@ -188,8 +188,8 @@ public class FlvRecordingDaoImpl {
 					"AND r.externalRoomType LIKE :externalRoomType " +
 					"AND c.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -199,7 +199,7 @@ public class FlvRecordingDaoImpl {
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			
 			log.debug("getFlvRecordingByExternalRoomType :: "+flvRecordingList.size());
@@ -220,8 +220,8 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -229,7 +229,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -248,8 +248,8 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -258,7 +258,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -276,8 +276,8 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -286,7 +286,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -304,8 +304,8 @@ public class FlvRecordingDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -315,7 +315,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -332,8 +332,8 @@ public class FlvRecordingDaoImpl {
 					"AND c.room_id = :room_id " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -342,7 +342,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -359,8 +359,8 @@ public class FlvRecordingDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -369,7 +369,7 @@ public class FlvRecordingDaoImpl {
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
@@ -406,8 +406,8 @@ public class FlvRecordingDaoImpl {
 			
 			flvRecording.setOwnerId(ownerId);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -415,7 +415,7 @@ public class FlvRecordingDaoImpl {
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingId;
 		} catch (Exception ex2) {
@@ -453,8 +453,8 @@ public class FlvRecordingDaoImpl {
 			
 			flvRecording.setOwnerId(ownerId);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -462,7 +462,7 @@ public class FlvRecordingDaoImpl {
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingId;
 		} catch (Exception ex2) {
@@ -474,8 +474,8 @@ public class FlvRecordingDaoImpl {
 	public Long addFlvRecordingObj(FlvRecording flvRecording) {
 		try { 
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -483,7 +483,7 @@ public class FlvRecordingDaoImpl {
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingId;
 		} catch (Exception ex2) {
@@ -499,8 +499,8 @@ public class FlvRecordingDaoImpl {
 			
 			fId.setOrganization_id(organization_id);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -512,7 +512,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ",ex2);
@@ -528,8 +528,8 @@ public class FlvRecordingDaoImpl {
 			fId.setRecordEnd(recordEnd);
 			fId.setOrganization_id(organization_id);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -541,7 +541,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ",ex2);
@@ -555,8 +555,8 @@ public class FlvRecordingDaoImpl {
 			
 			fId.setProgressPostProcessing(progress);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -568,7 +568,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ",ex2);
@@ -586,8 +586,8 @@ public class FlvRecordingDaoImpl {
 			fId.setDeleted("true");
 			fId.setUpdated(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -599,7 +599,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ",ex2);
@@ -618,8 +618,8 @@ public class FlvRecordingDaoImpl {
 			fId.setFileName(fileName);
 			fId.setUpdated(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -631,7 +631,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateFileOrFolderName]: ",ex2);
@@ -641,8 +641,8 @@ public class FlvRecordingDaoImpl {
 	public void updateFlvRecording(FlvRecording fId) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -654,7 +654,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateFileOrFolderName]: ",ex2);
@@ -688,8 +688,8 @@ public class FlvRecordingDaoImpl {
 			
 			fId.setUpdated(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (fId.getFlvRecordingId() == 0) {
@@ -701,7 +701,7 @@ public class FlvRecordingDaoImpl {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[moveFile]: ",ex2);

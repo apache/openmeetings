@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -36,8 +36,8 @@ public class PrivateMessageFolderDaoImpl {
 			privateMessageFolder.setUserId(userId);
 			privateMessageFolder.setInserted(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -45,7 +45,7 @@ public class PrivateMessageFolderDaoImpl {
 			Long privateMessageFolderId = privateMessageFolder.getPrivateMessageFolderId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageFolderId;	
 		} catch (Exception e) {
@@ -58,8 +58,8 @@ public class PrivateMessageFolderDaoImpl {
 		try {
 			privateMessageFolder.setInserted(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -67,7 +67,7 @@ public class PrivateMessageFolderDaoImpl {
 			Long privateMessageFolderId = privateMessageFolder.getPrivateMessageFolderId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageFolderId;	
 		} catch (Exception e) {
@@ -81,8 +81,8 @@ public class PrivateMessageFolderDaoImpl {
 			String hql = "select c from PrivateMessageFolder c " +
 						"where c.privateMessageFolderId = :privateMessageFolderId ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -94,7 +94,7 @@ public class PrivateMessageFolderDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageFolder;
 		} catch (Exception e) {
@@ -107,15 +107,15 @@ public class PrivateMessageFolderDaoImpl {
 		try {
 			String hql = "select c from PrivateMessageFolder c ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			
 			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageFolders;
 		} catch (Exception e) {
@@ -127,8 +127,8 @@ public class PrivateMessageFolderDaoImpl {
 	public void updatePrivateMessages(PrivateMessageFolder privateMessageFolder) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -141,7 +141,7 @@ public class PrivateMessageFolderDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception e) {
 			log.error("[updatePrivateMessages]",e);
@@ -153,8 +153,8 @@ public class PrivateMessageFolderDaoImpl {
 			String hql = "select c from PrivateMessageFolder c " +
 						"where c.userId = :userId ";
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
@@ -162,7 +162,7 @@ public class PrivateMessageFolderDaoImpl {
 			
 			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageFolders;
 		} catch (Exception e) {
@@ -174,8 +174,8 @@ public class PrivateMessageFolderDaoImpl {
 	public void deletePrivateMessages(PrivateMessageFolder privateMessageFolder) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 	
@@ -183,7 +183,7 @@ public class PrivateMessageFolderDaoImpl {
 			session.remove(privateMessageFolder);
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception e) {
 			log.error("[deletePrivateMessages]",e);

@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
@@ -72,8 +72,8 @@ public class Sessionmanagement {
 			sessiondata.setStarttermin_time(new Date());
 			sessiondata.setUser_id(null);
 		
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			session.flush();
@@ -81,7 +81,7 @@ public class Sessionmanagement {
 			session.flush();
 			session.refresh(sessiondata);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return sessiondata;
 		} catch (Exception ex2) {
@@ -95,8 +95,8 @@ public class Sessionmanagement {
 		try {
 			log.debug("updateUser User SID: "+SID);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			session.flush();
@@ -110,7 +110,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> fullList = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			if (fullList.size() == 0){
 				log.error("Could not find session to update: "+SID);
 				return null;
@@ -180,8 +180,8 @@ public class Sessionmanagement {
 					"where c.session_id LIKE :session_id";
 			
 			//log.debug("checkSession User: || "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -191,7 +191,7 @@ public class Sessionmanagement {
 			
 			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -233,8 +233,8 @@ public class Sessionmanagement {
 							"where c.session_id LIKE :session_id";
 	
 			//log.debug("checkSession User: || "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -244,7 +244,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -257,8 +257,8 @@ public class Sessionmanagement {
 			}
 			log.debug("Found session to update: "+sessiondata.getSession_id()+ " userId: "+USER_ID);
 			
-			idf = HibernateUtil.createSession();
-			session = HibernateUtil.getSession();
+			idf = PersistenceSessionUtil.createSession();
+			session = PersistenceSessionUtil.getSession();
 			tx = session.getTransaction();
 			tx.begin();
 			sessiondata.setRefresh_time(new Date());
@@ -272,7 +272,7 @@ public class Sessionmanagement {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
@@ -290,8 +290,8 @@ public class Sessionmanagement {
 							"where c.session_id LIKE :session_id";
 	
 			//log.debug("checkSession User: || "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -301,7 +301,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -314,8 +314,8 @@ public class Sessionmanagement {
 			}
 			log.debug("Found session to update: "+sessiondata.getSession_id()+ " userId: "+USER_ID);
 			
-			idf = HibernateUtil.createSession();
-			session = HibernateUtil.getSession();
+			idf = PersistenceSessionUtil.createSession();
+			session = PersistenceSessionUtil.getSession();
 			tx = session.getTransaction();
 			tx.begin();
 			sessiondata.setRefresh_time(new Date());
@@ -334,7 +334,7 @@ public class Sessionmanagement {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
@@ -352,8 +352,8 @@ public class Sessionmanagement {
 							"where c.session_id LIKE :session_id";
 	
 			//log.debug("checkSession User: || "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -363,7 +363,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -376,8 +376,8 @@ public class Sessionmanagement {
 			}
 			log.debug("Found session to update: "+sessiondata.getSession_id()+ " organisation_id: "+organization_id);
 			
-			idf = HibernateUtil.createSession();
-			session = HibernateUtil.getSession();
+			idf = PersistenceSessionUtil.createSession();
+			session = PersistenceSessionUtil.getSession();
 			tx = session.getTransaction();
 			tx.begin();
 			sessiondata.setRefresh_time(new Date());
@@ -392,7 +392,7 @@ public class Sessionmanagement {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
@@ -411,8 +411,8 @@ public class Sessionmanagement {
 							"where c.session_id LIKE :session_id";
 	
 			//log.debug("checkSession User: || "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -422,7 +422,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> sessions = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -435,8 +435,8 @@ public class Sessionmanagement {
 			}
 			log.debug("Found session to update: "+sessiondata.getSession_id()+ " userId: "+USER_ID);
 			
-			idf = HibernateUtil.createSession();
-			session = HibernateUtil.getSession();
+			idf = PersistenceSessionUtil.createSession();
+			session = PersistenceSessionUtil.getSession();
 			tx = session.getTransaction();
 			tx.begin();
 			sessiondata.setRefresh_time(new Date());
@@ -451,7 +451,7 @@ public class Sessionmanagement {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
@@ -465,8 +465,8 @@ public class Sessionmanagement {
 		try {
 			log.debug("updateUser User SID: "+SID);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			session.flush();
@@ -479,7 +479,7 @@ public class Sessionmanagement {
 			TypedQuery<Sessiondata> q = session.createQuery(cq);
 			List<Sessiondata> fullList = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (fullList.size() == 0){
 				log.error("Could not find session to update: "+SID);
@@ -490,8 +490,8 @@ public class Sessionmanagement {
 			Sessiondata sd = (Sessiondata) fullList.get(0);
 			//log.debug("Found session to update: "+sd.getSession_id()+ " userId: "+USER_ID);
 			
-			idf = HibernateUtil.createSession();
-			session = HibernateUtil.getSession();
+			idf = PersistenceSessionUtil.createSession();
+			session = PersistenceSessionUtil.getSession();
 			tx = session.getTransaction();
 			tx.begin();
 			sd.setRefresh_time(new Date());
@@ -507,7 +507,7 @@ public class Sessionmanagement {
 			}
 			session.flush();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			//log.debug("session updated User: "+USER_ID);
 			return true;
@@ -524,8 +524,8 @@ public class Sessionmanagement {
 	private void updatesession(String SID) {
 		try {
 			//log.debug("****** updatesession: "+SID);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -538,7 +538,7 @@ public class Sessionmanagement {
 
 			List<Sessiondata> fullList = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);			
+			PersistenceSessionUtil.closeSession(idf);			
 			if (fullList.size() == 0) {
 				log.error("Found NO session to updateSession: ");
 
@@ -548,8 +548,8 @@ public class Sessionmanagement {
 				//log.debug("Found session to updateSession sd "+sd.getUser_id()+" "+sd.getSession_id());
 				sd.setRefresh_time(new Date());
 				
-				Object idf2 = HibernateUtil.createSession();
-				EntityManager session2 = HibernateUtil.getSession();
+				Object idf2 = PersistenceSessionUtil.createSession();
+				EntityManager session2 = PersistenceSessionUtil.getSession();
 				EntityTransaction tx2 = session2.getTransaction();
 				tx2.begin();
 				if (sd.getId() == null) {
@@ -561,7 +561,7 @@ public class Sessionmanagement {
 				}
 				session2.flush();
 				tx2.commit();
-				HibernateUtil.closeSession(idf2);	
+				PersistenceSessionUtil.closeSession(idf2);	
 			}
 			
 		} catch (Exception ex2) {
@@ -585,15 +585,15 @@ public class Sessionmanagement {
 							"c.storePermanent = false " +
 							")";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("refresh_time", refresh_time);
 			List<Sessiondata> fullList = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			log.debug("Sessions To Delete :: "+fullList.size());
 			
@@ -616,8 +616,8 @@ public class Sessionmanagement {
 			rightNow.setTimeInMillis(rightNow.getTimeInMillis()-1800000);
 		    List l = this.getSessionToDelete(rightNow.getTime());
 		    log.debug("clearSessionTable: "+l.size());
-            Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 		    for (Iterator it = l.iterator();it.hasNext();){
@@ -626,7 +626,7 @@ public class Sessionmanagement {
 				session.remove(sData);
 		    }
             tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		    
 		} catch (Exception err) {
 			log.error("clearSessionTable",err);
@@ -658,13 +658,13 @@ public class Sessionmanagement {
 				
 				Sessiondata sData = this.getSessionByHash(SID);
 
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				sData = session.find(Sessiondata.class, sData.getId());
 				session.remove(sData);
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 			}
 
 		} catch (Exception err) {

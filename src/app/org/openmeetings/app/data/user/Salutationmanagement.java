@@ -14,7 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.persistence.beans.user.Salutations;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -46,8 +46,8 @@ public class Salutationmanagement {
 	 */
 	public Long addUserSalutation(String titelname, long fieldvalues_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Salutations ti = new Salutations();
@@ -58,7 +58,7 @@ public class Salutationmanagement {
 			ti = session.merge(ti);
 			Long salutations_id = ti.getSalutations_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return salutations_id;
 		} catch (Exception ex2) {
 			log.error("[addUserSalutation]" ,ex2);
@@ -73,8 +73,8 @@ public class Salutationmanagement {
 	 */
 	public List<Salutations> getUserSalutations(long language_id){
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -84,7 +84,7 @@ public class Salutationmanagement {
 			TypedQuery<Salutations> q = session.createQuery(select);
 			List<Salutations> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			for (Iterator it4 = ll.iterator(); it4.hasNext();) {
 				Salutations ti = (Salutations) it4.next();
 				ti.setLabel(Fieldmanagment.getInstance().getFieldByIdAndLanguage(ti.getFieldvalues_id(),language_id));

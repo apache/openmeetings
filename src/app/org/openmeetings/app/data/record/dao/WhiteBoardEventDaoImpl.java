@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.recording.WhiteBoardEvent;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class WhiteBoardEventDaoImpl {
@@ -35,8 +35,8 @@ public class WhiteBoardEventDaoImpl {
 					"where wbe.starttime between :startTime and :endTime " +
 					"AND wbe.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -46,7 +46,7 @@ public class WhiteBoardEventDaoImpl {
 			List<WhiteBoardEvent> ll = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -59,8 +59,8 @@ public class WhiteBoardEventDaoImpl {
 	public Long addWhiteBoardEvent(WhiteBoardEvent whiteBoardEvent) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -68,7 +68,7 @@ public class WhiteBoardEventDaoImpl {
 			Long whiteBoardEventId = whiteBoardEvent.getWhiteBoardEventId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return whiteBoardEventId;
 		} catch (Exception ex2) {

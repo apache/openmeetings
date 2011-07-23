@@ -32,7 +32,7 @@ import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Userdata;
 import org.openmeetings.app.persistence.beans.user.Userlevel;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
@@ -83,8 +83,8 @@ public class Usermanagement {
 				sresult.setRecords(UsersDaoImpl.getInstance().selectMaxFromUsers());
 				
 				//get all users
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -103,7 +103,7 @@ public class Usermanagement {
 				q.setMaxResults(max);
 				List<Users> ll = q.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return sresult;				
 			}
 		} catch (Exception ex2) {
@@ -159,8 +159,8 @@ public class Usermanagement {
 				
 				log.debug("Show HQL: "+hql);
 				
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery(hql);
@@ -173,7 +173,7 @@ public class Usermanagement {
 				query.setMaxResults(max);			
 				List<Users> ll = query.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				
 				sresult.setResult(ll);
 		
@@ -225,8 +225,8 @@ public class Usermanagement {
 					"(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) " +
 					"AND c.deleted <> :deleted";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -237,7 +237,7 @@ public class Usermanagement {
 			List<Users> ll = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("debug SIZE: " + ll.size());
 			
@@ -292,8 +292,8 @@ public class Usermanagement {
 	public Users refreshUserObject(Users us) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -301,7 +301,7 @@ public class Usermanagement {
 			session.refresh(us);
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return us;
 		} catch (Exception ex2) {
@@ -344,8 +344,8 @@ public class Usermanagement {
 	private void updateLastLogin(Users us) {
 		try {
 			us.setLastlogin(new Date());
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (us.getUser_id() == null) {
@@ -356,7 +356,7 @@ public class Usermanagement {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateLastLogin",ex2);
 		}
@@ -373,8 +373,8 @@ public class Usermanagement {
 	public List searchUser(long user_level, String searchcriteria, String searchstring, int max, int start, String orderby, boolean asc) {
 		if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -397,7 +397,7 @@ public class Usermanagement {
 				q.setMaxResults(max);
 				List<Users> contactsZ = q.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return contactsZ;
 			} catch (Exception ex2) {
 				log.error("searchUser",ex2);
@@ -409,8 +409,8 @@ public class Usermanagement {
 	public List getUserdataDashBoard(Long user_id) {
 		if (user_id.longValue() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted");
@@ -418,7 +418,7 @@ public class Usermanagement {
 				query.setParameter("deleted", "true");
 				List ll = query.getResultList();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return ll;
 			} catch (Exception ex2) {
 				log.error("getUserdataDashBoard",ex2);
@@ -431,8 +431,8 @@ public class Usermanagement {
 		int userdata = 0;
 		if (USER_ID.longValue() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
@@ -441,7 +441,7 @@ public class Usermanagement {
 				query.setParameter("deleted", "true");
 				userdata = query.getResultList().size();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("getUserdataNoByKey",ex2);
 			}
@@ -455,8 +455,8 @@ public class Usermanagement {
 		Userdata userdata = new Userdata();
 		if (user_id.longValue() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				Query query = session.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
@@ -467,7 +467,7 @@ public class Usermanagement {
 					userdata = (Userdata) it2.next();
 				}
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("getUserdataByKey",ex2);
 			}
@@ -594,8 +594,8 @@ public class Usermanagement {
 					}
 					
 					//log.info("USER " + us.getLastname());
-					Object idf = HibernateUtil.createSession();
-					EntityManager session = HibernateUtil.getSession();
+					Object idf = PersistenceSessionUtil.createSession();
+					EntityManager session = PersistenceSessionUtil.getSession();
 					EntityTransaction tx = session.getTransaction();
 					tx.begin();
 
@@ -608,7 +608,7 @@ public class Usermanagement {
 					}
 					
 					tx.commit();
-					HibernateUtil.closeSession(idf);
+					PersistenceSessionUtil.closeSession(idf);
 					
 					return us.getUser_id();
 					
@@ -633,8 +633,8 @@ public class Usermanagement {
 			String DATA, String Comment) {
 		String res = "Fehler beim Update";
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			String hqlUpdate = "update userdata set DATA_KEY= :DATA_KEY, USER_ID = :USER_ID, DATA = :DATA, updatetime = :updatetime, comment = :Comment where DATA_ID= :DATA_ID";
@@ -645,7 +645,7 @@ public class Usermanagement {
                             DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateUserdata",ex2);
 		}
@@ -656,8 +656,8 @@ public class Usermanagement {
 			String DATA, String Comment) {
 		String res = "Fehler beim Update";
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			String hqlUpdate = "update Userdata set data = :data, updatetime = :updatetime, "
@@ -669,7 +669,7 @@ public class Usermanagement {
 					.setParameter("data_key", DATA_KEY).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateUserdataByKey",ex2);
 		}
@@ -679,15 +679,15 @@ public class Usermanagement {
 	public String deleteUserdata(int DATA_ID) {
 		String res = "Fehler beim deleteUserdata";
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			String hqlUpdate = "delete userdata where DATA_ID= :DATA_ID";
 			int updatedEntities = session.createQuery(hqlUpdate).setParameter("DATA_ID", DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("deleteUserdata",ex2);
 		}
@@ -697,8 +697,8 @@ public class Usermanagement {
 	public String deleteUserdataByUserAndKey(int users_id, String DATA_KEY) {
 		String res = "Fehler beim deleteUserdataByUserAndKey";
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			String hqlUpdate = "delete userdata where users_id= :users_id AND DATA_KEY = :DATA_KEY";
@@ -707,7 +707,7 @@ public class Usermanagement {
 					.executeUpdate();
 			res = "Success" + updatedEntities;
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("deleteUserdataByUserAndKey",ex2);
 		}
@@ -726,15 +726,15 @@ public class Usermanagement {
 		userdata.setUser_id(new Long(USER_ID));
 		userdata.setDeleted("false");
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			userdata = session.merge(userdata);
 			session.flush();
 			session.refresh(userdata);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			ret = "success";
 		} catch (Exception ex2) {
 			log.error("addUserdata",ex2);
@@ -745,8 +745,8 @@ public class Usermanagement {
 	private Userlevel getUserLevel(Long level_id) {
 		Userlevel userlevel = new Userlevel();
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted");
@@ -756,7 +756,7 @@ public class Usermanagement {
 				userlevel = (Userlevel) it2.next();
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("[getUserLevel]" ,ex2);
 		}
@@ -780,8 +780,8 @@ public class Usermanagement {
 				return new Long(1);
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -795,7 +795,7 @@ public class Usermanagement {
 	        }
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (us!=null){
 				return us.getLevel_id();
@@ -817,8 +817,8 @@ public class Usermanagement {
 				return new Long(1);
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -832,7 +832,7 @@ public class Usermanagement {
 	        }
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (us!=null){
 				
@@ -1166,15 +1166,15 @@ public class Usermanagement {
 			users.setRegdate(new Date());
 			users.setDeleted("false");
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			users = session.merge(users);
 			session.flush();
 			Long user_id = users.getUser_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			return user_id;
 
@@ -1193,8 +1193,8 @@ public class Usermanagement {
 					"AND c.externalUserType LIKE :externalUserType " +
 					"AND c.deleted <> :deleted";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -1206,7 +1206,7 @@ public class Usermanagement {
 			List<Users> users = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (users.size() > 0) {
 				return users.get(0);
@@ -1283,14 +1283,14 @@ public class Usermanagement {
 			users.setRegdate(new Date());
 			users.setDeleted("false");
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			session.merge(users);
 			long user_id = users.getUser_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			return user_id;
 
@@ -1302,14 +1302,14 @@ public class Usermanagement {
 	
 	public Long addUser(Users usr) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			usr = session.merge(usr);
 			Long user_id = usr.getUser_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return user_id;
 		} catch (Exception ex2) {
 			log.error("[addUser]" ,ex2);
@@ -1329,14 +1329,14 @@ public class Usermanagement {
 				usr.setUserSipData(UserSipDataDaoImpl.getInstance().getUserSipDataById(userSipDataId));
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			usr = session.merge(usr);
 			Long user_id = usr.getUser_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return user_id;
 			
@@ -1349,8 +1349,8 @@ public class Usermanagement {
 	
 	public void addUserLevel(String description, int myStatus) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Userlevel uslevel = new Userlevel();
@@ -1360,7 +1360,7 @@ public class Usermanagement {
 			uslevel.setDeleted("false");
 			session.merge(uslevel);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]" ,ex2);
 		}
@@ -1433,8 +1433,8 @@ public class Usermanagement {
 					
 					//savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
 					
-					Object idf = HibernateUtil.createSession();
-					EntityManager session = HibernateUtil.getSession();
+					Object idf = PersistenceSessionUtil.createSession();
+					EntityManager session = PersistenceSessionUtil.getSession();
 					EntityTransaction tx = session.getTransaction();
 					tx.begin();
 
@@ -1448,7 +1448,7 @@ public class Usermanagement {
 					session.flush();
 					
 					tx.commit();
-					HibernateUtil.closeSession(idf);
+					PersistenceSessionUtil.closeSession(idf);
 					
 					return returnLong;
 				}
@@ -1539,8 +1539,8 @@ public class Usermanagement {
 			return null;
 		}
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		
@@ -1563,7 +1563,7 @@ public class Usermanagement {
         	tx.rollback();
         }
 
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		return u;
 		
@@ -1572,8 +1572,8 @@ public class Usermanagement {
 	public Users getUserByIdAndDeleted(Long id) throws Exception{
 		log.debug("Usermanagement.getUserById");
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		
@@ -1591,7 +1591,7 @@ public class Usermanagement {
         }
 		
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		return u;
 		
@@ -1606,8 +1606,8 @@ public class Usermanagement {
 	public Users getUserByLogin(String login) throws Exception{
 		log.debug("Usermanagement.getUserByLogin : " + login);
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		
@@ -1626,7 +1626,7 @@ public class Usermanagement {
         }
 		
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		return u;
 		
@@ -1647,8 +1647,8 @@ public class Usermanagement {
 				"AND c.externalUserId IS NULL " +
 				"AND c.deleted <> :deleted";
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		
@@ -1660,7 +1660,7 @@ public class Usermanagement {
 		
 		List<Users> ll = query.getResultList();
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have either same login or Email ");
@@ -1681,8 +1681,8 @@ public class Usermanagement {
 				"WHERE " +
 				"c.adresses.email LIKE :userOrEmail";
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 		
@@ -1693,7 +1693,7 @@ public class Usermanagement {
 		
 		List<Users> ll = query.getResultList();
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have same Email ");
@@ -1828,8 +1828,8 @@ public class Usermanagement {
             String hql = "SELECT u FROM Users as u " +
                             " where u.activatehash = :activatehash" +
                             " AND c.deleted <> :deleted";
-            Object idf = HibernateUtil.createSession();
-            EntityManager session = HibernateUtil.getSession();
+            Object idf = PersistenceSessionUtil.createSession();
+            EntityManager session = PersistenceSessionUtil.getSession();
             EntityTransaction tx = session.getTransaction();
 			tx.begin();
             Query query = session.createQuery(hql);
@@ -1842,7 +1842,7 @@ public class Usermanagement {
                 //u=null}
             }
             tx.commit();
-            HibernateUtil.closeSession(idf);
+            PersistenceSessionUtil.closeSession(idf);
             return u;
 	    } catch (Exception e) {
 	            log.error("[getUserByActivationHash]",e);
@@ -1854,8 +1854,8 @@ public class Usermanagement {
     public void updateUser(Users user) {
         if (user.getUser_id() > 0) {
             try {
-                Object idf = HibernateUtil.createSession();
-                EntityManager session = HibernateUtil.getSession();
+                Object idf = PersistenceSessionUtil.createSession();
+                EntityManager session = PersistenceSessionUtil.getSession();
                 EntityTransaction tx = session.getTransaction();
                 tx.begin();
 				if (user.getUser_id() == null) {
@@ -1866,7 +1866,7 @@ public class Usermanagement {
 				    }
 				}
                 tx.commit();
-                HibernateUtil.closeSession(idf);
+                PersistenceSessionUtil.closeSession(idf);
             } catch (Exception ex2) {
                     log.error("[updateUser] ",ex2);
             }
@@ -1921,8 +1921,8 @@ public class Usermanagement {
 				sresult.setRecords(UsersDaoImpl.getInstance().selectMaxFromUsersWithSearch(search));
 				
 				//get all users
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				session.flush();
@@ -1934,7 +1934,7 @@ public class Usermanagement {
 				
 				sresult.setResult(query.getResultList());
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				
 				return sresult;				
 			}
@@ -2075,8 +2075,8 @@ public class Usermanagement {
 			log.debug("hql :: "+hql);
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -2124,7 +2124,7 @@ public class Usermanagement {
 			List<Users> userList = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return userList;	
 			
@@ -2258,8 +2258,8 @@ public class Usermanagement {
 			log.debug("hql :: "+hql);
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -2304,7 +2304,7 @@ public class Usermanagement {
 			List userList = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long) userList.get(0);	
 			
@@ -2360,8 +2360,8 @@ public class Usermanagement {
 			}
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -2372,7 +2372,7 @@ public class Usermanagement {
 			
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long) ll.get(0);		
 			

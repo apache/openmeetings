@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ChatvaluesEventDaoImpl {
@@ -34,15 +34,15 @@ public class ChatvaluesEventDaoImpl {
 			String hql = "select c from ChatvaluesEvent as c " +
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("roomrecordingId", roomrecordingId);
 			List<ChatvaluesEvent> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 	
@@ -56,8 +56,8 @@ public class ChatvaluesEventDaoImpl {
 	public Long addChatvaluesEvent(ChatvaluesEvent chatvaluesEvent) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -65,7 +65,7 @@ public class ChatvaluesEventDaoImpl {
 			Long chatvaluesEventId = chatvaluesEvent.getChatvaluesEventId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return chatvaluesEventId;
 		} catch (Exception ex2) {

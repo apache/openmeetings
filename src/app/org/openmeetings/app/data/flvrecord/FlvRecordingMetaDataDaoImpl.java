@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -33,8 +33,8 @@ public class FlvRecordingMetaDataDaoImpl {
 			String hql = "SELECT c FROM FlvRecordingMetaData c " +
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -46,7 +46,7 @@ public class FlvRecordingMetaDataDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaData;
 			
@@ -63,8 +63,8 @@ public class FlvRecordingMetaDataDaoImpl {
 					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
 					"AND c.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -73,7 +73,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaDatas;
 			
@@ -94,8 +94,8 @@ public class FlvRecordingMetaDataDaoImpl {
 						"(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))" +
 					")";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -103,7 +103,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaDatas;
 			
@@ -120,8 +120,8 @@ public class FlvRecordingMetaDataDaoImpl {
 					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
 					"AND c.isScreenData = true";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -130,7 +130,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			if (flvRecordingMetaDatas.size() > 0) {
 				return flvRecordingMetaDatas.get(0);
@@ -165,8 +165,8 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			flvRecordingMetaData.setInteriewPodId(interiewPodId);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -174,7 +174,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaDataId;
 			
@@ -187,8 +187,8 @@ public class FlvRecordingMetaDataDaoImpl {
 	public Long addFlvRecordingMetaDataObj(FlvRecordingMetaData flvRecordingMetaData) {
 		try {
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -196,7 +196,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			return flvRecordingMetaDataId;
 
@@ -248,8 +248,8 @@ public class FlvRecordingMetaDataDaoImpl {
 	public Long updateFlvRecordingMetaData(FlvRecordingMetaData flvRecordingMetaData) {
 		try { 
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -262,7 +262,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateFlvRecordingMetaData]: ",ex2);

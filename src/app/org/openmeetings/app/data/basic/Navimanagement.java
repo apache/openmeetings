@@ -18,7 +18,7 @@ import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
 import org.openmeetings.app.persistence.beans.basic.Navisub;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Navimanagement {
@@ -64,8 +64,8 @@ public class Navimanagement {
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			// CriteriaBuilder crit = session.getCriteriaBuilder();
@@ -80,7 +80,7 @@ public class Navimanagement {
 			
 			log.debug("getMainMenu "+navi.size());
 			
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return navi;
 		} catch (Exception ex2) {
@@ -107,8 +107,8 @@ public class Navimanagement {
 			ng.setStarttime(new Date());
 			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			// CriteriaBuilder crit = session.getCriteriaBuilder();
@@ -116,7 +116,7 @@ public class Navimanagement {
 			session.merge(ng);
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 		} catch (Exception ex2) {
 			log.error("addGlobalStructure",ex2);
@@ -141,8 +141,8 @@ public class Navimanagement {
 			ng.setGlobal_id(global_id);
 			ng.setStarttime(new Date());
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			// CriteriaBuilder crit = session.getCriteriaBuilder();
@@ -150,7 +150,7 @@ public class Navimanagement {
 			session.merge(ng);
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 		} catch (Exception ex2) {
 			log.error("addMainStructure",ex2);
@@ -175,8 +175,8 @@ public class Navimanagement {
 			ng.setMain_id(main_id);
 			ng.setStarttime(new Date());
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			// CriteriaBuilder crit = session.getCriteriaBuilder();
@@ -184,7 +184,7 @@ public class Navimanagement {
 			session.merge(ng);
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 		} catch (Exception ex2) {
 			log.error("addSubStructure",ex2);

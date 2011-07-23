@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.openmeetings.app.persistence.beans.adresses.States;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 /**
@@ -37,8 +37,8 @@ public class Statemanagement {
 	 */
 	public Long addState(String statename) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -51,7 +51,7 @@ public class Statemanagement {
 			Long id = st.getState_id();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("added id " + id);
 
@@ -69,8 +69,8 @@ public class Statemanagement {
 	 */
 	public States getStateById(long state_id) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session
@@ -79,7 +79,7 @@ public class Statemanagement {
 			query.setParameter("deleted", "true");
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			if (ll.size() > 0) {
 				return (States) ll.get(0);
 			}
@@ -95,8 +95,8 @@ public class Statemanagement {
 	 */
 	public List<States> getStates() {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session
@@ -104,7 +104,7 @@ public class Statemanagement {
 			query.setParameter("deleted", "true");
 			List<States> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getStates",ex2);

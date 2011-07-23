@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLog;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ConferenceLogDaoImpl {
@@ -54,8 +54,8 @@ public class ConferenceLogDaoImpl {
 			confLog.setLastname(lastname);
 			confLog.setEmail(email);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -64,7 +64,7 @@ public class ConferenceLogDaoImpl {
 			Long confLogId = confLog.getConferenceLogId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return confLogId;
 		} catch (Exception ex2) {

@@ -9,9 +9,9 @@ import javax.persistence.Persistence;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
-public class HibernateUtil {
+public class PersistenceSessionUtil {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(HibernateUtil.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(PersistenceSessionUtil.class, ScopeApplicationAdapter.webAppRootKey);
 
 	/** Read the configuration, will share across threads**/
 	  private static EntityManagerFactory sessionFactory;

@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.recording.RoomRecording;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RoomRecordingDaoImpl {
@@ -35,8 +35,8 @@ public class RoomRecordingDaoImpl {
 			String hql = "select r from RoomRecording r " +
 					"WHERE r.roomrecordingId = :roomrecordingId ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -48,7 +48,7 @@ public class RoomRecordingDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomRecording;
 		} catch (Exception ex2) {
@@ -74,14 +74,14 @@ public class RoomRecordingDaoImpl {
 			log.debug("roomRecording.getEnduser().getRoomClientId(): "+roomRecording.getEnduser().getRoomClientId());
 			log.debug("roomRecording.getStartedby().getRoomClientId(): "+roomRecording.getStartedby().getRoomClientId());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			roomRecording = session.merge(roomRecording);
 			Long roomRecordingId = roomRecording.getRoomrecordingId();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomRecordingId;
 		} catch (Exception ex2) {
@@ -93,8 +93,8 @@ public class RoomRecordingDaoImpl {
 	public Long updateRoomRecording(RoomRecording roomRecording) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (roomRecording.getRoomrecordingId() == null) {
@@ -106,7 +106,7 @@ public class RoomRecordingDaoImpl {
 			}
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateRoomRecording]: " , ex2);

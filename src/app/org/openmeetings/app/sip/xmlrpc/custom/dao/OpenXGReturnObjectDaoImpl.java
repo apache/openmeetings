@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -31,15 +31,15 @@ public class OpenXGReturnObjectDaoImpl {
 		
 		openXGReturnObject.setInserted(new Date());
 		
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 		tx.begin();
 
 		session.merge(openXGReturnObject);
 
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 		
 	} catch (Exception ex2) {
 		log.error("[addOpenXGReturnObject]: ",ex2);

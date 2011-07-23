@@ -13,7 +13,7 @@ import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.persistence.beans.recording.Recording;
 import org.openmeetings.app.persistence.beans.recording.RoomRecording;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RecordingDaoImpl {
@@ -48,14 +48,14 @@ public class RecordingDaoImpl {
 	
 	public Long addRecording(Recording recording) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			recording = session.merge(recording);
 			Long recording_id = recording.getRecording_id();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return recording_id;
 		} catch (Exception ex2) {
 			log.error("[addRecording] ",ex2);
@@ -66,15 +66,15 @@ public class RecordingDaoImpl {
 	public List<Recording> getRecordings(){
 		try {
 			String hql = "select c from Recording as c where c.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getRecordings",ex2);
@@ -85,8 +85,8 @@ public class RecordingDaoImpl {
 	public List<Recording> getRecordingsByRoom(Long rooms_id){
 		try {
 			String hql = "select c from Recording as c where c.rooms.rooms_id = :rooms_id AND c.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -94,7 +94,7 @@ public class RecordingDaoImpl {
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getRecordingsByRoom",ex2);
@@ -107,8 +107,8 @@ public class RecordingDaoImpl {
 			String hql = "select c from Recording as c " +
 					"where c.whiteBoardConverted = :whiteBoardConverted " +
 					"AND c.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -116,7 +116,7 @@ public class RecordingDaoImpl {
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getRecordingsByRoom",ex2);
@@ -128,15 +128,15 @@ public class RecordingDaoImpl {
 		try {
 			String hql = "select c from Recording as c where " + where + " c.deleted <> :deleted";
 			log.error("getRecordingsByWhereClause: "+hql);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getRecordingsByWhereClause",ex2);
@@ -148,8 +148,8 @@ public class RecordingDaoImpl {
 	public Recording getRecordingById(Long recording_id) {
 		try {
 			String hql = "select c from Recording as c where c.recording_id = :recording_id AND c.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -161,7 +161,7 @@ public class RecordingDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return rec;
 		} catch (Exception ex2) {
 			log.error("getRecordingById",ex2);
@@ -174,8 +174,8 @@ public class RecordingDaoImpl {
 			
 			log.debug("updateRecording SET TO TRUE NOW!!! "+rec.getRecording_id()+" "+rec.getWhiteBoardConverted());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (rec.getRecording_id() == null) {
@@ -187,7 +187,7 @@ public class RecordingDaoImpl {
 			}
 			//session.refresh(rec);
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateRecording",ex2);
 		}

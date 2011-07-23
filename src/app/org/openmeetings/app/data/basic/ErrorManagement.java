@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.basic.ErrorType;
 import org.openmeetings.app.persistence.beans.basic.ErrorValues;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class ErrorManagement {
@@ -37,14 +37,14 @@ public class ErrorManagement {
 			eType.setStarttime(new Date());
 			eType.setDeleted("false");
 			eType.setFieldvalues_id(fieldvalues_id);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			eType = session.merge(eType);
 			Long newerrortype_id = eType.getErrortype_id(); 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return newerrortype_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: " + ex2);
@@ -56,15 +56,15 @@ public class ErrorManagement {
 		try {
 			String hql = "select c from ErrorType as c " +
 					"WHERE c.deleted <> :deleted ";			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("deleted", "true");
 			List<ErrorType> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getErrorTypes]: " + ex2);
@@ -80,14 +80,14 @@ public class ErrorManagement {
 			eValue.setDeleted("false");
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			eValue = session.merge(eValue);
 			Long newerrorvalues_id = eValue.getErrorvalues_id(); 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: " + ex2);
@@ -101,14 +101,14 @@ public class ErrorManagement {
 			eValue.setErrortype_id(errortype_id);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			eValue = session.merge(eValue);
 			Long newerrorvalues_id = eValue.getErrorvalues_id(); 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: " + ex2);
@@ -122,14 +122,14 @@ public class ErrorManagement {
 			eValue.setErrortype_id(errortype_id);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			eValue = session.merge(eValue);
 			Long newerrorvalues_id = eValue.getErrorvalues_id(); 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: " + ex2);
@@ -142,8 +142,8 @@ public class ErrorManagement {
 			String hql = "select c from ErrorValues as c " +
 					" where c.errorvalues_id = :errorvalues_id " +
 					" AND c.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			session.flush();
@@ -156,7 +156,7 @@ public class ErrorManagement {
 	        } catch (NoResultException ex) {
 	        }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return e;
 		} catch (Exception ex2) {
 			log.error("[getErrorValuesById]",ex2);

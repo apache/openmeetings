@@ -13,7 +13,7 @@ import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -46,14 +46,14 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setStarttime(new Date());
 			rModerator.setDeleted("false");
 			rModerator.setRoomId(roomId);
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			rModerator = session.merge(rModerator);
 			long rModeratorId = rModerator.getRoomModeratorsId();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return rModeratorId;
 		} catch (Exception ex2) {
 			log.error("[addRoomModeratorByUserId] ",ex2);
@@ -64,14 +64,14 @@ public class RoomModeratorsDaoImpl {
 	public Long addRoomModeratorByObj(RoomModerators rModerator){
 		try {
 			rModerator.setStarttime(new Date());
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			rModerator = session.merge(rModerator);
 			long rModeratorId = rModerator.getRoomModeratorsId();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return rModeratorId;
 		} catch (Exception ex2) {
 			log.error("[addRoomModeratorByUserId] ",ex2);
@@ -87,8 +87,8 @@ public class RoomModeratorsDaoImpl {
 		try {
 			String hql = "select c from RoomModerators as c where c.roomModeratorsId = :roomModeratorsId";
 		
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -102,7 +102,7 @@ public class RoomModeratorsDaoImpl {
 		    }
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomModerators;
 			
@@ -118,8 +118,8 @@ public class RoomModeratorsDaoImpl {
 			String hql = "select c from RoomModerators as c " +
 					"where c.roomId = :roomId AND c.deleted <> :deleted";
 		
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -130,7 +130,7 @@ public class RoomModeratorsDaoImpl {
 			List<RoomModerators> roomModerators = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomModerators;
 			
@@ -149,8 +149,8 @@ public class RoomModeratorsDaoImpl {
 					"AND c.deleted <> :deleted " +
 					"AND c.user.user_id = :user_id";
 		
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -162,7 +162,7 @@ public class RoomModeratorsDaoImpl {
 			List<RoomModerators> roomModerators = query.getResultList();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomModerators;
 			
@@ -189,8 +189,8 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setUpdatetime(new Date());
 			rModerator.setDeleted("true");
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (rModerator.getRoomModeratorsId() == 0) {
@@ -201,7 +201,7 @@ public class RoomModeratorsDaoImpl {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[removeRoomModeratorByUserId] ",ex2);
@@ -219,8 +219,8 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setIsSuperModerator(isSuperModerator);
 			rModerator.setUpdatetime(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (rModerator.getRoomModeratorsId() == 0) {
@@ -231,7 +231,7 @@ public class RoomModeratorsDaoImpl {
 			    }
 			}
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateRoomModeratorByUserId] ",ex2);

@@ -13,7 +13,7 @@ import javax.persistence.EntityTransaction;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class MeetingMemberDaoImpl {
@@ -41,8 +41,8 @@ public class MeetingMemberDaoImpl {
 					"WHERE app.deleted <> :deleted " +
 					"AND app.meetingMemberId = :meetingMemberId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -55,7 +55,7 @@ public class MeetingMemberDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return meetingMember;
 		} catch (Exception ex2) {
@@ -68,15 +68,15 @@ public class MeetingMemberDaoImpl {
 		try {
 			String hql = "select app from MeetingMember app";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			
 			List<MeetingMember> meetingMembers = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return meetingMembers;
 		} catch (Exception ex2) {
@@ -93,8 +93,8 @@ public class MeetingMemberDaoImpl {
 					"WHERE app.deleted <> :deleted " +
 					"AND app.appointment.appointmentId = :appointmentId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -103,7 +103,7 @@ public class MeetingMemberDaoImpl {
 			
 			List<MeetingMember> listmeetingMember = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listmeetingMember;
 		} catch (Exception ex2) {
@@ -166,8 +166,8 @@ public class MeetingMemberDaoImpl {
 		log.debug("");
 		if (meetingMember.getMeetingMemberId() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				if (meetingMember.getMeetingMemberId() == null) {
@@ -179,7 +179,7 @@ public class MeetingMemberDaoImpl {
 				}
 				session.flush();
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return meetingMember;
 			} catch (Exception ex2) {
 				log.error("[updateMeetingMember] ",ex2);
@@ -217,8 +217,8 @@ public class MeetingMemberDaoImpl {
 			gm.setEmail(email);
 			
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -233,7 +233,7 @@ public class MeetingMemberDaoImpl {
 			session.flush();
 			tx.commit();
 			meetingMemberId = gm.getMeetingMemberId();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return meetingMemberId;
 		} catch (Exception ex2) {
 			log.error("[updateMeetingMember]: ",ex2);
@@ -263,8 +263,8 @@ public class MeetingMemberDaoImpl {
 			
 			gm.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(jNameTimeZone));
 						
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -273,7 +273,7 @@ public class MeetingMemberDaoImpl {
 			Long group_member_id = gm.getMeetingMemberId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return group_member_id;
 		} catch (Exception ex2) {
@@ -285,8 +285,8 @@ public class MeetingMemberDaoImpl {
 	public Long addMeetingMemberByObject(MeetingMember gm){
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -295,7 +295,7 @@ public class MeetingMemberDaoImpl {
 			Long group_member_id = gm.getMeetingMemberId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return group_member_id;
 		} catch (Exception ex2) {
@@ -320,8 +320,8 @@ public class MeetingMemberDaoImpl {
 			gm.setUpdatetime(new Date());
 			gm.setDeleted(true);
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (gm.getMeetingMemberId() == null) {
@@ -333,7 +333,7 @@ public class MeetingMemberDaoImpl {
 			}
 						
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return meetingMemberId;
 		} catch (Exception ex2) {
 			log.error("[deleteMeetingMember]: ", ex2);

@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.adresses.States;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class Addressmanagement {
@@ -46,8 +46,8 @@ public class Addressmanagement {
 		try {
 			States st = Statemanagement.getInstance().getStateById(states_id);
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -67,7 +67,7 @@ public class Addressmanagement {
 			Long id = adr.getAdresses_id();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("added id " + id);
 
@@ -81,8 +81,8 @@ public class Addressmanagement {
 	public Long saveAddressObj(Adresses adr) {
 		try {
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -90,7 +90,7 @@ public class Addressmanagement {
 			Long id = adr.getAdresses_id();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("added id " + id);
 
@@ -109,8 +109,8 @@ public class Addressmanagement {
 	public Adresses getAdressbyId(long adresses_id) {
 		try {
 			String hql = "select c from Adresses as c where c.adresses_id = :adresses_id";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -121,7 +121,7 @@ public class Addressmanagement {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return addr;
 		} catch (Exception ex2) {
 			log.error("getAdressbyId",ex2);
@@ -140,8 +140,8 @@ public class Addressmanagement {
 		String hql = "select c from Adresses as c " +
 				"where c.email LIKE :email";
 				//"and c.deleted <> :deleted";
-		Object idf = HibernateUtil.createSession();
-		EntityManager session = HibernateUtil.getSession();
+		Object idf = PersistenceSessionUtil.createSession();
+		EntityManager session = PersistenceSessionUtil.getSession();
 		EntityTransaction tx = session.getTransaction();
 			tx.begin();
 		Query query = session.createQuery(hql);
@@ -151,7 +151,7 @@ public class Addressmanagement {
 		List<Adresses> addr = query.getResultList();
 		
 		tx.commit();
-		HibernateUtil.closeSession(idf);
+		PersistenceSessionUtil.closeSession(idf);
 	
 		log.debug("retrieveAddressByEmail "+addr.size());
 		
@@ -181,8 +181,8 @@ public class Addressmanagement {
 			
 			Adresses adr = this.getAdressbyId(adresses_id);
 
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -206,7 +206,7 @@ public class Addressmanagement {
 			}
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			return adr;
 		} catch (Exception ex2) {
@@ -225,8 +225,8 @@ public class Addressmanagement {
 		
 		try {
 				
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 
@@ -240,7 +240,7 @@ public class Addressmanagement {
 			
 			tx.commit();
 				
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 
 			return addr;
 		} catch (Exception ex2) {

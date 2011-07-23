@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.openmeetings.app.persistence.beans.recording.RoomStream;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class RoomStreamDaoImpl {
@@ -34,15 +34,15 @@ public class RoomStreamDaoImpl {
 			String hql = "select c from RoomStream as c " +
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
 			query.setParameter("roomrecordingId", roomrecordingId);
 			List<RoomStream> ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 	
@@ -60,8 +60,8 @@ public class RoomStreamDaoImpl {
 				roomStream.setRcl(RoomClientDaoImpl.getInstance().getAndAddRoomClientByPublicSID(roomStream.getRcl()));
 			}
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -69,7 +69,7 @@ public class RoomStreamDaoImpl {
 			Long roomStreamId = roomStream.getRoomStreamId();
 			
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomStreamId;
 		} catch (Exception ex2) {

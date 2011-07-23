@@ -15,7 +15,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 public class AppointmentCategoryDaoImpl {
@@ -43,8 +43,8 @@ public class AppointmentCategoryDaoImpl {
 					"WHERE app.deleted <> :deleted " +
 					"AND app.categoryId = :categoryId";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -57,7 +57,7 @@ public class AppointmentCategoryDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return appointCategory;
 		} catch (Exception ex2) {
@@ -75,8 +75,8 @@ public class AppointmentCategoryDaoImpl {
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -89,7 +89,7 @@ public class AppointmentCategoryDaoImpl {
 			}
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return categoryId;
 		} catch (Exception ex2) {
 			log.error("[updateAppointmentCategory]: ",ex2);
@@ -109,8 +109,8 @@ public class AppointmentCategoryDaoImpl {
 			ac.setComment(comment);
 			
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			
@@ -118,7 +118,7 @@ public class AppointmentCategoryDaoImpl {
 			Long category_id = ac.getCategoryId();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return category_id;
 		} catch (Exception ex2) {
@@ -141,8 +141,8 @@ public class AppointmentCategoryDaoImpl {
 			ac.setUpdatetime(new Date());
 			ac.setDeleted("true");
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			if (ac.getCategoryId() == null) {
@@ -154,7 +154,7 @@ public class AppointmentCategoryDaoImpl {
 			}
 						
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return categoryId;
 		} catch (Exception ex2) {
 			log.error("[deleteAppointmentCategory]: " + ex2);
@@ -168,8 +168,8 @@ public class AppointmentCategoryDaoImpl {
 			String hql = "select a from AppointmentCategory a " +
 					"WHERE a.deleted <> :deleted ";
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -177,7 +177,7 @@ public class AppointmentCategoryDaoImpl {
 				
 			List<AppointmentCategory> listAppointmentCategory = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return listAppointmentCategory;
 		} catch (Exception ex2) {

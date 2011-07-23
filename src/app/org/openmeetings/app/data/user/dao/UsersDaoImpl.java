@@ -16,7 +16,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.HibernateUtil;
+import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.slf4j.Logger;
@@ -47,8 +47,8 @@ public class UsersDaoImpl {
 	public Users getUser(Long user_id) {
 		if (user_id != null && user_id > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 			tx.begin();
 				Query query = session.createQuery("select c from Users as c where c.user_id = :user_id");
@@ -64,7 +64,7 @@ public class UsersDaoImpl {
 				session.refresh(users);
 				
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				
 				//Somehow the Organizations are missing here o
 				
@@ -84,8 +84,8 @@ public class UsersDaoImpl {
 	public void updateUser(Users user) {
 		if (user.getUser_id() > 0) {
 			try {
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				session.flush();
@@ -97,7 +97,7 @@ public class UsersDaoImpl {
 				    }
 				}
 				tx.commit();
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("[updateUser] ",ex2);
 			}
@@ -117,8 +117,8 @@ public class UsersDaoImpl {
 				// Groupmanagement.getInstance().deleteUserFromAllGroups(new
 				// Long(USER_ID));
 
-				Object idf = HibernateUtil.createSession();
-				EntityManager session = HibernateUtil.getSession();
+				Object idf = PersistenceSessionUtil.createSession();
+				EntityManager session = PersistenceSessionUtil.getSession();
 				EntityTransaction tx = session.getTransaction();
 				tx.begin();
 				if (us.getUser_id() == null) {
@@ -130,7 +130,7 @@ public class UsersDaoImpl {
 				}
 				tx.commit();
 				
-				HibernateUtil.closeSession(idf);
+				PersistenceSessionUtil.closeSession(idf);
 				return us.getUser_id();
 				// result +=
 				// ResHandler.getBestellmanagement().deleteWarenkorbByUserID(USER_ID);
@@ -156,14 +156,14 @@ public class UsersDaoImpl {
 	public Long selectMaxFromUsers(){
 		try {
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select count(c.user_id) from Users c where c.deleted = 'false'"); 
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
@@ -176,8 +176,8 @@ public class UsersDaoImpl {
 		try {
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -188,7 +188,7 @@ public class UsersDaoImpl {
 			TypedQuery<Users> q = session.createQuery(cq);
 			List<Users> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;				
 
@@ -202,8 +202,8 @@ public class UsersDaoImpl {
 		try {
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -214,7 +214,7 @@ public class UsersDaoImpl {
 			TypedQuery<Users> q = session.createQuery(cq);
 			List<Users> ll = q.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;				
 
@@ -254,8 +254,8 @@ public class UsersDaoImpl {
 			
 			log.debug("Show HQL: "+hql);						
 			
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -268,7 +268,7 @@ public class UsersDaoImpl {
 						
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			
 			
 			//log.error((Long)ll.get(0));
@@ -288,8 +288,8 @@ public class UsersDaoImpl {
 	 */
 	public boolean checkUserLogin(String DataValue) {
 		try {
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted");
@@ -298,7 +298,7 @@ public class UsersDaoImpl {
 			int count = query.getResultList().size();
 
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			if (count != 0) {
 				return false;
 			}			
@@ -314,8 +314,8 @@ public class UsersDaoImpl {
 			String hql = "SELECT u FROM Users as u " +
 					" where u.login = :login" +
 					" AND u.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -327,7 +327,7 @@ public class UsersDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return us;			
 		} catch (Exception e) {
 			log.error("[getUserByAdressesId]",e);
@@ -340,8 +340,8 @@ public class UsersDaoImpl {
 			String hql = "SELECT u FROM Users as u " +
 					" where u.adresses.adresses_id = :adresses_id" +
 					" AND u.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -353,7 +353,7 @@ public class UsersDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			return us;			
 		} catch (Exception e) {
 			log.error("[getUserByAdressesId]",e);
@@ -367,8 +367,8 @@ public class UsersDaoImpl {
 			String hql = "SELECT u FROM Users as u " +
 					" where u.resethash = :resethash" +
 					" AND u.deleted <> :deleted";
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql);
@@ -380,7 +380,7 @@ public class UsersDaoImpl {
 		    } catch (NoResultException ex) {
 		    }
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			if (us!=null) {
 				return us;		
 			} else {
@@ -426,15 +426,15 @@ public class UsersDaoImpl {
 					")";
 			
 			//get all users
-			Object idf = HibernateUtil.createSession();
-			EntityManager session = HibernateUtil.getSession();
+			Object idf = PersistenceSessionUtil.createSession();
+			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
 			tx.begin();
 			Query query = session.createQuery(hql); 
 			query.setParameter("search", StringUtils.lowerCase(search));
 			List ll = query.getResultList();
 			tx.commit();
-			HibernateUtil.closeSession(idf);
+			PersistenceSessionUtil.closeSession(idf);
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
