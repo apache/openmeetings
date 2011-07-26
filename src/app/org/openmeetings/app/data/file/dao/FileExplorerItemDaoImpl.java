@@ -223,7 +223,7 @@ public class FileExplorerItemDaoImpl {
     }
 
     public FileExplorerItem getFileExplorerItemsById(Long fileExplorerItemId) {
-        log.debug(".getFileExplorerItemsById() started");
+        //log.debug(".getFileExplorerItemsById() started");
 
         try {
 

@@ -229,7 +229,7 @@ public class Roommanagement {
 				return room;
 			}
 			else{
-				log.error("Could not find room " + rooms_id);
+				log.info("Could not find room " + rooms_id);
 			}
 		} catch (Exception ex2) {
 			log.error("[getRoomById] ", ex2);

@@ -76,7 +76,7 @@ public class UsersDaoImpl {
 				log.error("getUser",ex2);
 			}
 		} else {
-			log.error("[getUser] "+"Error: No USER_ID given");
+			log.info("[getUser] "+"Error: No USER_ID given");
 		}
 		return null;
 	}
@@ -102,7 +102,7 @@ public class UsersDaoImpl {
 				log.error("[updateUser] ",ex2);
 			}
 		} else {
-			log.error("[updateUser] "+"Error: No USER_ID given");
+			log.info("[updateUser] "+"Error: No USER_ID given");
 		}
 	}
 	
@@ -167,7 +167,7 @@ public class UsersDaoImpl {
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] "+ex2);
+			log.error("[selectMaxFromUsers] ", ex2);
 		}
 		return null;
 	}
@@ -193,7 +193,7 @@ public class UsersDaoImpl {
 			return ll;				
 
 		} catch (Exception ex2) {
-			log.error("[getAllUsers] "+ex2);
+			log.error("[getAllUsers] ", ex2);
 		}
 		return null;
 	}	
@@ -219,7 +219,7 @@ public class UsersDaoImpl {
 			return ll;				
 
 		} catch (Exception ex2) {
-			log.error("[getAllUsers] "+ex2);
+			log.error("[getAllUsers] ", ex2);
 		}
 		return null;
 	}	
@@ -276,7 +276,7 @@ public class UsersDaoImpl {
 			
 			return new Long(i);
 		} catch (Exception ex2) {
-			log.error("[getAllUserMax]: " + ex2);
+			log.error("[getAllUserMax]: " , ex2);
 		}
 		return null;
 	}
@@ -438,7 +438,7 @@ public class UsersDaoImpl {
 			log.info("selectMaxFromUsers"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
 		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] "+ex2);
+			log.error("[selectMaxFromUsers] ",ex2);
 		}
 		return null;
 	}

@@ -778,27 +778,36 @@ public class BackupImport extends HttpServlet {
 	        				
 	        			}
 	        			
-	        			Users storedUser = Usermanagement.getInstance().getUserById(us.getUser_id());
+	        			//check if login does already exists
+	        			Users storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(us.getLogin());
 	        			
-	        			if (storedUser == null) {
-	        				
-	        				log.debug("Add User ID "+us.getUser_id());
-	        				us.setUser_id(null);
-	        				us.setStarttime(new Date());
-	        				Long actualNewUserId = Usermanagement.getInstance().addUserBackup(us);
-		        			usersMap.put(us.getUser_id(), actualNewUserId);
-	        				
-	        				for (Iterator<Organisation_Users> orgUserIterator = orgUsers.iterator();orgUserIterator.hasNext();) {
-	        					
-	        					Organisation_Users organisationUsers = orgUserIterator.next();
-	        					
-	        					organisationUsers.setUser_id(actualNewUserId);
-	        					
-	        					Organisationmanagement.getInstance().addOrganisationUserObj(organisationUsers);
-	        					
-	        				}
-	        				
+	        			if (storedUser != null) {
+	        				log.info("A user with the given login does already exist "+us.getLogin());
+	        				return;
 	        			}
+	        			
+	        			storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(email);
+	        			
+	        			if (storedUser != null) {
+	        				log.info("A user with the given email as login does already exist "+email);
+	        				return;
+	        			}
+	        			
+        				log.debug("Import User ID "+us.getUser_id());
+        				us.setUser_id(null);
+        				us.setStarttime(new Date());
+        				Long actualNewUserId = Usermanagement.getInstance().addUserBackup(us);
+	        			usersMap.put(us.getUser_id(), actualNewUserId);
+        				
+        				for (Iterator<Organisation_Users> orgUserIterator = orgUsers.iterator();orgUserIterator.hasNext();) {
+        					
+        					Organisation_Users organisationUsers = orgUserIterator.next();
+        					
+        					organisationUsers.setUser_id(actualNewUserId);
+        					
+        					Organisationmanagement.getInstance().addOrganisationUserObj(organisationUsers);
+        					
+        				}
 	        			
 	        		}
 	        		
@@ -1182,13 +1191,10 @@ public class BackupImport extends HttpServlet {
 		
 		for (Organisation org : orgList) {
 			Long orgId = org.getOrganisation_id();
-			Organisation orgStored = Organisationmanagement.getInstance().getOrganisationByIdAndDeleted(orgId);
 			
-			if (orgStored == null) {
-				org.setOrganisation_id(null);
-				Long newOrgID = Organisationmanagement.getInstance().addOrganisationObj(org);
-				organisationsMap.put(orgId, newOrgID);
-			}
+			org.setOrganisation_id(null);
+			Long newOrgID = Organisationmanagement.getInstance().addOrganisationObj(org);
+			organisationsMap.put(orgId, newOrgID);
 			
 		}
 		
@@ -1377,16 +1383,12 @@ public class BackupImport extends HttpServlet {
 		
 		for (Appointment appointment : appointmentList) {
 			Long appId = appointment.getAppointmentId();
-			Appointment appointmentStored = AppointmentDaoImpl.getInstance().getAppointmentById(appId);
+				
+			//We need to reset this as openJPA reject to store them otherwise
+			appointment.setAppointmentId(null);
 			
-			if (appointmentStored == null) {
-				
-				//We need to reset this as openJPA reject to store them otherwise
-				appointment.setAppointmentId(null);
-				
-				Long newAppId =  AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
-				appointmentsMap.put(appId, newAppId);
-			}
+			Long newAppId =  AppointmentDaoImpl.getInstance().addAppointmentObj(appointment);
+			appointmentsMap.put(appId, newAppId);
 			
 		}
 		
@@ -1477,17 +1479,11 @@ public class BackupImport extends HttpServlet {
 			
 		for (Rooms_Organisation rooms_Organisation :roomOrgList) {
 			
-			Rooms_Organisation roomsOrganisationStored = Roommanagement.getInstance().getRoomsOrganisationById(rooms_Organisation.getRooms_organisation_id());
+			//We need to reset this as openJPA reject to store them otherwise
+			rooms_Organisation.setRooms_organisation_id(null);
 			
-			if (roomsOrganisationStored == null) {
+			Roommanagement.getInstance().addRoomOrganisation(rooms_Organisation);
 				
-				//We need to reset this as openJPA reject to store them otherwise
-				rooms_Organisation.setRooms_organisation_id(null);
-				
-				Roommanagement.getInstance().addRoomOrganisation(rooms_Organisation);
-				
-			}
-			
 		}
 		
 	}
@@ -1640,15 +1636,12 @@ public class BackupImport extends HttpServlet {
 	        			room.setAllowRecording(allowRecording);
 	        			
 	        			Long roomId = room.getRooms_id();
-	        			Rooms roomStored = Roommanagement.getInstance().getRoomById(roomId);
 	        			
-	        			if (roomStored == null) {
-	        				//We need to reset this as openJPA reject to store them otherwise
-	        				room.setRooms_id(null);
-	        				
-	        				Long newRoomId = Roommanagement.getInstance().addRoom(room);
-	        				roomsMap.put(roomId, newRoomId);
-	        			}
+        				//We need to reset this as openJPA reject to store them otherwise
+        				room.setRooms_id(null);
+        				
+        				Long newRoomId = Roommanagement.getInstance().addRoom(room);
+        				roomsMap.put(roomId, newRoomId);
 	        			
 	        			for (Iterator<Element> iterMods = roomObject.elementIterator( "room_moderators" ); iterMods.hasNext(); ) {
 	        				
@@ -1668,13 +1661,8 @@ public class BackupImport extends HttpServlet {
 	        					roomModerators.setUser(Usermanagement.getInstance().getUserById(user_id));
 	        					roomModerators.setIsSuperModerator(is_supermoderator);
 	        					
-	        					List<RoomModerators> roomModeratorsStored = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByUserAndRoomId(roomModerators.getRoomId(), roomModerators.getUser().getUser_id());
-	        					
-	        					if (roomModeratorsStored == null || roomModeratorsStored.size() == 0) {
+        						RoomModeratorsDaoImpl.getInstance().addRoomModeratorByObj(roomModerators);
 	        						
-	        						RoomModeratorsDaoImpl.getInstance().addRoomModeratorByObj(roomModerators);
-	        						
-	        					}
 	        				}
 	        				
 	        			}
@@ -1698,12 +1686,10 @@ public class BackupImport extends HttpServlet {
 			
 			//We need to reset this as openJPA reject to store them otherwise
 			long itemId = fileExplorerItem.getFileExplorerItemId();
-			FileExplorerItem storedItem = FileExplorerItemDaoImpl.getInstance().getFileExplorerItemsById(itemId);
-			if (storedItem == null){
-				fileExplorerItem.setFileExplorerItemId(0);
-				long newItemId = FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
-				fileExplorerItemsMap.put(itemId, newItemId);
-			}
+			
+			fileExplorerItem.setFileExplorerItemId(0);
+			long newItemId = FileExplorerItemDaoImpl.getInstance().addFileExplorerItem(fileExplorerItem);
+			fileExplorerItemsMap.put(itemId, newItemId);
 			
 		}
 		
