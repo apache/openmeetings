@@ -178,7 +178,7 @@ public class UploadHandler extends HttpServlet {
 					// System.out.println("cannot write to directory");
 				}
 			}
-			completeName += "profile_" + userId + File.separatorChar;
+			completeName += ScopeApplicationAdapter.profilesPrefix + userId + File.separatorChar;
 			File f2 = new File(completeName);
 			if (!f2.exists()) {
 				boolean c = f2.mkdir();
@@ -204,7 +204,7 @@ public class UploadHandler extends HttpServlet {
 					+ "uploadtemp"
 					+ File.separatorChar
 					+ ((userProfile) ? "profiles" + File.separatorChar
-							+ "profile_" + userId : roomName)
+							+ ScopeApplicationAdapter.profilesPrefix + userId : roomName)
 					+ File.separatorChar;
 			localFolder = new File(workingDirPpt);
 			if (!localFolder.exists()) {
@@ -365,7 +365,7 @@ public class UploadHandler extends HttpServlet {
 			Long users_id) throws Exception {
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
-				+ "profiles" + File.separatorChar + "profile_" + users_id
+				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 		File f = new File(working_imgdir);
 		if (f.exists() && f.isDirectory()) {
@@ -377,7 +377,7 @@ public class UploadHandler extends HttpServlet {
 			throws Exception {
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
-				+ "profiles" + File.separatorChar + "profile_" + users_id
+				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 
 		for (int i = 0; i < this.filesString.length; i++) {

@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
@@ -50,9 +48,6 @@ import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.documents.GenerateImage;
-import org.openmeetings.app.documents.GeneratePDF;
-import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
@@ -244,114 +239,6 @@ public class BackupImport extends HttpServlet {
 
 		            zipinputstream.close();
 		            
-		            //Now check the room files and import them
-		            
-		            File roomFilesFolder = new File(completeName + File.separatorChar + "roomFiles");
-		            
-		            
-		            String library_dir = current_dir + "upload"
-												+ File.separatorChar;
-		            
-		            log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
-		            
-		            if (roomFilesFolder.exists()) {
-		            	
-		            	File[] files = roomFilesFolder.listFiles();
-		            	for (File file : files) {
-		            		if (file.isDirectory()) {
-		            			
-								String parentFolderName = file.getName();
-		            				
-	            				//Is a room folder or the profiles folder
-	            				String parentPath = library_dir + parentFolderName + File.separatorChar;
-		            			
-	            				File parentPathFile = new File(parentPath);
-	            				
-	            				if (!parentPathFile.exists()) {
-	            					parentPathFile.mkdir();
-	            				}
-	            				
-	            				File[] roomOrProfileFiles = file.listFiles();
-	            				for (File roomOrProfileFileOrFolder : roomOrProfileFiles) {
-	            					
-	            					
-	            					if (roomOrProfileFileOrFolder.isDirectory()) {
-	            						
-	            						String roomDocumentFolderName = parentPath + roomOrProfileFileOrFolder.getName() + File.separatorChar;
-	            						
-	            						File roomDocumentFolder = new File(roomDocumentFolderName);
-	    	            				
-	    	            				if (!roomDocumentFolder.exists()) {
-	    	            					roomDocumentFolder.mkdir();
-	    	            					
-	    	            					File[] roomDocumentFiles = roomOrProfileFileOrFolder.listFiles();
-		    	            				
-		    	            				for (File roomDocumentFile : roomDocumentFiles) {
-		    	            					
-		    	            					if (roomDocumentFile.isDirectory()) {
-		    	            						log.error("Folder detected in Documents space! Folder "+roomDocumentFolderName);
-		    	            					} else {
-		    	            						
-		    	            						String roomDocumentFileName = roomDocumentFolderName + roomDocumentFile.getName();
-		    	            						
-		    	            						this.copyFile(roomDocumentFile, new File(roomDocumentFileName));
-		    	            						
-		    	            					}
-		    	            					
-		    	            				}
-	    	            					
-	    	            				} else {
-	    	            					
-	    	            					log.debug("Document already exists :: ",roomDocumentFolderName);
-	    	            					
-	    	            				}
-	    	            				
-	    	            				
-	            						
-	            					} else {
-	            						
-	            						String roomFileOrProfileName = parentPath + roomOrProfileFileOrFolder.getName();
-	            						
-	            						File roomFileOrProfileFile = new File(roomFileOrProfileName);
-	            						
-	            						if (!roomFileOrProfileFile.exists()) {
-	            							
-	            							this.copyFile(roomOrProfileFileOrFolder, roomFileOrProfileFile);
-	            							
-	            						} else {
-	            							
-	            							log.debug("File does already exist :: ",roomFileOrProfileName);
-	            							
-	            						}
-	            						
-	            						
-	            					}
-	            					
-	            					
-	            					
-	            				}
-		            			
-		            		}
-		            	}
-		            	
-		            }
-		            
-		            
-		            //Now check the recordings and import them
-		            
-		            File sourceDirRec = new File(completeName + File.separatorChar + "recordingFiles");
-		            
-		            
-		            log.debug("sourceDirRec PATH " + sourceDirRec.getAbsolutePath());
-		            
-		            if (sourceDirRec.exists()) {
-		            	
-		            	File targetDirRec = new File(current_dir + "streams" + File.separatorChar 
-												+ "hibernate" + File.separatorChar);
-		            	
-		            	copyDirectory(sourceDirRec,targetDirRec);
-		            	
-		            }
 					
 					/* #####################
 					 * Import Organizations
@@ -493,6 +380,8 @@ public class BackupImport extends HttpServlet {
 					} else {
 						this.importFileExplorerItems(fileExplorerListFile);
 					}
+
+					importFolders(current_dir, completeName);
 					
 					this.deleteDirectory(f);
 					
@@ -781,23 +670,29 @@ public class BackupImport extends HttpServlet {
 	        			//check if login does already exists
 	        			Users storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(us.getLogin());
 	        			
-	        			if (storedUser != null) {
-	        				log.info("A user with the given login does already exist "+us.getLogin());
-	        				return;
+	        			Long userId = us.getUser_id();
+	        			if (us.getExternalUserId() == null || us.getExternalUserId() == 0){
+		        			if (storedUser != null) {
+		        				log.info("A user with the given login does already exist "+us.getLogin());
+		        			} else {
+	
+		        				storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(email);
+			        			
+			        			if (storedUser != null) {
+			        				log.info("A user with the given email as login does already exist "+email);
+			        			}
+		        			}
+		        			if (storedUser != null) {
+			        			usersMap.put(userId, storedUser.getUser_id());
+			        			continue;
+		        			}
 	        			}
-	        			
-	        			storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(email);
-	        			
-	        			if (storedUser != null) {
-	        				log.info("A user with the given email as login does already exist "+email);
-	        				return;
-	        			}
-	        			
-        				log.debug("Import User ID "+us.getUser_id());
+
+        				log.debug("Import User ID "+userId);
         				us.setUser_id(null);
         				us.setStarttime(new Date());
         				Long actualNewUserId = Usermanagement.getInstance().addUserBackup(us);
-	        			usersMap.put(us.getUser_id(), actualNewUserId);
+	        			usersMap.put(userId, actualNewUserId);
         				
         				for (Iterator<Organisation_Users> orgUserIterator = orgUsers.iterator();orgUserIterator.hasNext();) {
         					
@@ -1773,6 +1668,129 @@ public class BackupImport extends HttpServlet {
 			log.error("[getFileExplorerItems]",err);
 		}
 		return null;
+	}
+
+	private void importFolders(String current_dir, String completeName) throws IOException {
+        
+		//Now check the room files and import them
+        File roomFilesFolder = new File(completeName + File.separatorChar + "roomFiles");
+        
+        
+        String library_dir = current_dir + "upload"
+									+ File.separatorChar;
+        
+        log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
+        
+        if (roomFilesFolder.exists()) {
+        	
+        	File[] files = roomFilesFolder.listFiles();
+        	for (File file : files) {
+        		if (file.isDirectory()) {
+        			
+					String parentFolderName = file.getName();
+        				
+    				//Is a room folder or the profiles folder
+    				String parentPath = library_dir + parentFolderName + File.separatorChar;
+        			
+    				File parentPathFile = new File(parentPath);
+    				
+    				if (!parentPathFile.exists()) {
+    					parentPathFile.mkdir();
+    				}
+    				
+    				File[] roomOrProfileFiles = file.listFiles();
+    				for (File roomOrProfileFileOrFolder : roomOrProfileFiles) {
+    					
+    					
+    					if (roomOrProfileFileOrFolder.isDirectory()) {
+    						
+    						String fileOrFolderName = roomOrProfileFileOrFolder.getName();
+    						int beginIndex = fileOrFolderName.indexOf(ScopeApplicationAdapter.profilesPrefix);
+    						// Profile folder should be renamed if new user id is differ from current id.
+    						if (beginIndex  > -1 ){
+    							beginIndex = beginIndex + ScopeApplicationAdapter.profilesPrefix.length();
+    							Long profileId = importLongType(fileOrFolderName.substring(beginIndex));
+    							Long newProfileID = getNewId(profileId, Maps.USERS);
+    							if (profileId != newProfileID){
+    								fileOrFolderName = fileOrFolderName.replaceFirst(ScopeApplicationAdapter.profilesPrefix + profileId, ScopeApplicationAdapter.profilesPrefix + newProfileID);
+    							}
+    						}
+    						String roomDocumentFolderName = parentPath + fileOrFolderName + File.separatorChar;
+    						
+    						File roomDocumentFolder = new File(roomDocumentFolderName);
+            				
+            				if (!roomDocumentFolder.exists()) {
+            					roomDocumentFolder.mkdir();
+            					
+            					File[] roomDocumentFiles = roomOrProfileFileOrFolder.listFiles();
+	            				
+	            				for (File roomDocumentFile : roomDocumentFiles) {
+	            					
+	            					if (roomDocumentFile.isDirectory()) {
+	            						log.error("Folder detected in Documents space! Folder "+roomDocumentFolderName);
+	            					} else {
+	            						
+	            						String roomDocumentFileName = roomDocumentFolderName + roomDocumentFile.getName();
+	            						
+	            						this.copyFile(roomDocumentFile, new File(roomDocumentFileName));
+	            						
+	            					}
+	            					
+	            				}
+            					
+            				} else {
+            					
+            					log.debug("Document already exists :: ",roomDocumentFolderName);
+            					
+            				}
+            				
+            				
+    						
+    					} else {
+    						
+    						String roomFileOrProfileName = parentPath + roomOrProfileFileOrFolder.getName();
+    						
+    						File roomFileOrProfileFile = new File(roomFileOrProfileName);
+    						
+    						if (!roomFileOrProfileFile.exists()) {
+    							
+    							this.copyFile(roomOrProfileFileOrFolder, roomFileOrProfileFile);
+    							
+    						} else {
+    							
+    							log.debug("File does already exist :: ",roomFileOrProfileName);
+    							
+    						}
+    						
+    						
+    					}
+    					
+    					
+    					
+    				}
+        			
+        		}
+        	}
+        	
+        }
+        
+        
+        //Now check the recordings and import them
+        
+        File sourceDirRec = new File(completeName + File.separatorChar + "recordingFiles");
+        
+        
+        log.debug("sourceDirRec PATH " + sourceDirRec.getAbsolutePath());
+        
+        if (sourceDirRec.exists()) {
+        	
+        	File targetDirRec = new File(current_dir + "streams" + File.separatorChar 
+									+ "hibernate" + File.separatorChar);
+        	
+        	copyDirectory(sourceDirRec,targetDirRec);
+        	
+        }
+		
 	}
 	
 	private Integer importIntegerType(String value) {

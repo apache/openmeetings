@@ -90,10 +90,10 @@ public class GenerateImage {
 		HashMap<String, HashMap<String, Object>> returnMap = new HashMap<String, HashMap<String, Object>>();
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
-				+ "profiles" + File.separatorChar + "profile_" + users_id
+				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 		String working_pptdir = current_dir + "uploadtemp" + File.separatorChar
-				+ "profiles" + File.separatorChar + "profile_" + users_id
+				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 
 		String fileFullPath = working_pptdir + fileName + fileExt;

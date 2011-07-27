@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 
 
 public class DownloadHandler extends HttpServlet {
@@ -142,7 +143,7 @@ public class DownloadHandler extends HttpServlet {
 						}
 					}
 					
-					working_dir += "profile_"+users_id + File.separatorChar;
+					working_dir += ScopeApplicationAdapter.profilesPrefix+users_id + File.separatorChar;
 					File f2 = new File(working_dir);
 					if (!f2.exists()) {
 						boolean c = f2.mkdir();
@@ -165,7 +166,7 @@ public class DownloadHandler extends HttpServlet {
 						remoteUser_id = "0";
 					}
 					
-					working_dir += "profile_"+remoteUser_id + File.separatorChar;
+					working_dir += ScopeApplicationAdapter.profilesPrefix+remoteUser_id + File.separatorChar;
 					File f2 = new File(working_dir);
 					if (!f2.exists()) {
 						boolean c = f2.mkdir();
@@ -191,7 +192,7 @@ public class DownloadHandler extends HttpServlet {
 						remoteUser_id = "0";
 					}
 					
-					working_dir += "profile_"+remoteUser_id + File.separatorChar;
+					working_dir += ScopeApplicationAdapter.profilesPrefix+remoteUser_id + File.separatorChar;
 					File f2 = new File(working_dir);
 					if (!f2.exists()) {
 						boolean c = f2.mkdir();
@@ -218,7 +219,7 @@ public class DownloadHandler extends HttpServlet {
 						remoteUser_id = "0";
 					}	
 					
-					working_dir += "profile_"+remoteUser_id + File.separatorChar;
+					working_dir += ScopeApplicationAdapter.profilesPrefix+remoteUser_id + File.separatorChar;
 					File f2 = new File(working_dir);
 					if (!f2.exists()) {
 						boolean c = f2.mkdir();
