@@ -9,10 +9,10 @@
                                          "September","October", "November",
                                          "December" ]'/>
                                          
-<class name="lzCalendar" extends="baseContentView" height="570">
+<class name="lzCalendar" extends="baseContentView" height="600">
 	
 	<handler name="oninit">
-		this.setAttribute("height",570);
+		//this.setAttribute("height",570);
 	</handler>
 	
 	<dateSelector name="_calendar" y="0" x="2">
