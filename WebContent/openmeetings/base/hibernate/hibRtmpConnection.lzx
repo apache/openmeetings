@@ -255,7 +255,7 @@
     <netRemoteCallHib name="getDefaultLanguage" funcname="languageservice.getDefaultLanguage" >      
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getDefaultLanguage: ",value);
+            if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
             if (canvas.language_id==0){
             	parent.userlang = value;
             } else {
@@ -420,6 +420,7 @@
         <netparam><method name="getValue">return parent.step;</method></netparam> 
         <handler name="ondata" args="value">
         	<![CDATA[
+			if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.parent.userlang,"]");
         		//if($debug) Debug.write("hibRtmpConnection/getLanguageByIdAndMax:[",value,"]");
         		setLabelObjectByHundred(this.start,value);
 	            //The onResult-Handler will be called be the rtmpconnection
@@ -639,7 +640,10 @@
                     	return;
                     }
                     
-                    hib.userlang = Number(value.sessionData.language_id);
+                    if ($debug) Debug.write("value.sessionData: ", value.sessionData);
+                    hib.userlang = isNaN(value.sessionData.language_id) ? 1 :  Number(value.sessionData.language_id);
+                    canvas.setAttribute('userlang', hib.userlang);
+                    canvas.setAttribute('language_id', hib.userlang);
                     hib.userobject = value;
                     
                     var found = false;

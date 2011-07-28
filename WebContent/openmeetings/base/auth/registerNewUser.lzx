@@ -98,27 +98,29 @@
             shownitems="7" validate_method="$once{ canvas.validateCountry }" 
             resultId="state_id" resultName="name" />        
              -->
-<!--
-    <labelText text="Language: " width="300" y="252" resize="false" x="2"/>  
         
-        <resetCombobox name="languages" width="370" y="252" x="120" editable="false">
-            <netRemoteCallHib name="getLanguages" funcname="xmlcrm.getLanguages" remotecontext="$once{ canvas.thishib }" >      
+    <labelText labelid="111" width="300" y="282" resize="false" x="2"/>  
+        
+        <resetCombobox name="languages" width="370" y="282" x="120" editable="false">
+            <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" 
+                value="$path{ 'language_id/text()' }" />
                 <handler name="oninit">
-                    this.doCall();
-                </handler>
-                <handler name="ondata" args="value">
-                    //The onResult-Handler will be called be the rtmpconnection
-                    //Debug.write("getLanguages: ",value);
-                    <![CDATA[
-                    for (var i=0;i<value.length;i++){
-                        this.parent.addItem(value[i].name,value[i].language_id);
+                var t = new lz.sharedObject();
+                t.getLocal('userdata');
+                var g = t.getData('userdata');
+                if($debug) Debug.write("checkLoginData/g: ",g);
+                if(g!=null) {
+                    if (g["userlang"]!=null) {
+                        this.selectItem(g["userlang"]);
+                    } else {
+                        this.selectItem(String(canvas.thishib.userlang));
                     }
-                    this.parent.selectItem(value[0].language_id);
-                    ]]>
+                } else {
+                    this.selectItem(String(canvas.thishib.userlang));
+                    }
                 </handler>  
-            </netRemoteCallHib>
         </resetCombobox>       
-         -->   
+
     <simpleLabelButton name="registerB" labelid="121" width="120" x="240" y="332">
     	<handler name="onclick">
             <![CDATA[
@@ -144,7 +146,7 @@
                     this.parent.regObject["zip"]='';
                     this.parent.regObject["states_id"]=Number(this.parent._state.getValue());
                     this.parent.regObject["town"]='';
-                    this.parent.regObject["language_id"]=0;
+                    this.parent.regObject["language_id"]=this.parent.languages.getValue();
                     
                     this.parent.regObject["domain"]=canvas.rtmphostlocal; 
                     this.parent.regObject["port"]=canvas.red5httpport; 

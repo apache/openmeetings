@@ -4,7 +4,7 @@
 <!--- LOGIN panel window -->
 <class name="checkLoginData" extends="labelExplorerBox" labelid="108"
     docking="true" resizeable="false" closable="false" 
-    width="460" height="260"
+    width="460" height="230"
      x="$once{ canvas.width/2 - this.width/2 }"  y="60">
     
     <handler name="onclose">
@@ -26,29 +26,6 @@
             this.b3.onclick.sendEvent();
         }
     </method>   
-    
-    <datapointer id="pointer" name="pointer" xpath="languagesSet:/" rerunxpath="true"> 
-    	<method name="processData"> 
-    		if ($debug) Debug.write("Process data of DATAPOINTER: ");
-    		if ($debug) Debug.write("combo language : " + parent.languages.getValue());
-            
-            this.selectChild();
-            
-            if ($debug) Debug.write(" xQuery  : " + this.xpathQuery( 'language_id/text()' ));
-      		
-      		do { 
-      			if (this.xpathQuery( 'language_id/text()' ) == parent.languages.getValue()) { 
-      				if ($debug) Debug.write("LANGUAGE FOUND : " + this.xpathQuery( 'name/text()' ));
-      				if ($debug) Debug.write("LANGUAGE FOUND RTL: " + this.xpathQuery( 'rtl/text()' ));
-      				
-      				canvas.setAttribute('isrtl', this.xpathQuery( 'rtl/text()' ));
-      				
-      				break;
-            	} 
-            	
-      		} while (this.selectNext()); 
-    	</method> 
-  	</datapointer>  
     
     <attribute name="refObj" value="null" />
     <attribute name="childObj" value="null" />
@@ -105,45 +82,9 @@
             </handler>
         </customEdittext>
     
-    <labelText name="n3" labelid="111" width="300" y="86" resize="false" x="2"/>  
+    <labelText name="n5" text="Color-Style" width="300" y="86" resize="false" x="2"/>  
         
-        <resetCombobox name="languages" width="330" y="84" x="120" >
-            <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" 
-                value="$path{ 'language_id/text()' }" />
-            <handler name="oninit">
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) {
-                    if (g["userlang"]!=null) {
-                        this.selectItem(g["userlang"]);
-                    } else {
-                        this.selectItem(String(canvas.thishib.userlang));
-                    }
-                } else {
-                    this.selectItem(String(canvas.thishib.userlang));
-                }
-            </handler>
-            <handler name="onkeyup" args="key">
-                <![CDATA[
-                if ( this.parent.enterPressed && ( key == 13 ) )
-                {
-                    parent.login();
-                }
-                ]]>
-            </handler>
-            <handler name="onkeydown" args="key">
-                if ( key == 13 )
-                {
-                    this.parent.enterPressed = true;
-                }
-            </handler>
-        </resetCombobox>
-
-    <labelText name="n5" text="Color-Style" width="300" y="116" resize="false" x="2"/>  
-        
-        <resetCombobox name="colors" width="330" y="114" x="120">
+        <resetCombobox name="colors" width="330" y="84" x="120">
             <attribute name="initselect" value="true" type="boolean" />
             <handler name="oninit">
                 this.addItem('redorange','redorange');
@@ -216,8 +157,8 @@
             </handler>
         </resetCombobox>    
     
-    <labelText name="nlabelquality" text="Quality" y="146" x="2" visible="true" width="140" />     
-        <resetCombobox name="ncomboquality" width="330" y="144" x="120" editable="false" >
+    <labelText name="nlabelquality" text="Quality" y="116" x="2" visible="true" width="140" />     
+        <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
             <handler name="oninit">
                 this.addItem("best ~ 16KB upload","best");
                 this.addItem("medium ~ 10KB upload ","medium");
@@ -254,8 +195,8 @@
             </handler>
         </resetCombobox>
         
-	<labelText name="domain_label" text="Domain" width="300" y="174" resize="false" x="2" />     
-        <resetCombobox name="domain" width="330" y="174" x="120" editable="false">
+	<labelText name="domain_label" text="Domain" width="300" y="144" resize="false" x="2" />     
+        <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
         	<handler name="oninit">
         		//this.addItem("localhost","localhost");
         		//this.addItem("eu.p-f.biz","SA-MeetingEU");
@@ -344,10 +285,6 @@
             //Recheck the Applet Status 
             getAppletStatus();
             
-            <!-- Setting the RTL Flag global -->
-            this.parent.pointer.setXPath('languagesSet:/');
-            this.parent.pointer.processData();
-            
         </handler>
     </simpleLabelButton>   
         
@@ -373,14 +310,18 @@
         <netparam><method name="getValue"> return parent.parent.username.getText(); </method></netparam>  
         <netparam><method name="getValue"> return parent.parent.userpass.getText(); </method></netparam>
         <netparam><method name="getValue"> return parent.parent._savelogindata.getValue(); </method></netparam> 
-        <netparam><method name="getValue"> return Number(parent.parent.languages.getValue()); </method></netparam> 
+        <netparam><method name="getValue"> return null; </method></netparam> 
         <netparam><method name="getValue"> return Number(parent.parent.domain.getValue()); </method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            	if ($debug) Debug.write("loginUser: ",value);
+            	if ($debug) {
+                    Debug.write("user.lang: ",value.language_id);
+                    Debug.write("loginUser: ",value);
+                }
             	
                 if (!(value<0)){
+                    hib.userlang = isNaN(value.language_id) ? 1 :  Number(value.language_id);
                     
                     if (this.parent._savelogindata.getValue()) {
                         var t = new lz.sharedObject();
@@ -391,7 +332,7 @@
                         g["userpass"] = parent.userpass.getText();
                         g["userquality"] = parent.ncomboquality.getValue();
                         g["usercolor"] = parent.colors.getValue();
-                        g["userlang"] = parent.languages.getValue();
+                        g["userlang"] = hib.userlang;
                         g["userdomain"] = parent.domain.getValue();
                         g["saveuserdata"]=true;
                         g["storedSession"] = canvas.sessionId;
@@ -421,6 +362,8 @@
                     canvas.setAttribute('lastLogin','');
                     canvas.setAttribute('official_code','');
                     canvas.setAttribute('picture_uri','');
+                    canvas.setAttribute('userlang', hib.userlang);
+                    canvas.setAttribute('language_id', hib.userlang);
                     canvas.setAttribute('language','');
                     canvas.setAttribute('currentuser',value.login);
                     if (value.omTimeZone != null) {
@@ -437,8 +380,6 @@
                     } else {
                         canvas.becomemoderator = false;
                     }
-                    
-                    hib.userlang = Number(parent.languages.getValue());
                     
                     if ($debug) Debug.write("value.organisation_users ",value.organisation_users);
                     
@@ -483,8 +424,6 @@
                         parent.username.setAttribute('visible',false);
                         parent.n2.setAttribute('visible',false);
                         parent.userpass.setAttribute('visible',false);
-                        parent.n3.setAttribute('visible',false);
-                        parent.languages.setAttribute('visible',false);
                         parent.n5.setAttribute('visible',false);
                         parent.colors.setAttribute('visible',false);
                         parent._register.setAttribute('visible',false);
@@ -592,9 +531,9 @@
     <animator name="doreset" attribute="x" to="$once{ canvas.width/2 - parent.width/2 }" 
               duration="1000" start="false" />
     
-    <animator name="showResetForm" attribute="height" to="400" duration="1000" 
+    <animator name="showResetForm" attribute="height" to="370" duration="1000" 
         onstop="parent.createReset(parent)" start="false" />
-    <animator name="disableResetForm" attribute="height" to="260" duration="1000" 
+    <animator name="disableResetForm" attribute="height" to="230" duration="1000" 
         onstart="parent.destroyReset(parent);" start="false" />    
 
 </class>

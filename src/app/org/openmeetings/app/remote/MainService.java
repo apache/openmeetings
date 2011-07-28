@@ -295,21 +295,6 @@ public class MainService implements IPendingServiceCallback {
     		// Pruefen, ob User bereits vorhanden ist
     		Users user = Usermanagement.getInstance().getUserByLoginOrEmail(usernameOrEmail);
     		
-    		// AdminUser werden auf jeden Fall lokal authentifiziert
-//    		if(user != null){ // User exists in local DB
-//    			if (user.getExternalUserType() ==null || ! user.getExternalUserType().equals(EXTERNAL_USER_TYPE_LDAP)){ // User is not of External Type LDAP
-//    				log.debug("User " + usernameOrEmail + " is local user -> Use Internal DB");
-//    				withLdap = false;
-//    			}
-//    			else if(user.getLevel_id() >=3 && LdapLoginManagement.getInstance().getLdapPwdSynchStatus(ldapConfigId) == true){ // User is admin with pwd synch
-//    				log.debug("User " + usernameOrEmail + " : Ldap-user has admin rights -> Use Internal DB");
-//        			withLdap = false;	
-//    			}
-//    			else{
-//    				log.debug("User " + usernameOrEmail + " : Ldap user authenticated using Ldap");
-//    			}
-//    		}
-    		
     		RoomClient currentClient;
     		IConnection current = Red5.getConnectionLocal();
     		
@@ -330,19 +315,12 @@ public class MainService implements IPendingServiceCallback {
 	        	}
 	        	
 	        	o =  LdapLoginManagement.getInstance().doLdapLogin(ldapLogin, Userpass, currentClient, SID, ldapConfig.getConfigFileName());
-//	        	o =  LdapLoginManagement.getInstance().doLdapLogin(usernameOrEmail, Userpass, currentClient, SID, 
-//	        								false, language_id);
-	        	
-    		}
-    		else{
-    			log.debug("default login");
-    			// User exists -> DefaultLogin
-    			
-    			
+    		} else {
+    			log.debug("default login: lang: null ? " + (language_id == null) + "; user.lang: " + user.getLanguage_id());
 	    		currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 	    		
 	            o = Usermanagement.getInstance().loginUser(SID,usernameOrEmail,Userpass, currentClient, 
-	            							storePermanent, language_id);
+					storePermanent, language_id != null ? language_id : user.getLanguage_id());
 	      	}
     		
     		if(o==null)
