@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="WebContent/screen/kunststoff.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="server/red5/lib/javaee-api-5.1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
