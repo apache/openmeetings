@@ -2,7 +2,7 @@ package org.openmeetings.app.persistence.beans.user;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
@@ -84,7 +84,7 @@ public class Users implements Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
-    private Set<Organisation_Users> organisation_users;
+    private List<Organisation_Users> organisation_users;
     
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="userSipDataId", insertable=true, updatable=true)
@@ -284,10 +284,10 @@ public class Users implements Serializable {
 	}
 		
 
-	public Set<Organisation_Users> getOrganisation_users() {
+	public List<Organisation_Users> getOrganisation_users() {
 		return organisation_users;
 	}
-	public void setOrganisation_users(Set<Organisation_Users> organisation_users) {
+	public void setOrganisation_users(List<Organisation_Users> organisation_users) {
 		this.organisation_users = organisation_users;
 	}
 

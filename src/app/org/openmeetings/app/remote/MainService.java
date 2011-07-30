@@ -3,38 +3,27 @@ package org.openmeetings.app.remote;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-
-import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
-import org.red5.server.api.service.IPendingServiceCall;
-import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.api.service.IServiceCapableConnection;
-
-
-import org.openmeetings.app.data.basic.*;
-import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
-import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.data.user.Statemanagement;
-import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.ldap.LdapAuthBase;
-import org.openmeetings.app.ldap.LdapLoginManagement;
-
-import org.openmeetings.app.data.conference.Invitationmanagement;
-import org.openmeetings.app.data.conference.Feedbackmanagement;
-import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.app.data.basic.Navimanagement;
+import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
+import org.openmeetings.app.data.conference.Feedbackmanagement;
+import org.openmeetings.app.data.conference.Invitationmanagement;
+import org.openmeetings.app.data.conference.Roommanagement;
+import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
+import org.openmeetings.app.data.user.Statemanagement;
+import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.ldap.LdapLoginManagement;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
@@ -48,11 +37,16 @@ import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rss.LoadAtomRssFeed;
-
+import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IConnection;
+import org.red5.server.api.Red5;
+import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.api.service.IServiceCapableConnection;
+import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.XppDriver;
 
 /**
  * 
@@ -204,7 +198,7 @@ public class MainService implements IPendingServiceCallback {
     		RoomClient currentClient;
     		IConnection current = Red5.getConnectionLocal();
     		
-    		Users o;
+    		Users o = null;
     		
     		currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
     		
@@ -212,14 +206,17 @@ public class MainService implements IPendingServiceCallback {
     		
             if(o==null)
     			return null;
+            
+            if (o.getOrganisation_users() == null) {
+            	throw new Exception("Users has no organization assigned");
+            }
     		
             o.setSessionData(Sessionmanagement.getInstance().getSessionByHash(remoteHashId));
             
     		if (currentClient.getUser_id()!=null && currentClient.getUser_id()>0) {
     			
-    				Users u = (Users)o;
-	            	currentClient.setFirstname(u.getFirstname());
-	            	currentClient.setLastname(u.getLastname());
+	            	currentClient.setFirstname(o.getFirstname());
+	            	currentClient.setLastname(o.getLastname());
 	    			
 	    			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 	    			for (Set<IConnection> conset : conCollection) {
@@ -245,7 +242,7 @@ public class MainService implements IPendingServiceCallback {
 		    			}
 	    			}
 	            }
-	            
+    		
 	            return o;
 
     	} catch (Exception err) {

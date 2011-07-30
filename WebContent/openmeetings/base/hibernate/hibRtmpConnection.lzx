@@ -1126,6 +1126,7 @@
         <netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
             <attribute name="publicSIDOfNewModerator" value="0" type="string" />
             <attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
+            <attribute name="avsettings" value="av" type="string" />
             <attribute name="interviewPodId" value="0" type="number" />
             <netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
             <netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
@@ -1427,6 +1428,14 @@
             	this.doCall();
             </method>
             
+            <method name="sendAdvMessage" args="typeName,messageObject,tStamp">
+                this.messageObj = new Object();
+                this.messageObj[0] = typeName;
+                this.messageObj[1] = messageObject;
+                this.messageObj[2] = tStamp;
+                this.doCall();
+            </method>
+            
             <netparam name="vars"><method name="getValue">return parent.messageObj;</method></netparam>
             <handler name="ondata" args="value">
             	//The onResult-Handler will be called be the rtmpconnection
@@ -1502,7 +1511,7 @@
 						//this message is deprecated and can be removed!
 						//swagner 12.06.2008
 						//canvas._drawarea.sendCompleteImageSync(value.client);
-					    Debug.write("inituser loadwmlObjectToStage: ",value.message[2]);
+					    if ($debug) Debug.write("inituser loadwmlObjectToStage: ",value.message[2]);
 					    if (!canvas.ismoderator) canvas._drawarea.loadwmlObjectToStage(value.message[2],"","","",true,true);
 					} else if (value.message[1]=='initgetVars'){
 						//canvas._drawarea.sendCompleteImageSync(value.client);
@@ -1521,9 +1530,12 @@
                 	canvas.setDrawAllowStatus(value.message[1]);
                     canvas.setAttribute("drawAllowStatus",value.message[1]);
                 } else if (value.message[0]=='applyForModeration'){
-                    if (canvas.ismoderator) {
+                    //if (canvas.ismoderator) {
                     	if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
                     	
+                    	canvas.currentActivityList.addModerationRequest(value.client,value.message[1]);
+                    	
+                    	/*
                     	var txt = canvas.getLabelName(692) + " " + 
                 	               value.client.firstname + " " + value.client.lastname + " " +
                 	               "[" + value.client.username + "] " +
@@ -1532,10 +1544,16 @@
                     	new lz.errorPopup(canvas,{
                             	   labelid:691,error:txt
                             	});
-                    }
+                    	*/
+                    	
+                    //}
                 } else if (value.message[0]=='applyForScreen'){
-                    if (canvas.ismoderator) {
+                    //if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants to share/record Screen ",value.client);
+                        
+                        canvas.currentActivityList.addScreenRequest(value.client,value.message[1]);
+                        
+                        /*
                         var txt = canvas.getLabelName(692) + " " + 
                                    value.client.firstname + " " + value.client.lastname + " " +
                                    "[" + value.client.username + "] " +
@@ -1544,10 +1562,15 @@
                         new lz.errorPopup(canvas,{
                                    labelid:691,error:txt
                                 });
-                    }
+                        */
+                    //}
                 } else if (value.message[0]=='applyForRemote'){
-                    if (canvas.ismoderator) {
+                    //if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants to remote control screen ",value.client);
+                        
+                        canvas.currentActivityList.addRemoteRequest(value.client,value.message[1]);
+                        
+                        /*
                         var txt = canvas.getLabelName(692) + " " + 
                                    value.client.firstname + " " + value.client.lastname + " " +
                                    "[" + value.client.username + "] " +
@@ -1556,10 +1579,15 @@
                         new lz.errorPopup(canvas,{
                                    labelid:691,error:txt
                                 });
-                    }
+                        */
+                    //}
                 } else if (value.message[0]=='applyForWhiteboard'){
-                    if (canvas.ismoderator) {
+                    //if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants to draw on Whiteboard ",value.client);
+                        
+                        canvas.currentActivityList.addWhiteboardRequest(value.client,value.message[1]);
+                        
+                        /*
                         var txt = canvas.getLabelName(692) + " " + 
                                    value.client.firstname + " " + value.client.lastname + " " +
                                    "[" + value.client.username + "] " +
@@ -1568,10 +1596,27 @@
                         new lz.errorPopup(canvas,{
                                    labelid:691,error:txt
                                 });
-                    }
+                        */
+                        
+                    //}
+                } else if (value.message[0]=='applyForA'){
+                    //if (canvas.ismoderator) {
+                    if ($debug) Debug.write("Somebody wants to share A ",value.client);
+                    
+                    canvas.currentActivityList.addAudioRequest(value.client,value.message[1]);
+                    
+                    //
+                        //new lz.errorPopup(canvas,{
+                         //          labelid:691,error:txt
+                        //        });
+                    //}
                 } else if (value.message[0]=='applyForAV'){
-                    if (canvas.ismoderator) {
+                    //if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants to share AV ",value.client);
+                        
+                        canvas.currentActivityList.addAudioAndVideoRequest(value.client,value.message[1]);
+                        
+                        /*
                         var txt = canvas.getLabelName(692) + " " + 
                                    value.client.firstname + " " + value.client.lastname + " " +
                                    "[" + value.client.username + "] " +
@@ -1580,7 +1625,20 @@
                         new lz.errorPopup(canvas,{
                                    labelid:691,error:txt
                                 });
-                    }
+                        */
+                        
+                    //}
+                } else if (value.message[0]=='hideActivityObj'){
+                    //if (canvas.ismoderator) {
+                    if ($debug) Debug.write("Somebody wants to hideActivityObj ",value.client);
+                    
+                    canvas.currentActivityList.hideActivityObj(value);
+                    
+                    //
+                        //new lz.errorPopup(canvas,{
+                         //          labelid:691,error:txt
+                        //        });
+                    //}
                 } else {
                     if ($debug) Debug.warn("sendVarsToMessageWithClient unkown message ",value);
                 }

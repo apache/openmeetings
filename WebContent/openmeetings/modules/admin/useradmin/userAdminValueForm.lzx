@@ -324,9 +324,9 @@
                 value="$path{ 'jname/text()' }" />
          </resetCombobox>   
              
-		<labelText labelid="111" width="300" y="220" resize="false" x="2"/>
+	<labelText labelid="111" width="300" y="220" resize="false" x="2"/>
 
-        <resetCombobox name="languages" width="370" y="220" x="120" editable="false">
+        <resetCombobox name="languages" width="270" y="220" x="120" editable="false">
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }"
                 value="$path{ 'language_id/text()' }" />
             <handler name="oninit">
@@ -434,7 +434,7 @@
 	</method>	
 	
 	<blueButton width="20" height="20" resourceItem="button_cancel_rsc"
-        			x_insetResource="2" y_insetResource="2" y="602" x="416"
+        			x_insetResource="2" y_insetResource="2" y="632" x="416"
         			width_insetResource="16" height_insetResource="16">
 		<handler name="onclick">
 			new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});

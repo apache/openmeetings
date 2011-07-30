@@ -90,10 +90,10 @@
     	<handler name="ondata" args="value">
     		<![CDATA[
     		
-    		    if (value.pictureuri.startsWith("http")) {
-                    //nothing
-                } else if (value.pictureuri==null || value.pictureuri.length==0){
+    			if (value.pictureuri==null || value.pictureuri.length==0){
 					value.pictureuri = "d.jpg";
+    		    } else if (value.pictureuri.startsWith("http")) {
+                    //nothing
 				} else {
 					value.pictureuri = "_profile_"+value.pictureuri;
 				}

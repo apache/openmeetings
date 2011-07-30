@@ -94,11 +94,18 @@
     </view>
     
     <fileExplorer name="_files" y="16" width="$once{ parent.width-12 }"
-               height="${ parent.height-16 }" visibility="hidden" />
+               height="${ parent.height-216 }" visibility="hidden" />
     
     <restrictedUserList name="_videocontainer" y="36" 
 			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 
-			   height="${ parent.height-36 }" />
+			   height="${ parent.height-236 }" />
+			   
+    <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
+        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" />
+               
+    <activityListRestrictedRoom name="_activityListRestrictedRoom" >
+        
+    </activityListRestrictedRoom>			   
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
           bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">

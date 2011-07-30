@@ -4,36 +4,34 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import javax.persistence.Query;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
-
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.persistence.beans.rooms.*;
+import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
-import org.openmeetings.app.persistence.beans.user.*;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -1370,7 +1368,7 @@ public class Roommanagement {
 		try {
 			
 			Users us = UsersDaoImpl.getInstance().getUser(user_id);
-			Set s = us.getOrganisation_users();
+			List s = us.getOrganisation_users();
 		
 			for (Iterator it = s.iterator(); it.hasNext();){
 				Organisation_Users orgUsers = (Organisation_Users) it.next();

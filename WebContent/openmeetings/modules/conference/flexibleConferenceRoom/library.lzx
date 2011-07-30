@@ -10,6 +10,7 @@
 		<frame src="resources/sidebar_open.png" />
 	</resource>
 	
+	<include href="activitylist/" />
 	<include href="roomSidebar/" />
 	<include href="appointmentNotificationPopUp.lzx" />
 	<include href="baseRoomInnerList.lzx" />
