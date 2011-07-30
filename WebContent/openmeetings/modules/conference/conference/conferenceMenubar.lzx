@@ -132,7 +132,8 @@
 	            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
 	            	<handler name="onselect" args="sel">
 	            		//Ask for Right to Draw on Whiteboard
-	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+	            		var tDate = new Date();
+	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
 	            	</handler>
 	            </_labelMenuItem>
 	            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
@@ -145,7 +146,8 @@
 			                canvas.thishib.setBroadCastingFlag.doCall(); 
 			            } else {
 			                //Apply for Right to Share Audio/Video
-			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+			                var tDate = new Date();
+			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
 			            }
 	            	</handler>
 	            </_labelMenuItem>
@@ -256,7 +258,8 @@
 	            <_labelMenuItem labelid="785" enabled="${ !canvas.ismoderator }" >
 	            	<handler name="onselect" args="sel">
 	            		//Ask for Right to Draw on Whiteboard
-	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+	            		var tDate = new Date();
+	            		canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
 	            	</handler>
 	            </_labelMenuItem>
 	            <_labelMenuItem labelid="786" enabled="${ !canvas.ismoderator }" >
@@ -269,7 +272,8 @@
 			                canvas.thishib.setBroadCastingFlag.doCall(); 
 			            } else {
 			                //Apply for Right to Share Audio/Video
-			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+			                var tDate = new Date();
+			                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
 			            }
 	            	</handler>
 	            </_labelMenuItem>

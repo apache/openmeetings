@@ -2032,7 +2032,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Remove moderator role from this user</value>
   </string>
   <string id="676" name="participants panel">
-    <value>Grant moderator rights to this rser</value>
+    <value>Grant moderator rights to this user</value>
   </string>
   <string id="677" name="event user list">
     <value>User</value>
@@ -4082,5 +4082,20 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1359" name="submenu">
     <value>Do you really want to delete the content on the current slide?</value>
+  </string>
+  <string id="1360" name="activity_window">
+    <value>Accept and grant user right</value>
+  </string>
+  <string id="1361" name="activity_window">
+    <value>Deny</value>
+  </string>
+  <string id="1361" name="activity_window">
+    <value>Deny</value>
+  </string>
+  <string id="1362" name="activity_window">
+    <value>I</value>
+  </string>
+  <string id="1363" name="activity_window">
+    <value>Activities and actions</value>
   </string>
 </language>

@@ -4083,4 +4083,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1359" name="submenu">
     <value>Do you really want to delete the content on the current slide?</value>
   </string>
+  <string id="1360" name="activity_window">
+    <value>Accept and grant user right</value>
+  </string>
+  <string id="1361" name="activity_window">
+    <value>Deny</value>
+  </string>
+  <string id="1361" name="activity_window">
+    <value>Deny</value>
+  </string>
+  <string id="1362" name="activity_window">
+    <value>I</value>
+  </string>
+  <string id="1363" name="activity_window">
+    <value>Activities and actions</value>
+  </string>
 </language>

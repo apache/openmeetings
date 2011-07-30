@@ -110,7 +110,8 @@
                resource="participents_isDrawing_rsc" height="16" showhandcursor="true">
         <handler name="onclick">
             //Ask for Right to Draw on Whiteboard
-            canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",null);
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
         </handler>
         <labelTooltip labelid="686" />
     </miniIcons>
@@ -130,7 +131,8 @@
                resource="screen_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",canvas.refObj.publicSID);
-        	canvas.thishib.sendMessageWithClient.sendMessage("applyForScreen",null);
+            var tDate = new Date();
+        	canvas.thishib.sendMessageWithClient.sendMessage("applyForScreen",tDate.getTime());
         </handler>
         <labelTooltip labelid="1072" />
     </miniIcons>    
@@ -150,7 +152,8 @@
                resource="remote_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Remote: ",parent.parent.parent.refObj.publicSID);
-            canvas.thishib.sendMessageWithClient.sendMessage("applyForRemote",null);
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForRemote",tDate.getTime());
         </handler>
         <labelTooltip labelid="1080" />
     </miniIcons>      
@@ -168,7 +171,8 @@
                 canvas.thishib.setBroadCastingFlag.doCall(); 
             } else {
                 //Apply for Right to Share Audio/Video
-                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",null);
+                var tDate = new Date();
+                canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
             }
         </handler>
         <labelTooltip labelid="687" />

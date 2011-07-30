@@ -323,6 +323,18 @@ function getStringDateFileSave(){
     return date+'_'+month+'_'+dateObj.getFullYear()+'_at_'+hours+'_'+minutes;
 } 
 
+function getStringTimeByTimeStamp(tStamp){
+    if ($debug) Debug.write("getStringTimeByTimeStamp "+tStamp);
+    var dateObj = new Date(tStamp);
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}  
+
 ]]>
 </script>
 		

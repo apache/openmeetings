@@ -1248,7 +1248,8 @@
                     	parent.addModerator.doCall();
                     } else if (value == 2) {
                     	//Ask the Moderator
-                    	parent.sendMessageWithClient.sendMessage("applyForModeration",null);
+                    	var tDate = new Date();
+                    	parent.sendMessageWithClient.sendMessage("applyForModeration",tDate.getTime());
                     } else if (value == 3) {
                     	new lz.labelerrorPopup(canvas,{errorlabelid:696});
                     }

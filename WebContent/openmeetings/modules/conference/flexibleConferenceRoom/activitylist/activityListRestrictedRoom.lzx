@@ -17,6 +17,12 @@
         this._doHide.doStart();
     </method>
     
+    <method name="destroyItem">
+        this.destroy();
+        parent.setAttribute("y",parent.y-40);
+        parent._reverselayout.update();
+    </method>
+    
     <method name="sendClearMessage" args="bool">
         canvas.thishib.sendMessageWithClient.sendAdvMessage("hideActivityObj",bool,this.tStamp);
     </method>
@@ -31,7 +37,7 @@
     
     <animator name="_doHide" attribute="opacity" duration="1250" to="0" start="false">
         <handler name="onstop">
-            parent.destroy();
+            parent.destroyItem();
         </handler>
     </animator>    
     
@@ -53,6 +59,13 @@
     	this._doHide.doStart();
     </method>
     
+    <method name="destroyItem">
+        this.destroy();
+        if ($debug) Debug.write("Reverse-Layout DoUpdate");
+        parent.setAttribute("y",parent.y-40);
+        parent._reverselayout.update();
+    </method>
+    
     <method name="sendClearMessage" args="bool">
 		canvas.thishib.sendMessageWithClient.sendAdvMessage("hideActivityObj",bool,this.tStamp);
     </method>
@@ -62,7 +75,7 @@
         <handler name="onclick">
             this.parent.applyObject();
         </handler>
-        <labelTooltip labelid="1076" />
+        <labelTooltip labelid="1360" />
     </miniIcons> 
                
     <miniIcons resource="allow_deny_icon_rsc" visible="${ canvas.ismoderator }"
@@ -70,12 +83,12 @@
         <handler name="onclick">
             this.parent.removeObject();
         </handler>
-        <labelTooltip labelid="1077" />
+        <labelTooltip labelid="1361" />
     </miniIcons>   
     
     <animator name="_doHide" attribute="opacity" duration="1250" to="0" start="false">
         <handler name="onstop">
-            parent.destroy();
+            parent.destroyItem();
         </handler>
     </animator>    
 	
@@ -93,7 +106,7 @@
         this.sendClearMessage(true);
     </method>	
 	
-	<view resource="av_allow_rsc" />
+	<view resource="av_allow_rsc" x="2" y="2" />
 	
 	<labelText text="$once{ parent.message }" multiline="true" x="40"
 			   width="$once{ parent.width - 60 }" font="Helvetica"/>
@@ -111,7 +124,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="allow_audio_only_rsc" x="1" />
+    <view resource="allow_audio_only_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -129,7 +142,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="allow_video_only_rsc" x="1" />
+    <view resource="allow_video_only_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -146,7 +159,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="participents_isDrawing_rsc" x="1" />
+    <view resource="participents_isDrawing_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -165,7 +178,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="screen_allow_rsc" x="1" />
+    <view resource="screen_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -184,7 +197,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="remote_allow_rsc" x="1" />
+    <view resource="remote_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -197,7 +210,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="warning_icon_rsc" x="1" />
+    <view resource="warning_icon_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -213,16 +226,16 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="participents_isMod_rsc" x="1" />
+    <view resource="participents_isMod_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
                
 </class>  
 
-<class name="activityListRestrictedRoom" y="${ parent.height - 200 }" x="1"
+<class name="activityListRestrictedRoom" y="${ parent.height - 200 }" x="0"
 	   extends="basePropertyPanelWhiteboard" height="200" 
-         width="$once{ parent.width-11 }" labelid="1075" >
+         width="$once{ parent.width-16 }" labelid="1363" >
     
     <handler name="oninit">
         canvas.currentActivityList = this;
@@ -232,7 +245,7 @@
         <![CDATA[
             var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] : " +
-                                   message;
+                                   message + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             
             new lz.activityListMessageRequest(this._list._list,{
                                             message:txt,
@@ -248,11 +261,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                                   canvas.getLabelName(693);
+                                   canvas.getLabelName(693) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(693);
+                                   canvas.getLabelName(693) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
             
             new lz.activityListRestrictedRoomModeration(this._list._list,{
@@ -268,11 +281,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(1361);
+                           canvas.getLabelName(1070) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1361);
+                                   canvas.getLabelName(1070) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
             new lz.activityListRestrictedRoomScreen(this._list._list,{
@@ -288,11 +301,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(1360);
+                           canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1360);
+                                   canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
             new lz.activityListRestrictedRoomRemote(this._list._list,{
@@ -308,11 +321,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(694);
+                           canvas.getLabelName(694) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(694);
+                                   canvas.getLabelName(694) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
             new lz.activityListRestrictedRoomWhiteboard(this._list._list,{
@@ -328,11 +341,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(1080);
+                           canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1080);
+                                   canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                            
             new lz.activityListRestrictedRoomA(this._list._list,{
@@ -348,11 +361,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(1081);
+                           canvas.getLabelName(1081) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {                
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1081);
+                                   canvas.getLabelName(1081) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                            
             new lz.activityListRestrictedRoomV(this._list._list,{
@@ -369,11 +382,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                               canvas.getLabelName(695);
+                               canvas.getLabelName(695) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(695);
+                                   canvas.getLabelName(695) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
             
             new lz.activityListRestrictedRoomAV(this._list._list,{
@@ -405,12 +418,12 @@
     	]]>
     </method>
     
-    <view name="_list" y="22" height="178" bgcolor="0xFFFFFF"
-    	  width="$once{ parent.width }" clip="true">
+    <view name="_list" y="20" height="178" bgcolor="0xFFFFFF"
+    	  width="$once{ parent.width+6 }" clip="true">
         
         <view name="_list">
             
-            <simplelayout axis="y" spacing="2" />
+            <reverselayout name="_reverselayout" axis="y" spacing="2" />
             
         </view>
         
