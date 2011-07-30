@@ -6,7 +6,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -41,9 +46,9 @@ import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.utils.ObjectMap;
-import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IScope;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -216,7 +221,7 @@ public class Usermanagement {
 	 * @return
 	 */
 	public Object loginUser(String SID, String userOrEmail, String userpass,
-			RoomClient currentClient, Boolean storePermanent, Long language_id) {
+			RoomClient currentClient, Boolean storePermanent) {
 		try {
 			log.debug("Login user SID : " + SID + " Stored Permanent :"
 					+ storePermanent);
@@ -252,9 +257,10 @@ public class Usermanagement {
 				if (ManageCryptStyle.getInstance().getInstanceOfCrypt()
 						.verifyPassword(userpass, users.getPassword())) {
 					log.info("chsum OK: " + users.getUser_id());
+
 					Boolean bool = Sessionmanagement.getInstance().updateUser(
 							SID, users.getUser_id(), storePermanent,
-							language_id);
+							users.getLanguage_id());
 					if (bool == null) {
 						// Exception
 						return new Long(-1);
@@ -1782,7 +1788,7 @@ public class Usermanagement {
 	 */
 	// -----------------------------------------------------------------------------------------------------
 	public Users getUserByLoginOrEmail(String userOrEmail) throws Exception {
-		//log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
+		// log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
 
 		String hql = "SELECT c from Users AS c "
 				+ "WHERE "
