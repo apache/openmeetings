@@ -418,7 +418,7 @@
 		multiselect="true" />
 	
 	<blueButton width="20" height="20" resourceItem="edit_add_rsc"
-        			x_insetResource="2" y_insetResource="2" y="602" x="396"
+        			x_insetResource="2" y_insetResource="2" y="632" x="396"
         			width_insetResource="16" height_insetResource="16">
 		<handler name="onclick">
 			this.parent.addOrganisationToUser();
