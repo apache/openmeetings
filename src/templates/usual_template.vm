@@ -83,16 +83,17 @@ img {
 </script>
 
 
-
+<!--
 <div style="width: 100%; height: 100%;" id="lzappContainer"><embed
 	src="maindebug.lzx-Dateien/maindebug.lzx" quality="high"
-	bgcolor="#ffffff" wmode="window" allowfullscreen="false" id="lzapp"
+	bgcolor="#ffffff" wmode="window" allowfullscreen="true" id="lzapp"
 	name="lzapp"
 	flashvars="$SWF_FLASHVARS"
 	swliveconnect="true" allowscriptaccess="sameDomain"
 	type="application/x-shockwave-flash"
 	pluginspage="http://www.macromedia.com/go/getflashplayer"
 	align="middle" height="100%" width="100%"></div>
+	 -->
 <noscript>Please enable JavaScript in order to use this
 application.</noscript>
 </body>
