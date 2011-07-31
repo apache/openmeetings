@@ -19,8 +19,7 @@
     
     <method name="destroyItem">
         this.destroy();
-        parent.setAttribute("y",parent.y-40);
-        parent._reverselayout.update();
+        parent.scrollToMax();
     </method>
     
     <method name="sendClearMessage" args="bool">
@@ -61,9 +60,7 @@
     
     <method name="destroyItem">
         this.destroy();
-        if ($debug) Debug.write("Reverse-Layout DoUpdate");
-        parent.setAttribute("y",parent.y-40);
-        parent._reverselayout.update();
+        parent.scrollToMax();
     </method>
     
     <method name="sendClearMessage" args="bool">
@@ -233,9 +230,9 @@
                
 </class>  
 
-<class name="activityListRestrictedRoom" y="${ parent.height - 200 }" x="0"
+<class name="activityList" y="${ parent.height - 200 }" x="0"
 	   extends="basePropertyPanelWhiteboard" height="200" 
-         width="$once{ parent.width-16 }" labelid="1363" >
+         width="$once{ parent.width-18 }" labelid="1363" >
     
     <handler name="oninit">
         canvas.currentActivityList = this;
@@ -253,6 +250,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();                                        
         ]]>                        
     </method>
     
@@ -274,6 +273,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();                                        
         ]]>                        
     </method>
     
@@ -294,6 +295,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();                                        
         ]]>                      
     </method>
     
@@ -314,6 +317,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();                                        
         ]]>                      
     </method>
     
@@ -334,6 +339,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();                                        
         ]]>                      
     </method>
     
@@ -354,6 +361,8 @@
                                         rcl:rcl,
                                         tStamp:tStamp
                                     });
+                                    
+            this._list._list.scrollToMax();                                    
        ]]>                  
     </method>
     
@@ -374,8 +383,9 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
-        ]]>
                                         
+            this._list._list.scrollToMax();
+        ]]>
     </method>
     
     <method name="addAudioAndVideoRequest" args="rcl,tStamp">
@@ -395,6 +405,8 @@
                                             rcl:rcl,
                                             tStamp:tStamp
                                         });
+                                        
+            this._list._list.scrollToMax();
         ]]>
     </method>
     
@@ -418,16 +430,24 @@
     	]]>
     </method>
     
-    <view name="_list" y="20" height="178" bgcolor="0xFFFFFF"
-    	  width="$once{ parent.width+6 }" clip="true">
+    <view name="_list" y="20" height="180" bgcolor="0xFFFFFF"
+    	  width="$once{ parent.width+8 }" clip="true">
         
         <view name="_list">
             
-            <reverselayout name="_reverselayout" axis="y" spacing="2" />
+            <method name="scrollToMax">
+                <![CDATA[
+			        if(this.height>parent.height){
+			            parent.myscrollbar.scrolltarget.setAttribute(parent.myscrollbar.scrollattr,(parent.height-this.height));
+			        }
+		        ]]>
+            </method>
+            
+            <simplelayout name="_layout" axis="y" spacing="2" />
             
         </view>
         
-        <vscrollbar />
+        <vscrollbar name="myscrollbar" />
         
     </view>
     

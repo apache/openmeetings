@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-<class name="participentList" extends="view"  width="$once{ parent.width }" height="${ parent.height }" 
-       bgcolor="$once{ canvas.basebgcolorizer }" >
+<class name="participentList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
+       bgcolor="$once{ canvas.basebgcolorizer }" y="22">
     <!-- clip="true" -->
     
     <attribute name="sortType" value="alphabetical" type="string" />    
@@ -34,7 +34,7 @@
                     isSuperModerator:object.isSuperModerator,
                     firstname:object.firstname,
                     lastname:lastname,
-                    width:this.width-18,
+                    width:this.width-17,
                     refObj:object,
                     connectedSince:object.connectedSince,
                     isMod:object.isMod,
@@ -157,8 +157,8 @@
 	<simplelayout name="_layout" axis="y" spacing="0" />
 </class>
     
-<class name="participentsTable" extends="view" height="${ parent.height-24 }" 
-    bgcolor="white" x="2" y="2" clip="true" width="$once{ parent.width-4 }" >
+<class name="participentsTable" extends="view" height="${ parent.height-20 }" 
+    bgcolor="0xFFFFFF" x="2" y="6" clip="true" width="$once{ parent.width-4 }" >
         <innerlistViewParticipentsTable name="innerList" />
     <vscrollbar />
 </class>
@@ -187,7 +187,7 @@
 <!-- 
     The Width of each item is set in the participentList-Class
  -->
-<class name="participentListItem" extends="view" bgcolor="white" height="40" 
+<class name="participentListItem" extends="view" bgcolor="0xFFFFFF" height="40" 
        showhandcursor="false">
     
     <attribute name="connectedSince" value="" type="string" />
@@ -711,7 +711,7 @@
 
  
 <class name="participents" extends="baseRoomInnerList" 
-       width="$once{ parent.width }" height="$once{ parent.height-34 }">
+       height="$once{ parent.height-34 }">
 
     <!--- holds a references to the videoview which is broadcasting -->
     <attribute name="broadCastViewRef" value="null" />
@@ -1131,6 +1131,18 @@
             videoContainer.subviews[eg].resetValues();
         }
     </method>
+    
+    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" showAvIcons="false" x="2" y="2" >
+        <handler name="onismoderator" reference="canvas" args="m">
+            this.updateIcons();
+        </handler>
+        <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+            this.updateIcons();
+        </handler>
+        <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
+            this.updateIcons();
+        </handler>
+    </moderationMiniIconsEventUserList>
     
     <participentList name="_participents" />
     

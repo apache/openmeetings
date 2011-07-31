@@ -2,6 +2,8 @@
 <library>
 
 <class name="moderationMiniIconsEventUserList" extends="view">
+
+    <attribute name="showAvIcons" value="true" type="boolean" />
 	
     <handler name="oninit">
     	this.updateIcons();
@@ -66,12 +68,14 @@
             }
         }
         
-        if (canvas.isBroadCasting) {
-            this._allowDevice.setAttribute("visibility","hidden");
-            this._denyDevice.setAttribute("visibility","visible");
-        } else {
-            this._allowDevice.setAttribute("visibility","visible");
-            this._denyDevice.setAttribute("visibility","hidden");
+        if (this.showAvIcons) {
+	        if (canvas.isBroadCasting) {
+	            this._allowDevice.setAttribute("visibility","hidden");
+	            this._denyDevice.setAttribute("visibility","visible");
+	        } else {
+	            this._allowDevice.setAttribute("visibility","visible");
+	            this._denyDevice.setAttribute("visibility","hidden");
+	        }
         }
     </method>
 	
@@ -138,7 +142,7 @@
     </miniIcons>    
     
  	<miniIcons name="_allowRemote" x="60" width="16" height="16" 
-               resource="remote_allow_rsc" showhandcursor="true">
+               resource="remote_allow_rsc" showhandcursor="false">
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
@@ -160,7 +164,7 @@
           
     
     <miniIcons name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
-               resource="av_allow_rsc" showhandcursor="true">
+            visible="$once{ parent.showAvIcons }" resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
             if (canvas.ismoderator) {
@@ -179,7 +183,7 @@
     </miniIcons>
     
     <miniIcons name="_denyDevice" x="80" width="40" height="16" 
-               resource="av_allow_rsc" showhandcursor="false">
+            visible="$once{ parent.showAvIcons }" resource="av_allow_rsc" showhandcursor="false">
         <handler name="onclick">
             if ($debug) Debug.write("DENY: ",canvas.publicSID);
             //Nothing happens here

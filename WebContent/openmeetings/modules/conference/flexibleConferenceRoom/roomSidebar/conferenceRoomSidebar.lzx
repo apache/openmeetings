@@ -22,10 +22,12 @@
             if (this.selected.name == "userTabButton") {
                 if ($debug) Debug.write("-- userTabButton");
                 this._files.setAttribute("visibility","hidden");
+                this._videocontainer._applyAndStatusIcons.setAttribute("visibility","visible");
                 this._videocontainer._participents.setAttribute("visibility","visible");
             } else if (this.selected.name == "filesTabButton") {
                 if ($debug) Debug.write("-- filesTabButton");
                 this._files.setAttribute("visibility","visible");
+                this._videocontainer._applyAndStatusIcons.setAttribute("visibility","hidden");
                 this._videocontainer._participents.setAttribute("visibility","hidden");
             }
         ]]>
@@ -78,10 +80,18 @@
     </view>
     
     <fileExplorer name="_files" y="16" width="$once{ parent.width-12 }"
-               height="${ parent.height-16 }" visibility="hidden" />
+               height="${ parent.height-216 }" visibility="hidden" />
     
     <participents name="_videocontainer" y="36" userNewVideoContainer="true"
-                  width="$once{ parent.width-10 }" height="${ parent.height-36 }" />
+                  width="$once{ parent.width-10 }" 
+               height="${ parent.height-236 }" />
+               
+    <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
+        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" />
+               
+    <activityList name="_activityList" >
+        
+    </activityList>             
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
           bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">

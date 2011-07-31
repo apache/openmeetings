@@ -4099,4 +4099,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1363" name="activity_window">
     <value>Activities and actions</value>
   </string>
+  <string id="1364" name="whiteboard">
+    <value>Remove whiteboard</value>
+  </string>
+  <string id="1365" name="whiteboard">
+    <value>You need the moderation or the right to draw on the whiteboard to remove whiteboards!</value>
+  </string>
+  <string id="1366" name="whiteboard">
+    <value>Not allowed</value>
+  </string>
 </language>
