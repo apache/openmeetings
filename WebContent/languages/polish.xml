@@ -4181,4 +4181,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1366" name="whiteboard">
     <value>Not allowed</value>
   </string>
+  <string id="1367" name="user_left_act_msg">
+    <value> has left the room.</value>
+  </string>
 </language>

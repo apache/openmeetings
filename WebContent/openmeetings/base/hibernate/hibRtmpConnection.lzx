@@ -8,6 +8,24 @@
 <dataset name="countrySet" />
 <dataset name="timeZoneSet" />
 
+<class name="userStatus" extends="view" width="250" height="30">
+    <attribute name="statusText" type="string" />
+    <attribute name="statusColor" type="number" value="0" />
+
+    <text name="status" width="240" height="20" x="5" y="5" fontstyle="bold" fgcolor="0" text="defaulttext" fontsize="10"/>
+
+    <handler name="oninit">
+        this.status.setAttribute("text", this.statusText);
+        this.status.setAttribute("fgcolor", this.statusColor);
+        this.setAttribute("visibility", "visible");
+        lz.Timer.addTimer( new LzDelegate( this, "selfDestroy" ), 3000 );
+    </handler>
+
+    <method name="selfDestroy" args="ignore=null">
+        this.destroy();
+    </method>
+</class>
+
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
     src="$once{ this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope }" >
 
@@ -1011,6 +1029,7 @@
                 if (value.isScreenClient) {
                     return;
                 }
+                canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
                 if (canvas._overallchatcontent!=null){
                 	var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
                 	parentObj.removeItemById(value.user_id);
@@ -1065,12 +1084,61 @@
             </handler>   
         </netRemoteCallHib>    
         
+        <method name="setUserStatus" args="ctx,user,o">
+            <![CDATA[
+if (!o) return;
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) {
+                    Debug.write("setUserStatus: ", user);
+                    Debug.write("setUserStatus: ", o.param);
+                }
+                var aObj = o.param[3];
+                var usPoint = null;
+                if ($debug) Debug.write("drawObj: ", aObj[0]);
+                switch(aObj[0]) {
+                    case 'line':
+                    case 'uline':
+                        usPoint = {x: aObj[aObj.length - 5] + aObj[6], y: aObj[aObj.length - 4] + aObj[7]};
+                        break;
+                    case 'letter':
+                    case 'rectangle':
+                    case 'ellipse':
+                    case 'clipart':
+                        usPoint = {x: aObj[aObj.length - 3] + aObj[aObj.length - 5], y: aObj[aObj.length - 2] + aObj[aObj.length - 4]};
+                        break;
+                    case 'paint':
+                        var points = aObj[1];
+                        //points are empty on 'paint' move
+                        usPoint = {
+                            x: aObj[aObj.length - 5] + (points.length ? points[points.length - 1][3] : aObj[aObj.length - 3])
+                            , y: aObj[aObj.length - 4] + (points.length ? points[points.length - 1][4] : aObj[aObj.length - 2])};
+                        break;
+                    case 'drawarrow':
+                        usPoint = {x: aObj[aObj.length - 5] + aObj[9], y: aObj[aObj.length - 4] + aObj[10]};
+                        break;
+                    case 'clipart':
+                        break;
+                }
+                if (usPoint) {
+                    var us = new lz.userStatus(ctx, {
+                        width:100
+                        , x: usPoint.x
+                        , y: usPoint.y - 25 //little above
+                        , queueable: false
+                        , statusText: user.firstname + " " + user.lastname
+                        });
+                    if ($debug) Debug.write("us: ", us, "; usPoint: ", usPoint);
+                }
+            ]]>
+        </method>
+
         <netRemoteCallHib name="sendVarsToWhiteboard" funcname="sendVarsToWhiteboard">
             <handler name="ondata" args="value">
                 <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
 	                if ($debug) Debug.write("sendVarsToWhiteboard : ",value);
-	                canvas._drawarea.sendWatchObject(value[2],value[3],false);
+			parent.setUserStatus(canvas._drawarea, value[0], value[1]);
+			canvas._drawarea.sendWatchObject(canvas._drawarea,value[1][2],value[1][3],false);
                 ]]>
             </handler>   
         </netRemoteCallHib>  
@@ -1079,8 +1147,9 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
-                    canvas._drawarea.parent.parent.parent.sendWatchObjectByWhiteboard(value);
+			if ($debug) Debug.write("sendVarsToWhiteboardById : ",value);
+			parent.setUserStatus(canvas._drawarea, value[0], value[1]);
+			canvas._drawarea.parent.parent.parent.sendWatchObjectByWhiteboard(value[1]);
                 ]]>
             </handler>   
         </netRemoteCallHib> 

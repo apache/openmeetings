@@ -2137,7 +2137,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
-									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboard", new Object[] { whiteboardObj },this);
+									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboard", new Object[] { currentClient, whiteboardObj },this);
 									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
 									numberOfUsers++;
 								}
@@ -2263,7 +2263,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
-									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById", new Object[] { sendObject },this);
+									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById", new Object[] { currentClient, sendObject },this);
 									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
 									numberOfUsers++;
 								}
