@@ -1086,7 +1086,7 @@
         
         <method name="setUserStatus" args="ctx,user,o">
             <![CDATA[
-if (!o) return;
+		if (!o || !user) return;
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) {
                     Debug.write("setUserStatus: ", user);

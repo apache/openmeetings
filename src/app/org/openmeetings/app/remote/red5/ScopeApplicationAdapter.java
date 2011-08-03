@@ -2122,6 +2122,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	
 			//if (ismod) {
 			
+			Configuration conf = Configurationmanagement.getInstance().getConfKey(3, "show.whiteboard.draw.status");
+			boolean showDrawStatus = conf != null && "1".equals(conf.getConf_value());
+
 			//Notify all Clients of that Scope (Room)
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -2137,7 +2140,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
-									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboard", new Object[] { currentClient, whiteboardObj },this);
+									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboard", new Object[] { showDrawStatus ? currentClient : null, whiteboardObj },this);
 									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
 									numberOfUsers++;
 								}
@@ -2250,6 +2253,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			sendObject.put("id", whiteboardId);
 			sendObject.put("param", whiteboardObjParam);
 			
+			Configuration conf = Configurationmanagement.getInstance().getConfKey(3, "show.whiteboard.draw.status");
+			boolean showDrawStatus = conf != null && "1".equals(conf.getConf_value());
+
 			//Notify all Clients of that Scope (Room)
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -2263,7 +2269,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								//log.debug("*..*idremote: " + rcl.getStreamid());
 								//log.debug("*..* sendVars room_id IS EQUAL: " + currentClient.getStreamid() + " asd " + rcl.getStreamid() + " IS eq? " +currentClient.getStreamid().equals(rcl.getStreamid()));
 								if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
-									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById", new Object[] { currentClient, sendObject },this);
+									((IServiceCapableConnection) conn).invoke("sendVarsToWhiteboardById", new Object[] { showDrawStatus ? currentClient : null, sendObject },this);
 									//log.debug("sending sendVarsToWhiteboard to " + conn + " rcl " + rcl);
 									numberOfUsers++;
 								}

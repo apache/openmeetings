@@ -436,6 +436,9 @@ public class ImportInitvalues {
 		Configurationmanagement.getInstance().addConfByKey(3, "dashboard.show.rssfeed",
 				"0", null, "Show RSS Tab");
 		
+                Configurationmanagement.getInstance().addConfByKey(3, "show.whiteboard.draw.status",
+                                "0", null, "Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
+
 	}
 
 	public void loadDefaultRooms() {
