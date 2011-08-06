@@ -454,21 +454,24 @@ public class LdapLoginManagement {
 				
 				// Return UserObject
 				Users u2 =  Usermanagement.getInstance().getUserById(userid);
+				
+				if(u2 == null)
+					return new Long(-1);
+				
 				u2.setExternalUserType(EXTERNAL_USER_TYPE_LDAP); //TIBO
 				
 				//initialize lazy collection
 				Usermanagement.getInstance().refreshUserObject(u2);
 				
-				if(u2 == null)
-					return userid;
+				
 				
 				log.debug("getUserbyId : " + userid + " : " + u2.getLogin());
 				
 				return u2;
 				
 			}catch(Exception e){
-				log.error("Error on Working Userdata : " + e.getMessage());
-				return null;
+				log.error("Error on Working Userdata : " , e);
+				return new Long(-1);
 			}
 		}
 		else{
@@ -501,7 +504,7 @@ public class LdapLoginManagement {
 				Usermanagement.getInstance().updateUserObject(u,true );
 			}catch(Exception e){
 				log.error("Error updating user : " + e.getMessage());
-				return null;
+				return new Long(-1);
 			}
 			
 			return u;

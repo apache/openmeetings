@@ -126,7 +126,7 @@ public class OpenXGHttpClient {
 		    
 		    //adminid
 		    Configuration openxg_adminid = Configurationmanagement.getInstance().getConfKey(3L, "openxg.adminid");
-			if (openxg_language_code == null) {
+			if (openxg_adminid == null) {
 				throw new Exception("openxg.adminid missing in Configuration table");
 			}
 		    String adminid = openxg_adminid.getConf_value();
@@ -275,7 +275,7 @@ public class OpenXGHttpClient {
 		    
 		    //adminid
 		    Configuration openxg_adminid = Configurationmanagement.getInstance().getConfKey(3L, "openxg.adminid");
-			if (openxg_language_code == null) {
+			if (openxg_adminid == null) {
 				throw new Exception("openxg.adminid missing in Configuration table");
 			}
 		    String adminid = openxg_adminid.getConf_value();

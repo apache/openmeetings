@@ -18,6 +18,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -64,7 +65,7 @@ public class Export extends HttpServlet {
 			System.out.println("user_level: " + user_level);
 
 			// if (user_level!=null && user_level > 0) {
-			if (true) {
+			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
 				
 				String moduleName = httpServletRequest.getParameter("moduleName");
 				if (moduleName == null) {

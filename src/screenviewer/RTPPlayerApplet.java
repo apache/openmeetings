@@ -334,8 +334,6 @@ public class RTPPlayerApplet  extends Applet implements
             videomgr = mymgr;
         if (media.equals("audio"))
             audiomgr = mymgr;
-        if (mymgr == null)
-            return null;
         mymgr.addReceiveStreamListener(this);
         //if (media.equals("audio"))
         //  EncodingUtil.Init((SessionManager)mymgr);

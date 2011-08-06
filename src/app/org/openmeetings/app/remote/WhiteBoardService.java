@@ -789,12 +789,15 @@ private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.
 			    					} else {
 										if (rcl != null) {
 											((IServiceCapableConnection) conn).invoke("sendImagesSyncCompleteFlag", new Object[] { "remove" },this);
-										} else if (!rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+										} 
+										/*
+										else if (!rcl.getPublicSID().equals(currentClient.getPublicSID())) {
 											//do not send to current
 											((IServiceCapableConnection) conn).invoke("sendImagesSyncCompleteFlag", new Object[] { "remove" },this);
 										} else {
 											log.debug("IS current");
 										}
+										*/
 									}
 								}
 							}			

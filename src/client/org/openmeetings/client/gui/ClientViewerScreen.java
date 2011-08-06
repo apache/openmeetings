@@ -251,8 +251,9 @@ public class ClientViewerScreen {
 			
 			this.showBandwidthWarning("Receive updateCursor");;
 			
-			if (true) return;
+			//if (true) return;
 			
+			/*
 			if (!this.mousePointerLoaded) {
 				
 				this.menupointerPanel = new ImagePanel(clientCursorStatus.getX(), clientCursorStatus.getY());
@@ -264,6 +265,7 @@ public class ClientViewerScreen {
 			
 			this.menupointerPanel.setBounds(clientCursorStatus.getX(), clientCursorStatus.getY(), 22, 22);
 			this.menupointerPanel.repaint();
+			*/
 			
 			//this.menupointerPanel.setImages(menupointer.getImage(), 22, 22);
 			

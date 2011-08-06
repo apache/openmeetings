@@ -18,6 +18,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Emailmanagement;
@@ -71,7 +72,7 @@ public class Import extends HttpServlet {
 			log.debug("moduleName: " + moduleName);
 
 			// if (user_level!=null && user_level > 0) {
-			if (true) {
+			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
 				if (moduleName.equals("users")) {
 					log.error("Import Users");
 					String organisation = httpServletRequest.getParameter("secondid");

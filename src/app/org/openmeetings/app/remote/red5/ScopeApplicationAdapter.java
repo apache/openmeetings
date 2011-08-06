@@ -865,9 +865,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							} else {
 								RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
 								if (rcl != null){
-									if (rcl == null) {
-										//continue;
-									} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+									if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 			    						//continue;
 			    					} else {
 										log.debug("is this users still alive? :"+rcl);
@@ -986,7 +984,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-						log.debug("Send Flag to Client: "+rcl.getUsername());
+						
 						if (rcl == null) {
 							//continue;
 						} else if (conn instanceof IServiceCapableConnection) {
@@ -2685,7 +2683,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								if (!rcl.getPublicSID().equals(publicSID)){
 									
 									boolean sharerOnList = false;
-									for (int i=0;i<rcl.getSharerSIDs().size();i++) {
+									if (rcl.getSharerSIDs().size()>0) {
 										sharerOnList = true;
 										break;
 									}
@@ -2766,7 +2764,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								if (!rcl.getPublicSID().equals(publicSID)){
 									
 									boolean sharerOnList = false;
-									for (int i=0;i<rcl.getSharerSIDs().size();i++) {
+									if (rcl.getSharerSIDs().size()>0) {
 										sharerOnList = true;
 										break;
 									}
