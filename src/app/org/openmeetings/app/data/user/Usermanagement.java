@@ -1975,7 +1975,7 @@ public class Usermanagement {
 		try {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.activatehash = :activatehash"
-					+ " AND c.deleted <> :deleted";
+					+ " AND u.deleted <> :deleted";
 			Object idf = PersistenceSessionUtil.createSession();
 			EntityManager session = PersistenceSessionUtil.getSession();
 			EntityTransaction tx = session.getTransaction();
