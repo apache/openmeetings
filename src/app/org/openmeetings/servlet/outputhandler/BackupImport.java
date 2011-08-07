@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -74,7 +75,13 @@ import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+
 public class BackupImport extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2786696080712127872L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, ScopeApplicationAdapter.webAppRootKey);
 
@@ -133,6 +140,7 @@ public class BackupImport extends HttpServlet {
 							httpServletRequest, 104857600*10, "utf-8"); // max 1000 mb
 					InputStream is = upload.getFileContents("Filedata");
 					
+					@SuppressWarnings("deprecation")
 					String fileSystemName = upload.getFileSystemName("Filedata");
 					
 					StringUtils.deleteWhitespace(fileSystemName);
@@ -250,6 +258,8 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importOrganizsations(orgFile);
 					
+					log.info("Organizations import complete, starting user import");
+					
 					/* #####################
 					 * Import Users
 					 */
@@ -259,6 +269,8 @@ public class BackupImport extends HttpServlet {
 						throw new Exception ("users.xml missing");
 					}
 					this.importUsers(userFile);
+					
+					log.info("Users import complete, starting room import");
 					
 					/* #####################
 					 * Import Rooms
@@ -270,6 +282,8 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importRooms(roomFile);
 					
+					log.info("Room import complete, starting room organizations import");
+					
 					/* #####################
 					 * Import Room Organisations
 					 */
@@ -280,6 +294,8 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importOrgRooms(orgRoomListFile);
 					
+					log.info("Room organizations import complete, starting appointement import");
+					
 					/* #####################
 					 * Import Appointements
 					 */
@@ -289,6 +305,8 @@ public class BackupImport extends HttpServlet {
 						throw new Exception ("appointements.xml missing");
 					}
 					this.importAppointements(appointementListFile);
+					
+					log.info("Appointement import complete, starting meeting members import");
 
 					/* #####################
 					 * Import MeetingMembers
@@ -303,6 +321,8 @@ public class BackupImport extends HttpServlet {
 					}
 					this.importMeetingmembers(meetingmembersListFile);
 					
+					log.info("Meeting members import complete, starting ldap config import");
+					
 					/* #####################
 					 * Import LDAP Configs
 					 * 
@@ -315,6 +335,8 @@ public class BackupImport extends HttpServlet {
 					} else {
 						this.importLdapConfig(ldapConfigListFile);
 					}
+					
+					log.info("Ldap config import complete, starting recordings import");
 					
 					/* #####################
 					 * Import Recordings
@@ -329,6 +351,8 @@ public class BackupImport extends HttpServlet {
 						this.importFlvRecordings(flvRecordingsListFile);
 					}
 					
+					log.info("FLVrecording import complete, starting private message folder import");
+					
 					/* #####################
 					 * Import Private Message Folders
 					 * 
@@ -342,6 +366,8 @@ public class BackupImport extends HttpServlet {
 						this.importPrivateMessageFolders(privateMessageFoldersFile);
 					}
 					
+					log.info("Private message folder import complete, starting private message import");
+					
 					/* #####################
 					 * Import Private Messages
 					 * 
@@ -354,6 +380,8 @@ public class BackupImport extends HttpServlet {
 					} else {
 						this.importPrivateMessages(privateMessagesFile);
 					}
+					
+					log.info("Private message import complete, starting usercontact import");
 
 					/* #####################
 					 * Import User Contacts
@@ -367,6 +395,8 @@ public class BackupImport extends HttpServlet {
 					} else {
 						this.importUserContacts(userContactsFile);
 					}
+					
+					log.info("Usercontact import complete, starting file explorer item import");
 					
 					/* #####################
 					 * Import File-Explorer Items
@@ -382,6 +412,8 @@ public class BackupImport extends HttpServlet {
 					}
 
 					importFolders(current_dir, completeName);
+					
+					log.info("File explorer item import complete, clearing temp files");
 					
 					this.deleteDirectory(f);
 					
@@ -475,6 +507,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
+	@SuppressWarnings("unchecked") 
 	private void getUsersByXML (File userFile) {
 		try {
 			
@@ -493,103 +526,103 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Users us = new Users();
 
-	        			us.setUser_id(Long.valueOf(itemUsers.element("user_id").getText()));
-	                    us.setAge(CalendarPatterns.parseDate(itemUsers.element("age").getText()));
-	                    us.setAvailible(importIntegerType(itemUsers.element("availible").getText()));
-	        			us.setDeleted(itemUsers.element("deleted").getText());
-	        			us.setFirstname(itemUsers.element("firstname").getText());
-	        			us.setLastname(itemUsers.element("lastname").getText());
-	        			us.setLogin(itemUsers.element("login").getText());
-	        			us.setPassword(itemUsers.element("pass").getText());
+	        			us.setUser_id(Long.valueOf(unformatString(itemUsers.element("user_id").getText())));
+	                    us.setAge(CalendarPatterns.parseDate(unformatString(itemUsers.element("age").getText())));
+	                    us.setAvailible(importIntegerType(unformatString(itemUsers.element("availible").getText())));
+	        			us.setDeleted(unformatString(itemUsers.element("deleted").getText()));
+	        			us.setFirstname(unformatString(itemUsers.element("firstname").getText()));
+	        			us.setLastname(unformatString(itemUsers.element("lastname").getText()));
+	        			us.setLogin(unformatString(itemUsers.element("login").getText()));
+	        			us.setPassword(unformatString(itemUsers.element("pass").getText()));
 	        			us.setDeleted(itemUsers.element("deleted").getText());
 	        			
 	        			if (itemUsers.element("activatehash") != null) {
-	        				us.setActivatehash(itemUsers.element("activatehash").getText());
+	        				us.setActivatehash(unformatString(itemUsers.element("activatehash").getText()));
 	        			} else {
 	        				us.setActivatehash("");
 	        			}
 	        			if (itemUsers.element("externalUserType") != null) {
-	        				us.setExternalUserType(itemUsers.element("externalUserType").getText());
+	        				us.setExternalUserType(unformatString(itemUsers.element("externalUserType").getText()));
 	        			} else {
 	        				us.setExternalUserType("");
 	        			}
 	        			if (itemUsers.element("externalUserId") != null) {
-	        				us.setExternalUserId(importLongType(itemUsers.element("externalUserId").getText()));
+	        				us.setExternalUserId(importLongType(unformatString(itemUsers.element("externalUserId").getText())));
 	        			} else {
 	        				us.setExternalUserId(null);
 	        			}
 	        			if (itemUsers.element("resethash") != null) {
-	        				us.setResethash(itemUsers.element("resethash").getText());
+	        				us.setResethash(unformatString(itemUsers.element("resethash").getText()));
 	        			} else {
 	        				us.setResethash(null);
 	        			}
 	        			if (itemUsers.element("userOffers") != null) {
-	        				us.setUserOffers(itemUsers.element("userOffers").getText());
+	        				us.setUserOffers(unformatString(itemUsers.element("userOffers").getText()));
 	        			} else {
 	        				us.setUserOffers("");
 	        			}
 	        			if (itemUsers.element("userSearchs") != null) {
-	        				us.setUserSearchs(itemUsers.element("userSearchs").getText());
+	        				us.setUserSearchs(unformatString(itemUsers.element("userSearchs").getText()));
 	        			} else {
 	        				us.setUserSearchs("");
 	        			}
 	        			if (itemUsers.element("forceTimeZoneCheck") != null) {
-	        				us.setForceTimeZoneCheck(importBooleanType(itemUsers.element("forceTimeZoneCheck").getText()));
+	        				us.setForceTimeZoneCheck(importBooleanType(unformatString(itemUsers.element("forceTimeZoneCheck").getText())));
 	        			} else {
 	        				us.setForceTimeZoneCheck(null);
 	        			}
 	        			if (itemUsers.element("lasttrans") != null) {
-	        				us.setLasttrans(importLongType(itemUsers.element("lasttrans").getText()));
+	        				us.setLasttrans(importLongType(unformatString(itemUsers.element("lasttrans").getText())));
 	        			} else {
 	        				us.setLasttrans(null);
 	        			}
 	        			if (itemUsers.element("showContactData") != null) {
-	        				us.setShowContactData(importBooleanType(itemUsers.element("showContactData").getText()));
+	        				us.setShowContactData(importBooleanType(unformatString(itemUsers.element("showContactData").getText())));
 	        			} else {
 	        				us.setShowContactData(null);
 	        			}
 	        			if (itemUsers.element("showContactDataToContacts") != null) {
-	        				us.setShowContactDataToContacts(importBooleanType(itemUsers.element("showContactDataToContacts").getText()));
+	        				us.setShowContactDataToContacts(importBooleanType(unformatString(itemUsers.element("showContactDataToContacts").getText())));
 	        			} else {
 	        				us.setShowContactDataToContacts(null);
 	        			}
 	        			
 	        			
-	        			us.setPictureuri(itemUsers.element("pictureuri").getText());
-	        			if (itemUsers.element("language_id").getText().length()>0)
-	        				us.setLanguage_id(Long.valueOf(itemUsers.element("language_id").getText()));
+	        			us.setPictureuri(unformatString(itemUsers.element("pictureuri").getText()));
+	        			if (unformatString(itemUsers.element("language_id").getText()).length()>0)
+	        				us.setLanguage_id(Long.valueOf(unformatString(itemUsers.element("language_id").getText())));
 	        				
-	        			us.setStatus(importIntegerType(itemUsers.element("status").getText()));
-	        			us.setRegdate(CalendarPatterns.parseDate(itemUsers.element("regdate").getText()));
-	        			us.setTitle_id(importIntegerType(itemUsers.element("title_id").getText()));
-	        			us.setLevel_id(importLongType(itemUsers.element("level_id").getText()));
+	        			us.setStatus(importIntegerType(unformatString(itemUsers.element("status").getText())));
+	        			us.setRegdate(CalendarPatterns.parseDate(unformatString(itemUsers.element("regdate").getText())));
+	        			us.setTitle_id(importIntegerType(unformatString(itemUsers.element("title_id").getText())));
+	        			us.setLevel_id(importLongType(unformatString(itemUsers.element("level_id").getText())));
 	        			
 	        			//UserSIP Data
 	        			if (itemUsers.element("sip_username") != null 
 	        					&& itemUsers.element("sip_userpass") != null
 	        					&& itemUsers.element("sip_authid") != null) {
 	        				UserSipData userSipData = new UserSipData();
-	        				userSipData.setUsername(itemUsers.element("sip_username").getText());
-	        				userSipData.setUsername(itemUsers.element("sip_userpass").getText());
-	        				userSipData.setUsername(itemUsers.element("sip_authid").getText());
+	        				userSipData.setUsername(unformatString(itemUsers.element("sip_username").getText()));
+	        				userSipData.setUsername(unformatString(itemUsers.element("sip_userpass").getText()));
+	        				userSipData.setUsername(unformatString(itemUsers.element("sip_authid").getText()));
 	        				us.setUserSipData(userSipData);
 	        			}
 	        				
 	        			
-	        			String additionalname = itemUsers.element("additionalname").getText();
-	        			String comment = itemUsers.element("comment").getText();
+	        			String additionalname = unformatString(itemUsers.element("additionalname").getText());
+	        			String comment = unformatString(itemUsers.element("comment").getText());
 	        			// A User can not have a deleted Adress, you cannot delete the
 	        			// Adress of an User
 	        			// String deleted = u.getAdresses().getDeleted()
 	        			// Phone Number not done yet
-	        			String fax = itemUsers.element("fax").getText();
-	        			Long state_id = importLongType(itemUsers.element("state_id").getText());
-	        			String street = itemUsers.element("street").getText();
-	        			String town = itemUsers.element("town").getText();
-	        			String zip = itemUsers.element("zip").getText();
+	        			String fax = unformatString(itemUsers.element("fax").getText());
+	        			Long state_id = importLongType(unformatString(itemUsers.element("state_id").getText()));
+	        			String street = unformatString(itemUsers.element("street").getText());
+	        			String town = unformatString(itemUsers.element("town").getText());
+	        			String zip = unformatString(itemUsers.element("zip").getText());
 	        			
 	        			if (itemUsers.element("omTimeZone") != null) {
-	        				OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(itemUsers.element("omTimeZone").getText());
+	        				OmTimeZone omTimeZone = OmTimeZoneDaoImpl.getInstance().getOmTimeZone(unformatString(itemUsers.element("omTimeZone").getText()));
 	        				
 	        				us.setOmTimeZone(omTimeZone);
 	        				us.setForceTimeZoneCheck(false);
@@ -610,12 +643,12 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			String phone = "";
 	        			if (itemUsers.element("phone") != null) {
-	        				phone = itemUsers.element("phone").getText();
+	        				phone = unformatString(itemUsers.element("phone").getText());
 	        			}
 	        			
 	        			String email = "";
 	        			if (itemUsers.element("mail") != null) {
-	        				email = itemUsers.element("mail").getText();
+	        				email = unformatString(itemUsers.element("mail").getText());
 	        			}
 	        			
 	        			States st = Statemanagement.getInstance().getStateById(state_id);
@@ -647,11 +680,11 @@ public class BackupImport extends HttpServlet {
 	    	        			
 		        				Element organisationObject = organisationIterator.next();
 		        				
-		        				Long organisation_id = importLongType(organisationObject.element("organisation_id").getText());
-		        				Long user_id = importLongType(organisationObject.element("user_id").getText());
-		        				Boolean isModerator = importBooleanType(organisationObject.element("isModerator").getText());
-		        				String commentOrg = organisationObject.element("comment").getText();
-		        				String deleted = organisationObject.element("deleted").getText();
+		        				Long organisation_id = importLongType(unformatString(organisationObject.element("organisation_id").getText()));
+		        				Long user_id = importLongType(unformatString(organisationObject.element("user_id").getText()));
+		        				Boolean isModerator = importBooleanType(unformatString(organisationObject.element("isModerator").getText()));
+		        				String commentOrg = unformatString(organisationObject.element("comment").getText());
+		        				String deleted = unformatString(organisationObject.element("deleted").getText());
 		        				
 		        				Organisation_Users orgUser = new Organisation_Users();
 		        				orgUser.setOrganisation(Organisationmanagement.getInstance().getOrganisationByIdBackup(organisation_id));
@@ -667,11 +700,15 @@ public class BackupImport extends HttpServlet {
 	        				
 	        			}
 	        			
-	        			//check if login does already exists
-	        			Users storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(us.getLogin());
-	        			
 	        			Long userId = us.getUser_id();
-	        			if (us.getExternalUserId() == null || us.getExternalUserId() == 0){
+	        			
+	        			//check if login does already exists, but only for users that have been created in the OpenMeetings Administration
+	        			//maybe we should check status too
+	        			/*
+	        			if ((us.getExternalUserId() == null || us.getExternalUserId() == 0) && email != null && email.length() > 0){
+	        				
+	        				Users storedUser = Usermanagement.getInstance().getUserByLoginOrEmail(us.getLogin());
+	        				
 		        			if (storedUser != null) {
 		        				log.info("A user with the given login does already exist "+us.getLogin());
 		        			} else {
@@ -687,6 +724,7 @@ public class BackupImport extends HttpServlet {
 			        			continue;
 		        			}
 	        			}
+	        			*/
 
         				log.debug("Import User ID "+userId);
         				us.setUser_id(null);
@@ -737,6 +775,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 
+	@SuppressWarnings("unchecked") 
 	private List<FlvRecording> getFlvRecordings(File flvRecordingsListFile) {
 		try {
 
@@ -757,32 +796,32 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element flvObject = innerIter.next();
 	        			
-	        			String alternateDownload = flvObject.element("alternateDownload").getText();
-	        			String comment = flvObject.element("comment").getText();
-	        			String deleted = flvObject.element("deleted").getText();
-	        			String fileHash = flvObject.element("fileHash").getText();
-	        			String fileName = flvObject.element("fileName").getText();
-	        			String previewImage = flvObject.element("previewImage").getText();
-	        			String recorderStreamId = flvObject.element("recorderStreamId").getText();
-	        			Long fileSize = importLongType(flvObject.element("fileSize").getText());
-	        			Integer flvHeight = importIntegerType(flvObject.element("flvHeight").getText());
-	        			Integer flvWidth = importIntegerType(flvObject.element("flvWidth").getText());
-	        			Integer height = importIntegerType(flvObject.element("height").getText());
-	        			Integer width = importIntegerType(flvObject.element("width").getText());
-	        			Long insertedBy = getNewId(importLongType(flvObject.element("insertedBy").getText()), Maps.USERS);
-	        			Long organization_id = getNewId(importLongType(flvObject.element("organization_id").getText()), Maps.ORGANISATIONS);
-	        			Long ownerId = getNewId(importLongType(flvObject.element("ownerId").getText()), Maps.USERS);
-	        			Long parentFileExplorerItemId = getNewId(importLongType(flvObject.element("parentFileExplorerItemId").getText()), Maps.FILEEXPLORERITEMS);
-	        			Integer progressPostProcessing = importIntegerType(flvObject.element("progressPostProcessing").getText());
-	        			Long room_id = getNewId(importLongType(flvObject.element("room_id").getText()), Maps.ROOMS);
-	        			Date inserted = CalendarPatterns.parseDateWithHour(flvObject.element("inserted").getText());
-	        			Boolean isFolder = importBooleanType(flvObject.element("isFolder").getText());
-	        			Boolean isImage = importBooleanType(flvObject.element("isImage").getText());
-	        			Boolean isInterview = importBooleanType(flvObject.element("isInterview").getText());
-	        			Boolean isPresentation = importBooleanType(flvObject.element("isPresentation").getText());
-	        			Boolean isRecording = importBooleanType(flvObject.element("isRecording").getText());
-	        			Date recordEnd = CalendarPatterns.parseDateWithHour(flvObject.element("recordEnd").getText());
-	        			Date recordStart = CalendarPatterns.parseDateWithHour(flvObject.element("recordStart").getText());
+	        			String alternateDownload = unformatString(flvObject.element("alternateDownload").getText());
+	        			String comment = unformatString(flvObject.element("comment").getText());
+	        			String deleted = unformatString(flvObject.element("deleted").getText());
+	        			String fileHash = unformatString(flvObject.element("fileHash").getText());
+	        			String fileName = unformatString(flvObject.element("fileName").getText());
+	        			String previewImage = unformatString(flvObject.element("previewImage").getText());
+	        			String recorderStreamId = unformatString(flvObject.element("recorderStreamId").getText());
+	        			Long fileSize = importLongType(unformatString(flvObject.element("fileSize").getText()));
+	        			Integer flvHeight = importIntegerType(unformatString(flvObject.element("flvHeight").getText()));
+	        			Integer flvWidth = importIntegerType(unformatString(flvObject.element("flvWidth").getText()));
+	        			Integer height = importIntegerType(unformatString(flvObject.element("height").getText()));
+	        			Integer width = importIntegerType(unformatString(flvObject.element("width").getText()));
+	        			Long insertedBy = getNewId(importLongType(unformatString(flvObject.element("insertedBy").getText())), Maps.USERS);
+	        			Long organization_id = getNewId(importLongType(unformatString(flvObject.element("organization_id").getText())), Maps.ORGANISATIONS);
+	        			Long ownerId = getNewId(importLongType(unformatString(flvObject.element("ownerId").getText())), Maps.USERS);
+	        			Long parentFileExplorerItemId = getNewId(importLongType(unformatString(flvObject.element("parentFileExplorerItemId").getText())), Maps.FILEEXPLORERITEMS);
+	        			Integer progressPostProcessing = importIntegerType(unformatString(flvObject.element("progressPostProcessing").getText()));
+	        			Long room_id = getNewId(importLongType(unformatString(flvObject.element("room_id").getText())), Maps.ROOMS);
+	        			Date inserted = CalendarPatterns.parseDateWithHour(unformatString(flvObject.element("inserted").getText()));
+	        			Boolean isFolder = importBooleanType(unformatString(flvObject.element("isFolder").getText()));
+	        			Boolean isImage = importBooleanType(unformatString(flvObject.element("isImage").getText()));
+	        			Boolean isInterview = importBooleanType(unformatString(flvObject.element("isInterview").getText()));
+	        			Boolean isPresentation = importBooleanType(unformatString(flvObject.element("isPresentation").getText()));
+	        			Boolean isRecording = importBooleanType(unformatString(flvObject.element("isRecording").getText()));
+	        			Date recordEnd = CalendarPatterns.parseDateWithHour(unformatString(flvObject.element("recordEnd").getText()));
+	        			Date recordStart = CalendarPatterns.parseDateWithHour(unformatString(flvObject.element("recordStart").getText()));
 	        			
 	        			
 	        			FlvRecording flvRecording = new FlvRecording();
@@ -822,21 +861,21 @@ public class BackupImport extends HttpServlet {
 	        				
 	        				Element flvrecordingmetadataObj = innerIterMetas.next();
 	        				
-	        				String freeTextUserName = flvrecordingmetadataObj.element("freeTextUserName").getText();
-	        				String fullWavAudioData = flvrecordingmetadataObj.element("fullWavAudioData").getText();
-	        				String streamName = flvrecordingmetadataObj.element("streamName").getText();
-	        				String wavAudioData = flvrecordingmetadataObj.element("wavAudioData").getText();
-	        				Integer initialGapSeconds = importIntegerType(flvrecordingmetadataObj.element("initialGapSeconds").getText());
-	        				Long insertedBy1 = importLongType(flvrecordingmetadataObj.element("insertedBy").getText());
-	        				Integer interiewPodId = importIntegerType(flvrecordingmetadataObj.element("interiewPodId").getText());
-	        				Boolean audioIsValid = importBooleanType(flvrecordingmetadataObj.element("audioIsValid").getText());
-	        				Date inserted1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("inserted").getText());
-	        				Boolean isAudioOnly = importBooleanType(flvrecordingmetadataObj.element("isAudioOnly").getText());
-	        				Boolean isScreenData = importBooleanType(flvrecordingmetadataObj.element("isScreenData").getText());
-	        				Boolean isVideoOnly = importBooleanType(flvrecordingmetadataObj.element("isVideoOnly").getText());
-	        				Date recordEnd1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("recordEnd").getText());
-	        				Date recordStart1 = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("recordStart").getText());
-	        				Date updated = CalendarPatterns.parseDateWithHour(flvrecordingmetadataObj.element("updated").getText());
+	        				String freeTextUserName = unformatString(flvrecordingmetadataObj.element("freeTextUserName").getText());
+	        				String fullWavAudioData = unformatString(flvrecordingmetadataObj.element("fullWavAudioData").getText());
+	        				String streamName = unformatString(flvrecordingmetadataObj.element("streamName").getText());
+	        				String wavAudioData = unformatString(flvrecordingmetadataObj.element("wavAudioData").getText());
+	        				Integer initialGapSeconds = importIntegerType(unformatString(flvrecordingmetadataObj.element("initialGapSeconds").getText()));
+	        				Long insertedBy1 = importLongType(unformatString(flvrecordingmetadataObj.element("insertedBy").getText()));
+	        				Integer interiewPodId = importIntegerType(unformatString(flvrecordingmetadataObj.element("interiewPodId").getText()));
+	        				Boolean audioIsValid = importBooleanType(unformatString(flvrecordingmetadataObj.element("audioIsValid").getText()));
+	        				Date inserted1 = CalendarPatterns.parseDateWithHour(unformatString(flvrecordingmetadataObj.element("inserted").getText()));
+	        				Boolean isAudioOnly = importBooleanType(unformatString(flvrecordingmetadataObj.element("isAudioOnly").getText()));
+	        				Boolean isScreenData = importBooleanType(unformatString(flvrecordingmetadataObj.element("isScreenData").getText()));
+	        				Boolean isVideoOnly = importBooleanType(unformatString(flvrecordingmetadataObj.element("isVideoOnly").getText()));
+	        				Date recordEnd1 = CalendarPatterns.parseDateWithHour(unformatString(flvrecordingmetadataObj.element("recordEnd").getText()));
+	        				Date recordStart1 = CalendarPatterns.parseDateWithHour(unformatString(flvrecordingmetadataObj.element("recordStart").getText()));
+	        				Date updated = CalendarPatterns.parseDateWithHour(unformatString(flvrecordingmetadataObj.element("updated").getText()));
 	        				
 	        				FlvRecordingMetaData flvrecordingmetadata = new FlvRecordingMetaData();
 	        				flvrecordingmetadata.setFreeTextUserName(freeTextUserName);
@@ -893,6 +932,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 
+	@SuppressWarnings("unchecked") 
 	private List<PrivateMessageFolder> getPrivateMessageFoldersByXML(
 											File privateMessageFoldersFile) {
 		try {
@@ -912,9 +952,9 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element pmfObject = innerIter.next();
 	        			
-	        			String folderName = pmfObject.element("folderName").getText();
-	        			Long userId = getNewId(importLongType(pmfObject.element("userId").getText()), Maps.USERS);
-	        			Long privateMessageFolderId = importLongType(pmfObject.element("privateMessageFolderId").getText());
+	        			String folderName = unformatString(pmfObject.element("folderName").getText());
+	        			Long userId = getNewId(importLongType(unformatString(pmfObject.element("userId").getText())), Maps.USERS);
+	        			Long privateMessageFolderId = importLongType(unformatString(pmfObject.element("privateMessageFolderId").getText()));
 	        			
 	        			PrivateMessageFolder privateMessageFolder = new PrivateMessageFolder();
 	        			privateMessageFolder.setFolderName(folderName);
@@ -949,6 +989,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
+	@SuppressWarnings("unchecked") 
 	private List<PrivateMessages> getPrivateMessagesByXML(
 										File privateMessagesFile) {
 		try {
@@ -968,20 +1009,20 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element pmObject = innerIter.next();
 	        			
-	        			String message = pmObject.element("message").getText();
-	        			String subject = pmObject.element("subject").getText();
-	        			Long privateMessageFolderId = getNewId(importLongType(pmObject.element("privateMessageFolderId").getText()), Maps.MESSAGEFOLDERS);
-	        			Long userContactId = getNewId(importLongType(pmObject.element("userContactId").getText()), Maps.USERCONTACTS);
-	        			Long parentMessage = importLongType(pmObject.element("parentMessage").getText());
-	        			Boolean bookedRoom = importBooleanType(pmObject.element("bookedRoom").getText());
-	        			Users from = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("from").getText()), Maps.USERS));
-	        			Users to = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("to").getText()), Maps.USERS));
-	        			Date inserted = CalendarPatterns.parseDateWithHour(pmObject.element("inserted").getText());
-	        			Boolean isContactRequest = importBooleanType(pmObject.element("isContactRequest").getText());
-	        			Boolean isRead = importBooleanType(pmObject.element("isRead").getText());
-	        			Boolean isTrash = importBooleanType(pmObject.element("isTrash").getText());
-	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(pmObject.element("owner").getText()), Maps.USERS));
-	        			Rooms room = Roommanagement.getInstance().getRoomById(getNewId(importLongType(pmObject.element("room").getText()), Maps.ROOMS));
+	        			String message = unformatString(pmObject.element("message").getText());
+	        			String subject = unformatString(pmObject.element("subject").getText());
+	        			Long privateMessageFolderId = getNewId(importLongType(unformatString(pmObject.element("privateMessageFolderId").getText())), Maps.MESSAGEFOLDERS);
+	        			Long userContactId = getNewId(importLongType(unformatString(pmObject.element("userContactId").getText())), Maps.USERCONTACTS);
+	        			Long parentMessage = importLongType(unformatString(pmObject.element("parentMessage").getText()));
+	        			Boolean bookedRoom = importBooleanType(unformatString(pmObject.element("bookedRoom").getText()));
+	        			Users from = Usermanagement.getInstance().getUserById(getNewId(importLongType(unformatString(pmObject.element("from").getText())), Maps.USERS));
+	        			Users to = Usermanagement.getInstance().getUserById(getNewId(importLongType(unformatString(pmObject.element("to").getText())), Maps.USERS));
+	        			Date inserted = CalendarPatterns.parseDateWithHour(unformatString(pmObject.element("inserted").getText()));
+	        			Boolean isContactRequest = importBooleanType(unformatString(pmObject.element("isContactRequest").getText()));
+	        			Boolean isRead = importBooleanType(unformatString(pmObject.element("isRead").getText()));
+	        			Boolean isTrash = importBooleanType(unformatString(pmObject.element("isTrash").getText()));
+	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(unformatString(pmObject.element("owner").getText())), Maps.USERS));
+	        			Rooms room = Roommanagement.getInstance().getRoomById(getNewId(importLongType(unformatString(pmObject.element("room").getText())), Maps.ROOMS));
 	        			
 	        			PrivateMessages pm = new PrivateMessages();
 	        			pm.setMessage(message);
@@ -1031,6 +1072,7 @@ public class BackupImport extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unchecked") 
 	private List<UserContacts> getUserContactsByXML(File userContactsFile) {
 		try {
 			
@@ -1049,12 +1091,12 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element usercontact = innerIter.next();
 	        			
-	        			String hash = usercontact.element("hash").getText();
-	        			Users contact = Usermanagement.getInstance().getUserById(getNewId(importLongType(usercontact.element("contact").getText()), Maps.USERS));
-	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(usercontact.element("owner").getText()), Maps.USERS));
-	        			Boolean pending = importBooleanType(usercontact.element("pending").getText());
-	        			Boolean shareCalendar = importBooleanType(usercontact.element("shareCalendar").getText());
-	        			Long userContactId = importLongType(usercontact.element("userContactId").getText());
+	        			String hash = unformatString(usercontact.element("hash").getText());
+	        			Users contact = Usermanagement.getInstance().getUserById(getNewId(importLongType(unformatString(usercontact.element("contact").getText())), Maps.USERS));
+	        			Users owner = Usermanagement.getInstance().getUserById(getNewId(importLongType(unformatString(usercontact.element("owner").getText())), Maps.USERS));
+	        			Boolean pending = importBooleanType(unformatString(usercontact.element("pending").getText()));
+	        			Boolean shareCalendar = importBooleanType(unformatString(usercontact.element("shareCalendar").getText()));
+	        			Long userContactId = importLongType(unformatString(usercontact.element("userContactId").getText()));
 	        			
 	        			UserContacts userContacts = new UserContacts();
 	        			userContacts.setHash(hash);
@@ -1095,6 +1137,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
+	@SuppressWarnings("unchecked") 
 	private List<Organisation> getOrganisationsByXML(File orgFile) {
 		try {
 			
@@ -1113,9 +1156,9 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element orgObject = innerIter.next();
 	        			
-	        			Long organisation_id = importLongType(orgObject.element("organisation_id").getText());
-	        			String name = orgObject.element("name").getText();
-	        			String deleted = orgObject.element("deleted").getText();
+	        			Long organisation_id = importLongType(unformatString(orgObject.element("organisation_id").getText()));
+	        			String name = unformatString(orgObject.element("name").getText());
+	        			String deleted = unformatString(orgObject.element("deleted").getText());
 	        			
 	        			Organisation organisation = new Organisation();
 	        			organisation.setOrganisation_id(organisation_id);
@@ -1137,6 +1180,12 @@ public class BackupImport extends HttpServlet {
 		return null;
 	}
 	
+	private String unformatString(String str) {
+		str = str.replaceAll(Pattern.quote("<![CDATA["),"");
+		str = str.replaceAll(Pattern.quote("]]>"),"");
+		return str;
+	}
+	
 
 	private void importMeetingmembers(File meetingmembersListFile) throws Exception {
 		
@@ -1152,6 +1201,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 
+	@SuppressWarnings("unchecked") 
 	private List<MeetingMember> getMeetingmembersListByXML(File meetingmembersListFile) {
 		try {
 			
@@ -1170,17 +1220,17 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element appointmentsObject = innerIter.next();
 	        			
-	        			Long meetingMemberId = importLongType(appointmentsObject.element("meetingMemberId").getText());
-	        			Long userid = getNewId(importLongType(appointmentsObject.element("userid").getText()), Maps.USERS);
-	        			Long appointment = getNewId(importLongType(appointmentsObject.element("appointment").getText()), Maps.APPOINTMENTS);
-	        			String firstname = appointmentsObject.element("firstname").getText();
-	        			String lastname = appointmentsObject.element("lastname").getText();
-	        			String memberStatus = appointmentsObject.element("memberStatus").getText();
-	        			String appointmentStatus = appointmentsObject.element("appointmentStatus").getText();
-	        			String email = appointmentsObject.element("email").getText();
-	        			Boolean deleted = importBooleanType(appointmentsObject.element("deleted").getText());
-	        			String comment = appointmentsObject.element("comment").getText();
-	        			Boolean invitor = importBooleanType(appointmentsObject.element("invitor").getText());
+	        			Long meetingMemberId = importLongType(unformatString(appointmentsObject.element("meetingMemberId").getText()));
+	        			Long userid = getNewId(importLongType(unformatString(appointmentsObject.element("userid").getText())), Maps.USERS);
+	        			Long appointment = getNewId(importLongType(unformatString(appointmentsObject.element("appointment").getText())), Maps.APPOINTMENTS);
+	        			String firstname = unformatString(appointmentsObject.element("firstname").getText());
+	        			String lastname = unformatString(appointmentsObject.element("lastname").getText());
+	        			String memberStatus = unformatString(appointmentsObject.element("memberStatus").getText());
+	        			String appointmentStatus = unformatString(appointmentsObject.element("appointmentStatus").getText());
+	        			String email = unformatString(appointmentsObject.element("email").getText());
+	        			Boolean deleted = importBooleanType(unformatString(appointmentsObject.element("deleted").getText()));
+	        			String comment = unformatString(appointmentsObject.element("comment").getText());
+	        			Boolean invitor = importBooleanType(unformatString(appointmentsObject.element("invitor").getText()));
 	        			
 	        			
 	        			MeetingMember meetingMember = new MeetingMember();
@@ -1224,7 +1274,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
-		
+	@SuppressWarnings("unchecked") 
 	private List<LdapConfig> getLdapConfigListByXML(File ldapConfigListFile) {
 		try {
 			
@@ -1243,11 +1293,11 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element ldapconfigObject = innerIter.next();
 	        			
-	        			String name = ldapconfigObject.element("name").getText();
-	        			String configFileName = ldapconfigObject.element("configFileName").getText();
-	        			Boolean addDomainToUserName = importBooleanType(ldapconfigObject.element("addDomainToUserName").getText());
-	        			String domain = ldapconfigObject.element("domain").getText();
-	        			Boolean isActive = importBooleanType(ldapconfigObject.element("isActive").getText());
+	        			String name = unformatString(ldapconfigObject.element("name").getText());
+	        			String configFileName = unformatString(ldapconfigObject.element("configFileName").getText());
+	        			Boolean addDomainToUserName = importBooleanType(unformatString(ldapconfigObject.element("addDomainToUserName").getText()));
+	        			String domain = unformatString(ldapconfigObject.element("domain").getText());
+	        			Boolean isActive = importBooleanType(unformatString(ldapconfigObject.element("isActive").getText()));
 	        			
 	        			
 	        			LdapConfig ldapConfig = new LdapConfig();
@@ -1290,7 +1340,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
-	
+	@SuppressWarnings("unchecked") 
 	private List<Appointment> getAppointmentListByXML(File appointementListFile) {
 		try {
 			
@@ -1309,26 +1359,26 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element appointmentsObject = innerIter.next();
 	        			
-	        			Long appointmentId = importLongType(appointmentsObject.element("appointmentId").getText());
-	        			String appointmentName = appointmentsObject.element("appointmentName").getText();
-	        			String appointmentLocation = appointmentsObject.element("appointmentLocation").getText();
-	        			String appointmentDescription = appointmentsObject.element("appointmentDescription").getText();
-	        			Long categoryId = importLongType(appointmentsObject.element("categoryId").getText());
-	        			Date appointmentStarttime = CalendarPatterns.parseDateWithHour(appointmentsObject.element("appointmentStarttime").getText());
-	        			Date appointmentEndtime = CalendarPatterns.parseDateWithHour(appointmentsObject.element("appointmentEndtime").getText());
-	        			String deleted = appointmentsObject.element("deleted").getText();
-	        			String comment = appointmentsObject.element("comment").getText();
-	        			Long typId = importLongType(appointmentsObject.element("typId").getText());
-	        			Boolean isDaily = importBooleanType(appointmentsObject.element("isDaily").getText());
-	        			Boolean isWeekly = importBooleanType(appointmentsObject.element("isWeekly").getText());
-	        			Boolean isMonthly = importBooleanType(appointmentsObject.element("isMonthly").getText());
-	        			Boolean isYearly = importBooleanType(appointmentsObject.element("isYearly").getText());
-	        			Long room_id = getNewId(importLongType(appointmentsObject.element("room_id").getText()), Maps.ROOMS);
-	        			String icalId = appointmentsObject.element("icalId").getText();
-	        			Long language_id = importLongType(appointmentsObject.element("language_id").getText());
-	        			Boolean isPasswordProtected = importBooleanType(appointmentsObject.element("isPasswordProtected").getText());
-	        			String password = appointmentsObject.element("password").getText();
-	        			Long users_id = getNewId(importLongType(appointmentsObject.element("users_id").getText()), Maps.USERS);
+	        			Long appointmentId = importLongType(unformatString(appointmentsObject.element("appointmentId").getText()));
+	        			String appointmentName = unformatString(appointmentsObject.element("appointmentName").getText());
+	        			String appointmentLocation = unformatString(appointmentsObject.element("appointmentLocation").getText());
+	        			String appointmentDescription = unformatString(appointmentsObject.element("appointmentDescription").getText());
+	        			Long categoryId = importLongType(unformatString(appointmentsObject.element("categoryId").getText()));
+	        			Date appointmentStarttime = CalendarPatterns.parseDateWithHour(unformatString(appointmentsObject.element("appointmentStarttime").getText()));
+	        			Date appointmentEndtime = CalendarPatterns.parseDateWithHour(unformatString(appointmentsObject.element("appointmentEndtime").getText()));
+	        			String deleted = unformatString(appointmentsObject.element("deleted").getText());
+	        			String comment = unformatString(appointmentsObject.element("comment").getText());
+	        			Long typId = importLongType(unformatString(appointmentsObject.element("typId").getText()));
+	        			Boolean isDaily = importBooleanType(unformatString(appointmentsObject.element("isDaily").getText()));
+	        			Boolean isWeekly = importBooleanType(unformatString(appointmentsObject.element("isWeekly").getText()));
+	        			Boolean isMonthly = importBooleanType(unformatString(appointmentsObject.element("isMonthly").getText()));
+	        			Boolean isYearly = importBooleanType(unformatString(appointmentsObject.element("isYearly").getText()));
+	        			Long room_id = getNewId(importLongType(unformatString(appointmentsObject.element("room_id").getText())), Maps.ROOMS);
+	        			String icalId = unformatString(appointmentsObject.element("icalId").getText());
+	        			Long language_id = importLongType(unformatString(appointmentsObject.element("language_id").getText()));
+	        			Boolean isPasswordProtected = importBooleanType(unformatString(appointmentsObject.element("isPasswordProtected").getText()));
+	        			String password = unformatString(appointmentsObject.element("password").getText());
+	        			Long users_id = getNewId(importLongType(unformatString(appointmentsObject.element("users_id").getText())), Maps.USERS);
 	        			
 	        			
 	        			Appointment app = new Appointment();
@@ -1383,6 +1433,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 
+	@SuppressWarnings("unchecked") 
 	private List<Rooms_Organisation> getOrgRoomListByXML(File orgRoomListFile) {
 		try {
 			
@@ -1401,10 +1452,10 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element orgRoomObject = innerIter.next();
 	        			
-	        			Long rooms_organisation_id = importLongType(orgRoomObject.element("rooms_organisation_id").getText());
-	        			Long organisation_id = getNewId(importLongType(orgRoomObject.element("organisation_id").getText()), Maps.ORGANISATIONS);
-	        			Long rooms_id = getNewId(importLongType(orgRoomObject.element("rooms_id").getText()), Maps.ROOMS);
-	        			String deleted = orgRoomObject.element("deleted").getText();
+	        			Long rooms_organisation_id = importLongType(unformatString(orgRoomObject.element("rooms_organisation_id").getText()));
+	        			Long organisation_id = getNewId(importLongType(unformatString(orgRoomObject.element("organisation_id").getText())), Maps.ORGANISATIONS);
+	        			Long rooms_id = getNewId(importLongType(unformatString(orgRoomObject.element("rooms_id").getText())), Maps.ROOMS);
+	        			String deleted = unformatString(orgRoomObject.element("deleted").getText());
 	        			
 	        			Rooms_Organisation rooms_Organisation = new Rooms_Organisation();
 	        			rooms_Organisation.setRooms_organisation_id(rooms_organisation_id);
@@ -1433,6 +1484,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
+	@SuppressWarnings("unchecked") 
 	private void getRoomListByXML(File roomFile) {
 		try {
 			
@@ -1453,56 +1505,56 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element roomObject = innerIter.next();
 	        			
-	        			Long rooms_id = importLongType(roomObject.element("rooms_id").getText());
-	        			String name = roomObject.element("name").getText();
-	        			String deleted = roomObject.element("deleted").getText();
-	        			String comment = roomObject.element("comment").getText();
-	        			Long numberOfPartizipants = importLongType(roomObject.element("numberOfPartizipants").getText());
-	        			Boolean appointment = importBooleanType(roomObject.element("appointment").getText());
-	        			Long externalRoomId = importLongType(roomObject.element("externalRoomId").getText());
-	        			String externalRoomType = roomObject.element("externalRoomType").getText();
-	        			Long roomtypes_id = importLongType(roomObject.element("roomtypeId").getText());
-	        			Boolean isDemoRoom = importBooleanType(roomObject.element("isDemoRoom").getText());
-	        			Integer demoTime = importIntegerType(roomObject.element("demoTime").getText());
-	        			Boolean isModeratedRoom = importBooleanType(roomObject.element("isModeratedRoom").getText());
-	        			Boolean allowUserQuestions = importBooleanType(roomObject.element("allowUserQuestions").getText());
-	        			Boolean isAudioOnly = importBooleanType(roomObject.element("isAudioOnly").getText());
-	        			String sipNumber = roomObject.element("sipNumber").getText();
-	        			String conferencePin = roomObject.element("conferencePin").getText();
+	        			Long rooms_id = importLongType(unformatString(roomObject.element("rooms_id").getText()));
+	        			String name = unformatString(roomObject.element("name").getText());
+	        			String deleted = unformatString(roomObject.element("deleted").getText());
+	        			String comment = unformatString(roomObject.element("comment").getText());
+	        			Long numberOfPartizipants = importLongType(unformatString((roomObject.element("numberOfPartizipants").getText())));
+	        			Boolean appointment = importBooleanType(unformatString(roomObject.element("appointment").getText()));
+	        			Long externalRoomId = importLongType(unformatString(roomObject.element("externalRoomId").getText()));
+	        			String externalRoomType = unformatString(roomObject.element("externalRoomType").getText());
+	        			Long roomtypes_id = importLongType(unformatString(roomObject.element("roomtypeId").getText()));
+	        			Boolean isDemoRoom = importBooleanType(unformatString(roomObject.element("isDemoRoom").getText()));
+	        			Integer demoTime = importIntegerType(unformatString(roomObject.element("demoTime").getText()));
+	        			Boolean isModeratedRoom = importBooleanType(unformatString(roomObject.element("isModeratedRoom").getText()));
+	        			Boolean allowUserQuestions = importBooleanType(unformatString(roomObject.element("allowUserQuestions").getText()));
+	        			Boolean isAudioOnly = importBooleanType(unformatString(roomObject.element("isAudioOnly").getText()));
+	        			String sipNumber = unformatString(roomObject.element("sipNumber").getText());
+	        			String conferencePin = unformatString(roomObject.element("conferencePin").getText());
 	        			
 	        			Long ownerId = null;
 	        			if (roomObject.element("ownerid") != null) {
-	        				ownerId = getNewId(importLongType(roomObject.element("ownerid").getText()), Maps.USERS);
+	        				ownerId = getNewId(importLongType(unformatString(roomObject.element("ownerid").getText())), Maps.USERS);
 	        			}
 	        			
 	        			Boolean ispublic = false;
 	        			if (roomObject.element("ispublic") != null) {
-	        				ispublic = importBooleanType(roomObject.element("ispublic").getText());
+	        				ispublic = importBooleanType(unformatString(roomObject.element("ispublic").getText()));
 	        			}
 	        			
 	        			Boolean waitForRecording = false;
 	        			if (roomObject.element("waitForRecording") != null) {
-	        				waitForRecording = importBooleanType(roomObject.element("waitForRecording").getText());
+	        				waitForRecording = importBooleanType(unformatString(roomObject.element("waitForRecording").getText()));
 	        			}
 
 	        			Boolean hideTopBar = false;
 	        			if (roomObject.element("hideTopBar") != null) {
-	        				hideTopBar = importBooleanType(roomObject.element("hideTopBar").getText());
+	        				hideTopBar = importBooleanType(unformatString(roomObject.element("hideTopBar").getText()));
 	        			}
 	        			
 	        			Boolean isClosed = false;
 	        			if (roomObject.element("isClosed") != null) {
-	        				isClosed = importBooleanType(roomObject.element("isClosed").getText());
+	        				isClosed = importBooleanType(unformatString(roomObject.element("isClosed").getText()));
 	        			}
 	        			
 	        			Boolean allowRecording = false;
 	        			if (roomObject.element("allowRecording") != null) {
-	        				allowRecording = importBooleanType(roomObject.element("allowRecording").getText());
+	        				allowRecording = importBooleanType(unformatString(roomObject.element("allowRecording").getText()));
 	        			}
 	        			
 	        			String redirectURL = "";
 	        			if (roomObject.element("redirectURL") != null) {
-	        				redirectURL = roomObject.element("redirectURL").getText();
+	        				redirectURL = unformatString(roomObject.element("redirectURL").getText());
 	        			}
 	        			
 	        			Rooms room = new Rooms();
@@ -1548,8 +1600,8 @@ public class BackupImport extends HttpServlet {
 	        					
 	        					RoomModerators roomModerators = new RoomModerators();
 	        					
-	        					Long user_id = getNewId(importLongType(room_moderator.element("user_id").getText()), Maps.USERS);
-	        					Boolean is_supermoderator = importBooleanType(room_moderator.element("is_supermoderator").getText());
+	        					Long user_id = getNewId(importLongType(unformatString(room_moderator.element("user_id").getText())), Maps.USERS);
+	        					Boolean is_supermoderator = importBooleanType(unformatString(room_moderator.element("is_supermoderator").getText()));
 	        					
 	        					roomModerators.setDeleted("false");
 	        					roomModerators.setRoomId(getNewId(rooms_id, Maps.ROOMS));
@@ -1590,6 +1642,7 @@ public class BackupImport extends HttpServlet {
 		
 	}
 	
+	@SuppressWarnings("unchecked") 
 	private List<FileExplorerItem> getFileExplorerItems(File fileExplorerItemsListFile) {
 		try {
 
@@ -1610,27 +1663,27 @@ public class BackupImport extends HttpServlet {
 	        			
 	        			Element fileExplorerItemObj = innerIter.next();
 	        			
-	        			Long fileExplorerItemId = importLongType(fileExplorerItemObj.element("fileExplorerItemId").getText());
-	        			String fileName = fileExplorerItemObj.element("fileName").getText();
-	        			String fileHash = fileExplorerItemObj.element("fileHash").getText();
-	        			Long parentFileExplorerItemId = importLongType(fileExplorerItemObj.element("parentFileExplorerItemId").getText());
-	        			Long room_id = getNewId(importLongType(fileExplorerItemObj.element("room_id").getText()), Maps.ROOMS);
-	        			Long ownerId = getNewId(importLongType(fileExplorerItemObj.element("ownerId").getText()), Maps.USERS);
-	        			Boolean isFolder = importBooleanType(fileExplorerItemObj.element("isFolder").getText());
-	        			Boolean isImage = importBooleanType(fileExplorerItemObj.element("isImage").getText());
-	        			Boolean isPresentation = importBooleanType(fileExplorerItemObj.element("isPresentation").getText());
-	        			Boolean isVideo = importBooleanType(fileExplorerItemObj.element("isVideo").getText());
-	        			Long insertedBy = getNewId(importLongType(fileExplorerItemObj.element("insertedBy").getText()), Maps.USERS);
-	        			Date inserted = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("inserted").getText());
-	        			Date updated = CalendarPatterns.parseDateWithHour(fileExplorerItemObj.element("updated").getText());
-	        			String deleted = fileExplorerItemObj.element("deleted").getText();
-	        			Long fileSize = importLongType(fileExplorerItemObj.element("fileSize").getText());
-	        			Integer flvWidth = importIntegerType(fileExplorerItemObj.element("flvWidth").getText());
-	        			Integer flvHeight = importIntegerType(fileExplorerItemObj.element("flvHeight").getText());
-	        			String previewImage = fileExplorerItemObj.element("previewImage").getText();
-	        			String wmlFilePath = fileExplorerItemObj.element("wmlFilePath").getText();
-	        			Boolean isStoredWmlFile = importBooleanType(fileExplorerItemObj.element("isStoredWmlFile").getText());
-	        			Boolean isChart = importBooleanType(fileExplorerItemObj.element("isChart").getText());
+	        			Long fileExplorerItemId = importLongType(unformatString(fileExplorerItemObj.element("fileExplorerItemId").getText()));
+	        			String fileName = unformatString(fileExplorerItemObj.element("fileName").getText());
+	        			String fileHash = unformatString(fileExplorerItemObj.element("fileHash").getText());
+	        			Long parentFileExplorerItemId = importLongType(unformatString(fileExplorerItemObj.element("parentFileExplorerItemId").getText()));
+	        			Long room_id = getNewId(importLongType(unformatString(fileExplorerItemObj.element("room_id").getText())), Maps.ROOMS);
+	        			Long ownerId = getNewId(importLongType(unformatString(fileExplorerItemObj.element("ownerId").getText())), Maps.USERS);
+	        			Boolean isFolder = importBooleanType(unformatString(fileExplorerItemObj.element("isFolder").getText()));
+	        			Boolean isImage = importBooleanType(unformatString(fileExplorerItemObj.element("isImage").getText()));
+	        			Boolean isPresentation = importBooleanType(unformatString(fileExplorerItemObj.element("isPresentation").getText()));
+	        			Boolean isVideo = importBooleanType(unformatString(fileExplorerItemObj.element("isVideo").getText()));
+	        			Long insertedBy = getNewId(importLongType(unformatString(fileExplorerItemObj.element("insertedBy").getText())), Maps.USERS);
+	        			Date inserted = CalendarPatterns.parseDateWithHour(unformatString(fileExplorerItemObj.element("inserted").getText()));
+	        			Date updated = CalendarPatterns.parseDateWithHour(unformatString(fileExplorerItemObj.element("updated").getText()));
+	        			String deleted = unformatString(fileExplorerItemObj.element("deleted").getText());
+	        			Long fileSize = importLongType(unformatString(fileExplorerItemObj.element("fileSize").getText()));
+	        			Integer flvWidth = importIntegerType(unformatString(fileExplorerItemObj.element("flvWidth").getText()));
+	        			Integer flvHeight = importIntegerType(unformatString(fileExplorerItemObj.element("flvHeight").getText()));
+	        			String previewImage = unformatString(fileExplorerItemObj.element("previewImage").getText());
+	        			String wmlFilePath = unformatString(fileExplorerItemObj.element("wmlFilePath").getText());
+	        			Boolean isStoredWmlFile = importBooleanType(unformatString(fileExplorerItemObj.element("isStoredWmlFile").getText()));
+	        			Boolean isChart = importBooleanType(unformatString(fileExplorerItemObj.element("isChart").getText()));
 	        			
 	        			FileExplorerItem fileExplorerItem = new FileExplorerItem();
 	        			fileExplorerItem.setFileExplorerItemId(fileExplorerItemId);

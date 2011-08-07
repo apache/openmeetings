@@ -76,7 +76,7 @@ public class UsersDaoImpl {
 				log.error("getUser",ex2);
 			}
 		} else {
-			log.info("[getUser] "+"Error: No USER_ID given");
+			log.info("[getUser] "+"Info: No USER_ID given");
 		}
 		return null;
 	}

@@ -623,42 +623,42 @@ public class BackupExport extends HttpServlet {
 			
 			Element appointment = appointments.addElement("appointment");
 			
-			appointment.addElement("appointmentId").setText(""+a.getAppointmentId());
-			appointment.addElement("appointmentName").setText(""+a.getAppointmentName());
-			appointment.addElement("appointmentLocation").setText(""+a.getAppointmentLocation());
-			appointment.addElement("appointmentDescription").setText(""+a.getAppointmentDescription());
-			appointment.addElement("appointmentStarttime").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentStarttime()));
-			appointment.addElement("appointmentEndtime").setText(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentEndtime()));
+			appointment.addElement("appointmentId").addCDATA(""+a.getAppointmentId());
+			appointment.addElement("appointmentName").addCDATA(""+a.getAppointmentName());
+			appointment.addElement("appointmentLocation").addCDATA(""+a.getAppointmentLocation());
+			appointment.addElement("appointmentDescription").addCDATA(""+a.getAppointmentDescription());
+			appointment.addElement("appointmentStarttime").addCDATA(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentStarttime()));
+			appointment.addElement("appointmentEndtime").addCDATA(CalendarPatterns.getDateWithTimeByMiliSeconds(a.getAppointmentEndtime()));
 			if (a.getAppointmentCategory() != null) {
-				appointment.addElement("categoryId").setText(""+a.getAppointmentCategory().getCategoryId());
+				appointment.addElement("categoryId").addCDATA(""+a.getAppointmentCategory().getCategoryId());
 			} else {
-				appointment.addElement("categoryId").setText(""+0);
+				appointment.addElement("categoryId").addCDATA(""+0);
 			}
 			if (a.getUserId() != null) {
-				appointment.addElement("users_id").setText(""+a.getUserId().getUser_id());
+				appointment.addElement("users_id").addCDATA(""+a.getUserId().getUser_id());
 			} else {
-				appointment.addElement("users_id").setText(""+0);
+				appointment.addElement("users_id").addCDATA(""+0);
 			}
-			appointment.addElement("deleted").setText(""+a.getDeleted());
-			appointment.addElement("comment").setText(""+a.getComment());
+			appointment.addElement("deleted").addCDATA(""+a.getDeleted());
+			appointment.addElement("comment").addCDATA(""+a.getComment());
 			if (a.getRemind() != null) {
-				appointment.addElement("typId").setText(""+a.getRemind().getTypId());
+				appointment.addElement("typId").addCDATA(""+a.getRemind().getTypId());
 			} else {
-				appointment.addElement("typId").setText(""+0);
+				appointment.addElement("typId").addCDATA(""+0);
 			}
-			appointment.addElement("isDaily").setText(""+a.getIsDaily());
-			appointment.addElement("isWeekly").setText(""+a.getIsWeekly());
-			appointment.addElement("isMonthly").setText(""+a.getIsMonthly());
-			appointment.addElement("isYearly").setText(""+a.getIsYearly());
+			appointment.addElement("isDaily").addCDATA(""+a.getIsDaily());
+			appointment.addElement("isWeekly").addCDATA(""+a.getIsWeekly());
+			appointment.addElement("isMonthly").addCDATA(""+a.getIsMonthly());
+			appointment.addElement("isYearly").addCDATA(""+a.getIsYearly());
 			if (a.getRoom() != null) {
-				appointment.addElement("room_id").setText(""+a.getRoom().getRooms_id());
+				appointment.addElement("room_id").addCDATA(""+a.getRoom().getRooms_id());
 			} else {
-				appointment.addElement("room_id").setText(""+0);
+				appointment.addElement("room_id").addCDATA(""+0);
 			}
-			appointment.addElement("icalId").setText(""+a.getIcalId());
-			appointment.addElement("language_id").setText(""+a.getLanguage_id());
-			appointment.addElement("isPasswordProtected").setText(""+a.getIsPasswordProtected());
-			appointment.addElement("password").setText(""+a.getPassword());
+			appointment.addElement("icalId").addCDATA(""+a.getIcalId());
+			appointment.addElement("language_id").addCDATA(""+a.getLanguage_id());
+			appointment.addElement("isPasswordProtected").addCDATA(""+a.getIsPasswordProtected());
+			appointment.addElement("password").addCDATA(""+a.getPassword());
 			
 			//Separated XML File
 			
@@ -667,20 +667,20 @@ public class BackupExport extends HttpServlet {
 //			for (Iterator<MeetingMember> iterObj = a.getMeetingMember().iterator();iterObj.hasNext(); ) {
 //				MeetingMember m = iterObj.next();
 //				Element meetingMember = meetingMembers.addElement("meetingMember");
-//				meetingMember.addElement("meetingMemberId").setText(""+m.getMeetingMemberId());
+//				meetingMember.addElement("meetingMemberId").addCDATA(""+m.getMeetingMemberId());
 //				if (m.getUserid() != null) {
-//					meetingMember.addElement("userid").setText(""+m.getUserid().getUser_id());
+//					meetingMember.addElement("userid").addCDATA(""+m.getUserid().getUser_id());
 //				} else {
-//					meetingMember.addElement("userid").setText("null");
+//					meetingMember.addElement("userid").addCDATA("null");
 //				}
-//				meetingMember.addElement("firstname").setText(""+m.getFirstname());
-//				meetingMember.addElement("lastname").setText(""+m.getLastname());
-//				meetingMember.addElement("memberStatus").setText(""+m.getMemberStatus());
-//				meetingMember.addElement("appointmentStatus").setText(""+m.getAppointmentStatus());
-//				meetingMember.addElement("email").setText(""+m.getEmail());
-//				meetingMember.addElement("deleted").setText(""+m.getDeleted());
-//				meetingMember.addElement("comment").setText(""+m.getComment());
-//				meetingMember.addElement("invitor").setText(""+m.getInvitor());
+//				meetingMember.addElement("firstname").addCDATA(""+m.getFirstname());
+//				meetingMember.addElement("lastname").addCDATA(""+m.getLastname());
+//				meetingMember.addElement("memberStatus").addCDATA(""+m.getMemberStatus());
+//				meetingMember.addElement("appointmentStatus").addCDATA(""+m.getAppointmentStatus());
+//				meetingMember.addElement("email").addCDATA(""+m.getEmail());
+//				meetingMember.addElement("deleted").addCDATA(""+m.getDeleted());
+//				meetingMember.addElement("comment").addCDATA(""+m.getComment());
+//				meetingMember.addElement("invitor").addCDATA(""+m.getInvitor());
 //			}
 			
 		}
@@ -707,55 +707,55 @@ public class BackupExport extends HttpServlet {
 			
 			Element room = rooms.addElement("room");
 			
-			room.addElement("name").setText(""+r.getName());
-			room.addElement("rooms_id").setText(""+r.getRooms_id());
-			room.addElement("deleted").setText(""+r.getDeleted());
-			room.addElement("comment").setText(""+r.getComment());
-			room.addElement("numberOfPartizipants").setText(""+r.getNumberOfPartizipants());
-			room.addElement("appointment").setText(""+r.getAppointment());
-			room.addElement("externalRoomId").setText(""+r.getExternalRoomId());
-			room.addElement("externalRoomType").setText(""+r.getExternalRoomType());
+			room.addElement("name").addCDATA(""+r.getName());
+			room.addElement("rooms_id").addCDATA(""+r.getRooms_id());
+			room.addElement("deleted").addCDATA(""+r.getDeleted());
+			room.addElement("comment").addCDATA(""+r.getComment());
+			room.addElement("numberOfPartizipants").addCDATA(""+r.getNumberOfPartizipants());
+			room.addElement("appointment").addCDATA(""+r.getAppointment());
+			room.addElement("externalRoomId").addCDATA(""+r.getExternalRoomId());
+			room.addElement("externalRoomType").addCDATA(""+r.getExternalRoomType());
 			if (r.getRoomtype() != null) {
-				room.addElement("roomtypeId").setText(""+r.getRoomtype().getRoomtypes_id());
+				room.addElement("roomtypeId").addCDATA(""+r.getRoomtype().getRoomtypes_id());
 			} else {
-				room.addElement("roomtypeId").setText(""+0);
+				room.addElement("roomtypeId").addCDATA(""+0);
 			}
 			if (r.getOwnerId() != null) {
-				room.addElement("ownerid").setText(""+r.getOwnerId());
+				room.addElement("ownerid").addCDATA(""+r.getOwnerId());
 			} else {
-				room.addElement("ownerid").setText("");
+				room.addElement("ownerid").addCDATA("");
 			}
 			if (r.getWaitForRecording() != null) {
-				room.addElement("waitForRecording").setText(""+r.getWaitForRecording());
+				room.addElement("waitForRecording").addCDATA(""+r.getWaitForRecording());
 			} else {
-				room.addElement("waitForRecording").setText("");
+				room.addElement("waitForRecording").addCDATA("");
 			}
 			if (r.getHideTopBar() != null) {
-				room.addElement("hideTopBar").setText(""+r.getHideTopBar());
+				room.addElement("hideTopBar").addCDATA(""+r.getHideTopBar());
 			} else {
-				room.addElement("hideTopBar").setText("");
+				room.addElement("hideTopBar").addCDATA("");
 			}
 			if (r.getAllowRecording() != null) {
-				room.addElement("allowRecording").setText(""+r.getAllowRecording());
+				room.addElement("allowRecording").addCDATA(""+r.getAllowRecording());
 			} else {
-				room.addElement("allowRecording").setText("");
+				room.addElement("allowRecording").addCDATA("");
 			}
-			room.addElement("isDemoRoom").setText(""+r.getIsDemoRoom());
-			room.addElement("demoTime").setText(""+r.getDemoTime());
-			room.addElement("isModeratedRoom").setText(""+r.getIsModeratedRoom());
-			room.addElement("allowUserQuestions").setText(""+r.getAllowUserQuestions());
-			room.addElement("isAudioOnly").setText(""+r.getIsAudioOnly());
-			room.addElement("sipNumber").setText(""+r.getSipNumber());
-			room.addElement("conferencePin").setText(""+r.getConferencePin());
+			room.addElement("isDemoRoom").addCDATA(""+r.getIsDemoRoom());
+			room.addElement("demoTime").addCDATA(""+r.getDemoTime());
+			room.addElement("isModeratedRoom").addCDATA(""+r.getIsModeratedRoom());
+			room.addElement("allowUserQuestions").addCDATA(""+r.getAllowUserQuestions());
+			room.addElement("isAudioOnly").addCDATA(""+r.getIsAudioOnly());
+			room.addElement("sipNumber").addCDATA(""+r.getSipNumber());
+			room.addElement("conferencePin").addCDATA(""+r.getConferencePin());
 			if (r.getIspublic() != null) {
-				room.addElement("ispublic").setText(""+r.getIspublic());
+				room.addElement("ispublic").addCDATA(""+r.getIspublic());
 			} else {
 				r.setIspublic(false);
-				room.addElement("ispublic").setText(""+r.getIspublic());
+				room.addElement("ispublic").addCDATA(""+r.getIspublic());
 			}
 			
-			room.addElement("isClosed").setText(""+r.getIsClosed());
-			room.addElement("redirectURL").setText(""+r.getRedirectURL());
+			room.addElement("isClosed").addCDATA(""+r.getIsClosed());
+			room.addElement("redirectURL").addCDATA(""+r.getRedirectURL());
 			
 			List<RoomModerators> roomModeratorsList = RoomModeratorsDaoImpl.getInstance().getRoomModeratorByRoomId(r.getRooms_id());
 			
@@ -766,12 +766,12 @@ public class BackupExport extends HttpServlet {
 				Element room_moderator = room_moderators.addElement("room_moderator");
 				
 				if (roomModerator.getUser() != null) {
-					room_moderator.addElement("user_id").setText(""+roomModerator.getUser().getUser_id());
+					room_moderator.addElement("user_id").addCDATA(""+roomModerator.getUser().getUser_id());
 				} else {
-					room_moderator.addElement("user_id").setText("0");
+					room_moderator.addElement("user_id").addCDATA("0");
 				}
 				
-				room_moderator.addElement("is_supermoderator").setText(""+roomModerator.getIsSuperModerator());
+				room_moderator.addElement("is_supermoderator").addCDATA(""+roomModerator.getIsSuperModerator());
 			}
 			
 		}
@@ -798,14 +798,20 @@ public class BackupExport extends HttpServlet {
 			
 			Element organisation = organisations.addElement("organisation");
 			
-			organisation.addElement("name").setText(""+org.getName());
-			organisation.addElement("organisation_id").setText(""+org.getOrganisation_id());
-			organisation.addElement("deleted").setText(""+org.getDeleted());
+			organisation.addElement("name").addCDATA(formatString(""+org.getName()));
+			organisation.addElement("organisation_id").addCDATA(formatString(""+org.getOrganisation_id()));
+			organisation.addElement("deleted").addCDATA(formatString(""+org.getDeleted()));
 			
 		}
 	
 		return document;
 	}	
+	
+	private String formatString(String str) {
+		//Todo fix if there is sth. we can do to prevent unicode replacement with invalid chars
+		//This is the place if you need to do special conversion on the strings
+		return str;
+	}
 	
 
 	private Document createPrivateMessagesDocument(
@@ -828,37 +834,37 @@ public class BackupExport extends HttpServlet {
 			
 			Element privateMessage = privatemessages.addElement("privatemessage");
 			
-			privateMessage.addElement("privateMessageId").setText(""+pm.getPrivateMessageId());
-			privateMessage.addElement("message").setText(""+pm.getMessage());
-			privateMessage.addElement("subject").setText(""+pm.getSubject());
-			privateMessage.addElement("privateMessageFolderId").setText(""+pm.getPrivateMessageFolderId());
-			privateMessage.addElement("userContactId").setText(""+pm.getUserContactId());
-			privateMessage.addElement("parentMessage").setText(""+pm.getParentMessage());
-			privateMessage.addElement("bookedRoom").setText(""+pm.getBookedRoom());
+			privateMessage.addElement("privateMessageId").addCDATA(formatString(""+pm.getPrivateMessageId()));
+			privateMessage.addElement("message").addCDATA(formatString(""+pm.getMessage()));
+			privateMessage.addElement("subject").addCDATA(formatString(""+pm.getSubject()));
+			privateMessage.addElement("privateMessageFolderId").addCDATA(formatString(""+pm.getPrivateMessageFolderId()));
+			privateMessage.addElement("userContactId").addCDATA(formatString(""+pm.getUserContactId()));
+			privateMessage.addElement("parentMessage").addCDATA(formatString(""+pm.getParentMessage()));
+			privateMessage.addElement("bookedRoom").addCDATA(formatString(""+pm.getBookedRoom()));
 			if (pm.getFrom() != null) {
-				privateMessage.addElement("from").setText(""+pm.getFrom().getUser_id());
+				privateMessage.addElement("from").addCDATA(formatString(""+pm.getFrom().getUser_id()));
 			} else {
-				privateMessage.addElement("from").setText("0");
+				privateMessage.addElement("from").addCDATA("0");
 			}
 			if (pm.getTo() != null) {
-				privateMessage.addElement("to").setText(""+pm.getTo().getUser_id());
+				privateMessage.addElement("to").addCDATA(formatString(""+pm.getTo().getUser_id()));
 			} else {
-				privateMessage.addElement("to").setText("0");
+				privateMessage.addElement("to").addCDATA("0");
 			}
-			privateMessage.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(pm.getInserted()));
-			privateMessage.addElement("isContactRequest").setText(""+pm.getIsContactRequest());
-			privateMessage.addElement("isRead").setText(""+pm.getIsRead());
-			privateMessage.addElement("isTrash").setText(""+pm.getIsTrash());
+			privateMessage.addElement("inserted").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(pm.getInserted())));
+			privateMessage.addElement("isContactRequest").addCDATA(formatString(""+pm.getIsContactRequest()));
+			privateMessage.addElement("isRead").addCDATA(formatString(""+pm.getIsRead()));
+			privateMessage.addElement("isTrash").addCDATA(formatString(""+pm.getIsTrash()));
 			if (pm.getOwner() != null) {
-				privateMessage.addElement("owner").setText(""+pm.getOwner().getUser_id());
+				privateMessage.addElement("owner").addCDATA(formatString(""+pm.getOwner().getUser_id()));
 			} else {
-				privateMessage.addElement("owner").setText("0");
+				privateMessage.addElement("owner").addCDATA("0");
 			}
 			
 			if (pm.getRoom() != null) {
-				privateMessage.addElement("room").setText(""+pm.getRoom().getRooms_id());
+				privateMessage.addElement("room").addCDATA(formatString(""+pm.getRoom().getRooms_id()));
 			} else {
-				privateMessage.addElement("room").setText("0");
+				privateMessage.addElement("room").addCDATA("0");
 			}
 			
 		}
@@ -886,27 +892,27 @@ public class BackupExport extends HttpServlet {
 			
 			Element fileExplorerItemElement = fileExplorerItemsElement.addElement("fileExplorerItem");
 			
-			fileExplorerItemElement.addElement("fileExplorerItemId").setText(""+fileExplorerItem.getFileExplorerItemId());
-			fileExplorerItemElement.addElement("fileName").setText(""+fileExplorerItem.getFileName());
-			fileExplorerItemElement.addElement("fileHash").setText(""+fileExplorerItem.getFileHash());
-			fileExplorerItemElement.addElement("parentFileExplorerItemId").setText(""+fileExplorerItem.getParentFileExplorerItemId());
-			fileExplorerItemElement.addElement("room_id").setText(""+fileExplorerItem.getRoom_id());
-			fileExplorerItemElement.addElement("ownerId").setText(""+fileExplorerItem.getOwnerId());
-			fileExplorerItemElement.addElement("isFolder").setText(""+fileExplorerItem.getIsFolder());
-			fileExplorerItemElement.addElement("isImage").setText(""+fileExplorerItem.getIsImage());
-			fileExplorerItemElement.addElement("isPresentation").setText(""+fileExplorerItem.getIsPresentation());
-			fileExplorerItemElement.addElement("isVideo").setText(""+fileExplorerItem.getIsVideo());
-			fileExplorerItemElement.addElement("insertedBy").setText(""+fileExplorerItem.getInsertedBy());
-			fileExplorerItemElement.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(fileExplorerItem.getInserted()));
-			fileExplorerItemElement.addElement("updated").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(fileExplorerItem.getUpdated()));
-			fileExplorerItemElement.addElement("deleted").setText(""+fileExplorerItem.getDeleted());
-			fileExplorerItemElement.addElement("fileSize").setText(""+fileExplorerItem.getFileSize());
-			fileExplorerItemElement.addElement("flvWidth").setText(""+fileExplorerItem.getFlvWidth());
-			fileExplorerItemElement.addElement("flvHeight").setText(""+fileExplorerItem.getFlvHeight());
-			fileExplorerItemElement.addElement("previewImage").setText(""+fileExplorerItem.getPreviewImage());
-			fileExplorerItemElement.addElement("wmlFilePath").setText(""+fileExplorerItem.getWmlFilePath());
-			fileExplorerItemElement.addElement("isStoredWmlFile").setText(""+fileExplorerItem.getIsStoredWmlFile());
-			fileExplorerItemElement.addElement("isChart").setText(""+fileExplorerItem.getIsChart());
+			fileExplorerItemElement.addElement("fileExplorerItemId").addCDATA(formatString(""+fileExplorerItem.getFileExplorerItemId()));
+			fileExplorerItemElement.addElement("fileName").addCDATA(formatString(""+fileExplorerItem.getFileName()));
+			fileExplorerItemElement.addElement("fileHash").addCDATA(formatString(""+fileExplorerItem.getFileHash()));
+			fileExplorerItemElement.addElement("parentFileExplorerItemId").addCDATA(formatString(""+fileExplorerItem.getParentFileExplorerItemId()));
+			fileExplorerItemElement.addElement("room_id").addCDATA(formatString(""+fileExplorerItem.getRoom_id()));
+			fileExplorerItemElement.addElement("ownerId").addCDATA(formatString(""+fileExplorerItem.getOwnerId()));
+			fileExplorerItemElement.addElement("isFolder").addCDATA(formatString(""+fileExplorerItem.getIsFolder()));
+			fileExplorerItemElement.addElement("isImage").addCDATA(formatString(""+fileExplorerItem.getIsImage()));
+			fileExplorerItemElement.addElement("isPresentation").addCDATA(formatString(""+fileExplorerItem.getIsPresentation()));
+			fileExplorerItemElement.addElement("isVideo").addCDATA(formatString(""+fileExplorerItem.getIsVideo()));
+			fileExplorerItemElement.addElement("insertedBy").addCDATA(formatString(""+fileExplorerItem.getInsertedBy()));
+			fileExplorerItemElement.addElement("inserted").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(fileExplorerItem.getInserted())));
+			fileExplorerItemElement.addElement("updated").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(fileExplorerItem.getUpdated())));
+			fileExplorerItemElement.addElement("deleted").addCDATA(formatString(""+fileExplorerItem.getDeleted()));
+			fileExplorerItemElement.addElement("fileSize").addCDATA(formatString(""+fileExplorerItem.getFileSize()));
+			fileExplorerItemElement.addElement("flvWidth").addCDATA(formatString(""+fileExplorerItem.getFlvWidth()));
+			fileExplorerItemElement.addElement("flvHeight").addCDATA(formatString(""+fileExplorerItem.getFlvHeight()));
+			fileExplorerItemElement.addElement("previewImage").addCDATA(formatString(""+fileExplorerItem.getPreviewImage()));
+			fileExplorerItemElement.addElement("wmlFilePath").addCDATA(formatString(""+fileExplorerItem.getWmlFilePath()));
+			fileExplorerItemElement.addElement("isStoredWmlFile").addCDATA(formatString(""+fileExplorerItem.getIsStoredWmlFile()));
+			fileExplorerItemElement.addElement("isChart").addCDATA(formatString(""+fileExplorerItem.getIsChart()));
 		    
 		}
 		
@@ -933,33 +939,33 @@ public class BackupExport extends HttpServlet {
 			
 			Element flvrecording = flvrecordings.addElement("flvrecording");
 			
-			flvrecording.addElement("alternateDownload").setText(""+flvRec.getAlternateDownload());
-			flvrecording.addElement("comment").setText(""+flvRec.getComment());
-			flvrecording.addElement("deleted").setText(""+flvRec.getDeleted());
-			flvrecording.addElement("fileHash").setText(""+flvRec.getFileHash());
-			flvrecording.addElement("fileName").setText(""+flvRec.getFileName());
-			flvrecording.addElement("flvRecordingId").setText(""+flvRec.getFlvRecordingId());
-			flvrecording.addElement("previewImage").setText(""+flvRec.getPreviewImage());
-			flvrecording.addElement("recorderStreamId").setText(""+flvRec.getRecorderStreamId());
-			flvrecording.addElement("fileSize").setText(""+flvRec.getFileSize());
-			flvrecording.addElement("flvHeight").setText(""+flvRec.getFlvHeight());
-			flvrecording.addElement("flvWidth").setText(""+flvRec.getFlvWidth());
-			flvrecording.addElement("height").setText(""+flvRec.getHeight());
-			flvrecording.addElement("width").setText(""+flvRec.getWidth());
-			flvrecording.addElement("insertedBy").setText(""+flvRec.getInsertedBy());
-			flvrecording.addElement("organization_id").setText(""+flvRec.getOrganization_id());
-			flvrecording.addElement("ownerId").setText(""+flvRec.getOwnerId());
-			flvrecording.addElement("parentFileExplorerItemId").setText(""+flvRec.getParentFileExplorerItemId());
-			flvrecording.addElement("progressPostProcessing").setText(""+flvRec.getProgressPostProcessing());
-			flvrecording.addElement("room_id").setText(""+flvRec.getRoom_id());
-			flvrecording.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getInserted()));
-			flvrecording.addElement("isFolder").setText(""+flvRec.getIsFolder());
-			flvrecording.addElement("isImage").setText(""+flvRec.getIsImage());
-			flvrecording.addElement("isInterview").setText(""+flvRec.getIsInterview());
-			flvrecording.addElement("isPresentation").setText(""+flvRec.getIsPresentation());
-			flvrecording.addElement("isRecording").setText(""+flvRec.getIsRecording());
-			flvrecording.addElement("recordEnd").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordEnd()));
-			flvrecording.addElement("recordStart").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordStart()));
+			flvrecording.addElement("alternateDownload").addCDATA(formatString(""+flvRec.getAlternateDownload()));
+			flvrecording.addElement("comment").addCDATA(formatString(""+flvRec.getComment()));
+			flvrecording.addElement("deleted").addCDATA(formatString(""+flvRec.getDeleted()));
+			flvrecording.addElement("fileHash").addCDATA(formatString(""+flvRec.getFileHash()));
+			flvrecording.addElement("fileName").addCDATA(formatString(""+flvRec.getFileName()));
+			flvrecording.addElement("flvRecordingId").addCDATA(formatString(""+flvRec.getFlvRecordingId()));
+			flvrecording.addElement("previewImage").addCDATA(formatString(""+flvRec.getPreviewImage()));
+			flvrecording.addElement("recorderStreamId").addCDATA(formatString(""+flvRec.getRecorderStreamId()));
+			flvrecording.addElement("fileSize").addCDATA(formatString(""+flvRec.getFileSize()));
+			flvrecording.addElement("flvHeight").addCDATA(formatString(""+flvRec.getFlvHeight()));
+			flvrecording.addElement("flvWidth").addCDATA(formatString(""+flvRec.getFlvWidth()));
+			flvrecording.addElement("height").addCDATA(formatString(""+flvRec.getHeight()));
+			flvrecording.addElement("width").addCDATA(formatString(""+flvRec.getWidth()));
+			flvrecording.addElement("insertedBy").addCDATA(formatString(""+flvRec.getInsertedBy()));
+			flvrecording.addElement("organization_id").addCDATA(formatString(""+flvRec.getOrganization_id()));
+			flvrecording.addElement("ownerId").addCDATA(formatString(""+flvRec.getOwnerId()));
+			flvrecording.addElement("parentFileExplorerItemId").addCDATA(formatString(""+flvRec.getParentFileExplorerItemId()));
+			flvrecording.addElement("progressPostProcessing").addCDATA(formatString(""+flvRec.getProgressPostProcessing()));
+			flvrecording.addElement("room_id").addCDATA(formatString(""+flvRec.getRoom_id()));
+			flvrecording.addElement("inserted").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getInserted())));
+			flvrecording.addElement("isFolder").addCDATA(formatString(""+flvRec.getIsFolder()));
+			flvrecording.addElement("isImage").addCDATA(formatString(""+flvRec.getIsImage()));
+			flvrecording.addElement("isInterview").addCDATA(formatString(""+flvRec.getIsInterview()));
+			flvrecording.addElement("isPresentation").addCDATA(formatString(""+flvRec.getIsPresentation()));
+			flvrecording.addElement("isRecording").addCDATA(formatString(""+flvRec.getIsRecording()));
+			flvrecording.addElement("recordEnd").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordEnd())));
+			flvrecording.addElement("recordStart").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvRec.getRecordStart())));
 			
 			
 			Element flvrecordingmetadatas = flvrecording.addElement("flvrecordingmetadatas");
@@ -969,22 +975,22 @@ public class BackupExport extends HttpServlet {
 				
 				Element flvrecordingmetadata = flvrecordingmetadatas.addElement("flvrecordingmetadata");
 				
-				flvrecordingmetadata.addElement("flvRecordingMetaDataId").setText(""+flvMeta.getFlvRecordingMetaDataId());
-				flvrecordingmetadata.addElement("freeTextUserName").setText(""+flvMeta.getFreeTextUserName());
-				flvrecordingmetadata.addElement("fullWavAudioData").setText(""+flvMeta.getFullWavAudioData());
-				flvrecordingmetadata.addElement("streamName").setText(""+flvMeta.getStreamName());
-				flvrecordingmetadata.addElement("wavAudioData").setText(""+flvMeta.getWavAudioData());
-				flvrecordingmetadata.addElement("initialGapSeconds").setText(""+flvMeta.getInitialGapSeconds());
-				flvrecordingmetadata.addElement("insertedBy").setText(""+flvMeta.getInsertedBy());
-				flvrecordingmetadata.addElement("interiewPodId").setText(""+flvMeta.getInteriewPodId());
-				flvrecordingmetadata.addElement("audioIsValid").setText(""+flvMeta.getAudioIsValid());
-				flvrecordingmetadata.addElement("inserted").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getInserted()));
-				flvrecordingmetadata.addElement("isAudioOnly").setText(""+flvMeta.getIsAudioOnly());
-				flvrecordingmetadata.addElement("isScreenData").setText(""+flvMeta.getIsScreenData());
-				flvrecordingmetadata.addElement("isVideoOnly").setText(""+flvMeta.getIsVideoOnly());
-				flvrecordingmetadata.addElement("recordEnd").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordEnd()));
-				flvrecordingmetadata.addElement("recordStart").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordStart()));
-				flvrecordingmetadata.addElement("updated").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getUpdated()));
+				flvrecordingmetadata.addElement("flvRecordingMetaDataId").addCDATA(formatString(""+flvMeta.getFlvRecordingMetaDataId()));
+				flvrecordingmetadata.addElement("freeTextUserName").addCDATA(formatString(""+flvMeta.getFreeTextUserName()));
+				flvrecordingmetadata.addElement("fullWavAudioData").addCDATA(formatString(""+flvMeta.getFullWavAudioData()));
+				flvrecordingmetadata.addElement("streamName").addCDATA(formatString(""+flvMeta.getStreamName()));
+				flvrecordingmetadata.addElement("wavAudioData").addCDATA(formatString(""+flvMeta.getWavAudioData()));
+				flvrecordingmetadata.addElement("initialGapSeconds").addCDATA(formatString(""+flvMeta.getInitialGapSeconds()));
+				flvrecordingmetadata.addElement("insertedBy").addCDATA(formatString(""+flvMeta.getInsertedBy()));
+				flvrecordingmetadata.addElement("interiewPodId").addCDATA(formatString(""+flvMeta.getInteriewPodId()));
+				flvrecordingmetadata.addElement("audioIsValid").addCDATA(formatString(""+flvMeta.getAudioIsValid()));
+				flvrecordingmetadata.addElement("inserted").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getInserted())));
+				flvrecordingmetadata.addElement("isAudioOnly").addCDATA(formatString(""+flvMeta.getIsAudioOnly()));
+				flvrecordingmetadata.addElement("isScreenData").addCDATA(formatString(""+flvMeta.getIsScreenData()));
+				flvrecordingmetadata.addElement("isVideoOnly").addCDATA(formatString(""+flvMeta.getIsVideoOnly()));
+				flvrecordingmetadata.addElement("recordEnd").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordEnd())));
+				flvrecordingmetadata.addElement("recordStart").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getRecordStart())));
+				flvrecordingmetadata.addElement("updated").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(flvMeta.getUpdated())));
 				
 			}
 			
@@ -1013,9 +1019,9 @@ public class BackupExport extends HttpServlet {
 			
 			Element privateMessageFolder = privatemessagefolders.addElement("privatemessagefolder");
 			
-			privateMessageFolder.addElement("privateMessageFolderId").setText(""+pmf.getPrivateMessageFolderId());
-			privateMessageFolder.addElement("folderName").setText(""+pmf.getFolderName());
-			privateMessageFolder.addElement("userId").setText(""+pmf.getUserId());
+			privateMessageFolder.addElement("privateMessageFolderId").addCDATA(formatString(""+pmf.getPrivateMessageFolderId()));
+			privateMessageFolder.addElement("folderName").addCDATA(formatString(""+pmf.getFolderName()));
+			privateMessageFolder.addElement("userId").addCDATA(formatString(""+pmf.getUserId()));
 			
 		}
 	
@@ -1041,20 +1047,20 @@ public class BackupExport extends HttpServlet {
 			
 			Element usercontact = usercontacts.addElement("usercontact");
 			
-			usercontact.addElement("userContactId").setText(""+uc.getUserContactId());
-			usercontact.addElement("hash").setText(""+uc.getHash());
+			usercontact.addElement("userContactId").addCDATA(formatString(""+uc.getUserContactId()));
+			usercontact.addElement("hash").addCDATA(formatString(""+uc.getHash()));
 			if (uc.getContact() != null) {
-				usercontact.addElement("contact").setText(""+uc.getContact().getUser_id());
+				usercontact.addElement("contact").addCDATA(formatString(""+uc.getContact().getUser_id()));
 			} else {
-				usercontact.addElement("contact").setText("0");
+				usercontact.addElement("contact").addCDATA("0");
 			}
 			if (uc.getOwner() != null) {
-				usercontact.addElement("owner").setText(""+uc.getOwner().getUser_id());
+				usercontact.addElement("owner").addCDATA(formatString(""+uc.getOwner().getUser_id()));
 			} else {
-				usercontact.addElement("owner").setText("0");
+				usercontact.addElement("owner").addCDATA("0");
 			}
-			usercontact.addElement("pending").setText(""+uc.getPending());
-			usercontact.addElement("shareCalendar").setText(""+uc.getShareCalendar());
+			usercontact.addElement("pending").addCDATA(formatString(""+uc.getPending()));
+			usercontact.addElement("shareCalendar").addCDATA(formatString(""+uc.getShareCalendar()));
 			
 		}
 	
@@ -1080,10 +1086,10 @@ public class BackupExport extends HttpServlet {
 			
 			Element room_organisation = organisations.addElement("room_organisation");
 			
-			room_organisation.addElement("rooms_organisation_id").setText(""+roomOrg.getRooms_organisation_id());
-			room_organisation.addElement("organisation_id").setText(""+roomOrg.getOrganisation().getOrganisation_id());
-			room_organisation.addElement("rooms_id").setText(""+roomOrg.getRoom().getRooms_id());
-			room_organisation.addElement("deleted").setText(""+roomOrg.getDeleted());
+			room_organisation.addElement("rooms_organisation_id").addCDATA(formatString(""+roomOrg.getRooms_organisation_id()));
+			room_organisation.addElement("organisation_id").addCDATA(formatString(""+roomOrg.getOrganisation().getOrganisation_id()));
+			room_organisation.addElement("rooms_id").addCDATA(formatString(""+roomOrg.getRoom().getRooms_id()));
+			room_organisation.addElement("deleted").addCDATA(formatString(""+roomOrg.getDeleted()));
 			
 		}
 	
@@ -1109,25 +1115,25 @@ public class BackupExport extends HttpServlet {
 			
 			Element meetingmember = meetingmembers.addElement("meetingmember");
 			
-			meetingmember.addElement("meetingMemberId").setText(""+meetMember.getMeetingMemberId());
+			meetingmember.addElement("meetingMemberId").addCDATA(formatString(""+meetMember.getMeetingMemberId()));
 			if (meetMember.getUserid() != null) {
-				meetingmember.addElement("userid").setText(""+meetMember.getUserid().getUser_id());
+				meetingmember.addElement("userid").addCDATA(formatString(""+meetMember.getUserid().getUser_id()));
 			} else {
-				meetingmember.addElement("userid").setText("0");
+				meetingmember.addElement("userid").addCDATA("0");
 			}
 			if (meetMember.getAppointment() != null) {
-				meetingmember.addElement("appointment").setText(""+meetMember.getAppointment().getAppointmentId());
+				meetingmember.addElement("appointment").addCDATA(formatString(""+meetMember.getAppointment().getAppointmentId()));
 			} else {
-				meetingmember.addElement("appointment").setText("0");
+				meetingmember.addElement("appointment").addCDATA("0");
 			}
-			meetingmember.addElement("firstname").setText(""+meetMember.getFirstname());
-			meetingmember.addElement("lastname").setText(""+meetMember.getLastname());
-			meetingmember.addElement("memberStatus").setText(""+meetMember.getMemberStatus());
-			meetingmember.addElement("appointmentStatus").setText(""+meetMember.getAppointmentStatus());
-			meetingmember.addElement("email").setText(""+meetMember.getEmail());
-			meetingmember.addElement("deleted").setText(""+meetMember.getDeleted());
-			meetingmember.addElement("comment").setText(""+meetMember.getComment());
-			meetingmember.addElement("invitor").setText(""+meetMember.getInvitor());
+			meetingmember.addElement("firstname").addCDATA(formatString(""+meetMember.getFirstname()));
+			meetingmember.addElement("lastname").addCDATA(formatString(""+meetMember.getLastname()));
+			meetingmember.addElement("memberStatus").addCDATA(formatString(""+meetMember.getMemberStatus()));
+			meetingmember.addElement("appointmentStatus").addCDATA(formatString(""+meetMember.getAppointmentStatus()));
+			meetingmember.addElement("email").addCDATA(formatString(""+meetMember.getEmail()));
+			meetingmember.addElement("deleted").addCDATA(formatString(""+meetMember.getDeleted()));
+			meetingmember.addElement("comment").addCDATA(formatString(""+meetMember.getComment()));
+			meetingmember.addElement("invitor").addCDATA(formatString(""+meetMember.getInvitor()));
 			
 		}
 	
@@ -1154,11 +1160,11 @@ public class BackupExport extends HttpServlet {
 
 			Element ldapconfig = ldapconfigs.addElement("ldapconfig");
 			
-			ldapconfig.addElement("name").setText(""+ldapC.getName());
-			ldapconfig.addElement("configFileName").setText(""+ldapC.getConfigFileName());
-			ldapconfig.addElement("addDomainToUserName").setText(""+ldapC.getAddDomainToUserName());
-			ldapconfig.addElement("domain").setText(""+ldapC.getDomain());
-			ldapconfig.addElement("isActive").setText(""+ldapC.getIsActive());
+			ldapconfig.addElement("name").addCDATA(formatString(""+ldapC.getName()));
+			ldapconfig.addElement("configFileName").addCDATA(formatString(""+ldapC.getConfigFileName()));
+			ldapconfig.addElement("addDomainToUserName").addCDATA(formatString(""+ldapC.getAddDomainToUserName()));
+			ldapconfig.addElement("domain").addCDATA(formatString(""+ldapC.getDomain()));
+			ldapconfig.addElement("isActive").addCDATA(formatString(""+ldapC.getIsActive()));
 
 		}
 
@@ -1184,147 +1190,147 @@ public class BackupExport extends HttpServlet {
 
 			Element user = users.addElement("user");
 
-			user.addElement("user_id").setText(""+u.getUser_id());
-			user.addElement("deleted").setText(""+u.getDeleted());
-			user.addElement("age").setText(""+CalendarPatterns.getDateByMiliSeconds(u.getAge()));
+			user.addElement("user_id").addCDATA(formatString(""+u.getUser_id()));
+			user.addElement("deleted").addCDATA(formatString(""+u.getDeleted()));
+			user.addElement("age").addCDATA(formatString(""+CalendarPatterns.getDateByMiliSeconds(u.getAge())));
 			if (u.getAvailible() != null) {
-				user.addElement("availible").setText(""+u.getAvailible().toString());
+				user.addElement("availible").addCDATA(formatString(""+u.getAvailible().toString()));
 			} else {
-				user.addElement("availible").setText("0");
+				user.addElement("availible").addCDATA("0");
 			}
-			user.addElement("deleted").setText(""+u.getDeleted());
-			user.addElement("firstname").setText(""+u.getFirstname());
-			user.addElement("lastname").setText(""+u.getLastname());
-			user.addElement("login").setText(""+u.getLogin());
-			user.addElement("pass").setText(""+u.getPassword());
+			user.addElement("deleted").addCDATA(formatString(""+u.getDeleted()));
+			user.addElement("firstname").addCDATA(formatString(""+u.getFirstname()));
+			user.addElement("lastname").addCDATA(formatString(""+u.getLastname()));
+			user.addElement("login").addCDATA(formatString(""+u.getLogin()));
+			user.addElement("pass").addCDATA(formatString(""+u.getPassword()));
 			
 			if (u.getActivatehash()!= null) {
-				user.addElement("activatehash").setText(""+u.getActivatehash());
+				user.addElement("activatehash").addCDATA(formatString(""+u.getActivatehash()));
 			} else {
-				user.addElement("activatehash").setText("");
+				user.addElement("activatehash").addCDATA(formatString(""));
 			}
 			if (u.getExternalUserType() != null) {
-				user.addElement("externalUserType").setText(""+u.getExternalUserType());
+				user.addElement("externalUserType").addCDATA(formatString(""+u.getExternalUserType()));
 			} else {
-				user.addElement("externalUserType").setText("");
+				user.addElement("externalUserType").addCDATA(formatString(""));
 			}
 			
 			if (u.getExternalUserId() != null) {
-				user.addElement("externalUserId").setText(""+u.getExternalUserId());
+				user.addElement("externalUserId").addCDATA(formatString(""+u.getExternalUserId()));
 			} else {
-				user.addElement("externalUserId").setText("");
+				user.addElement("externalUserId").addCDATA(formatString(""));
 			}
 			
 			if (u.getResethash() != null) {
-				user.addElement("resethash").setText(""+u.getResethash());
+				user.addElement("resethash").addCDATA(formatString(""+u.getResethash()));
 			} else {
-				user.addElement("resethash").setText("");
+				user.addElement("resethash").addCDATA(formatString(""));
 			}
 			
 			if (u.getUserOffers() != null) {
-				user.addElement("userOffers").setText(""+u.getUserOffers());
+				user.addElement("userOffers").addCDATA(formatString(""+u.getUserOffers()));
 			} else {
-				user.addElement("userOffers").setText("");
+				user.addElement("userOffers").addCDATA(formatString(""));
 			}
 			
 			if (u.getUserSearchs() != null) {
-				user.addElement("userSearchs").setText(""+u.getUserSearchs());
+				user.addElement("userSearchs").addCDATA(formatString(""+u.getUserSearchs()));
 			} else {
-				user.addElement("userSearchs").setText("");
+				user.addElement("userSearchs").addCDATA(formatString(""));
 			}
 			
 			if (u.getForceTimeZoneCheck() != null) {
-				user.addElement("forceTimeZoneCheck").setText(""+u.getForceTimeZoneCheck());
+				user.addElement("forceTimeZoneCheck").addCDATA(formatString(""+u.getForceTimeZoneCheck()));
 			} else {
-				user.addElement("ForceTimeZoneCheck").setText("");
+				user.addElement("ForceTimeZoneCheck").addCDATA(formatString(""));
 			}
 			
 			if (u.getLasttrans() != null) {
-				user.addElement("lasttrans").setText(""+u.getLasttrans());
+				user.addElement("lasttrans").addCDATA(formatString(""+u.getLasttrans()));
 			} else {
-				user.addElement("lasttrans").setText("");
+				user.addElement("lasttrans").addCDATA(formatString(""));
 			}
 
 			if (u.getShowContactData() != null) {
-				user.addElement("showContactData").setText(""+u.getShowContactData());
+				user.addElement("showContactData").addCDATA(formatString(""+u.getShowContactData()));
 			} else {
-				user.addElement("showContactData").setText("");
+				user.addElement("showContactData").addCDATA(formatString(""));
 			}
 
 			if (u.getShowContactDataToContacts() != null) {
-				user.addElement("showContactDataToContacts").setText(""+u.getShowContactDataToContacts());
+				user.addElement("showContactDataToContacts").addCDATA(formatString(""+u.getShowContactDataToContacts()));
 			} else {
-				user.addElement("showContactDataToContacts").setText("");
+				user.addElement("showContactDataToContacts").addCDATA(formatString(""));
 			}			
 			
 			String pictureuri = u.getPictureuri();
-			if (pictureuri != null) user.addElement("pictureuri").setText(pictureuri);
-			else user.addElement("pictureuri").setText("");
+			if (pictureuri != null) user.addElement("pictureuri").addCDATA(pictureuri);
+			else user.addElement("pictureuri").addCDATA(formatString(""));
 			
-			if ( u.getLanguage_id() != null ) user.addElement("language_id").setText(u.getLanguage_id().toString());
-			else user.addElement("language_id").setText("");
+			if ( u.getLanguage_id() != null ) user.addElement("language_id").addCDATA(formatString(u.getLanguage_id().toString()));
+			else user.addElement("language_id").addCDATA(formatString(""));
 				
 			if (u.getStatus() != null) {
-				user.addElement("status").setText(""+u.getStatus().toString());
+				user.addElement("status").addCDATA(formatString(""+u.getStatus().toString()));
 			} else {
-				user.addElement("status").setText("0");
+				user.addElement("status").addCDATA("0");
 			}
-			user.addElement("regdate").setText(""+CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate()));
+			user.addElement("regdate").addCDATA(formatString(""+CalendarPatterns.getDateWithTimeByMiliSeconds(u.getRegdate())));
 			
 			if (u.getTitle_id() != null) {
-				user.addElement("title_id").setText(""+u.getTitle_id().toString());
-				user.addElement("level_id").setText(""+u.getLevel_id().toString());
+				user.addElement("title_id").addCDATA(formatString(""+u.getTitle_id().toString()));
+				user.addElement("level_id").addCDATA(formatString(""+u.getLevel_id().toString()));
 			} else {
-				user.addElement("title_id").setText("1");
-				user.addElement("level_id").setText("1");
+				user.addElement("title_id").addCDATA("1");
+				user.addElement("level_id").addCDATA("1");
 			}
 			
 			if (u.getOmTimeZone() != null) {
-				user.addElement("omTimeZone").setText(""+u.getOmTimeZone().getJname());
+				user.addElement("omTimeZone").addCDATA(formatString(""+u.getOmTimeZone().getJname()));
 			} else {
-				user.addElement("omTimeZone").setText("");
+				user.addElement("omTimeZone").addCDATA(formatString(""));
 			}
 			
 			if (u.getAdresses() != null) {
-				user.addElement("additionalname").setText(""+u.getAdresses().getAdditionalname());
-				user.addElement("comment").setText(""+u.getAdresses().getComment());
+				user.addElement("additionalname").addCDATA(formatString(""+u.getAdresses().getAdditionalname()));
+				user.addElement("comment").addCDATA(formatString(""+u.getAdresses().getComment()));
 				//A User can not have a deleted Adress, you cannot delete the Adress of an User
 				//String deleted = u.getAdresses().getDeleted()
 				//Phone Number not done yet
-				user.addElement("fax").setText(""+u.getAdresses().getFax());
+				user.addElement("fax").addCDATA(formatString(""+u.getAdresses().getFax()));
 				if (u.getAdresses().getStates() != null) {
-					user.addElement("state_id").setText(""+u.getAdresses().getStates().getState_id().toString());
+					user.addElement("state_id").addCDATA(formatString(""+u.getAdresses().getStates().getState_id().toString()));
 				} else {
-					user.addElement("state_id").setText("1");
+					user.addElement("state_id").addCDATA("1");
 				}
-				user.addElement("street").setText(""+u.getAdresses().getStreet());
-				user.addElement("town").setText(""+u.getAdresses().getTown());
-				user.addElement("zip").setText(""+u.getAdresses().getZip());
+				user.addElement("street").addCDATA(formatString(""+u.getAdresses().getStreet()));
+				user.addElement("town").addCDATA(formatString(""+u.getAdresses().getTown()));
+				user.addElement("zip").addCDATA(formatString(""+u.getAdresses().getZip()));
 				
 				// Email and Phone
-				user.addElement("mail").setText(""+u.getAdresses().getEmail());
-				user.addElement("phone").setText(""+u.getAdresses().getPhone());
+				user.addElement("mail").addCDATA(formatString(""+u.getAdresses().getEmail()));
+				user.addElement("phone").addCDATA(formatString(""+u.getAdresses().getPhone()));
 			} else {
-				user.addElement("additionalname").setText("");
-				user.addElement("comment").setText("");
+				user.addElement("additionalname").addCDATA(formatString(""));
+				user.addElement("comment").addCDATA(formatString(""));
 				//A User can not have a deleted address, you cannot delete the address of an User without deleting the user
 				//only SOAP users might have a null
 				//String deleted = u.getAdresses().getDeleted()
 				//Phone Number not done yet
-				user.addElement("fax").setText("");
-				user.addElement("state_id").setText("1");
-				user.addElement("street").setText("");
-				user.addElement("town").setText("");
-				user.addElement("zip").setText("");
-				user.addElement("mail").setText("");
-				user.addElement("phone").setText("");
+				user.addElement("fax").addCDATA(formatString(""));
+				user.addElement("state_id").addCDATA("1");
+				user.addElement("street").addCDATA(formatString(""));
+				user.addElement("town").addCDATA(formatString(""));
+				user.addElement("zip").addCDATA(formatString(""));
+				user.addElement("mail").addCDATA(formatString(""));
+				user.addElement("phone").addCDATA(formatString(""));
 				
 			}
 			
 			if (u.getUserSipData() != null) {
-				user.addElement("sip_username").setText(""+u.getUserSipData().getUsername());
-				user.addElement("sip_userpass").setText(""+u.getUserSipData().getUserpass());
-				user.addElement("sip_authid").setText(""+u.getUserSipData().getAuthId());
+				user.addElement("sip_username").addCDATA(formatString(""+u.getUserSipData().getUsername()));
+				user.addElement("sip_userpass").addCDATA(formatString(""+u.getUserSipData().getUserpass()));
+				user.addElement("sip_authid").addCDATA(formatString(""+u.getUserSipData().getAuthId()));
 			}
 			
 			
@@ -1337,15 +1343,15 @@ public class BackupExport extends HttpServlet {
 				
 				Organisation_Users orgUsers = iterObj.next();
 				if (orgUsers.getOrganisation() != null) {
-					user_organisation.addElement("organisation_id").addText(""+orgUsers.getOrganisation().getOrganisation_id().toString());
+					user_organisation.addElement("organisation_id").addCDATA(formatString(""+orgUsers.getOrganisation().getOrganisation_id().toString()));
 				} else {
-					user_organisation.addElement("organisation_id").addText("0");
+					user_organisation.addElement("organisation_id").addCDATA("0");
 				}
 				
-				user_organisation.addElement("deleted").addText(""+orgUsers.getDeleted());
-				user_organisation.addElement("user_id").addText(""+orgUsers.getUser_id());
-				user_organisation.addElement("isModerator").addText(""+orgUsers.getIsModerator());
-				user_organisation.addElement("comment").addText(""+orgUsers.getComment());
+				user_organisation.addElement("deleted").addCDATA(formatString(""+orgUsers.getDeleted()));
+				user_organisation.addElement("user_id").addCDATA(formatString(""+orgUsers.getUser_id()));
+				user_organisation.addElement("isModerator").addCDATA(formatString(""+orgUsers.getIsModerator()));
+				user_organisation.addElement("comment").addCDATA(formatString(""+orgUsers.getComment()));
 				
 			}
 			
@@ -1359,6 +1365,7 @@ public class BackupExport extends HttpServlet {
 	public void serializetoXML(OutputStream out, String aEncodingScheme, Document doc)
 			throws Exception {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setXHTML(true);
 		outformat.setEncoding(aEncodingScheme);
 		XMLWriter writer = new XMLWriter(out, outformat);
 		writer.write(doc);
