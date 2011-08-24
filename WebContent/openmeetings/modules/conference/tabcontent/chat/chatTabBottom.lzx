@@ -138,7 +138,7 @@
             <handler name="onclick">
                 <![CDATA[
                 
-                    var tString = canvas._overallchatcontent.getLog();
+                    var tString = canvas._chatcontent.getLog();
                 
                     new lz.showChatLog(canvas,{
                                     error:tString
