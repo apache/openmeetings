@@ -39,16 +39,19 @@
 
 	<attribute name="roomid" value="0" type="number" />
 	<attribute name="roomname" value="" type="string" />
+	<attribute name="roomcomment" value="" type="string" />
 	<attribute name="currentusers" value="null" />
 	
 	
-	<method name="doinit" args="currentusers,roomid,roomname">
+	<method name="doinit" args="currentusers,roomid,roomname,roomcomment">
 		<![CDATA[
 			if ($debug) Debug.write("doinit",currentusers,roomid,roomname);
 			this.setAttribute('currentusers',currentusers);
 			this.setAttribute('roomid',roomid);
 			this.setAttribute('roomname',roomname);
-			this._roomname.setAttribute('text',canvas.getLabelName(406)+roomname);
+			this.setAttribute('roomcomment',roomcomment);
+			this._roomname.setAttribute('text',canvas.getLabelName(406)+" "+roomname);
+			this._roomcomment.setAttribute('text', roomcomment);
 			this._users.clearList();
 			for (var i = 0;i<this.currentusers.length;i++){
 				var username = this.currentusers[i].firstname + " "
@@ -144,14 +147,17 @@
 	<labelText name="l_bdatum" labelid="570" y="40" width="50" visible="false" />
 	<customEdittext name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
 	<customEdittext name="bzeit" x="200" y="40" width="50" regexpType="time" visible="false" />
-	
-	<labelText name="l_edatum" labelid="571" y="70" width="50" visible="false" />
-	<customEdittext name="edatum" y="70" x="75" width="100" text="" visible="false" /> 	            	
-	<customEdittext name="ezeit" x="200" y="70" width="50" regexpType="time" visible="false" />
-	
-	<labelText name="user_label" labelid="407" y="110" width="200" />
-	<view name="_users" bgcolor="$once{ canvas.basebgcolorizer }" width="300" y="130"
-		              height="${ parent.height - 130 }" >
+
+	<labelText name="l_edatum" labelid="571" y="${40 + parent.l_bdatum.visible ? 30 : 0}" width="50" visible="false" />
+	<customEdittext name="edatum" y="${parent.l_edatum.y}" x="75" width="100" text="" visible="false" />
+	<customEdittext name="ezeit" x="200" y="${parent.l_edatum.y}" width="50" regexpType="time" visible="false" />
+
+	<labelText name="_roomcomment" x="75" y="${parent.l_edatum.y + (parent.l_edatum.visible ? 30 : 0)}" width="100" text=""/>
+	<labelText labelid="270" y="${parent._roomcomment.y}" width="50" />
+
+	<labelText name="user_label" labelid="407" y="${10 + parent._roomcomment.y + parent._roomcomment.height}" width="200" />
+	<view name="_users" bgcolor="$once{ canvas.basebgcolorizer }" width="300" y="${30 + parent._roomcomment.y + parent._roomcomment.height}"
+				height="${ parent.height - parent._users.y }" >
 		<method name="clearList">
 			for (var eg in this._users._cbtext.subviews) 
 				this._users._cbtext.subviews[eg].destroy();

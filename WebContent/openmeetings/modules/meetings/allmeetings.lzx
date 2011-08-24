@@ -142,7 +142,8 @@
 													ispublic : true,
 													roomid : value[eg].rooms_id,
 													starttime : time,
-													roomname : value[eg].name
+													roomname : value[eg].name,
+													roomcomment : value[eg].comment
 												});
 									}
 								}
@@ -200,7 +201,8 @@
 												ispublic : false,
 												roomid : value[eg].room.rooms_id,
 												starttime : parseDateToStringTime(value[eg].room.starttime),
-												roomname : value[eg].room.name
+												roomname : value[eg].room.name,
+												roomcomment : value[eg].room.comment
 											});
 								}
 							}
