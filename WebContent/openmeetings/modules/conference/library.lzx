@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
+    <include href="commonVideoViewContent.lzx"/>
+
 	<include href="whiteboard/" /> 
 <!-- <include href="remote/" />-->
  	<include href="tabbar/" />

@@ -89,8 +89,8 @@
 	    	]]>
 	    	</method>  	
 		
-		<view width="$once{ parent.width }" name="_videoviewcontent">
+		<commonVideoViewContent width="$once{ parent.width }" name="_videoviewcontent">
 			<wrappinglayout axis="x" spacing="2" />
-		</view>
+		</commonVideoViewContent>
 	</class>
 </library>

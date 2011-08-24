@@ -175,15 +175,11 @@
 				this.broadCastViewRef = obj;
 			} else {
 				//Get a Free VideoView Slot
-                var newx = this._videoviewcontent.subviews.length*136;
-                var newy = 0;
-                if (x>220) {
-                    newx = 0;
-                    newy += 140;
-                }
+				var freePos = this._videoviewcontent.getVideoObjectFreePos(36, 100, 100);
+
 				this.broadCastViewRef = new lz.videoObjectBroadcast(this._videoviewcontent,{
 	                    publicSID:publicSID,
-	                    x:newx,y:newy
+	                    x:freePos[0],y:freePos[1]
                     });
 				canvas.currentusercolor = this.colorArray[this.subviews.length];
 				this.broadCastViewRef._chatvideoinner.r.destroy();
@@ -205,15 +201,12 @@
 			if (obj!=null){
 				return obj;
 			}
-            var newx = this._videoviewcontent.subviews.length*136;
-            var newy = 0;
-            if (x>220) {
-                newx = 0;
-                newy += 140;
-            }
+            //Get a Free VideoView Slot
+            var freePos = this._videoviewcontent.getVideoObjectFreePos(36, 100, 100);
+
 			return new lz.videoObjectPlayBroadcast(this._videoviewcontent,{
                     publicSID:publicSID,
-                    x:newx,y:newy
+                    x:freePos[0],y:freePos[1]
                 });
 		]]>
 	</method>
@@ -273,9 +266,7 @@
 		}
 	</method>
 	
-	<view name="_videoviewcontent">
-          
-	</view>
+	<commonVideoViewContent name="_videoviewcontent" />
 	
 </class>
 

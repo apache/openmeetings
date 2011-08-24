@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<class name="commonVideoViewContent" extends="view">
+
+    <!--
+		This method returns a free position for a new video object
+		@param horizontal offset between two video objects
+	 -->
+    <method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
+        <![CDATA[
+            var newx = 20;
+            var newy = 0;
+            var posFound = false;
+            while (!posFound) {
+                posFound = true;
+                for (var i=0;i<this.subviews.length;i++){
+                    var subview = this.subviews[i];
+                    var left = subview.x;
+                    var right = subview.x + subview.width;
+                    var top = subview.y;
+                    var bottom = subview.y + subview.height;
+
+                    if( !(newx > right
+                        || (newx + videoWidth) < left
+                        || newy > bottom
+                        || (newy + videoHeight) < top ))
+                    {
+                        newx = right + offsetLength;
+                        posFound = false;
+                    }
+                    if ((newx + videoWidth) >= canvas.width) {
+                        newx = 20;
+                        newy += 10;
+                        posFound = false;
+                    }
+                }
+            }
+
+            if ((newy + videoHeight) >= canvas.height) {
+                newy = 0;
+            }
+
+            var result = [newx, newy];
+            return result;
+        ]]>
+    </method>
+
+</class>
+
+</library>

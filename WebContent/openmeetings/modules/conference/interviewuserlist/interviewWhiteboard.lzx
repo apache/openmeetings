@@ -40,7 +40,7 @@
     
     <simplelayout axis="y" spacing="2" />
     
-    <view name="_videoviewcontent" align="center" >
+    <commonVideoViewContent name="_videoviewcontent" align="center" >
     	
     	<simplelayout axis="x" spacing="2" />
     	
@@ -51,7 +51,7 @@
         <interviewVideoBox name="interviewVideoBox2" x="324" interviewPodId="2" >
             
         </interviewVideoBox>
-    </view>
+    </commonVideoViewContent>
     
     <view name="_interview" align="center" visible="${ canvas.ismoderator }">
     	

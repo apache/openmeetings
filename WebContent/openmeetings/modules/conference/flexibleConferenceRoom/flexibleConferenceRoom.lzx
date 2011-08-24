@@ -125,7 +125,7 @@
         ###############################
         This is the container for all Videos
      -->
-    <view name="_videoviewcontent" />
+    <commonVideoViewContent name="_videoviewcontent" />
     
 </class>
 

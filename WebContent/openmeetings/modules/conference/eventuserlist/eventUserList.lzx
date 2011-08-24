@@ -331,16 +331,11 @@
                 }
                 
                 //Get a Free VideoView Slot
-                var newx = videoContainer.subviews.length*140;
-                var newy = 0;
-                if ((newx+100)>=canvas.width) {
-                    newx = 20;
-                    newy += 140;
-                }
+                var freePos = videoContainer.getVideoObjectFreePos(40, 396, 360);
                 
 				this.broadCastViewRef = new lz.videoObjectBroadcast(videoContainer,{
 	                    publicSID:publicSID,width:396,height:360,
-	                    x:newx,y:newy
+	                    x:freePos[0],y:freePos[1]
                     });
 				
 				this.broadCastViewRef._chatvideoinner.r.destroy();
@@ -368,16 +363,11 @@
             }
             
             //Get a Free VideoView Slot
-            var newx = videoContainer.subviews.length*140;
-            var newy = 0;
-            if ((newx+300)>=canvas.width) {
-                newx = 20;
-                newy += 140;
-            }
+            var freePos = videoContainer.getVideoObjectFreePos(40, 396, 360);
             
 			return new lz.videoObjectPlayBroadcast(videoContainer,{
                     publicSID:publicSID,width:396,height:360,
-                    x:newx,y:newy
+                    x:freePos[0],y:freePos[1]
                 });
 		]]>
 	</method>
@@ -457,9 +447,7 @@
     
     <eventUserListInner name="_participents" listType="$once{ parent.listType }" />
     
-	<view name="_videoviewcontent">
-          
-	</view>
+	<commonVideoViewContent name="_videoviewcontent" />
 	
 </class>
 
